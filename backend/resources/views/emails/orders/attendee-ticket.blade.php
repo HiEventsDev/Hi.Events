@@ -3,7 +3,8 @@
 @php /** @var \HiEvents\DomainObjects\EventSettingDomainObject $eventSettings */ @endphp
 @php /** @var \HiEvents\DomainObjects\OrganizerDomainObject $organizer */ @endphp
 @php /** @var \HiEvents\DomainObjects\OrderDomainObject $order */ @endphp
-@php /** @var array<int, array{attendee: \HiEvents\DomainObjects\AttendeeDomainObject, occurrence: ?\HiEvents\DomainObjects\EventOccurrenceDomainObject, venueName: ?string, addressString: ?string, ticketUrl: string}> $tickets */ @endphp
+@php /** @var array<int, array{attendee: \HiEvents\DomainObjects\AttendeeDomainObject, occurrence: ?\HiEvents\DomainObjects\EventOccurrenceDomainObject, startDate: ?string, endDate: ?string, venueName: ?string, addressString: ?string, ticketUrl: string}> $tickets */ @endphp
+@php /** @var \HiEvents\Services\Domain\Lineup\DTO\EmailLineupHighlightsDTO|null $lineup */ @endphp
 @php /** @see \HiEvents\Mail\Attendee\AttendeeTicketMail */ @endphp
 
 @php
@@ -36,8 +37,8 @@
     $occurrence = $ticket['occurrence'];
     $venueName = $ticket['venueName'];
     $addressString = $ticket['addressString'];
-    $displayStart = $occurrence?->getStartDate() ?? $event->getStartDate();
-    $displayEnd = $occurrence?->getEndDate() ?? $event->getEndDate();
+    $displayStart = $ticket['startDate'];
+    $displayEnd = $ticket['endDate'];
 
     $startFormatted = $formatDateTime($displayStart);
     $endFormatted = null;
@@ -74,6 +75,8 @@
 </x-mail::button>
 
 @endforeach
+@include('emails.partials.lineup-highlights', ['lineup' => $lineup])
+
 {{ __('If you have any questions or need assistance, please reply to this email or contact the event organizer') }}
 {{ __('at') }} <a href="mailto:{{$eventSettings->getSupportEmail()}}">{{$eventSettings->getSupportEmail()}}</a>.
 

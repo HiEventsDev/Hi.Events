@@ -1,13 +1,13 @@
 import {Button, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {useMutation} from "@tanstack/react-query";
-import {showError} from "../../../../utilites/notifications.tsx";
 import {authClient} from "../../../../api/auth.client.ts";
 import {useState} from "react";
 import {NavLink} from "react-router";
 import {t} from "@lingui/macro";
 import classes from "./ForgotPassword.module.scss";
 import {IconArrowLeft, IconCheck} from "@tabler/icons-react";
+import {Callout} from "../../../common/Callout";
 
 export const ForgotPassword = () => {
     const form = useForm({
@@ -16,6 +16,7 @@ export const ForgotPassword = () => {
         },
     });
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const mutate = useMutation({
         mutationFn: (email: string) => {
@@ -28,8 +29,8 @@ export const ForgotPassword = () => {
             setShowSuccessMessage(true);
         },
 
-        onError: (error: any) => {
-            showError(error?.response?.status === 429
+        onError: (requestError: any) => {
+            setError(requestError?.response?.status === 429
                 ? t`Too many attempts. Please wait a minute and try again.`
                 : t`Something went wrong, please try again, or contact support if the problem persists`);
         }
@@ -47,7 +48,7 @@ export const ForgotPassword = () => {
                 </p>
                 <NavLink to={'/auth/login'}>
                     <IconArrowLeft size={14} />
-                    {t`Back to login`}
+                    {t`Back to sign in`}
                 </NavLink>
             </div>
         );
@@ -59,6 +60,7 @@ export const ForgotPassword = () => {
                 <h2>{t`Reset password`}</h2>
                 <p>{t`Enter your email and we'll send you instructions to reset your password.`}</p>
             </header>
+            {error && <Callout variant="danger" onDismiss={() => setError(null)}>{error}</Callout>}
             <div className={classes.forgotPasswordCard}>
                 <form onSubmit={form.onSubmit((values) => mutate.mutate(values.email))}>
                     <TextInput
@@ -73,7 +75,7 @@ export const ForgotPassword = () => {
                     </Button>
                 </form>
                 <footer>
-                    <NavLink to={'/auth/login'}>{t`Back to login`}</NavLink>
+                    <NavLink to={'/auth/login'}>{t`Back to sign in`}</NavLink>
                 </footer>
             </div>
         </>

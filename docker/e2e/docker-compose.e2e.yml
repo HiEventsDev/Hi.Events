@@ -14,6 +14,12 @@ services:
             STRIPE_PUBLIC_KEY: '${STRIPE_PUBLIC_KEY:-}'
             STRIPE_SECRET_KEY: '${STRIPE_SECRET_KEY:-}'
             STRIPE_WEBHOOK_SECRET: '${STRIPE_WEBHOOK_SECRET:-whsec_e2e_local_secret}'
+            SSO_OIDC_ISSUER: 'http://mock-oidc:${E2E_OIDC_PORT:-8124}/default'
+            SSO_OIDC_CLIENT_ID: 'hievents-e2e'
+            SSO_OIDC_CLIENT_SECRET: 'e2e-secret'
+            SSO_OIDC_NAME: 'Mock SSO'
+            SSO_OIDC_TRUST_EMAIL: 'true'
+            SSO_ALLOW_PRIVATE_ISSUERS: 'true'
         depends_on:
             pgsql:
                 condition: service_healthy
@@ -91,6 +97,15 @@ services:
             interval: 5s
             timeout: 5s
             retries: 20
+
+    mock-oidc:
+        image: 'ghcr.io/navikt/mock-oauth2-server:2.1.10'
+        environment:
+            SERVER_PORT: '${E2E_OIDC_PORT:-8124}'
+        ports:
+            - "${E2E_OIDC_PORT:-8124}:${E2E_OIDC_PORT:-8124}"
+        networks:
+            - app
 
     mailpit:
         image: 'axllent/mailpit:latest'

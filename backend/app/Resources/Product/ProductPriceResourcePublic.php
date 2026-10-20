@@ -23,6 +23,8 @@ class ProductPriceResourcePublic extends BaseResource
             'sale_end_date' => $this->getSaleEndDate(),
             'price_including_taxes_and_fees' => $this->getPriceIncludingTaxAndServiceFee(),
             'price_before_discount' => $this->getPriceBeforeDiscount(),
+            /** @var float|null */
+            'price_before_discount_including_taxes_and_fees' => $this->getPriceBeforeDiscountIncludingTaxesAndFees(),
             'is_discounted' => (bool) $this->getPriceBeforeDiscount(),
             'tax_total' => $this->getTaxTotal(),
             'fee_total' => $this->getFeeTotal(),

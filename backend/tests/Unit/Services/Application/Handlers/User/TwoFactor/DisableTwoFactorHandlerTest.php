@@ -3,21 +3,28 @@
 namespace Tests\Unit\Services\Application\Handlers\User\TwoFactor;
 
 use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Enterprise\Sso\Services\Domain\SsoEnforcementService;
+use HiEvents\Exceptions\IdentityConfirmationFailedException;
 use HiEvents\Exceptions\InvalidTwoFactorCodeException;
-use HiEvents\Exceptions\PasswordInvalidException;
 use HiEvents\Exceptions\TwoFactorRequiredByAccountException;
 use HiEvents\Mail\User\TwoFactorDisabledMail;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Application\Handlers\User\TwoFactor\DisableTwoFactorHandler;
 use HiEvents\Services\Application\Handlers\User\TwoFactor\DTO\DisableTwoFactorDTO;
+use HiEvents\Services\Domain\Auth\IdentityConfirmationService;
+use HiEvents\Services\Domain\Auth\PasswordLoginPolicy;
+use HiEvents\Services\Domain\Auth\Sso\SsoTicketService;
 use HiEvents\Services\Domain\Auth\TwoFactor\TrustedDeviceService;
 use HiEvents\Services\Domain\Auth\TwoFactor\TwoFactorAuthenticationService;
 use HiEvents\Services\Domain\Auth\TwoFactor\TwoFactorRequirementService;
 use HiEvents\Services\Domain\Auth\TwoFactor\TwoFactorVerifier;
+use Illuminate\Cache\ArrayStore;
+use Illuminate\Cache\Repository;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
 use Mockery as m;
+use Mockery\MockInterface;
 use Tests\TestCase;
 
 class DisableTwoFactorHandlerTest extends TestCase
@@ -36,6 +43,8 @@ class DisableTwoFactorHandlerTest extends TestCase
 
     private DisableTwoFactorHandler $handler;
 
+    private SsoEnforcementService|MockInterface $ssoEnforcementService;
+
     private UserDomainObject $user;
 
     protected function setUp(): void
@@ -49,6 +58,8 @@ class DisableTwoFactorHandlerTest extends TestCase
         $this->requirementService = m::mock(TwoFactorRequirementService::class);
         $this->hasher = m::mock(Hasher::class);
         $this->mailer = m::mock(Mailer::class);
+        $this->ssoEnforcementService = m::mock(SsoEnforcementService::class);
+        $this->ssoEnforcementService->shouldReceive('requiresFreshSecondFactor')->andReturnFalse()->byDefault();
         $databaseManager = m::mock(DatabaseManager::class);
         $databaseManager->shouldReceive('transaction')->andReturnUsing(fn (callable $callback) => $callback());
 
@@ -58,7 +69,8 @@ class DisableTwoFactorHandlerTest extends TestCase
             $this->twoFactorVerifier,
             $this->trustedDeviceService,
             $this->requirementService,
-            $this->hasher,
+            new IdentityConfirmationService($this->hasher, new SsoTicketService(new Repository(new ArrayStore)), $this->passwordLoginPolicy()),
+            $this->ssoEnforcementService,
             $databaseManager,
             $this->mailer,
         );
@@ -66,6 +78,17 @@ class DisableTwoFactorHandlerTest extends TestCase
         $this->user = (new UserDomainObject)->setId(2)->setPassword('hashed')->setEmail('a@example.com')->setLocale('en');
         $userRepository->shouldReceive('findById')->with(2)->andReturn($this->user);
         $this->twoFactorAuthenticationService->shouldReceive('isEnabled')->andReturn(true);
+    }
+
+    public function test_the_owner_of_an_account_that_requires_single_sign_on_cannot_disable_it(): void
+    {
+        $this->requirementService->shouldReceive('namesOfAccountsRequiringTwoFactor')->andReturn(collect());
+        $this->ssoEnforcementService->shouldReceive('requiresFreshSecondFactor')->andReturnTrue();
+        $this->twoFactorAuthenticationService->shouldNotReceive('disable');
+
+        $this->expectException(TwoFactorRequiredByAccountException::class);
+
+        $this->handler->handle(new DisableTwoFactorDTO(userId: 2, password: 'secret', code: '123456', recoveryCode: null));
     }
 
     public function test_cannot_disable_while_an_account_requires_it(): void
@@ -83,7 +106,7 @@ class DisableTwoFactorHandlerTest extends TestCase
         $this->requirementService->shouldReceive('namesOfAccountsRequiringTwoFactor')->andReturn(collect());
         $this->hasher->shouldReceive('check')->with('secret', 'hashed')->andReturn(false);
 
-        $this->expectException(PasswordInvalidException::class);
+        $this->expectException(IdentityConfirmationFailedException::class);
 
         $this->handler->handle($this->dto());
     }
@@ -114,5 +137,13 @@ class DisableTwoFactorHandlerTest extends TestCase
     private function dto(): DisableTwoFactorDTO
     {
         return new DisableTwoFactorDTO(userId: 2, password: 'secret', code: '123456', recoveryCode: null);
+    }
+
+    private function passwordLoginPolicy(): PasswordLoginPolicy
+    {
+        $policy = m::mock(PasswordLoginPolicy::class);
+        $policy->shouldReceive('canConfirmWithPassword')->andReturnUsing(fn (UserDomainObject $user) => $user->getPassword() !== null);
+
+        return $policy;
     }
 }

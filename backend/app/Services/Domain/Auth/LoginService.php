@@ -7,28 +7,35 @@ use HiEvents\DomainObjects\AccountUserDomainObject;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Enterprise\Sso\Exceptions\SsoRequiredException;
+use HiEvents\Enterprise\Sso\Repository\Interfaces\AccountSsoConnectionRepositoryInterface;
+use HiEvents\Enterprise\Sso\Services\Domain\SsoEnforcementService;
 use HiEvents\Exceptions\UnauthorizedException;
 use HiEvents\Models\User;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Services\Domain\Auth\DTO\LoginResponse;
+use HiEvents\Services\Domain\Auth\Sso\DTO\AuthContext;
+use HiEvents\Services\Domain\Auth\Sso\UserIdentityService;
 use HiEvents\Services\Domain\Auth\TwoFactor\TrustedDeviceService;
 use HiEvents\Services\Domain\Auth\TwoFactor\TwoFactorAuthenticationService;
 use HiEvents\Services\Domain\Auth\TwoFactor\TwoFactorChallengeService;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Support\Collection;
 use PHPOpenSourceSaver\JWTAuth\JWTGuard;
-use Psr\Log\LoggerInterface;
 
 class LoginService
 {
     public function __construct(
         private readonly AuthManager $authManager,
-        private readonly LoggerInterface $logger,
         private readonly AccountUserRepositoryInterface $accountUserRepository,
         private readonly TwoFactorAuthenticationService $twoFactorAuthenticationService,
         private readonly TwoFactorChallengeService $twoFactorChallengeService,
         private readonly TrustedDeviceService $trustedDeviceService,
+        private readonly UserIdentityService $userIdentityService,
+        private readonly PasswordLoginPolicy $passwordLoginPolicy,
+        private readonly SsoEnforcementService $ssoEnforcementService,
+        private readonly AccountSsoConnectionRepositoryInterface $ssoConnectionRepository,
     ) {}
 
     /**
@@ -51,29 +58,57 @@ class LoginService
 
         /** @var User $userModel */
         $userModel = $this->guard()->getLastAttempted();
-        $user = UserDomainObject::hydrateFromModel($userModel);
 
+        if (! $this->passwordLoginPolicy->isAllowedFor($userModel->id)) {
+            throw new UnauthorizedException(__('Username or Password are incorrect'));
+        }
+
+        return $this->beginLogin(
+            user: UserDomainObject::hydrateFromModel($userModel),
+            requestedAccountId: $requestedAccountId,
+            trustedDeviceToken: $trustedDeviceToken,
+            context: AuthContext::password(),
+        );
+    }
+
+    /**
+     * @throws UnauthorizedException
+     * @throws SsoRequiredException
+     */
+    public function beginLogin(
+        UserDomainObject $user,
+        ?int $requestedAccountId,
+        ?string $trustedDeviceToken,
+        AuthContext $context,
+    ): LoginResponse {
         if ($this->twoFactorAuthenticationService->isEnabled($user)
-            && ! $this->trustedDeviceService->isTrusted($user->getId(), $trustedDeviceToken)) {
-            $this->assertCanSignInTo($user, $requestedAccountId);
+            && ($this->ssoEnforcementService->requiresFreshSecondFactor($user->getId(), $context)
+                || ! $this->trustedDeviceService->isTrusted($user->getId(), $trustedDeviceToken))) {
+            $accountId = $this->resolveAccountToSignInTo($user, $requestedAccountId);
+
+            if ($accountId !== null) {
+                $this->ssoEnforcementService->assertMemberSignInAllowed($user, $accountId, $context);
+            }
 
             return new LoginResponse(
                 accounts: collect(),
                 token: null,
                 user: $user,
-                twoFactorChallengeToken: $this->twoFactorChallengeService->create($user->getId()),
+                twoFactorChallengeToken: $this->twoFactorChallengeService->create($user->getId(), $context),
             );
         }
 
-        return $this->completeLogin($user, $requestedAccountId);
+        return $this->completeLogin($user, $requestedAccountId, $context);
     }
 
     /**
      * @throws UnauthorizedException
+     * @throws SsoRequiredException
      */
-    public function completeLogin(UserDomainObject $user, ?int $requestedAccountId): LoginResponse
+    public function completeLogin(UserDomainObject $user, ?int $requestedAccountId, AuthContext $context): LoginResponse
     {
-        $userAccounts = $this->findUserAccounts($user);
+        $requestedAccountId = $this->accountRequiredByContext($requestedAccountId, $context);
+        $userAccounts = $this->findActiveUserAccounts($user);
 
         $accounts = $userAccounts->map(fn ($accountUser) => $accountUser->getAccount());
 
@@ -87,37 +122,76 @@ class LoginService
             );
         }
 
-        $this->validateUserStatus($accountId, $userAccounts);
+        $this->ssoEnforcementService->assertSignInAllowed($user, $accountId, $context);
+
+        if ($context->pendingIdentity !== null) {
+            $this->userIdentityService->attachForSignIn($user, $context->pendingIdentity);
+        }
+
+        $token = $this->issueToken($user->getId(), $accountId, $this->getUserRole($accountId, $userAccounts), $context);
+
+        $this->accountUserRepository->updateWhere(
+            attributes: ['last_login_at' => now()],
+            where: [
+                'user_id' => $user->getId(),
+                'account_id' => $accountId,
+            ],
+        );
 
         return new LoginResponse(
             accounts: $accounts,
-            token: $this->issueToken($user->getId(), $accountId, $this->getUserRole($accountId, $userAccounts)),
+            token: $token,
             user: $user,
             accountId: $accountId,
         );
     }
 
-    private function assertCanSignInTo(UserDomainObject $user, ?int $requestedAccountId): void
+    /**
+     * @throws UnauthorizedException
+     */
+    private function accountRequiredByContext(?int $requestedAccountId, AuthContext $context): ?int
     {
-        $userAccounts = $this->findUserAccounts($user);
-        $accountId = $this->getAccountId($userAccounts->map(fn ($accountUser) => $accountUser->getAccount()), $requestedAccountId);
-
-        if ($accountId !== null) {
-            $this->validateUserStatus($accountId, $userAccounts);
+        if ($context->accountId === null) {
+            return $requestedAccountId;
         }
+
+        if ($requestedAccountId !== null && $requestedAccountId !== $context->accountId) {
+            throw new UnauthorizedException(__('Account not found'));
+        }
+
+        return $context->accountId;
     }
 
-    private function findUserAccounts(UserDomainObject $user): Collection
+    /**
+     * @throws UnauthorizedException
+     */
+    private function resolveAccountToSignInTo(UserDomainObject $user, ?int $requestedAccountId): ?int
+    {
+        return $this->getAccountId(
+            $this->findActiveUserAccounts($user)->map(fn ($accountUser) => $accountUser->getAccount()),
+            $requestedAccountId,
+        );
+    }
+
+    private function findActiveUserAccounts(UserDomainObject $user): Collection
     {
         return $this->accountUserRepository
             ->loadRelation(new Relationship(domainObject: AccountDomainObject::class, name: 'account'))
             ->findWhere([
                 'user_id' => $user->getId(),
+                'status' => UserStatus::ACTIVE->name,
             ]);
     }
 
+    /**
+     * @throws UnauthorizedException
+     */
     private function getAccountId(Collection $accounts, ?int $requestedAccountId): ?int
     {
+        if ($accounts->isEmpty()) {
+            throw new UnauthorizedException(__('User account is not active'));
+        }
+
         if ($accounts->count() === 1) {
             return $accounts->first()->getId();
         }
@@ -135,33 +209,37 @@ class LoginService
         return null;
     }
 
-    private function issueToken(int $userId, int $accountId, Role $userRole): string
+    private function issueToken(int $userId, int $accountId, Role $userRole, AuthContext $context): string
     {
-        $token = $this->guard()
-            ->claims([
-                'account_id' => $accountId,
-                'role' => $userRole->value,
-            ])
-            ->tokenById($userId);
+        $claims = [
+            'account_id' => $accountId,
+            'role' => $userRole->value,
+            'auth_method' => $context->method->value,
+        ];
+
+        $connection = $context->ssoConnectionId === null
+            ? null
+            : $this->ssoConnectionRepository->findFirstWhere(['id' => $context->ssoConnectionId, 'account_id' => $accountId]);
+
+        $guard = $this->guard();
+        $defaultTtl = $guard->factory()->getTTL();
+
+        if ($connection !== null) {
+            $claims['sso_connection_id'] = $connection->getId();
+            $guard->setTTL($connection->getSessionTtlMinutes());
+        }
+
+        try {
+            $token = $guard->claims($claims)->tokenById($userId);
+        } finally {
+            $guard->setTTL($defaultTtl);
+        }
 
         if ($token === null) {
             throw new UnauthorizedException(__('Username or Password are incorrect'));
         }
 
         return $token;
-    }
-
-    private function validateUserStatus(int $accountId, Collection $userAccounts): void
-    {
-        /** @var AccountUserDomainObject $currentAccount */
-        $currentAccount = $userAccounts
-            ->first(fn (AccountUserDomainObject $userAccount) => $userAccount->getAccountId() === $accountId);
-
-        if ($currentAccount->getStatus() !== UserStatus::ACTIVE->name) {
-            $this->logger->info(__('Attempt to log in to a non-active account'), $currentAccount->toArray());
-
-            throw new UnauthorizedException(__('User account is not active'));
-        }
     }
 
     private function getUserRole(int $accountId, Collection $userAccounts): Role

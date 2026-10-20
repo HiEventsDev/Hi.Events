@@ -1,6 +1,7 @@
 import React, {useMemo, useRef, useState} from "react";
+import {CreateButton} from "../../../../common/CreateButton";
 import {t} from "@lingui/macro";
-import {ActionIcon, Button, Menu, Popover, Text} from "@mantine/core";
+import {ActionIcon, Menu, Popover, Text} from "@mantine/core";
 import {
     IconChevronLeft,
     IconChevronRight,
@@ -9,10 +10,11 @@ import {
     IconX,
 } from "@tabler/icons-react";
 import dayjs from "dayjs";
+import {useDatesContext} from "@mantine/dates";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import {EventOccurrence} from "../../../../../types.ts";
-import {formatDateWithLocale, formatOccurrenceEnd} from "../../../../../utilites/dates.ts";
+import {formatDateWithLocale, formatOccurrenceEnd, getCalendarGridStart} from "../../../../../utilites/dates.ts";
 import {OccurrenceMenuItems, OccurrenceMenuActions} from "../OccurrenceMenu";
 import classes from "./CalendarView.module.scss";
 import {bookedLimit} from "../bookingLimits.ts";
@@ -41,6 +43,7 @@ export const CalendarView = ({
     onOccurrenceClick,
     onCreate,
 }: CalendarViewProps) => {
+    const {firstDayOfWeek} = useDatesContext();
     const [selectedDate, setSelectedDate] = useState<string | null>(null);
     const cellRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
@@ -55,10 +58,7 @@ export const CalendarView = ({
     }, [occurrences, eventTimezone]);
 
     const calendarDays = useMemo(() => {
-        const startOfMonth = currentMonth.startOf('month');
-        const startDay = startOfMonth.day();
-        const offset = startDay === 0 ? 6 : startDay - 1;
-        const gridStart = startOfMonth.subtract(offset, 'day');
+        const gridStart = getCalendarGridStart(currentMonth.startOf('month'), firstDayOfWeek);
 
         const days: { date: dayjs.Dayjs; isCurrentMonth: boolean }[] = [];
         for (let i = 0; i < 42; i++) {
@@ -69,16 +69,14 @@ export const CalendarView = ({
             });
         }
         return days;
-    }, [currentMonth]);
+    }, [currentMonth, firstDayOfWeek]);
 
     const todayStr = dayjs().tz(eventTimezone).format('YYYY-MM-DD');
 
-    const dayNames = useMemo(() => {
-        const start = dayjs().startOf('week').add(1, 'day');
-        return Array.from({length: 7}, (_, i) =>
-            start.add(i, 'day').format('ddd')
-        );
-    }, []);
+    const dayNames = useMemo(
+        () => calendarDays.slice(0, 7).map(({date}) => date.format('ddd')),
+        [calendarDays]
+    );
 
     const selectedOccurrences = selectedDate ? (occurrencesByDate[selectedDate] || []) : [];
 
@@ -134,14 +132,14 @@ export const CalendarView = ({
                     <div className={classes.popoverEmpty}>
                         <Text size="sm" c="dimmed" mb="sm">{t`No occurrences on this date`}</Text>
                         {onCreate && (
-                            <Button
+                            <CreateButton
                                 size="compact-sm"
                                 variant="light"
                                 leftSection={<IconPlus size={14}/>}
                                 onClick={() => closeAndDo(() => onCreate(selectedDate))}
                             >
                                 {t`Add a date`}
-                            </Button>
+                            </CreateButton>
                         )}
                     </div>
                 ) : (

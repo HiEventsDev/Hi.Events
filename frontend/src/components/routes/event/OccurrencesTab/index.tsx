@@ -1,4 +1,7 @@
 import {useLocation, useNavigate, useParams} from "react-router";
+import {CreateButton} from "../../../common/CreateButton";
+import {WriteAccess} from "../../../common/WriteAccess";
+import {useAccess} from "../../../../hooks/useAccess.ts";
 import {t} from "@lingui/macro";
 import {Anchor, Button, Checkbox, Group, HoverCard, Menu, Paper, Progress, SegmentedControl, Skeleton, Stack, Text, Tooltip} from "@mantine/core";
 import {
@@ -13,6 +16,7 @@ import {
 import {useDisclosure} from "@mantine/hooks";
 import {useCallback, useMemo, useRef, useState} from "react";
 import dayjs from "dayjs";
+import {useDatesContext} from "@mantine/dates";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import {modals} from "@mantine/modals";
@@ -24,7 +28,7 @@ import {useGetEventOccurrences} from "../../../../queries/useGetEventOccurrences
 import {useFilterQueryParamSync} from "../../../../hooks/useFilterQueryParamSync.ts";
 import {EventOccurrence, EventOccurrenceStatus, MessageType, QueryFilterFields, QueryFilterOperator, QueryFilters} from "../../../../types.ts";
 import {useGetEvent} from "../../../../queries/useGetEvent.ts";
-import {formatDateWithLocale, formatOccurrenceEnd} from "../../../../utilites/dates.ts";
+import {formatDateWithLocale, formatOccurrenceEnd, getCalendarGridStart} from "../../../../utilites/dates.ts";
 import {getEventLocationDisplay} from "../../../../utilites/effectiveLocation.ts";
 import {formatCurrency} from "../../../../utilites/currency.ts";
 import {OccurrenceEditModal, OccurrenceEditTab} from "./OccurrenceEditModal";
@@ -68,6 +72,7 @@ const OccurrencesTab = () => {
         navigate(target);
     };
     const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
+    const {firstDayOfWeek} = useDatesContext();
     const [calendarMonth, setCalendarMonth] = useState<dayjs.Dayjs>(() => dayjs().startOf('month'));
 
     const timePeriod = useMemo(() => {
@@ -83,15 +88,13 @@ const OccurrencesTab = () => {
         if (!event?.timezone) return null;
         const tz = event.timezone;
         const monthStart = dayjs.tz(calendarMonth.format('YYYY-MM-01'), tz).startOf('month');
-        const startDay = monthStart.day();
-        const offset = startDay === 0 ? 6 : startDay - 1;
-        const gridStart = monthStart.subtract(offset, 'day').startOf('day');
+        const gridStart = getCalendarGridStart(monthStart, firstDayOfWeek);
         const gridEnd = gridStart.add(42, 'day').endOf('day');
         return {
             start: gridStart.utc().format('YYYY-MM-DD HH:mm:ss'),
             end: gridEnd.utc().format('YYYY-MM-DD HH:mm:ss'),
         };
-    }, [calendarMonth, event?.timezone]);
+    }, [calendarMonth, event?.timezone, firstDayOfWeek]);
 
     const queryParams: QueryFilters = useMemo(() => {
         if (viewMode === 'calendar') {
@@ -139,6 +142,8 @@ const OccurrencesTab = () => {
     const bulkUpdateMutation = useBulkUpdateOccurrences();
     const reactivateMutation = useReactivateOccurrence();
     const refundRef = useRef(false);
+    const {can, isReadOnly} = useAccess();
+    const canIssueRefunds = can('ISSUE_REFUNDS');
 
     const handleEditClick = (occurrenceId: number) => {
         setSelectedOccurrenceId(occurrenceId);
@@ -191,6 +196,7 @@ const OccurrencesTab = () => {
             occurrenceId,
             orderCount: occ?.statistics?.orders_created ?? 0,
             mutation: cancelMutation,
+            canRefund: canIssueRefunds,
         });
     };
 
@@ -228,10 +234,12 @@ const OccurrencesTab = () => {
                     <Text size="sm" mb="md">
                         {t`Are you sure you want to cancel ${count} date(s)? Affected attendees will be notified by email.`}
                     </Text>
-                    <Checkbox
-                        label={t`Refund all orders for these dates`}
-                        onChange={(e) => { refundRef.current = e.currentTarget.checked; }}
-                    />
+                    {canIssueRefunds && (
+                        <Checkbox
+                            label={t`Refund all orders for these dates`}
+                            onChange={(e) => { refundRef.current = e.currentTarget.checked; }}
+                        />
+                    )}
                 </>
             ),
             labels: {confirm: t`Cancel ${count} date(s)`, cancel: t`Go Back`},
@@ -520,7 +528,7 @@ const OccurrencesTab = () => {
 
                 <div className={classes.toolbarSpacer}/>
 
-                {selectedIds.size > 0 && (
+                {selectedIds.size > 0 && !isReadOnly && (
                     <div className={classes.selectionGroup}>
                         <span className={classes.selectionCount}>{selectedIds.size} {t`selected`}</span>
                         <button
@@ -550,42 +558,44 @@ const OccurrencesTab = () => {
                     </div>
                 )}
 
-                <Button
-                    size="sm"
-                    variant="light"
-                    leftSection={<IconPencil size={14}/>}
-                    onClick={openBulkEdit}
-                    data-testid="occurrence-bulk-edit-button"
-                >
-                    {t`Bulk Edit`}
-                </Button>
+                <WriteAccess>
+                    <Button
+                        size="sm"
+                        variant="light"
+                        leftSection={<IconPencil size={14}/>}
+                        onClick={openBulkEdit}
+                        data-testid="occurrence-bulk-edit-button"
+                    >
+                        {t`Bulk Edit`}
+                    </Button>
 
-                <Menu shadow="md" width={220}>
-                    <Menu.Target>
-                        <Button
-                            size="sm"
-                            leftSection={<IconPlus size={14}/>}
-                        >
-                            {t`Add Dates`}
-                        </Button>
-                    </Menu.Target>
-                    <Menu.Dropdown>
-                        <Menu.Item
-                            leftSection={<IconCalendarEvent size={16}/>}
-                            onClick={openGenerate}
-                            disabled={generationPolling.isGenerating}
-                        >
-                            {event?.recurrence_rule ? t`Edit Schedule` : t`Set Up Schedule`}
-                        </Menu.Item>
-                        <Menu.Item
-                            leftSection={<IconCalendarPlus size={16}/>}
-                            onClick={handleCreateClick}
-                            data-testid="occurrence-add-single-date-menu-item"
-                        >
-                            {t`Add a Single Date`}
-                        </Menu.Item>
-                    </Menu.Dropdown>
-                </Menu>
+                    <Menu shadow="md" width={220}>
+                        <Menu.Target>
+                            <CreateButton
+                                size="sm"
+                                leftSection={<IconPlus size={14}/>}
+                            >
+                                {t`Add Dates`}
+                            </CreateButton>
+                        </Menu.Target>
+                        <Menu.Dropdown>
+                            <Menu.Item
+                                leftSection={<IconCalendarEvent size={16}/>}
+                                onClick={openGenerate}
+                                disabled={generationPolling.isGenerating}
+                            >
+                                {event?.recurrence_rule ? t`Edit Schedule` : t`Set Up Schedule`}
+                            </Menu.Item>
+                            <Menu.Item
+                                leftSection={<IconCalendarPlus size={16}/>}
+                                onClick={handleCreateClick}
+                                data-testid="occurrence-add-single-date-menu-item"
+                            >
+                                {t`Add a Single Date`}
+                            </Menu.Item>
+                        </Menu.Dropdown>
+                    </Menu>
+                </WriteAccess>
             </div>
 
             {generationPolling.isGenerating && (
@@ -631,22 +641,24 @@ const OccurrencesTab = () => {
                                 </Text>
                             </Stack>
                             {!hasActiveFilters && (
-                                <Group gap="md" mt="sm">
-                                    <Button
-                                        variant="filled"
-                                        leftSection={<IconCalendarEvent size={16}/>}
-                                        onClick={openGenerate}
-                                    >
-                                        {t`Set Up Schedule`}
-                                    </Button>
-                                    <Button
-                                        variant="subtle"
-                                        color="gray"
-                                        onClick={handleCreateClick}
-                                    >
-                                        {t`or add a single date`}
-                                    </Button>
-                                </Group>
+                                <WriteAccess>
+                                    <Group gap="md" mt="sm">
+                                        <Button
+                                            variant="filled"
+                                            leftSection={<IconCalendarEvent size={16}/>}
+                                            onClick={openGenerate}
+                                        >
+                                            {t`Set Up Schedule`}
+                                        </Button>
+                                        <Button
+                                            variant="subtle"
+                                            color="gray"
+                                            onClick={handleCreateClick}
+                                        >
+                                            {t`or add a single date`}
+                                        </Button>
+                                    </Group>
+                                </WriteAccess>
                             )}
                         </Stack>
                     </Paper>
@@ -662,6 +674,7 @@ const OccurrencesTab = () => {
                         selectedIds={selectedIds}
                         onSelectionChange={setSelectedIds}
                         rowStyle={rowStyleFn}
+                        selectable={!isReadOnly}
                     />
                     {pagination && (
                         <Text className={classes.countText}>

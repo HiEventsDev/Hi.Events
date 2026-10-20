@@ -82,7 +82,7 @@ class SendMessageHandler
 
         $event = $this->eventRepository->findById($messageData->event_id);
 
-        $scheduledAtUtc = $messageData->scheduled_at
+        $scheduledAtUtc = $isScheduled
             ? DateHelper::convertToUTC($messageData->scheduled_at, $event->getTimezone())
             : null;
 

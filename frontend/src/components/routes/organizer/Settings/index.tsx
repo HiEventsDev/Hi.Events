@@ -19,7 +19,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Card } from "../../../common/Card";
 import { useLocation, useParams } from "react-router";
 import { useGetAccount } from "../../../../queries/useGetAccount.ts";
-import { useGetMe } from "../../../../queries/useGetMe.ts";
+import { useAccess } from "../../../../hooks/useAccess.ts";
 import { FeatureFlag } from "../../../../constants/featureFlags.ts";
 import { useLicensedFeature } from "../../../../ee/licensing/hooks/useLicensedFeature.ts";
 
@@ -27,9 +27,10 @@ const Settings = () => {
     const { organizerId } = useParams();
     const { data: account } = useGetAccount();
     const isSaasMode = account?.is_saas_mode_enabled;
-    const { data: me } = useGetMe();
-    const canManageReaders = me?.role === 'ADMIN' || me?.role === 'SUPERADMIN';
-    const showCardReaders = useLicensedFeature(FeatureFlag.BOX_OFFICE).isVisible && canManageReaders;
+    const {can} = useAccess();
+    const canManagePayments = can('MANAGE_PAYMENTS');
+    const canViewFinancials = can('VIEW_FINANCIALS');
+    const showCardReaders = useLicensedFeature(FeatureFlag.BOX_OFFICE).isVisible && canManagePayments;
 
     const SECTIONS = useMemo(() => {
         const baseSections = [
@@ -93,25 +94,25 @@ const Settings = () => {
 
         if (isSaasMode) {
             baseSections.splice(2, 0,
-                {
+                ...(canManagePayments ? [{
                     id: 'payouts',
                     label: t`Payouts`,
                     icon: IconBrandStripe,
                     component: PayoutsSettings,
-                },
+                }] : []),
                 ...(showCardReaders ? [cardReadersSection] : []),
-                {
+                ...(canViewFinancials ? [{
                     id: 'platform-fees',
                     label: t`Platform Fees`,
                     icon: IconPercentage,
                     component: PlatformFeesSettings,
-                });
+                }] : []));
         } else if (showCardReaders) {
             baseSections.splice(baseSections.length - 1, 0, cardReadersSection);
         }
 
         return baseSections;
-    }, [showCardReaders, isSaasMode, organizerId]);
+    }, [showCardReaders, isSaasMode, organizerId, canManagePayments, canViewFinancials]);
 
     const isLargeScreen = useMediaQuery('(min-width: 1200px)', true);
     const location = useLocation();

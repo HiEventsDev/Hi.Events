@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Domain\Auth\TwoFactor;
 
+use HiEvents\Services\Domain\Auth\Sso\DTO\AuthContext;
 use HiEvents\Services\Domain\Auth\TwoFactor\DTO\TwoFactorChallengeDTO;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Support\Str;
@@ -14,13 +15,14 @@ class TwoFactorChallengeService
         private readonly Cache $cache,
     ) {}
 
-    public function create(int $userId): string
+    public function create(int $userId, AuthContext $authContext): string
     {
         $token = Str::random(64);
 
         $this->store($token, new TwoFactorChallengeDTO(
             userId: $userId,
             verified: false,
+            authContext: $authContext,
         ));
 
         return $token;
@@ -39,6 +41,7 @@ class TwoFactorChallengeService
             userId: $challenge->userId,
             verified: true,
             recoveryCodesRemaining: $recoveryCodesRemaining,
+            authContext: $challenge->authContext,
         );
 
         $this->store($token, $verified);

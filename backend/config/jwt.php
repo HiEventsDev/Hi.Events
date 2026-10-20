@@ -161,8 +161,12 @@ return [
     */
 
     'persistent_claims' => [
-        // 'foo',
-        // 'bar',
+        'account_id',
+        'role',
+        'auth_method',
+        'is_impersonating',
+        'impersonator_id',
+        'sso_connection_id',
     ],
 
     /*

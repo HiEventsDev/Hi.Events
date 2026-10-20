@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Admin\DeletionRequests;
 
-use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\Admin\AdminAccountDeletionRequestResource;
 use HiEvents\Services\Application\Handlers\Admin\DTO\GetAllAccountDeletionRequestsDTO;
@@ -20,7 +19,7 @@ class GetAllAccountDeletionRequestsAction extends BaseAction
 
     public function __invoke(Request $request): JsonResponse
     {
-        $this->minimumAllowedRole(Role::SUPERADMIN);
+        $this->requireSuperAdmin();
 
         $deletionRequests = $this->handler->handle(new GetAllAccountDeletionRequestsDTO(
             perPage: min((int) $request->query('per_page', 20), 100),

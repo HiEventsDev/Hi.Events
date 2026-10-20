@@ -19,6 +19,7 @@ use HiEvents\Mail\BaseMail;
 use HiEvents\Mail\Concerns\ContainsEventContent;
 use HiEvents\Mail\Concerns\ProvidesEventContent;
 use HiEvents\Services\Domain\Email\DTO\RenderedEmailTemplateDTO;
+use HiEvents\Services\Domain\Lineup\DTO\EmailLineupHighlightsDTO;
 use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -36,6 +37,8 @@ class AttendeeTicketMail extends BaseMail implements ContainsEventContent
 
     private readonly ?RenderedEmailTemplateDTO $renderedTemplate;
 
+    private ?EmailLineupHighlightsDTO $lineup = null;
+
     public function __construct(
         private readonly OrderDomainObject $order,
         private readonly AttendeeDomainObject $attendee,
@@ -45,9 +48,11 @@ class AttendeeTicketMail extends BaseMail implements ContainsEventContent
         ?RenderedEmailTemplateDTO $renderedTemplate = null,
         private readonly ?EventOccurrenceDomainObject $occurrence = null,
         private readonly ?Collection $attendees = null,
+        ?EmailLineupHighlightsDTO $lineup = null,
     ) {
         parent::__construct();
         $this->renderedTemplate = $renderedTemplate;
+        $this->lineup = $lineup;
     }
 
     public function envelope(): Envelope
@@ -83,6 +88,7 @@ class AttendeeTicketMail extends BaseMail implements ContainsEventContent
                 'eventSettings' => $this->eventSettings,
                 'organizer' => $this->organizer,
                 'order' => $this->order,
+                'lineup' => $this->lineup,
                 'tickets' => $this->tickets()
                     ->map(fn (AttendeeDomainObject $attendee) => $this->ticketViewData($attendee))
                     ->all(),
@@ -115,6 +121,8 @@ class AttendeeTicketMail extends BaseMail implements ContainsEventContent
         return [
             'attendee' => $attendee,
             'occurrence' => $occurrence,
+            'startDate' => $this->startDateFor($occurrence),
+            'endDate' => $this->endDateFor($occurrence),
             'venueName' => $this->venueNameFor($eventLocation),
             'addressString' => $this->addressStringFor($eventLocation),
             'ticketUrl' => sprintf(
@@ -123,6 +131,23 @@ class AttendeeTicketMail extends BaseMail implements ContainsEventContent
                 $attendee->getShortId(),
             ),
         ];
+    }
+
+    private function startDateFor(?EventOccurrenceDomainObject $occurrence): ?string
+    {
+        return $occurrence?->getStartDate() ?? $this->event->getStartDate();
+    }
+
+    private function endDateFor(?EventOccurrenceDomainObject $occurrence): ?string
+    {
+        $start = $this->startDateFor($occurrence);
+        $end = $occurrence === null ? $this->event->getEndDate() : $occurrence->getEndDate();
+
+        if ($start === null || $end === null || ! Carbon::parse($end)->greaterThan(Carbon::parse($start))) {
+            return null;
+        }
+
+        return $end;
     }
 
     private function venueNameFor(?EventLocationDomainObject $eventLocation): ?string
@@ -197,8 +222,8 @@ class AttendeeTicketMail extends BaseMail implements ContainsEventContent
     {
         $occurrence = $this->occurrenceFor($attendee);
 
-        $startDateRaw = $occurrence?->getStartDate() ?? $this->event->getStartDate();
-        $endDateRaw = $occurrence?->getEndDate() ?? $this->event->getEndDate();
+        $startDateRaw = $this->startDateFor($occurrence);
+        $endDateRaw = $this->endDateFor($occurrence);
 
         $startDateTime = $startDateRaw ? Carbon::parse($startDateRaw, $this->event->getTimezone()) : null;
         $endDateTime = $endDateRaw ? Carbon::parse($endDateRaw, $this->event->getTimezone()) : null;

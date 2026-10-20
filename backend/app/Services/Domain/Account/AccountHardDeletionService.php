@@ -136,6 +136,29 @@ class AccountHardDeletionService
                 ->delete();
         }
 
+        $ssoConnectionIds = $connection->table('account_sso_connections')
+            ->where('account_id', $context->accountId)
+            ->pluck('id')
+            ->all();
+
+        if ($ssoConnectionIds !== []) {
+            $manifest['user_identities'] = $connection->table('user_identities')
+                ->whereIn('account_sso_connection_id', $ssoConnectionIds)
+                ->delete();
+        }
+
+        $manifest['account_sso_domains'] = $connection->table('account_sso_domains')
+            ->where('account_id', $context->accountId)
+            ->delete();
+
+        $manifest['account_sso_connections'] = $connection->table('account_sso_connections')
+            ->where('account_id', $context->accountId)
+            ->delete();
+
+        $manifest['api_keys'] = $connection->table('personal_access_tokens')
+            ->where('account_id', $context->accountId)
+            ->delete();
+
         $manifest['roles'] = $connection->table('roles')
             ->where('account_id', $context->accountId)
             ->delete();

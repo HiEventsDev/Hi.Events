@@ -1,4 +1,5 @@
 import {PageBody} from "../../../common/PageBody";
+import {CreateButton} from "../../../common/CreateButton";
 import {PageTitle} from "../../../common/PageTitle";
 import {t} from "@lingui/macro";
 import {useParams} from "react-router";
@@ -9,7 +10,6 @@ import {CreateCapacityAssignmentModal} from "../../../modals/CreateCapacityAssig
 import {useDisclosure} from "@mantine/hooks";
 import {ToolBar} from "../../../common/ToolBar";
 import {SearchBarWrapper} from "../../../common/SearchBar";
-import {Button} from "@mantine/core";
 import {IconPlus} from "@tabler/icons-react";
 import {useFilterQueryParamSync} from "../../../../hooks/useFilterQueryParamSync.ts";
 import {QueryFilters} from "../../../../types.ts";
@@ -55,12 +55,12 @@ const CapacityAssignments = () => {
                     />
                 ) : undefined}
             >
-                <Button
+                <CreateButton
                     leftSection={<IconPlus/>}
                     color={'green'}
                     data-testid="capacity-create-button"
                     onClick={() => openCreateModal()}>{t`Create Capacity Assignment`}
-                </Button>
+                </CreateButton>
             </ToolBar>
 
             <TableSkeleton isVisible={!capacityAssignments}/>

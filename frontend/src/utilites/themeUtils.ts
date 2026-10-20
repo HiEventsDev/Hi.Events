@@ -88,12 +88,17 @@ export function detectMode(backgroundColor: string): 'light' | 'dark' {
     return luminance > 128 ? 'light' : 'dark';
 }
 
-export function isLightColor(hex: string): boolean {
-    return calculateLuminance(hex) > 128;
-}
+const LIGHT_TEXT_COLOR = '#ffffff';
+const DARK_TEXT_COLOR = '#1a1a1a';
 
 export function getContrastColor(backgroundColor: string): string {
-    return isLightColor(backgroundColor) ? '#1a1a1a' : '#ffffff';
+    if (!hexToRgb(backgroundColor)) {
+        return LIGHT_TEXT_COLOR;
+    }
+
+    return getContrastRatio(DARK_TEXT_COLOR, backgroundColor) > getContrastRatio(LIGHT_TEXT_COLOR, backgroundColor)
+        ? DARK_TEXT_COLOR
+        : LIGHT_TEXT_COLOR;
 }
 
 export function getDerivedColors(mode: 'light' | 'dark'): Omit<DerivedThemeColors, 'accentContrast'> {
@@ -111,7 +116,7 @@ export function getDerivedColors(mode: 'light' | 'dark'): Omit<DerivedThemeColor
         surface: '#1f1f1f',
         textPrimary: '#ffffff',
         textSecondary: '#a3a3a3',
-        textTertiary: '#737373',
+        textTertiary: '#8f8f8f',
         border: 'rgba(255, 255, 255, 0.1)',
     };
 }

@@ -67,6 +67,12 @@ export const futureStartDate = (): string => {
   return date.toISOString();
 };
 
+export const tomorrowUtcDate = (): string => {
+  const date = new Date();
+  date.setUTCDate(date.getUTCDate() + 1);
+  return date.toISOString().slice(0, 10);
+};
+
 const pastStartDate = (): string => {
   const date = new Date();
   date.setDate(date.getDate() - 30);
@@ -390,7 +396,7 @@ export async function createRecurringLiveEvent(
 
   await api.generateOccurrences(event.id, {
     frequency: 'weekly',
-    range: { type: 'count', count },
+    range: { type: 'count', count, start: tomorrowUtcDate() },
     days_of_week: ['friday'],
     times_of_day: ['19:00'],
     duration_minutes: 120,
@@ -593,7 +599,7 @@ async function createDraftRecurringEvent(api: ApiClient, organizerId: number, co
   await setAttendeeDetailsCollection(api, event.id, 'PER_TICKET');
   await api.generateOccurrences(event.id, {
     frequency: 'weekly',
-    range: { type: 'count', count },
+    range: { type: 'count', count, start: tomorrowUtcDate() },
     days_of_week: ['friday'],
     times_of_day: ['19:00'],
     duration_minutes: 120,

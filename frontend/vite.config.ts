@@ -1,6 +1,6 @@
 import {defineConfig} from "vite";
 import {lingui} from "@lingui/vite-plugin";
-import react from "@vitejs/plugin-react";
+import react from "@vitejs/plugin-react-swc";
 import {copy} from "vite-plugin-copy";
 import {existsSync, readFileSync} from "fs";
 import {resolve} from "path";
@@ -31,9 +31,7 @@ export default defineConfig({
     },
     plugins: [
         react({
-            babel: {
-                plugins: ["macros"],
-            },
+            plugins: [["@lingui/swc-plugin", {}]],
         }),
         lingui(),
         copy({

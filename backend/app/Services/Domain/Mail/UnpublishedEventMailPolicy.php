@@ -2,12 +2,16 @@
 
 namespace HiEvents\Services\Domain\Mail;
 
+use HiEvents\DomainObjects\AccountUserDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\Generated\AccountUserDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
 use HiEvents\DomainObjects\Status\EventStatus;
+use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Repository\Eloquent\Value\Relationship;
+use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
-use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 
 class UnpublishedEventMailPolicy
 {
@@ -18,7 +22,7 @@ class UnpublishedEventMailPolicy
 
     public function __construct(
         private readonly EventRepositoryInterface $eventRepository,
-        private readonly UserRepositoryInterface $userRepository,
+        private readonly AccountUserRepositoryInterface $accountUserRepository,
     ) {}
 
     /**
@@ -38,8 +42,14 @@ class UnpublishedEventMailPolicy
             return false;
         }
 
-        $verifiedMemberEmails = ($this->userRepository->findUsersByAccountId($event->getAccountId()) ?? collect())
-            ->filter(fn (UserDomainObject $user) => $user->getEmailVerifiedAt() !== null)
+        $verifiedMemberEmails = $this->accountUserRepository
+            ->loadRelation(new Relationship(domainObject: UserDomainObject::class, name: 'user'))
+            ->findWhere([
+                AccountUserDomainObjectAbstract::ACCOUNT_ID => $event->getAccountId(),
+                AccountUserDomainObjectAbstract::STATUS => UserStatus::ACTIVE->name,
+            ])
+            ->map(fn (AccountUserDomainObject $accountUser) => $accountUser->getUser())
+            ->filter(fn (?UserDomainObject $user) => $user?->getEmailVerifiedAt() !== null)
             ->map(fn (UserDomainObject $user) => mb_strtolower(trim($user->getEmail())))
             ->all();
 

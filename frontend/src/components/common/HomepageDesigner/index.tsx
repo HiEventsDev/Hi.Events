@@ -1,12 +1,7 @@
-import {ReactNode, useEffect, useRef, useState} from "react";
-import {SegmentedControl, Tooltip, VisuallyHidden} from "@mantine/core";
-import {IconDeviceDesktop, IconDeviceMobile} from "@tabler/icons-react";
-import {t} from "@lingui/macro";
+import {createContext, ReactNode, useCallback, useContext, useEffect, useRef, useState} from "react";
 import {LoadingMask} from "../LoadingMask";
-import {DesignerShell} from "../DesignerShell";
+import {DesignerShell, PreviewDevice, PreviewDeviceToggle} from "../DesignerShell";
 import classes from "./HomepageDesigner.module.scss";
-
-type PreviewDevice = 'desktop' | 'mobile';
 
 interface UseHomepagePreviewOptions {
     path: string;
@@ -45,7 +40,7 @@ export const useHomepagePreview = ({path, ready, imageVersion, messageType, sett
         if (!loaded || !iframeRef.current?.contentWindow || settingsJson === lastSentSettings.current) {
             return;
         }
-        iframeRef.current.contentWindow.postMessage({type: messageType, settings}, "*");
+        iframeRef.current.contentWindow.postMessage({type: messageType, settings}, window.location.origin);
         lastSentSettings.current = settingsJson;
     }, [loaded, settingsJson]);
 
@@ -55,6 +50,16 @@ export const useHomepagePreview = ({path, ready, imageVersion, messageType, sett
     };
 
     return {iframeRef, src, onLoad};
+};
+
+export const firstHomepageSectionsError = (error: any): string | undefined => {
+    const errors: Record<string, string[] | string> | undefined = error?.response?.data?.errors;
+    const field = errors && Object.keys(errors).find(key => key.startsWith('homepage_sections'));
+    if (!field) {
+        return undefined;
+    }
+    const messages = errors[field];
+    return Array.isArray(messages) ? messages[0] : messages;
 };
 
 interface HomepageDesignerProps {
@@ -68,57 +73,56 @@ interface HomepageDesignerProps {
     children: ReactNode;
 }
 
-export const HomepageDesigner = ({preview, previewTitle, ...shellProps}: HomepageDesignerProps) => {
+type SaveGuard = () => boolean;
+
+const SaveGuardContext = createContext<(guard: SaveGuard) => () => void>(() => () => undefined);
+
+export const useHomepageSaveGuard = (blocksSave: SaveGuard) => {
+    const register = useContext(SaveGuardContext);
+    useEffect(() => register(blocksSave), [register, blocksSave]);
+};
+
+export const HomepageDesigner = ({preview, previewTitle, onSave, ...shellProps}: HomepageDesignerProps) => {
     const [device, setDevice] = useState<PreviewDevice>('desktop');
+    const [saveGuards] = useState(() => new Set<SaveGuard>());
+
+    const registerSaveGuard = useCallback((guard: SaveGuard) => {
+        saveGuards.add(guard);
+        return () => {
+            saveGuards.delete(guard);
+        };
+    }, [saveGuards]);
+
+    const save = () => {
+        if (Array.from(saveGuards).some(blocksSave => blocksSave())) {
+            return;
+        }
+        onSave();
+    };
 
     return (
-        <DesignerShell
-            {...shellProps}
-            previewActions={(
-                <SegmentedControl
-                    size="xs"
-                    value={device}
-                    onChange={(value) => setDevice(value as PreviewDevice)}
-                    data={[
-                        {
-                            value: 'desktop',
-                            label: (
-                                <Tooltip label={t`Desktop`} withArrow>
-                                    <span className={classes.deviceIcon}>
-                                        <IconDeviceDesktop size={16} aria-hidden/>
-                                        <VisuallyHidden>{t`Desktop`}</VisuallyHidden>
-                                    </span>
-                                </Tooltip>
-                            ),
-                        },
-                        {
-                            value: 'mobile',
-                            label: (
-                                <Tooltip label={t`Mobile`} withArrow>
-                                    <span className={classes.deviceIcon}>
-                                        <IconDeviceMobile size={16} aria-hidden/>
-                                        <VisuallyHidden>{t`Mobile`}</VisuallyHidden>
-                                    </span>
-                                </Tooltip>
-                            ),
-                        },
-                    ]}
-                />
-            )}
-            preview={(
-                <div className={device === 'mobile' ? classes.mobileFrame : classes.desktopFrame}>
-                    {preview.src ? (
-                        <iframe
-                            ref={preview.iframeRef}
-                            src={preview.src}
-                            title={previewTitle}
-                            onLoad={preview.onLoad}
-                        />
-                    ) : (
-                        <LoadingMask/>
-                    )}
-                </div>
-            )}
-        />
+        <SaveGuardContext.Provider value={registerSaveGuard}>
+            <DesignerShell
+                {...shellProps}
+                onSave={save}
+                previewActions={(
+                    <PreviewDeviceToggle value={device} onChange={setDevice}/>
+                )}
+                preview={(
+                    <div className={device === 'mobile' ? classes.mobileFrame : classes.desktopFrame}>
+                        {preview.src ? (
+                            <iframe
+                                ref={preview.iframeRef}
+                                src={preview.src}
+                                title={previewTitle}
+                                onLoad={preview.onLoad}
+                            />
+                        ) : (
+                            <LoadingMask/>
+                        )}
+                    </div>
+                )}
+            />
+        </SaveGuardContext.Provider>
     );
 };

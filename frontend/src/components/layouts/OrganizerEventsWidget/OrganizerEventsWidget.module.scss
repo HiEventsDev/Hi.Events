@@ -1,0 +1,323 @@
+.tabs {
+  margin-bottom: 16px;
+  background: var(--hi-inset-bg);
+
+  :global(.mantine-SegmentedControl-indicator) {
+    background: var(--hi-card-bg);
+  }
+
+  :global(.mantine-SegmentedControl-label) {
+    color: var(--hi-text);
+  }
+}
+
+.list {
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  &[data-layout='grid'] {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+
+  &[data-layout='compact'] {
+    gap: 0;
+  }
+}
+
+.item {
+  min-width: 0;
+
+  &[data-ended] {
+    opacity: 0.72;
+  }
+}
+
+.itemButton {
+  display: grid;
+  grid-template-columns: 116px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  height: 100%;
+  padding: 10px 14px 10px 10px;
+  border: 1.5px solid var(--hi-border);
+  border-radius: var(--hi-radius-lg, 16px);
+  background: var(--hi-card-bg);
+  color: var(--hi-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 150ms var(--hi-ease), box-shadow 150ms var(--hi-ease);
+  -webkit-tap-highlight-color: transparent;
+
+  &:hover {
+    border-color: var(--hi-border-strong);
+
+    .cover img {
+      transform: scale(1.03);
+    }
+
+    .cta {
+      filter: brightness(0.94);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--hi-accent);
+    outline-offset: 2px;
+  }
+
+  .item[data-layout='grid'] & {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .item[data-layout='compact'] & {
+    grid-template-columns: 52px minmax(0, 1fr) auto;
+    gap: 14px;
+    padding: 14px 2px;
+    border: 0;
+    border-bottom: 1px solid var(--hi-hairline);
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .item[data-layout='compact']:last-child & {
+    border-bottom: 0;
+  }
+}
+
+.cover {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--hi-radius-md, 13px);
+  background: var(--hi-inset-bg);
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 300ms var(--hi-ease);
+  }
+
+  .item[data-layout='grid'] & {
+    aspect-ratio: 16 / 9;
+    border-radius: 0;
+  }
+}
+
+.coverPlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: var(--hi-soft-accent);
+  color: var(--hi-accent);
+  line-height: 1;
+}
+
+.placeholderDay {
+  margin-top: 4px;
+  font-size: 26px;
+  font-weight: 750;
+
+  .item[data-layout='grid'] & {
+    font-size: 40px;
+  }
+}
+
+.dateBadge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 56px;
+  border-radius: var(--hi-radius-md, 13px);
+  background: var(--hi-soft-accent);
+  color: var(--hi-accent);
+  line-height: 1;
+}
+
+.dateBadgeMonth {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.dateBadgeDay {
+  margin-top: 3px;
+  font-size: 20px;
+  font-weight: 750;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+
+  .item[data-layout='grid'] & {
+    flex: 1;
+    padding: 14px 16px 4px;
+  }
+}
+
+.date {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--hi-accent);
+}
+
+.title {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: 15.5px;
+  font-weight: 700;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  overflow: hidden;
+  font-size: 12.5px;
+  color: var(--hi-muted);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.aside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
+
+  .item[data-layout='grid'] & {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px 16px;
+  }
+}
+
+.price {
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+
+  &[data-sold-out] {
+    color: var(--hi-muted);
+  }
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: var(--hi-radius-sm, 10px);
+  background: var(--hi-accent);
+  color: var(--hi-accent-contrast);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: filter 150ms var(--hi-ease);
+
+  margin-left: auto;
+
+  .item[data-ended] & {
+    background: var(--hi-inset-bg);
+    color: var(--hi-text);
+  }
+}
+
+@container (max-width: 480px) {
+  .itemButton {
+    grid-template-columns: 84px minmax(0, 1fr);
+    align-items: start;
+    gap: 12px;
+  }
+
+  .item[data-layout='list'] .cover,
+  .item[data-layout='compact'] .dateBadge {
+    grid-row: span 2;
+  }
+
+  .item[data-layout='list'] .aside {
+    grid-column: 2;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .item[data-layout='compact'] .itemButton {
+    grid-template-columns: 48px minmax(0, 1fr);
+  }
+
+  .item[data-layout='compact'] .aside {
+    grid-column: 2;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .dateBadge {
+    width: 48px;
+    height: 52px;
+  }
+}
+
+.loadMore {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  margin-top: 16px;
+  border: 1.5px solid var(--hi-border);
+  border-radius: var(--hi-radius-md, 13px);
+  background: transparent;
+  color: var(--hi-text);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 150ms var(--hi-ease), background-color 150ms var(--hi-ease);
+
+  &:hover:not(:disabled) {
+    border-color: var(--hi-border-strong);
+    background: var(--hi-soft-surface);
+  }
+
+  &:disabled {
+    cursor: progress;
+    opacity: 0.7;
+  }
+}

@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Application\Handlers\Order;
 
+use HiEvents\DomainObjects\AttendeeCheckInDomainObject;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventLocationDomainObject;
@@ -95,6 +96,7 @@ class GetOrderPublicHandler
                         ],
                         name: 'event_occurrence',
                     ),
+                    new Relationship(domainObject: AttendeeCheckInDomainObject::class, name: 'check_ins'),
                 ],
             ))
             ->loadRelation(new Relationship(domainObject: InvoiceDomainObject::class))

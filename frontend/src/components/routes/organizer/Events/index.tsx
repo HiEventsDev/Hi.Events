@@ -1,4 +1,5 @@
 import {useFilterQueryParamSync} from "../../../../hooks/useFilterQueryParamSync.ts";
+import {WriteAccess} from "../../../common/WriteAccess";
 import {useDisclosure} from "@mantine/hooks";
 import {Event, QueryFilters} from "../../../../types.ts";
 import {useParams} from "react-router";
@@ -16,10 +17,12 @@ import {EventsDashboardStatusButtons} from "../../../common/EventsDashboardStatu
 import {NoEventsBlankSlate} from "../../../common/NoEventsBlankSlate";
 import {PageBody} from "../../../common/PageBody";
 import {PageTitle} from "../../../common/PageTitle";
+import {useAccess} from "../../../../hooks/useAccess.ts";
 
 const Events = () => {
     const {organizerId, eventsState} = useParams();
     const [searchParams, setSearchParams] = useFilterQueryParamSync();
+    const {isReadOnly} = useAccess();
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
     const {data: eventsData, isFetched: isEventsFetched} = useGetEvents(
         getEventQueryFilters(searchParams) as QueryFilters
@@ -51,16 +54,18 @@ const Events = () => {
                     />
                 )}
             >
-                <Button
-                    color={'green'}
-                    rightSection={
-                        <IconCalendarPlus stroke={1.5}/>
-                    }
-                    onClick={openCreateModal}
-                    pr={12}
-                >
-                    {t`Create Event`}
-                </Button>
+                <WriteAccess>
+                    <Button
+                        color={'green'}
+                        rightSection={
+                            <IconCalendarPlus stroke={1.5}/>
+                        }
+                        onClick={openCreateModal}
+                        pr={12}
+                    >
+                        {t`Create Event`}
+                    </Button>
+                </WriteAccess>
             </ToolBar>
 
             <EventsDashboardStatusButtons
@@ -69,7 +74,7 @@ const Events = () => {
             />
 
             {(events?.length === 0 && isEventsFetched)
-                && <NoEventsBlankSlate openCreateModal={openCreateModal} eventsState={eventsState}/>}
+                && <NoEventsBlankSlate openCreateModal={isReadOnly ? undefined : openCreateModal} eventsState={eventsState}/>}
 
             {!isEventsFetched && <SkeletonEvents/>}
 

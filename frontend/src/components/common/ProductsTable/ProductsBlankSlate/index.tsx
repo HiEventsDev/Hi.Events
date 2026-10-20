@@ -1,5 +1,6 @@
 import {NoResultsSplash} from "../../NoResultsSplash";
-import {Button} from "../../Button";
+import {CreateButton} from "../../CreateButton";
+import buttonClasses from "../../Button/Button.module.scss";
 import {IconPlus} from "@tabler/icons-react";
 import {t, Trans} from "@lingui/macro";
 
@@ -42,14 +43,14 @@ export const ProductsBlankSlate = ({openCreateModal, productCategories, searchTe
                         <p>
                             {t`You'll need at least one product to get started. Free, paid or let the user decide what to pay.`}
                         </p>
-                        <Button
+                        <CreateButton className={buttonClasses.button}
                             size={'xs'}
                             leftSection={<IconPlus/>}
                             color={'green'}
                             onClick={() => openCreateModal()}
                         >
                             {t`Add Product to Category`}
-                        </Button>
+                        </CreateButton>
                     </>
                 )}
             />
@@ -60,13 +61,13 @@ export const ProductsBlankSlate = ({openCreateModal, productCategories, searchTe
         <div style={{textAlign: 'center'}}><p style={{marginBottom: 20, marginTop: 0}}>
             {t`This category doesn't have any products yet.`}
         </p>
-            <Button
+            <CreateButton className={buttonClasses.button}
                 size={'xs'}
                 leftSection={<IconPlus/>}
                 color={'green'}
                 onClick={() => openCreateModal()}
             >{t`Add Product`}
-            </Button>
+            </CreateButton>
         </div>
     )
 }

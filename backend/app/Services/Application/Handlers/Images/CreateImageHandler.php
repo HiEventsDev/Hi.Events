@@ -6,16 +6,21 @@ use HiEvents\DomainObjects\Enums\ImageType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\ProfileDomainObject;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
+use HiEvents\Repository\Interfaces\ProfileRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Images\DTO\CreateImageDTO;
 use HiEvents\Services\Domain\Image\ImageUploadService;
 use HiEvents\Services\Infrastructure\Image\Exception\CouldNotUploadImageException;
+use Illuminate\Validation\ValidationException;
 
 class CreateImageHandler
 {
+    private const MAX_PROFILE_IMAGES = 8;
+
     private const IMAGES_TYPES_WITH_ONLY_ONE_IMAGE_ALLOWED = [
         ImageType::ORGANIZER_LOGO,
         ImageType::ORGANIZER_COVER,
@@ -28,6 +33,7 @@ class CreateImageHandler
         private readonly OrganizerRepositoryInterface $organizerRepository,
         private readonly EventRepositoryInterface $eventRepository,
         private readonly ImageRepositoryInterface $imageRepository,
+        private readonly ProfileRepositoryInterface $profileRepository,
     ) {}
 
     /**
@@ -54,6 +60,7 @@ class CreateImageHandler
 
         $this->validateEntityBelongsToUser($imageData->accountId, $imageData->entityId, $entityType);
 
+        $this->assertRoomForProfileImage($imageData, $entityType);
         $this->deleteExistingImages($imageData, $entityType);
 
         return $this->imageUploadService->upload(
@@ -84,6 +91,31 @@ class CreateImageHandler
                     throw new CouldNotUploadImageException('Event does not belong to the user.');
                 }
                 break;
+            case ProfileDomainObject::class:
+                $profile = $this->profileRepository->findById($entityId);
+                if ($profile->getAccountId() !== $accountId) {
+                    throw new CouldNotUploadImageException('Profile does not belong to the user.');
+                }
+                break;
+        }
+    }
+
+    private function assertRoomForProfileImage(CreateImageDTO $imageData, string $entityType): void
+    {
+        if ($imageData->imageType !== ImageType::PROFILE_IMAGE) {
+            return;
+        }
+
+        $existing = $this->imageRepository->countWhere([
+            'entity_id' => $imageData->entityId,
+            'entity_type' => $entityType,
+            'type' => $imageData->imageType->name,
+        ]);
+
+        if ($existing >= self::MAX_PROFILE_IMAGES) {
+            throw ValidationException::withMessages([
+                'image' => __('A profile can have up to :max photos', ['max' => self::MAX_PROFILE_IMAGES]),
+            ]);
         }
     }
 

@@ -23,6 +23,7 @@ use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 use Psr\Log\LoggerInterface;
@@ -65,11 +66,22 @@ class AccountDeletionService
 
     public function getCannotDeleteReason(int $accountId): ?string
     {
-        if ($this->findActiveRequest($accountId) !== null) {
+        $activeRequest = $this->findActiveRequest($accountId);
+
+        return $this->describeCannotDeleteReason(
+            hasActiveRequest: $activeRequest !== null,
+            blockingEvents: $activeRequest === null ? $this->getBlockingEvents($accountId) : collect(),
+        );
+    }
+
+    /**
+     * @param  Collection<int, EventDomainObject>  $blockingEvents
+     */
+    public function describeCannotDeleteReason(bool $hasActiveRequest, Collection $blockingEvents): ?string
+    {
+        if ($hasActiveRequest) {
             return __('Account deletion has already been requested.');
         }
-
-        $blockingEvents = $this->eventRepository->getUpcomingEventsWithCompletedOrders($accountId);
 
         if ($blockingEvents->isNotEmpty()) {
             return __('The following upcoming events have completed orders: :events. Please cancel and refund these orders before deleting your account.', [
@@ -80,6 +92,14 @@ class AccountDeletionService
         }
 
         return null;
+    }
+
+    /**
+     * @return Collection<int, EventDomainObject>
+     */
+    public function getBlockingEvents(int $accountId): Collection
+    {
+        return $this->eventRepository->getUpcomingEventsWithCompletedOrders($accountId);
     }
 
     public function determineOutcome(int $accountId): AccountDeletionOutcome

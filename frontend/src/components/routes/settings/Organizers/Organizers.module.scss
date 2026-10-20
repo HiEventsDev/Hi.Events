@@ -1,0 +1,103 @@
+@use "../../../../styles/mixins";
+
+.empty {
+  margin: 0;
+  padding: 32px 20px;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--hi-color-text-muted);
+}
+
+.emptyText {
+  margin: 0 0 12px;
+}
+
+.organizer {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px 14px 20px;
+  color: inherit;
+  transition: background-color 0.15s ease;
+
+  & + & {
+    border-top: 1px solid var(--hi-color-border);
+  }
+
+  &:first-child {
+    border-radius: var(--hi-radius-card) var(--hi-radius-card) 0 0;
+  }
+
+  &:last-child {
+    border-radius: 0 0 var(--hi-radius-card) var(--hi-radius-card);
+  }
+
+  &:only-child {
+    border-radius: var(--hi-radius-card);
+  }
+
+  &:hover {
+    background: color-mix(in srgb, var(--hi-color-gray) 60%, transparent);
+
+    .open {
+      color: var(--hi-text);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--mantine-color-primary-5);
+    outline-offset: -2px;
+  }
+
+  @include mixins.respond-below(sm, true) {
+    padding-left: 16px;
+  }
+}
+
+.details {
+  flex: 1;
+  min-width: 0;
+}
+
+.nameLine {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+}
+
+.name {
+  @include mixins.ellipsis;
+  max-width: 100%;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--hi-text);
+}
+
+.status {
+  font-size: 0.75rem;
+}
+
+.meta {
+  @include mixins.ellipsis;
+  margin-top: 2px;
+  font-size: 0.8125rem;
+  color: var(--hi-color-text-muted);
+}
+
+.open {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--hi-color-text-muted);
+  transition: color 0.15s ease;
+}
+
+.openLabel {
+  @include mixins.respond-below(sm, true) {
+    display: none;
+  }
+}

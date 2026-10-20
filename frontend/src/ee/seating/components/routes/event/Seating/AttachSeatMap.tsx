@@ -1,4 +1,5 @@
 import {useState} from "react";
+import {useAccess} from "../../../../../../hooks/useAccess.ts";
 import {Button, Group, Skeleton, Stack, Text} from "@mantine/core";
 import {IconCircleCheckFilled} from "@tabler/icons-react";
 import {t} from "@lingui/macro";
@@ -26,6 +27,8 @@ export const AttachSeatMap = ({eventId, organizerId}: AttachSeatMapProps) => {
     const mutation = useUpdateEventSeatMap(eventId);
     const [seatMapId, setSeatMapId] = useState<string | null>(null);
     const seatMapsPath = `/manage/organizer/${organizerId}/seat-maps`;
+    const {canManageOrganizer, isReadOnly} = useAccess();
+    const canManageSeatMaps = !isReadOnly && canManageOrganizer(organizerId);
 
     const attach = () => mutation.mutate({action: 'attach', seatMapId: seatMapId as string}, {
         onSuccess: () => showSuccess(t`Seat map attached`),
@@ -47,10 +50,10 @@ export const AttachSeatMap = ({eventId, organizerId}: AttachSeatMapProps) => {
                                      subHeading={<p className={classes.blankSlateText}>
                                          {t`A seat map is a reusable venue layout of rows, tables and standing areas. Build one for your venue, then attach it to this event to sell seats.`}
                                      </p>}>
-                        <Button component={Link} to={`${seatMapsPath}?create=1`}
+                        {canManageSeatMaps && <Button component={Link} to={`${seatMapsPath}?create=1`}
                                 data-testid="seating-create-seat-map-button">
                             {t`Create a seat map`}
-                        </Button>
+                        </Button>}
                     </NoResultsSplash>
                 )}
 
@@ -86,7 +89,7 @@ export const AttachSeatMap = ({eventId, organizerId}: AttachSeatMapProps) => {
                                     onClick={attach}>
                                 {t`Attach seat map`}
                             </Button>
-                            {organizerId && (
+                            {organizerId && canManageSeatMaps && (
                                 <Button variant="subtle" component={Link} to={seatMapsPath}>
                                     {t`Manage seat maps`}
                                 </Button>

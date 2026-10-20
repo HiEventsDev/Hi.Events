@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Admin\LifecycleEmails;
 
-use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Exceptions\EmailTemplateValidationException;
 use HiEvents\Http\Request\Admin\LifecycleEmail\UpdateLifecycleEmailRequest;
 use HiEvents\Resources\LifecycleEmail\AdminLifecycleEmailResource;
@@ -23,7 +22,7 @@ class UpdateLifecycleEmailAction extends BaseLifecycleEmailAction
      */
     public function __invoke(UpdateLifecycleEmailRequest $request, string $nudgeType): JsonResponse
     {
-        $this->minimumAllowedRole(Role::SUPERADMIN);
+        $this->requireSuperAdmin();
 
         try {
             $email = $this->handler->handle(

@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\Enums\EventType;
 use HiEvents\DomainObjects\Enums\FeatureFlag;
 use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Enterprise\Licensing\LicenceService;
+use HiEvents\Enterprise\Licensing\Plan;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Models\AccountConfiguration;
 use HiEvents\Models\User;
@@ -31,7 +32,7 @@ class LicenceGatingTest extends TestCase
 
     private const RULES = ['prevent_orphan_seats' => true, 'max_seats_per_order' => null, 'allow_seat_change' => false];
 
-    private const LICENCE_REQUIRED = 'This feature requires an active Hi.Events Enterprise licence';
+    private const LICENCE_REQUIRED = 'This feature needs an active Hi.Events licence that includes it';
 
     private string $authToken;
 
@@ -75,6 +76,45 @@ class LicenceGatingTest extends TestCase
             ->assertStatus(ResponseCodes::HTTP_CREATED);
         $this->putJson("/events/{$this->eventId}/seat-map/rules", self::RULES, $this->authHeaders())
             ->assertStatus(ResponseCodes::HTTP_OK);
+    }
+
+    public function test_an_own_events_licence_locks_enterprise_setup_until_the_add_on_is_bought(): void
+    {
+        $this->useLicence(expiresAt: '2099-01-01', plan: Plan::OWN_EVENTS);
+
+        $this->postJson("/events/{$this->eventId}/box-offices", ['name' => 'Front door'], $this->authHeaders())
+            ->assertStatus(ResponseCodes::HTTP_FORBIDDEN)
+            ->assertJsonPath('error_code', 'FEATURE_UNAVAILABLE');
+        $this->putJson("/events/{$this->eventId}/seat-map/rules", self::RULES, $this->authHeaders())
+            ->assertStatus(ResponseCodes::HTTP_FORBIDDEN);
+        $this->getJson("/events/{$this->eventId}/seat-map", $this->authHeaders())
+            ->assertStatus(ResponseCodes::HTTP_OK);
+        $this->getJson('/users/me', $this->authHeaders())
+            ->assertJsonPath('data.feature_flags.seating', false)
+            ->assertJsonPath('data.licence.status', 'ACTIVE')
+            ->assertJsonPath('data.licence.features', ['white_label'])
+            ->assertJsonPath('data.licence.unlocked_features', ['white_label'])
+            ->assertJsonPath('data.licence.features_in_use', ['seating', 'white_label']);
+        $this->getJson('/public/instance')
+            ->assertJsonPath('data.white_label', true);
+
+        $this->useLicence(expiresAt: '2099-01-01', addOns: ['seating', 'box_office', 'enterprise_sso'], plan: Plan::OWN_EVENTS);
+
+        $this->postJson("/events/{$this->eventId}/box-offices", ['name' => 'Front door'], $this->authHeaders())
+            ->assertStatus(ResponseCodes::HTTP_CREATED);
+        $this->getJson('/users/me', $this->authHeaders())
+            ->assertJsonPath('data.feature_flags.seating', true)
+            ->assertJsonPath('data.licence.unlocked_features', ['white_label', 'seating', 'box_office', 'enterprise_sso']);
+    }
+
+    public function test_a_lapsed_licence_still_reports_the_features_renewing_would_unlock(): void
+    {
+        $this->useLicence(expiresAt: '2020-01-01', plan: Plan::OWN_EVENTS);
+
+        $this->getJson('/users/me', $this->authHeaders())
+            ->assertJsonPath('data.licence.status', 'LAPSED')
+            ->assertJsonPath('data.licence.features', ['white_label'])
+            ->assertJsonPath('data.licence.unlocked_features', []);
     }
 
     public function test_a_lapsed_licence_blocks_configuration_but_not_reads(): void
@@ -252,9 +292,9 @@ class LicenceGatingTest extends TestCase
             ->assertJsonPath('data.dev_mode', false);
     }
 
-    public function test_the_white_label_add_on_is_reported_publicly(): void
+    public function test_a_paid_licence_removes_the_powered_by_notice(): void
     {
-        $this->useLicence(expiresAt: '2099-01-01', addOns: ['white_label']);
+        $this->useLicence(expiresAt: '2099-01-01', plan: Plan::OWN_EVENTS);
 
         $this->getJson('/public/instance')
             ->assertJsonPath('data.white_label', true)
@@ -263,7 +303,7 @@ class LicenceGatingTest extends TestCase
 
     public function test_compliance_reports_the_support_email_and_licence(): void
     {
-        $this->useLicence(expiresAt: '2099-01-01', addOns: ['white_label']);
+        $this->useLicence(expiresAt: '2099-01-01', plan: Plan::OWN_EVENTS);
         config(['app.platform_support_email' => 'help@example.test']);
 
         $this->getJson('/public/compliance')
@@ -298,7 +338,7 @@ class LicenceGatingTest extends TestCase
         foreach (['event_seat_maps', 'seat_maps', 'stripe_terminal_readers', 'box_offices'] as $table) {
             DB::table($table)->delete();
         }
-        $this->useLicence(expiresAt: '2020-01-01', addOns: ['white_label']);
+        $this->useLicence(expiresAt: '2020-01-01', plan: Plan::OWN_EVENTS);
 
         $this->getJson('/users/me', $this->authHeaders())
             ->assertJsonPath('data.licence.status', 'LAPSED')

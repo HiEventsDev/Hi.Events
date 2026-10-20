@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Admin\Announcements;
 
-use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\Announcement\AdminAnnouncementResource;
 use HiEvents\Services\Application\Handlers\Announcement\DTO\GetAllAnnouncementsDTO;
@@ -20,7 +19,7 @@ class GetAllAnnouncementsAction extends BaseAction
 
     public function __invoke(Request $request): JsonResponse
     {
-        $this->minimumAllowedRole(Role::SUPERADMIN);
+        $this->requireSuperAdmin();
 
         $announcements = $this->handler->handle(new GetAllAnnouncementsDTO(
             perPage: min((int) $request->query('per_page', 20), 100),

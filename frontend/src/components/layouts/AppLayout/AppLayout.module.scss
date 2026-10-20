@@ -1,5 +1,23 @@
 @use "../../../styles/mixins";
 
+.skipLink {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 300;
+  padding: 8px 14px;
+  border-radius: var(--hi-radius-lg);
+  background: var(--hi-color-white);
+  color: var(--hi-text);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(calc(-100% - 16px));
+
+  &:focus {
+    transform: none;
+  }
+}
+
 .container {
   display: grid;
   grid-template-areas:
@@ -34,6 +52,10 @@
     background-color: var(--hi-color-gray);
 
     @include mixins.scrollbar;
+
+    &:focus {
+      outline: none;
+    }
 
     @media (max-width: 767px) {
       padding: 16px 16px 56px;

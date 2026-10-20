@@ -12,6 +12,7 @@ use HiEvents\Mail\BaseMail;
 use HiEvents\Mail\Concerns\ContainsEventContent;
 use HiEvents\Mail\Concerns\ProvidesEventContent;
 use HiEvents\Services\Domain\Email\DTO\RenderedEmailTemplateDTO;
+use HiEvents\Services\Domain\Lineup\DTO\EmailLineupHighlightsDTO;
 use HiEvents\Services\Domain\Order\InvoicePdfRenderer;
 use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
@@ -26,6 +27,8 @@ class OrderSummary extends BaseMail implements ContainsEventContent
 
     private readonly ?RenderedEmailTemplateDTO $renderedTemplate;
 
+    private ?EmailLineupHighlightsDTO $lineup = null;
+
     public function __construct(
         private readonly OrderDomainObject $order,
         private readonly EventDomainObject $event,
@@ -33,8 +36,10 @@ class OrderSummary extends BaseMail implements ContainsEventContent
         private readonly EventSettingDomainObject $eventSettings,
         private readonly ?InvoiceDomainObject $invoice,
         ?RenderedEmailTemplateDTO $renderedTemplate = null,
+        ?EmailLineupHighlightsDTO $lineup = null,
     ) {
         $this->renderedTemplate = $renderedTemplate;
+        $this->lineup = $lineup;
 
         parent::__construct();
     }
@@ -70,6 +75,7 @@ class OrderSummary extends BaseMail implements ContainsEventContent
                 'order' => $this->order,
                 'organizer' => $this->organizer,
                 'occurrence' => $this->order->getSingleEventOccurrence(),
+                'lineup' => $this->lineup,
                 'orderUrl' => sprintf(
                     Url::getFrontEndUrlFromConfig(Url::ORDER_SUMMARY),
                     $this->event->getId(),

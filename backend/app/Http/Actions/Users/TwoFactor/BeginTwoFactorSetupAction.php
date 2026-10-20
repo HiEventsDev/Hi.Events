@@ -2,9 +2,10 @@
 
 namespace HiEvents\Http\Actions\Users\TwoFactor;
 
-use HiEvents\Exceptions\PasswordInvalidException;
+use HiEvents\Exceptions\IdentityConfirmationFailedException;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\AllowedForReadOnlyUsers;
 use HiEvents\Http\Request\User\TwoFactor\BeginTwoFactorSetupRequest;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Resources\User\TwoFactor\TwoFactorSetupResource;
@@ -12,6 +13,7 @@ use HiEvents\Services\Application\Handlers\User\TwoFactor\BeginTwoFactorSetupHan
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 
+#[AllowedForReadOnlyUsers]
 class BeginTwoFactorSetupAction extends BaseAction
 {
     public function __construct(
@@ -27,8 +29,10 @@ class BeginTwoFactorSetupAction extends BaseAction
             $setup = $this->handler->handle(
                 userId: $this->getAuthenticatedUser()->getId(),
                 password: $request->validated('password'),
+                reauthProof: $request->validated('reauth_proof'),
+                tokenId: $this->getAuthTokenId(),
             );
-        } catch (PasswordInvalidException $exception) {
+        } catch (IdentityConfirmationFailedException $exception) {
             throw ValidationException::withMessages(['password' => $exception->getMessage()]);
         } catch (ResourceConflictException $exception) {
             return $this->errorResponse($exception->getMessage(), ResponseCodes::HTTP_CONFLICT);

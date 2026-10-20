@@ -8,7 +8,6 @@ use HiEvents\Services\Domain\Auth\AuthUserService;
 use HiEvents\Services\Domain\Auth\TwoFactor\TwoFactorRequirementService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException;
 use Symfony\Component\HttpFoundation\Response;
 
 class EnsureTwoFactorEnrolled
@@ -29,7 +28,7 @@ class EnsureTwoFactorEnrolled
         /** @var User $user */
         $user = Auth::user();
 
-        if ($user->two_factor_confirmed_at !== null || $this->isImpersonating() || $this->isAllowedBeforeEnrolment($request)) {
+        if ($user->two_factor_confirmed_at !== null || $this->authUserService->isImpersonating() || $this->isAllowedBeforeEnrolment($request)) {
             return $next($request);
         }
 
@@ -51,15 +50,6 @@ class EnsureTwoFactorEnrolled
             ->contains(fn ($middleware) => is_string($middleware) && str_starts_with($middleware, 'auth:'));
     }
 
-    private function isImpersonating(): bool
-    {
-        try {
-            return (bool) Auth::payload()->get('is_impersonating', false);
-        } catch (JWTException) {
-            return false;
-        }
-    }
-
     private function isAllowedBeforeEnrolment(Request $request): bool
     {
         $path = trim($request->path(), '/');
@@ -68,11 +58,16 @@ class EnsureTwoFactorEnrolled
             return true;
         }
 
+        if ($path === 'users/me/sso-identities/exchange' || preg_match('#^users/me/sso-identities/[\w-]+/reauth$#', $path) === 1) {
+            return true;
+        }
+
         if (! $request->isMethod('GET')) {
             return false;
         }
 
         return $path === 'users/me'
+            || $path === 'users/me/sso-identities'
             || $path === 'accounts'
             || preg_match('#^accounts/\d+$#', $path) === 1;
     }

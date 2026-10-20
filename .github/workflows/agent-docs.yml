@@ -1,0 +1,29 @@
+name: Agent Docs
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'AGENTS.md'
+      - 'CLAUDE.md'
+      - '.claude/rules/**'
+      - '.claude/skills/**'
+      - '.agents/skills/**'
+      - 'scripts/check-agent-docs.sh'
+      - '.github/workflows/agent-docs.yml'
+  pull_request:
+    paths:
+      - 'AGENTS.md'
+      - 'CLAUDE.md'
+      - '.claude/rules/**'
+      - '.claude/skills/**'
+      - '.agents/skills/**'
+      - 'scripts/check-agent-docs.sh'
+      - '.github/workflows/agent-docs.yml'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: scripts/check-agent-docs.sh

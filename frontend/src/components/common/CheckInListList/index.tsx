@@ -1,5 +1,6 @@
 import {CheckInList, IdParam} from "../../../types";
-import {Badge, Button, Progress} from "@mantine/core";
+import {CreateButton} from "../CreateButton";
+import {Badge, Progress} from "@mantine/core";
 import {t, Trans} from "@lingui/macro";
 import {IconCopy, IconExternalLink, IconHelp, IconPencil, IconPlus, IconTrash, IconUsers} from "@tabler/icons-react";
 import Truncate from "../Truncate";
@@ -51,13 +52,13 @@ export const CheckInListList = ({checkInLists, openCreateModal}: CheckInListList
                                     Check-in lists help you manage event entry by day, area, or ticket type. You can link tickets to specific lists such as VIP zones or Day 1 passes and share a secure check-in link with staff. No account is required. Check-in works on mobile, desktop, or tablet, using a device camera or HID USB scanner.                                </p>
                             </Trans>
                         </p>
-                        <Button
+                        <CreateButton
                             loading={deleteMutation.isPending}
                             size={'xs'}
                             leftSection={<IconPlus/>}
                             color={'green'}
                             onClick={() => openCreateModal()}>{t`Create Check-In List`}
-                        </Button>
+                        </CreateButton>
                     </>
                 )}
             />
@@ -144,6 +145,7 @@ export const CheckInListList = ({checkInLists, openCreateModal}: CheckInListList
                                                 items: [
                                                     {
                                                         label: t`Edit Check-In List`,
+                                                        requiresEdit: true,
                                                         icon: <IconPencil size={14}/>,
                                                         onClick: () => {
                                                             setSelectedCheckInListId(list.id as IdParam);
@@ -175,6 +177,7 @@ export const CheckInListList = ({checkInLists, openCreateModal}: CheckInListList
                                                 items: [
                                                     {
                                                         label: t`Delete Check-In List`,
+                                                        requiresEdit: true,
                                                         icon: <IconTrash size={14}/>,
                                                         onClick: () => {
                                                             confirmationDialog(

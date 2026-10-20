@@ -128,7 +128,7 @@ if ! grep -Fqx "$notes_marker" "$agents_file" 2>/dev/null; then
 <!-- hi-events orb notes -->
 # Hi.Events in an orb
 
-- There is no Docker stack in the orb. Run the `docker compose ... exec backend` commands from CLAUDE.md directly in `backend/`, e.g. `php artisan test --testsuite=Unit`, `php artisan test --filter=Name`, `./vendor/bin/pint --test`.
+- There is no Docker stack in the orb. Run the `docker compose ... exec backend` commands from AGENTS.md directly in `backend/`, e.g. `php -d memory_limit=1G vendor/bin/phpunit --testsuite=Unit`, `./vendor/bin/pint --test`.
 - PHP 8.5, Composer, and PostgreSQL 15 are installed natively. Postgres runs under systemd on 127.0.0.1:5432 (role `username` / `password`, databases `backend` and `hievents_test`); the hostname `pgsql` resolves to 127.0.0.1, so `backend/.env` and `backend/.env.testing` work unchanged.
 - `backend/.env` is set up for a native dev server: `php artisan serve --port 8000` (API at http://localhost:8000, no `/api` prefix), mail goes to the log, files use local disks, no Redis or Mailpit.
 - `frontend/.env` points at that API; run the SSR dev server with `yarn dev:ssr` in `frontend/` (http://localhost:5678).

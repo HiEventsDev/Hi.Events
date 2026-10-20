@@ -42,6 +42,7 @@ import {CheckoutContent} from "../../../layouts/Checkout/CheckoutContent";
 import {CheckoutStepTitle} from "../../../layouts/Checkout/CheckoutStepTitle";
 import {EditAttendeeModal} from "./EditAttendeeModal";
 import {ChangeSeatButton} from "../../../../ee/seating/components/ChangeSeatButton";
+import {canAttendeeChangeSeat} from "../../../../ee/seating/components/ChangeSeatButton/canAttendeeChangeSeat.ts";
 import {EditOrderModal} from "./EditOrderModal";
 
 import {useEditAttendeePublic} from "../../../../mutations/useEditAttendeePublic";
@@ -128,7 +129,7 @@ const GuestListItem = ({
                         <IconPrinter size={18}/>
                     </ActionIcon>
                 </Tooltip>
-                {canChangeSeat && attendee.seat_uid && !isCancelled && (
+                {canChangeSeat && (
                     <ChangeSeatButton eventId={event.id as IdParam} orderShortId={orderShortId} attendee={attendee}/>
                 )}
                 {allowSelfEdit && !isCancelled && (
@@ -669,7 +670,7 @@ export const OrderSummaryAndProducts = () => {
                                         attendee={attendee}
                                         event={event}
                                         orderShortId={orderShortId as string}
-                                        canChangeSeat={order.status === 'COMPLETED'}
+                                        canChangeSeat={canAttendeeChangeSeat(attendee, order.status, allowSelfEdit)}
                                         allowSelfEdit={allowSelfEdit}
                                         onEditClick={() => setEditingAttendee(attendee)}
                                         onResendClick={() => handleResendAttendeeTicket(attendee)}

@@ -112,6 +112,15 @@ export async function confirmEmailWithCode(
   }
 }
 
+export interface SsoConnectionPayload {
+  type: 'OKTA' | 'ENTRA' | 'GOOGLE_WORKSPACE' | 'OIDC';
+  issuer: string;
+  client_id: string;
+  client_secret: string;
+  jit_provisioning_enabled?: boolean;
+  jit_default_role?: 'ADMIN' | 'ORGANIZER' | 'VIEWER';
+}
+
 interface CurrentUser {
   id: number;
   feature_flags: Record<string, boolean>;
@@ -127,6 +136,15 @@ export class ApiClient {
 
   getMe(): Promise<CurrentUser> {
     return unwrap<CurrentUser>(this.request.get('users/me', { headers: jsonHeaders }));
+  }
+
+  createApiKey(payload: {
+    name: string;
+    access: 'READ_ONLY' | 'READ_WRITE';
+    expires_in_days: number | null;
+    password: string;
+  }): Promise<{ id: number; key: string }> {
+    return unwrap<{ id: number; key: string }>(this.request.post('api-keys', { headers: jsonHeaders, data: payload }));
   }
 
   requestAccountDeletion(confirmation: string): Promise<{ id: number; status: string }> {
@@ -149,6 +167,10 @@ export class ApiClient {
     );
   }
 
+  updateOrganizerSettings(organizerId: number, settings: { first_day_of_week?: number }): Promise<void> {
+    return check(this.request.patch(`organizers/${organizerId}/settings`, { headers: jsonHeaders, data: settings }));
+  }
+
   updateOrganizerStatus(organizerId: number, status: 'LIVE' | 'DRAFT'): Promise<void> {
     return check(this.request.put(`organizers/${organizerId}/status`, { headers: jsonHeaders, data: { status } }));
   }
@@ -163,6 +185,40 @@ export class ApiClient {
     type: EventImageType = 'EVENT_COVER',
   ): Promise<ImageRecord> {
     return unwrap<ImageRecord>(this.request.post(`events/${eventId}/images`, { multipart: { image, type } }));
+  }
+
+  createLineupProfile(organizerId: number, payload: { name: string; tagline?: string; bio?: string; links?: string[] }): Promise<{ id: number }> {
+    return unwrap<{ id: number }>(this.request.post(`organizers/${organizerId}/profiles`, { headers: jsonHeaders, data: payload }));
+  }
+
+  addLineupEntry(
+    eventId: number,
+    payload: { profile_id: number; billing_tier: 'HEADLINER' | 'FEATURED' | 'STANDARD'; is_hidden?: boolean },
+  ): Promise<{ id: number }> {
+    return unwrap<{ id: number }>(this.request.post(`events/${eventId}/lineup/entries`, { headers: jsonHeaders, data: payload }));
+  }
+
+  getLineup(eventId: number): Promise<{
+    entries: { profile: { name: string; tagline: string | null; links: { type: string; url: string }[] } }[];
+    schedule_items: { starts_at: string }[];
+  }> {
+    return unwrap(this.request.get(`events/${eventId}/lineup`, { headers: jsonHeaders }));
+  }
+
+  importLineup(
+    eventId: number,
+    payload: {
+      people: { name: string; billing_tier?: 'HEADLINER' | 'FEATURED' | 'STANDARD' }[];
+      slots: { starts_at: string; ends_at: string; stage?: string; title?: string; people: string[] }[];
+    },
+  ): Promise<void> {
+    return this.request
+      .post(`events/${eventId}/lineup/import`, { headers: jsonHeaders, data: payload })
+      .then(async (response) => {
+        if (!response.ok()) {
+          throw new Error(`POST lineup/import → ${response.status()}: ${await response.text()}`);
+        }
+      });
   }
 
   listProductCategories(eventId: number): Promise<ProductCategory[]> {
@@ -287,6 +343,18 @@ export class ApiClient {
     );
   }
 
+  createEventWidget(eventId: number, payload: { name: string; type: string; settings: Record<string, unknown> }): Promise<{ id: number; short_id: string }> {
+    return unwrap<{ id: number; short_id: string }>(
+      this.request.post(`events/${eventId}/widgets`, { headers: jsonHeaders, data: payload }),
+    );
+  }
+
+  listAffiliates(eventId: number): Promise<(Affiliate & { total_sales: number })[]> {
+    return unwrap<(Affiliate & { total_sales: number })[]>(
+      this.request.get(`events/${eventId}/affiliates`, { headers: jsonHeaders }),
+    );
+  }
+
   createWebhook(eventId: number, payload: CreateWebhookPayload): Promise<Webhook> {
     return unwrap<Webhook>(
       this.request.post(`events/${eventId}/webhooks`, { headers: jsonHeaders, data: payload }),
@@ -309,6 +377,24 @@ export class ApiClient {
     return unwrap<{ recovery_codes: string[] }>(
       this.request.post('users/me/two-factor/confirm', { headers: jsonHeaders, data: { code } }),
     );
+  }
+
+  createSsoConnection(accountId: number, payload: SsoConnectionPayload): Promise<{ id: number; provider_key: string }> {
+    return unwrap<{ id: number; provider_key: string }>(
+      this.request.post(`accounts/${accountId}/sso/connection`, { headers: jsonHeaders, data: payload }),
+    );
+  }
+
+  setSsoConnectionStatus(accountId: number, status: 'ACTIVE' | 'INACTIVE'): Promise<void> {
+    return check(this.request.put(`accounts/${accountId}/sso/connection/status`, { headers: jsonHeaders, data: { status } }));
+  }
+
+  updateSsoEnforcement(accountId: number, enabled: boolean): Promise<void> {
+    return check(this.request.put(`accounts/${accountId}/sso/enforcement`, { headers: jsonHeaders, data: { enabled } }));
+  }
+
+  addSsoDomain(accountId: number, domain: string): Promise<void> {
+    return check(this.request.post(`accounts/${accountId}/sso/domains`, { headers: jsonHeaders, data: { domain } }));
   }
 
   setTwoFactorRequirement(accountId: number, required: boolean): Promise<void> {
@@ -537,6 +623,11 @@ export interface UpsertAnnouncementPayload {
   cta_url?: string;
 }
 
+export interface CreateConfigurationPayload {
+  name: string;
+  application_fees: { percentage: number; fixed: number; currency: string };
+}
+
 export class AdminApiClient {
   constructor(private readonly request: APIRequestContext) {}
 
@@ -582,6 +673,23 @@ export class AdminApiClient {
 
   listConfigurations(): Promise<{ id: number; name: string; is_system_default: boolean; default_for_currency: string | null }[]> {
     return unwrap(this.request.get('admin/configurations', { headers: jsonHeaders }));
+  }
+
+  createConfiguration(payload: CreateConfigurationPayload): Promise<{ id: number; name: string }> {
+    return unwrap(this.request.post('admin/configurations', { headers: jsonHeaders, data: payload }));
+  }
+
+  deleteConfiguration(configurationId: number): Promise<void> {
+    return check(this.request.delete(`admin/configurations/${configurationId}`, { headers: jsonHeaders }));
+  }
+
+  assignOrganizerConfiguration(organizerId: number, configurationId: number): Promise<void> {
+    return check(
+      this.request.put(`admin/organizers/${organizerId}/configuration`, {
+        headers: jsonHeaders,
+        data: { configuration_id: configurationId },
+      }),
+    );
   }
 
   createAnnouncement(payload: UpsertAnnouncementPayload): Promise<{ id: number }> {

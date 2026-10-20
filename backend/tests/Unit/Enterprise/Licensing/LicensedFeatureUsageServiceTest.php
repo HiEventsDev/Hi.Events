@@ -13,6 +13,7 @@ use HiEvents\Enterprise\Licensing\LicensedFeature;
 use HiEvents\Enterprise\Licensing\LicensedFeatureUsageService;
 use HiEvents\Enterprise\Seating\Repository\Interfaces\EventSeatMapRepositoryInterface;
 use HiEvents\Enterprise\Seating\Repository\Interfaces\SeatMapRepositoryInterface;
+use HiEvents\Enterprise\Sso\Repository\Interfaces\AccountSsoConnectionRepositoryInterface;
 use Illuminate\Cache\ArrayStore;
 use Illuminate\Cache\Repository as CacheRepository;
 use Mockery;
@@ -29,6 +30,8 @@ class LicensedFeatureUsageServiceTest extends TestCase
 
     private StripeTerminalReaderRepositoryInterface&MockInterface $readers;
 
+    private AccountSsoConnectionRepositoryInterface&MockInterface $ssoConnections;
+
     private CacheRepository $cache;
 
     private LicenceService $licenceService;
@@ -41,6 +44,7 @@ class LicensedFeatureUsageServiceTest extends TestCase
         $this->eventSeatMaps = Mockery::mock(EventSeatMapRepositoryInterface::class);
         $this->boxOffices = Mockery::mock(BoxOfficeRepositoryInterface::class);
         $this->readers = Mockery::mock(StripeTerminalReaderRepositoryInterface::class);
+        $this->ssoConnections = Mockery::mock(AccountSsoConnectionRepositoryInterface::class);
         $this->cache = new CacheRepository(new ArrayStore);
         $this->licenceWithFeatures(LicenceStatus::ACTIVE, [LicensedFeature::SEATING, LicensedFeature::BOX_OFFICE]);
     }
@@ -73,6 +77,24 @@ class LicensedFeatureUsageServiceTest extends TestCase
         $this->assertSame([LicensedFeature::BOX_OFFICE], $this->service()->featuresInUse());
     }
 
+    public function test_an_sso_connection_means_enterprise_sso_is_in_use(): void
+    {
+        $this->usage(seatMaps: false, eventSeatMaps: false, boxOffices: false, readers: false, ssoConnections: true);
+
+        $this->assertSame([LicensedFeature::ENTERPRISE_SSO], $this->service()->featuresInUse());
+    }
+
+    public function test_sso_usage_is_scoped_to_the_account(): void
+    {
+        $this->usage(seatMaps: false, eventSeatMaps: false, boxOffices: false, readers: false, accountId: 42);
+        $this->ssoConnections->shouldReceive('countWhere')
+            ->with(['account_id' => 42])
+            ->once()
+            ->andReturn(1);
+
+        $this->assertSame([LicensedFeature::ENTERPRISE_SSO], $this->service()->featuresInUse(42));
+    }
+
     public function test_both_features_are_reported(): void
     {
         $this->usage(seatMaps: true, eventSeatMaps: null, boxOffices: true, readers: null);
@@ -98,6 +120,7 @@ class LicensedFeatureUsageServiceTest extends TestCase
         $this->seatMaps->shouldReceive('existsForLiveOrganizer')->with(null)->once()->andReturn(true);
         $this->boxOffices->shouldReceive('existsInUseForUpcomingEvent')->with(null)->once()->andReturn(false);
         $this->readers->shouldReceive('existsForLiveOrganizer')->with(null)->once()->andReturn(false);
+        $this->ssoConnections->shouldReceive('countWhere')->andReturn(0);
         $service = $this->service();
 
         $this->assertSame([LicensedFeature::BOX_OFFICE], $service->featuresInUse(42));
@@ -138,12 +161,19 @@ class LicensedFeatureUsageServiceTest extends TestCase
         $this->licenceService = $licenceService;
     }
 
-    private function usage(?bool $seatMaps, ?bool $eventSeatMaps, ?bool $boxOffices, ?bool $readers, ?int $accountId = null, int $times = 1): void
+    private function usage(?bool $seatMaps, ?bool $eventSeatMaps, ?bool $boxOffices, ?bool $readers, ?int $accountId = null, int $times = 1, ?bool $ssoConnections = false): void
     {
         $this->expectCalls($this->seatMaps, 'existsForLiveOrganizer', $seatMaps, $accountId, $times);
         $this->expectCalls($this->eventSeatMaps, 'existsForUpcomingEvent', $eventSeatMaps, $accountId, $times);
         $this->expectCalls($this->boxOffices, 'existsInUseForUpcomingEvent', $boxOffices, $accountId, $times);
         $this->expectCalls($this->readers, 'existsForLiveOrganizer', $readers, $accountId, $times);
+
+        if ($ssoConnections !== null && $accountId === null) {
+            $this->ssoConnections->shouldReceive('countWhere')
+                ->with([])
+                ->times($times)
+                ->andReturn($ssoConnections ? 1 : 0);
+        }
     }
 
     private function expectCalls(MockInterface $mock, string $method, ?bool $result, ?int $accountId, int $times): void
@@ -164,6 +194,7 @@ class LicensedFeatureUsageServiceTest extends TestCase
             $this->eventSeatMaps,
             $this->boxOffices,
             $this->readers,
+            $this->ssoConnections,
             $this->licenceService,
             $this->cache,
         );

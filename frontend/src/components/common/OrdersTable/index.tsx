@@ -1,4 +1,5 @@
 import {t} from "@lingui/macro";
+import {useAccess} from "../../../hooks/useAccess.ts";
 import {Anchor, Button, Group, Menu, Popover, Text, Tooltip} from '@mantine/core';
 import {Event, IdParam, Invoice, Order} from "../../../types.ts";
 import {
@@ -35,6 +36,7 @@ import {ColumnVisibilityToggle} from "../ColumnVisibilityToggle";
 import {CellContext} from "@tanstack/react-table";
 import {formatCurrency} from "../../../utilites/currency.ts";
 import {getBoxOfficeTenderLabel} from "../../../ee/box-office/utilites/boxOfficeTender.ts";
+import {WriteAccess} from "../WriteAccess";
 
 interface OrdersTableProps {
     event: Event,
@@ -106,6 +108,7 @@ export const OrdersTable = ({orders, event, compact}: OrdersTableProps) => {
         );
     }
 
+    const canViewFinancials = useAccess().can('VIEW_FINANCIALS');
     const columns = useMemo<TanStackTableColumn<Order>[]>(
         () => [
             {
@@ -154,14 +157,16 @@ export const OrdersTable = ({orders, event, compact}: OrdersTableProps) => {
                                 </Popover.Target>
                                 <Popover.Dropdown>
                                     <Group gap="xs" style={{flexDirection: 'column', width: '100%'}}>
-                                        <Button
-                                            fullWidth
-                                            variant="light"
-                                            leftSection={<IconSend size={16}/>}
-                                            onClick={() => handleMessageFromEmail(order)}
-                                        >
-                                            {t`Message`}
-                                        </Button>
+                                        <WriteAccess>
+                                            <Button
+                                                fullWidth
+                                                variant="light"
+                                                leftSection={<IconSend size={16}/>}
+                                                onClick={() => handleMessageFromEmail(order)}
+                                            >
+                                                {t`Message`}
+                                            </Button>
+                                        </WriteAccess>
                                         <Button
                                             fullWidth
                                             variant="light"
@@ -389,8 +394,8 @@ export const OrdersTable = ({orders, event, compact}: OrdersTableProps) => {
                     sticky: 'right',
                 },
             },
-        ],
-        [event.id, emailPopoverId]
+        ].filter(column => canViewFinancials || column.id !== 'amount') as TanStackTableColumn<Order>[],
+        [event.id, emailPopoverId, canViewFinancials]
     );
 
     if (orders.length === 0) {

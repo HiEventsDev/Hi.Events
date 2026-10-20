@@ -71,3 +71,47 @@ export function stripeReaderIdFor(readerId: number): string {
   }
   return stripeReaderId;
 }
+
+const DOMAIN = /^[a-z0-9.-]+\.[a-z]{2,}$/;
+
+export function enableFeatureFlag(accountId: number, key: string): void {
+  if (!Number.isInteger(accountId) || !/^[a-z_]+$/.test(key)) {
+    throw new Error(`Refusing to enable an unexpected feature flag ${key} for account ${accountId}`);
+  }
+  runSql(
+    `INSERT INTO account_feature_flag_overrides (account_id, feature_flag_id, enabled, created_at, updated_at)
+     SELECT ${accountId}, id, true, NOW(), NOW() FROM feature_flags WHERE key = '${key}'
+     ON CONFLICT (account_id, feature_flag_id) DO UPDATE SET enabled = true`,
+  );
+}
+
+export function markSsoDomainVerified(accountId: number, domain: string): void {
+  if (!Number.isInteger(accountId) || !DOMAIN.test(domain)) {
+    throw new Error(`Refusing to verify an unexpected domain ${domain}`);
+  }
+  const updated = runSql(
+    `UPDATE account_sso_domains SET verified_at = NOW(), last_checked_at = NOW() WHERE account_id = ${accountId} AND domain = '${domain}' RETURNING id`,
+  ).trim();
+  if (updated === '') {
+    throw new Error(`No pending domain ${domain} on account ${accountId}`);
+  }
+}
+
+export function markSsoConnectionTested(accountId: number): void {
+  if (!Number.isInteger(accountId)) {
+    throw new Error(`Refusing to update an unexpected account ${accountId}`);
+  }
+  runSql(`UPDATE account_sso_connections SET last_tested_at = NOW() WHERE account_id = ${accountId}`);
+}
+
+export function expireApiKey(apiKeyId: number): void {
+  if (!Number.isInteger(apiKeyId)) {
+    throw new Error(`Refusing to expire an unexpected API key ${apiKeyId}`);
+  }
+  const updated = runSql(
+    `UPDATE personal_access_tokens SET expires_at = NOW() - INTERVAL '2 days' WHERE id = ${apiKeyId} RETURNING id`,
+  ).trim();
+  if (updated === '') {
+    throw new Error(`No API key found with id ${apiKeyId}`);
+  }
+}

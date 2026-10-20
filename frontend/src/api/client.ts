@@ -2,34 +2,16 @@ import axios from "axios";
 import {isSsr} from "../utilites/helpers.ts";
 import {getConfig} from "../utilites/config.ts";
 import {applySsrRequestHeaders} from "./ssrRequestHeaders.ts";
+import {queueSilentReauthAfterExpiry, setAuthNotice} from "../utilites/ssoFlow.ts";
+import {LOGIN_PATH, resolveAuthErrorAction, TWO_FACTOR_SETUP_PATH} from "./authErrorRedirect.ts";
+
+export {TWO_FACTOR_SETUP_PATH};
 
 const BASE_URL = isSsr()
     ? getConfig('VITE_API_URL_SERVER')
     : getConfig('VITE_API_URL_CLIENT');
-const LOGIN_PATH = "/auth/login";
-export const TWO_FACTOR_SETUP_PATH = "/auth/two-factor-setup";
+export const SECURITY_SETTINGS_PATH = "/settings/security";
 const PREVIOUS_URL_KEY = 'previous_url';
-
-// todo - This isn't scalable, we need to better way to manage this
-const ALLOWED_UNAUTHENTICATED_PATHS = [
-    'auth/login',
-    'accept-invitation',
-    'register',
-    'forgot-password',
-    'auth',
-    'account/payment',
-    'checkout',
-    'box-office',
-    '/event/',
-    'print',
-    '/order/',
-    'widget',
-    '/product/',
-    'check-in',
-    '/events/',
-    'my-tickets',
-    'emails/unsubscribe',
-];
 
 export const api = axios.create({
     baseURL: BASE_URL,
@@ -47,31 +29,19 @@ api.interceptors.response.use(
         if (!error.response) {
             return Promise.reject(error);
         }
-        const { status } = error.response;
-        const currentPath = window?.location.pathname;
-        const isAllowedUnauthenticatedPath = ALLOWED_UNAUTHENTICATED_PATHS.some(path => currentPath.includes(path));
-        const isManageEventPath = currentPath.startsWith('/manage/event/');
-        const isAuthError = status === 401 || status === 403;
+        const {status, data} = error.response;
+        const action = resolveAuthErrorAction(status, data?.error_code, window?.location.pathname);
 
-        if (status === 403 && error.response.data?.error_code === 'ACCOUNT_PENDING_DELETION') {
-            if (!currentPath.startsWith('/account')) {
-                window?.location?.replace('/account/danger-zone');
+        if (action.type === 'redirect') {
+            window?.location?.replace(action.to);
+        }
+
+        if (action.type === 'login') {
+            if (data?.error_code === 'SSO_REQUIRED') {
+                setAuthNotice('SSO_REQUIRED');
+            } else if (status === 401) {
+                queueSilentReauthAfterExpiry();
             }
-            return Promise.reject(error);
-        }
-
-        if (status === 403 && error.response.data?.error_code === 'TWO_FACTOR_SETUP_REQUIRED') {
-            if (!currentPath.startsWith(TWO_FACTOR_SETUP_PATH)) {
-                window?.location?.replace(TWO_FACTOR_SETUP_PATH);
-            }
-            return Promise.reject(error);
-        }
-
-        if (status === 403 && error.response.data?.error_code === 'FEATURE_UNAVAILABLE') {
-            return Promise.reject(error);
-        }
-
-        if (isAuthError && (!isAllowedUnauthenticatedPath || isManageEventPath)) {
             window?.localStorage?.setItem(PREVIOUS_URL_KEY, window?.location.href);
             const searchParams = window?.location?.search || '';
             window?.location?.replace(LOGIN_PATH + searchParams);
@@ -87,10 +57,16 @@ export const setPreviousUrl = (url: string) => {
     window?.localStorage?.setItem(PREVIOUS_URL_KEY, url);
 };
 
-export const redirectToPreviousUrl = () => {
+export const redirectToPreviousUrl = (replaceHistory = false) => {
     const previousUrl = window?.localStorage?.getItem(PREVIOUS_URL_KEY) || '/manage/events';
     window?.localStorage?.removeItem(PREVIOUS_URL_KEY);
-    if (typeof window !== "undefined") {
+    if (typeof window === "undefined") {
+        return;
+    }
+
+    if (replaceHistory) {
+        window.location.replace(previousUrl);
+    } else {
         window.location.href = previousUrl;
     }
 };

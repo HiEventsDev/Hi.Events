@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Application\Handlers\User\TwoFactor;
 
 use HiEvents\DomainObjects\UserTrustedDeviceDomainObject;
+use HiEvents\Enterprise\Sso\Services\Domain\SsoEnforcementService;
 use HiEvents\Repository\Eloquent\Value\OrderAndDirection;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserTrustedDeviceRepositoryInterface;
@@ -19,6 +20,7 @@ class GetTwoFactorStatusHandler
         private readonly TwoFactorAuthenticationService $twoFactorAuthenticationService,
         private readonly RecoveryCodeService $recoveryCodeService,
         private readonly TwoFactorRequirementService $twoFactorRequirementService,
+        private readonly SsoEnforcementService $ssoEnforcementService,
     ) {}
 
     public function handle(int $userId): TwoFactorStatusDTO
@@ -42,6 +44,7 @@ class GetTwoFactorStatusHandler
                 )
                 : collect(),
             requiredByAccounts: $this->twoFactorRequirementService->namesOfAccountsRequiringTwoFactor($userId),
+            requiredBySsoAccounts: $this->ssoEnforcementService->namesOfOwnedEnforcingAccounts($userId),
         );
     }
 }

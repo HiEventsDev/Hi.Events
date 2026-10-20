@@ -1,4 +1,5 @@
 import {useParams} from "react-router";
+import {CreateButton} from "../../common/CreateButton";
 import {useGetAttendees} from "../../../queries/useGetAttendees.ts";
 import {PageTitle} from "../../common/PageTitle";
 import {PageBody} from "../../common/PageBody";
@@ -25,7 +26,7 @@ import {useGetEventOccurrences} from "../../../queries/useGetEventOccurrences.ts
 import {SortSelector} from "../../common/SortSelector";
 import {OccurrenceSelect} from "../../common/OccurrenceSelect";
 
-const attendeeStatuses = [
+const getAttendeeStatuses = () => [
     {label: t`Active`, value: 'ACTIVE'},
     {label: t`Cancelled`, value: 'CANCELLED'},
     {label: t`Awaiting Payment`, value: 'AWAITING_PAYMENT'},
@@ -80,7 +81,7 @@ const Attendees = () => {
             field: 'status',
             label: t`Attendee Status`,
             type: 'multi-select',
-            options: attendeeStatuses
+            options: getAttendeeStatuses()
         }
     ];
 
@@ -249,9 +250,9 @@ const Attendees = () => {
                     resultCount={pagination?.total}
                     resultLabel={t`attendees`}
                 >
-                    <Button color={'green'} size={'sm'} data-testid="attendee-create-button" onClick={openCreateModal} rightSection={<IconPlus/>}>
+                    <CreateButton color={'green'} size={'sm'} data-testid="attendee-create-button" onClick={openCreateModal} rightSection={<IconPlus/>}>
                         {t`Create`}
-                    </Button>
+                    </CreateButton>
 
                     <Button color={'green'}
                             size={'sm'}

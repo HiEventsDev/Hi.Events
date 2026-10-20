@@ -123,6 +123,7 @@ npm test              # run everything
 npm run test:ui       # Playwright UI mode (great for authoring)
 npm run test:headed   # headed browser
 npm run test:smoke    # only @smoke-tagged specs
+npx playwright test --config tests '\.unit\.spec\.ts$'   # pure-logic unit specs, no stack needed
 npm run report        # open the last HTML report
 npm run typecheck     # tsc --noEmit
 ```
@@ -228,7 +229,7 @@ widgets with no accessible label (e.g. `CustomSelect`, whose `dataTestId` prop l
 on its target and auto-derives `<id>-option-<value>` on each option). Convention:
 kebab-case `<feature>-<element>`. Don't add IDs to text inputs with a unique label —
 use `getByLabel(/^Label/)` (anchored regex dodges Mantine's required `*`). See the
-"Test IDs (E2E)" note in the repo `CLAUDE.md`.
+test ID rules in `.claude/rules/frontend/ui.md`.
 
 Watch for two things when asserting on list content: Mantine's `Truncate` hides the
 full text in a tooltip past its length limit (assert a short value, or target the
@@ -266,6 +267,9 @@ Lanes:
   (`E2E_SAAS_MODE=false`) and a SaaS stack (`E2E_SAAS_MODE=true`), each sharded across two
   parallel jobs with their own hermetic stack.
 - Adding the **`full-e2e` label** to a PR forces the full lane on that PR.
+- **Every run**, pull requests included, also runs all `*.unit.spec.ts` files in a
+  stack-less `e2e unit specs` job (`npx playwright test --config tests '\.unit\.spec\.ts$'`),
+  so pure-logic specs don't need an `@smoke` tag.
 
 A final `summary` job merges every shard's `results.json` (via `scripts/github-summary.mjs`)
 into one report on the run's summary page (and as a PR comment): a pass/fail table per

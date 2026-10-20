@@ -2,6 +2,7 @@
 
 namespace HiEvents\Resources\EventOccurrence;
 
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\Resources\BaseResource;
 use HiEvents\Resources\EventLocation\EventLocationResource;
@@ -50,14 +51,17 @@ class EventOccurrenceResource extends BaseResource
                     'applies_to' => $allocation->applies_to,
                 ], $this->getBookingLimits()->allocations),
             ]),
+            /** @var array{orders_created: int, attendees_registered: int, products_sold: int, total_gross_sales?: float, total_tax?: float, total_fee?: float, total_refunded?: float} */
             'statistics' => $this->when($stats !== null, fn () => [
-                'total_gross_sales' => $stats->getSalesTotalGross() ?? 0,
-                'total_tax' => $stats->getTotalTax() ?? 0,
-                'total_fee' => $stats->getTotalFee() ?? 0,
                 'orders_created' => $stats->getOrdersCreated() ?? 0,
-                'total_refunded' => $stats->getTotalRefunded() ?? 0,
                 'attendees_registered' => $stats->getAttendeesRegistered() ?? 0,
                 'products_sold' => $stats->getProductsSold() ?? 0,
+                ...($this->isPermitted(Permission::VIEW_FINANCIALS) ? [
+                    'total_gross_sales' => $stats->getSalesTotalGross() ?? 0,
+                    'total_tax' => $stats->getTotalTax() ?? 0,
+                    'total_fee' => $stats->getTotalFee() ?? 0,
+                    'total_refunded' => $stats->getTotalRefunded() ?? 0,
+                ] : []),
             ]),
             'created_at' => $this->getCreatedAt(),
             'updated_at' => $this->getUpdatedAt(),

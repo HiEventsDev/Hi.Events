@@ -9,8 +9,9 @@ import {eventHomepagePath, eventHomepageUrl} from "../../../utilites/urlHelper.t
 import {ShareComponent} from "../../common/ShareIcon";
 import {AddToEventCalendarButton} from "../../common/AddEventToCalendarButton";
 import classNames from "classnames";
-import React, {useCallback, useEffect, useMemo, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {getEmbedMode, getParentOrigin} from "../../../utilites/iframeResize.ts";
+import {resolveClientEmbedLocale} from "../../../utilites/embedLocale.ts";
 import {Invoice} from "../../../types.ts";
 import {orderClientPublic} from "../../../api/order.client.ts";
 import {downloadBinary} from "../../../utilites/download.ts";
@@ -67,6 +68,7 @@ const Checkout = () => {
     }, []);
 
     const closeModal = useCallback(() => postToParent('hievents:close-checkout'), [postToParent]);
+    const reportedOrderRef = useRef<string | null>(null);
 
     const getCurrentStep = (): 'details' | 'payment' | 'summary' => {
         const pathname = location.pathname;
@@ -152,11 +154,26 @@ const Checkout = () => {
                 ...(parentOrigin ? {sessionId: getCheckoutSessionIdentifier(String(orderShortId))} : {}),
                 step: currentStep,
                 reservedUntil: order?.reserved_until ? utcDateToEpochMs(order.reserved_until) : null,
+                locale: resolveClientEmbedLocale(),
             });
         } else if (orderIsCompleted || orderIsAwaitingOfflinePayment) {
             postToParent('hievents:checkout-cleared');
         }
     }, [isModal, isOrderReservedAndNotExpired, orderIsCompleted, orderIsAwaitingOfflinePayment, order?.reserved_until, currentStep, eventId, orderShortId, postToParent]);
+
+    useEffect(() => {
+        if (!isModal || !order || !(orderIsCompleted || orderIsAwaitingOfflinePayment) || reportedOrderRef.current === order.short_id) {
+            return;
+        }
+        reportedOrderRef.current = order.short_id;
+        postToParent('hievents:order-completed', {
+            eventId,
+            currency: order.currency,
+            total: order.total_gross,
+            quantity: (order.order_items ?? []).reduce((sum, item) => sum + item.quantity, 0),
+            status: order.status,
+        });
+    }, [isModal, order, orderIsCompleted, orderIsAwaitingOfflinePayment, eventId, postToParent]);
 
     useEffect(() => {
         if (!isModal) return;

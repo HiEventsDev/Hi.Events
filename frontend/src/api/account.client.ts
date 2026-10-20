@@ -17,7 +17,7 @@ export const accountClient = {
         const response = await api.get<GenericDataResponse<Account>>('accounts');
         return response.data;
     },
-    updateAccount: async (account: Account) => {
+    updateAccount: async (account: Partial<Account>) => {
         const response = await api.put<GenericDataResponse<Account>>('accounts', account);
         return response.data;
     },

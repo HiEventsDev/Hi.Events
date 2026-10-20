@@ -58,7 +58,6 @@ class MarkOrderAsPaidService
             $order = $this->orderRepository
                 ->loadRelation(OrderItemDomainObject::class)
                 ->loadRelation(AttendeeDomainObject::class)
-                ->loadRelation(InvoiceDomainObject::class)
                 ->findFirstWhere([
                     OrderDomainObjectAbstract::ID => $orderId,
                     OrderDomainObjectAbstract::EVENT_ID => $eventId,
@@ -103,6 +102,7 @@ class MarkOrderAsPaidService
                     ],
                 ))
                 ->loadRelation(AttendeeDomainObject::class)
+                ->loadRelation(InvoiceDomainObject::class)
                 ->findById($orderId);
 
             if ($updatedOrder->getAffiliateId()) {
@@ -133,7 +133,7 @@ class MarkOrderAsPaidService
                 event: $event,
                 organizer: $event->getOrganizer(),
                 eventSettings: $event->getEventSettings(),
-                invoice: $order->getLatestInvoice(),
+                invoice: $updatedOrder->getLatestInvoice(),
             );
 
             return $updatedOrder;

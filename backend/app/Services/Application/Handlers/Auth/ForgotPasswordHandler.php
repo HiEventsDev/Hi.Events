@@ -3,9 +3,12 @@
 namespace HiEvents\Services\Application\Handlers\Auth;
 
 use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Enterprise\Sso\Services\Domain\SsoEnforcementService;
 use HiEvents\Mail\User\ForgotPassword;
 use HiEvents\Repository\Interfaces\PasswordResetTokenRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\Services\Domain\Auth\PasswordLoginPolicy;
+use HiEvents\Services\Domain\Auth\Sso\UserIdentityService;
 use HiEvents\Services\Infrastructure\TokenGenerator\TokenGeneratorService;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
@@ -22,6 +25,9 @@ class ForgotPasswordHandler
         private readonly PasswordResetTokenRepositoryInterface $passwordResetTokenRepository,
         private readonly TokenGeneratorService $tokenGeneratorService,
         private readonly DatabaseManager $databaseManager,
+        private readonly PasswordLoginPolicy $passwordLoginPolicy,
+        private readonly UserIdentityService $userIdentityService,
+        private readonly SsoEnforcementService $ssoEnforcementService,
     ) {}
 
     /**
@@ -46,6 +52,10 @@ class ForgotPasswordHandler
 
         if ($user === null) {
             $this->logUnrecognisedEmail($email);
+            throw new ResourceNotFoundException;
+        }
+
+        if (! $this->passwordLoginPolicy->isAllowedFor($user->getId()) || ! $this->ssoEnforcementService->isPasswordResetAllowed($user)) {
             throw new ResourceNotFoundException;
         }
 
@@ -78,6 +88,7 @@ class ForgotPasswordHandler
             ->send(new ForgotPassword(
                 user: $user,
                 token: $token,
+                signInProviders: $this->userIdentityService->providerNamesFor($user->getId()),
             ));
     }
 

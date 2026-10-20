@@ -7,10 +7,11 @@ use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Enterprise\Licensing\LicenceService;
 use HiEvents\Enterprise\Licensing\LicensedFeature;
 use HiEvents\Enterprise\Licensing\LicensedFeatureUsageService;
+use HiEvents\Enterprise\Sso\Services\Domain\SsoEnforcementService;
+use HiEvents\Services\Domain\Auth\AuthUserService;
 use HiEvents\Services\Domain\Auth\TwoFactor\TwoFactorRequirementService;
 use HiEvents\Services\Domain\FeatureFlag\FeatureFlagService;
 use Illuminate\Http\Request;
-use PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException;
 
 /**
  * @mixin UserDomainObject
@@ -21,7 +22,8 @@ class MeResource extends UserResource
     {
         $accountUser = $this->getCurrentAccountUser();
         $accountId = $accountUser?->getAccountId();
-        $licence = app(LicenceService::class)->state();
+        $licenceService = app(LicenceService::class);
+        $licence = $licenceService->state();
         $featuresInUse = match (true) {
             $accountUser?->getRole() === Role::SUPERADMIN->name => app(LicensedFeatureUsageService::class)->featuresInUse(),
             $accountId !== null => app(LicensedFeatureUsageService::class)->featuresInUse($accountId),
@@ -32,8 +34,10 @@ class MeResource extends UserResource
             ...parent::toArray($request),
             'two_factor_setup_required' => $accountId !== null
                 && $this->getTwoFactorConfirmedAt() === null
-                && ! $this->isImpersonating()
+                && ! app(AuthUserService::class)->isImpersonating()
                 && app(TwoFactorRequirementService::class)->isRequiredByAccount($accountId),
+            /** @var bool */
+            'password_reset_allowed' => app(SsoEnforcementService::class)->isPasswordResetAllowed($this->resource),
             /** @var array<string, bool> */
             'feature_flags' => (object) ($accountId !== null
                 ? app(FeatureFlagService::class)->getEnabledFlagsForAccount($accountId)
@@ -44,21 +48,22 @@ class MeResource extends UserResource
                 'expires_at' => $licence->licence?->expires_at->toDateString(),
                 'grace_ends_at' => $licence->grace_ends_at?->toDateString(),
                 'invalid_reason' => $licence->invalid_reason,
-                /** @var array<int, 'seating'|'box_office'|'white_label'> */
+                /** @var array<int, 'seating'|'box_office'|'enterprise_sso'|'white_label'> */
+                'features' => array_map(
+                    static fn (LicensedFeature $feature) => $feature->value,
+                    $licence->features,
+                ),
+                /** @var array<int, 'seating'|'box_office'|'enterprise_sso'|'white_label'> */
+                'unlocked_features' => array_map(
+                    static fn (LicensedFeature $feature) => $feature->value,
+                    $licenceService->unlockedFeatures(),
+                ),
+                /** @var array<int, 'seating'|'box_office'|'enterprise_sso'|'white_label'> */
                 'features_in_use' => array_map(
                     static fn (LicensedFeature $feature) => $feature->value,
                     $featuresInUse,
                 ),
             ],
         ];
-    }
-
-    private function isImpersonating(): bool
-    {
-        try {
-            return (bool) auth()->payload()->get('is_impersonating', false);
-        } catch (JWTException) {
-            return false;
-        }
     }
 }

@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import {useAccess} from "../../../hooks/useAccess.ts";
 import {useParams} from "react-router";
 import {Button, Group} from "@mantine/core";
 import {IconDownload} from "@tabler/icons-react";
@@ -26,18 +27,19 @@ import {useLicensedFeature} from "../../../ee/licensing/hooks/useLicensedFeature
 import {FeatureFlag} from "../../../constants/featureFlags.ts";
 import {getProductsFromEvent} from "../../../utilites/helpers.ts";
 
-const orderStatuses = [
+const getOrderStatuses = () => [
     {label: t`Completed`, value: 'COMPLETED'},
     {label: t`Cancelled`, value: 'CANCELLED'},
     {label: t`Awaiting Offline Payment`, value: 'AWAITING_OFFLINE_PAYMENT'},
 ];
 
-const refundStatuses = [
+const getRefundStatuses = () => [
     {label: t`Refunded`, value: 'REFUNDED'},
     {label: t`Partially Refunded`, value: 'PARTIALLY_REFUNDED'},
 ];
 
 export const Orders: React.FC = () => {
+    const canViewFinancials = useAccess().can('VIEW_FINANCIALS');
     const {eventId} = useParams<{ eventId: string }>();
     const {data: event} = useGetEvent(eventId);
     const isRecurring = event?.type === EventType.RECURRING;
@@ -71,13 +73,13 @@ export const Orders: React.FC = () => {
             field: 'status',
             label: t`Order Status`,
             type: 'multi-select',
-            options: orderStatuses
+            options: getOrderStatuses()
         },
         {
             field: 'refund_status',
             label: t`Refund Status`,
             type: 'multi-select',
-            options: refundStatuses
+            options: getRefundStatuses()
         },
         ...(boxOffices.length > 0 ? [{
             field: 'box_office_id',
@@ -238,7 +240,7 @@ export const Orders: React.FC = () => {
                 resultCount={pagination?.total}
                 resultLabel={t`orders`}
             >
-                <Button
+                {canViewFinancials && <Button
                     onClick={() => handleExport(eventId)}
                     rightSection={<IconDownload size={14}/>}
                     color="green"
@@ -246,7 +248,7 @@ export const Orders: React.FC = () => {
                     size="sm"
                 >
                     {t`Export`}
-                </Button>
+                </Button>}
             </ToolBar>
 
             <TableSkeleton isVisible={!orders || ordersQuery.isFetching}/>

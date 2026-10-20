@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Admin\Configurations;
 
-use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Interfaces\OrganizerConfigurationRepositoryInterface;
 use HiEvents\Resources\Organizer\OrganizerConfigurationResource;
@@ -18,7 +17,7 @@ class GetAllConfigurationsAction extends BaseAction
 
     public function __invoke(): JsonResponse
     {
-        $this->minimumAllowedRole(Role::SUPERADMIN);
+        $this->requireSuperAdmin();
 
         $configurations = $this->repository->all();
 

@@ -11,6 +11,8 @@ use Illuminate\Validation\Rule;
 
 class CreateUserRequest extends BaseRequest
 {
+    use ValidatesAccountUserAccess;
+
     public function rules(): array
     {
         return [
@@ -21,6 +23,7 @@ class CreateUserRequest extends BaseRequest
                 'required',
                 'email',
             ],
+            ...$this->accessRules(),
         ];
     }
 }

@@ -6,11 +6,13 @@ namespace HiEvents\Http\Actions\Announcements;
 
 use HiEvents\Exceptions\AnnouncementNotFoundException;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\AllowedForReadOnlyUsers;
 use HiEvents\Services\Application\Handlers\Announcement\DismissAnnouncementHandler;
 use HiEvents\Services\Application\Handlers\Announcement\DTO\DismissAnnouncementDTO;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
+#[AllowedForReadOnlyUsers]
 class DismissAnnouncementAction extends BaseAction
 {
     public function __construct(

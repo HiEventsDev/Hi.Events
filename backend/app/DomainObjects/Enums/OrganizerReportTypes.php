@@ -11,4 +11,9 @@ enum OrganizerReportTypes: string
     case TAX_SUMMARY = 'tax_summary';
     case CHECK_IN_SUMMARY = 'check_in_summary';
     case PLATFORM_FEES = 'platform_fees';
+
+    public function isFinancial(): bool
+    {
+        return $this !== self::CHECK_IN_SUMMARY;
+    }
 }

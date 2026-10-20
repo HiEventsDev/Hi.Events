@@ -1,6 +1,7 @@
 import React from "react";
 import {NavLink} from "react-router";
 import {Breadcrumbs, Burger} from '@mantine/core';
+import {t} from "@lingui/macro";
 import classes from './Topbar.module.scss';
 import {BreadcrumbItem} from "../types";
 import {GlobalMenu} from "../../../common/GlobalMenu";
@@ -34,6 +35,9 @@ export const Topbar: React.FC<TopbarProps> = ({
                         opened={sidebarOpen}
                         onClick={() => setSidebarOpen(!sidebarOpen)}
                         size={'sm'}
+                        aria-label={sidebarOpen ? t`Close sidebar` : t`Open sidebar`}
+                        aria-expanded={sidebarOpen}
+                        aria-controls="app-manage-sidebar"
                     />
                 </div>
                 <div className={classes.logo}>
@@ -55,10 +59,12 @@ export const Topbar: React.FC<TopbarProps> = ({
             <div className={classes.breadcrumbsRow}>
                 <div className={classes.breadcrumbs}>
                     <Breadcrumbs separator={<span style={{margin: '0 4px', color: '#aaa'}}>/</span>}>
-                        {breadcrumbItems.map((item, index) => (
-                            <NavLink key={index} to={item.link ?? '#'}>
+                        {breadcrumbItems.map((item, index) => item.link ? (
+                            <NavLink key={index} to={item.link}>
                                 {item.content}
                             </NavLink>
+                        ) : (
+                            <span key={index}>{item.content}</span>
                         ))}
                     </Breadcrumbs>
                 </div>

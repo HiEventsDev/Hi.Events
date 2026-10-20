@@ -8,16 +8,26 @@ export interface InstanceInfo {
     dev_mode: boolean;
 }
 
+export type LicencePlan = 'own_events' | 'platform' | 'cloud';
+
 export interface AdminLicence {
     status: LicenceStatus;
     features: string[];
     lid: string | null;
     customer: string | null;
-    plan: string | null;
+    plan: LicencePlan | null;
     issued_at: string | null;
     expires_at: string | null;
     grace_ends_at: string | null;
+    covered_sales: number | null;
     invalid_reason: string | null;
+}
+
+export interface LicenceSalesPeriod {
+    starts_on: string;
+    ends_on: string;
+    is_current: boolean;
+    sales: { currency: string, amount: number }[];
 }
 
 export const licenceClientPublic = {
@@ -30,6 +40,10 @@ export const licenceClientPublic = {
 export const licenceAdminClient = {
     getLicence: async () => {
         const response = await api.get<GenericDataResponse<AdminLicence>>('admin/licence');
+        return response.data;
+    },
+    getLicenceSales: async () => {
+        const response = await api.get<GenericDataResponse<LicenceSalesPeriod[]>>('admin/licence/sales');
         return response.data;
     },
 };

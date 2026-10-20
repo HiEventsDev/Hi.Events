@@ -8,13 +8,18 @@ use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\Enterprise\Seating\Services\Domain\SeatClaimService;
 use HiEvents\Enterprise\Seating\Services\Domain\SeatedProductLookupService;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatingEventLockService;
 use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Attendee\DTO\PartialEditAttendeeDTO;
 use HiEvents\Services\Application\Handlers\Attendee\PartialEditAttendeeHandler;
+use HiEvents\Services\Domain\EventOccurrence\OccurrencePurchaseEligibilityService;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsCancellationService;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsReactivationService;
+use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
+use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesDTO;
+use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesResponseDTO;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
@@ -62,6 +67,12 @@ class PartialEditAttendeeHandlerTest extends TestCase
 
     private SeatedProductLookupService|MockInterface $seatedProductLookupService;
 
+    private SeatingEventLockService|MockInterface $seatingEventLock;
+
+    private OccurrencePurchaseEligibilityService|MockInterface $occurrenceEligibilityService;
+
+    private AvailableProductQuantitiesFetchService|MockInterface $availableProductQuantitiesFetchService;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -84,6 +95,12 @@ class PartialEditAttendeeHandlerTest extends TestCase
         $this->seatedProductLookupService = Mockery::mock(SeatedProductLookupService::class);
         $this->seatedProductLookupService->shouldReceive('isSeated')->andReturn(false)->byDefault();
 
+        $this->seatingEventLock = Mockery::mock(SeatingEventLockService::class);
+        $this->seatingEventLock->shouldReceive('lock')->with(self::EVENT_ID)->byDefault();
+
+        $this->occurrenceEligibilityService = Mockery::mock(OccurrencePurchaseEligibilityService::class);
+        $this->availableProductQuantitiesFetchService = Mockery::mock(AvailableProductQuantitiesFetchService::class);
+
         $this->handler = new PartialEditAttendeeHandler(
             $this->attendeeRepository,
             $this->orderRepository,
@@ -95,6 +112,9 @@ class PartialEditAttendeeHandlerTest extends TestCase
             Mockery::mock(LoggerInterface::class)->shouldIgnoreMissing(),
             $this->seatClaimService,
             $this->seatedProductLookupService,
+            $this->seatingEventLock,
+            $this->occurrenceEligibilityService,
+            $this->availableProductQuantitiesFetchService,
         );
     }
 
@@ -136,6 +156,7 @@ class PartialEditAttendeeHandlerTest extends TestCase
     {
         $this->givenAttendee(AttendeeStatus::CANCELLED);
         $this->givenOrderExists();
+        $this->givenRoomToReactivate();
         $this->expectAttendeeUpdatedWithStatus(AttendeeStatus::ACTIVE);
 
         $this->productQuantityService->shouldReceive('increaseQuantitySold')
@@ -313,6 +334,124 @@ class PartialEditAttendeeHandlerTest extends TestCase
         $this->handler->handle($this->dto(AttendeeStatus::CANCELLED));
     }
 
+    public function test_the_event_is_locked_before_the_attendee_is_read(): void
+    {
+        $this->seatingEventLock->shouldReceive('lock')->once()->with(self::EVENT_ID)->globally()->ordered();
+        $this->attendeeRepository->shouldReceive('findFirstWhere')
+            ->once()
+            ->globally()
+            ->ordered()
+            ->andReturn($this->attendee(AttendeeStatus::ACTIVE));
+        $this->expectAttendeeUpdatedWithStatus(AttendeeStatus::ACTIVE);
+
+        $this->handler->handle($this->dto(AttendeeStatus::ACTIVE));
+    }
+
+    public function test_editing_only_contact_details_does_not_lock_the_event(): void
+    {
+        $this->givenAttendee(AttendeeStatus::ACTIVE);
+        $this->attendeeRepository->shouldReceive('updateByIdWhere')->once()->andReturn(new AttendeeDomainObject);
+        $this->seatingEventLock->shouldNotReceive('lock');
+
+        $this->handler->handle(new PartialEditAttendeeDTO(
+            attendee_id: self::ATTENDEE_ID,
+            event_id: self::EVENT_ID,
+            first_name: 'Renamed',
+            last_name: null,
+            email: null,
+            status: null,
+        ));
+    }
+
+    public function test_a_cancelled_attendee_is_not_reactivated_when_their_price_has_no_room(): void
+    {
+        $this->givenAttendee(AttendeeStatus::CANCELLED);
+        $this->givenRoomToReactivate(quantityAvailable: 0);
+
+        $this->productQuantityService->shouldNotReceive('increaseQuantitySold');
+        $this->reactivationService->shouldNotReceive('incrementForReactivatedAttendee');
+        $this->attendeeRepository->shouldNotReceive('updateByIdWhere');
+
+        $this->assertStatusRefused(AttendeeStatus::ACTIVE);
+
+        Event::assertNotDispatched(CapacityChangedEvent::class);
+    }
+
+    public function test_a_cancelled_attendee_is_not_reactivated_when_the_price_row_is_gone(): void
+    {
+        $this->givenAttendee(AttendeeStatus::CANCELLED);
+        $this->occurrenceEligibilityService->shouldReceive('assertOccurrencePurchasable');
+        $this->availableProductQuantitiesFetchService->shouldReceive('getAvailableProductQuantities')
+            ->andReturn(new AvailableProductQuantitiesResponseDTO(productQuantities: collect()));
+
+        $this->productQuantityService->shouldNotReceive('increaseQuantitySold');
+        $this->attendeeRepository->shouldNotReceive('updateByIdWhere');
+
+        $this->assertStatusRefused(AttendeeStatus::ACTIVE);
+    }
+
+    public function test_a_full_date_is_reported_against_the_status_field(): void
+    {
+        $this->givenAttendee(AttendeeStatus::CANCELLED);
+        $this->occurrenceEligibilityService->shouldReceive('assertOccurrencePurchasable')
+            ->once()
+            ->with(self::EVENT_ID, self::OCCURRENCE_ID, 1, false, null, null, true)
+            ->andThrow(ValidationException::withMessages(['event_occurrence_id' => 'This event is sold out']));
+        $this->availableProductQuantitiesFetchService->shouldNotReceive('getAvailableProductQuantities');
+
+        $this->productQuantityService->shouldNotReceive('increaseQuantitySold');
+        $this->attendeeRepository->shouldNotReceive('updateByIdWhere');
+
+        $this->assertSame('This event is sold out', $this->assertStatusRefused(AttendeeStatus::ACTIVE));
+    }
+
+    public function test_moving_from_awaiting_payment_to_active_does_not_touch_capacity_or_statistics(): void
+    {
+        $this->givenAttendee(AttendeeStatus::AWAITING_PAYMENT);
+        $this->expectAttendeeUpdatedWithStatus(AttendeeStatus::ACTIVE);
+
+        $this->occurrenceEligibilityService->shouldNotReceive('assertOccurrencePurchasable');
+        $this->availableProductQuantitiesFetchService->shouldNotReceive('getAvailableProductQuantities');
+        $this->seatClaimService->shouldNotReceive('reclaimForAttendee');
+        $this->productQuantityService->shouldNotReceive('increaseQuantitySold');
+        $this->productQuantityService->shouldNotReceive('decreaseQuantitySold');
+        $this->reactivationService->shouldNotReceive('incrementForReactivatedAttendee');
+        $this->cancellationService->shouldNotReceive('decrementForCancelledAttendee');
+        $this->domainEventDispatcherService->shouldNotReceive('dispatch');
+
+        $this->handler->handle($this->dto(AttendeeStatus::ACTIVE));
+
+        Event::assertNotDispatched(CapacityChangedEvent::class);
+    }
+
+    public function test_bringing_a_cancelled_attendee_back_as_awaiting_payment_is_checked_and_counted(): void
+    {
+        $this->givenAttendee(AttendeeStatus::CANCELLED);
+        $this->givenOrderExists();
+        $this->givenRoomToReactivate();
+        $this->expectAttendeeUpdatedWithStatus(AttendeeStatus::AWAITING_PAYMENT);
+
+        $this->productQuantityService->shouldReceive('increaseQuantitySold')
+            ->once()
+            ->with(self::PRODUCT_PRICE_ID, 1, self::OCCURRENCE_ID);
+        $this->reactivationService->shouldReceive('incrementForReactivatedAttendee')
+            ->once()
+            ->with(self::EVENT_ID, self::ORDER_CREATED_AT, 1, self::OCCURRENCE_ID);
+
+        $this->handler->handle($this->dto(AttendeeStatus::AWAITING_PAYMENT));
+    }
+
+    public function test_a_cancelled_attendee_without_a_seat_cannot_come_back_awaiting_payment_once_the_ticket_is_seated(): void
+    {
+        $this->givenAttendee(AttendeeStatus::CANCELLED);
+        $this->seatedProductLookupService->shouldReceive('isSeated')->once()->with(self::PRODUCT_ID)->andReturn(true);
+
+        $this->productQuantityService->shouldNotReceive('increaseQuantitySold');
+        $this->attendeeRepository->shouldNotReceive('updateByIdWhere');
+
+        $this->assertStatusRefused(AttendeeStatus::AWAITING_PAYMENT);
+    }
+
     public function test_throws_when_attendee_does_not_belong_to_event(): void
     {
         $this->attendeeRepository->shouldReceive('findFirstWhere')
@@ -337,9 +476,53 @@ class PartialEditAttendeeHandlerTest extends TestCase
         );
     }
 
+    private function assertStatusRefused(AttendeeStatus $status): string
+    {
+        try {
+            $this->handler->handle($this->dto($status));
+        } catch (ValidationException $exception) {
+            $this->assertArrayHasKey('status', $exception->errors());
+
+            return $exception->errors()['status'][0];
+        }
+
+        $this->fail('Expected the status change to be refused');
+    }
+
+    private function givenRoomToReactivate(int $quantityAvailable = 5): void
+    {
+        $this->occurrenceEligibilityService->shouldReceive('assertOccurrencePurchasable')
+            ->once()
+            ->with(self::EVENT_ID, self::OCCURRENCE_ID, 1, false, null, null, true);
+
+        $this->availableProductQuantitiesFetchService->shouldReceive('getAvailableProductQuantities')
+            ->once()
+            ->with(self::EVENT_ID, true, self::OCCURRENCE_ID, false)
+            ->andReturn(new AvailableProductQuantitiesResponseDTO(
+                productQuantities: collect([new AvailableProductQuantitiesDTO(
+                    product_id: self::PRODUCT_ID,
+                    price_id: self::PRODUCT_PRICE_ID,
+                    product_title: 'General admission',
+                    price_label: null,
+                    quantity_available: $quantityAvailable,
+                    quantity_reserved: 0,
+                    initial_quantity_available: 10,
+                    product_type: 'TICKET',
+                )]),
+            ));
+    }
+
     private function givenAttendee(AttendeeStatus $status, ?int $occurrenceId = self::OCCURRENCE_ID): void
     {
-        $attendee = (new AttendeeDomainObject)
+        $this->attendeeRepository->shouldReceive('findFirstWhere')
+            ->once()
+            ->with(['id' => self::ATTENDEE_ID, 'event_id' => self::EVENT_ID])
+            ->andReturn($this->attendee($status, $occurrenceId));
+    }
+
+    private function attendee(AttendeeStatus $status, ?int $occurrenceId = self::OCCURRENCE_ID): AttendeeDomainObject
+    {
+        return (new AttendeeDomainObject)
             ->setId(self::ATTENDEE_ID)
             ->setEventId(self::EVENT_ID)
             ->setOrderId(self::ORDER_ID)
@@ -350,11 +533,6 @@ class PartialEditAttendeeHandlerTest extends TestCase
             ->setFirstName('Original')
             ->setLastName('Last')
             ->setEmail('original@example.com');
-
-        $this->attendeeRepository->shouldReceive('findFirstWhere')
-            ->once()
-            ->with(['id' => self::ATTENDEE_ID, 'event_id' => self::EVENT_ID])
-            ->andReturn($attendee);
     }
 
     private function givenOrderExists(): void

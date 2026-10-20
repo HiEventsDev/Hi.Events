@@ -10,6 +10,9 @@ import {
     UnstyledButton,
     ActionIcon,
 } from '@mantine/core';
+import {useAccess} from "../../../hooks/useAccess.ts";
+import {WriteAccess} from "../WriteAccess";
+import {CreateButton} from "../CreateButton";
 import {IdParam, Question} from "../../../types.ts";
 import {
     IconChevronDown,
@@ -35,7 +38,7 @@ import {CreateQuestionModal} from "../../modals/CreateQuestionModal";
 import {useDisclosure} from "@mantine/hooks";
 import {Card} from "../Card";
 import {t} from "@lingui/macro";
-import {useEffect, useState} from "react";
+import {useEffect, useId, useState} from "react";
 import {EditQuestionModal} from "../../modals/EditQuestionModal";
 import {useDeleteQuestion} from "../../../mutations/useDeleteQuestion.ts";
 import {useParams} from "react-router";
@@ -79,8 +82,10 @@ const SortableQuestion = ({
     onDelete: (id: IdParam) => void;
 }) => {
     const uniqueId = question.id as UniqueIdentifier;
+    const {isReadOnly} = useAccess();
     const {attributes, listeners, setNodeRef, transform, transition, isDragging} = useSortable({
         id: uniqueId,
+        disabled: isReadOnly,
     });
 
     const style = {
@@ -99,9 +104,11 @@ const SortableQuestion = ({
                 [classes.dragging]: isDragging,
             })}
         >
-            <div {...attributes} {...listeners} className={classes.dragHandle}>
-                <IconGripVertical size={18} stroke={1.5}/>
-            </div>
+            {!isReadOnly && (
+                <div {...attributes} {...listeners} className={classes.dragHandle}>
+                    <IconGripVertical size={18} stroke={1.5}/>
+                </div>
+            )}
 
             <div className={classes.questionContent}>
                 <div className={classes.questionHeader}>
@@ -127,30 +134,32 @@ const SortableQuestion = ({
                 </Text>
             </div>
 
-            <Menu shadow="md" width={180} position="bottom-end">
-                <Menu.Target>
-                    <ActionIcon variant="subtle" color="gray" size="sm">
-                        <IconDotsVertical size={16}/>
-                    </ActionIcon>
-                </Menu.Target>
+            <WriteAccess>
+                <Menu shadow="md" width={180} position="bottom-end">
+                    <Menu.Target>
+                        <ActionIcon variant="subtle" color="gray" size="sm">
+                            <IconDotsVertical size={16}/>
+                        </ActionIcon>
+                    </Menu.Target>
 
-                <Menu.Dropdown>
-                    <Menu.Item
-                        leftSection={<IconPencil size={14}/>}
-                        onClick={() => onEditModalOpen?.(question.id)}
-                    >
-                        {t`Edit`}
-                    </Menu.Item>
-                    <Menu.Divider/>
-                    <Menu.Item
-                        color="red"
-                        leftSection={<IconTrash size={14}/>}
-                        onClick={() => onDelete(question.id)}
-                    >
-                        {t`Delete`}
-                    </Menu.Item>
-                </Menu.Dropdown>
-            </Menu>
+                    <Menu.Dropdown>
+                        <Menu.Item
+                            leftSection={<IconPencil size={14}/>}
+                            onClick={() => onEditModalOpen?.(question.id)}
+                        >
+                            {t`Edit`}
+                        </Menu.Item>
+                        <Menu.Divider/>
+                        <Menu.Item
+                            color="red"
+                            leftSection={<IconTrash size={14}/>}
+                            onClick={() => onDelete(question.id)}
+                        >
+                            {t`Delete`}
+                        </Menu.Item>
+                    </Menu.Dropdown>
+                </Menu>
+            </WriteAccess>
         </div>
     );
 };
@@ -192,6 +201,7 @@ const QuestionsList = ({
     }, [questions]);
 
     const sensors = useSensors(useSensor(PointerSensor), useSensor(TouchSensor));
+    const dndId = useId();
 
     const onDelete = (id: IdParam) => {
         confirmationDialog(t`Delete this question? This cannot be undone.`, () => {
@@ -215,7 +225,7 @@ const QuestionsList = ({
                 <Text size="xs" c="dimmed" mb="sm">
                     {emptyHint}
                 </Text>
-                <Button
+                <CreateButton
                     variant="light"
                     size="xs"
                     leftSection={<IconPlus size={14}/>}
@@ -223,13 +233,13 @@ const QuestionsList = ({
                     data-testid="question-add-button-empty"
                 >
                     {t`Add Question`}
-                </Button>
+                </CreateButton>
             </div>
         );
     }
 
     return (
-        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <DndContext id={dndId} sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
             <SortableContext items={items as UniqueIdentifier[]} strategy={verticalListSortingStrategy}>
                 <div className={classes.questionsList}>
                     {questions.map((question) => (
@@ -348,6 +358,7 @@ export const QuestionsTable = ({questions}: QuestionsTableProp) => {
 
     const eventSettingsQuery = useGetEventSettings(eventId);
     const updateSettingsMutation = useUpdateEventSettings();
+    const {isReadOnly} = useAccess();
     const collectionMethod = eventSettingsQuery.data?.attendee_details_collection_method || 'PER_TICKET';
     const isPerOrderCollection = collectionMethod === 'PER_ORDER';
 
@@ -424,7 +435,7 @@ export const QuestionsTable = ({questions}: QuestionsTableProp) => {
                     label={t`Attendee details collection`}
                     value={collectionMethod}
                     onChange={handleCollectionMethodChange}
-                    disabled={updateSettingsMutation.isPending}
+                    disabled={updateSettingsMutation.isPending || isReadOnly}
                 />
             </Card>
 
@@ -472,13 +483,13 @@ export const QuestionsTable = ({questions}: QuestionsTableProp) => {
                     />
                     <Group gap="xs" wrap="nowrap">
                         <ExportButton/>
-                        <Button
+                        <CreateButton
                             leftSection={<IconPlus size={16}/>}
                             onClick={openCreateModal}
                             data-testid="question-add-button"
                         >
                             {t`Add Question`}
-                        </Button>
+                        </CreateButton>
                     </Group>
                 </div>
 

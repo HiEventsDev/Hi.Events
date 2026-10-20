@@ -1,4 +1,5 @@
 import React, {useEffect, useId, useMemo, useState} from "react";
+import {CreateButton} from "../../../../common/CreateButton";
 import {t} from "@lingui/macro";
 import {
     ActionIcon,
@@ -13,6 +14,7 @@ import {
     TextInput,
 } from "@mantine/core";
 import {useForm} from "@mantine/form";
+import {useDatesContext} from "@mantine/dates";
 import {modals} from "@mantine/modals";
 import {useParams} from "react-router";
 import {
@@ -31,30 +33,40 @@ import {GET_EVENT_QUERY_KEY, useGetEvent} from "../../../../../queries/useGetEve
 import {GET_EVENT_OCCURRENCES_QUERY_KEY} from "../../../../../queries/useGetEventOccurrences.ts";
 import {useQueryClient} from "@tanstack/react-query";
 import {showError, showSuccess} from "../../../../../utilites/notifications.tsx";
+import {daysSinceWeekStart} from "../../../../../utilites/dates.ts";
 import {useFormErrorResponseHandler} from "../../../../../hooks/useFormErrorResponseHandler.tsx";
 import classes from './RecurrenceScheduleDrawer.module.scss';
 import {CapacityHelpLink} from "../../../../common/CapacityHelp";
+import {DateField} from "../../../../common/DateField";
 
 const MAX_PREVIEW = 1200;
 
-const DAYS_OF_WEEK = [
+const getDaysOfWeek = () => [
+    {value: 'sunday', label: t`Sun`, full: t`Sunday`},
     {value: 'monday', label: t`Mon`, full: t`Monday`},
     {value: 'tuesday', label: t`Tue`, full: t`Tuesday`},
     {value: 'wednesday', label: t`Wed`, full: t`Wednesday`},
     {value: 'thursday', label: t`Thu`, full: t`Thursday`},
     {value: 'friday', label: t`Fri`, full: t`Friday`},
     {value: 'saturday', label: t`Sat`, full: t`Saturday`},
-    {value: 'sunday', label: t`Sun`, full: t`Sunday`},
 ];
 
-const FREQUENCIES = [
+const useDaysOfWeekInDisplayOrder = () => {
+    const {firstDayOfWeek} = useDatesContext();
+    return useMemo(() => {
+        const daysOfWeek = getDaysOfWeek();
+        return Array.from({length: 7}, (_, i) => daysOfWeek[(firstDayOfWeek + i) % 7]);
+    }, [firstDayOfWeek]);
+};
+
+const getFrequencies = () => [
     {value: 'daily', label: t`Daily`},
     {value: 'weekly', label: t`Weekly`},
     {value: 'monthly', label: t`Monthly`},
     {value: 'yearly', label: t`Yearly`},
 ];
 
-const WEEK_POSITIONS = [
+const getWeekPositions = () => [
     {value: '1', label: t`First`},
     {value: '2', label: t`Second`},
     {value: '3', label: t`Third`},
@@ -62,7 +74,7 @@ const WEEK_POSITIONS = [
     {value: '-1', label: t`Last`},
 ];
 
-const MONTHS = [
+const getMonths = () => [
     {value: '1', label: t`January`},
     {value: '2', label: t`February`},
     {value: '3', label: t`March`},
@@ -337,26 +349,30 @@ const IntervalStepper = ({value, onChange}: { value: number; onChange: (value: n
     </div>
 );
 
-const DayDots = ({selected, onToggle}: { selected: string[]; onToggle: (value: string) => void }) => (
-    <div className={classes.dayDots}>
-        {DAYS_OF_WEEK.map(day => {
-            const isSelected = selected.includes(day.value);
-            return (
-                <button
-                    key={day.value}
-                    type="button"
-                    role="checkbox"
-                    aria-checked={isSelected}
-                    aria-label={day.full}
-                    className={classNames(classes.dayDot, isSelected && classes.selected)}
-                    onClick={() => onToggle(day.value)}
-                >
-                    <span>{day.label}</span>
-                </button>
-            );
-        })}
-    </div>
-);
+const DayDots = ({selected, onToggle}: { selected: string[]; onToggle: (value: string) => void }) => {
+    const orderedDaysOfWeek = useDaysOfWeekInDisplayOrder();
+
+    return (
+        <div className={classes.dayDots}>
+            {orderedDaysOfWeek.map(day => {
+                const isSelected = selected.includes(day.value);
+                return (
+                    <button
+                        key={day.value}
+                        type="button"
+                        role="checkbox"
+                        aria-checked={isSelected}
+                        aria-label={day.full}
+                        className={classNames(classes.dayDot, isSelected && classes.selected)}
+                        onClick={() => onToggle(day.value)}
+                    >
+                        <span>{day.label}</span>
+                    </button>
+                );
+            })}
+        </div>
+    );
+};
 
 const MonthDayGrid = ({selected, onToggle}: { selected: string[]; onToggle: (value: string) => void }) => (
     <div className={classes.monthGrid}>
@@ -382,6 +398,8 @@ const MonthDayGrid = ({selected, onToggle}: { selected: string[]; onToggle: (val
 const monthIndexOf = (date: Date): number => date.getFullYear() * 12 + date.getMonth();
 
 const MiniCalendar = ({previewDates, rangeStart}: { previewDates: Date[]; rangeStart: string }) => {
+    const {firstDayOfWeek} = useDatesContext();
+    const orderedDaysOfWeek = useDaysOfWeekInDisplayOrder();
     const [viewMonth, setViewMonth] = useState<number | null>(null);
 
     const firstMonth = monthIndexOf(previewDates[0]);
@@ -405,7 +423,7 @@ const MiniCalendar = ({previewDates, rangeStart}: { previewDates: Date[]; rangeS
     const startDate = parseLocalDate(rangeStart);
     const firstOfMonth = new Date(year, monthOfYear, 1);
     const gridStart = new Date(firstOfMonth);
-    gridStart.setDate(gridStart.getDate() - ((gridStart.getDay() + 6) % 7));
+    gridStart.setDate(gridStart.getDate() - daysSinceWeekStart(gridStart.getDay(), firstDayOfWeek));
 
     const cells = Array.from({length: 42}, (_, i) => {
         const date = new Date(gridStart);
@@ -435,7 +453,7 @@ const MiniCalendar = ({previewDates, rangeStart}: { previewDates: Date[]; rangeS
                 </button>
             </div>
             <div className={classes.calendarWeekdays}>
-                {DAYS_OF_WEEK.map(day => <span key={day.value}>{day.label}</span>)}
+                {orderedDaysOfWeek.map(day => <span key={day.value}>{day.label}</span>)}
             </div>
             <div className={classes.calendarGrid}>
                 {cells.map((date, i) => {
@@ -470,6 +488,7 @@ interface RecurrenceScheduleDrawerProps extends GenericModalProps {
 }
 
 export const RecurrenceScheduleDrawer = ({onClose, onGenerationStarted}: RecurrenceScheduleDrawerProps) => {
+    const orderedDaysOfWeek = useDaysOfWeekInDisplayOrder();
     const {eventId} = useParams();
     const {data: event} = useGetEvent(eventId);
     const generateMutation = useGenerateOccurrences();
@@ -754,7 +773,7 @@ export const RecurrenceScheduleDrawer = ({onClose, onGenerationStarted}: Recurre
 
         let onPart = '';
         if (values.frequency === 'weekly') {
-            const dayList = DAYS_OF_WEEK
+            const dayList = orderedDaysOfWeek
                 .filter(day => values.days_of_week.includes(day.value))
                 .map(day => day.label)
                 .join(', ');
@@ -768,12 +787,12 @@ export const RecurrenceScheduleDrawer = ({onClose, onGenerationStarted}: Recurre
                     .join(', ');
                 if (dayList) onPart = t`on ${dayList}`;
             } else {
-                const position = WEEK_POSITIONS.find(p => p.value === values.week_position)?.label ?? '';
-                const day = DAYS_OF_WEEK.find(d => d.value === values.day_of_week)?.full ?? '';
+                const position = getWeekPositions().find(p => p.value === values.week_position)?.label ?? '';
+                const day = getDaysOfWeek().find(d => d.value === values.day_of_week)?.full ?? '';
                 onPart = t`on the ${position} ${day}`;
             }
         } else if (values.frequency === 'yearly') {
-            const month = MONTHS.find(m => m.value === values.yearly_month)?.label ?? '';
+            const month = getMonths().find(m => m.value === values.yearly_month)?.label ?? '';
             const day = values.yearly_day;
             onPart = t`on ${month} ${day}`;
         }
@@ -798,7 +817,7 @@ export const RecurrenceScheduleDrawer = ({onClose, onGenerationStarted}: Recurre
             bold: onPart ? `${cadenceSummary} ${onPart}` : cadenceSummary,
             rest: `, ${times}, ${range}.`,
         };
-    }, [form.values, previewDates.length, validTimes, cadenceSummary]);
+    }, [form.values, previewDates.length, validTimes, cadenceSummary, orderedDaysOfWeek]);
 
     const dateCount = previewDates.length;
     const timesPerDay = validTimes.length;
@@ -888,7 +907,7 @@ export const RecurrenceScheduleDrawer = ({onClose, onGenerationStarted}: Recurre
                                     size="xs"
                                     value={form.values.frequency}
                                     onChange={(value) => form.setFieldValue('frequency', value)}
-                                    data={FREQUENCIES}
+                                    data={getFrequencies()}
                                 />
                             </div>
 
@@ -930,7 +949,7 @@ export const RecurrenceScheduleDrawer = ({onClose, onGenerationStarted}: Recurre
                                         <span className={classes.sentenceWord}>{t`on`}</span>
                                         <Select
                                             aria-label={t`Month`}
-                                            data={MONTHS}
+                                            data={getMonths()}
                                             className={classes.inlineSelect}
                                             {...form.getInputProps('yearly_month')}
                                         />
@@ -966,13 +985,13 @@ export const RecurrenceScheduleDrawer = ({onClose, onGenerationStarted}: Recurre
                                 <div className={classNames(classes.patternContent, classes.sentenceRow)}>
                                     <Select
                                         aria-label={t`Position`}
-                                        data={WEEK_POSITIONS}
+                                        data={getWeekPositions()}
                                         className={classes.inlineSelect}
                                         {...form.getInputProps('week_position')}
                                     />
                                     <Select
                                         aria-label={t`Day`}
-                                        data={DAYS_OF_WEEK.map(day => ({value: day.value, label: day.full}))}
+                                        data={orderedDaysOfWeek.map(day => ({value: day.value, label: day.full}))}
                                         className={classes.inlineSelect}
                                         {...form.getInputProps('day_of_week')}
                                     />
@@ -984,14 +1003,14 @@ export const RecurrenceScheduleDrawer = ({onClose, onGenerationStarted}: Recurre
                         <div className={classes.block}>
                             <div className={classes.blockHeader}>
                                 <span className={classes.blockLabel}>{t`Times`}</span>
-                                <Button
+                                <CreateButton
                                     variant="subtle"
                                     size="compact-sm"
                                     leftSection={<IconPlus size={14}/>}
                                     onClick={handleAddTime}
                                 >
                                     {t`Add another time`}
-                                </Button>
+                                </CreateButton>
                             </div>
 
                             <Stack gap="sm">
@@ -1065,8 +1084,7 @@ export const RecurrenceScheduleDrawer = ({onClose, onGenerationStarted}: Recurre
 
                             <div className={classes.sentenceRow}>
                                 <span className={classes.sentenceWord}>{t`From`}</span>
-                                <TextInput
-                                    type="date"
+                                <DateField
                                     aria-label={t`Schedule starts on`}
                                     className={classes.inlineDateInput}
                                     {...form.getInputProps('range_start')}
@@ -1074,8 +1092,7 @@ export const RecurrenceScheduleDrawer = ({onClose, onGenerationStarted}: Recurre
                                 {form.values.range_type === 'until' ? (
                                     <>
                                         <span className={classes.sentenceWord}>{t`until`}</span>
-                                        <TextInput
-                                            type="date"
+                                        <DateField
                                             aria-label={t`Schedule ends on`}
                                             className={classes.inlineDateInput}
                                             {...form.getInputProps('range_until')}

@@ -1,4 +1,5 @@
 import {t, Trans} from "@lingui/macro";
+import {useAccess} from "../../../../../hooks/useAccess.ts";
 import {Anchor, Button, Checkbox, NumberInput, Radio, SegmentedControl, Tabs, Text, TextInput, UnstyledButton} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {modals} from "@mantine/modals";
@@ -17,7 +18,7 @@ import {
     IconUsers,
     IconX,
 } from "@tabler/icons-react";
-import {Modal} from "../../../../common/Modal";
+import {Modal, ModalFooter} from "../../../../common/Modal";
 import {InputGroup} from "../../../../common/InputGroup";
 import {Callout} from "../../../../common/Callout";
 import {
@@ -49,6 +50,7 @@ import {SendMessageModal} from "../../../../modals/SendMessageModal";
 import {MessageType} from "../../../../../types.ts";
 import {buildSingleRescheduleTemplate} from "../rescheduleMessageTemplate";
 import classes from './OccurrenceEditModal.module.scss';
+import {DateTimeField} from "../../../../common/DateTimeField";
 
 export type OccurrenceEditTab = 'details' | 'products';
 
@@ -318,6 +320,7 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
     };
 
     const refundRef = useRef(false);
+    const canIssueRefunds = useAccess().can('ISSUE_REFUNDS');
 
     const handleCancel = () => {
         refundRef.current = false;
@@ -335,10 +338,12 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
                             {t`This date has ${orderCount} order(s) that will be affected.`}
                         </Text>
                     )}
-                    <Checkbox
-                        label={t`Refund all orders for this date`}
-                        onChange={(e) => { refundRef.current = e.currentTarget.checked; }}
-                    />
+                    {canIssueRefunds && (
+                        <Checkbox
+                            label={t`Refund all orders for this date`}
+                            onChange={(e) => { refundRef.current = e.currentTarget.checked; }}
+                        />
+                    )}
                 </>
             ),
             labels: {confirm: t`Cancel Date`, cancel: t`Go Back`},
@@ -438,16 +443,15 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
                                     <span className={classes.sectionTitle}>{t`Date & Time`}</span>
                                 </div>
                                 <InputGroup>
-                                    <TextInput
-                                        type="datetime-local"
+                                    <DateTimeField
                                         {...form.getInputProps('start_date')}
                                         label={t`Start Date`}
                                         required
                                     />
-                                    <TextInput
-                                        type="datetime-local"
+                                    <DateTimeField
                                         {...form.getInputProps('end_date')}
                                         label={t`End Date`}
+                                        defaultTime="23:59"
                                     />
                                     <TextInput
                                         {...form.getInputProps('label')}
@@ -553,16 +557,13 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
                                     onChange={(value) => form.setFieldValue('show_available_capacity', value as CapacityVisibility)}
                                 />
                             </div>
-
-                            <Button
-                                type="submit"
-                                fullWidth
-                                size="md"
-                                loading={isPending}
-                            >
+                        </fieldset>
+                        <ModalFooter inline={isEditing}>
+                            <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                            <Button type="submit" loading={isPending} disabled={isCancelled}>
                                 {isEditing ? t`Save Changes` : t`Create Date`}
                             </Button>
-                        </fieldset>
+                        </ModalFooter>
                     </form>
 
                     {isEditing && (

@@ -8,6 +8,7 @@ import {DailySalesReport} from "../DailySalesReport";
 import PromoCodesReport from "../PromoCodesReport";
 import OccurrenceSummaryReport from "../OccurrenceSummaryReport";
 import SeatingSalesReport from "../../../../../ee/seating/components/routes/event/Reports/SeatingSalesReport";
+import {RequirePermission} from "../../../../common/WriteAccess";
 
 const renderReport = (reportType: string) => {
     switch (reportType) {
@@ -40,9 +41,11 @@ const ReportLayout = () => {
             >
                 Back to Reports
             </Button>
-            <div>
-                {renderReport(reportType as string)}
-            </div>
+            <RequirePermission permission="VIEW_FINANCIALS" imageHref="/blank-slate/reports.svg">
+                <div>
+                    {renderReport(reportType as string)}
+                </div>
+            </RequirePermission>
         </PageBody>
     );
 }

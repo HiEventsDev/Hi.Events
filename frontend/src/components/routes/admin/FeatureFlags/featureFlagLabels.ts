@@ -13,6 +13,11 @@ export const getFeatureFlagLabel = (key: string): { name: string, description: s
                 name: t`Box office`,
                 description: t`Lets accounts sell tickets at the door, with card readers and door check-in.`,
             };
+        case FeatureFlag.ENTERPRISE_SSO:
+            return {
+                name: t`Enterprise single sign-on`,
+                description: t`Lets accounts connect their identity provider, verify email domains and require single sign-on.`,
+            };
         default:
             return {name: key, description: ''};
     }

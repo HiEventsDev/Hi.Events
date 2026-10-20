@@ -21,6 +21,7 @@ import {
 } from "@tabler/icons-react";
 import {formatDateWithLocale} from "../../../utilites/dates.ts";
 import classes from "./CheckInListForm.module.scss";
+import {DateTimeField} from "../../common/DateTimeField";
 
 interface CheckInListFormProps {
     form: UseFormReturnType<CheckInListRequest>;
@@ -148,17 +149,16 @@ export const CheckInListForm = ({
                 />
 
                 <InputGroup>
-                    <TextInput
+                    <DateTimeField
                         {...form.getInputProps('activates_at')}
-                        type="datetime-local"
                         label={t`Activation date`}
                         description={t`When check-in opens`}
                     />
-                    <TextInput
+                    <DateTimeField
                         {...form.getInputProps('expires_at')}
-                        type="datetime-local"
                         label={t`Expiration date`}
                         description={t`When check-in closes`}
+                        defaultTime="23:59"
                     />
                 </InputGroup>
 

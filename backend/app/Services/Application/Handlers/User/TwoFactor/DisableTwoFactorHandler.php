@@ -2,19 +2,21 @@
 
 namespace HiEvents\Services\Application\Handlers\User\TwoFactor;
 
+use HiEvents\Enterprise\Sso\Services\Domain\SsoEnforcementService;
+use HiEvents\Exceptions\IdentityConfirmationFailedException;
 use HiEvents\Exceptions\InvalidTwoFactorCodeException;
-use HiEvents\Exceptions\PasswordInvalidException;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Exceptions\TwoFactorLockedOutException;
 use HiEvents\Exceptions\TwoFactorRequiredByAccountException;
 use HiEvents\Mail\User\TwoFactorDisabledMail;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Application\Handlers\User\TwoFactor\DTO\DisableTwoFactorDTO;
+use HiEvents\Services\Domain\Auth\IdentityConfirmationService;
+use HiEvents\Services\Domain\Auth\Sso\DTO\AuthContext;
 use HiEvents\Services\Domain\Auth\TwoFactor\TrustedDeviceService;
 use HiEvents\Services\Domain\Auth\TwoFactor\TwoFactorAuthenticationService;
 use HiEvents\Services\Domain\Auth\TwoFactor\TwoFactorRequirementService;
 use HiEvents\Services\Domain\Auth\TwoFactor\TwoFactorVerifier;
-use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
 
@@ -26,7 +28,8 @@ class DisableTwoFactorHandler
         private readonly TwoFactorVerifier $twoFactorVerifier,
         private readonly TrustedDeviceService $trustedDeviceService,
         private readonly TwoFactorRequirementService $twoFactorRequirementService,
-        private readonly Hasher $hasher,
+        private readonly IdentityConfirmationService $identityConfirmationService,
+        private readonly SsoEnforcementService $ssoEnforcementService,
         private readonly DatabaseManager $databaseManager,
         private readonly Mailer $mailer,
     ) {}
@@ -34,7 +37,7 @@ class DisableTwoFactorHandler
     /**
      * @throws ResourceConflictException
      * @throws TwoFactorRequiredByAccountException
-     * @throws PasswordInvalidException
+     * @throws IdentityConfirmationFailedException
      * @throws InvalidTwoFactorCodeException
      * @throws TwoFactorLockedOutException
      */
@@ -55,9 +58,11 @@ class DisableTwoFactorHandler
             ));
         }
 
-        if (! $this->hasher->check($dto->password, $user->getPassword())) {
-            throw new PasswordInvalidException(__('The password is incorrect.'));
+        if ($this->ssoEnforcementService->requiresFreshSecondFactor($user->getId(), AuthContext::password())) {
+            throw new TwoFactorRequiredByAccountException(__('You own an account that requires single sign-on. Two-factor authentication protects your backup sign-in, so it cannot be turned off.'));
         }
+
+        $this->identityConfirmationService->confirm($user, $dto->password, $dto->reauthProof, $dto->tokenId);
 
         if (! $this->twoFactorVerifier->verify($user, $dto->code, $dto->recoveryCode)) {
             throw new InvalidTwoFactorCodeException(__('That code is not valid. Check your authenticator app and try again.'));

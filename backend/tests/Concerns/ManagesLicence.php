@@ -7,7 +7,7 @@ use HiEvents\Enterprise\Licensing\Plan;
 
 trait ManagesLicence
 {
-    protected function useLicence(?string $expiresAt, string $env = 'production', array $addOns = [], Plan $plan = Plan::ENTERPRISE): void
+    protected function useLicence(?string $expiresAt, string $env = 'production', array $addOns = [], Plan $plan = Plan::PLATFORM, ?int $coveredSales = null): void
     {
         $keypair = sodium_crypto_sign_keypair();
         $codec = new LicenceKeyCodec(['test' => base64_encode(sodium_crypto_sign_publickey($keypair))]);
@@ -21,6 +21,7 @@ trait ManagesLicence
             'expires_at' => $expiresAt,
             'plan' => $plan->value,
             'add' => $addOns,
+            ...($coveredSales === null ? [] : ['covered_sales' => $coveredSales]),
         ], base64_encode(sodium_crypto_sign_secretkey($keypair)));
 
         $this->useLicenceKey($key, $env);

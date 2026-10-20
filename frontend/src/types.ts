@@ -2,6 +2,7 @@
  * @todo - This file needs to be organized better. Split into multiple files.
  */
 import {SupportedLocales} from "./locales.ts";
+import type {DayOfWeek} from "@mantine/dates";
 
 export type ConfigKeys = 
     | 'VITE_TURNSTILE_SITE_KEY'
@@ -39,13 +40,13 @@ export type IdParam = string | undefined | number;
 export interface AcceptInvitationRequest {
     first_name: string;
     last_name: string;
-    email: string;
     password: string;
     password_confirmation: string;
     marketing_opt_in?: boolean;
 }
 
 export interface RegisterAccountRequest extends AcceptInvitationRequest {
+    email: string;
     locale: SupportedLocales;
     utm_source?: string | null;
     utm_medium?: string | null;
@@ -100,6 +101,196 @@ export interface TwoFactorLoginRequest {
     recovery_code?: string;
     account_id?: IdParam;
     remember_device?: boolean;
+    sso_binding?: string;
+}
+
+export type SsoIntent = 'LOGIN' | 'SIGNUP' | 'INVITE' | 'LINK' | 'REAUTH' | 'TEST';
+
+export type SsoProviderType = 'GOOGLE' | 'MICROSOFT' | 'OIDC';
+
+export interface SsoProvider {
+    key: string;
+    name: string;
+    type: SsoProviderType;
+    logo_url: string | null;
+}
+
+export interface SsoProvidersResponse {
+    providers: SsoProvider[];
+    password_login_enabled: boolean;
+    registration_enabled: boolean;
+    enterprise_sso_enabled: boolean;
+}
+
+export interface SsoStartResponse {
+    authorization_url: string;
+    binding: string;
+}
+
+export type SsoExchangeStatus =
+    | 'AUTHENTICATED'
+    | 'TWO_FACTOR_REQUIRED'
+    | 'CHOOSE_ACCOUNT'
+    | 'SIGNUP_REQUIRED'
+    | 'LINKED'
+    | 'REAUTHENTICATED'
+    | 'TESTED';
+
+export interface SsoSignupDetails {
+    ticket: string;
+    email: string;
+    email_verified: boolean;
+    first_name: string | null;
+    last_name: string | null;
+}
+
+export interface SsoExchangeResponse {
+    status: SsoExchangeStatus;
+    provider_name: string;
+    return_path: string | null;
+    token?: string;
+    user?: User;
+    accounts?: Account[];
+    two_factor_challenge_token?: string;
+    login_ticket?: string;
+    signup?: SsoSignupDetails;
+    reauth_proof?: string;
+    test?: SsoTestResult;
+}
+
+export interface SsoTestResult {
+    email: string | null;
+    email_verified: boolean;
+    email_domain_verified: boolean;
+    first_name: string | null;
+    last_name: string | null;
+    groups: string[];
+}
+
+export type AccountSsoConnectionType = 'OKTA' | 'ENTRA' | 'GOOGLE_WORKSPACE' | 'OIDC';
+
+export interface AccountSsoConnection {
+    id: IdParam;
+    provider_key: string;
+    type: AccountSsoConnectionType;
+    issuer: string;
+    client_id: string;
+    tenant_id: string | null;
+    hosted_domain: string | null;
+    status: 'ACTIVE' | 'INACTIVE';
+    session_ttl_minutes: number;
+    enforce_sso: boolean;
+    jit_provisioning_enabled: boolean;
+    jit_default_role: Exclude<UserRole, 'SUPERADMIN'>;
+    last_tested_at: string | null;
+    created_at: string;
+}
+
+export interface AccountSsoConnectionRequest {
+    type: AccountSsoConnectionType;
+    client_id: string;
+    client_secret?: string | null;
+    issuer?: string | null;
+    tenant_id?: string | null;
+    hosted_domain?: string | null;
+    session_ttl_minutes: number;
+    jit_provisioning_enabled: boolean;
+    jit_default_role: Exclude<UserRole, 'SUPERADMIN'>;
+}
+
+export type AccountSsoDomainStatus = 'PENDING' | 'VERIFIED' | 'FAILING' | 'SUSPENDED';
+
+export interface AccountSsoDomain {
+    id: IdParam;
+    domain: string;
+    status: AccountSsoDomainStatus;
+    txt_record_name: string;
+    txt_record_value: string;
+    verified_at: string | null;
+    last_checked_at: string | null;
+    failing_since: string | null;
+}
+
+export interface AccountSso {
+    connection: AccountSsoConnection | null;
+    domains: AccountSsoDomain[];
+    redirect_uri: string;
+    stats: {
+        domain_count: number;
+        verified_domain_count: number;
+        sso_sign_ins_last_30_days: number;
+    };
+}
+
+export interface SsoEnforcementMember {
+    account_user_id: IdParam;
+    user_id: IdParam;
+    email: string;
+    first_name: string | null;
+    last_name: string | null;
+    role: UserRole;
+    is_account_owner: boolean;
+    on_verified_domain: boolean;
+    sso_enforced: boolean;
+    sso_available: boolean;
+}
+
+export interface SsoEnforcementPreview {
+    affected_count: number;
+    outside_domain_count: number;
+    members: SsoEnforcementMember[];
+}
+
+export interface SsoErrorResponse {
+    message: string;
+    error_code: string;
+    context?: Record<string, string>;
+}
+
+export interface SsoSignupRequest {
+    signup_ticket: string;
+    binding: string;
+    first_name: string;
+    last_name?: string;
+    timezone: string;
+    currency_code: string;
+    locale: SupportedLocales;
+    marketing_opt_in: boolean;
+    email_code?: string;
+    invite_token?: string;
+}
+
+export interface IdentityConfirmation {
+    password?: string;
+    reauth_proof?: string;
+}
+
+export interface UserIdentity {
+    id: IdParam;
+    provider_key: string;
+    email: string | null;
+    last_used_at: string | null;
+    created_at: string;
+    organization_provider: SsoProvider | null;
+}
+
+export interface LinkableSsoConnection extends SsoProvider {
+    account_name: string;
+}
+
+export interface SsoSignInMethods {
+    identities: UserIdentity[];
+    linkableConnections: LinkableSsoConnection[];
+}
+
+export interface Invitation {
+    first_name: string;
+    last_name: string | null;
+    email: string;
+    timezone: string | null;
+    account_name: string;
+    requires_sign_in: boolean;
+    sso_required: boolean;
 }
 
 export interface TrustedDevice {
@@ -112,6 +303,41 @@ export interface TrustedDevice {
     is_current_device: boolean;
 }
 
+export type ApiKeyAccess = 'READ_ONLY' | 'READ_WRITE';
+
+export interface ApiKey {
+    id: IdParam;
+    name: string;
+    token_hint: string;
+    access: ApiKeyAccess;
+    last_used_at: string | null;
+    expires_at: string | null;
+    created_at: string;
+    is_expired: boolean;
+    is_own: boolean;
+    owner: { id: IdParam; full_name: string; email: string } | null;
+}
+
+export interface CreatedApiKey extends ApiKey {
+    key: string;
+}
+
+export interface ApiKeysMeta {
+    expiry_options_in_days: number[];
+    max_active_keys: number;
+}
+
+export interface ApiKeysResponse {
+    data: ApiKey[];
+    meta: ApiKeysMeta;
+}
+
+export interface CreateApiKeyRequest extends IdentityConfirmation {
+    name: string;
+    access: ApiKeyAccess;
+    expires_in_days: number | null;
+}
+
 export interface TwoFactorStatus {
     enabled: boolean;
     confirmed_at: string | null;
@@ -119,6 +345,7 @@ export interface TwoFactorStatus {
     recovery_codes_total: number;
     trusted_devices: TrustedDevice[];
     required_by_accounts: string[];
+    required_by_sso_accounts: string[];
 }
 
 export interface TwoFactorSetup {
@@ -131,7 +358,8 @@ export interface TwoFactorRecoveryCodes {
 }
 
 export interface DisableTwoFactorRequest {
-    password: string;
+    password?: string;
+    reauth_proof?: string;
     code?: string;
     recovery_code?: string;
 }
@@ -147,20 +375,64 @@ export interface User {
     password?: string;
     is_email_verified?: boolean;
     has_pending_email_change?: boolean;
+    has_password?: boolean;
     is_impersonating?: boolean;
     impersonator_id?: IdParam;
     two_factor_enabled?: boolean;
     two_factor_setup_required?: boolean;
+    password_reset_allowed?: boolean;
     enforce_email_confirmation_during_registration?: boolean;
     pending_email?: string;
     last_login_at?: string;
     status?: 'ACTIVE' | 'INACTIVE' | 'INVITED';
-    role?: 'ADMIN' | 'ORGANIZER' | 'SUPERADMIN';
+    role?: UserRole;
     is_account_owner?: boolean;
+    notify_new_orders?: boolean;
+    access?: UserAccess;
+    sso_sign_in?: 'SSO' | 'EXEMPT' | 'PASSWORD' | null;
     locale?: SupportedLocales;
     marketing_opted_in_at?: string | null;
     feature_flags?: Record<string, boolean>;
     licence?: LicenceSummary;
+}
+
+export type UserRole = 'ADMIN' | 'ORGANIZER' | 'VIEWER' | 'SUPERADMIN';
+
+export type AccessScope = 'ACCOUNT' | 'RESTRICTED';
+
+export type Permission =
+    | 'EDIT'
+    | 'VIEW_FINANCIALS'
+    | 'ISSUE_REFUNDS'
+    | 'MANAGE_PAYMENTS'
+    | 'DELETE_EVENTS'
+    | 'MANAGE_TEAM'
+    | 'MANAGE_ACCOUNT';
+
+export type AdjustablePermission = 'VIEW_FINANCIALS' | 'ISSUE_REFUNDS';
+
+export interface UserAccess {
+    scope: AccessScope;
+    organizer_ids: number[];
+    event_ids: number[];
+    permissions: Permission[];
+}
+
+export interface TeamMemberAccess {
+    user_id: number;
+    first_name: string;
+    last_name: string | null;
+    email: string;
+    role: UserRole;
+    status: 'ACTIVE' | 'INACTIVE' | 'INVITED';
+    access_via: 'ACCOUNT' | 'ORGANIZER' | 'EVENT';
+}
+
+export interface TeamAccessRequest {
+    access_scope: AccessScope;
+    organizer_ids: number[];
+    event_ids: number[];
+    permissions: Partial<Record<AdjustablePermission, boolean>>;
 }
 
 export type LicenceStatus = 'ACTIVE' | 'GRACE' | 'LAPSED' | 'NONE' | 'DEV';
@@ -170,10 +442,12 @@ export interface LicenceSummary {
     expires_at: string | null;
     grace_ends_at: string | null;
     invalid_reason: string | null;
+    features: LicensedFeature[];
+    unlocked_features: LicensedFeature[];
     features_in_use: LicensedFeature[];
 }
 
-export type LicensedFeature = 'seating' | 'box_office' | 'white_label';
+export type LicensedFeature = 'seating' | 'box_office' | 'enterprise_sso' | 'white_label';
 
 export interface Account {
     id?: IdParam;
@@ -204,6 +478,7 @@ export interface AccountDeletionStatus {
     can_request_deletion: boolean;
     cannot_delete_reason: string | null;
     expected_outcome: 'HARD_DELETE' | 'ANONYMIZE';
+    blocking_events: { id: number; title: string }[];
 }
 
 export interface AccountConfiguration {
@@ -285,7 +560,46 @@ export interface Image {
     lqip_base64?: string | null;
 }
 
-export type ImageType = 'EVENT_COVER' | 'EDITOR_IMAGE' | 'ORGANIZER_LOGO' | 'ORGANIZER_COVER' | 'ORGANIZER_IMAGE' | 'TICKET_LOGO';
+export type ImageType = 'EVENT_COVER' | 'EDITOR_IMAGE' | 'ORGANIZER_LOGO' | 'ORGANIZER_COVER' | 'ORGANIZER_IMAGE' | 'TICKET_LOGO' | 'PROFILE_IMAGE' | 'EVENT_GALLERY' | 'EVENT_SPONSOR_LOGO' | 'ORGANIZER_GALLERY' | 'ORGANIZER_SPONSOR_LOGO';
+
+export type HomepageSectionType =
+    'TICKETS'
+    | 'ABOUT'
+    | 'LINEUP'
+    | 'SCHEDULE'
+    | 'LOCATION'
+    | 'ORGANIZER'
+    | 'EVENTS'
+    | 'CONTACT'
+    | 'PAST_EVENTS'
+    | 'TEXT'
+    | 'GALLERY'
+    | 'FAQ'
+    | 'VIDEO'
+    | 'SPONSORS';
+
+export interface HomepageSectionFaq {
+    question: string;
+    answer?: string | null;
+}
+
+export interface HomepageSectionSponsor {
+    image_id: number;
+    name?: string | null;
+    url?: string | null;
+}
+
+export interface HomepageSection {
+    id: string;
+    type: HomepageSectionType;
+    enabled: boolean;
+    heading?: string | null;
+    body?: string | null;
+    faqs?: HomepageSectionFaq[];
+    video_url?: string | null;
+    image_ids?: number[];
+    sponsors?: HomepageSectionSponsor[];
+}
 
 export type PaymentProvider = 'STRIPE' | 'OFFLINE';
 
@@ -358,6 +672,7 @@ export interface EventSettings {
 
     // Simplified homepage theme settings (new 2-color + mode system)
     homepage_theme_settings?: HomepageThemeSettings;
+    homepage_sections?: HomepageSection[] | null;
 
     // Waitlist settings
     waitlist_auto_process?: boolean;
@@ -439,6 +754,7 @@ export interface EventDuplicatePayload extends EventBase {
     duplicate_ticket_logo: boolean;
     duplicate_webhooks: boolean;
     duplicate_affiliates: boolean;
+    duplicate_lineup: boolean;
     duplicate_occurrences?: boolean;
 }
 
@@ -762,6 +1078,7 @@ export interface OrganizerSettings {
     default_allow_attendee_self_edit?: boolean;
     homepage_visibility: 'PUBLIC' | 'PRIVATE' | 'PASSWORD_PROTECTED';
     homepage_theme_settings: HomepageThemeSettings;
+    homepage_sections?: HomepageSection[] | null;
     website_url?: string;
     social_media_handles?: {
         facebook?: string;
@@ -788,6 +1105,7 @@ export interface OrganizerSettings {
     allow_search_engine_indexing?: boolean;
     tracking_pixels?: TrackingPixelConfig[];
     tracking_consent_acknowledged?: boolean;
+    first_day_of_week?: DayOfWeek;
 }
 
 export interface TrackingPixelConfig {
@@ -855,6 +1173,7 @@ export interface ProductPrice {
     sale_end_date?: string | Date;
     price_including_taxes_and_fees?: number;
     price_before_discount?: number;
+    price_before_discount_including_taxes_and_fees?: number | null;
     is_discounted?: boolean;
     tax_total?: number;
     fee_total?: number;
@@ -1602,11 +1921,11 @@ export interface TaxAndFee {
     account_id?: IdParam;
 }
 
-export interface InviteUserRequest {
+export interface InviteUserRequest extends TeamAccessRequest {
     email: string;
     first_name: string;
     last_name: string;
-    role: string;
+    role: UserRole;
 }
 
 export interface SortableItem {

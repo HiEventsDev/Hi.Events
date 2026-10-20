@@ -2,14 +2,17 @@
 
 namespace HiEvents\Http\Actions\Webhooks;
 
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\RequiresPermission;
 use HiEvents\Http\Request\Webhook\UpsertWebhookRequest;
 use HiEvents\Resources\Webhook\WebhookResourceWithSecret;
 use HiEvents\Services\Application\Handlers\Webhook\CreateWebhookHandler;
 use HiEvents\Services\Application\Handlers\Webhook\DTO\CreateWebhookDTO;
 use Illuminate\Http\JsonResponse;
 
+#[RequiresPermission(Permission::VIEW_FINANCIALS)]
 class CreateWebhookAction extends BaseAction
 {
     public function __construct(

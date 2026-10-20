@@ -195,8 +195,17 @@ class ProductFilterService
 
         if ($this->shouldProductBeDiscounted($promoCode, $product)) {
             $product->getProductPrices()?->each(function (ProductPriceDomainObject $price) use ($product, $promoCode, $eventOccurrenceId) {
-                $price->setPriceBeforeDiscount($price->getPrice());
-                $price->setPrice($this->productPriceService->getIndividualPrice($product, $price, $promoCode, $eventOccurrenceId));
+                $discountedPrice = $this->productPriceService->getPrice(
+                    $product,
+                    new OrderProductPriceDTO(quantity: 1, price_id: $price->getId()),
+                    $promoCode,
+                    $eventOccurrenceId,
+                );
+                $price->setPriceBeforeDiscount($discountedPrice->price_before_discount);
+                $price->setPriceBeforeDiscountIncludingTaxesAndFees($discountedPrice->price_before_discount === null
+                    ? null
+                    : $this->priceIncludingTaxesAndFees($product, $discountedPrice->price_before_discount));
+                $price->setPrice($discountedPrice->price);
             });
         }
 

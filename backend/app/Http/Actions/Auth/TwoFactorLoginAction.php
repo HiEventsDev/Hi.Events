@@ -38,6 +38,7 @@ class TwoFactorLoginAction extends BaseAuthAction
                 rememberDevice: (bool) $request->validated('remember_device'),
                 userAgent: $request->userAgent(),
                 ipAddress: $request->ip(),
+                ssoBinding: $request->validated('sso_binding'),
             ));
         } catch (InvalidTwoFactorCodeException $exception) {
             throw ValidationException::withMessages([

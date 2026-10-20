@@ -45,6 +45,11 @@ class UserAnonymizer implements AccountAnonymizerInterface
                 entity: 'user_trusted_devices',
             );
 
+            $results[] = $this->executor->delete(
+                query: $this->databaseManager->table('user_identities')->whereIn('user_id', $context->soleUserIds),
+                entity: 'user_identities',
+            );
+
             $results[] = $this->executor->scrub(
                 query: $this->databaseManager->table('users')->whereIn('id', $context->soleUserIds),
                 entity: 'users',

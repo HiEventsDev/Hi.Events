@@ -16,16 +16,7 @@ async function resolveFrame(page: Page, selector: string): Promise<Frame> {
   return frame;
 }
 
-export async function openEmbeddedWidget(
-  page: Page,
-  baseURL: string,
-  eventId: number,
-  attributes: Record<string, string> = {},
-): Promise<Frame> {
-  const extraAttributes = Object.entries(attributes)
-    .map(([name, value]) => `data-hievents-${name}="${value}"`)
-    .join(' ');
-
+export async function openEmbedHost(page: Page, baseURL: string, body: string, query = ''): Promise<void> {
   const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,22 +27,41 @@ export async function openEmbeddedWidget(
 </head>
 <body>
   <h1>Third-party host page</h1>
-  <div class="hievents-widget" data-hievents-id="${eventId}" ${extraAttributes}></div>
+  ${body}
   <p>Host page footer content</p>
 </body>
 </html>`;
 
   await page.context().grantPermissions(['local-network-access'], { origin: new URL(EMBED_HOST_URL).origin });
   await page.route(`${EMBED_HOST_URL}**`, (route) => {
-    if (route.request().url() === EMBED_HOST_URL) {
+    if (route.request().url().split('?')[0] === EMBED_HOST_URL) {
       return route.fulfill({ contentType: 'text/html', body: html });
     }
     return route.fulfill({ status: 404, body: '' });
   });
 
-  await page.goto(EMBED_HOST_URL);
+  await page.goto(`${EMBED_HOST_URL}${query}`);
+}
 
+export const widgetMarkup = (attributes: Record<string, string>): string => {
+  const rendered = Object.entries(attributes)
+    .map(([name, value]) => `data-hievents-${name}="${value}"`)
+    .join(' ');
+  return `<div class="hievents-widget" ${rendered}></div>`;
+};
+
+export async function openEmbeddedWidget(
+  page: Page,
+  baseURL: string,
+  eventId: number,
+  attributes: Record<string, string> = {},
+): Promise<Frame> {
+  await openEmbedHost(page, baseURL, widgetMarkup({ id: String(eventId), ...attributes }));
   return resolveFrame(page, WIDGET_IFRAME_SELECTOR);
+}
+
+export function resolveWidgetFrame(page: Page, title = 'Hi.Events Widget'): Promise<Frame> {
+  return resolveFrame(page, `iframe[title="${title}"]`);
 }
 
 export function widgetIframe(page: Page): Locator {

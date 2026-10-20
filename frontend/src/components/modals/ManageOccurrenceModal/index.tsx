@@ -1,10 +1,11 @@
 import {EventOccurrence, GenericModalProps, IdParam, MessageType} from "../../../types.ts";
+import {useAccess} from "../../../hooks/useAccess.ts";
 import {useNavigate, useParams} from "react-router";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useGetEventOccurrence} from "../../../queries/useGetEventOccurrence.ts";
 import {t} from "@lingui/macro";
 import {useCallback, useMemo, useState} from "react";
-import {Anchor, Progress, Skeleton, Stack, Text} from "@mantine/core";
+import {Anchor, Drawer, Progress, Skeleton, Stack, Text} from "@mantine/core";
 import {IconMapPin, IconWorld} from "@tabler/icons-react";
 import {getEventLocationDisplay} from "../../../utilites/effectiveLocation.ts";
 import {OccurrenceAttendeesAndOrders} from "../../common/OccurrenceAttendeesAndOrders";
@@ -43,6 +44,7 @@ export const ManageOccurrenceModal = ({onClose, occurrenceId}: GenericModalProps
 
     const cancelMutation = useCancelOccurrence();
     const deleteMutation = useDeleteEventOccurrence();
+    const canIssueRefunds = useAccess().can('ISSUE_REFUNDS');
     const reactivateMutation = useReactivateOccurrence();
 
     const handleCancel = useCallback((occId: number) => {
@@ -51,8 +53,9 @@ export const ManageOccurrenceModal = ({onClose, occurrenceId}: GenericModalProps
             occurrenceId: occId,
             orderCount: occurrence?.statistics?.orders_created ?? 0,
             mutation: cancelMutation,
+            canRefund: canIssueRefunds,
         });
-    }, [occurrence, eventId, cancelMutation]);
+    }, [occurrence, eventId, cancelMutation, canIssueRefunds]);
 
     const handleDelete = useCallback((occId: number) => {
         confirmationDialog(t`Are you sure you want to delete this date? This action cannot be undone.`, () => {
@@ -131,9 +134,11 @@ export const ManageOccurrenceModal = ({onClose, occurrenceId}: GenericModalProps
             <Stack className={classes.container}>
                 <div className={classes.header}>
                     <div className={classes.occurrenceInfo}>
-                        <Text className={classes.dateTime}>
-                            {startFormatted}{endFormatted && <> &mdash; {endFormatted}</>}
-                        </Text>
+                        <Drawer.Title component="div">
+                            <Text className={classes.dateTime}>
+                                {startFormatted}{endFormatted && <> &mdash; {endFormatted}</>}
+                            </Text>
+                        </Drawer.Title>
                         {occurrence.label && (
                             <Text className={classes.titleSuffix}>{occurrence.label}</Text>
                         )}
@@ -177,10 +182,12 @@ export const ManageOccurrenceModal = ({onClose, occurrenceId}: GenericModalProps
                         <div className={classes.statValue}>{occurrence.statistics?.orders_created ?? 0}</div>
                         <div className={classes.statLabel}>{t`Orders`}</div>
                     </div>
-                    <div className={classes.statCard}>
-                        <div className={classes.statValue}>{formatCurrency(occurrence.statistics?.total_gross_sales ?? 0, event.currency)}</div>
-                        <div className={classes.statLabel}>{t`Gross Sales`}</div>
-                    </div>
+                    {occurrence.statistics?.total_gross_sales !== undefined && (
+                        <div className={classes.statCard}>
+                            <div className={classes.statValue}>{formatCurrency(occurrence.statistics.total_gross_sales, event.currency)}</div>
+                            <div className={classes.statLabel}>{t`Gross Sales`}</div>
+                        </div>
+                    )}
                     <div className={classes.statCard}>
                         <div className={classes.statValue}>{soldLabel}</div>
                         <div className={classes.statLabel}>{t`Sold`}</div>

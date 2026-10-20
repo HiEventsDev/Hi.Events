@@ -35,6 +35,6 @@ export class CheckInListPage {
   }
 
   async submitEdit(): Promise<void> {
-    await this.page.getByRole('dialog').getByRole('button', { name: 'Edit Check-In List' }).click();
+    await this.page.getByRole('dialog').getByRole('button', { name: 'Save Changes' }).click();
   }
 }

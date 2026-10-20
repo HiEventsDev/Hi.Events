@@ -2,32 +2,30 @@
 
 namespace HiEvents\Services\Application\Handlers\User\TwoFactor;
 
-use HiEvents\Exceptions\PasswordInvalidException;
+use HiEvents\Exceptions\IdentityConfirmationFailedException;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\Services\Domain\Auth\IdentityConfirmationService;
 use HiEvents\Services\Domain\Auth\TwoFactor\DTO\TwoFactorSetupDTO;
 use HiEvents\Services\Domain\Auth\TwoFactor\TwoFactorAuthenticationService;
-use Illuminate\Contracts\Hashing\Hasher;
 
 class BeginTwoFactorSetupHandler
 {
     public function __construct(
         private readonly UserRepositoryInterface $userRepository,
         private readonly TwoFactorAuthenticationService $twoFactorAuthenticationService,
-        private readonly Hasher $hasher,
+        private readonly IdentityConfirmationService $identityConfirmationService,
     ) {}
 
     /**
      * @throws ResourceConflictException
-     * @throws PasswordInvalidException
+     * @throws IdentityConfirmationFailedException
      */
-    public function handle(int $userId, string $password): TwoFactorSetupDTO
+    public function handle(int $userId, ?string $password, ?string $reauthProof, ?string $tokenId): TwoFactorSetupDTO
     {
         $user = $this->userRepository->findById($userId);
 
-        if (! $this->hasher->check($password, $user->getPassword())) {
-            throw new PasswordInvalidException(__('The password is incorrect.'));
-        }
+        $this->identityConfirmationService->confirm($user, $password, $reauthProof, $tokenId);
 
         return $this->twoFactorAuthenticationService->beginSetup($user);
     }

@@ -1,84 +1,135 @@
-import {useLocation, useParams} from "react-router";
+import {useParams} from "react-router";
 import '../../../styles/widget/default.scss';
-import {useGetEventPublic} from "../../../queries/useGetEventPublic.ts";
+import {useQuery} from "@tanstack/react-query";
+import {promoCodeClientPublic} from "../../../api/promo-code.client.ts";
+import {getParentOrigin} from "../../../utilites/iframeResize.ts";
+import {AxiosError} from "axios";
+import {getEventPublicQuery, WIDGET_EVENT_STALE_TIME} from "../../../queries/useGetEventPublic.ts";
 import SelectProducts from "../../routes/product-widget/SelectProducts";
-import {useMemo} from "react";
+import {Fragment, useEffect, useState} from "react";
 import {Loader} from "@mantine/core";
 import {t} from "@lingui/macro";
-import {widgetColorsFromSearchParams} from "../../../utilites/widgetColors.ts";
+import {Event, EventOccurrence} from "../../../types.ts";
+import {productSelectionFromConfig, WidgetSection} from "../../../utilites/widgetConfig.ts";
+import {useWidgetAppearance, useWidgetRuntime} from "../../widget/useWidgetRuntime.ts";
+import {WidgetFrame} from "../../widget/WidgetFrame";
+import {preloadHeavySections, WidgetEventHeader, WidgetEventSection, WidgetSectionStack} from "../../widget/WidgetSections";
+import {WidgetMessage} from "../../widget/WidgetMessage";
 
 const ProductWidget = () => {
     const {eventId} = useParams();
-    const location = useLocation();
+    const {config, checkoutParams, promoCodeValid: loaderPromoCodeValid, isPreview, notFound} = useWidgetRuntime();
+    const [selectedOccurrence, setSelectedOccurrence] = useState<EventOccurrence | undefined>();
+    const previewPromoQuery = useQuery({
+        queryKey: ['widgetPreviewPromoCode', eventId, config.promo_code],
+        queryFn: () => promoCodeClientPublic.validateCode(eventId, config.promo_code ?? ''),
+        enabled: isPreview && !!config.promo_code,
+        staleTime: WIDGET_EVENT_STALE_TIME,
+    });
+    const promoCodeValid = isPreview
+        ? (config.promo_code ? previewPromoQuery.data?.valid : undefined)
+        : loaderPromoCodeValid;
 
-    const eventOccurrenceId = useMemo(() => {
-        const raw = new URLSearchParams(location.search).get('occurrence_id');
-        if (raw === null) return null;
-        const parsed = Number(raw);
-        return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
-    }, [location.search]);
-
-    const checkoutMode = useMemo(() => {
-        return new URLSearchParams(location.search).get('Checkout') === 'new-tab' ? 'new-tab' : 'modal';
-    }, [location.search]);
-
-    const eventQuery = useGetEventPublic(eventId, true, false, null, eventOccurrenceId);
-
-    const settings = useMemo(() => {
-        const searchParams = new URLSearchParams(location.search);
-
-        return {
-            colors: widgetColorsFromSearchParams(searchParams),
-            continueButtonText: searchParams.get("ContinueButtonText") || 'Continue',
-            padding: searchParams.get("Padding") || '10px',
+    useEffect(() => {
+        if (!config.isModal) {
+            return;
+        }
+        const closeOnEscape = (keyboardEvent: KeyboardEvent) => {
+            const insideDialog = keyboardEvent.target instanceof Element && !!keyboardEvent.target.closest('[role="dialog"]');
+            if (keyboardEvent.key === 'Escape' && !keyboardEvent.defaultPrevented && !insideDialog) {
+                window.parent.postMessage({type: 'hievents:close-checkout'}, getParentOrigin() || '*');
+            }
         };
-    }, [location.search]);
+        window.addEventListener('keydown', closeOnEscape);
+        return () => window.removeEventListener('keydown', closeOnEscape);
+    }, [config.isModal]);
 
-    if (eventQuery.isError || (eventQuery.isFetched && !eventQuery.data)) {
+    const eventQuery = useQuery<Event, AxiosError>({
+        ...getEventPublicQuery(
+            eventId,
+            promoCodeValid ? config.promo_code ?? null : null,
+            !!promoCodeValid,
+            config.occurrence_id ?? null,
+            productSelectionFromConfig(config),
+        ),
+        staleTime: WIDGET_EVENT_STALE_TIME,
+        enabled: !notFound,
+    });
+    const event = eventQuery.data;
+    const appearance = useWidgetAppearance(config, event?.settings?.homepage_theme_settings);
+    preloadHeavySections(config.sections);
+
+    if (notFound || eventQuery.isError || (eventQuery.isFetched && !event)) {
         return (
-            <div style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '100vh',
-                padding: '20px',
-                textAlign: 'center',
-                backgroundColor: settings.colors.background,
-                color: settings.colors.primaryText,
-            }}>
-                <div>
-                    <p style={{fontWeight: 600, margin: '0 0 4px'}}>{t`This event is not available`}</p>
-                    <p style={{margin: 0, opacity: 0.7}}>{t`It may have been unpublished or removed. Please check the link and try again.`}</p>
+            <WidgetFrame style={appearance.style} mode={appearance.mode}>
+                <WidgetMessage
+                    title={t`This event is not available`}
+                    description={t`It may have been unpublished or removed. Please check the link and try again.`}
+                />
+            </WidgetFrame>
+        );
+    }
+
+    if (!event) {
+        return (
+            <WidgetFrame style={appearance.style} mode={appearance.mode}>
+                <div className={'hi-widget-loading'}>
+                    <Loader color={appearance.colors.primaryText} size="md" type="dots"/>
                 </div>
-            </div>
-        )
+            </WidgetFrame>
+        );
     }
 
-    if (!eventQuery.isFetched || !eventQuery.data) {
-        return (
-            <div style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '100vh',
-                backgroundColor: settings.colors.background
-            }}>
-                <Loader color={settings.colors.primaryText} size="md" type="dots"/>
-            </div>
-        )
-    }
+    const sections: WidgetSection[] = config.sections?.length ? config.sections : ['tickets'];
+    const orderedSections = sections.includes('tickets') ? sections : [...sections, 'tickets' as const];
+    const showsHeader = orderedSections.includes('header');
+
+    const tickets = (
+        <SelectProducts
+            key={`${config.products?.join(',')}|${config.categories?.join(',')}|${config.occurrence_id ?? ''}|${promoCodeValid ? config.promo_code : ''}`}
+            widgetMode={isPreview ? 'preview' : 'embedded'}
+            checkoutMode={config.checkout === 'new-tab' ? 'new-tab' : 'modal'}
+            event={event}
+            colors={appearance.colors}
+            continueButtonText={config.continue_button_text || t`Continue`}
+            padding={'0px'}
+            showLineup={!!config.show_lineup}
+            reportsHeight={false}
+            showPoweredBy={false}
+            hidePromoCode={!!config.hide_promo_code}
+            hideCategoryTitles={!!config.hide_category_titles}
+            promoCode={config.promo_code}
+            promoCodeValid={promoCodeValid}
+            initialOccurrenceId={config.occurrence_id}
+            onSelectedOccurrenceChange={setSelectedOccurrence}
+            productSelection={productSelectionFromConfig(config)}
+            widgetId={config.widgetId}
+            checkoutParams={checkoutParams}
+        />
+    );
 
     return (
-        <div className={'full-height'} style={{backgroundColor: settings.colors.bodyBackground}}>
-            <SelectProducts
-                widgetMode={'embedded'}
-                checkoutMode={checkoutMode}
-                event={eventQuery.data}
-                colors={settings.colors}
-                continueButtonText={settings.continueButtonText}
-                padding={settings.padding}
-            />
-        </div>
+        <WidgetFrame style={appearance.style} mode={appearance.mode} testId="ticket-widget">
+            <WidgetSectionStack>
+                {config.isModal && !showsHeader && (
+                    <WidgetEventHeader event={event} occurrence={selectedOccurrence} reserveCloseButton compact/>
+                )}
+                {orderedSections.map((section, index) => (
+                    <Fragment key={section}>
+                        {section === 'tickets'
+                            ? tickets
+                            : (
+                                <WidgetEventSection
+                                    section={section}
+                                    event={event}
+                                    occurrence={selectedOccurrence}
+                                    reserveCloseButton={config.isModal && index === 0}
+                                />
+                            )}
+                    </Fragment>
+                ))}
+            </WidgetSectionStack>
+        </WidgetFrame>
     );
 };
 

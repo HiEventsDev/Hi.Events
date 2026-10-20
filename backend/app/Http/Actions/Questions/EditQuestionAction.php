@@ -40,7 +40,7 @@ class EditQuestionAction extends BaseAction
                     'required' => $request->boolean('required'),
                     'options' => $request->input('options'),
                     'event_id' => $eventId,
-                    'product_ids' => $request->input('product_ids'),
+                    'product_ids' => $request->input('product_ids', []),
                     'is_hidden' => $request->boolean('is_hidden'),
                     'belongs_to' => QuestionBelongsTo::fromName($request->input('belongs_to')),
                     'description' => $request->input('description'),

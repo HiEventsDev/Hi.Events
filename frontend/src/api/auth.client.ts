@@ -1,6 +1,7 @@
 import {
     AcceptInvitationRequest,
     GenericDataResponse,
+    Invitation,
     LoginData,
     LoginResponse, RegisterAccountRequest,
     ResetPasswordRequest,
@@ -8,13 +9,9 @@ import {
     User
 } from "../types.ts";
 import {api} from './client.ts';
+import {forgetConnectionSession} from "../utilites/ssoFlow.ts";
 
 export const authClient = {
-    refreshAccessTokenFn: async () => {
-        const response = await api.get<LoginResponse>('auth/refresh');
-        return response.data;
-    },
-
     register: async (registerData: RegisterAccountRequest) => {
         const response = await api.post<GenericDataResponse<User>>('auth/register', registerData);
         return response.data;
@@ -22,6 +19,7 @@ export const authClient = {
 
     login: async (user: LoginData) => {
         const response = await api.post<LoginResponse>('auth/login', user);
+        forgetConnectionSession();
         return response.data;
     },
 
@@ -31,6 +29,7 @@ export const authClient = {
     },
 
     logout: async () => {
+        forgetConnectionSession();
         const response = await api.post('auth/logout');
         return response.data;
     },
@@ -51,12 +50,17 @@ export const authClient = {
     },
 
     getInvitation: async (token: string) => {
-        const response = await api.get<GenericDataResponse<User>>(`auth/invitation/${token}`);
+        const response = await api.get<GenericDataResponse<Invitation>>(`auth/invitation/${token}`);
         return response.data;
     },
 
     acceptInvitation: async (token: string, acceptData: AcceptInvitationRequest) => {
         const response = await api.post(`auth/invitation/${token}`, acceptData);
+        return response.data;
+    },
+
+    joinInvitation: async (token: string) => {
+        const response = await api.post<LoginResponse>(`auth/invitation/${token}/join`);
         return response.data;
     }
 }

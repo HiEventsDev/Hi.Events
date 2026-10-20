@@ -2,16 +2,21 @@
 
 namespace HiEvents\Http\Actions\Products\Purchases;
 
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Exports\ProductPurchasesCsvExport;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\AllowedForReadOnlyUsers;
+use HiEvents\Http\Attributes\RequiresPermission;
 use HiEvents\Http\Request\Product\ExportProductPurchasesRequest;
 use HiEvents\Repository\DTO\ProductPurchase\ProductPurchaseFilterDTO;
 use HiEvents\Services\Application\Handlers\Product\Purchases\ExportProductPurchasesHandler;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
+#[AllowedForReadOnlyUsers]
+#[RequiresPermission(Permission::VIEW_FINANCIALS)]
 class ExportProductPurchasesAction extends BaseAction
 {
     public function __construct(

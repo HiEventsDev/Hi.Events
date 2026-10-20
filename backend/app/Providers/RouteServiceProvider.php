@@ -14,18 +14,8 @@ use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
-    /**
-     * The path to your application's "home" route.
-     *
-     * Typically, users are redirected here after authentication.
-     *
-     * @var string
-     */
     public const HOME = '/home';
 
-    /**
-     * Define your route model bindings, pattern filters, and other route configuration.
-     */
     public function boot(): void
     {
         RateLimiter::for('api', function (Request $request) {
@@ -55,6 +45,38 @@ class RouteServiceProvider extends ServiceProvider
                 Limit::perHour($perHour)->by('auth-register|'.$request->ip()),
                 Limit::perDay($perHour * 3)->by('auth-register-day|'.$request->ip()),
                 Limit::perHour(5)->by('auth-register-email|'.$this->normalisedEmail($request)),
+            ];
+        });
+
+        RateLimiter::for('auth-sso-start', function (Request $request) {
+            return Limit::perMinute(20)->by('auth-sso-start|'.$request->ip());
+        });
+
+        RateLimiter::for('auth-sso-exchange', function (Request $request) {
+            return Limit::perMinute(20)->by('auth-sso-exchange|'.$request->ip());
+        });
+
+        RateLimiter::for('auth-sso-discover', function (Request $request) {
+            return [
+                Limit::perMinute(10)->by('auth-sso-discover|'.$request->ip()),
+                Limit::perHour(60)->by('auth-sso-discover-hour|'.$request->ip()),
+            ];
+        });
+
+        RateLimiter::for('auth-sso-signup-code', function (Request $request) {
+            return [
+                Limit::perHour(5)->by('auth-sso-signup-code|'.hash('sha256', (string) $request->input('signup_ticket'))),
+                Limit::perHour(20)->by('auth-sso-signup-code-ip|'.$request->ip()),
+            ];
+        });
+
+        RateLimiter::for('auth-sso-signup', function (Request $request) {
+            $perHour = (int) config('app.register_rate_limit_per_hour');
+
+            return [
+                Limit::perHour($perHour)->by('auth-sso-signup|'.$request->ip()),
+                Limit::perDay($perHour * 3)->by('auth-sso-signup-day|'.$request->ip()),
+                Limit::perMinute(10)->by('auth-sso-signup-ticket|'.hash('sha256', (string) $request->input('signup_ticket'))),
             ];
         });
 
@@ -99,6 +121,16 @@ class RouteServiceProvider extends ServiceProvider
             return [
                 Limit::perMinute(10)->by($request->route('box_office_short_id').'|'.$request->ip()),
                 Limit::perMinute(60)->by($request->route('box_office_short_id')),
+            ];
+        });
+
+        RateLimiter::for('box-office-read', function (Request $request) {
+            return [
+                Limit::perMinute(60)->by(
+                    $this->boxOfficeSessionKey($request)
+                        ?? 'box-office-read|'.$request->route('box_office_short_id').'|'.$request->ip()
+                ),
+                Limit::perMinute(600)->by('box-office-read-ip|'.$request->ip()),
             ];
         });
 

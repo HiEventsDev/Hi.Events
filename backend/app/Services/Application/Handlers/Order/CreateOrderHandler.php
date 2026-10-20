@@ -14,12 +14,14 @@ use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\DomainObjects\Status\AffiliateStatus;
 use HiEvents\DomainObjects\Status\EventStatus;
+use HiEvents\DomainObjects\WidgetDomainObject;
 use HiEvents\Enterprise\Seating\Services\Domain\SeatClaimService;
 use HiEvents\Enterprise\Seating\Services\Domain\SeatingEventLockService;
 use HiEvents\Exceptions\EventNotOpenForOrdersException;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
+use HiEvents\Repository\Interfaces\WidgetRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\CreateOrderPublicDTO;
 use HiEvents\Services\Domain\EventOccurrence\OccurrencePurchaseEligibilityService;
 use HiEvents\Services\Domain\Order\DTO\ProcessedOrderItemDTO;
@@ -48,6 +50,7 @@ class CreateOrderHandler
         private readonly DatabaseManager $databaseManager,
         private readonly SeatClaimService $seatClaimService,
         private readonly SeatingEventLockService $seatingEventLock,
+        private readonly WidgetRepositoryInterface $widgetRepository,
     ) {}
 
     /**
@@ -73,6 +76,7 @@ class CreateOrderHandler
 
             $promoCode = $this->getPromoCode($createOrderPublicDTO, $eventId);
             $affiliate = $this->getAffiliate($createOrderPublicDTO, $eventId);
+            $widget = $this->getWidget($createOrderPublicDTO, $event);
 
             $this->validateProductAvailability($eventId, $createOrderPublicDTO);
 
@@ -84,6 +88,7 @@ class CreateOrderHandler
                 promoCode: $promoCode,
                 affiliate: $affiliate,
                 sessionId: $createOrderPublicDTO->session_identifier,
+                widget: $widget,
             );
 
             $orderItems = $this->orderItemProcessingService->process(
@@ -131,6 +136,19 @@ class CreateOrderHandler
             AffiliateDomainObjectAbstract::EVENT_ID => $eventId,
             AffiliateDomainObjectAbstract::STATUS => AffiliateStatus::ACTIVE->value,
         ]);
+    }
+
+    private function getWidget(CreateOrderPublicDTO $createOrderPublicDTO, EventDomainObject $event): ?WidgetDomainObject
+    {
+        if ($createOrderPublicDTO->widget_id === null || trim($createOrderPublicDTO->widget_id) === '') {
+            return null;
+        }
+
+        return $this->widgetRepository->findForOrderAttribution(
+            shortId: trim($createOrderPublicDTO->widget_id),
+            eventId: $event->getId(),
+            organizerId: $event->getOrganizerId(),
+        );
     }
 
     /**

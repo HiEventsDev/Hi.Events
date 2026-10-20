@@ -1,4 +1,5 @@
 import {useState} from "react";
+import {useAccess} from "./useAccess.ts";
 import {t, Trans} from "@lingui/macro";
 import {useDisclosure} from "@mantine/hooks";
 import {notifications} from "@mantine/notifications";
@@ -27,6 +28,8 @@ export const useAttendeeActions = ({eventId, onManage, onEdit}: UseAttendeeActio
         setSelectedAttendee(attendee);
         messageModal.open();
     };
+
+    const canEdit = useAccess().can('EDIT');
 
     const handleResendTicket = (attendee: Attendee) => {
         resendTicketMutation.mutate({
@@ -86,7 +89,7 @@ export const useAttendeeActions = ({eventId, onManage, onEdit}: UseAttendeeActio
                 onClick: () => onManage(attendee),
                 group: 'primary',
             },
-            !!onEdit && {
+            !!onEdit && canEdit && {
                 key: 'edit',
                 label: t`Edit`,
                 icon: <IconPencil size={14}/>,
@@ -94,21 +97,21 @@ export const useAttendeeActions = ({eventId, onManage, onEdit}: UseAttendeeActio
                 group: 'primary',
                 dataTestId: 'attendee-edit-button',
             },
-            !!attendee.email && {
+            !!attendee.email && canEdit && {
                 key: 'message',
                 label: t`Message attendee`,
                 icon: <IconSend size={14}/>,
                 onClick: () => handleMessage(attendee),
                 group: 'primary',
             },
-            attendee.status === 'ACTIVE' && !!attendee.email && {
+            attendee.status === 'ACTIVE' && !!attendee.email && canEdit && {
                 key: 'resend',
                 label: t`Resend ticket email`,
                 icon: <IconMailForward size={14}/>,
                 onClick: () => handleResendTicket(attendee),
                 group: 'primary',
             },
-            {
+            canEdit && {
                 key: 'cancel',
                 label: isCancelled ? t`Activate` : t`Cancel` + ` ` + t`ticket`,
                 icon: <IconTrash size={14}/>,

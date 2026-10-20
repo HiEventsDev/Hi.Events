@@ -33,6 +33,7 @@ class DuplicateEventHandler
             duplicateTicketLogo: $data->duplicateTicketLogo,
             duplicateWebhooks: $data->duplicateWebhooks,
             duplicateAffiliates: $data->duplicateAffiliates,
+            duplicateLineup: $data->duplicateLineup,
             duplicateOccurrences: $data->duplicateOccurrences,
             description: $data->description,
             endDate: $data->endDate,

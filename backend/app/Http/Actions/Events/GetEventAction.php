@@ -10,6 +10,7 @@ use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\OrganizerSettingDomainObject;
 use HiEvents\DomainObjects\ProductCategoryDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
@@ -33,7 +34,9 @@ class GetEventAction extends BaseAction
         $this->isActionAuthorized($eventId, EventDomainObject::class);
 
         $event = $this->eventRepository
-            ->loadRelation(new Relationship(domainObject: OrganizerDomainObject::class, name: 'organizer'))
+            ->loadRelation(new Relationship(domainObject: OrganizerDomainObject::class, nested: [
+                new Relationship(domainObject: OrganizerSettingDomainObject::class),
+            ], name: 'organizer'))
             ->loadRelation(new Relationship(ImageDomainObject::class))
             ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
                 new Relationship(domainObject: LocationDomainObject::class, name: 'location'),

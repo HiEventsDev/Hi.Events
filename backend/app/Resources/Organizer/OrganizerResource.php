@@ -36,7 +36,7 @@ class OrganizerResource extends JsonResource
             ),
             'settings' => $this->when(
                 condition: ! is_null($this->getOrganizerSettings()),
-                value: fn () => new OrganizerSettingsResource($this->getOrganizerSettings())
+                value: fn () => new OrganizerSettingsPublicResource($this->getOrganizerSettings())
             ),
             $this->mergeWhen(
                 config('app.saas_mode_enabled') && $this->getOrganizerStripePlatforms() !== null,

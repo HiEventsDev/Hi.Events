@@ -1,7 +1,7 @@
 import {t} from "@lingui/macro";
 import {EventDuplicatePayload, EventType, GenericModalProps, IdParam} from "../../../types.ts";
 import {Button, Switch, TextInput, Group, ActionIcon, Tooltip, Grid} from "@mantine/core";
-import {Modal} from "../../common/Modal";
+import {Modal, ModalFooter} from "../../common/Modal";
 import {useForm} from "@mantine/form";
 import {useDuplicateEvent} from "../../../mutations/useDuplicateEvent.ts";
 import {Editor} from "../../common/Editor";
@@ -14,6 +14,8 @@ import {showSuccess} from "../../../utilites/notifications.tsx";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
 import {Card} from "../../common/Card";
 import {IconCheckbox, IconSquare} from "@tabler/icons-react";
+import {DateTimeField} from "../../common/DateTimeField";
+import {OrganizerDatesProvider} from "../../common/OrganizerDatesProvider";
 
 interface DuplicateEventModalProps extends GenericModalProps {
     eventId: IdParam;
@@ -36,6 +38,7 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
             duplicate_ticket_logo: true,
             duplicate_webhooks: true,
             duplicate_affiliates: true,
+            duplicate_lineup: true,
             duplicate_occurrences: true,
         }
     });
@@ -56,6 +59,7 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
         { key: 'duplicate_ticket_logo', label: t`Ticket Logo` },
         { key: 'duplicate_webhooks', label: t`Webhooks` },
         { key: 'duplicate_affiliates', label: t`Affiliates` },
+        { key: 'duplicate_lineup', label: t`Lineup & Schedule`, description: isRecurring ? undefined : t`Time slots move with the new start date` },
         ...(isRecurring ? [{ key: 'duplicate_occurrences' as const, label: t`Occurrences (future only)`, description: t`Future dates will be copied with capacity reset to zero` }] : []),
     ];
 
@@ -120,17 +124,20 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
                     />
 
                     {!isRecurring && (
-                        <InputGroup>
-                            <TextInput type={'datetime-local'}
-                                       {...form.getInputProps('start_date')}
-                                       label={t`Start Date`}
-                                       required
-                            />
-                            <TextInput type={'datetime-local'}
-                                       {...form.getInputProps('end_date')}
-                                       label={t`End Date`}
-                            />
-                        </InputGroup>
+                        <OrganizerDatesProvider firstDayOfWeek={eventQuery.data?.organizer?.settings?.first_day_of_week}>
+                            <InputGroup>
+                                <DateTimeField
+                                           {...form.getInputProps('start_date')}
+                                           label={t`Start Date`}
+                                           required
+                                />
+                                <DateTimeField
+                                           {...form.getInputProps('end_date')}
+                                           label={t`End Date`}
+                                           defaultTime="23:59"
+                                />
+                            </InputGroup>
+                        </OrganizerDatesProvider>
                     )}
 
                     <Group justify="space-between" align="center" mb="md">
@@ -177,9 +184,12 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
                         </Grid>
                     </Card>
                 </fieldset>
-                <Button type="submit" fullWidth disabled={mutation.isPending}>
-                    {mutation.isPending ? t`Working...` : t`Duplicate Event`}
-                </Button>
+                <ModalFooter>
+                    <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                    <Button type="submit" disabled={mutation.isPending}>
+                        {mutation.isPending ? t`Working...` : t`Duplicate Event`}
+                    </Button>
+                </ModalFooter>
             </form>
         </Modal>
     )

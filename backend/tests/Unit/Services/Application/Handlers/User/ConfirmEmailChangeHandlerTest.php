@@ -3,6 +3,8 @@
 namespace Tests\Unit\Services\Application\Handlers\User;
 
 use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Enterprise\Sso\Exceptions\AccountSsoConfigurationException;
+use HiEvents\Enterprise\Sso\Services\Domain\SsoEnforcementService;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Application\Handlers\User\ConfirmEmailChangeHandler;
@@ -25,6 +27,8 @@ class ConfirmEmailChangeHandlerTest extends TestCase
 
     private ConfirmEmailChangeHandler $handler;
 
+    private SsoEnforcementService|MockInterface $ssoEnforcementService;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -32,6 +36,8 @@ class ConfirmEmailChangeHandlerTest extends TestCase
         $this->userRepository = Mockery::mock(UserRepositoryInterface::class);
         $this->encryptedPayloadService = Mockery::mock(EncryptedPayloadService::class);
 
+        $this->ssoEnforcementService = Mockery::mock(SsoEnforcementService::class);
+        $this->ssoEnforcementService->shouldReceive('assertEmailChangeAllowed')->byDefault();
         $databaseManager = Mockery::mock(DatabaseManager::class);
         $databaseManager->shouldReceive('transaction')->andReturnUsing(fn ($callback) => $callback());
 
@@ -43,8 +49,23 @@ class ConfirmEmailChangeHandlerTest extends TestCase
             new NullLogger,
             $this->userRepository,
             $this->encryptedPayloadService,
+            $this->ssoEnforcementService,
             $databaseManager,
         );
+    }
+
+    public function test_refuses_to_confirm_an_email_that_left_the_verified_domains_after_single_sign_on_was_required(): void
+    {
+        $this->givenTokenPayload(['id' => 1, 'email' => 'new@example.com']);
+        $this->userRepository->shouldReceive('findFirstWhere')->andReturnNull();
+        $this->userRepository->shouldNotReceive('updateWhere');
+        $this->ssoEnforcementService->shouldReceive('assertEmailChangeAllowed')
+            ->with(1, 'new@example.com')
+            ->andThrow(new AccountSsoConfigurationException('Your organization requires single sign-on.', 'email'));
+
+        $this->expectException(ResourceConflictException::class);
+
+        $this->handler->handle(new ConfirmEmailChangeDTO(token: 'token', accountId: 9));
     }
 
     protected function tearDown(): void

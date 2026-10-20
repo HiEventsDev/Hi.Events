@@ -1,0 +1,45 @@
+.toolbar {
+  margin-bottom: var(--mantine-spacing-md);
+}
+
+.toolbarRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--mantine-spacing-sm);
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.addExisting {
+  display: flex;
+  gap: var(--mantine-spacing-sm);
+  flex: 1;
+  min-width: 0;
+  max-width: 480px;
+
+  @media (max-width: 600px) {
+    max-width: none;
+  }
+
+  :global(.mantine-InputWrapper-root) {
+    margin-bottom: 0;
+  }
+}
+
+.memberSelect {
+  flex: 1;
+  min-width: 0;
+}
+
+.email {
+  word-break: break-all;
+}
+
+.tableCard {
+  padding: 0;
+}

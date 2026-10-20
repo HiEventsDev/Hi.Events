@@ -6,8 +6,9 @@ test.describe('account deletion', () => {
     const page = await freshAccount.newAuthedPage();
 
     await page.goto('/account/danger-zone');
+    await expect(page).toHaveURL(/\/settings\/account#delete-account$/);
     await page.getByTestId('delete-account-button').click();
-    await page.getByLabel('Account name').fill(account.name);
+    await page.getByRole('dialog').getByLabel('Account name').fill(account.name);
     await page.getByTestId('confirm-account-deletion-button').click();
 
     await expect(page.getByText('This account is scheduled for deletion', { exact: true })).toBeVisible();
@@ -37,12 +38,12 @@ test.describe('account deletion', () => {
   test('the confirm button stays disabled until the account name matches', async ({ freshAccount }) => {
     const page = await freshAccount.newAuthedPage();
 
-    await page.goto('/account/danger-zone');
+    await page.goto('/settings/account');
     await page.getByTestId('delete-account-button').click();
 
     await expect(page.getByTestId('confirm-account-deletion-button')).toBeDisabled();
 
-    await page.getByLabel('Account name').fill('Wrong Name');
+    await page.getByRole('dialog').getByLabel('Account name').fill('Wrong Name');
     await expect(page.getByTestId('confirm-account-deletion-button')).toBeDisabled();
   });
 });

@@ -76,22 +76,26 @@ export const OrderDetails = ({order, event, cardVariant = 'lightGray'}: {
                     <OrderStatusBadge order={order} variant={'outline'}/>
                 </div>
             </div>
-            <div className={classes.block}>
-                <div className={classes.title}>
-                    {t`Total order amount`}
-                </div>
-                <div className={classes.amount}>
-                    <Currency currency={order.currency} price={order.total_gross}/>
-                </div>
-            </div>
-            <div className={classes.block}>
-                <div className={classes.title}>
-                    {t`Total refunded`}
-                </div>
-                <div className={classes.amount}>
-                    <Currency currency={order.currency} price={order.total_refunded}/>
-                </div>
-            </div>
+            {order.total_gross !== undefined && (
+                <>
+                    <div className={classes.block}>
+                        <div className={classes.title}>
+                            {t`Total order amount`}
+                        </div>
+                        <div className={classes.amount}>
+                            <Currency currency={order.currency} price={order.total_gross}/>
+                        </div>
+                    </div>
+                    <div className={classes.block}>
+                        <div className={classes.title}>
+                            {t`Total refunded`}
+                        </div>
+                        <div className={classes.amount}>
+                            <Currency currency={order.currency} price={order.total_refunded}/>
+                        </div>
+                    </div>
+                </>
+            )}
             {order.payment_provider && (
                 <div className={classes.block}>
                     <div className={classes.title}>

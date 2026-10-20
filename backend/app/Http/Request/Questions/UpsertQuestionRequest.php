@@ -16,9 +16,8 @@ class UpsertQuestionRequest extends BaseRequest
             'description' => ['string', 'nullable', 'max:10000'],
             'type' => ['required', Rule::in(QuestionTypeEnum::valuesArray())],
             'product_ids' => ['array', 'required_if:belongs_to,PRODUCT'],
-            'belongs_to' => [
-                ['required', Rule::in([QuestionBelongsTo::PRODUCT->name, QuestionBelongsTo::ORDER->name])],
-            ],
+            'belongs_to' => ['required', Rule::in([QuestionBelongsTo::PRODUCT->name, QuestionBelongsTo::ORDER->name])],
+            /** @var string[]|null */
             'options' => 'max:2000|required_if:type,CHECKBOX,RADIO',
             'required' => 'required|boolean',
             'is_hidden' => 'required|boolean',

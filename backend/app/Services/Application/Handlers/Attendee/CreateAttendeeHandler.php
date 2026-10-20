@@ -279,11 +279,12 @@ class CreateAttendeeHandler
         }
 
         $taxesAndFees = $this->taxAndFeeRepository->findWhereIn(
-            'id',
-            $attendeeDTO
+            field: 'id',
+            values: $attendeeDTO
                 ->taxes_and_fees
                 ->map(fn (CreateAttendeeTaxAndFeeDTO $taxAndFee) => $taxAndFee->tax_or_fee_id)
-                ->toArray()
+                ->toArray(),
+            additionalWhere: ['account_id' => $this->eventRepository->findById($attendeeDTO->event_id)->getAccountId()],
         );
 
         $validatedTaxesAndFees = collect();

@@ -1,0 +1,120 @@
+@use "../../../styles/mixins";
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  :global(.mantine-InputWrapper-root),
+  :global(.mantine-Switch-root) {
+    margin-bottom: 0;
+  }
+}
+
+.typeOptions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.typeOption {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--hi-color-border);
+  border-radius: var(--hi-radius-lg);
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--mantine-color-primary-5) 40%, transparent);
+  }
+
+  &[data-checked] {
+    border-color: var(--mantine-color-primary-5);
+    background: var(--hi-accent-brand-soft);
+  }
+}
+
+.typeIcon {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--mantine-color-primary-6);
+}
+
+.typeText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.typeLabel {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--hi-text);
+}
+
+.typeDescription {
+  font-size: 0.75rem;
+  color: var(--hi-color-text-muted);
+}
+
+.typeIndicator {
+  flex-shrink: 0;
+}
+
+.amountRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+
+  @include mixins.respond-below(sm) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.amountInput {
+  flex: 1;
+  min-width: 0;
+}
+
+.calculationToggle {
+  flex-shrink: 0;
+}
+
+.preview {
+  margin-top: 6px;
+  font-size: 0.8125rem;
+  color: var(--hi-color-text-muted);
+}
+
+.defaultToggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 14px;
+  border: 1px solid var(--hi-color-border);
+  border-radius: var(--hi-radius-lg);
+}
+
+.defaultText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.defaultLabel {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--hi-text);
+}
+
+.defaultDescription {
+  font-size: 0.8125rem;
+  color: var(--hi-color-text-muted);
+}

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Admin\Accounts;
 
-use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\Account\AdminAccountDetailResource;
 use HiEvents\Services\Application\Handlers\Admin\GetAccountHandler;
@@ -21,7 +20,7 @@ class UpdateAccountMessagingTierAction extends BaseAction
 
     public function __invoke(Request $request, int $accountId): JsonResponse
     {
-        $this->minimumAllowedRole(Role::SUPERADMIN);
+        $this->requireSuperAdmin();
 
         $validated = $request->validate([
             'messaging_tier_id' => 'required|integer|exists:account_messaging_tiers,id',

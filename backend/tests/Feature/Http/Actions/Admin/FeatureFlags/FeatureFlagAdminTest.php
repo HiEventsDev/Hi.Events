@@ -43,7 +43,7 @@ class FeatureFlagAdminTest extends TestCase
         [$this->adminToken, $this->targetAccountId] = $this->makeUser('ADMIN');
     }
 
-    public function test_licensed_flags_are_hidden_from_the_admin_off_hi_events_cloud(): void
+    public function test_no_flags_are_shown_to_the_admin_off_hi_events_cloud(): void
     {
         config(['app.saas_mode_enabled' => true]);
         $this->useLicence(expiresAt: '2099-12-31', env: 'testing');

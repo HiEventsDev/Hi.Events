@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\AccountDomainObject;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Enterprise\Sso\Services\Domain\SsoEnforcementService;
 use HiEvents\Exceptions\EmailAlreadyExists;
 use HiEvents\Helper\IdHelper;
 use HiEvents\Repository\Interfaces\AccountAttributionRepositoryInterface;
@@ -42,6 +43,7 @@ class CreateAccountHandler
         private readonly AccountConfigurationRepositoryInterface $accountConfigurationRepository,
         private readonly AccountAttributionRepositoryInterface $accountAttributionRepository,
         private readonly AttributionSourceClassifier $attributionSourceClassifier,
+        private readonly SsoEnforcementService $ssoEnforcementService,
         private readonly LoggerInterface $logger,
     ) {}
 
@@ -54,17 +56,19 @@ class CreateAccountHandler
             throw new AccountRegistrationDisabledException;
         }
 
-        $isSaasMode = $this->config->get('app.saas_mode_enabled');
-        $passwordHash = $this->hashManager->make($accountData->password);
+        $this->ssoEnforcementService->assertSignupAllowed($accountData->email);
 
-        return $this->databaseManager->transaction(function () use ($isSaasMode, $passwordHash, $accountData) {
+        $requiresVerification = $this->config->get('app.saas_mode_enabled') && ! $accountData->email_verified;
+        $passwordHash = $accountData->password !== null ? $this->hashManager->make($accountData->password) : null;
+
+        return $this->databaseManager->transaction(function () use ($requiresVerification, $passwordHash, $accountData) {
             $account = $this->accountRepository->create([
                 'timezone' => $this->getTimezone($accountData),
                 'currency_code' => $this->getCurrencyCode($accountData),
                 'name' => $accountData->first_name.($accountData->last_name ? ' '.$accountData->last_name : ''),
                 'email' => strtolower($accountData->email),
                 'short_id' => IdHelper::shortId(IdHelper::ACCOUNT_PREFIX),
-                'account_verified_at' => $isSaasMode ? null : now()->toDateTimeString(),
+                'account_verified_at' => $requiresVerification ? null : now()->toDateTimeString(),
                 'account_configuration_id' => $this->getAccountConfigurationId($accountData),
                 'account_messaging_tier_id' => $this->getDefaultMessagingTierId(),
             ]);
@@ -75,7 +79,7 @@ class CreateAccountHandler
                 'first_name' => $accountData->first_name,
                 'last_name' => $accountData->last_name,
                 'timezone' => $this->getTimezone($accountData),
-                'email_verified_at' => $isSaasMode ? null : now()->toDateTimeString(),
+                'email_verified_at' => $requiresVerification ? null : now()->toDateTimeString(),
                 'locale' => $accountData->locale,
                 'marketing_opted_in_at' => $accountData->marketing_opt_in ? now()->toDateTimeString() : null,
             ]);
@@ -111,7 +115,9 @@ class CreateAccountHandler
                 ]);
             }
 
-            $this->emailConfirmationService->sendConfirmation($user, $account->getId());
+            if (! $accountData->email_verified) {
+                $this->emailConfirmationService->sendConfirmation($user, $account->getId());
+            }
 
             return $account;
         });
@@ -154,6 +160,12 @@ class CreateAccountHandler
 
         if ($existingUser === null) {
             return null;
+        }
+
+        if (! $accountData->allow_existing_user) {
+            throw new EmailAlreadyExists(
+                __('There is already an account associated with this email. Please log in instead.')
+            );
         }
 
         $existingOwner = $this->accountUserRepository->findFirstWhere([

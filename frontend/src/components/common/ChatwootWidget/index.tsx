@@ -4,7 +4,7 @@ import { useGetMe } from "../../../queries/useGetMe.ts";
 import { User } from "../../../types.ts";
 import { getConfig } from "../../../utilites/config.ts";
 
-const CHATWOOT_ROUTES = ["/manage", "/account", "/welcome"];
+const CHATWOOT_ROUTES = ["/manage", "/settings", "/welcome"];
 
 const ChatwootWidget = () => {
     const scriptRef = useRef<HTMLScriptElement | null>(null);

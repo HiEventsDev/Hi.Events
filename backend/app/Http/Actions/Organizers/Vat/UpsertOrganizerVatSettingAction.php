@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Organizers\Vat;
 
-use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\RequiresPermission;
 use HiEvents\Resources\Organizer\Vat\OrganizerVatSettingResource;
 use HiEvents\Services\Application\Handlers\Organizer\Vat\DTO\UpsertOrganizerVatSettingDTO;
 use HiEvents\Services\Application\Handlers\Organizer\Vat\UpsertOrganizerVatSettingHandler;
@@ -15,6 +16,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+#[RequiresPermission(Permission::MANAGE_PAYMENTS)]
 class UpsertOrganizerVatSettingAction extends BaseAction
 {
     public function __construct(
@@ -23,7 +25,7 @@ class UpsertOrganizerVatSettingAction extends BaseAction
 
     public function __invoke(Request $request, int $organizerId): JsonResponse
     {
-        $this->isActionAuthorized($organizerId, OrganizerDomainObject::class, Role::ADMIN);
+        $this->isActionAuthorized($organizerId, OrganizerDomainObject::class);
 
         $validated = $request->validate([
             'vat_registered' => 'required|boolean',

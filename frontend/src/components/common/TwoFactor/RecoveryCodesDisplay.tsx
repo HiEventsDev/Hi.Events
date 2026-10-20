@@ -79,6 +79,7 @@ export const RecoveryCodesDisplay = ({codes, email, acknowledged, onAcknowledged
                     leftSection={clipboard.copied ? <IconCheck size={14}/> : <IconCopy size={14}/>}
                     onClick={() => clipboard.copy(codes.join('\n'))}
                     color={clipboard.copied ? 'green' : undefined}
+                    data-autofocus
                 >
                     {clipboard.copied ? t`Copied` : t`Copy all`}
                 </Button>

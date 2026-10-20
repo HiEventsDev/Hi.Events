@@ -55,7 +55,7 @@ test.describe('two-factor authentication', () => {
     await expect(notice).toContainText('You have 9 recovery codes left');
     await page.getByTestId('two-factor-manage-codes').click();
 
-    await expect(page).toHaveURL(/\/manage\/profile\/security/);
+    await expect(page).toHaveURL(/\/settings\/security/);
     await expect(page.getByTestId('two-factor-recovery-remaining')).toHaveText('9 of 10 remaining');
     await page.context().close();
 
@@ -224,7 +224,7 @@ test.describe('two-factor authentication', () => {
     const memberRow = team.userRow(memberEmail);
     await expect(memberRow.getByText('On', { exact: true })).toBeVisible();
 
-    await memberRow.getByRole('button').click();
+    await memberRow.getByTestId('team-member-actions').click();
     await ownerPage.getByTestId('team-reset-two-factor-menu-item').click();
     await ownerPage.getByRole('button', { name: 'Reset two-factor' }).click();
     await expect(ownerPage.getByText('Two-factor authentication reset')).toBeVisible();

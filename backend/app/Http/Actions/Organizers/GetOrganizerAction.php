@@ -5,7 +5,6 @@ namespace HiEvents\Http\Actions\Organizers;
 use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\OrganizerConfigurationDomainObject;
-use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\OrganizerStripePlatformDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Eloquent\Value\Relationship;
@@ -19,10 +18,7 @@ class GetOrganizerAction extends BaseAction
 
     public function __invoke(int $organizerId): Response
     {
-        $this->isActionAuthorized(
-            entityId: $organizerId,
-            entityType: OrganizerDomainObject::class,
-        );
+        $this->isOrganizerReadAuthorized($organizerId);
 
         $organizer = $this->organizerRepository
             ->loadRelation(ImageDomainObject::class)

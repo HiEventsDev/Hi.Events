@@ -41,7 +41,7 @@ class EmailTokenContextBuilder
         $occurrence ??= $order->getSingleEventOccurrence();
 
         $startDateRaw = $occurrence?->getStartDate() ?? $event->getStartDate();
-        $endDateRaw = $occurrence?->getEndDate() ?? $event->getEndDate();
+        $endDateRaw = $occurrence === null ? $event->getEndDate() : $occurrence->getEndDate();
 
         $eventStartDate = $startDateRaw ? new Carbon(DateHelper::convertFromUTC($startDateRaw, $event->getTimezone())) : null;
         $eventEndDate = $endDateRaw ? new Carbon(DateHelper::convertFromUTC($endDateRaw, $event->getTimezone())) : null;
@@ -272,6 +272,16 @@ class EmailTokenContextBuilder
             'end_date' => 'April 26, 2029',
             'end_time' => '11:00 PM',
             'label' => 'Session A',
+        ];
+
+        $baseContext['lineup'] = [
+            'heading' => __('Lineup'),
+            'names' => ['Velvet Harbour', 'The Northern Arcs', 'Mira Solenne'],
+            'slots' => [
+                ['time' => 'Fri 25 Apr · 9:30 PM', 'title' => 'Velvet Harbour', 'stage' => __('Main Stage')],
+                ['time' => 'Sat 26 Apr · 10:00 PM', 'title' => 'The Northern Arcs', 'stage' => __('Main Stage')],
+            ],
+            'url' => 'https://example.com/event/123/summer-fest#schedule',
         ];
 
         $baseContext['event_location'] = [

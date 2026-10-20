@@ -1,48 +1,81 @@
 import type { Locator, Page } from '@playwright/test';
 
-type TeamRole = 'Admin' | 'Organizer';
+type TeamRole = 'Admin' | 'Organizer' | 'Viewer';
 
 export class TeamPage {
   constructor(private readonly page: Page) {}
 
   async goto(): Promise<void> {
-    await this.page.goto('/account/users');
+    await this.page.goto('/settings/team');
     await this.page.waitForLoadState('networkidle');
   }
 
   userRow(email: string): Locator {
-    return this.page.getByRole('row').filter({ hasText: email });
+    return this.page.getByTestId('team-member-row').filter({ hasText: email });
   }
 
-  async inviteUser(details: { firstName: string; lastName: string; email: string; role: TeamRole }): Promise<void> {
+  async inviteUser(details: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    role: TeamRole;
+    onlyAccessTo?: string[];
+  }): Promise<void> {
     await this.page.getByTestId('team-invite-button').click();
     await this.page.getByRole('heading', { name: 'Invite a team member' }).waitFor();
     await this.page.getByLabel(/^First Name/).fill(details.firstName);
     await this.page.getByLabel(/^Last Name/).fill(details.lastName);
     await this.page.getByLabel(/^Email/).fill(details.email);
-    if (details.role !== 'Admin') {
-      await this.selectRole('Admin', details.role);
+    if (details.role !== 'Organizer') {
+      await this.selectRole(details.role);
     }
-    await this.page.getByRole('button', { name: 'Invite Team Member' }).click();
+    if (details.onlyAccessTo) {
+      await this.restrictAccessTo(details.onlyAccessTo);
+    }
+    await this.page.getByTestId('invite-team-member-submit').click();
+  }
+
+  async restrictAccessTo(targets: string[]): Promise<void> {
+    const dialog = this.page.getByRole('dialog');
+    await dialog.getByText('Specific organizers and events', { exact: true }).click();
+    const picker = dialog.getByPlaceholder('Search organizers and events');
+    for (const target of targets) {
+      await picker.click();
+      await picker.fill(target);
+      await this.page.getByRole('option', { name: target, exact: true }).click();
+    }
+    await picker.press('Escape');
   }
 
   async openEditUserModal(email: string): Promise<void> {
-    await this.userRow(email).getByRole('button').click();
+    await this.userRow(email).getByTestId('team-member-actions').click();
     await this.page.getByRole('menuitem', { name: 'Edit user' }).click();
-    await this.page.getByRole('heading', { name: 'Edit User' }).waitFor();
+    await this.page.getByRole('heading', { name: 'Edit member' }).waitFor();
   }
 
-  async selectRole(currentRole: TeamRole, newRole: TeamRole): Promise<void> {
-    await this.page.getByRole('dialog').getByText(currentRole, { exact: true }).click();
-    await this.page.getByRole('option', { name: newRole }).click();
+  async selectRole(role: TeamRole): Promise<void> {
+    await this.page.getByTestId(`team-role-${role.toLowerCase()}`).click();
   }
 
-  async selectStatus(status: 'Active' | 'Inactive'): Promise<void> {
-    await this.page.getByRole('dialog').getByLabel(/^Status/).click();
-    await this.page.getByRole('option', { name: status, exact: true }).click();
+  async search(text: string): Promise<void> {
+    await this.page.getByLabel('Search members').fill(text);
+  }
+
+  async chooseRowAction(email: string, action: string): Promise<void> {
+    await this.userRow(email).getByTestId('team-member-actions').click();
+    await this.page.getByRole('menuitem', { name: action, exact: true }).click();
+  }
+
+  async confirm(label = 'Confirm'): Promise<void> {
+    await this.page.getByRole('dialog').getByRole('button', { name: label, exact: true }).click();
+  }
+
+  async deactivate(email: string): Promise<void> {
+    await this.chooseRowAction(email, 'Deactivate');
+    await this.confirm('Deactivate');
   }
 
   async submitEditUser(): Promise<void> {
-    await this.page.getByRole('button', { name: 'Edit User', exact: true }).click();
+    await this.page.getByTestId('edit-team-member-submit').click();
   }
 }

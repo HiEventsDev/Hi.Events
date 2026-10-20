@@ -41,21 +41,21 @@ export class OrganizerPage {
     await this.page.waitForLoadState('networkidle');
   }
 
-  async openCreateOrganizerModal(avatarInitials: string): Promise<void> {
-    await this.page.getByRole('button', { name: avatarInitials, exact: true }).click();
+  async openCreateOrganizerModal(): Promise<void> {
+    await this.page.getByTestId('account-menu-button').click();
     await this.page.getByRole('menuitem', { name: 'Create Organizer' }).click();
   }
 
-  get organizationNameInput(): Locator {
-    return this.page.getByLabel(/^Organization Name/);
+  get organizerNameInput(): Locator {
+    return this.page.getByRole('dialog').getByLabel(/^Organizer name/);
   }
 
   get contactEmailInput(): Locator {
-    return this.page.getByLabel(/^Contact Email/);
+    return this.page.getByRole('dialog').getByLabel(/^Contact email/);
   }
 
-  get continueSetupButton(): Locator {
-    return this.page.getByRole('button', { name: /^Continue to event creation$/ });
+  get createOrganizerButton(): Locator {
+    return this.page.getByTestId('create-organizer-submit');
   }
 
   get settingsNameInput(): Locator {

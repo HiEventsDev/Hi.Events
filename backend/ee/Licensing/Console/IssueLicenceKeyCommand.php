@@ -19,8 +19,9 @@ class IssueLicenceKeyCommand extends Command
         {--kid= : Key id of that private key}
         {--customer= : Customer name shown in the admin licence page}
         {--expires= : Expiry date (YYYY-MM-DD, UTC)}
-        {--plan=enterprise : Plan whose features the key unlocks (cloud is only for Hi.Events Cloud: it rolls features out by feature flag)}
-        {--add=* : Add-on features on top of the plan, e.g. white_label}
+        {--plan=own_events : Plan whose features the key unlocks: own_events, platform, or cloud (only for Hi.Events Cloud: it rolls features out by feature flag)}
+        {--covers= : Yearly sales the licence covers, in euros (required for own_events and platform)}
+        {--add=* : Add-on features on top of the plan, e.g. --add=seating --add=box_office --add=enterprise_sso}
         {--lid= : Licence id (generated when omitted)}';
 
     protected $description = 'Issue a signed Hi.Events licence key';
@@ -51,6 +52,23 @@ class IssueLicenceKeyCommand extends Command
             return self::FAILURE;
         }
 
+        $covers = (string) $this->option('covers');
+        if ($covers !== '' && (! ctype_digit($covers) || (int) $covers === 0)) {
+            $this->error('--covers must be a whole number of euros above zero.');
+
+            return self::FAILURE;
+        }
+        if ($covers === '' && $plan !== Plan::CLOUD) {
+            $this->error('--covers is required for the '.$plan->value.' plan.');
+
+            return self::FAILURE;
+        }
+        if ($covers !== '' && $plan === Plan::CLOUD) {
+            $this->error('--covers can only be used with the own_events and platform plans.');
+
+            return self::FAILURE;
+        }
+
         $addOns = (array) $this->option('add');
         $unknown = array_diff($addOns, array_column(LicensedFeature::cases(), 'value'));
         if ($unknown !== []) {
@@ -70,7 +88,7 @@ class IssueLicenceKeyCommand extends Command
             return self::FAILURE;
         }
 
-        $key = $codec->encode([
+        $payload = [
             'kid' => $kid,
             'lid' => (string) ($this->option('lid') ?: 'lic_'.Str::lower(Str::random(12))),
             'customer' => $customer,
@@ -78,7 +96,12 @@ class IssueLicenceKeyCommand extends Command
             'expires_at' => $expiresAt->toDateString(),
             'plan' => $plan->value,
             'add' => array_values($addOns),
-        ], trim((string) file_get_contents($privateKeyFile)));
+        ];
+        if ($covers !== '') {
+            $payload['covered_sales'] = (int) $covers;
+        }
+
+        $key = $codec->encode($payload, trim((string) file_get_contents($privateKeyFile)));
 
         $this->line($key);
 

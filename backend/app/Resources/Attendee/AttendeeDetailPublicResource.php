@@ -68,8 +68,6 @@ class AttendeeDetailPublicResource extends JsonResource
                 'id' => $order->getId(),
                 'public_id' => $order->getPublicId(),
                 'status' => $order->getStatus(),
-                'total_gross' => $order->getTotalGross(),
-                'currency' => $order->getCurrency(),
                 'first_name' => $order->getFirstName(),
                 'last_name' => $order->getLastName(),
                 'email' => $order->getEmail(),

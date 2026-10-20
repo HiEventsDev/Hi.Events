@@ -31,6 +31,7 @@ use HiEvents\Services\Application\Handlers\Event\DTO\PublicOccurrenceFetchResult
 use HiEvents\Services\Domain\Event\EventPageViewIncrementService;
 use HiEvents\Services\Domain\EventOccurrence\PublicOccurrenceVisibilityService;
 use HiEvents\Services\Domain\Product\ProductFilterService;
+use HiEvents\Services\Domain\Product\PublicProductSelectionFilter;
 
 class GetPublicEventHandler
 {
@@ -44,6 +45,7 @@ class GetPublicEventHandler
         private readonly EventPageViewIncrementService $eventPageViewIncrementService,
         private readonly PublicOccurrenceVisibilityService $occurrenceVisibilityService,
         private readonly EventSeatMapLookupService $eventSeatMapLookupService,
+        private readonly PublicProductSelectionFilter $productSelectionFilter,
     ) {}
 
     public function handle(GetPublicEventDTO $data): EventDomainObject
@@ -109,7 +111,11 @@ class GetPublicEventHandler
         $event->setHasSeatMap($this->eventSeatMapLookupService->existsForEvent($data->eventId));
 
         return $event->setProductCategories($this->productFilterService->filter(
-            productsCategories: $event->getProductCategories(),
+            productsCategories: $this->productSelectionFilter->filter(
+                categories: $event->getProductCategories(),
+                productIds: $data->productIds,
+                categoryIds: $data->productCategoryIds,
+            ),
             promoCode: $promoCodeDomainObject,
             eventOccurrenceId: $verifiedOccurrence?->getId(),
         ));

@@ -3,14 +3,15 @@
 namespace HiEvents\Enterprise\BoxOffice\Resources;
 
 use HiEvents\DomainObjects\BoxOfficeDomainObject;
+use HiEvents\DomainObjects\Enums\Permission;
+use HiEvents\Resources\BaseResource;
 use HiEvents\Resources\EventOccurrence\EventOccurrenceResource;
 use HiEvents\Resources\Product\ProductResource;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @mixin BoxOfficeDomainObject
  */
-class BoxOfficeResource extends JsonResource
+class BoxOfficeResource extends BaseResource
 {
     public function toArray($request): array
     {
@@ -30,7 +31,7 @@ class BoxOfficeResource extends JsonResource
             'activates_at' => $this->getActivatesAt(),
             'expires_at' => $this->getExpiresAt(),
             'sales_count' => $this->getSalesCount(),
-            'gross_sales' => $this->getGrossSales(),
+            'gross_sales' => $this->when($this->isPermitted(Permission::VIEW_FINANCIALS), fn () => $this->getGrossSales()),
             $this->mergeWhen($this->getEvent() !== null, fn () => [
                 'is_expired' => $this->isExpired(),
                 'is_active' => $this->isActivated(),

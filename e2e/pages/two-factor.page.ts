@@ -11,7 +11,7 @@ export class TwoFactorPage {
   constructor(private readonly page: Page) {}
 
   async gotoSecurity(): Promise<void> {
-    await this.page.goto('/manage/profile/security');
+    await this.page.goto('/settings/security');
     await this.page.waitForLoadState('networkidle');
     await expect(this.page.getByText('Two-factor authentication', { exact: true }).first()).toBeVisible();
   }
@@ -52,7 +52,7 @@ export class TwoFactorPage {
     await this.page.waitForLoadState('networkidle');
     await this.page.getByLabel(/^Email/).fill(email);
     await this.page.getByLabel(/^Password/).fill(password);
-    await this.page.getByRole('button', { name: 'Log in' }).click();
+    await this.page.getByRole('button', { name: 'Sign in', exact: true }).click();
   }
 
   async expectChallenge(): Promise<void> {

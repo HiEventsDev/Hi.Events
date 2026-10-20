@@ -47,6 +47,7 @@ use HiEvents\Services\Domain\CapacityAssignment\CreateCapacityAssignmentService;
 use HiEvents\Services\Domain\CheckInList\CreateCheckInListService;
 use HiEvents\Services\Domain\CreateWebhookService;
 use HiEvents\Services\Domain\FeatureFlag\FeatureFlagService;
+use HiEvents\Services\Domain\Lineup\EventLineupCloneService;
 use HiEvents\Services\Domain\Product\CreateProductService;
 use HiEvents\Services\Domain\ProductCategory\CreateProductCategoryService;
 use HiEvents\Services\Domain\PromoCode\CreatePromoCodeService;
@@ -80,6 +81,8 @@ class DuplicateEventService
         private readonly EventSeatMapCloneService $eventSeatMapCloneService,
         private readonly EventSeatMapLookupService $eventSeatMapLookupService,
         private readonly FeatureFlagService $featureFlagService,
+        private readonly EventLineupCloneService $eventLineupCloneService,
+        private readonly HomepageSectionImageCloneService $homepageSectionImageCloneService,
     ) {}
 
     /**
@@ -102,6 +105,7 @@ class DuplicateEventService
         bool $duplicateWebhooks = true,
         bool $duplicateAffiliates = true,
         bool $duplicateOccurrences = true,
+        bool $duplicateLineup = true,
         ?string $description = null,
         ?string $endDate = null,
     ): EventDomainObject {
@@ -176,12 +180,24 @@ class DuplicateEventService
                 $this->cloneTicketLogo($event, $newEvent->getId());
             }
 
+            if ($duplicateSettings) {
+                $this->homepageSectionImageCloneService->clone($event, $newEvent->getId());
+            }
+
             if ($duplicateWebhooks) {
                 $this->duplicateWebhooks($event, $newEvent);
             }
 
             if ($duplicateAffiliates) {
                 $this->duplicateAffiliates($event, $newEvent);
+            }
+
+            if ($duplicateLineup) {
+                $this->eventLineupCloneService->clone(
+                    sourceEventId: $event->getId(),
+                    newEventId: $newEvent->getId(),
+                    shiftToNewStartDate: $event->getType() !== EventType::RECURRING->name,
+                );
             }
 
             $this->databaseManager->commit();

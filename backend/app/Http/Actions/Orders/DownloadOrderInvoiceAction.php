@@ -3,13 +3,16 @@
 namespace HiEvents\Http\Actions\Orders;
 
 use Dedoc\Scramble\Attributes\Response as ResponseAttribute;
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\RequiresPermission;
 use HiEvents\Services\Application\Handlers\Order\DTO\GetOrderInvoiceDTO;
 use HiEvents\Services\Application\Handlers\Order\GetOrderInvoiceHandler;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
+#[RequiresPermission(Permission::VIEW_FINANCIALS)]
 class DownloadOrderInvoiceAction extends BaseAction
 {
     public function __construct(

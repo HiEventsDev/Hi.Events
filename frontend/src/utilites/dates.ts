@@ -17,6 +17,12 @@ dayjs.extend(relativeTime);
 dayjs.extend(timezone);
 dayjs.extend(advanced)
 
+export const daysSinceWeekStart = (dayOfWeek: number, firstDayOfWeek: number): number =>
+    (dayOfWeek - firstDayOfWeek + 7) % 7;
+
+export const getCalendarGridStart = (monthStart: dayjs.Dayjs, firstDayOfWeek: number): dayjs.Dayjs =>
+    monthStart.subtract(daysSinceWeekStart(monthStart.day(), firstDayOfWeek), 'day').startOf('day');
+
 export const formatDate = (date: string, format: string, tz: string): string => {
     return dayjs.utc(date).tz(tz).format(format);
 };
@@ -102,22 +108,40 @@ export const getDateTimePickerFormat = (): string => {
     return localeFormats[safeLocale].dateTimePicker;
 };
 
+export const getDatePickerFormat = (): string => localeFormats[getSafeLocale(getClientLocale())].shortDate;
+
+export const getTimePickerFormat = (): '12h' | '24h' => getDateTimePickerFormat().includes('A') ? '12h' : '24h';
+
 export const isValidDate = (date?: string | null): boolean => {
     return !!date && dayjs(date).isValid();
+};
+
+const toWallClock = (instant: Date, tz: string): string => {
+    const parts = Object.fromEntries(
+        new Intl.DateTimeFormat('en-US', {
+            timeZone: tz,
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            hourCycle: 'h23',
+        }).formatToParts(instant).map(part => [part.type, part.value])
+    );
+
+    return `${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}`;
 };
 
 export const utcToTz = (date: undefined | string | Date, tz: string): string | undefined => {
     if (!date) {
         return undefined;
     }
-    // eslint-disable-next-line lingui/no-unlocalized-strings
-    return dayjs.utc(date).tz(tz).format('YYYY-MM-DDTHH:mm');
+    const instant = dayjs.utc(date);
+
+    return instant.isValid() ? toWallClock(instant.toDate(), tz) : undefined;
 };
 
-export const nowInTimezone = (tz: string): string => {
-    // eslint-disable-next-line lingui/no-unlocalized-strings
-    return dayjs().tz(tz).format('YYYY-MM-DDTHH:mm');
-};
+export const nowInTimezone = (tz: string): string => toWallClock(new Date(), tz);
 
 export const dateToBrowserTz = (date: string, fallbackTz: string, locale?: string): string => {
     const userTimezone = !isSsr()

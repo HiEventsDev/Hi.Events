@@ -27,6 +27,8 @@ class LicenceService
 
     private const INVALID_KEY_REPORT_SECONDS = 86400;
 
+    private const SIMULATED_COVERED_SALES = 300_000;
+
     private ?LicenceStateDTO $state = null;
 
     public function __construct(
@@ -38,9 +40,17 @@ class LicenceService
 
     public function allows(LicensedFeature $feature): bool
     {
+        return in_array($feature, $this->unlockedFeatures(), true);
+    }
+
+    /**
+     * @return LicensedFeature[]
+     */
+    public function unlockedFeatures(): array
+    {
         $state = $this->state();
 
-        return $state->status->unlocksFeatures() && in_array($feature, $state->features, true);
+        return $state->status->unlocksFeatures() ? $state->features : [];
     }
 
     public function status(): LicenceStatus
@@ -117,7 +127,7 @@ class LicenceService
 
         [$status, $features] = array_pad(explode(':', trim($simulation), 2), 2, null);
         $status = strtoupper((string) $status);
-        $plan = $status === 'CLOUD' ? Plan::CLOUD : Plan::ENTERPRISE;
+        $plan = $status === 'CLOUD' ? Plan::CLOUD : Plan::PLATFORM;
         $features = $features === null
             ? $plan->features()
             : array_values(array_filter(array_map(
@@ -143,6 +153,7 @@ class LicenceService
                 features: $features,
                 issued_at: $now->subYear(),
                 expires_at: $now->addDays($expiresInDays),
+                covered_sales: $plan === Plan::CLOUD ? null : self::SIMULATED_COVERED_SALES,
             ));
         }
 

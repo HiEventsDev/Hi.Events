@@ -2,17 +2,22 @@
 
 namespace HiEvents\Providers;
 
+use Carbon\FactoryImmutable;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\ProfileDomainObject;
 use HiEvents\Enterprise\BoxOffice\Services\Domain\BoxOfficeSessionService;
 use HiEvents\Enterprise\Licensing\LicenceService;
 use HiEvents\Enterprise\Seating\Services\Domain\EventSeatMapLookupService;
 use HiEvents\Enterprise\Seating\Services\Domain\SeatedProductLookupService;
 use HiEvents\Models\Event;
 use HiEvents\Models\Organizer;
+use HiEvents\Models\Profile;
+use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
+use HiEvents\Services\Domain\Auth\ApiKey\ApiKeyService;
 use HiEvents\Services\Infrastructure\CurrencyConversion\CurrencyConversionClientInterface;
 use HiEvents\Services\Infrastructure\CurrencyConversion\NoOpCurrencyConversionClient;
 use HiEvents\Services\Infrastructure\CurrencyConversion\OpenExchangeRatesCurrencyConversionClient;
@@ -29,6 +34,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Sanctum\PersonalAccessToken;
+use Laravel\Sanctum\Sanctum;
+use PHPOpenSourceSaver\JWTAuth\Http\Parser\AuthHeaders;
+use PHPOpenSourceSaver\JWTAuth\Http\Parser\Cookies;
+use Psr\Clock\ClockInterface;
 use Stripe\StripeClient;
 
 class AppServiceProvider extends ServiceProvider
@@ -43,6 +53,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->scoped(SeatedProductLookupService::class);
         $this->app->scoped(LicenceService::class);
         $this->app->scoped(BoxOfficeSessionService::class);
+        $this->app->scoped(AccountUserAccessService::class);
+        $this->app->bind(ClockInterface::class, fn () => FactoryImmutable::getDefaultInstance());
     }
 
     /**
@@ -50,6 +62,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->restrictJwtSourcesToHeaderAndCookie();
         $this->handleHttpsEnforcing();
 
         $this->handleQueryLogging();
@@ -57,6 +70,26 @@ class AppServiceProvider extends ServiceProvider
         $this->disableLazyLoading();
 
         $this->registerMorphMaps();
+
+        $this->restrictApiKeysToActiveMembers();
+    }
+
+    private function restrictApiKeysToActiveMembers(): void
+    {
+        Sanctum::authenticateAccessTokensUsing(
+            static fn (PersonalAccessToken $apiKey, bool $isValid): bool => $isValid
+                && app(ApiKeyService::class)->isUsableBy((int) $apiKey->getAttribute('tokenable_id'), (int) $apiKey->getAttribute('account_id')),
+        );
+    }
+
+    private function restrictJwtSourcesToHeaderAndCookie(): void
+    {
+        $parser = $this->app->make('tymon.jwt.parser');
+
+        $parser->setChain(array_values(array_filter(
+            $parser->getChain(),
+            static fn ($source) => $source instanceof AuthHeaders || $source instanceof Cookies,
+        )));
     }
 
     private function bindDoctrineConnection(): void
@@ -127,6 +160,7 @@ class AppServiceProvider extends ServiceProvider
         Relation::enforceMorphMap([
             EventDomainObject::class => Event::class,
             OrganizerDomainObject::class => Organizer::class,
+            ProfileDomainObject::class => Profile::class,
         ]);
     }
 

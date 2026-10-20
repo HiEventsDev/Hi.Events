@@ -11,6 +11,7 @@ import {
     IconEyeOff,
     IconMailCheck,
     IconMailForward,
+    IconMicrophone2,
     IconPaint,
     IconQrcode,
     IconReceipt,
@@ -27,8 +28,10 @@ import {
     IconWebhook,
     IconListCheck,
 } from "@tabler/icons-react";
+import {useAccess} from "../../../hooks/useAccess.ts";
 import {t} from "@lingui/macro";
 import {useGetEvent} from "../../../queries/useGetEvent";
+import {OrganizerDatesProvider} from "../../common/OrganizerDatesProvider";
 import {useGetEventSettings} from "../../../queries/useGetEventSettings";
 import {useGetEventCounts} from "../../../queries/useGetEventCounts";
 import {useGeoStatus} from "../../../queries/useGeoStatus.ts";
@@ -37,7 +40,7 @@ import {BreadcrumbItem, NavItem} from "../AppLayout/types.ts";
 import AppLayout from "../AppLayout";
 import {NavLink, useLocation, useParams} from "react-router";
 import classes from './Event.module.scss';
-import {Button} from "@mantine/core";
+import {Badge, Button} from "@mantine/core";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 import {useUpdateEventStatus} from "../../../mutations/useUpdateEventStatus.ts";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
@@ -57,6 +60,7 @@ import {EventType} from "../../../types.ts";
 import {useGetEventOccurrence} from "../../../queries/useGetEventOccurrence.ts";
 import {useLicensedFeature} from "../../../ee/licensing/hooks/useLicensedFeature.ts";
 import {prettyDate} from "../../../utilites/dates.ts";
+import {GenericErrorPage} from "../../common/GenericErrorPage";
 
 const EventLayout = () => {
     const location = useLocation();
@@ -68,12 +72,13 @@ const EventLayout = () => {
 
     const statusToggleMutation = useUpdateEventStatus();
 
-    const {data: event, isFetched: isEventFetched} = useGetEvent(eventId);
+    const {data: event, isFetched: isEventFetched, error: eventError} = useGetEvent(eventId);
     const {isFetched: isEventSettingsFetched} = useGetEventSettings(eventId);
     const {data: eventCounts} = useGetEventCounts(eventId);
     const seating = useLicensedFeature(FeatureFlag.SEATING);
     const boxOffice = useLicensedFeature(FeatureFlag.BOX_OFFICE);
     const {data: me} = useGetMe();
+    const {isReadOnly, can, canManageOrganizer} = useAccess();
 
     const resendEmailConfirmationMutation = useResendEmailConfirmation();
     const [emailConfirmationResent, setEmailConfirmationResent] = useState(false);
@@ -100,7 +105,12 @@ const EventLayout = () => {
     }
 
     const navItems: NavItem[] = [
-        {link: '/manage/organizer/' + event?.organizer?.id, label: t`Organizer Dashboard`, icon: IconArrowLeft},
+        {
+            link: '/manage/organizer/' + event?.organizer?.id,
+            label: t`Organizer Dashboard`,
+            icon: IconArrowLeft,
+            showWhen: () => canManageOrganizer(event?.organizer_id),
+        },
 
         // 1. OVERVIEW
         {label: t`Overview`},
@@ -109,7 +119,8 @@ const EventLayout = () => {
             link: 'reports',
             label: t`Reports`,
             icon: IconChartPie,
-            isActive: (isActive) => isActive || location.pathname.includes('/report/')
+            isActive: (isActive) => isActive || location.pathname.includes('/report/'),
+            showWhen: () => can('VIEW_FINANCIALS'),
         },
 
         // 2. EVENT SETUP
@@ -120,10 +131,11 @@ const EventLayout = () => {
             icon: IconCalendarRepeat,
             showWhen: () => event?.type === EventType.RECURRING,
         },
-        {link: 'settings', label: t`Event Settings`, icon: IconSettings},
-        {link: 'homepage-designer', label: t`Homepage Designer`, icon: IconPaint},
-        {link: 'ticket-designer', label: t`Ticket Designer`, icon: IconTicket},
-        {link: 'seating', label: t`Seating`, icon: IconArmchair, showWhen: () => seating.isEnabled || !!event?.has_seat_map},
+        {link: 'settings', label: t`Event Settings`, icon: IconSettings, showWhen: () => !isReadOnly},
+        {link: 'lineup', label: t`Lineup & Schedule`, icon: IconMicrophone2},
+        {link: 'homepage-designer', label: t`Homepage Designer`, icon: IconPaint, showWhen: () => !isReadOnly},
+        {link: 'ticket-designer', label: t`Ticket Designer`, icon: IconTicket, showWhen: () => !isReadOnly},
+        {link: 'seating', label: t`Seating`, icon: IconArmchair, showWhen: () => !isReadOnly && (seating.isEnabled || !!event?.has_seat_map)},
         {link: 'questions', label: t`Registration Questions`, icon: IconUserQuestion},
 
         // 3. Ticketing & Sales
@@ -150,7 +162,9 @@ const EventLayout = () => {
         // 5. INTEGRATIONS
         {label: t`Integrations`},
         {link: 'widget', label: t`Widget Embed`, icon: IconDeviceTabletCode},
-        {link: 'webhooks', label: t`Webhooks`, icon: IconWebhook},
+        {link: 'webhooks', label: t`Webhooks`, icon: IconWebhook, showWhen: () => can('VIEW_FINANCIALS')},
+        {label: t`Team`},
+        {link: 'team', label: t`Team Access`, icon: IconUsersGroup, showWhen: () => can('MANAGE_TEAM')},
 
 
     ];
@@ -163,7 +177,7 @@ const EventLayout = () => {
 
     const breadcrumbItems: BreadcrumbItem[] = isEventFetched ? [
         {
-            link: `/manage/organizer/${event?.organizer?.id}`,
+            link: canManageOrganizer(event?.organizer_id) ? `/manage/organizer/${event?.organizer?.id}` : undefined,
             content: <Truncate length={breadcrumbItemsWidth} text={event?.organizer?.name} showTooltip={false}/>
         },
         {
@@ -210,110 +224,125 @@ const EventLayout = () => {
         });
     };
 
+    if ((eventError as any)?.response?.data?.error_code === 'ACCESS_RESTRICTED') {
+        return (
+            <GenericErrorPage
+                title={t`You don't have access to this event`}
+                description={t`Ask an account admin to give you access, or open one of your own events.`}
+                buttonText={t`Go to your events`}
+                buttonUrl="/manage/events"
+                buttonIcon={<IconArrowLeft size={18}/>}
+            />
+        );
+    }
+
     return (
-        <AppLayout
-            navItems={navItemsWithLoading}
-            breadcrumbItems={breadcrumbItems}
-            entityType="event"
-            topBarContent={(
-                <div className={classes.statusToggleContainer}>
-                    {isEventFetched && (
-                        <TopBarButton
-                            onClick={handleStatusToggle}
-                            data-testid="event-status-toggle"
-                            size="sm"
-                            leftSection={(event?.status === 'DRAFT' || event?.status === 'PENDING_MANUAL_REVIEW') ? <IconEyeOff size={16}/> : <IconEye size={16}/>}
-                            rightSection={<IconChevronRight size={14}/>}
-                        >
-                            {event?.status === 'PENDING_MANUAL_REVIEW'
-                                ? <span>{t`Pending Review`}</span>
-                                : event?.status === 'DRAFT'
-                                    ? <span>{t`Draft`} <span
-                                        className={classes.statusAction}>{t`- Click to Publish`}</span></span>
-                                    : <span>{t`Live`} <span
-                                        className={classes.statusAction}>{t`- Click to Unpublish`}</span></span>
-                            }
-                        </TopBarButton>
-                    )}
-                </div>
-            )}
-            breadcrumbContentRight={(
-                <div className={classes.shareButton}>
-                    {event && (
-                        <>
-                            <Button
-                                onClick={open}
-                                variant="transparent"
-                                leftSection={<IconShare size={16}/>}
+        <OrganizerDatesProvider firstDayOfWeek={event?.organizer?.settings?.first_day_of_week}>
+            <AppLayout
+                navItems={navItemsWithLoading}
+                breadcrumbItems={breadcrumbItems}
+                entityType="event"
+                topBarContent={(
+                    <div className={classes.statusToggleContainer}>
+                        {isReadOnly && <Badge variant="white" color="dark" data-testid="view-only-badge">{t`View only`}</Badge>}
+                        {isEventFetched && !isReadOnly && (
+                            <TopBarButton
+                                onClick={handleStatusToggle}
+                                data-testid="event-status-toggle"
+                                size="sm"
+                                leftSection={(event?.status === 'DRAFT' || event?.status === 'PENDING_MANUAL_REVIEW') ? <IconEyeOff size={16}/> : <IconEye size={16}/>}
+                                rightSection={<IconChevronRight size={14}/>}
                             >
-                                {t`Share Event`}
-                            </Button>
-
-                            <ShareModal
-                                url={eventHomepageUrl(event)}
-                                title={event.title}
-                                modalTitle={t`Share Event`}
-                                opened={opened}
-                                onClose={close}
-                            />
-
-                            <EventLiveCelebrationModal
-                                opened={celebrationOpened}
-                                onClose={closeCelebration}
-                                url={eventHomepageUrl(event)}
-                                eventTitle={event.title}
-                                eventId={String(event.id)}
-                            />
-
-                            {publishModalOpened && (
-                                <PublishEventModal
-                                    opened={publishModalOpened}
-                                    onClose={closePublishModal}
-                                    event={event}
-                                    onSuccess={() => {
-                                        closePublishModal();
-                                        openCelebration();
-                                    }}
-                                />
-                            )}
-                        </>
-                    )}
-                </div>
-            )}
-            actionGroupContent={(
-                <Button
-                    component={NavLink}
-                    to={`/event/${eventId}/${event?.slug}`}
-                    target={'_blank'}
-                    variant={'transparent'}
-                    leftSection={<IconExternalLink size={17}/>}
-                    className={classes.eventPageButton}
-                    title={t`Preview Event page`}
-                >
-                    <div className={classes.eventPageButtonText}>
-                                <span className={classes.desktop}>
-                                    {t`Preview Event page`}
-                                </span>
-                        <span className={classes.mobile}>
-                                    {t`Event Page`}
-                                </span>
+                                {event?.status === 'PENDING_MANUAL_REVIEW'
+                                    ? <span>{t`Pending Review`}</span>
+                                    : event?.status === 'DRAFT'
+                                        ? <span>{t`Draft`} <span
+                                            className={classes.statusAction}>{t`- Click to Publish`}</span></span>
+                                        : <span>{t`Live`} <span
+                                            className={classes.statusAction}>{t`- Click to Unpublish`}</span></span>
+                                }
+                            </TopBarButton>
+                        )}
                     </div>
+                )}
+                breadcrumbContentRight={(
+                    <div className={classes.shareButton}>
+                        {event && (
+                            <>
+                                <Button
+                                    onClick={open}
+                                    variant="transparent"
+                                    leftSection={<IconShare size={16}/>}
+                                >
+                                    {t`Share Event`}
+                                </Button>
 
-                </Button>
-            )}
-            sidebarFooter={
-                (me && !me.is_email_verified && !emailConfirmationResent ? (
-                    <SidebarCallout
-                        icon={<IconMailCheck size={20}/>}
-                        heading={t`Verify your email`}
-                        description={t`Confirm your email to access all features.`}
-                        buttonIcon={<IconMailForward size={16}/>}
-                        buttonText={t`Resend email`}
-                        onClick={() => handleEmailConfirmationResend()}
-                    />
-                ) : null)
-            }
-        />
+                                <ShareModal
+                                    url={eventHomepageUrl(event)}
+                                    title={event.title}
+                                    modalTitle={t`Share Event`}
+                                    opened={opened}
+                                    onClose={close}
+                                />
+
+                                <EventLiveCelebrationModal
+                                    opened={celebrationOpened}
+                                    onClose={closeCelebration}
+                                    url={eventHomepageUrl(event)}
+                                    eventTitle={event.title}
+                                    eventId={String(event.id)}
+                                />
+
+                                {publishModalOpened && (
+                                    <PublishEventModal
+                                        opened={publishModalOpened}
+                                        onClose={closePublishModal}
+                                        event={event}
+                                        onSuccess={() => {
+                                            closePublishModal();
+                                            openCelebration();
+                                        }}
+                                    />
+                                )}
+                            </>
+                        )}
+                    </div>
+                )}
+                actionGroupContent={(
+                    <Button
+                        component={NavLink}
+                        to={`/event/${eventId}/${event?.slug}`}
+                        target={'_blank'}
+                        variant={'transparent'}
+                        leftSection={<IconExternalLink size={17}/>}
+                        className={classes.eventPageButton}
+                        title={t`Preview Event page`}
+                    >
+                        <div className={classes.eventPageButtonText}>
+                                    <span className={classes.desktop}>
+                                        {t`Preview Event page`}
+                                    </span>
+                            <span className={classes.mobile}>
+                                        {t`Event Page`}
+                                    </span>
+                        </div>
+
+                    </Button>
+                )}
+                sidebarFooter={
+                    (me && !me.is_email_verified && !emailConfirmationResent ? (
+                        <SidebarCallout
+                            icon={<IconMailCheck size={20}/>}
+                            heading={t`Verify your email`}
+                            description={t`Confirm your email to access all features.`}
+                            buttonIcon={<IconMailForward size={16}/>}
+                            buttonText={t`Resend email`}
+                            onClick={() => handleEmailConfirmationResend()}
+                        />
+                    ) : null)
+                }
+            />
+        </OrganizerDatesProvider>
     );
 };
 

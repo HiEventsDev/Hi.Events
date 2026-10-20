@@ -25,6 +25,7 @@ import {
 import {useForm} from "@mantine/form";
 import {useInputState, useResizeObserver} from "@mantine/hooks";
 import React, {useEffect, useMemo, useRef, useState} from "react";
+import {flushSync} from "react-dom";
 import {showError, showInfo, showSuccess} from "../../../../utilites/notifications.tsx";
 import {useGetEventSeatMapPublic} from "../../../../ee/seating/queries/useGetEventSeatMapPublic.ts";
 import {choicesTotal, SeatChoice, seatedProductIds, ticketOptionsByBand} from "../../../../ee/seating/components/SeatPicker/ticketOptions.ts";
@@ -56,6 +57,7 @@ import {
 } from "../../../../types.ts";
 import {formatCurrency} from "../../../../utilites/currency.ts";
 import {getDisplayPrice} from "../../../common/Currency";
+import {getLineTotal} from "./priceTotals.ts";
 import {eventsClientPublic} from "../../../../api/event.client.ts";
 import {promoCodeClientPublic} from "../../../../api/promo-code.client.ts";
 import {IconCheck, IconChevronDown, IconX} from "@tabler/icons-react"
@@ -65,10 +67,12 @@ import {getEmbedParentUrl, getParentOrigin, sendHeightToParent} from "../../../.
 import {Constants} from "../../../../constants.ts";
 import {clearWaitlistJoinedForEvent} from "../../../../hooks/useWaitlistJoined.ts";
 import {OccurrenceSelector} from "../OccurrenceSelector";
+import {WidgetLineupStrip} from "./WidgetLineupStrip.tsx";
 import {CHECKOUT_PREFILL_PARAM_KEYS} from "../../../../hooks/useCheckoutPrefill.ts";
 import {UserGeneratedContent} from "../../../common/UserGeneratedContent";
 import {firstApiError} from "../../../../utilites/apiErrors.ts";
 import {WIDGET_COLOR_PARAMS} from "../../../../utilites/widgetColors.ts";
+import {ProductSelection, WIDGET_PARAM} from "../../../../utilites/widgetConfig.ts";
 
 const AFFILIATE_EXPIRY_DAYS = 30;
 
@@ -131,10 +135,17 @@ interface SelectProductsProps {
     checkoutMode?: 'modal' | 'new-tab';
     isSeatPickerPage?: boolean;
     showPoweredBy?: boolean;
+    showLineup?: boolean;
     initialOccurrenceId?: number | null;
     onSelectedOccurrenceChange?: (occurrence?: EventOccurrence) => void;
     onCartChange?: (cart: {quantity: number; total: number}) => void;
     continueButtonRef?: React.Ref<HTMLButtonElement>;
+    reportsHeight?: boolean;
+    hidePromoCode?: boolean;
+    hideCategoryTitles?: boolean;
+    productSelection?: ProductSelection;
+    widgetId?: string | null;
+    checkoutParams?: Record<string, string>;
 }
 
 const SelectProducts = (props: SelectProductsProps) => {
@@ -143,6 +154,7 @@ const SelectProducts = (props: SelectProductsProps) => {
     const navigate = useNavigate();
 
     const promoRef = useRef<HTMLInputElement>(null);
+    const promoTriggerRef = useRef<HTMLButtonElement>(null);
     const [showPromoCodeInput, setShowPromoCodeInput] = useInputState<boolean>(false);
     const [event, setEvent] = useState(props.event);
     const [orderInProcessOverlayVisible, setOrderInProcessOverlayVisible] = useState(false);
@@ -155,7 +167,11 @@ const SelectProducts = (props: SelectProductsProps) => {
         response: PromoCodeValidationResponse;
     } | null>(null);
 
-    useEffect(() => sendHeightToIframeWidgets(), [resizeObserverRect.height]);
+    useEffect(() => {
+        if (props.reportsHeight !== false) {
+            sendHeightToIframeWidgets();
+        }
+    }, [resizeObserverRect.height, props.reportsHeight]);
 
     useEffect(() => {
         const storageKey = 'affiliate_code_' + eventId;
@@ -227,6 +243,7 @@ const SelectProducts = (props: SelectProductsProps) => {
             products: undefined,
             promo_code: props.promoCodeValid ? props.promoCode || null : null,
             affiliate_code: affiliateCode || null,
+            widget_id: props.widgetId || null,
             session_identifier: undefined,
         },
     });
@@ -278,7 +295,8 @@ const SelectProducts = (props: SelectProductsProps) => {
                     }
                 });
 
-                const pathWithSession = buildCheckoutPath(eventId, data.data.short_id, sessionId, prefillParams);
+                const checkoutParams = {...prefillParams, ...(props.checkoutParams ?? {})};
+                const pathWithSession = buildCheckoutPath(eventId, data.data.short_id, sessionId, checkoutParams);
 
                 if (sessionId) {
                     setCheckoutSessionIdentifier(String(data.data.short_id), sessionId);
@@ -289,7 +307,7 @@ const SelectProducts = (props: SelectProductsProps) => {
 
                     if (!parentSupportsModal) {
                         window.open(
-                            buildCheckoutPath(eventId, data.data.short_id, sessionId, {...prefillParams, utm_source: 'embedded_widget'}),
+                            buildCheckoutPath(eventId, data.data.short_id, sessionId, {utm_source: 'embedded_widget', ...checkoutParams}),
                             '_blank',
                             'noopener,noreferrer'
                         );
@@ -347,6 +365,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                 eventId,
                 promoCode,
                 selectedOccurrenceId,
+                props.productSelection,
             );
 
             setEvent(eventWithPromoCodeApplied.data);
@@ -370,6 +389,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                 eventId,
                 form.values.promo_code,
                 occurrenceId,
+                props.productSelection,
             );
             if (selectedOccurrenceIdRef.current === occurrenceId) {
                 setEvent(eventWithOccurrenceApplied.data);
@@ -627,7 +647,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                 }
                 const productPrice = product.prices?.find(p => Number(p.id) === price_id);
                 if (productPrice) {
-                    total += selectedQuantity * getDisplayPrice(productPrice, event?.settings?.price_display_mode);
+                    total += getLineTotal(product, productPrice, selectedQuantity, event?.settings?.price_display_mode);
                 }
             });
         });
@@ -765,6 +785,11 @@ const SelectProducts = (props: SelectProductsProps) => {
         }
     };
 
+    const closePromoCodeInput = () => {
+        flushSync(() => setShowPromoCodeInput(false));
+        promoTriggerRef.current?.focus();
+    };
+
     const handleApplyPromoCode = () => {
         const promoCode = promoRef.current?.value;
         if (promoCode && promoCode.length >= 3) {
@@ -808,14 +833,25 @@ const SelectProducts = (props: SelectProductsProps) => {
         if (opensSeatPickerInParentModal) {
             const params = new URLSearchParams({occurrence_id: String(seatingOccurrenceId)});
             const widgetParams = new URLSearchParams(window.location.search);
+            const resolvedColors: Record<string, string | undefined> = {
+                BackgroundColor: props.colors?.background,
+                PrimaryColor: props.colors?.primary,
+                PrimaryTextColor: props.colors?.primaryText,
+                SecondaryColor: props.colors?.secondary,
+                SecondaryTextColor: props.colors?.secondaryText,
+            };
             WIDGET_COLOR_PARAMS.forEach(name => {
-                const value = widgetParams.get(name);
+                const value = resolvedColors[name] ?? widgetParams.get(name);
                 if (value) {
                     params.set(name, value);
                 }
             });
             if (form.values.promo_code) {
                 params.set('promo_code', form.values.promo_code);
+            }
+            Object.entries(props.checkoutParams ?? {}).forEach(([key, value]) => params.set(key, value));
+            if (props.widgetId) {
+                params.set(WIDGET_PARAM.widget, props.widgetId);
             }
             window.parent.postMessage(
                 {type: 'hievents:open-checkout', path: `/checkout/${eventId}/seats?${params.toString()}`},
@@ -848,11 +884,13 @@ const SelectProducts = (props: SelectProductsProps) => {
 
                 return (
                     <div className={'hi-product-category-row'} key={category.id}>
-                        <h2 className={'hi-product-category-title'} style={category.description ? {
-                            marginBottom: '0px'
-                        } : {}}>
-                            {category.name}
-                        </h2>
+                        {!props.hideCategoryTitles && (
+                            <h2 className={'hi-product-category-title'} style={category.description ? {
+                                marginBottom: '0px'
+                            } : {}}>
+                                {category.name}
+                            </h2>
+                        )}
                         {category.description && (
                             <div className={'hi-product-category-description'}>
                                 <Spoiler maxHeight={500} showLabel={t`Show more`} hideLabel={t`Hide`}>
@@ -1139,10 +1177,11 @@ const SelectProducts = (props: SelectProductsProps) => {
         </>
     );
 
-    const promoSection = (
+    const promoSection = props.hidePromoCode && !form.values.promo_code ? null : (
         <div className={'hi-promo-code-row'}>
             {(!showPromoCodeInput && !form.values.promo_code) && (
-                <Anchor className={'hi-have-a-promo-code-link'} underline={'always'}
+                <Anchor component={'button'} type={'button'} ref={promoTriggerRef}
+                        className={'hi-have-a-promo-code-link'} underline={'always'}
                         onClick={() => setShowPromoCodeInput(true)}>
                     {t`Have a promo code?`}
                 </Anchor>
@@ -1183,7 +1222,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                             event.preventDefault();
                             handleApplyPromoCode();
                         }
-                    }} mb={0} ref={promoRef}/>
+                    }} mb={0} ref={promoRef} aria-label={t`Promo code`}/>
                     <Button type="button" disabled={promoCodeEventRefetchMutation.isPending}
                             className={'hi-apply-promo-code-button'} variant={'outline'}
                             data-testid="promo-code-apply-button"
@@ -1196,7 +1235,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                         variant="transparent"
                         aria-label={t`close`}
                         title={t`Close`}
-                        onClick={() => setShowPromoCodeInput(false)}
+                        onClick={closePromoCodeInput}
                     >
                         <IconX stroke={1.5} size={20}/>
                     </ActionIcon>
@@ -1315,6 +1354,12 @@ const SelectProducts = (props: SelectProductsProps) => {
                         </div>
                     </div>
                 </Modal>
+            )}
+            {props.showLineup && event && !eventHasEnded && (
+                <WidgetLineupStrip
+                    event={event}
+                    occurrence={isRecurring ? event.occurrences?.find(occurrence => occurrence.id === selectedOccurrenceId) : undefined}
+                />
             )}
             {(event && !eventHasEnded && (showRecurringSelector || (!isRecurring && productAreAvailable))) && (
                 <form target={'__blank'} onSubmit={form.onSubmit(handleProductSelection as any)}>

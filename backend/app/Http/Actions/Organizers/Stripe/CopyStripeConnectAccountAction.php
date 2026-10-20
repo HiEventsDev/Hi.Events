@@ -2,12 +2,13 @@
 
 namespace HiEvents\Http\Actions\Organizers\Stripe;
 
-use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Exceptions\SaasModeEnabledException;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\RequiresPermission;
 use HiEvents\Resources\Organizer\Stripe\OrganizerStripeConnectAccountResponseResource;
 use HiEvents\Services\Application\Handlers\Organizer\Payment\Stripe\CopyStripeConnectAccountHandler;
 use HiEvents\Services\Application\Handlers\Organizer\Payment\Stripe\DTO\CopyStripeConnectAccountDTO;
@@ -15,6 +16,7 @@ use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
+#[RequiresPermission(Permission::MANAGE_PAYMENTS)]
 class CopyStripeConnectAccountAction extends BaseAction
 {
     public function __construct(
@@ -26,8 +28,8 @@ class CopyStripeConnectAccountAction extends BaseAction
      */
     public function __invoke(int $organizerId, int $sourceOrganizerId): JsonResponse
     {
-        $this->isActionAuthorized($organizerId, OrganizerDomainObject::class, Role::ADMIN);
-        $this->isActionAuthorized($sourceOrganizerId, OrganizerDomainObject::class, Role::ADMIN);
+        $this->isActionAuthorized($organizerId, OrganizerDomainObject::class);
+        $this->isActionAuthorized($sourceOrganizerId, OrganizerDomainObject::class);
 
         try {
             $result = $this->copyStripeConnectAccountHandler->handle(CopyStripeConnectAccountDTO::from([

@@ -8,6 +8,8 @@ import {IconArrowRight} from "@tabler/icons-react";
 import classes from "./PlatformFeesSettings.module.scss";
 import {AccountConfiguration} from "../../../types.ts";
 import {PlatformFeePreview} from "../../../api/event-settings.client.ts";
+import {NavLink} from "react-router";
+import {useAccess} from "../../../hooks/useAccess.ts";
 
 const formatPercentage = (value: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -105,6 +107,7 @@ export const PlatformFeesSettings = ({
     feePreview,
     onPriceChange,
 }: PlatformFeesSettingsProps) => {
+    const {isRestricted} = useAccess();
     const [samplePrice, setSamplePrice] = useState<number | string>(50);
     const [selectedOption, setSelectedOption] = useState<'pass' | 'absorb'>(currentValue ? 'pass' : 'absorb');
 
@@ -251,22 +254,24 @@ export const PlatformFeesSettings = ({
                     </fieldset>
                 </div>
 
-                <Card variant="lightGray">
-                    <Group justify="space-between" align="center">
-                        <div>
-                            <Text fw={500} mb={4}>{t`Additional Fees`}</Text>
-                            <Text size="sm" c="dimmed">
-                                {t`You can configure additional service fees and taxes in your account settings.`}
-                            </Text>
-                        </div>
-                        <Anchor href="/account/taxes-and-fees" size="sm">
-                            <Group gap="xs">
-                                <span>{t`Configure Taxes & Fees`}</span>
-                                <IconArrowRight size={16} />
-                            </Group>
-                        </Anchor>
-                    </Group>
-                </Card>
+                {!isRestricted && (
+                    <Card variant="lightGray">
+                        <Group justify="space-between" align="center">
+                            <div>
+                                <Text fw={500} mb={4}>{t`Additional Fees`}</Text>
+                                <Text size="sm" c="dimmed">
+                                    {t`You can configure additional service fees and taxes in your account settings.`}
+                                </Text>
+                            </div>
+                            <Anchor component={NavLink} to="/settings/taxes-and-fees" size="sm">
+                                <Group gap="xs">
+                                    <span>{t`Configure Taxes & Fees`}</span>
+                                    <IconArrowRight size={16} />
+                                </Group>
+                            </Anchor>
+                        </Group>
+                    </Card>
+                )}
             </Stack>
         </Card>
     );

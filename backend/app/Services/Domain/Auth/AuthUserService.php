@@ -2,24 +2,21 @@
 
 namespace HiEvents\Services\Domain\Auth;
 
-use Exception;
-use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\DomainObjects\Enums\ApiKeyAccess;
 use HiEvents\DomainObjects\Interfaces\DomainObjectInterface;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Models\User;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use Illuminate\Auth\AuthManager;
+use Laravel\Sanctum\PersonalAccessToken;
 use PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException;
-use PHPOpenSourceSaver\JWTAuth\Payload;
+use Throwable;
 
-readonly class AuthUserService
+class AuthUserService
 {
     public function __construct(
-        /**
-         * @var AuthManager
-         */
-        private AuthManager $authManager,
-        private AccountUserRepositoryInterface $accountUserRepository,
+        private readonly AuthManager $authManager,
+        private readonly AccountUserRepositoryInterface $accountUserRepository,
     ) {}
 
     public function getAuthenticatedAccountId(): ?int
@@ -28,14 +25,28 @@ readonly class AuthUserService
             return null;
         }
 
+        if ($apiKey = $this->currentApiKey()) {
+            return (int) $apiKey->getAttribute('account_id');
+        }
+
+        $accountId = $this->sessionClaim('account_id');
+
+        return $accountId === null ? null : (int) $accountId;
+    }
+
+    public function getAuthenticatedTokenKey(): ?string
+    {
+        if ($apiKey = $this->currentApiKey()) {
+            return 'api-key:'.$apiKey->getKey();
+        }
+
         try {
-            /** @var Payload $payload */
-            $payload = $this->authManager->payload();
-        } catch (JWTException) {
+            $token = $this->authManager->guard()->getToken();
+        } catch (Throwable) {
             return null;
         }
 
-        return $payload->get('account_id');
+        return $token === null ? null : (string) $token;
     }
 
     public function getAuthenticatedUserId(): ?int
@@ -47,23 +58,45 @@ readonly class AuthUserService
         return (int) $this->authManager->id();
     }
 
-    public function getAuthenticatedUserRole(): ?Role
+    public function isApiKeyRequest(): bool
     {
-        if (! $this->authManager->check()) {
+        return $this->currentApiKey() !== null;
+    }
+
+    public function apiKeyCanWrite(): bool
+    {
+        $apiKey = $this->currentApiKey();
+
+        return $apiKey === null || $apiKey->can(ApiKeyAccess::WRITE_ABILITY);
+    }
+
+    public function isImpersonating(): bool
+    {
+        return (bool) $this->sessionClaim('is_impersonating', false);
+    }
+
+    public function getImpersonatorId(): ?int
+    {
+        if (! $this->isImpersonating()) {
             return null;
         }
 
-        try {
-            /** @var Payload $payload */
-            $payload = $this->authManager->payload();
-        } catch (JWTException) {
-            return null;
-        }
+        $impersonatorId = $this->sessionClaim('impersonator_id');
 
-        try {
-            return Role::from($payload->get('role'));
-        } catch (Exception) {
-            return null;
+        return $impersonatorId === null ? null : (int) $impersonatorId;
+    }
+
+    public function getSessionTokenId(): ?string
+    {
+        $tokenId = $this->sessionClaim('jti');
+
+        return is_string($tokenId) ? $tokenId : null;
+    }
+
+    public function logout(): void
+    {
+        if (! $this->isApiKeyRequest()) {
+            $this->authManager->logout();
         }
     }
 
@@ -84,5 +117,31 @@ readonly class AuthUserService
         }
 
         return null;
+    }
+
+    private function currentApiKey(): ?PersonalAccessToken
+    {
+        $user = $this->authManager->user();
+
+        if (! $user instanceof User) {
+            return null;
+        }
+
+        $token = $user->currentAccessToken();
+
+        return $token instanceof PersonalAccessToken ? $token : null;
+    }
+
+    private function sessionClaim(string $claim, mixed $default = null): mixed
+    {
+        if (! $this->authManager->check() || $this->isApiKeyRequest()) {
+            return $default;
+        }
+
+        try {
+            return $this->authManager->payload()->get($claim) ?? $default;
+        } catch (JWTException) {
+            return $default;
+        }
     }
 }

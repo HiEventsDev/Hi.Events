@@ -16,12 +16,56 @@ use HiEvents\Services\Domain\Email\DTO\RenderedEmailTemplateDTO;
 use HiEvents\Services\Domain\Email\EmailTemplateService;
 use HiEvents\Services\Domain\Email\EmailTokenContextBuilder;
 use HiEvents\Services\Domain\Email\MailBuilderService;
+use HiEvents\Services\Domain\Lineup\EmailLineupHighlightsService;
 use HiEvents\Services\Domain\Order\OfflinePaymentInstructionsRenderService;
 use Mockery as m;
 use Tests\TestCase;
 
 class MailBuilderServiceTest extends TestCase
 {
+    private EmailLineupHighlightsService $lineupHighlights;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->lineupHighlights = m::mock(EmailLineupHighlightsService::class)->makePartial();
+        $this->lineupHighlights->shouldReceive('build')->andReturnNull();
+        $this->app->instance(EmailLineupHighlightsService::class, $this->lineupHighlights);
+    }
+
+    public function test_lineup_highlights_are_built_in_the_buyers_language(): void
+    {
+        $emailTemplateService = m::mock(EmailTemplateService::class);
+        $emailTemplateService->shouldReceive('getTemplateByType')->andReturn(null);
+        $builtIn = null;
+        $highlights = m::mock(EmailLineupHighlightsService::class);
+        $highlights->shouldReceive('build')->andReturnUsing(function () use (&$builtIn) {
+            $builtIn = app()->getLocale();
+
+            return null;
+        });
+
+        $service = new MailBuilderService(
+            $emailTemplateService,
+            app(EmailTokenContextBuilder::class),
+            app(OfflinePaymentInstructionsRenderService::class),
+            $highlights,
+        );
+
+        $organizer = (new OrganizerDomainObject)->setId(1)->setName('Organizer')->setEmail('organizer@example.com');
+        $settings = (new EventSettingDomainObject)->setId(20)->setEventId(10)->setSupportEmail('support@example.com');
+        $event = (new EventDomainObject)->setId(10)->setAccountId(1)->setTitle('Fest')->setCurrency('EUR')->setTimezone('UTC')
+            ->setOrganizer($organizer)->setEventSettings($settings);
+        $order = (new OrderDomainObject)->setId(30)->setEventId(10)->setShortId('o')->setPublicId('ORD-1')->setFirstName('Jo')
+            ->setLastName('Buyer')->setEmail('buyer@example.com')->setTotalGross(0)->setCurrency('EUR')->setLocale('de')
+            ->setCreatedAt('2026-08-01 12:00:00')->setStatus(OrderStatus::COMPLETED->name)->setPaymentStatus(OrderPaymentStatus::NO_PAYMENT_REQUIRED->name);
+
+        $service->buildOrderSummaryMail($order, $event, $settings, $organizer);
+
+        $this->assertSame('de', $builtIn);
+        $this->assertSame('en', app()->getLocale());
+    }
+
     public function test_order_summary_blade_fallback_receives_rendered_instructions(): void
     {
         $emailTemplateService = m::mock(EmailTemplateService::class);
@@ -31,6 +75,7 @@ class MailBuilderServiceTest extends TestCase
             $emailTemplateService,
             app(EmailTokenContextBuilder::class),
             app(OfflinePaymentInstructionsRenderService::class),
+            $this->lineupHighlights,
         );
 
         $organizer = (new OrganizerDomainObject)
@@ -145,6 +190,7 @@ class MailBuilderServiceTest extends TestCase
             $emailTemplateService,
             app(EmailTokenContextBuilder::class),
             app(OfflinePaymentInstructionsRenderService::class),
+            $this->lineupHighlights,
         );
     }
 
