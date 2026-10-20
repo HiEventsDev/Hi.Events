@@ -2,6 +2,7 @@
 
 use HiEvents\Http\Actions\Accounts\CreateAccountAction;
 use HiEvents\Http\Actions\Accounts\EmailSetting\GetAccountEmailSettingAction;
+use HiEvents\Http\Actions\Accounts\EmailSetting\SendTestEmailAction;
 use HiEvents\Http\Actions\Accounts\EmailSetting\UpsertAccountEmailSettingAction;
 use HiEvents\Http\Actions\Accounts\Approval\ApproveAccountAction;
 use HiEvents\Http\Actions\Accounts\Approval\ResendApprovalRequestAction;
@@ -283,6 +284,7 @@ $router->middleware(['auth:api'])->group(
         // Email Settings
         $router->get('/accounts/{account_id}/email-settings', GetAccountEmailSettingAction::class);
         $router->post('/accounts/{account_id}/email-settings', UpsertAccountEmailSettingAction::class);
+        $router->post('/accounts/{account_id}/email-settings/test', SendTestEmailAction::class);
 
         // Organizers
         $router->post('/organizers', CreateOrganizerAction::class);

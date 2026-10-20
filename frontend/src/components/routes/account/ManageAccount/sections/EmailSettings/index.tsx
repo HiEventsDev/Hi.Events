@@ -8,7 +8,8 @@ import {LoadingMask} from "../../../../../common/LoadingMask";
 import {useGetAccount} from "../../../../../../queries/useGetAccount.ts";
 import {useGetAccountEmailSettings} from "../../../../../../queries/useGetAccountEmailSettings.ts";
 import {useUpsertAccountEmailSettings} from "../../../../../../mutations/useUpsertAccountEmailSettings.ts";
-import {showSuccess} from "../../../../../../utilites/notifications.tsx";
+import {useSendTestEmail} from "../../../../../../mutations/useSendTestEmail.ts";
+import {showSuccess, showError} from "../../../../../../utilites/notifications.tsx";
 import {useFormErrorResponseHandler} from "../../../../../../hooks/useFormErrorResponseHandler.tsx";
 import {AccountEmailSettings} from "../../../../../../types.ts";
 import classes from "../../ManageAccount.module.scss";
@@ -29,6 +30,7 @@ const EmailSettings = () => {
     });
 
     const upsertMutation = useUpsertAccountEmailSettings(accountId);
+    const testEmailMutation = useSendTestEmail(accountId);
     const formErrorHandler = useFormErrorResponseHandler();
 
     const form = useForm<AccountEmailSettings>({
@@ -69,6 +71,22 @@ const EmailSettings = () => {
             },
             onError: (error) => {
                 formErrorHandler(form, error);
+            },
+        });
+    };
+
+    const handleSendTestEmail = () => {
+        testEmailMutation.mutate(undefined, {
+            onSuccess: (response: any) => {
+                if (response?.success) {
+                    showSuccess(response.message || t`Test email sent`);
+                } else {
+                    showError(response?.message || t`Failed to send test email`);
+                }
+            },
+            onError: (error: any) => {
+                const message = error?.response?.data?.message || t`Failed to send test email`;
+                showError(message);
             },
         });
     };
@@ -166,11 +184,22 @@ const EmailSettings = () => {
                             </>
                         )}
 
-                        <div className={classes.footer}>
+                        <div className={classes.footer} style={{display: 'flex', gap: '12px'}}>
+                            {smtpEnabled && emailSettingsQuery.data?.smtp_host && (
+                                <Button
+                                    loading={testEmailMutation.isPending}
+                                    variant="light"
+                                    onClick={handleSendTestEmail}
+                                    type="button"
+                                    style={{flex: 1}}
+                                >
+                                    {t`Send Test Email`}
+                                </Button>
+                            )}
                             <Button
                                 loading={upsertMutation.isPending}
                                 type="submit"
-                                fullWidth
+                                style={{flex: 1}}
                             >
                                 {t`Save Settings`}
                             </Button>

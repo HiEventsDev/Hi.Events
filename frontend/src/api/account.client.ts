@@ -39,4 +39,8 @@ export const accountClient = {
         const response = await api.post<GenericDataResponse<AccountEmailSettings>>(`accounts/${accountId}/email-settings`, settings);
         return response.data;
     },
+    sendTestEmail: async (accountId: IdParam) => {
+        const response = await api.post<{success: boolean; message: string}>(`accounts/${accountId}/email-settings/test`);
+        return response.data;
+    },
 }
