@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace HiEvents\Repository\Eloquent;
 
+use Carbon\CarbonImmutable;
 use HiEvents\DomainObjects\AccountDomainObject;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
@@ -17,6 +18,7 @@ use HiEvents\Enterprise\BoxOffice\Repository\DTO\BoxOfficeSummaryRowDTO;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Models\Order;
 use HiEvents\Models\OrderItem;
+use HiEvents\Repository\DTO\SalesByCurrencyDTO;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -374,6 +376,39 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
             boxOfficeId: (int) $row->box_office_id,
             salesCount: (int) $row->sales_count,
             grossSales: (float) $row->gross_sales,
+        ));
+    }
+
+    public function getNetSalesByCurrency(CarbonImmutable $from, CarbonImmutable $to): Collection
+    {
+        $rows = $this->db->select(
+            <<<'SQL'
+                SELECT currency, ROUND(SUM(net_sales), 2) AS net_sales
+                FROM (
+                    SELECT
+                        currency,
+                        total_before_additions * (total_gross - LEAST(COALESCE(total_refunded, 0), total_gross)) / total_gross AS net_sales
+                    FROM orders
+                    WHERE payment_status = :payment_status
+                      AND deleted_at IS NULL
+                      AND total_gross > 0
+                      AND created_at >= :from
+                      AND created_at < :to
+                ) paid_orders
+                GROUP BY currency
+                HAVING SUM(net_sales) > 0
+                ORDER BY currency
+            SQL,
+            [
+                'payment_status' => OrderPaymentStatus::PAYMENT_RECEIVED->name,
+                'from' => $from->utc()->toDateTimeString(),
+                'to' => $to->utc()->toDateTimeString(),
+            ],
+        );
+
+        return collect($rows)->map(static fn ($row) => new SalesByCurrencyDTO(
+            currency: (string) $row->currency,
+            amount: (float) $row->net_sales,
         ));
     }
 

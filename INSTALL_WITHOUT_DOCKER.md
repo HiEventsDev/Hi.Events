@@ -152,7 +152,7 @@ Point a Stripe webhook at `/api/public/webhooks/stripe` and subscribe it to `pay
 
 11. **Optional: Enterprise features:**
 
-Reserved seating and the box office are Hi.Events Enterprise features. To unlock them, set `APP_LICENCE_KEY` in `.env` to the licence key you received. Without a key they stay off, and everything else works as normal.
+Reserved seating, the box office and enterprise single sign-on are Hi.Events Enterprise features. Set `APP_LICENCE_KEY` in `.env` to the licence key you received: it removes the "Powered by Hi.Events" notice and unlocks the Enterprise features your licence includes. Without a key they stay off, and everything else works as normal.
 
 For development and testing, you can set `APP_LICENCE_KEY` to `development` instead. That unlocks them with a "Development licence" notice shown to ticket buyers, and must not be used for real events. A superadmin (`php artisan user:make-superadmin <user id>`) can check the licence status at `/admin/licence`.
 

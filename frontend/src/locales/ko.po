@@ -161,6 +161,10 @@ msgstr "{1}석 중 {0}석이 예약되었습니다."
 msgid "{0} of {1} sold"
 msgstr "{1}석 중 {0}석 판매"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:172
+msgid "{0} of sales a year"
+msgstr "연간 매출 {0}"
+
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:166
 msgid "{0} orders"
 msgstr "주문 {0}건"
@@ -262,6 +266,10 @@ msgstr "{0}석 입석"
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/OrdersTab.tsx:93
 msgid "{0} tickets"
 msgstr "티켓 {0}장"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:85
+msgid "{0} to {1}"
+msgstr "{0}~{1}"
 
 #: src/components/routes/settings/Security/SignInMethods.tsx:139
 msgid "{0} was disconnected."
@@ -667,7 +675,7 @@ msgstr "+세금/수수료"
 msgid "<0>{accountName}</0> requires two-factor authentication for everyone on the team. Set it up now to continue. It takes about a minute."
 msgstr "<0>{accountName}</0>에서는 팀의 모든 구성원에게 2단계 인증을 요구합니다. 계속하려면 지금 설정하세요. 약 1분이면 됩니다."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:80
+#: src/ee/licensing/components/LicenceModal/index.tsx:94
 msgid "<0>APP_LICENCE_KEY</0> is set, but the key couldn't be verified, so reserved seating, the box office and enterprise single sign-on can't be set up."
 msgstr "<0>APP_LICENCE_KEY</0>가 설정되어 있지만 키를 확인할 수 없어 지정 좌석, 현장 매표소 및 엔터프라이즈 싱글 사인온을 설정할 수 없습니다."
 
@@ -1206,7 +1214,7 @@ msgstr "활성화 날짜"
 #: src/components/routes/organizer/Payments/CapabilityList.tsx:57
 #: src/components/routes/settings/Team/MemberRow.tsx:28
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:187
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:26
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:31
 msgid "Active"
 msgstr "활성"
 
@@ -1236,6 +1244,10 @@ msgstr "추가"
 #: src/components/routes/product-widget/SelectProducts/index.tsx:522
 msgid "Add {0} first"
 msgstr "먼저 {0}을(를) 추가하세요"
+
+#: src/ee/licensing/components/LicenceModal/index.tsx:137
+msgid "Add {notIncludedList} to your licence."
+msgstr "라이선스에 {notIncludedList}을(를) 추가하세요."
 
 #: src/ee/box-office/components/routes/event/BoxOffices/index.tsx:72
 msgid "Add a card reader"
@@ -3056,7 +3068,7 @@ msgstr "기본 정보"
 msgid "Before taxes and fees"
 msgstr "세금 및 수수료 제외"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:117
+#: src/ee/licensing/components/LicenceModal/index.tsx:151
 msgid "Before you go live"
 msgstr "운영 전에"
 
@@ -3153,7 +3165,7 @@ msgstr "현장 매표소"
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:13
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:157
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:106
-#: src/ee/licensing/licenceNotice.ts:51
+#: src/ee/licensing/licenceNotice.ts:55
 msgid "Box office"
 msgstr "매표소"
 
@@ -3821,7 +3833,7 @@ msgstr "지금 체크인"
 msgid "Check in only"
 msgstr "체크인만"
 
-#: src/ee/licensing/licenceNotice.ts:64
+#: src/ee/licensing/licenceNotice.ts:68
 msgid "Check key"
 msgstr "키 확인"
 
@@ -5031,6 +5043,10 @@ msgstr "PIN 복사"
 msgid "Copy redirect URI"
 msgstr "리디렉션 URI 복사"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:94
+msgid "Copy sales report"
+msgstr "매출 보고서 복사"
+
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:194
 msgid "Copy setup key"
 msgstr "설정 키 복사"
@@ -5056,7 +5072,7 @@ msgstr "디렉터리(테넌트) ID, 애플리케이션(클라이언트) ID, 시�
 msgid "Copy the issuer URL, the client ID and the client secret into the fields below."
 msgstr "발급자 URL, 클라이언트 ID, 클라이언트 시크릿을 아래 입력란에 복사하세요."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:86
+#: src/ee/licensing/components/LicenceModal/index.tsx:100
 msgid "Copy the key again from your licence email, without quotes or spaces."
 msgstr "라이선스 이메일에서 따옴표나 공백 없이 키를 다시 복사하세요."
 
@@ -5244,6 +5260,10 @@ msgstr "커버 이미지는 이벤트 페이지 상단에 표시됩니다"
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:164
 msgid "Cover image will be displayed at the top of your organizer page"
 msgstr "커버 이미지는 주최자 페이지 상단에 표시됩니다"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:172
+msgid "Covers"
+msgstr "적용 범위"
 
 #: src/components/common/CheckInListTable/index.tsx:92
 msgid "Covers every ticket"
@@ -5567,6 +5587,10 @@ msgstr "통화"
 msgid "Current password"
 msgstr "현재 비밀번호"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:86
+msgid "Current year"
+msgstr "현재 연도"
+
 #: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:111
 msgid "Currently assigned"
 msgstr "현재 할당됨"
@@ -5627,7 +5651,7 @@ msgstr "맞춤 템플릿"
 
 #: src/components/common/AdminOrdersTable/index.tsx:71
 #: src/components/common/OrdersTable/index.tsx:116
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:84
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:169
 msgid "Customer"
 msgstr "고객"
 
@@ -6236,12 +6260,12 @@ msgstr "데스크톱"
 msgid "Details"
 msgstr "상세 정보"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:32
-#: src/ee/licensing/licenceNotice.ts:68
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:37
+#: src/ee/licensing/licenceNotice.ts:74
 msgid "Development"
 msgstr "개발"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:114
+#: src/ee/licensing/components/LicenceModal/index.tsx:148
 msgid "Development licence"
 msgstr "개발용 라이선스"
 
@@ -7367,7 +7391,7 @@ msgid "enterprise single sign-on"
 msgstr "엔터프라이즈 싱글 사인온"
 
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:18
-#: src/ee/licensing/licenceNotice.ts:53
+#: src/ee/licensing/licenceNotice.ts:57
 msgid "Enterprise single sign-on"
 msgstr "엔터프라이즈 싱글 사인온"
 
@@ -7819,8 +7843,8 @@ msgstr "만료일"
 #: src/components/common/WaitlistTable/index.tsx:30
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:119
 #: src/components/routes/settings/ApiKeys/index.tsx:210
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:30
-#: src/ee/licensing/licenceNotice.ts:72
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:35
+#: src/ee/licensing/licenceNotice.ts:78
 msgid "Expired"
 msgstr "만료됨"
 
@@ -7832,7 +7856,7 @@ msgstr "{0} 만료됨"
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:33
 #: src/components/routes/settings/ApiKeys/index.tsx:176
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:88
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:176
 msgid "Expires"
 msgstr "만료"
 
@@ -8282,7 +8306,7 @@ msgstr "기능 플래그"
 msgid "Featured"
 msgstr "주요 출연"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:91
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:103
 msgid "Features"
 msgstr "기능"
 
@@ -8791,12 +8815,12 @@ msgid "German"
 msgstr "독일어"
 
 #: src/ee/licensing/components/GetLicenceLink/index.tsx:11
-#: src/ee/licensing/components/LicenceModal/index.tsx:108
-#: src/ee/licensing/components/LicenceModal/index.tsx:124
+#: src/ee/licensing/components/LicenceModal/index.tsx:122
+#: src/ee/licensing/components/LicenceModal/index.tsx:158
 msgid "Get a licence"
 msgstr "라이선스 받기"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:103
+#: src/ee/licensing/components/LicenceModal/index.tsx:117
 msgid "Get an Enterprise licence key."
 msgstr "Enterprise 라이선스 키를 받으세요."
 
@@ -8922,12 +8946,12 @@ msgstr "Google 캘린더"
 msgid "Got it"
 msgstr "확인"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:28
-#: src/ee/licensing/licenceNotice.ts:70
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:33
+#: src/ee/licensing/licenceNotice.ts:76
 msgid "Grace period"
 msgstr "유예 기간"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:89
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:177
 msgid "Grace period ends"
 msgstr "유예 기간 종료"
 
@@ -9079,6 +9103,10 @@ msgstr "{0}님, 안녕하세요 👋"
 #: src/components/routes/event/OccurrencesTab/rescheduleMessageTemplate.ts:74
 msgid "Hi,"
 msgstr "안녕하세요,"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:50
+msgid "Hi.Events Cloud"
+msgstr "Hi.Events Cloud"
 
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:75
 msgid "Hi.Events Fee"
@@ -9543,7 +9571,7 @@ msgstr "Microsoft Entra admin center에서 \"App registrations\"로 이동한 �
 msgid "In the Okta Admin Console, go to Applications and choose Create App Integration."
 msgstr "Okta Admin Console에서 \"Applications\"로 이동한 다음 \"Create App Integration\"을 선택합니다."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:188
+#: src/ee/licensing/components/LicenceModal/index.tsx:230
 msgid "In use"
 msgstr "사용 중"
 
@@ -9592,6 +9620,10 @@ msgstr "온라인 이벤트 접속 정보를 포함하세요. 이 정보는 주�
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:55
 msgid "Include tax and fees in the price"
 msgstr "가격에 세금과 수수료 포함"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:108
+msgid "Included"
+msgstr "포함됨"
 
 #: src/components/common/CheckInListList/index.tsx:102
 #: src/components/common/CheckInListTable/index.tsx:95
@@ -9744,7 +9776,7 @@ msgstr "인보이스 번호 매기기"
 msgid "Invoice Settings"
 msgstr "인보이스 설정"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:87
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:175
 msgid "Issued"
 msgstr "발급일"
 
@@ -10222,19 +10254,19 @@ msgstr "라이브러리"
 
 #: src/components/common/GlobalMenu/index.tsx:79
 #: src/components/layouts/Admin/index.tsx:32
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:51
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:136
 msgid "Licence"
 msgstr "라이선스"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:215
+#: src/ee/licensing/components/LicenceModal/index.tsx:257
 msgid "Licence details"
 msgstr "라이선스 세부 정보"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:86
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:174
 msgid "Licence ID"
 msgstr "라이선스 ID"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:79
+#: src/ee/licensing/components/LicenceModal/index.tsx:93
 msgid "Licence key not recognised"
 msgstr "라이선스 키를 인식할 수 없음"
 
@@ -11168,7 +11200,7 @@ msgstr "새 구역"
 msgid "New band"
 msgstr "새 가격 등급"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:56
+#: src/ee/licensing/components/LicenceModal/index.tsx:63
 msgid "New box office sign-ins are refused, so open box office sessions end within 24 hours."
 msgstr "새 매표소 로그인이 거부되므로 열려 있는 매표소 세션은 24시간 이내에 종료됩니다."
 
@@ -11526,7 +11558,7 @@ msgstr "종료일 없음"
 msgid "No ended events to show."
 msgstr "표시할 종료된 이벤트가 없습니다."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:96
+#: src/ee/licensing/components/LicenceModal/index.tsx:110
 msgid "No Enterprise licence"
 msgstr "Enterprise 라이선스 없음"
 
@@ -11586,11 +11618,11 @@ msgstr "아직 추가된 안내가 없습니다."
 msgid "No invoice"
 msgstr "인보이스 없음"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:34
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:39
 msgid "No licence"
 msgstr "라이선스 없음"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:62
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:147
 msgid "No licence key is set, so reserved seating, the box office and enterprise single sign-on can't be set up. To unlock them, set APP_LICENCE_KEY in the backend environment and redeploy the backend. With Docker Compose, use docker compose up -d, because docker compose restart doesn't reload the environment."
 msgstr "라이선스 키가 설정되어 있지 않아 지정 좌석, 현장 매표소 및 엔터프라이즈 싱글 사인온을 설정할 수 없습니다. 이 기능을 사용하려면 백엔드 환경에 APP_LICENCE_KEY를 설정하고 백엔드를 다시 배포하세요. Docker Compose를 사용하는 경우 docker compose restart는 환경을 다시 불러오지 않으므로 docker compose up -d를 사용하세요."
 
@@ -11796,6 +11828,10 @@ msgstr "결과 없음"
 msgid "No results found"
 msgstr "결과가 없습니다"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:91
+msgid "No sales"
+msgstr "매출 없음"
+
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:29
 msgid "No sales in this period"
 msgstr "이 기간에 판매 내역이 없습니다"
@@ -12000,6 +12036,18 @@ msgstr "대상 아님"
 msgid "Not enough free seats for {0}"
 msgstr "{0}에 대한 빈 좌석이 부족합니다"
 
+#: src/ee/licensing/licenceNotice.ts:72
+msgid "Not in licence"
+msgstr "라이선스 미포함"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:109
+msgid "Not included"
+msgstr "포함되지 않음"
+
+#: src/ee/licensing/components/LicenceModal/index.tsx:130
+msgid "Not included in your licence"
+msgstr "라이선스에 포함되지 않음"
+
 #: src/components/routes/settings/Team/MemberRow.tsx:166
 msgid "Not joined yet"
 msgstr "아직 참여하지 않음"
@@ -12053,7 +12101,7 @@ msgstr "테스트 안 됨"
 msgid "Not tested yet"
 msgstr "아직 테스트하지 않음"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:120
+#: src/ee/licensing/components/LicenceModal/index.tsx:154
 msgid "Not using reserved seating, the box office or enterprise single sign-on? Remove <0>APP_LICENCE_KEY</0> and redeploy."
 msgstr "지정 좌석, 현장 매표소 또는 엔터프라이즈 싱글 사인온을 사용하지 않나요? <0>APP_LICENCE_KEY</0>를 제거하고 다시 배포하세요."
 
@@ -12428,7 +12476,7 @@ msgstr "온라인 이벤트"
 msgid "Online Event Details"
 msgstr "온라인 이벤트 정보"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:54
+#: src/ee/licensing/components/LicenceModal/index.tsx:61
 msgid "Online ticket sales for events with reserved seating keep working."
 msgstr "지정 좌석 이벤트의 온라인 티켓 판매는 계속 작동합니다."
 
@@ -13059,6 +13107,10 @@ msgstr "이 계정의 전역 기본값을 재정의합니다."
 msgid "Overview"
 msgstr "개요"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:46
+msgid "Own events"
+msgstr "자체 이벤트"
+
 #: src/components/modals/EditUserModal/index.tsx:66
 #: src/components/routes/settings/Team/MemberRow.tsx:137
 msgid "Owner"
@@ -13121,6 +13173,10 @@ msgstr "유료 계정"
 #: src/ee/box-office/utilites/boxOfficeTender.ts:13
 msgid "Paid elsewhere"
 msgstr "다른 곳에서 결제됨"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:122
+msgid "Paid sales before tax, after refunds, across every organizer on this install. At the end of each licence year, send that year's sales to licence@hi.events."
+msgstr "이 설치의 모든 주최자에 대한 세금 전, 환불 후 유료 매출입니다. 각 라이선스 연도가 끝나면 해당 연도의 매출을 licence@hi.events로 보내 주세요."
 
 #: src/ee/box-office/components/routes/organizer/Payments/TerminalReaders/index.tsx:68
 msgid "Pair Stripe Terminal readers to take card payments at the box office."
@@ -13613,13 +13669,17 @@ msgstr "테이블 배치"
 msgid "Placed"
 msgstr "접수됨"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:85
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:170
 msgid "Plan"
 msgstr "플랜"
 
 #: src/components/common/PoweredByFooter/index.tsx:67
 msgid "Planning an event?"
 msgstr "이벤트를 계획 중이신가요?"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:48
+msgid "Platform"
+msgstr "플랫폼"
 
 #: src/components/routes/admin/Dashboard/index.tsx:195
 msgid "Platform commission"
@@ -14240,7 +14300,8 @@ msgstr "구매자 이메일"
 msgid "Purchases"
 msgstr "구매 내역"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:45
+#: src/ee/licensing/components/LicenceModal/index.tsx:52
+#: src/ee/licensing/components/LicenceModal/index.tsx:138
 msgid "Put the new key in <0>APP_LICENCE_KEY</0> and redeploy the backend."
 msgstr "새 키를 <0>APP_LICENCE_KEY</0>에 넣고 백엔드를 다시 배포하세요."
 
@@ -14510,7 +14571,7 @@ msgstr "반복 이벤트"
 msgid "Reddit"
 msgstr "Reddit"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:38
+#: src/ee/licensing/components/LicenceModal/index.tsx:45
 msgid "Redeploy the backend. With Docker Compose, run <0>docker compose up -d</0>."
 msgstr "백엔드를 다시 배포하세요. Docker Compose에서는 <0>docker compose up -d</0>를 실행하세요."
 
@@ -14837,12 +14898,12 @@ msgstr "위젯 이름 변경"
 msgid "Render it where the widget should appear"
 msgstr "위젯을 표시할 위치에서 렌더링하세요"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:133
-#: src/ee/licensing/components/LicenceModal/index.tsx:143
+#: src/ee/licensing/components/LicenceModal/index.tsx:168
+#: src/ee/licensing/components/LicenceModal/index.tsx:184
 msgid "Renew licence"
 msgstr "라이선스 갱신"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:44
+#: src/ee/licensing/components/LicenceModal/index.tsx:51
 msgid "Renew your licence."
 msgstr "라이선스를 갱신하세요."
 
@@ -15005,7 +15066,7 @@ msgstr "지정 좌석"
 #: src/components/common/EventCard/index.tsx:329
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:365
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:8
-#: src/ee/licensing/licenceNotice.ts:49
+#: src/ee/licensing/licenceNotice.ts:53
 msgid "Reserved seating"
 msgstr "지정 좌석"
 
@@ -15356,6 +15417,10 @@ msgstr "환불 후 매출"
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:149
 msgid "Sales are paused"
 msgstr "판매가 일시중지되었습니다"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:120
+msgid "Sales by licence year"
+msgstr "라이선스 연도별 매출"
 
 #: src/components/common/ProductPriceAvailability/index.tsx:24
 #: src/components/common/ProductPriceAvailability/index.tsx:63
@@ -16466,11 +16531,11 @@ msgstr "이 주최자 아래에서 생성되는 신규 이벤트의 기본 설�
 msgid "Set how long each date lasts"
 msgstr "각 날짜의 진행 시간 설정"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:87
+#: src/ee/licensing/components/LicenceModal/index.tsx:101
 msgid "Set it as <0>APP_LICENCE_KEY</0> and redeploy the backend."
 msgstr "<0>APP_LICENCE_KEY</0>로 설정하고 백엔드를 다시 배포하세요."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:104
+#: src/ee/licensing/components/LicenceModal/index.tsx:118
 msgid "Set it as <0>APP_LICENCE_KEY</0> in the backend environment."
 msgstr "백엔드 환경에 <0>APP_LICENCE_KEY</0>로 설정하세요."
 
@@ -16580,19 +16645,19 @@ msgstr "설정"
 msgid "Setup & Design"
 msgstr "설정 및 디자인"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:97
+#: src/ee/licensing/components/LicenceModal/index.tsx:111
 msgid "Setup for {featureList} is locked because this instance has no Hi.Events Enterprise licence. Anything already set up can still be viewed or removed."
 msgstr "이 인스턴스에 Hi.Events Enterprise 라이선스가 없어 {featureList} 설정이 잠겨 있습니다. 이미 설정된 항목은 계속 보거나 삭제할 수 있습니다."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:67
+#: src/ee/licensing/components/LicenceModal/index.tsx:74
 msgid "Setup for {featureList} is locked until you renew. Anything already set up can still be viewed or removed."
 msgstr "라이선스를 갱신할 때까지 {featureList} 설정이 잠겨 있습니다. 이미 설정된 항목은 계속 보거나 삭제할 수 있습니다."
 
-#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:6
+#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:12
 msgid "Setup is locked"
 msgstr "설정이 잠겨 있습니다"
 
-#: src/ee/licensing/licenceNotice.ts:66
+#: src/ee/licensing/licenceNotice.ts:70
 msgid "Setup locked"
 msgstr "설정 잠김"
 
@@ -17029,7 +17094,7 @@ msgstr "한 줄 텍스트 상자"
 msgid "Single sign-on"
 msgstr "싱글 사인온"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:58
+#: src/ee/licensing/components/LicenceModal/index.tsx:65
 msgid "Single sign-on connections keep signing people in. They can be switched off or deleted, but not changed or switched back on without a licence."
 msgstr "싱글 사인온 연결을 통한 로그인은 계속 작동합니다. 연결을 끄거나 삭제할 수는 있지만, 라이선스 없이는 변경하거나 다시 켤 수 없습니다."
 
@@ -17600,7 +17665,7 @@ msgstr "통계"
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:88
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:62
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:177
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:79
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:164
 msgid "Status"
 msgstr "상태"
 
@@ -17608,7 +17673,7 @@ msgstr "상태"
 msgid "Status unknown"
 msgstr "상태 알 수 없음"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:88
+#: src/ee/licensing/components/LicenceModal/index.tsx:102
 msgid "Still failing? Upgrade Hi.Events, then contact hello@hi.events."
 msgstr "그래도 안 되나요? Hi.Events를 업그레이드한 뒤 hello@hi.events로 문의하세요."
 
@@ -18243,7 +18308,7 @@ msgstr "총 {totalOccurrences}개 세션입니다. 최대 {max}개까지 가능�
 msgid "That's a wrap"
 msgstr "모두 끝났습니다"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:49
+#: src/ee/licensing/components/LicenceModal/index.tsx:56
 msgid "The \"Powered by Hi.Events\" notice is shown again until you renew."
 msgstr "라이선스를 갱신할 때까지 “Powered by Hi.Events” 문구가 다시 표시됩니다."
 
@@ -18366,7 +18431,7 @@ msgstr "이 키는 {accountName}에서 회원님이 할 수 있는 모든 작업
 msgid "The language the attendee will receive emails in."
 msgstr "참가자가 이메일을 받을 언어입니다."
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:56
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:141
 msgid "The licence key was rejected"
 msgstr "라이선스 키가 거부되었습니다"
 
@@ -18852,7 +18917,7 @@ msgstr "이 이벤트만"
 msgid "This event's dates and times are set on the occurrence schedule."
 msgstr "이 이벤트의 날짜와 시간은 회차 일정에서 설정됩니다."
 
-#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:7
+#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:15
 msgid "This feature needs a Hi.Events Enterprise licence. Until a licence key is added, nothing new can be set up and existing setup can't be changed, but what is already set up can still be viewed, switched off or removed."
 msgstr "이 기능에는 Hi.Events Enterprise 라이선스가 필요합니다. 라이선스 키를 추가할 때까지 새로 설정하거나 기존 설정을 변경할 수 없지만, 이미 설정된 항목은 계속 보거나 끄거나 삭제할 수 있습니다."
 
@@ -18918,7 +18983,7 @@ msgstr "이 키는 지금 한 번만 표시됩니다"
 msgid "This is usually temporary. Try again in a moment."
 msgstr "일반적으로 일시적인 문제입니다. 잠시 후 다시 시도하세요."
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:68
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:153
 msgid "This licence expires on {0}. Renew before then to avoid interruption."
 msgstr "이 라이선스는 {0}에 만료됩니다. 중단을 피하려면 그 전에 갱신하세요."
 
@@ -20176,6 +20241,10 @@ msgstr "규칙을 작성하면 실시간으로 업데이트됩니다. 월을 넘
 msgid "Updates as you type."
 msgstr "입력하면 실시간으로 업데이트됩니다."
 
+#: src/ee/licensing/components/LicenceModal/index.tsx:141
+msgid "Upgrade licence"
+msgstr "라이선스 업그레이드"
+
 #: src/components/routes/organizer/Settings/Sections/ImageAssetSettings/index.tsx:39
 msgid "Upload a cover image for your organizer"
 msgstr "주최자용 커버 이미지를 업로드하세요"
@@ -20370,7 +20439,7 @@ msgstr "홈페이지 디자인의 색상과 글꼴을 사용하며, 변경하면
 msgid "Uses the colours and font from your homepage design. If you change the design, copy the code again to update the button."
 msgstr "홈페이지 디자인의 색상과 글꼴을 사용합니다. 디자인을 바꾸면 버튼을 업데이트하도록 코드를 다시 복사하세요."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:121
+#: src/ee/licensing/components/LicenceModal/index.tsx:155
 msgid "Using them for real events? Get an Enterprise licence and put its key in <0>APP_LICENCE_KEY</0>."
 msgstr "실제 이벤트에 사용하나요? Enterprise 라이선스를 받아 그 키를 <0>APP_LICENCE_KEY</0>에 넣으세요."
 
@@ -21164,9 +21233,10 @@ msgstr "참가자는 무엇을 기대할 수 있나요?"
 msgid "What time will you be arriving?"
 msgstr "몇 시에 도착하시나요?"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:41
-#: src/ee/licensing/components/LicenceModal/index.tsx:83
-#: src/ee/licensing/components/LicenceModal/index.tsx:100
+#: src/ee/licensing/components/LicenceModal/index.tsx:48
+#: src/ee/licensing/components/LicenceModal/index.tsx:97
+#: src/ee/licensing/components/LicenceModal/index.tsx:114
+#: src/ee/licensing/components/LicenceModal/index.tsx:134
 msgid "What to do"
 msgstr "해야 할 일"
 
@@ -21348,7 +21418,7 @@ msgstr "{0}에 어떤 티켓을 적용할까요?"
 msgid "Which tickets should be associated with this check-in list?"
 msgstr "어떤 티켓이 이 체크인 목록과 연결되어야 하나요?"
 
-#: src/ee/licensing/licenceNotice.ts:55
+#: src/ee/licensing/licenceNotice.ts:59
 msgid "White-label"
 msgstr "화이트 라벨"
 
@@ -21906,9 +21976,13 @@ msgstr "이벤트에 아직 설명이 없습니다."
 msgid "Your event is live!"
 msgstr "이벤트가 공개되었습니다!"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:131
+#: src/ee/licensing/components/LicenceModal/index.tsx:165
 msgid "Your Hi.Events Enterprise licence expired on {expiresAt}. Everything stays on until {graceEndsAt}. Renew before then to avoid interruption."
 msgstr "Hi.Events Enterprise 라이선스가 {expiresAt}에 만료되었습니다. {graceEndsAt}까지는 모든 기능이 유지됩니다. 중단을 피하려면 그 전에 갱신하세요."
+
+#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:14
+msgid "Your Hi.Events licence doesn't include this feature. Until it does, nothing new can be set up and existing setup can't be changed, but what is already set up can still be viewed, switched off or removed."
+msgstr "Hi.Events 라이선스에 이 기능이 포함되어 있지 않습니다. 포함될 때까지 새로 설정하거나 기존 설정을 변경할 수 없지만, 이미 설정된 항목은 계속 보거나 끄거나 삭제할 수 있습니다."
 
 #: src/ee/sso/components/SingleSignOn/providers.tsx:22
 msgid "your identity provider"
@@ -21918,8 +21992,12 @@ msgstr "사용 중인 ID 공급자"
 msgid "Your identity provider returned an error: {providerError}"
 msgstr "ID 공급자가 오류를 반환했습니다: {providerError}"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:130
-#: src/ee/licensing/components/LicenceModal/index.tsx:139
+#: src/ee/licensing/components/LicenceModal/index.tsx:80
+msgid "Your licence doesn't include {notIncludedList}. Nothing new can be set up, but anything already set up can still be viewed or removed."
+msgstr "라이선스에 {notIncludedList}이(가) 포함되어 있지 않습니다. 새로 설정할 수는 없지만, 이미 설정된 항목은 계속 보거나 삭제할 수 있습니다."
+
+#: src/ee/licensing/components/LicenceModal/index.tsx:164
+#: src/ee/licensing/components/LicenceModal/index.tsx:177
 msgid "Your licence has expired"
 msgstr "라이선스가 만료되었습니다"
 

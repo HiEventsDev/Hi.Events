@@ -16,6 +16,7 @@ use HiEvents\Enterprise\Seating\Repository\Interfaces\EventSeatMapRepositoryInte
 use HiEvents\Enterprise\Seating\Repository\Interfaces\SeatMapRepositoryInterface;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
+use Tests\Concerns\ManagesLicence;
 use Tests\Feature\Support\InsertsRecurringEventRows;
 use Tests\TestCase;
 
@@ -23,10 +24,13 @@ class LicensedFeatureUsageDetectionTest extends TestCase
 {
     use DatabaseTransactions;
     use InsertsRecurringEventRows;
+    use ManagesLicence;
 
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->useLicenceKey(null, 'testing');
 
         foreach (['event_seat_maps', 'seat_maps', 'stripe_terminal_readers', 'box_offices'] as $table) {
             DB::table($table)->delete();

@@ -21,5 +21,6 @@ class LicencePayloadDTO extends BaseDataObject
         public readonly array $features,
         public readonly CarbonImmutable $issued_at,
         public readonly CarbonImmutable $expires_at,
+        public readonly ?int $covered_sales = null,
     ) {}
 }

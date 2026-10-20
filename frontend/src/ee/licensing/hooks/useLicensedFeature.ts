@@ -14,7 +14,7 @@ export const useLicensedFeature = (feature: FeatureFlagKey): LicensedFeatureAcce
     const {data: me} = useGetMe();
     const isEnabled = useIsFeatureEnabled(feature);
     const licence = me?.licence;
-    const isUnlicensed = licence?.status === 'LAPSED' || licence?.status === 'NONE';
+    const isUnlicensed = !!licence && !licence.unlocked_features?.includes(feature);
     const isSetupLocked = !isEnabled && isUnlicensed;
     const isLocked = isSetupLocked && !!licence?.features_in_use?.includes(feature);
 

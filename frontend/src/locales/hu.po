@@ -161,6 +161,10 @@ msgstr "{1} helyből {0} foglalt."
 msgid "{0} of {1} sold"
 msgstr "{1} helyből {0} eladva"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:172
+msgid "{0} of sales a year"
+msgstr "évi {0} értékesítés"
+
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:166
 msgid "{0} orders"
 msgstr "{0} rendelés"
@@ -262,6 +266,10 @@ msgstr "{0} állóhely"
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/OrdersTab.tsx:93
 msgid "{0} tickets"
 msgstr "{0} jegy"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:85
+msgid "{0} to {1}"
+msgstr "{0} – {1}"
 
 #: src/components/routes/settings/Security/SignInMethods.tsx:139
 msgid "{0} was disconnected."
@@ -667,7 +675,7 @@ msgstr "+Adó/Díjak"
 msgid "<0>{accountName}</0> requires two-factor authentication for everyone on the team. Set it up now to continue. It takes about a minute."
 msgstr "A(z) <0>{accountName}</0> kétlépcsős hitelesítést ír elő a csapat minden tagjának. A folytatáshoz állítsa be most. Nagyjából egy percet vesz igénybe."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:80
+#: src/ee/licensing/components/LicenceModal/index.tsx:94
 msgid "<0>APP_LICENCE_KEY</0> is set, but the key couldn't be verified, so reserved seating, the box office and enterprise single sign-on can't be set up."
 msgstr "Az <0>APP_LICENCE_KEY</0> be van állítva, de a kulcsot nem sikerült ellenőrizni, ezért a foglalt ülőhelyek, a helyszíni jegypénztár és a vállalati egyszeri bejelentkezés nem állítható be."
 
@@ -1206,7 +1214,7 @@ msgstr "Aktiválás dátuma"
 #: src/components/routes/organizer/Payments/CapabilityList.tsx:57
 #: src/components/routes/settings/Team/MemberRow.tsx:28
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:187
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:26
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:31
 msgid "Active"
 msgstr "Aktív"
 
@@ -1236,6 +1244,10 @@ msgstr "Hozzáadás"
 #: src/components/routes/product-widget/SelectProducts/index.tsx:522
 msgid "Add {0} first"
 msgstr "Először add hozzá: {0}"
+
+#: src/ee/licensing/components/LicenceModal/index.tsx:137
+msgid "Add {notIncludedList} to your licence."
+msgstr "Adja hozzá licencéhez a következőket: {notIncludedList}."
 
 #: src/ee/box-office/components/routes/event/BoxOffices/index.tsx:72
 msgid "Add a card reader"
@@ -3056,7 +3068,7 @@ msgstr "Alapvető információk"
 msgid "Before taxes and fees"
 msgstr "Adók és díjak nélkül"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:117
+#: src/ee/licensing/components/LicenceModal/index.tsx:151
 msgid "Before you go live"
 msgstr "Élesítés előtt"
 
@@ -3153,7 +3165,7 @@ msgstr "helyszíni jegypénztár"
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:13
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:157
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:106
-#: src/ee/licensing/licenceNotice.ts:51
+#: src/ee/licensing/licenceNotice.ts:55
 msgid "Box office"
 msgstr "Pénztár"
 
@@ -3821,7 +3833,7 @@ msgstr "Bejelentkeztetés most"
 msgid "Check in only"
 msgstr "Csak bejelentkezés"
 
-#: src/ee/licensing/licenceNotice.ts:64
+#: src/ee/licensing/licenceNotice.ts:68
 msgid "Check key"
 msgstr "Kulcs ellenőrzése"
 
@@ -5031,6 +5043,10 @@ msgstr "PIN másolása"
 msgid "Copy redirect URI"
 msgstr "Átirányítási URI másolása"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:94
+msgid "Copy sales report"
+msgstr "Értékesítési jelentés másolása"
+
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:194
 msgid "Copy setup key"
 msgstr "Beállítási kulcs másolása"
@@ -5056,7 +5072,7 @@ msgstr "Másolja a directory (tenant) ID-t, az application (client) ID-t és a t
 msgid "Copy the issuer URL, the client ID and the client secret into the fields below."
 msgstr "Másolja a kibocsátó URL-jét, a client ID-t és a client secretet az alábbi mezőkbe."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:86
+#: src/ee/licensing/components/LicenceModal/index.tsx:100
 msgid "Copy the key again from your licence email, without quotes or spaces."
 msgstr "Másold ki újra a kulcsot a licenc e-mailből, idézőjelek és szóközök nélkül."
 
@@ -5244,6 +5260,10 @@ msgstr "A borítókép az eseményoldal tetején jelenik meg"
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:164
 msgid "Cover image will be displayed at the top of your organizer page"
 msgstr "A borítókép a szervezői oldal tetején jelenik meg"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:172
+msgid "Covers"
+msgstr "Lefedi"
 
 #: src/components/common/CheckInListTable/index.tsx:92
 msgid "Covers every ticket"
@@ -5567,6 +5587,10 @@ msgstr "Pénznem"
 msgid "Current password"
 msgstr "Jelenlegi jelszó"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:86
+msgid "Current year"
+msgstr "Aktuális év"
+
 #: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:111
 msgid "Currently assigned"
 msgstr "Jelenleg hozzárendelve"
@@ -5627,7 +5651,7 @@ msgstr "Egyedi sablon"
 
 #: src/components/common/AdminOrdersTable/index.tsx:71
 #: src/components/common/OrdersTable/index.tsx:116
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:84
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:169
 msgid "Customer"
 msgstr "Ügyfél"
 
@@ -6236,12 +6260,12 @@ msgstr "Asztali"
 msgid "Details"
 msgstr "Részletek"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:32
-#: src/ee/licensing/licenceNotice.ts:68
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:37
+#: src/ee/licensing/licenceNotice.ts:74
 msgid "Development"
 msgstr "Fejlesztés"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:114
+#: src/ee/licensing/components/LicenceModal/index.tsx:148
 msgid "Development licence"
 msgstr "Fejlesztői licenc"
 
@@ -7367,7 +7391,7 @@ msgid "enterprise single sign-on"
 msgstr "vállalati egyszeri bejelentkezés"
 
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:18
-#: src/ee/licensing/licenceNotice.ts:53
+#: src/ee/licensing/licenceNotice.ts:57
 msgid "Enterprise single sign-on"
 msgstr "Vállalati egyszeri bejelentkezés"
 
@@ -7819,8 +7843,8 @@ msgstr "Lejárati dátum"
 #: src/components/common/WaitlistTable/index.tsx:30
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:119
 #: src/components/routes/settings/ApiKeys/index.tsx:210
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:30
-#: src/ee/licensing/licenceNotice.ts:72
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:35
+#: src/ee/licensing/licenceNotice.ts:78
 msgid "Expired"
 msgstr "Lejárt"
 
@@ -7832,7 +7856,7 @@ msgstr "Lejárt {0}"
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:33
 #: src/components/routes/settings/ApiKeys/index.tsx:176
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:88
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:176
 msgid "Expires"
 msgstr "Lejár"
 
@@ -8282,7 +8306,7 @@ msgstr "Funkciókapcsolók"
 msgid "Featured"
 msgstr "Kiemelt"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:91
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:103
 msgid "Features"
 msgstr "Funkciók"
 
@@ -8791,12 +8815,12 @@ msgid "German"
 msgstr "Német"
 
 #: src/ee/licensing/components/GetLicenceLink/index.tsx:11
-#: src/ee/licensing/components/LicenceModal/index.tsx:108
-#: src/ee/licensing/components/LicenceModal/index.tsx:124
+#: src/ee/licensing/components/LicenceModal/index.tsx:122
+#: src/ee/licensing/components/LicenceModal/index.tsx:158
 msgid "Get a licence"
 msgstr "Licenc beszerzése"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:103
+#: src/ee/licensing/components/LicenceModal/index.tsx:117
 msgid "Get an Enterprise licence key."
 msgstr "Szerezz be egy Enterprise licenckulcsot."
 
@@ -8922,12 +8946,12 @@ msgstr "Google Naptár"
 msgid "Got it"
 msgstr "Értem"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:28
-#: src/ee/licensing/licenceNotice.ts:70
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:33
+#: src/ee/licensing/licenceNotice.ts:76
 msgid "Grace period"
 msgstr "Türelmi időszak"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:89
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:177
 msgid "Grace period ends"
 msgstr "Türelmi időszak vége"
 
@@ -9079,6 +9103,10 @@ msgstr "Szia {0} 👋"
 #: src/components/routes/event/OccurrencesTab/rescheduleMessageTemplate.ts:74
 msgid "Hi,"
 msgstr "Üdvözöljük,"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:50
+msgid "Hi.Events Cloud"
+msgstr "Hi.Events Cloud"
 
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:75
 msgid "Hi.Events Fee"
@@ -9543,7 +9571,7 @@ msgstr "A Microsoft Entra admin centerben lépjen az \"App registrations\" rész
 msgid "In the Okta Admin Console, go to Applications and choose Create App Integration."
 msgstr "Az Okta Admin Consoleban lépjen az \"Applications\" részre, és válassza a \"Create App Integration\" lehetőséget."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:188
+#: src/ee/licensing/components/LicenceModal/index.tsx:230
 msgid "In use"
 msgstr "Használatban"
 
@@ -9592,6 +9620,10 @@ msgstr "Adja meg az online esemény csatlakozási adatait. Ezek az adatok megjel
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:55
 msgid "Include tax and fees in the price"
 msgstr "Adó és díjak belefoglalása az árba"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:108
+msgid "Included"
+msgstr "Benne van"
 
 #: src/components/common/CheckInListList/index.tsx:102
 #: src/components/common/CheckInListTable/index.tsx:95
@@ -9744,7 +9776,7 @@ msgstr "Számlaszámozás"
 msgid "Invoice Settings"
 msgstr "Számla beállítások"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:87
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:175
 msgid "Issued"
 msgstr "Kiállítva"
 
@@ -10222,19 +10254,19 @@ msgstr "Könyvtár"
 
 #: src/components/common/GlobalMenu/index.tsx:79
 #: src/components/layouts/Admin/index.tsx:32
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:51
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:136
 msgid "Licence"
 msgstr "Licenc"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:215
+#: src/ee/licensing/components/LicenceModal/index.tsx:257
 msgid "Licence details"
 msgstr "Licenc részletei"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:86
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:174
 msgid "Licence ID"
 msgstr "Licencazonosító"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:79
+#: src/ee/licensing/components/LicenceModal/index.tsx:93
 msgid "Licence key not recognised"
 msgstr "A licenckulcs nem ismerhető fel"
 
@@ -11168,7 +11200,7 @@ msgstr "Új terület"
 msgid "New band"
 msgstr "Új kategória"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:56
+#: src/ee/licensing/components/LicenceModal/index.tsx:63
 msgid "New box office sign-ins are refused, so open box office sessions end within 24 hours."
 msgstr "A rendszer elutasítja az új pénztári bejelentkezéseket, így a megnyitott pénztári munkamenetek 24 órán belül véget érnek."
 
@@ -11526,7 +11558,7 @@ msgstr "Nincs befejezési dátum"
 msgid "No ended events to show."
 msgstr "Nincs megjeleníthető befejezett esemény."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:96
+#: src/ee/licensing/components/LicenceModal/index.tsx:110
 msgid "No Enterprise licence"
 msgstr "Nincs Enterprise licenc"
 
@@ -11586,11 +11618,11 @@ msgstr "Még nincsenek megadva utasítások."
 msgid "No invoice"
 msgstr "Nincs számla"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:34
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:39
 msgid "No licence"
 msgstr "Nincs licenc"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:62
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:147
 msgid "No licence key is set, so reserved seating, the box office and enterprise single sign-on can't be set up. To unlock them, set APP_LICENCE_KEY in the backend environment and redeploy the backend. With Docker Compose, use docker compose up -d, because docker compose restart doesn't reload the environment."
 msgstr "Nincs megadva licenckulcs, ezért a foglalt ülőhelyek, a helyszíni jegypénztár és a vállalati egyszeri bejelentkezés nem állítható be. A feloldásukhoz állítsd be az APP_LICENCE_KEY értékét a backend környezetében, és telepítsd újra a backendet. Docker Compose esetén a docker compose up -d parancsot használd, mert a docker compose restart nem tölti be újra a környezetet."
 
@@ -11796,6 +11828,10 @@ msgstr "Nincs találat"
 msgid "No results found"
 msgstr "Nincs találat"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:91
+msgid "No sales"
+msgstr "Nincs értékesítés"
+
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:29
 msgid "No sales in this period"
 msgstr "Nincs eladás ebben az időszakban"
@@ -12000,6 +12036,18 @@ msgstr "Nem jogosult"
 msgid "Not enough free seats for {0}"
 msgstr "Nincs elég szabad szék ehhez: {0}"
 
+#: src/ee/licensing/licenceNotice.ts:72
+msgid "Not in licence"
+msgstr "Nincs a licencben"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:109
+msgid "Not included"
+msgstr "Nincs benne"
+
+#: src/ee/licensing/components/LicenceModal/index.tsx:130
+msgid "Not included in your licence"
+msgstr "Nem része a licencének"
+
 #: src/components/routes/settings/Team/MemberRow.tsx:166
 msgid "Not joined yet"
 msgstr "Még nem csatlakozott"
@@ -12053,7 +12101,7 @@ msgstr "Nincs tesztelve"
 msgid "Not tested yet"
 msgstr "Még nincs tesztelve"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:120
+#: src/ee/licensing/components/LicenceModal/index.tsx:154
 msgid "Not using reserved seating, the box office or enterprise single sign-on? Remove <0>APP_LICENCE_KEY</0> and redeploy."
 msgstr "Nem használsz foglalt ülőhelyeket, helyszíni jegypénztárat vagy vállalati egyszeri bejelentkezést? Töröld az <0>APP_LICENCE_KEY</0> értéket, és telepítsd újra."
 
@@ -12428,7 +12476,7 @@ msgstr "Online esemény"
 msgid "Online Event Details"
 msgstr "Online esemény részletei"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:54
+#: src/ee/licensing/components/LicenceModal/index.tsx:61
 msgid "Online ticket sales for events with reserved seating keep working."
 msgstr "A foglalt ülőhelyes események online jegyértékesítése továbbra is működik."
 
@@ -13059,6 +13107,10 @@ msgstr "A globális alapértelmezés felülírása ennél a fióknál."
 msgid "Overview"
 msgstr "Áttekintés"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:46
+msgid "Own events"
+msgstr "Saját események"
+
 #: src/components/modals/EditUserModal/index.tsx:66
 #: src/components/routes/settings/Team/MemberRow.tsx:137
 msgid "Owner"
@@ -13121,6 +13173,10 @@ msgstr "Fizetett fiókok"
 #: src/ee/box-office/utilites/boxOfficeTender.ts:13
 msgid "Paid elsewhere"
 msgstr "Máshol fizetve"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:122
+msgid "Paid sales before tax, after refunds, across every organizer on this install. At the end of each licence year, send that year's sales to licence@hi.events."
+msgstr "Fizetett értékesítés adó előtt, visszatérítések után, a telepítés összes szervezőjére. Minden licencév végén küldje el az adott év értékesítését a licence@hi.events címre."
 
 #: src/ee/box-office/components/routes/organizer/Payments/TerminalReaders/index.tsx:68
 msgid "Pair Stripe Terminal readers to take card payments at the box office."
@@ -13613,13 +13669,17 @@ msgstr "Asztalok elhelyezése"
 msgid "Placed"
 msgstr "Leadva"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:85
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:170
 msgid "Plan"
 msgstr "Csomag"
 
 #: src/components/common/PoweredByFooter/index.tsx:67
 msgid "Planning an event?"
 msgstr "Eseményt tervez?"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:48
+msgid "Platform"
+msgstr "Platform"
 
 #: src/components/routes/admin/Dashboard/index.tsx:195
 msgid "Platform commission"
@@ -14240,7 +14300,8 @@ msgstr "Vásárló e-mail-címe"
 msgid "Purchases"
 msgstr "Vásárlások"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:45
+#: src/ee/licensing/components/LicenceModal/index.tsx:52
+#: src/ee/licensing/components/LicenceModal/index.tsx:138
 msgid "Put the new key in <0>APP_LICENCE_KEY</0> and redeploy the backend."
 msgstr "Add meg az új kulcsot az <0>APP_LICENCE_KEY</0> értékeként, és telepítsd újra a backendet."
 
@@ -14510,7 +14571,7 @@ msgstr "Ismétlődő események"
 msgid "Reddit"
 msgstr "Reddit"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:38
+#: src/ee/licensing/components/LicenceModal/index.tsx:45
 msgid "Redeploy the backend. With Docker Compose, run <0>docker compose up -d</0>."
 msgstr "Telepítsd újra a backendet. Docker Compose esetén futtasd: <0>docker compose up -d</0>."
 
@@ -14837,12 +14898,12 @@ msgstr "Widget átnevezése"
 msgid "Render it where the widget should appear"
 msgstr "Renderelje oda, ahol a widgetnek meg kell jelennie"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:133
-#: src/ee/licensing/components/LicenceModal/index.tsx:143
+#: src/ee/licensing/components/LicenceModal/index.tsx:168
+#: src/ee/licensing/components/LicenceModal/index.tsx:184
 msgid "Renew licence"
 msgstr "Licenc megújítása"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:44
+#: src/ee/licensing/components/LicenceModal/index.tsx:51
 msgid "Renew your licence."
 msgstr "Újítsd meg a licencedet."
 
@@ -15005,7 +15066,7 @@ msgstr "foglalt ülőhelyek"
 #: src/components/common/EventCard/index.tsx:329
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:365
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:8
-#: src/ee/licensing/licenceNotice.ts:49
+#: src/ee/licensing/licenceNotice.ts:53
 msgid "Reserved seating"
 msgstr "Helyfoglalás"
 
@@ -15356,6 +15417,10 @@ msgstr "Értékesítés visszatérítések után"
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:149
 msgid "Sales are paused"
 msgstr "Értékesítés szüneteltetve"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:120
+msgid "Sales by licence year"
+msgstr "Értékesítés licencévenként"
 
 #: src/components/common/ProductPriceAvailability/index.tsx:24
 #: src/components/common/ProductPriceAvailability/index.tsx:63
@@ -16466,11 +16531,11 @@ msgstr "Alapértelmezett beállítások megadása az e szervező alatt létrehoz
 msgid "Set how long each date lasts"
 msgstr "Állítsa be, meddig tart egy-egy időpont"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:87
+#: src/ee/licensing/components/LicenceModal/index.tsx:101
 msgid "Set it as <0>APP_LICENCE_KEY</0> and redeploy the backend."
 msgstr "Állítsd be <0>APP_LICENCE_KEY</0> értékként, és telepítsd újra a backendet."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:104
+#: src/ee/licensing/components/LicenceModal/index.tsx:118
 msgid "Set it as <0>APP_LICENCE_KEY</0> in the backend environment."
 msgstr "Állítsd be <0>APP_LICENCE_KEY</0> értékként a backend környezetében."
 
@@ -16580,19 +16645,19 @@ msgstr "Beállítások"
 msgid "Setup & Design"
 msgstr "Beállítás és tervezés"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:97
+#: src/ee/licensing/components/LicenceModal/index.tsx:111
 msgid "Setup for {featureList} is locked because this instance has no Hi.Events Enterprise licence. Anything already set up can still be viewed or removed."
 msgstr "Ennek a példánynak nincs Hi.Events Enterprise licence, ezért a következők beállítása zárolva van: {featureList}. Ami már be van állítva, az továbbra is megtekinthető vagy eltávolítható."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:67
+#: src/ee/licensing/components/LicenceModal/index.tsx:74
 msgid "Setup for {featureList} is locked until you renew. Anything already set up can still be viewed or removed."
 msgstr "A licenc megújításáig a következők beállítása zárolva van: {featureList}. Ami már be van állítva, az továbbra is megtekinthető vagy eltávolítható."
 
-#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:6
+#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:12
 msgid "Setup is locked"
 msgstr "A beállítás zárolva van"
 
-#: src/ee/licensing/licenceNotice.ts:66
+#: src/ee/licensing/licenceNotice.ts:70
 msgid "Setup locked"
 msgstr "Beállítás zárolva"
 
@@ -17029,7 +17094,7 @@ msgstr "Egysoros szövegmező"
 msgid "Single sign-on"
 msgstr "Egyszeri bejelentkezés"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:58
+#: src/ee/licensing/components/LicenceModal/index.tsx:65
 msgid "Single sign-on connections keep signing people in. They can be switched off or deleted, but not changed or switched back on without a licence."
 msgstr "Az egyszeri bejelentkezési kapcsolatokkal továbbra is be lehet jelentkezni. Kikapcsolhatók vagy törölhetők, de licenc nélkül nem módosíthatók, és nem kapcsolhatók be újra."
 
@@ -17600,7 +17665,7 @@ msgstr "Statisztika"
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:88
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:62
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:177
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:79
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:164
 msgid "Status"
 msgstr "Állapot"
 
@@ -17608,7 +17673,7 @@ msgstr "Állapot"
 msgid "Status unknown"
 msgstr "Ismeretlen állapot"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:88
+#: src/ee/licensing/components/LicenceModal/index.tsx:102
 msgid "Still failing? Upgrade Hi.Events, then contact hello@hi.events."
 msgstr "Még mindig nem működik? Frissítsd a Hi.Events-et, majd írj a hello@hi.events címre."
 
@@ -18243,7 +18308,7 @@ msgstr "Ez {totalOccurrences} alkalom — a maximum {max}. Rövidítse az idősz
 msgid "That's a wrap"
 msgstr "Ennyi volt"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:49
+#: src/ee/licensing/components/LicenceModal/index.tsx:56
 msgid "The \"Powered by Hi.Events\" notice is shown again until you renew."
 msgstr "A „Powered by Hi.Events” felirat újra megjelenik, amíg meg nem újítod a licencet."
 
@@ -18366,7 +18431,7 @@ msgstr "A kulcs mindenre képes, amire Ön a(z) {accountName} fiókban, ezért t
 msgid "The language the attendee will receive emails in."
 msgstr "Az a nyelv, amelyen a résztvevő e-maileket kap."
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:56
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:141
 msgid "The licence key was rejected"
 msgstr "A licenckulcsot elutasították"
 
@@ -18852,7 +18917,7 @@ msgstr "Csak ez az esemény"
 msgid "This event's dates and times are set on the occurrence schedule."
 msgstr "Ennek az eseménynek az időpontjait az időpontok ütemtervében állíthatja be."
 
-#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:7
+#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:15
 msgid "This feature needs a Hi.Events Enterprise licence. Until a licence key is added, nothing new can be set up and existing setup can't be changed, but what is already set up can still be viewed, switched off or removed."
 msgstr "Ehhez a funkcióhoz Hi.Events Enterprise licenc szükséges. Amíg nincs megadva licenckulcs, semmi új nem állítható be, és a meglévő beállítások nem módosíthatók, de ami már be van állítva, az továbbra is megtekinthető, kikapcsolható vagy eltávolítható."
 
@@ -18918,7 +18983,7 @@ msgstr "Ezt a kulcsot csak most láthatja"
 msgid "This is usually temporary. Try again in a moment."
 msgstr "Ez általában átmeneti. Próbálja újra egy kis idő múlva."
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:68
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:153
 msgid "This licence expires on {0}. Renew before then to avoid interruption."
 msgstr "Ez a licenc {0} napon lejár. Újítsd meg előtte a megszakítás elkerülése érdekében."
 
@@ -20176,6 +20241,10 @@ msgstr "A szabály összeállítása közben frissül. Lapozza át a hónapokat 
 msgid "Updates as you type."
 msgstr "Gépelés közben frissül."
 
+#: src/ee/licensing/components/LicenceModal/index.tsx:141
+msgid "Upgrade licence"
+msgstr "Licenc bővítése"
+
 #: src/components/routes/organizer/Settings/Sections/ImageAssetSettings/index.tsx:39
 msgid "Upload a cover image for your organizer"
 msgstr "Borítókép feltöltése a szervezőhöz"
@@ -20370,7 +20439,7 @@ msgstr "A honlapdizájn színeit és betűtípusát használja, és frissül, am
 msgid "Uses the colours and font from your homepage design. If you change the design, copy the code again to update the button."
 msgstr "A kezdőlapod dizájnjának színeit és betűtípusát használja. Ha módosítod a dizájnt, másold újra a kódot a gomb frissítéséhez."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:121
+#: src/ee/licensing/components/LicenceModal/index.tsx:155
 msgid "Using them for real events? Get an Enterprise licence and put its key in <0>APP_LICENCE_KEY</0>."
 msgstr "Valódi eseményekhez használod őket? Szerezz be egy Enterprise licencet, és add meg a kulcsát az <0>APP_LICENCE_KEY</0> értékeként."
 
@@ -21164,9 +21233,10 @@ msgstr "Mire számíthatnak a résztvevők?"
 msgid "What time will you be arriving?"
 msgstr "Mikor érkezik?"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:41
-#: src/ee/licensing/components/LicenceModal/index.tsx:83
-#: src/ee/licensing/components/LicenceModal/index.tsx:100
+#: src/ee/licensing/components/LicenceModal/index.tsx:48
+#: src/ee/licensing/components/LicenceModal/index.tsx:97
+#: src/ee/licensing/components/LicenceModal/index.tsx:114
+#: src/ee/licensing/components/LicenceModal/index.tsx:134
 msgid "What to do"
 msgstr "Teendők"
 
@@ -21348,7 +21418,7 @@ msgstr "Melyik jegy ehhez: {0}?"
 msgid "Which tickets should be associated with this check-in list?"
 msgstr "Mely jegyeket kell ehhez a bejelentkezési listához társítani?"
 
-#: src/ee/licensing/licenceNotice.ts:55
+#: src/ee/licensing/licenceNotice.ts:59
 msgid "White-label"
 msgstr "White-label"
 
@@ -21906,9 +21976,13 @@ msgstr "Az eseményednek még nincs leírása."
 msgid "Your event is live!"
 msgstr "Az eseményed élőben van!"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:131
+#: src/ee/licensing/components/LicenceModal/index.tsx:165
 msgid "Your Hi.Events Enterprise licence expired on {expiresAt}. Everything stays on until {graceEndsAt}. Renew before then to avoid interruption."
 msgstr "A Hi.Events Enterprise licenced lejárt ekkor: {expiresAt}. Minden bekapcsolva marad eddig: {graceEndsAt}. Újítsd meg előtte, hogy elkerüld a fennakadást."
+
+#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:14
+msgid "Your Hi.Events licence doesn't include this feature. Until it does, nothing new can be set up and existing setup can't be changed, but what is already set up can still be viewed, switched off or removed."
+msgstr "Az Ön Hi.Events-licence nem tartalmazza ezt a funkciót. Amíg nem tartalmazza, semmi új nem állítható be, és a meglévő beállítások nem módosíthatók, de ami már be van állítva, az továbbra is megtekinthető, kikapcsolható vagy eltávolítható."
 
 #: src/ee/sso/components/SingleSignOn/providers.tsx:22
 msgid "your identity provider"
@@ -21918,8 +21992,12 @@ msgstr "az identitásszolgáltatód"
 msgid "Your identity provider returned an error: {providerError}"
 msgstr "Az identitásszolgáltatója hibát adott vissza: {providerError}"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:130
-#: src/ee/licensing/components/LicenceModal/index.tsx:139
+#: src/ee/licensing/components/LicenceModal/index.tsx:80
+msgid "Your licence doesn't include {notIncludedList}. Nothing new can be set up, but anything already set up can still be viewed or removed."
+msgstr "Az Ön licence nem tartalmazza a következőket: {notIncludedList}. Semmi új nem állítható be, de ami már be van állítva, az továbbra is megtekinthető vagy eltávolítható."
+
+#: src/ee/licensing/components/LicenceModal/index.tsx:164
+#: src/ee/licensing/components/LicenceModal/index.tsx:177
 msgid "Your licence has expired"
 msgstr "A licenced lejárt"
 

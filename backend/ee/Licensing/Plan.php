@@ -6,7 +6,8 @@ namespace HiEvents\Enterprise\Licensing;
 
 enum Plan: string
 {
-    case ENTERPRISE = 'enterprise';
+    case OWN_EVENTS = 'own_events';
+    case PLATFORM = 'platform';
     case CLOUD = 'cloud';
 
     /**
@@ -15,7 +16,16 @@ enum Plan: string
     public function features(): array
     {
         return match ($this) {
-            self::ENTERPRISE, self::CLOUD => [
+            self::OWN_EVENTS => [
+                LicensedFeature::WHITE_LABEL,
+            ],
+            self::PLATFORM => [
+                LicensedFeature::WHITE_LABEL,
+                LicensedFeature::SEATING,
+                LicensedFeature::BOX_OFFICE,
+                LicensedFeature::ENTERPRISE_SSO,
+            ],
+            self::CLOUD => [
                 LicensedFeature::SEATING,
                 LicensedFeature::BOX_OFFICE,
                 LicensedFeature::ENTERPRISE_SSO,

@@ -31221,6 +31221,30 @@
               "invalid_reason": {
                 "type": "string"
               },
+              "features": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "seating",
+                    "box_office",
+                    "enterprise_sso",
+                    "white_label"
+                  ]
+                }
+              },
+              "unlocked_features": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "seating",
+                    "box_office",
+                    "enterprise_sso",
+                    "white_label"
+                  ]
+                }
+              },
               "features_in_use": {
                 "type": "array",
                 "items": {
@@ -31239,6 +31263,8 @@
               "expires_at",
               "grace_ends_at",
               "invalid_reason",
+              "features",
+              "unlocked_features",
               "features_in_use"
             ]
           }

@@ -29,6 +29,8 @@ class PublicEventProductSelectionTest extends TestCase
 
     private int $merch;
 
+    private int $productOrder = 0;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -129,7 +131,10 @@ class PublicEventProductSelectionTest extends TestCase
     private function insertCategorisedProduct(int $categoryId): int
     {
         $productId = $this->insertProduct();
-        DB::table('products')->where('id', $productId)->update(['product_category_id' => $categoryId]);
+        DB::table('products')->where('id', $productId)->update([
+            'product_category_id' => $categoryId,
+            'order' => ++$this->productOrder,
+        ]);
         $this->insertPrice($productId, null);
 
         return $productId;

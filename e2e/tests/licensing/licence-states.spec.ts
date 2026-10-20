@@ -206,6 +206,29 @@ test.describe('licence gating', () => {
     await expect(superAdminPage.getByText('This licence expires on')).toBeVisible();
   });
 
+  test('the admin licence page shows the plan, the sales it covers and sales by licence year', async ({ superAdminPage }) => {
+    await simulateLicence(superAdminPage, 'ACTIVE');
+
+    await superAdminPage.goto('/admin/licence');
+    const card = superAdminPage.getByTestId('admin-licence-card');
+    await expect(card).toContainText('Platform');
+    await expect(card).toContainText('€300,000 of sales a year');
+    await expect(superAdminPage.getByTestId('admin-licence-features').getByText('Included', { exact: true })).toHaveCount(4);
+
+    const sales = superAdminPage.getByTestId('admin-licence-sales');
+    await expect(sales).toContainText('Paid sales before tax, after refunds, across every organizer on this install');
+    await expect(sales.getByText('Current year')).toBeVisible();
+
+    await superAdminPage.context().grantPermissions(['clipboard-read', 'clipboard-write']);
+    await sales.getByRole('button', { name: 'Copy sales report' }).first().click();
+    await expect(sales.getByRole('button', { name: 'Copied' })).toBeVisible();
+    const report = await superAdminPage.evaluate(() => navigator.clipboard.readText());
+    expect(report).toContain('Licence: lic_simulated (Simulated licence)');
+    expect(report).toContain('Plan: platform, covers EUR 300000 a year');
+    expect(report).toMatch(/Licence year: \d{4}-\d{2}-\d{2} to \d{4}-\d{2}-\d{2}/);
+    expect(report).toContain('Paid sales before tax, after refunds: ');
+  });
+
   test('the Powered by notice follows the white-label licence', async ({ page }) => {
     await simulateLicence(page, 'NONE');
     await page.goto('/auth/login');
@@ -245,6 +268,24 @@ test.describe('licence notices', () => {
     await expect(modal.getByRole('link', { name: 'Get a licence' })).toHaveAttribute('href', /hi\.events\/licensing/);
   });
 
+  test('an own-events licence locks a box office it does not include', async ({ freshAccount }) => {
+    const eventId = await createEventWithBoxOffice(freshAccount.api, freshAccount.organizerId);
+    const page = await freshAccount.newAuthedPage();
+    await simulateLicence(page, 'ACTIVE:white_label');
+
+    await page.goto(`/manage/event/${eventId}/box-office`);
+    await expect(page.getByTestId('licence-locked-callout')).toContainText("Your Hi.Events licence doesn't include this feature");
+    await expect(page.getByText('Side door')).toBeVisible();
+    await expect(page.getByTestId('box-office-create-button')).toHaveCount(0);
+    await expect(licenceBadge(page)).toHaveAttribute('data-tone', 'danger');
+
+    const modal = await openLicenceModal(page);
+    await expect(modal).toContainText("Your licence doesn't include box office");
+    await expect(modal).toContainText('New box office sign-ins are refused, so open box office sessions end within 24 hours');
+    await expect(modal).toContainText('Add box office to your licence');
+    await expect(modal.getByRole('link', { name: 'Upgrade licence' })).toHaveAttribute('href', /hi\.events\/licensing/);
+  });
+
   test('a lapsed licence says what keeps working and what stops', async ({ freshAccount }) => {
     await createFixtureSeatMap(freshAccount.api, freshAccount.organizerId, 'theatre', 'Main hall');
     const eventId = await createEventWithBoxOffice(freshAccount.api, freshAccount.organizerId);
@@ -280,9 +321,9 @@ test.describe('licence notices', () => {
     await expectNoLicenceMenuItem(page);
   });
 
-  test('the grace period warns only accounts using enterprise features', async ({ freshAccount }) => {
+  test('without white label, the grace period warns only accounts using enterprise features', async ({ freshAccount }) => {
     const page = await freshAccount.newAuthedPage();
-    await simulateLicence(page, 'GRACE');
+    await simulateLicence(page, 'GRACE:seating,box_office');
 
     await page.goto(`/manage/organizer/${freshAccount.organizerId}/events`);
     await expect(page.getByRole('link', { name: 'Locations' })).toBeVisible();
@@ -296,6 +337,46 @@ test.describe('licence notices', () => {
     const modal = await openLicenceModal(page);
     await expect(modal).toContainText('Everything stays on until');
     await expect(modal.getByRole('link', { name: 'Renew licence' })).toHaveAttribute('href', /hi\.events\/licensing/);
+  });
+
+  test('a paid licence in its grace period warns admins even without enterprise features, because the Powered by notice will return', async ({ freshAccount }) => {
+    const page = await freshAccount.newAuthedPage();
+    await simulateLicence(page, 'GRACE');
+
+    await page.goto(`/manage/organizer/${freshAccount.organizerId}/events`);
+    await expect(licenceBadge(page)).toHaveAttribute('data-tone', 'warning');
+
+    const modal = await openLicenceModal(page);
+    await expect(modal).toContainText('Everything stays on until');
+    await expect(modal.getByText('White-label')).toBeVisible();
+  });
+
+  test('an own-events licence in its grace period warns about the expiry and the box office it does not include', async ({ freshAccount }) => {
+    const eventId = await createEventWithBoxOffice(freshAccount.api, freshAccount.organizerId);
+    const page = await freshAccount.newAuthedPage();
+    await simulateLicence(page, 'GRACE:white_label');
+
+    await page.goto(`/manage/event/${eventId}/box-office`);
+    await expect(licenceBadge(page)).toHaveAttribute('data-tone', 'warning');
+
+    const modal = await openLicenceModal(page);
+    await expect(modal).toContainText('Everything stays on until');
+    await expect(modal).toContainText("Your licence doesn't include box office");
+  });
+
+  test('a lapsed own-events licence does not promise that renewing unlocks a box office it never included', async ({ freshAccount }) => {
+    const eventId = await createEventWithBoxOffice(freshAccount.api, freshAccount.organizerId);
+    const page = await freshAccount.newAuthedPage();
+    await simulateLicence(page, 'LAPSED:white_label');
+
+    await page.goto(`/manage/event/${eventId}/box-office`);
+    await expect(licenceBadge(page)).toHaveAttribute('data-tone', 'danger');
+
+    const modal = await openLicenceModal(page);
+    await expect(modal).toContainText('"Powered by Hi.Events" notice is shown again');
+    await expect(modal).toContainText("Your licence doesn't include box office");
+    await expect(modal).toContainText('New box office sign-ins are refused');
+    await expect(modal).not.toContainText('locked until you renew');
   });
 
   test('an active licence shows no licence notice, even close to expiry', async ({ freshAccount }) => {
