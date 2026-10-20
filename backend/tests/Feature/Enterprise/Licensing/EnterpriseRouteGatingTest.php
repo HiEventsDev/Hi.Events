@@ -22,6 +22,7 @@ class EnterpriseRouteGatingTest extends TestCase
         'GET accounts/{account_id}/sso',
         'GET accounts/{account_id}/sso/enforcement',
         'GET admin/licence',
+        'GET admin/licence/sales',
         'GET events/{event_id}/box-offices',
         'GET events/{event_id}/box-offices/{box_office_id}',
         'GET events/{event_id}/box-offices/{box_office_id}/stats',

@@ -27,6 +27,7 @@ class LicenceResource extends JsonResource
             'issued_at' => $this->licence?->issued_at->toDateString(),
             'expires_at' => $this->licence?->expires_at->toDateString(),
             'grace_ends_at' => $this->grace_ends_at?->toDateString(),
+            'covered_sales' => $this->licence?->covered_sales,
             'invalid_reason' => $this->invalid_reason,
         ];
     }

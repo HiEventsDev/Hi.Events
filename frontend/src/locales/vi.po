@@ -161,6 +161,10 @@ msgstr "Đã kín {0} trong số {1} chỗ."
 msgid "{0} of {1} sold"
 msgstr "đã bán {0}/{1}"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:172
+msgid "{0} of sales a year"
+msgstr "{0} doanh thu mỗi năm"
+
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:166
 msgid "{0} orders"
 msgstr "{0} đơn hàng"
@@ -262,6 +266,10 @@ msgstr "{0} chỗ đứng"
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/OrdersTab.tsx:93
 msgid "{0} tickets"
 msgstr "{0} vé"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:85
+msgid "{0} to {1}"
+msgstr "{0} đến {1}"
 
 #: src/components/routes/settings/Security/SignInMethods.tsx:139
 msgid "{0} was disconnected."
@@ -667,7 +675,7 @@ msgstr "+Thuế/Phí"
 msgid "<0>{accountName}</0> requires two-factor authentication for everyone on the team. Set it up now to continue. It takes about a minute."
 msgstr "<0>{accountName}</0> yêu cầu mọi người trong nhóm phải bật xác thực hai yếu tố. Hãy thiết lập ngay để tiếp tục. Chỉ mất khoảng một phút."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:80
+#: src/ee/licensing/components/LicenceModal/index.tsx:94
 msgid "<0>APP_LICENCE_KEY</0> is set, but the key couldn't be verified, so reserved seating, the box office and enterprise single sign-on can't be set up."
 msgstr "Đã đặt <0>APP_LICENCE_KEY</0> nhưng không thể xác minh khóa, nên không thể thiết lập chỗ ngồi đặt trước, quầy bán vé và đăng nhập một lần doanh nghiệp."
 
@@ -1206,7 +1214,7 @@ msgstr "Ngày kích hoạt"
 #: src/components/routes/organizer/Payments/CapabilityList.tsx:57
 #: src/components/routes/settings/Team/MemberRow.tsx:28
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:187
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:26
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:31
 msgid "Active"
 msgstr "Hoạt động"
 
@@ -1236,6 +1244,10 @@ msgstr "Thêm"
 #: src/components/routes/product-widget/SelectProducts/index.tsx:522
 msgid "Add {0} first"
 msgstr "Hãy thêm {0} trước"
+
+#: src/ee/licensing/components/LicenceModal/index.tsx:137
+msgid "Add {notIncludedList} to your licence."
+msgstr "Thêm {notIncludedList} vào giấy phép của bạn."
 
 #: src/ee/box-office/components/routes/event/BoxOffices/index.tsx:72
 msgid "Add a card reader"
@@ -3056,7 +3068,7 @@ msgstr "Thông tin cơ bản"
 msgid "Before taxes and fees"
 msgstr "Trước thuế và phí"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:117
+#: src/ee/licensing/components/LicenceModal/index.tsx:151
 msgid "Before you go live"
 msgstr "Trước khi chạy thật"
 
@@ -3153,7 +3165,7 @@ msgstr "quầy bán vé"
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:13
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:157
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:106
-#: src/ee/licensing/licenceNotice.ts:51
+#: src/ee/licensing/licenceNotice.ts:55
 msgid "Box office"
 msgstr "Quầy vé"
 
@@ -3821,7 +3833,7 @@ msgstr "Check-in ngay"
 msgid "Check in only"
 msgstr "Chỉ check-in"
 
-#: src/ee/licensing/licenceNotice.ts:64
+#: src/ee/licensing/licenceNotice.ts:68
 msgid "Check key"
 msgstr "Kiểm tra khóa"
 
@@ -5031,6 +5043,10 @@ msgstr "Sao chép PIN"
 msgid "Copy redirect URI"
 msgstr "Sao chép URI chuyển hướng"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:94
+msgid "Copy sales report"
+msgstr "Sao chép báo cáo doanh thu"
+
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:194
 msgid "Copy setup key"
 msgstr "Sao chép khóa thiết lập"
@@ -5056,7 +5072,7 @@ msgstr "Sao chép ID thư mục (tenant), ID ứng dụng (client) và giá tr�
 msgid "Copy the issuer URL, the client ID and the client secret into the fields below."
 msgstr "Sao chép URL nhà phát hành, ID ứng dụng khách và khóa bí mật của ứng dụng khách vào các trường bên dưới."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:86
+#: src/ee/licensing/components/LicenceModal/index.tsx:100
 msgid "Copy the key again from your licence email, without quotes or spaces."
 msgstr "Sao chép lại khóa từ email giấy phép, không kèm dấu ngoặc kép hoặc khoảng trắng."
 
@@ -5244,6 +5260,10 @@ msgstr "Ảnh bìa sẽ được hiển thị ở đầu trang sự kiện của
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:164
 msgid "Cover image will be displayed at the top of your organizer page"
 msgstr "Ảnh bìa sẽ hiển thị ở đầu trang của nhà tổ chức"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:172
+msgid "Covers"
+msgstr "Phạm vi"
 
 #: src/components/common/CheckInListTable/index.tsx:92
 msgid "Covers every ticket"
@@ -5567,6 +5587,10 @@ msgstr "Tiền tệ"
 msgid "Current password"
 msgstr "Mật khẩu hiện tại"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:86
+msgid "Current year"
+msgstr "Năm hiện tại"
+
 #: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:111
 msgid "Currently assigned"
 msgstr "Đang được gán"
@@ -5627,7 +5651,7 @@ msgstr "Mẫu tùy chỉnh"
 
 #: src/components/common/AdminOrdersTable/index.tsx:71
 #: src/components/common/OrdersTable/index.tsx:116
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:84
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:169
 msgid "Customer"
 msgstr "Khách hàng"
 
@@ -6236,12 +6260,12 @@ msgstr "Máy tính"
 msgid "Details"
 msgstr "Chi tiết"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:32
-#: src/ee/licensing/licenceNotice.ts:68
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:37
+#: src/ee/licensing/licenceNotice.ts:74
 msgid "Development"
 msgstr "Phát triển"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:114
+#: src/ee/licensing/components/LicenceModal/index.tsx:148
 msgid "Development licence"
 msgstr "Giấy phép phát triển"
 
@@ -7367,7 +7391,7 @@ msgid "enterprise single sign-on"
 msgstr "đăng nhập một lần doanh nghiệp"
 
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:18
-#: src/ee/licensing/licenceNotice.ts:53
+#: src/ee/licensing/licenceNotice.ts:57
 msgid "Enterprise single sign-on"
 msgstr "Đăng nhập một lần doanh nghiệp"
 
@@ -7819,8 +7843,8 @@ msgstr "Ngày hết hạn"
 #: src/components/common/WaitlistTable/index.tsx:30
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:119
 #: src/components/routes/settings/ApiKeys/index.tsx:210
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:30
-#: src/ee/licensing/licenceNotice.ts:72
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:35
+#: src/ee/licensing/licenceNotice.ts:78
 msgid "Expired"
 msgstr "Đã hết hạn"
 
@@ -7832,7 +7856,7 @@ msgstr "Đã hết hạn {0}"
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:33
 #: src/components/routes/settings/ApiKeys/index.tsx:176
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:88
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:176
 msgid "Expires"
 msgstr "Hết hạn"
 
@@ -8282,7 +8306,7 @@ msgstr "Cờ tính năng"
 msgid "Featured"
 msgstr "Nổi bật"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:91
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:103
 msgid "Features"
 msgstr "Tính năng"
 
@@ -8791,12 +8815,12 @@ msgid "German"
 msgstr "Tiếng Đức"
 
 #: src/ee/licensing/components/GetLicenceLink/index.tsx:11
-#: src/ee/licensing/components/LicenceModal/index.tsx:108
-#: src/ee/licensing/components/LicenceModal/index.tsx:124
+#: src/ee/licensing/components/LicenceModal/index.tsx:122
+#: src/ee/licensing/components/LicenceModal/index.tsx:158
 msgid "Get a licence"
 msgstr "Nhận giấy phép"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:103
+#: src/ee/licensing/components/LicenceModal/index.tsx:117
 msgid "Get an Enterprise licence key."
 msgstr "Nhận khóa giấy phép Enterprise."
 
@@ -8922,12 +8946,12 @@ msgstr "Lịch Google"
 msgid "Got it"
 msgstr "Đã hiểu"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:28
-#: src/ee/licensing/licenceNotice.ts:70
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:33
+#: src/ee/licensing/licenceNotice.ts:76
 msgid "Grace period"
 msgstr "Thời gian gia hạn"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:89
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:177
 msgid "Grace period ends"
 msgstr "Kết thúc thời gian gia hạn"
 
@@ -9079,6 +9103,10 @@ msgstr "Chào {0} 👋"
 #: src/components/routes/event/OccurrencesTab/rescheduleMessageTemplate.ts:74
 msgid "Hi,"
 msgstr "Xin chào,"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:50
+msgid "Hi.Events Cloud"
+msgstr "Hi.Events Cloud"
 
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:75
 msgid "Hi.Events Fee"
@@ -9543,7 +9571,7 @@ msgstr "Trong Microsoft Entra admin center, vào \"App registrations\" và chọ
 msgid "In the Okta Admin Console, go to Applications and choose Create App Integration."
 msgstr "Trong Okta Admin Console, vào \"Applications\" và chọn \"Create App Integration\"."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:188
+#: src/ee/licensing/components/LicenceModal/index.tsx:230
 msgid "In use"
 msgstr "Đang dùng"
 
@@ -9592,6 +9620,10 @@ msgstr "Bao gồm thông tin kết nối cho sự kiện trực tuyến của b�
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:55
 msgid "Include tax and fees in the price"
 msgstr "Bao gồm thuế và phí trong giá"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:108
+msgid "Included"
+msgstr "Đã bao gồm"
 
 #: src/components/common/CheckInListList/index.tsx:102
 #: src/components/common/CheckInListTable/index.tsx:95
@@ -9744,7 +9776,7 @@ msgstr "Đánh số hóa đơn"
 msgid "Invoice Settings"
 msgstr "Cài đặt hóa đơn"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:87
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:175
 msgid "Issued"
 msgstr "Ngày cấp"
 
@@ -10222,19 +10254,19 @@ msgstr "Thư viện"
 
 #: src/components/common/GlobalMenu/index.tsx:79
 #: src/components/layouts/Admin/index.tsx:32
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:51
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:136
 msgid "Licence"
 msgstr "Giấy phép"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:215
+#: src/ee/licensing/components/LicenceModal/index.tsx:257
 msgid "Licence details"
 msgstr "Chi tiết giấy phép"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:86
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:174
 msgid "Licence ID"
 msgstr "Mã giấy phép"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:79
+#: src/ee/licensing/components/LicenceModal/index.tsx:93
 msgid "Licence key not recognised"
 msgstr "Không nhận dạng được khóa giấy phép"
 
@@ -11168,7 +11200,7 @@ msgstr "Khu vực mới"
 msgid "New band"
 msgstr "Hạng giá mới"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:56
+#: src/ee/licensing/components/LicenceModal/index.tsx:63
 msgid "New box office sign-ins are refused, so open box office sessions end within 24 hours."
 msgstr "Các lượt đăng nhập quầy vé mới sẽ bị từ chối, nên các phiên quầy vé đang mở sẽ kết thúc trong vòng 24 giờ."
 
@@ -11526,7 +11558,7 @@ msgstr "Không có ngày kết thúc"
 msgid "No ended events to show."
 msgstr "Không có sự kiện đã kết thúc để hiển thị."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:96
+#: src/ee/licensing/components/LicenceModal/index.tsx:110
 msgid "No Enterprise licence"
 msgstr "Không có giấy phép Enterprise"
 
@@ -11586,11 +11618,11 @@ msgstr "Chưa có hướng dẫn nào được thêm."
 msgid "No invoice"
 msgstr "Không có hóa đơn"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:34
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:39
 msgid "No licence"
 msgstr "Không có giấy phép"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:62
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:147
 msgid "No licence key is set, so reserved seating, the box office and enterprise single sign-on can't be set up. To unlock them, set APP_LICENCE_KEY in the backend environment and redeploy the backend. With Docker Compose, use docker compose up -d, because docker compose restart doesn't reload the environment."
 msgstr "Chưa đặt khóa giấy phép nên không thể thiết lập chỗ ngồi đặt trước, quầy bán vé và đăng nhập một lần doanh nghiệp. Để mở khóa, hãy đặt APP_LICENCE_KEY trong môi trường backend và triển khai lại backend. Với Docker Compose, hãy dùng docker compose up -d, vì docker compose restart không tải lại môi trường."
 
@@ -11796,6 +11828,10 @@ msgstr "Không có kết quả"
 msgid "No results found"
 msgstr "Không tìm thấy kết quả"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:91
+msgid "No sales"
+msgstr "Chưa có doanh thu"
+
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:29
 msgid "No sales in this period"
 msgstr "Không có giao dịch trong khoảng thời gian này"
@@ -12000,6 +12036,18 @@ msgstr "Không Đủ Điều Kiện"
 msgid "Not enough free seats for {0}"
 msgstr "Không đủ ghế trống cho {0}"
 
+#: src/ee/licensing/licenceNotice.ts:72
+msgid "Not in licence"
+msgstr "Ngoài giấy phép"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:109
+msgid "Not included"
+msgstr "Không bao gồm"
+
+#: src/ee/licensing/components/LicenceModal/index.tsx:130
+msgid "Not included in your licence"
+msgstr "Không có trong giấy phép của bạn"
+
 #: src/components/routes/settings/Team/MemberRow.tsx:166
 msgid "Not joined yet"
 msgstr "Chưa tham gia"
@@ -12053,7 +12101,7 @@ msgstr "Chưa thử"
 msgid "Not tested yet"
 msgstr "Chưa thử nghiệm"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:120
+#: src/ee/licensing/components/LicenceModal/index.tsx:154
 msgid "Not using reserved seating, the box office or enterprise single sign-on? Remove <0>APP_LICENCE_KEY</0> and redeploy."
 msgstr "Không dùng chỗ ngồi đặt trước, quầy bán vé hoặc đăng nhập một lần doanh nghiệp? Hãy xóa <0>APP_LICENCE_KEY</0> và triển khai lại."
 
@@ -12428,7 +12476,7 @@ msgstr "Sự kiện trực tuyến"
 msgid "Online Event Details"
 msgstr "Chi tiết sự kiện trực tuyến"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:54
+#: src/ee/licensing/components/LicenceModal/index.tsx:61
 msgid "Online ticket sales for events with reserved seating keep working."
 msgstr "Việc bán vé trực tuyến cho các sự kiện có chỗ ngồi đặt trước vẫn tiếp tục hoạt động."
 
@@ -13059,6 +13107,10 @@ msgstr "Ghi đè mặc định chung cho tài khoản này."
 msgid "Overview"
 msgstr "Tổng quan"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:46
+msgid "Own events"
+msgstr "Sự kiện của riêng bạn"
+
 #: src/components/modals/EditUserModal/index.tsx:66
 #: src/components/routes/settings/Team/MemberRow.tsx:137
 msgid "Owner"
@@ -13121,6 +13173,10 @@ msgstr "Tài khoản trả phí"
 #: src/ee/box-office/utilites/boxOfficeTender.ts:13
 msgid "Paid elsewhere"
 msgstr "Đã trả ở nơi khác"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:122
+msgid "Paid sales before tax, after refunds, across every organizer on this install. At the end of each licence year, send that year's sales to licence@hi.events."
+msgstr "Doanh thu đã thanh toán trước thuế, sau hoàn tiền, của mọi nhà tổ chức trên bản cài đặt này. Vào cuối mỗi năm giấy phép, hãy gửi doanh thu của năm đó đến licence@hi.events."
 
 #: src/ee/box-office/components/routes/organizer/Payments/TerminalReaders/index.tsx:68
 msgid "Pair Stripe Terminal readers to take card payments at the box office."
@@ -13613,13 +13669,17 @@ msgstr "Đặt bàn"
 msgid "Placed"
 msgstr "Đã đặt"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:85
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:170
 msgid "Plan"
 msgstr "Gói"
 
 #: src/components/common/PoweredByFooter/index.tsx:67
 msgid "Planning an event?"
 msgstr "Đang lên kế hoạch cho một sự kiện?"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:48
+msgid "Platform"
+msgstr "Nền tảng"
 
 #: src/components/routes/admin/Dashboard/index.tsx:195
 msgid "Platform commission"
@@ -14240,7 +14300,8 @@ msgstr "Email người mua"
 msgid "Purchases"
 msgstr "Lượt mua"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:45
+#: src/ee/licensing/components/LicenceModal/index.tsx:52
+#: src/ee/licensing/components/LicenceModal/index.tsx:138
 msgid "Put the new key in <0>APP_LICENCE_KEY</0> and redeploy the backend."
 msgstr "Đặt khóa mới vào <0>APP_LICENCE_KEY</0> và triển khai lại backend."
 
@@ -14510,7 +14571,7 @@ msgstr "Sự kiện định kỳ"
 msgid "Reddit"
 msgstr "Reddit"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:38
+#: src/ee/licensing/components/LicenceModal/index.tsx:45
 msgid "Redeploy the backend. With Docker Compose, run <0>docker compose up -d</0>."
 msgstr "Triển khai lại backend. Với Docker Compose, hãy chạy <0>docker compose up -d</0>."
 
@@ -14837,12 +14898,12 @@ msgstr "Đổi tên widget"
 msgid "Render it where the widget should appear"
 msgstr "Hiển thị nó ở vị trí bạn muốn widget xuất hiện"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:133
-#: src/ee/licensing/components/LicenceModal/index.tsx:143
+#: src/ee/licensing/components/LicenceModal/index.tsx:168
+#: src/ee/licensing/components/LicenceModal/index.tsx:184
 msgid "Renew licence"
 msgstr "Gia hạn giấy phép"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:44
+#: src/ee/licensing/components/LicenceModal/index.tsx:51
 msgid "Renew your licence."
 msgstr "Gia hạn giấy phép của bạn."
 
@@ -15005,7 +15066,7 @@ msgstr "chỗ ngồi đặt trước"
 #: src/components/common/EventCard/index.tsx:329
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:365
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:8
-#: src/ee/licensing/licenceNotice.ts:49
+#: src/ee/licensing/licenceNotice.ts:53
 msgid "Reserved seating"
 msgstr "Chỗ ngồi đặt trước"
 
@@ -15356,6 +15417,10 @@ msgstr "Doanh thu sau hoàn tiền"
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:149
 msgid "Sales are paused"
 msgstr "Bán hàng đang tạm dừng"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:120
+msgid "Sales by licence year"
+msgstr "Doanh thu theo năm giấy phép"
 
 #: src/components/common/ProductPriceAvailability/index.tsx:24
 #: src/components/common/ProductPriceAvailability/index.tsx:63
@@ -16466,11 +16531,11 @@ msgstr "Đặt cài đặt mặc định cho các sự kiện mới được t�
 msgid "Set how long each date lasts"
 msgstr "Đặt thời lượng của mỗi ngày"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:87
+#: src/ee/licensing/components/LicenceModal/index.tsx:101
 msgid "Set it as <0>APP_LICENCE_KEY</0> and redeploy the backend."
 msgstr "Đặt khóa đó làm <0>APP_LICENCE_KEY</0> và triển khai lại backend."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:104
+#: src/ee/licensing/components/LicenceModal/index.tsx:118
 msgid "Set it as <0>APP_LICENCE_KEY</0> in the backend environment."
 msgstr "Đặt khóa đó làm <0>APP_LICENCE_KEY</0> trong môi trường backend."
 
@@ -16580,19 +16645,19 @@ msgstr "Cài đặt"
 msgid "Setup & Design"
 msgstr "Thiết lập & thiết kế"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:97
+#: src/ee/licensing/components/LicenceModal/index.tsx:111
 msgid "Setup for {featureList} is locked because this instance has no Hi.Events Enterprise licence. Anything already set up can still be viewed or removed."
 msgstr "Việc thiết lập {featureList} bị khóa vì bản cài đặt này không có giấy phép Hi.Events Enterprise. Những gì đã thiết lập vẫn có thể xem hoặc xóa."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:67
+#: src/ee/licensing/components/LicenceModal/index.tsx:74
 msgid "Setup for {featureList} is locked until you renew. Anything already set up can still be viewed or removed."
 msgstr "Việc thiết lập {featureList} bị khóa cho đến khi bạn gia hạn. Những gì đã thiết lập vẫn có thể xem hoặc xóa."
 
-#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:6
+#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:12
 msgid "Setup is locked"
 msgstr "Thiết lập bị khóa"
 
-#: src/ee/licensing/licenceNotice.ts:66
+#: src/ee/licensing/licenceNotice.ts:70
 msgid "Setup locked"
 msgstr "Thiết lập bị khóa"
 
@@ -17029,7 +17094,7 @@ msgstr "Hộp văn bản dòng đơn"
 msgid "Single sign-on"
 msgstr "Đăng nhập một lần"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:58
+#: src/ee/licensing/components/LicenceModal/index.tsx:65
 msgid "Single sign-on connections keep signing people in. They can be switched off or deleted, but not changed or switched back on without a licence."
 msgstr "Các kết nối đăng nhập một lần vẫn tiếp tục cho phép mọi người đăng nhập. Có thể tắt hoặc xóa các kết nối này, nhưng không thể thay đổi hoặc bật lại nếu không có giấy phép."
 
@@ -17600,7 +17665,7 @@ msgstr "Thống kê"
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:88
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:62
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:177
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:79
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:164
 msgid "Status"
 msgstr "Trạng thái"
 
@@ -17608,7 +17673,7 @@ msgstr "Trạng thái"
 msgid "Status unknown"
 msgstr "Không rõ trạng thái"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:88
+#: src/ee/licensing/components/LicenceModal/index.tsx:102
 msgid "Still failing? Upgrade Hi.Events, then contact hello@hi.events."
 msgstr "Vẫn không được? Hãy nâng cấp Hi.Events, rồi liên hệ hello@hi.events."
 
@@ -18243,7 +18308,7 @@ msgstr "Đó là {totalOccurrences} buổi — tối đa là {max}. Hãy rút ng
 msgid "That's a wrap"
 msgstr "Vậy là xong"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:49
+#: src/ee/licensing/components/LicenceModal/index.tsx:56
 msgid "The \"Powered by Hi.Events\" notice is shown again until you renew."
 msgstr "Thông báo “Powered by Hi.Events” sẽ hiển thị lại cho đến khi bạn gia hạn."
 
@@ -18366,7 +18431,7 @@ msgstr "Khóa có thể làm mọi việc bạn làm được trong {accountName
 msgid "The language the attendee will receive emails in."
 msgstr "Ngôn ngữ mà người tham dự sẽ nhận email."
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:56
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:141
 msgid "The licence key was rejected"
 msgstr "Khóa giấy phép bị từ chối"
 
@@ -18852,7 +18917,7 @@ msgstr "Chỉ sự kiện này"
 msgid "This event's dates and times are set on the occurrence schedule."
 msgstr "Ngày và giờ của sự kiện này được đặt trong lịch các ngày."
 
-#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:7
+#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:15
 msgid "This feature needs a Hi.Events Enterprise licence. Until a licence key is added, nothing new can be set up and existing setup can't be changed, but what is already set up can still be viewed, switched off or removed."
 msgstr "Tính năng này cần giấy phép Hi.Events Enterprise. Cho đến khi thêm khóa giấy phép, không thể thiết lập thêm gì mới và không thể thay đổi thiết lập hiện có, nhưng những gì đã thiết lập vẫn có thể xem, tắt hoặc xóa."
 
@@ -18918,7 +18983,7 @@ msgstr "Đây là lần duy nhất bạn thấy khóa này"
 msgid "This is usually temporary. Try again in a moment."
 msgstr "Đây thường chỉ là sự cố tạm thời. Hãy thử lại sau giây lát."
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:68
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:153
 msgid "This licence expires on {0}. Renew before then to avoid interruption."
 msgstr "Giấy phép này hết hạn vào {0}. Hãy gia hạn trước ngày đó để tránh gián đoạn."
 
@@ -20176,6 +20241,10 @@ msgstr "Cập nhật khi bạn tạo quy tắc. Lật qua các tháng để ki�
 msgid "Updates as you type."
 msgstr "Cập nhật khi bạn nhập."
 
+#: src/ee/licensing/components/LicenceModal/index.tsx:141
+msgid "Upgrade licence"
+msgstr "Nâng cấp giấy phép"
+
 #: src/components/routes/organizer/Settings/Sections/ImageAssetSettings/index.tsx:39
 msgid "Upload a cover image for your organizer"
 msgstr "Tải lên ảnh bìa cho nhà tổ chức của bạn"
@@ -20370,7 +20439,7 @@ msgstr "Sử dụng màu sắc và phông chữ từ thiết kế trang chủ c�
 msgid "Uses the colours and font from your homepage design. If you change the design, copy the code again to update the button."
 msgstr "Dùng màu và phông chữ từ thiết kế trang chủ của bạn. Nếu bạn đổi thiết kế, hãy sao chép lại mã để cập nhật nút."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:121
+#: src/ee/licensing/components/LicenceModal/index.tsx:155
 msgid "Using them for real events? Get an Enterprise licence and put its key in <0>APP_LICENCE_KEY</0>."
 msgstr "Dùng chúng cho sự kiện thật? Hãy lấy giấy phép Enterprise và đặt khóa của nó vào <0>APP_LICENCE_KEY</0>."
 
@@ -21164,9 +21233,10 @@ msgstr "Mọi người có thể mong đợi điều gì?"
 msgid "What time will you be arriving?"
 msgstr "Bạn sẽ đến lúc mấy giờ?"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:41
-#: src/ee/licensing/components/LicenceModal/index.tsx:83
-#: src/ee/licensing/components/LicenceModal/index.tsx:100
+#: src/ee/licensing/components/LicenceModal/index.tsx:48
+#: src/ee/licensing/components/LicenceModal/index.tsx:97
+#: src/ee/licensing/components/LicenceModal/index.tsx:114
+#: src/ee/licensing/components/LicenceModal/index.tsx:134
 msgid "What to do"
 msgstr "Việc cần làm"
 
@@ -21348,7 +21418,7 @@ msgstr "Vé nào cho {0}?"
 msgid "Which tickets should be associated with this check-in list?"
 msgstr "Những vé nào nên được liên kết với danh sách người tham dự này?"
 
-#: src/ee/licensing/licenceNotice.ts:55
+#: src/ee/licensing/licenceNotice.ts:59
 msgid "White-label"
 msgstr "White-label"
 
@@ -21906,9 +21976,13 @@ msgstr "Sự kiện của bạn chưa có mô tả."
 msgid "Your event is live!"
 msgstr "Sự kiện của bạn đã hoạt động!"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:131
+#: src/ee/licensing/components/LicenceModal/index.tsx:165
 msgid "Your Hi.Events Enterprise licence expired on {expiresAt}. Everything stays on until {graceEndsAt}. Renew before then to avoid interruption."
 msgstr "Giấy phép Hi.Events Enterprise của bạn đã hết hạn vào {expiresAt}. Mọi thứ vẫn hoạt động đến {graceEndsAt}. Hãy gia hạn trước thời điểm đó để tránh gián đoạn."
+
+#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:14
+msgid "Your Hi.Events licence doesn't include this feature. Until it does, nothing new can be set up and existing setup can't be changed, but what is already set up can still be viewed, switched off or removed."
+msgstr "Giấy phép Hi.Events của bạn không bao gồm tính năng này. Cho đến khi được bao gồm, không thể thiết lập thêm gì mới và không thể thay đổi thiết lập hiện có, nhưng những gì đã thiết lập vẫn có thể xem, tắt hoặc xóa."
 
 #: src/ee/sso/components/SingleSignOn/providers.tsx:22
 msgid "your identity provider"
@@ -21918,8 +21992,12 @@ msgstr "nhà cung cấp danh tính của bạn"
 msgid "Your identity provider returned an error: {providerError}"
 msgstr "Nhà cung cấp danh tính của bạn trả về lỗi: {providerError}"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:130
-#: src/ee/licensing/components/LicenceModal/index.tsx:139
+#: src/ee/licensing/components/LicenceModal/index.tsx:80
+msgid "Your licence doesn't include {notIncludedList}. Nothing new can be set up, but anything already set up can still be viewed or removed."
+msgstr "Giấy phép của bạn không bao gồm {notIncludedList}. Không thể thiết lập thêm gì mới, nhưng những gì đã thiết lập vẫn có thể xem hoặc xóa."
+
+#: src/ee/licensing/components/LicenceModal/index.tsx:164
+#: src/ee/licensing/components/LicenceModal/index.tsx:177
 msgid "Your licence has expired"
 msgstr "Giấy phép của bạn đã hết hạn"
 

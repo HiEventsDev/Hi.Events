@@ -5,7 +5,14 @@ import {Link} from "react-router";
 import {type Icon, IconClock, IconCode, IconExternalLink, IconKey, IconLock} from "@tabler/icons-react";
 import {LicensedFeature, LicenceSummary} from "../../../../types.ts";
 import {formatDateWithLocale} from "../../../../utilites/dates.ts";
-import {LICENCE_TONE_COLORS, LicenceNotice, LicenceNoticeKind, licensedFeatureLabel, licensedFeatureList} from "../../licenceNotice.ts";
+import {
+    featuresNotIncluded,
+    LICENCE_TONE_COLORS,
+    LicenceNotice,
+    LicenceNoticeKind,
+    licensedFeatureLabel,
+    licensedFeatureList,
+} from "../../licenceNotice.ts";
 import {licensingUrl} from "../../licensingUrl.ts";
 import {DevelopmentLicenceSummary} from "../DevelopmentLicenceSummary";
 import classes from "./LicenceModal.module.scss";
@@ -67,8 +74,15 @@ const lapsedBody = (featureList: string | null): string => featureList
     ? t`Setup for ${featureList} is locked until you renew. Anything already set up can still be viewed or removed.`
     : whiteLabelLapsedNotice();
 
+const notIncludedBody = (notIncluded: LicensedFeature[]): string => {
+    const notIncludedList = licensedFeatureList(notIncluded);
+
+    return t`Your licence doesn't include ${notIncludedList}. Nothing new can be set up, but anything already set up can still be viewed or removed.`;
+};
+
 const contentFor = (kind: LicenceNoticeKind, licence: LicenceSummary): LicenceModalContent => {
     const featureList = licensedFeatureList(licence.features_in_use);
+    const notIncluded = featuresNotIncluded(licence);
     const expiresAt = formatDate(licence.expires_at);
     const graceEndsAt = formatDate(licence.grace_ends_at);
 
@@ -108,6 +122,26 @@ const contentFor = (kind: LicenceNoticeKind, licence: LicenceSummary): LicenceMo
                 cta: {label: t`Get a licence`, isPrimary: true},
                 showFeaturesInUse: false,
             };
+        case 'not_included': {
+            const notIncludedList = licensedFeatureList(notIncluded);
+
+            return {
+                icon: IconLock,
+                title: t`Not included in your licence`,
+                body: notIncludedBody(notIncluded),
+                effects: unlicensedEffects(notIncluded),
+                nextSteps: {
+                    title: t`What to do`,
+                    ordered: true,
+                    items: [
+                        t`Add ${notIncludedList} to your licence.`,
+                        <Trans>Put the new key in <Code>APP_LICENCE_KEY</Code> and redeploy the backend.</Trans>,
+                    ],
+                },
+                cta: {label: t`Upgrade licence`, isPrimary: true},
+                showFeaturesInUse: false,
+            };
+        }
         case 'dev':
             return {
                 icon: IconCode,
@@ -129,20 +163,28 @@ const contentFor = (kind: LicenceNoticeKind, licence: LicenceSummary): LicenceMo
                 icon: IconClock,
                 title: t`Your licence has expired`,
                 body: t`Your Hi.Events Enterprise licence expired on ${expiresAt}. Everything stays on until ${graceEndsAt}. Renew before then to avoid interruption.`,
+                effects: notIncluded.length > 0 ? [notIncludedBody(notIncluded)] : undefined,
                 nextSteps: renewSteps(),
                 cta: {label: t`Renew licence`, isPrimary: true},
                 showFeaturesInUse: true,
             };
-        case 'lapsed':
+        case 'lapsed': {
+            const renewableList = licensedFeatureList(licence.features_in_use.filter(feature => licence.features?.includes(feature)));
+            const bodyExplainsWhiteLabel = renewableList === null;
+
             return {
                 icon: IconLock,
                 title: t`Your licence has expired`,
-                body: lapsedBody(featureList),
-                effects: featureList ? unlicensedEffects(licence.features_in_use) : [],
+                body: lapsedBody(renewableList),
+                effects: [
+                    ...(notIncluded.length > 0 ? [notIncludedBody(notIncluded)] : []),
+                    ...unlicensedEffects(licence.features_in_use.filter(feature => !(bodyExplainsWhiteLabel && feature === 'white_label'))),
+                ],
                 nextSteps: renewSteps(),
                 cta: {label: t`Renew licence`, isPrimary: true},
                 showFeaturesInUse: false,
             };
+        }
     }
 };
 

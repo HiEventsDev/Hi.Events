@@ -98,7 +98,37 @@ class LicenceServiceTest extends TestCase
         $this->assertSame(LicenceStatus::ACTIVE, $service->status());
         $this->assertTrue($service->allows(LicensedFeature::SEATING));
         $this->assertTrue($service->allows(LicensedFeature::BOX_OFFICE));
-        $this->assertFalse($service->allows(LicensedFeature::WHITE_LABEL));
+        $this->assertTrue($service->allows(LicensedFeature::ENTERPRISE_SSO));
+        $this->assertTrue($service->allows(LicensedFeature::WHITE_LABEL));
+    }
+
+    public function test_an_own_events_licence_only_removes_the_powered_by_notice(): void
+    {
+        CarbonImmutable::setTestNow('2027-01-01');
+        $service = $this->service($this->issue(plan: 'own_events'));
+
+        $this->assertSame([LicensedFeature::WHITE_LABEL], $service->unlockedFeatures());
+        $this->assertFalse($service->allows(LicensedFeature::SEATING));
+        $this->assertFalse($service->allows(LicensedFeature::BOX_OFFICE));
+        $this->assertFalse($service->allows(LicensedFeature::ENTERPRISE_SSO));
+    }
+
+    public function test_the_own_events_add_on_unlocks_seating_box_office_and_sso(): void
+    {
+        CarbonImmutable::setTestNow('2027-01-01');
+        $service = $this->service($this->issue(['seating', 'box_office', 'enterprise_sso'], plan: 'own_events'));
+
+        $this->assertSame(
+            [LicensedFeature::WHITE_LABEL, LicensedFeature::SEATING, LicensedFeature::BOX_OFFICE, LicensedFeature::ENTERPRISE_SSO],
+            $service->unlockedFeatures(),
+        );
+    }
+
+    public function test_a_lapsed_licence_unlocks_nothing(): void
+    {
+        CarbonImmutable::setTestNow('2030-01-01');
+
+        $this->assertSame([], $this->service($this->issue())->unlockedFeatures());
     }
 
     public function test_a_key_in_its_grace_period_still_unlocks_its_features(): void
@@ -126,13 +156,6 @@ class LicenceServiceTest extends TestCase
         CarbonImmutable::setTestNow('2030-01-01');
 
         $this->assertSame(LicenceStatus::LAPSED, $this->service($this->issue(), env: 'local')->status());
-    }
-
-    public function test_add_ons_unlock_white_label(): void
-    {
-        CarbonImmutable::setTestNow('2027-01-01');
-
-        $this->assertTrue($this->service($this->issue(['white_label']))->allows(LicensedFeature::WHITE_LABEL));
     }
 
     public function test_an_invalid_key_behaves_like_no_key_and_reports_the_reason_once(): void
@@ -194,6 +217,12 @@ class LicenceServiceTest extends TestCase
         $this->assertFalse($service->allows(LicensedFeature::SEATING));
     }
 
+    public function test_a_simulated_self_hosted_licence_covers_sales_and_a_simulated_cloud_licence_does_not(): void
+    {
+        $this->assertSame(300000, $this->simulated('ACTIVE')->state()->licence->covered_sales);
+        $this->assertNull($this->simulated('CLOUD')->state()->licence->covered_sales);
+    }
+
     public function test_an_unknown_simulated_state_falls_back_to_the_real_one(): void
     {
         $this->assertSame(LicenceStatus::DEV, $this->simulated('BOGUS')->status());
@@ -230,7 +259,7 @@ class LicenceServiceTest extends TestCase
         return new Repository(['licence' => ['key' => $key, 'simulation' => $simulation], 'app' => ['env' => $env]]);
     }
 
-    private function issue(array $addOns = [], string $plan = 'enterprise'): string
+    private function issue(array $addOns = [], string $plan = 'platform'): string
     {
         return $this->codec->encode([
             'kid' => 'test-a',

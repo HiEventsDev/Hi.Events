@@ -137,6 +137,8 @@ class LicenceKeyCodec
             $features[$feature->value] = $feature;
         }
 
+        $coveredSales = $payload['covered_sales'] ?? null;
+
         return new LicencePayloadDTO(
             lid: $payload['lid'],
             customer: $payload['customer'],
@@ -144,6 +146,7 @@ class LicenceKeyCodec
             features: array_values($features),
             issued_at: $issuedAt,
             expires_at: $expiresAt,
+            covered_sales: is_int($coveredSales) && $coveredSales > 0 ? $coveredSales : null,
         );
     }
 

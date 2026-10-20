@@ -161,6 +161,10 @@ msgstr "{1} 個座位中已佔用 {0} 個。"
 msgid "{0} of {1} sold"
 msgstr "{1} 個中已售 {0} 個"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:172
+msgid "{0} of sales a year"
+msgstr "每年 {0} 銷售額"
+
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:166
 msgid "{0} orders"
 msgstr "{0} 個訂單"
@@ -262,6 +266,10 @@ msgstr "{0} 個企位"
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/OrdersTab.tsx:93
 msgid "{0} tickets"
 msgstr "{0}張門票"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:85
+msgid "{0} to {1}"
+msgstr "{0} 至 {1}"
 
 #: src/components/routes/settings/Security/SignInMethods.tsx:139
 msgid "{0} was disconnected."
@@ -667,7 +675,7 @@ msgstr "+稅/費"
 msgid "<0>{accountName}</0> requires two-factor authentication for everyone on the team. Set it up now to continue. It takes about a minute."
 msgstr "<0>{accountName}</0> 要求團隊中的所有人啟用雙重驗證。請立即設定以繼續,大約只需一分鐘。"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:80
+#: src/ee/licensing/components/LicenceModal/index.tsx:94
 msgid "<0>APP_LICENCE_KEY</0> is set, but the key couldn't be verified, so reserved seating, the box office and enterprise single sign-on can't be set up."
 msgstr "已設定 <0>APP_LICENCE_KEY</0>，但無法驗證該金鑰，因此無法設定預留座位、售票處及企業單一登入。"
 
@@ -1206,7 +1214,7 @@ msgstr "激活日期"
 #: src/components/routes/organizer/Payments/CapabilityList.tsx:57
 #: src/components/routes/settings/Team/MemberRow.tsx:28
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:187
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:26
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:31
 msgid "Active"
 msgstr "活躍"
 
@@ -1236,6 +1244,10 @@ msgstr "新增"
 #: src/components/routes/product-widget/SelectProducts/index.tsx:522
 msgid "Add {0} first"
 msgstr "請先加入 {0}"
+
+#: src/ee/licensing/components/LicenceModal/index.tsx:137
+msgid "Add {notIncludedList} to your licence."
+msgstr "將{notIncludedList}加入您的授權。"
 
 #: src/ee/box-office/components/routes/event/BoxOffices/index.tsx:72
 msgid "Add a card reader"
@@ -3056,7 +3068,7 @@ msgstr "基本資料"
 msgid "Before taxes and fees"
 msgstr "稅費前"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:117
+#: src/ee/licensing/components/LicenceModal/index.tsx:151
 msgid "Before you go live"
 msgstr "正式上線前"
 
@@ -3153,7 +3165,7 @@ msgstr "售票處"
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:13
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:157
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:106
-#: src/ee/licensing/licenceNotice.ts:51
+#: src/ee/licensing/licenceNotice.ts:55
 msgid "Box office"
 msgstr "售票處"
 
@@ -3821,7 +3833,7 @@ msgstr "立即報到"
 msgid "Check in only"
 msgstr "僅簽到"
 
-#: src/ee/licensing/licenceNotice.ts:64
+#: src/ee/licensing/licenceNotice.ts:68
 msgid "Check key"
 msgstr "檢查金鑰"
 
@@ -5031,6 +5043,10 @@ msgstr "複製 PIN 碼"
 msgid "Copy redirect URI"
 msgstr "複製重新導向 URI"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:94
+msgid "Copy sales report"
+msgstr "複製銷售報告"
+
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:194
 msgid "Copy setup key"
 msgstr "複製設定金鑰"
@@ -5056,7 +5072,7 @@ msgstr "將目錄（租戶）ID、應用程式（客戶端）ID 和密鑰值複�
 msgid "Copy the issuer URL, the client ID and the client secret into the fields below."
 msgstr "將簽發者 URL、客戶端 ID 和客戶端密鑰複製到下方欄位。"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:86
+#: src/ee/licensing/components/LicenceModal/index.tsx:100
 msgid "Copy the key again from your licence email, without quotes or spaces."
 msgstr "從授權電郵中重新複製金鑰，不要包含引號或空格。"
 
@@ -5244,6 +5260,10 @@ msgstr "封面圖片將顯示在活動頁面頂部"
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:164
 msgid "Cover image will be displayed at the top of your organizer page"
 msgstr "封面圖片將顯示在您的主辦單位頁面頂部"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:172
+msgid "Covers"
+msgstr "涵蓋"
 
 #: src/components/common/CheckInListTable/index.tsx:92
 msgid "Covers every ticket"
@@ -5567,6 +5587,10 @@ msgstr "貨幣"
 msgid "Current password"
 msgstr "目前密碼"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:86
+msgid "Current year"
+msgstr "本年度"
+
 #: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:111
 msgid "Currently assigned"
 msgstr "目前已指派"
@@ -5627,7 +5651,7 @@ msgstr "自定義範本"
 
 #: src/components/common/AdminOrdersTable/index.tsx:71
 #: src/components/common/OrdersTable/index.tsx:116
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:84
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:169
 msgid "Customer"
 msgstr "客户"
 
@@ -6236,12 +6260,12 @@ msgstr "桌面"
 msgid "Details"
 msgstr "詳細信息"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:32
-#: src/ee/licensing/licenceNotice.ts:68
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:37
+#: src/ee/licensing/licenceNotice.ts:74
 msgid "Development"
 msgstr "開發"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:114
+#: src/ee/licensing/components/LicenceModal/index.tsx:148
 msgid "Development licence"
 msgstr "開發授權"
 
@@ -7367,7 +7391,7 @@ msgid "enterprise single sign-on"
 msgstr "企業單一登入"
 
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:18
-#: src/ee/licensing/licenceNotice.ts:53
+#: src/ee/licensing/licenceNotice.ts:57
 msgid "Enterprise single sign-on"
 msgstr "企業單一登入"
 
@@ -7819,8 +7843,8 @@ msgstr "過期日期"
 #: src/components/common/WaitlistTable/index.tsx:30
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:119
 #: src/components/routes/settings/ApiKeys/index.tsx:210
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:30
-#: src/ee/licensing/licenceNotice.ts:72
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:35
+#: src/ee/licensing/licenceNotice.ts:78
 msgid "Expired"
 msgstr "已過期"
 
@@ -7832,7 +7856,7 @@ msgstr "{0}已過期"
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:33
 #: src/components/routes/settings/ApiKeys/index.tsx:176
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:88
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:176
 msgid "Expires"
 msgstr "到期"
 
@@ -8282,7 +8306,7 @@ msgstr "功能開關"
 msgid "Featured"
 msgstr "特邀"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:91
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:103
 msgid "Features"
 msgstr "功能"
 
@@ -8791,12 +8815,12 @@ msgid "German"
 msgstr "德國"
 
 #: src/ee/licensing/components/GetLicenceLink/index.tsx:11
-#: src/ee/licensing/components/LicenceModal/index.tsx:108
-#: src/ee/licensing/components/LicenceModal/index.tsx:124
+#: src/ee/licensing/components/LicenceModal/index.tsx:122
+#: src/ee/licensing/components/LicenceModal/index.tsx:158
 msgid "Get a licence"
 msgstr "取得授權"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:103
+#: src/ee/licensing/components/LicenceModal/index.tsx:117
 msgid "Get an Enterprise licence key."
 msgstr "取得企業版授權金鑰。"
 
@@ -8922,12 +8946,12 @@ msgstr "谷歌日曆"
 msgid "Got it"
 msgstr "知道了"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:28
-#: src/ee/licensing/licenceNotice.ts:70
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:33
+#: src/ee/licensing/licenceNotice.ts:76
 msgid "Grace period"
 msgstr "寬限期"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:89
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:177
 msgid "Grace period ends"
 msgstr "寬限期結束"
 
@@ -9079,6 +9103,10 @@ msgstr "你好 {0} 👋"
 #: src/components/routes/event/OccurrencesTab/rescheduleMessageTemplate.ts:74
 msgid "Hi,"
 msgstr "你好，"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:50
+msgid "Hi.Events Cloud"
+msgstr "Hi.Events Cloud"
 
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:75
 msgid "Hi.Events Fee"
@@ -9543,7 +9571,7 @@ msgstr "在 Microsoft Entra admin center 中，前往 \"App registrations\"，�
 msgid "In the Okta Admin Console, go to Applications and choose Create App Integration."
 msgstr "在 Okta Admin Console 中，前往 \"Applications\"，然後選擇 \"Create App Integration\"。"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:188
+#: src/ee/licensing/components/LicenceModal/index.tsx:230
 msgid "In use"
 msgstr "使用中"
 
@@ -9592,6 +9620,10 @@ msgstr "包含您的在線活動的連接詳細信息。這些信息將在訂單
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:55
 msgid "Include tax and fees in the price"
 msgstr "價格中包含税費"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:108
+msgid "Included"
+msgstr "已包含"
 
 #: src/components/common/CheckInListList/index.tsx:102
 #: src/components/common/CheckInListTable/index.tsx:95
@@ -9744,7 +9776,7 @@ msgstr "發票編號"
 msgid "Invoice Settings"
 msgstr "發票設置"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:87
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:175
 msgid "Issued"
 msgstr "簽發日期"
 
@@ -10222,19 +10254,19 @@ msgstr "圖庫"
 
 #: src/components/common/GlobalMenu/index.tsx:79
 #: src/components/layouts/Admin/index.tsx:32
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:51
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:136
 msgid "Licence"
 msgstr "授權"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:215
+#: src/ee/licensing/components/LicenceModal/index.tsx:257
 msgid "Licence details"
 msgstr "授權詳情"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:86
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:174
 msgid "Licence ID"
 msgstr "授權 ID"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:79
+#: src/ee/licensing/components/LicenceModal/index.tsx:93
 msgid "Licence key not recognised"
 msgstr "無法識別授權金鑰"
 
@@ -11168,7 +11200,7 @@ msgstr "新建區域"
 msgid "New band"
 msgstr "新價位區"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:56
+#: src/ee/licensing/components/LicenceModal/index.tsx:63
 msgid "New box office sign-ins are refused, so open box office sessions end within 24 hours."
 msgstr "售票處不再接受新的登入，因此現有的售票處工作階段會在 24 小時內結束。"
 
@@ -11526,7 +11558,7 @@ msgstr "沒有結束日期"
 msgid "No ended events to show."
 msgstr "沒有可顯示的已結束活動。"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:96
+#: src/ee/licensing/components/LicenceModal/index.tsx:110
 msgid "No Enterprise licence"
 msgstr "沒有企業版授權"
 
@@ -11586,11 +11618,11 @@ msgstr "尚未新增任何說明。"
 msgid "No invoice"
 msgstr "無發票"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:34
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:39
 msgid "No licence"
 msgstr "沒有授權"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:62
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:147
 msgid "No licence key is set, so reserved seating, the box office and enterprise single sign-on can't be set up. To unlock them, set APP_LICENCE_KEY in the backend environment and redeploy the backend. With Docker Compose, use docker compose up -d, because docker compose restart doesn't reload the environment."
 msgstr "尚未設定授權金鑰，因此無法設定預留座位、售票處及企業單一登入。如要解鎖這些功能，請在後端環境中設定 APP_LICENCE_KEY，然後重新部署後端。使用 Docker Compose 時，請執行 docker compose up -d，因為 docker compose restart 不會重新載入環境。"
 
@@ -11796,6 +11828,10 @@ msgstr "無結果"
 msgid "No results found"
 msgstr "找不到結果"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:91
+msgid "No sales"
+msgstr "暫無銷售"
+
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:29
 msgid "No sales in this period"
 msgstr "此期間沒有銷售"
@@ -12000,6 +12036,18 @@ msgstr "不符合條件"
 msgid "Not enough free seats for {0}"
 msgstr "{0} 的空置座位不足"
 
+#: src/ee/licensing/licenceNotice.ts:72
+msgid "Not in licence"
+msgstr "不在授權內"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:109
+msgid "Not included"
+msgstr "未包含"
+
+#: src/ee/licensing/components/LicenceModal/index.tsx:130
+msgid "Not included in your licence"
+msgstr "未包含在您的授權中"
+
 #: src/components/routes/settings/Team/MemberRow.tsx:166
 msgid "Not joined yet"
 msgstr "尚未加入"
@@ -12053,7 +12101,7 @@ msgstr "未測試"
 msgid "Not tested yet"
 msgstr "尚未測試"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:120
+#: src/ee/licensing/components/LicenceModal/index.tsx:154
 msgid "Not using reserved seating, the box office or enterprise single sign-on? Remove <0>APP_LICENCE_KEY</0> and redeploy."
 msgstr "不使用預留座位、售票處或企業單一登入？刪除 <0>APP_LICENCE_KEY</0> 並重新部署。"
 
@@ -12428,7 +12476,7 @@ msgstr "線上活動"
 msgid "Online Event Details"
 msgstr "在線活動詳情"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:54
+#: src/ee/licensing/components/LicenceModal/index.tsx:61
 msgid "Online ticket sales for events with reserved seating keep working."
 msgstr "設有預留座位的活動仍可繼續網上售票。"
 
@@ -13059,6 +13107,10 @@ msgstr "為此帳戶覆寫全域預設值。"
 msgid "Overview"
 msgstr "總覽"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:46
+msgid "Own events"
+msgstr "自家活動"
+
 #: src/components/modals/EditUserModal/index.tsx:66
 #: src/components/routes/settings/Team/MemberRow.tsx:137
 msgid "Owner"
@@ -13121,6 +13173,10 @@ msgstr "付費帳戶"
 #: src/ee/box-office/utilites/boxOfficeTender.ts:13
 msgid "Paid elsewhere"
 msgstr "已在別處支付"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:122
+msgid "Paid sales before tax, after refunds, across every organizer on this install. At the end of each licence year, send that year's sales to licence@hi.events."
+msgstr "此安裝中所有主辦單位的已付款銷售額，以稅前及扣除退款後計算。每個授權年度結束時，請將該年度的銷售額發送至 licence@hi.events。"
 
 #: src/ee/box-office/components/routes/organizer/Payments/TerminalReaders/index.tsx:68
 msgid "Pair Stripe Terminal readers to take card payments at the box office."
@@ -13613,13 +13669,17 @@ msgstr "放置桌子"
 msgid "Placed"
 msgstr "已落單"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:85
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:170
 msgid "Plan"
 msgstr "方案"
 
 #: src/components/common/PoweredByFooter/index.tsx:67
 msgid "Planning an event?"
 msgstr "計劃舉辦活動？"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:48
+msgid "Platform"
+msgstr "平台"
 
 #: src/components/routes/admin/Dashboard/index.tsx:195
 msgid "Platform commission"
@@ -14240,7 +14300,8 @@ msgstr "購買人電郵"
 msgid "Purchases"
 msgstr "購買記錄"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:45
+#: src/ee/licensing/components/LicenceModal/index.tsx:52
+#: src/ee/licensing/components/LicenceModal/index.tsx:138
 msgid "Put the new key in <0>APP_LICENCE_KEY</0> and redeploy the backend."
 msgstr "將新金鑰填入 <0>APP_LICENCE_KEY</0> 並重新部署後端。"
 
@@ -14510,7 +14571,7 @@ msgstr "重複活動"
 msgid "Reddit"
 msgstr "Reddit"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:38
+#: src/ee/licensing/components/LicenceModal/index.tsx:45
 msgid "Redeploy the backend. With Docker Compose, run <0>docker compose up -d</0>."
 msgstr "重新部署後端。使用 Docker Compose 時，請執行 <0>docker compose up -d</0>。"
 
@@ -14837,12 +14898,12 @@ msgstr "重新命名小工具"
 msgid "Render it where the widget should appear"
 msgstr "在需要顯示小工具的位置渲染它"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:133
-#: src/ee/licensing/components/LicenceModal/index.tsx:143
+#: src/ee/licensing/components/LicenceModal/index.tsx:168
+#: src/ee/licensing/components/LicenceModal/index.tsx:184
 msgid "Renew licence"
 msgstr "續期授權"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:44
+#: src/ee/licensing/components/LicenceModal/index.tsx:51
 msgid "Renew your licence."
 msgstr "為你的授權續期。"
 
@@ -15005,7 +15066,7 @@ msgstr "預留座位"
 #: src/components/common/EventCard/index.tsx:329
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:365
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:8
-#: src/ee/licensing/licenceNotice.ts:49
+#: src/ee/licensing/licenceNotice.ts:53
 msgid "Reserved seating"
 msgstr "預留座位"
 
@@ -15356,6 +15417,10 @@ msgstr "扣除退款後的銷售額"
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:149
 msgid "Sales are paused"
 msgstr "銷售已暫停"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:120
+msgid "Sales by licence year"
+msgstr "按授權年度劃分的銷售額"
 
 #: src/components/common/ProductPriceAvailability/index.tsx:24
 #: src/components/common/ProductPriceAvailability/index.tsx:63
@@ -16466,11 +16531,11 @@ msgstr "為此主辦單位下創建的新活動設定預設設定。"
 msgid "Set how long each date lasts"
 msgstr "設定每個日期的時長"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:87
+#: src/ee/licensing/components/LicenceModal/index.tsx:101
 msgid "Set it as <0>APP_LICENCE_KEY</0> and redeploy the backend."
 msgstr "將其設定為 <0>APP_LICENCE_KEY</0> 並重新部署後端。"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:104
+#: src/ee/licensing/components/LicenceModal/index.tsx:118
 msgid "Set it as <0>APP_LICENCE_KEY</0> in the backend environment."
 msgstr "在後端環境中將其設定為 <0>APP_LICENCE_KEY</0>。"
 
@@ -16580,19 +16645,19 @@ msgstr "設置"
 msgid "Setup & Design"
 msgstr "設定與設計"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:97
+#: src/ee/licensing/components/LicenceModal/index.tsx:111
 msgid "Setup for {featureList} is locked because this instance has no Hi.Events Enterprise licence. Anything already set up can still be viewed or removed."
 msgstr "由於此實例沒有 Hi.Events Enterprise 授權，{featureList} 的設定已鎖定。已設定的內容仍可查看或移除。"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:67
+#: src/ee/licensing/components/LicenceModal/index.tsx:74
 msgid "Setup for {featureList} is locked until you renew. Anything already set up can still be viewed or removed."
 msgstr "在你續期之前，{featureList} 的設定已鎖定。已設定的內容仍可查看或移除。"
 
-#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:6
+#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:12
 msgid "Setup is locked"
 msgstr "設定已鎖定"
 
-#: src/ee/licensing/licenceNotice.ts:66
+#: src/ee/licensing/licenceNotice.ts:70
 msgid "Setup locked"
 msgstr "設定已鎖定"
 
@@ -17029,7 +17094,7 @@ msgstr "單行文本框"
 msgid "Single sign-on"
 msgstr "單一登入"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:58
+#: src/ee/licensing/components/LicenceModal/index.tsx:65
 msgid "Single sign-on connections keep signing people in. They can be switched off or deleted, but not changed or switched back on without a licence."
 msgstr "單一登入連接會繼續讓人員登入。這些連接可以關閉或刪除，但沒有授權時無法更改或重新開啟。"
 
@@ -17600,7 +17665,7 @@ msgstr "統計"
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:88
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:62
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:177
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:79
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:164
 msgid "Status"
 msgstr "狀態"
 
@@ -17608,7 +17673,7 @@ msgstr "狀態"
 msgid "Status unknown"
 msgstr "狀態未知"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:88
+#: src/ee/licensing/components/LicenceModal/index.tsx:102
 msgid "Still failing? Upgrade Hi.Events, then contact hello@hi.events."
 msgstr "仍然失敗？請升級 Hi.Events，然後聯絡 hello@hi.events。"
 
@@ -18243,7 +18308,7 @@ msgstr "共 {totalOccurrences} 場 — 上限為 {max}。請縮短日期範圍�
 msgid "That's a wrap"
 msgstr "到此為止"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:49
+#: src/ee/licensing/components/LicenceModal/index.tsx:56
 msgid "The \"Powered by Hi.Events\" notice is shown again until you renew."
 msgstr "在你續期之前，將再次顯示「Powered by Hi.Events」標示。"
 
@@ -18366,7 +18431,7 @@ msgstr "此金鑰在 {accountName} 中擁有與您相同的權限，請妥善保
 msgid "The language the attendee will receive emails in."
 msgstr "與會者接收電子郵件的語言。"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:56
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:141
 msgid "The licence key was rejected"
 msgstr "授權金鑰被拒絕"
 
@@ -18852,7 +18917,7 @@ msgstr "僅此活動"
 msgid "This event's dates and times are set on the occurrence schedule."
 msgstr "此活動的日期和時間在場次排程中設定。"
 
-#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:7
+#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:15
 msgid "This feature needs a Hi.Events Enterprise licence. Until a licence key is added, nothing new can be set up and existing setup can't be changed, but what is already set up can still be viewed, switched off or removed."
 msgstr "此功能需要 Hi.Events Enterprise 授權。在新增授權金鑰之前，無法設定任何新項目，亦無法更改現有設定，但已設定的內容仍可查看、關閉或移除。"
 
@@ -18918,7 +18983,7 @@ msgstr "這是您唯一一次看到此金鑰"
 msgid "This is usually temporary. Try again in a moment."
 msgstr "這通常是暫時性的。請稍後再試。"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:68
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:153
 msgid "This licence expires on {0}. Renew before then to avoid interruption."
 msgstr "此授權將於 {0} 到期。請在此之前續期以免中斷。"
 
@@ -20176,6 +20241,10 @@ msgstr "隨規則建立即時更新。翻閱月份以核對日期。"
 msgid "Updates as you type."
 msgstr "輸入時即時更新。"
 
+#: src/ee/licensing/components/LicenceModal/index.tsx:141
+msgid "Upgrade licence"
+msgstr "升級授權"
+
 #: src/components/routes/organizer/Settings/Sections/ImageAssetSettings/index.tsx:39
 msgid "Upload a cover image for your organizer"
 msgstr "上傳主辦單位的封面圖片"
@@ -20370,7 +20439,7 @@ msgstr "使用你首頁設計中的顏色和字型，並會在你修改時同步
 msgid "Uses the colours and font from your homepage design. If you change the design, copy the code again to update the button."
 msgstr "使用您主頁設計中的顏色和字型。如果更改設計，請重新複製代碼以更新按鈕。"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:121
+#: src/ee/licensing/components/LicenceModal/index.tsx:155
 msgid "Using them for real events? Get an Enterprise licence and put its key in <0>APP_LICENCE_KEY</0>."
 msgstr "要在真實活動中使用它們？請取得企業版授權，並將其金鑰填入 <0>APP_LICENCE_KEY</0>。"
 
@@ -21164,9 +21233,10 @@ msgstr "參加者可以期待甚麼？"
 msgid "What time will you be arriving?"
 msgstr "您什麼時候抵達？"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:41
-#: src/ee/licensing/components/LicenceModal/index.tsx:83
-#: src/ee/licensing/components/LicenceModal/index.tsx:100
+#: src/ee/licensing/components/LicenceModal/index.tsx:48
+#: src/ee/licensing/components/LicenceModal/index.tsx:97
+#: src/ee/licensing/components/LicenceModal/index.tsx:114
+#: src/ee/licensing/components/LicenceModal/index.tsx:134
 msgid "What to do"
 msgstr "需要做甚麼"
 
@@ -21348,7 +21418,7 @@ msgstr "{0} 使用哪種門票？"
 msgid "Which tickets should be associated with this check-in list?"
 msgstr "哪些票應與此簽到列表關聯？"
 
-#: src/ee/licensing/licenceNotice.ts:55
+#: src/ee/licensing/licenceNotice.ts:59
 msgid "White-label"
 msgstr "白標"
 
@@ -21906,9 +21976,13 @@ msgstr "您的活動尚未有描述。"
 msgid "Your event is live!"
 msgstr "您的活動已上線！"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:131
+#: src/ee/licensing/components/LicenceModal/index.tsx:165
 msgid "Your Hi.Events Enterprise licence expired on {expiresAt}. Everything stays on until {graceEndsAt}. Renew before then to avoid interruption."
 msgstr "你的 Hi.Events Enterprise 授權已於 {expiresAt} 到期。所有功能將保持開啟至 {graceEndsAt}。請在此之前續期，以免中斷。"
+
+#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:14
+msgid "Your Hi.Events licence doesn't include this feature. Until it does, nothing new can be set up and existing setup can't be changed, but what is already set up can still be viewed, switched off or removed."
+msgstr "您的 Hi.Events 授權不包含此功能。在包含之前，無法設定任何新項目，亦無法更改現有設定，但已設定的內容仍可查看、關閉或移除。"
 
 #: src/ee/sso/components/SingleSignOn/providers.tsx:22
 msgid "your identity provider"
@@ -21918,8 +21992,12 @@ msgstr "你的身份提供者"
 msgid "Your identity provider returned an error: {providerError}"
 msgstr "你的身份提供者傳回了錯誤：{providerError}"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:130
-#: src/ee/licensing/components/LicenceModal/index.tsx:139
+#: src/ee/licensing/components/LicenceModal/index.tsx:80
+msgid "Your licence doesn't include {notIncludedList}. Nothing new can be set up, but anything already set up can still be viewed or removed."
+msgstr "您的授權不包含{notIncludedList}。無法設定任何新項目，但已設定的內容仍可查看或移除。"
+
+#: src/ee/licensing/components/LicenceModal/index.tsx:164
+#: src/ee/licensing/components/LicenceModal/index.tsx:177
 msgid "Your licence has expired"
 msgstr "你的授權已到期"
 

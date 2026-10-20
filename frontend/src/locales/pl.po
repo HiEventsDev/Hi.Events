@@ -161,6 +161,10 @@ msgstr "Zajęte miejsca: {0} z {1}."
 msgid "{0} of {1} sold"
 msgstr "{0} z {1} sprzedanych"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:172
+msgid "{0} of sales a year"
+msgstr "{0} sprzedaży rocznie"
+
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:166
 msgid "{0} orders"
 msgstr "{0} zamówień"
@@ -262,6 +266,10 @@ msgstr "{0} miejsc stojących"
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/OrdersTab.tsx:93
 msgid "{0} tickets"
 msgstr "{0} biletów"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:85
+msgid "{0} to {1}"
+msgstr "{0} – {1}"
 
 #: src/components/routes/settings/Security/SignInMethods.tsx:139
 msgid "{0} was disconnected."
@@ -667,7 +675,7 @@ msgstr "+Podatek/Opłaty"
 msgid "<0>{accountName}</0> requires two-factor authentication for everyone on the team. Set it up now to continue. It takes about a minute."
 msgstr "<0>{accountName}</0> wymaga uwierzytelniania dwuskładnikowego od wszystkich członków zespołu. Skonfiguruj je teraz, aby kontynuować. Zajmie to około minuty."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:80
+#: src/ee/licensing/components/LicenceModal/index.tsx:94
 msgid "<0>APP_LICENCE_KEY</0> is set, but the key couldn't be verified, so reserved seating, the box office and enterprise single sign-on can't be set up."
 msgstr "<0>APP_LICENCE_KEY</0> jest ustawiony, ale nie udało się zweryfikować klucza, więc nie można skonfigurować miejsc rezerwowanych, kasy biletowej ani firmowego logowania jednokrotnego."
 
@@ -1206,7 +1214,7 @@ msgstr "Data aktywacji"
 #: src/components/routes/organizer/Payments/CapabilityList.tsx:57
 #: src/components/routes/settings/Team/MemberRow.tsx:28
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:187
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:26
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:31
 msgid "Active"
 msgstr "Aktywny"
 
@@ -1236,6 +1244,10 @@ msgstr "Dodaj"
 #: src/components/routes/product-widget/SelectProducts/index.tsx:522
 msgid "Add {0} first"
 msgstr "Najpierw dodaj {0}"
+
+#: src/ee/licensing/components/LicenceModal/index.tsx:137
+msgid "Add {notIncludedList} to your licence."
+msgstr "Dodaj do licencji: {notIncludedList}."
 
 #: src/ee/box-office/components/routes/event/BoxOffices/index.tsx:72
 msgid "Add a card reader"
@@ -3056,7 +3068,7 @@ msgstr "Podstawowe informacje"
 msgid "Before taxes and fees"
 msgstr "Przed podatkami i opłatami"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:117
+#: src/ee/licensing/components/LicenceModal/index.tsx:151
 msgid "Before you go live"
 msgstr "Przed uruchomieniem"
 
@@ -3153,7 +3165,7 @@ msgstr "kasa biletowa"
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:13
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:157
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:106
-#: src/ee/licensing/licenceNotice.ts:51
+#: src/ee/licensing/licenceNotice.ts:55
 msgid "Box office"
 msgstr "Kasa biletowa"
 
@@ -3821,7 +3833,7 @@ msgstr "Odpraw teraz"
 msgid "Check in only"
 msgstr "Tylko weryfikacja"
 
-#: src/ee/licensing/licenceNotice.ts:64
+#: src/ee/licensing/licenceNotice.ts:68
 msgid "Check key"
 msgstr "Sprawdź klucz"
 
@@ -5031,6 +5043,10 @@ msgstr "Kopiuj PIN"
 msgid "Copy redirect URI"
 msgstr "Kopiuj URI przekierowania"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:94
+msgid "Copy sales report"
+msgstr "Kopiuj raport sprzedaży"
+
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:194
 msgid "Copy setup key"
 msgstr "Kopiuj klucz konfiguracji"
@@ -5056,7 +5072,7 @@ msgstr "Skopiuj directory (tenant) ID, application (client) ID i wartość sekre
 msgid "Copy the issuer URL, the client ID and the client secret into the fields below."
 msgstr "Skopiuj adres URL wystawcy, client ID i client secret do pól poniżej."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:86
+#: src/ee/licensing/components/LicenceModal/index.tsx:100
 msgid "Copy the key again from your licence email, without quotes or spaces."
 msgstr "Skopiuj ponownie klucz z e-maila z licencją, bez cudzysłowów i spacji."
 
@@ -5244,6 +5260,10 @@ msgstr "Obraz okładki będzie wyświetlany na górze strony wydarzenia"
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:164
 msgid "Cover image will be displayed at the top of your organizer page"
 msgstr "Obraz okładki będzie wyświetlany na górze strony organizatora"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:172
+msgid "Covers"
+msgstr "Obejmuje"
 
 #: src/components/common/CheckInListTable/index.tsx:92
 msgid "Covers every ticket"
@@ -5567,6 +5587,10 @@ msgstr "Waluta"
 msgid "Current password"
 msgstr "Obecne hasło"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:86
+msgid "Current year"
+msgstr "Bieżący rok"
+
 #: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:111
 msgid "Currently assigned"
 msgstr "Obecnie przypisane"
@@ -5627,7 +5651,7 @@ msgstr "Niestandardowy szablon"
 
 #: src/components/common/AdminOrdersTable/index.tsx:71
 #: src/components/common/OrdersTable/index.tsx:116
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:84
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:169
 msgid "Customer"
 msgstr "Klient"
 
@@ -6236,12 +6260,12 @@ msgstr "Komputer"
 msgid "Details"
 msgstr "Szczegóły"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:32
-#: src/ee/licensing/licenceNotice.ts:68
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:37
+#: src/ee/licensing/licenceNotice.ts:74
 msgid "Development"
 msgstr "Deweloperska"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:114
+#: src/ee/licensing/components/LicenceModal/index.tsx:148
 msgid "Development licence"
 msgstr "Licencja deweloperska"
 
@@ -7367,7 +7391,7 @@ msgid "enterprise single sign-on"
 msgstr "firmowe logowanie jednokrotne"
 
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:18
-#: src/ee/licensing/licenceNotice.ts:53
+#: src/ee/licensing/licenceNotice.ts:57
 msgid "Enterprise single sign-on"
 msgstr "Firmowe logowanie jednokrotne"
 
@@ -7819,8 +7843,8 @@ msgstr "Data wygaśnięcia"
 #: src/components/common/WaitlistTable/index.tsx:30
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:119
 #: src/components/routes/settings/ApiKeys/index.tsx:210
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:30
-#: src/ee/licensing/licenceNotice.ts:72
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:35
+#: src/ee/licensing/licenceNotice.ts:78
 msgid "Expired"
 msgstr "Wygasłe"
 
@@ -7832,7 +7856,7 @@ msgstr "Wygasł {0}"
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:33
 #: src/components/routes/settings/ApiKeys/index.tsx:176
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:88
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:176
 msgid "Expires"
 msgstr "Wygasa"
 
@@ -8282,7 +8306,7 @@ msgstr "Flagi funkcji"
 msgid "Featured"
 msgstr "Wyróżniony"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:91
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:103
 msgid "Features"
 msgstr "Funkcje"
 
@@ -8791,12 +8815,12 @@ msgid "German"
 msgstr "Niemiecki"
 
 #: src/ee/licensing/components/GetLicenceLink/index.tsx:11
-#: src/ee/licensing/components/LicenceModal/index.tsx:108
-#: src/ee/licensing/components/LicenceModal/index.tsx:124
+#: src/ee/licensing/components/LicenceModal/index.tsx:122
+#: src/ee/licensing/components/LicenceModal/index.tsx:158
 msgid "Get a licence"
 msgstr "Uzyskaj licencję"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:103
+#: src/ee/licensing/components/LicenceModal/index.tsx:117
 msgid "Get an Enterprise licence key."
 msgstr "Uzyskaj klucz licencji Enterprise."
 
@@ -8922,12 +8946,12 @@ msgstr "Kalendarz Google"
 msgid "Got it"
 msgstr "Rozumiem"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:28
-#: src/ee/licensing/licenceNotice.ts:70
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:33
+#: src/ee/licensing/licenceNotice.ts:76
 msgid "Grace period"
 msgstr "Okres karencji"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:89
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:177
 msgid "Grace period ends"
 msgstr "Koniec okresu karencji"
 
@@ -9079,6 +9103,10 @@ msgstr "Cześć {0} 👋"
 #: src/components/routes/event/OccurrencesTab/rescheduleMessageTemplate.ts:74
 msgid "Hi,"
 msgstr "Cześć,"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:50
+msgid "Hi.Events Cloud"
+msgstr "Hi.Events Cloud"
 
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:75
 msgid "Hi.Events Fee"
@@ -9543,7 +9571,7 @@ msgstr "W Microsoft Entra admin center przejdź do \"App registrations\" i wybie
 msgid "In the Okta Admin Console, go to Applications and choose Create App Integration."
 msgstr "W Okta Admin Console przejdź do \"Applications\" i wybierz \"Create App Integration\"."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:188
+#: src/ee/licensing/components/LicenceModal/index.tsx:230
 msgid "In use"
 msgstr "W użyciu"
 
@@ -9592,6 +9620,10 @@ msgstr "Podaj dane połączenia dla wydarzenia online. Informacje te będą wido
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:55
 msgid "Include tax and fees in the price"
 msgstr "Uwzględnij podatek i opłaty w cenie"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:108
+msgid "Included"
+msgstr "Uwzględnione"
 
 #: src/components/common/CheckInListList/index.tsx:102
 #: src/components/common/CheckInListTable/index.tsx:95
@@ -9744,7 +9776,7 @@ msgstr "Numeracja faktur"
 msgid "Invoice Settings"
 msgstr "Ustawienia faktury"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:87
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:175
 msgid "Issued"
 msgstr "Wystawiona"
 
@@ -10222,19 +10254,19 @@ msgstr "Biblioteka"
 
 #: src/components/common/GlobalMenu/index.tsx:79
 #: src/components/layouts/Admin/index.tsx:32
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:51
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:136
 msgid "Licence"
 msgstr "Licencja"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:215
+#: src/ee/licensing/components/LicenceModal/index.tsx:257
 msgid "Licence details"
 msgstr "Szczegóły licencji"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:86
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:174
 msgid "Licence ID"
 msgstr "ID licencji"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:79
+#: src/ee/licensing/components/LicenceModal/index.tsx:93
 msgid "Licence key not recognised"
 msgstr "Nie rozpoznano klucza licencyjnego"
 
@@ -11168,7 +11200,7 @@ msgstr "Nowy obszar"
 msgid "New band"
 msgstr "Nowa kategoria"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:56
+#: src/ee/licensing/components/LicenceModal/index.tsx:63
 msgid "New box office sign-ins are refused, so open box office sessions end within 24 hours."
 msgstr "Nowe logowania do kasy biletowej są odrzucane, więc otwarte sesje kasy kończą się w ciągu 24 godzin."
 
@@ -11526,7 +11558,7 @@ msgstr "Brak daty zakończenia"
 msgid "No ended events to show."
 msgstr "Brak zakończonych wydarzeń do wyświetlenia."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:96
+#: src/ee/licensing/components/LicenceModal/index.tsx:110
 msgid "No Enterprise licence"
 msgstr "Brak licencji Enterprise"
 
@@ -11586,11 +11618,11 @@ msgstr "Nie dodano jeszcze żadnych instrukcji."
 msgid "No invoice"
 msgstr "Brak faktury"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:34
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:39
 msgid "No licence"
 msgstr "Brak licencji"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:62
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:147
 msgid "No licence key is set, so reserved seating, the box office and enterprise single sign-on can't be set up. To unlock them, set APP_LICENCE_KEY in the backend environment and redeploy the backend. With Docker Compose, use docker compose up -d, because docker compose restart doesn't reload the environment."
 msgstr "Nie ustawiono klucza licencyjnego, więc nie można skonfigurować miejsc rezerwowanych, kasy biletowej ani firmowego logowania jednokrotnego. Aby je odblokować, ustaw APP_LICENCE_KEY w środowisku backendu i wdróż backend ponownie. W Docker Compose użyj docker compose up -d, ponieważ docker compose restart nie wczytuje ponownie środowiska."
 
@@ -11796,6 +11828,10 @@ msgstr "Brak wyników"
 msgid "No results found"
 msgstr "Nie znaleziono wyników"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:91
+msgid "No sales"
+msgstr "Brak sprzedaży"
+
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:29
 msgid "No sales in this period"
 msgstr "Brak sprzedaży w tym okresie"
@@ -12000,6 +12036,18 @@ msgstr "Nie kwalifikuje się"
 msgid "Not enough free seats for {0}"
 msgstr "Za mało wolnych miejsc dla {0}"
 
+#: src/ee/licensing/licenceNotice.ts:72
+msgid "Not in licence"
+msgstr "Poza licencją"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:109
+msgid "Not included"
+msgstr "Nieuwzględnione"
+
+#: src/ee/licensing/components/LicenceModal/index.tsx:130
+msgid "Not included in your licence"
+msgstr "Nieobjęte Twoją licencją"
+
 #: src/components/routes/settings/Team/MemberRow.tsx:166
 msgid "Not joined yet"
 msgstr "Jeszcze nie dołączył"
@@ -12053,7 +12101,7 @@ msgstr "Nie przetestowano"
 msgid "Not tested yet"
 msgstr "Jeszcze nie przetestowano"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:120
+#: src/ee/licensing/components/LicenceModal/index.tsx:154
 msgid "Not using reserved seating, the box office or enterprise single sign-on? Remove <0>APP_LICENCE_KEY</0> and redeploy."
 msgstr "Nie używasz miejsc rezerwowanych, kasy biletowej ani firmowego logowania jednokrotnego? Usuń <0>APP_LICENCE_KEY</0> i wdróż ponownie."
 
@@ -12428,7 +12476,7 @@ msgstr "Wydarzenie online"
 msgid "Online Event Details"
 msgstr "Szczegóły wydarzenia online"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:54
+#: src/ee/licensing/components/LicenceModal/index.tsx:61
 msgid "Online ticket sales for events with reserved seating keep working."
 msgstr "Sprzedaż biletów online na wydarzenia z miejscami rezerwowanymi nadal działa."
 
@@ -13059,6 +13107,10 @@ msgstr "Nadpisz globalną wartość domyślną dla tego konta."
 msgid "Overview"
 msgstr "Przegląd"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:46
+msgid "Own events"
+msgstr "Własne wydarzenia"
+
 #: src/components/modals/EditUserModal/index.tsx:66
 #: src/components/routes/settings/Team/MemberRow.tsx:137
 msgid "Owner"
@@ -13121,6 +13173,10 @@ msgstr "Opłacone konta"
 #: src/ee/box-office/utilites/boxOfficeTender.ts:13
 msgid "Paid elsewhere"
 msgstr "Opłacono inaczej"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:122
+msgid "Paid sales before tax, after refunds, across every organizer on this install. At the end of each licence year, send that year's sales to licence@hi.events."
+msgstr "Opłacona sprzedaż przed opodatkowaniem i po zwrotach, od wszystkich organizatorów w tej instalacji. Na koniec każdego roku licencyjnego wyślij sprzedaż z tego roku na adres licence@hi.events."
 
 #: src/ee/box-office/components/routes/organizer/Payments/TerminalReaders/index.tsx:68
 msgid "Pair Stripe Terminal readers to take card payments at the box office."
@@ -13613,13 +13669,17 @@ msgstr "Rozmieść stoły"
 msgid "Placed"
 msgstr "Złożone"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:85
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:170
 msgid "Plan"
 msgstr "Plan"
 
 #: src/components/common/PoweredByFooter/index.tsx:67
 msgid "Planning an event?"
 msgstr "Planujesz wydarzenie?"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:48
+msgid "Platform"
+msgstr "Platforma"
 
 #: src/components/routes/admin/Dashboard/index.tsx:195
 msgid "Platform commission"
@@ -14240,7 +14300,8 @@ msgstr "E-mail kupującego"
 msgid "Purchases"
 msgstr "Zakupy"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:45
+#: src/ee/licensing/components/LicenceModal/index.tsx:52
+#: src/ee/licensing/components/LicenceModal/index.tsx:138
 msgid "Put the new key in <0>APP_LICENCE_KEY</0> and redeploy the backend."
 msgstr "Wpisz nowy klucz w <0>APP_LICENCE_KEY</0> i wdróż backend ponownie."
 
@@ -14510,7 +14571,7 @@ msgstr "Wydarzenia cykliczne"
 msgid "Reddit"
 msgstr "Reddit"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:38
+#: src/ee/licensing/components/LicenceModal/index.tsx:45
 msgid "Redeploy the backend. With Docker Compose, run <0>docker compose up -d</0>."
 msgstr "Wdróż backend ponownie. W Docker Compose uruchom <0>docker compose up -d</0>."
 
@@ -14837,12 +14898,12 @@ msgstr "Zmień nazwę widżetu"
 msgid "Render it where the widget should appear"
 msgstr "Wyrenderuj go w miejscu, w którym ma się pojawić widżet"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:133
-#: src/ee/licensing/components/LicenceModal/index.tsx:143
+#: src/ee/licensing/components/LicenceModal/index.tsx:168
+#: src/ee/licensing/components/LicenceModal/index.tsx:184
 msgid "Renew licence"
 msgstr "Odnów licencję"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:44
+#: src/ee/licensing/components/LicenceModal/index.tsx:51
 msgid "Renew your licence."
 msgstr "Odnów swoją licencję."
 
@@ -15005,7 +15066,7 @@ msgstr "miejsca rezerwowane"
 #: src/components/common/EventCard/index.tsx:329
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:365
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:8
-#: src/ee/licensing/licenceNotice.ts:49
+#: src/ee/licensing/licenceNotice.ts:53
 msgid "Reserved seating"
 msgstr "Rezerwacja miejsc"
 
@@ -15356,6 +15417,10 @@ msgstr "Sprzedaż po zwrotach"
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:149
 msgid "Sales are paused"
 msgstr "Sprzedaż jest wstrzymana"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:120
+msgid "Sales by licence year"
+msgstr "Sprzedaż według roku licencyjnego"
 
 #: src/components/common/ProductPriceAvailability/index.tsx:24
 #: src/components/common/ProductPriceAvailability/index.tsx:63
@@ -16466,11 +16531,11 @@ msgstr "Ustaw domyślne ustawienia dla nowych wydarzeń utworzonych pod tym orga
 msgid "Set how long each date lasts"
 msgstr "Ustaw, jak długo trwa każdy termin"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:87
+#: src/ee/licensing/components/LicenceModal/index.tsx:101
 msgid "Set it as <0>APP_LICENCE_KEY</0> and redeploy the backend."
 msgstr "Ustaw go jako <0>APP_LICENCE_KEY</0> i wdróż backend ponownie."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:104
+#: src/ee/licensing/components/LicenceModal/index.tsx:118
 msgid "Set it as <0>APP_LICENCE_KEY</0> in the backend environment."
 msgstr "Ustaw go jako <0>APP_LICENCE_KEY</0> w środowisku backendu."
 
@@ -16580,19 +16645,19 @@ msgstr "Ustawienia"
 msgid "Setup & Design"
 msgstr "Konfiguracja i projekt"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:97
+#: src/ee/licensing/components/LicenceModal/index.tsx:111
 msgid "Setup for {featureList} is locked because this instance has no Hi.Events Enterprise licence. Anything already set up can still be viewed or removed."
 msgstr "Konfiguracja funkcji ({featureList}) jest zablokowana, ponieważ ta instancja nie ma licencji Hi.Events Enterprise. Wszystko, co już skonfigurowano, nadal można przeglądać lub usunąć."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:67
+#: src/ee/licensing/components/LicenceModal/index.tsx:74
 msgid "Setup for {featureList} is locked until you renew. Anything already set up can still be viewed or removed."
 msgstr "Konfiguracja funkcji ({featureList}) jest zablokowana do czasu odnowienia licencji. Wszystko, co już skonfigurowano, nadal można przeglądać lub usunąć."
 
-#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:6
+#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:12
 msgid "Setup is locked"
 msgstr "Konfiguracja zablokowana"
 
-#: src/ee/licensing/licenceNotice.ts:66
+#: src/ee/licensing/licenceNotice.ts:70
 msgid "Setup locked"
 msgstr "Konfiguracja zablokowana"
 
@@ -17029,7 +17094,7 @@ msgstr "Krótka odpowiedź"
 msgid "Single sign-on"
 msgstr "Logowanie jednokrotne"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:58
+#: src/ee/licensing/components/LicenceModal/index.tsx:65
 msgid "Single sign-on connections keep signing people in. They can be switched off or deleted, but not changed or switched back on without a licence."
 msgstr "Połączenia logowania jednokrotnego nadal logują użytkowników. Można je wyłączyć lub usunąć, ale bez licencji nie można ich zmienić ani ponownie włączyć."
 
@@ -17600,7 +17665,7 @@ msgstr "Statystyki"
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:88
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:62
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:177
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:79
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:164
 msgid "Status"
 msgstr "Status"
 
@@ -17608,7 +17673,7 @@ msgstr "Status"
 msgid "Status unknown"
 msgstr "Stan nieznany"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:88
+#: src/ee/licensing/components/LicenceModal/index.tsx:102
 msgid "Still failing? Upgrade Hi.Events, then contact hello@hi.events."
 msgstr "Nadal nie działa? Zaktualizuj Hi.Events, a następnie napisz na hello@hi.events."
 
@@ -18243,7 +18308,7 @@ msgstr "To {totalOccurrences} sesji — maksimum to {max}. Skróć zakres lub cz
 msgid "That's a wrap"
 msgstr "To już koniec"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:49
+#: src/ee/licensing/components/LicenceModal/index.tsx:56
 msgid "The \"Powered by Hi.Events\" notice is shown again until you renew."
 msgstr "Informacja „Powered by Hi.Events” jest znowu wyświetlana do czasu odnowienia licencji."
 
@@ -18366,7 +18431,7 @@ msgstr "Klucz może robić w {accountName} to samo co Ty, więc zachowaj go w ta
 msgid "The language the attendee will receive emails in."
 msgstr "Język, w którym uczestnik będzie otrzymywać e-maile."
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:56
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:141
 msgid "The licence key was rejected"
 msgstr "Klucz licencyjny został odrzucony"
 
@@ -18852,7 +18917,7 @@ msgstr "Tylko to wydarzenie"
 msgid "This event's dates and times are set on the occurrence schedule."
 msgstr "Terminy i godziny tego wydarzenia ustawia się w harmonogramie terminów."
 
-#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:7
+#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:15
 msgid "This feature needs a Hi.Events Enterprise licence. Until a licence key is added, nothing new can be set up and existing setup can't be changed, but what is already set up can still be viewed, switched off or removed."
 msgstr "Ta funkcja wymaga licencji Hi.Events Enterprise. Dopóki nie zostanie dodany klucz licencyjny, nie można skonfigurować niczego nowego ani zmienić istniejącej konfiguracji, ale to, co już skonfigurowano, nadal można przeglądać, wyłączać lub usuwać."
 
@@ -18918,7 +18983,7 @@ msgstr "To jedyny raz, kiedy zobaczysz ten klucz"
 msgid "This is usually temporary. Try again in a moment."
 msgstr "Zwykle jest to chwilowe. Spróbuj ponownie za moment."
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:68
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:153
 msgid "This licence expires on {0}. Renew before then to avoid interruption."
 msgstr "Ta licencja wygasa {0}. Odnów ją wcześniej, aby uniknąć przerw."
 
@@ -20176,6 +20241,10 @@ msgstr "Aktualizuje się podczas tworzenia reguły. Przeglądaj miesiące, aby s
 msgid "Updates as you type."
 msgstr "Aktualizuje się w trakcie pisania."
 
+#: src/ee/licensing/components/LicenceModal/index.tsx:141
+msgid "Upgrade licence"
+msgstr "Rozszerz licencję"
+
 #: src/components/routes/organizer/Settings/Sections/ImageAssetSettings/index.tsx:39
 msgid "Upload a cover image for your organizer"
 msgstr "Prześlij obraz okładki dla swojego organizatora"
@@ -20370,7 +20439,7 @@ msgstr "Używa kolorów i czcionki z projektu Twojej strony głównej i aktualiz
 msgid "Uses the colours and font from your homepage design. If you change the design, copy the code again to update the button."
 msgstr "Używa kolorów i czcionki z projektu Twojej strony. Jeśli zmienisz projekt, skopiuj kod ponownie, aby zaktualizować przycisk."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:121
+#: src/ee/licensing/components/LicenceModal/index.tsx:155
 msgid "Using them for real events? Get an Enterprise licence and put its key in <0>APP_LICENCE_KEY</0>."
 msgstr "Używasz ich na prawdziwych wydarzeniach? Uzyskaj licencję Enterprise i wpisz jej klucz w <0>APP_LICENCE_KEY</0>."
 
@@ -21164,9 +21233,10 @@ msgstr "Czego mogą spodziewać się uczestnicy?"
 msgid "What time will you be arriving?"
 msgstr "O której godzinie przyjedziesz?"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:41
-#: src/ee/licensing/components/LicenceModal/index.tsx:83
-#: src/ee/licensing/components/LicenceModal/index.tsx:100
+#: src/ee/licensing/components/LicenceModal/index.tsx:48
+#: src/ee/licensing/components/LicenceModal/index.tsx:97
+#: src/ee/licensing/components/LicenceModal/index.tsx:114
+#: src/ee/licensing/components/LicenceModal/index.tsx:134
 msgid "What to do"
 msgstr "Co zrobić"
 
@@ -21348,7 +21418,7 @@ msgstr "Który bilet dla {0}?"
 msgid "Which tickets should be associated with this check-in list?"
 msgstr "Które bilety powinny być powiązane z tą listą weryfikacyjną?"
 
-#: src/ee/licensing/licenceNotice.ts:55
+#: src/ee/licensing/licenceNotice.ts:59
 msgid "White-label"
 msgstr "White label"
 
@@ -21906,9 +21976,13 @@ msgstr "Twoje wydarzenie nie ma jeszcze opisu."
 msgid "Your event is live!"
 msgstr "Twoje wydarzenie jest aktywne!"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:131
+#: src/ee/licensing/components/LicenceModal/index.tsx:165
 msgid "Your Hi.Events Enterprise licence expired on {expiresAt}. Everything stays on until {graceEndsAt}. Renew before then to avoid interruption."
 msgstr "Twoja licencja Hi.Events Enterprise wygasła {expiresAt}. Wszystko działa do {graceEndsAt}. Odnów ją wcześniej, aby uniknąć przerwy."
+
+#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:14
+msgid "Your Hi.Events licence doesn't include this feature. Until it does, nothing new can be set up and existing setup can't be changed, but what is already set up can still be viewed, switched off or removed."
+msgstr "Twoja licencja Hi.Events nie obejmuje tej funkcji. Dopóki jej nie obejmie, nie można skonfigurować niczego nowego ani zmienić istniejącej konfiguracji, ale to, co już skonfigurowano, nadal można przeglądać, wyłączać lub usuwać."
 
 #: src/ee/sso/components/SingleSignOn/providers.tsx:22
 msgid "your identity provider"
@@ -21918,8 +21992,12 @@ msgstr "Twój dostawca tożsamości"
 msgid "Your identity provider returned an error: {providerError}"
 msgstr "Twój dostawca tożsamości zwrócił błąd: {providerError}"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:130
-#: src/ee/licensing/components/LicenceModal/index.tsx:139
+#: src/ee/licensing/components/LicenceModal/index.tsx:80
+msgid "Your licence doesn't include {notIncludedList}. Nothing new can be set up, but anything already set up can still be viewed or removed."
+msgstr "Twoja licencja nie obejmuje: {notIncludedList}. Nie można skonfigurować niczego nowego, ale wszystko, co już skonfigurowano, nadal można przeglądać lub usunąć."
+
+#: src/ee/licensing/components/LicenceModal/index.tsx:164
+#: src/ee/licensing/components/LicenceModal/index.tsx:177
 msgid "Your licence has expired"
 msgstr "Twoja licencja wygasła"
 

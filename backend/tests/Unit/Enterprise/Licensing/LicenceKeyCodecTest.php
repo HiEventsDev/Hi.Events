@@ -23,26 +23,55 @@ class LicenceKeyCodecTest extends TestCase
         $this->codec = new LicenceKeyCodec(['test-a' => base64_encode(sodium_crypto_sign_publickey($keypair))]);
     }
 
-    public function test_a_signed_key_decodes_to_its_plan_features_and_dates(): void
+    public function test_a_signed_key_decodes_to_its_plan_features_dates_and_covered_sales(): void
     {
         $licence = $this->codec->decode($this->issue());
 
         $this->assertSame('lic_test', $licence->lid);
         $this->assertSame('Riverside Theatre', $licence->customer);
-        $this->assertSame(Plan::ENTERPRISE, $licence->plan);
-        $this->assertSame([LicensedFeature::SEATING, LicensedFeature::BOX_OFFICE, LicensedFeature::ENTERPRISE_SSO], $licence->features);
+        $this->assertSame(Plan::OWN_EVENTS, $licence->plan);
+        $this->assertSame([LicensedFeature::WHITE_LABEL], $licence->features);
         $this->assertSame('2026-10-01', $licence->issued_at->toDateString());
         $this->assertSame('2027-10-01', $licence->expires_at->toDateString());
+        $this->assertSame(300000, $licence->covered_sales);
+    }
+
+    public function test_the_platform_plan_includes_every_enterprise_feature_and_white_label(): void
+    {
+        $this->assertSame(
+            [LicensedFeature::WHITE_LABEL, LicensedFeature::SEATING, LicensedFeature::BOX_OFFICE, LicensedFeature::ENTERPRISE_SSO],
+            $this->codec->decode($this->issue(['plan' => 'platform']))->features,
+        );
+    }
+
+    public function test_the_cloud_plan_includes_every_enterprise_feature_without_white_label(): void
+    {
+        $licence = $this->codec->decode($this->issue(['plan' => 'cloud', 'covered_sales' => null]));
+
+        $this->assertSame([LicensedFeature::SEATING, LicensedFeature::BOX_OFFICE, LicensedFeature::ENTERPRISE_SSO], $licence->features);
+        $this->assertNull($licence->covered_sales);
     }
 
     public function test_add_ons_extend_the_plan_and_unknown_or_duplicate_features_are_ignored(): void
     {
-        $licence = $this->codec->decode($this->issue(['add' => ['white_label', 'seating', 'hologram_ushers', 42]]));
+        $licence = $this->codec->decode($this->issue(['add' => ['seating', 'box_office', 'white_label', 'hologram_ushers', 42]]));
 
         $this->assertSame(
-            [LicensedFeature::SEATING, LicensedFeature::BOX_OFFICE, LicensedFeature::ENTERPRISE_SSO, LicensedFeature::WHITE_LABEL],
+            [LicensedFeature::WHITE_LABEL, LicensedFeature::SEATING, LicensedFeature::BOX_OFFICE],
             $licence->features,
         );
+    }
+
+    public function test_a_missing_or_malformed_covered_sales_amount_is_read_as_none(): void
+    {
+        foreach ([null, 0, -5, '300000', 1.5] as $coveredSales) {
+            $this->assertNull($this->codec->decode($this->issue(['covered_sales' => $coveredSales]))->covered_sales);
+        }
+    }
+
+    public function test_the_retired_enterprise_plan_is_rejected(): void
+    {
+        $this->expectInvalid($this->issue(['plan' => 'enterprise']), 'unknown plan');
     }
 
     public function test_a_tampered_payload_is_rejected(): void
@@ -106,8 +135,9 @@ class LicenceKeyCodecTest extends TestCase
             'customer' => 'Riverside Theatre',
             'issued_at' => '2026-10-01',
             'expires_at' => '2027-10-01',
-            'plan' => 'enterprise',
+            'plan' => 'own_events',
             'add' => [],
+            'covered_sales' => 300000,
             ...$overrides,
         ];
     }

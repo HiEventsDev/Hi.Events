@@ -442,6 +442,8 @@ export interface LicenceSummary {
     expires_at: string | null;
     grace_ends_at: string | null;
     invalid_reason: string | null;
+    features: LicensedFeature[];
+    unlocked_features: LicensedFeature[];
     features_in_use: LicensedFeature[];
 }
 

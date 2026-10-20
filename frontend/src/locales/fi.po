@@ -161,6 +161,10 @@ msgstr "{0}/{1} paikkaa on varattuna."
 msgid "{0} of {1} sold"
 msgstr "{0}/{1} myyty"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:172
+msgid "{0} of sales a year"
+msgstr "{0} myyntiä vuodessa"
+
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:166
 msgid "{0} orders"
 msgstr "{0} tilausta"
@@ -262,6 +266,10 @@ msgstr "{0} seisomapaikkaa"
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/OrdersTab.tsx:93
 msgid "{0} tickets"
 msgstr "{0} lippua"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:85
+msgid "{0} to {1}"
+msgstr "{0}–{1}"
 
 #: src/components/routes/settings/Security/SignInMethods.tsx:139
 msgid "{0} was disconnected."
@@ -667,7 +675,7 @@ msgstr "+Vero/Maksut"
 msgid "<0>{accountName}</0> requires two-factor authentication for everyone on the team. Set it up now to continue. It takes about a minute."
 msgstr "<0>{accountName}</0> edellyttää kaksivaiheista tunnistautumista kaikilta tiimin jäseniltä. Ota se käyttöön nyt jatkaaksesi. Siihen menee noin minuutti."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:80
+#: src/ee/licensing/components/LicenceModal/index.tsx:94
 msgid "<0>APP_LICENCE_KEY</0> is set, but the key couldn't be verified, so reserved seating, the box office and enterprise single sign-on can't be set up."
 msgstr "<0>APP_LICENCE_KEY</0> on asetettu, mutta avainta ei voitu vahvistaa, joten varattuja istumapaikkoja, lipunmyyntiä ovella ja yritysten kertakirjautumista ei voi määrittää."
 
@@ -1206,7 +1214,7 @@ msgstr "Aktivointipäivä"
 #: src/components/routes/organizer/Payments/CapabilityList.tsx:57
 #: src/components/routes/settings/Team/MemberRow.tsx:28
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:187
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:26
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:31
 msgid "Active"
 msgstr "Aktiivinen"
 
@@ -1236,6 +1244,10 @@ msgstr "Lisää"
 #: src/components/routes/product-widget/SelectProducts/index.tsx:522
 msgid "Add {0} first"
 msgstr "Lisää ensin {0}"
+
+#: src/ee/licensing/components/LicenceModal/index.tsx:137
+msgid "Add {notIncludedList} to your licence."
+msgstr "Lisää lisenssiisi: {notIncludedList}."
 
 #: src/ee/box-office/components/routes/event/BoxOffices/index.tsx:72
 msgid "Add a card reader"
@@ -3056,7 +3068,7 @@ msgstr "Perustiedot"
 msgid "Before taxes and fees"
 msgstr "Ennen veroja ja maksuja"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:117
+#: src/ee/licensing/components/LicenceModal/index.tsx:151
 msgid "Before you go live"
 msgstr "Ennen käyttöönottoa"
 
@@ -3153,7 +3165,7 @@ msgstr "lipunmyynti ovella"
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:13
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:157
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:106
-#: src/ee/licensing/licenceNotice.ts:51
+#: src/ee/licensing/licenceNotice.ts:55
 msgid "Box office"
 msgstr "Lippukassa"
 
@@ -3821,7 +3833,7 @@ msgstr "Kirjaa sisään nyt"
 msgid "Check in only"
 msgstr "Vain sisäänkirjaus"
 
-#: src/ee/licensing/licenceNotice.ts:64
+#: src/ee/licensing/licenceNotice.ts:68
 msgid "Check key"
 msgstr "Tarkista avain"
 
@@ -5031,6 +5043,10 @@ msgstr "Kopioi PIN-koodi"
 msgid "Copy redirect URI"
 msgstr "Kopioi uudelleenohjaus-URI"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:94
+msgid "Copy sales report"
+msgstr "Kopioi myyntiraportti"
+
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:194
 msgid "Copy setup key"
 msgstr "Kopioi asetusavain"
@@ -5056,7 +5072,7 @@ msgstr "Kopioi hakemiston (tenant) tunnus, sovelluksen (client) tunnus ja salais
 msgid "Copy the issuer URL, the client ID and the client secret into the fields below."
 msgstr "Kopioi myöntäjän URL, asiakastunnus ja asiakassalaisuus alla oleviin kenttiin."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:86
+#: src/ee/licensing/components/LicenceModal/index.tsx:100
 msgid "Copy the key again from your licence email, without quotes or spaces."
 msgstr "Kopioi avain uudelleen lisenssisähköpostistasi ilman lainausmerkkejä tai välilyöntejä."
 
@@ -5244,6 +5260,10 @@ msgstr "Kansikuva näytetään tapahtumasivusi yläosassa"
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:164
 msgid "Cover image will be displayed at the top of your organizer page"
 msgstr "Kansikuva näytetään järjestäjäsivusi yläosassa"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:172
+msgid "Covers"
+msgstr "Kattaa"
 
 #: src/components/common/CheckInListTable/index.tsx:92
 msgid "Covers every ticket"
@@ -5567,6 +5587,10 @@ msgstr "Valuutta"
 msgid "Current password"
 msgstr "Nykyinen salasana"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:86
+msgid "Current year"
+msgstr "Kuluva vuosi"
+
 #: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:111
 msgid "Currently assigned"
 msgstr "Tällä hetkellä määritetty"
@@ -5627,7 +5651,7 @@ msgstr "Mukautettu malli"
 
 #: src/components/common/AdminOrdersTable/index.tsx:71
 #: src/components/common/OrdersTable/index.tsx:116
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:84
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:169
 msgid "Customer"
 msgstr "Asiakas"
 
@@ -6236,12 +6260,12 @@ msgstr "Työpöytä"
 msgid "Details"
 msgstr "Yksityiskohdat"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:32
-#: src/ee/licensing/licenceNotice.ts:68
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:37
+#: src/ee/licensing/licenceNotice.ts:74
 msgid "Development"
 msgstr "Kehitys"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:114
+#: src/ee/licensing/components/LicenceModal/index.tsx:148
 msgid "Development licence"
 msgstr "Kehityslisenssi"
 
@@ -7367,7 +7391,7 @@ msgid "enterprise single sign-on"
 msgstr "yritysten kertakirjautuminen"
 
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:18
-#: src/ee/licensing/licenceNotice.ts:53
+#: src/ee/licensing/licenceNotice.ts:57
 msgid "Enterprise single sign-on"
 msgstr "Yritysten kertakirjautuminen"
 
@@ -7819,8 +7843,8 @@ msgstr "Vanhentumispäivä"
 #: src/components/common/WaitlistTable/index.tsx:30
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:119
 #: src/components/routes/settings/ApiKeys/index.tsx:210
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:30
-#: src/ee/licensing/licenceNotice.ts:72
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:35
+#: src/ee/licensing/licenceNotice.ts:78
 msgid "Expired"
 msgstr "Vanhentunut"
 
@@ -7832,7 +7856,7 @@ msgstr "Vanheni {0}"
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:33
 #: src/components/routes/settings/ApiKeys/index.tsx:176
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:88
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:176
 msgid "Expires"
 msgstr "Vanhenee"
 
@@ -8282,7 +8306,7 @@ msgstr "Ominaisuusliput"
 msgid "Featured"
 msgstr "Nostettu"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:91
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:103
 msgid "Features"
 msgstr "Ominaisuudet"
 
@@ -8791,12 +8815,12 @@ msgid "German"
 msgstr "Saksa"
 
 #: src/ee/licensing/components/GetLicenceLink/index.tsx:11
-#: src/ee/licensing/components/LicenceModal/index.tsx:108
-#: src/ee/licensing/components/LicenceModal/index.tsx:124
+#: src/ee/licensing/components/LicenceModal/index.tsx:122
+#: src/ee/licensing/components/LicenceModal/index.tsx:158
 msgid "Get a licence"
 msgstr "Hanki lisenssi"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:103
+#: src/ee/licensing/components/LicenceModal/index.tsx:117
 msgid "Get an Enterprise licence key."
 msgstr "Hanki Enterprise-lisenssiavain."
 
@@ -8922,12 +8946,12 @@ msgstr "Google Calendar"
 msgid "Got it"
 msgstr "Ymmärretty"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:28
-#: src/ee/licensing/licenceNotice.ts:70
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:33
+#: src/ee/licensing/licenceNotice.ts:76
 msgid "Grace period"
 msgstr "Lisäaika"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:89
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:177
 msgid "Grace period ends"
 msgstr "Lisäaika päättyy"
 
@@ -9079,6 +9103,10 @@ msgstr "Hei {0} 👋"
 #: src/components/routes/event/OccurrencesTab/rescheduleMessageTemplate.ts:74
 msgid "Hi,"
 msgstr "Hei,"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:50
+msgid "Hi.Events Cloud"
+msgstr "Hi.Events Cloud"
 
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:75
 msgid "Hi.Events Fee"
@@ -9543,7 +9571,7 @@ msgstr "Siirry Microsoft Entra admin centerissä kohtaan App registrations ja va
 msgid "In the Okta Admin Console, go to Applications and choose Create App Integration."
 msgstr "Siirry Okta Admin Consolessa kohtaan Applications ja valitse Create App Integration."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:188
+#: src/ee/licensing/components/LicenceModal/index.tsx:230
 msgid "In use"
 msgstr "Käytössä"
 
@@ -9592,6 +9620,10 @@ msgstr "Lisää verkkotapahtuman yhteydenottotiedot. Nämä tiedot näytetään 
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:55
 msgid "Include tax and fees in the price"
 msgstr "Sisällytä verot ja maksut hintaan"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:108
+msgid "Included"
+msgstr "Sisältyy"
 
 #: src/components/common/CheckInListList/index.tsx:102
 #: src/components/common/CheckInListTable/index.tsx:95
@@ -9744,7 +9776,7 @@ msgstr "Laskun numerointi"
 msgid "Invoice Settings"
 msgstr "Laskuasetukset"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:87
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:175
 msgid "Issued"
 msgstr "Myönnetty"
 
@@ -10222,19 +10254,19 @@ msgstr "Kirjasto"
 
 #: src/components/common/GlobalMenu/index.tsx:79
 #: src/components/layouts/Admin/index.tsx:32
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:51
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:136
 msgid "Licence"
 msgstr "Lisenssi"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:215
+#: src/ee/licensing/components/LicenceModal/index.tsx:257
 msgid "Licence details"
 msgstr "Lisenssin tiedot"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:86
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:174
 msgid "Licence ID"
 msgstr "Lisenssin tunnus"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:79
+#: src/ee/licensing/components/LicenceModal/index.tsx:93
 msgid "Licence key not recognised"
 msgstr "Lisenssiavainta ei tunnistettu"
 
@@ -11168,7 +11200,7 @@ msgstr "Uusi alue"
 msgid "New band"
 msgstr "Uusi hintaryhmä"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:56
+#: src/ee/licensing/components/LicenceModal/index.tsx:63
 msgid "New box office sign-ins are refused, so open box office sessions end within 24 hours."
 msgstr "Uusia kirjautumisia lippukassaan ei hyväksytä, joten avoimet lippukassan istunnot päättyvät 24 tunnin kuluessa."
 
@@ -11526,7 +11558,7 @@ msgstr "Ei loppupäivämäärää"
 msgid "No ended events to show."
 msgstr "Ei näytettäviä päättyneitä tapahtumia."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:96
+#: src/ee/licensing/components/LicenceModal/index.tsx:110
 msgid "No Enterprise licence"
 msgstr "Ei Enterprise-lisenssiä"
 
@@ -11586,11 +11618,11 @@ msgstr "Ohjeita ei ole vielä lisätty."
 msgid "No invoice"
 msgstr "Ei laskua"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:34
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:39
 msgid "No licence"
 msgstr "Ei lisenssiä"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:62
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:147
 msgid "No licence key is set, so reserved seating, the box office and enterprise single sign-on can't be set up. To unlock them, set APP_LICENCE_KEY in the backend environment and redeploy the backend. With Docker Compose, use docker compose up -d, because docker compose restart doesn't reload the environment."
 msgstr "Lisenssiavainta ei ole asetettu, joten varattuja istumapaikkoja, lipunmyyntiä ovella ja yritysten kertakirjautumista ei voi määrittää. Avaa ne asettamalla APP_LICENCE_KEY taustajärjestelmän ympäristöön ja ottamalla taustajärjestelmä uudelleen käyttöön. Docker Composea käytettäessä käytä komentoa docker compose up -d, koska docker compose restart ei lataa ympäristöä uudelleen."
 
@@ -11796,6 +11828,10 @@ msgstr "Ei tuloksia"
 msgid "No results found"
 msgstr "Tuloksia ei löytynyt"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:91
+msgid "No sales"
+msgstr "Ei myyntiä"
+
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:29
 msgid "No sales in this period"
 msgstr "Ei myyntiä tällä aikavälillä"
@@ -12000,6 +12036,18 @@ msgstr "Ei kelvollinen"
 msgid "Not enough free seats for {0}"
 msgstr "Ei tarpeeksi vapaita paikkoja kohteelle {0}"
 
+#: src/ee/licensing/licenceNotice.ts:72
+msgid "Not in licence"
+msgstr "Ei lisenssissä"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:109
+msgid "Not included"
+msgstr "Ei sisälly"
+
+#: src/ee/licensing/components/LicenceModal/index.tsx:130
+msgid "Not included in your licence"
+msgstr "Ei sisälly lisenssiisi"
+
 #: src/components/routes/settings/Team/MemberRow.tsx:166
 msgid "Not joined yet"
 msgstr "Ei vielä liittynyt"
@@ -12053,7 +12101,7 @@ msgstr "Ei testattu"
 msgid "Not tested yet"
 msgstr "Ei vielä testattu"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:120
+#: src/ee/licensing/components/LicenceModal/index.tsx:154
 msgid "Not using reserved seating, the box office or enterprise single sign-on? Remove <0>APP_LICENCE_KEY</0> and redeploy."
 msgstr "Etkö käytä varattuja istumapaikkoja, lipunmyyntiä ovella tai yritysten kertakirjautumista? Poista <0>APP_LICENCE_KEY</0> ja ota taustajärjestelmä uudelleen käyttöön."
 
@@ -12428,7 +12476,7 @@ msgstr "Verkkotapahtuma"
 msgid "Online Event Details"
 msgstr "Verkkotapahtuman tiedot"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:54
+#: src/ee/licensing/components/LicenceModal/index.tsx:61
 msgid "Online ticket sales for events with reserved seating keep working."
 msgstr "Verkkolipunmyynti tapahtumiin, joissa on varatut istumapaikat, toimii edelleen."
 
@@ -13059,6 +13107,10 @@ msgstr "Ohita globaali oletus tälle tilille."
 msgid "Overview"
 msgstr "Yleiskatsaus"
 
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:46
+msgid "Own events"
+msgstr "Omat tapahtumat"
+
 #: src/components/modals/EditUserModal/index.tsx:66
 #: src/components/routes/settings/Team/MemberRow.tsx:137
 msgid "Owner"
@@ -13121,6 +13173,10 @@ msgstr "Maksetut tilit"
 #: src/ee/box-office/utilites/boxOfficeTender.ts:13
 msgid "Paid elsewhere"
 msgstr "Maksettu muualla"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:122
+msgid "Paid sales before tax, after refunds, across every organizer on this install. At the end of each licence year, send that year's sales to licence@hi.events."
+msgstr "Maksettu myynti ennen veroja ja hyvitysten jälkeen, kaikilta tämän asennuksen järjestäjiltä. Lähetä kunkin lisenssivuoden lopussa sen vuoden myynti osoitteeseen licence@hi.events."
 
 #: src/ee/box-office/components/routes/organizer/Payments/TerminalReaders/index.tsx:68
 msgid "Pair Stripe Terminal readers to take card payments at the box office."
@@ -13613,13 +13669,17 @@ msgstr "Sijoita pöytiä"
 msgid "Placed"
 msgstr "Tehty"
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:85
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:170
 msgid "Plan"
 msgstr "Paketti"
 
 #: src/components/common/PoweredByFooter/index.tsx:67
 msgid "Planning an event?"
 msgstr "Suunnitteletko tapahtumaa?"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:48
+msgid "Platform"
+msgstr "Alusta"
 
 #: src/components/routes/admin/Dashboard/index.tsx:195
 msgid "Platform commission"
@@ -14240,7 +14300,8 @@ msgstr "Ostajan sähköposti"
 msgid "Purchases"
 msgstr "Ostot"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:45
+#: src/ee/licensing/components/LicenceModal/index.tsx:52
+#: src/ee/licensing/components/LicenceModal/index.tsx:138
 msgid "Put the new key in <0>APP_LICENCE_KEY</0> and redeploy the backend."
 msgstr "Aseta uusi avain muuttujaan <0>APP_LICENCE_KEY</0> ja ota taustajärjestelmä uudelleen käyttöön."
 
@@ -14510,7 +14571,7 @@ msgstr "Toistuvat tapahtumat"
 msgid "Reddit"
 msgstr "Reddit"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:38
+#: src/ee/licensing/components/LicenceModal/index.tsx:45
 msgid "Redeploy the backend. With Docker Compose, run <0>docker compose up -d</0>."
 msgstr "Ota taustajärjestelmä uudelleen käyttöön. Docker Composea käytettäessä aja <0>docker compose up -d</0>."
 
@@ -14837,12 +14898,12 @@ msgstr "Nimeä widget uudelleen"
 msgid "Render it where the widget should appear"
 msgstr "Renderöi se kohtaan, jossa widgetin pitää näkyä"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:133
-#: src/ee/licensing/components/LicenceModal/index.tsx:143
+#: src/ee/licensing/components/LicenceModal/index.tsx:168
+#: src/ee/licensing/components/LicenceModal/index.tsx:184
 msgid "Renew licence"
 msgstr "Jatka lisenssiä"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:44
+#: src/ee/licensing/components/LicenceModal/index.tsx:51
 msgid "Renew your licence."
 msgstr "Jatka lisenssiäsi."
 
@@ -15005,7 +15066,7 @@ msgstr "varatut istumapaikat"
 #: src/components/common/EventCard/index.tsx:329
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:365
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:8
-#: src/ee/licensing/licenceNotice.ts:49
+#: src/ee/licensing/licenceNotice.ts:53
 msgid "Reserved seating"
 msgstr "Varatut paikat"
 
@@ -15356,6 +15417,10 @@ msgstr "Myynti hyvitysten jälkeen"
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:149
 msgid "Sales are paused"
 msgstr "Myynti on tauolla"
+
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:120
+msgid "Sales by licence year"
+msgstr "Myynti lisenssivuosittain"
 
 #: src/components/common/ProductPriceAvailability/index.tsx:24
 #: src/components/common/ProductPriceAvailability/index.tsx:63
@@ -16466,11 +16531,11 @@ msgstr "Aseta oletusasetukset uusille tämän järjestäjän tapahtumille."
 msgid "Set how long each date lasts"
 msgstr "Määritä, kuinka kauan kukin päivämäärä kestää"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:87
+#: src/ee/licensing/components/LicenceModal/index.tsx:101
 msgid "Set it as <0>APP_LICENCE_KEY</0> and redeploy the backend."
 msgstr "Aseta se muuttujaksi <0>APP_LICENCE_KEY</0> ja ota taustajärjestelmä uudelleen käyttöön."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:104
+#: src/ee/licensing/components/LicenceModal/index.tsx:118
 msgid "Set it as <0>APP_LICENCE_KEY</0> in the backend environment."
 msgstr "Aseta se muuttujaksi <0>APP_LICENCE_KEY</0> taustajärjestelmän ympäristöön."
 
@@ -16580,19 +16645,19 @@ msgstr "Asetukset"
 msgid "Setup & Design"
 msgstr "Asetus ja suunnittelu"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:97
+#: src/ee/licensing/components/LicenceModal/index.tsx:111
 msgid "Setup for {featureList} is locked because this instance has no Hi.Events Enterprise licence. Anything already set up can still be viewed or removed."
 msgstr "Näiden ominaisuuksien määrittäminen on lukittu, koska tällä asennuksella ei ole Hi.Events Enterprise -lisenssiä: {featureList}. Jo määritettyä voi edelleen tarkastella tai poistaa."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:67
+#: src/ee/licensing/components/LicenceModal/index.tsx:74
 msgid "Setup for {featureList} is locked until you renew. Anything already set up can still be viewed or removed."
 msgstr "Näiden ominaisuuksien määrittäminen on lukittu, kunnes jatkat lisenssiä: {featureList}. Jo määritettyä voi edelleen tarkastella tai poistaa."
 
-#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:6
+#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:12
 msgid "Setup is locked"
 msgstr "Asetukset on lukittu"
 
-#: src/ee/licensing/licenceNotice.ts:66
+#: src/ee/licensing/licenceNotice.ts:70
 msgid "Setup locked"
 msgstr "Asetukset lukittu"
 
@@ -17029,7 +17094,7 @@ msgstr "Yksirivinen tekstikenttä"
 msgid "Single sign-on"
 msgstr "Kertakirjautuminen"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:58
+#: src/ee/licensing/components/LicenceModal/index.tsx:65
 msgid "Single sign-on connections keep signing people in. They can be switched off or deleted, but not changed or switched back on without a licence."
 msgstr "Kertakirjautumisyhteydet kirjaavat käyttäjiä edelleen sisään. Ne voi kytkeä pois päältä tai poistaa, mutta niitä ei voi muuttaa tai ottaa uudelleen käyttöön ilman lisenssiä."
 
@@ -17600,7 +17665,7 @@ msgstr "Tilastot"
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:88
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:62
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:177
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:79
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:164
 msgid "Status"
 msgstr "Tila"
 
@@ -17608,7 +17673,7 @@ msgstr "Tila"
 msgid "Status unknown"
 msgstr "Tila tuntematon"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:88
+#: src/ee/licensing/components/LicenceModal/index.tsx:102
 msgid "Still failing? Upgrade Hi.Events, then contact hello@hi.events."
 msgstr "Eikö vieläkään toimi? Päivitä Hi.Events ja ota sitten yhteyttä osoitteeseen hello@hi.events."
 
@@ -18243,7 +18308,7 @@ msgstr "Se on {totalOccurrences} istuntoa — enimmäismäärä on {max}. Lyhenn
 msgid "That's a wrap"
 msgstr "Se on paketissa"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:49
+#: src/ee/licensing/components/LicenceModal/index.tsx:56
 msgid "The \"Powered by Hi.Events\" notice is shown again until you renew."
 msgstr "”Powered by Hi.Events” -ilmoitus näytetään taas, kunnes jatkat lisenssiä."
 
@@ -18366,7 +18431,7 @@ msgstr "Avaimella voi tehdä kaiken, mitä sinä voit tehdä tilillä {accountNa
 msgid "The language the attendee will receive emails in."
 msgstr "Kieli, jolla osallistuja saa sähköpostit."
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:56
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:141
 msgid "The licence key was rejected"
 msgstr "Lisenssiavain hylättiin"
 
@@ -18852,7 +18917,7 @@ msgstr "Vain tämä tapahtuma"
 msgid "This event's dates and times are set on the occurrence schedule."
 msgstr "Tapahtuman päivämäärät ja kellonajat määritetään tapahtumakertojen aikataulussa."
 
-#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:7
+#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:15
 msgid "This feature needs a Hi.Events Enterprise licence. Until a licence key is added, nothing new can be set up and existing setup can't be changed, but what is already set up can still be viewed, switched off or removed."
 msgstr "Tämä ominaisuus vaatii Hi.Events Enterprise -lisenssin. Ennen kuin lisenssiavain lisätään, mitään uutta ei voi määrittää eikä nykyisiä asetuksia voi muuttaa, mutta jo määritettyä voi edelleen tarkastella, kytkeä pois päältä tai poistaa."
 
@@ -18918,7 +18983,7 @@ msgstr "Näet tämän avaimen vain tämän kerran"
 msgid "This is usually temporary. Try again in a moment."
 msgstr "Tämä on yleensä tilapäistä. Yritä hetken kuluttua uudelleen."
 
-#: src/ee/licensing/components/routes/admin/Licence/index.tsx:68
+#: src/ee/licensing/components/routes/admin/Licence/index.tsx:153
 msgid "This licence expires on {0}. Renew before then to avoid interruption."
 msgstr "Tämä lisenssi vanhenee {0}. Uusi se ennen sitä välttääksesi katkokset."
 
@@ -20176,6 +20241,10 @@ msgstr "Päivittyy sääntöä rakentaessasi. Selaa kuukausia tarkistaaksesi pä
 msgid "Updates as you type."
 msgstr "Päivittyy kirjoittaessasi."
 
+#: src/ee/licensing/components/LicenceModal/index.tsx:141
+msgid "Upgrade licence"
+msgstr "Päivitä lisenssi"
+
 #: src/components/routes/organizer/Settings/Sections/ImageAssetSettings/index.tsx:39
 msgid "Upload a cover image for your organizer"
 msgstr "Lataa järjestäjällesi kansikuva"
@@ -20370,7 +20439,7 @@ msgstr "Käyttää etusivusi ulkoasun värejä ja fonttia, ja päivittyy, kun mu
 msgid "Uses the colours and font from your homepage design. If you change the design, copy the code again to update the button."
 msgstr "Käyttää kotisivusi suunnittelun värejä ja fonttia. Jos muutat suunnittelua, kopioi koodi uudelleen päivittääksesi painikkeen."
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:121
+#: src/ee/licensing/components/LicenceModal/index.tsx:155
 msgid "Using them for real events? Get an Enterprise licence and put its key in <0>APP_LICENCE_KEY</0>."
 msgstr "Käytätkö niitä oikeissa tapahtumissa? Hanki Enterprise-lisenssi ja aseta sen avain muuttujaan <0>APP_LICENCE_KEY</0>."
 
@@ -21164,9 +21233,10 @@ msgstr "Mitä osallistujat voivat odottaa?"
 msgid "What time will you be arriving?"
 msgstr "Mihin aikaan saavut?"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:41
-#: src/ee/licensing/components/LicenceModal/index.tsx:83
-#: src/ee/licensing/components/LicenceModal/index.tsx:100
+#: src/ee/licensing/components/LicenceModal/index.tsx:48
+#: src/ee/licensing/components/LicenceModal/index.tsx:97
+#: src/ee/licensing/components/LicenceModal/index.tsx:114
+#: src/ee/licensing/components/LicenceModal/index.tsx:134
 msgid "What to do"
 msgstr "Mitä tehdä"
 
@@ -21348,7 +21418,7 @@ msgstr "Mikä lippu paikoille {0}?"
 msgid "Which tickets should be associated with this check-in list?"
 msgstr "Mitkä liput yhdistetään tähän sisäänkirjautumislistaan?"
 
-#: src/ee/licensing/licenceNotice.ts:55
+#: src/ee/licensing/licenceNotice.ts:59
 msgid "White-label"
 msgstr "White label"
 
@@ -21906,9 +21976,13 @@ msgstr "Tapahtumallasi ei ole vielä kuvausta."
 msgid "Your event is live!"
 msgstr "Tapahtumasi on julkaistu!"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:131
+#: src/ee/licensing/components/LicenceModal/index.tsx:165
 msgid "Your Hi.Events Enterprise licence expired on {expiresAt}. Everything stays on until {graceEndsAt}. Renew before then to avoid interruption."
 msgstr "Hi.Events Enterprise -lisenssisi vanheni {expiresAt}. Kaikki pysyy käytössä {graceEndsAt} asti. Jatka lisenssiä ennen sitä välttääksesi katkokset."
+
+#: src/ee/licensing/components/LicenceLockedCallout/index.tsx:14
+msgid "Your Hi.Events licence doesn't include this feature. Until it does, nothing new can be set up and existing setup can't be changed, but what is already set up can still be viewed, switched off or removed."
+msgstr "Hi.Events-lisenssisi ei sisällä tätä ominaisuutta. Siihen asti mitään uutta ei voi määrittää eikä nykyisiä asetuksia voi muuttaa, mutta jo määritettyä voi edelleen tarkastella, poistaa käytöstä tai poistaa."
 
 #: src/ee/sso/components/SingleSignOn/providers.tsx:22
 msgid "your identity provider"
@@ -21918,8 +21992,12 @@ msgstr "identiteetintarjoajasi"
 msgid "Your identity provider returned an error: {providerError}"
 msgstr "Identiteetintarjoajasi palautti virheen: {providerError}"
 
-#: src/ee/licensing/components/LicenceModal/index.tsx:130
-#: src/ee/licensing/components/LicenceModal/index.tsx:139
+#: src/ee/licensing/components/LicenceModal/index.tsx:80
+msgid "Your licence doesn't include {notIncludedList}. Nothing new can be set up, but anything already set up can still be viewed or removed."
+msgstr "Lisenssisi ei sisällä seuraavia: {notIncludedList}. Mitään uutta ei voi määrittää, mutta jo määritettyä voi edelleen tarkastella tai poistaa."
+
+#: src/ee/licensing/components/LicenceModal/index.tsx:164
+#: src/ee/licensing/components/LicenceModal/index.tsx:177
 msgid "Your licence has expired"
 msgstr "Lisenssisi on vanhentunut"
 

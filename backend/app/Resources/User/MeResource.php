@@ -22,7 +22,8 @@ class MeResource extends UserResource
     {
         $accountUser = $this->getCurrentAccountUser();
         $accountId = $accountUser?->getAccountId();
-        $licence = app(LicenceService::class)->state();
+        $licenceService = app(LicenceService::class);
+        $licence = $licenceService->state();
         $featuresInUse = match (true) {
             $accountUser?->getRole() === Role::SUPERADMIN->name => app(LicensedFeatureUsageService::class)->featuresInUse(),
             $accountId !== null => app(LicensedFeatureUsageService::class)->featuresInUse($accountId),
@@ -47,6 +48,16 @@ class MeResource extends UserResource
                 'expires_at' => $licence->licence?->expires_at->toDateString(),
                 'grace_ends_at' => $licence->grace_ends_at?->toDateString(),
                 'invalid_reason' => $licence->invalid_reason,
+                /** @var array<int, 'seating'|'box_office'|'enterprise_sso'|'white_label'> */
+                'features' => array_map(
+                    static fn (LicensedFeature $feature) => $feature->value,
+                    $licence->features,
+                ),
+                /** @var array<int, 'seating'|'box_office'|'enterprise_sso'|'white_label'> */
+                'unlocked_features' => array_map(
+                    static fn (LicensedFeature $feature) => $feature->value,
+                    $licenceService->unlockedFeatures(),
+                ),
                 /** @var array<int, 'seating'|'box_office'|'enterprise_sso'|'white_label'> */
                 'features_in_use' => array_map(
                     static fn (LicensedFeature $feature) => $feature->value,
