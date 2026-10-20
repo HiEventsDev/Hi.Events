@@ -560,6 +560,7 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                             <a
                                                 href={organizerHomepageUrl(organizer)}
                                                 className={classes.organizerPill}
+                                                title={organizer.name}
                                             >
                                                 {organizerLogo ? (
                                                     <img
@@ -577,7 +578,7 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                                 </span>
                                             </a>
                                         ) : (
-                                            <div className={classes.organizerPill}>
+                                            <div className={classes.organizerPill} title={organizer?.name}>
                                                 {organizerLogo ? (
                                                     <img
                                                         src={organizerLogo}

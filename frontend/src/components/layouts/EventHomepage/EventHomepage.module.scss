@@ -235,6 +235,7 @@ $transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
   margin-bottom: 16px;
 }
 
@@ -245,6 +246,7 @@ $transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   background: var(--accent-soft);
   border-radius: 100px;
   padding: 6px 14px 6px 6px;
+  min-width: 0;
   text-decoration: none;
   transition: all $transition-fast;
   cursor: pointer;
@@ -255,6 +257,7 @@ $transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .organizerPillAvatar {
+  flex-shrink: 0;
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -263,6 +266,7 @@ $transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .organizerPillAvatarPlaceholder {
+  flex-shrink: 0;
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -277,6 +281,10 @@ $transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .organizerPillName {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: 0.9rem;
   font-weight: 500;
   color: var(--primary-text-color);
@@ -284,6 +292,7 @@ $transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
 .actionButtons {
   display: flex;
+  flex-shrink: 0;
   gap: 8px;
 }
 
