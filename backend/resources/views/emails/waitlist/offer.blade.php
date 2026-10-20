@@ -1,6 +1,7 @@
 @php /** @var \HiEvents\DomainObjects\WaitlistEntryDomainObject $entry */ @endphp
 @php /** @var \HiEvents\DomainObjects\EventDomainObject $event */ @endphp
 @php /** @var ?string $productName */ @endphp
+@php /** @var ?string $occurrenceDateFormatted */ @endphp
 @php /** @var \HiEvents\DomainObjects\OrganizerDomainObject $organizer */ @endphp
 @php /** @var \HiEvents\DomainObjects\EventSettingDomainObject $eventSettings */ @endphp
 @php /** @var string $checkoutUrl */ @endphp
@@ -12,7 +13,11 @@
 
 {{ __('Hello') }},
 
-@if($productName)
+@if($occurrenceDateFormatted && $productName)
+{{ __('Great news! A spot has become available for **:product** on **:date** for the event **:event**.', ['product' => $productName, 'date' => $occurrenceDateFormatted, 'event' => $event->getTitle()]) }}
+@elseif($occurrenceDateFormatted)
+{{ __('Great news! A spot has become available on **:date** for the event **:event**.', ['date' => $occurrenceDateFormatted, 'event' => $event->getTitle()]) }}
+@elseif($productName)
 {{ __('Great news! A spot has become available for **:product** for the event **:event**.', ['product' => $productName, 'event' => $event->getTitle()]) }}
 @else
 {{ __('Great news! A spot has become available for the event **:event**.', ['event' => $event->getTitle()]) }}

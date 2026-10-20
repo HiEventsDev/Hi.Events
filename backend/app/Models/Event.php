@@ -13,8 +13,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Event extends BaseModel
 {
-    use SoftDeletes;
     use HasImages;
+    use SoftDeletes;
 
     public function account(): BelongsTo
     {
@@ -61,6 +61,11 @@ class Event extends BaseModel
         return $this->hasMany(CheckInList::class);
     }
 
+    public function box_offices(): HasMany
+    {
+        return $this->hasMany(BoxOffice::class);
+    }
+
     public function capacity_assignments(): HasMany
     {
         return $this->hasMany(CapacityAssignment::class);
@@ -81,11 +86,35 @@ class Event extends BaseModel
         return $this->hasMany(Affiliate::class);
     }
 
+    public function event_lineup_entries(): HasMany
+    {
+        return $this->hasMany(EventLineupEntry::class);
+    }
+
+    public function event_spaces(): HasMany
+    {
+        return $this->hasMany(EventSpace::class);
+    }
+
+    public function event_schedule_items(): HasMany
+    {
+        return $this->hasMany(EventScheduleItem::class);
+    }
+
+    public function event_occurrences(): HasMany
+    {
+        return $this->hasMany(EventOccurrence::class);
+    }
+
+    public function event_location(): BelongsTo
+    {
+        return $this->belongsTo(EventLocation::class, 'event_location_id');
+    }
+
     public static function boot(): void
     {
         parent::boot();
 
-        // todo - move into a domain service
         static::creating(
             static function (Event $event) {
                 $event->user_id = auth()->user()->id;
@@ -96,10 +125,8 @@ class Event extends BaseModel
     protected function getCastMap(): array
     {
         return [
-            EventDomainObjectAbstract::START_DATE => 'datetime',
-            EventDomainObjectAbstract::END_DATE => 'datetime',
             EventDomainObjectAbstract::ATTRIBUTES => 'array',
-            EventDomainObjectAbstract::LOCATION_DETAILS => 'array',
+            EventDomainObjectAbstract::RECURRENCE_RULE => 'array',
         ];
     }
 }

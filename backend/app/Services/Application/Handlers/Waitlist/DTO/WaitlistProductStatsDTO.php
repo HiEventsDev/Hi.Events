@@ -12,7 +12,5 @@ class WaitlistProductStatsDTO extends BaseDataObject
         public int $waiting,
         public int $offered,
         public ?int $available,
-    )
-    {
-    }
+    ) {}
 }

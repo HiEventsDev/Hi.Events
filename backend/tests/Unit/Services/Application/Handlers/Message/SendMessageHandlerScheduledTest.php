@@ -30,14 +30,23 @@ use Tests\TestCase;
 class SendMessageHandlerScheduledTest extends TestCase
 {
     private OrderRepositoryInterface $orderRepository;
+
     private AttendeeRepositoryInterface $attendeeRepository;
+
     private ProductRepositoryInterface $productRepository;
+
     private MessageRepositoryInterface $messageRepository;
+
     private AccountRepositoryInterface $accountRepository;
+
     private EventRepositoryInterface $eventRepository;
+
     private HtmlPurifierService $purifier;
+
     private Repository $config;
+
     private MessagingEligibilityService $eligibilityService;
+
     private SendMessageHandler $handler;
 
     protected function setUp(): void
@@ -88,13 +97,13 @@ class SendMessageHandlerScheduledTest extends TestCase
 
     private function setupRepositoryMocks(): void
     {
-        $attendee = new AttendeeDomainObject();
+        $attendee = new AttendeeDomainObject;
         $attendee->setId(10);
 
-        $product = new ProductDomainObject();
+        $product = new ProductDomainObject;
         $product->setId(20);
 
-        $order = new OrderDomainObject();
+        $order = new OrderDomainObject;
         $order->setId(5);
 
         $this->attendeeRepository->shouldReceive('findWhereIn')->andReturn(collect([$attendee]));
@@ -102,7 +111,7 @@ class SendMessageHandlerScheduledTest extends TestCase
         $this->orderRepository->shouldReceive('findFirstWhere')->andReturn($order);
     }
 
-    public function testFutureScheduledAtSetsScheduledStatusAndDoesNotDispatchJob(): void
+    public function test_future_scheduled_at_sets_scheduled_status_and_does_not_dispatch_job(): void
     {
         Bus::fake();
 
@@ -147,7 +156,7 @@ class SendMessageHandlerScheduledTest extends TestCase
         Bus::assertNotDispatched(SendMessagesJob::class);
     }
 
-    public function testNoScheduledAtDispatchesJobImmediately(): void
+    public function test_no_scheduled_at_dispatches_job_immediately(): void
     {
         Bus::fake();
 
@@ -190,7 +199,7 @@ class SendMessageHandlerScheduledTest extends TestCase
         Bus::assertDispatched(SendMessagesJob::class);
     }
 
-    public function testIsTestWithScheduledAtSendsImmediately(): void
+    public function test_is_test_with_scheduled_at_sends_immediately(): void
     {
         Bus::fake();
 

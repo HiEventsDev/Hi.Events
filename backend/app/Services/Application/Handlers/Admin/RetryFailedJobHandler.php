@@ -11,7 +11,7 @@ class RetryFailedJobHandler
     {
         $job = FailedJob::find($id);
 
-        if (!$job) {
+        if (! $job) {
             return false;
         }
 

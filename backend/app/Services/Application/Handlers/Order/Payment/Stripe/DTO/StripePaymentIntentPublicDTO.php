@@ -10,7 +10,5 @@ class StripePaymentIntentPublicDTO extends BaseDTO
         public string $status,
         public string $paymentIntentId,
         public string $amount,
-    )
-    {
-    }
+    ) {}
 }

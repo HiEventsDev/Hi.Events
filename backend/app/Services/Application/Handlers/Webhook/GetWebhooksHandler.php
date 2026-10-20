@@ -10,9 +10,7 @@ class GetWebhooksHandler
 {
     public function __construct(
         private readonly WebhookRepositoryInterface $webhookRepository,
-    )
-    {
-    }
+    ) {}
 
     public function handler(int $accountId, ?int $eventId = null, ?int $organizerId = null): Collection
     {

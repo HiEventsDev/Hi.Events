@@ -1,15 +1,16 @@
-import {Container, Title, Stack, Card, Text, Group, Button, Badge, ActionIcon, Alert, NumberInput, TextInput, Skeleton, Switch, Select} from "@mantine/core";
+import {Container, Title, Stack, Card, Text, Group, Button, Badge, ActionIcon, NumberInput, TextInput, Skeleton, Switch, Select} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {useGetAllConfigurations} from "../../../../queries/useGetAllConfigurations";
 import {useCreateConfiguration} from "../../../../mutations/useCreateConfiguration";
 import {useUpdateConfiguration} from "../../../../mutations/useUpdateConfiguration";
 import {useDeleteConfiguration} from "../../../../mutations/useDeleteConfiguration";
-import {IconPlus, IconEdit, IconTrash, IconAlertTriangle} from "@tabler/icons-react";
+import {IconPlus, IconEdit, IconTrash} from "@tabler/icons-react";
+import {Callout} from "../../../common/Callout";
 import {useState} from "react";
-import {Modal} from "../../../common/Modal";
+import {Modal, ModalFooter} from "../../../common/Modal";
 import {useForm} from "@mantine/form";
 import {showSuccess, showError} from "../../../../utilites/notifications";
-import {AccountConfiguration} from "../../../../api/admin.client";
+import {AccountConfiguration, isDefaultConfiguration} from "../../../../api/admin.client";
 import {currenciesMap} from "../../../../../data/currencies";
 import {getCurrencySymbol} from "../../../../utilites/currency";
 import classes from "./Configurations.module.scss";
@@ -31,11 +32,6 @@ const Configurations = () => {
     const configurations = configurationsData?.data || [];
 
     const handleDelete = (config: AccountConfiguration) => {
-        if (config.is_system_default) {
-            showError(t`Cannot delete the system default configuration`);
-            return;
-        }
-
         if (window.confirm(t`Are you sure you want to delete this configuration? This may affect accounts using it.`)) {
             deleteMutation.mutate(config.id, {
                 onSuccess: () => showSuccess(t`Configuration deleted successfully`),
@@ -70,9 +66,9 @@ const Configurations = () => {
                         </Button>
                     </Group>
 
-                    <Alert icon={<IconAlertTriangle size={16} />} color="yellow">
+                    <Callout variant="tip">
                         {t`Configuration names are visible to end users. Fixed fees will be converted to the order currency at the current exchange rate.`}
-                    </Alert>
+                    </Callout>
 
                     <Stack gap="md">
                         {configurations.map((config) => (
@@ -83,6 +79,9 @@ const Configurations = () => {
                                             <Text fw={600}>{config.name}</Text>
                                             {config.is_system_default && (
                                                 <Badge color="blue" size="sm">{t`System Default`}</Badge>
+                                            )}
+                                            {config.default_for_currency && (
+                                                <Badge color="teal" size="sm">{t`${config.default_for_currency} Default`}</Badge>
                                             )}
                                             {config.bypass_application_fees && (
                                                 <Badge color="orange" size="sm">{t`Fees Bypassed`}</Badge>
@@ -113,7 +112,7 @@ const Configurations = () => {
                                             variant="light"
                                             color="red"
                                             onClick={() => handleDelete(config)}
-                                            disabled={config.is_system_default}
+                                            disabled={isDefaultConfiguration(config)}
                                         >
                                             <IconTrash size={16} />
                                         </ActionIcon>
@@ -208,9 +207,15 @@ const ConfigurationModal = ({configuration, onClose}: ConfigurationModalProps) =
             opened
         >
             {isEditing && configuration?.is_system_default && (
-                <Alert icon={<IconAlertTriangle size={16} />} color="orange" mb="md">
+                <Callout variant="tip">
                     {t`Warning: This is the system default configuration. Changes will affect all accounts that don't have a specific configuration assigned.`}
-                </Alert>
+                </Callout>
+            )}
+
+            {isEditing && configuration && !configuration.is_system_default && configuration.default_for_currency && (
+                <Callout variant="tip">
+                    {t`Warning: This is the ${configuration.default_for_currency} default configuration. Changes will affect every organizer automatically assigned this pricing.`}
+                </Callout>
             )}
 
             <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -260,13 +265,15 @@ const ConfigurationModal = ({configuration, onClose}: ConfigurationModalProps) =
                         {...form.getInputProps('bypass_application_fees', { type: 'checkbox' })}
                     />
 
-                    <Button
-                        fullWidth
-                        loading={createMutation.isPending || updateMutation.isPending}
-                        type="submit"
-                    >
-                        {isEditing ? t`Save Changes` : t`Create Configuration`}
-                    </Button>
+                    <ModalFooter>
+                        <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                        <Button
+                            loading={createMutation.isPending || updateMutation.isPending}
+                            type="submit"
+                        >
+                            {isEditing ? t`Save Changes` : t`Create Configuration`}
+                        </Button>
+                    </ModalFooter>
                 </Stack>
             </form>
         </Modal>

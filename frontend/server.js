@@ -1,9 +1,9 @@
 import express from "express";
 import {installGlobals} from "@remix-run/node";
 import process from "process";
-import {createServer as viteServer} from "vite";
 import compression from "compression";
 import fs from "node:fs/promises";
+import {createHash} from "node:crypto";
 import sirv from "sirv";
 import cookieParser from "cookie-parser";
 import path from "node:path";
@@ -11,7 +11,12 @@ import {fileURLToPath} from "node:url";
 import * as nodePath from "node:path";
 import * as nodeUrl from "node:url";
 import "dotenv/config";
+import * as Sentry from "@sentry/node";
+import {complianceHandler} from "./src/compliance/proxy.js";
 import {sitemapIndexHandler, sitemapEventsHandler, sitemapOrganizersHandler} from "./src/sitemap/proxy.js";
+import {htmlSafeJsonStringify} from "./src/utilites/safeScriptJson.js";
+import {backendRequestHeaders, licenceSimulation} from "./src/ssr/backendRequestHeaders.js";
+import {loggableError} from "./src/ssr/loggableError.js";
 
 installGlobals();
 
@@ -37,9 +42,58 @@ async function main() {
 
     app.use('/.well-known', express.static(path.join(__dirname, 'public/.well-known')));
 
+    const widgetPath = isProduction
+        ? path.join(__dirname, './dist/client/widget.js')
+        : path.join(__dirname, './public/widget.js');
+    const loadWidgetScript = async () => {
+        const body = await fs.readFile(widgetPath, 'utf-8');
+        return {body, etag: `"${createHash('sha1').update(body).digest('base64url')}"`};
+    };
+    const productionWidgetScript = isProduction ? loadWidgetScript().catch(() => null) : null;
+
+    app.get('/widget.js', compression(), async (req, res) => {
+        try {
+            const script = isProduction ? await productionWidgetScript : await loadWidgetScript();
+            if (!script) {
+                return res.status(404).send('');
+            }
+            res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+            res.setHeader('Cache-Control', isProduction
+                ? 'public, max-age=300, stale-while-revalidate=86400'
+                : 'no-cache');
+            res.setHeader('ETag', script.etag);
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+            if (req.fresh) {
+                return res.status(304).end();
+            }
+            return res.status(200).send(script.body);
+        } catch (error) {
+            return res.status(404).send('');
+        }
+    });
+
+    const widgetTestPageEnabled = !isProduction || process.env.WIDGET_TEST_PAGE_ENABLED === 'true';
+
+    if (widgetTestPageEnabled) {
+        app.get('/widget-test', async (req, res) => {
+            try {
+                const widgetTestHtml = await fs.readFile(path.join(__dirname, './src/widget-test/index.html'), 'utf-8');
+                res.setHeader('Content-Type', 'text/html; charset=utf-8');
+                res.setHeader('Cache-Control', 'no-cache');
+                res.setHeader('X-Robots-Tag', 'noindex');
+                return res.status(200).send(widgetTestHtml);
+            } catch (error) {
+                return res.status(404).send('');
+            }
+        });
+    }
+
     let vite;
 
     if (!isProduction) {
+        const {createServer: viteServer} = await import("vite");
+
         vite = await viteServer({
             server: { middlewareMode: true },
             appType: "custom",
@@ -52,6 +106,16 @@ async function main() {
         app.use(base, sirv(path.join(__dirname, "./dist/client"), { extensions: [] }));
     }
 
+    const googleConsentDefaults = (consentCookie) => {
+        const consent = new URLSearchParams(typeof consentCookie === 'string' ? consentCookie : '');
+        if (!consent.has('analytics') && !consent.has('advertising')) {
+            return "ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',wait_for_update:500";
+        }
+        const advertising = consent.get('advertising') === '1' ? 'granted' : 'denied';
+        const analytics = consent.get('analytics') === '1' ? 'granted' : 'denied';
+        return `ad_storage:'${advertising}',ad_user_data:'${advertising}',ad_personalization:'${advertising}',analytics_storage:'${analytics}'`;
+    };
+
     const getViteEnvironmentVariables = () => {
         const envVars = {};
         for (const key in process.env) {
@@ -59,7 +123,7 @@ async function main() {
                 envVars[key] = process.env[key];
             }
         }
-        return JSON.stringify(envVars);
+        return htmlSafeJsonStringify(envVars);
     };
 
     app.get('/robots.txt', (req, res) => {
@@ -74,9 +138,42 @@ Sitemap: ${frontendUrl}/sitemap.xml
         res.status(200).send(robotsTxt);
     });
 
+    app.get('/compliance', complianceHandler);
+
     app.get('/sitemap.xml', sitemapIndexHandler);
     app.get('/sitemap-events-:page.xml', sitemapEventsHandler);
     app.get('/sitemap-organizers-:page.xml', sitemapOrganizersHandler);
+
+    const nonRenderablePathPattern = /(^|\/)\.[^/]|\.(php|asp|aspx|jsp|cgi|sql|bak|old|zip|tar|gz|rar|7z|env|ini|yml|yaml|conf|log|sh|exe|dll)$/i;
+
+    app.use("*", async (req, res, next) => {
+        if (nonRenderablePathPattern.test(req.originalUrl.split("?")[0])) {
+            return res.status(404).type("text/plain").send("Not Found");
+        }
+
+        return next();
+    });
+
+    const frameProtectedPathPattern = /^\/(auth|manage|account|profile|settings|welcome|admin|sso)(\/|$)/;
+    const credentialInUrlPathPattern = /^\/(sso\/callback|auth\/accept-invitation\/)/;
+    const ssoCallbackPathPattern = /^\/sso\/callback\/?$/;
+    const requestPathOf = (req) => req.originalUrl.replace(base, "/").split("?")[0];
+
+    app.use("*", (req, res, next) => {
+        const requestPath = requestPathOf(req);
+
+        if (frameProtectedPathPattern.test(requestPath)) {
+            res.setHeader("Content-Security-Policy", "frame-ancestors 'self'");
+            res.setHeader("X-Frame-Options", "SAMEORIGIN");
+        }
+
+        if (credentialInUrlPathPattern.test(requestPath)) {
+            res.setHeader("Referrer-Policy", "no-referrer");
+            res.setHeader("Cache-Control", "no-store");
+        }
+
+        return next();
+    });
 
     app.use("*", async (req, res) => {
         const url = req.originalUrl.replace(base, "");
@@ -94,11 +191,26 @@ Sitemap: ${frontendUrl}/sitemap.xml
                 render = (await dynamicImport(path.join(__dirname, "./dist/server/entry.server.js"))).render;
             }
 
-            const { appHtml, dehydratedState, helmetContext } = await render(
-                { req, res },
+            const { appHtml, dehydratedState, helmetContext, themeColors, statusCode, renderErrors } = await render(
+                {
+                    req,
+                    res,
+                    backendHeaders: backendRequestHeaders(req),
+                    licenceSimulation: licenceSimulation(req),
+                },
                 ssrManifest
             );
-            const stringifiedState = JSON.stringify(dehydratedState);
+
+            if (statusCode >= 500) {
+                renderErrors.forEach((renderError) => {
+                    Sentry.captureException(renderError, {
+                        tags: { source: "ssr-loader" },
+                        extra: { url: req.originalUrl },
+                    });
+                });
+            }
+            const stringifiedState = htmlSafeJsonStringify(dehydratedState);
+            const stringifiedThemeColors = htmlSafeJsonStringify(themeColors);
 
             const helmetHtml = Object.values(helmetContext.helmet || {})
                 .map((value) => value.toString() || "")
@@ -107,21 +219,32 @@ Sitemap: ${frontendUrl}/sitemap.xml
             const envVariablesHtml = `<script>window.hievents = ${getViteEnvironmentVariables()};</script>`;
 
             const headSnippets = [];
-            if (process.env.VITE_FATHOM_SITE_ID) {
+            const isSsoCallback = ssoCallbackPathPattern.test(requestPathOf(req));
+            if (process.env.VITE_COOKIE_CONSENT_ENABLED === 'true' && !isSsoCallback) {
+                headSnippets.push(`<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{${googleConsentDefaults(req.cookies?.hi_cookie_consent)}});</script>`);
+            }
+            if (process.env.VITE_GOOGLE_ADS_CONVERSION_ID && !isSsoCallback) {
+                const conversionId = encodeURIComponent(process.env.VITE_GOOGLE_ADS_CONVERSION_ID);
                 headSnippets.push(`
-                <script src="https://cdn.usefathom.com/script.js" data-spa="auto" data-site="${process.env.VITE_FATHOM_SITE_ID}" defer></script>
+                <script async src="https://www.googletagmanager.com/gtag/js?id=${conversionId}"></script>
+                <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${conversionId}');</script>
+            `);
+            }
+            if (process.env.VITE_FATHOM_SITE_ID && !isSsoCallback) {
+                headSnippets.push(`
+                <script src="https://cdn.usefathom.com/script.js" data-spa="auto" data-site="${encodeURIComponent(process.env.VITE_FATHOM_SITE_ID)}" defer></script>
             `);
             }
 
             const html = template
-                .replace("<!--head-snippets-->", headSnippets.join("\n"))
-                .replace("<!--app-html-->", appHtml)
-                .replace("<!--dehydrated-state-->", `<script>window.__REHYDRATED_STATE__ = ${stringifiedState}</script>`)
-                .replace("<!--environment-variables-->", envVariablesHtml)
-                .replace(/<!--render-helmet-->.*?<!--\/render-helmet-->/s, helmetHtml);
+                .replace("<!--head-snippets-->", () => headSnippets.join("\n"))
+                .replace("<!--app-html-->", () => appHtml)
+                .replace("<!--dehydrated-state-->", () => `<script>window.__REHYDRATED_STATE__ = ${stringifiedState};window.__THEME_COLORS__ = ${stringifiedThemeColors}</script>`)
+                .replace("<!--environment-variables-->", () => envVariablesHtml)
+                .replace(/<!--render-helmet-->.*?<!--\/render-helmet-->/s, () => helmetHtml);
 
             res.setHeader("Content-Type", "text/html");
-            return res.status(200).end(html);
+            return res.status(statusCode || 200).end(html);
         } catch (error) {
             if (error instanceof Response) {
                 if (error.status >= 300 && error.status < 400) {
@@ -131,9 +254,25 @@ Sitemap: ${frontendUrl}/sitemap.xml
                 }
             }
 
-            console.error(error);
+            Sentry.captureException(error, {
+                tags: { source: "ssr-render" },
+                extra: { url: req.originalUrl },
+            });
+            console.error(loggableError(error));
             res.status(500).send("Internal Server Error");
         }
+    });
+
+    Sentry.setupExpressErrorHandler(app);
+
+    app.use((error, req, res, _next) => {
+        console.error(loggableError(error));
+
+        if (res.headersSent) {
+            return res.end();
+        }
+
+        return res.status(500).type("text/plain").send("Internal Server Error");
     });
 
     app.listen(port, () => {

@@ -12,10 +12,10 @@ class EditQuestionAnswerRequest extends BaseRequest
             'answer' => [
                 'nullable',
                 function ($attribute, $value, $fail) {
-                    if (!is_string($value) && !is_array($value)) {
+                    if (! is_string($value) && ! is_array($value)) {
                         $fail("The {$attribute} must be a string or an array.");
                     }
-                }
+                },
             ],
         ];
     }

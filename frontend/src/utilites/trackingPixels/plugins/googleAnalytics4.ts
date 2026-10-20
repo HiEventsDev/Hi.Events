@@ -57,6 +57,5 @@ export const googleAnalytics4Plugin: TrackingPixelPlugin = {
 
     cleanup() {
         document.querySelectorAll('script[data-tracking-pixel="ga4"]').forEach(el => el.remove());
-        delete (window as any).gtag;
     },
 };

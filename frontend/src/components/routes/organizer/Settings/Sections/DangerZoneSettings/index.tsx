@@ -1,5 +1,6 @@
 import {t} from "@lingui/macro";
-import {Button, Alert, TextInput, Stack, Text} from "@mantine/core";
+import {Button, TextInput, Stack, Text} from "@mantine/core";
+import {Callout} from "../../../../../common/Callout";
 import {useNavigate, useParams} from "react-router";
 import {useState} from "react";
 import {DangerZone, DangerZoneSection} from "../../../../../common/DangerZone";
@@ -11,14 +12,14 @@ import {useGetOrganizers} from "../../../../../../queries/useGetOrganizers.ts";
 import {showSuccess, showError} from "../../../../../../utilites/notifications.tsx";
 import {confirmationDialog} from "../../../../../../utilites/confirmationDialog.tsx";
 import {OrganizerStatus} from "../../../../../../types.ts";
-import {IconInfoCircle, IconTrash, IconArchive, IconArrowBackUp} from "@tabler/icons-react";
-import {useIsCurrentUserAdmin} from "../../../../../../hooks/useIsCurrentUserAdmin.ts";
+import {IconTrash, IconArchive, IconArrowBackUp} from "@tabler/icons-react";
+import {useAccess} from "../../../../../../hooks/useAccess.ts";
 import {BouncingEmoji} from "../../../../../common/BouncingEmoji";
 
 export const DangerZoneSettings = () => {
     const {organizerId} = useParams();
     const navigate = useNavigate();
-    const isAdmin = useIsCurrentUserAdmin();
+    const isAdmin = useAccess().can('DELETE_EVENTS');
     const {data: deletionStatus, isLoading: isDeletionStatusLoading} = useGetOrganizerDeletionStatus(organizerId!);
     const {data: organizer} = useGetOrganizer(organizerId!);
     const {data: organizers} = useGetOrganizers();
@@ -27,7 +28,8 @@ export const DangerZoneSettings = () => {
     const [deleteConfirmation, setDeleteConfirmation] = useState('');
 
     const isArchived = organizer?.status === OrganizerStatus.ARCHIVED;
-    const isDeleteConfirmed = deleteConfirmation.toLowerCase() === 'delete';
+    const deleteConfirmationPhrase = t`delete`;
+    const isDeleteConfirmed = deleteConfirmation.trim().toLocaleLowerCase() === deleteConfirmationPhrase.toLocaleLowerCase();
 
     const activeOrganizerCount = organizers?.data?.filter(
         org => org.status !== OrganizerStatus.ARCHIVED
@@ -94,9 +96,9 @@ export const DangerZoneSettings = () => {
                 action={
                     <>
                         {!isDeletionStatusLoading && !deletionStatus?.can_delete && (
-                            <Alert icon={<IconInfoCircle size={16}/>} variant="light" color="gray" mb="sm">
+                            <Callout variant="info" style={{marginBottom: 8}}>
                                 {deletionStatus?.reason}
-                            </Alert>
+                            </Callout>
                         )}
                         {deletionStatus?.can_delete && (
                             <Stack gap="xs" maw={400}>
@@ -104,7 +106,7 @@ export const DangerZoneSettings = () => {
                                     {t`Type "delete" to confirm`}
                                 </Text>
                                 <TextInput
-                                    placeholder={t`delete`}
+                                    placeholder={deleteConfirmationPhrase}
                                     value={deleteConfirmation}
                                     onChange={(e) => setDeleteConfirmation(e.currentTarget.value)}
                                 />

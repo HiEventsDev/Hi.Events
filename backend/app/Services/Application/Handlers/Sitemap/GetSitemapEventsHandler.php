@@ -12,14 +12,13 @@ use Illuminate\Support\Facades\Cache;
 class GetSitemapEventsHandler
 {
     private const CACHE_KEY_PREFIX = 'sitemap:events:';
+
     private const MIN_PAGE = 1;
 
     public function __construct(
         private readonly EventRepositoryInterface $eventRepository,
         private readonly SitemapGeneratorService $sitemapGenerator,
-    )
-    {
-    }
+    ) {}
 
     public function handle(int $page): string
     {
@@ -36,7 +35,7 @@ class GetSitemapEventsHandler
         }
 
         $cacheTtl = (int) config('sitemap.cache_ttl');
-        $cacheKey = self::CACHE_KEY_PREFIX . $page;
+        $cacheKey = self::CACHE_KEY_PREFIX.$page;
 
         return Cache::remember($cacheKey, $cacheTtl, function () use ($page, $eventsPerPage): string {
             $events = $this->eventRepository->getSitemapEvents($page, $eventsPerPage);

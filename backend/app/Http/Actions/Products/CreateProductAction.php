@@ -12,6 +12,8 @@ use HiEvents\Http\ResponseCodes;
 use HiEvents\Resources\Product\ProductResource;
 use HiEvents\Services\Application\Handlers\Product\CreateProductHandler;
 use HiEvents\Services\Application\Handlers\Product\DTO\UpsertProductDTO;
+use HiEvents\Services\Domain\Product\Exception\InvalidAddonProductException;
+use HiEvents\Services\Domain\Product\Exception\UnrecognizedProductIdException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 use Throwable;
@@ -42,6 +44,10 @@ class CreateProductAction extends BaseAction
         } catch (InvalidTaxOrFeeIdException $e) {
             throw ValidationException::withMessages([
                 'tax_and_fee_ids' => $e->getMessage(),
+            ]);
+        } catch (InvalidAddonProductException|UnrecognizedProductIdException $e) {
+            throw ValidationException::withMessages([
+                'addon_product_ids' => $e->getMessage(),
             ]);
         }
 

@@ -7,7 +7,7 @@ setup steps, and configuration details.
 
 ## Prerequisites
 
-1. [Install PHP 8.2 or higher](https://www.php.net/downloads.php)
+1. [Install PHP 8.3 or higher](https://www.php.net/downloads.php)
 2. [Install Composer](https://getcomposer.org/download/)
 3. [Install PostgreSQL](https://www.postgresql.org/download/)
 4. [Install Node.js](https://nodejs.org/en)
@@ -36,6 +36,13 @@ Hi.Events has two main directories: `backend` (Laravel) and `frontend` (React).
    ```bash
    cd backend
    cp .env.example .env
+   ```
+
+   The example file is set up for local development. For a production install, set:
+
+   ```bash
+   APP_ENV=production
+   APP_DEBUG=false
    ```
 
 2. **Database Configuration:**
@@ -139,6 +146,28 @@ If you want to test the payment functionality, configure Stripe:
 STRIPE_PUBLIC_KEY=your_public_key
 STRIPE_SECRET_KEY=your_secret_key
 STRIPE_WEBHOOK_SECRET=your_webhook_secret
+```
+
+Point a Stripe webhook at `/api/public/webhooks/stripe` and subscribe it to `payment_intent.succeeded`, `payment_intent.payment_failed`, `charge.succeeded`, `charge.updated`, `charge.refunded`, `refund.created`, `refund.updated`, `account.updated`, `payout.paid`, `payout.updated` and `terminal.reader.action_failed` (box office card readers).
+
+11. **Optional: Enterprise features:**
+
+Reserved seating and the box office are Hi.Events Enterprise features. To unlock them, set `APP_LICENCE_KEY` in `.env` to the licence key you received. Without a key they stay off, and everything else works as normal.
+
+For development and testing, you can set `APP_LICENCE_KEY` to `development` instead. That unlocks them with a "Development licence" notice shown to ticket buyers, and must not be used for real events. A superadmin (`php artisan user:make-superadmin <user id>`) can check the licence status at `/admin/licence`.
+
+12. **Optional: Reverse proxies and rate limiting:**
+
+Rate limits are keyed by client IP. The default, `APP_TRUSTED_PROXIES=*`, trusts whichever proxy connects to the app and reads the client IP from its `X-Forwarded-For`. That works with no proxy or a single proxy, but lets clients that reach the app directly spoof their IP. Behind two or more proxies (for example Cloudflare in front of Traefik, Caddy or nginx) the default sees the outer proxy as the client, so many visitors share one rate limit. In both cases, list every proxy between the visitor and the app instead (`cloudflare` expands to Cloudflare's published ranges), including the frontend server if it calls the API from another host:
+
+```bash
+APP_TRUSTED_PROXIES=127.0.0.1,10.0.0.0/8,cloudflare
+```
+
+If the frontend server's address can't be listed (for example it has no fixed IP), set the same random value on the backend and the frontend server instead, so server-rendered pages keep each visitor's IP:
+
+```bash
+APP_SSR_SHARED_SECRET=a_long_random_string
 ```
 
 ### Frontend Setup

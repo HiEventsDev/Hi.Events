@@ -15,18 +15,18 @@ interface WaitlistEntryRepositoryInterface extends RepositoryInterface
 {
     public function findByEventId(int $eventId, QueryParamsDTO $params): LengthAwarePaginator;
 
-    public function getStatsByEventId(int $eventId): WaitlistStatsDTO;
+    public function getStatsByEventId(int $eventId, ?int $eventOccurrenceId = null): WaitlistStatsDTO;
 
-    public function getProductStatsByEventId(int $eventId): Collection;
+    public function getProductStatsByEventId(int $eventId, ?int $eventOccurrenceId = null): Collection;
 
-    public function getMaxPosition(int $productPriceId): int;
+    public function getMaxPosition(int $productPriceId, ?int $eventOccurrenceId = null): int;
 
     /**
      * @return Collection<int, WaitlistEntryDomainObject>
      */
-    public function getNextWaitingEntries(int $productPriceId, int $limit): Collection;
+    public function getNextWaitingEntries(int $productPriceId, ?int $limit = null, ?int $eventOccurrenceId = null): Collection;
 
-    public function lockForProductPrice(int $productPriceId): void;
+    public function lockForProductPrice(int $productPriceId, ?int $eventOccurrenceId = null): void;
 
     public function findByIdLocked(int $id): ?WaitlistEntryDomainObject;
 }

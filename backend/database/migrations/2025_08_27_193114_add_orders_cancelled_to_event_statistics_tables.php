@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasColumn('event_statistics', 'orders_cancelled')) {
+        if (! Schema::hasColumn('event_statistics', 'orders_cancelled')) {
             Schema::table('event_statistics', function (Blueprint $table) {
                 $table->unsignedInteger('orders_cancelled')->default(0);
             });
         }
 
-        if (!Schema::hasColumn('event_daily_statistics', 'orders_cancelled')) {
+        if (! Schema::hasColumn('event_daily_statistics', 'orders_cancelled')) {
             Schema::table('event_daily_statistics', function (Blueprint $table) {
                 $table->unsignedInteger('orders_cancelled')->default(0);
             });

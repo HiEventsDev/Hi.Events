@@ -12,9 +12,7 @@ class DomainEventDispatcherService
     public function __construct(
         private readonly EventDispatcher $dispatcher,
         private readonly LoggerInterface $logger,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws Throwable

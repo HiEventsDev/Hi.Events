@@ -10,9 +10,7 @@ class GetAllUsersHandler
 {
     public function __construct(
         private readonly UserRepositoryInterface $userRepository,
-    )
-    {
-    }
+    ) {}
 
     public function handle(GetAllUsersDTO $dto): LengthAwarePaginator
     {

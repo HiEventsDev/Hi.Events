@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Admin\Events;
 
-use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\Event\AdminEventResource;
 use HiEvents\Services\Application\Handlers\Admin\DTO\GetAllEventsDTO;
@@ -16,16 +15,14 @@ class GetAllEventsAction extends BaseAction
 {
     public function __construct(
         private readonly GetAllEventsHandler $handler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(Request $request): JsonResponse
     {
-        $this->minimumAllowedRole(Role::SUPERADMIN);
+        $this->requireSuperAdmin();
 
         $events = $this->handler->handle(new GetAllEventsDTO(
-            perPage: min((int)$request->query('per_page', 20), 100),
+            perPage: min((int) $request->query('per_page', 20), 100),
             search: $request->query('search'),
             sortBy: $request->query('sort_by', 'start_date'),
             sortDirection: $request->query('sort_direction', 'desc'),

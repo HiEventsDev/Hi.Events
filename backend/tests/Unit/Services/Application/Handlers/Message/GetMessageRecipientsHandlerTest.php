@@ -5,6 +5,7 @@ namespace Tests\Unit\Services\Application\Handlers\Message;
 use HiEvents\DomainObjects\MessageDomainObject;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Http\DTO\QueryParamsDTO;
+use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
 use HiEvents\Repository\Interfaces\OutgoingMessageRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Message\GetMessageRecipientsHandler;
@@ -15,7 +16,9 @@ use Tests\TestCase;
 class GetMessageRecipientsHandlerTest extends TestCase
 {
     private OutgoingMessageRepositoryInterface $outgoingMessageRepository;
+
     private MessageRepositoryInterface $messageRepository;
+
     private GetMessageRecipientsHandler $handler;
 
     protected function setUp(): void
@@ -30,7 +33,7 @@ class GetMessageRecipientsHandlerTest extends TestCase
         );
     }
 
-    public function testHandleReturnsPaginatedRecipients(): void
+    public function test_handle_returns_paginated_recipients(): void
     {
         $eventId = 10;
         $messageId = 20;
@@ -45,6 +48,11 @@ class GetMessageRecipientsHandlerTest extends TestCase
 
         $paginator = new LengthAwarePaginator([], 0, 100);
         $this->outgoingMessageRepository
+            ->shouldReceive('loadRelation')
+            ->once()
+            ->with(m::on(fn (Relationship $relationship) => $relationship->getName() === 'email_delivery'))
+            ->andReturnSelf();
+        $this->outgoingMessageRepository
             ->shouldReceive('paginateWhere')
             ->once()
             ->with(['event_id' => $eventId, 'message_id' => $messageId], 100)
@@ -55,7 +63,7 @@ class GetMessageRecipientsHandlerTest extends TestCase
         $this->assertSame($paginator, $result);
     }
 
-    public function testHandleUsesDefaultPerPageFromDto(): void
+    public function test_handle_uses_default_per_page_from_dto(): void
     {
         $eventId = 5;
         $messageId = 15;
@@ -70,6 +78,11 @@ class GetMessageRecipientsHandlerTest extends TestCase
 
         $paginator = new LengthAwarePaginator([], 0, 25);
         $this->outgoingMessageRepository
+            ->shouldReceive('loadRelation')
+            ->once()
+            ->with(m::on(fn (Relationship $relationship) => $relationship->getName() === 'email_delivery'))
+            ->andReturnSelf();
+        $this->outgoingMessageRepository
             ->shouldReceive('paginateWhere')
             ->once()
             ->with(['event_id' => $eventId, 'message_id' => $messageId], 25)
@@ -80,7 +93,7 @@ class GetMessageRecipientsHandlerTest extends TestCase
         $this->assertSame($paginator, $result);
     }
 
-    public function testHandleThrowsNotFoundWhenMessageDoesNotExist(): void
+    public function test_handle_throws_not_found_when_message_does_not_exist(): void
     {
         $this->expectException(ResourceNotFoundException::class);
 
@@ -96,7 +109,7 @@ class GetMessageRecipientsHandlerTest extends TestCase
         $this->handler->handle(1, 999, $params);
     }
 
-    public function testHandleThrowsNotFoundWhenMessageBelongsToDifferentEvent(): void
+    public function test_handle_throws_not_found_when_message_belongs_to_different_event(): void
     {
         $this->expectException(ResourceNotFoundException::class);
 

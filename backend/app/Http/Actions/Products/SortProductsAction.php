@@ -14,9 +14,7 @@ class SortProductsAction extends BaseAction
 {
     public function __construct(
         private readonly SortProductsHandler $sortProductsHandler
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(SortProductsRequest $request, int $eventId): Response|JsonResponse
     {
@@ -33,5 +31,4 @@ class SortProductsAction extends BaseAction
 
         return $this->noContentResponse();
     }
-
 }

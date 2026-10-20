@@ -23,6 +23,7 @@ interface CustomSelectProps {
     multiple?: boolean;
     value?: string | string[];
     onChange?: (value: string | string[]) => void;
+    dataTestId?: string;
 }
 
 export const SelectOption = ({icon, description, label, selected}: ItemProps & { selected?: boolean }) => (
@@ -64,6 +65,7 @@ export const CustomSelect = ({
                                  multiple = false,
                                  value: controlledValue,
                                  onChange: controlledOnChange,
+                                 dataTestId,
                              }: CustomSelectProps) => {
     const combobox = useCombobox({
         onDropdownClose: () => combobox.resetSelectedOption(),
@@ -80,6 +82,7 @@ export const CustomSelect = ({
             key={item.value}
             disabled={item.disabled}
             active={selectedValues.includes(item.value)}
+            data-testid={dataTestId ? `${dataTestId}-option-${item.value}` : undefined}
         >
             <SelectOption
                 {...item}
@@ -157,6 +160,7 @@ export const CustomSelect = ({
                         onClick={() => combobox.toggleDropdown()}
                         rightSectionPointerEvents="none"
                         multiline
+                        data-testid={dataTestId}
                     >
                         {getSelectedContent()}
                     </InputBase>

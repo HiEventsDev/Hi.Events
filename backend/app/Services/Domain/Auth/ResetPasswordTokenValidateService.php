@@ -11,13 +11,13 @@ use Illuminate\Config\Repository;
 class ResetPasswordTokenValidateService
 {
     private PasswordResetTokenRepositoryInterface $passwordResetTokenRepository;
+
     private Repository $config;
 
     public function __construct(
         PasswordResetTokenRepositoryInterface $passwordResetTokenRepository,
-        Repository                            $config
-    )
-    {
+        Repository $config
+    ) {
         $this->passwordResetTokenRepository = $passwordResetTokenRepository;
         $this->config = $config;
     }
@@ -28,7 +28,7 @@ class ResetPasswordTokenValidateService
     public function validateAndFetchToken(string $token): PasswordResetTokenDomainObject
     {
         $resetToken = $this->passwordResetTokenRepository->findFirstWhere(['token' => $token]);
-        if (!$resetToken) {
+        if (! $resetToken) {
             throw new InvalidPasswordResetTokenException(__('Invalid reset token'));
         }
 

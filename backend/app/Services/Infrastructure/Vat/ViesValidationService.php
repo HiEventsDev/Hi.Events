@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace HiEvents\Services\Infrastructure\Vat;
 
 use Exception;
-use HiEvents\Services\Application\Handlers\Account\Vat\DTO\ViesValidationResponseDTO;
+use HiEvents\Services\Infrastructure\Vat\DTO\ViesValidationResponseDTO;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Factory as HttpClient;
 use Psr\Log\LoggerInterface;
@@ -13,6 +13,7 @@ use Psr\Log\LoggerInterface;
 class ViesValidationService
 {
     private const VIES_API_URL = 'https://ec.europa.eu/taxation_customs/vies/rest-api/check-vat-number';
+
     private const TIMEOUT_SECONDS = 15;
 
     private const TRANSIENT_ERRORS = [
@@ -25,7 +26,7 @@ class ViesValidationService
     ];
 
     public function __construct(
-        private readonly HttpClient      $httpClient,
+        private readonly HttpClient $httpClient,
         private readonly LoggerInterface $logger,
     ) {}
 
@@ -54,10 +55,10 @@ class ViesValidationService
                 'status_code' => $response->status(),
                 'action_succeed' => $data['actionSucceed'] ?? null,
                 'valid' => $data['valid'] ?? null,
-                'has_errors' => !empty($data['errorWrappers']),
+                'has_errors' => ! empty($data['errorWrappers']),
             ]);
 
-            if (!$response->successful()) {
+            if (! $response->successful()) {
                 $this->logger->warning('VIES HTTP error response', [
                     'vat_number' => $this->maskVatNumber($vatNumber),
                     'status_code' => $response->status(),
@@ -73,7 +74,7 @@ class ViesValidationService
                 );
             }
 
-            if (($data['actionSucceed'] ?? true) === false || !empty($data['errorWrappers'])) {
+            if (($data['actionSucceed'] ?? true) === false || ! empty($data['errorWrappers'])) {
                 $errorCode = $this->extractErrorCode($data);
 
                 $this->logger->warning('VIES API returned error', [
@@ -182,6 +183,6 @@ class ViesValidationService
             return $vatNumber;
         }
 
-        return substr($vatNumber, 0, 2) . str_repeat('*', $length - 4) . substr($vatNumber, -2);
+        return substr($vatNumber, 0, 2).str_repeat('*', $length - 4).substr($vatNumber, -2);
     }
 }

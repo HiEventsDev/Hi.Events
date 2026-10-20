@@ -11,6 +11,7 @@ import {useUpdateEventSettings} from "../../../../../../mutations/useUpdateEvent
 import {useGetEventSettings} from "../../../../../../queries/useGetEventSettings.ts";
 import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
 import {Editor} from "../../../../../common/Editor";
+import {LiquidTokenControl} from "../../../../../common/Editor/Controls/LiquidTokenControl";
 import {InputLabelWithHelp} from "../../../../../common/InputLabelWithHelp";
 import {isEmptyHtml} from "../../../../../../utilites/helpers.ts";
 
@@ -152,6 +153,15 @@ export const PaymentAndInvoicingSettings = () => {
                                                                    helpText={t`This information will be shown on the payment page, order summary page, and order confirmation email.`}/>}
                                         description={t`Add instructions for offline payments (e.g., bank transfer details, where to send checks, payment deadlines)`}
                                         onChange={(value) => form.setFieldValue('offline_payment_instructions', value)}
+                                        additionalToolbarControls={
+                                            <LiquidTokenControl
+                                                templateType={'order_confirmation'}
+                                                excludeTokens={[
+                                                    '{{ settings.offline_payment_instructions }}',
+                                                    '{{ settings.post_checkout_message }}',
+                                                ]}
+                                            />
+                                        }
                                     />
                                     <Switch
                                         label={t`Allow attendees associated with unpaid orders to check in`}

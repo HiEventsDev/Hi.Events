@@ -10,12 +10,10 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 class DeleteWebhookHandler
 {
     public function __construct(
-        private readonly WebhookRepositoryInterface    $webhookRepository,
+        private readonly WebhookRepositoryInterface $webhookRepository,
         private readonly WebhookLogRepositoryInterface $webhookLogRepository,
-        private readonly DatabaseManager               $databaseManager,
-    )
-    {
-    }
+        private readonly DatabaseManager $databaseManager,
+    ) {}
 
     public function handle(int $webhookId, int $accountId, ?int $eventId = null, ?int $organizerId = null): void
     {
@@ -30,7 +28,7 @@ class DeleteWebhookHandler
 
             $webhook = $this->webhookRepository->findFirstWhere($where);
 
-            if (!$webhook) {
+            if (! $webhook) {
                 throw new ResourceNotFoundException(__(
                     key: 'Webhook not found for ID: :webhookId',
                     replace: [

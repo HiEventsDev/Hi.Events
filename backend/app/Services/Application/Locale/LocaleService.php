@@ -9,9 +9,7 @@ class LocaleService
 {
     public function __construct(
         private readonly Repository $config,
-    )
-    {
-    }
+    ) {}
 
     public function getLocaleOrDefault(?string $locale): string
     {

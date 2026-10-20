@@ -18,4 +18,11 @@ interface UserRepositoryInterface extends RepositoryInterface
     public function findUsersByAccountId(int $accountId): ?Collection;
 
     public function getAllUsersWithAccounts(?string $search, int $perPage): LengthAwarePaginator;
+
+    /**
+     * @return Collection<int, UserDomainObject>
+     */
+    public function findByEmailIgnoringCase(string $email): Collection;
+
+    public function countWithoutSingleSignOnExcludingSuperAdmins(): int;
 }

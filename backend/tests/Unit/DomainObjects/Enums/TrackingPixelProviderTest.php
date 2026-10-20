@@ -9,13 +9,13 @@ use Tests\TestCase;
 class TrackingPixelProviderTest extends TestCase
 {
     #[DataProvider('validPixelIdProvider')]
-    public function testValidPixelIdsPassValidation(TrackingPixelProvider $provider, string $pixelId): void
+    public function test_valid_pixel_ids_pass_validation(TrackingPixelProvider $provider, string $pixelId): void
     {
         $this->assertMatchesRegularExpression($provider->pixelIdPattern(), $pixelId);
     }
 
     #[DataProvider('invalidPixelIdProvider')]
-    public function testInvalidPixelIdsFailValidation(TrackingPixelProvider $provider, string $pixelId): void
+    public function test_invalid_pixel_ids_fail_validation(TrackingPixelProvider $provider, string $pixelId): void
     {
         $this->assertDoesNotMatchRegularExpression($provider->pixelIdPattern(), $pixelId);
     }

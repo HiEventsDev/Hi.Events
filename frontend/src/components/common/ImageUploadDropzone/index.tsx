@@ -2,14 +2,18 @@ import {useEffect, useRef, useState} from "react";
 import {Dropzone, FileRejection, IMAGE_MIME_TYPE} from "@mantine/dropzone";
 import {useUploadImage} from "../../../mutations/useUploadImage.ts";
 import {useDeleteImage} from "../../../mutations/useDeleteImage.ts";
-import {showSuccess} from "../../../utilites/notifications.tsx";
+import {showError, showSuccess} from "../../../utilites/notifications.tsx";
+import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 import {ActionIcon, Button, Group, Loader, Text} from "@mantine/core";
 import {IconReplace, IconTrash, IconUpload} from "@tabler/icons-react";
 import {t} from "@lingui/macro";
 import {IdParam, ImageType} from "../../../types.ts";
+import {
+    extractImageUploadErrors,
+    IMAGE_MAX_UPLOAD_SIZE,
+    validateImageFile,
+} from "../../../utilites/imageUploadValidation.ts";
 import classes from "./ImageUploadDropzone.module.scss";
-
-const MAX_UPLOAD_SIZE = 5 * 1024 * 1024; // 5MB
 
 interface ImageUploadDropzoneProps {
     disabled?: boolean;
@@ -70,6 +74,12 @@ export const ImageUploadDropzone = ({
         const [file] = files;
         if (!file) return;
 
+        const validationError = validateImageFile(file);
+        if (validationError) {
+            setErrors([validationError]);
+            return;
+        }
+
         setErrors([]);
         setLoading(true);
 
@@ -92,18 +102,7 @@ export const ImageUploadDropzone = ({
                 onError: (error: any) => {
                     console.error(error);
                     setLoading(false);
-
-                    // Extract error messages from the response
-                    let errorMessages: string[];
-                    if (error?.response?.data?.errors?.image) {
-                        errorMessages = error.response.data.errors.image;
-                    } else if (error?.response?.data?.message) {
-                        errorMessages = [error.response.data.message];
-                    } else {
-                        errorMessages = [t`Failed to upload image. Please try again.`];
-                    }
-
-                    setErrors(errorMessages);
+                    setErrors(extractImageUploadErrors(error));
                 },
             }
         );
@@ -112,25 +111,28 @@ export const ImageUploadDropzone = ({
     const handleDelete = () => {
         if (!previewImage || !imageId) return;
 
-        setLoading(true);
-        setErrors([]);
+        confirmationDialog(t`Are you sure you want to delete this image?`, () => {
+            setLoading(true);
+            setErrors([]);
 
-        deleteImage.mutate(
-            {imageId},
-            {
-                onSuccess: () => {
-                    setPreviewImage(null);
-                    setImageId(null);
-                    showSuccess(t`Image deleted successfully`);
-                    setErrors([]);
-                    onDeleteSuccess?.();
-                },
-                onError: (error) => {
-                    console.error(error);
-                },
-                onSettled: () => setLoading(false),
-            }
-        );
+            deleteImage.mutate(
+                {imageId},
+                {
+                    onSuccess: () => {
+                        setPreviewImage(null);
+                        setImageId(null);
+                        showSuccess(t`Image deleted successfully`);
+                        setErrors([]);
+                        onDeleteSuccess?.();
+                    },
+                    onError: (error) => {
+                        console.error(error);
+                        showError(t`Something went wrong while deleting the image. Please try again.`);
+                    },
+                    onSettled: () => setLoading(false),
+                }
+            );
+        });
     };
 
     const handleReplace = () => {
@@ -216,7 +218,7 @@ export const ImageUploadDropzone = ({
                     onDrop={handleDrop}
                     onReject={handleReject}
                     accept={IMAGE_MIME_TYPE}
-                    maxSize={MAX_UPLOAD_SIZE}
+                    maxSize={IMAGE_MAX_UPLOAD_SIZE}
                     disabled={disabled || loading}
                     className={classes.dropzone}
                     classNames={{

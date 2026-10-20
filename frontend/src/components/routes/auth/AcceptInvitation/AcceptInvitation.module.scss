@@ -6,7 +6,6 @@
 }
 
 .invitationCard {
-  @include auth.auth-card;
   width: 100%;
 
   form {
@@ -20,25 +19,11 @@
     @include auth.auth-button;
 
     :global(.mantine-InputWrapper-root) {
-      margin-bottom: 0.875rem;
+      margin-bottom: 1rem;
     }
 
-    :global(.mantine-Switch-root) {
-      margin-bottom: 1.25rem;
-    }
-
-    :global(.mantine-Switch-label) {
-      font-size: 0.875rem;
-      color: var(--hi-color-gray-dark);
-
-      a {
-        color: var(--mantine-color-secondary-5);
-        font-weight: 500;
-
-        &:hover {
-          color: var(--mantine-color-secondary-7);
-        }
-      }
+    :global(.mantine-Checkbox-root) {
+      margin-bottom: 0.75rem;
     }
   }
 }
@@ -46,10 +31,10 @@
 .inputGroup {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 0.875rem;
-  margin-bottom: 0.875rem;
+  gap: 1rem;
+  margin-bottom: 1rem;
 
-  @include mixins.respond-below(sm) {
+  @include mixins.respond-below(lg) {
     grid-template-columns: 1fr;
     gap: 0;
   }
@@ -57,8 +42,31 @@
   :global(.mantine-InputWrapper-root) {
     margin-bottom: 0;
 
-    @include mixins.respond-below(sm) {
-      margin-bottom: 0.875rem;
+    @include mixins.respond-below(lg) {
+      margin-bottom: 1rem;
     }
   }
+}
+
+.invitedEmail {
+  color: var(--hi-text);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.signedIn {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  @include auth.auth-button;
+
+  :global(.mantine-Button-root[data-variant="subtle"]) {
+    background-image: none;
+    box-shadow: none;
+  }
+}
+
+
+.terms {
+  @include auth.auth-footer-terms;
 }

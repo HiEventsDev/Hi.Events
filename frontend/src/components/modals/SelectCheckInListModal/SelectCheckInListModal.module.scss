@@ -1,0 +1,159 @@
+.primaryAction {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--mantine-color-primary-2);
+  background: var(--mantine-color-primary-0);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s ease, border-color 0.12s ease, transform 0.12s ease;
+
+  &:hover {
+    background: var(--mantine-color-primary-1);
+    border-color: var(--mantine-color-primary-3);
+  }
+
+  &:active {
+    transform: scale(0.99);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--mantine-color-primary-5);
+    outline-offset: 2px;
+  }
+}
+
+.primaryIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: var(--mantine-color-primary-6);
+  color: #fff;
+}
+
+.primaryText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.primaryName {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--mantine-color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.primaryMeta {
+  font-size: 12px;
+  color: var(--mantine-color-dimmed);
+}
+
+.primaryArrow {
+  color: var(--mantine-color-primary-6);
+  flex-shrink: 0;
+}
+
+.listCard {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--mantine-color-gray-2);
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s ease, border-color 0.12s ease, transform 0.12s ease;
+
+  &:hover {
+    background: var(--mantine-color-gray-0);
+    border-color: var(--mantine-color-gray-3);
+  }
+
+  &:active {
+    transform: scale(0.99);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--mantine-color-primary-5);
+    outline-offset: 2px;
+  }
+}
+
+.listCardIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: var(--mantine-color-gray-1);
+  color: var(--mantine-color-gray-7);
+}
+
+.listCardArrow {
+  color: var(--mantine-color-gray-5);
+  flex-shrink: 0;
+}
+
+.divider {
+  height: 1px;
+  background: var(--mantine-color-gray-2);
+  margin: 12px 0 6px;
+}
+
+.actionRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 11px 10px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  border-radius: 8px;
+  color: var(--mantine-color-text);
+  font-size: 14px;
+  transition: background 0.12s ease;
+
+  &:hover {
+    background: var(--mantine-color-gray-1);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--mantine-color-primary-5);
+    outline-offset: -2px;
+  }
+}
+
+.actionRowIcon {
+  color: var(--mantine-color-gray-6);
+  flex-shrink: 0;
+  display: flex;
+}
+
+.actionRowLabel {
+  flex: 1;
+  min-width: 0;
+}
+
+.actionRowChevron {
+  color: var(--mantine-color-gray-5);
+  flex-shrink: 0;
+}

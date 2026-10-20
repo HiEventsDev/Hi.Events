@@ -20,9 +20,13 @@ use Tests\TestCase;
 class SelfServiceEditOrderServiceTest extends TestCase
 {
     private SelfServiceEditOrderService $service;
+
     private MockInterface|OrderRepositoryInterface $orderRepository;
+
     private MockInterface|EventRepositoryInterface $eventRepository;
+
     private MockInterface|OrderAuditLogService $orderAuditLogService;
+
     private MockInterface|SendOrderDetailsService $sendOrderDetailsService;
 
     protected function setUp(): void
@@ -44,7 +48,7 @@ class SelfServiceEditOrderServiceTest extends TestCase
         );
     }
 
-    public function testSuccessfulEditUpdatesOrderFields(): void
+    public function test_successful_edit_updates_order_fields(): void
     {
         $order = Mockery::mock(OrderDomainObject::class);
         $order->shouldReceive('getId')->andReturn(123);
@@ -111,7 +115,7 @@ class SelfServiceEditOrderServiceTest extends TestCase
         });
     }
 
-    public function testEmailChangeTriggersShortIdRotation(): void
+    public function test_email_change_triggers_short_id_rotation(): void
     {
         $order = Mockery::mock(OrderDomainObject::class);
         $order->shouldReceive('getId')->andReturn(123);
@@ -193,7 +197,7 @@ class SelfServiceEditOrderServiceTest extends TestCase
         $this->assertTrue($result->emailChanged);
     }
 
-    public function testNoUpdateWhenNoFieldsChange(): void
+    public function test_no_update_when_no_fields_change(): void
     {
         $order = Mockery::mock(OrderDomainObject::class);
         $order->shouldReceive('getId')->andReturn(123);
@@ -221,7 +225,7 @@ class SelfServiceEditOrderServiceTest extends TestCase
         Mail::assertNothingSent();
     }
 
-    public function testMultipleFieldsUpdateTogether(): void
+    public function test_multiple_fields_update_together(): void
     {
         $order = Mockery::mock(OrderDomainObject::class);
         $order->shouldReceive('getId')->andReturn(123);
@@ -311,7 +315,7 @@ class SelfServiceEditOrderServiceTest extends TestCase
         $this->assertTrue($result->emailChanged);
     }
 
-    public function testOnlyEmailUpdate(): void
+    public function test_only_email_update(): void
     {
         $order = Mockery::mock(OrderDomainObject::class);
         $order->shouldReceive('getId')->andReturn(123);
@@ -384,7 +388,7 @@ class SelfServiceEditOrderServiceTest extends TestCase
         $this->assertTrue($result->emailChanged);
     }
 
-    public function testOnlyFirstNameUpdate(): void
+    public function test_only_first_name_update(): void
     {
         $order = Mockery::mock(OrderDomainObject::class);
         $order->shouldReceive('getId')->andReturn(123);
@@ -439,6 +443,56 @@ class SelfServiceEditOrderServiceTest extends TestCase
         Mail::assertQueued(OrderDetailsChangedMail::class, function ($mail) {
             return $mail->hasTo('same@example.com');
         });
+    }
+
+    public function test_box_office_buyer_adding_first_email_sends_no_change_notification(): void
+    {
+        $order = Mockery::mock(OrderDomainObject::class);
+        $order->shouldReceive('getId')->andReturn(123);
+        $order->shouldReceive('getEventId')->andReturn(789);
+        $order->shouldReceive('getFirstName')->andReturn('Walk-up');
+        $order->shouldReceive('getLastName')->andReturn('');
+        $order->shouldReceive('getEmail')->andReturn(null);
+        $order->shouldReceive('getShortId')->andReturn('o_boxoffice123');
+        $order->shouldReceive('getLatestInvoice')->andReturn(null);
+
+        $this->orderRepository
+            ->shouldReceive('updateWhere')
+            ->once()
+            ->andReturn(1);
+
+        $mockEventSettings = Mockery::mock(EventSettingDomainObject::class);
+        $mockEventSettings->shouldReceive('getSupportEmail')->andReturn('support@example.com');
+        $mockOrganizer = Mockery::mock(OrganizerDomainObject::class);
+        $mockEvent = Mockery::mock(EventDomainObject::class);
+        $mockEvent->shouldReceive('getEventSettings')->andReturn($mockEventSettings);
+        $mockEvent->shouldReceive('getOrganizer')->andReturn($mockOrganizer);
+
+        $this->eventRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->eventRepository->shouldReceive('findById')->with(789)->andReturn($mockEvent);
+
+        $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->orderRepository->shouldReceive('findById')->with(123)->andReturn($order);
+
+        $this->sendOrderDetailsService
+            ->shouldReceive('sendCustomerOrderSummary')
+            ->once();
+
+        $this->orderAuditLogService->shouldReceive('logOrderUpdate')->once();
+
+        $result = $this->service->editOrder(
+            order: $order,
+            firstName: null,
+            lastName: null,
+            email: 'walkup@example.com',
+            ipAddress: '192.168.1.1',
+            userAgent: 'Mozilla/5.0'
+        );
+
+        $this->assertTrue($result->success);
+        $this->assertTrue($result->emailChanged);
+
+        Mail::assertNotQueued(OrderDetailsChangedMail::class);
     }
 
     protected function tearDown(): void

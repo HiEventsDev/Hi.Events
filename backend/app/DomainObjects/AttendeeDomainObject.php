@@ -23,6 +23,8 @@ class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implem
     /** @var Collection<AttendeeCheckInDomainObject>|null */
     private ?Collection $checkIns = null;
 
+    private ?EventOccurrenceDomainObject $eventOccurrence = null;
+
     public static function getDefaultSort(): string
     {
         return self::CREATED_AT;
@@ -32,7 +34,7 @@ class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implem
     {
         return new AllowedSorts(
             [
-               self::TICKET_NAME_SORT_KEY => [
+                self::TICKET_NAME_SORT_KEY => [
                     'asc' => __('Ticket Name A-Z'),
                     'desc' => __('Ticket Name Z-A'),
                 ],
@@ -71,6 +73,7 @@ class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implem
             self::STATUS,
             self::PRODUCT_ID,
             self::PRODUCT_PRICE_ID,
+            self::EVENT_OCCURRENCE_ID,
         ];
     }
 
@@ -86,7 +89,7 @@ class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implem
 
     public function getFullName(): string
     {
-        return $this->first_name . ' ' . $this->last_name;
+        return $this->first_name.' '.$this->last_name;
     }
 
     public function getProduct(): ?ProductDomainObject
@@ -104,6 +107,7 @@ class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implem
     public function setQuestionAndAnswerViews(?Collection $questionAndAnswerViews): AttendeeDomainObject
     {
         $this->questionAndAnswerViews = $questionAndAnswerViews;
+
         return $this;
     }
 
@@ -115,13 +119,12 @@ class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implem
     public function setCheckIn(?AttendeeCheckInDomainObject $checkIn): AttendeeDomainObject
     {
         $this->checkIn = $checkIn;
+
         return $this;
     }
 
     /**
      * Only use in the context when a single check-in is expected (e.g., when loading a list of attendees for a specific check-in list).
-     *
-     * @return AttendeeCheckInDomainObject|null
      */
     public function getCheckIn(): ?AttendeeCheckInDomainObject
     {
@@ -131,11 +134,24 @@ class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implem
     public function setCheckIns(?Collection $checkIns): AttendeeDomainObject
     {
         $this->checkIns = $checkIns;
+
         return $this;
     }
 
     public function getCheckIns(): ?Collection
     {
         return $this->checkIns;
+    }
+
+    public function setEventOccurrence(?EventOccurrenceDomainObject $eventOccurrence): AttendeeDomainObject
+    {
+        $this->eventOccurrence = $eventOccurrence;
+
+        return $this;
+    }
+
+    public function getEventOccurrence(): ?EventOccurrenceDomainObject
+    {
+        return $this->eventOccurrence;
     }
 }

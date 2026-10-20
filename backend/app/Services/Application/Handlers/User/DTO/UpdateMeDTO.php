@@ -7,8 +7,8 @@ use HiEvents\DataTransferObjects\BaseDTO;
 class UpdateMeDTO extends BaseDTO
 {
     public function __construct(
-        public readonly int     $id,
-        public readonly int     $account_id,
+        public readonly int $id,
+        public readonly int $account_id,
         public readonly ?string $first_name,
         public readonly ?string $last_name,
         public readonly ?string $email,
@@ -16,8 +16,10 @@ class UpdateMeDTO extends BaseDTO
         public readonly ?string $password,
         public readonly ?string $current_password,
         public readonly ?string $locale,
-        public readonly ?bool   $marketing_opt_in = null,
-    )
-    {
-    }
+        public readonly ?bool $marketing_opt_in = null,
+        public readonly ?bool $notify_new_orders = null,
+        public readonly ?string $confirmation_password = null,
+        public readonly ?string $reauth_proof = null,
+        public readonly ?string $token_id = null,
+    ) {}
 }

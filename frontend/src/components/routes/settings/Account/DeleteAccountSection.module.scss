@@ -1,0 +1,84 @@
+.consequences {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0 20px;
+  padding: 0 0 0 18px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--hi-color-text-muted);
+
+  li::marker {
+    color: var(--hi-color-danger);
+  }
+}
+
+.blocked {
+  padding: 12px 14px;
+  border: 1px solid color-mix(in srgb, var(--hi-color-warning) 30%, transparent);
+  border-radius: var(--hi-radius-lg);
+  background: color-mix(in srgb, var(--hi-color-warning) 6%, var(--hi-color-white));
+}
+
+.blockedHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.blockedIcon {
+  flex-shrink: 0;
+  color: var(--hi-color-warning);
+}
+
+.blockedTitle {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--hi-text);
+}
+
+.blockedText {
+  margin: 4px 0 0 24px;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--hi-color-text-muted);
+}
+
+.blockingEvents {
+  margin: 10px 0 0 24px;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--hi-color-border);
+  border-radius: var(--hi-radius-md);
+  background: var(--hi-color-white);
+}
+
+.blockingEvent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  font-size: 0.8125rem;
+
+  & + & {
+    border-top: 1px solid var(--hi-color-border);
+  }
+}
+
+.blockingEventTitle {
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 500;
+  color: var(--hi-text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.blockingEventLink {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+}

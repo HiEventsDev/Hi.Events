@@ -27,6 +27,7 @@ import {EventsDashboardStatusButtons} from "../../../common/EventsDashboardStatu
 import {NoEventsBlankSlate} from "../../../common/NoEventsBlankSlate";
 import {useState} from "react";
 import {getConfig} from "../../../../utilites/config.ts";
+import {useAccess} from "../../../../hooks/useAccess.ts";
 
 const DashboardSkeleton = () => {
     return (
@@ -54,17 +55,18 @@ export function Dashboard() {
         isFetching: isEventsFetching,
     } = useGetEvents(getEventQueryFilters(searchParams) as QueryFilters);
     const organizersQuery = useGetOrganizers();
+    const {canManageOrganizer, canCreateOrganizers, isReadOnly, isLoaded: isAccessLoaded} = useAccess();
     const pagination = eventData?.meta;
     const events = eventData?.data;
-    const organizers = organizersQuery?.data?.data;
+    const readableOrganizers = organizersQuery?.data?.data;
+    const organizers = readableOrganizers?.filter(organizer => canManageOrganizer(organizer.id));
+    const canCreateEvents = !isReadOnly && !!organizers?.length;
 
-    // If there are no organizers, redirect to the welcome page
-    if (organizersQuery.isFetched && organizers?.length === 0) {
+    if (isAccessLoaded && organizersQuery.isFetched && readableOrganizers?.length === 0 && canCreateOrganizers) {
         return <Navigate to={'/welcome'}/>
     }
 
-    // If there's only one organizer, redirect to their dashboard
-    if (organizersQuery.isFetched && organizers?.length === 1) {
+    if (isAccessLoaded && organizersQuery.isFetched && readableOrganizers?.length === 1 && organizers?.length === 1) {
         return <Navigate to={'/manage/organizer/' + organizers[0].id}/>;
     }
 
@@ -145,57 +147,58 @@ export function Dashboard() {
                 ) : null}
             </div>
 
-            <ToolBar searchComponent={() => (
-                <SearchBarWrapper
-                    placeholder={t`Search by event name...`}
-                    setSearchParams={setSearchParams}
-                    searchParams={searchParams}
-                    pagination={pagination}
-                />
-            )}>
-                <>
-                    <Menu
-                        transitionProps={{transition: 'pop-top-right'}}
-                        position="bottom"
-                        width={220}
-                        withinPortal
-                    >
-                        <Menu.Target>
-                            <Button
-                                leftSection={<IconPlus/>}
-                                color={'green'}
-                                rightSection={
-                                    <IconChevronDown stroke={1.5}/>
-                                }
-                                pr={12}
-                            >
-                                {t`Create new`}
-                            </Button>
-                        </Menu.Target>
-                        <Menu.Dropdown>
-                            <Menu.Item
-                                leftSection={
-                                    <IconCalendarPlus
-                                        stroke={1.5}
-                                    />
-                                }
-                                onClick={openCreateModal}
-                            >
-                                {t`Event`}
-                            </Menu.Item>
-                            <Menu.Item
-                                leftSection={
-                                    <IconUserPlus
-                                        stroke={1.5}
-                                    />
-                                }
-                                onClick={openCreateOrganizerModal}
-                            >
-                                {t`Organizer`}
-                            </Menu.Item>
-                        </Menu.Dropdown>
-                    </Menu>
-                </>
+            <ToolBar
+                searchComponent={() => (
+                    <SearchBarWrapper
+                        placeholder={t`Search by event name...`}
+                        setSearchParams={setSearchParams}
+                        searchParams={searchParams}
+                    />
+                )}
+            >
+                {(canCreateEvents || canCreateOrganizers) && <Menu
+                    transitionProps={{transition: 'pop-top-right'}}
+                    position="bottom"
+                    width={220}
+                    withinPortal
+                >
+                    <Menu.Target>
+                        <Button
+                            leftSection={<IconPlus/>}
+                            color={'green'}
+                            rightSection={
+                                <IconChevronDown stroke={1.5}/>
+                            }
+                            pr={12}
+                            data-testid="create-new-menu-button"
+                        >
+                            {t`Create new`}
+                        </Button>
+                    </Menu.Target>
+                    <Menu.Dropdown>
+                        {canCreateEvents && <Menu.Item
+                            leftSection={
+                                <IconCalendarPlus
+                                    stroke={1.5}
+                                />
+                            }
+                            onClick={openCreateModal}
+                            data-testid="create-event-menu-item"
+                        >
+                            {t`Event`}
+                        </Menu.Item>}
+                        {canCreateOrganizers && <Menu.Item
+                            leftSection={
+                                <IconUserPlus
+                                    stroke={1.5}
+                                />
+                            }
+                            onClick={openCreateOrganizerModal}
+                        >
+                            {t`Organizer`}
+                        </Menu.Item>}
+                    </Menu.Dropdown>
+                </Menu>}
             </ToolBar>
 
             <EventsDashboardStatusButtons
@@ -204,7 +207,7 @@ export function Dashboard() {
             />
 
             {(events?.length === 0 && isEventsFetched)
-                && <NoEventsBlankSlate openCreateModal={openCreateModal} eventsState={eventsState}/>}
+                && <NoEventsBlankSlate openCreateModal={canCreateEvents ? openCreateModal : undefined} eventsState={eventsState}/>}
 
             <div>
                 {(isEventsFetching && !events) && <DashboardSkeleton/>}

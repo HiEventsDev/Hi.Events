@@ -14,6 +14,7 @@ abstract class OrderItemDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     final public const ORDER_ID = 'order_id';
     final public const PRODUCT_ID = 'product_id';
     final public const PRODUCT_PRICE_ID = 'product_price_id';
+    final public const EVENT_OCCURRENCE_ID = 'event_occurrence_id';
     final public const TOTAL_BEFORE_ADDITIONS = 'total_before_additions';
     final public const QUANTITY = 'quantity';
     final public const ITEM_NAME = 'item_name';
@@ -25,11 +26,13 @@ abstract class OrderItemDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     final public const TOTAL_SERVICE_FEE = 'total_service_fee';
     final public const TAXES_AND_FEES_ROLLUP = 'taxes_and_fees_rollup';
     final public const PRODUCT_TYPE = 'product_type';
+    final public const BAND_KEY = 'band_key';
 
     protected int $id;
     protected int $order_id;
     protected int $product_id;
     protected int $product_price_id;
+    protected ?int $event_occurrence_id = null;
     protected float $total_before_additions;
     protected int $quantity;
     protected ?string $item_name = null;
@@ -41,6 +44,7 @@ abstract class OrderItemDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     protected ?float $total_service_fee = 0.0;
     protected array|string|null $taxes_and_fees_rollup = null;
     protected string $product_type = 'TICKET';
+    protected ?string $band_key = null;
 
     public function toArray(): array
     {
@@ -49,6 +53,7 @@ abstract class OrderItemDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
                     'order_id' => $this->order_id ?? null,
                     'product_id' => $this->product_id ?? null,
                     'product_price_id' => $this->product_price_id ?? null,
+                    'event_occurrence_id' => $this->event_occurrence_id ?? null,
                     'total_before_additions' => $this->total_before_additions ?? null,
                     'quantity' => $this->quantity ?? null,
                     'item_name' => $this->item_name ?? null,
@@ -60,6 +65,7 @@ abstract class OrderItemDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
                     'total_service_fee' => $this->total_service_fee ?? null,
                     'taxes_and_fees_rollup' => $this->taxes_and_fees_rollup ?? null,
                     'product_type' => $this->product_type ?? null,
+                    'band_key' => $this->band_key ?? null,
                 ];
     }
 
@@ -105,6 +111,17 @@ abstract class OrderItemDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     public function getProductPriceId(): int
     {
         return $this->product_price_id;
+    }
+
+    public function setEventOccurrenceId(?int $event_occurrence_id): self
+    {
+        $this->event_occurrence_id = $event_occurrence_id;
+        return $this;
+    }
+
+    public function getEventOccurrenceId(): ?int
+    {
+        return $this->event_occurrence_id;
     }
 
     public function setTotalBeforeAdditions(float $total_before_additions): self
@@ -226,5 +243,16 @@ abstract class OrderItemDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     public function getProductType(): string
     {
         return $this->product_type;
+    }
+
+    public function setBandKey(?string $band_key): self
+    {
+        $this->band_key = $band_key;
+        return $this;
+    }
+
+    public function getBandKey(): ?string
+    {
+        return $this->band_key;
     }
 }

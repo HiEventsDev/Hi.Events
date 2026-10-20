@@ -1,0 +1,44 @@
+@use "../../../styles/mixins.scss";
+
+.member {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--hi-color-border);
+  border-radius: 10px;
+  background: var(--hi-color-gray);
+}
+
+.memberText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.memberName {
+  @include mixins.ellipsis();
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--hi-text);
+}
+
+.memberEmail {
+  @include mixins.ellipsis();
+  font-size: 0.8125rem;
+  color: var(--hi-color-text-muted);
+}
+
+.fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.hint {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--hi-color-text-muted);
+}

@@ -8,11 +8,13 @@ import {IconLayoutSidebar} from "@tabler/icons-react";
 import {UnstyledButton, VisuallyHidden} from "@mantine/core";
 import {t} from "@lingui/macro";
 import ImpersonationBanner from "../../common/ImpersonationBanner";
+import PendingDeletionBanner from "../../common/PendingDeletionBanner";
+import AnnouncementDisplay from "../../common/AnnouncementDisplay";
 
 interface AppLayoutProps {
     navItems: NavItem[];
     breadcrumbItems: BreadcrumbItem[];
-    entityType: 'event' | 'organizer';
+    entityType: 'event' | 'organizer' | 'settings';
     topBarContent?: React.ReactNode;
     breadcrumbContentRight?: React.ReactNode;
     actionGroupContent?: React.ReactNode;
@@ -81,6 +83,8 @@ const AppLayout: React.FC<AppLayoutProps> = ({
     return (
         <>
             <ImpersonationBanner />
+            <PendingDeletionBanner />
+            <AnnouncementDisplay />
             <div id={`${entityType}-manage-container`}
                  className={`${classes.container} ${sidebarOpen ? classes.open : classes.closed}`}>
                 <Topbar

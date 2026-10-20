@@ -4,6 +4,7 @@ namespace HiEvents\Services\Application\Handlers\CheckInList;
 
 use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\CheckInListRepositoryInterface;
@@ -14,15 +15,14 @@ class GetCheckInListsHandler
 {
     public function __construct(
         private readonly CheckInListRepositoryInterface $checkInListRepository,
-    )
-    {
-    }
+    ) {}
 
     public function handle(GetCheckInListsDTO $dto): LengthAwarePaginator
     {
         $checkInLists = $this->checkInListRepository
             ->loadRelation(ProductDomainObject::class)
             ->loadRelation(new Relationship(domainObject: EventDomainObject::class, name: 'event'))
+            ->loadRelation(new Relationship(domainObject: EventOccurrenceDomainObject::class, name: 'event_occurrence'))
             ->findByEventId(
                 eventId: $dto->eventId,
                 params: $dto->queryParams,
@@ -33,7 +33,7 @@ class GetCheckInListsHandler
         }
 
         $attendeeCheckInCounts = $this->checkInListRepository->getCheckedInAttendeeCountByIds(
-            $checkInLists->map(fn($checkInList) => $checkInList->getId())->toArray(),
+            $checkInLists->map(fn ($checkInList) => $checkInList->getId())->toArray(),
         );
 
         if ($attendeeCheckInCounts->isEmpty()) {

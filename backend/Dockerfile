@@ -1,4 +1,4 @@
-FROM serversideup/php:8.4-fpm-nginx-alpine
+FROM serversideup/php:8.5-fpm-nginx-alpine
 
 ENV PHP_OPCACHE_ENABLE=1
 
@@ -9,7 +9,7 @@ RUN echo "" >> /usr/local/etc/php-fpm.d/docker-php-serversideup-pool.conf && \
     echo "user = www-data" >> /usr/local/etc/php-fpm.d/docker-php-serversideup-pool.conf && \
     echo "group = www-data" >> /usr/local/etc/php-fpm.d/docker-php-serversideup-pool.conf
 
-RUN install-php-extensions intl imagick
+RUN install-php-extensions intl imagick gd
 
 COPY --chown=www-data:www-data . .
 

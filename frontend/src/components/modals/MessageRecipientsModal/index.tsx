@@ -1,7 +1,7 @@
 import {Modal} from "../../common/Modal";
 import {t} from "@lingui/macro";
 import {Alert, Badge, Loader, Text} from "@mantine/core";
-import {GenericModalProps, IdParam} from "../../../types.ts";
+import {GenericModalProps, IdParam, OutgoingMessage} from "../../../types.ts";
 import {useGetMessageRecipients} from "../../../queries/useGetMessageRecipients.ts";
 import {relativeDate} from "../../../utilites/dates.ts";
 import {Pagination} from "../../common/Pagination";
@@ -13,15 +13,20 @@ interface MessageRecipientsModalProps extends GenericModalProps {
     messageId: IdParam;
 }
 
-const statusColor = (status: string) => {
-    switch (status?.toUpperCase()) {
-        case 'SENT':
-            return 'green';
-        case 'FAILED':
-            return 'red';
-        default:
-            return 'gray';
+const deliveryBadge = (recipient: OutgoingMessage): { label: string, color: string } => {
+    if (recipient.status === 'FAILED') {
+        return {label: t`Failed`, color: 'red'};
     }
+    if (recipient.complained_at) {
+        return {label: t`Marked as spam`, color: 'orange'};
+    }
+    if (recipient.bounced_at) {
+        return {label: t`Bounced`, color: 'red'};
+    }
+    if (recipient.delivered_at) {
+        return {label: t`Delivered`, color: 'green'};
+    }
+    return {label: t`Sent`, color: 'blue'};
 };
 
 export const MessageRecipientsModal = ({onClose, eventId, messageId}: MessageRecipientsModalProps) => {
@@ -62,21 +67,25 @@ export const MessageRecipientsModal = ({onClose, eventId, messageId}: MessageRec
                             {total} {total === 1 ? t`recipient` : t`recipients`}
                         </div>
                     )}
-                    {recipients.map((recipient) => (
-                        <div key={recipient.id} className={classes.recipientRow}>
-                            <span className={classes.recipientEmail}>{recipient.recipient}</span>
-                            <div className={classes.recipientRight}>
-                                <Badge size="xs" color={statusColor(recipient.status)} variant="filled">
-                                    {recipient.status}
-                                </Badge>
-                                {recipient.created_at && (
-                                    <span className={classes.recipientDate}>
-                                        {relativeDate(recipient.created_at)}
-                                    </span>
-                                )}
+                    {recipients.map((recipient) => {
+                        const badge = deliveryBadge(recipient);
+
+                        return (
+                            <div key={recipient.id} className={classes.recipientRow} data-testid="message-recipient-row">
+                                <span className={classes.recipientEmail}>{recipient.recipient}</span>
+                                <div className={classes.recipientRight}>
+                                    <Badge size="xs" color={badge.color} variant="light" data-testid="message-recipient-status">
+                                        {badge.label}
+                                    </Badge>
+                                    {recipient.created_at && (
+                                        <span className={classes.recipientDate}>
+                                            {relativeDate(recipient.created_at)}
+                                        </span>
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
 
                     {pagination && Number(pagination.last_page) > 1 && (
                         <Pagination

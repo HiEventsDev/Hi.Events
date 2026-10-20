@@ -8,9 +8,7 @@ class EmailVerificationCodeService
 {
     public function __construct(
         private readonly Repository $cacheRepository,
-    )
-    {
-    }
+    ) {}
 
     public function storeAndReturnCode(string $email): int
     {
@@ -49,6 +47,6 @@ class EmailVerificationCodeService
 
     private function getCacheKey(string $email): string
     {
-        return 'email_verification_code:' . $email;
+        return 'email_verification_code:'.$email;
     }
 }

@@ -10,24 +10,21 @@ class OrderPaymentPlatformFeeService
 {
     public function __construct(
         private readonly OrderPaymentPlatformFeeRepositoryInterface $orderPaymentPlatformFeeRepository,
-    )
-    {
-    }
+    ) {}
 
     public function createOrderPaymentPlatformFee(
-        int     $orderId,
-        string  $paymentPlatform,
-        ?array  $feeRollup,
-        int     $paymentPlatformFeeAmountMinorUnit,
-        int     $applicationFeeGrossAmountMinorUnit,
-        string  $currency,
+        int $orderId,
+        string $paymentPlatform,
+        ?array $feeRollup,
+        int $paymentPlatformFeeAmountMinorUnit,
+        int $applicationFeeGrossAmountMinorUnit,
+        string $currency,
         ?string $transactionId = null,
         ?string $chargeId = null,
-        ?int    $applicationFeeNetAmountMinorUnit = null,
-        ?int    $applicationFeeVatAmountMinorUnit = null,
-        ?float  $applicationFeeVatRate = null,
-    ): void
-    {
+        ?int $applicationFeeNetAmountMinorUnit = null,
+        ?int $applicationFeeVatAmountMinorUnit = null,
+        ?float $applicationFeeVatRate = null,
+    ): void {
         $isZeroDecimalCurrency = Currency::isZeroDecimalCurrency($currency);
 
         $paymentPlatformFeeAmount = $isZeroDecimalCurrency

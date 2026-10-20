@@ -1,0 +1,69 @@
+.tabsCard {
+  padding: 0;
+
+  :global(.mantine-Tabs-list) {
+    padding: 0;
+  }
+
+  :global(.mantine-Tabs-tab:first-of-type) {
+    border-top-left-radius: var(--hi-radius-lg);
+  }
+}
+
+.tabLabelShort {
+  display: none;
+}
+
+.tabCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  margin-left: 6px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--mantine-color-gray-1);
+  color: var(--mantine-color-gray-7);
+}
+
+.viewAllLink {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  padding-right: 12px;
+}
+
+@media (max-width: 768px) {
+  .tabsCard {
+    :global(.mantine-Tabs-list) {
+      flex-wrap: nowrap;
+    }
+
+    :global(.mantine-Tabs-tab) {
+      flex: 1 1 0;
+      justify-content: center;
+      min-width: 0;
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+
+    :global(.mantine-Tabs-tab:last-of-type) {
+      border-top-right-radius: var(--hi-radius-lg);
+    }
+  }
+
+  .tabLabelFull {
+    display: none;
+  }
+
+  .tabLabelShort {
+    display: inline;
+  }
+
+  .viewAllLink {
+    display: none;
+  }
+}

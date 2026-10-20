@@ -19,6 +19,7 @@ class PromoCodeResource extends JsonResource
             'applicable_product_ids' => $this->getApplicableProductIds(),
             'discount' => $this->getDiscount(),
             'discount_type' => $this->getDiscountType(),
+            'discount_applies_to' => $this->getDiscountAppliesTo(),
             'created_at' => $this->getCreatedAt(),
             'updated_at' => $this->getUpdatedAt(),
             'expiry_date' => $this->getExpiryDate(),

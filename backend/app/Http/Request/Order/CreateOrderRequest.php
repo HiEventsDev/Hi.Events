@@ -14,6 +14,24 @@ class CreateOrderRequest extends BaseRequest
      */
     public function rules(): array
     {
-        return [];
+        if ($this->route() !== null) {
+            return [];
+        }
+
+        return [
+            'products' => ['required', 'array'],
+            'products.*.product_id' => ['required', 'integer'],
+            'products.*.event_occurrence_id' => ['integer', 'nullable'],
+            'products.*.quantities' => ['required', 'array'],
+            'products.*.quantities.*.quantity' => ['required', 'integer', 'min:0'],
+            'products.*.quantities.*.price_id' => ['required', 'integer'],
+            'products.*.quantities.*.price' => ['numeric', 'min:0', 'nullable'],
+            'products.*.quantities.*.seat_uids' => ['array', 'nullable', 'max:100'],
+            'products.*.quantities.*.seat_uids.*' => ['string', 'max:24'],
+            'products.*.quantities.*.band_key' => ['nullable', 'string', 'max:24'],
+            'promo_code' => ['nullable', 'string'],
+            'affiliate_code' => ['nullable', 'string'],
+            'widget_id' => ['nullable', 'string', 'max:50'],
+        ];
     }
 }

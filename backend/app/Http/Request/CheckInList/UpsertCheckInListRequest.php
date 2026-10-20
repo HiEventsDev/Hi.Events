@@ -4,17 +4,30 @@ namespace HiEvents\Http\Request\CheckInList;
 
 use HiEvents\Http\Request\BaseRequest;
 use HiEvents\Validators\Rules\RulesHelper;
+use Illuminate\Validation\Rule;
 
 class UpsertCheckInListRequest extends BaseRequest
 {
     public function rules(): array
     {
+        $eventId = $this->route('event_id');
+
         return [
             'name' => RulesHelper::REQUIRED_STRING,
-            'description' => ['nullable', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:2000'],
             'expires_at' => ['nullable', 'date'],
             'activates_at' => ['nullable', 'date'],
-            'product_ids' => ['required', 'array', 'min:1'],
+            'product_ids' => ['nullable', 'array'],
+            'event_occurrence_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('event_occurrences', 'id')
+                    ->where('event_id', $eventId)
+                    ->whereNull('deleted_at'),
+            ],
+            'public_show_attendee_notes' => ['nullable', 'boolean'],
+            'public_show_question_answers' => ['nullable', 'boolean'],
+            'public_show_order_details' => ['nullable', 'boolean'],
         ];
     }
 
@@ -32,7 +45,6 @@ class UpsertCheckInListRequest extends BaseRequest
     public function messages(): array
     {
         return [
-            'product_ids.required' => __('Please select at least one product.'),
             'expires_at.after' => __('The expiration date must be after the activation date.'),
             'activates_at.before' => __('The activation date must be before the expiration date.'),
         ];

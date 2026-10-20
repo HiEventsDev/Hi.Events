@@ -11,9 +11,7 @@ class OrderStatusChangedEvent
 
     public function __construct(
         public OrderDomainObject $order,
-        public bool              $sendEmails = true,
-        public bool              $createInvoice = false,
-    )
-    {
-    }
+        public bool $sendEmails = true,
+        public bool $createInvoice = false,
+    ) {}
 }

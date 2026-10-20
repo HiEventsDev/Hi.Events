@@ -1,5 +1,5 @@
 import {api} from "./client.ts";
-import {Account, GenericDataResponse, IdParam, User, StripeConnectAccountsResponse} from "../types.ts";
+import {Account, AccountDeletionRequest, AccountDeletionStatus, GenericDataResponse, IdParam, User} from "../types.ts";
 
 interface CreateAccountRequest {
     first_name: string;
@@ -17,18 +17,26 @@ export const accountClient = {
         const response = await api.get<GenericDataResponse<Account>>('accounts');
         return response.data;
     },
-    updateAccount: async (account: Account) => {
+    updateAccount: async (account: Partial<Account>) => {
         const response = await api.put<GenericDataResponse<Account>>('accounts', account);
         return response.data;
     },
-    getStripeConnectDetails: async (accountId: IdParam, platform?: string) => {
-        const response = await api.post<GenericDataResponse<any>>(`accounts/${accountId}/stripe/connect`, {
-            platform
+    updateTwoFactorRequirement: async (accountId: IdParam, required: boolean) => {
+        const response = await api.put<GenericDataResponse<Account>>(`accounts/${accountId}/two-factor-requirement`, {
+            require_two_factor_authentication: required,
         });
         return response.data;
     },
-    getStripeConnectAccounts: async (accountId: IdParam) => {
-        const response = await api.get<GenericDataResponse<StripeConnectAccountsResponse>>(`accounts/${accountId}/stripe/connect_accounts`);
+    getDeletionStatus: async () => {
+        const response = await api.get<GenericDataResponse<AccountDeletionStatus>>('accounts/deletion-request');
         return response.data;
-    }
+    },
+    requestDeletion: async (payload: { confirmation: string; reason?: string }) => {
+        const response = await api.post<GenericDataResponse<AccountDeletionRequest>>('accounts/deletion-request', payload);
+        return response.data;
+    },
+    cancelDeletion: async () => {
+        const response = await api.delete<GenericDataResponse<AccountDeletionRequest>>('accounts/deletion-request');
+        return response.data;
+    },
 }

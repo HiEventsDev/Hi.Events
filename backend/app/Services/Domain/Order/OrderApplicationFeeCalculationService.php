@@ -3,9 +3,9 @@
 namespace HiEvents\Services\Domain\Order;
 
 use Brick\Money\Currency;
-use HiEvents\DomainObjects\AccountConfigurationDomainObject;
-use HiEvents\DomainObjects\AccountVatSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\OrganizerConfigurationDomainObject;
+use HiEvents\DomainObjects\OrganizerVatSettingDomainObject;
 use HiEvents\Services\Domain\Order\DTO\ApplicationFeeValuesDTO;
 use HiEvents\Services\Domain\Order\Vat\VatRateDeterminationService;
 use HiEvents\Services\Infrastructure\CurrencyConversion\CurrencyConversionClientInterface;
@@ -15,35 +15,32 @@ use Illuminate\Config\Repository;
 class OrderApplicationFeeCalculationService
 {
     public function __construct(
-        private readonly Repository                        $config,
+        private readonly Repository $config,
         private readonly CurrencyConversionClientInterface $currencyConversionClient,
-        private readonly VatRateDeterminationService       $vatRateDeterminationService,
-    )
-    {
-    }
+        private readonly VatRateDeterminationService $vatRateDeterminationService,
+    ) {}
 
     public function calculateApplicationFee(
-        AccountConfigurationDomainObject $accountConfiguration,
-        OrderDomainObject                $order,
-        ?AccountVatSettingDomainObject   $vatSettings = null
-    ): ?ApplicationFeeValuesDTO
-    {
+        OrganizerConfigurationDomainObject $configuration,
+        OrderDomainObject $order,
+        ?OrganizerVatSettingDomainObject $vatSettings = null
+    ): ?ApplicationFeeValuesDTO {
         $currency = $order->getCurrency();
         $quantityPurchased = $this->getChargeableQuantityPurchased($order);
 
-        if (!$this->config->get('app.saas_mode_enabled')) {
+        if (! $this->config->get('app.saas_mode_enabled')) {
             return null;
         }
 
-        $fixedFee = $this->getConvertedFixedFee($accountConfiguration, $currency);
-        $percentageFee = $accountConfiguration->getPercentageApplicationFee();
+        $fixedFee = $this->getConvertedFixedFee($configuration, $currency);
+        $percentageFee = $configuration->getPercentageApplicationFee();
 
         $netApplicationFee = MoneyValue::fromFloat(
             amount: ($fixedFee->toFloat() * $quantityPurchased) + ($order->getTotalGross() * $percentageFee / 100),
             currency: $currency
         );
 
-        if (!$vatSettings) {
+        if (! $vatSettings) {
             return new ApplicationFeeValuesDTO(
                 grossApplicationFee: $netApplicationFee,
                 netApplicationFee: $netApplicationFee,
@@ -58,20 +55,19 @@ class OrderApplicationFeeCalculationService
     }
 
     private function getConvertedFixedFee(
-        AccountConfigurationDomainObject $accountConfiguration,
-        string                           $currency
-    ): MoneyValue
-    {
-        $baseCurrency = $accountConfiguration->getApplicationFeeCurrency();
+        OrganizerConfigurationDomainObject $configuration,
+        string $currency
+    ): MoneyValue {
+        $baseCurrency = $configuration->getApplicationFeeCurrency();
 
         if ($currency === $baseCurrency) {
-            return MoneyValue::fromFloat($accountConfiguration->getFixedApplicationFee(), $currency);
+            return MoneyValue::fromFloat($configuration->getFixedApplicationFee(), $currency);
         }
 
         return $this->currencyConversionClient->convert(
             fromCurrency: Currency::of($baseCurrency),
             toCurrency: Currency::of($currency),
-            amount: $accountConfiguration->getFixedApplicationFee()
+            amount: $configuration->getFixedApplicationFee()
         );
     }
 
@@ -98,11 +94,10 @@ class OrderApplicationFeeCalculationService
      * - Gross charged: £0.72 (£0.60 + £0.12)
      */
     private function calculateFeeWithVat(
-        AccountVatSettingDomainObject $vatSettings,
-        MoneyValue                    $netApplicationFee,
-        string                        $currency,
-    ): ApplicationFeeValuesDTO
-    {
+        OrganizerVatSettingDomainObject $vatSettings,
+        MoneyValue $netApplicationFee,
+        string $currency,
+    ): ApplicationFeeValuesDTO {
         $vatRate = $this->vatRateDeterminationService->determineVatRatePercentage($vatSettings);
 
         if ($vatRate <= 0) {

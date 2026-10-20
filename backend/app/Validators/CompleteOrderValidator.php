@@ -16,26 +16,25 @@ use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
 use HiEvents\Validators\Rules\OrderQuestionRule;
+use HiEvents\Validators\Rules\PersonNameRule;
 use HiEvents\Validators\Rules\ProductQuestionRule;
 use Illuminate\Routing\Route;
 
 class CompleteOrderValidator extends BaseValidator
 {
     public function __construct(
-        private readonly QuestionRepositoryInterface      $questionRepository,
-        private readonly ProductRepositoryInterface       $productRepository,
+        private readonly QuestionRepositoryInterface $questionRepository,
+        private readonly ProductRepositoryInterface $productRepository,
         private readonly EventSettingsRepositoryInterface $eventSettingsRepository,
-        private readonly Route                            $route
-    )
-    {
-    }
+        private readonly Route $route
+    ) {}
 
     public function rules(): array
     {
         $questions = $this->questionRepository
             ->loadRelation(
                 new Relationship(ProductDomainObject::class, [
-                    new Relationship(ProductPriceDomainObject::class)
+                    new Relationship(ProductPriceDomainObject::class),
                 ])
             )
             ->findWhere(
@@ -43,11 +42,11 @@ class CompleteOrderValidator extends BaseValidator
             );
 
         $orderQuestions = $questions->filter(
-            fn(QuestionDomainObject $question) => $question->getBelongsTo() === QuestionBelongsTo::ORDER->name
+            fn (QuestionDomainObject $question) => $question->getBelongsTo() === QuestionBelongsTo::ORDER->name
         );
 
         $productQuestions = $questions->filter(
-            fn(QuestionDomainObject $question) => $question->getBelongsTo() === QuestionBelongsTo::PRODUCT->name
+            fn (QuestionDomainObject $question) => $question->getBelongsTo() === QuestionBelongsTo::PRODUCT->name
         );
 
         $products = $this->productRepository
@@ -72,8 +71,8 @@ class CompleteOrderValidator extends BaseValidator
         ] : [];
 
         return [
-            'order.first_name' => ['required', 'string', 'max:40'],
-            'order.last_name' => ['required', 'string', 'max:40'],
+            'order.first_name' => ['required', 'string', 'max:40', new PersonNameRule],
+            'order.last_name' => ['required', 'string', 'max:40', new PersonNameRule],
             'order.questions' => new OrderQuestionRule($orderQuestions, $products),
             'order.email' => 'required|email',
             'order.email_confirmation' => 'required|email|same:order.email',
@@ -82,7 +81,8 @@ class CompleteOrderValidator extends BaseValidator
                 $products,
                 $eventSettings->getAttendeeDetailsCollectionMethod(),
             ),
-            ...$addressRules
+            'products.*.seat_uid' => ['nullable', 'string', 'max:24'],
+            ...$addressRules,
         ];
     }
 

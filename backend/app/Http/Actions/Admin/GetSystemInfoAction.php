@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Admin;
 
-use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use Illuminate\Http\JsonResponse;
 
@@ -12,7 +11,7 @@ class GetSystemInfoAction extends BaseAction
 {
     public function __invoke(): JsonResponse
     {
-        $this->minimumAllowedRole(Role::SUPERADMIN);
+        $this->requireSuperAdmin();
 
         $version = trim(@file_get_contents(base_path('VERSION')) ?: 'unknown');
 

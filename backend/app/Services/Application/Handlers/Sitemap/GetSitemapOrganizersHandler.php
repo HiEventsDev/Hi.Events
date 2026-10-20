@@ -12,13 +12,13 @@ use Illuminate\Support\Facades\Cache;
 class GetSitemapOrganizersHandler
 {
     private const CACHE_KEY_PREFIX = 'sitemap:organizers:';
+
     private const MIN_PAGE = 1;
 
     public function __construct(
         private readonly OrganizerRepositoryInterface $organizerRepository,
         private readonly SitemapGeneratorService $sitemapGenerator,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws ResourceNotFoundException
@@ -38,7 +38,7 @@ class GetSitemapOrganizersHandler
         }
 
         $cacheTtl = (int) config('sitemap.cache_ttl');
-        $cacheKey = self::CACHE_KEY_PREFIX . $page;
+        $cacheKey = self::CACHE_KEY_PREFIX.$page;
 
         return Cache::remember($cacheKey, $cacheTtl, function () use ($page, $organizersPerPage): string {
             $organizers = $this->organizerRepository->getSitemapOrganizers($page, $organizersPerPage);

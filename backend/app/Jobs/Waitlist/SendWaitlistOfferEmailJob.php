@@ -7,6 +7,7 @@ use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\WaitlistEntryDomainObject;
 use HiEvents\Mail\Waitlist\WaitlistOfferMail;
 use HiEvents\Repository\Eloquent\Value\Relationship;
+use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
@@ -25,20 +26,19 @@ class SendWaitlistOfferEmailJob implements ShouldQueue
 
     public function __construct(
         private readonly WaitlistEntryDomainObject $entry,
-        private readonly string                    $orderShortId,
-        private readonly string                    $sessionIdentifier,
-    )
-    {
+        private readonly string $orderShortId,
+        private readonly string $sessionIdentifier,
+    ) {
         $this->afterCommit = true;
     }
 
     public function handle(
-        EventRepositoryInterface      $eventRepository,
+        EventRepositoryInterface $eventRepository,
         ProductPriceRepositoryInterface $productPriceRepository,
-        ProductRepositoryInterface    $productRepository,
-        Mailer                        $mailer,
-    ): void
-    {
+        ProductRepositoryInterface $productRepository,
+        EventOccurrenceRepositoryInterface $occurrenceRepository,
+        Mailer $mailer,
+    ): void {
         $event = $eventRepository
             ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
             ->loadRelation(new Relationship(EventSettingDomainObject::class))
@@ -50,6 +50,10 @@ class SendWaitlistOfferEmailJob implements ShouldQueue
             $productPrice = $productPriceRepository->findById($this->entry->getProductPriceId());
             $product = $productRepository->findById($productPrice->getProductId());
         }
+
+        $occurrence = $this->entry->getEventOccurrenceId() !== null
+            ? $occurrenceRepository->findById($this->entry->getEventOccurrenceId())
+            : null;
 
         $mailer
             ->to($this->entry->getEmail())
@@ -63,6 +67,7 @@ class SendWaitlistOfferEmailJob implements ShouldQueue
                 eventSettings: $event->getEventSettings(),
                 orderShortId: $this->orderShortId,
                 sessionIdentifier: $this->sessionIdentifier,
+                occurrence: $occurrence,
             ));
     }
 }

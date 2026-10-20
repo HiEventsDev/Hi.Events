@@ -14,6 +14,7 @@ use Tests\TestCase;
 class EncryptedPayloadServiceTest extends TestCase
 {
     private Encrypter $encrypter;
+
     private EncryptedPayloadService $service;
 
     protected function setUp(): void
@@ -24,7 +25,7 @@ class EncryptedPayloadServiceTest extends TestCase
         $this->service = new EncryptedPayloadService($this->encrypter);
     }
 
-    public function testEncryptPayload(): void
+    public function test_encrypt_payload(): void
     {
         $payload = ['data' => 'test'];
         $encryptedPayload = 'encryptedString';
@@ -37,7 +38,7 @@ class EncryptedPayloadServiceTest extends TestCase
         $this->assertEquals($encryptedPayload, $result);
     }
 
-    public function testDecryptPayloadSuccess(): void
+    public function test_decrypt_payload_success(): void
     {
         $encryptedPayload = 'encryptedString';
         $decryptedPayload = ['data' => 'test', 'exp' => Carbon::now()->addHours(1)->toIso8601String()];
@@ -49,7 +50,7 @@ class EncryptedPayloadServiceTest extends TestCase
         $this->assertEquals($decryptedPayload, $result);
     }
 
-    public function testDecryptPayloadExpiredException(): void
+    public function test_decrypt_payload_expired_exception(): void
     {
         $this->expectException(EncryptedPayloadExpiredException::class);
 
@@ -61,13 +62,13 @@ class EncryptedPayloadServiceTest extends TestCase
         $this->service->decryptPayload($encryptedPayload);
     }
 
-    public function testDecryptPayloadDecryptionFailedException(): void
+    public function test_decrypt_payload_decryption_failed_exception(): void
     {
         $this->expectException(DecryptionFailedException::class);
 
         $encryptedPayload = 'encryptedString';
 
-        $this->encrypter->shouldReceive('decrypt')->once()->andThrow(new DecryptException());
+        $this->encrypter->shouldReceive('decrypt')->once()->andThrow(new DecryptException);
 
         $this->service->decryptPayload($encryptedPayload);
     }

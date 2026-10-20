@@ -11,4 +11,5 @@ enum EventStatus
     case DRAFT;
     case LIVE;
     case ARCHIVED;
+    case PENDING_MANUAL_REVIEW;
 }

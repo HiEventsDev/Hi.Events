@@ -14,13 +14,11 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ExportAnswersJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Batchable;
+    use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public function __construct(
         private readonly int $eventId,
-    )
-    {
-    }
+    ) {}
 
     public function handle(ExportAnswersHandler $exportAnswersHandler, AnswersExport $export): void
     {

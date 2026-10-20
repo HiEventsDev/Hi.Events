@@ -13,9 +13,7 @@ class DeletePromoCodeAction extends BaseAction
 {
     public function __construct(
         private readonly DeletePromoCodeHandler $deletePromoCodeHandler
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(Request $request, int $eventId, int $promoCodeId): Response
     {

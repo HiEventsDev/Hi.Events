@@ -77,4 +77,47 @@ class OrderAuditLogService
             'user_agent' => $userAgent,
         ]);
     }
+
+    public function logManualAttendeeCapacityOverride(
+        int $eventId,
+        int $orderId,
+        int $attendeeId,
+        int $occurrenceId,
+        string $ipAddress,
+        ?string $userAgent,
+    ): void {
+        $this->orderAuditLogRepository->create([
+            'event_id' => $eventId,
+            'order_id' => $orderId,
+            'attendee_id' => $attendeeId,
+            'action' => OrderAuditAction::MANUAL_ATTENDEE_CAPACITY_OVERRIDE->value,
+            'old_values' => null,
+            'new_values' => ['event_occurrence_id' => $occurrenceId],
+            'changed_fields' => 'event_occurrence_id',
+            'ip_address' => $ipAddress,
+            'user_agent' => $userAgent,
+        ]);
+    }
+
+    public function logBoxOfficeAction(
+        OrderAuditAction $action,
+        int $eventId,
+        int $orderId,
+        string $operatorName,
+        array $details,
+        string $ipAddress,
+        ?string $userAgent,
+    ): void {
+        $this->orderAuditLogRepository->create([
+            'event_id' => $eventId,
+            'order_id' => $orderId,
+            'attendee_id' => null,
+            'action' => $action->value,
+            'old_values' => null,
+            'new_values' => array_merge(['operator_name' => $operatorName], $details),
+            'changed_fields' => implode(',', array_keys($details)),
+            'ip_address' => $ipAddress,
+            'user_agent' => $userAgent,
+        ]);
+    }
 }

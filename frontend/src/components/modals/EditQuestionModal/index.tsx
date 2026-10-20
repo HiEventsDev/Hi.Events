@@ -7,7 +7,7 @@ import {useParams} from "react-router";
 import {questionClient} from "../../../api/question.client.ts";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {GET_EVENT_QUESTIONS_QUERY_KEY} from "../../../queries/useGetEventQuestions.ts";
-import {Modal} from "../../common/Modal";
+import {Modal, ModalFooter} from "../../common/Modal";
 import {t} from "@lingui/macro";
 import {QuestionForm} from "../../forms/QuestionForm";
 import {GET_QUESTION_QUERY_KEY, useGetQuestion} from "../../../queries/useGetQuestion.ts";
@@ -97,9 +97,12 @@ export const EditQuestionModal = ({onClose, questionId}: EditQuestionModalProps)
             <form onSubmit={form.onSubmit((values) => mutation.mutate(values as any as Question))}>
                 <QuestionForm form={form} productCategories={productsCategories}/>
                 {!questionQuery.isFetched && <LoadingOverlay visible/>}
-                <Button loading={mutation.isPending} type="submit" fullWidth mt="xl">
-                    {mutation.isPending ? t`Working...` : t`Edit Question`}
-                </Button>
+                <ModalFooter>
+                    <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                    <Button loading={mutation.isPending} type="submit">
+                        {mutation.isPending ? t`Working...` : t`Save Changes`}
+                    </Button>
+                </ModalFooter>
             </form>
         </Modal>
     )

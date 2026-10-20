@@ -13,9 +13,7 @@ class DeleteImageAction extends BaseAction
 {
     public function __construct(
         public readonly DeleteImageHandler $deleteImageHandler,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws CannotDeleteEntityException

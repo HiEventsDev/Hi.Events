@@ -9,6 +9,4 @@ use HiEvents\DomainObjects\AccountMessagingTierDomainObject;
 /**
  * @extends RepositoryInterface<AccountMessagingTierDomainObject>
  */
-interface AccountMessagingTierRepositoryInterface extends RepositoryInterface
-{
-}
+interface AccountMessagingTierRepositoryInterface extends RepositoryInterface {}

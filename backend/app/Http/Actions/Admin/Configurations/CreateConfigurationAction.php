@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Admin\Configurations;
 
-use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Repository\Interfaces\AccountConfigurationRepositoryInterface;
-use HiEvents\Resources\Account\AccountConfigurationResource;
+use HiEvents\Repository\Interfaces\OrganizerConfigurationRepositoryInterface;
+use HiEvents\Resources\Organizer\OrganizerConfigurationResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,13 +14,12 @@ use Symfony\Component\HttpFoundation\Response;
 class CreateConfigurationAction extends BaseAction
 {
     public function __construct(
-        private readonly AccountConfigurationRepositoryInterface $repository,
-    ) {
-    }
+        private readonly OrganizerConfigurationRepositoryInterface $repository,
+    ) {}
 
     public function __invoke(Request $request): JsonResponse
     {
-        $this->minimumAllowedRole(Role::SUPERADMIN);
+        $this->requireSuperAdmin();
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -40,7 +38,7 @@ class CreateConfigurationAction extends BaseAction
         ]);
 
         return $this->jsonResponse(
-            new AccountConfigurationResource($configuration),
+            new OrganizerConfigurationResource($configuration),
             statusCode: Response::HTTP_CREATED,
             wrapInData: true
         );

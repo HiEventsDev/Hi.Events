@@ -10,9 +10,7 @@ class DeleteProductHandler
 {
     public function __construct(
         private readonly DeleteProductService $deleteProductService,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws CannotDeleteEntityException

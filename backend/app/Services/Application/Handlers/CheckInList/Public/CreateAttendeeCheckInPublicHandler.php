@@ -17,11 +17,9 @@ class CreateAttendeeCheckInPublicHandler
 {
     public function __construct(
         private readonly CreateAttendeeCheckInService $createAttendeeCheckInService,
-        private readonly LoggerInterface              $logger,
+        private readonly LoggerInterface $logger,
         private readonly DomainEventDispatcherService $domainEventDispatcherService,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws CannotCheckInException|Throwable
@@ -36,7 +34,7 @@ class CreateAttendeeCheckInPublicHandler
 
         $this->logger->info('Attendee check-ins created', [
             'attendee_ids' => $checkIns->attendeeCheckIns
-                ->map(fn(AttendeeCheckInDomainObject $checkIn) => $checkIn->getAttendeeId())->toArray(),
+                ->map(fn (AttendeeCheckInDomainObject $checkIn) => $checkIn->getAttendeeId())->toArray(),
             'check_in_list_uuid' => $checkInData->checkInListUuid,
             'ip_address' => $checkInData->checkInUserIpAddress,
         ]);

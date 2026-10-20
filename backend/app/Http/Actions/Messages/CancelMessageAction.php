@@ -13,9 +13,7 @@ class CancelMessageAction extends BaseAction
 {
     public function __construct(
         private readonly CancelMessageHandler $cancelMessageHandler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(Request $request, int $eventId, int $messageId): JsonResponse
     {

@@ -13,7 +13,7 @@ import {trackEvent, AnalyticsEvents} from '../../../utilites/analytics';
 interface StatusToggleProps {
     entityType: 'event' | 'organizer';
     entityId: IdParam;
-    currentStatus: 'DRAFT' | 'LIVE';
+    currentStatus: 'DRAFT' | 'LIVE' | 'PENDING_MANUAL_REVIEW';
     entityName?: string;
     onSuccess?: () => void;
 }
@@ -32,7 +32,6 @@ export const StatusToggle: React.FC<StatusToggleProps> = ({
         const isDraft = currentStatus === 'DRAFT';
         const newStatus = isDraft ? 'LIVE' : 'DRAFT';
 
-        // Confirmation messages
         const confirmMessage = isDraft
             ? entityType === 'event'
                 ? t`Are you sure you want to publish this event? Once published, it will be visible to the public.`
@@ -73,9 +72,20 @@ export const StatusToggle: React.FC<StatusToggleProps> = ({
         mutation
     ]);
 
-    // Don't show toggle if already live
     if (currentStatus === 'LIVE') {
         return null;
+    }
+
+    if (currentStatus === 'PENDING_MANUAL_REVIEW') {
+        return (
+            <div className={classes.banner}>
+                <div className={classes.content}>
+                    <span className={classes.message}>
+                        {t`This event is pending manual review and is not visible to the public`}
+                    </span>
+                </div>
+            </div>
+        );
     }
 
     const message = entityType === 'event'

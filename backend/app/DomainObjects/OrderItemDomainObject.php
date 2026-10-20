@@ -12,6 +12,8 @@ class OrderItemDomainObject extends Generated\OrderItemDomainObjectAbstract
 
     public ?OrderDomainObject $order = null;
 
+    private ?EventOccurrenceDomainObject $eventOccurrence = null;
+
     public function getTotalBeforeDiscount(): float
     {
         return Currency::round($this->getPriceBeforeDiscount() * $this->getQuantity());
@@ -49,6 +51,18 @@ class OrderItemDomainObject extends Generated\OrderItemDomainObjectAbstract
     public function setOrder(?OrderDomainObject $order): self
     {
         $this->order = $order;
+
+        return $this;
+    }
+
+    public function getEventOccurrence(): ?EventOccurrenceDomainObject
+    {
+        return $this->eventOccurrence;
+    }
+
+    public function setEventOccurrence(?EventOccurrenceDomainObject $eventOccurrence): self
+    {
+        $this->eventOccurrence = $eventOccurrence;
 
         return $this;
     }

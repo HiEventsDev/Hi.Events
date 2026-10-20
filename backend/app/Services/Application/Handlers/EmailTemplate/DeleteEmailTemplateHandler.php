@@ -10,9 +10,7 @@ class DeleteEmailTemplateHandler
 {
     public function __construct(
         private readonly EmailTemplateRepositoryInterface $emailTemplateRepository
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws EmailTemplateNotFoundException
@@ -22,9 +20,11 @@ class DeleteEmailTemplateHandler
         $template = $this->emailTemplateRepository->findFirstWhere([
             'id' => $dto->id,
             'account_id' => $dto->account_id,
+            'event_id' => $dto->event_id,
+            'organizer_id' => $dto->organizer_id,
         ]);
 
-        if (!$template) {
+        if (! $template) {
             throw new EmailTemplateNotFoundException(__('Email template not found'));
         }
 

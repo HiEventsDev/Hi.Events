@@ -16,9 +16,7 @@ use Throwable;
 class EditAttendeeAction extends BaseAction
 {
     public function __construct(
-        private readonly EditAttendeeHandler $handler)
-    {
-    }
+        private readonly EditAttendeeHandler $handler) {}
 
     /**
      * @throws ValidationException

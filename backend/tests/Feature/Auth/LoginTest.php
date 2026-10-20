@@ -14,10 +14,12 @@ class LoginTest extends TestCase
     use RefreshDatabase;
 
     private const LOGIN_ROUTE = '/auth/login';
+
     private const LOGOUT_ROUTE = '/auth/logout';
+
     private const USERS_ME_ROUTE = '/users/me';
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -28,7 +30,7 @@ class LoginTest extends TestCase
             'application_fees' => [
                 'percentage' => 1.5,
                 'fixed' => 0,
-            ]
+            ],
         ]);
     }
 
@@ -44,14 +46,30 @@ class LoginTest extends TestCase
 
         $response->assertSuccessful();
         $response->assertCookie('token');
+        $this->assertSame('lax', $response->getCookie('token', false)->getSameSite());
         $response->assertHeader('X-Auth-Token');
         $response->assertJsonStructure([
             'token',
             'token_type',
             'expires_in',
             'user',
-            'accounts'
+            'accounts',
         ]);
+    }
+
+    public function test_login_from_a_cross_site_frontend_sets_a_cookie_the_browser_will_store(): void
+    {
+        $password = fake()->password(16);
+        $user = User::factory()->password($password)->withAccount()->create();
+
+        $response = $this->postJson(route('auth.login'), [
+            'email' => $user->email,
+            'password' => $password,
+        ], ['Sec-Fetch-Site' => 'cross-site']);
+
+        $response->assertSuccessful();
+        $this->assertSame('none', $response->getCookie('token', false)->getSameSite());
+        $this->assertTrue($response->getCookie('token', false)->isSecure());
     }
 
     public function test_login_with_invalid_credentials(): void
@@ -69,7 +87,6 @@ class LoginTest extends TestCase
         $response->assertHeaderMissing('X-Auth-Token');
     }
 
-
     public function test_logout(): void
     {
         $password = fake()->password(16);
@@ -82,14 +99,14 @@ class LoginTest extends TestCase
         $response->assertCookie('token');
 
         $response2 = $this->postJson(self::LOGOUT_ROUTE, [], [
-            'Authorization' => 'Bearer ' . $response->headers->get('X-Auth-Token'),
+            'Authorization' => 'Bearer '.$response->headers->get('X-Auth-Token'),
         ]);
         $response2->assertStatus(200);
         $response2->assertCookieExpired('token');
 
         // try to use the expired token
         $response3 = $this->getJson(self::USERS_ME_ROUTE, [
-            'Authorization' => 'Bearer ' . $response->headers->get('X-Auth-Token'),
+            'Authorization' => 'Bearer '.$response->headers->get('X-Auth-Token'),
         ]);
         $response3->assertStatus(401);
     }

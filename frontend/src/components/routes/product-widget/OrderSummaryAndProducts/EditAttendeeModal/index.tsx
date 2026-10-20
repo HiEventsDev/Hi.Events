@@ -1,10 +1,10 @@
 import {t} from "@lingui/macro";
-import {Alert, Button, Group, Modal, Text, TextInput} from "@mantine/core";
+import {Button, Group, Modal, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
-import {IconInfoCircle} from "@tabler/icons-react";
 import {Attendee} from "../../../../../types";
 import classes from "./EditAttendeeModal.module.scss";
 import {InputGroup} from "../../../../common/InputGroup";
+import {Callout} from "../../../../common/Callout";
 
 interface EditAttendeeModalProps {
     opened: boolean;
@@ -19,24 +19,26 @@ export const EditAttendeeModal = ({
                                       attendee,
                                       onSuccess,
                                   }: EditAttendeeModalProps) => {
+    const emailRequired = !!attendee.email;
+
     const form = useForm({
         initialValues: {
             first_name: attendee.first_name,
             last_name: attendee.last_name,
-            email: attendee.email,
+            email: attendee.email ?? "",
         },
         validate: {
             first_name: (value) => !value ? t`First name is required` : null,
             last_name: (value) => !value ? t`Last name is required` : null,
             email: (value) => {
-                if (!value) return t`Email is required`;
+                if (!value) return emailRequired ? t`Email is required` : null;
                 if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return t`Invalid email`;
                 return null;
             },
         },
     });
 
-    const emailChanged = form.values.email !== attendee.email;
+    const emailChanged = form.values.email !== (attendee.email ?? "");
 
     return (
         <Modal
@@ -67,17 +69,15 @@ export const EditAttendeeModal = ({
                     <TextInput
                         label={t`Email`}
                         placeholder={t`Enter email`}
-                        required
+                        required={emailRequired}
                         type="email"
                         {...form.getInputProps('email')}
                     />
 
                     {emailChanged && (
-                        <Alert mb={20} icon={<IconInfoCircle size={16}/>} color="blue">
-                            <Text size="sm">
-                                {t`The email address has been changed. The attendee will receive a new ticket at the updated email address.`}
-                            </Text>
-                        </Alert>
+                        <Callout variant="info">
+                            {t`The email address has been changed. The attendee will receive a new ticket at the updated email address.`}
+                        </Callout>
                     )}
 
                     <Group justify="flex-end" gap="sm" mt="md">

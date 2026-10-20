@@ -10,9 +10,7 @@ class GetAllEventsHandler
 {
     public function __construct(
         private readonly EventRepositoryInterface $eventRepository,
-    )
-    {
-    }
+    ) {}
 
     public function handle(GetAllEventsDTO $dto): LengthAwarePaginator
     {

@@ -26,9 +26,6 @@ $transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
           transform: scale(1.03);
         }
 
-        .placeholderContent {
-          transform: scale(1.03);
-        }
       }
 
       .shareButton {
@@ -36,9 +33,6 @@ $transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         transform: scale(1);
       }
 
-      .dateBadge {
-        border-color: var(--primary-color);
-      }
     }
   }
 }
@@ -116,83 +110,34 @@ $transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 .placeholderImage {
   width: 100%;
   height: 100%;
-  background: var(--bg-color);
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  overflow: hidden;
+  background: linear-gradient(135deg, var(--accent-soft), var(--bg-color));
+  color: var(--primary-color);
 }
 
-.placeholderContent {
-  position: relative;
-  transition: transform $transition-slow;
+.placeholderDate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-family: $font-display;
+  line-height: 1;
 }
 
-.placeholderIcon {
-  font-size: 2.5rem;
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
-  color: var(--badge-text, white);
-  animation: float 4s ease-in-out infinite;
-
-  @media (max-width: 640px) {
-    font-size: 2rem;
-  }
+.placeholderMonth {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  25% {
-    transform: translateY(-6px) rotate(-2deg);
-  }
-  75% {
-    transform: translateY(3px) rotate(2deg);
-  }
-}
-
-// Sparkles
-.sparkles {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.sparkle {
-  position: absolute;
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 1rem;
-  animation: sparkle 3s ease-in-out infinite;
-
-  &:nth-child(1) {
-    top: 15%;
-    left: 20%;
-    animation-delay: 0s;
-  }
-
-  &:nth-child(2) {
-    top: 70%;
-    right: 25%;
-    animation-delay: 1s;
-  }
-
-  &:nth-child(3) {
-    bottom: 25%;
-    left: 30%;
-    animation-delay: 2s;
-  }
-}
-
-@keyframes sparkle {
-  0%, 100% {
-    opacity: 0;
-    transform: scale(0) rotate(0deg);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1) rotate(180deg);
-  }
+.placeholderDay {
+  font-size: 2.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--primary-text-color);
 }
 
 // Image Overlay - contains floating elements
@@ -272,36 +217,6 @@ $transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
-// Date badge
-.dateBadge {
-  position: absolute;
-  background: var(--content-bg-color);
-  color: var(--primary-text-color);
-  border: 1px solid var(--border-color);
-  padding: 6px 10px;
-  border-radius: $radius-xs;
-  box-shadow: 0 2px 8px var(--border-color);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-family: $font-display;
-  font-weight: 600;
-  font-size: 0.75rem;
-  z-index: 10;
-  bottom: 8px;
-  left: 8px;
-  backdrop-filter: blur(10px);
-  transition: border-color $transition-fast;
-
-  @include mixins.respond-below('sm') {
-    left: 8px;
-  }
-
-  svg {
-    color: var(--primary-color);
-  }
-}
-
 // Content Section
 .eventContent {
   flex: 1;
@@ -340,23 +255,16 @@ $transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
-.eventDateTime {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--secondary-color);
+.eventDate {
+  color: var(--primary-color);
   font-size: 0.8125rem;
-  font-weight: 500;
-
-  svg {
-    color: var(--accent-muted);
-    flex-shrink: 0;
-  }
+  font-weight: 600;
+  line-height: 1.4;
 }
 
 .timezone {
   font-weight: 500;
-  opacity: 0.8;
+  color: var(--secondary-color);
 }
 
 .eventDescription {
@@ -393,7 +301,7 @@ $transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   flex-wrap: wrap;
 }
 
-.location {
+.metaItem {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -426,12 +334,19 @@ $transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     flex-shrink: 0;
   }
 
-  .price {
-    color: var(--primary-text-color);
+  &.priceSoldOut {
+    background: var(--bg-color);
+    color: var(--secondary-color);
+  }
+}
+
+.eventCardEnded {
+  .imageWrapper {
+    filter: grayscale(0.6);
+    opacity: 0.8;
   }
 
-  .free {
-    font-weight: 700;
-    color: var(--primary-color);
+  .eventDate {
+    color: var(--secondary-color);
   }
 }

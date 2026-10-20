@@ -1,1 +1,1 @@
-See [CLAUDE.md](../CLAUDE.md) for project conventions and development guidelines.
+See [AGENTS.md](../AGENTS.md) for project conventions and development guidelines.

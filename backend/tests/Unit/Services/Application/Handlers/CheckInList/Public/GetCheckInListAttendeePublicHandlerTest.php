@@ -8,6 +8,8 @@ use HiEvents\Exceptions\CannotCheckInException;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\CheckInListRepositoryInterface;
 use HiEvents\Services\Application\Handlers\CheckInList\Public\GetCheckInListAttendeePublicHandler;
+use HiEvents\Services\Domain\CheckInList\CheckInListActivityValidator;
+use Illuminate\Support\Collection;
 use Mockery as m;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Tests\TestCase;
@@ -15,7 +17,9 @@ use Tests\TestCase;
 class GetCheckInListAttendeePublicHandlerTest extends TestCase
 {
     private CheckInListRepositoryInterface $checkInListRepository;
+
     private AttendeeRepositoryInterface $attendeeRepository;
+
     private GetCheckInListAttendeePublicHandler $handler;
 
     protected function setUp(): void
@@ -27,11 +31,12 @@ class GetCheckInListAttendeePublicHandlerTest extends TestCase
 
         $this->handler = new GetCheckInListAttendeePublicHandler(
             $this->attendeeRepository,
-            $this->checkInListRepository
+            $this->checkInListRepository,
+            new CheckInListActivityValidator,
         );
     }
 
-    public function testHandleThrowsNotFoundIfCheckInListMissing(): void
+    public function test_handle_throws_not_found_if_check_in_list_missing(): void
     {
         $this->checkInListRepository
             ->shouldReceive('loadRelation')
@@ -48,7 +53,7 @@ class GetCheckInListAttendeePublicHandlerTest extends TestCase
         $this->handler->handle('short-id', 'attendee-public-id');
     }
 
-    public function testHandleThrowsCannotCheckInIfListExpired(): void
+    public function test_handle_throws_cannot_check_in_if_list_expired(): void
     {
         $checkInList = m::mock(CheckInListDomainObject::class);
         $checkInList->shouldReceive('getExpiresAt')->twice()->andReturn(now()->subMinute());
@@ -68,7 +73,7 @@ class GetCheckInListAttendeePublicHandlerTest extends TestCase
         $this->handler->handle('short-id', 'attendee-public-id');
     }
 
-    public function testHandleThrowsCannotCheckInIfListNotActiveYet(): void
+    public function test_handle_throws_cannot_check_in_if_list_not_active_yet(): void
     {
         $checkInList = m::mock(CheckInListDomainObject::class);
         $checkInList->shouldReceive('getExpiresAt')->once()->andReturn(null);
@@ -89,12 +94,14 @@ class GetCheckInListAttendeePublicHandlerTest extends TestCase
         $this->handler->handle('short-id', 'attendee-public-id');
     }
 
-    public function testHandleReturnsAttendeeSuccessfully(): void
+    public function test_handle_returns_attendee_successfully(): void
     {
         $checkInList = m::mock(CheckInListDomainObject::class);
         $checkInList->shouldReceive('getExpiresAt')->once()->andReturn(null);
         $checkInList->shouldReceive('getActivatesAt')->once()->andReturn(null);
         $checkInList->shouldReceive('getEventId')->once()->andReturn(123);
+        $checkInList->shouldReceive('getProducts')->once()->andReturn(new Collection);
+        $checkInList->shouldReceive('getEventOccurrenceId')->once()->andReturn(null);
 
         $attendee = m::mock(AttendeeDomainObject::class);
 

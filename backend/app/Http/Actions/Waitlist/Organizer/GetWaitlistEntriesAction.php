@@ -14,9 +14,7 @@ class GetWaitlistEntriesAction extends BaseAction
 {
     public function __construct(
         private readonly GetWaitlistEntriesHandler $handler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(Request $request, int $eventId): JsonResponse
     {

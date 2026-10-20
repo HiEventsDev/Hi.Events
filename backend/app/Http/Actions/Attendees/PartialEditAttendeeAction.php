@@ -14,9 +14,7 @@ class PartialEditAttendeeAction extends BaseAction
 {
     public function __construct(
         private readonly PartialEditAttendeeHandler $partialEditAttendeeHandler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(PartialEditAttendeeRequest $request, int $eventId, int $attendeeId): JsonResponse
     {

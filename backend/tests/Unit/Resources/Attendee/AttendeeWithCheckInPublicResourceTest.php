@@ -11,7 +11,7 @@ class AttendeeWithCheckInPublicResourceTest extends TestCase
 {
     public function test_public_check_in_attendee_resource_excludes_email(): void
     {
-        $attendee = (new AttendeeDomainObject())
+        $attendee = (new AttendeeDomainObject)
             ->setId(1)
             ->setOrderId(10)
             ->setProductId(20)

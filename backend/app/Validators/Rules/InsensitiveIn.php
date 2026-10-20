@@ -16,8 +16,8 @@ class InsensitiveIn implements ValidationRule
 
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (!in_array(strtoupper($value), $this->values, true)) {
-            $fail(':attribute must be one of ' . implode(', ', $this->values));
+        if (! in_array(strtoupper($value), $this->values, true)) {
+            $fail(':attribute must be one of '.implode(', ', $this->values));
         }
     }
 }

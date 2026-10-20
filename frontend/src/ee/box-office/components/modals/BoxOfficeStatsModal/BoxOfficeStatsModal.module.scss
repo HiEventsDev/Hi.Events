@@ -1,0 +1,48 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hi-spacing-lg);
+}
+
+.datePicker {
+  max-width: 320px;
+}
+
+.totals {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+
+  @media (max-width: 560px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.total {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--hi-color-gray);
+}
+
+.totalLabel {
+  font-size: 12px;
+  color: var(--hi-color-gray-dark);
+}
+
+.totalValue {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.sectionTitle {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.number {
+  text-align: right;
+}

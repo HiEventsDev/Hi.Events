@@ -1,12 +1,9 @@
 <?php
 
 return [
-    /*
-     * The name of the queue that should be used to send webhooks.
-     *
-     * Falls back to the default queue connection if not set.
-     */
     'webhook_queue_name' => env('WEBHOOK_QUEUE_NAME', env('QUEUE_CONNECTION', 'sync')),
+
+    'occurrences_queue_name' => env('OCCURRENCES_QUEUE_NAME'),
 
     /*
     |--------------------------------------------------------------------------

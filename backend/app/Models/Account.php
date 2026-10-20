@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace HiEvents\Models;
 
 use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\DomainObjects\Status\AccountDeletionRequestStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -14,8 +15,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Account extends BaseModel
 {
-    use SoftDeletes;
     use HasFactory;
+    use SoftDeletes;
 
     public function users(): BelongsToMany
     {
@@ -32,6 +33,11 @@ class Account extends BaseModel
     public function events(): HasMany
     {
         return $this->hasMany(Event::class);
+    }
+
+    public function organizers(): HasMany
+    {
+        return $this->hasMany(Organizer::class);
     }
 
     public function configuration(): BelongsTo
@@ -55,5 +61,17 @@ class Account extends BaseModel
     public function messagingTier(): BelongsTo
     {
         return $this->belongsTo(AccountMessagingTier::class, 'account_messaging_tier_id');
+    }
+
+    public function active_deletion_request(): HasOne
+    {
+        return $this->hasOne(AccountDeletionRequest::class)
+            ->where('status', AccountDeletionRequestStatus::REQUESTED->name)
+            ->latestOfMany();
+    }
+
+    public function lifecycleNudges(): HasMany
+    {
+        return $this->hasMany(AccountLifecycleNudge::class);
     }
 }

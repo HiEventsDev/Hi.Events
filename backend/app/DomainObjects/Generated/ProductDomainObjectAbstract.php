@@ -37,6 +37,8 @@ abstract class ProductDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     final public const IS_HIGHLIGHTED = 'is_highlighted';
     final public const HIGHLIGHT_MESSAGE = 'highlight_message';
     final public const WAITLIST_ENABLED = 'waitlist_enabled';
+    final public const IS_ADDON_ONLY = 'is_addon_only';
+    final public const SEQUENTIAL_TIER_RELEASE_ENABLED = 'sequential_tier_release_enabled';
 
     protected int $id;
     protected int $event_id;
@@ -65,6 +67,8 @@ abstract class ProductDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     protected bool $is_highlighted = false;
     protected ?string $highlight_message = null;
     protected ?bool $waitlist_enabled = null;
+    protected bool $is_addon_only = false;
+    protected bool $sequential_tier_release_enabled = false;
 
     public function toArray(): array
     {
@@ -96,6 +100,8 @@ abstract class ProductDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
                     'is_highlighted' => $this->is_highlighted ?? null,
                     'highlight_message' => $this->highlight_message ?? null,
                     'waitlist_enabled' => $this->waitlist_enabled ?? null,
+                    'is_addon_only' => $this->is_addon_only ?? null,
+                    'sequential_tier_release_enabled' => $this->sequential_tier_release_enabled ?? null,
                 ];
     }
 
@@ -394,5 +400,27 @@ abstract class ProductDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     public function getWaitlistEnabled(): ?bool
     {
         return $this->waitlist_enabled;
+    }
+
+    public function setIsAddonOnly(bool $is_addon_only): self
+    {
+        $this->is_addon_only = $is_addon_only;
+        return $this;
+    }
+
+    public function getIsAddonOnly(): bool
+    {
+        return $this->is_addon_only;
+    }
+
+    public function setSequentialTierReleaseEnabled(bool $sequential_tier_release_enabled): self
+    {
+        $this->sequential_tier_release_enabled = $sequential_tier_release_enabled;
+        return $this;
+    }
+
+    public function getSequentialTierReleaseEnabled(): bool
+    {
+        return $this->sequential_tier_release_enabled;
     }
 }

@@ -55,10 +55,12 @@ export const Topbar: React.FC<TopbarProps> = ({
             <div className={classes.breadcrumbsRow}>
                 <div className={classes.breadcrumbs}>
                     <Breadcrumbs separator={<span style={{margin: '0 4px', color: '#aaa'}}>/</span>}>
-                        {breadcrumbItems.map((item, index) => (
-                            <NavLink key={index} to={item.link ?? '#'}>
+                        {breadcrumbItems.map((item, index) => item.link ? (
+                            <NavLink key={index} to={item.link}>
                                 {item.content}
                             </NavLink>
+                        ) : (
+                            <span key={index}>{item.content}</span>
                         ))}
                     </Breadcrumbs>
                 </div>

@@ -1,18 +1,18 @@
-import { useForm } from "@mantine/form";
-import { TaxAndFeeForm } from "../../forms/TaxAndFeeForm";
-import { GenericModalProps, TaxAndFee, TaxAndFeeCalculationType, TaxAndFeeType } from "../../../types.ts";
-import { Modal } from "../../common/Modal";
-import { Button } from "@mantine/core";
-import { useCreateTaxOrFee } from "../../../mutations/useCreateTaxOrFee.ts";
-import { useFormErrorResponseHandler } from "../../../hooks/useFormErrorResponseHandler.tsx";
-import { showSuccess } from "../../../utilites/notifications.tsx";
-import {t, Trans} from "@lingui/macro";
+import {useForm} from "@mantine/form";
+import {Button} from "@mantine/core";
+import {t} from "@lingui/macro";
+import {TaxAndFeeForm} from "../../forms/TaxAndFeeForm";
+import {Modal, ModalFooter} from "../../common/Modal";
+import {GenericModalProps, TaxAndFee, TaxAndFeeCalculationType, TaxAndFeeType} from "../../../types.ts";
+import {useCreateTaxOrFee} from "../../../mutations/useCreateTaxOrFee.ts";
+import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
+import {showSuccess} from "../../../utilites/notifications.tsx";
 
 interface CreateTaxOrFeeModalProps extends GenericModalProps {
     onCreated?: (taxOrFee: TaxAndFee) => void;
 }
 
-export const CreateTaxOrFeeModal = ({ onClose, onCreated }: CreateTaxOrFeeModalProps) => {
+export const CreateTaxOrFeeModal = ({onClose, onCreated}: CreateTaxOrFeeModalProps) => {
     const createMutation = useCreateTaxOrFee();
     const formErrorHandler = useFormErrorResponseHandler();
 
@@ -28,36 +28,33 @@ export const CreateTaxOrFeeModal = ({ onClose, onCreated }: CreateTaxOrFeeModalP
         },
     });
 
+    const isTax = form.values.type === TaxAndFeeType.Tax;
+
     const handleCreate = (values: TaxAndFee) => {
-        createMutation.mutate({
-            taxOrFeeData: values,
-        }, {
+        createMutation.mutate({taxOrFeeData: values}, {
             onSuccess: (response) => {
-                showSuccess(<Trans>{form.values.type === TaxAndFeeType.Tax ? t`Tax` : t`Fee`} created successfully</Trans>);
-                form.reset();
+                showSuccess(isTax ? t`Tax created` : t`Fee created`);
                 onCreated?.(response.data);
                 onClose();
             },
-            onError: (error) => formErrorHandler(form, error)
+            onError: (error) => formErrorHandler(form, error),
         });
     };
 
-    const handleSubmit = () => {
-        form.validate();
-        if (form.isValid()) {
-            handleCreate(form.values);
-        }
-    };
-
     return (
-        <Modal heading={t`Create Tax or Fee`} onClose={onClose} opened>
-            <TaxAndFeeForm form={form} />
-            <Button
-                fullWidth
-                loading={createMutation.isPending}
-                onClick={handleSubmit}>
-                <Trans>Create {form.values.type === TaxAndFeeType.Tax ? t`Tax` : t`Fee`}</Trans>
-            </Button>
+        <Modal opened onClose={onClose} heading={t`Add tax or fee`} size={520}>
+            <form onSubmit={(event) => {
+                event.stopPropagation();
+                form.onSubmit(handleCreate)(event);
+            }}>
+                <TaxAndFeeForm form={form}/>
+                <ModalFooter>
+                    <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                    <Button type="submit" loading={createMutation.isPending} data-testid="tax-or-fee-submit">
+                        {isTax ? t`Create tax` : t`Create fee`}
+                    </Button>
+                </ModalFooter>
+            </form>
         </Modal>
-    )
-}
+    );
+};

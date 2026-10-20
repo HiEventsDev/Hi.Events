@@ -10,7 +10,5 @@ class RenderedEmailTemplateDTO extends BaseDataObject
         public readonly string $subject,
         public readonly string $body,
         public readonly ?array $cta = null,
-    )
-    {
-    }
+    ) {}
 }

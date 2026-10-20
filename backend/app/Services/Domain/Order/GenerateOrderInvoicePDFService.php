@@ -2,7 +2,6 @@
 
 namespace HiEvents\Services\Domain\Order;
 
-use Barryvdh\DomPDF\Facade\Pdf;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
@@ -15,11 +14,10 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 class GenerateOrderInvoicePDFService
 {
     public function __construct(
-        private readonly OrderRepositoryInterface   $orderRepository,
+        private readonly OrderRepositoryInterface $orderRepository,
         private readonly InvoiceRepositoryInterface $invoiceRepository,
-    )
-    {
-    }
+        private readonly InvoicePdfRenderer $invoicePdfRenderer,
+    ) {}
 
     public function generatePdfFromOrderShortId(string $orderShortId, int $eventId): InvoicePdfResponseDTO
     {
@@ -46,25 +44,25 @@ class GenerateOrderInvoicePDFService
             ], name: 'event'))
             ->findFirstWhere($whereCriteria);
 
-        if (!$order) {
+        if (! $order) {
             throw new ResourceNotFoundException(__('Order not found'));
         }
 
         $invoice = $this->invoiceRepository->findLatestInvoiceForOrder($order->getId());
 
-        if (!$invoice) {
+        if (! $invoice) {
             throw new ResourceNotFoundException(__('Invoice not found'));
         }
 
         return new InvoicePdfResponseDTO(
-            pdf: Pdf::loadView('invoice', [
-                'order' => $order,
-                'event' => $order->getEvent(),
-                'organizer' => $order->getEvent()->getOrganizer(),
-                'eventSettings' => $order->getEvent()->getEventSettings(),
-                'invoice' => $invoice,
-            ]),
-            filename: $invoice->getInvoiceNumber() . '.pdf'
+            pdf: $this->invoicePdfRenderer->render(
+                order: $order,
+                event: $order->getEvent(),
+                organizer: $order->getEvent()->getOrganizer(),
+                eventSettings: $order->getEvent()->getEventSettings(),
+                invoice: $invoice,
+            ),
+            filename: $invoice->getInvoiceNumber().'.pdf'
         );
     }
 }

@@ -13,13 +13,11 @@ use HiEvents\Services\Application\Handlers\Admin\DTO\GetAdminStatsDTO;
 class GetAdminStatsHandler
 {
     public function __construct(
-        private readonly UserRepositoryInterface     $userRepository,
-        private readonly AccountRepositoryInterface  $accountRepository,
-        private readonly EventRepositoryInterface    $eventRepository,
+        private readonly UserRepositoryInterface $userRepository,
+        private readonly AccountRepositoryInterface $accountRepository,
+        private readonly EventRepositoryInterface $eventRepository,
         private readonly AttendeeRepositoryInterface $attendeeRepository,
-    )
-    {
-    }
+    ) {}
 
     public function handle(): GetAdminStatsDTO
     {

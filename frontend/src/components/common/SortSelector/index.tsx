@@ -23,7 +23,7 @@ export const SortSelector = ({options, onSortSelect, selected}: SortSelectorProp
     return (
         <div className={classes.selectWrapper}>
             <Select
-                size={'md'}
+                size={'sm'}
                 data={sortOptions}
                 className={classes.select}
                 value={selected}

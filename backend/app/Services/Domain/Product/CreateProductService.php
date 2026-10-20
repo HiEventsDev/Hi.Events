@@ -20,32 +20,39 @@ use Throwable;
 class CreateProductService
 {
     public function __construct(
-        private readonly ProductRepositoryInterface      $productRepository,
-        private readonly DatabaseManager                 $databaseManager,
+        private readonly ProductRepositoryInterface $productRepository,
+        private readonly DatabaseManager $databaseManager,
         private readonly TaxAndProductAssociationService $taxAndProductAssociationService,
-        private readonly ProductPriceCreateService       $priceCreateService,
-        private readonly HtmlPurifierService             $purifier,
-        private readonly EventRepositoryInterface        $eventRepository,
-        private readonly ProductOrderingService          $productOrderingService,
-        private readonly DomainEventDispatcherService    $domainEventDispatcherService,
-    )
-    {
-    }
+        private readonly ProductAddonAssociationService $productAddonAssociationService,
+        private readonly ProductPriceCreateService $priceCreateService,
+        private readonly HtmlPurifierService $purifier,
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly ProductOrderingService $productOrderingService,
+        private readonly DomainEventDispatcherService $domainEventDispatcherService,
+    ) {}
 
     /**
      * @throws Throwable
      */
     public function createProduct(
         ProductDomainObject $product,
-        int                 $accountId,
-        ?array              $taxAndFeeIds = null,
-    ): ProductDomainObject
-    {
-        return $this->databaseManager->transaction(function () use ($accountId, $taxAndFeeIds, $product) {
+        int $accountId,
+        ?array $taxAndFeeIds = null,
+        ?array $addonProductIds = null,
+    ): ProductDomainObject {
+        return $this->databaseManager->transaction(function () use ($accountId, $taxAndFeeIds, $addonProductIds, $product) {
             $persistedProduct = $this->persistProduct($product);
 
             if ($taxAndFeeIds) {
                 $this->associateTaxesAndFees($persistedProduct, $taxAndFeeIds, $accountId);
+            }
+
+            if ($addonProductIds !== null) {
+                $this->productAddonAssociationService->associateAddons(
+                    productId: $persistedProduct->getId(),
+                    eventId: $persistedProduct->getEventId(),
+                    addonProductIds: $addonProductIds,
+                );
             }
 
             $product = $this->createProductPrices($persistedProduct, $product);
@@ -87,6 +94,7 @@ class CreateProductService
             'hide_before_sale_start_date' => $productsData->getHideBeforeSaleStartDate(),
             'hide_after_sale_end_date' => $productsData->getHideAfterSaleEndDate(),
             'hide_when_sold_out' => $productsData->getHideWhenSoldOut(),
+            'sequential_tier_release_enabled' => $productsData->getSequentialTierReleaseEnabled(),
             'show_quantity_remaining' => $productsData->getShowQuantityRemaining(),
             'is_hidden_without_promo_code' => $productsData->getIsHiddenWithoutPromoCode(),
             'event_id' => $productsData->getEventId(),
@@ -94,6 +102,7 @@ class CreateProductService
             'is_highlighted' => $productsData->getIsHighlighted(),
             'highlight_message' => $productsData->getHighlightMessage(),
             'waitlist_enabled' => $productsData->getWaitlistEnabled(),
+            'is_addon_only' => $productsData->getIsAddonOnly(),
         ]);
     }
 
@@ -102,10 +111,9 @@ class CreateProductService
      */
     private function createProductTaxesAndFees(
         ProductDomainObject $product,
-        array               $taxAndFeeIds,
-        int                 $accountId,
-    ): Collection
-    {
+        array $taxAndFeeIds,
+        int $accountId,
+    ): Collection {
         return $this->taxAndProductAssociationService->addTaxesToProduct(
             new TaxAndProductAssociateParams(
                 productId: $product->getId(),

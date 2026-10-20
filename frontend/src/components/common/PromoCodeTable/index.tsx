@@ -1,5 +1,7 @@
 import {t} from "@lingui/macro";
-import {Event, PromoCode, PromoCodeDiscountType} from "../../../types.ts";
+import {WriteAccess} from "../WriteAccess";
+import {CreateButton} from "../CreateButton";
+import {Event, PromoCode, PromoCodeDiscountAppliesTo, PromoCodeDiscountType} from "../../../types.ts";
 import {prettyDate, relativeDate} from "../../../utilites/dates.ts";
 import {Badge, Button, Flex, Group, Menu, Table as MantineTable, Tooltip} from "@mantine/core";
 import {Table, TableHead} from "../Table";
@@ -50,12 +52,12 @@ export const PromoCodeTable = ({event, promoCodes, openCreateModal}: PromoCodeTa
                     <p>
                         {t`Promo codes can be used to offer discounts, presale access, or provide special access to your event.`}
                     </p>
-                    <Button
+                    <CreateButton
                         size={'xs'}
                         leftSection={<IconPlus/>}
                         color={'green'}
                         onClick={() => openCreateModal()}>{t`Create a Promo Code`}
-                    </Button>
+                    </CreateButton>
                 </>
             )}
         />
@@ -83,7 +85,15 @@ export const PromoCodeTable = ({event, promoCodes, openCreateModal}: PromoCodeTa
                             }
 
                             if (code.discount_type === PromoCodeDiscountType.Fixed) {
-                                return <Currency currency={event.currency} price={code.discount}/>;
+                                return (
+                                    <>
+                                        <Currency currency={event.currency} price={code.discount}/>
+                                        {' '}
+                                        {code.discount_applies_to === PromoCodeDiscountAppliesTo.Order
+                                            ? t`per order`
+                                            : t`per product`}
+                                    </>
+                                );
                             }
 
                             return <>{code.discount}%</>;
@@ -160,15 +170,17 @@ export const PromoCodeTable = ({event, promoCodes, openCreateModal}: PromoCodeTa
                                     <Group wrap={'nowrap'} gap={0} justify={'flex-end'}>
                                         <Menu shadow="md" width={200}>
                                             <Menu.Target>
-                                                <Button size={'xs'} variant={'transparent'}><IconDotsVertical/></Button>
+                                                <Button size={'xs'} variant={'transparent'} data-testid="promo-code-actions-button"><IconDotsVertical/></Button>
                                             </Menu.Target>
 
                                             <Menu.Dropdown>
                                                 <Menu.Label>{t`Manage`}</Menu.Label>
-                                                <Menu.Item leftSection={<IconSend size={14}/>}
-                                                           onClick={() => handleEditModal(code?.id)}>
-                                                    {t`Edit Code`}
-                                                </Menu.Item>
+                                                <WriteAccess>
+                                                    <Menu.Item leftSection={<IconSend size={14}/>}
+                                                               onClick={() => handleEditModal(code?.id)}>
+                                                        {t`Edit Code`}
+                                                    </Menu.Item>
+                                                </WriteAccess>
                                                 <Menu.Item leftSection={<IconCopy size={14}/>}
                                                            onClick={() => {
                                                                 clipboard.copy(eventHomepageUrl(event) + `?promo_code=${code?.code}`);
@@ -176,14 +188,16 @@ export const PromoCodeTable = ({event, promoCodes, openCreateModal}: PromoCodeTa
                                                            }}>
                                                     {t`Copy URL`}
                                                 </Menu.Item>
-                                                <Menu.Divider/>
+                                                <WriteAccess>
+                                                    <Menu.Divider/>
 
-                                                <Menu.Label>{t`Danger zone`}</Menu.Label>
-                                                <Menu.Item color="red"
-                                                           onClick={() => handleDeleteCode(code?.id as number)}
-                                                           leftSection={<IconTrash size={14}/>}>
-                                                    {t`Delete code`}
-                                                </Menu.Item>
+                                                    <Menu.Label>{t`Danger zone`}</Menu.Label>
+                                                    <Menu.Item color="red"
+                                                               onClick={() => handleDeleteCode(code?.id as number)}
+                                                               leftSection={<IconTrash size={14}/>}>
+                                                        {t`Delete code`}
+                                                    </Menu.Item>
+                                                </WriteAccess>
 
                                             </Menu.Dropdown>
                                         </Menu>

@@ -3,14 +3,15 @@ import {t} from "@lingui/macro";
 import {IconSearch} from "@tabler/icons-react";
 import {useState, useEffect} from "react";
 import {useGetAllUsers} from "../../../../queries/useGetAllUsers";
-import {useStartImpersonation} from "../../../../mutations/useStartImpersonation";
+import {useImpersonateUser} from "../../../../hooks/useImpersonateUser";
+import {useResetUserTwoFactor} from "../../../../mutations/useResetUserTwoFactor";
+import {confirmationDialog} from "../../../../utilites/confirmationDialog";
+import {AdminUser} from "../../../../api/admin.client";
 import AdminUsersTable from "../../../common/AdminUsersTable";
 import {showError, showSuccess} from "../../../../utilites/notifications";
 import {IdParam} from "../../../../types";
-import {useNavigate} from "react-router";
 
 const Users = () => {
-    const navigate = useNavigate();
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("");
     const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -21,7 +22,19 @@ const Users = () => {
         search: debouncedSearch
     });
 
-    const startImpersonationMutation = useStartImpersonation();
+    const {impersonate, isPending: isImpersonating} = useImpersonateUser();
+    const resetTwoFactorMutation = useResetUserTwoFactor();
+
+    const handleResetTwoFactor = (user: AdminUser) => {
+        confirmationDialog(
+            t`Turn off two-factor authentication for ${user.email}? Only do this after confirming their identity. They will be emailed and can sign in with just their password.`,
+            () => resetTwoFactorMutation.mutate(user.id as IdParam, {
+                onSuccess: () => showSuccess(t`Two-factor authentication reset`),
+                onError: (error: any) => showError(error?.response?.data?.message ?? t`Something went wrong. Please try again.`),
+            }),
+            {confirm: t`Reset 2FA`},
+        );
+    };
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -31,25 +44,6 @@ const Users = () => {
 
         return () => clearTimeout(timer);
     }, [search]);
-
-    const handleImpersonate = (userId: IdParam, accountId: IdParam) => {
-        startImpersonationMutation.mutate({userId, accountId}, {
-            onSuccess: (response) => {
-                showSuccess(response.message || t`Impersonation started`);
-                if (response.redirect_url) {
-                    window.location.href = response.redirect_url;
-                } else {
-                    navigate('/manage/events');
-                }
-            },
-            onError: (error: any) => {
-                showError(
-                    error?.response?.data?.message ||
-                    t`Failed to start impersonation. Please try again.`
-                );
-            }
-        });
-    };
 
     return (
         <Container size="xl" p="xl">
@@ -72,8 +66,9 @@ const Users = () => {
                 ) : (
                     <AdminUsersTable
                         users={usersData?.data || []}
-                        onImpersonate={handleImpersonate}
-                        isLoading={startImpersonationMutation.isPending}
+                        onImpersonate={impersonate}
+                        onResetTwoFactor={handleResetTwoFactor}
+                        isLoading={isImpersonating}
                     />
                 )}
 

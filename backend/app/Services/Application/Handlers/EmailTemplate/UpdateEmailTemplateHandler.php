@@ -17,8 +17,7 @@ class UpdateEmailTemplateHandler
         private readonly EmailTemplateRepositoryInterface $emailTemplateRepository,
         private readonly EmailTemplateService $emailTemplateService,
         private readonly HtmlPurifierService $purifier,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws EmailTemplateValidationException
@@ -27,12 +26,12 @@ class UpdateEmailTemplateHandler
      */
     public function handle(UpsertEmailTemplateDTO $dto): EmailTemplateDomainObject
     {
-        if (!$dto->id) {
-            throw new InvalidEmailTemplateException('Template ID is required for update');
+        if (! $dto->id) {
+            throw new InvalidEmailTemplateException(__('Template ID is required for update'));
         }
 
         $validation = $this->emailTemplateService->validateTemplate($dto->subject, $dto->body);
-        if (!$validation['valid']) {
+        if (! $validation['valid']) {
             $exception = new EmailTemplateValidationException('Template validation failed');
             $exception->validationErrors = $validation['errors'];
             throw $exception;
@@ -41,10 +40,12 @@ class UpdateEmailTemplateHandler
         $template = $this->emailTemplateRepository->findFirstWhere([
             'id' => $dto->id,
             'account_id' => $dto->account_id,
+            'event_id' => $dto->event_id,
+            'organizer_id' => $dto->organizer_id,
         ]);
 
-        if (!$template) {
-            throw new EmailTemplateNotFoundException('Email template not found');
+        if (! $template) {
+            throw new EmailTemplateNotFoundException(__('Email template not found'));
         }
 
         return $this->emailTemplateRepository->updateFromArray($template->getId(), [

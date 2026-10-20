@@ -24,11 +24,12 @@ class AdminUserResource extends BaseResource
             'id' => $this->resource->id,
             'first_name' => $this->resource->first_name,
             'last_name' => $this->resource->last_name,
-            'full_name' => $this->resource->first_name . ' ' . $this->resource->last_name,
+            'full_name' => $this->resource->first_name.' '.$this->resource->last_name,
             'email' => $this->resource->email,
             'timezone' => $this->resource->timezone,
             'locale' => $this->resource->locale,
             'is_email_verified' => $this->resource->email_verified_at !== null,
+            'two_factor_enabled' => $this->resource->two_factor_confirmed_at !== null,
             'created_at' => $this->resource->created_at,
             'accounts' => $accounts,
         ];

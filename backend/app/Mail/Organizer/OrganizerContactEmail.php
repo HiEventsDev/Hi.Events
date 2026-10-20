@@ -12,11 +12,10 @@ class OrganizerContactEmail extends BaseMail
 {
     public function __construct(
         private readonly OrganizerDomainObject $organizer,
-        private readonly string                $senderName,
-        private readonly string                $senderEmail,
-        private readonly string                $messageContent,
-    )
-    {
+        private readonly string $senderName,
+        private readonly string $senderEmail,
+        private readonly string $messageContent,
+    ) {
         parent::__construct();
     }
 
@@ -24,7 +23,7 @@ class OrganizerContactEmail extends BaseMail
     {
         return new Envelope(
             replyTo: [new Address($this->senderEmail, $this->senderName)],
-            subject: __('New message from :name', ['name' => $this->senderName]),
+            subject: __('New message from your organizer page'),
         );
     }
 

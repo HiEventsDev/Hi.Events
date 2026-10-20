@@ -23,7 +23,7 @@ class InvoiceRepository extends BaseRepository implements InvoiceRepositoryInter
 
     public function findLatestInvoiceForEvent(int $eventId): ?InvoiceDomainObject
     {
-        $invoice =  $this->model
+        $invoice = $this->model
             ->whereHas('order', function ($query) use ($eventId) {
                 $query->where('event_id', $eventId);
             })
@@ -35,7 +35,7 @@ class InvoiceRepository extends BaseRepository implements InvoiceRepositoryInter
 
     public function findLatestInvoiceForOrder(int $orderId): ?InvoiceDomainObject
     {
-        $invoice =  $this->model
+        $invoice = $this->model
             ->where('order_id', $orderId)
             ->orderBy('id', 'desc')
             ->first();

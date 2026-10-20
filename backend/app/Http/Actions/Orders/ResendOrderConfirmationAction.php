@@ -2,18 +2,23 @@
 
 namespace HiEvents\Http\Actions\Orders;
 
+use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventLocationDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\InvoiceDomainObject;
+use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Mail\Order\OrderSummary;
+use HiEvents\Http\ResponseCodes;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\Email\MailBuilderService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Mail\Mailer;
 
@@ -22,35 +27,59 @@ class ResendOrderConfirmationAction extends BaseAction
     public function __construct(
         private readonly EventRepositoryInterface $eventRepository,
         private readonly OrderRepositoryInterface $orderRepository,
-        private readonly Mailer                   $mailer,
-        private readonly MailBuilderService       $mailBuilderService,
-    )
-    {
-    }
+        private readonly Mailer $mailer,
+        private readonly MailBuilderService $mailBuilderService,
+    ) {}
 
     /**
      * @todo - move this to a handler
      */
-    public function __invoke(int $eventId, int $orderId): Response
+    public function __invoke(int $eventId, int $orderId): Response|JsonResponse
     {
         $this->isActionAuthorized($eventId, EventDomainObject::class);
 
         $order = $this->orderRepository
-            ->loadRelation(OrderItemDomainObject::class)
+            ->loadRelation(new Relationship(domainObject: OrderItemDomainObject::class, nested: [
+                new Relationship(
+                    domainObject: EventOccurrenceDomainObject::class,
+                    nested: [
+                        new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                            new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                        ]),
+                    ],
+                    name: 'event_occurrence',
+                ),
+            ]))
+            ->loadRelation(AttendeeDomainObject::class)
             ->loadRelation(InvoiceDomainObject::class)
             ->findFirstWhere([
                 OrderDomainObjectAbstract::EVENT_ID => $eventId,
                 OrderDomainObjectAbstract::ID => $orderId,
             ]);
 
-        if (!$order) {
+        if (! $order) {
             return $this->notFoundResponse();
+        }
+
+        if ($order->getEmail() === null) {
+            return $this->errorResponse(
+                __('This order has no email address. Add one before resending the confirmation.'),
+                ResponseCodes::HTTP_UNPROCESSABLE_ENTITY,
+            );
         }
 
         if ($order->isOrderCompleted()) {
             $event = $this->eventRepository
                 ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
                 ->loadRelation(new Relationship(EventSettingDomainObject::class))
+                ->loadRelation(new Relationship(domainObject: EventOccurrenceDomainObject::class, nested: [
+                    new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                        new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                    ]),
+                ]))
+                ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                    new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                ]))
                 ->findById($order->getEventId());
 
             $mail = $this->mailBuilderService->buildOrderSummaryMail(

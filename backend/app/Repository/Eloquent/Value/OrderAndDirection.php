@@ -7,13 +7,13 @@ use InvalidArgumentException;
 class OrderAndDirection
 {
     public const DIRECTION_ASC = 'asc';
+
     public const DIRECTION_DESC = 'desc';
 
     public function __construct(
         private readonly string $order,
         private readonly string $direction = self::DIRECTION_ASC,
-    )
-    {
+    ) {
         $this->validate();
     }
 
@@ -29,7 +29,7 @@ class OrderAndDirection
 
     private function validate(): void
     {
-        if (!in_array($this->direction, ['asc', 'desc'])) {
+        if (! in_array($this->direction, ['asc', 'desc'])) {
             throw new InvalidArgumentException(__('Invalid direction. Must be either asc or desc'));
         }
     }

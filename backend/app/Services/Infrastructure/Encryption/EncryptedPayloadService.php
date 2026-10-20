@@ -34,7 +34,7 @@ class EncryptedPayloadService
         try {
             $decrypted = $this->encrypter->decrypt($encryptedPayload);
 
-            if (!isset($decrypted['exp']) || (new Carbon($decrypted['exp']))->isPast()) {
+            if (! isset($decrypted['exp']) || (new Carbon($decrypted['exp']))->isPast()) {
                 throw new EncryptedPayloadExpiredException(__('Payload has expired or is invalid.'));
             }
 

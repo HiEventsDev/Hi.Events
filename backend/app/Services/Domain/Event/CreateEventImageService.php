@@ -17,23 +17,20 @@ use Throwable;
 class CreateEventImageService
 {
     public function __construct(
-        private readonly ImageUploadService       $imageUploadService,
+        private readonly ImageUploadService $imageUploadService,
         private readonly ImageRepositoryInterface $imageRepository,
-        private readonly DatabaseManager          $databaseManager,
-    )
-    {
-    }
+        private readonly DatabaseManager $databaseManager,
+    ) {}
 
     /**
      * @throws Throwable
      */
     public function createImage(
-        int          $eventId,
-        int          $accountId,
+        int $eventId,
+        int $accountId,
         UploadedFile $image,
-        ImageType    $imageType,
-    ): ImageDomainObject
-    {
+        ImageType $imageType,
+    ): ImageDomainObject {
         return $this->databaseManager->transaction(function () use ($accountId, $image, $eventId, $imageType) {
             if ($imageType === ImageType::EVENT_COVER) {
                 $this->imageRepository->deleteWhere([

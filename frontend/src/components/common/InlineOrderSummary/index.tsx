@@ -3,9 +3,10 @@ import {Collapse, Popover} from "@mantine/core";
 import {IconCalendarEvent, IconChevronDown, IconInfoCircle, IconShieldCheck, IconTag} from "@tabler/icons-react";
 import {t} from "@lingui/macro";
 import classNames from "classnames";
-import {Event, Order} from "../../../types.ts";
+import {Event, LocationType, Order} from "../../../types.ts";
 import {formatCurrency} from "../../../utilites/currency.ts";
 import {prettyDate} from "../../../utilites/dates.ts";
+import {resolveEventLocation} from "../../../utilites/effectiveLocation.ts";
 import classes from './InlineOrderSummary.module.scss';
 
 interface InlineOrderSummaryProps {
@@ -28,9 +29,15 @@ export const InlineOrderSummary = ({
         : order.total_gross;
 
     const coverImage = event?.images?.find((image) => image.type === 'EVENT_COVER');
-    const location = event?.settings?.location_details?.city ||
-        event?.settings?.location_details?.venue_name ||
-        null;
+    const orderOccurrence = order.order_items?.[0]?.event_occurrence;
+    const effective = resolveEventLocation(event, orderOccurrence);
+    const venueName = effective?.type === LocationType.InPerson
+        ? (effective.location?.name || effective.location?.structured_address?.venue_name || null)
+        : null;
+    const city = effective?.type === LocationType.InPerson
+        ? effective.location?.structured_address?.city ?? null
+        : null;
+    const location = city || venueName || null;
 
     const totalFee = order.taxes_and_fees_rollup?.fees?.reduce((sum, fee) => sum + fee.value, 0) || 0;
     const totalTax = order.taxes_and_fees_rollup?.taxes?.reduce((sum, tax) => sum + tax.value, 0) || 0;
@@ -41,8 +48,13 @@ export const InlineOrderSummary = ({
         return sum;
     }, 0) || 0;
 
+    const seatLabelsByItem = new Map<number, string[]>();
+    (order.seats ?? []).forEach(seat => {
+        seatLabelsByItem.set(seat.order_item_id, [...(seatLabelsByItem.get(seat.order_item_id) ?? []), seat.seat_label]);
+    });
+
     return (
-        <div className={classes.inlineOrderSummary}>
+        <div className={classes.inlineOrderSummary} data-testid="inline-order-summary">
             <div
                 className={classes.header}
                 onClick={() => setExpanded(!expanded)}
@@ -65,7 +77,7 @@ export const InlineOrderSummary = ({
                 </div>
             </div>
 
-            <Collapse in={expanded}>
+            <Collapse expanded={expanded}>
                 <div className={classes.content}>
                     <div className={classes.eventInfo}>
                         <div className={classes.eventImage}>
@@ -80,8 +92,17 @@ export const InlineOrderSummary = ({
                         <div className={classes.eventDetails}>
                             <div className={classes.eventTitle}>{event.title}</div>
                             <div className={classes.eventMeta}>
-                                {prettyDate(event.start_date, event.timezone, false)}
+                                {prettyDate(
+                                    order.order_items?.[0]?.event_occurrence?.start_date || event.start_date,
+                                    event.timezone,
+                                    false
+                                )}
                             </div>
+                            {order.order_items?.[0]?.event_occurrence?.label && (
+                                <div className={classes.eventMeta}>
+                                    {order.order_items[0].event_occurrence.label}
+                                </div>
+                            )}
                             {location && (
                                 <div className={classes.eventMeta}>{location}</div>
                             )}
@@ -91,13 +112,19 @@ export const InlineOrderSummary = ({
                     <div className={classes.divider}/>
 
                     <div className={classes.lineItems}>
-                        {order.order_items?.map((item) => (
+                        {order.order_items?.map((item) => {
+                            const seatLabels = seatLabelsByItem.get(item.id) ?? [];
+
+                            return (
                             <div key={item.id} className={classes.lineItem}>
                                 <div className={classes.lineItemLeft}>
                                     <span title={item.item_name}
                                         className={classes.lineItemName}>{item.item_name}</span>
                                     {/* eslint-disable-next-line lingui/no-unlocalized-strings */}
                                     <span className={classes.lineItemQuantity}>× {item.quantity}</span>
+                                    {seatLabels.length > 0 && (
+                                        <span className={classes.lineItemSeats}>{seatLabels.join(', ')}</span>
+                                    )}
                                 </div>
                                 <div className={classes.lineItemPriceWrapper}>
                                     {!!item.price_before_discount && (
@@ -110,7 +137,8 @@ export const InlineOrderSummary = ({
                                     </span>
                                 </div>
                             </div>
-                        ))}
+                            );
+                        })}
                     </div>
 
                     {order.promo_code && totalDiscount > 0 && (

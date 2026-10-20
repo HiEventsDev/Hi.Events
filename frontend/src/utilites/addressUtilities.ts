@@ -4,8 +4,8 @@ export const isAddressSet = (address?: VenueAddress) => {
     if (!address) return false;
 
     const addressFields: (keyof VenueAddress)[] = [
+        'venue_name',
         'address_line_1',
-        'address_line_2',
         'city',
         'state_or_region',
         'zip_or_postal_code',
@@ -14,6 +14,16 @@ export const isAddressSet = (address?: VenueAddress) => {
 
     return addressFields.some(field => address[field])
 }
+
+export const sameAddress = (left: VenueAddress, right: VenueAddress) => ([
+    'venue_name',
+    'address_line_1',
+    'address_line_2',
+    'city',
+    'state_or_region',
+    'zip_or_postal_code',
+    'country',
+] as (keyof VenueAddress)[]).every((field) => (left[field] || "") === (right[field] || ""));
 
 export const formatAddress = (address: VenueAddress) => {
     const addressLines = [
@@ -28,7 +38,7 @@ export const formatAddress = (address: VenueAddress) => {
     return addressLines.filter((line) => line).join(', ');
 }
 
-export const getShortLocationDisplay = (locationDetails?: VenueAddress) => {
+export const getShortLocationDisplay = (locationDetails?: VenueAddress | null) => {
     if (!locationDetails) return null;
 
     const parts = [];
@@ -42,7 +52,7 @@ export const getShortLocationDisplay = (locationDetails?: VenueAddress) => {
     return parts.length > 0 ? parts.join(', ') : null;
 };
 
-export const getGoogleMapsUrl = (locationDetails: VenueAddress) => {
+export const getGoogleMapsUrl = (locationDetails: VenueAddress | null | undefined) => {
     if (!locationDetails) return '';
     return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(formatAddress(locationDetails))}`;
 };

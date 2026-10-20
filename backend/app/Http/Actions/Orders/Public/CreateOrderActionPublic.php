@@ -4,54 +4,82 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Orders\Public;
 
+use HiEvents\DomainObjects\Enums\Permission;
+use HiEvents\Enterprise\Seating\Exceptions\SeatSelectionInvalidException;
+use HiEvents\Enterprise\Seating\Exceptions\SeatsUnavailableException;
+use HiEvents\Exceptions\EventNotOpenForOrdersException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Order\CreateOrderRequest;
 use HiEvents\Http\ResponseCodes;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Resources\Order\OrderResourcePublic;
 use HiEvents\Services\Application\Handlers\Order\CreateOrderHandler;
 use HiEvents\Services\Application\Handlers\Order\DTO\CreateOrderPublicDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\ProductOrderDetailsDTO;
 use HiEvents\Services\Application\Locale\LocaleService;
+use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
 use HiEvents\Services\Domain\Order\OrderCreateRequestValidationService;
 use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 
 class CreateOrderActionPublic extends BaseAction
 {
     public function __construct(
-        private readonly CreateOrderHandler                  $orderHandler,
+        private readonly CreateOrderHandler $orderHandler,
         private readonly OrderCreateRequestValidationService $orderCreateRequestValidationService,
-        private readonly CheckoutSessionManagementService    $sessionIdentifierService,
-        private readonly LocaleService                        $localeService,
-
-    )
-    {
-    }
+        private readonly CheckoutSessionManagementService $sessionIdentifierService,
+        private readonly LocaleService $localeService,
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly AccountUserAccessService $accessService,
+    ) {}
 
     /**
+     * Create Order
+     *
+     * `products.*.event_occurrence_id` is required for recurring events; for single-occurrence
+     * events it is inferred when omitted. Product availability, capacity, and pricing are
+     * validated against the event's live configuration.
+     *
      * @throws Throwable
      */
     public function __invoke(CreateOrderRequest $request, int $eventId): JsonResponse
     {
-        $this->orderCreateRequestValidationService->validateRequestData($eventId, $request->all());
+        $validatedData = $this->orderCreateRequestValidationService->validateRequestData($eventId, $request->all());
         $sessionId = $this->sessionIdentifierService->getSessionId();
 
-        $order = $this->orderHandler->handle(
-            eventId: $eventId,
-            createOrderPublicDTO: CreateOrderPublicDTO::fromArray([
-                'is_user_authenticated' => $this->isUserAuthenticated(),
-                'promo_code' => $request->input('promo_code'),
-                'affiliate_code' => $request->input('affiliate_code'),
-                'products' => ProductOrderDetailsDTO::collectionFromArray($request->input('products')),
-                'session_identifier' => $sessionId,
-                'order_locale' => $this->localeService->getLocaleOrDefault($request->getPreferredLanguage()),
-            ])
-        );
+        try {
+            $order = $this->orderHandler->handle(
+                eventId: $eventId,
+                createOrderPublicDTO: CreateOrderPublicDTO::fromArray([
+                    'can_order_unpublished_event' => $this->authenticatedAccountOwnsEvent($eventId),
+                    'promo_code' => $request->input('promo_code'),
+                    'affiliate_code' => $request->input('affiliate_code'),
+                    'widget_id' => $request->input('widget_id'),
+                    'products' => ProductOrderDetailsDTO::collectionFromArray($validatedData['products']),
+                    'session_identifier' => $sessionId,
+                    'order_locale' => $this->localeService->getLocaleOrDefault($request->getPreferredLanguage()),
+                ])
+            );
+        } catch (EventNotOpenForOrdersException $exception) {
+            return $this->errorResponse(
+                message: $exception->getMessage(),
+                statusCode: ResponseCodes::HTTP_FORBIDDEN,
+            );
+        } catch (SeatSelectionInvalidException $exception) {
+            throw ValidationException::withMessages(['products' => $exception->getMessage()]);
+        } catch (SeatsUnavailableException $exception) {
+            return $this->errorResponse(
+                message: $exception->getMessage(),
+                statusCode: ResponseCodes::HTTP_CONFLICT,
+                errors: ['unavailable_seat_uids' => $exception->getSeatUids()],
+            );
+        }
 
         $order->setSessionIdentifier($sessionId);
 
-        $response =  $this->resourceResponse(
+        $response = $this->resourceResponse(
             resource: OrderResourcePublic::class,
             data: $order,
             statusCode: ResponseCodes::HTTP_CREATED,
@@ -60,5 +88,17 @@ class CreateOrderActionPublic extends BaseAction
         return $response->withCookie(
             cookie: $this->sessionIdentifierService->getSessionCookie(),
         );
+    }
+
+    private function authenticatedAccountOwnsEvent(int $eventId): bool
+    {
+        if (! $this->isUserAuthenticated()) {
+            return false;
+        }
+
+        $event = $this->eventRepository->findFirst($eventId);
+
+        return $event !== null
+            && $this->accessService->currentMemberCanAccessEvent($event, Permission::EDIT);
     }
 }

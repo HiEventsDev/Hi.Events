@@ -7,6 +7,7 @@ use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Services\Application\Handlers\Waitlist\CancelWaitlistEntryHandler;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
@@ -14,11 +15,9 @@ class CancelWaitlistEntryAction extends BaseAction
 {
     public function __construct(
         private readonly CancelWaitlistEntryHandler $cancelWaitlistEntryHandler,
-    )
-    {
-    }
+    ) {}
 
-    public function __invoke(int $eventId, int $entryId): Response|\Illuminate\Http\JsonResponse
+    public function __invoke(int $eventId, int $entryId): Response|JsonResponse
     {
         $this->isActionAuthorized($eventId, EventDomainObject::class);
 

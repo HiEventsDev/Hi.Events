@@ -6,7 +6,6 @@
 }
 
 .registerCard {
-  @include auth.auth-card;
   width: 100%;
 
   form {
@@ -14,11 +13,11 @@
     @include auth.auth-button(0.5rem);
 
     :global(.mantine-InputWrapper-root) {
-      margin-bottom: 0.875rem;
+      margin-bottom: 1rem;
     }
 
     :global(.mantine-SimpleGrid-root) {
-      gap: 0.875rem;
+      gap: 1rem;
 
       @include mixins.respond-below(sm) {
         gap: 0;
@@ -28,7 +27,7 @@
         margin-bottom: 0;
 
         @include mixins.respond-below(sm) {
-          margin-bottom: 0.875rem;
+          margin-bottom: 1rem;
 
           &:last-child {
             margin-bottom: 0;

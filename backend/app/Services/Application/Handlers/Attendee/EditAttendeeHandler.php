@@ -9,11 +9,14 @@ use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
+use HiEvents\Enterprise\Seating\Exceptions\SeatSelectionInvalidException;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatClaimService;
 use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Exceptions\NoTicketsAvailableException;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Attendee\DTO\EditAttendeeDTO;
+use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
@@ -25,14 +28,14 @@ use Throwable;
 class EditAttendeeHandler
 {
     public function __construct(
-        private readonly AttendeeRepositoryInterface  $attendeeRepository,
-        private readonly ProductRepositoryInterface   $productRepository,
+        private readonly AttendeeRepositoryInterface $attendeeRepository,
+        private readonly ProductRepositoryInterface $productRepository,
         private readonly ProductQuantityUpdateService $productQuantityService,
-        private readonly DatabaseManager              $databaseManager,
+        private readonly DatabaseManager $databaseManager,
         private readonly DomainEventDispatcherService $domainEventDispatcherService,
-    )
-    {
-    }
+        private readonly AvailableProductQuantitiesFetchService $availableProductQuantitiesFetchService,
+        private readonly SeatClaimService $seatClaimService,
+    ) {}
 
     /**
      * @throws ValidationException
@@ -63,14 +66,15 @@ class EditAttendeeHandler
     private function adjustProductQuantities(AttendeeDomainObject $attendee, EditAttendeeDTO $editAttendeeDTO): void
     {
         if ($attendee->getProductPriceId() !== $editAttendeeDTO->product_price_id) {
-            $this->productQuantityService->decreaseQuantitySold($attendee->getProductPriceId());
-            $this->productQuantityService->increaseQuantitySold($editAttendeeDTO->product_price_id);
+            $this->productQuantityService->decreaseQuantitySold($attendee->getProductPriceId(), 1, $attendee->getEventOccurrenceId());
+            $this->productQuantityService->increaseQuantitySold($editAttendeeDTO->product_price_id, 1, $attendee->getEventOccurrenceId());
 
             event(new CapacityChangedEvent(
                 eventId: $editAttendeeDTO->event_id,
                 direction: CapacityChangeDirection::INCREASED,
                 productId: $attendee->getProductId(),
                 productPriceId: $attendee->getProductPriceId(),
+                eventOccurrenceId: $attendee->getEventOccurrenceId(),
             ));
         }
     }
@@ -79,7 +83,7 @@ class EditAttendeeHandler
     {
         return $this->attendeeRepository->updateByIdWhere($editAttendeeDTO->attendee_id, [
             'first_name' => $editAttendeeDTO->first_name,
-            'last_name' => $editAttendeeDTO->last_name,
+            'last_name' => $editAttendeeDTO->last_name ?? '',
             'email' => $editAttendeeDTO->email,
             'product_id' => $editAttendeeDTO->product_id,
             'product_price_id' => $editAttendeeDTO->product_price_id,
@@ -96,8 +100,7 @@ class EditAttendeeHandler
     private function validateProductId(
         EditAttendeeDTO $editAttendeeDTO,
         AttendeeDomainObject $attendee,
-    ): void
-    {
+    ): void {
         /** @var ProductDomainObject $product */
         $product = $this->productRepository
             ->loadRelation(ProductPriceDomainObject::class)
@@ -111,29 +114,45 @@ class EditAttendeeHandler
             ]);
         }
 
-        $productPriceIds = $product->getProductPrices()->map(fn($productPrice) => $productPrice->getId())->toArray();
-        if (!in_array($editAttendeeDTO->product_price_id, $productPriceIds, true)) {
+        $productPriceIds = $product->getProductPrices()->map(fn ($productPrice) => $productPrice->getId())->toArray();
+        if (! in_array($editAttendeeDTO->product_price_id, $productPriceIds, true)) {
             throw ValidationException::withMessages([
                 'product_price_id' => __('Product price ID is not valid'),
             ]);
         }
 
-        // No need to check availability if the product price hasn't changed
         if ($attendee->getProductPriceId() === $editAttendeeDTO->product_price_id) {
             return;
         }
 
-        $availableQuantity = $this->productRepository->getQuantityRemainingForProductPrice(
-            productId: $editAttendeeDTO->product_id,
-            productPriceId: $product->getType() === ProductPriceType::TIERED->name
-                ? $editAttendeeDTO->product_price_id
-                : $product->getProductPrices()->first()->getId(),
+        try {
+            $keepsSeat = $this->seatClaimService->changeProductForAttendee($attendee, $editAttendeeDTO->product_id, $editAttendeeDTO->product_price_id);
+        } catch (SeatSelectionInvalidException $exception) {
+            throw ValidationException::withMessages(['product_id' => $exception->getMessage()]);
+        }
+
+        $availability = $this->availableProductQuantitiesFetchService->getAvailableProductQuantities(
+            $editAttendeeDTO->event_id,
+            ignoreCache: true,
+            eventOccurrenceId: $attendee->getEventOccurrenceId(),
+            applyOccurrenceLimits: false,
         );
+        $priceId = $product->getType() === ProductPriceType::TIERED->name
+            ? $editAttendeeDTO->product_price_id
+            : $product->getProductPrices()->first()->getId();
+
+        $availableQuantity = $keepsSeat
+            ? $availability->productQuantities->firstWhere('price_id', $priceId)?->quantity_available_before_seats ?? 0
+            : $availability->getAvailableQuantityForPrice($priceId);
 
         if ($availableQuantity <= 0) {
             throw new NoTicketsAvailableException(
                 __('There are no products available. If you would like to assign this product to this attendee, please adjust the product\'s available quantity.')
             );
+        }
+
+        if ($keepsSeat && $availability->firstOverflowingPool([$editAttendeeDTO->product_id => 1]) !== null) {
+            throw new NoTicketsAvailableException(__('The capacity shared by this ticket is full.'));
         }
     }
 

@@ -1,0 +1,22 @@
+{
+  "name": "hievents-e2e",
+  "version": "0.0.0",
+  "private": true,
+  "description": "End-to-end (Playwright) test suite for Hi.Events",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "test:smoke": "playwright test --grep @smoke",
+    "report": "playwright show-report",
+    "install:browsers": "playwright install --with-deps chromium",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.1",
+    "@types/node": "^22.10.0",
+    "dotenv": "^16.4.7",
+    "typescript": "^5.7.2"
+  }
+}

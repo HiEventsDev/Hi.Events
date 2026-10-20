@@ -1,48 +1,47 @@
-import {Container, Title, Stack, Card, Text, Group, Button, Badge, Skeleton, Select} from "@mantine/core";
+import {Container, Title, Stack, Card, Text, Group, Button, Badge, Skeleton, Select, Switch} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {useParams, useNavigate} from "react-router";
-import {useGetAdminAccount} from "../../../../../queries/useGetAdminAccount";
-import {useGetAllConfigurations} from "../../../../../queries/useGetAllConfigurations";
-import {useGetMessagingTiers} from "../../../../../queries/useGetMessagingTiers";
-import {useAssignConfiguration} from "../../../../../mutations/useAssignConfiguration";
-import {useUpdateAccountMessagingTier} from "../../../../../mutations/useUpdateAccountMessagingTier";
-import {IconArrowLeft, IconCalendar, IconWorld, IconEdit, IconBuildingBank, IconUsers} from "@tabler/icons-react";
 import {useState} from "react";
-import {EditAccountVatSettingsModal} from "../../../../modals/EditAccountVatSettingsModal";
+import {useGetAdminAccount} from "../../../../../queries/useGetAdminAccount";
+import {useGetMessagingTiers} from "../../../../../queries/useGetMessagingTiers";
+import {useUpdateAccountMessagingTier} from "../../../../../mutations/useUpdateAccountMessagingTier";
+import {useUpdateAccountVerification} from "../../../../../mutations/useUpdateAccountVerification";
+import {IconArrowLeft, IconCalendar, IconWorld, IconBuildingBank, IconUsers} from "@tabler/icons-react";
 import {showSuccess, showError} from "../../../../../utilites/notifications";
-import {getCurrencySymbol} from "../../../../../utilites/currency";
+import {AdminOrganizerSummary} from "../../../../../api/admin.client";
+import {IdParam} from "../../../../../types";
+import {OrganizerAdminModal} from "./OrganizerAdminModal";
+import {AccountFeatureFlags} from "./AccountFeatureFlags";
+import {DeleteAccountModal} from "./DeleteAccountModal";
+import {useImpersonateUser} from "../../../../../hooks/useImpersonateUser";
+import {useAdminExecuteDeletionRequest} from "../../../../../mutations/useAdminExecuteDeletionRequest";
+import {useAdminCancelDeletionRequest} from "../../../../../mutations/useAdminCancelDeletionRequest";
+import {confirmationDialog} from "../../../../../utilites/confirmationDialog";
 import classes from "./AccountDetail.module.scss";
+import {getLifecycleEmailLabel} from "../../LifecycleEmails/lifecycleEmailLabels";
 
 const AccountDetail = () => {
     const {accountId} = useParams();
     const navigate = useNavigate();
     const {data: accountData, isLoading} = useGetAdminAccount(accountId);
-    const {data: configurationsData} = useGetAllConfigurations();
     const {data: messagingTiersData} = useGetMessagingTiers();
-    const assignConfigMutation = useAssignConfiguration(accountId!);
     const updateTierMutation = useUpdateAccountMessagingTier(accountId!);
-    const [showVatModal, setShowVatModal] = useState(false);
+    const updateVerificationMutation = useUpdateAccountVerification(accountId!);
+    const [managedOrganizer, setManagedOrganizer] = useState<AdminOrganizerSummary | null>(null);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const {impersonate, isPending: isImpersonating, pendingUserId} = useImpersonateUser();
+    const executeDeletionMutation = useAdminExecuteDeletionRequest();
+    const cancelDeletionMutation = useAdminCancelDeletionRequest();
 
     const account = accountData?.data;
-    const configurations = configurationsData?.data || [];
     const messagingTiers = messagingTiersData?.data || [];
+    const organizers = account?.organizers ?? [];
+    const lifecycleNudges = account?.lifecycle_nudges;
 
     const formatDate = (dateString?: string) => {
         if (!dateString) return '-';
         const date = new Date(dateString);
         return date.toLocaleDateString();
-    };
-
-    const handleConfigurationChange = (value: string | null) => {
-        if (!value) return;
-
-        assignConfigMutation.mutate(
-            {configuration_id: parseInt(value, 10)},
-            {
-                onSuccess: () => showSuccess(t`Configuration assigned successfully`),
-                onError: () => showError(t`Failed to assign configuration`),
-            }
-        );
     };
 
     const handleMessagingTierChange = (value: string | null) => {
@@ -51,6 +50,33 @@ const AccountDetail = () => {
         updateTierMutation.mutate(parseInt(value, 10), {
             onSuccess: () => showSuccess(t`Messaging tier updated successfully`),
             onError: () => showError(t`Failed to update messaging tier`),
+        });
+    };
+
+    const handleVerificationChange = (isVerified: boolean) => {
+        updateVerificationMutation.mutate(isVerified, {
+            onSuccess: () => showSuccess(
+                isVerified
+                    ? t`Account marked as verified`
+                    : t`Account verification revoked`
+            ),
+            onError: () => showError(t`Failed to update account verification`),
+        });
+    };
+
+    const handleExecuteDeletion = (deletionRequestId: IdParam) => {
+        confirmationDialog(t`Delete this account now instead of waiting for the grace period? This cannot be undone.`, () => {
+            executeDeletionMutation.mutate(deletionRequestId, {
+                onSuccess: () => showSuccess(t`Account deletion queued`),
+                onError: (error: any) => showError(error?.response?.data?.message ?? t`Failed to delete account`),
+            });
+        }, {confirm: t`Delete now`, destructive: true});
+    };
+
+    const handleCancelDeletion = (deletionRequestId: IdParam) => {
+        cancelDeletionMutation.mutate(deletionRequestId, {
+            onSuccess: () => showSuccess(t`Account deletion cancelled`),
+            onError: (error: any) => showError(error?.response?.data?.message ?? t`Failed to cancel account deletion`),
         });
     };
 
@@ -88,11 +114,6 @@ const AccountDetail = () => {
             </Container>
         );
     }
-
-    const configOptions = configurations.map((config) => ({
-        value: String(config.id),
-        label: config.is_system_default ? `${config.name} (${t`Default`})` : config.name,
-    }));
 
     const tierOptions = messagingTiers.map((tier) => ({
         value: String(tier.id),
@@ -173,41 +194,25 @@ const AccountDetail = () => {
 
                     <Card className={classes.accountCard}>
                         <Stack gap="md">
-                            <Text size="lg" fw={600}>{t`Application Fees Configuration`}</Text>
+                            <Group justify="space-between">
+                                <Text size="lg" fw={600}>{t`Verification`}</Text>
+                                <Badge color={account.is_manually_verified ? 'green' : 'orange'}>
+                                    {account.is_manually_verified ? t`Verified` : t`Unverified`}
+                                </Badge>
+                            </Group>
 
-                            <Select
-                                label={t`Assigned Configuration`}
-                                description={t`Select which fee configuration applies to this account. Fixed fees are converted to the order currency at checkout.`}
-                                data={configOptions}
-                                value={account.configuration?.id ? String(account.configuration.id) : null}
-                                onChange={handleConfigurationChange}
-                                placeholder={t`Select a configuration`}
-                                disabled={assignConfigMutation.isPending}
+                            <Switch
+                                label={t`Manually verified`}
+                                description={t`Verified accounts can send messages to attendees and manage email templates. Connecting Stripe verifies an account automatically.`}
+                                checked={account.is_manually_verified}
+                                onChange={(event) => handleVerificationChange(event.currentTarget.checked)}
+                                disabled={updateVerificationMutation.isPending}
+                                data-testid="account-verification-switch"
                             />
-
-                            {account.configuration && (
-                                <div className={classes.infoGrid}>
-                                    <div className={classes.infoItem}>
-                                        <Text size="xs" c="dimmed">{t`Fixed Fee`}</Text>
-                                        <Text size="sm" fw={500}>
-                                            {getCurrencySymbol(account.configuration.application_fees?.currency || 'USD')}
-                                            {account.configuration.application_fees?.fixed || 0} {account.configuration.application_fees?.currency || 'USD'}
-                                        </Text>
-                                    </div>
-                                    <div className={classes.infoItem}>
-                                        <Text size="xs" c="dimmed">{t`Percentage Fee`}</Text>
-                                        <Text size="sm" fw={500}>
-                                            {account.configuration.application_fees?.percentage || 0}%
-                                        </Text>
-                                    </div>
-                                </div>
-                            )}
-
-                            <Text size="xs" c="dimmed">
-                                {t`To edit configurations, go to the Configurations section in the admin menu.`}
-                            </Text>
                         </Stack>
                     </Card>
+
+                    <AccountFeatureFlags accountId={accountId!}/>
 
                     <Card className={classes.accountCard}>
                         <Stack gap="md">
@@ -255,60 +260,88 @@ const AccountDetail = () => {
                         </Stack>
                     </Card>
 
+                    {organizers.length > 0 && (
+                        <Card className={classes.accountCard}>
+                            <Stack gap="md">
+                                <Text size="lg" fw={600}>{t`Organizers`}</Text>
+                                <Stack gap="xs">
+                                    {organizers.map((organizer) => {
+                                        const fees = organizer.configuration?.application_fees;
+                                        const vat = organizer.vat_setting;
+                                        return (
+                                            <Group
+                                                key={String(organizer.id)}
+                                                justify="space-between"
+                                                wrap="nowrap"
+                                                className={classes.userItem}
+                                            >
+                                                <Stack gap={2}>
+                                                    <Text size="sm" fw={500}>{organizer.name}</Text>
+                                                    <Group gap="xs">
+                                                        {organizer.configuration && (
+                                                            <Badge size="xs" variant="light">
+                                                                {organizer.configuration.name}
+                                                                {fees ? ` · ${fees.percentage}% + ${fees.fixed} ${fees.currency}` : ""}
+                                                            </Badge>
+                                                        )}
+                                                        {vat?.vat_registered ? (
+                                                            <Badge size="xs" color="green" variant="light">
+                                                                {t`VAT: ${vat.vat_number ?? "—"}`}
+                                                                {vat.vat_validated ? ` ✓` : ""}
+                                                            </Badge>
+                                                        ) : (
+                                                            <Badge size="xs" color="gray" variant="light">
+                                                                {t`VAT: not registered`}
+                                                            </Badge>
+                                                        )}
+                                                    </Group>
+                                                </Stack>
+                                                <Button
+                                                    variant="subtle"
+                                                    size="xs"
+                                                    onClick={() => setManagedOrganizer(organizer)}
+                                                >
+                                                    {t`Manage`}
+                                                </Button>
+                                            </Group>
+                                        );
+                                    })}
+                                </Stack>
+                            </Stack>
+                        </Card>
+                    )}
+
+                    {lifecycleNudges && (
                     <Card className={classes.accountCard}>
                         <Stack gap="md">
-                            <Group justify="space-between">
-                                <Text size="lg" fw={600}>{t`VAT Settings`}</Text>
-                                <Button
-                                    variant="light"
-                                    size="xs"
-                                    leftSection={<IconEdit size={14} />}
-                                    onClick={() => setShowVatModal(true)}
-                                >
-                                    {t`Edit`}
-                                </Button>
-                            </Group>
-
-                            {account.vat_setting ? (
-                                <div className={classes.infoGrid}>
-                                    <div className={classes.infoItem}>
-                                        <Text size="xs" c="dimmed">{t`VAT Registered`}</Text>
-                                        <Badge color={account.vat_setting.vat_registered ? 'green' : 'gray'}>
-                                            {account.vat_setting.vat_registered ? t`Yes` : t`No`}
-                                        </Badge>
-                                    </div>
-                                    {account.vat_setting.vat_registered && (
-                                        <>
-                                            <div className={classes.infoItem}>
-                                                <Text size="xs" c="dimmed">{t`VAT Number`}</Text>
-                                                <Text size="sm">{account.vat_setting.vat_number || '-'}</Text>
-                                            </div>
-                                            <div className={classes.infoItem}>
-                                                <Text size="xs" c="dimmed">{t`Validated`}</Text>
-                                                <Badge color={account.vat_setting.vat_validated ? 'green' : 'red'}>
-                                                    {account.vat_setting.vat_validated ? t`Valid` : t`Invalid`}
-                                                </Badge>
-                                            </div>
-                                            {account.vat_setting.business_name && (
-                                                <div className={classes.infoItem}>
-                                                    <Text size="xs" c="dimmed">{t`Business Name`}</Text>
-                                                    <Text size="sm">{account.vat_setting.business_name}</Text>
-                                                </div>
-                                            )}
-                                            {account.vat_setting.vat_country_code && (
-                                                <div className={classes.infoItem}>
-                                                    <Text size="xs" c="dimmed">{t`VAT Country`}</Text>
-                                                    <Text size="sm">{account.vat_setting.vat_country_code}</Text>
-                                                </div>
-                                            )}
-                                        </>
-                                    )}
-                                </div>
+                            <Text size="lg" fw={600}>{t`Lifecycle Emails`}</Text>
+                            {lifecycleNudges.length === 0 ? (
+                                <Text size="sm" c="dimmed">{t`No lifecycle emails have been sent to this account.`}</Text>
                             ) : (
-                                <Text size="sm" c="dimmed">{t`No VAT settings configured`}</Text>
+                                <Stack gap="xs">
+                                    {lifecycleNudges.map((nudge) => (
+                                        <Group
+                                            key={nudge.nudge_type}
+                                            justify="space-between"
+                                            wrap="nowrap"
+                                            className={classes.userItem}
+                                        >
+                                            <Stack gap={2}>
+                                                <Text size="sm" fw={500}>
+                                                    {getLifecycleEmailLabel(nudge.nudge_type).name}
+                                                </Text>
+                                                {nudge.event_id && (
+                                                    <Text size="xs" c="dimmed">{t`Event ID: ${nudge.event_id}`}</Text>
+                                                )}
+                                            </Stack>
+                                            <Badge size="sm" variant="light">{formatDate(nudge.sent_at)}</Badge>
+                                        </Group>
+                                    ))}
+                                </Stack>
                             )}
                         </Stack>
                     </Card>
+                    )}
 
                     {account.users && account.users.length > 0 && (
                         <Card className={classes.accountCard}>
@@ -323,21 +356,85 @@ const AccountDetail = () => {
                                                 </Text>
                                                 <Text size="xs" c="dimmed">{user.email}</Text>
                                             </div>
-                                            <Badge size="sm">{user.role}</Badge>
+                                            <Group gap="xs">
+                                                <Badge size="sm">{user.role}</Badge>
+                                                {user.role !== 'SUPERADMIN' && (
+                                                    <Button
+                                                        variant="light"
+                                                        size="xs"
+                                                        onClick={() => impersonate(user.id, account.id)}
+                                                        loading={pendingUserId === user.id}
+                                                        disabled={isImpersonating && pendingUserId !== user.id}
+                                                        data-testid="admin-account-impersonate-button"
+                                                    >
+                                                        {t`Impersonate`}
+                                                    </Button>
+                                                )}
+                                            </Group>
                                         </div>
                                     ))}
                                 </div>
                             </Stack>
                         </Card>
                     )}
+
+                    <Card className={`${classes.accountCard} ${classes.dangerCard}`}>
+                        <Stack gap="md">
+                            <Text size="lg" fw={600}>{t`Delete account`}</Text>
+                            {account.active_deletion_request ? (
+                                <>
+                                    <Text size="sm">
+                                        {t`Deletion is scheduled for ${formatDate(account.active_deletion_request.scheduled_deletion_at)}.`}
+                                        {' '}
+                                        {account.active_deletion_request.expected_outcome === 'ANONYMIZE'
+                                            ? t`The account has completed orders, so it will be anonymised.`
+                                            : t`The account will be permanently deleted.`}
+                                    </Text>
+                                    <Group>
+                                        <Button
+                                            color="red"
+                                            onClick={() => handleExecuteDeletion(account.active_deletion_request!.id)}
+                                            loading={executeDeletionMutation.isPending}
+                                        >
+                                            {t`Delete now`}
+                                        </Button>
+                                        <Button
+                                            variant="default"
+                                            onClick={() => handleCancelDeletion(account.active_deletion_request!.id)}
+                                            loading={cancelDeletionMutation.isPending}
+                                        >
+                                            {t`Cancel deletion`}
+                                        </Button>
+                                    </Group>
+                                </>
+                            ) : (
+                                <Group justify="space-between" wrap="nowrap">
+                                    <Text size="sm" c="dimmed">
+                                        {t`Unpublish all events and delete or anonymise this account and its users.`}
+                                    </Text>
+                                    <Button
+                                        color="red"
+                                        variant="light"
+                                        onClick={() => setIsDeleteModalOpen(true)}
+                                        data-testid="admin-delete-account-button"
+                                    >
+                                        {t`Delete account`}
+                                    </Button>
+                                </Group>
+                            )}
+                        </Stack>
+                    </Card>
                 </Stack>
             </Container>
 
-            {showVatModal && (
-                <EditAccountVatSettingsModal
-                    accountId={accountId!}
-                    vatSetting={account.vat_setting}
-                    onClose={() => setShowVatModal(false)}
+            {isDeleteModalOpen && (
+                <DeleteAccountModal account={account} onClose={() => setIsDeleteModalOpen(false)}/>
+            )}
+
+            {managedOrganizer && (
+                <OrganizerAdminModal
+                    organizer={managedOrganizer}
+                    onClose={() => setManagedOrganizer(null)}
                 />
             )}
         </>

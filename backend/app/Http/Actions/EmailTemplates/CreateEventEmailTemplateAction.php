@@ -20,9 +20,7 @@ class CreateEventEmailTemplateAction extends BaseEmailTemplateAction
 {
     public function __construct(
         private readonly CreateEmailTemplateHandler $handler
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws ValidationException
@@ -42,9 +40,9 @@ class CreateEventEmailTemplateAction extends BaseEmailTemplateAction
         try {
             $cta = [
                 'label' => $validated['ctaLabel'],
-                'url_token' => $validated['template_type'] === 'order_confirmation' ? 'order.url' : 'ticket.url',
+                'url_token' => EmailTemplateType::from($validated['template_type'])->ctaUrlToken(),
             ];
-            
+
             $template = $this->handler->handle(
                 new UpsertEmailTemplateDTO(
                     account_id: $this->getAuthenticatedAccountId(),

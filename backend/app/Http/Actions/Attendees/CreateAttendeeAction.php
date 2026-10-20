@@ -3,6 +3,8 @@
 namespace HiEvents\Http\Actions\Attendees;
 
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Enterprise\Seating\Exceptions\SeatSelectionInvalidException;
+use HiEvents\Enterprise\Seating\Exceptions\SeatsUnavailableException;
 use HiEvents\Exceptions\InvalidProductPriceId;
 use HiEvents\Exceptions\NoTicketsAvailableException;
 use HiEvents\Http\Actions\BaseAction;
@@ -33,8 +35,11 @@ class CreateAttendeeAction extends BaseAction
 
         try {
             $attendee = $this->createAttendeeHandler->handle(CreateAttendeeDTO::fromArray(
-                array_merge($request->validationData(), [
+                array_merge($request->validated(), [
                     'event_id' => $eventId,
+                    'override_capacity' => (bool) $request->validated('override_capacity', false),
+                    'client_ip' => $this->getClientIp($request),
+                    'client_user_agent' => $request->userAgent(),
                 ])
             ));
         } catch (NoTicketsAvailableException $exception) {
@@ -44,6 +49,14 @@ class CreateAttendeeAction extends BaseAction
         } catch (InvalidProductPriceId $exception) {
             throw ValidationException::withMessages([
                 'product_price_id' => $exception->getMessage(),
+            ]);
+        } catch (SeatSelectionInvalidException $exception) {
+            throw ValidationException::withMessages([
+                'seat_uid' => $exception->getMessage(),
+            ]);
+        } catch (SeatsUnavailableException) {
+            throw ValidationException::withMessages([
+                'seat_uid' => __('That seat has just been taken'),
             ]);
         }
 

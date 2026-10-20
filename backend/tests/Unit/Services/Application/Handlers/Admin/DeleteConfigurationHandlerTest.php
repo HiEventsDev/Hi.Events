@@ -2,94 +2,103 @@
 
 namespace Tests\Unit\Services\Application\Handlers\Admin;
 
-use HiEvents\DomainObjects\AccountConfigurationDomainObject;
+use HiEvents\DomainObjects\OrganizerConfigurationDomainObject;
 use HiEvents\Exceptions\CannotDeleteEntityException;
-use HiEvents\Repository\Interfaces\AccountConfigurationRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrganizerConfigurationRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Admin\DeleteConfigurationHandler;
-use Mockery;
+use Mockery as m;
 use Tests\TestCase;
 
 class DeleteConfigurationHandlerTest extends TestCase
 {
-    private AccountConfigurationRepositoryInterface $repository;
     private DeleteConfigurationHandler $handler;
+
+    private OrganizerConfigurationRepositoryInterface $repository;
+
+    private OrganizerRepositoryInterface $organizerRepository;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->repository = Mockery::mock(AccountConfigurationRepositoryInterface::class);
-        $this->handler = new DeleteConfigurationHandler($this->repository);
+
+        $this->repository = m::mock(OrganizerConfigurationRepositoryInterface::class);
+        $this->organizerRepository = m::mock(OrganizerRepositoryInterface::class);
+
+        $this->handler = new DeleteConfigurationHandler(
+            $this->repository,
+            $this->organizerRepository,
+        );
     }
 
-    public function testHandleSuccessfullyDeletesConfiguration(): void
+    public function test_it_refuses_to_delete_the_system_default_configuration(): void
     {
-        $configurationId = 123;
-        $configuration = Mockery::mock(AccountConfigurationDomainObject::class);
+        $this->givenConfiguration(isSystemDefault: true, defaultForCurrency: null);
 
-        $configuration
-            ->shouldReceive('getIsSystemDefault')
-            ->once()
-            ->andReturn(false);
+        $this->expectException(CannotDeleteEntityException::class);
 
-        $this->repository
-            ->shouldReceive('findById')
-            ->with($configurationId)
+        $this->handler->handle(1);
+    }
+
+    public function test_it_refuses_to_delete_a_currency_default_configuration(): void
+    {
+        $this->givenConfiguration(isSystemDefault: false, defaultForCurrency: 'AUD');
+
+        $this->expectException(CannotDeleteEntityException::class);
+
+        $this->handler->handle(1);
+    }
+
+    public function test_it_refuses_to_delete_a_configuration_with_assigned_organizers(): void
+    {
+        $this->givenConfiguration(isSystemDefault: false, defaultForCurrency: null);
+        $this->organizerRepository
+            ->shouldReceive('countWhere')
             ->once()
-            ->andReturn($configuration);
+            ->with(['organizer_configuration_id' => 1])
+            ->andReturn(3);
+
+        $this->expectException(CannotDeleteEntityException::class);
+
+        $this->handler->handle(1);
+    }
+
+    public function test_it_deletes_an_unassigned_custom_configuration(): void
+    {
+        $this->givenConfiguration(isSystemDefault: false, defaultForCurrency: null);
+        $this->organizerRepository
+            ->shouldReceive('countWhere')
+            ->once()
+            ->with(['organizer_configuration_id' => 1])
+            ->andReturn(0);
 
         $this->repository
             ->shouldReceive('deleteById')
-            ->with($configurationId)
-            ->once();
+            ->once()
+            ->with(1);
 
-        $this->handler->handle($configurationId);
+        $this->handler->handle(1);
 
-        $this->assertTrue(true);
+        $this->addToAssertionCount(1);
     }
 
-    public function testHandleThrowsExceptionWhenDeletingSystemDefault(): void
+    private function givenConfiguration(bool $isSystemDefault, ?string $defaultForCurrency): void
     {
-        $configurationId = 1;
-        $configuration = Mockery::mock(AccountConfigurationDomainObject::class);
-
-        $configuration
-            ->shouldReceive('getIsSystemDefault')
-            ->once()
-            ->andReturn(true);
+        $configuration = (new OrganizerConfigurationDomainObject)
+            ->setId(1)
+            ->setIsSystemDefault($isSystemDefault)
+            ->setDefaultForCurrency($defaultForCurrency);
 
         $this->repository
             ->shouldReceive('findById')
-            ->with($configurationId)
             ->once()
+            ->with(1)
             ->andReturn($configuration);
-
-        $this->repository
-            ->shouldNotReceive('deleteById');
-
-        $this->expectException(CannotDeleteEntityException::class);
-        $this->expectExceptionMessage('The system default configuration cannot be deleted.');
-
-        $this->handler->handle($configurationId);
-    }
-
-    public function testHandleThrowsExceptionWhenConfigurationNotFound(): void
-    {
-        $configurationId = 999;
-
-        $this->repository
-            ->shouldReceive('findById')
-            ->with($configurationId)
-            ->once()
-            ->andThrow(new \Illuminate\Database\Eloquent\ModelNotFoundException());
-
-        $this->expectException(\Illuminate\Database\Eloquent\ModelNotFoundException::class);
-
-        $this->handler->handle($configurationId);
     }
 
     protected function tearDown(): void
     {
-        Mockery::close();
+        m::close();
         parent::tearDown();
     }
 }

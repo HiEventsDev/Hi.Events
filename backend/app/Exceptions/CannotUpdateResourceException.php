@@ -4,7 +4,4 @@ namespace HiEvents\Exceptions;
 
 use Exception;
 
-class CannotUpdateResourceException extends Exception
-{
-
-}
+class CannotUpdateResourceException extends Exception {}

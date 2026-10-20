@@ -5,10 +5,12 @@ namespace HiEvents\Http\Request\EventSettings;
 use HiEvents\DomainObjects\Enums\AttendeeDetailsCollectionMethod;
 use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
 use HiEvents\DomainObjects\Enums\HomepageFontFamily;
+use HiEvents\DomainObjects\Enums\HomepageSectionType;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\Enums\PriceDisplayMode;
 use HiEvents\DomainObjects\Enums\TicketDateDisplayMode;
 use HiEvents\Http\Request\BaseRequest;
+use HiEvents\Validators\Rules\HomepageSectionRules;
 use HiEvents\Validators\Rules\RulesHelper;
 use Illuminate\Validation\Rule;
 
@@ -18,15 +20,16 @@ class UpdateEventSettingsRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'post_checkout_message' => ['string', "nullable"],
-            'pre_checkout_message' => ['string', "nullable"],
-            'email_footer_message' => ['string', "nullable"],
+            'post_checkout_message' => ['string', 'nullable'],
+            'pre_checkout_message' => ['string', 'nullable'],
+            'email_footer_message' => ['string', 'nullable'],
 
             'continue_button_text' => ['string', 'nullable', 'max:100'],
+            'get_tickets_button_text' => ['string', 'nullable', 'max:100'],
             'support_email' => ['email', 'nullable'],
             'require_attendee_details' => ['boolean'],
             'attendee_details_collection_method' => [Rule::in(AttendeeDetailsCollectionMethod::valuesArray())],
-            'order_timeout_in_minutes' => ['numeric', "min:1", "max:120"],
+            'order_timeout_in_minutes' => ['numeric', 'min:1', 'max:120'],
 
             'homepage_background_color' => ['nullable', ...RulesHelper::HEX_COLOR],
             'homepage_primary_color' => ['nullable', ...RulesHelper::HEX_COLOR],
@@ -39,18 +42,6 @@ class UpdateEventSettingsRequest extends BaseRequest
             'website_url' => ['url', 'nullable'],
             'maps_url' => ['url', 'nullable'],
 
-            'location_details' => ['array'],
-            'location_details.venue_name' => ['string', 'max:255', 'nullable'],
-            'location_details.address_line_1' => ['required_with:location_details', 'string', 'max:255'],
-            'location_details.address_line_2' => ['string', 'max:255', 'nullable'],
-            'location_details.city' => ['required_with:location_details', 'string', 'max:85'],
-            'location_details.state_or_region' => ['string', 'max:85', 'nullable'],
-            'location_details.zip_or_postal_code' => ['required_with:location_details', 'string', 'max:85'],
-            'location_details.country' => ['required_with:location_details', 'string', 'max:2'],
-
-            'is_online_event' => ['boolean'],
-            'online_event_connection_details' => ['string', 'nullable'],
-
             'seo_title' => ['string', 'max:255', 'nullable'],
             'seo_description' => ['string', 'max:255', 'nullable'],
             'seo_keywords' => ['string', 'max:255', 'nullable'],
@@ -60,12 +51,10 @@ class UpdateEventSettingsRequest extends BaseRequest
 
             'price_display_mode' => [Rule::in(PriceDisplayMode::valuesArray())],
 
-            'hide_getting_started_page' => ['boolean'],
-
             // Payment settings
             'payment_providers' => ['array'],
             'payment_providers.*' => ['string', Rule::in(PaymentProviders::valuesArray())],
-            'offline_payment_instructions' => ['string', 'nullable', Rule::requiredIf(fn() => in_array(PaymentProviders::OFFLINE->name, $this->input('payment_providers', []), true))],
+            'offline_payment_instructions' => ['string', 'nullable', Rule::requiredIf(fn () => in_array(PaymentProviders::OFFLINE->name, $this->input('payment_providers', []), true))],
             'allow_orders_awaiting_offline_payment_to_check_in' => ['boolean'],
 
             // Invoice settings
@@ -92,6 +81,9 @@ class UpdateEventSettingsRequest extends BaseRequest
             // Marketing settings
             'show_marketing_opt_in' => ['boolean'],
 
+            // Attendee detail copy control
+            'allow_copy_details_to_all_attendees' => ['boolean'],
+
             // Platform fee settings
             'pass_platform_fee_to_buyer' => ['boolean'],
 
@@ -102,9 +94,14 @@ class UpdateEventSettingsRequest extends BaseRequest
             'homepage_theme_settings.mode' => ['nullable', 'string', Rule::in(['light', 'dark'])],
             'homepage_theme_settings.background_type' => ['nullable', 'string', Rule::in(HomepageBackgroundType::valuesArray())],
             'homepage_theme_settings.font_family' => ['nullable', 'string', Rule::in(HomepageFontFamily::valuesArray())],
+            ...HomepageSectionRules::rules(HomepageSectionType::eventValues()),
 
             // Self-service settings
             'allow_attendee_self_edit' => ['boolean'],
+
+            // Occurrence display
+            'show_available_occurrence_capacity' => ['boolean'],
+            'hide_sold_out_occurrences' => ['boolean'],
 
             // Waitlist settings
             'waitlist_auto_process' => ['boolean'],
@@ -124,11 +121,6 @@ class UpdateEventSettingsRequest extends BaseRequest
             'homepage_link_color' => $colorMessage,
             'homepage_product_widget_background_color' => $colorMessage,
             'homepage_product_widget_text_color' => $colorMessage,
-            'location_details.address_line_1.required_with' => __('The address line 1 field is required'),
-            'location_details.city.required_with' => __('The city field is required'),
-            'location_details.zip_or_postal_code.required_with' => __('The zip or postal code field is required'),
-            'location_details.country.required_with' => __('The country field is required'),
-            'location_details.country.max' => __('The country field should be a 2 character ISO 3166 code'),
             'price_display_mode.in' => 'The price display mode must be either inclusive or exclusive.',
 
             // Payment messages
@@ -152,6 +144,7 @@ class UpdateEventSettingsRequest extends BaseRequest
             'homepage_theme_settings.mode.in' => __('The mode must be light or dark.'),
             'homepage_theme_settings.background_type.in' => __('The background type must be COLOR or MIRROR_COVER_IMAGE.'),
             'homepage_theme_settings.font_family.in' => __('The selected font is not supported.'),
+            ...HomepageSectionRules::messages(),
         ];
     }
 }

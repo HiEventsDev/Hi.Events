@@ -1,0 +1,908 @@
+[
+  {
+    "name": "consecutive numbers run left to right",
+    "element": {
+      "id": "r1",
+      "type": "row",
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "name": "Row",
+      "spacing": 24,
+      "curve": 0,
+      "aisles": [],
+      "rowLabelStyle": "alpha",
+      "startRow": "A",
+      "startSeat": 1,
+      "count": 4,
+      "numbering": "seq",
+      "band": "b_standard",
+      "seatSize": 18,
+      "overrides": {},
+      "seats": []
+    },
+    "expected": [
+      {
+        "uid": "r1.0.0",
+        "n": "1",
+        "label": "A-1"
+      },
+      {
+        "uid": "r1.0.1",
+        "n": "2",
+        "label": "A-2"
+      },
+      {
+        "uid": "r1.0.2",
+        "n": "3",
+        "label": "A-3"
+      },
+      {
+        "uid": "r1.0.3",
+        "n": "4",
+        "label": "A-4"
+      }
+    ]
+  },
+  {
+    "name": "consecutive numbers run right to left",
+    "element": {
+      "id": "r1",
+      "type": "row",
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "name": "Row",
+      "spacing": 24,
+      "curve": 0,
+      "aisles": [],
+      "rowLabelStyle": "alpha",
+      "startRow": "A",
+      "startSeat": 1,
+      "count": 4,
+      "numbering": "seq",
+      "band": "b_standard",
+      "seatSize": 18,
+      "overrides": {},
+      "seats": [],
+      "direction": "rtl"
+    },
+    "expected": [
+      {
+        "uid": "r1.0.0",
+        "n": "4",
+        "label": "A-4"
+      },
+      {
+        "uid": "r1.0.1",
+        "n": "3",
+        "label": "A-3"
+      },
+      {
+        "uid": "r1.0.2",
+        "n": "2",
+        "label": "A-2"
+      },
+      {
+        "uid": "r1.0.3",
+        "n": "1",
+        "label": "A-1"
+      }
+    ]
+  },
+  {
+    "name": "consecutive numbers start at the first seat number",
+    "element": {
+      "id": "r1",
+      "type": "row",
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "name": "Row",
+      "spacing": 24,
+      "curve": 0,
+      "aisles": [],
+      "rowLabelStyle": "alpha",
+      "startRow": "A",
+      "startSeat": 101,
+      "count": 3,
+      "numbering": "seq",
+      "band": "b_standard",
+      "seatSize": 18,
+      "overrides": {},
+      "seats": [],
+      "direction": "ltr"
+    },
+    "expected": [
+      {
+        "uid": "r1.0.0",
+        "n": "101",
+        "label": "A-101"
+      },
+      {
+        "uid": "r1.0.1",
+        "n": "102",
+        "label": "A-102"
+      },
+      {
+        "uid": "r1.0.2",
+        "n": "103",
+        "label": "A-103"
+      }
+    ]
+  },
+  {
+    "name": "odd numbers only",
+    "element": {
+      "id": "r1",
+      "type": "row",
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "name": "Row",
+      "spacing": 24,
+      "curve": 0,
+      "aisles": [],
+      "rowLabelStyle": "alpha",
+      "startRow": "A",
+      "startSeat": 1,
+      "count": 4,
+      "numbering": "oddOnly",
+      "band": "b_standard",
+      "seatSize": 18,
+      "overrides": {},
+      "seats": []
+    },
+    "expected": [
+      {
+        "uid": "r1.0.0",
+        "n": "1",
+        "label": "A-1"
+      },
+      {
+        "uid": "r1.0.1",
+        "n": "3",
+        "label": "A-3"
+      },
+      {
+        "uid": "r1.0.2",
+        "n": "5",
+        "label": "A-5"
+      },
+      {
+        "uid": "r1.0.3",
+        "n": "7",
+        "label": "A-7"
+      }
+    ]
+  },
+  {
+    "name": "odd numbers only round an even first seat up",
+    "element": {
+      "id": "r1",
+      "type": "row",
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "name": "Row",
+      "spacing": 24,
+      "curve": 0,
+      "aisles": [],
+      "rowLabelStyle": "alpha",
+      "startRow": "A",
+      "startSeat": 4,
+      "count": 3,
+      "numbering": "oddOnly",
+      "band": "b_standard",
+      "seatSize": 18,
+      "overrides": {},
+      "seats": []
+    },
+    "expected": [
+      {
+        "uid": "r1.0.0",
+        "n": "5",
+        "label": "A-5"
+      },
+      {
+        "uid": "r1.0.1",
+        "n": "7",
+        "label": "A-7"
+      },
+      {
+        "uid": "r1.0.2",
+        "n": "9",
+        "label": "A-9"
+      }
+    ]
+  },
+  {
+    "name": "even numbers only",
+    "element": {
+      "id": "r1",
+      "type": "row",
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "name": "Row",
+      "spacing": 24,
+      "curve": 0,
+      "aisles": [],
+      "rowLabelStyle": "alpha",
+      "startRow": "A",
+      "startSeat": 1,
+      "count": 4,
+      "numbering": "evenOnly",
+      "band": "b_standard",
+      "seatSize": 18,
+      "overrides": {},
+      "seats": []
+    },
+    "expected": [
+      {
+        "uid": "r1.0.0",
+        "n": "2",
+        "label": "A-2"
+      },
+      {
+        "uid": "r1.0.1",
+        "n": "4",
+        "label": "A-4"
+      },
+      {
+        "uid": "r1.0.2",
+        "n": "6",
+        "label": "A-6"
+      },
+      {
+        "uid": "r1.0.3",
+        "n": "8",
+        "label": "A-8"
+      }
+    ]
+  },
+  {
+    "name": "even numbers only from the right",
+    "element": {
+      "id": "r1",
+      "type": "row",
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "name": "Row",
+      "spacing": 24,
+      "curve": 0,
+      "aisles": [],
+      "rowLabelStyle": "alpha",
+      "startRow": "A",
+      "startSeat": 1,
+      "count": 4,
+      "numbering": "evenOnly",
+      "band": "b_standard",
+      "seatSize": 18,
+      "overrides": {},
+      "seats": [],
+      "direction": "rtl"
+    },
+    "expected": [
+      {
+        "uid": "r1.0.0",
+        "n": "8",
+        "label": "A-8"
+      },
+      {
+        "uid": "r1.0.1",
+        "n": "6",
+        "label": "A-6"
+      },
+      {
+        "uid": "r1.0.2",
+        "n": "4",
+        "label": "A-4"
+      },
+      {
+        "uid": "r1.0.3",
+        "n": "2",
+        "label": "A-2"
+      }
+    ]
+  },
+  {
+    "name": "odd and even from the centre",
+    "element": {
+      "id": "r1",
+      "type": "row",
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "name": "Row",
+      "spacing": 24,
+      "curve": 0,
+      "aisles": [],
+      "rowLabelStyle": "alpha",
+      "startRow": "A",
+      "startSeat": 1,
+      "count": 5,
+      "numbering": "odd",
+      "band": "b_standard",
+      "seatSize": 18,
+      "overrides": {},
+      "seats": []
+    },
+    "expected": [
+      {
+        "uid": "r1.0.0",
+        "n": "4",
+        "label": "A-4"
+      },
+      {
+        "uid": "r1.0.1",
+        "n": "2",
+        "label": "A-2"
+      },
+      {
+        "uid": "r1.0.2",
+        "n": "1",
+        "label": "A-1"
+      },
+      {
+        "uid": "r1.0.3",
+        "n": "3",
+        "label": "A-3"
+      },
+      {
+        "uid": "r1.0.4",
+        "n": "5",
+        "label": "A-5"
+      }
+    ]
+  },
+  {
+    "name": "odd and even from the centre, mirrored",
+    "element": {
+      "id": "r1",
+      "type": "row",
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "name": "Row",
+      "spacing": 24,
+      "curve": 0,
+      "aisles": [],
+      "rowLabelStyle": "alpha",
+      "startRow": "A",
+      "startSeat": 1,
+      "count": 5,
+      "numbering": "odd",
+      "band": "b_standard",
+      "seatSize": 18,
+      "overrides": {},
+      "seats": [],
+      "direction": "rtl"
+    },
+    "expected": [
+      {
+        "uid": "r1.0.0",
+        "n": "5",
+        "label": "A-5"
+      },
+      {
+        "uid": "r1.0.1",
+        "n": "3",
+        "label": "A-3"
+      },
+      {
+        "uid": "r1.0.2",
+        "n": "1",
+        "label": "A-1"
+      },
+      {
+        "uid": "r1.0.3",
+        "n": "2",
+        "label": "A-2"
+      },
+      {
+        "uid": "r1.0.4",
+        "n": "4",
+        "label": "A-4"
+      }
+    ]
+  },
+  {
+    "name": "continuous numbering across rows from the right",
+    "element": {
+      "id": "b1",
+      "type": "block",
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "name": "Block",
+      "spacing": 24,
+      "curve": 0,
+      "aisles": [],
+      "rowLabelStyle": "alpha",
+      "startRow": "A",
+      "startSeat": 1,
+      "rows": 2,
+      "cols": 3,
+      "rowSpacing": 30,
+      "taper": 0,
+      "numbering": "cont",
+      "band": "b_standard",
+      "seatSize": 18,
+      "overrides": {},
+      "seats": [],
+      "direction": "rtl"
+    },
+    "expected": [
+      {
+        "uid": "b1.0.0",
+        "n": "3",
+        "label": "A-3"
+      },
+      {
+        "uid": "b1.0.1",
+        "n": "2",
+        "label": "A-2"
+      },
+      {
+        "uid": "b1.0.2",
+        "n": "1",
+        "label": "A-1"
+      },
+      {
+        "uid": "b1.1.0",
+        "n": "6",
+        "label": "B-6"
+      },
+      {
+        "uid": "b1.1.1",
+        "n": "5",
+        "label": "B-5"
+      },
+      {
+        "uid": "b1.1.2",
+        "n": "4",
+        "label": "B-4"
+      }
+    ]
+  },
+  {
+    "name": "odd numbers only from the right on a tapered block",
+    "element": {
+      "id": "b1",
+      "type": "block",
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "name": "Block",
+      "spacing": 24,
+      "curve": 0,
+      "aisles": [],
+      "rowLabelStyle": "alpha",
+      "startRow": "A",
+      "startSeat": 1,
+      "rows": 2,
+      "cols": 2,
+      "rowSpacing": 30,
+      "taper": 1,
+      "numbering": "oddOnly",
+      "band": "b_standard",
+      "seatSize": 18,
+      "overrides": {},
+      "seats": [],
+      "direction": "rtl"
+    },
+    "expected": [
+      {
+        "uid": "b1.0.0",
+        "n": "3",
+        "label": "A-3"
+      },
+      {
+        "uid": "b1.0.1",
+        "n": "1",
+        "label": "A-1"
+      },
+      {
+        "uid": "b1.1.0",
+        "n": "5",
+        "label": "B-5"
+      },
+      {
+        "uid": "b1.1.1",
+        "n": "3",
+        "label": "B-3"
+      },
+      {
+        "uid": "b1.1.2",
+        "n": "1",
+        "label": "B-1"
+      }
+    ]
+  },
+  {
+    "name": "letters skipping I and O",
+    "element": {
+      "id": "b1",
+      "type": "block",
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "name": "Block",
+      "spacing": 24,
+      "curve": 0,
+      "aisles": [],
+      "rowLabelStyle": "alphaSkipIO",
+      "startRow": "G",
+      "startSeat": 1,
+      "rows": 4,
+      "cols": 1,
+      "rowSpacing": 30,
+      "taper": 0,
+      "numbering": "seq",
+      "band": "b_standard",
+      "seatSize": 18,
+      "overrides": {},
+      "seats": []
+    },
+    "expected": [
+      {
+        "uid": "b1.0.0",
+        "n": "1",
+        "label": "G-1"
+      },
+      {
+        "uid": "b1.1.0",
+        "n": "1",
+        "label": "H-1"
+      },
+      {
+        "uid": "b1.2.0",
+        "n": "1",
+        "label": "J-1"
+      },
+      {
+        "uid": "b1.3.0",
+        "n": "1",
+        "label": "K-1"
+      }
+    ]
+  },
+  {
+    "name": "a first row of I moves to J when skipping I and O",
+    "element": {
+      "id": "b1",
+      "type": "block",
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "name": "Block",
+      "spacing": 24,
+      "curve": 0,
+      "aisles": [],
+      "rowLabelStyle": "alphaSkipIO",
+      "startRow": "I",
+      "startSeat": 1,
+      "rows": 2,
+      "cols": 1,
+      "rowSpacing": 30,
+      "taper": 0,
+      "numbering": "seq",
+      "band": "b_standard",
+      "seatSize": 18,
+      "overrides": {},
+      "seats": []
+    },
+    "expected": [
+      {
+        "uid": "b1.0.0",
+        "n": "1",
+        "label": "J-1"
+      },
+      {
+        "uid": "b1.1.0",
+        "n": "1",
+        "label": "K-1"
+      }
+    ]
+  },
+  {
+    "name": "a first row of O moves to P when skipping I and O",
+    "element": {
+      "id": "b1",
+      "type": "block",
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "name": "Block",
+      "spacing": 24,
+      "curve": 0,
+      "aisles": [],
+      "rowLabelStyle": "alphaSkipIO",
+      "startRow": "o",
+      "startSeat": 1,
+      "rows": 2,
+      "cols": 1,
+      "rowSpacing": 30,
+      "taper": 0,
+      "numbering": "seq",
+      "band": "b_standard",
+      "seatSize": 18,
+      "overrides": {},
+      "seats": []
+    },
+    "expected": [
+      {
+        "uid": "b1.0.0",
+        "n": "1",
+        "label": "P-1"
+      },
+      {
+        "uid": "b1.1.0",
+        "n": "1",
+        "label": "Q-1"
+      }
+    ]
+  },
+  {
+    "name": "double letters skip I and O too",
+    "element": {
+      "id": "b1",
+      "type": "block",
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "name": "Block",
+      "spacing": 24,
+      "curve": 0,
+      "aisles": [],
+      "rowLabelStyle": "alphaSkipIO",
+      "startRow": "Y",
+      "startSeat": 1,
+      "rows": 3,
+      "cols": 1,
+      "rowSpacing": 30,
+      "taper": 0,
+      "numbering": "seq",
+      "band": "b_standard",
+      "seatSize": 18,
+      "overrides": {},
+      "seats": []
+    },
+    "expected": [
+      {
+        "uid": "b1.0.0",
+        "n": "1",
+        "label": "Y-1"
+      },
+      {
+        "uid": "b1.1.0",
+        "n": "1",
+        "label": "Z-1"
+      },
+      {
+        "uid": "b1.2.0",
+        "n": "1",
+        "label": "AA-1"
+      }
+    ]
+  },
+  {
+    "name": "plain letters keep I and O",
+    "element": {
+      "id": "b1",
+      "type": "block",
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "name": "Block",
+      "spacing": 24,
+      "curve": 0,
+      "aisles": [],
+      "rowLabelStyle": "alpha",
+      "startRow": "H",
+      "startSeat": 1,
+      "rows": 3,
+      "cols": 1,
+      "rowSpacing": 30,
+      "taper": 0,
+      "numbering": "seq",
+      "band": "b_standard",
+      "seatSize": 18,
+      "overrides": {},
+      "seats": []
+    },
+    "expected": [
+      {
+        "uid": "b1.0.0",
+        "n": "1",
+        "label": "H-1"
+      },
+      {
+        "uid": "b1.1.0",
+        "n": "1",
+        "label": "I-1"
+      },
+      {
+        "uid": "b1.2.0",
+        "n": "1",
+        "label": "J-1"
+      }
+    ]
+  },
+  {
+    "name": "a row label override replaces one row",
+    "element": {
+      "id": "b1",
+      "type": "block",
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "name": "Block",
+      "spacing": 24,
+      "curve": 0,
+      "aisles": [],
+      "rowLabelStyle": "alpha",
+      "startRow": "A",
+      "startSeat": 1,
+      "rows": 3,
+      "cols": 2,
+      "rowSpacing": 30,
+      "taper": 0,
+      "numbering": "seq",
+      "band": "b_standard",
+      "seatSize": 18,
+      "overrides": {},
+      "seats": [],
+      "rowLabels": {
+        "1": "BB"
+      }
+    },
+    "expected": [
+      {
+        "uid": "b1.0.0",
+        "n": "1",
+        "label": "A-1"
+      },
+      {
+        "uid": "b1.0.1",
+        "n": "2",
+        "label": "A-2"
+      },
+      {
+        "uid": "b1.1.0",
+        "n": "1",
+        "label": "BB-1"
+      },
+      {
+        "uid": "b1.1.1",
+        "n": "2",
+        "label": "BB-2"
+      },
+      {
+        "uid": "b1.2.0",
+        "n": "1",
+        "label": "C-1"
+      },
+      {
+        "uid": "b1.2.1",
+        "n": "2",
+        "label": "C-2"
+      }
+    ]
+  },
+  {
+    "name": "a row label override applies to a single row",
+    "element": {
+      "id": "r1",
+      "type": "row",
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "name": "Row",
+      "spacing": 24,
+      "curve": 0,
+      "aisles": [],
+      "rowLabelStyle": "none",
+      "startRow": "A",
+      "startSeat": 1,
+      "count": 2,
+      "numbering": "seq",
+      "band": "b_standard",
+      "seatSize": 18,
+      "overrides": {},
+      "seats": [],
+      "rowLabels": {
+        "0": "X"
+      }
+    },
+    "expected": [
+      {
+        "uid": "r1.0.0",
+        "n": "1",
+        "label": "X-1"
+      },
+      {
+        "uid": "r1.0.1",
+        "n": "2",
+        "label": "X-2"
+      }
+    ]
+  },
+  {
+    "name": "row labels can be numbers",
+    "element": {
+      "id": "b1",
+      "type": "block",
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "name": "Block",
+      "spacing": 24,
+      "curve": 0,
+      "aisles": [],
+      "rowLabelStyle": "num",
+      "startRow": "3",
+      "startSeat": 1,
+      "rows": 2,
+      "cols": 1,
+      "rowSpacing": 30,
+      "taper": 0,
+      "numbering": "seq",
+      "band": "b_standard",
+      "seatSize": 18,
+      "overrides": {},
+      "seats": []
+    },
+    "expected": [
+      {
+        "uid": "b1.0.0",
+        "n": "1",
+        "label": "3-1"
+      },
+      {
+        "uid": "b1.1.0",
+        "n": "1",
+        "label": "4-1"
+      }
+    ]
+  },
+  {
+    "name": "a section prefixes every label",
+    "element": {
+      "id": "r1",
+      "type": "row",
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "name": "Row",
+      "spacing": 24,
+      "curve": 0,
+      "aisles": [],
+      "rowLabelStyle": "alpha",
+      "startRow": "A",
+      "startSeat": 1,
+      "count": 2,
+      "numbering": "seq",
+      "band": "b_standard",
+      "seatSize": 18,
+      "overrides": {},
+      "seats": [],
+      "direction": "rtl",
+      "section": "Left"
+    },
+    "expected": [
+      {
+        "uid": "r1.0.0",
+        "n": "2",
+        "label": "Left · A-2"
+      },
+      {
+        "uid": "r1.0.1",
+        "n": "1",
+        "label": "Left · A-1"
+      }
+    ]
+  }
+]

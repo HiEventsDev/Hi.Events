@@ -14,6 +14,7 @@ abstract class EventDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     final public const ACCOUNT_ID = 'account_id';
     final public const USER_ID = 'user_id';
     final public const ORGANIZER_ID = 'organizer_id';
+    final public const EVENT_LOCATION_ID = 'event_location_id';
     final public const TITLE = 'title';
     final public const START_DATE = 'start_date';
     final public const END_DATE = 'end_date';
@@ -30,11 +31,14 @@ abstract class EventDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     final public const SHORT_ID = 'short_id';
     final public const TICKET_QUANTITY_AVAILABLE = 'ticket_quantity_available';
     final public const CATEGORY = 'category';
+    final public const TYPE = 'type';
+    final public const RECURRENCE_RULE = 'recurrence_rule';
 
     protected int $id;
     protected int $account_id;
     protected int $user_id;
     protected ?int $organizer_id = null;
+    protected ?int $event_location_id = null;
     protected string $title;
     protected ?string $start_date = null;
     protected ?string $end_date = null;
@@ -51,6 +55,8 @@ abstract class EventDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     protected string $short_id;
     protected ?int $ticket_quantity_available = null;
     protected string $category = 'OTHER';
+    protected string $type = 'SINGLE';
+    protected array|string|null $recurrence_rule = null;
 
     public function toArray(): array
     {
@@ -59,6 +65,7 @@ abstract class EventDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
                     'account_id' => $this->account_id ?? null,
                     'user_id' => $this->user_id ?? null,
                     'organizer_id' => $this->organizer_id ?? null,
+                    'event_location_id' => $this->event_location_id ?? null,
                     'title' => $this->title ?? null,
                     'start_date' => $this->start_date ?? null,
                     'end_date' => $this->end_date ?? null,
@@ -75,6 +82,8 @@ abstract class EventDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
                     'short_id' => $this->short_id ?? null,
                     'ticket_quantity_available' => $this->ticket_quantity_available ?? null,
                     'category' => $this->category ?? null,
+                    'type' => $this->type ?? null,
+                    'recurrence_rule' => $this->recurrence_rule ?? null,
                 ];
     }
 
@@ -120,6 +129,17 @@ abstract class EventDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     public function getOrganizerId(): ?int
     {
         return $this->organizer_id;
+    }
+
+    public function setEventLocationId(?int $event_location_id): self
+    {
+        $this->event_location_id = $event_location_id;
+        return $this;
+    }
+
+    public function getEventLocationId(): ?int
+    {
+        return $this->event_location_id;
     }
 
     public function setTitle(string $title): self
@@ -296,5 +316,27 @@ abstract class EventDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     public function getCategory(): string
     {
         return $this->category;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
+        return $this;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function setRecurrenceRule(array|string|null $recurrence_rule): self
+    {
+        $this->recurrence_rule = $recurrence_rule;
+        return $this;
+    }
+
+    public function getRecurrenceRule(): array|string|null
+    {
+        return $this->recurrence_rule;
     }
 }

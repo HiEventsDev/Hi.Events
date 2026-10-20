@@ -1,7 +1,8 @@
 import {PageTitle} from "../../../common/PageTitle";
+import {CreateButton} from "../../../common/CreateButton";
 import {t} from "@lingui/macro";
 import {PageBody} from "../../../common/PageBody";
-import {Badge, Button, Group} from "@mantine/core"
+import {Badge, Group} from "@mantine/core"
 import {IconPlus} from "@tabler/icons-react";
 import {Card} from "../../../common/Card";
 import {useDisclosure} from "@mantine/hooks";
@@ -33,9 +34,9 @@ const Webhooks = () => {
             </PageTitle>
             <Card>
                 <Group justify="space-between">
-                    <Button color={'green'} rightSection={<IconPlus/>} onClick={openCreateModal}>
+                    <CreateButton color={'green'} rightSection={<IconPlus/>} onClick={openCreateModal}>
                         {t`Add Webhook`}
-                    </Button>
+                    </CreateButton>
                     <Badge
                         variant="transparent"
                         size="lg"

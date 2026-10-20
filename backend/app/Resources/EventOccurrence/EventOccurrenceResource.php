@@ -1,0 +1,69 @@
+<?php
+
+namespace HiEvents\Resources\EventOccurrence;
+
+use HiEvents\DomainObjects\Enums\Permission;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
+use HiEvents\Resources\BaseResource;
+use HiEvents\Resources\EventLocation\EventLocationResource;
+use HiEvents\Services\Domain\EventOccurrence\DTO\OccurrenceAllocationDTO;
+use Illuminate\Http\Request;
+
+/**
+ * @mixin EventOccurrenceDomainObject
+ */
+class EventOccurrenceResource extends BaseResource
+{
+    public function toArray(Request $request): array
+    {
+        $stats = $this->getEventOccurrenceStatistics();
+
+        return [
+            'id' => $this->getId(),
+            'event_id' => $this->getEventId(),
+            'short_id' => $this->getShortId(),
+            'start_date' => $this->getStartDate(),
+            'end_date' => $this->getEndDate(),
+            'status' => $this->getStatus(),
+            'capacity' => $this->getCapacity(),
+            'used_capacity' => $this->getUsedCapacity(),
+            'available_capacity' => $this->getAvailableCapacity(),
+            'label' => $this->getLabel(),
+            'show_available_capacity' => $this->getShowAvailableCapacity(),
+            'is_overridden' => $this->getIsOverridden(),
+            'is_past' => $this->isPast(),
+            'is_future' => $this->isFuture(),
+            'is_active' => $this->isActive(),
+            'event_location' => $this->when(
+                condition: $this->getEventLocation() !== null,
+                value: fn () => new EventLocationResource($this->getEventLocation()),
+            ),
+            'booking_limits' => $this->when($this->getBookingLimits() !== null, fn () => [
+                'capacity' => $this->getBookingLimits()->capacity,
+                'allocation_total' => $this->getBookingLimits()->allocation_total,
+                'sellable' => $this->getBookingLimits()->sellable,
+                'allocations' => array_map(fn (OccurrenceAllocationDTO $allocation) => [
+                    'product_price_id' => $allocation->product_price_id,
+                    'product_title' => $allocation->product_title,
+                    'price_label' => $allocation->price_label,
+                    'quantity' => $allocation->quantity,
+                    /** @var 'OCCURRENCE'|'EVENT' */
+                    'applies_to' => $allocation->applies_to,
+                ], $this->getBookingLimits()->allocations),
+            ]),
+            'statistics' => $this->when($stats !== null, fn () => [
+                'orders_created' => $stats->getOrdersCreated() ?? 0,
+                'attendees_registered' => $stats->getAttendeesRegistered() ?? 0,
+                'products_sold' => $stats->getProductsSold() ?? 0,
+                ...($this->isPermitted(Permission::VIEW_FINANCIALS) ? [
+                    'total_gross_sales' => $stats->getSalesTotalGross() ?? 0,
+                    'total_tax' => $stats->getTotalTax() ?? 0,
+                    'total_fee' => $stats->getTotalFee() ?? 0,
+                    'total_refunded' => $stats->getTotalRefunded() ?? 0,
+                ] : []),
+            ]),
+            'created_at' => $this->getCreatedAt(),
+            'updated_at' => $this->getUpdatedAt(),
+        ];
+    }
+}

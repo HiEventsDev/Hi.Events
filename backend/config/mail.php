@@ -44,6 +44,8 @@ return [
             'password' => env('MAIL_PASSWORD'),
             'timeout' => null,
             'local_domain' => env('MAIL_EHLO_DOMAIN'),
+            'auto_tls' => env('MAIL_AUTO_TLS', true),
+            'verify_peer' => env('MAIL_VERIFY_PEER', true),
         ],
 
         'ses' => [
@@ -62,6 +64,11 @@ return [
             // 'client' => [
             //     'timeout' => 5,
             // ],
+        ],
+
+        'postmark-broadcast' => [
+            'transport' => 'postmark',
+            'message_stream_id' => env('POSTMARK_BROADCAST_MESSAGE_STREAM_ID', 'broadcast'),
         ],
 
         'sendmail' => [
@@ -101,6 +108,22 @@ return [
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'hello@hi.events'),
         'name' => env('MAIL_FROM_NAME', 'Hi.Events'),
+    ],
+
+    'lifecycle' => [
+        'mailer' => env('MAIL_LIFECYCLE_MAILER'),
+        'from' => [
+            'address' => env('MAIL_LIFECYCLE_FROM_ADDRESS', env('MAIL_FROM_ADDRESS', 'hello@hi.events')),
+            'name' => env('MAIL_LIFECYCLE_FROM_NAME', env('MAIL_FROM_NAME', 'Hi.Events')),
+        ],
+        'reply_to' => [
+            'address' => env('MAIL_LIFECYCLE_REPLY_TO_ADDRESS'),
+            'name' => env('MAIL_LIFECYCLE_REPLY_TO_NAME', env('MAIL_LIFECYCLE_FROM_NAME', env('MAIL_FROM_NAME', 'Hi.Events'))),
+        ],
+        'signature' => [
+            'name' => env('MAIL_LIFECYCLE_SIGNATURE_NAME', 'The Hi.Events team'),
+            'title' => env('MAIL_LIFECYCLE_SIGNATURE_TITLE'),
+        ],
     ],
 
     /*

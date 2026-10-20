@@ -1,0 +1,210 @@
+@use "../../../styles/mixins";
+
+.page {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding-top: 8px;
+
+  &.wide {
+    max-width: 1080px;
+  }
+
+  @include mixins.respond-below(md) {
+    padding-top: 4px;
+  }
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px 24px;
+  margin-bottom: 28px;
+
+  @include mixins.respond-below(md) {
+    margin-bottom: 20px;
+  }
+}
+
+.heading {
+  min-width: 0;
+  flex: 1 1 320px;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: var(--hi-text);
+
+  @include mixins.respond-below(md) {
+    font-size: 1.5rem;
+  }
+}
+
+.description {
+  max-width: 62ch;
+  margin: 6px 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--hi-color-text-muted);
+}
+
+.actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 8px;
+
+  @include mixins.respond-below(sm) {
+    flex-shrink: 1;
+    min-width: 0;
+  }
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+
+  @include mixins.respond-below(md) {
+    gap: 28px;
+  }
+}
+
+.section {
+  scroll-margin-top: 24px;
+}
+
+.sectionTitle {
+  margin: 0 0 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0;
+  color: var(--hi-text);
+}
+
+.card {
+  container-type: inline-size;
+  background: var(--hi-color-white);
+  border: 1px solid var(--hi-color-border);
+  border-radius: var(--hi-radius-card);
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+
+  &.danger {
+    border-color: color-mix(in srgb, var(--hi-color-danger) 28%, transparent);
+  }
+}
+
+.row {
+  padding: 18px 20px;
+
+  & + & {
+    border-top: 1px solid var(--hi-color-border);
+  }
+
+  @include mixins.respond-below(sm, true) {
+    padding: 16px;
+  }
+}
+
+.rowMain {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 320px);
+  align-items: center;
+  gap: 12px 32px;
+
+  &.textOnly {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  @include mixins.respond-below(sm, true) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+
+    &.inlineControl {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+    }
+  }
+}
+
+.rowText {
+  min-width: 0;
+}
+
+.rowLabel {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--hi-text);
+}
+
+.rowDescription {
+  margin-top: 2px;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--hi-color-text-muted);
+}
+
+.rowControl {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-width: 0;
+
+  > :global(.mantine-InputWrapper-root) {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  :global(.mantine-InputWrapper-root),
+  :global(.mantine-Switch-root) {
+    margin-bottom: 0;
+  }
+
+  @include mixins.respond-below(sm, true) {
+    justify-content: flex-start;
+  }
+}
+
+.rowBelow {
+  margin-top: 14px;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  min-height: 56px;
+  padding: 10px 20px;
+  border-top: 1px solid var(--hi-color-border);
+  border-radius: 0 0 var(--hi-radius-card) var(--hi-radius-card);
+  background: color-mix(in srgb, var(--hi-color-gray) 65%, var(--hi-color-white));
+
+  @include mixins.respond-below(sm, true) {
+    padding: 10px 16px;
+  }
+}
+
+.footerHint {
+  min-width: 0;
+  flex: 1 1 200px;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--hi-color-text-muted);
+}
+
+.footerActions {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}

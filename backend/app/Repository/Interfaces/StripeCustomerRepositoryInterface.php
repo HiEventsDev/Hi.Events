@@ -7,7 +7,4 @@ use HiEvents\DomainObjects\StripeCustomerDomainObject;
 /**
  * @extends RepositoryInterface<StripeCustomerDomainObject>
  */
-interface StripeCustomerRepositoryInterface extends RepositoryInterface
-{
-
-}
+interface StripeCustomerRepositoryInterface extends RepositoryInterface {}

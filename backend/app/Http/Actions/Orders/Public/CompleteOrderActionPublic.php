@@ -16,10 +16,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CompleteOrderActionPublic extends BaseAction
 {
-    public function __construct(private readonly CompleteOrderHandler $orderService)
-    {
-    }
+    public function __construct(private readonly CompleteOrderHandler $orderService) {}
 
+    /**
+     * Complete Order
+     *
+     * `order.questions` and `products.*.questions` are validated against the questions configured
+     * for the event. The `order.address` fields become required when the event's settings require
+     * a billing address.
+     */
     public function __invoke(CompleteOrderRequest $request, int $eventId, string $orderShortId): JsonResponse
     {
         try {

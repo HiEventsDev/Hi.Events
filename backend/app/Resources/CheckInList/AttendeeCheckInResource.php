@@ -19,15 +19,16 @@ class AttendeeCheckInResource extends JsonResource
             'check_in_list_id' => $this->getCheckInListId(),
             'product_id' => $this->getProductId(),
             'event_id' => $this->getEventId(),
+            'event_occurrence_id' => $this->getEventOccurrenceId(),
             'short_id' => $this->getShortId(),
             'created_at' => $this->getCreatedAt(),
             'check_in_list' => $this->when(
-                !is_null($this->getCheckInList()),
-                fn() => (new CheckInListResource($this->getCheckInList()))->toArray($request)
+                ! is_null($this->getCheckInList()),
+                fn () => (new CheckInListResource($this->getCheckInList()))->toArray($request)
             ),
             'attendee' => $this->when(
-                !is_null($this->getAttendee()),
-                fn() => (new AttendeeResource($this->getAttendee()))->toArray($request)
+                ! is_null($this->getAttendee()),
+                fn () => (new AttendeeResource($this->getAttendee()))->toArray($request)
             ),
         ];
     }

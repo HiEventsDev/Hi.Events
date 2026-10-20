@@ -1,5 +1,6 @@
 import {ActionIcon} from '@mantine/core';
 import {IconCaretDownFilled, IconCaretUpFilled} from '@tabler/icons-react';
+import {useAccess} from "../../../hooks/useAccess.ts";
 
 interface SortArrowsProps {
     upArrowEnabled: boolean;
@@ -16,6 +17,12 @@ export const SortArrows = ({
                                onSortDown,
                                flexDirection = 'row'
                            }: SortArrowsProps) => {
+    const {isReadOnly} = useAccess();
+
+    if (isReadOnly) {
+        return null;
+    }
+
     return (
         <div style={{
             display: 'flex',

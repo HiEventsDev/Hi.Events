@@ -19,7 +19,7 @@ class QuestionAnswerFormatter
             ];
 
             return implode(', ', array_filter($addressLines, static function ($line) {
-                return !empty($line);
+                return ! empty($line);
             }));
         }
 

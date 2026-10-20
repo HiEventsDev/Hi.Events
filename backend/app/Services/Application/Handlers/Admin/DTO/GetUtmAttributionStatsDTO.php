@@ -12,7 +12,5 @@ final class GetUtmAttributionStatsDTO extends BaseDataObject
         public readonly ?string $date_to = null,
         public readonly int $per_page = 20,
         public readonly int $page = 1,
-    )
-    {
-    }
+    ) {}
 }

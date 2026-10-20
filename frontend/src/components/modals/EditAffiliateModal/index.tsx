@@ -1,6 +1,6 @@
-import {Modal} from "../../common/Modal";
+import {Modal, ModalFooter} from "../../common/Modal";
 import {t} from "@lingui/macro";
-import {Button, Group} from "@mantine/core";
+import {Button} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {useParams} from "react-router";
@@ -78,8 +78,8 @@ export const EditAffiliateModal = ({affiliateId, onClose}: EditAffiliateModalPro
             <Modal
                 opened={true}
                 onClose={onClose}
-                title={t`Edit Affiliate`}
-                size="md"
+                heading={t`Edit Affiliate`}
+                size="lg"
             >
                 <LoadingMask />
             </Modal>
@@ -91,7 +91,7 @@ export const EditAffiliateModal = ({affiliateId, onClose}: EditAffiliateModalPro
             opened={true}
             onClose={onClose}
             heading={t`Edit Affiliate`}
-            size="md"
+            size="lg"
         >
             <form onSubmit={handleSubmit}>
                 <AffiliateForm
@@ -100,13 +100,15 @@ export const EditAffiliateModal = ({affiliateId, onClose}: EditAffiliateModalPro
                     existingCode={affiliate?.code}
                 />
 
-                <Button
-                    type="submit"
-                    loading={updateMutation.isPending}
-                    fullWidth
-                >
-                    {t`Update Affiliate`}
-                </Button>
+                <ModalFooter>
+                    <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                    <Button
+                        type="submit"
+                        loading={updateMutation.isPending}
+                    >
+                        {t`Save Changes`}
+                    </Button>
+                </ModalFooter>
             </form>
         </Modal>
     );

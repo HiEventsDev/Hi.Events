@@ -9,16 +9,18 @@ use Illuminate\Support\Collection;
 class AvailableProductQuantitiesDTO extends BaseDTO
 {
     public function __construct(
-        public int         $product_id,
-        public int         $price_id,
-        public string      $product_title,
-        public ?string     $price_label,
-        public int         $quantity_available,
-        public int         $quantity_reserved,
-        public ?int        $initial_quantity_available,
+        public int $product_id,
+        public int $price_id,
+        public string $product_title,
+        public ?string $price_label,
+        public int $quantity_available,
+        public int $quantity_reserved,
+        public ?int $initial_quantity_available,
+        public string $product_type,
+        public string $quantity_applies_to = 'EVENT',
         /** @var Collection<CapacityAssignmentDomainObject> */
         public ?Collection $capacities = null,
-    )
-    {
-    }
+        public ?int $seats_available = null,
+        public ?int $quantity_available_before_seats = null,
+    ) {}
 }

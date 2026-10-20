@@ -1,7 +1,7 @@
 import {t} from "@lingui/macro";
-import {EventDuplicatePayload, GenericModalProps, IdParam} from "../../../types.ts";
+import {EventDuplicatePayload, EventType, GenericModalProps, IdParam} from "../../../types.ts";
 import {Button, Switch, TextInput, Group, ActionIcon, Tooltip, Grid} from "@mantine/core";
-import {Modal} from "../../common/Modal";
+import {Modal, ModalFooter} from "../../common/Modal";
 import {useForm} from "@mantine/form";
 import {useDuplicateEvent} from "../../../mutations/useDuplicateEvent.ts";
 import {Editor} from "../../common/Editor";
@@ -14,25 +14,13 @@ import {showSuccess} from "../../../utilites/notifications.tsx";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
 import {Card} from "../../common/Card";
 import {IconCheckbox, IconSquare} from "@tabler/icons-react";
+import {DateTimeField} from "../../common/DateTimeField";
 
 interface DuplicateEventModalProps extends GenericModalProps {
     eventId: IdParam;
 }
 
 export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps) => {
-    const duplicateOptions = [
-        { key: 'duplicate_products', label: t`Products` },
-        { key: 'duplicate_questions', label: t`Questions` },
-        { key: 'duplicate_settings', label: t`Settings` },
-        { key: 'duplicate_promo_codes', label: t`Promo Codes` },
-        { key: 'duplicate_capacity_assignments', label: t`Capacity Assignments` },
-        { key: 'duplicate_check_in_lists', label: t`Check-In Lists` },
-        { key: 'duplicate_event_cover_image', label: t`Event Cover Image` },
-        { key: 'duplicate_ticket_logo', label: t`Ticket Logo` },
-        { key: 'duplicate_webhooks', label: t`Webhooks` },
-        { key: 'duplicate_affiliates', label: t`Affiliates` },
-    ];
-
     const form = useForm({
         initialValues: {
             title: '',
@@ -49,12 +37,30 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
             duplicate_ticket_logo: true,
             duplicate_webhooks: true,
             duplicate_affiliates: true,
+            duplicate_lineup: true,
+            duplicate_occurrences: true,
         }
     });
     const mutation = useDuplicateEvent();
     const eventQuery = useGetEvent(eventId);
+    const isRecurring = eventQuery?.data?.type === EventType.RECURRING;
     const nav = useNavigate();
     const errorHandler = useFormErrorResponseHandler();
+
+    const duplicateOptions: { key: keyof typeof form.values; label: string; description?: string }[] = [
+        { key: 'duplicate_products', label: t`Products` },
+        { key: 'duplicate_questions', label: t`Questions` },
+        { key: 'duplicate_settings', label: t`Settings` },
+        { key: 'duplicate_promo_codes', label: t`Promo Codes` },
+        { key: 'duplicate_capacity_assignments', label: t`Capacity Assignments` },
+        { key: 'duplicate_check_in_lists', label: t`Check-In Lists` },
+        { key: 'duplicate_event_cover_image', label: t`Event Cover Image` },
+        { key: 'duplicate_ticket_logo', label: t`Ticket Logo` },
+        { key: 'duplicate_webhooks', label: t`Webhooks` },
+        { key: 'duplicate_affiliates', label: t`Affiliates` },
+        { key: 'duplicate_lineup', label: t`Lineup & Schedule`, description: isRecurring ? undefined : t`Time slots move with the new start date` },
+        ...(isRecurring ? [{ key: 'duplicate_occurrences' as const, label: t`Occurrences (future only)`, description: t`Future dates will be copied with capacity reset to zero` }] : []),
+    ];
 
     const handleSelectAll = () => {
         duplicateOptions.forEach(option => {
@@ -73,12 +79,10 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
 
     useEffect(() => {
         if (eventQuery?.data) {
-            form.setValues({
-                title: eventQuery.data.title,
-                description: eventQuery.data.description,
-                start_date: utcToTz(eventQuery.data.start_date, eventQuery.data.timezone),
-                end_date: utcToTz(eventQuery.data.end_date, eventQuery.data.timezone),
-            });
+            form.setFieldValue('title', eventQuery.data.title);
+            form.setFieldValue('description', eventQuery.data.description);
+            form.setFieldValue('start_date', utcToTz(eventQuery.data.start_date, eventQuery.data.timezone));
+            form.setFieldValue('end_date', utcToTz(eventQuery.data.end_date, eventQuery.data.timezone));
         }
     }, [eventQuery.isFetched]);
 
@@ -118,17 +122,19 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
                         error={form.errors?.description as string}
                     />
 
-                    <InputGroup>
-                        <TextInput type={'datetime-local'}
-                                   {...form.getInputProps('start_date')}
-                                   label={t`Start Date`}
-                                   required
-                        />
-                        <TextInput type={'datetime-local'}
-                                   {...form.getInputProps('end_date')}
-                                   label={t`End Date`}
-                        />
-                    </InputGroup>
+                    {!isRecurring && (
+                        <InputGroup>
+                            <DateTimeField
+                                       {...form.getInputProps('start_date')}
+                                       label={t`Start Date`}
+                                       required
+                            />
+                            <DateTimeField
+                                       {...form.getInputProps('end_date')}
+                                       label={t`End Date`}
+                            />
+                        </InputGroup>
+                    )}
 
                     <Group justify="space-between" align="center" mb="md">
                         <h3 style={{margin: 0}}>
@@ -166,6 +172,7 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
                                     <Switch
                                         {...form.getInputProps(option.key, {type: 'checkbox'})}
                                         label={option.label}
+                                        description={option.description}
                                         mb={index === duplicateOptions.length - 1 || index === duplicateOptions.length - 2 ? 0 : "xs"}
                                     />
                                 </Grid.Col>
@@ -173,9 +180,12 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
                         </Grid>
                     </Card>
                 </fieldset>
-                <Button type="submit" fullWidth disabled={mutation.isPending}>
-                    {mutation.isPending ? t`Working...` : t`Duplicate Event`}
-                </Button>
+                <ModalFooter>
+                    <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                    <Button type="submit" disabled={mutation.isPending}>
+                        {mutation.isPending ? t`Working...` : t`Duplicate Event`}
+                    </Button>
+                </ModalFooter>
             </form>
         </Modal>
     )

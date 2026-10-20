@@ -2,7 +2,7 @@
 
 namespace HiEvents\Exports;
 
-use HiEvents\Resources\PromoCode\PromoCodeResource;
+use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -16,12 +16,15 @@ class PromoCodesExport implements FromCollection, WithHeadings, WithMapping, Wit
     public function withData($data): PromoCodesExport
     {
         $this->data = $data;
+
         return $this;
     }
 
-    public function collection()
+    public function collection(): Collection
     {
-        return PromoCodeResource::collection($this->data);
+        return $this->data instanceof Collection
+            ? $this->data
+            : collect(is_array($this->data) ? $this->data : $this->data->items());
     }
 
     public function headings(): array
@@ -31,6 +34,7 @@ class PromoCodesExport implements FromCollection, WithHeadings, WithMapping, Wit
             'Code',
             'Discount',
             'Discount Type',
+            'Discount Applies To',
             'Max Allowed Uses',
             'Expiry Date',
             'Event ID',
@@ -46,6 +50,7 @@ class PromoCodesExport implements FromCollection, WithHeadings, WithMapping, Wit
             $discountCode->getCode(),
             $discountCode->getDiscount(),
             $discountCode->getDiscountType(),
+            $discountCode->getDiscountAppliesTo(),
             $discountCode->getMaxAllowedUsages(),
             $discountCode->getExpiryDate(),
             $discountCode->getEventId(),

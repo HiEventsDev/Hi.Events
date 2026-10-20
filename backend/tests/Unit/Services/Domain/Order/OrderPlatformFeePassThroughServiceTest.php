@@ -3,8 +3,8 @@
 namespace Tests\Unit\Services\Domain\Order;
 
 use Brick\Money\Currency;
-use HiEvents\DomainObjects\AccountConfigurationDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\DomainObjects\OrganizerConfigurationDomainObject;
 use HiEvents\Services\Domain\Order\OrderPlatformFeePassThroughService;
 use HiEvents\Services\Infrastructure\CurrencyConversion\CurrencyConversionClientInterface;
 use HiEvents\Values\MoneyValue;
@@ -14,7 +14,9 @@ use PHPUnit\Framework\TestCase;
 class OrderPlatformFeePassThroughServiceTest extends TestCase
 {
     private Repository $config;
+
     private CurrencyConversionClientInterface $currencyConversionClient;
+
     private OrderPlatformFeePassThroughService $service;
 
     protected function setUp(): void
@@ -23,7 +25,7 @@ class OrderPlatformFeePassThroughServiceTest extends TestCase
         $this->currencyConversionClient = $this->createMock(CurrencyConversionClientInterface::class);
 
         $this->currencyConversionClient->method('convert')->willReturnCallback(
-            fn(Currency $from, Currency $to, float $amount) => MoneyValue::fromFloat($amount, $to->getCurrencyCode())
+            fn (Currency $from, Currency $to, float $amount) => MoneyValue::fromFloat($amount, $to->getCurrencyCode())
         );
 
         $this->service = new OrderPlatformFeePassThroughService(
@@ -32,12 +34,13 @@ class OrderPlatformFeePassThroughServiceTest extends TestCase
         );
     }
 
-    private function createAccountConfig(float $fixedFee = 0.30, float $percentageFee = 2.9, string $currency = 'USD'): AccountConfigurationDomainObject
+    private function createAccountConfig(float $fixedFee = 0.30, float $percentageFee = 2.9, string $currency = 'USD'): OrganizerConfigurationDomainObject
     {
-        $mock = $this->createMock(AccountConfigurationDomainObject::class);
+        $mock = $this->createMock(OrganizerConfigurationDomainObject::class);
         $mock->method('getFixedApplicationFee')->willReturn($fixedFee);
         $mock->method('getPercentageApplicationFee')->willReturn($percentageFee);
         $mock->method('getApplicationFeeCurrency')->willReturn($currency);
+
         return $mock;
     }
 
@@ -45,10 +48,11 @@ class OrderPlatformFeePassThroughServiceTest extends TestCase
     {
         $settings = $this->createMock(EventSettingDomainObject::class);
         $settings->method('getPassPlatformFeeToBuyer')->willReturn($passPlatformFeeToBuyer);
+
         return $settings;
     }
 
-    public function testIsEnabledReturnsFalseWhenSaasModeDisabled(): void
+    public function test_is_enabled_returns_false_when_saas_mode_disabled(): void
     {
         $this->config->method('get')->with('app.saas_mode_enabled')->willReturn(false);
 
@@ -57,7 +61,7 @@ class OrderPlatformFeePassThroughServiceTest extends TestCase
         $this->assertFalse($this->service->isEnabled($eventSettings));
     }
 
-    public function testIsEnabledReturnsFalseWhenEventSettingDisabled(): void
+    public function test_is_enabled_returns_false_when_event_setting_disabled(): void
     {
         $this->config->method('get')->with('app.saas_mode_enabled')->willReturn(true);
 
@@ -66,7 +70,7 @@ class OrderPlatformFeePassThroughServiceTest extends TestCase
         $this->assertFalse($this->service->isEnabled($eventSettings));
     }
 
-    public function testIsEnabledReturnsTrueWhenBothEnabled(): void
+    public function test_is_enabled_returns_true_when_both_enabled(): void
     {
         $this->config->method('get')->with('app.saas_mode_enabled')->willReturn(true);
 
@@ -75,7 +79,7 @@ class OrderPlatformFeePassThroughServiceTest extends TestCase
         $this->assertTrue($this->service->isEnabled($eventSettings));
     }
 
-    public function testCalculatePlatformFeeReturnsZeroWhenDisabled(): void
+    public function test_calculate_platform_fee_returns_zero_when_disabled(): void
     {
         $this->config->method('get')->with('app.saas_mode_enabled')->willReturn(true);
 
@@ -87,7 +91,7 @@ class OrderPlatformFeePassThroughServiceTest extends TestCase
         $this->assertEquals(0.0, $result);
     }
 
-    public function testCalculatePlatformFeeReturnsZeroForZeroTotal(): void
+    public function test_calculate_platform_fee_returns_zero_for_zero_total(): void
     {
         $this->config->method('get')->willReturn(true);
 
@@ -99,7 +103,7 @@ class OrderPlatformFeePassThroughServiceTest extends TestCase
         $this->assertEquals(0.0, $result);
     }
 
-    public function testCalculatePlatformFeeBasicCalculation(): void
+    public function test_calculate_platform_fee_basic_calculation(): void
     {
         $this->config->method('get')->willReturn(true);
 
@@ -115,7 +119,7 @@ class OrderPlatformFeePassThroughServiceTest extends TestCase
         $this->assertEqualsWithDelta(3.30, $result, 0.01);
     }
 
-    public function testCalculatePlatformFeeWithMultipleQuantity(): void
+    public function test_calculate_platform_fee_with_multiple_quantity(): void
     {
         $this->config->method('get')->willReturn(true);
 
@@ -132,7 +136,7 @@ class OrderPlatformFeePassThroughServiceTest extends TestCase
         $this->assertEqualsWithDelta(6.59, $result, 0.01);
     }
 
-    public function testPlatformFeeExactlyCoversStripeApplicationFee(): void
+    public function test_platform_fee_exactly_covers_stripe_application_fee(): void
     {
         $this->config->method('get')->willReturn(true);
 
@@ -166,7 +170,7 @@ class OrderPlatformFeePassThroughServiceTest extends TestCase
         );
     }
 
-    public function testPlatformFeeWithDifferentTotals(): void
+    public function test_platform_fee_with_different_totals(): void
     {
         $this->config->method('get')->willReturn(true);
 
@@ -204,7 +208,7 @@ class OrderPlatformFeePassThroughServiceTest extends TestCase
         }
     }
 
-    public function testCurrencyConversionCalledForNonUsdCurrency(): void
+    public function test_currency_conversion_called_for_non_usd_currency(): void
     {
         $this->config->method('get')->willReturn(true);
 
@@ -213,8 +217,8 @@ class OrderPlatformFeePassThroughServiceTest extends TestCase
         $currencyConversionClient->expects($this->once())
             ->method('convert')
             ->with(
-                $this->callback(fn(Currency $c) => $c->getCurrencyCode() === 'USD'),
-                $this->callback(fn(Currency $c) => $c->getCurrencyCode() === 'EUR'),
+                $this->callback(fn (Currency $c) => $c->getCurrencyCode() === 'USD'),
+                $this->callback(fn (Currency $c) => $c->getCurrencyCode() === 'EUR'),
                 0.30
             )
             ->willReturn(MoneyValue::fromFloat(0.27, 'EUR'));
@@ -232,7 +236,7 @@ class OrderPlatformFeePassThroughServiceTest extends TestCase
         $this->assertGreaterThan(0, $result);
     }
 
-    public function testNoCurrencyConversionForUsd(): void
+    public function test_no_currency_conversion_for_usd(): void
     {
         $this->config->method('get')->willReturn(true);
 
@@ -252,7 +256,7 @@ class OrderPlatformFeePassThroughServiceTest extends TestCase
         $this->assertGreaterThan(0, $result);
     }
 
-    public function testNoConversionWhenOrderCurrencyMatchesFeeCurrency(): void
+    public function test_no_conversion_when_order_currency_matches_fee_currency(): void
     {
         $this->config->method('get')->willReturn(true);
 
@@ -273,7 +277,7 @@ class OrderPlatformFeePassThroughServiceTest extends TestCase
         $this->assertGreaterThan(0, $result);
     }
 
-    public function testCurrencyConversionFromEurToUsd(): void
+    public function test_currency_conversion_from_eur_to_usd(): void
     {
         $this->config->method('get')->willReturn(true);
 
@@ -282,8 +286,8 @@ class OrderPlatformFeePassThroughServiceTest extends TestCase
         $currencyConversionClient->expects($this->once())
             ->method('convert')
             ->with(
-                $this->callback(fn(Currency $c) => $c->getCurrencyCode() === 'EUR'),
-                $this->callback(fn(Currency $c) => $c->getCurrencyCode() === 'USD'),
+                $this->callback(fn (Currency $c) => $c->getCurrencyCode() === 'EUR'),
+                $this->callback(fn (Currency $c) => $c->getCurrencyCode() === 'USD'),
                 0.30
             )
             ->willReturn(MoneyValue::fromFloat(0.33, 'USD'));
@@ -302,7 +306,7 @@ class OrderPlatformFeePassThroughServiceTest extends TestCase
         $this->assertGreaterThan(0, $result);
     }
 
-    public function testZeroFixedFeeOnlyPercentage(): void
+    public function test_zero_fixed_fee_only_percentage(): void
     {
         $this->config->method('get')->willReturn(true);
 
@@ -319,7 +323,7 @@ class OrderPlatformFeePassThroughServiceTest extends TestCase
         $this->assertEqualsWithDelta($platformFee, $stripeAppFee, 0.01);
     }
 
-    public function testZeroPercentageOnlyFixedFee(): void
+    public function test_zero_percentage_only_fixed_fee(): void
     {
         $this->config->method('get')->willReturn(true);
 
@@ -332,7 +336,7 @@ class OrderPlatformFeePassThroughServiceTest extends TestCase
         $this->assertEquals(0.50, $platformFee);
     }
 
-    public function testBothFeesZero(): void
+    public function test_both_fees_zero(): void
     {
         $this->config->method('get')->willReturn(true);
 

@@ -14,9 +14,7 @@ class ResendAttendeeTicketAction extends BaseAction
 {
     public function __construct(
         private readonly ResendAttendeeTicketHandler $handler
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(int $eventId, int $attendeeId): JsonResponse|Response
     {

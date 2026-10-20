@@ -1,9 +1,9 @@
-import {GenericModalProps, PromoCode, PromoCodeDiscountType} from "../../../types.ts";
+import {GenericModalProps, PromoCode, PromoCodeDiscountAppliesTo, PromoCodeDiscountType} from "../../../types.ts";
 import {hasLength, useForm} from "@mantine/form";
 import {useParams} from "react-router";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
 import {PromoCodeForm} from "../../forms/PromoCodeForm";
-import {Modal} from "../../common/Modal";
+import {Modal, ModalFooter} from "../../common/Modal";
 import {Button} from "../../common/Button";
 import {useCreatePromoCode} from "../../../mutations/useCreatePromoCode.ts";
 import {showSuccess} from "../../../utilites/notifications.tsx";
@@ -20,6 +20,7 @@ export const CreatePromoCodeModal = ({onClose}: GenericModalProps) => {
             applicable_product_ids: [],
             expiry_date: undefined,
             discount_type: PromoCodeDiscountType.None,
+            discount_applies_to: PromoCodeDiscountAppliesTo.Order,
             max_allowed_usages: undefined,
         },
         validate: {
@@ -52,9 +53,12 @@ export const CreatePromoCodeModal = ({onClose}: GenericModalProps) => {
         >
             <form onSubmit={form.onSubmit(handleSubmit)}>
                 <PromoCodeForm form={form}/>
-                <Button type="submit" fullWidth mt="xl" disabled={mutation.isPending}>
-                    {mutation.isPending ? t`Working...` : t`Create Promo Code`}
-                </Button>
+                <ModalFooter>
+                    <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                    <Button type="submit" disabled={mutation.isPending} data-testid="promo-code-submit-button">
+                        {mutation.isPending ? t`Working...` : t`Create Promo Code`}
+                    </Button>
+                </ModalFooter>
             </form>
         </Modal>
     )

@@ -1,0 +1,45 @@
+<?php
+
+declare(strict_types=1);
+
+namespace HiEvents\Http\Actions\Events;
+
+use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\Status\EventStatus;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
+use Illuminate\Support\Facades\Log;
+
+abstract class BasePublicEventAction extends BaseAction
+{
+    protected function canUserViewEventWithId(int $eventId): bool
+    {
+        $event = app(EventRepositoryInterface::class)->findFirst($eventId);
+
+        return $event !== null && $this->canUserViewEvent($event);
+    }
+
+    protected function canUserViewEvent(EventDomainObject $event): bool
+    {
+        if ($event->getStatus() === EventStatus::LIVE->name) {
+            return true;
+        }
+
+        if (app(AccountUserAccessService::class)->currentMemberCanAccessEvent($event)) {
+            return true;
+        }
+
+        if ($this->isUserAuthenticated() && $this->getAuthenticatedUser()->getCurrentAccountUser()?->getRole() === Role::SUPERADMIN->name) {
+            Log::debug(__('Superadmin user is viewing non-live event with ID :eventId', [
+                'eventId' => $event->getId(),
+                'accountId' => $this->getAuthenticatedAccountId(),
+            ]));
+
+            return true;
+        }
+
+        return false;
+    }
+}

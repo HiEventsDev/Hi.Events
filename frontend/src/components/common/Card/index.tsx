@@ -1,7 +1,7 @@
 import classes from './Card.module.scss';
 import React, {CSSProperties, LegacyRef} from "react";
 
-export type CardVariant = 'default' | 'lightGray' | 'noStyle' | 'lightGradient';
+export type CardVariant = 'default' | 'lightGray' | 'lightGradient';
 
 interface CardInterface {
     children: React.ReactNode;

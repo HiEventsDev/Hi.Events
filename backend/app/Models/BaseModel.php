@@ -29,7 +29,7 @@ abstract class BaseModel extends Model
         return [];
     }
 
-    protected function getFillableFields() : array
+    protected function getFillableFields(): array
     {
         return [];
     }

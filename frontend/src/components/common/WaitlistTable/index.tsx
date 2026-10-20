@@ -1,11 +1,12 @@
 import {t} from "@lingui/macro";
+import {WriteAccess} from "../WriteAccess";
 import {Button, Group, Menu, Text} from "@mantine/core";
 import {IconDotsVertical, IconEye, IconSend, IconTrash} from "@tabler/icons-react";
 import {useMemo, useState} from "react";
 import {CellContext} from "@tanstack/react-table";
 import {useDisclosure} from "@mantine/hooks";
-import {IdParam, WaitlistEntry, WaitlistEntryStatus} from "../../../types.ts";
-import {relativeDate} from "../../../utilites/dates.ts";
+import {Event, EventType, IdParam, WaitlistEntry, WaitlistEntryStatus} from "../../../types.ts";
+import {prettyDate, relativeDate} from "../../../utilites/dates.ts";
 import {NoResultsSplash} from "../NoResultsSplash";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 import {useRemoveWaitlistEntry} from "../../../mutations/useRemoveWaitlistEntry.ts";
@@ -18,6 +19,7 @@ import classes from './WaitlistTable.module.scss';
 interface WaitlistTableProps {
     eventId: IdParam;
     entries: WaitlistEntry[];
+    event?: Event;
 }
 
 const statusLabelMap: Record<string, () => string> = {
@@ -61,30 +63,34 @@ const ActionMenu = ({entry, onOffer, onRemove, onViewOrder}: {
                             {t`View Order`}
                         </Menu.Item>
                     )}
-                    {canOffer && (
-                        <Menu.Item
-                            leftSection={<IconSend size={14}/>}
-                            onClick={() => onOffer(entry.id)}
-                        >
-                            {isExpired ? t`Re-offer Spot` : t`Offer Spot`}
-                        </Menu.Item>
-                    )}
-                    {canCancel && (
-                        <Menu.Item
-                            color="red"
-                            leftSection={<IconTrash size={14}/>}
-                            onClick={() => onRemove(entry.id as number)}
-                        >
-                            {isOffered ? t`Revoke Offer` : t`Remove`}
-                        </Menu.Item>
-                    )}
+                    <WriteAccess>
+                        {canOffer && (
+                            <Menu.Item
+                                leftSection={<IconSend size={14}/>}
+                                onClick={() => onOffer(entry.id)}
+                            >
+                                {isExpired ? t`Re-offer Spot` : t`Offer Spot`}
+                            </Menu.Item>
+                        )}
+                        {canCancel && (
+                            <Menu.Item
+                                color="red"
+                                leftSection={<IconTrash size={14}/>}
+                                onClick={() => onRemove(entry.id as number)}
+                            >
+                                {isOffered ? t`Revoke Offer` : t`Remove`}
+                            </Menu.Item>
+                        )}
+                    </WriteAccess>
                 </Menu.Dropdown>
             </Menu>
         </Group>
     );
 };
 
-export const WaitlistTable = ({eventId, entries}: WaitlistTableProps) => {
+export const WaitlistTable = ({eventId, entries, event}: WaitlistTableProps) => {
+    const isRecurring = event?.type === EventType.RECURRING;
+    const timezone = event?.timezone || 'UTC';
     const removeMutation = useRemoveWaitlistEntry();
     const offerMutation = useOfferSpecificWaitlistEntry();
     const [isOrderModalOpen, orderModal] = useDisclosure(false);
@@ -176,6 +182,27 @@ export const WaitlistTable = ({eventId, entries}: WaitlistTableProps) => {
                     return label ? `${title} - ${label}` : title;
                 }
             },
+            ...(isRecurring ? [{
+                id: 'occurrence',
+                header: t`Date`,
+                enableHiding: true,
+                cell: (info: CellContext<WaitlistEntry, unknown>) => {
+                    const entry = info.row.original;
+                    const occurrence = entry.event_occurrence;
+                    if (!occurrence) {
+                        return <Text size="sm" c="dimmed">—</Text>;
+                    }
+                    const dateText = prettyDate(occurrence.start_date, timezone);
+                    return (
+                        <Text size="sm">
+                            {occurrence.label ? `${dateText} (${occurrence.label})` : dateText}
+                        </Text>
+                    );
+                },
+                meta: {
+                    headerStyle: {minWidth: 180},
+                },
+            } as TanStackTableColumn<WaitlistEntry>] : []),
             {
                 id: 'status',
                 header: t`Status`,
@@ -227,7 +254,7 @@ export const WaitlistTable = ({eventId, entries}: WaitlistTableProps) => {
                 },
             },
         ],
-        [eventId]
+        [eventId, isRecurring, timezone]
     );
 
     if (entries.length === 0) {

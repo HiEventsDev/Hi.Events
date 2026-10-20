@@ -2,22 +2,22 @@
 
 namespace HiEvents\Http\Actions\Organizers\Webhooks;
 
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\OrganizerDomainObject;
-use HiEvents\DomainObjects\Status\WebhookStatus;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\RequiresPermission;
 use HiEvents\Http\Request\Webhook\UpsertWebhookRequest;
 use HiEvents\Resources\Webhook\WebhookResourceWithSecret;
 use HiEvents\Services\Application\Handlers\Webhook\CreateWebhookHandler;
 use HiEvents\Services\Application\Handlers\Webhook\DTO\CreateWebhookDTO;
 use Illuminate\Http\JsonResponse;
 
+#[RequiresPermission(Permission::VIEW_FINANCIALS)]
 class CreateOrganizerWebhookAction extends BaseAction
 {
     public function __construct(
         private readonly CreateWebhookHandler $createWebhookHandler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(int $organizerId, UpsertWebhookRequest $request): JsonResponse
     {
@@ -31,7 +31,7 @@ class CreateOrganizerWebhookAction extends BaseAction
                 organizerId: $organizerId,
                 userId: $this->getAuthenticatedUser()->getId(),
                 accountId: $this->getAuthenticatedAccountId(),
-                status: WebhookStatus::fromName($request->validated('status')),
+                status: $request->getStatus(),
             )
         );
 

@@ -1,0 +1,105 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.heroCard {
+    padding: 32px;
+
+    @media (max-width: 600px) {
+        padding: 20px;
+    }
+}
+
+.heroBullets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 24px;
+    margin: 16px 0 24px;
+    color: var(--mantine-color-dimmed);
+    font-size: 14px;
+}
+
+.bullet {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.statusGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.statusCell {
+    padding: 12px;
+    border-radius: 8px;
+    background: var(--mantine-color-gray-0);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.statusCellLabel {
+    font-size: 12px;
+    color: var(--mantine-color-dimmed);
+}
+
+.statusCellValue {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.reuseInlineRow {
+    @media (max-width: 600px) {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+.connectedHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+
+    @media (max-width: 600px) {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+.connectedIdentity {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+
+    > div {
+        min-width: 0;
+    }
+}
+
+.connectedMeta {
+    word-break: break-word;
+}
+
+.accountIdRow {
+    min-width: 0;
+}
+
+.accountIdValue {
+    font-family: var(--mantine-font-family-monospace);
+    word-break: break-all;
+}
+
+.manageButton {
+    flex-shrink: 0;
+
+    @media (max-width: 600px) {
+        align-self: flex-start;
+    }
+}

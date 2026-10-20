@@ -7,7 +7,7 @@ import {SupportedLocales} from "../locales.ts";
 export interface EditAttendeeRequest {
     first_name: string;
     last_name: string;
-    email: string;
+    email: string | null;
     notes?: string;
     product_id?: IdParam;
     product_price_id?: IdParam;
@@ -19,6 +19,9 @@ export interface CreateAttendeeRequest extends EditAttendeeRequest {
     send_confirmation_email: boolean,
     taxes_and_fees: TaxAndFee[],
     locale: SupportedLocales,
+    event_occurrence_id?: number | null,
+    override_capacity?: boolean,
+    seat_uid?: string,
 }
 
 export const attendeesClient = {
@@ -56,8 +59,9 @@ export const attendeesClient = {
         });
         return response.data;
     },
-    export: async (eventId: IdParam): Promise<Blob> => {
-        const response = await api.post(`events/${eventId}/attendees/export`, {}, {
+    export: async (eventId: IdParam, eventOccurrenceId?: number | null): Promise<Blob> => {
+        const body = eventOccurrenceId ? {event_occurrence_id: eventOccurrenceId} : {};
+        const response = await api.post(`events/${eventId}/attendees/export`, body, {
             responseType: 'blob',
         });
 

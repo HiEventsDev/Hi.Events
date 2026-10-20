@@ -4,7 +4,4 @@ namespace HiEvents\Exceptions;
 
 use Exception;
 
-class AccountNotVerifiedException extends Exception
-{
-
-}
+class AccountNotVerifiedException extends Exception {}
