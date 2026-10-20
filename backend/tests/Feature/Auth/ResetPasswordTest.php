@@ -145,6 +145,6 @@ class ResetPasswordTest extends TestCase
             'password_confirmation' => $password,
         ]);
 
-        $response2->assertJsonValidationErrors('current_password');
+        $response2->assertJsonValidationErrors('password');
     }
 }

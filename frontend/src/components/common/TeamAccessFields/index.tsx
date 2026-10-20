@@ -2,7 +2,7 @@ import {MultiSelect, Radio, Switch} from "@mantine/core";
 import {UseFormReturnType} from "@mantine/form";
 import {useDebouncedValue} from "@mantine/hooks";
 import {t} from "@lingui/macro";
-import {ReactNode, useEffect, useRef, useState} from "react";
+import {ReactNode, useEffect, useId, useRef, useState} from "react";
 import {IconEye, IconLock, IconSearch, IconUser, IconUserShield, IconWorld} from "@tabler/icons-react";
 import {useGetOrganizers} from "../../../queries/useGetOrganizers.ts";
 import {useGetEvents} from "../../../queries/useGetEvents.ts";
@@ -68,7 +68,7 @@ export const toTeamAccessPayload = (values: TeamAccessForm): TeamAccessRequest =
 
 export const TeamAccessFields = ({form, disabled}: TeamAccessFieldsProps) => {
     const values = form.values as TeamAccessForm;
-    const isAdmin = values.role === 'ADMIN';
+    const isAdmin = values.role === 'ADMIN' || values.role === 'SUPERADMIN';
     const isRestricted = !isAdmin && values.access_scope === 'RESTRICTED';
     const organizersQuery = useGetOrganizers();
     const [search, setSearch] = useState('');
@@ -173,7 +173,13 @@ export const TeamAccessFields = ({form, disabled}: TeamAccessFieldsProps) => {
     return (
         <>
             <TeamFormSection title={t`Role`}>
-                <Radio.Group value={values.role} onChange={(value) => form.setFieldValue('role', value)}>
+                <Radio.Group
+                    label={t`Role`}
+                    labelProps={{className: classes.hiddenLabel}}
+                    value={values.role === 'SUPERADMIN' ? 'ADMIN' : values.role}
+                    onChange={(value) => form.setFieldValue('role', value)}
+                    error={form.errors.role}
+                >
                     <div className={classes.roleGrid}>
                         {roleOptions.map(option => (
                             <Radio.Card
@@ -197,7 +203,12 @@ export const TeamAccessFields = ({form, disabled}: TeamAccessFieldsProps) => {
 
             {!isAdmin && (
                 <TeamFormSection title={t`Access`}>
-                    <Radio.Group value={values.access_scope} onChange={(value) => form.setFieldValue('access_scope', value)}>
+                    <Radio.Group
+                        label={t`Access`}
+                        labelProps={{className: classes.hiddenLabel}}
+                        value={values.access_scope}
+                        onChange={(value) => form.setFieldValue('access_scope', value)}
+                    >
                         <div className={classes.scopeGrid}>
                             {scopeChoices.map(option => (
                                 <Radio.Card
@@ -251,6 +262,7 @@ export const TeamAccessFields = ({form, disabled}: TeamAccessFieldsProps) => {
                             <PermissionRow
                                 label={t`Can issue refunds`}
                                 description={t`Refund, cancel with a refund, and mark orders as paid.`}
+                                hint={canSeeFinancials ? undefined : t`Turn on Can see financials to allow refunds.`}
                                 checked={canSeeFinancials && hasPermission(values, 'ISSUE_REFUNDS')}
                                 disabled={disabled || !canSeeFinancials}
                                 onChange={(checked) => setPermission('ISSUE_REFUNDS', checked)}
@@ -266,25 +278,34 @@ export const TeamAccessFields = ({form, disabled}: TeamAccessFieldsProps) => {
 interface PermissionRowProps {
     label: string;
     description: string;
+    hint?: string;
     checked: boolean;
     disabled?: boolean;
     onChange: (checked: boolean) => void;
 }
 
-const PermissionRow = ({label, description, checked, disabled, onChange}: PermissionRowProps) => (
-    <label className={`${classes.permission} ${disabled ? classes.permissionDisabled : ''}`}>
-        <span className={classes.permissionText}>
-            <span className={classes.choiceLabel}>{label}</span>
-            <span className={classes.choiceDescription}>{description}</span>
-        </span>
-        <Switch
-            aria-label={label}
-            checked={checked}
-            disabled={disabled}
-            onChange={(event) => onChange(event.currentTarget.checked)}
-        />
-    </label>
-);
+const PermissionRow = ({label, description, hint, checked, disabled, onChange}: PermissionRowProps) => {
+    const descriptionId = useId();
+
+    return (
+        <label className={`${classes.permission} ${disabled ? classes.permissionDisabled : ''}`}>
+            <span className={classes.permissionText}>
+                <span className={classes.choiceLabel}>{label}</span>
+                <span className={classes.choiceDescription} id={descriptionId}>
+                    {description}
+                    {hint && <span className={classes.permissionHint}>{hint}</span>}
+                </span>
+            </span>
+            <Switch
+                aria-label={label}
+                aria-describedby={descriptionId}
+                checked={checked}
+                disabled={disabled}
+                onChange={(event) => onChange(event.currentTarget.checked)}
+            />
+        </label>
+    );
+};
 
 export const TeamFormSection = ({title, children}: { title: string, children: ReactNode }) => (
     <section className={classes.section}>

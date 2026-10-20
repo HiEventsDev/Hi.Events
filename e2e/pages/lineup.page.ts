@@ -36,7 +36,7 @@ export class LineupPage {
   async fillProfile(details: { tagline: string; link: string }): Promise<void> {
     const drawer = this.drawer();
     await drawer.getByLabel(/^Tagline/).fill(details.tagline);
-    await drawer.getByLabel('Link 1').fill(details.link);
+    await drawer.getByLabel('Link 1', { exact: true }).fill(details.link);
   }
 
   async uploadPhoto(filePath: string): Promise<void> {
@@ -67,7 +67,7 @@ export class LineupPage {
     const dialog = this.page.getByRole('dialog');
     await this.page.getByTestId('lineup-slot-people').click();
     await this.page.getByRole('option', { name: details.person }).click();
-    await pickDate(this.page, dialog.getByLabel('Date'), details.date);
+    await pickDate(this.page, dialog.getByRole('button', { name: /^Date/ }), details.date);
     await dialog.getByLabel('Starts').fill(details.starts);
     await dialog.getByLabel('Ends').fill(details.ends);
     await this.page.getByTestId('lineup-slot-save-button').click();

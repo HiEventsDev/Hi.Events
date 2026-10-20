@@ -8,6 +8,7 @@ $ease: cubic-bezier(0.4, 0, 0.2, 1);
   font-size: 0.95rem;
   line-height: 1.7;
   color: var(--event-secondary-color);
+  overflow-wrap: anywhere;
 
   p {
     margin: 0 0 0.9em;
@@ -27,7 +28,7 @@ $ease: cubic-bezier(0.4, 0, 0.2, 1);
 .faq {
   border-bottom: 1px solid var(--event-border-color);
 
-  summary {
+  summary, .faqQuestion {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -36,6 +37,10 @@ $ease: cubic-bezier(0.4, 0, 0.2, 1);
     font-weight: 600;
     font-size: 0.98rem;
     color: var(--event-primary-text-color);
+    overflow-wrap: anywhere;
+  }
+
+  summary {
     cursor: pointer;
     list-style: none;
 
@@ -60,6 +65,7 @@ $ease: cubic-bezier(0.4, 0, 0.2, 1);
   font-size: 0.92rem;
   line-height: 1.65;
   color: var(--event-secondary-color);
+  overflow-wrap: anywhere;
 
   p {
     margin: 0 0 0.6em;
@@ -158,6 +164,10 @@ $ease: cubic-bezier(0.4, 0, 0.2, 1);
     &[data-count="1"] {
       grid-template-columns: 1fr;
       grid-auto-rows: 240px;
+    }
+
+    &[data-count="2"] {
+      grid-auto-rows: 130px;
     }
 
     &[data-count="3"] {

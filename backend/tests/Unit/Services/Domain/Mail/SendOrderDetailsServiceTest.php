@@ -9,6 +9,7 @@ use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Mail\Order\OrderSummary;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
@@ -65,7 +66,7 @@ class SendOrderDetailsServiceTest extends TestCase
         $teamRecipients->shouldReceive('recipientsFor')
             ->once()
             ->with(m::type(EventDomainObject::class), 'organizer@example.com')
-            ->andReturn(['team@example.com']);
+            ->andReturn([$this->teamMember('team@example.com', 'en')]);
 
         $this->service($order, notifyOrganizer: true, teamRecipients: $teamRecipients, recipients: $recipients)
             ->sendOrderSummaryAndTicketEmails($order);
@@ -80,13 +81,33 @@ class SendOrderDetailsServiceTest extends TestCase
         $recipients = [];
 
         $teamRecipients = m::mock(TeamOrderNotificationRecipientService::class);
-        $teamRecipients->shouldReceive('recipientsFor')->once()->with(m::any(), null)->andReturn(['team@example.com']);
+        $teamRecipients->shouldReceive('recipientsFor')->once()->with(m::any(), null)->andReturn([$this->teamMember('team@example.com', 'en')]);
 
         $this->service($order, notifyOrganizer: false, teamRecipients: $teamRecipients, recipients: $recipients)
             ->sendOrderSummaryAndTicketEmails($order);
 
         $this->assertNotContains('organizer@example.com', $recipients);
         $this->assertContains('team@example.com', $recipients);
+    }
+
+    public function test_team_notifications_are_sent_in_each_members_locale(): void
+    {
+        $order = $this->completedOrder()->setLocale('de');
+        $recipients = [];
+        $locales = [];
+
+        $teamRecipients = m::mock(TeamOrderNotificationRecipientService::class);
+        $teamRecipients->shouldReceive('recipientsFor')->once()->andReturn([
+            $this->teamMember('marie@example.com', 'fr'),
+            $this->teamMember('sam@example.com', 'en'),
+        ]);
+
+        $this->service($order, notifyOrganizer: false, teamRecipients: $teamRecipients, recipients: $recipients, locales: $locales)
+            ->sendOrderSummaryAndTicketEmails($order);
+
+        $this->assertSame('fr', $locales['marie@example.com']);
+        $this->assertSame('en', $locales['sam@example.com']);
+        $this->assertSame('de', $locales['buyer@example.com']);
     }
 
     public function test_manual_orders_notify_nobody_on_the_team(): void
@@ -119,6 +140,7 @@ class SendOrderDetailsServiceTest extends TestCase
         bool $notifyOrganizer = false,
         ?TeamOrderNotificationRecipientService $teamRecipients = null,
         array &$recipients = [],
+        array &$locales = [],
     ): SendOrderDetailsService {
         $organizer = (new OrganizerDomainObject)->setId(1)->setEmail('organizer@example.com');
         $event = (new EventDomainObject)
@@ -145,7 +167,11 @@ class SendOrderDetailsServiceTest extends TestCase
 
             return $mailer;
         });
-        $mailer->shouldReceive('locale')->andReturnSelf();
+        $mailer->shouldReceive('locale')->andReturnUsing(function ($locale) use (&$recipients, &$locales, &$mailer) {
+            $locales[end($recipients)] = $locale;
+
+            return $mailer;
+        });
         $mailer->shouldReceive('send');
 
         $mailBuilderService = m::mock(MailBuilderService::class);
@@ -159,6 +185,11 @@ class SendOrderDetailsServiceTest extends TestCase
             $mailBuilderService,
             $teamRecipients,
         );
+    }
+
+    private function teamMember(string $email, string $locale): UserDomainObject
+    {
+        return (new UserDomainObject)->setEmail($email)->setLocale($locale);
     }
 
     private function attendee(int $id, ?string $email, AttendeeStatus $status = AttendeeStatus::ACTIVE): AttendeeDomainObject

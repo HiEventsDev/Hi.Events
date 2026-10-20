@@ -10,7 +10,7 @@ paths:
 
 # Single sign-on (OIDC)
 
-- One generic OIDC client (`Services/Domain/Auth/Sso`) serves Google, Microsoft and the operator's `SSO_OIDC_*` provider; no Socialite. Providers exist only when their client id and secret are set.
+- One generic OIDC client (`Services/Domain/Auth/Sso`) serves Google, Microsoft and the operator's `SSO_OIDC_*` provider; no Socialite. Providers exist, and their buttons show, only when their client id and secret are set; there is no separate visibility switch.
 - Identities are keyed by (`issuer`, `subject`) in `user_identities`; Microsoft uses the `tid`-substituted issuer and `oid`, never `sub`, `email` or `upn`. Never write the provider email back to `users.email`.
 - An email links an existing user only when the provider's email is trusted (`SsoIdentityClaimsMapper`) AND the user was verified in SaaS mode or password sign-in is disabled. Superadmins, untrusted emails and ambiguous matches get `SSO_LINK_REQUIRES_LOGIN` before any membership check, so responses can't reveal account state; never create a signup ticket for an email that already has a user. The first link by email while password sign-in is off clears the old password, trusted devices and sessions.
 - Every step after `start` is bound to the browser: the state, the 2FA challenge, the account-choice ticket and the signup ticket all carry the binding hash (`SsoTicketService`, one cache entry per `SsoTicketType`). Keep that when adding a step.

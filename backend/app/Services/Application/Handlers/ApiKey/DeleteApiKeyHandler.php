@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Application\Handlers\ApiKey;
 
+use Carbon\CarbonImmutable;
 use HiEvents\DomainObjects\PersonalAccessTokenDomainObject;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Exceptions\ResourceNotFoundException;
@@ -43,7 +44,7 @@ class DeleteApiKeyHandler
 
         $owner = $apiKey->getUser();
 
-        if ($isOwnKey || $owner === null) {
+        if ($isOwnKey || $owner === null || $this->hadExpired($apiKey)) {
             return;
         }
 
@@ -54,5 +55,10 @@ class DeleteApiKeyHandler
                 keyName: $apiKey->getName(),
                 accountName: $this->accountRepository->findById($dto->accountId)->getName(),
             ));
+    }
+
+    private function hadExpired(PersonalAccessTokenDomainObject $apiKey): bool
+    {
+        return $apiKey->getExpiresAt() !== null && CarbonImmutable::parse($apiKey->getExpiresAt())->isPast();
     }
 }

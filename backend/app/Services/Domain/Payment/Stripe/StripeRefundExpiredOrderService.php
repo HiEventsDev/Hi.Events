@@ -58,9 +58,17 @@ readonly class StripeRefundExpiredOrderService
             ->findById($order->getEventId());
 
         $stripeClient = $this->stripeClientFactory->createForPlatform($stripePayment->getStripePlatformEnum());
-        $amount = MoneyValue::fromMinorUnit($paymentIntent->amount, strtoupper($paymentIntent->currency));
+        $currency = strtoupper($paymentIntent->currency);
+        $amount = MoneyValue::fromMinorUnit($paymentIntent->amount, $currency);
 
-        $refund = $this->refundService->refundPayment($amount, $stripePayment, $stripeClient);
+        $refund = $this->refundService->refundPayment(
+            amount: $amount,
+            alreadyRefunded: MoneyValue::zero($currency),
+            failedRefundCount: 0,
+            payment: $stripePayment,
+            stripeClient: $stripeClient,
+            notifyBuyer: false,
+        );
 
         $this->logger->info('Refunded payment for an order that could not be completed', [
             'order_id' => $order->getId(),

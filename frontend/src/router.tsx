@@ -1,4 +1,4 @@
-import { Navigate, RouteObject } from "react-router";
+import { Navigate, redirect, RouteObject } from "react-router";
 import ErrorPage from "./error-page.tsx";
 import { useEffect, useState } from "react";
 import { useGetMe } from "./queries/useGetMe.ts";
@@ -108,19 +108,19 @@ export const router: RouteObject[] = [
             },
             {
                 path: "account",
-                element: <Navigate to="/settings/account" replace={true} />
+                loader: () => redirect("/settings/account")
             },
             {
                 path: "profile",
-                element: <Navigate to="/settings/profile" replace={true} />
+                loader: () => redirect("/settings/profile")
             },
             {
                 path: "profile/security",
-                element: <Navigate to="/settings/security" replace={true} />
+                loader: () => redirect("/settings/security")
             },
             {
                 path: "profile/password",
-                element: <Navigate to="/settings/security" replace={true} />
+                loader: () => redirect("/settings/security")
             },
             {
                 path: "profile/confirm-email-change/:token",
@@ -294,7 +294,7 @@ export const router: RouteObject[] = [
         children: [
             {
                 index: true,
-                element: <Navigate to="/settings/profile" replace={true} />
+                loader: () => redirect("/settings/profile")
             },
             {
                 path: "profile",
@@ -357,11 +357,11 @@ export const router: RouteObject[] = [
     {
         path: "account",
         children: [
-            { path: "users", element: <Navigate to="/settings/team" replace={true} /> },
-            { path: "taxes-and-fees", element: <Navigate to="/settings/taxes-and-fees" replace={true} /> },
-            { path: "danger-zone", element: <Navigate to="/settings/account#delete-account" replace={true} /> },
-            { path: "*", element: <Navigate to="/settings/account" replace={true} /> },
-            { index: true, element: <Navigate to="/settings/account" replace={true} /> },
+            { path: "users", loader: () => redirect("/settings/team") },
+            { path: "taxes-and-fees", loader: () => redirect("/settings/taxes-and-fees") },
+            { path: "danger-zone", loader: () => redirect("/settings/account#delete-account") },
+            { path: "*", loader: () => redirect("/settings/account") },
+            { index: true, loader: () => redirect("/settings/account") },
         ]
     },
     {

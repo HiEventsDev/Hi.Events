@@ -49,7 +49,7 @@ readonly class UpdateMeHandler
         }
 
         if ($this->isUpdatingDetails($updateUserData)) {
-            $updateArray = [
+            $updateArray += [
                 'first_name' => $updateUserData->first_name,
                 'last_name' => $updateUserData->last_name,
                 'timezone' => $updateUserData->timezone,

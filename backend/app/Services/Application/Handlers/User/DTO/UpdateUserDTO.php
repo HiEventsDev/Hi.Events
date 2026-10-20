@@ -13,9 +13,9 @@ class UpdateUserDTO extends BaseDTO
         public readonly int $id,
         public readonly int $account_id,
         public readonly string $first_name,
-        public readonly string $last_name,
-        public readonly Role $role,
         public readonly int $updated_by_user_id,
+        public readonly ?string $last_name = null,
+        public readonly ?Role $role = null,
         public readonly ?UserStatus $status = null,
         public readonly ?AccountUserAccessData $access = null,
     ) {}

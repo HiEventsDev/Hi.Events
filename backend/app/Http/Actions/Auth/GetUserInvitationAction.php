@@ -6,7 +6,7 @@ use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Resources\Auth\InvitationResource;
-use HiEvents\Services\Domain\Auth\Invitation\InvitationAcceptanceService;
+use HiEvents\Services\Application\Handlers\Auth\GetInvitationHandler;
 use HiEvents\Services\Infrastructure\Encryption\Exception\DecryptionFailedException;
 use HiEvents\Services\Infrastructure\Encryption\Exception\EncryptedPayloadExpiredException;
 use Illuminate\Http\JsonResponse;
@@ -16,13 +16,13 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 class GetUserInvitationAction extends BaseAction
 {
     public function __construct(
-        private readonly InvitationAcceptanceService $invitationAcceptanceService,
+        private readonly GetInvitationHandler $handler,
     ) {}
 
     public function __invoke(string $inviteToken): JsonResponse
     {
         try {
-            $invitation = $this->invitationAcceptanceService->findPending($inviteToken);
+            $invitation = $this->handler->handle($inviteToken);
         } catch (EncryptedPayloadExpiredException) {
             throw new HttpException(ResponseCodes::HTTP_GONE, __('The invitation has expired'));
         } catch (DecryptionFailedException) {

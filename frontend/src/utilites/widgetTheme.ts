@@ -68,7 +68,7 @@ const mix = (color: string, percent: number, base = 'transparent') => `color-mix
 
 export const widgetFrameStyle = (colors: WidgetColors, settings: WidgetSettings, font: string | null): CSSProperties => {
     const textSecondary = mix(colors.primaryText, 68);
-    const textTertiary = mix(colors.primaryText, 52);
+    const textTertiary = mix(colors.primaryText, 62);
     const border = mix(colors.primary, 24);
     const accentSoft = mix(colors.secondary, 10);
     const accentMuted = mix(colors.secondary, 60);

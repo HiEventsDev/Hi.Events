@@ -14,10 +14,10 @@ import {t, Trans} from "@lingui/macro";
 import {useEffect, useMemo} from "react";
 import {InputGroup} from "../../common/InputGroup";
 import {
+    availableLocales,
     getClientLocale,
     getLocaleName,
     localeToFlagEmojiMap,
-    localeToNameMap,
     SupportedLocales
 } from "../../../locales.ts";
 import {ProductSelector} from "../../common/ProductSelector";
@@ -232,7 +232,7 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
 
                 <Select
                     required
-                    data={Object.keys(localeToNameMap).map(locale => ({
+                    data={availableLocales.map(locale => ({
                         value: locale,
                         label: localeToFlagEmojiMap[locale as SupportedLocales] + ' ' + getLocaleName(locale as SupportedLocales),
                     }))}

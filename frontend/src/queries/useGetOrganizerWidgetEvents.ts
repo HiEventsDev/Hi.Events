@@ -1,4 +1,5 @@
 import {useInfiniteQuery} from "@tanstack/react-query";
+import {AxiosError} from "axios";
 import {IdParam} from "../types.ts";
 import {organizerPublicClient} from "../api/organizer.client.ts";
 import {organizerWidgetEventsFilters} from "../utilites/widgetEvents.ts";
@@ -22,4 +23,8 @@ export const useGetOrganizerWidgetEvents = (
     config: WidgetSettings,
     status: OrganizerWidgetEventsStatus,
     enabled: boolean,
-) => useInfiniteQuery({...organizerWidgetEventsQuery(organizerId, config, status), enabled});
+) => useInfiniteQuery({
+    ...organizerWidgetEventsQuery(organizerId, config, status),
+    enabled,
+    retry: (failureCount: number, error: AxiosError) => error?.response?.status !== 404 && failureCount < 3,
+});

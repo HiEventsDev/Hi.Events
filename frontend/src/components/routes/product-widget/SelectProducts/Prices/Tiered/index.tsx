@@ -9,6 +9,7 @@ import {useEffect, useRef, useState} from "react";
 import {ProductPriceAvailability} from "../../../../../common/ProductPriceAvailability";
 import {formatCurrency, getCurrencySymbol} from "../../../../../../utilites/currency.ts";
 import {FeeBreakdown, FeeBreakdownRow} from "../FeeBreakdown";
+import {getBeforeDiscountDisplayPrice} from "../../priceTotals.ts";
 
 const LIMIT_MESSAGE_TIMEOUT_MS = 4000;
 
@@ -142,6 +143,7 @@ export const TieredPricing = ({
         }
         const feesAndTax = getFeesAndTaxTotal(price);
         const isPriceAvailable = product.is_available && price.is_available;
+        const beforeDiscountPrice = getBeforeDiscountDisplayPrice(price, priceDisplayMode);
 
         return (
             <div className={'hi-product-header-pricing'}
@@ -158,10 +160,10 @@ export const TieredPricing = ({
                                 taxAndServiceFeeDisplayType={priceDisplayMode}
                                 feeDisplay={'none'}
                             />
-                            {price.is_discounted && (
+                            {beforeDiscountPrice !== null && (
                                 <div className={'hi-price-strike'}>
                                     <Currency
-                                        price={price.price_before_discount}
+                                        price={beforeDiscountPrice}
                                         currency={event?.currency}
                                         className={'hi-price-tier-price-amount'}
                                     />
@@ -191,6 +193,7 @@ export const TieredPricing = ({
             {product?.prices?.map((price, index) => {
                 const feesAndTax = getFeesAndTaxTotal(price);
                 const isPriceAvailable = product.is_available && price.is_available;
+                const beforeDiscountPrice = getBeforeDiscountDisplayPrice(price, priceDisplayMode);
 
                 return (
                     <div key={index} className={'hi-price-tier-row'}
@@ -246,10 +249,10 @@ export const TieredPricing = ({
                             />
                         )}
 
-                        {price.is_discounted && (
+                        {beforeDiscountPrice !== null && (
                             <div className={'hi-price-strike'}>
                                 <Currency
-                                    price={price.price_before_discount}
+                                    price={beforeDiscountPrice}
                                     currency={event?.currency}
                                     className={'hi-price-tier-price-amount'}
                                 />

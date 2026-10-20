@@ -17,7 +17,7 @@ import {useAccess} from "../../../../hooks/useAccess.ts";
 import classes from "./TaxesAndFees.module.scss";
 
 const TaxesAndFees = () => {
-    const {data: taxesAndFees, isFetched} = useGetTaxesAndFees();
+    const {data: taxesAndFees, isFetched, isError, isFetching, refetch} = useGetTaxesAndFees();
     const {data: account} = useGetAccount();
     const deleteMutation = useDeleteTaxOrFee();
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
@@ -77,6 +77,20 @@ const TaxesAndFees = () => {
     );
 
     const renderContent = () => {
+        if (isError && !taxesAndFees) {
+            return (
+                <SettingsSection>
+                    <div className={classes.empty}>
+                        <div className={classes.emptyTitle}>{t`Couldn't load your taxes and fees`}</div>
+                        <p className={classes.emptyText}>{t`Check your connection and try again.`}</p>
+                        <Button variant="default" loading={isFetching} onClick={() => refetch()}>
+                            {t`Try again`}
+                        </Button>
+                    </div>
+                </SettingsSection>
+            );
+        }
+
         if (!isFetched) {
             return (
                 <SettingsSection>

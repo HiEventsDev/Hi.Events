@@ -175,6 +175,11 @@ class AccountSsoSettingsTest extends TestCase
         $connection->update(['enforce_sso' => false]);
 
         $this->putJson($this->url('/connection'), [...$this->oktaPayload(), 'client_id' => 'new-client', 'client_secret' => null], $this->ownerHeaders())
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('client_secret');
+        $this->assertSame('rotated-secret', $connection->fresh()->client_secret);
+
+        $this->putJson($this->url('/connection'), [...$this->oktaPayload(), 'client_id' => 'new-client', 'client_secret' => 'new-secret'], $this->ownerHeaders())
             ->assertOk()
             ->assertJsonPath('data.status', 'INACTIVE')
             ->assertJsonPath('data.last_tested_at', null);

@@ -1,4 +1,5 @@
 import type {EventLineup, ScheduleItem} from "../api/lineup.client.ts";
+import {EventOccurrence, EventOccurrenceStatus} from "../types.ts";
 
 export const DAY_BOUNDARY_HOUR = 5;
 
@@ -54,16 +55,64 @@ export const lineupForOccurrence = (
 ): EventLineup => {
     const firstDay = scheduleDayKey(occurrence.start_date, tz);
     const lastDay = scheduleDayKey(occurrence.end_date ?? occurrence.start_date, tz);
-    const items = lineup.schedule_items.filter(item => {
-        const day = scheduleDayKey(item.starts_at, tz);
-        return day >= firstDay && day <= lastDay;
-    });
+    const isOnDate = (day: string) => day >= firstDay && day <= lastDay;
+    const items = lineup.schedule_items.filter(item => isOnDate(scheduleDayKey(item.starts_at, tz)));
     const scheduledAnywhere = new Set(lineup.schedule_items.flatMap(item => item.lineup_entry_ids));
     const scheduledOnDate = new Set(items.flatMap(item => item.lineup_entry_ids));
 
     return {
         ...lineup,
-        entries: lineup.entries.filter(entry => scheduledOnDate.has(entry.id) || !scheduledAnywhere.has(entry.id)),
+        entries: lineup.entries.filter(entry => entry.schedule_days
+            ? !entry.schedule_days.length || entry.schedule_days.some(isOnDate)
+            : scheduledOnDate.has(entry.id) || !scheduledAnywhere.has(entry.id)),
         schedule_items: items,
     };
+};
+
+export interface ScheduleLane {
+    lane: number;
+    lanes: number;
+}
+
+export const assignScheduleLanes = (blocks: { id: number, top: number, bottom: number }[]): Map<number, ScheduleLane> => {
+    const assigned = new Map<number, ScheduleLane>();
+    let group: { id: number, lane: number }[] = [];
+    let laneEnds: number[] = [];
+    let groupBottom = -Infinity;
+
+    const closeGroup = () => {
+        group.forEach(({id, lane}) => assigned.set(id, {lane, lanes: laneEnds.length}));
+        group = [];
+        laneEnds = [];
+        groupBottom = -Infinity;
+    };
+
+    [...blocks]
+        .sort((a, b) => a.top - b.top || a.id - b.id)
+        .forEach(block => {
+            if (block.top >= groupBottom) {
+                closeGroup();
+            }
+            const freeLane = laneEnds.findIndex(end => end <= block.top);
+            const lane = freeLane === -1 ? laneEnds.length : freeLane;
+            laneEnds[lane] = block.bottom;
+            group.push({id: block.id, lane});
+            groupBottom = Math.max(groupBottom, block.bottom);
+        });
+    closeGroup();
+
+    return assigned;
+};
+
+export const initialSelectedOccurrence = (
+    occurrences: EventOccurrence[] | undefined,
+    requestedOccurrenceId: number | null | undefined,
+): EventOccurrence | undefined => {
+    const selectable = (occurrences ?? []).filter(occurrence => !occurrence.is_past
+        && (occurrence.status === EventOccurrenceStatus.ACTIVE || occurrence.status === EventOccurrenceStatus.SOLD_OUT));
+    const requested = requestedOccurrenceId
+        ? selectable.find(occurrence => Number(occurrence.id) === requestedOccurrenceId)
+        : undefined;
+
+    return requested ?? (selectable.length === 1 ? selectable[0] : undefined);
 };

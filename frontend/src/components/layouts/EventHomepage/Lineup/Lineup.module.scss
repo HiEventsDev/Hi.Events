@@ -121,6 +121,10 @@ $ease: cubic-bezier(0.4, 0, 0.2, 1);
     aspect-ratio: 4 / 5;
     border-radius: $radius-lg;
 
+    &:not([data-empty]) {
+      flex-grow: 1;
+    }
+
     &::after {
       content: '';
       position: absolute;
@@ -206,7 +210,34 @@ $ease: cubic-bezier(0.4, 0, 0.2, 1);
 
   .tier[data-tier="featured"] {
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 120px), 1fr));
+
+    .cardName {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
   }
+
+  .tier[data-tier="headliner"] .cardMedia[data-empty] {
+    aspect-ratio: auto;
+  }
+}
+
+.tier[data-tier="headliner"], .tier[data-tier="featured"] {
+  .cardMedia[data-empty] {
+    aspect-ratio: auto;
+    min-height: 112px;
+  }
+}
+
+.tier[data-tier="headliner"]:has(.cardMedia:not([data-empty])) .cardMedia[data-empty] {
+  flex-grow: 1;
+}
+
+.tier[data-tier="featured"]:has(.cardMedia:not([data-empty])) .cardMedia[data-empty] {
+  aspect-ratio: 1;
 }
 
 .tier[data-tier="standard"] {
@@ -269,7 +300,7 @@ $ease: cubic-bezier(0.4, 0, 0.2, 1);
     color: var(--event-secondary-color);
     cursor: pointer;
 
-    &[data-active] {
+    &[aria-pressed="true"] {
       background: var(--event-content-bg-color);
       color: var(--event-primary-text-color);
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -319,7 +350,7 @@ $ease: cubic-bezier(0.4, 0, 0.2, 1);
     border-color: var(--event-primary-color);
   }
 
-  &[aria-selected="true"] {
+  &[aria-pressed="true"] {
     background: var(--event-primary-color);
     border-color: var(--event-primary-color);
     color: var(--event-accent-contrast);
@@ -364,7 +395,7 @@ $ease: cubic-bezier(0.4, 0, 0.2, 1);
   color: var(--event-secondary-color);
   cursor: pointer;
 
-  &[data-active] {
+  &[aria-pressed="true"] {
     border-color: var(--event-primary-text-color);
     color: var(--event-primary-text-color);
   }
@@ -483,6 +514,12 @@ $ease: cubic-bezier(0.4, 0, 0.2, 1);
     text-decoration: underline;
     text-underline-offset: 3px;
   }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
 }
 
 .livePill {
@@ -524,8 +561,12 @@ $ease: cubic-bezier(0.4, 0, 0.2, 1);
 
 .agendaSpace {
   display: inline-flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 6px;
+
+  .spaceDot {
+    margin-top: 0.4em;
+  }
 }
 
 .agendaVenue {
@@ -536,13 +577,15 @@ $ease: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .performerChip {
+  position: relative;
   display: inline-flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 6px;
   padding: 0;
   border: 0;
   background: none;
   font: inherit;
+  text-align: left;
   color: var(--event-primary-text-color);
   cursor: pointer;
 
@@ -584,6 +627,7 @@ $ease: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .agendaAvatars {
+  position: relative;
   display: flex;
   align-self: start;
   padding: 0;
@@ -607,6 +651,7 @@ $ease: cubic-bezier(0.4, 0, 0.2, 1);
   font-size: 0.88rem;
   line-height: 1.55;
   color: var(--event-secondary-color);
+  overflow-wrap: anywhere;
 
   p {
     margin: 0 0 0.5em;
@@ -640,10 +685,11 @@ $ease: cubic-bezier(0.4, 0, 0.2, 1);
 .stageGrid {
   position: relative;
   display: grid;
-  grid-template-columns: 56px repeat(var(--stage-count), minmax(150px, 1fr));
+  grid-template-columns: 68px repeat(var(--stage-count), minmax(150px, 1fr));
   grid-template-rows: auto var(--grid-height);
   column-gap: 8px;
-  min-width: calc(56px + var(--stage-count) * 158px);
+  min-width: calc(68px + var(--stage-count) * 158px);
+  padding-bottom: 12px;
 }
 
 .stageGridCorner {
@@ -676,6 +722,7 @@ $ease: cubic-bezier(0.4, 0, 0.2, 1);
     position: absolute;
     right: 8px;
     transform: translateY(-50%);
+    white-space: nowrap;
     font-size: 0.72rem;
     font-variant-numeric: tabular-nums;
     color: var(--event-secondary-text-color);
@@ -692,14 +739,13 @@ $ease: cubic-bezier(0.4, 0, 0.2, 1);
 
 .stageBlock {
   position: absolute;
-  left: 0;
-  right: 0;
   display: flex;
   flex-direction: column;
   gap: 2px;
-  padding: 8px 10px;
+  padding: 5px 10px;
   overflow: hidden;
   border: 0;
+  box-shadow: 0 0 0 1px var(--event-content-bg-color);
   border-left: 3px solid var(--space-color);
   border-radius: 8px;
   background: color-mix(in srgb, var(--space-color) 14%, var(--event-content-bg-color));
@@ -720,13 +766,22 @@ $ease: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .stageBlockTitle {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--title-lines, 2);
+  flex-shrink: 0;
+  overflow: hidden;
   font-weight: 650;
   font-size: 0.85rem;
-  line-height: 1.25;
+  line-height: 17px;
+  overflow-wrap: anywhere;
 }
 
 .stageBlockTime {
+  flex-shrink: 0;
   font-size: 0.72rem;
+  line-height: 14px;
+  @include mixins.ellipsis;
   font-variant-numeric: tabular-nums;
   color: var(--event-secondary-color);
 }

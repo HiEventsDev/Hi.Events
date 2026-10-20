@@ -1,5 +1,5 @@
 import {useForm} from "@mantine/form";
-import {GenericModalProps, TeamAccessRequest, User,} from "../../../types.ts";
+import {GenericModalProps, TeamAccessRequest, User, UserRole} from "../../../types.ts";
 import {Modal, ModalFooter} from "../../common/Modal";
 import {Avatar, Badge, Button, SimpleGrid, TextInput} from "@mantine/core";
 import {Callout} from "../../common/Callout";
@@ -22,25 +22,28 @@ interface EditUserModalProps extends GenericModalProps {
     user: User;
 }
 
+type EditUserForm = UpdateUserRequest & TeamAccessRequest & { role: UserRole };
+
 export const EditUserModal = ({onClose, user}: EditUserModalProps) => {
     const editMutation = useEditUser();
     const isLocked = !!user.is_account_owner || user.role === 'SUPERADMIN';
     const formErrorHandler = useFormErrorResponseHandler();
 
-    const form = useForm<UpdateUserRequest & TeamAccessRequest>({
+    const form = useForm<EditUserForm>({
         initialValues: {
             first_name: user.first_name,
-            last_name: user.last_name,
+            last_name: user.last_name ?? '',
             role: user.role ?? 'ORGANIZER',
             ...teamAccessInitialValues(user),
         },
     });
 
-    const handleSave = (values: UpdateUserRequest & TeamAccessRequest) => {
-        editMutation.mutate({
-            userId: user.id,
-            userData: {...values, ...toTeamAccessPayload(values)},
-        }, {
+    const handleSave = (values: EditUserForm) => {
+        const userData: UpdateUserRequest = user.role === 'SUPERADMIN'
+            ? {first_name: values.first_name, last_name: values.last_name}
+            : {...values, ...toTeamAccessPayload(values)};
+
+        editMutation.mutate({userId: user.id, userData}, {
             onSuccess: () => {
                 form.reset();
                 onClose();
@@ -82,7 +85,7 @@ export const EditUserModal = ({onClose, user}: EditUserModalProps) => {
                     <TeamFormSection title={t`Details`}>
                         <SimpleGrid cols={{base: 1, xs: 2}} spacing="sm" verticalSpacing="sm">
                             <TextInput required {...form.getInputProps('first_name')} label={t`First Name`}/>
-                            <TextInput required {...form.getInputProps('last_name')} label={t`Last Name`}/>
+                            <TextInput {...form.getInputProps('last_name')} label={t`Last Name`}/>
                         </SimpleGrid>
                         <p className={classes.hint}>
                             <Trans>Members change their own email in <NavLink target={'_blank'} to={'/settings/profile'}>profile settings</NavLink>.</Trans>

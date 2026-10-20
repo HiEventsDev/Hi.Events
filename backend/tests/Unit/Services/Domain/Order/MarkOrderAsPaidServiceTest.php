@@ -175,6 +175,32 @@ class MarkOrderAsPaidServiceTest extends TestCase
         $this->service->markOrderAsPaid(self::ORDER_ID, self::EVENT_ID);
     }
 
+    public function test_the_order_summary_email_attaches_the_paid_invoice(): void
+    {
+        $this->givenOrderAwaitingOfflinePayment(
+            pendingInvoice: (new InvoiceDomainObject)->setId(77)->setStatus(InvoiceStatus::UNPAID->name),
+            completedInvoice: (new InvoiceDomainObject)->setId(77)->setStatus(InvoiceStatus::PAID->name),
+        );
+        $this->givenEventWithoutOrganizerConfiguration();
+        $this->orderRepository->shouldReceive('updateFromArray')->once();
+        $this->attendeeRepository->shouldReceive('updateWhere')->once();
+        $this->domainEventDispatcherService->shouldReceive('dispatch')->once();
+        $this->invoiceRepository->shouldReceive('findLatestInvoiceForOrder')
+            ->once()
+            ->with(self::ORDER_ID)
+            ->andReturn((new InvoiceDomainObject)->setId(77));
+        $this->invoiceRepository->shouldReceive('updateFromArray')
+            ->once()
+            ->with(77, ['status' => InvoiceStatus::PAID->name]);
+
+        $this->sendOrderDetailsService->shouldReceive('sendCustomerOrderSummary')
+            ->once()
+            ->withArgs(fn (OrderDomainObject $order, $event, $organizer, $eventSettings, ?InvoiceDomainObject $invoice) => $invoice?->getId() === 77
+                && $invoice->getStatus() === InvoiceStatus::PAID->name);
+
+        $this->service->markOrderAsPaid(self::ORDER_ID, self::EVENT_ID);
+    }
+
     public function test_an_order_that_is_not_awaiting_offline_payment_cannot_be_marked_as_paid(): void
     {
         $this->givenOrderAwaitingOfflinePayment(status: OrderStatus::COMPLETED);
@@ -215,13 +241,16 @@ class MarkOrderAsPaidServiceTest extends TestCase
         ?int $affiliateId = null,
         float $totalGross = 50.0,
         bool $occurrencePurchasable = true,
+        ?InvoiceDomainObject $pendingInvoice = null,
+        ?InvoiceDomainObject $completedInvoice = null,
     ): void {
         $pending = (new OrderDomainObject)
             ->setId(self::ORDER_ID)
             ->setEventId(self::EVENT_ID)
             ->setStatus($status->name)
             ->setTotalGross($totalGross)
-            ->setCurrency('USD');
+            ->setCurrency('USD')
+            ->setInvoices($pendingInvoice ? collect([$pendingInvoice]) : null);
 
         $this->orderRepository->shouldReceive('findFirstWhere')
             ->once()
@@ -251,7 +280,8 @@ class MarkOrderAsPaidServiceTest extends TestCase
             ->setStatus(OrderStatus::COMPLETED->name)
             ->setTotalGross($totalGross)
             ->setCurrency('USD')
-            ->setAffiliateId($affiliateId);
+            ->setAffiliateId($affiliateId)
+            ->setInvoices($completedInvoice ? collect([$completedInvoice]) : null);
 
         $this->orderRepository->shouldReceive('findById')
             ->once()

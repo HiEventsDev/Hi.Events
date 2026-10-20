@@ -16,7 +16,7 @@ return [
     'reset_password_token_expiry_in_min' => 15,
     'frontend_url' => env('APP_FRONTEND_URL', 'http://localhost'),
     'api_url' => env('APP_URL', 'https://localhost:8443'),
-    'cnd_url' => env('APP_CDN_URL', '/storage'),
+    'cdn_url' => env('APP_CDN_URL'),
     'default_timezone' => 'America/Vancouver',
     'default_currency_code' => 'USD',
     'saas_mode_enabled' => env('APP_SAAS_MODE_ENABLED', false),

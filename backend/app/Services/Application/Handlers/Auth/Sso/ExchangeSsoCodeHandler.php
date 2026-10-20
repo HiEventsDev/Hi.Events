@@ -11,6 +11,7 @@ use HiEvents\Enterprise\Sso\Exceptions\SsoRequiredException;
 use HiEvents\Enterprise\Sso\Services\Domain\AccountSsoConnectionService;
 use HiEvents\Enterprise\Sso\Services\Domain\AccountSsoDomainService;
 use HiEvents\Enterprise\Sso\Services\Domain\EnterpriseSsoResolver;
+use HiEvents\Enterprise\Sso\Services\Domain\SsoConnectionLinkService;
 use HiEvents\Enterprise\Sso\Services\Domain\SsoEnforcementService;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Exceptions\SsoException;
@@ -57,6 +58,7 @@ class ExchangeSsoCodeHandler
         private readonly AccountSsoConnectionService $connectionService,
         private readonly AccountSsoDomainService $domainService,
         private readonly SsoEnforcementService $enforcementService,
+        private readonly SsoConnectionLinkService $connectionLinkService,
     ) {}
 
     /**
@@ -287,6 +289,10 @@ class ExchangeSsoCodeHandler
     {
         $this->assertSameSession($state, $dto);
 
+        if ($provider->isAccountConnection()) {
+            $this->connectionLinkService->assertCanLink($provider, (int) $state->userId);
+        }
+
         $this->userIdentityService->attach($this->userRepository->findById((int) $state->userId), $claims);
 
         return new SsoExchangeResult(
@@ -307,7 +313,8 @@ class ExchangeSsoCodeHandler
         $isFresh = $claims->authTime === null || (now()->getTimestamp() - $claims->authTime) <= self::REAUTH_MAX_AGE_SECONDS;
 
         $connectionCannotConfirm = $provider->isAccountConnection()
-            && $this->enterpriseResolver->hasMembershipsOutside((int) $state->userId, (int) $provider->accountId);
+            && ($this->enterpriseResolver->hasMembershipsOutside((int) $state->userId, (int) $provider->accountId)
+                || $this->connectionLinkService->isSuperAdmin((int) $state->userId));
 
         if ($identity === null || $identity->getUserId() !== $state->userId || ! $isFresh || $connectionCannotConfirm) {
             throw new SsoException(SsoErrorCode::REAUTH_FAILED, __('We couldn\'t confirm it\'s you. Sign in with an account you have already connected.'));

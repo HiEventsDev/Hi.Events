@@ -36,7 +36,7 @@ class ResetPasswordAction extends BaseAction
             ));
         } catch (PasswordInvalidException $exception) {
             throw ValidationException::withMessages([
-                'current_password' => $exception->getMessage(),
+                'password' => $exception->getMessage(),
             ]);
         } catch (InvalidPasswordResetTokenException $e) {
             throw new ResourceNotFoundException($e->getMessage());

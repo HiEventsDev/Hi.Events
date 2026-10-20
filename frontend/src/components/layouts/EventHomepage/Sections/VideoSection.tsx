@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {t} from "@lingui/macro";
 import {IconPlayerPlayFilled} from "@tabler/icons-react";
 import {HomepageSection} from "../../../../types.ts";
@@ -39,7 +39,14 @@ export const videoEmbedUrl = (url?: string | null): { src: string, provider: str
 
 export const VideoSection = ({section, sectionClasses}: { section: HomepageSection, sectionClasses: HomepageSectionClasses }) => {
     const [playing, setPlaying] = useState(false);
+    const playerRef = useRef<HTMLIFrameElement>(null);
     const embed = videoEmbedUrl(section.video_url);
+
+    useEffect(() => {
+        if (playing) {
+            playerRef.current?.focus({preventScroll: true});
+        }
+    }, [playing]);
 
     if (!embed) {
         return null;
@@ -53,6 +60,7 @@ export const VideoSection = ({section, sectionClasses}: { section: HomepageSecti
                 {playing
                     ? (
                         <iframe
+                            ref={playerRef}
                             src={embed.src}
                             title={section.heading || provider}
                             allow="autoplay; encrypted-media; fullscreen; picture-in-picture"

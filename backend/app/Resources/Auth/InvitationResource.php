@@ -3,23 +3,24 @@
 namespace HiEvents\Resources\Auth;
 
 use HiEvents\Resources\BaseResource;
-use HiEvents\Services\Domain\Auth\Invitation\PendingInvitation;
+use HiEvents\Services\Application\Handlers\Auth\DTO\InvitationDetailsDTO;
 use Illuminate\Http\Request;
 
 /**
- * @mixin PendingInvitation
+ * @mixin InvitationDetailsDTO
  */
 class InvitationResource extends BaseResource
 {
     public function toArray(Request $request): array
     {
         return [
-            'first_name' => $this->user->getFirstName(),
-            'last_name' => $this->user->getLastName(),
-            'email' => $this->user->getEmail(),
-            'timezone' => $this->user->getTimezone(),
-            'account_name' => $this->accountName,
-            'requires_sign_in' => $this->requiresSignIn,
+            'first_name' => $this->invitation->user->getFirstName(),
+            'last_name' => $this->invitation->user->getLastName(),
+            'email' => $this->invitation->user->getEmail(),
+            'timezone' => $this->invitation->user->getTimezone(),
+            'account_name' => $this->invitation->accountName,
+            'requires_sign_in' => $this->invitation->requiresSignIn,
+            'sso_required' => $this->ssoRequired,
         ];
     }
 }

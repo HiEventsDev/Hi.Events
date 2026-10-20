@@ -1,8 +1,9 @@
 import { test, expect } from '../../fixtures';
 import { createSeatedEvent } from '../../api/factory';
-import { checkoutModal, openEmbeddedWidget, resolveCheckoutFrame } from '../../pages/embedded-widget';
+import { checkoutModal, openEmbedHost, openEmbeddedWidget, resolveCheckoutFrame, resolveWidgetFrame, widgetMarkup } from '../../pages/embedded-widget';
 import { CheckoutPage } from '../../pages/checkout.page';
 import { uniqueCode, uniqueEmail } from '../../utils/unique';
+import { WidgetApi } from './widget-api';
 
 test.describe('embedded widget reserved seating', () => {
   test.beforeEach(async ({ adminApi, account }) => {
@@ -35,6 +36,36 @@ test.describe('embedded widget reserved seating', () => {
     const [attendee] = await api.listAttendees(event.eventId);
     expect(attendee.email).toBe(email);
     expect(attendee.seat_label).toBe('Stalls · A-10');
+  });
+
+  test('a seated order from a saved widget keeps its widget and campaign through the seat picker', async ({ page, api, account, baseURL, playwright }) => {
+    const event = await createSeatedEvent(api, account.organizerId);
+    const saved = await api.createEventWidget(event.eventId, { name: 'Seated site', type: 'TICKETS', settings: {} });
+
+    await openEmbedHost(page, baseURL!, widgetMarkup({ id: String(event.eventId), widget: saved.short_id }), '?utm_source=newsletter');
+    const widgetFrame = await resolveWidgetFrame(page);
+    await widgetFrame.getByTestId('choose-seats-button').click();
+
+    const seatFrame = await resolveCheckoutFrame(page);
+    await seatFrame.waitForURL(/\/checkout\/\d+\/seats/);
+    const seatUrl = new URL(seatFrame.url());
+    expect(seatUrl.searchParams.get('Widget')).toBe(saved.short_id);
+    expect(seatUrl.searchParams.get('utm_source')).toBe('newsletter');
+
+    await seatFrame.getByTestId('seat-picker-map').locator('[data-uid="e2.0.9"]').click();
+    await seatFrame.getByTestId('seat-picker-continue-button').click();
+    await seatFrame.waitForURL(/\/checkout\/\d+\/[^/]+\/details/);
+    expect(new URL(seatFrame.url()).searchParams.get('utm_source')).toBe('newsletter');
+
+    const checkout = new CheckoutPage(page, seatFrame);
+    await checkout.fillOrderAndAttendees({ firstName: 'Sam', lastName: 'Seated', email: uniqueEmail('seatwidget') }, 1);
+    await checkout.completeFreeOrder();
+    await expect(seatFrame.getByText("You're going to", { exact: false }).first()).toBeVisible();
+
+    const widgets = await WidgetApi.create(playwright, account.token);
+    await expect.poll(async () => (await widgets.listEventWidgets(event.eventId)).find((candidate) => candidate.id === saved.id)?.stats.orders)
+      .toBe(1);
+    await widgets.dispose();
   });
 
   test('a promo code applied in the widget carries into the host page seat picker', async ({ page, api, account, baseURL }) => {

@@ -1,4 +1,4 @@
-import {ReactNode} from "react";
+import {MouseEvent, ReactNode, useEffect, useRef} from "react";
 import {Button} from "@mantine/core";
 import {t} from "@lingui/macro";
 import classNames from "classnames";
@@ -85,15 +85,63 @@ interface SettingsSaveFooterProps {
     saveTestId?: string;
 }
 
-export const SettingsSaveFooter = ({isDirty, isSaving, onDiscard, saveTestId}: SettingsSaveFooterProps) => (
-    <SettingsFooter hint={isDirty && <StatusDot tone="warning" strong>{t`Unsaved changes`}</StatusDot>}>
-        {isDirty && !isSaving && (
-            <Button variant="subtle" color="gray" onClick={onDiscard}>
-                {t`Discard`}
+const isBehindModalDialog = (element: HTMLElement) => Array
+    .from(document.querySelectorAll('[role="dialog"][aria-modal="true"]'))
+    .some(dialog => !dialog.contains(element));
+
+export const SettingsSaveFooter = ({isDirty, isSaving, onDiscard, saveTestId}: SettingsSaveFooterProps) => {
+    const saveButton = useRef<HTMLButtonElement>(null);
+    const focusBeforeSave = useRef<HTMLElement | null>(null);
+
+    useEffect(() => {
+        const target = focusBeforeSave.current;
+        if (isSaving || !target) {
+            return;
+        }
+
+        focusBeforeSave.current = null;
+        const focusWasLost = !document.activeElement || document.activeElement === document.body;
+        if (focusWasLost && target.isConnected && !isBehindModalDialog(target)) {
+            target.focus();
+        }
+    }, [isSaving]);
+
+    const handleSaveClick = (event: MouseEvent<HTMLButtonElement>) => {
+        if (!isDirty) {
+            event.preventDefault();
+            return;
+        }
+
+        const active = document.activeElement;
+        focusBeforeSave.current = active instanceof HTMLElement && active !== document.body ? active : null;
+    };
+
+    const handleDiscardClick = (event: MouseEvent<HTMLButtonElement>) => {
+        const discardHadFocus = document.activeElement === event.currentTarget;
+        onDiscard();
+        if (discardHadFocus) {
+            saveButton.current?.focus();
+        }
+    };
+
+    return (
+        <SettingsFooter hint={isDirty && <StatusDot tone="warning" strong>{t`Unsaved changes`}</StatusDot>}>
+            {isDirty && !isSaving && (
+                <Button variant="subtle" color="gray" onClick={handleDiscardClick}>
+                    {t`Discard`}
+                </Button>
+            )}
+            <Button
+                ref={saveButton}
+                type="submit"
+                data-disabled={!isDirty || undefined}
+                aria-disabled={!isDirty || undefined}
+                loading={isSaving}
+                onClick={handleSaveClick}
+                data-testid={saveTestId}
+            >
+                {t`Save changes`}
             </Button>
-        )}
-        <Button type="submit" disabled={!isDirty} loading={isSaving} data-testid={saveTestId}>
-            {t`Save changes`}
-        </Button>
-    </SettingsFooter>
-);
+        </SettingsFooter>
+    );
+};

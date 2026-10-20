@@ -15,6 +15,7 @@ import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHa
 import {Card} from "../../common/Card";
 import {IconCheckbox, IconSquare} from "@tabler/icons-react";
 import {DateTimeField} from "../../common/DateTimeField";
+import {OrganizerDatesProvider} from "../../common/OrganizerDatesProvider";
 
 interface DuplicateEventModalProps extends GenericModalProps {
     eventId: IdParam;
@@ -123,17 +124,20 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
                     />
 
                     {!isRecurring && (
-                        <InputGroup>
-                            <DateTimeField
-                                       {...form.getInputProps('start_date')}
-                                       label={t`Start Date`}
-                                       required
-                            />
-                            <DateTimeField
-                                       {...form.getInputProps('end_date')}
-                                       label={t`End Date`}
-                            />
-                        </InputGroup>
+                        <OrganizerDatesProvider firstDayOfWeek={eventQuery.data?.organizer?.settings?.first_day_of_week}>
+                            <InputGroup>
+                                <DateTimeField
+                                           {...form.getInputProps('start_date')}
+                                           label={t`Start Date`}
+                                           required
+                                />
+                                <DateTimeField
+                                           {...form.getInputProps('end_date')}
+                                           label={t`End Date`}
+                                           defaultTime="23:59"
+                                />
+                            </InputGroup>
+                        </OrganizerDatesProvider>
                     )}
 
                     <Group justify="space-between" align="center" mb="md">

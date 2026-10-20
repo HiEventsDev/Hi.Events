@@ -121,7 +121,7 @@ export const QuickAddPerson = ({event, lineup, onAdded}: QuickAddPersonProps) =>
                                         disabled={added}
                                         className={classes.quickAddOption}
                                     >
-                                        <Avatar src={profilePhoto(profile)?.url} size={28} radius="sm" color="primary">
+                                        <Avatar src={profilePhoto(profile)?.url} alt="" size={28} radius="sm" color="primary">
                                             {initialsFor(profile.name)}
                                         </Avatar>
                                         <span className={classes.quickAddText}>

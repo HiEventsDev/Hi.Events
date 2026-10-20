@@ -116,7 +116,6 @@ export const GlobalMenu = () => {
         onClick: async (event: any) => {
             event.preventDefault();
             await authClient.logout();
-            localStorage.removeItem("token");
             window.location.href = "/auth/login";
         },
     });
@@ -128,7 +127,7 @@ export const GlobalMenu = () => {
                     <UnstyledButton data-testid="account-menu-button">
                         <LicenceIndicator notice={licenceNotice}>
                             <Avatar color={"primary.1"} radius="xl">
-                                {me ? getInitials(me.first_name + " " + me.last_name) : ".."}
+                                {me ? getInitials([me.first_name, me.last_name].filter(Boolean).join(' ')) : ".."}
                             </Avatar>
                         </LicenceIndicator>
                     </UnstyledButton>

@@ -8,6 +8,7 @@ import {Avatar, UnstyledButton} from "@mantine/core";
 import {Link, useParams} from "react-router";
 import {EventType, ReportTypes} from "../../../../types.ts";
 import {useGetEvent} from "../../../../queries/useGetEvent.ts";
+import {RequirePermission} from "../../../common/WriteAccess";
 
 const Reports = () => {
     const {eventId} = useParams();
@@ -53,22 +54,24 @@ const Reports = () => {
                 {t`Reports`}
             </PageTitle>
 
-            {reports.map((report) => (
-                <UnstyledButton component={Link} key={report.id} to={`/manage/event/${eventId}/report/${report.id}`}>
-                    <Card className={classes.reportType}>
-                        <div className={classes.icon}>
-                            {report.icon}
-                        </div>
-                        <div className={classes.content}>
-                            <h3>{report.title}</h3>
-                            <p>{report.description}</p>
-                        </div>
-                        <div className={classes.rightCaret}>
-                            <IconChevronRight/>
-                        </div>
-                    </Card>
-                </UnstyledButton>
-            ))}
+            <RequirePermission permission="VIEW_FINANCIALS" imageHref="/blank-slate/reports.svg">
+                {reports.map((report) => (
+                    <UnstyledButton component={Link} key={report.id} to={`/manage/event/${eventId}/report/${report.id}`}>
+                        <Card className={classes.reportType}>
+                            <div className={classes.icon}>
+                                {report.icon}
+                            </div>
+                            <div className={classes.content}>
+                                <h3>{report.title}</h3>
+                                <p>{report.description}</p>
+                            </div>
+                            <div className={classes.rightCaret}>
+                                <IconChevronRight/>
+                            </div>
+                        </Card>
+                    </UnstyledButton>
+                ))}
+            </RequirePermission>
         </PageBody>
     )
 }

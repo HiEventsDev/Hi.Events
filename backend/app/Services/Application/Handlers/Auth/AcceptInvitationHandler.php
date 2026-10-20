@@ -2,6 +2,8 @@
 
 namespace HiEvents\Services\Application\Handlers\Auth;
 
+use HiEvents\Enterprise\Sso\Exceptions\SsoRequiredException;
+use HiEvents\Enterprise\Sso\Services\Domain\SsoEnforcementService;
 use HiEvents\Exceptions\InvitationSignInRequiredException;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Services\Application\Handlers\Auth\DTO\AcceptInvitationDTO;
@@ -17,6 +19,7 @@ class AcceptInvitationHandler
     public function __construct(
         private readonly InvitationAcceptanceService $invitationAcceptanceService,
         private readonly PasswordLoginPolicy $passwordLoginPolicy,
+        private readonly SsoEnforcementService $ssoEnforcementService,
         private readonly DatabaseManager $databaseManager,
     ) {}
 
@@ -25,6 +28,7 @@ class AcceptInvitationHandler
      * @throws EncryptedPayloadExpiredException
      * @throws ResourceConflictException
      * @throws InvitationSignInRequiredException
+     * @throws SsoRequiredException
      * @throws Throwable
      */
     public function handle(AcceptInvitationDTO $invitationData): void
@@ -34,6 +38,14 @@ class AcceptInvitationHandler
 
             if ($invitation->requiresSignIn) {
                 throw new InvitationSignInRequiredException(__('Sign in to accept this invitation.'));
+            }
+
+            if ($this->ssoEnforcementService->requiresSsoToJoin(
+                $invitation->user->getId(),
+                $invitation->user->getEmail(),
+                $invitation->accountId,
+            )) {
+                throw new SsoRequiredException($invitation->user->getEmail());
             }
 
             if ($this->passwordLoginPolicy->isDisabled()) {

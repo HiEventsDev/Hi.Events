@@ -132,16 +132,13 @@ class WidgetCrudTest extends TestCase
 
     public function test_rejects_invalid_event_widget_payloads(): void
     {
+        $categoryId = $this->insertCategory($this->eventId);
+        $productId = $this->insertProduct($this->eventId, $categoryId);
         $foreignCategory = $this->insertCategory($this->otherEventId);
         $foreignProduct = $this->insertProduct($this->otherEventId, $foreignCategory);
-        $foreignOccurrence = DB::table('event_occurrences')->insertGetId([
-            'short_id' => 'oc_'.uniqid(),
-            'event_id' => $this->otherEventId,
-            'start_date' => now()->addDay(),
-            'status' => 'ACTIVE',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $foreignOccurrence = $this->insertOccurrence($this->otherEventId);
+        $deletedProduct = $this->insertProduct($this->eventId, $categoryId);
+        DB::table('products')->where('id', $deletedProduct)->update(['deleted_at' => now()]);
 
         $post = fn (array $payload) => $this->postJson("/events/$this->eventId/widgets", ['name' => 'Widget', 'type' => 'TICKETS', ...$payload], $this->headers);
 
@@ -149,11 +146,114 @@ class WidgetCrudTest extends TestCase
         $post(['settings' => ['onload' => 'alert(1)']])->assertUnprocessable()->assertJsonValidationErrors('settings');
         $post(['settings' => ['layout' => 'grid']])->assertUnprocessable()->assertJsonValidationErrors('settings');
         $post(['settings' => ['sections' => ['about', 'about']]])->assertUnprocessable()->assertJsonValidationErrors('settings.sections.1');
-        $post(['settings' => ['products' => [$foreignProduct]]])->assertUnprocessable()->assertJsonValidationErrors('settings.products');
-        $post(['settings' => ['categories' => [$foreignCategory]]])->assertUnprocessable()->assertJsonValidationErrors('settings.categories');
-        $post(['settings' => ['occurrence_id' => $foreignOccurrence]])->assertUnprocessable()->assertJsonValidationErrors('settings.occurrence_id');
+        $post(['settings' => ['products' => [$productId, $foreignProduct]]])
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['settings.products' => 'One or more selected products do not belong to this event.']);
+        $post(['settings' => ['products' => [$deletedProduct]]])->assertUnprocessable()->assertJsonValidationErrors('settings.products');
+        $post(['settings' => ['products' => [999999999]]])->assertUnprocessable()->assertJsonValidationErrors('settings.products');
+        $post(['settings' => ['categories' => [$foreignCategory]]])
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['settings.categories' => 'One or more selected categories do not belong to this event.']);
+        $post(['settings' => ['occurrence_id' => $foreignOccurrence]])
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['settings.occurrence_id' => 'The selected date does not belong to this event.']);
 
         $this->assertDatabaseMissing('widgets', ['event_id' => $this->eventId]);
+    }
+
+    public function test_updating_rejects_newly_selected_ids_that_are_not_on_the_event(): void
+    {
+        $categoryId = $this->insertCategory($this->eventId);
+        $productId = $this->insertProduct($this->eventId, $categoryId);
+        $staleProductId = $this->insertProduct($this->eventId, $categoryId);
+        $newlyDeletedProductId = $this->insertProduct($this->eventId, $categoryId);
+        $foreignCategory = $this->insertCategory($this->otherEventId);
+        $foreignProduct = $this->insertProduct($this->otherEventId, $foreignCategory);
+        $foreignOccurrence = $this->insertOccurrence($this->otherEventId);
+        $storedSettings = ['products' => [$productId, $staleProductId]];
+        $widgetId = $this->createEventWidget($this->eventId, $storedSettings);
+        DB::table('products')->whereIn('id', [$staleProductId, $newlyDeletedProductId])->update(['deleted_at' => now()]);
+
+        $put = fn (array $settings) => $this->putJson("/events/$this->eventId/widgets/$widgetId", [
+            'name' => 'Renamed',
+            'type' => 'TICKETS',
+            'settings' => $settings,
+        ], $this->headers);
+
+        $put(['products' => [$productId, $staleProductId, $foreignProduct]])->assertUnprocessable()->assertJsonValidationErrors('settings.products');
+        $put(['products' => [$productId, $newlyDeletedProductId]])->assertUnprocessable()->assertJsonValidationErrors('settings.products');
+        $put(['products' => [$productId, 999999999]])->assertUnprocessable()->assertJsonValidationErrors('settings.products');
+        $put(['categories' => [$foreignCategory]])->assertUnprocessable()->assertJsonValidationErrors('settings.categories');
+        $put(['occurrence_id' => $foreignOccurrence])->assertUnprocessable()->assertJsonValidationErrors('settings.occurrence_id');
+
+        $this->assertDatabaseHas('widgets', ['id' => $widgetId, 'name' => 'Widget']);
+        $this->assertSame($storedSettings, json_decode(DB::table('widgets')->where('id', $widgetId)->value('settings'), true));
+    }
+
+    public function test_saving_drops_selections_deleted_since_the_widget_was_saved(): void
+    {
+        $categoryId = $this->insertCategory($this->eventId);
+        $deletedCategoryId = $this->insertCategory($this->eventId);
+        $keptProductId = $this->insertProduct($this->eventId, $categoryId);
+        $deletedProductId = $this->insertProduct($this->eventId, $categoryId);
+        $deletedOccurrenceId = $this->insertOccurrence($this->eventId);
+
+        $widget = $this->postJson("/events/$this->eventId/widgets", [
+            'name' => 'VIP only',
+            'type' => 'TICKETS',
+            'settings' => [
+                'products' => [$keptProductId, $deletedProductId],
+                'categories' => [$deletedCategoryId],
+                'occurrence_id' => $deletedOccurrenceId,
+                'hide_promo_code' => true,
+            ],
+        ], $this->headers)->assertCreated()->json('data');
+
+        DB::table('products')->where('id', $deletedProductId)->update(['deleted_at' => now()]);
+        DB::table('product_categories')->where('id', $deletedCategoryId)->update(['deleted_at' => now()]);
+        DB::table('event_occurrences')->where('id', $deletedOccurrenceId)->update(['deleted_at' => now()]);
+
+        $this->putJson("/events/$this->eventId/widgets/{$widget['id']}", [
+            'name' => 'Renamed',
+            'type' => 'TICKETS',
+            'settings' => $widget['settings'],
+        ], $this->headers)
+            ->assertOk()
+            ->assertJsonPath('data.name', 'Renamed')
+            ->assertJsonPath('data.settings', ['products' => [$keptProductId], 'hide_promo_code' => true]);
+
+        $this->assertSame(
+            ['products' => [$keptProductId], 'hide_promo_code' => true],
+            json_decode(DB::table('widgets')->where('id', $widget['id'])->value('settings'), true),
+        );
+    }
+
+    public function test_saving_a_widget_whose_selected_tickets_were_all_deleted_clears_the_selection(): void
+    {
+        $categoryId = $this->insertCategory($this->eventId);
+        $firstProductId = $this->insertProduct($this->eventId, $categoryId);
+        $secondProductId = $this->insertProduct($this->eventId, $categoryId);
+        $widget = $this->postJson("/events/$this->eventId/widgets", [
+            'name' => 'VIP only',
+            'type' => 'TICKETS',
+            'settings' => ['products' => [$firstProductId, $secondProductId], 'button_text' => 'Buy VIP'],
+        ], $this->headers)->assertCreated()->json('data');
+
+        DB::table('products')->whereIn('id', [$firstProductId, $secondProductId])->update(['deleted_at' => now()]);
+
+        $this->putJson("/events/$this->eventId/widgets/{$widget['id']}", [
+            'name' => 'VIP only renamed',
+            'type' => 'TICKETS',
+            'settings' => $widget['settings'],
+        ], $this->headers)
+            ->assertOk()
+            ->assertJsonPath('data.name', 'VIP only renamed')
+            ->assertJsonPath('data.settings', ['button_text' => 'Buy VIP']);
+
+        $this->assertSame(
+            ['button_text' => 'Buy VIP'],
+            json_decode(DB::table('widgets')->where('id', $widget['id'])->value('settings'), true),
+        );
     }
 
     public function test_widget_ids_are_scoped_to_the_parent_in_the_route(): void
@@ -274,6 +374,18 @@ class WidgetCrudTest extends TestCase
             'product_type' => 'TICKET',
             'type' => 'PAID',
             'order' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+    }
+
+    private function insertOccurrence(int $eventId): int
+    {
+        return DB::table('event_occurrences')->insertGetId([
+            'short_id' => 'oc_'.uniqid(),
+            'event_id' => $eventId,
+            'start_date' => now()->addDay(),
+            'status' => 'ACTIVE',
             'created_at' => now(),
             'updated_at' => now(),
         ]);

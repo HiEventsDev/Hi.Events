@@ -64,11 +64,6 @@ class SsoProviderRegistry
         return (bool) $this->config->get('sso.password_login_disabled');
     }
 
-    public function areButtonsVisible(): bool
-    {
-        return (bool) $this->config->get('sso.buttons_visible', true);
-    }
-
     private function build(string $key, array $settings): ?SsoProviderConfig
     {
         $clientId = $settings['client_id'] ?? null;

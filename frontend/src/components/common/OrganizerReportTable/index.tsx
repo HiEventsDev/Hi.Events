@@ -265,6 +265,17 @@ const OrganizerReportTable = <T extends Record<string, any>>({
             return wrapper(t`Loading...`);
         }
 
+        if (reportQuery.isError) {
+            return wrapper(
+                <Group justify="center" gap="sm">
+                    <Text size="sm">{t`Couldn't load this report`}</Text>
+                    <Button variant="default" size="xs" loading={reportQuery.isFetching} onClick={() => reportQuery.refetch()}>
+                        {t`Try again`}
+                    </Button>
+                </Group>
+            );
+        }
+
         if (showDateFilter && (!dateRange[0] || !dateRange[1])) {
             return wrapper(t`Please select a date range`);
         }

@@ -451,6 +451,7 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
                                     <DateTimeField
                                         {...form.getInputProps('end_date')}
                                         label={t`End Date`}
+                                        defaultTime="23:59"
                                     />
                                     <TextInput
                                         {...form.getInputProps('label')}

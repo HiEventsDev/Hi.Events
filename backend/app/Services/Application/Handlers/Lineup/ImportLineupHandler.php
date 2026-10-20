@@ -32,6 +32,7 @@ use HiEvents\Services\Application\Handlers\Lineup\DTO\ImportLineupResultDTO;
 use HiEvents\Services\Application\Handlers\Lineup\DTO\ImportLineupSlotDTO;
 use HiEvents\Services\Domain\Event\EventSpamCheckDispatchService;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
+use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -78,6 +79,7 @@ class ImportLineupHandler
         private readonly HtmlPurifierService $purifier,
         private readonly EventSpamCheckDispatchService $spamCheckDispatchService,
         private readonly DatabaseManager $databaseManager,
+        private readonly TransactionLockService $transactionLockService,
     ) {}
 
     /**
@@ -119,7 +121,8 @@ class ImportLineupHandler
 
     private function load(int $eventId): void
     {
-        $this->event = $this->eventRepository->findByIdLocked($eventId);
+        $this->transactionLockService->lockEventLineup($eventId);
+        $this->event = $this->eventRepository->findById($eventId);
         $this->timezone = $this->event->getTimezone() ?? 'UTC';
         $this->performerRows = [];
         $this->updatedProfileIds = [];

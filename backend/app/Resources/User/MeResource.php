@@ -47,7 +47,7 @@ class MeResource extends UserResource
                 'expires_at' => $licence->licence?->expires_at->toDateString(),
                 'grace_ends_at' => $licence->grace_ends_at?->toDateString(),
                 'invalid_reason' => $licence->invalid_reason,
-                /** @var array<int, 'seating'|'box_office'|'white_label'> */
+                /** @var array<int, 'seating'|'box_office'|'enterprise_sso'|'white_label'> */
                 'features_in_use' => array_map(
                     static fn (LicensedFeature $feature) => $feature->value,
                     $featuresInUse,

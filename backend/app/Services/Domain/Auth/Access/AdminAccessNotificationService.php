@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Domain\Auth\Access;
 
 use HiEvents\DomainObjects\AccountUserDomainObject;
+use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\Mail\Account\AdminAccessGrantedMail;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
@@ -30,12 +31,19 @@ class AdminAccessNotificationService
 
         $ownerUser = $this->userRepository->findById($owner->getUserId());
 
+        /** @var AccountUserDomainObject|null $newAdmin */
+        $newAdmin = $this->accountUserRepository->findFirstWhere([
+            'account_id' => $accountId,
+            'user_id' => $newAdminUserId,
+        ]);
+
         $this->mailer
             ->to($ownerUser->getEmail())
             ->locale($ownerUser->getLocale())
             ->send(new AdminAccessGrantedMail(
                 newAdminEmail: $this->userRepository->findById($newAdminUserId)->getEmail(),
                 grantedByEmail: $grantedByUserId === null ? null : $this->userRepository->findById($grantedByUserId)->getEmail(),
+                isInvitation: $newAdmin?->getStatus() === UserStatus::INVITED->name,
             ));
     }
 }

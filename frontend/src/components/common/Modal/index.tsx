@@ -3,6 +3,8 @@ import {useMediaQuery} from "@mantine/hooks";
 import React from "react";
 import classes from "./Modal.module.scss";
 import classNames from "classnames";
+import {t} from "@lingui/macro";
+import {useReturnFocusOnClose} from "../../../hooks/useReturnFocusOnClose.ts";
 
 interface ModalProps {
     heading?: string | React.ReactNode,
@@ -14,6 +16,7 @@ export const Modal = (props: MantineModalProps & ModalProps) => {
     const isSmallScreen = useMediaQuery('(max-width: 575px)', false, {getInitialValueInEffect: false});
     const isBranded = modalHeader === 'branded';
     const extraClassNames = typeof customClassNames === 'object' ? customClassNames : {};
+    useReturnFocusOnClose(restProps.opened && restProps.returnFocus !== false);
 
     return (
         <MantineModal
@@ -27,6 +30,7 @@ export const Modal = (props: MantineModalProps & ModalProps) => {
             }}
             size={props.size ?? 'xl'}
             withCloseButton={true}
+            closeButtonProps={{'aria-label': t`Close`, ...restProps.closeButtonProps}}
             title={heading}
             closeOnClickOutside={false}
             classNames={{

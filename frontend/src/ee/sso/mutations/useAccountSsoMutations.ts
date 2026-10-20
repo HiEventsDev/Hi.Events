@@ -3,7 +3,7 @@ import {accountSsoClient} from "../api/accountSso.client.ts";
 import {GET_ACCOUNT_SSO_QUERY_KEY} from "../queries/useGetAccountSso.ts";
 import {GET_SSO_ENFORCEMENT_PREVIEW_QUERY_KEY} from "../queries/useGetSsoEnforcementPreview.ts";
 import {GET_USERS_QUERY_KEY} from "../../../queries/useGetUsers.ts";
-import {AccountSsoConnection, AccountSsoConnectionRequest, IdParam} from "../../../types.ts";
+import {AccountSso, AccountSsoConnection, AccountSsoConnectionRequest, IdParam} from "../../../types.ts";
 
 const useInvalidateAccountSso = () => {
     const queryClient = useQueryClient();
@@ -13,6 +13,38 @@ const useInvalidateAccountSso = () => {
         queryClient.invalidateQueries({queryKey: [GET_SSO_ENFORCEMENT_PREVIEW_QUERY_KEY]}),
         queryClient.invalidateQueries({queryKey: [GET_USERS_QUERY_KEY]}),
     ]);
+};
+
+type ConnectionPatch = Partial<Pick<AccountSsoConnection, 'status' | 'session_ttl_minutes' | 'jit_provisioning_enabled' | 'jit_default_role'>>;
+
+interface ConnectionSnapshot {
+    queryKey: string[];
+    previous: AccountSso | undefined;
+}
+
+const useOptimisticConnection = () => {
+    const queryClient = useQueryClient();
+    const invalidate = useInvalidateAccountSso();
+
+    const apply = async (accountId: IdParam, patch: ConnectionPatch): Promise<ConnectionSnapshot> => {
+        const queryKey = [GET_ACCOUNT_SSO_QUERY_KEY, String(accountId)];
+        await queryClient.cancelQueries({queryKey});
+        const previous = queryClient.getQueryData<AccountSso>(queryKey);
+
+        if (previous?.connection) {
+            queryClient.setQueryData<AccountSso>(queryKey, {...previous, connection: {...previous.connection, ...patch}});
+        }
+
+        return {queryKey, previous};
+    };
+
+    const rollBack = (snapshot: ConnectionSnapshot | undefined) => {
+        if (snapshot?.previous) {
+            queryClient.setQueryData(snapshot.queryKey, snapshot.previous);
+        }
+    };
+
+    return {apply, rollBack, invalidate};
 };
 
 export const useSaveSsoConnection = () => {
@@ -30,12 +62,29 @@ export const useCheckSsoConnection = () => useMutation({
     mutationFn: ({accountId, request}: { accountId: IdParam, request: AccountSsoConnectionRequest }) => accountSsoClient.checkConnection(accountId, request),
 });
 
+export const useUpdateSsoAccessSettings = () => {
+    const optimistic = useOptimisticConnection();
+
+    return useMutation({
+        mutationFn: ({accountId, request}: { accountId: IdParam, request: AccountSsoConnectionRequest }) => accountSsoClient.updateConnection(accountId, request),
+        onMutate: ({accountId, request}) => optimistic.apply(accountId, {
+            session_ttl_minutes: request.session_ttl_minutes,
+            jit_provisioning_enabled: request.jit_provisioning_enabled,
+            jit_default_role: request.jit_default_role,
+        }),
+        onError: (_, __, snapshot) => optimistic.rollBack(snapshot),
+        onSettled: optimistic.invalidate,
+    });
+};
+
 export const useSetSsoConnectionStatus = () => {
-    const invalidate = useInvalidateAccountSso();
+    const optimistic = useOptimisticConnection();
 
     return useMutation({
         mutationFn: ({accountId, status}: { accountId: IdParam, status: AccountSsoConnection['status'] }) => accountSsoClient.setConnectionStatus(accountId, status),
-        onSuccess: invalidate,
+        onMutate: ({accountId, status}) => optimistic.apply(accountId, {status}),
+        onError: (_, __, snapshot) => optimistic.rollBack(snapshot),
+        onSettled: optimistic.invalidate,
     });
 };
 

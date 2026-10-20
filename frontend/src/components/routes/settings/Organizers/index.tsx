@@ -25,8 +25,8 @@ const OrganizerStatusLabel = ({status}: { status?: OrganizerStatus }) => {
 };
 
 const Organizers = () => {
-    const {data: organizersResponse, isFetched} = useGetOrganizers();
-    const {canCreateOrganizers, canManageOrganizer} = useAccess();
+    const {data: organizersResponse, isFetched, isError, isFetching, refetch} = useGetOrganizers();
+    const {canCreateOrganizers, canManageOrganizer, isReadOnly} = useAccess();
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
 
     const organizers = (organizersResponse?.data ?? [])
@@ -34,6 +34,15 @@ const Organizers = () => {
         .sort((a, b) => a.name.localeCompare(b.name));
 
     const renderContent = () => {
+        if (isError && !organizersResponse) {
+            return (
+                <div className={classes.empty}>
+                    <p className={classes.emptyText}>{t`Couldn't load your organizers`}</p>
+                    <Button variant="default" size="xs" loading={isFetching} onClick={() => refetch()}>{t`Try again`}</Button>
+                </div>
+            );
+        }
+
         if (!isFetched) {
             return <Center py="xl"><Loader size="sm"/></Center>;
         }
@@ -45,7 +54,7 @@ const Organizers = () => {
         return organizers.map(organizer => (
             <NavLink
                 key={organizer.id}
-                to={`/manage/organizer/${organizer.id}/settings`}
+                to={`/manage/organizer/${organizer.id}/${isReadOnly ? 'dashboard' : 'settings'}`}
                 className={classes.organizer}
                 data-testid="settings-organizer-row"
             >
@@ -60,7 +69,7 @@ const Organizers = () => {
                     </div>
                 </div>
                 <span className={classes.open}>
-                    <span className={classes.openLabel}>{t`Open settings`}</span>
+                    <span className={classes.openLabel}>{isReadOnly ? t`Open` : t`Open settings`}</span>
                     <IconChevronRight size={16}/>
                 </span>
             </NavLink>

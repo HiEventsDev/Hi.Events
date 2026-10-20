@@ -22,7 +22,7 @@ import {GET_EVENT_PUBLIC_QUERY_KEY, useGetEventPublic} from "../../../../queries
 import {ThemeColorControls} from "../../../common/ThemeColorControls";
 import {ThemeFontControl} from "../../../common/ThemeFontControl";
 import {getDefaultThemeSettings, validateThemeSettings} from "../../../../utilites/themeUtils.ts";
-import {HomepageDesigner as HomepageDesignerShell, useHomepagePreview} from "../../../common/HomepageDesigner";
+import {firstHomepageSectionsError, HomepageDesigner as HomepageDesignerShell, useHomepagePreview} from "../../../common/HomepageDesigner";
 import {DesignerSection} from "../../../common/DesignerShell";
 
 interface FormValues {
@@ -119,7 +119,7 @@ const HomepageDesigner = () => {
                     showSuccess(t`Successfully Updated Homepage Design`);
                 },
                 onError: (error) => {
-                    formErrorHandle(form, error);
+                    formErrorHandle(form, error, firstHomepageSectionsError(error));
                 },
             }
         );

@@ -189,7 +189,7 @@ const ATTRIBUTE_DESCRIPTIONS: Record<string, string> = {
     'data-hievents-radius': 'Corner radius in pixels.',
     'data-hievents-padding': 'Inner padding in pixels.',
     'data-hievents-locale': 'Language code. Omit to follow the visitor\'s browser language.',
-    'data-hievents-autoresize': '"false" makes the widget fill its container\'s height instead of growing to fit its content.',
+    'data-hievents-autoresize': '"false" stops the widget growing to fit its content. It fills the height you give this element instead.',
     'data-hievents-sections': 'Comma-separated content to show, in order: tickets, header, about, location, organizer, lineup, schedule, custom.',
     'data-hievents-products': 'Comma-separated product ids to show. Others are hidden.',
     'data-hievents-categories': 'Comma-separated product category ids to show.',
@@ -227,6 +227,7 @@ export const agentInstructions = (type: WidgetType, rawAttributes: [string, stri
         .map(([name, value]) => `- \`${name}="${value}"\`: ${ATTRIBUTE_DESCRIPTIONS[name] ?? ''}`)
         .join('\n');
     const sellsTickets = type !== 'LINEUP' && type !== 'SCHEDULE';
+    const fixedHeight = attributes.some(([name, value]) => name === 'data-hievents-autoresize' && value === 'false');
 
     return `# Add the Hi.Events ${WIDGET_KIND[type]} to this website
 
@@ -261,7 +262,9 @@ ${elementLines}
   Load the script once, globally (for example with Next.js \`<Script src="${scriptUrl}" strategy="afterInteractive" />\` in the root layout). With TypeScript, declare \`hievents-widget\` as an intrinsic JSX element. Widgets added after the page loads are picked up automatically.
 - Server-side rendering is fine: render the element on the server and the script activates it in the browser.
 - Site builders (WordPress, Webflow, Squarespace, Wix, Shopify, Framer): paste the element and the script together into the builder's custom HTML or code embed block.
-- Don't wrap the widget in your own iframe. It creates its own iframe and resizes to fit its content, so don't give it a fixed height${attributes.some(([name, value]) => name === 'data-hievents-autoresize' && value === 'false') ? ' unless the container should control the height (autoresize is off)' : ''}.
+- Don't wrap the widget in your own iframe. ${fixedHeight
+        ? 'It creates its own iframe, which fills the widget element because autoresize is off, so give the widget element the height it should take.'
+        : 'It creates its own iframe and resizes to fit its content, so don\'t give it a fixed height.'}
 - If the site sends a Content-Security-Policy header, allow \`${origin}\` in \`script-src\` and \`frame-src\`.
 ${sellsTickets ? `
 ## Optional: track sales in your analytics

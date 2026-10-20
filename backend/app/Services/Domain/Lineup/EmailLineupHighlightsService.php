@@ -6,7 +6,6 @@ namespace HiEvents\Services\Domain\Lineup;
 
 use Carbon\CarbonImmutable;
 use HiEvents\DomainObjects\Enums\HomepageSectionType;
-use HiEvents\DomainObjects\Enums\LineupBillingTier;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventLineupEntryDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
@@ -28,10 +27,6 @@ use Illuminate\Support\Collection;
 
 class EmailLineupHighlightsService
 {
-    private const MAX_NAMES = 6;
-
-    private const MAX_SLOTS = 5;
-
     private const SPEAKER_CATEGORIES = ['BUSINESS', 'TECH', 'EDUCATION'];
 
     private const HOST_CATEGORIES = ['WORKSHOP', 'WELLNESS', 'SPIRITUALITY', 'SPORTS', 'HOBBIES'];
@@ -40,6 +35,7 @@ class EmailLineupHighlightsService
         private readonly EventLineupEntryRepositoryInterface $lineupEntryRepository,
         private readonly EventScheduleItemRepositoryInterface $scheduleItemRepository,
         private readonly EventSpaceRepositoryInterface $spaceRepository,
+        private readonly LineupHighlightSelector $highlightSelector,
     ) {}
 
     public function toTemplateContext(?EmailLineupHighlightsDTO $highlights): array
@@ -79,19 +75,10 @@ class EmailLineupHighlightsService
         $allItems = $this->scheduleItems($event->getId());
         $items = $this->itemsForOccurrence($allItems, $occurrence, $timezone);
         $entries = $occurrence === null ? $entries : $this->entriesForOccurrence($entries, $items, $allItems);
-        $highlighted = $this->highlightedEntries($entries);
-        $highlightedIds = $highlighted->map(fn (EventLineupEntryDomainObject $entry) => $entry->getId())->all();
-
-        $slotRows = $showSchedule ? $this->slotRows($items, $entries, $highlightedIds) : collect();
-        $namedInSlots = $slotRows
-            ->filter(fn (array $row) => $row['item']->getTitle() === null)
-            ->flatMap(fn (array $row) => $row['people']->map(fn (EventLineupEntryDomainObject $entry) => $entry->getId()))
-            ->all();
-        $slots = $this->formatSlots($event->getId(), $slotRows, $timezone);
+        $selection = $this->highlightSelector->select($entries, $showSchedule ? $items : collect());
+        $slots = $this->formatSlots($event->getId(), $selection->slots, $timezone);
         $names = $showLineup
-            ? $highlighted
-                ->reject(fn (EventLineupEntryDomainObject $entry) => in_array($entry->getId(), $namedInSlots, true))
-                ->take(self::MAX_NAMES)
+            ? $selection->entries
                 ->map(fn (EventLineupEntryDomainObject $entry) => $entry->getProfile()->getName())
                 ->values()
                 ->all()
@@ -169,43 +156,6 @@ class EmailLineupHighlightsService
             ->values();
     }
 
-    private function highlightedEntries(Collection $entries): Collection
-    {
-        foreach ([LineupBillingTier::HEADLINER, LineupBillingTier::FEATURED] as $tier) {
-            $matches = $entries->filter(fn (EventLineupEntryDomainObject $entry) => $entry->getBillingTier() === $tier->value);
-
-            if ($matches->isNotEmpty()) {
-                return $matches->values();
-            }
-        }
-
-        return $entries;
-    }
-
-    /**
-     * @param  int[]  $highlightedIds
-     */
-    private function slotRows(Collection $items, Collection $entries, array $highlightedIds): Collection
-    {
-        $entriesById = $entries->keyBy(fn (EventLineupEntryDomainObject $entry) => $entry->getId());
-
-        $withPeople = $items
-            ->map(fn (EventScheduleItemDomainObject $item) => [
-                'item' => $item,
-                'people' => ($item->getPerformers() ?? collect())
-                    ->map(fn (EventScheduleItemPerformerDomainObject $performer) => $entriesById->get($performer->getEventLineupEntryId()))
-                    ->filter()
-                    ->values(),
-            ])
-            ->filter(fn (array $row) => $row['item']->getTitle() !== null || $row['people']->isNotEmpty());
-
-        $featured = $withPeople->filter(fn (array $row) => $row['people']->contains(
-            fn (EventLineupEntryDomainObject $entry) => in_array($entry->getId(), $highlightedIds, true)
-        ));
-
-        return ($featured->isNotEmpty() ? $featured : $withPeople)->take(self::MAX_SLOTS)->values();
-    }
-
     /**
      * @return array<int, array{time: string, title: string, stage: ?string}>
      */
@@ -229,6 +179,7 @@ class EmailLineupHighlightsService
                     ->implode(', '),
                 'stage' => $spacesById->get($row['item']->getEventSpaceId() ?? '')?->getName(),
             ])
+            ->values()
             ->all();
     }
 

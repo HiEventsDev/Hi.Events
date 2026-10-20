@@ -3,10 +3,12 @@ import {
     GenericDataResponse,
     IdentityConfirmation,
     IdParam,
+    LinkableSsoConnection,
     LoginResponse,
     SsoExchangeResponse,
     SsoIntent,
     SsoProvidersResponse,
+    SsoSignInMethods,
     SsoSignupRequest,
     SsoStartResponse,
     UserIdentity,
@@ -61,9 +63,15 @@ export const ssoClient = {
         return response.data;
     },
 
-    identities: async () => {
-        const response = await api.get<GenericDataResponse<UserIdentity[]>>('users/me/sso-identities');
-        return response.data.data;
+    identities: async (): Promise<SsoSignInMethods> => {
+        const response = await api.get<GenericDataResponse<UserIdentity[]> & {
+            meta?: { linkable_connections?: LinkableSsoConnection[] }
+        }>('users/me/sso-identities');
+
+        return {
+            identities: response.data.data,
+            linkableConnections: response.data.meta?.linkable_connections ?? [],
+        };
     },
 
     startLink: async (provider: string, request: IdentityConfirmation & { return_path?: string }) => {

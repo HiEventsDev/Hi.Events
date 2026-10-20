@@ -18,6 +18,6 @@ enum SsoIntent: string
      */
     public static function accountConnectionIntents(): array
     {
-        return [self::LOGIN, self::REAUTH, self::TEST];
+        return [self::LOGIN, self::LINK, self::REAUTH, self::TEST];
     }
 }

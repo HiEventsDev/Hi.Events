@@ -3,37 +3,15 @@ import {isSsr} from "../utilites/helpers.ts";
 import {getConfig} from "../utilites/config.ts";
 import {applySsrRequestHeaders} from "./ssrRequestHeaders.ts";
 import {queueSilentReauthAfterExpiry, setAuthNotice} from "../utilites/ssoFlow.ts";
+import {LOGIN_PATH, resolveAuthErrorAction, TWO_FACTOR_SETUP_PATH} from "./authErrorRedirect.ts";
+
+export {TWO_FACTOR_SETUP_PATH};
 
 const BASE_URL = isSsr()
     ? getConfig('VITE_API_URL_SERVER')
     : getConfig('VITE_API_URL_CLIENT');
-const LOGIN_PATH = "/auth/login";
-export const TWO_FACTOR_SETUP_PATH = "/auth/two-factor-setup";
 export const SECURITY_SETTINGS_PATH = "/settings/security";
 const PREVIOUS_URL_KEY = 'previous_url';
-const ACCESS_ERROR_CODES = ['FEATURE_UNAVAILABLE', 'ACCESS_RESTRICTED', 'PERMISSION_REQUIRED', 'READ_ONLY_ROLE', 'IMPERSONATION_NOT_ALLOWED'];
-
-// todo - This isn't scalable, we need to better way to manage this
-const ALLOWED_UNAUTHENTICATED_PATHS = [
-    'auth/login',
-    'accept-invitation',
-    'register',
-    'forgot-password',
-    'auth',
-    'account/payment',
-    'checkout',
-    'box-office',
-    '/event/',
-    'print',
-    '/order/',
-    'widget',
-    '/product/',
-    'check-in',
-    '/events/',
-    'my-tickets',
-    'emails/unsubscribe',
-    'sso/callback',
-];
 
 export const api = axios.create({
     baseURL: BASE_URL,
@@ -51,32 +29,15 @@ api.interceptors.response.use(
         if (!error.response) {
             return Promise.reject(error);
         }
-        const { status } = error.response;
-        const currentPath = window?.location.pathname;
-        const isAllowedUnauthenticatedPath = ALLOWED_UNAUTHENTICATED_PATHS.some(path => currentPath.includes(path));
-        const isManageEventPath = currentPath.startsWith('/manage/event/');
-        const isAuthError = status === 401 || status === 403;
+        const {status, data} = error.response;
+        const action = resolveAuthErrorAction(status, data?.error_code, window?.location.pathname);
 
-        if (status === 403 && error.response.data?.error_code === 'ACCOUNT_PENDING_DELETION') {
-            if (!currentPath.startsWith('/settings/account')) {
-                window?.location?.replace('/settings/account#delete-account');
-            }
-            return Promise.reject(error);
+        if (action.type === 'redirect') {
+            window?.location?.replace(action.to);
         }
 
-        if (status === 403 && error.response.data?.error_code === 'TWO_FACTOR_SETUP_REQUIRED') {
-            if (!currentPath.startsWith(TWO_FACTOR_SETUP_PATH)) {
-                window?.location?.replace(TWO_FACTOR_SETUP_PATH);
-            }
-            return Promise.reject(error);
-        }
-
-        if (status === 403 && ACCESS_ERROR_CODES.includes(error.response.data?.error_code)) {
-            return Promise.reject(error);
-        }
-
-        if (isAuthError && (!isAllowedUnauthenticatedPath || isManageEventPath)) {
-            if (error.response.data?.error_code === 'SSO_REQUIRED') {
+        if (action.type === 'login') {
+            if (data?.error_code === 'SSO_REQUIRED') {
                 setAuthNotice('SSO_REQUIRED');
             } else if (status === 401) {
                 queueSilentReauthAfterExpiry();

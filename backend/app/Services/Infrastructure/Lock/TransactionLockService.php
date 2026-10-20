@@ -12,6 +12,8 @@ class TransactionLockService
 
     public const ORDER_LOCK_KEYSPACE = 0x4F5244;
 
+    public const LINEUP_LOCK_KEYSPACE = 0x4C494E;
+
     public const MAX_LOCK_KEY = 2147483647;
 
     public function __construct(
@@ -23,6 +25,14 @@ class TransactionLockService
         $this->databaseManager->statement(
             'SELECT pg_advisory_xact_lock(?, ?)',
             [self::EVENT_LOCK_KEYSPACE, $eventId % self::MAX_LOCK_KEY],
+        );
+    }
+
+    public function lockEventLineup(int $eventId): void
+    {
+        $this->databaseManager->statement(
+            'SELECT pg_advisory_xact_lock(?, ?)',
+            [self::LINEUP_LOCK_KEYSPACE, $eventId % self::MAX_LOCK_KEY],
         );
     }
 

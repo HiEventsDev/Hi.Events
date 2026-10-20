@@ -7,8 +7,26 @@ import {
   resolveWidgetFrame,
   widgetMarkup,
 } from '../../pages/embedded-widget';
-import { createFreshOrganizer, createLiveEventWithFreeTicket, createLiveEventWithPaidTicket, createPastEventWithCoverImage } from '../../api/factory';
-import { uniqueEmail, uniqueName } from '../../utils/unique';
+import {
+  createFreshOrganizer,
+  createLiveEventWithFreeTicket,
+  createLiveEventWithPaidTicket,
+  createPastEventWithCoverImage,
+  enableOfflinePayments,
+} from '../../api/factory';
+import { uniqueCode, uniqueEmail, uniqueName } from '../../utils/unique';
+import { WidgetApi } from './widget-api';
+
+type HostOrdersWindow = Window & { hieventsOrders: unknown[] };
+
+const recordHostOrders = (page: import('@playwright/test').Page) => page.evaluate(() => {
+  const log: unknown[] = [];
+  (window as unknown as HostOrdersWindow).hieventsOrders = log;
+  window.addEventListener('hievents:order-completed', (event) => log.push((event as CustomEvent).detail));
+});
+
+const hostOrders = (page: import('@playwright/test').Page) =>
+  page.evaluate(() => (window as unknown as HostOrdersWindow).hieventsOrders);
 
 test.describe('widget modes', () => {
   test('the ticket widget shows the chosen sections and only the selected tickets', async ({ page, api, account, baseURL }) => {
@@ -38,6 +56,7 @@ test.describe('widget modes', () => {
 
   test('a promo code in the host page link is applied in the widget', async ({ page, api, account, baseURL }) => {
     const event = await createLiveEventWithPaidTicket(api, account.organizerId, 20);
+    await api.updateEventSettings(event.eventId, { pass_platform_fee_to_buyer: false });
     const code = uniqueName('HOSTPROMO').replace(/[^A-Za-z0-9]/g, '').slice(0, 20).toUpperCase();
     await api.createPromoCode(event.eventId, { code, discount_type: 'PERCENTAGE', discount: 10, applicable_product_ids: [] });
 
@@ -79,6 +98,112 @@ test.describe('widget modes', () => {
     await expect(checkoutFrame.getByText(`You're going to ${event.title}`)).toBeVisible();
     await expect.poll(() => page.evaluate(() => (window as unknown as { hieventsOrders: unknown[] }).hieventsOrders))
       .toEqual([expect.objectContaining({ eventId: String(event.eventId), quantity: 1, status: 'COMPLETED' })]);
+  });
+
+  test('a paid order through the ticket button tells the host page its total and currency', async ({ page, api, account, baseURL }) => {
+    const event = await createLiveEventWithPaidTicket(api, account.organizerId, 20);
+    await api.updateEventSettings(event.eventId, { pass_platform_fee_to_buyer: false });
+    await enableOfflinePayments(api, event.eventId);
+    const buyer = { firstName: 'Paid', lastName: 'Button', email: uniqueEmail('paid-button') };
+
+    await openEmbedHost(page, baseURL!, widgetMarkup({ id: String(event.eventId), 'widget-type': 'button', 'button-text': 'Book now' }));
+    await recordHostOrders(page);
+
+    await page.getByRole('button', { name: 'Book now' }).click();
+    const widget = await resolveWidgetFrame(page);
+    await setWidgetQuantity(widget, 1);
+    await widget.getByTestId('checkout-continue-button').click();
+    const checkoutFrame = await resolveCheckoutFrame(page);
+    await checkoutFrame.waitForURL(/\/checkout\/\d+\/[^/]+\/details/);
+    const checkout = new CheckoutPage(page, checkoutFrame);
+    await checkout.fillOrderDetails(buyer);
+    await checkout.fillFirstAttendee(buyer);
+    await checkout.continueToPayment();
+    await checkout.chooseOfflinePayment();
+
+    await expect.poll(() => hostOrders(page)).toContainEqual(expect.objectContaining({
+      eventId: String(event.eventId),
+      currency: 'USD',
+      total: 20,
+      quantity: 1,
+      status: 'AWAITING_OFFLINE_PAYMENT',
+    }));
+    const [order] = await api.listOrders(event.eventId);
+    expect(Number(order.total_gross)).toBe(20);
+  });
+
+  test('a saved events widget credits the host page affiliate and counts the order it sold', async ({ page, api, account, baseURL, playwright }) => {
+    const organizer = await createFreshOrganizer(api);
+    const event = await createLiveEventWithFreeTicket(api, organizer.id);
+    const affiliateCode = uniqueCode('EVENTSAFF');
+    await api.createAffiliate(event.eventId, { name: 'Events partner', code: affiliateCode });
+    const widgets = await WidgetApi.create(playwright, account.token);
+    const saved = await widgets.createOrganizerWidget(organizer.id, { name: 'Listing', type: 'EVENTS', settings: { layout: 'list' } });
+    const buyer = { firstName: 'Listing', lastName: 'Buyer', email: uniqueEmail('events-widget') };
+
+    await openEmbedHost(
+      page,
+      baseURL!,
+      `<div class="hievents-widget" data-hievents-organizer-id="${organizer.id}" data-hievents-widget-type="events" data-hievents-widget="${saved.short_id}"></div>`,
+      `?aff=${affiliateCode}`,
+    );
+    const list = await resolveWidgetFrame(page, 'Hi.Events Events');
+    await list.getByTestId('widget-event-item').filter({ hasText: event.title }).click();
+    const widget = await resolveWidgetFrame(page);
+    await setWidgetQuantity(widget, 1);
+    await widget.getByTestId('checkout-continue-button').click();
+    const checkoutFrame = await resolveCheckoutFrame(page);
+    await checkoutFrame.waitForURL(/\/checkout\/\d+\/[^/]+\/details/);
+    const checkout = new CheckoutPage(page, checkoutFrame);
+    await checkout.fillOrderDetails(buyer);
+    await checkout.fillFirstAttendee(buyer);
+    await checkout.completeFreeOrder();
+    await expect(checkoutFrame.getByText(`You're going to ${event.title}`)).toBeVisible();
+
+    await expect.poll(async () => (await api.listAffiliates(event.eventId)).find((affiliate) => affiliate.code === affiliateCode)?.total_sales)
+      .toBe(1);
+    await expect.poll(async () => (await widgets.listOrganizerWidgets(organizer.id)).find((candidate) => candidate.id === saved.id)?.stats.orders)
+      .toBe(1);
+    await widgets.dispose();
+  });
+
+  test('an events widget that opens event pages passes on the host page affiliate, promo code and campaign', async ({ page, api, baseURL }) => {
+    const organizer = await createFreshOrganizer(api);
+    const event = await createLiveEventWithFreeTicket(api, organizer.id);
+    const affiliateCode = uniqueCode('PAGEAFF');
+    await api.createAffiliate(event.eventId, { name: 'Page partner', code: affiliateCode });
+    const promoCode = uniqueCode('PAGEPROMO');
+    await api.createPromoCode(event.eventId, { code: promoCode, discount_type: 'PERCENTAGE', discount: 10, applicable_product_ids: [] });
+    const buyer = { firstName: 'Page', lastName: 'Buyer', email: uniqueEmail('events-page') };
+
+    await openEmbedHost(
+      page,
+      baseURL!,
+      `<div class="hievents-widget" data-hievents-organizer-id="${organizer.id}" data-hievents-widget-type="events" data-hievents-open-in="page"></div>`,
+      `?aff=${affiliateCode}&promo_code=${promoCode}&utm_source=newsletter`,
+    );
+    const list = await resolveWidgetFrame(page, 'Hi.Events Events');
+    const [eventPage] = await Promise.all([
+      page.context().waitForEvent('page'),
+      list.getByTestId('widget-event-item').filter({ hasText: event.title }).click(),
+    ]);
+    await eventPage.waitForLoadState('networkidle');
+
+    const opened = new URL(eventPage.url());
+    expect(opened.pathname).toContain(`/event/${event.eventId}/`);
+    expect(opened.searchParams.get('aff')).toBe(affiliateCode);
+    expect(opened.searchParams.get('promo_code')).toBe(promoCode);
+    expect(opened.searchParams.get('utm_source')).toBe('newsletter');
+
+    const checkout = new CheckoutPage(eventPage);
+    await checkout.setFirstProductQuantity(1);
+    await checkout.continueToCheckout();
+    await checkout.fillOrderDetails(buyer);
+    await checkout.fillFirstAttendee(buyer);
+    await checkout.completeFreeOrder();
+
+    await expect.poll(async () => (await api.listAffiliates(event.eventId)).find((affiliate) => affiliate.code === affiliateCode)?.total_sales)
+      .toBe(1);
   });
 
   test('the events widget lists an organizer’s events and opens tickets in a pop-up', async ({ page, api, baseURL }) => {

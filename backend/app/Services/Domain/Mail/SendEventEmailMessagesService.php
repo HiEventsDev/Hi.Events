@@ -64,6 +64,13 @@ class SendEventEmailMessagesService
             throw new UnableToSendMessageException($message);
         }
 
+        if ($messageData->is_test) {
+            $this->sendEmailToMessageSender($messageData, $event);
+            $this->updateMessageStatus($messageData, MessageStatus::SENT);
+
+            return;
+        }
+
         switch ($messageData->type) {
             case MessageTypeEnum::INDIVIDUAL_ATTENDEES:
                 $this->sendAttendeeMessages($messageData, $event);
@@ -143,10 +150,6 @@ class SendEventEmailMessagesService
         EventDomainObject $event,
     ): void {
         $this->sendEmailToMessageSender($messageData, $event);
-
-        if ($messageData->is_test) {
-            return;
-        }
 
         $sentEmails = [];
         $attendees->each(function (AttendeeDomainObject $attendee) use (&$sentEmails, $event, $messageData) {

@@ -700,7 +700,12 @@ $muted: var(--mantine-color-gray-6);
   }
 }
 
-.dayChip[aria-selected="true"] {
+.dayChip[data-off-date] {
+  border-color: var(--mantine-color-orange-4);
+  color: var(--mantine-color-orange-9);
+}
+
+.dayChip[aria-pressed="true"] {
   border-color: var(--mantine-color-primary-6);
   background: var(--mantine-color-primary-6);
   color: white;
@@ -890,6 +895,10 @@ $muted: var(--mantine-color-gray-6);
   min-width: 0;
   font-size: var(--mantine-font-size-xs);
   color: var(--mantine-color-gray-7);
+}
+
+.agendaAdminSpaceName {
+  min-width: 0;
   @include mixins.ellipsis;
 }
 
@@ -988,9 +997,17 @@ $muted: var(--mantine-color-gray-6);
   background: rgba(0, 0, 0, 0.6);
 }
 
-.photoRemove {
+.photoMove, .photoRemove {
   position: absolute;
   top: 6px;
+}
+
+.photoMove {
+  left: 6px;
+  cursor: grab;
+}
+
+.photoRemove {
   right: 6px;
 }
 

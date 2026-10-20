@@ -6,6 +6,7 @@ import {HomepageThemeSettings} from '../../../types.ts';
 import {WidgetSettings, WidgetType} from "../../../utilites/widgetConfig.ts";
 import {WidgetColors} from "../../../utilites/widgetTheme.ts";
 import {COLOR_REGEX} from "./editorSettings.ts";
+import {useAccess} from "../../../hooks/useAccess.ts";
 import classes from './WidgetEditor.module.scss';
 
 interface AppearancePanelProps {
@@ -19,6 +20,7 @@ interface AppearancePanelProps {
 }
 
 export const AppearancePanel = ({type, settings, update, isOrganizer, theme, themeColors, homepageDesignerPath}: AppearancePanelProps) => {
+    const {isReadOnly} = useAccess();
     const usesEventTheme = settings.theme === 'event';
     const radius = settings.radius ?? (type === 'BUTTON' ? 10 : 16);
 
@@ -53,6 +55,7 @@ export const AppearancePanel = ({type, settings, update, isOrganizer, theme, the
                 size="sm"
                 value={usesEventTheme ? 'event' : 'custom'}
                 onChange={(value) => setStyle(value as 'event' | 'custom')}
+                aria-label={t`Colours and font`}
                 data={[
                     {value: 'event', label: isOrganizer ? t`Match my page` : t`Match event page`},
                     {value: 'custom', label: t`Custom`},
@@ -63,8 +66,12 @@ export const AppearancePanel = ({type, settings, update, isOrganizer, theme, the
                 <Text size="xs" c="dimmed">
                     {type === 'BUTTON'
                         ? t`Uses the colours and font from your homepage design. If you change the design, copy the code again to update the button.`
-                        : t`Uses the colours and font from your homepage design, and updates when you change them.`}{' '}
-                    <NavLink to={homepageDesignerPath} className={classes.inlineLink}>{t`Edit design`}</NavLink>
+                        : t`Uses the colours and font from your homepage design, and updates when you change them.`}
+                    {!isReadOnly && (
+                        <>
+                            {' '}<NavLink to={homepageDesignerPath} className={classes.inlineLink}>{t`Edit design`}</NavLink>
+                        </>
+                    )}
                 </Text>
             ) : (
                 <>

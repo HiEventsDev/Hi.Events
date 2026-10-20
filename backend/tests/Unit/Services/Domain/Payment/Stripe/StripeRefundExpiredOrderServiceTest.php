@@ -16,6 +16,7 @@ use HiEvents\Services\Domain\Payment\Stripe\DTOs\NotCompletableOrderRefundDTO;
 use HiEvents\Services\Domain\Payment\Stripe\StripePaymentIntentRefundService;
 use HiEvents\Services\Domain\Payment\Stripe\StripeRefundExpiredOrderService;
 use HiEvents\Services\Infrastructure\Stripe\StripeClientFactory;
+use HiEvents\Values\MoneyValue;
 use Illuminate\Contracts\Mail\Mailer;
 use Mockery;
 use Psr\Log\LoggerInterface;
@@ -103,6 +104,67 @@ class StripeRefundExpiredOrderServiceTest extends TestCase
         $this->assertSame('pi_test', $refund->paymentIntentId);
         $this->assertNotNull($capturedMail);
         $this->assertFalse($capturedMail->afterCommit, 'Refund notification must dispatch beforeCommit or the rollback discards it');
+    }
+
+    public function test_the_expired_order_refund_keeps_a_fixed_idempotency_key_whatever_the_order_has_refunded(): void
+    {
+        $order = (new OrderDomainObject)->setCurrency('USD')
+            ->setId(1)
+            ->setEventId(2)
+            ->setEmail(null)
+            ->setTotalRefunded(4.0);
+
+        $stripePayment = (new StripePaymentDomainObject)
+            ->setOrderId(1)
+            ->setPaymentIntentId('pi_test');
+
+        $eventRepository = Mockery::mock(EventRepositoryInterface::class);
+        $eventRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $eventRepository->shouldReceive('findById')->with(2)->andReturn((new EventDomainObject)->setId(2));
+
+        $stripeClient = Mockery::mock(StripeClient::class);
+        $clientFactory = Mockery::mock(StripeClientFactory::class);
+        $clientFactory->shouldReceive('createForPlatform')->andReturn($stripeClient);
+
+        $request = null;
+        $refundService = Mockery::mock(StripePaymentIntentRefundService::class);
+        $refundService->shouldReceive('refundPayment')
+            ->once()
+            ->andReturnUsing(function (
+                MoneyValue $amount,
+                MoneyValue $alreadyRefunded,
+                int $failedRefundCount,
+                StripePaymentDomainObject $payment,
+                StripeClient $client,
+                bool $notifyBuyer,
+            ) use (&$request) {
+                $request = compact('amount', 'alreadyRefunded', 'failedRefundCount', 'notifyBuyer');
+
+                return Refund::constructFrom(['id' => 're_test', 'status' => 'succeeded']);
+            });
+
+        $logger = Mockery::mock(LoggerInterface::class);
+        $logger->shouldReceive('info');
+
+        $service = new StripeRefundExpiredOrderService(
+            $refundService,
+            Mockery::mock(Mailer::class),
+            $logger,
+            $eventRepository,
+            $clientFactory,
+            Mockery::mock(OrderRefundRepositoryInterface::class),
+        );
+
+        $service->refundExpiredOrder(
+            paymentIntent: PaymentIntent::constructFrom(['id' => 'pi_test', 'amount' => 1000, 'currency' => 'usd']),
+            stripePayment: $stripePayment,
+            order: $order,
+        );
+
+        $this->assertSame(1000, $request['amount']->toMinorUnit());
+        $this->assertSame(0, $request['alreadyRefunded']->toMinorUnit());
+        $this->assertSame(0, $request['failedRefundCount']);
+        $this->assertFalse($request['notifyBuyer']);
     }
 
     public function test_recording_the_refund_writes_the_order_refund_row(): void

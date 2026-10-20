@@ -157,7 +157,8 @@ test.describe('read-only and permission spot checks', () => {
     await expect(page.getByTestId('lineup-import-button')).toHaveCount(0);
 
     await page.goto(`/manage/organizer/${freshAccount.organizerId}/dashboard`);
-    await expect(page).toHaveURL(/\/manage\/events/);
+    await expect(page.getByRole('heading', { name: "You don't have access to this organizer" })).toBeVisible();
+    await expect(page).toHaveURL(new RegExp(`/manage/organizer/${freshAccount.organizerId}/dashboard`));
 
     await page.goto('/account/settings');
     await expect(page).toHaveURL(/\/settings\/profile/);

@@ -26,6 +26,33 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  unit:
+    name: e2e unit specs
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: e2e/package-lock.json
+
+      - name: Install dependencies
+        working-directory: e2e
+        run: npm ci
+
+      - name: Run pure-logic specs
+        working-directory: e2e
+        run: npx playwright test --config tests '\.unit\.spec\.ts$' --forbid-only --reporter=github,list
+
   plan:
     runs-on: ubuntu-latest
     outputs:

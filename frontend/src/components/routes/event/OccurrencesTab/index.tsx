@@ -674,6 +674,7 @@ const OccurrencesTab = () => {
                         selectedIds={selectedIds}
                         onSelectionChange={setSelectedIds}
                         rowStyle={rowStyleFn}
+                        selectable={!isReadOnly}
                     />
                     {pagination && (
                         <Text className={classes.countText}>

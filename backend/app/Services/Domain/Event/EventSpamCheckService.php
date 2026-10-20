@@ -23,6 +23,14 @@ class EventSpamCheckService
 
     private const MAX_LINKS = 30;
 
+    private const EMAIL_FIRST_LABEL_PATTERNS = [
+        '/^organizer name$/',
+        '/^'.EventSpamCheckContentService::TICKET_EMAIL_LABEL_PREFIX.'/',
+        '/^product \d+ title$/',
+        '/^category \d+ name$/',
+        '/^(offline payment instructions|post-checkout message|online event connection details|email footer message)$/',
+    ];
+
     public function __construct(
         private readonly Repository $config,
     ) {}
@@ -64,6 +72,7 @@ class EventSpamCheckService
 
     private function buildPrompt(EventSpamCheckContentDTO $content): string
     {
+        $content = $this->emailFirst($content);
         $title = $this->toPlainText($content->title, self::TITLE_MAX_LENGTH);
         $description = $this->toPlainText($content->description, self::DESCRIPTION_MAX_LENGTH);
         $supplementary = $this->buildSupplementary($content);
@@ -81,6 +90,34 @@ class EventSpamCheckService
         </links>
         </event_content>
         PROMPT;
+    }
+
+    private function emailFirst(EventSpamCheckContentDTO $content): EventSpamCheckContentDTO
+    {
+        $tiers = [];
+
+        foreach ($content->supplementaryContent as $label => $value) {
+            $tiers[$this->emailFirstTier((string) $label)][$label] = $value;
+        }
+
+        ksort($tiers);
+
+        return new EventSpamCheckContentDTO(
+            title: $content->title,
+            description: $content->description,
+            supplementaryContent: array_merge([], ...$tiers),
+        );
+    }
+
+    private function emailFirstTier(string $label): int
+    {
+        foreach (self::EMAIL_FIRST_LABEL_PATTERNS as $tier => $pattern) {
+            if (preg_match($pattern, $label) === 1) {
+                return $tier;
+            }
+        }
+
+        return count(self::EMAIL_FIRST_LABEL_PATTERNS);
     }
 
     private function buildSupplementary(EventSpamCheckContentDTO $content): string

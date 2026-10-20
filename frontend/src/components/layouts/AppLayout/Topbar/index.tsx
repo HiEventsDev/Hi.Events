@@ -1,6 +1,7 @@
 import React from "react";
 import {NavLink} from "react-router";
 import {Breadcrumbs, Burger} from '@mantine/core';
+import {t} from "@lingui/macro";
 import classes from './Topbar.module.scss';
 import {BreadcrumbItem} from "../types";
 import {GlobalMenu} from "../../../common/GlobalMenu";
@@ -34,6 +35,9 @@ export const Topbar: React.FC<TopbarProps> = ({
                         opened={sidebarOpen}
                         onClick={() => setSidebarOpen(!sidebarOpen)}
                         size={'sm'}
+                        aria-label={sidebarOpen ? t`Close sidebar` : t`Open sidebar`}
+                        aria-expanded={sidebarOpen}
+                        aria-controls="app-manage-sidebar"
                     />
                 </div>
                 <div className={classes.logo}>

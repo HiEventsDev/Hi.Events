@@ -76,9 +76,13 @@ class AccountSsoConnectionService
                 throw new AccountSsoConfigurationException(__('Stop requiring single sign-on before changing the identity provider details.'));
             }
 
+            if ($secret === null) {
+                throw new AccountSsoConfigurationException(__('Enter the client secret again when you change the identity provider details.'), 'client_secret');
+            }
+
             $attributes = [
                 ...$attributes,
-                ...$this->identityAttributes($data, $this->validateIdentityProvider($data, $secret ?? $connection->getClientSecret())),
+                ...$this->identityAttributes($data, $this->validateIdentityProvider($data, $secret)),
                 'status' => AccountSsoConnectionStatus::INACTIVE->value,
                 'last_tested_at' => null,
             ];

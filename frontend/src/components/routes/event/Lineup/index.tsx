@@ -37,6 +37,8 @@ import {ScheduleItemDraft, ScheduleItemModal} from "./ScheduleBuilder/ScheduleIt
 import {SpaceModal} from "./ScheduleBuilder/SpaceModal.tsx";
 import {ProfileDrawer} from "./ProfileDrawer.tsx";
 import {ImportLineupModal} from "./ImportLineupModal.tsx";
+import {useOccurrenceDays} from "./useOccurrenceDays.ts";
+import {localScheduleDayKey} from "./ScheduleBuilder/scheduleDays.ts";
 import classes from "./Lineup.module.scss";
 
 type View = 'lineup' | 'timetable' | 'agenda';
@@ -166,6 +168,7 @@ const LineupWorkspace = ({event, lineup}: { event: Event, lineup: EventLineup })
     const [slotModal, setSlotModal] = useState<{ draft?: ScheduleItemDraft, item?: ScheduleItem } | null>(null);
     const [spaceModal, setSpaceModal] = useState<{ space?: EventSpace } | null>(null);
     const [date, setDate] = useState(() => initialScheduleDate(event, lineup));
+    const occurrenceDays = useOccurrenceDays(event);
 
     const drawerEntry = lineup.entries.find(entry => entry.id === drawerEntryId);
     const drawerSlotCount = lineup.schedule_items.filter(item => drawerEntryId && item.lineup_entry_ids.includes(drawerEntryId)).length;
@@ -198,7 +201,7 @@ const LineupWorkspace = ({event, lineup}: { event: Event, lineup: EventLineup })
 
     return (
         <>
-            <LineupStats event={event} lineup={lineup} lineupLabel={terminology.lineup}/>
+            <LineupStats event={event} lineup={lineup} lineupLabel={terminology.lineup} occurrenceDays={occurrenceDays}/>
 
             <div className={classes.workspace}>
                 <PeopleRail
@@ -214,6 +217,7 @@ const LineupWorkspace = ({event, lineup}: { event: Event, lineup: EventLineup })
                         <SegmentedControl
                             value={view}
                             onChange={setView}
+                            aria-label={t`View`}
                             data-testid="lineup-view-switch"
                             data={[
                                 {value: 'lineup', label: <span className={classes.viewLabel}><IconLayoutGrid size={14}/>{t`Preview`}</span>},
@@ -264,6 +268,7 @@ const LineupWorkspace = ({event, lineup}: { event: Event, lineup: EventLineup })
                                 event={event}
                                 lineup={lineup}
                                 date={date}
+                                occurrenceDays={occurrenceDays}
                                 onDateChange={setDate}
                                 onCreate={openNewSlot}
                                 onEdit={item => setSlotModal({item})}
@@ -299,7 +304,8 @@ const LineupWorkspace = ({event, lineup}: { event: Event, lineup: EventLineup })
                     lineup={lineup}
                     item={slotModal.item}
                     draft={slotModal.draft}
-                    onSaved={start => setDate(start.slice(0, 10))}
+                    occurrenceDays={occurrenceDays}
+                    onSaved={start => setDate(localScheduleDayKey(start))}
                     onClose={() => setSlotModal(null)}
                 />
             )}

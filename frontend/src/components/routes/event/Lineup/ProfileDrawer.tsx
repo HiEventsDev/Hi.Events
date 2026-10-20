@@ -173,7 +173,7 @@ const ProfileDrawerForm = ({organizerId, eventId, entry, profile: profileProp, s
             header={(
                 <SideDrawerHeading
                     media={(
-                        <Avatar src={photo?.url} radius="md" size={48} color="primary">
+                        <Avatar src={photo?.url} alt="" radius="md" size={48} color="primary">
                             {initialsFor(form.values.name || '?')}
                         </Avatar>
                     )}
@@ -246,6 +246,7 @@ const ProfileDrawerForm = ({organizerId, eventId, entry, profile: profileProp, s
                                 <SegmentedControl
                                     fullWidth
                                     disabled={isReadOnly}
+                                    aria-label={t`Billing`}
                                     data={BILLING_TIERS.map(tier => ({value: tier, label: billingTierLabel(tier)}))}
                                     {...form.getInputProps('billing_tier')}
                                 />

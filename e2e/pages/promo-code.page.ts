@@ -1,11 +1,12 @@
 import type { Page } from '@playwright/test';
-import { pickDateTime } from '../utils/datePicker';
+import { pickDate, pickDateTime } from '../utils/datePicker';
 
 interface CreatePromoCodeOptions {
   discountType?: 'Percentage' | 'Fixed amount';
   discount?: number;
   appliesTo?: 'Entire order' | 'Each product';
   expiryDate?: string;
+  expiryDay?: string;
 }
 
 export class PromoCodePage {
@@ -37,6 +38,11 @@ export class PromoCodePage {
     if (options.expiryDate) {
       await this.page.getByTestId('promo-code-advanced-toggle').click();
       await pickDateTime(this.page, this.page.getByLabel('Expiry Date'), options.expiryDate);
+    }
+
+    if (options.expiryDay) {
+      await this.page.getByTestId('promo-code-advanced-toggle').click();
+      await pickDate(this.page, this.page.getByLabel('Expiry Date'), options.expiryDay);
     }
 
     await this.page.getByTestId('promo-code-submit-button').click();

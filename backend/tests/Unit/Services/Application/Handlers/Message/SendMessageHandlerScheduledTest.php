@@ -6,12 +6,14 @@ use Carbon\Carbon;
 use HiEvents\DomainObjects\AccountDomainObject;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\MessageTypeEnum;
+use HiEvents\DomainObjects\Enums\MessagingEligibilityFailureEnum;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\MessageDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\Status\MessageStatus;
 use HiEvents\Jobs\Event\SendMessagesJob;
+use HiEvents\Jobs\Message\MessagePendingReviewJob;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -20,6 +22,7 @@ use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Message\DTO\SendMessageDTO;
 use HiEvents\Services\Application\Handlers\Message\SendMessageHandler;
+use HiEvents\Services\Domain\Message\DTO\MessagingEligibilityFailureDTO;
 use HiEvents\Services\Domain\Message\MessagingEligibilityService;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Config\Repository;
@@ -76,7 +79,7 @@ class SendMessageHandlerScheduledTest extends TestCase
         );
     }
 
-    private function setupAccountMocks(): void
+    private function setupAccountMocks(?MessagingEligibilityFailureDTO $eligibilityFailure = null): void
     {
         $account = m::mock(AccountDomainObject::class);
         $account->shouldReceive('getAccountVerifiedAt')->andReturn(Carbon::now());
@@ -90,7 +93,7 @@ class SendMessageHandlerScheduledTest extends TestCase
         $this->config->shouldReceive('get')->with('app.saas_mode_enabled')->andReturn(false);
 
         $this->eligibilityService->shouldReceive('checkTierLimits')->andReturn(null);
-        $this->eligibilityService->shouldReceive('checkEligibility')->andReturn(null);
+        $this->eligibilityService->shouldReceive('checkEligibility')->andReturn($eligibilityFailure);
 
         $this->purifier->shouldReceive('purify')->andReturn('<p>Test</p>');
     }
@@ -107,6 +110,7 @@ class SendMessageHandlerScheduledTest extends TestCase
         $order->setId(5);
 
         $this->attendeeRepository->shouldReceive('findWhereIn')->andReturn(collect([$attendee]));
+        $this->attendeeRepository->shouldReceive('countWhere')->andReturn(1);
         $this->productRepository->shouldReceive('findWhereIn')->andReturn(collect([$product]));
         $this->orderRepository->shouldReceive('findFirstWhere')->andReturn($order);
     }
@@ -241,5 +245,97 @@ class SendMessageHandlerScheduledTest extends TestCase
 
         $this->assertSame($message, $result);
         Bus::assertDispatched(SendMessagesJob::class);
+    }
+
+    public function test_is_test_with_scheduled_at_stores_no_schedule(): void
+    {
+        Bus::fake();
+
+        $this->setupAccountMocks();
+        $this->setupRepositoryMocks();
+
+        $this->messageRepository->shouldReceive('create')
+            ->once()
+            ->withArgs(fn ($data) => $data['status'] === MessageStatus::PROCESSING->name
+                && $data['scheduled_at'] === null
+                && $data['send_data']['is_test'] === true)
+            ->andReturn($this->makeCreatedMessage());
+
+        $this->handler->handle($this->makeTestDto(
+            Carbon::now('America/New_York')->addHour()->format('Y-m-d\TH:i'),
+        ));
+
+        Bus::assertDispatched(SendMessagesJob::class, fn (SendMessagesJob $job) => $job->messageData->is_test === true);
+    }
+
+    public function test_is_test_with_past_scheduled_at_is_not_rejected(): void
+    {
+        Bus::fake();
+
+        $this->setupAccountMocks();
+        $this->setupRepositoryMocks();
+
+        $this->messageRepository->shouldReceive('create')
+            ->once()
+            ->withArgs(fn ($data) => $data['scheduled_at'] === null)
+            ->andReturn($this->makeCreatedMessage());
+
+        $this->handler->handle($this->makeTestDto(
+            Carbon::now('America/New_York')->subHour()->format('Y-m-d\TH:i'),
+        ));
+
+        Bus::assertDispatched(SendMessagesJob::class);
+    }
+
+    public function test_scheduled_test_held_for_review_is_pending_without_schedule(): void
+    {
+        Bus::fake();
+
+        $this->setupAccountMocks(new MessagingEligibilityFailureDTO(
+            accountId: 1,
+            eventId: 101,
+            failures: [MessagingEligibilityFailureEnum::STRIPE_NOT_CONNECTED],
+        ));
+        $this->setupRepositoryMocks();
+
+        $this->messageRepository->shouldReceive('create')
+            ->once()
+            ->withArgs(fn ($data) => $data['status'] === MessageStatus::PENDING_REVIEW->name
+                && $data['scheduled_at'] === null)
+            ->andReturn($this->makeCreatedMessage());
+
+        $this->handler->handle($this->makeTestDto(
+            Carbon::now('America/New_York')->addDays(2)->format('Y-m-d\TH:i'),
+        ));
+
+        Bus::assertNotDispatched(SendMessagesJob::class);
+        Bus::assertDispatched(MessagePendingReviewJob::class);
+    }
+
+    private function makeCreatedMessage(): MessageDomainObject
+    {
+        $message = m::mock(MessageDomainObject::class);
+        $message->shouldReceive('getId')->andReturn(1);
+        $message->shouldReceive('getOrderId')->andReturn(5);
+        $message->shouldReceive('getAttendeeIds')->andReturn([10]);
+        $message->shouldReceive('getProductIds')->andReturn([20]);
+
+        return $message;
+    }
+
+    private function makeTestDto(string $scheduledAt): SendMessageDTO
+    {
+        return new SendMessageDTO(
+            account_id: 1,
+            event_id: 101,
+            subject: 'Hello',
+            message: '<p>Test</p>',
+            type: MessageTypeEnum::ALL_ATTENDEES,
+            is_test: true,
+            send_copy_to_current_user: false,
+            sent_by_user_id: 99,
+            order_statuses: [],
+            scheduled_at: $scheduledAt,
+        );
     }
 }

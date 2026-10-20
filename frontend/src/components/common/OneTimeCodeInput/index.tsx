@@ -88,6 +88,7 @@ export const OneTimeCodeInput = ({
                     onBlur={() => setFocused(false)}
                     onSelect={keepCaretAtEnd}
                     disabled={disabled}
+                    data-autofocus={autoFocus || undefined}
                     aria-label={label}
                     aria-invalid={!!error}
                     aria-describedby={error ? errorId : undefined}

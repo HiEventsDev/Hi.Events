@@ -20,9 +20,13 @@ class SortProfileImagesRequest extends BaseRequest
     public function withValidator(Validator $validator): void
     {
         $validator->after(function (Validator $validator) {
-            $ids = $this->input('sorted_ids', []);
+            if ($validator->errors()->isNotEmpty()) {
+                return;
+            }
 
-            if (is_array($ids) && count($ids) !== count(array_unique($ids))) {
+            $ids = $this->input('sorted_ids');
+
+            if (count($ids) !== count(array_unique($ids))) {
                 $validator->errors()->add('sorted_ids', __('Each photo may only appear once'));
             }
         });

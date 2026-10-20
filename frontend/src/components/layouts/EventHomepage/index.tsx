@@ -2,6 +2,7 @@ import classes from "./EventHomepage.module.scss";
 import {EventLineupSection, EventScheduleSection} from "./Lineup";
 import {CustomHomepageSection} from "./Sections";
 import {resolveHomepageSections} from "../../../utilites/homepageSections.ts";
+import {initialSelectedOccurrence} from "../../../utilites/lineupSchedule.ts";
 import SelectProducts from "../../routes/product-widget/SelectProducts";
 import "../../../styles/widget/default.scss";
 import React, {Fragment, useCallback, useEffect, useRef, useState} from "react";
@@ -57,11 +58,22 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
     const {event, promoCodeValid, promoCode, initialOccurrenceId, isPreview = false} = loaderData;
     const [showScrollButton, setShowScrollButton] = useState(false);
     const [contactModalOpen, setContactModalOpen] = useState(false);
-    const [selectedOccurrence, setSelectedOccurrence] = useState<EventOccurrence | undefined>();
+    const [selectedOccurrence, setSelectedOccurrence] = useState<EventOccurrence | undefined>(
+        () => initialSelectedOccurrence(event?.occurrences, initialOccurrenceId),
+    );
+    const occurrenceSelectionReported = useRef(false);
     const [selectedCart, setSelectedCart] = useState({quantity: 0, total: 0});
     const [continueButtonNode, setContinueButtonNode] = useState<HTMLButtonElement | null>(null);
     const [continueButtonInView, setContinueButtonInView] = useState(false);
     const ticketsSectionRef = useRef<HTMLDivElement>(null);
+
+    const handleSelectedOccurrenceChange = useCallback((occurrence?: EventOccurrence) => {
+        if (!occurrence && !occurrenceSelectionReported.current) {
+            return;
+        }
+        occurrenceSelectionReported.current = true;
+        setSelectedOccurrence(occurrence);
+    }, []);
 
     const handleCartChange = useCallback(
         (cart: {quantity: number; total: number}) => setSelectedCart(cart),
@@ -248,7 +260,7 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                 promoCode={promoCode}
                 showPoweredBy={false}
                 initialOccurrenceId={initialOccurrenceId}
-                onSelectedOccurrenceChange={setSelectedOccurrence}
+                onSelectedOccurrenceChange={handleSelectedOccurrenceChange}
                 onCartChange={handleCartChange}
                 continueButtonRef={setContinueButtonNode}
             />

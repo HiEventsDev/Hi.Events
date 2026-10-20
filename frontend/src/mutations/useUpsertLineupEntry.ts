@@ -20,7 +20,7 @@ export const useUpsertLineupEntry = () => {
         onSuccess: (_, {eventId}) => Promise.all([
             queryClient.invalidateQueries({queryKey: [GET_EVENT_LINEUP_QUERY_KEY, String(eventId)]}),
             queryClient.invalidateQueries({queryKey: [GET_EVENT_LINEUP_PUBLIC_QUERY_KEY, String(eventId)]}),
-            queryClient.invalidateQueries({queryKey: [GET_PROFILES_QUERY_KEY]}),
+            queryClient.invalidateQueries({queryKey: [GET_PROFILES_QUERY_KEY], refetchType: 'none'}),
         ]),
     });
 };

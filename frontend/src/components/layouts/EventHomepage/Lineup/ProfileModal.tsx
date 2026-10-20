@@ -71,6 +71,7 @@ export const ProfileModal = ({event, entry, lineup, portalTarget, onClose, onBac
                                     key={image.id}
                                     type="button"
                                     data-active={index === photoIndex || undefined}
+                                    aria-current={index === photoIndex || undefined}
                                     aria-label={t`Photo ${photoNumber}`}
                                     onClick={() => setPhotoIndex(index)}
                                 />

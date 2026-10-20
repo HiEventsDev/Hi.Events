@@ -69,7 +69,7 @@ class MessageDispatchService
                 subject: $message->getSubject(),
                 message: $message->getMessage(),
                 type: MessageTypeEnum::fromName($message->getType()),
-                is_test: false,
+                is_test: (bool) ($sendDataArray['is_test'] ?? false),
                 send_copy_to_current_user: $sendDataArray['send_copy_to_current_user'] ?? false,
                 sent_by_user_id: $message->getSentByUserId(),
                 order_id: $message->getOrderId(),

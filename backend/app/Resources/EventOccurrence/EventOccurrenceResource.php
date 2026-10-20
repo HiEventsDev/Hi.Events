@@ -51,6 +51,7 @@ class EventOccurrenceResource extends BaseResource
                     'applies_to' => $allocation->applies_to,
                 ], $this->getBookingLimits()->allocations),
             ]),
+            /** @var array{orders_created: int, attendees_registered: int, products_sold: int, total_gross_sales?: float, total_tax?: float, total_fee?: float, total_refunded?: float} */
             'statistics' => $this->when($stats !== null, fn () => [
                 'orders_created' => $stats->getOrdersCreated() ?? 0,
                 'attendees_registered' => $stats->getAttendeesRegistered() ?? 0,

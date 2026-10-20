@@ -10,7 +10,6 @@
     flex-direction: column;
     flex: 1;
     padding: 0;
-    min-height: 100%;
 }
 
 .header {
@@ -45,6 +44,7 @@
 .footer {
     position: sticky;
     bottom: 0;
+    z-index: 2;
     margin-top: auto;
     display: flex;
     justify-content: flex-end;
@@ -107,6 +107,18 @@
     border: 1px solid var(--mantine-color-gray-2);
     border-radius: var(--mantine-radius-md);
     overflow: hidden;
+
+    > :last-child:nth-child(4n + 1) {
+        grid-column: span 4;
+    }
+
+    > :last-child:nth-child(4n + 2) {
+        grid-column: span 3;
+    }
+
+    > :last-child:nth-child(4n + 3) {
+        grid-column: span 2;
+    }
 }
 
 .stat {
@@ -229,6 +241,14 @@
 
     .stats {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+
+        > :last-child:nth-child(even) {
+            grid-column: auto;
+        }
+
+        > :last-child:nth-child(odd) {
+            grid-column: span 2;
+        }
     }
 
     .fields {

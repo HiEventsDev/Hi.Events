@@ -81,6 +81,10 @@ class CheckInAttendeeHandler
         $isInvalidCheckIn = $attendee->getCheckedInAt() !== null && $checkInAttendeeDTO->action === CheckInAction::CHECK_IN;
         $isInvalidCheckOut = $attendee->getCheckedInAt() === null && $checkInAttendeeDTO->action === CheckInAction::CHECK_OUT;
 
+        if ($isInvalidCheckOut && $attendee->getCheckedOutBy() === null) {
+            throw new CannotCheckInException(__('This attendee is not checked in'));
+        }
+
         if ($isInvalidCheckIn || $isInvalidCheckOut) {
             $user = $this->userRepository->findById(
                 $checkInAttendeeDTO->action === CheckInAction::CHECK_IN ? $attendee->getCheckedInBy() : $attendee->getCheckedOutBy()

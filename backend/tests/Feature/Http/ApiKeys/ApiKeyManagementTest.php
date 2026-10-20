@@ -234,6 +234,20 @@ class ApiKeyManagementTest extends TestCase
         Mail::assertQueued(ApiKeyRevokedMail::class, fn (ApiKeyRevokedMail $mail) => $mail->hasTo($organizer->email));
     }
 
+    public function test_admins_remove_a_members_expired_key_without_emailing_them(): void
+    {
+        $organizer = $this->addAccountUser($this->accountId, Role::ORGANIZER);
+        $this->createApiKey($organizer, $this->accountId, expiresInDays: 7);
+        $keyId = DB::table('personal_access_tokens')->value('id');
+        DB::table('personal_access_tokens')->where('id', $keyId)->update(['expires_at' => CarbonImmutable::now()->subDay()]);
+
+        $this->deleteJson("/api-keys/$keyId", [], $this->headersFor($this->owner, $this->accountId))->assertNoContent();
+
+        $this->assertDatabaseMissing('personal_access_tokens', ['id' => $keyId]);
+        Mail::assertNotQueued(ApiKeyRevokedMail::class);
+        Mail::assertNotSent(ApiKeyRevokedMail::class);
+    }
+
     public function test_keys_from_another_account_are_not_found(): void
     {
         [$otherOwner, $otherAccountId] = $this->createAccountOwner();

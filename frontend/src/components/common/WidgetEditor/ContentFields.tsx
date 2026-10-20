@@ -6,6 +6,7 @@ import {Event, EventOccurrence, HomepageSection} from '../../../types.ts';
 import {getEventCategories} from "../../../constants/eventCategories.ts";
 import {WidgetEventsLayout, WidgetOpenIn, WidgetSettings, WidgetType} from "../../../utilites/widgetConfig.ts";
 import {SectionsPicker} from "./SectionsPicker.tsx";
+import {useAccess} from "../../../hooks/useAccess.ts";
 import classes from './WidgetEditor.module.scss';
 
 interface FieldsProps {
@@ -194,6 +195,7 @@ interface LineupNoticeProps {
 }
 
 export const LineupNotice = ({type, homepageSections, homepageDesignerPath, lineupPath}: LineupNoticeProps) => {
+    const {isReadOnly} = useAccess();
     if (type !== 'LINEUP' && type !== 'SCHEDULE') {
         return null;
     }
@@ -207,9 +209,11 @@ export const LineupNotice = ({type, homepageSections, homepageDesignerPath, line
                         ? t`Your lineup is hidden on your event page, so this widget will be empty.`
                         : t`Your schedule is hidden on your event page, so this widget will be empty.`}
                 </Text>
-                <Button component={NavLink} to={homepageDesignerPath} variant="subtle" size="compact-sm" mt={4}>
-                    {t`Open homepage designer`}
-                </Button>
+                {!isReadOnly && (
+                    <Button component={NavLink} to={homepageDesignerPath} variant="subtle" size="compact-sm" mt={4}>
+                        {t`Open homepage designer`}
+                    </Button>
+                )}
             </Alert>
         );
     }

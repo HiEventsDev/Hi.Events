@@ -50,6 +50,7 @@ export interface LineupEntry {
     role_label: string | null;
     is_hidden?: boolean;
     sort_order?: number;
+    schedule_days?: string[];
     profile: Profile;
 }
 

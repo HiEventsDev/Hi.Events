@@ -1,6 +1,6 @@
 import {useMemo} from "react";
 import {t} from "@lingui/macro";
-import {Avatar, Tooltip} from "@mantine/core";
+import {Avatar, Tooltip, VisuallyHidden} from "@mantine/core";
 import {IconEyeOff, IconGripVertical} from "@tabler/icons-react";
 import {
     closestCenter,
@@ -17,6 +17,7 @@ import {CSS} from "@dnd-kit/utilities";
 import {Event} from "../../../../types.ts";
 import {EventLineup, LineupEntry} from "../../../../api/lineup.client.ts";
 import {useAccess} from "../../../../hooks/useAccess.ts";
+import {useSortableAccessibility} from "../../../../hooks/useSortableAccessibility.ts";
 import {useSortLineupEntries} from "../../../../mutations/useSortLineupEntries.ts";
 import {billingTierLabel, initialsFor, profilePhoto} from "../../../../utilites/lineup.ts";
 import {showError} from "../../../../utilites/notifications.tsx";
@@ -35,6 +36,10 @@ interface PeopleRailProps {
 export const PeopleRail = ({event, lineup, title, selectedEntryId, onOpenEntry}: PeopleRailProps) => {
     const {isReadOnly} = useAccess();
     const sortMutation = useSortLineupEntries();
+    const {id: dndId, accessibility} = useSortableAccessibility(
+        lineup.entries.map(entry => entry.id),
+        id => lineup.entries.find(entry => entry.id === id)?.profile.name ?? '',
+    );
     const sensors = useSensors(
         useSensor(PointerSensor, {activationConstraint: {distance: 4}}),
         useSensor(TouchSensor, {activationConstraint: {delay: 150, tolerance: 6}}),
@@ -76,7 +81,7 @@ export const PeopleRail = ({event, lineup, title, selectedEntryId, onOpenEntry}:
             {lineup.entries.length === 0
                 ? <p className={classes.railEmpty}>{isReadOnly ? t`Nobody on the lineup yet.` : t`Nobody yet. Search your saved profiles or type a new name above.`}</p>
                 : (
-                    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                    <DndContext id={dndId} accessibility={accessibility} sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
                         <SortableContext items={lineup.entries.map(entry => entry.id)} strategy={verticalListSortingStrategy}>
                             <ul className={classes.railList} data-testid="lineup-people-list">
                                 {lineup.entries.map(entry => (
@@ -115,6 +120,7 @@ const RailRow = ({entry, slotCount, selected, sortable, onOpen}: RailRowProps) =
         disabled: !sortable,
     });
     const photo = profilePhoto(entry.profile);
+    const label = entry.profile.name;
 
     return (
         <li
@@ -131,7 +137,7 @@ const RailRow = ({entry, slotCount, selected, sortable, onOpen}: RailRowProps) =
                     type="button"
                     ref={setActivatorNodeRef}
                     className={classes.dragHandle}
-                    aria-label={t`Drag to reorder`}
+                    aria-label={t`Drag to reorder ${label}`}
                     {...attributes}
                     {...listeners}
                 >
@@ -150,6 +156,7 @@ const RailRow = ({entry, slotCount, selected, sortable, onOpen}: RailRowProps) =
             >
                 <Avatar
                     src={photo?.url}
+                    alt=""
                     size={34}
                     radius="md"
                     color="primary"
@@ -169,9 +176,12 @@ const RailRow = ({entry, slotCount, selected, sortable, onOpen}: RailRowProps) =
                     </span>
                 </span>
                 {entry.is_hidden && (
-                    <Tooltip label={t`Hidden from your event page`}>
-                        <IconEyeOff size={14} className={classes.railHiddenIcon}/>
-                    </Tooltip>
+                    <>
+                        <Tooltip label={t`Hidden from your event page`}>
+                            <IconEyeOff size={14} className={classes.railHiddenIcon} aria-hidden/>
+                        </Tooltip>
+                        <VisuallyHidden>{t`Hidden from your event page`}</VisuallyHidden>
+                    </>
                 )}
             </button>
         </li>

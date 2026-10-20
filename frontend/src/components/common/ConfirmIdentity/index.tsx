@@ -73,6 +73,7 @@ export const ConfirmIdentityField = ({identity, resumeUrl, passwordTestId, autoF
                 error={identity.error}
                 autoComplete="current-password"
                 autoFocus={autoFocus}
+                data-autofocus={autoFocus || undefined}
                 required
                 data-testid={passwordTestId}
             />

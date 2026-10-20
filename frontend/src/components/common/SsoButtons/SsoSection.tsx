@@ -1,5 +1,4 @@
 import {ReactNode} from "react";
-import {useLocation} from "react-router";
 import {StartSsoRequest} from "../../../api/sso.client.ts";
 import {useStartSso} from "../../../mutations/useSsoMutations.ts";
 import {useGetSsoProviders} from "../../../queries/useGetSsoProviders.ts";
@@ -8,18 +7,16 @@ import {ssoError} from "../../../utilites/ssoErrors.ts";
 import {SsoButtons, SsoButtonVariant, SsoDivider} from "./index.tsx";
 
 export const useSsoOptions = () => {
-    const location = useLocation();
     const {data: sso} = useGetSsoProviders();
     const providers = sso?.providers ?? [];
     const passwordLoginEnabled = sso?.password_login_enabled ?? true;
-    const buttonsVisible = (sso?.buttons_visible ?? false) || !passwordLoginEnabled || new URLSearchParams(location.search).has('sso');
 
     return {
         providers,
         passwordLoginEnabled,
         registrationEnabled: sso?.registration_enabled ?? true,
         enterpriseSsoEnabled: sso?.enterprise_sso_enabled ?? false,
-        showSso: providers.length > 0 && buttonsVisible,
+        showSso: providers.length > 0,
     };
 };
 

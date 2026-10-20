@@ -3,7 +3,7 @@ import {t, Trans} from "@lingui/macro";
 import {ReactNode} from "react";
 import {Link} from "react-router";
 import {type Icon, IconClock, IconCode, IconExternalLink, IconKey, IconLock} from "@tabler/icons-react";
-import {LicenceSummary} from "../../../../types.ts";
+import {LicensedFeature, LicenceSummary} from "../../../../types.ts";
 import {formatDateWithLocale} from "../../../../utilites/dates.ts";
 import {LICENCE_TONE_COLORS, LicenceNotice, LicenceNoticeKind, licensedFeatureLabel, licensedFeatureList} from "../../licenceNotice.ts";
 import {licensingUrl} from "../../licensingUrl.ts";
@@ -27,6 +27,7 @@ interface LicenceModalContent {
     icon: Icon;
     title: string;
     body: ReactNode;
+    effects?: string[];
     nextSteps: LicenceNextSteps;
     cta?: { label: string, isPrimary: boolean };
     showFeaturesInUse: boolean;
@@ -45,9 +46,26 @@ const renewSteps = (): LicenceNextSteps => ({
     ],
 });
 
+const whiteLabelLapsedNotice = (): string => t`The "Powered by Hi.Events" notice is shown again until you renew.`;
+
+const unlicensedEffect = (feature: LicensedFeature): string => {
+    switch (feature) {
+        case 'seating':
+            return t`Online ticket sales for events with reserved seating keep working.`;
+        case 'box_office':
+            return t`New box office sign-ins are refused, so open box office sessions end within 24 hours.`;
+        case 'enterprise_sso':
+            return t`Single sign-on connections keep signing people in. They can be switched off or deleted, but not changed or switched back on without a licence.`;
+        case 'white_label':
+            return whiteLabelLapsedNotice();
+    }
+};
+
+const unlicensedEffects = (features: LicensedFeature[]): string[] => features.map(unlicensedEffect);
+
 const lapsedBody = (featureList: string | null): string => featureList
-    ? t`Setup for ${featureList} is locked. Existing sales and scheduled dates keep working, and anything already set up can still be viewed or removed.`
-    : t`The "Powered by Hi.Events" notice is shown again until you renew.`;
+    ? t`Setup for ${featureList} is locked until you renew. Anything already set up can still be viewed or removed.`
+    : whiteLabelLapsedNotice();
 
 const contentFor = (kind: LicenceNoticeKind, licence: LicenceSummary): LicenceModalContent => {
     const featureList = licensedFeatureList(licence.features_in_use);
@@ -59,7 +77,8 @@ const contentFor = (kind: LicenceNoticeKind, licence: LicenceSummary): LicenceMo
             return {
                 icon: IconKey,
                 title: t`Licence key not recognised`,
-                body: <Trans><Code>APP_LICENCE_KEY</Code> is set, but the key couldn't be verified, so reserved seating, the box office and enterprise single sign-on stay locked.</Trans>,
+                body: <Trans><Code>APP_LICENCE_KEY</Code> is set, but the key couldn't be verified, so reserved seating, the box office and enterprise single sign-on can't be set up.</Trans>,
+                effects: unlicensedEffects(licence.features_in_use),
                 nextSteps: {
                     title: t`What to do`,
                     ordered: true,
@@ -75,7 +94,8 @@ const contentFor = (kind: LicenceNoticeKind, licence: LicenceSummary): LicenceMo
             return {
                 icon: IconLock,
                 title: t`No Enterprise licence`,
-                body: t`Setup for ${featureList} is locked because this instance has no Hi.Events Enterprise licence. Existing sales keep working.`,
+                body: t`Setup for ${featureList} is locked because this instance has no Hi.Events Enterprise licence. Anything already set up can still be viewed or removed.`,
+                effects: unlicensedEffects(licence.features_in_use),
                 nextSteps: {
                     title: t`What to do`,
                     ordered: true,
@@ -118,6 +138,7 @@ const contentFor = (kind: LicenceNoticeKind, licence: LicenceSummary): LicenceMo
                 icon: IconLock,
                 title: t`Your licence has expired`,
                 body: lapsedBody(featureList),
+                effects: featureList ? unlicensedEffects(licence.features_in_use) : [],
                 nextSteps: renewSteps(),
                 cta: {label: t`Renew licence`, isPrimary: true},
                 showFeaturesInUse: false,
@@ -144,7 +165,19 @@ export const LicenceModal = ({licence, notice, showDetailsLink, onClose}: Licenc
                 </Modal.Header>
                 <Modal.Body>
                     <Stack gap="md">
-                        <Text size="sm">{content.body}</Text>
+                        <div>
+                            <Text size="sm">{content.body}</Text>
+                            {content.effects && content.effects.length > 0 && (
+                                <ul className={classes.stepList}>
+                                    {content.effects.map((effect) => (
+                                        <li key={effect} className={classes.step}>
+                                            <span className={classes.stepBullet}/>
+                                            <span>{effect}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
 
                         {notice.kind === 'invalid' && licence.invalid_reason && (
                             <div className={classes.reason}>{licence.invalid_reason}</div>

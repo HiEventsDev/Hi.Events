@@ -6,6 +6,7 @@ use HiEvents\DomainObjects\AccountDomainObject;
 use HiEvents\DomainObjects\AccountSsoConnectionDomainObject;
 use HiEvents\DomainObjects\AccountSsoDomainDomainObject;
 use HiEvents\DomainObjects\AccountUserDomainObject;
+use HiEvents\DomainObjects\Enums\AccountSsoConnectionType;
 use HiEvents\DomainObjects\Enums\AuthMethod;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\Enums\SsoSignInRequirement;
@@ -74,6 +75,21 @@ class SsoEnforcementService
         if ($this->memberRequiresSso($accountUser, $user->getEmail())) {
             throw new SsoRequiredException($user->getEmail());
         }
+    }
+
+    /**
+     * @throws SsoRequiredException
+     */
+    public function assertMemberSignInAllowed(UserDomainObject $user, int $accountId, AuthContext $context): void
+    {
+        if (! $this->isTokenAllowed($user->getId(), $user->getEmail(), $accountId, $context->method->value, $context->ssoConnectionId)) {
+            throw new SsoRequiredException($user->getEmail());
+        }
+    }
+
+    public function requiresSsoToJoin(int $userId, string $email, int $accountId): bool
+    {
+        return ! $this->isTokenAllowed($userId, $email, $accountId, AuthMethod::PASSWORD->value, null);
     }
 
     /**
@@ -189,9 +205,9 @@ class SsoEnforcementService
             $canUseConnection = ! in_array($user->getId(), $withoutConnection, true);
 
             $accountUser?->setSsoSignInRequirement(match (true) {
-                $onVerifiedDomain && $accountUser->getSsoEnforced() && $canUseConnection && ! $accountUser->getIsAccountOwner() => SsoSignInRequirement::SSO,
-                $onVerifiedDomain && ! $accountUser->getIsAccountOwner() => SsoSignInRequirement::EXEMPT,
-                default => SsoSignInRequirement::PASSWORD,
+                ! $onVerifiedDomain || ! $canUseConnection || $accountUser->getIsAccountOwner() => SsoSignInRequirement::PASSWORD,
+                $accountUser->getSsoEnforced() => SsoSignInRequirement::SSO,
+                default => SsoSignInRequirement::EXEMPT,
             });
         });
     }
@@ -235,14 +251,21 @@ class SsoEnforcementService
     {
         $this->assertCanEnable($connection);
 
+        $members = $this->members($connection->getAccountId());
+        $withoutConnection = $this->usersWhoCannotUseConnection(
+            $connection,
+            $members->map(fn (AccountUserDomainObject $accountUser) => $accountUser->getUserId())->all(),
+        );
         $newlyEnforcedUserIds = [];
 
-        foreach ($this->members($connection->getAccountId()) as $accountUser) {
+        foreach ($members as $accountUser) {
             $enforce = ! $accountUser->getIsAccountOwner()
                 && ! in_array($accountUser->getId(), $exemptAccountUserIds, true)
                 && $this->domainService->isEmailOnUsableDomain($connection->getAccountId(), $accountUser->getUser()?->getEmail());
 
-            if ($enforce && ! ($connection->getEnforceSso() && $accountUser->getSsoEnforced())) {
+            if ($enforce
+                && ! in_array($accountUser->getUserId(), $withoutConnection, true)
+                && ! ($connection->getEnforceSso() && $accountUser->getSsoEnforced())) {
                 $newlyEnforcedUserIds[] = $accountUser->getUserId();
             }
 
@@ -280,7 +303,12 @@ class SsoEnforcementService
 
         $this->accountUserRepository->updateWhere(['sso_enforced' => $enforced], ['id' => $accountUserId]);
 
-        if ($enforced && ! $accountUser->getSsoEnforced() && $this->findConnection($accountId)?->isEnforcing()) {
+        $connection = $this->findConnection($accountId);
+
+        if ($enforced
+            && ! $accountUser->getSsoEnforced()
+            && $connection?->isEnforcing()
+            && $this->usersWhoCannotUseConnection($connection, [$accountUser->getUserId()]) === []) {
             $this->sessionRevocationService->revokeAll($accountUser->getUserId(), $accountId);
         }
     }
@@ -337,23 +365,37 @@ class SsoEnforcementService
             return [];
         }
 
-        $protectedUserIds = $this->accountUserRepository
-            ->findWhere([['user_id', 'in', $userIds]])
-            ->filter(fn (AccountUserDomainObject $accountUser) => $accountUser->getIsAccountOwner() || $accountUser->getRole() === Role::SUPERADMIN->name)
+        $accountUsers = $this->accountUserRepository->findWhere([['user_id', 'in', $userIds]]);
+        $superAdminIds = $accountUsers
+            ->filter(fn (AccountUserDomainObject $accountUser) => $accountUser->getRole() === Role::SUPERADMIN->name)
             ->map(fn (AccountUserDomainObject $accountUser) => $accountUser->getUserId())
             ->unique();
+        $ownerIds = $accountUsers
+            ->filter(fn (AccountUserDomainObject $accountUser) => $accountUser->getIsAccountOwner())
+            ->map(fn (AccountUserDomainObject $accountUser) => $accountUser->getUserId())
+            ->unique()
+            ->diff($superAdminIds);
 
-        if ($protectedUserIds->isEmpty()) {
-            return [];
-        }
-
-        $linkedUserIds = $this->userIdentityRepository
-            ->findWhere([['user_id', 'in', $protectedUserIds->all()]])
-            ->filter(fn (UserIdentityDomainObject $identity) => $identity->getAccountSsoConnectionId() === $connection->getId()
-                || $identity->getIssuer() === $connection->getIssuer())
+        $linkedOwnerIds = $ownerIds->isEmpty() ? collect() : $this->userIdentityRepository
+            ->findWhere([['user_id', 'in', $ownerIds->all()]])
+            ->filter(fn (UserIdentityDomainObject $identity) => $this->identitySignsInThrough($identity, $connection))
             ->map(fn (UserIdentityDomainObject $identity) => $identity->getUserId());
 
-        return $protectedUserIds->diff($linkedUserIds)->values()->all();
+        return $superAdminIds->merge($ownerIds->diff($linkedOwnerIds))->values()->all();
+    }
+
+    private function identitySignsInThrough(UserIdentityDomainObject $identity, AccountSsoConnectionDomainObject $connection): bool
+    {
+        if ($identity->getAccountSsoConnectionId() === $connection->getId()) {
+            return true;
+        }
+
+        if ($identity->getIssuer() !== $connection->getIssuer()) {
+            return false;
+        }
+
+        return $connection->getConnectionType() !== AccountSsoConnectionType::GOOGLE_WORKSPACE
+            || ($identity->getEmail() !== null && $this->domainService->domainOf($identity->getEmail()) === $connection->getHostedDomain());
     }
 
     /**

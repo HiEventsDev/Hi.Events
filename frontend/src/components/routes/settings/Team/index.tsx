@@ -40,6 +40,7 @@ const Team = () => {
     const [signInFilter, setSignInFilter] = useState<string | null>(null);
 
     const users = usersQuery.data?.data;
+    const usersFailed = usersQuery.isError && !users;
     const organizers = organizersQuery.data?.data ?? [];
 
     const {members, invitations, stats} = useMemo(() => {
@@ -166,7 +167,9 @@ const Team = () => {
                     ].map(stat => (
                         <div className={classes.stat} key={stat.label}>
                             <span className={classes.statLabel}>{stat.label}</span>
-                            {users ? <span className={classes.statValue}>{stat.value}</span> : <Skeleton height={24} width={40}/>}
+                            {users || usersFailed
+                                ? <span className={classes.statValue}>{users ? stat.value : '–'}</span>
+                                : <Skeleton height={24} width={40}/>}
                         </div>
                     ))}
                 </div>
@@ -218,9 +221,18 @@ const Team = () => {
                         <span/>
                     </div>
 
-                    {!users && [0, 1, 2].map(index => (
+                    {!users && !usersFailed && [0, 1, 2].map(index => (
                         <div className={classes.row} key={index}><Skeleton height={36} radius="md"/></div>
                     ))}
+
+                    {usersFailed && (
+                        <div className={classes.empty}>
+                            <p className={classes.emptyText}>{t`Couldn't load your team`}</p>
+                            <Button variant="default" size="xs" loading={usersQuery.isFetching} onClick={() => usersQuery.refetch()}>
+                                {t`Try again`}
+                            </Button>
+                        </div>
+                    )}
 
                     {users && renderRows(members)}
 

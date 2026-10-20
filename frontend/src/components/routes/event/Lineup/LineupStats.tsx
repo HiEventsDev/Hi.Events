@@ -3,21 +3,32 @@ import {t} from "@lingui/macro";
 import {Event} from "../../../../types.ts";
 import {EventLineup} from "../../../../api/lineup.client.ts";
 import {groupScheduleByDay} from "../../../../utilites/lineupSchedule.ts";
+import {scheduleCoverage} from "./ScheduleBuilder/scheduleDays.ts";
 import classes from "./Lineup.module.scss";
 
 interface LineupStatsProps {
     event: Event;
     lineup: EventLineup;
     lineupLabel: string;
+    occurrenceDays?: ReadonlySet<string>;
 }
 
-export const LineupStats = ({event, lineup, lineupLabel}: LineupStatsProps) => {
+const scheduledHint = (total: number, unscheduled: number, offDateOnly: number): string => {
+    if (total === 0) {
+        return t`Nobody yet`;
+    }
+    if (offDateOnly > 0) {
+        return t`${offDateOnly} not on an event date`;
+    }
+    return unscheduled > 0 ? t`${unscheduled} without a time` : t`Everyone has a time`;
+};
+
+export const LineupStats = ({event, lineup, lineupLabel, occurrenceDays}: LineupStatsProps) => {
     const stats = useMemo(() => {
-        const scheduledIds = new Set(lineup.schedule_items.flatMap(item => item.lineup_entry_ids));
-        const scheduled = lineup.entries.filter(entry => scheduledIds.has(entry.id)).length;
+        const {scheduled, offDateOnly} = scheduleCoverage(lineup, event.timezone, occurrenceDays);
         const hidden = lineup.entries.filter(entry => entry.is_hidden).length;
         const days = groupScheduleByDay(lineup.schedule_items, event.timezone).length;
-        const unscheduled = lineup.entries.length - scheduled;
+        const unscheduled = lineup.entries.length - scheduled - offDateOnly;
         const slots = lineup.schedule_items.length;
         const stages = lineup.spaces.length;
 
@@ -31,8 +42,8 @@ export const LineupStats = ({event, lineup, lineupLabel}: LineupStatsProps) => {
             {
                 label: t`Scheduled`,
                 value: `${scheduled}/${lineup.entries.length}`,
-                hint: lineup.entries.length === 0 ? t`Nobody yet` : unscheduled > 0 ? t`${unscheduled} without a time` : t`Everyone has a time`,
-                warn: unscheduled > 0,
+                hint: scheduledHint(lineup.entries.length, unscheduled, offDateOnly),
+                warn: unscheduled > 0 || offDateOnly > 0,
             },
             {
                 label: t`Time slots`,
@@ -47,7 +58,7 @@ export const LineupStats = ({event, lineup, lineupLabel}: LineupStatsProps) => {
                 warn: false,
             },
         ];
-    }, [event.timezone, lineup, lineupLabel]);
+    }, [event.timezone, lineup, lineupLabel, occurrenceDays]);
 
     return (
         <div className={classes.stats} data-testid="lineup-stats">

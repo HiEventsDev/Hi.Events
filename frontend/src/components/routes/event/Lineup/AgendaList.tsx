@@ -71,7 +71,7 @@ export const AgendaList = ({event, lineup, onEdit, onAdd}: AgendaListProps) => {
                                     <span className={classes.agendaAdminMain}>
                                         <Avatar.Group spacing={8}>
                                             {performers.slice(0, 3).map(entry => (
-                                                <Avatar key={entry.id} src={profilePhoto(entry.profile)?.url} size={28} radius="xl" color="primary">
+                                                <Avatar key={entry.id} src={profilePhoto(entry.profile)?.url} alt="" size={28} radius="xl" color="primary">
                                                     {initialsFor(entry.profile.name)}
                                                 </Avatar>
                                             ))}
@@ -85,7 +85,7 @@ export const AgendaList = ({event, lineup, onEdit, onAdd}: AgendaListProps) => {
                                     </span>
                                     <span className={classes.agendaAdminSpace}>
                                         <span className={classes.spaceSwatch} style={{background: `var(--mantine-color-${color}-5)`}}/>
-                                        {space?.name ?? t`No stage`}
+                                        <span className={classes.agendaAdminSpaceName} title={space?.name}>{space?.name ?? t`No stage`}</span>
                                     </span>
                                 </button>
                             );

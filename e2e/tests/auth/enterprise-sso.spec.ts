@@ -12,11 +12,11 @@ import { enableFeatureFlag, markSsoConnectionTested, markSsoDomainVerified } fro
 import { nextTotpCode } from '../../utils/totp';
 import { uniqueEmail } from '../../utils/unique';
 import { openAuthedPage } from '../../fixtures/auth.fixture';
-import { login } from '../../api/api-client';
+import { ApiClient, login } from '../../api/api-client';
+import { TeamPage } from '../../pages/team.page';
+import { acceptWithPassword, apiAs, joinAnotherAccount, latestInvitationPath, MEMBER_PASSWORD } from './team-member.shared';
 
 const uniqueSuffix = (): string => `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
-
-const MEMBER_PASSWORD = 'MemberPass123!';
 
 const prepareAccount = async (account: FreshAccount): Promise<number> => {
   const { id } = await account.api.getAccount();
@@ -271,6 +271,146 @@ test.describe('enterprise single sign-on', () => {
     await expect(page).toHaveURL(/\/manage\//);
 
     await mailpit.waitForMessage(freshAccount.email, { subjectContains: 'signed in without single sign-on' });
+    await context.close();
+  });
+
+  test('the owner connects the identity provider from security settings and then signs in through it', async ({ freshAccount, browser, playwright }) => {
+    const accountId = await prepareAccount(freshAccount);
+    const issuerId = `link-${uniqueSuffix()}`;
+    const domain = `${issuerId}.test`;
+    const accountName = `Acme ${issuerId}`;
+    const workEmail = `it-lead@${domain}`;
+    const ownerApi = await apiAs(playwright, freshAccount.token);
+    expect((await ownerApi.put(`accounts/${accountId}`, { data: { name: accountName, timezone: 'UTC', currency_code: 'USD' } })).ok()).toBeTruthy();
+    await ownerApi.dispose();
+    const { provider_key: providerKey } = await freshAccount.api.createSsoConnection(accountId, {
+      type: 'OIDC',
+      issuer: `${MOCK_OIDC_URL}/${issuerId}`,
+      client_id: 'hievents-e2e',
+      client_secret: 'e2e-secret',
+    });
+    markSsoConnectionTested(accountId);
+    await freshAccount.api.setSsoConnectionStatus(accountId, 'ACTIVE');
+    await freshAccount.api.addSsoDomain(accountId, domain);
+    markSsoDomainVerified(accountId, domain);
+    const { secret } = await freshAccount.api.beginTwoFactorSetup(freshAccount.password);
+    await freshAccount.api.confirmTwoFactorSetup(await nextTotpCode(secret));
+    await freshAccount.api.updateSsoEnforcement(accountId, true);
+
+    const page = await freshAccount.newAuthedPage();
+    await page.goto('/settings/security');
+    await expect(page.getByText(`Not connected. ${accountName} uses this for single sign-on.`)).toBeVisible();
+    await page.getByTestId(`sso-connect-${providerKey}`).click();
+    await page.getByRole('dialog').getByLabel(/Current password/).fill(freshAccount.password);
+    await page.getByTestId('confirm-identity-submit').click();
+    await signInAtMockProvider(page, issuerId, 'it-lead', { email: workEmail, email_verified: true });
+
+    await expect(page).toHaveURL(/\/settings\/security/);
+    await expect(page.getByTestId(`sso-identity-${providerKey}`)).toContainText(workEmail);
+
+    const context = await browser.newContext({ ignoreHTTPSErrors: true });
+    const signIn = await context.newPage();
+    await new SsoLoginPage(signIn).signInWithSso(workEmail);
+    await signInAtMockProvider(signIn, issuerId, 'it-lead', { email: workEmail, email_verified: true });
+    const twoFactor = new TwoFactorPage(signIn);
+    await twoFactor.expectChallenge();
+    await twoFactor.enterLoginCode(await nextTotpCode(secret));
+    await expect(signIn).toHaveURL(/\/manage\//);
+    await context.close();
+  });
+
+  test('someone invited while single sign-on is required joins through the identity provider instead of setting a password', async ({ freshAccount, browser, mailpit }) => {
+    const accountId = await prepareAccount(freshAccount);
+    const issuerId = `invite-${uniqueSuffix()}`;
+    const domain = `${issuerId}.test`;
+    const inviteeEmail = `new.hire@${domain}`;
+    await activeConnection(freshAccount, accountId, issuerId, domain);
+    const { secret } = await freshAccount.api.beginTwoFactorSetup(freshAccount.password);
+    await freshAccount.api.confirmTwoFactorSetup(await nextTotpCode(secret));
+    await freshAccount.api.updateSsoEnforcement(accountId, true);
+    await freshAccount.api.inviteUser({ first_name: 'New', last_name: 'Hire', email: inviteeEmail, role: 'ORGANIZER' });
+    const invitationPath = await latestInvitationPath(mailpit, inviteeEmail, 1);
+
+    const context = await browser.newContext({ ignoreHTTPSErrors: true });
+    const page = await context.newPage();
+    await page.goto(invitationPath);
+    await expect(page.getByText('Your organization requires single sign-on')).toBeVisible();
+    await expect(page.getByLabel(/^Password/)).toHaveCount(0);
+    await page.getByTestId('invitation-sso-button').click();
+
+    await expect(page.getByLabel('Work email')).toHaveValue(inviteeEmail);
+    await page.getByTestId('sso-discovery-submit').click();
+    await signInAtMockProvider(page, issuerId, 'new-hire', { email: inviteeEmail, email_verified: true });
+    await expect(page).toHaveURL(new RegExp(`/manage/organizer/${freshAccount.organizerId}`));
+    await context.close();
+
+    const team = new TeamPage(await freshAccount.newAuthedPage());
+    await team.goto();
+    await expect(team.userRow(inviteeEmail)).toBeVisible();
+    await expect(team.userRow(inviteeEmail).getByText(/^Invited$/)).toHaveCount(0);
+  });
+
+  test('a member of two accounts who picks the one that requires single sign-on is sent to SSO', async ({ freshAccount, browser, mailpit, publicApi, playwright }) => {
+    const accountId = await prepareAccount(freshAccount);
+    const issuerId = `pick-${uniqueSuffix()}`;
+    const domain = `${issuerId}.test`;
+    const memberEmail = `kim@${domain}`;
+    const accountName = `Acme ${issuerId}`;
+    const ownerApi = await apiAs(playwright, freshAccount.token);
+    expect((await ownerApi.put(`accounts/${accountId}`, { data: { name: accountName, timezone: 'UTC', currency_code: 'USD' } })).ok()).toBeTruthy();
+    await ownerApi.dispose();
+    await activeConnection(freshAccount, accountId, issuerId, domain);
+    await freshAccount.api.inviteUser({ first_name: 'Kim', last_name: 'Member', email: memberEmail, role: 'ORGANIZER' });
+    await acceptWithPassword(publicApi, await latestInvitationPath(mailpit, memberEmail, 1));
+    await joinAnotherAccount(playwright, publicApi, mailpit, memberEmail);
+
+    const { secret } = await freshAccount.api.beginTwoFactorSetup(freshAccount.password);
+    await freshAccount.api.confirmTwoFactorSetup(await nextTotpCode(secret));
+    await freshAccount.api.updateSsoEnforcement(accountId, true);
+
+    const context = await browser.newContext({ ignoreHTTPSErrors: true });
+    const page = await context.newPage();
+    await new TwoFactorPage(page).signInWithPassword(memberEmail, MEMBER_PASSWORD);
+    await expect(page.getByRole('heading', { name: 'Choose an account' })).toBeVisible();
+    await page.getByTestId('account-chooser-option').filter({ hasText: accountName }).click();
+
+    const required = page.getByRole('alert').filter({ hasText: 'Your organization requires single sign-on' });
+    await expect(required).toBeVisible();
+    await required.getByRole('button', { name: 'Sign in with SSO' }).click();
+    await expect(page.getByLabel('Work email')).toHaveValue(memberEmail);
+    await context.close();
+  });
+
+  test('a member with two-factor who must use single sign-on is sent to SSO before being asked for a code', async ({ freshAccount, browser, mailpit, publicApi, playwright }) => {
+    const accountId = await prepareAccount(freshAccount);
+    const issuerId = `mfa-${uniqueSuffix()}`;
+    const domain = `${issuerId}.test`;
+    const memberEmail = `kim@${domain}`;
+    await activeConnection(freshAccount, accountId, issuerId, domain);
+    await freshAccount.api.inviteUser({ first_name: 'Kim', last_name: 'Member', email: memberEmail, role: 'ORGANIZER' });
+    await acceptWithPassword(publicApi, await latestInvitationPath(mailpit, memberEmail, 1));
+
+    const memberApi = await apiAs(playwright, (await login(publicApi, memberEmail, MEMBER_PASSWORD)).token);
+    const member = new ApiClient(memberApi);
+    const { secret: memberSecret } = await member.beginTwoFactorSetup(MEMBER_PASSWORD);
+    await member.confirmTwoFactorSetup(await nextTotpCode(memberSecret));
+    await memberApi.dispose();
+
+    const { secret } = await freshAccount.api.beginTwoFactorSetup(freshAccount.password);
+    await freshAccount.api.confirmTwoFactorSetup(await nextTotpCode(secret));
+    await freshAccount.api.updateSsoEnforcement(accountId, true);
+
+    const context = await browser.newContext({ ignoreHTTPSErrors: true });
+    const page = await context.newPage();
+    const twoFactor = new TwoFactorPage(page);
+    await twoFactor.signInWithPassword(memberEmail, MEMBER_PASSWORD);
+
+    const required = page.getByRole('alert').filter({ hasText: 'Your organization requires single sign-on' });
+    await expect(required).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Two-factor authentication' })).toHaveCount(0);
+    await expect(page.getByText('Something went wrong')).toHaveCount(0);
+    await required.getByRole('button', { name: 'Sign in with SSO' }).click();
+    await expect(page.getByLabel('Work email')).toHaveValue(memberEmail);
     await context.close();
   });
 });

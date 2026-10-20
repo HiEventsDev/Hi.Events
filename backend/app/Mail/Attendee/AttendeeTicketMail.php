@@ -121,6 +121,8 @@ class AttendeeTicketMail extends BaseMail implements ContainsEventContent
         return [
             'attendee' => $attendee,
             'occurrence' => $occurrence,
+            'startDate' => $this->startDateFor($occurrence),
+            'endDate' => $this->endDateFor($occurrence),
             'venueName' => $this->venueNameFor($eventLocation),
             'addressString' => $this->addressStringFor($eventLocation),
             'ticketUrl' => sprintf(
@@ -129,6 +131,23 @@ class AttendeeTicketMail extends BaseMail implements ContainsEventContent
                 $attendee->getShortId(),
             ),
         ];
+    }
+
+    private function startDateFor(?EventOccurrenceDomainObject $occurrence): ?string
+    {
+        return $occurrence?->getStartDate() ?? $this->event->getStartDate();
+    }
+
+    private function endDateFor(?EventOccurrenceDomainObject $occurrence): ?string
+    {
+        $start = $this->startDateFor($occurrence);
+        $end = $occurrence === null ? $this->event->getEndDate() : $occurrence->getEndDate();
+
+        if ($start === null || $end === null || ! Carbon::parse($end)->greaterThan(Carbon::parse($start))) {
+            return null;
+        }
+
+        return $end;
     }
 
     private function venueNameFor(?EventLocationDomainObject $eventLocation): ?string
@@ -203,8 +222,8 @@ class AttendeeTicketMail extends BaseMail implements ContainsEventContent
     {
         $occurrence = $this->occurrenceFor($attendee);
 
-        $startDateRaw = $occurrence?->getStartDate() ?? $this->event->getStartDate();
-        $endDateRaw = $occurrence?->getEndDate() ?? $this->event->getEndDate();
+        $startDateRaw = $this->startDateFor($occurrence);
+        $endDateRaw = $this->endDateFor($occurrence);
 
         $startDateTime = $startDateRaw ? Carbon::parse($startDateRaw, $this->event->getTimezone()) : null;
         $endDateTime = $endDateRaw ? Carbon::parse($endDateRaw, $this->event->getTimezone()) : null;

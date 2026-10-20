@@ -7,16 +7,36 @@ use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
 use HiEvents\DomainObjects\Enums\HomepageFontFamily;
 use HiEvents\DomainObjects\Enums\HomepageSectionType;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\Enums\PriceDisplayMode;
 use HiEvents\DomainObjects\Enums\TicketDateDisplayMode;
+use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Request\BaseRequest;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
+use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
+use HiEvents\Services\Domain\Auth\AuthUserService;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use HiEvents\Validators\Rules\HomepageSectionRules;
 use HiEvents\Validators\Rules\RulesHelper;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Validator;
 
 class UpdateEventSettingsRequest extends BaseRequest
 {
-    // @todo these should all be required for the update request. They should only be nullable for the PATCH request
+    public function after(): array
+    {
+        return [
+            function (Validator $validator): void {
+                $refusal = $this->offlinePaymentInstructionsChangeRefusal();
+
+                if ($refusal !== null && $this->changesOfflinePaymentInstructions()) {
+                    $validator->errors()->add('offline_payment_instructions', $refusal);
+                }
+            },
+        ];
+    }
+
     public function rules(): array
     {
         return [
@@ -146,5 +166,64 @@ class UpdateEventSettingsRequest extends BaseRequest
             'homepage_theme_settings.font_family.in' => __('The selected font is not supported.'),
             ...HomepageSectionRules::messages(),
         ];
+    }
+
+    private function offlinePaymentInstructionsChangeRefusal(): ?string
+    {
+        if (app(AuthUserService::class)->isApiKeyRequest()) {
+            return __('Offline payment instructions can only be changed from the dashboard, not with an API key.');
+        }
+
+        if (app(AccountUserAccessService::class)->isWithheldFromCurrentUser(Permission::MANAGE_PAYMENTS)) {
+            return __('Only members who can manage payments can change the offline payment instructions.');
+        }
+
+        return null;
+    }
+
+    private function changesOfflinePaymentInstructions(): bool
+    {
+        if (! $this->isMethod('PUT') && ! $this->exists('offline_payment_instructions')) {
+            return false;
+        }
+
+        $submitted = $this->input('offline_payment_instructions');
+
+        if ($submitted !== null && ! is_string($submitted)) {
+            return false;
+        }
+
+        $event = $this->eventTheMemberCanEdit();
+
+        if ($event === null) {
+            return false;
+        }
+
+        $saved = trim((string) app(EventSettingsRepositoryInterface::class)
+            ->findFirstWhere(['event_id' => $event->getId()])
+            ?->getOfflinePaymentInstructions());
+
+        if (blank($submitted)) {
+            return $saved !== '';
+        }
+
+        $submitted = trim($submitted);
+
+        return $submitted !== $saved
+            && trim(app(HtmlPurifierService::class)->purify($submitted)) !== $saved;
+    }
+
+    private function eventTheMemberCanEdit(): ?EventDomainObject
+    {
+        $event = app(EventRepositoryInterface::class)->findFirstWhere([
+            'id' => (int) $this->route('event_id'),
+            'account_id' => app(AuthUserService::class)->getAuthenticatedAccountId(),
+        ]);
+
+        if ($event === null || ! app(AccountUserAccessService::class)->currentMemberCanAccessEvent($event)) {
+            return null;
+        }
+
+        return $event;
     }
 }

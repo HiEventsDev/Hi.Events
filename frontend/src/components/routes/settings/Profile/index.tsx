@@ -10,7 +10,7 @@ import {useResendEmailConfirmation} from "../../../../mutations/useResendEmailCo
 import {useFormErrorResponseHandler} from "../../../../hooks/useFormErrorResponseHandler.tsx";
 import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
 import {timezones} from "../../../../../data/timezones.ts";
-import {localeToFlagEmojiMap, localeToNameMap, SupportedLocales} from "../../../../locales.ts";
+import {availableLocales, getLocaleName, localeToFlagEmojiMap, SupportedLocales} from "../../../../locales.ts";
 import {getConfig} from "../../../../utilites/config.ts";
 import {Callout} from "../../../common/Callout";
 import {ConfirmIdentityModal} from "../../../common/ConfirmIdentity/ConfirmIdentityModal.tsx";
@@ -20,11 +20,6 @@ import {readSessionValue, writeSessionValue} from "../../../../utilites/ssoFlow.
 import {StatusDot} from "../../../common/StatusDot";
 import {SettingsPage, SettingsRow, SettingsSaveFooter, SettingsSection} from "../../../common/SettingsPage";
 import classes from "./Profile.module.scss";
-
-const localeOptions = Object.keys(localeToNameMap).map(locale => ({
-    value: locale,
-    label: `${localeToFlagEmojiMap[locale as SupportedLocales]} ${localeToNameMap[locale as SupportedLocales]}`,
-}));
 
 const EMAIL_CHANGE_ACTION = 'email-change';
 const PENDING_EMAIL_KEY = 'hi_pending_email_change';
@@ -232,7 +227,10 @@ const Profile = () => {
                         <SettingsRow label={t`Language`} htmlFor="profile-locale">
                             <Select
                                 id="profile-locale"
-                                data={localeOptions}
+                                data={availableLocales.map(locale => ({
+                                    value: locale,
+                                    label: `${localeToFlagEmojiMap[locale as SupportedLocales]} ${getLocaleName(locale as SupportedLocales)}`,
+                                }))}
                                 allowDeselect={false}
                                 {...form.getInputProps('locale')}
                             />

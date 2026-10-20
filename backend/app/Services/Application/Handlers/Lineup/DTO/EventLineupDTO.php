@@ -14,5 +14,6 @@ class EventLineupDTO extends BaseDataObject
         public readonly Collection $spaces,
         public readonly Collection $schedule_items,
         public readonly ?Collection $venues = null,
+        public readonly ?array $schedule_days_by_entry_id = null,
     ) {}
 }

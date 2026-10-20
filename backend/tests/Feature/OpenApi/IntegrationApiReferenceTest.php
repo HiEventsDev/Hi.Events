@@ -3,6 +3,7 @@
 namespace Tests\Feature\OpenApi;
 
 use HiEvents\DomainObjects\Enums\ApiKeyAccess;
+use HiEvents\Enterprise\Licensing\LicensedFeature;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Process;
 use Tests\Concerns\ActsAsAccountUsers;
@@ -51,6 +52,76 @@ class IntegrationApiReferenceTest extends TestCase
         $this->assertSame(trim(file_get_contents(base_path('VERSION'))), $response->json('info.version'));
     }
 
+    public function test_empty_schemas_are_objects_not_arrays(): void
+    {
+        [$owner, $accountId] = $this->createAccountOwner();
+
+        $served = $this->getJson('/api-reference', $this->headersFor($owner, $accountId))->assertOk()->getContent();
+
+        $this->assertSame([], self::emptyArraySchemas(file_get_contents(base_path('resources/api-reference/openapi.json'))));
+        $this->assertSame([], self::emptyArraySchemas($served));
+        $this->assertStringContainsString('"items":{}', $served);
+    }
+
+    public function test_object_and_enum_fields_are_documented_with_their_real_types(): void
+    {
+        $schemas = json_decode(file_get_contents(base_path('resources/api-reference/openapi.json')), true)['components']['schemas'];
+
+        $this->assertEqualsCanonicalizing(
+            array_column(LicensedFeature::cases(), 'value'),
+            $schemas['MeResource']['properties']['licence']['properties']['features_in_use']['items']['enum'],
+        );
+
+        $widget = $schemas['WidgetResource']['properties'];
+        $this->assertSame('object', $widget['settings']['type']);
+        $this->assertSame('object', $widget['stats']['properties']['revenue']['type']);
+        $this->assertSame('number', $widget['stats']['properties']['revenue']['additionalProperties']['type']);
+
+        $this->assertSame(
+            [-1, 1, 2, 3, 4, null],
+            $schemas['GenerateOccurrencesRequest']['properties']['recurrence_rule']['properties']['week_position']['enum'],
+        );
+    }
+
+    public function test_every_operation_has_a_unique_operation_id(): void
+    {
+        $operationIds = array_column(self::operations(), 'operationId');
+
+        $this->assertCount(count(self::operations()), $operationIds);
+        $this->assertSame([], array_keys(array_filter(array_count_values($operationIds), static fn (int $count) => $count > 1)));
+        $this->assertContains('events.getEventPublicAction.getPublicEventsEventId', $operationIds);
+        $this->assertContains('events.getEventPublicAction.getPublicEventsEventIdProducts', $operationIds);
+    }
+
+    public function test_paths_do_not_differ_only_by_parameter_names(): void
+    {
+        $paths = array_keys(self::committedReference()['paths']);
+        $shapes = array_map(static fn (string $path) => preg_replace('/\{[^}]+}/', '{}', $path), $paths);
+
+        $this->assertSame([], array_keys(array_filter(array_count_values($shapes), static fn (int $count) => $count > 1)));
+    }
+
+    public function test_every_request_body_is_documented(): void
+    {
+        $undocumented = array_keys(array_filter(
+            self::operations(),
+            static fn (array $operation) => str_contains($operation['description'] ?? '', 'Cannot generate request documentation'),
+        ));
+
+        $this->assertSame([], $undocumented);
+        $this->assertArrayHasKey('requestBody', self::committedReference()['paths']['/events/{eventId}/questions']['post']);
+    }
+
+    public function test_tuples_use_json_schema_2020_12_keywords(): void
+    {
+        $json = file_get_contents(base_path('resources/api-reference/openapi.json'));
+
+        $this->assertStringNotContainsString('"additionalItems"', $json);
+
+        $emptyTuple = self::committedReference()['components']['schemas']['CheckInListResourcePublic']['properties']['event_occurrences']['anyOf'][1];
+        $this->assertSame(['type' => 'array', 'items' => false, 'minItems' => 0, 'maxItems' => 0], $emptyTuple);
+    }
+
     public function test_the_reference_needs_a_signed_in_session(): void
     {
         [$owner, $accountId] = $this->createAccountOwner();
@@ -60,5 +131,39 @@ class IntegrationApiReferenceTest extends TestCase
         $this->getJson('/api-reference', $this->apiKeyHeaders($apiKey))
             ->assertForbidden()
             ->assertJsonPath('error_code', 'API_KEY_NOT_ALLOWED');
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private static function committedReference(): array
+    {
+        return json_decode(file_get_contents(base_path('resources/api-reference/openapi.json')), true, flags: JSON_THROW_ON_ERROR);
+    }
+
+    /**
+     * @return array<string, array<string, mixed>>
+     */
+    private static function operations(): array
+    {
+        $operations = [];
+
+        foreach (self::committedReference()['paths'] as $path => $pathItem) {
+            foreach (array_intersect_key($pathItem, array_flip(['get', 'put', 'post', 'delete', 'patch'])) as $method => $operation) {
+                $operations[strtoupper($method).' '.$path] = $operation;
+            }
+        }
+
+        return $operations;
+    }
+
+    /**
+     * @return array<string, int>
+     */
+    private static function emptyArraySchemas(string $json): array
+    {
+        preg_match_all('/"(items|additionalProperties|properties|schema|not|contains|propertyNames)":\s*\[\]/', $json, $matches);
+
+        return array_count_values($matches[1]);
     }
 }

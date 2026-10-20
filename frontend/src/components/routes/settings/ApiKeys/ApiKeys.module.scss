@@ -180,11 +180,24 @@ $row-columns: minmax(0, 1fr) 120px 130px 150px 36px;
 }
 
 .cellLabel {
-  display: none;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 
   @include mixins.respond-below(md, true) {
-    display: inline;
-    margin-right: 4px;
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0 4px 0 0;
+    overflow: visible;
+    clip-path: none;
+    white-space: normal;
     color: var(--hi-color-text-tertiary);
   }
 }

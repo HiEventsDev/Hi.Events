@@ -38,7 +38,7 @@ import {CreateQuestionModal} from "../../modals/CreateQuestionModal";
 import {useDisclosure} from "@mantine/hooks";
 import {Card} from "../Card";
 import {t} from "@lingui/macro";
-import {useEffect, useState} from "react";
+import {useEffect, useId, useState} from "react";
 import {EditQuestionModal} from "../../modals/EditQuestionModal";
 import {useDeleteQuestion} from "../../../mutations/useDeleteQuestion.ts";
 import {useParams} from "react-router";
@@ -201,6 +201,7 @@ const QuestionsList = ({
     }, [questions]);
 
     const sensors = useSensors(useSensor(PointerSensor), useSensor(TouchSensor));
+    const dndId = useId();
 
     const onDelete = (id: IdParam) => {
         confirmationDialog(t`Delete this question? This cannot be undone.`, () => {
@@ -238,7 +239,7 @@ const QuestionsList = ({
     }
 
     return (
-        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <DndContext id={dndId} sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
             <SortableContext items={items as UniqueIdentifier[]} strategy={verticalListSortingStrategy}>
                 <div className={classes.questionsList}>
                     {questions.map((question) => (

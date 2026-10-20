@@ -8,6 +8,7 @@ import {LineupGrid} from "./LineupGrid.tsx";
 import {ScheduleTimeline} from "./ScheduleTimeline.tsx";
 import {ProfileModal} from "./ProfileModal.tsx";
 import {SessionModal} from "./SessionModal.tsx";
+import {useReturnFocusOnClose} from "../../../../hooks/useReturnFocusOnClose.ts";
 
 export interface HomepageSectionClasses {
     section: string;
@@ -50,6 +51,7 @@ type OpenDialog = (DialogTarget & { back?: DialogTarget }) | null;
 
 const useLineupDialog = (lineup: EventLineup | undefined, deepLink: boolean) => {
     const [dialog, setDialog] = useState<OpenDialog>(null);
+    useReturnFocusOnClose(dialog !== null);
 
     useEffect(() => {
         if (!deepLink || !lineup || !window.location.hash.startsWith(SESSION_HASH_PREFIX)) {

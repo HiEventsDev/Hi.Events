@@ -7,6 +7,7 @@ namespace HiEvents\OpenApi;
 use Dedoc\Scramble\Generator;
 use Dedoc\Scramble\Scramble;
 use Illuminate\Contracts\Foundation\Application;
+use stdClass;
 
 class IntegrationApiReference
 {
@@ -33,32 +34,33 @@ class IntegrationApiReference
     {
         $document = json_decode(
             json_encode($this->app->make(Generator::class)(Scramble::getGeneratorConfig('default')), JSON_THROW_ON_ERROR),
-            true,
             flags: JSON_THROW_ON_ERROR,
         );
 
-        unset($document['servers'], $document['info']['version']);
+        unset($document->servers, $document->info->version);
 
-        $document['paths'] = array_filter(
-            array_map($this->withoutSessionOnlyOperations(...), $document['paths']),
-            static fn (array $pathItem, string $path) => $pathItem !== [] && ! self::isExcludedPath($path),
-            ARRAY_FILTER_USE_BOTH,
-        );
+        $paths = [];
+        foreach ((array) $document->paths as $path => $pathItem) {
+            $pathItem = $this->withoutSessionOnlyOperations($pathItem);
 
-        $document = $this->withReachableSchemasOnly($document);
+            if ($pathItem !== null && ! self::isExcludedPath($path)) {
+                $paths[$path] = $pathItem;
+            }
+        }
+        $document->paths = (object) $paths;
+
+        $this->keepReachableSchemasOnly($document);
+        self::closeTuplesWithItems($document);
 
         $json = json_encode($document, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
 
         return preg_replace_callback('/^(?: {4})+/m', static fn (array $indent) => substr($indent[0], 0, intdiv(strlen($indent[0]), 2)), $json)."\n";
     }
 
-    /**
-     * @return array<string, mixed>
-     */
-    public function published(): array
+    public function published(): stdClass
     {
-        $document = json_decode((string) file_get_contents($this->path()), true, flags: JSON_THROW_ON_ERROR);
-        $document['info']['version'] = trim((string) file_get_contents($this->app->basePath('VERSION')));
+        $document = json_decode((string) file_get_contents($this->path()), flags: JSON_THROW_ON_ERROR);
+        $document->info->version = trim((string) file_get_contents($this->app->basePath('VERSION')));
 
         return $document;
     }
@@ -74,14 +76,11 @@ class IntegrationApiReference
         return false;
     }
 
-    /**
-     * @param  array<string, mixed>  $document
-     * @return array<string, mixed>
-     */
-    private function withReachableSchemasOnly(array $document): array
+    private function keepReachableSchemasOnly(stdClass $document): void
     {
-        $schemas = $document['components']['schemas'] ?? [];
-        $pending = self::schemaRefs([$document['paths'], array_diff_key($document['components'] ?? [], ['schemas' => true])]);
+        $components = (array) ($document->components ?? []);
+        $schemas = (array) ($components['schemas'] ?? []);
+        $pending = self::schemaRefs([$document->paths, array_diff_key($components, ['schemas' => true])]);
         $reachable = [];
 
         while ($pending !== []) {
@@ -95,9 +94,8 @@ class IntegrationApiReference
             array_push($pending, ...self::schemaRefs($schemas[$name]));
         }
 
-        $document['components']['schemas'] = array_intersect_key($schemas, $reachable);
-
-        return $document;
+        $document->components ??= new stdClass;
+        $document->components->schemas = (object) array_intersect_key($schemas, $reachable);
     }
 
     /**
@@ -110,19 +108,33 @@ class IntegrationApiReference
         return $matches[1];
     }
 
-    /**
-     * @param  array<string, mixed>  $pathItem
-     * @return array<string, mixed>
-     */
-    private function withoutSessionOnlyOperations(array $pathItem): array
+    private static function closeTuplesWithItems(mixed $node): void
     {
+        if (! is_array($node) && ! $node instanceof stdClass) {
+            return;
+        }
+
+        foreach ($node as $child) {
+            self::closeTuplesWithItems($child);
+        }
+
+        if ($node instanceof stdClass && property_exists($node, 'additionalItems') && in_array('array', (array) ($node->type ?? null), true)) {
+            $node->items = $node->additionalItems;
+            unset($node->additionalItems);
+        }
+    }
+
+    private function withoutSessionOnlyOperations(stdClass $pathItem): ?stdClass
+    {
+        $pathItem = (array) $pathItem;
+
         $operations = array_filter(
             $pathItem,
             static fn ($operation, string $key) => in_array($key, self::HTTP_METHODS, true)
-                && ! ($operation['x-'.self::SESSION_ONLY_EXTENSION] ?? false),
+                && ! ($operation->{'x-'.self::SESSION_ONLY_EXTENSION} ?? false),
             ARRAY_FILTER_USE_BOTH,
         );
 
-        return $operations === [] ? [] : $operations + array_diff_key($pathItem, array_flip(self::HTTP_METHODS));
+        return $operations === [] ? null : (object) ($operations + array_diff_key($pathItem, array_flip(self::HTTP_METHODS)));
     }
 }

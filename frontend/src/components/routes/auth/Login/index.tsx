@@ -29,12 +29,14 @@ const Login = () => {
     const [ticketLookupOpen, setTicketLookupOpen] = useState(false);
     const [ssoCancelled, setSsoCancelled] = useState(false);
     const [notice, setNotice] = useState<string | null>((location.state as { notice?: string } | null)?.notice ?? null);
-    const steps = useLoginSteps();
+    const [ssoRequiredEmail, setSsoRequiredEmail] = useState<string | null>(null);
+    const steps = useLoginSteps({
+        onSsoRequired: (error) => setSsoRequiredEmail(error.context?.email ?? form.values.email),
+    });
     const {passwordLoginEnabled, registrationEnabled, enterpriseSsoEnabled} = useSsoOptions();
     const [ssoDiscoveryEmail, setSsoDiscoveryEmail] = useState<string | null>((location.state as { ssoStep?: boolean } | null)?.ssoStep
         ? (location.state as { email?: string }).email ?? ''
         : null);
-    const [ssoRequiredEmail, setSsoRequiredEmail] = useState<string | null>(null);
     const startSso = useStartSso();
 
     const ticketLookupForm = useForm({
@@ -79,12 +81,18 @@ const Login = () => {
             steps.setPendingAccountId(null);
 
             if (error?.response?.data?.error_code === 'SSO_REQUIRED') {
+                steps.reset();
                 setSsoRequiredEmail(variables.email);
                 return;
             }
 
-            steps.setError(error?.response?.status === 429
-                ? t`Too many attempts. Please wait a minute and try again.`
+            if (error?.response?.status === 429) {
+                steps.setError(t`Too many attempts. Please wait a minute and try again.`);
+                return;
+            }
+
+            steps.setError(variables.account_id && error?.response?.data?.message
+                ? error.response.data.message
                 : t`Please check your email and password and try again`);
         }
     });

@@ -9,6 +9,7 @@ import TaxSummaryReport from "../TaxSummaryReport";
 import CheckInSummaryReport from "../CheckInSummaryReport";
 import PlatformFeesReport from "../PlatformFeesReport";
 import {t} from "@lingui/macro";
+import {RequirePermission} from "../../../../common/WriteAccess";
 
 const renderReport = (reportType: string) => {
     switch (reportType) {
@@ -29,6 +30,7 @@ const renderReport = (reportType: string) => {
 
 const OrganizerReportLayout = () => {
     const {organizerId, reportType} = useParams();
+    const report = <div>{renderReport(reportType as string)}</div>;
 
     return (
         <PageBody>
@@ -41,9 +43,11 @@ const OrganizerReportLayout = () => {
             >
                 {t`Back to Reports`}
             </Button>
-            <div>
-                {renderReport(reportType as string)}
-            </div>
+            {reportType === OrganizerReportTypes.CheckInSummary ? report : (
+                <RequirePermission permission="VIEW_FINANCIALS" imageHref="/blank-slate/reports.svg">
+                    {report}
+                </RequirePermission>
+            )}
         </PageBody>
     );
 }

@@ -27,12 +27,15 @@ use HiEvents\Resources\Order\OrderResource;
 use HiEvents\Resources\Product\ProductResource;
 use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
+use Illuminate\Config\Repository;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Psr\Log\LoggerInterface;
 use Spatie\WebhookServer\WebhookCall;
 
 class WebhookDispatchService
 {
+    private const LARGEST_QUEUED_PAYLOAD_BYTES = 120 * 1024;
+
     public function __construct(
         private readonly LoggerInterface $logger,
         private readonly WebhookRepositoryInterface $webhookRepository,
@@ -43,6 +46,7 @@ class WebhookDispatchService
         private readonly EventRepositoryInterface $eventRepository,
         private readonly EventOccurrenceRepositoryInterface $eventOccurrenceRepository,
         private readonly AccountUserAccessService $accessService,
+        private readonly Repository $config,
     ) {}
 
     public function dispatchEventWebhook(DomainEventType $eventType, int $eventId): void
@@ -197,12 +201,16 @@ class WebhookDispatchService
             return;
         }
 
-        $resolvedPayload = $this->accessService->withoutMemberRestrictions(fn () => $payload->resolve());
+        $encodedPayload = $this->accessService->withoutMemberRestrictions(
+            fn () => json_encode($payload, JSON_THROW_ON_ERROR),
+        );
+        $resolvedPayload = json_decode($encodedPayload, flags: JSON_THROW_ON_ERROR);
+        $fitsOnTheQueue = strlen($encodedPayload) <= self::LARGEST_QUEUED_PAYLOAD_BYTES;
 
         foreach ($webhooks as $webhook) {
             $this->logger->info("Dispatching webhook for event ID: $eventId and webhook ID: {$webhook->getId()}");
 
-            WebhookCall::create()
+            $call = WebhookCall::create()
                 ->url($webhook->getUrl())
                 ->payload([
                     'event_type' => $eventType->value,
@@ -214,8 +222,15 @@ class WebhookDispatchService
                     'webhook_id' => $webhook->getId(),
                     'event_id' => $eventId,
                     'event_type' => $eventType->name,
-                ])
-                ->dispatchSync();
+                ]);
+
+            if (! $fitsOnTheQueue) {
+                $call->dispatchSync();
+
+                continue;
+            }
+
+            $call->onQueue($this->config->get('queue.webhook_queue_name'))->dispatch();
         }
     }
 }

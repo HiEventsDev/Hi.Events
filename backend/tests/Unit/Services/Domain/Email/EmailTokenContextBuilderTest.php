@@ -233,6 +233,34 @@ class EmailTokenContextBuilderTest extends TestCase
         $this->assertEquals('', $context['occurrence']['label']);
     }
 
+    public function test_an_occurrence_without_an_end_leaves_the_end_tokens_empty(): void
+    {
+        $occurrence = (new EventOccurrenceDomainObject)
+            ->setId(7)
+            ->setStartDate('2026-11-02 19:00:00')
+            ->setEndDate(null);
+        $series = Mockery::mock(EventDomainObject::class, [
+            'getTitle' => 'Weekly Quiz',
+            'getDescription' => null,
+            'getStartDate' => '2026-11-02 19:00:00',
+            'getEndDate' => '2026-11-16 19:00:00',
+            'getTimezone' => 'UTC',
+            'getCurrency' => 'USD',
+            'getId' => 1,
+            'getEventLocation' => null,
+        ]);
+
+        $context = $this->contextBuilder->buildOrderConfirmationContext(
+            $this->createMockOrder(), $series, $this->createMockOrganizer(), $this->createMockEventSettings(), $occurrence
+        );
+
+        $this->assertEquals('November 2, 2026', $context['event']['date']);
+        $this->assertSame('', $context['event']['end_date']);
+        $this->assertSame('', $context['event']['end_time']);
+        $this->assertSame('', $context['occurrence']['end_date']);
+        $this->assertSame('', $context['occurrence']['end_time']);
+    }
+
     public function test_uses_the_orders_only_occurrence_when_none_is_passed(): void
     {
         $occurrence = (new EventOccurrenceDomainObject)

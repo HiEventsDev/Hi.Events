@@ -1,6 +1,6 @@
 import {Select, Switch} from "@mantine/core";
-import {t} from "@lingui/macro";
-import {useSaveSsoConnection, useSetSsoConnectionStatus} from "../../mutations/useAccountSsoMutations.ts";
+import {plural, t} from "@lingui/macro";
+import {useSetSsoConnectionStatus, useUpdateSsoAccessSettings} from "../../mutations/useAccountSsoMutations.ts";
 import {AccountSsoConnection, AccountSsoConnectionRequest, IdParam} from "../../../../types.ts";
 import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
 import {roleLabel} from "../../../../components/common/TeamAccessFields";
@@ -13,11 +13,11 @@ const SESSION_LENGTHS = [60, 240, 480, 720, 1440, 10080];
 const sessionLengthLabel = (minutes: number): string => {
     if (minutes >= 1440) {
         const days = minutes / 1440;
-        return days === 1 ? t`1 day` : t`${days} days`;
+        return plural(days, {one: '# day', other: '# days'});
     }
 
     const hours = minutes / 60;
-    return hours === 1 ? t`1 hour` : t`${hours} hours`;
+    return plural(hours, {one: '# hour', other: '# hours'});
 };
 
 const errorMessage = (error: any): string => {
@@ -34,7 +34,7 @@ interface AccessSettingsProps {
 }
 
 export const AccessSettings = ({accountId, connection, setupLocked}: AccessSettingsProps) => {
-    const saveMutation = useSaveSsoConnection();
+    const saveMutation = useUpdateSsoAccessSettings();
     const statusMutation = useSetSsoConnectionStatus();
     const providerName = connectionProviderName(connection.type);
     const isActive = connection.status === 'ACTIVE';
@@ -43,7 +43,7 @@ export const AccessSettings = ({accountId, connection, setupLocked}: AccessSetti
         .map(minutes => ({value: String(minutes), label: sessionLengthLabel(minutes)}));
 
     const save = (overrides: Partial<AccountSsoConnectionRequest>) => {
-        saveMutation.mutate({accountId, request: connectionRequest(connection, overrides), isNew: false}, {
+        saveMutation.mutate({accountId, request: connectionRequest(connection, overrides)}, {
             onSuccess: () => showSuccess(t`Single sign-on settings updated`),
             onError: (error) => showError(errorMessage(error)),
         });
@@ -72,7 +72,7 @@ export const AccessSettings = ({accountId, connection, setupLocked}: AccessSetti
                 <Switch
                     size="md"
                     checked={isActive}
-                    disabled={statusMutation.isPending || (!isActive && (setupLocked || !connection.last_tested_at)) || (isActive && connection.enforce_sso)}
+                    disabled={(!isActive && (setupLocked || !connection.last_tested_at)) || (isActive && connection.enforce_sso)}
                     onChange={(event) => setActive(event.currentTarget.checked)}
                     aria-label={t`Allow sign-in with ${providerName}`}
                     data-testid="sso-connection-active-switch"
@@ -89,7 +89,7 @@ export const AccessSettings = ({accountId, connection, setupLocked}: AccessSetti
                 <Switch
                     size="md"
                     checked={connection.jit_provisioning_enabled}
-                    disabled={setupLocked || saveMutation.isPending}
+                    disabled={setupLocked}
                     onChange={(event) => save({jit_provisioning_enabled: event.currentTarget.checked})}
                     aria-label={t`Add new people automatically`}
                     data-testid="sso-jit-switch"
@@ -102,7 +102,7 @@ export const AccessSettings = ({accountId, connection, setupLocked}: AccessSetti
                     data={(['ORGANIZER', 'VIEWER', 'ADMIN'] as const).map(role => ({value: role, label: roleLabel(role)}))}
                     value={connection.jit_default_role}
                     onChange={(role) => role && save({jit_default_role: role as AccountSsoConnection['jit_default_role']})}
-                    disabled={setupLocked || !connection.jit_provisioning_enabled || saveMutation.isPending}
+                    disabled={setupLocked || !connection.jit_provisioning_enabled}
                     allowDeselect={false}
                     description={connection.jit_default_role === 'ADMIN' ? t`The account owner is emailed whenever someone joins as an admin.` : undefined}
                 />
@@ -111,7 +111,7 @@ export const AccessSettings = ({accountId, connection, setupLocked}: AccessSetti
                     data={sessionOptions}
                     value={String(connection.session_ttl_minutes)}
                     onChange={(minutes) => minutes && save({session_ttl_minutes: Number(minutes)})}
-                    disabled={setupLocked || saveMutation.isPending}
+                    disabled={setupLocked}
                     allowDeselect={false}
                     description={t`Applies to sessions started through ${providerName}. People then sign in again.`}
                 />

@@ -14,5 +14,7 @@ export const uniqueName = (prefix: string): string => `${prefix} ${token()}`;
 export const uniqueCode = (prefix = 'E2E'): string =>
   `${prefix}${token().replace(/-/g, '').toUpperCase()}`.slice(0, 30);
 
-export const uniqueShort = (prefix: string): string =>
-  `${prefix} ${Math.random().toString(36).slice(2, 8)}`;
+const randomLetters = (length: number): string =>
+  Array.from({ length }, () => String.fromCharCode(97 + Math.floor(Math.random() * 26))).join('');
+
+export const uniqueShort = (prefix: string): string => `${prefix} ${randomLetters(6)}`;

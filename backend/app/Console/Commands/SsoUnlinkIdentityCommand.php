@@ -38,7 +38,7 @@ class SsoUnlinkIdentityCommand extends Command
         $userIdentityService->deleteForUser($user->getId());
         $sessionRevocationService->revokeAll($user->getId());
 
-        $this->info('Single sign-on logins removed. The user can set a password with "Forgot password".');
+        $this->info('Single sign-on logins removed and the user is signed out everywhere. They can set a password with "Forgot password" unless password sign-in is turned off or every account they belong to requires single sign-on.');
 
         return self::SUCCESS;
     }

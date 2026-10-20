@@ -578,6 +578,33 @@
             : fallback
     );
 
+    const constructedSheet = (cssText) => {
+        try {
+            const sheet = new CSSStyleSheet();
+            sheet.replaceSync(cssText);
+            return sheet;
+        } catch (e) {
+            return null;
+        }
+    };
+
+    const FIXED_HEIGHT_CSS = ':where(.hievents-widget[data-hievents-autoresize="false"] > iframe, '
+        + 'hievents-widget[data-hievents-autoresize="false"] > iframe, hievents-widget[autoresize="false"] > iframe) { height: 100%; }';
+    let fixedHeightStylesAdded = false;
+
+    const addFixedHeightStyles = () => {
+        if (fixedHeightStylesAdded) return;
+        fixedHeightStylesAdded = true;
+        const sheet = constructedSheet(FIXED_HEIGHT_CSS);
+        if (sheet && 'adoptedStyleSheets' in document) {
+            document.adoptedStyleSheets = document.adoptedStyleSheets.concat(sheet);
+            return;
+        }
+        const style = document.createElement('style');
+        style.textContent = FIXED_HEIGHT_CSS;
+        document.head.appendChild(style);
+    };
+
     const renderButton = (element, attributes, instance) => {
         const root = element.shadowRoot || element.attachShadow({ mode: 'open' });
         const button = document.createElement('button');
@@ -588,8 +615,7 @@
         const color = cssColor(attributes['secondary-text-color'], '#ffffff');
         const radiusValue = parseFloat(attributes.radius);
         const radius = Number.isFinite(radiusValue) ? `${Math.max(0, Math.min(radiusValue, 32))}px` : '10px';
-        const style = document.createElement('style');
-        style.textContent = `
+        const css = `
             :host { display: inline-block; }
             button {
                 display: inline-flex; align-items: center; justify-content: center; gap: 8px;
@@ -604,7 +630,14 @@
             button:focus-visible { outline: 2px solid ${background}; outline-offset: 3px; }
         `;
         root.innerHTML = '';
-        root.appendChild(style);
+        const sheet = constructedSheet(css);
+        if (sheet && 'adoptedStyleSheets' in root) {
+            root.adoptedStyleSheets = [sheet];
+        } else {
+            const style = document.createElement('style');
+            style.textContent = css;
+            root.appendChild(style);
+        }
         root.appendChild(button);
 
         button.addEventListener('click', safe(() => {
@@ -652,6 +685,11 @@
 
         if (element.tagName === 'HIEVENTS-WIDGET' && !element.style.display) {
             element.style.display = 'block';
+            instance.setDisplay = true;
+        }
+
+        if (!instance.autoResize) {
+            addFixedHeightStyles();
         }
 
         const iframe = document.createElement('iframe');
@@ -678,7 +716,13 @@
                 try { instance.iframe.remove(); } catch (e) { /* noop */ }
             }
             if (instance.button && element.shadowRoot) {
-                element.shadowRoot.innerHTML = '';
+                element.shadowRoot.replaceChildren(document.createElement('slot'));
+                if ('adoptedStyleSheets' in element.shadowRoot) {
+                    element.shadowRoot.adoptedStyleSheets = [];
+                }
+            }
+            if (instance.setDisplay && element.style.display === 'block') {
+                element.style.display = '';
             }
             instances.delete(iframeId);
         }

@@ -155,16 +155,29 @@ Sitemap: ${frontendUrl}/sitemap.xml
     });
 
     const frameProtectedPathPattern = /^\/(auth|manage|account|profile|settings|welcome|admin|sso)(\/|$)/;
+    const homepagePreviewPathPattern = /^\/(event|organizer)\/[^/]+\/preview\/*$/;
+    const widgetPathPattern = /^\/widget\//;
     const credentialInUrlPathPattern = /^\/(sso\/callback|auth\/accept-invitation\/)/;
     const ssoCallbackPathPattern = /^\/sso\/callback\/?$/;
-    const requestPathOf = (req) => req.originalUrl.replace(base, "/").split("?")[0];
+    const requestPathOf = (req) => {
+        const path = req.originalUrl.replace(base, "/").split("?")[0];
+        try {
+            return decodeURIComponent(path).toLowerCase();
+        } catch {
+            return path.toLowerCase();
+        }
+    };
 
     app.use("*", (req, res, next) => {
         const requestPath = requestPathOf(req);
 
-        if (frameProtectedPathPattern.test(requestPath)) {
+        if (frameProtectedPathPattern.test(requestPath) || homepagePreviewPathPattern.test(requestPath)) {
             res.setHeader("Content-Security-Policy", "frame-ancestors 'self'");
             res.setHeader("X-Frame-Options", "SAMEORIGIN");
+        }
+
+        if (widgetPathPattern.test(requestPath)) {
+            res.setHeader("X-Robots-Tag", "noindex, indexifembedded");
         }
 
         if (credentialInUrlPathPattern.test(requestPath)) {
@@ -191,7 +204,7 @@ Sitemap: ${frontendUrl}/sitemap.xml
                 render = (await dynamicImport(path.join(__dirname, "./dist/server/entry.server.js"))).render;
             }
 
-            const { appHtml, dehydratedState, helmetContext, themeColors, statusCode, renderErrors } = await render(
+            const { appHtml, dehydratedState, helmetContext, themeColors, htmlLang, statusCode, renderErrors } = await render(
                 {
                     req,
                     res,
@@ -237,6 +250,7 @@ Sitemap: ${frontendUrl}/sitemap.xml
             }
 
             const html = template
+                .replace('<html lang="en">', () => `<html lang="${htmlLang}">`)
                 .replace("<!--head-snippets-->", () => headSnippets.join("\n"))
                 .replace("<!--app-html-->", () => appHtml)
                 .replace("<!--dehydrated-state-->", () => `<script>window.__REHYDRATED_STATE__ = ${stringifiedState};window.__THEME_COLORS__ = ${stringifiedThemeColors}</script>`)

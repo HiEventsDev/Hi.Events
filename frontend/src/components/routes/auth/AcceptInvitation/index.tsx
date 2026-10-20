@@ -85,7 +85,7 @@ const AcceptInvitation = () => {
                 navigate('/auth/login', {state: {email: invitation?.email}});
             },
             onError: (requestError: any) => {
-                if (requestError?.response?.data?.error_code === 'INVITATION_SIGN_IN_REQUIRED') {
+                if (['INVITATION_SIGN_IN_REQUIRED', 'SSO_REQUIRED'].includes(requestError?.response?.data?.error_code)) {
                     refetch();
                     return;
                 }
@@ -146,10 +146,31 @@ const AcceptInvitation = () => {
                             {t`Join ${invitation.account_name}`}
                         </Button>
                     ) : (
-                        <Button color="secondary.5" fullWidth onClick={signOut}>
+                        <Button color="secondary.5" fullWidth onClick={signOut} data-testid="invitation-sign-out-button">
                             {t`Sign out`}
                         </Button>
                     )}
+                </div>
+            </>
+        );
+    }
+
+    if (invitation.sso_required) {
+        return (
+            <>
+                {heading}
+                <Callout variant="info" title={t`Your organization requires single sign-on`}>
+                    {t`Sign in through your organization's identity provider to join ${invitation.account_name}.`}
+                </Callout>
+                <div className={classes.signedIn}>
+                    <Button
+                        color="secondary.5"
+                        fullWidth
+                        onClick={() => navigate('/auth/login', {state: {ssoStep: true, email: invitation.email}})}
+                        data-testid="invitation-sso-button"
+                    >
+                        {t`Sign in with SSO`}
+                    </Button>
                 </div>
             </>
         );

@@ -1,6 +1,9 @@
 import {notifications} from "@mantine/notifications";
 import {IconCheck, IconInfoSmall, IconX} from "@tabler/icons-react";
 import React, {ReactNode} from "react";
+import {t} from "@lingui/macro";
+
+const closeButtonProps = () => ({'aria-label': t`Close`});
 
 export const showSuccess = (message: ReactNode, icon: ReactNode = <IconCheck/>) => {
     notifications.show({
@@ -8,6 +11,7 @@ export const showSuccess = (message: ReactNode, icon: ReactNode = <IconCheck/>) 
         color: 'green',
         icon: icon,
         position: 'top-center',
+        closeButtonProps: closeButtonProps(),
     })
 }
 
@@ -17,6 +21,7 @@ export const showInfo = (message: ReactNode, icon: ReactNode = <IconInfoSmall/>)
         color: 'blue',
         icon: icon,
         position: 'top-center',
+        closeButtonProps: closeButtonProps(),
     })
 }
 
@@ -26,6 +31,7 @@ export const showError = (message: React.ReactNode, icon: ReactNode = <IconX/>) 
         color: 'red',
         icon: icon,
         position: 'top-center',
+        closeButtonProps: closeButtonProps(),
     })
 }
 
@@ -47,6 +53,7 @@ export const showSuccessWithUndo = (
         color: 'green',
         icon: <IconCheck/>,
         position: 'top-center',
+        closeButtonProps: closeButtonProps(),
         autoClose,
         message: (
             <span style={{display: 'flex', alignItems: 'center', gap: 12, justifyContent: 'space-between'}}>

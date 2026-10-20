@@ -38,6 +38,7 @@ export const confirmationDialog = (
         labels,
         styles: checkoutStyles,
         confirmProps: options?.destructive ? {color: 'red'} : undefined,
+        closeButtonProps: {'aria-label': t`Close`},
         onConfirm: () => onConfirm(),
     });
 }
@@ -52,6 +53,7 @@ export const confirmationDialogAsync = (
             confirm: options?.confirm || t`Confirm`,
             cancel: options?.cancel || t`Cancel`,
         },
+        closeButtonProps: {'aria-label': t`Close`},
         onConfirm: () => resolve(true),
         onCancel: () => resolve(false),
         onClose: () => resolve(false),

@@ -7,7 +7,7 @@ import {Pagination} from "../../common/Pagination";
 import {ActionIcon, Avatar, Badge, Button, CloseButton, Loader, TextInput, Tooltip} from "@mantine/core";
 import {IconArrowLeft, IconClock, IconMail, IconSearch, IconSend, IconX} from "@tabler/icons-react";
 import {useFilterQueryParamSync} from "../../../hooks/useFilterQueryParamSync.ts";
-import {IdParam, Message, MessageType, QueryFilters} from "../../../types.ts";
+import {IdParam, Message, QueryFilters} from "../../../types.ts";
 import {useGetEventMessages} from "../../../queries/useGetEventMessages.ts";
 import {MessageList, statusBadgeColor, typeLabel} from "../../common/MessageList";
 import {NoResultsSplash} from "../../common/NoResultsSplash";
@@ -332,15 +332,17 @@ export const Messages = () => {
                                         <p>{t`Send emails to attendees, ticket holders, or order owners. Messages can be sent immediately or scheduled for later.`}</p>
                                     }
                                 >
-                                    <Button
-                                        variant="filled"
-                                        size="sm"
-                                        onClick={openSendModal}
-                                        leftSection={<IconSend size={16}/>}
-                                        mt={8}
-                                    >
-                                        {t`Send your first message`}
-                                    </Button>
+                                    <WriteAccess>
+                                        <Button
+                                            variant="filled"
+                                            size="sm"
+                                            onClick={openSendModal}
+                                            leftSection={<IconSend size={16}/>}
+                                            mt={8}
+                                        >
+                                            {t`Send your first message`}
+                                        </Button>
+                                    </WriteAccess>
                                 </NoResultsSplash>
                             ) : (
                                 <>
@@ -353,7 +355,7 @@ export const Messages = () => {
                 </div>
             </div>
 
-            {sendModalOpen && <SendMessageModal messageType={MessageType.OrderOwner} onClose={closeSendModal}/>}
+            {sendModalOpen && <SendMessageModal onClose={closeSendModal}/>}
         </>
     );
 };

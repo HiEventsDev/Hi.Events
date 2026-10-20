@@ -25,15 +25,16 @@ class UpsertScheduleItemRequest extends BaseRequest
     public function withValidator(Validator $validator): void
     {
         $validator->after(function (Validator $validator) {
+            $errors = $validator->errors();
             $entryIds = $this->input('lineup_entry_ids', []);
-            $title = trim((string) $this->input('title', ''));
+            $title = $this->input('title');
 
-            if ($title === '' && (! is_array($entryIds) || $entryIds === [])) {
-                $validator->errors()->add('title', __('Add a title or at least one person from the lineup'));
+            if (! $errors->has('title') && trim(is_string($title) ? $title : '') === '' && (! is_array($entryIds) || $entryIds === [])) {
+                $errors->add('title', __('Add a title or at least one person from the lineup'));
             }
 
-            if (is_array($entryIds) && count($entryIds) !== count(array_unique($entryIds))) {
-                $validator->errors()->add('lineup_entry_ids', __('Each person may only be added once'));
+            if (! $errors->hasAny(['lineup_entry_ids', 'lineup_entry_ids.*']) && is_array($entryIds) && count($entryIds) !== count(array_unique($entryIds))) {
+                $errors->add('lineup_entry_ids', __('Each person may only be added once'));
             }
         });
     }
