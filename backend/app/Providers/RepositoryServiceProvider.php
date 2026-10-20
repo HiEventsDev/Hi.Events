@@ -23,6 +23,7 @@ use HiEvents\Enterprise\Sso\Repository\Interfaces\AccountSsoDomainRepositoryInte
 use HiEvents\Repository\Eloquent\AccountAttributionRepository;
 use HiEvents\Repository\Eloquent\AccountConfigurationRepository;
 use HiEvents\Repository\Eloquent\AccountDeletionRequestRepository;
+use HiEvents\Repository\Eloquent\AccountEmailSettingRepository;
 use HiEvents\Repository\Eloquent\AccountFeatureFlagOverrideRepository;
 use HiEvents\Repository\Eloquent\AccountLifecycleNudgeRepository;
 use HiEvents\Repository\Eloquent\AccountMessagingTierRepository;
@@ -99,6 +100,7 @@ use HiEvents\Repository\Eloquent\WidgetRepository;
 use HiEvents\Repository\Interfaces\AccountAttributionRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountConfigurationRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountDeletionRequestRepositoryInterface;
+use HiEvents\Repository\Interfaces\AccountEmailSettingRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountFeatureFlagOverrideRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountLifecycleNudgeRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountMessagingTierRepositoryInterface;
@@ -176,9 +178,6 @@ use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
-    /**
-     * @todo - find a way to auto-bind these
-     */
     private static array $interfaceToConcreteMap = [
         UserRepositoryInterface::class => UserRepository::class,
         UserTrustedDeviceRepositoryInterface::class => UserTrustedDeviceRepository::class,
@@ -241,6 +240,7 @@ class RepositoryServiceProvider extends ServiceProvider
         SuspiciousActivityRepositoryInterface::class => SuspiciousActivityRepository::class,
         OrganizerSettingsRepositoryInterface::class => OrganizerSettingsRepository::class,
         EmailTemplateRepositoryInterface::class => EmailTemplateRepository::class,
+        AccountEmailSettingRepositoryInterface::class => AccountEmailSettingRepository::class,
         OrganizerStripePlatformRepositoryInterface::class => OrganizerStripePlatformRepository::class,
         OrganizerVatSettingRepositoryInterface::class => OrganizerVatSettingRepository::class,
         OrganizerConfigurationRepositoryInterface::class => OrganizerConfigurationRepository::class,

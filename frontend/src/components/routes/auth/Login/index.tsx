@@ -8,7 +8,9 @@ import classes from "./Login.module.scss";
 import {t, Trans} from "@lingui/macro";
 import {useEffect, useState} from "react";
 import {useSendTicketLookupEmail} from "../../../../mutations/useSendTicketLookupEmail.ts";
+import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
 import {IconTicket, IconChevronDown} from "@tabler/icons-react";
+import {api} from "../../../../api/client.ts";
 import {LoginStepView} from "./LoginStepView.tsx";
 import {useLoginSteps} from "../../../../hooks/useLoginSteps.ts";
 import {SsoSection, useSsoOptions} from "../../../common/SsoButtons/SsoSection.tsx";
@@ -26,6 +28,8 @@ const Login = () => {
             password: '',
         }
     });
+    const [pendingApproval, setPendingApproval] = useState(false);
+    const [resendingApproval, setResendingApproval] = useState(false);
     const [ticketLookupOpen, setTicketLookupOpen] = useState(false);
     const [ssoCancelled, setSsoCancelled] = useState(false);
     const [notice, setNotice] = useState<string | null>((location.state as { notice?: string } | null)?.notice ?? null);
@@ -72,11 +76,21 @@ const Login = () => {
         mutationFn: (userData: LoginData) => authClient.login(userData),
 
         onSuccess: (response: LoginResponse, variables: LoginData) => {
+            setPendingApproval(false);
             steps.handleResponse(response, (accountId) => loginUser({...variables, account_id: accountId as string}));
         },
 
         onError: (error: any, variables: LoginData) => {
             steps.setPendingAccountId(null);
+
+            const message = error?.response?.data?.message || '';
+
+            if (message.toLowerCase().includes('pending approval') || message.toLowerCase().includes('awaiting approval')) {
+                setPendingApproval(true);
+                return;
+            }
+
+            setPendingApproval(false);
 
             if (error?.response?.data?.error_code === 'SSO_REQUIRED') {
                 setSsoRequiredEmail(variables.email);
@@ -85,9 +99,21 @@ const Login = () => {
 
             steps.setError(error?.response?.status === 429
                 ? t`Too many attempts. Please wait a minute and try again.`
-                : t`Please check your email and password and try again`);
+                : message || t`Please check your email and password and try again`);
         }
     });
+
+    const handleResendApproval = async () => {
+        setResendingApproval(true);
+        try {
+            await api.post('/accounts/resend-approval', { email: form.values.email });
+            showSuccess(t`A new approval request has been sent to the administrator.`);
+        } catch {
+            showError(t`Something went wrong. Please try again.`);
+        } finally {
+            setResendingApproval(false);
+        }
+    };
 
     const ticketLookupMutation = useSendTicketLookupEmail();
 
@@ -148,6 +174,35 @@ const Login = () => {
                     {steps.error}
                 </Callout>
             )}
+
+            {pendingApproval && (
+                <div style={{
+                    marginBottom: '1rem',
+                    padding: '1rem',
+                    backgroundColor: 'var(--mantine-color-orange-0)',
+                    borderRadius: '8px',
+                    border: '1px solid var(--mantine-color-orange-3)',
+                    textAlign: 'center',
+                }}>
+                    <p style={{margin: '0 0 0.5rem 0', fontWeight: 500}}>
+                        {t`Your account is pending admin approval.`}
+                    </p>
+                    <p style={{margin: '0 0 0.75rem 0', fontSize: '0.875rem', color: '#666'}}>
+                        {t`You will receive an email once your account has been approved.`}
+                    </p>
+                    <Button
+                        variant="light"
+                        color="orange"
+                        size="sm"
+                        onClick={handleResendApproval}
+                        loading={resendingApproval}
+                        disabled={resendingApproval}
+                    >
+                        {t`Resend Approval Request`}
+                    </Button>
+                </div>
+            )}
+
             <SsoSection
                 request={{intent: 'LOGIN'}}
                 onError={steps.setError}
@@ -200,7 +255,7 @@ const Login = () => {
                     />
                 </UnstyledButton>
 
-                <Collapse expanded={ticketLookupOpen}>
+                <Collapse in={ticketLookupOpen}>
                     <div className={classes.ticketLookupContent}>
                         {ticketLookupSuccess ? (
                             <div className={classes.successMessage}>
@@ -239,7 +294,6 @@ const Login = () => {
                     </div>
                 </Collapse>
             </div>
-
         </>
     )
 }

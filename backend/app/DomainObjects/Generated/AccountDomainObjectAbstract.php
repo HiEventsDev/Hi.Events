@@ -41,6 +41,8 @@ abstract class AccountDomainObjectAbstract extends AbstractDomainObject
 
     final public const ACCOUNT_VERIFIED_AT = 'account_verified_at';
 
+    final public const APPROVED_AT = 'approved_at';
+
     final public const STRIPE_CONNECT_ACCOUNT_TYPE = 'stripe_connect_account_type';
 
     final public const IS_MANUALLY_VERIFIED = 'is_manually_verified';
@@ -77,6 +79,8 @@ abstract class AccountDomainObjectAbstract extends AbstractDomainObject
 
     protected ?string $account_verified_at = null;
 
+    protected ?string $approved_at = null;
+
     protected ?string $stripe_connect_account_type = null;
 
     protected bool $is_manually_verified = false;
@@ -102,6 +106,7 @@ abstract class AccountDomainObjectAbstract extends AbstractDomainObject
             'short_id' => $this->short_id ?? null,
             'stripe_connect_setup_complete' => $this->stripe_connect_setup_complete ?? null,
             'account_verified_at' => $this->account_verified_at ?? null,
+            'approved_at' => $this->approved_at ?? null,
             'stripe_connect_account_type' => $this->stripe_connect_account_type ?? null,
             'is_manually_verified' => $this->is_manually_verified ?? null,
             'country' => $this->country ?? null,
@@ -275,6 +280,18 @@ abstract class AccountDomainObjectAbstract extends AbstractDomainObject
     public function getAccountVerifiedAt(): ?string
     {
         return $this->account_verified_at;
+    }
+
+
+    public function setApprovedAt(?string $approved_at): self
+    {
+        $this->approved_at = $approved_at;
+        return $this;
+    }
+
+    public function getApprovedAt(): ?string
+    {
+        return $this->approved_at;
     }
 
     public function setStripeConnectAccountType(?string $stripe_connect_account_type): self

@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Services\Domain\Email\MailBuilderService;
+use HiEvents\Services\Domain\Mail\AccountMailerFactory;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Support\Collection;
 
@@ -16,6 +17,7 @@ class SendAttendeeTicketService
     public function __construct(
         private readonly Mailer $mailer,
         private readonly MailBuilderService $mailBuilderService,
+        private readonly AccountMailerFactory $accountMailerFactory,
     ) {}
 
     public function send(
@@ -38,7 +40,9 @@ class SendAttendeeTicketService
             $attendee->getEventOccurrence(),
         );
 
-        $this->mailer
+        $mailer = $this->accountMailerFactory->forAccount($event->getAccountId());
+
+        $mailer
             ->to($attendee->getEmail())
             ->locale($attendee->getLocale())
             ->send($mail);
@@ -67,8 +71,10 @@ class SendAttendeeTicketService
             $organizer,
         );
 
+        $mailer = $this->accountMailerFactory->forAccount($event->getAccountId());
+
         foreach ($mails as $mail) {
-            $this->mailer
+            $mailer
                 ->to($recipient->getEmail())
                 ->locale($recipient->getLocale())
                 ->send($mail);

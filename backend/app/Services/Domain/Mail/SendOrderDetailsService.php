@@ -30,6 +30,7 @@ class SendOrderDetailsService
         private readonly EventRepositoryInterface $eventRepository,
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly Mailer $mailer,
+        private readonly AccountMailerFactory $accountMailerFactory,
         private readonly SendAttendeeTicketService $sendAttendeeTicketService,
         private readonly MailBuilderService $mailBuilderService,
         private readonly TeamOrderNotificationRecipientService $teamRecipientService,
@@ -86,13 +87,15 @@ class SendOrderDetailsService
             ]))
             ->findById($order->getEventId());
 
+        $mailer = $this->accountMailerFactory->forAccount($event->getAccountId());
+
         if ($order->isOrderCompleted() || $order->isOrderAwaitingOfflinePayment()) {
-            $this->sendOrderSummaryEmails($order, $event);
+            $this->sendOrderSummaryEmails($order, $event, $mailer);
             $this->sendAttendeeTicketEmails($order, $event);
         }
 
         if ($order->isOrderFailed() && $order->getEmail() !== null && ! $order->isBoxOfficeOrder()) {
-            $this->mailer
+            $mailer
                 ->to($order->getEmail())
                 ->locale($order->getLocale())
                 ->send(new OrderFailed(
@@ -115,6 +118,8 @@ class SendOrderDetailsService
             return;
         }
 
+        $mailer = $this->accountMailerFactory->forAccount($event->getAccountId());
+
         $mail = $this->mailBuilderService->buildOrderSummaryMail(
             $order,
             $event,
@@ -123,7 +128,7 @@ class SendOrderDetailsService
             $invoice,
         );
 
-        $this->mailer
+        $mailer
             ->to($order->getEmail())
             ->locale($order->getLocale())
             ->send($mail);
@@ -144,7 +149,11 @@ class SendOrderDetailsService
             ));
     }
 
-    private function sendOrderSummaryEmails(OrderDomainObject $order, EventDomainObject $event): void
+    private function sendOrderSummaryEmails(
+        OrderDomainObject $order,
+        EventDomainObject $event,
+        \Illuminate\Contracts\Mail\Mailer $mailer,
+    ): void
     {
         $this->sendCustomerOrderSummary(
             order: $order,
@@ -161,7 +170,7 @@ class SendOrderDetailsService
         $notifiesOrganizer = $event->getEventSettings()->getNotifyOrganizerOfNewOrders();
 
         if ($notifiesOrganizer) {
-            $this->mailer
+            $mailer
                 ->to($event->getOrganizer()->getEmail())
                 ->send(new OrderSummaryForOrganizer($order, $event));
         }
@@ -172,7 +181,7 @@ class SendOrderDetailsService
         );
 
         foreach ($teamRecipients as $email) {
-            $this->mailer
+            $mailer
                 ->to($email)
                 ->send(new OrderSummaryForOrganizer($order, $event));
         }

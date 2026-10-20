@@ -118,6 +118,10 @@ class LoginService
             );
         }
 
+        if (config('app.require_account_approval', false)) {
+            $this->validateAccountApproval($accountId, $accounts);
+        }
+
         $this->ssoEnforcementService->assertSignInAllowed($user, $accountId, $context);
 
         if ($context->pendingIdentity !== null) {
@@ -251,5 +255,17 @@ class LoginService
     {
         /** @var JWTGuard */
         return $this->authManager->guard('api');
+    }
+
+    private function validateAccountApproval(int $accountId, Collection $accounts): void
+    {
+        /** @var \HiEvents\DomainObjects\AccountDomainObject|null $account */
+        $account = $accounts->first(fn($a) => $a->getId() === $accountId);
+
+        if ($account && $account->getApprovedAt() === null) {
+            throw new UnauthorizedException(
+                __('Your account is pending approval. You will receive an email once it has been approved.')
+            );
+        }
     }
 }

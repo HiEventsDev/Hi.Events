@@ -1,5 +1,5 @@
 import {api} from "./client.ts";
-import {Account, AccountDeletionRequest, AccountDeletionStatus, GenericDataResponse, IdParam, User} from "../types.ts";
+import {Account, AccountDeletionRequest, AccountDeletionStatus, AccountEmailSettings, GenericDataResponse, IdParam, User} from "../types.ts";
 
 interface CreateAccountRequest {
     first_name: string;
@@ -37,6 +37,18 @@ export const accountClient = {
     },
     cancelDeletion: async () => {
         const response = await api.delete<GenericDataResponse<AccountDeletionRequest>>('accounts/deletion-request');
+        return response.data;
+    },
+    getEmailSettings: async (accountId: IdParam) => {
+        const response = await api.get<GenericDataResponse<AccountEmailSettings | null>>(`accounts/${accountId}/email-settings`);
+        return response.data;
+    },
+    updateEmailSettings: async (accountId: IdParam, settings: AccountEmailSettings) => {
+        const response = await api.post<GenericDataResponse<AccountEmailSettings>>(`accounts/${accountId}/email-settings`, settings);
+        return response.data;
+    },
+    sendTestEmail: async (accountId: IdParam) => {
+        const response = await api.post<{success: boolean; message: string}>(`accounts/${accountId}/email-settings/test`);
         return response.data;
     },
 }

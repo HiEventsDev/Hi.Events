@@ -279,6 +279,7 @@ class SendEventEmailMessagesService
                     messageData: $messageData
                 ),
                 messageData: $messageData,
+                accountId: $event->getAccountId(),
             )
         );
 

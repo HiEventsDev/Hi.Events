@@ -24,6 +24,8 @@ return [
     'saas_stripe_application_fee_fixed' => env('APP_SAAS_STRIPE_APPLICATION_FEE_FIXED', 0),
     'saas_default_pass_platform_fee_to_buyer' => env('APP_SAAS_DEFAULT_PASS_PLATFORM_FEE_TO_BUYER', true),
     'disable_registration' => env('APP_DISABLE_REGISTRATION', false),
+    'require_account_approval' => env('APP_REQUIRE_ACCOUNT_APPROVAL', false),
+    'admin_email' => env('APP_ADMIN_EMAIL'),
     'api_rate_limit_per_minute' => env('APP_API_RATE_LIMIT_PER_MINUTE', 180),
     'trusted_proxies' => env('APP_TRUSTED_PROXIES', '*'),
     'ssr_shared_secret' => env('APP_SSR_SHARED_SECRET'),

@@ -65,10 +65,15 @@ use HiEvents\Enterprise\Sso\Http\Actions\UpdateAccountSsoConnectionStatusAction;
 use HiEvents\Enterprise\Sso\Http\Actions\UpdateSsoEnforcementAction;
 use HiEvents\Enterprise\Sso\Http\Actions\UpdateSsoMemberEnforcementAction;
 use HiEvents\Enterprise\Sso\Http\Actions\VerifyAccountSsoDomainAction;
+use HiEvents\Http\Actions\Accounts\Approval\ApproveAccountAction;
+use HiEvents\Http\Actions\Accounts\Approval\ResendApprovalRequestAction;
 use HiEvents\Http\Actions\Accounts\CreateAccountAction;
 use HiEvents\Http\Actions\Accounts\DeletionRequest\CancelAccountDeletionAction;
 use HiEvents\Http\Actions\Accounts\DeletionRequest\GetAccountDeletionStatusAction;
 use HiEvents\Http\Actions\Accounts\DeletionRequest\RequestAccountDeletionAction;
+use HiEvents\Http\Actions\Accounts\EmailSetting\GetAccountEmailSettingAction;
+use HiEvents\Http\Actions\Accounts\EmailSetting\SendTestEmailAction;
+use HiEvents\Http\Actions\Accounts\EmailSetting\UpsertAccountEmailSettingAction;
 use HiEvents\Http\Actions\Accounts\GetAccountAction;
 use HiEvents\Http\Actions\Accounts\UpdateAccountAction;
 use HiEvents\Http\Actions\Accounts\UpdateAccountTwoFactorRequirementAction;
@@ -434,6 +439,10 @@ $router->prefix('/auth')->group(
     }
 );
 
+// Account Approval (public - magic link from admin email)
+$router->get('/accounts/approve', ApproveAccountAction::class)->name('accounts.approve');
+$router->post('/accounts/resend-approval', ResendApprovalRequestAction::class)->middleware('throttle:3,10')->name('accounts.resend-approval');
+
 /**
  * Signed-in routes that API keys can't use
  */
@@ -517,6 +526,11 @@ $router->middleware(['auth:api,sanctum'])->group(
 
         // Accounts
         $router->get('/accounts/{account_id?}', GetAccountAction::class)->whereNumber('account_id');
+
+        // Email Settings
+        $router->get('/accounts/{account_id}/email-settings', GetAccountEmailSettingAction::class);
+        $router->post('/accounts/{account_id}/email-settings', UpsertAccountEmailSettingAction::class);
+        $router->post('/accounts/{account_id}/email-settings/test', SendTestEmailAction::class);
 
         // Organizers
         $router->post('/organizers', CreateOrganizerAction::class);

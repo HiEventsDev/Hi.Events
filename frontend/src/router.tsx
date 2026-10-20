@@ -81,7 +81,14 @@ export const router: RouteObject[] = [
                     const RequiredTwoFactorSetup = await import("./components/routes/auth/RequiredTwoFactorSetup");
                     return { Component: RequiredTwoFactorSetup.default };
                 }
-            }
+            },
+            {
+                path: "pending-approval",
+                async lazy() {
+                    const PendingApproval = await import("./components/routes/auth/PendingApproval");
+                    return { Component: PendingApproval.default };
+                },
+            },
         ]
     },
     {
@@ -281,7 +288,14 @@ export const router: RouteObject[] = [
                     const LifecycleEmails = await import("./components/routes/admin/LifecycleEmails");
                     return { Component: LifecycleEmails.default };
                 }
-            }
+            },
+            {
+                path: "approve-account",
+                async lazy() {
+                    const ApproveAccount = await import("./components/routes/admin/ApproveAccount");
+                    return { Component: ApproveAccount.default };
+                },
+            },
         ]
     },
     {
@@ -893,6 +907,5 @@ export const router: RouteObject[] = [
             return { Component: MyTickets.default };
         },
         errorElement: <ErrorPage />,
-    }
+    },
 ];
-

@@ -59,9 +59,13 @@ export const Register = () => {
         };
 
         mutate.mutate({registerData: registrationData}, {
-            onSuccess: () => {
+            onSuccess: (response: any) => {
                 clearStoredUtmData();
-                navigate(`/welcome${location.search}`);
+                if (response?.pending_approval) {
+                    navigate('/auth/pending-approval');
+                } else {
+                    navigate(`/welcome${location.search}`);
+                }
             },
             onError: (error: any) => {
                 setTurnstileResetKey((key) => key + 1);

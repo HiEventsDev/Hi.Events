@@ -482,6 +482,20 @@ export interface AccountConfiguration {
     default_for_currency: string | null;
 }
 
+export interface AccountEmailSettings {
+    id?: IdParam;
+    account_id?: IdParam;
+    smtp_enabled: boolean;
+    smtp_host?: string;
+    smtp_port?: number;
+    smtp_encryption?: 'tls' | 'ssl' | 'starttls' | '';
+    smtp_username?: string;
+    smtp_password?: string;
+    smtp_password_set?: boolean;
+    mail_from_address?: string;
+    mail_from_name?: string;
+}
+
 export interface OrganizerStripeConnectDetails {
     organizer: Organizer;
     stripe_account_id: string;
@@ -1183,7 +1197,6 @@ export interface Product {
     order?: number;
     title: string;
     event_id?: IdParam;
-    // todo - rename to price_type
     type: ProductPriceType;
     product_type: ProductType;
     description?: string;
