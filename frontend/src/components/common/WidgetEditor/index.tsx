@@ -26,6 +26,7 @@ import {NameModal} from "./NameModal.tsx";
 import {CustomiseGroups} from "./CustomiseGroups.tsx";
 import {LayoutPicker, LineupNotice} from "./ContentFields.tsx";
 import {InstallPanel} from "./InstallPanel.tsx";
+import {useLineupSectionAvailability} from "./sectionAvailability.ts";
 
 const UNSAVED = 'unsaved';
 
@@ -72,6 +73,7 @@ export const WidgetEditor = ({target, theme, event, occurrences, homepageSection
     const themeColors = useMemo(() => resolveWidgetColors({theme: 'event'}, theme ?? {}), [theme]);
     const invalidColor = COLOR_KEYS.some(key => cleanSettings[key] && !COLOR_REGEX.test(String(cleanSettings[key])));
     const locked = isReadOnly && !!activeWidget;
+    const lineupAvailability = useLineupSectionAvailability(event?.id, homepageSections);
     const selectable: SelectableIds = useMemo(() => ({
         products: event?.product_categories?.flatMap(category => (category.products ?? []).map(product => Number(product.id))),
         categories: event?.product_categories?.map(category => Number(category.id)),
@@ -270,7 +272,7 @@ export const WidgetEditor = ({target, theme, event, occurrences, homepageSection
                 : <TypePicker value={type} onChange={changeType} disabled={locked}/>}
             <LineupNotice
                 type={type}
-                homepageSections={homepageSections}
+                availability={lineupAvailability}
                 homepageDesignerPath={homepageDesignerPath}
                 lineupPath={lineupPath}
             />
@@ -286,6 +288,7 @@ export const WidgetEditor = ({target, theme, event, occurrences, homepageSection
                     theme={theme}
                     themeColors={themeColors}
                     homepageDesignerPath={homepageDesignerPath}
+                    lineupAvailability={lineupAvailability}
                     locked={locked}
                 />
             </DesignerSection>

@@ -16,6 +16,7 @@ import {
 } from "./ContentFields.tsx";
 import {AppearancePanel} from "./AppearancePanel.tsx";
 import {BehaviourPanel} from "./BehaviourPanel.tsx";
+import {LineupSectionAvailability} from "./sectionAvailability.ts";
 import classes from './WidgetEditor.module.scss';
 
 interface Group {
@@ -35,6 +36,7 @@ interface CustomiseGroupsProps {
     theme?: Partial<HomepageThemeSettings> | null;
     themeColors: WidgetColors;
     homepageDesignerPath: string;
+    lineupAvailability: LineupSectionAvailability;
     locked: boolean;
 }
 
@@ -50,13 +52,16 @@ export const CustomiseGroups = ({
     theme,
     themeColors,
     homepageDesignerPath,
+    lineupAvailability,
     locked,
 }: CustomiseGroupsProps) => {
     const sellsTickets = type === 'TICKETS' || type === 'BUTTON';
     const canPinDate = !isOrganizer && event?.type === EventType.RECURRING && !!occurrences?.length && !!event.timezone;
     const occurrenceField = canPinDate && <OccurrenceField settings={settings} update={update} event={event} occurrences={occurrences}/>;
-    const extraSections = (settings.sections ?? ['tickets']).filter(section => section !== 'tickets').length
-        + (settings.show_lineup ? 1 : 0);
+    const extraSections = (settings.sections ?? ['tickets'])
+            .filter(section => section === 'lineup' || section === 'schedule' ? lineupAvailability[section] !== 'hidden' : section !== 'tickets')
+            .length
+        + (settings.show_lineup && lineupAvailability.lineup !== 'hidden' ? 1 : 0);
     const filtered = !!settings.categories?.length || !!settings.products?.length;
     const languageSummary = settings.locale ? getLocaleName(settings.locale as SupportedLocales) : t`Visitor's language`;
 
@@ -77,7 +82,14 @@ export const CustomiseGroups = ({
                 key: 'sections',
                 label: type === 'BUTTON' ? t`Pop-up content` : t`Sections`,
                 summary: extraSections ? t`Tickets and ${extraSections} more` : t`Tickets only`,
-                content: <SectionFields settings={settings} update={update}/>,
+                content: (
+                    <SectionFields
+                        settings={settings}
+                        update={update}
+                        availability={lineupAvailability}
+                        homepageDesignerPath={homepageDesignerPath}
+                    />
+                ),
             },
             {
                 key: 'tickets',

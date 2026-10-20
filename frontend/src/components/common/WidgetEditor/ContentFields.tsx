@@ -2,11 +2,13 @@ import {Alert, Button, MultiSelect, NumberInput, SegmentedControl, Select, Switc
 import {t} from "@lingui/macro";
 import {NavLink} from "react-router";
 import {OccurrenceSelect} from "../OccurrenceSelect";
-import {Event, EventOccurrence, HomepageSection} from '../../../types.ts';
+import {IconEyeOff} from "@tabler/icons-react";
+import {Event, EventOccurrence} from '../../../types.ts';
 import {getEventCategories} from "../../../constants/eventCategories.ts";
 import {WidgetEventsLayout, WidgetOpenIn, WidgetSettings, WidgetType} from "../../../utilites/widgetConfig.ts";
 import {SectionsPicker} from "./SectionsPicker.tsx";
 import {useAccess} from "../../../hooks/useAccess.ts";
+import {hiddenSectionsMessage, LineupSectionAvailability} from "./sectionAvailability.ts";
 import classes from './WidgetEditor.module.scss';
 
 interface FieldsProps {
@@ -25,20 +27,45 @@ export const ButtonFields = ({settings, update}: FieldsProps) => (
     />
 );
 
-export const SectionFields = ({settings, update}: FieldsProps) => (
-    <>
-        <div>
-            <Text size="xs" c="dimmed" mb={8}>{t`Turn on extra sections and drag to reorder.`}</Text>
-            <SectionsPicker value={settings.sections} onChange={(sections) => update({sections})}/>
-        </div>
-        <Switch
-            label={t`Show lineup strip above tickets`}
-            checked={!!settings.show_lineup}
-            onChange={(event) => update({show_lineup: event.currentTarget.checked})}
-            data-testid="widget-show-lineup-switch"
-        />
-    </>
-);
+interface SectionFieldsProps extends FieldsProps {
+    availability: LineupSectionAvailability;
+    homepageDesignerPath: string;
+}
+
+export const SectionFields = ({settings, update, availability, homepageDesignerPath}: SectionFieldsProps) => {
+    const {isReadOnly} = useAccess();
+    const lineupHidden = availability.lineup === 'hidden';
+    const hiddenMessage = hiddenSectionsMessage(lineupHidden, availability.schedule === 'hidden');
+
+    return (
+        <>
+            <div>
+                <Text size="xs" c="dimmed" mb={8}>{t`Turn on extra sections and drag to reorder.`}</Text>
+                <SectionsPicker value={settings.sections} availability={availability} onChange={(sections) => update({sections})}/>
+                {hiddenMessage && (
+                    <div className={classes.sectionNotice}>
+                        <IconEyeOff size={16}/>
+                        <span>
+                            {hiddenMessage}
+                            {!isReadOnly && (
+                                <>
+                                    {' '}<NavLink to={homepageDesignerPath} className={classes.inlineLink}>{t`Open homepage designer`}</NavLink>
+                                </>
+                            )}
+                        </span>
+                    </div>
+                )}
+            </div>
+            <Switch
+                label={t`Show lineup strip above tickets`}
+                checked={!!settings.show_lineup && !lineupHidden}
+                disabled={lineupHidden}
+                onChange={(event) => update({show_lineup: event.currentTarget.checked})}
+                data-testid="widget-show-lineup-switch"
+            />
+        </>
+    );
+};
 
 interface OccurrenceFieldProps extends FieldsProps {
     event: Event;
@@ -189,19 +216,18 @@ export const EventListFields = ({settings, update}: FieldsProps) => (
 
 interface LineupNoticeProps {
     type: WidgetType;
-    homepageSections?: HomepageSection[] | null;
+    availability: LineupSectionAvailability;
     homepageDesignerPath: string;
     lineupPath?: string;
 }
 
-export const LineupNotice = ({type, homepageSections, homepageDesignerPath, lineupPath}: LineupNoticeProps) => {
+export const LineupNotice = ({type, availability, homepageDesignerPath, lineupPath}: LineupNoticeProps) => {
     const {isReadOnly} = useAccess();
     if (type !== 'LINEUP' && type !== 'SCHEDULE') {
         return null;
     }
-    const hiddenOnHomepage = !!homepageSections && !homepageSections.some(section => section.type === type && section.enabled);
 
-    if (hiddenOnHomepage) {
+    if (availability[type === 'LINEUP' ? 'lineup' : 'schedule'] === 'hidden') {
         return (
             <Alert variant="light" color="yellow" className={classes.notice}>
                 <Text size="sm">

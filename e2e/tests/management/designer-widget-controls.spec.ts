@@ -76,6 +76,25 @@ test.describe('designer and widget editor controls', () => {
     await expect(page.getByRole('radiogroup', { name: 'Checkout opens in' })).toBeVisible();
   });
 
+  test('the widget editor flags lineup sections the event page hides or has nothing for', async ({ authedPage: page, api, account }) => {
+    const event = await createLiveEventWithFreeTicket(api, account.organizerId);
+    await api.updateEventSettings(event.eventId, {
+      homepage_sections: [{ id: 'tickets', type: 'TICKETS', enabled: true }, { id: 'schedule', type: 'SCHEDULE', enabled: false }],
+    });
+    await page.goto(`/manage/event/${event.eventId}/widget`);
+    await page.getByTestId('widget-group-sections').click();
+
+    const sectionRow = (section: string) => page.locator('li', { has: page.getByTestId(`widget-section-${section}-switch`) });
+    await expect(page.getByTestId('widget-section-schedule-switch')).toBeDisabled();
+    await expect(sectionRow('schedule').getByText('Hidden', { exact: true })).toBeVisible();
+    await expect(page.getByText("Schedule is hidden on your event page, so the widget can't show it.")).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Open homepage designer' })).toBeVisible();
+
+    await expect(page.getByTestId('widget-section-lineup-switch')).toBeEnabled();
+    await expect(sectionRow('lineup').getByText('Empty', { exact: true })).toBeVisible();
+    await expect(page.getByTestId('widget-show-lineup-switch')).toBeEnabled();
+  });
+
   test('a rejected homepage section shows the server message', async ({ authedPage: page, api, account }) => {
     const event = await createLiveEventWithFreeTicket(api, account.organizerId);
     const designer = new DesignerPage(page);
