@@ -3,12 +3,15 @@
 namespace HiEvents\Services\Application\Handlers\Auth;
 
 use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Enterprise\Sso\Services\Domain\SsoEnforcementService;
 use HiEvents\Mail\User\ForgotPassword;
 use HiEvents\Repository\Interfaces\PasswordResetTokenRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\Services\Domain\Auth\PasswordLoginPolicy;
+use HiEvents\Services\Domain\Auth\Sso\UserIdentityService;
 use HiEvents\Services\Infrastructure\TokenGenerator\TokenGeneratorService;
-use Illuminate\Database\DatabaseManager;
 use Illuminate\Contracts\Mail\Mailer;
+use Illuminate\Database\DatabaseManager;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
@@ -16,15 +19,16 @@ use Throwable;
 class ForgotPasswordHandler
 {
     public function __construct(
-        private readonly UserRepositoryInterface               $userRepository,
-        private readonly Mailer                                $mailer,
-        private readonly LoggerInterface                       $logger,
+        private readonly UserRepositoryInterface $userRepository,
+        private readonly Mailer $mailer,
+        private readonly LoggerInterface $logger,
         private readonly PasswordResetTokenRepositoryInterface $passwordResetTokenRepository,
-        private readonly TokenGeneratorService                 $tokenGeneratorService,
-        private readonly DatabaseManager                       $databaseManager,
-    )
-    {
-    }
+        private readonly TokenGeneratorService $tokenGeneratorService,
+        private readonly DatabaseManager $databaseManager,
+        private readonly PasswordLoginPolicy $passwordLoginPolicy,
+        private readonly UserIdentityService $userIdentityService,
+        private readonly SsoEnforcementService $ssoEnforcementService,
+    ) {}
 
     /**
      * @throws Throwable
@@ -42,13 +46,17 @@ class ForgotPasswordHandler
     private function findUserByEmail(string $email)
     {
         $user = $this->userRepository->findFirstWhere([
-                'email' => strtolower($email)
-            ]
+            'email' => strtolower($email),
+        ]
         );
 
         if ($user === null) {
             $this->logUnrecognisedEmail($email);
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException;
+        }
+
+        if (! $this->passwordLoginPolicy->isAllowedFor($user->getId()) || ! $this->ssoEnforcementService->isPasswordResetAllowed($user)) {
+            throw new ResourceNotFoundException;
         }
 
         return $user;
@@ -80,6 +88,7 @@ class ForgotPasswordHandler
             ->send(new ForgotPassword(
                 user: $user,
                 token: $token,
+                signInProviders: $this->userIdentityService->providerNamesFor($user->getId()),
             ));
     }
 

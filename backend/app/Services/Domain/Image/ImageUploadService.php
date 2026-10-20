@@ -12,23 +12,21 @@ use Illuminate\Http\UploadedFile;
 class ImageUploadService
 {
     public function __construct(
-        private readonly ImageStorageService      $imageStorageService,
+        private readonly ImageStorageService $imageStorageService,
         private readonly ImageRepositoryInterface $imageRepository,
-        private readonly ImageMetadataService     $imageMetadataService,
-    ) {
-    }
+        private readonly ImageMetadataService $imageMetadataService,
+    ) {}
 
     /**
      * @throws CouldNotUploadImageException
      */
     public function upload(
         UploadedFile $image,
-        int          $entityId,
-        string       $entityType,
-        string       $imageType,
-        int          $accountId,
-    ): ImageDomainObject
-    {
+        int $entityId,
+        string $entityType,
+        string $imageType,
+        int $accountId,
+    ): ImageDomainObject {
         $storedImage = $this->imageStorageService->store($image, $imageType);
         $metadata = $this->imageMetadataService->extractMetadata($image);
 

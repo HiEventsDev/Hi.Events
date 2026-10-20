@@ -8,8 +8,6 @@ class CreatedProductDataDTO extends BaseDTO
 {
     public function __construct(
         public readonly CompleteOrderProductDataDTO $productRequestData,
-        public readonly ?string                      $shortId,
-    )
-    {
-    }
+        public readonly ?string $shortId,
+    ) {}
 }

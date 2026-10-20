@@ -1,0 +1,312 @@
+import { expect, type Locator, type Page } from '@playwright/test';
+
+export type BulkAction =
+  | 'shift-times'
+  | 'change-duration'
+  | 'update-capacity'
+  | 'update-label'
+  | 'update-location';
+
+export class OccurrencePage {
+  constructor(private readonly page: Page) {}
+
+  async goto(eventId: number): Promise<void> {
+    await this.page.goto(`/manage/event/${eventId}/occurrences`);
+    await this.page.waitForLoadState('networkidle');
+  }
+
+  dialog(): Locator {
+    return this.page.getByRole('dialog');
+  }
+
+  async selectTimePeriod(period: 'Upcoming' | 'Past' | 'All'): Promise<void> {
+    await this.page.locator('[class*="toolbar"] label').filter({ hasText: new RegExp(`^${period}$`) }).click();
+  }
+
+  async openScheduleSetup(): Promise<void> {
+    await this.page.getByRole('button', { name: 'Set Up Schedule' }).click();
+  }
+
+  async pickWeekday(label: string): Promise<void> {
+    const dot = this.dialog().getByRole('checkbox', { name: new RegExp(`^${label}`) });
+    await dot.click();
+    await expect(dot).toBeChecked();
+  }
+
+  async chooseFixedNumberOfDates(count: number): Promise<void> {
+    await this.dialog().getByText('For a number of dates').click();
+    await this.dialog().getByLabel(/^Number of dates to create/).fill(String(count));
+  }
+
+  async submitSchedule(): Promise<void> {
+    await this.dialog().getByRole('button', { name: 'Create Schedule' }).click();
+    await this.dialog().waitFor({ state: 'hidden' });
+    await this.page.getByTestId('occurrence-generation-progress').waitFor({ state: 'detached', timeout: 60_000 });
+  }
+
+  occurrenceRows(): Locator {
+    return this.page.getByRole('row').filter({ has: this.page.getByTestId('occurrence-actions-menu') });
+  }
+
+  statusBadges(status: 'ACTIVE' | 'CANCELLED'): Locator {
+    return this.page.locator(`[class*="statusBadge"][data-status="${status}"]`);
+  }
+
+  timeCells(): Locator {
+    return this.page.locator('[class*="dateTimePrimary"]');
+  }
+
+  labelCells(): Locator {
+    return this.page.locator('[class*="dateTimeMeta"]');
+  }
+
+  locationCells(): Locator {
+    return this.page.locator('[class*="dateTimeLocation"]');
+  }
+
+  capacityCells(): Locator {
+    return this.page.locator('[class*="ticketsSoldNumbers"]');
+  }
+
+  bookedCell(row: Locator): Locator {
+    return row.locator('[class*="ticketsSoldNumbers"]');
+  }
+
+  bookingSummary(): Locator {
+    return this.dialog().locator('[data-testid="occurrence-booking-summary"]:visible');
+  }
+
+  async openBookingDetails(): Promise<void> {
+    await expect(this.breakdown()).toHaveCount(0);
+    await this.dialog().locator('[data-testid="occurrence-booking-details-button"]:visible').click();
+    await this.page.locator('[data-testid="occurrence-booking-breakdown"]:visible').waitFor();
+  }
+
+  async closeBookingDetails(): Promise<void> {
+    await this.dialog().locator('[data-testid="occurrence-booking-details-button"]:visible').click();
+    await this.page.locator('[data-testid="occurrence-booking-breakdown"]:visible').waitFor({ state: 'hidden' });
+  }
+
+  async openCapacityHelp(): Promise<void> {
+    await this.dialog().locator('[data-testid="capacity-help-link"]:visible').click();
+    await this.page.getByRole('heading', { name: 'How capacity works' }).waitFor();
+  }
+
+  capacityHelpScenarios(): Locator {
+    return this.page.getByTestId('capacity-help-scenario');
+  }
+
+  breakdown(): Locator {
+    return this.page.locator('[data-testid="occurrence-booking-breakdown"]:visible');
+  }
+
+  breakdownRow(row: 'capacity' | 'allocation' | 'sellable' | 'booked'): Locator {
+    return this.breakdown().getByTestId(`occurrence-booking-row-${row}`).locator('span').last();
+  }
+
+  breakdownAllocations(): Locator {
+    return this.breakdown().getByTestId('occurrence-booking-product-allocation');
+  }
+
+  breakdownLimitedBy(): Locator {
+    return this.breakdown().getByTestId('occurrence-booking-limited-by');
+  }
+
+  priceAvailability(): Locator {
+    return this.page.getByTestId('occurrence-price-availability');
+  }
+
+  rowWithStatus(status: 'ACTIVE' | 'CANCELLED'): Locator {
+    return this.occurrenceRows().filter({ has: this.statusBadges(status) });
+  }
+
+  async chooseRowAction(row: Locator, action: string): Promise<void> {
+    await row.getByTestId('occurrence-actions-menu').click();
+    await this.page.getByRole('menuitem', { name: action, exact: true }).click();
+  }
+
+  async confirmModalAction(buttonName: string): Promise<void> {
+    await this.dialog().getByRole('button', { name: buttonName }).click();
+  }
+
+  async addSingleDate(): Promise<void> {
+    await this.page.getByRole('button', { name: 'Add Dates' }).click();
+    await this.page.getByTestId('occurrence-add-single-date-menu-item').click();
+  }
+
+  async openProductsTab(): Promise<void> {
+    await this.page.getByRole('tab', { name: 'Products' }).click();
+  }
+
+  productCard(title: string): Locator {
+    return this.page.locator('[class*="productCard"]').filter({ hasText: title });
+  }
+
+  productSwitch(title: string): Locator {
+    return this.productCard(title).getByRole('switch');
+  }
+
+  overrideInput(): Locator {
+    return this.page.locator('[class*="overrideInput"] input');
+  }
+
+  quantityOverrideInput(): Locator {
+    return this.page.getByTestId('occurrence-override-quantity-input');
+  }
+
+  async saveProductSettings(): Promise<void> {
+    await this.page.locator('[class*="saveButton"]').click();
+  }
+
+  selectAllCheckbox(): Locator {
+    return this.page.getByRole('checkbox', { name: 'Select all', exact: true });
+  }
+
+  selectionSummary(): Locator {
+    return this.page.locator('[class*="selectionCount"]');
+  }
+
+  async clearSelection(): Promise<void> {
+    await this.page.getByTestId('occurrence-bulk-clear-selection-button').click();
+  }
+
+  async cancelSelected(): Promise<void> {
+    const count = parseInt(await this.selectionSummary().innerText(), 10);
+    await this.page.getByTestId('occurrence-bulk-cancel-button').click();
+    const confirm = this.dialog().filter({ hasText: `Cancel ${count} date(s)` });
+    await confirm.getByRole('button', { name: `Cancel ${count} date(s)` }).click();
+  }
+
+  async deleteSelected(): Promise<void> {
+    await this.page.getByTestId('occurrence-bulk-delete-button').click();
+    await this.dialog().getByRole('button', { name: 'Confirm' }).click();
+  }
+
+  bulkEditModal(): Locator {
+    return this.dialog().filter({ hasText: 'Bulk Edit Dates' });
+  }
+
+  async openBulkEdit(action: BulkAction): Promise<void> {
+    await this.page.getByTestId('occurrence-bulk-edit-button').click();
+    await this.page.getByTestId(`occurrence-bulk-action-${action}`).click();
+  }
+
+  async setBulkScope(scope: 'Loaded dates' | 'All matching dates'): Promise<void> {
+    await this.bulkEditModal().getByText(scope, { exact: true }).click();
+  }
+
+  bulkOption(label: string): Locator {
+    return this.bulkEditModal().getByRole('checkbox', { name: label });
+  }
+
+  affectedCount(): Locator {
+    return this.bulkEditModal().getByText(/This will affect \d+ date\(s\)\./);
+  }
+
+  async applyBulkEdit(): Promise<void> {
+    await this.page.getByTestId('occurrence-bulk-edit-submit-button').click();
+  }
+
+  async closeModal(): Promise<void> {
+    await this.page.keyboard.press('Escape');
+  }
+}
+
+export const occurrenceDayLabel = (isoDate: string): RegExp => {
+  const date = new Date(isoDate);
+  const weekday = date.toLocaleString('en-US', { weekday: 'long', timeZone: 'UTC' });
+  const month = date.toLocaleString('en-US', { month: 'long', timeZone: 'UTC' });
+  return new RegExp(`^${weekday}, ${month} ${date.getUTCDate()},`);
+};
+
+export class PublicOccurrenceSelector {
+  constructor(private readonly page: Page) {}
+
+  calendar(): Locator {
+    return this.page.locator('.hi-occurrence-datepicker');
+  }
+
+  dayButton(label: RegExp): Locator {
+    return this.page.getByRole('button', { name: label });
+  }
+
+  dateCard(label: RegExp): Locator {
+    return this.page.getByRole('radio', { name: label });
+  }
+
+  moreDatesButton(): Locator {
+    return this.page.getByTestId('occurrence-more-dates-button');
+  }
+
+  async waitForDateStrip(): Promise<void> {
+    await this.page.locator('.hi-occurrence-selector').waitFor();
+    await expect(this.page.locator('.hi-date-strip[aria-busy="true"]')).toHaveCount(0);
+  }
+
+  async openCalendar(): Promise<void> {
+    await this.waitForDateStrip();
+    if (await this.calendar().isVisible()) return;
+    await this.moreDatesButton().click();
+    await this.calendar().waitFor();
+  }
+
+  nextMonthButton(): Locator {
+    return this.page.locator('.hi-dp-nav[data-direction="next"]');
+  }
+
+  previousMonthButton(): Locator {
+    return this.page.locator('.hi-dp-nav[data-direction="previous"]');
+  }
+
+  slotHeaderDay(): Locator {
+    return this.page.locator('.hi-slot-header-day');
+  }
+
+  monthHeader(): Locator {
+    return this.page.locator('.hi-dp-level');
+  }
+
+  productsLoadingOverlay(): Locator {
+    return this.page.locator('.hi-occurrence-loading-overlay');
+  }
+
+  monthLoadingOverlay(): Locator {
+    return this.page.locator('.hi-calendar-month-loading');
+  }
+
+  async waitForMonthLoaded(): Promise<void> {
+    await this.monthLoadingOverlay().waitFor({ state: 'visible', timeout: 300 }).catch(() => {});
+    await this.monthLoadingOverlay().waitFor({ state: 'detached' });
+  }
+
+  async navigateToMonthOf(isoDate: string): Promise<void> {
+    const target = new Date(isoDate);
+    const targetIndex = target.getUTCFullYear() * 12 + target.getUTCMonth();
+    await this.openCalendar();
+    await this.waitForMonthLoaded();
+    for (let attempt = 0; attempt < 24; attempt++) {
+      const header = (await this.monthHeader().innerText()).trim();
+      const displayed = new Date(header.replace(' ', ' 1, '));
+      const displayedIndex = displayed.getFullYear() * 12 + displayed.getMonth();
+      if (displayedIndex === targetIndex) return;
+      if (displayedIndex < targetIndex) {
+        await this.nextMonthButton().click();
+      } else {
+        await this.previousMonthButton().click();
+      }
+      await this.waitForMonthLoaded();
+    }
+    throw new Error(`Could not navigate the occurrence calendar to the month of ${isoDate}`);
+  }
+
+  async selectDay(isoDate: string): Promise<void> {
+    await this.waitForDateStrip();
+    const card = this.dateCard(occurrenceDayLabel(isoDate));
+    if (await card.count() > 0) {
+      await card.click();
+      return;
+    }
+    await this.navigateToMonthOf(isoDate);
+    await this.dayButton(occurrenceDayLabel(isoDate)).click();
+  }
+}

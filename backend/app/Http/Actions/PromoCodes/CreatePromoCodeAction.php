@@ -2,6 +2,7 @@
 
 namespace HiEvents\Http\Actions\PromoCodes;
 
+use HiEvents\DomainObjects\Enums\PromoCodeDiscountAppliesToEnum;
 use HiEvents\DomainObjects\Enums\PromoCodeDiscountTypeEnum;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
@@ -40,6 +41,9 @@ class CreatePromoCodeAction extends BaseAction
                 discount: $request->float('discount'),
                 expiry_date: $request->input('expiry_date'),
                 max_allowed_usages: $request->input('max_allowed_usages'),
+                discount_applies_to: PromoCodeDiscountAppliesToEnum::fromName(
+                    $request->input('discount_applies_to', PromoCodeDiscountAppliesToEnum::EACH_PRODUCT->name)
+                ),
             ));
         } catch (ResourceConflictException $e) {
             throw ValidationException::withMessages([

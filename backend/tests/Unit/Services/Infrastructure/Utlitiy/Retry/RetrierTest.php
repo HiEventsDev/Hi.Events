@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class RetrierTest extends TestCase
 {
-    public function testRetriesMultipleTimesBeforeFailing(): void
+    public function test_retries_multiple_times_before_failing(): void
     {
         $attempts = 0;
         $maxAttempts = 3;
@@ -16,32 +16,33 @@ class RetrierTest extends TestCase
         $operation = function () use (&$attempts, $maxAttempts) {
             $attempts++;
             if ($attempts < $maxAttempts) {
-                throw new Exception("Temporary failure");
+                throw new Exception('Temporary failure');
             }
-            return "Success";
+
+            return 'Success';
         };
 
-        $retrier = new Retrier();
+        $retrier = new Retrier;
         $result = $retrier->retry($operation, $maxAttempts, 1);
 
-        $this->assertEquals("Success", $result);
+        $this->assertEquals('Success', $result);
         $this->assertEquals($maxAttempts, $attempts);
     }
 
-    public function testFailsAfterMaxAttempts(): void
+    public function test_fails_after_max_attempts(): void
     {
         $attempts = 0;
         $maxAttempts = 3;
 
         $operation = function () use (&$attempts) {
             $attempts++;
-            throw new Exception("Persistent failure");
+            throw new Exception('Persistent failure');
         };
 
-        $retrier = new Retrier();
+        $retrier = new Retrier;
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage("Persistent failure");
+        $this->expectExceptionMessage('Persistent failure');
 
         try {
             $retrier->retry($operation, $maxAttempts, 1);
@@ -50,7 +51,7 @@ class RetrierTest extends TestCase
         }
     }
 
-    public function testOnFailureCallbackIsCalled(): void
+    public function test_on_failure_callback_is_called(): void
     {
         $attempts = 0;
         $maxAttempts = 3;
@@ -58,19 +59,19 @@ class RetrierTest extends TestCase
 
         $operation = function () use (&$attempts) {
             $attempts++;
-            throw new Exception("Persistent failure");
+            throw new Exception('Persistent failure');
         };
 
         $onFailure = function (int $attempt, Exception $e) use (&$onFailureCalled, $maxAttempts) {
             $onFailureCalled = true;
             $this->assertEquals($maxAttempts, $attempt);
-            $this->assertEquals("Persistent failure", $e->getMessage());
+            $this->assertEquals('Persistent failure', $e->getMessage());
         };
 
-        $retrier = new Retrier();
+        $retrier = new Retrier;
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage("Persistent failure");
+        $this->expectExceptionMessage('Persistent failure');
 
         try {
             $retrier->retry($operation, $maxAttempts, 1, onFailure: $onFailure);

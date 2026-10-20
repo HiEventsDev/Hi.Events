@@ -4,6 +4,7 @@ namespace HiEvents\Resources\Waitlist;
 
 use HiEvents\DomainObjects\WaitlistEntryDomainObject;
 use HiEvents\Resources\BaseResource;
+use HiEvents\Resources\EventOccurrence\EventOccurrenceResource;
 use HiEvents\Resources\Product\ProductPriceResource;
 use HiEvents\Resources\Product\ProductResource;
 use Illuminate\Http\Request;
@@ -19,6 +20,7 @@ class WaitlistEntryResource extends BaseResource
             'id' => $this->getId(),
             'event_id' => $this->getEventId(),
             'product_price_id' => $this->getProductPriceId(),
+            'event_occurrence_id' => $this->getEventOccurrenceId(),
             'email' => $this->getEmail(),
             'first_name' => $this->getFirstName(),
             'last_name' => $this->getLastName(),
@@ -35,6 +37,9 @@ class WaitlistEntryResource extends BaseResource
                 : null,
             'product_price' => $this->getProductPrice()
                 ? new ProductPriceResource($this->getProductPrice())
+                : null,
+            'event_occurrence' => $this->getEventOccurrence()
+                ? new EventOccurrenceResource($this->getEventOccurrence())
                 : null,
             'created_at' => $this->getCreatedAt(),
             'updated_at' => $this->getUpdatedAt(),

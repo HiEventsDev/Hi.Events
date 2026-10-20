@@ -23,20 +23,17 @@ class MessagePendingReviewJob implements ShouldQueue
     public int $tries = 3;
 
     public function __construct(
-        private readonly int   $messageId,
+        private readonly int $messageId,
         private readonly array $failures
-    )
-    {
-    }
+    ) {}
 
     public function handle(
         MessageRepositoryInterface $messageRepository,
-        EventRepositoryInterface   $eventRepository,
+        EventRepositoryInterface $eventRepository,
         AccountRepositoryInterface $accountRepository,
-        Mailer                     $mailer,
-        Repository                 $config
-    ): void
-    {
+        Mailer $mailer,
+        Repository $config
+    ): void {
         /** @var MessageDomainObject $message */
         $message = $messageRepository->findById($this->messageId);
 

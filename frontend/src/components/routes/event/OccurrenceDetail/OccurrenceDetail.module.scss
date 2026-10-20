@@ -1,0 +1,41 @@
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  &[data-status="ACTIVE"] {
+    background: var(--mantine-color-green-1);
+    color: var(--mantine-color-green-9);
+  }
+
+  &[data-status="CANCELLED"] {
+    background: var(--mantine-color-red-1);
+    color: var(--mantine-color-red-9);
+  }
+
+  &[data-status="SOLD_OUT"] {
+    background: var(--mantine-color-orange-1);
+    color: var(--mantine-color-orange-9);
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 8px;
+  }
+}

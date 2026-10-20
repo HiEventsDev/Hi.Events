@@ -1,5 +1,5 @@
 import {CapacityAssignmentRequest, GenericModalProps, ProductCategory} from "../../../types.ts";
-import {Modal} from "../../common/Modal";
+import {Modal, ModalFooter} from "../../common/Modal";
 import {t} from "@lingui/macro";
 import {CapacityAssigmentForm} from "../../forms/CapaciyAssigmentForm";
 import {useForm} from "@mantine/form";
@@ -71,13 +71,15 @@ export const CreateCapacityAssignmentModal = ({onClose}: GenericModalProps) => {
                 <form onSubmit={form.onSubmit(handleSubmit)}>
                     {event && <CapacityAssigmentForm form={form}
                                                      productsCategories={event.product_categories as ProductCategory[]}/>}
-                    <Button
-                        type={'submit'}
-                        fullWidth
-                        loading={createMutation.isPending}
-                    >
-                        {t`Create Capacity Assignment`}
-                    </Button>
+                    <ModalFooter>
+                        <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                        <Button
+                            type={'submit'}
+                            loading={createMutation.isPending}
+                        >
+                            {t`Create Capacity Assignment`}
+                        </Button>
+                    </ModalFooter>
                 </form>
             )}
         </Modal>

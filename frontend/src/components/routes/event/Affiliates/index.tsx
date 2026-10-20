@@ -1,4 +1,6 @@
 import {PageBody} from "../../../common/PageBody";
+import {CreateButton} from "../../../common/CreateButton";
+import {useAccess} from "../../../../hooks/useAccess.ts";
 import {PageTitle} from "../../../common/PageTitle";
 import {t} from "@lingui/macro";
 import {useParams} from "react-router";
@@ -18,8 +20,10 @@ import {affiliateClient} from "../../../../api/affiliate.client.ts";
 import {downloadBinary} from "../../../../utilites/download.ts";
 import {withLoadingNotification} from "../../../../utilites/withLoadingNotification.tsx";
 import {useState} from "react";
+import {SortSelector} from "../../../common/SortSelector";
 
 const Affiliates = () => {
+    const canViewFinancials = useAccess().can('VIEW_FINANCIALS');
     const {eventId} = useParams();
     const [searchParams, setSearchParams] = useFilterQueryParamSync();
     const {data: affiliatesData} = useGetAffiliates(
@@ -63,15 +67,27 @@ const Affiliates = () => {
                 {t`Affiliates`}
             </PageTitle>
 
-            <ToolBar searchComponent={() => (
-                <SearchBarWrapper
-                    placeholder={t`Search affiliates...`}
-                    setSearchParams={setSearchParams}
-                    searchParams={searchParams}
-                    pagination={pagination}
-                />
-            )}>
-                <Button
+            <ToolBar
+                searchComponent={() => (
+                    <SearchBarWrapper
+                        placeholder={t`Search affiliates...`}
+                        setSearchParams={setSearchParams}
+                        searchParams={searchParams}
+                    />
+                )}
+                filterComponent={pagination?.allowed_sorts ? (
+                    <SortSelector
+                        selected={searchParams.sortBy && searchParams.sortDirection
+                            ? searchParams.sortBy + ':' + searchParams.sortDirection
+                            : pagination.default_sort + ':' + pagination.default_sort_direction}
+                        options={pagination.allowed_sorts}
+                        onSortSelect={(key, sortDirection) => {
+                            setSearchParams({sortBy: key, sortDirection});
+                        }}
+                    />
+                ) : undefined}
+            >
+                {canViewFinancials && <Button
                     onClick={() => handleExport(eventId)}
                     rightSection={<IconDownload size={14}/>}
                     color="green"
@@ -79,12 +95,13 @@ const Affiliates = () => {
                     size="sm"
                 >
                     {t`Export`}
-                </Button>
-                <Button
+                </Button>}
+                <CreateButton
                     leftSection={<IconPlus/>}
                     color={'green'}
+                    data-testid="affiliate-create-button"
                     onClick={openCreateModal}>{t`Create Affiliate`}
-                </Button>
+                </CreateButton>
             </ToolBar>
 
             <TableSkeleton isVisible={!affiliates}/>

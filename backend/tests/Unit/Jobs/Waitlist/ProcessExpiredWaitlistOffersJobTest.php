@@ -2,15 +2,16 @@
 
 namespace Tests\Unit\Jobs\Waitlist;
 
+use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\DomainObjects\Status\WaitlistEntryStatus;
 use HiEvents\DomainObjects\WaitlistEntryDomainObject;
 use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Jobs\Waitlist\ProcessExpiredWaitlistOffersJob;
 use HiEvents\Jobs\Waitlist\SendWaitlistOfferExpiredEmailJob;
-use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
+use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
 use HiEvents\Repository\Interfaces\WaitlistEntryRepositoryInterface;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
@@ -23,9 +24,14 @@ use Tests\TestCase;
 class ProcessExpiredWaitlistOffersJobTest extends TestCase
 {
     private WaitlistEntryRepositoryInterface $repository;
+
     private OrderRepositoryInterface $orderRepository;
+
     private ProductPriceRepositoryInterface $productPriceRepository;
+
     private DatabaseManager $databaseManager;
+
+    private StripePaymentsRepositoryInterface $stripePaymentsRepository;
 
     protected function setUp(): void
     {
@@ -34,6 +40,9 @@ class ProcessExpiredWaitlistOffersJobTest extends TestCase
         $this->orderRepository = m::mock(OrderRepositoryInterface::class);
         $this->productPriceRepository = m::mock(ProductPriceRepositoryInterface::class);
         $this->databaseManager = m::mock(DatabaseManager::class);
+        $this->stripePaymentsRepository = m::mock(StripePaymentsRepositoryInterface::class);
+
+        $this->stripePaymentsRepository->shouldReceive('countWhere')->andReturn(0)->byDefault();
 
         $this->databaseManager
             ->shouldReceive('transaction')
@@ -41,7 +50,7 @@ class ProcessExpiredWaitlistOffersJobTest extends TestCase
                 return $callback();
             });
 
-        $productPrice = new ProductPriceDomainObject();
+        $productPrice = new ProductPriceDomainObject;
         $productPrice->setId(20);
         $productPrice->setProductId(99);
 
@@ -51,12 +60,12 @@ class ProcessExpiredWaitlistOffersJobTest extends TestCase
             ->andReturn($productPrice);
     }
 
-    public function testProcessesExpiredOffersAndDispatchesEmailAndEvent(): void
+    public function test_processes_expired_offers_and_dispatches_email_and_event(): void
     {
         Bus::fake();
         Event::fake();
 
-        $entry = new WaitlistEntryDomainObject();
+        $entry = new WaitlistEntryDomainObject;
         $entry->setId(1);
         $entry->setEventId(10);
         $entry->setProductPriceId(20);
@@ -96,7 +105,7 @@ class ProcessExpiredWaitlistOffersJobTest extends TestCase
                 ['id' => 1],
             );
 
-        $expiredEntry = new WaitlistEntryDomainObject();
+        $expiredEntry = new WaitlistEntryDomainObject;
         $expiredEntry->setId(1);
         $expiredEntry->setEventId(10);
         $expiredEntry->setProductPriceId(20);
@@ -108,8 +117,8 @@ class ProcessExpiredWaitlistOffersJobTest extends TestCase
             ->with(1)
             ->andReturn($expiredEntry);
 
-        $job = new ProcessExpiredWaitlistOffersJob();
-        $job->handle($this->repository, $this->orderRepository, $this->productPriceRepository, $this->databaseManager);
+        $job = new ProcessExpiredWaitlistOffersJob;
+        $job->handle($this->repository, $this->orderRepository, $this->productPriceRepository, $this->databaseManager, $this->stripePaymentsRepository);
 
         Bus::assertDispatched(SendWaitlistOfferExpiredEmailJob::class);
         Event::assertDispatched(CapacityChangedEvent::class, function ($event) {
@@ -117,12 +126,56 @@ class ProcessExpiredWaitlistOffersJobTest extends TestCase
         });
     }
 
-    public function testSkipsOrderDeletionWhenNoOrderId(): void
+    public function test_marks_order_abandoned_when_a_stripe_payment_exists(): void
     {
         Bus::fake();
         Event::fake();
 
-        $entry = new WaitlistEntryDomainObject();
+        $entry = new WaitlistEntryDomainObject;
+        $entry->setId(1);
+        $entry->setEventId(10);
+        $entry->setProductPriceId(20);
+        $entry->setOrderId(100);
+        $entry->setStatus(WaitlistEntryStatus::OFFERED->name);
+
+        $this->repository->shouldReceive('findWhere')->once()->andReturn(new Collection([$entry]));
+        $this->repository->shouldReceive('findByIdLocked')->once()->with(1)->andReturn($entry);
+
+        $this->stripePaymentsRepository
+            ->shouldReceive('countWhere')
+            ->with(['order_id' => 100])
+            ->andReturn(1);
+
+        $this->orderRepository->shouldNotReceive('deleteWhere');
+        $this->orderRepository
+            ->shouldReceive('updateWhere')
+            ->once()
+            ->with(
+                ['status' => OrderStatus::ABANDONED->name],
+                ['id' => 100, 'status' => OrderStatus::RESERVED->name],
+            );
+
+        $this->repository->shouldReceive('updateWhere')->once();
+
+        $expiredEntry = new WaitlistEntryDomainObject;
+        $expiredEntry->setId(1);
+        $expiredEntry->setEventId(10);
+        $expiredEntry->setProductPriceId(20);
+        $expiredEntry->setStatus(WaitlistEntryStatus::OFFER_EXPIRED->name);
+        $this->repository->shouldReceive('findById')->once()->with(1)->andReturn($expiredEntry);
+
+        $job = new ProcessExpiredWaitlistOffersJob;
+        $job->handle($this->repository, $this->orderRepository, $this->productPriceRepository, $this->databaseManager, $this->stripePaymentsRepository);
+
+        Bus::assertDispatched(SendWaitlistOfferExpiredEmailJob::class);
+    }
+
+    public function test_skips_order_deletion_when_no_order_id(): void
+    {
+        Bus::fake();
+        Event::fake();
+
+        $entry = new WaitlistEntryDomainObject;
         $entry->setId(2);
         $entry->setEventId(10);
         $entry->setProductPriceId(20);
@@ -146,7 +199,7 @@ class ProcessExpiredWaitlistOffersJobTest extends TestCase
             ->shouldReceive('updateWhere')
             ->once();
 
-        $expiredEntry = new WaitlistEntryDomainObject();
+        $expiredEntry = new WaitlistEntryDomainObject;
         $expiredEntry->setId(2);
         $expiredEntry->setEventId(10);
         $expiredEntry->setProductPriceId(20);
@@ -158,14 +211,14 @@ class ProcessExpiredWaitlistOffersJobTest extends TestCase
             ->with(2)
             ->andReturn($expiredEntry);
 
-        $job = new ProcessExpiredWaitlistOffersJob();
-        $job->handle($this->repository, $this->orderRepository, $this->productPriceRepository, $this->databaseManager);
+        $job = new ProcessExpiredWaitlistOffersJob;
+        $job->handle($this->repository, $this->orderRepository, $this->productPriceRepository, $this->databaseManager, $this->stripePaymentsRepository);
 
         Bus::assertDispatched(SendWaitlistOfferExpiredEmailJob::class);
         Event::assertDispatched(CapacityChangedEvent::class);
     }
 
-    public function testDoesNothingWhenNoExpiredEntries(): void
+    public function test_does_nothing_when_no_expired_entries(): void
     {
         Bus::fake();
         Event::fake();
@@ -173,16 +226,16 @@ class ProcessExpiredWaitlistOffersJobTest extends TestCase
         $this->repository
             ->shouldReceive('findWhere')
             ->once()
-            ->andReturn(new Collection());
+            ->andReturn(new Collection);
 
-        $job = new ProcessExpiredWaitlistOffersJob();
-        $job->handle($this->repository, $this->orderRepository, $this->productPriceRepository, $this->databaseManager);
+        $job = new ProcessExpiredWaitlistOffersJob;
+        $job->handle($this->repository, $this->orderRepository, $this->productPriceRepository, $this->databaseManager, $this->stripePaymentsRepository);
 
         Bus::assertNotDispatched(SendWaitlistOfferExpiredEmailJob::class);
         Event::assertNotDispatched(CapacityChangedEvent::class);
     }
 
-    public function testCatchesExceptionAndLogsError(): void
+    public function test_catches_exception_and_logs_error(): void
     {
         Event::fake();
         Bus::fake();
@@ -192,10 +245,11 @@ class ProcessExpiredWaitlistOffersJobTest extends TestCase
             ->once()
             ->with('Failed to process expired waitlist offer', m::on(function ($context) use (&$logged) {
                 $logged = true;
+
                 return $context['entry_id'] === 1 && isset($context['error']);
             }));
 
-        $entry = new WaitlistEntryDomainObject();
+        $entry = new WaitlistEntryDomainObject;
         $entry->setId(1);
         $entry->setEventId(10);
         $entry->setProductPriceId(20);
@@ -213,20 +267,20 @@ class ProcessExpiredWaitlistOffersJobTest extends TestCase
             ->with(1)
             ->andThrow(new \RuntimeException('DB connection lost'));
 
-        $job = new ProcessExpiredWaitlistOffersJob();
-        $job->handle($this->repository, $this->orderRepository, $this->productPriceRepository, $this->databaseManager);
+        $job = new ProcessExpiredWaitlistOffersJob;
+        $job->handle($this->repository, $this->orderRepository, $this->productPriceRepository, $this->databaseManager, $this->stripePaymentsRepository);
 
         $this->assertTrue($logged, 'Error was logged for failed expired offer processing');
         Bus::assertNotDispatched(SendWaitlistOfferExpiredEmailJob::class);
         Event::assertNotDispatched(CapacityChangedEvent::class);
     }
 
-    public function testSkipsEntryWhenStatusChangedBeforeLock(): void
+    public function test_skips_entry_when_status_changed_before_lock(): void
     {
         Bus::fake();
         Event::fake();
 
-        $entry = new WaitlistEntryDomainObject();
+        $entry = new WaitlistEntryDomainObject;
         $entry->setId(1);
         $entry->setEventId(10);
         $entry->setProductPriceId(20);
@@ -238,7 +292,7 @@ class ProcessExpiredWaitlistOffersJobTest extends TestCase
             ->once()
             ->andReturn(new Collection([$entry]));
 
-        $cancelledEntry = new WaitlistEntryDomainObject();
+        $cancelledEntry = new WaitlistEntryDomainObject;
         $cancelledEntry->setId(1);
         $cancelledEntry->setStatus(WaitlistEntryStatus::CANCELLED->name);
 
@@ -257,8 +311,8 @@ class ProcessExpiredWaitlistOffersJobTest extends TestCase
             ->with(1)
             ->andReturn($cancelledEntry);
 
-        $job = new ProcessExpiredWaitlistOffersJob();
-        $job->handle($this->repository, $this->orderRepository, $this->productPriceRepository, $this->databaseManager);
+        $job = new ProcessExpiredWaitlistOffersJob;
+        $job->handle($this->repository, $this->orderRepository, $this->productPriceRepository, $this->databaseManager, $this->stripePaymentsRepository);
 
         Bus::assertNotDispatched(SendWaitlistOfferExpiredEmailJob::class);
         Event::assertNotDispatched(CapacityChangedEvent::class);

@@ -19,17 +19,24 @@ export const waitlistClient = {
         return response.data;
     },
 
-    stats: async (eventId: IdParam) => {
+    stats: async (eventId: IdParam, eventOccurrenceId?: IdParam | null) => {
+        const query = new URLSearchParams();
+
+        if (eventOccurrenceId) {
+            query.set('event_occurrence_id', String(eventOccurrenceId));
+        }
+
+        const queryString = query.toString();
         const response = await api.get<WaitlistStats>(
-            `events/${eventId}/waitlist/stats`,
+            `events/${eventId}/waitlist/stats${queryString ? `?${queryString}` : ''}`,
         );
         return response.data;
     },
 
-    offerNext: async (eventId: IdParam, productPriceId: number, quantity: number = 1) => {
+    offerNext: async (eventId: IdParam, productPriceId: number, quantity: number = 1, eventOccurrenceId?: IdParam | null) => {
         const response = await api.post<GenericDataResponse<WaitlistEntry[]>>(
             `events/${eventId}/waitlist/offer-next`,
-            {product_price_id: productPriceId, quantity},
+            {product_price_id: productPriceId, quantity, event_occurrence_id: eventOccurrenceId},
         );
         return response.data;
     },

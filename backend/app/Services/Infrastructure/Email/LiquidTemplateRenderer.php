@@ -2,11 +2,11 @@
 
 namespace HiEvents\Services\Infrastructure\Email;
 
-use Exception;
 use HiEvents\DomainObjects\Enums\EmailTemplateType;
 use Liquid\Exception\ParseException;
 use Liquid\Template;
 use RuntimeException;
+use Throwable;
 
 class LiquidTemplateRenderer
 {
@@ -14,17 +14,18 @@ class LiquidTemplateRenderer
 
     public function __construct()
     {
-        $this->liquid = new Template();
-        $this->liquid->parse(''); // Initialize
+        $this->liquid = new Template;
+        $this->liquid->parse('');
     }
 
     public function render(string $template, array $context): string
     {
         try {
             $this->liquid->parse($template);
+
             return $this->liquid->render($context);
-        } catch (Exception $e) {
-            throw new RuntimeException('Failed to render template: ' . $e->getMessage(), 0, $e);
+        } catch (Throwable $e) {
+            throw new RuntimeException('Failed to render template: '.$e->getMessage(), 0, $e);
         }
     }
 
@@ -32,6 +33,7 @@ class LiquidTemplateRenderer
     {
         try {
             $this->liquid->parse($template);
+
             return true;
         } catch (ParseException $e) {
             return false;
@@ -42,6 +44,7 @@ class LiquidTemplateRenderer
     {
         try {
             $this->liquid->parse($template);
+
             return null;
         } catch (ParseException $e) {
             return $e->getMessage();
@@ -146,6 +149,31 @@ class LiquidTemplateRenderer
                 'description' => __('Message shown after checkout'),
                 'example' => 'Thank you for your purchase!',
             ],
+            [
+                'token' => '{{ occurrence.start_date }}',
+                'description' => __('The occurrence start date'),
+                'example' => 'January 15, 2024',
+            ],
+            [
+                'token' => '{{ occurrence.start_time }}',
+                'description' => __('The occurrence start time'),
+                'example' => '7:00 PM',
+            ],
+            [
+                'token' => '{{ occurrence.end_date }}',
+                'description' => __('The occurrence end date'),
+                'example' => 'January 16, 2024',
+            ],
+            [
+                'token' => '{{ occurrence.end_time }}',
+                'description' => __('The occurrence end time'),
+                'example' => '11:00 PM',
+            ],
+            [
+                'token' => '{{ occurrence.label }}',
+                'description' => __('The occurrence title suffix'),
+                'example' => 'Session A',
+            ],
         ];
 
         $orderTokens = [
@@ -184,6 +212,11 @@ class LiquidTemplateRenderer
                 'description' => __('The email of the person who placed the order'),
                 'example' => 'john@example.com',
             ],
+            [
+                'token' => '{{ order.seats }}',
+                'description' => __('The seats in the order, for reserved seating events'),
+                'example' => 'Stalls · C-14, Stalls · C-15',
+            ],
         ];
 
         $attendeeTokens = [
@@ -196,6 +229,11 @@ class LiquidTemplateRenderer
                 'token' => '{{ attendee.email }}',
                 'description' => __('The attendee\'s email'),
                 'example' => 'john@example.com',
+            ],
+            [
+                'token' => '{{ attendee.seat }}',
+                'description' => __('The attendee\'s seat, for reserved seating events'),
+                'example' => 'Stalls · C-14',
             ],
             [
                 'token' => '{{ ticket.name }}',
@@ -214,9 +252,46 @@ class LiquidTemplateRenderer
             ],
         ];
 
+        $cancellationTokens = [
+            [
+                'token' => '{{ cancellation.refund_issued }}',
+                'description' => __('Whether refunds are being processed for this cancellation'),
+                'example' => 'true',
+            ],
+            [
+                'token' => '{{ event.url }}',
+                'description' => __('Link to the event homepage'),
+                'example' => 'https://example.com/event/123/summer-fest',
+            ],
+        ];
+
+        $lineupTokens = [
+            [
+                'token' => '{{ lineup.heading }}',
+                'description' => __('Heading for the lineup block, such as Lineup'),
+                'example' => 'Lineup',
+            ],
+            [
+                'token' => '{{ lineup.names | join: ", " }}',
+                'description' => __('Headliners on the attendee\'s date who aren\'t already listed under the key times'),
+                'example' => 'Velvet Harbour, The Northern Arcs',
+            ],
+            [
+                'token' => '{% for slot in lineup.slots %}{{ slot.time }} {{ slot.title }} {{ slot.stage }}{% endfor %}',
+                'description' => __('Key times from the schedule for the attendee\'s date'),
+                'example' => 'Fri 25 Apr · 9:30 PM Velvet Harbour Main Stage',
+            ],
+            [
+                'token' => '{{ lineup.url }}',
+                'description' => __('Link to the full schedule on the event page'),
+                'example' => 'https://example.com/event/123/summer-fest#schedule',
+            ],
+        ];
+
         return match ($type) {
-            EmailTemplateType::ORDER_CONFIRMATION => array_merge($commonTokens, $orderTokens),
-            EmailTemplateType::ATTENDEE_TICKET => array_merge($commonTokens, $orderTokens, $attendeeTokens),
+            EmailTemplateType::ORDER_CONFIRMATION => array_merge($commonTokens, $orderTokens, $lineupTokens),
+            EmailTemplateType::ATTENDEE_TICKET => array_merge($commonTokens, $orderTokens, $attendeeTokens, $lineupTokens),
+            EmailTemplateType::OCCURRENCE_CANCELLATION => array_merge($commonTokens, $cancellationTokens),
         };
     }
 }

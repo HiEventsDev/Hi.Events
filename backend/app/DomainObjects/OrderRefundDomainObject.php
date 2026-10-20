@@ -2,6 +2,4 @@
 
 namespace HiEvents\DomainObjects;
 
-class OrderRefundDomainObject extends Generated\OrderRefundDomainObjectAbstract
-{
-}
+class OrderRefundDomainObject extends Generated\OrderRefundDomainObjectAbstract {}

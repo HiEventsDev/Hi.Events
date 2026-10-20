@@ -1,4 +1,4 @@
-import {MantineProvider, MantineThemeOverride, CSSVariablesResolver, MantineColorsTuple, ButtonProps, CheckboxProps, MantineTheme} from "@mantine/core";
+import {MantineProvider, MantineThemeOverride, CSSVariablesResolver, MantineColorsTuple, ButtonProps, CheckboxProps, MantineTheme, v8CssVariablesResolver} from "@mantine/core";
 import {PropsWithChildren, useMemo} from "react";
 import {getContrastColor, hexToRgb} from "../../../utilites/themeUtils";
 
@@ -132,7 +132,8 @@ function createCheckoutTheme(accentColor: string, mode: 'light' | 'dark'): Manti
  * Only accent color is customizable.
  */
 function createCSSVariablesResolver(accentColor: string, mode: 'light' | 'dark'): CSSVariablesResolver {
-    return () => {
+    return (theme) => {
+        const v8 = v8CssVariablesResolver(theme);
         const palette = mode === 'light' ? LIGHT_PALETTE : DARK_PALETTE;
         const accentContrast = getContrastColor(accentColor);
         const rgb = hexToRgb(accentColor);
@@ -147,27 +148,22 @@ function createCSSVariablesResolver(accentColor: string, mode: 'light' | 'dark')
 
         return {
             variables: {
-                // Accent colors (customizable)
+                ...v8.variables,
                 '--checkout-accent': accentColor,
                 '--checkout-accent-contrast': accentContrast,
                 '--checkout-accent-soft': accentSoft,
                 '--checkout-accent-muted': accentMuted,
-
-                // Fixed palette colors (not customizable - ensures readability)
                 '--checkout-background': palette.background,
                 '--checkout-surface': palette.surface,
                 '--checkout-text-primary': palette.textPrimary,
                 '--checkout-text-secondary': palette.textSecondary,
                 '--checkout-text-tertiary': palette.textTertiary,
                 '--checkout-border': palette.border,
-
-                // Override global --hi-text (set to accent in global.scss) and
-                // Mantine's default text color to use fixed palette instead
                 '--hi-text': palette.textPrimary,
                 '--mantine-color-text': palette.textPrimary,
             },
-            light: {},
-            dark: {},
+            light: v8.light,
+            dark: v8.dark,
         };
     };
 }

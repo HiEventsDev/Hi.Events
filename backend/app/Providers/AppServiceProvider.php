@@ -2,25 +2,44 @@
 
 namespace HiEvents\Providers;
 
+use Carbon\FactoryImmutable;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\ProfileDomainObject;
+use HiEvents\Enterprise\BoxOffice\Services\Domain\BoxOfficeSessionService;
+use HiEvents\Enterprise\Licensing\LicenceService;
+use HiEvents\Enterprise\Seating\Services\Domain\EventSeatMapLookupService;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatedProductLookupService;
 use HiEvents\Models\Event;
 use HiEvents\Models\Organizer;
+use HiEvents\Models\Profile;
+use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
+use HiEvents\Services\Domain\Auth\ApiKey\ApiKeyService;
 use HiEvents\Services\Infrastructure\CurrencyConversion\CurrencyConversionClientInterface;
 use HiEvents\Services\Infrastructure\CurrencyConversion\NoOpCurrencyConversionClient;
 use HiEvents\Services\Infrastructure\CurrencyConversion\OpenExchangeRatesCurrencyConversionClient;
+use HiEvents\Services\Infrastructure\Geo\GeoProviderInterface;
+use HiEvents\Services\Infrastructure\Geo\GooglePlacesGeoProvider;
+use HiEvents\Services\Infrastructure\Geo\NoOpGeoProvider;
+use HiEvents\Services\Infrastructure\Stripe\StripeClientFactory;
+use HiEvents\Services\Infrastructure\Stripe\StripeConfigurationService;
+use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Http\Client\Factory as HttpClient;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Sanctum\PersonalAccessToken;
+use Laravel\Sanctum\Sanctum;
+use PHPOpenSourceSaver\JWTAuth\Http\Parser\AuthHeaders;
+use PHPOpenSourceSaver\JWTAuth\Http\Parser\Cookies;
+use Psr\Clock\ClockInterface;
 use Stripe\StripeClient;
-use HiEvents\Services\Infrastructure\Stripe\StripeConfigurationService;
-use HiEvents\Services\Infrastructure\Stripe\StripeClientFactory;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,6 +48,13 @@ class AppServiceProvider extends ServiceProvider
         $this->bindDoctrineConnection();
         $this->bindStripeServices();
         $this->bindCurrencyConversionClient();
+        $this->bindGeoProvider();
+        $this->app->scoped(EventSeatMapLookupService::class);
+        $this->app->scoped(SeatedProductLookupService::class);
+        $this->app->scoped(LicenceService::class);
+        $this->app->scoped(BoxOfficeSessionService::class);
+        $this->app->scoped(AccountUserAccessService::class);
+        $this->app->bind(ClockInterface::class, fn () => FactoryImmutable::getDefaultInstance());
     }
 
     /**
@@ -36,6 +62,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->restrictJwtSourcesToHeaderAndCookie();
         $this->handleHttpsEnforcing();
 
         $this->handleQueryLogging();
@@ -43,6 +70,26 @@ class AppServiceProvider extends ServiceProvider
         $this->disableLazyLoading();
 
         $this->registerMorphMaps();
+
+        $this->restrictApiKeysToActiveMembers();
+    }
+
+    private function restrictApiKeysToActiveMembers(): void
+    {
+        Sanctum::authenticateAccessTokensUsing(
+            static fn (PersonalAccessToken $apiKey, bool $isValid): bool => $isValid
+                && app(ApiKeyService::class)->isUsableBy((int) $apiKey->getAttribute('tokenable_id'), (int) $apiKey->getAttribute('account_id')),
+        );
+    }
+
+    private function restrictJwtSourcesToHeaderAndCookie(): void
+    {
+        $parser = $this->app->make('tymon.jwt.parser');
+
+        $parser->setChain(array_values(array_filter(
+            $parser->getChain(),
+            static fn ($source) => $source instanceof AuthHeaders || $source instanceof Cookies,
+        )));
     }
 
     private function bindDoctrineConnection(): void
@@ -54,7 +101,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             AbstractSchemaManager::class,
             function () {
-                $config = new Configuration();
+                $config = new Configuration;
 
                 $connectionParams = [
                     'dbname' => config('database.connections.pgsql.database'),
@@ -73,29 +120,27 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(StripeConfigurationService::class);
         $this->app->singleton(StripeClientFactory::class);
-        
-        if (!config('services.stripe.secret_key')) {
+
+        if (! config('services.stripe.secret_key')) {
             logger()?->debug('Stripe secret key is not set in the configuration file. Payment processing will not work.');
+
             return;
         }
 
         $this->app->bind(
             StripeClient::class,
-            fn() => new StripeClient(config('services.stripe.secret_key'))
+            fn () => new StripeClient(config('services.stripe.secret_key'))
         );
     }
 
-    /**
-     * @return void
-     */
     private function handleQueryLogging(): void
     {
-        if (env('APP_DEBUG') === true && env('APP_LOG_QUERIES') === true && !app()->isProduction()) {
+        if (env('APP_DEBUG') === true && env('APP_LOG_QUERIES') === true && ! app()->isProduction()) {
             DB::listen(
                 static function ($query) {
                     File::append(
                         storage_path('/logs/query.log'),
-                        $query->sql . ' [' . implode(', ', $query->bindings) . ']' . PHP_EOL
+                        $query->sql.' ['.implode(', ', $query->bindings).']'.PHP_EOL
                     );
                 }
             );
@@ -115,12 +160,13 @@ class AppServiceProvider extends ServiceProvider
         Relation::enforceMorphMap([
             EventDomainObject::class => Event::class,
             OrganizerDomainObject::class => Organizer::class,
+            ProfileDomainObject::class => Profile::class,
         ]);
     }
 
     private function disableLazyLoading(): void
     {
-        Model::preventLazyLoading(!app()->isProduction());
+        Model::preventLazyLoading(! app()->isProduction());
     }
 
     private function bindCurrencyConversionClient(): void
@@ -136,9 +182,32 @@ class AppServiceProvider extends ServiceProvider
                     );
                 }
 
-                // Fallback to no-op client if no other client is available
                 return new NoOpCurrencyConversionClient(
                     logger: $this->app->make('log')
+                );
+            }
+        );
+    }
+
+    private function bindGeoProvider(): void
+    {
+        $this->app->bind(
+            GeoProviderInterface::class,
+            function () {
+                $provider = config('services.geo.provider');
+                $googleKey = config('services.geo.google.api_key');
+
+                if ($provider === 'google' && $googleKey) {
+                    return new GooglePlacesGeoProvider(
+                        apiKey: $googleKey,
+                        http: $this->app->make(HttpClient::class),
+                        logger: $this->app->make('log'),
+                        cache: $this->app->make(Repository::class),
+                    );
+                }
+
+                return new NoOpGeoProvider(
+                    logger: $this->app->make('log'),
                 );
             }
         );

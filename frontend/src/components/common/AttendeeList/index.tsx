@@ -60,7 +60,7 @@ export const AttendeeList = ({order, products, refetchOrder, questionAnswers = [
                         <div key={attendee.id} className={classes.attendee}>
                             <div className={classes.attendeeInfo}>
                                 <Avatar
-                                    size="md"
+                                    size={32}
                                     radius="xl"
                                     className={classes.avatar}
                                 >
@@ -74,6 +74,7 @@ export const AttendeeList = ({order, products, refetchOrder, questionAnswers = [
                                     {product?.title && (
                                         <Text size="xs" className={classes.product} lineClamp={1}>
                                             {product.title}
+                                            {attendee.seat_label && ` · ${attendee.seat_label}`}
                                         </Text>
                                     )}
                                 </div>
@@ -118,11 +119,10 @@ export const AttendeeList = ({order, products, refetchOrder, questionAnswers = [
                                 </Group>
                             </div>
 
-                            {/* Collapsible answers section */}
-                            <Collapse in={isExpanded(attendee.id)}>
+                            <Collapse expanded={isExpanded(attendee.id)}>
                                 <div className={classes.answersContainer}>
                                     <QuestionList
-                                        compact
+                                        hideProductTitle
                                         questions={getAttendeeQuestions(attendee.id)}
                                         onEditAnswer={refetchOrder}
                                     />

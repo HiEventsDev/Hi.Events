@@ -2,6 +2,7 @@
 
 namespace HiEvents\Http\Request\PromoCode;
 
+use HiEvents\DomainObjects\Enums\PromoCodeDiscountAppliesToEnum;
 use HiEvents\DomainObjects\Enums\PromoCodeDiscountTypeEnum;
 use HiEvents\Http\Request\BaseRequest;
 use Illuminate\Validation\Rule;
@@ -27,7 +28,11 @@ class CreateUpdatePromoCodeRequest extends BaseRequest
             'max_allowed_usages' => 'nullable|gte:1|max:9999999',
             'discount_type' => [
                 'required',
-                Rule::in(PromoCodeDiscountTypeEnum::valuesArray())
+                Rule::in(PromoCodeDiscountTypeEnum::valuesArray()),
+            ],
+            'discount_applies_to' => [
+                'sometimes',
+                Rule::in(PromoCodeDiscountAppliesToEnum::valuesArray()),
             ],
         ];
     }

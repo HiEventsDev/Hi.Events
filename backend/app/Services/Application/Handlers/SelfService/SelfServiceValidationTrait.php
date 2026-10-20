@@ -12,8 +12,8 @@ trait SelfServiceValidationTrait
 {
     private function validateSelfServiceEnabled(EventDomainObject $event): void
     {
-        if (!$event->getEventSettings()?->getAllowAttendeeSelfEdit()) {
-            throw new SelfServiceDisabledException();
+        if (! $event->getEventSettings()?->getAllowAttendeeSelfEdit()) {
+            throw new SelfServiceDisabledException;
         }
     }
 
@@ -26,7 +26,7 @@ trait SelfServiceValidationTrait
             ->loadRelation(EventSettingDomainObject::class)
             ->findById($eventId);
 
-        if (!$event) {
+        if (! $event) {
             throw new ResourceNotFoundException(__('Event not found'));
         }
 
@@ -39,7 +39,7 @@ trait SelfServiceValidationTrait
     {
         $order = $this->orderRepository->findByShortId($orderShortId);
 
-        if (!$order || $order->getEventId() !== $eventId) {
+        if (! $order || $order->getEventId() !== $eventId) {
             throw new ResourceNotFoundException(__('Order not found'));
         }
 

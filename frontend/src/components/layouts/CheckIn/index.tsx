@@ -1,31 +1,32 @@
 import {useParams} from "react-router";
 import {useGetCheckInListPublic} from "../../../queries/useGetCheckInListPublic.ts";
-import {useCallback, useEffect, useRef, useState} from "react";
-import {useDebouncedValue, useDisclosure, useNetwork} from "@mantine/hooks";
-import {Attendee, QueryFilters, QueryFilterOperator} from "../../../types.ts";
-import {showError, showSuccess} from "../../../utilites/notifications.tsx";
+import {useEffect, useState} from "react";
+import {useDisclosure, useNetwork} from "@mantine/hooks";
+import {EventOccurrenceStatus, EventType} from "../../../types.ts";
 import {t, Trans} from "@lingui/macro";
-import {AxiosError} from "axios";
 import classes from "./CheckIn.module.scss";
-import {ActionIcon, Modal} from "@mantine/core";
-import {SearchBar} from "../../common/SearchBar";
-import {IconInfoCircle, IconQrcode, IconVolume, IconVolumeOff} from "@tabler/icons-react";
-import {QRScannerComponent} from "../../common/AttendeeCheckInTable/QrScanner.tsx";
-import {useGetCheckInListAttendees} from "../../../queries/useGetCheckInListAttendeesPublic.ts";
-import {useCreateCheckInPublic} from "../../../mutations/useCreateCheckInPublic.ts";
-import {useDeleteCheckInPublic} from "../../../mutations/useDeleteCheckInPublic.ts";
+import {ActionIcon} from "@mantine/core";
+import {IconCalendarEvent, IconChartBar, IconInfoCircle, IconQrcode, IconSearch, IconWifiOff} from "@tabler/icons-react";
+import {formatDateWithLocale} from "../../../utilites/dates.ts";
+import {useGetCheckInListStatsPublic} from "../../../queries/useGetCheckInListStatsPublic.ts";
 import {NoResultsSplash} from "../../common/NoResultsSplash";
 import {Countdown} from "../../common/Countdown";
 import Truncate from "../../common/Truncate";
-import {Header} from "../../common/Header";
-import {publicCheckInClient} from "../../../api/check-in.client.ts";
 import {isSsr} from "../../../utilites/helpers.ts";
-import {AttendeeList} from "../../common/CheckIn/AttendeeList";
-import {CheckInOptionsModal} from "../../common/CheckIn/CheckInOptionsModal";
-import {ScannerSelectionModal} from "../../common/CheckIn/ScannerSelectionModal";
 import {CheckInInfoModal} from "../../common/CheckIn/CheckInInfoModal";
-import {HidScannerStatus} from "../../common/CheckIn/HidScannerStatus";
-import {Button} from "@mantine/core";
+import {CheckInDescriptionModal} from "../../common/CheckIn/CheckInDescriptionModal";
+import {BottomNav, BottomNavTab} from "./BottomNav.tsx";
+import {ScanTab} from "./tabs/ScanTab.tsx";
+import {SearchTab} from "./tabs/SearchTab.tsx";
+import {StatsTab} from "./tabs/StatsTab.tsx";
+import {OccurrenceFilterPill} from "./OccurrenceFilterPill.tsx";
+import {CheckInModals} from "./CheckInModals.tsx";
+import {useCheckInController} from "../../../hooks/useCheckInController.tsx";
+import {useHashTab} from "../../../hooks/useHashTab.ts";
+
+type CheckInTab = "scan" | "search" | "stats";
+
+const CHECK_IN_TABS: readonly CheckInTab[] = ["scan", "search", "stats"];
 
 const CheckIn = () => {
     const networkStatus = useNetwork();
@@ -33,320 +34,55 @@ const CheckIn = () => {
     const CheckInListQuery = useGetCheckInListPublic(checkInListShortId);
     const checkInList = CheckInListQuery?.data?.data;
     const event = checkInList?.event;
-    const eventSettings = event?.settings;
-    const [searchQuery, setSearchQuery] = useState('');
-    const [searchQueryDebounced] = useDebouncedValue(searchQuery, 200);
-    const [qrScannerOpen, setQrScannerOpen] = useState(false);
-    const [scannerSelectionOpen, setScannerSelectionOpen] = useState(false);
-    const [hidScannerMode, setHidScannerMode] = useState(false);
-    const [currentBarcode, setCurrentBarcode] = useState('');
-    const [pageHasFocus, setPageHasFocus] = useState(true);
-    const barcodeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-    const isProcessingRef = useRef(false);
-    const processedBarcodesRef = useRef<Set<string>>(new Set());
-    const lastScanTimeRef = useRef<number>(0);
-    const scanSuccessAudioRef = useRef<HTMLAudioElement | null>(null);
-    const scanErrorAudioRef = useRef<HTMLAudioElement | null>(null);
-    const [isSoundOn, setIsSoundOn] = useState(() => {
-        if (isSsr()) return true;
-        // Use a unified sound setting for all scanners
-        const storedIsSoundOn = localStorage.getItem("scannerSoundOn");
-        return storedIsSoundOn === null ? true : JSON.parse(storedIsSoundOn);
-    });
-    const [selectedAttendee, setSelectedAttendee] = useState<Attendee | null>(null);
-    const [checkInModalOpen, checkInModalHandlers] = useDisclosure(false);
+
+    const [activeTab, setActiveTab] = useHashTab(CHECK_IN_TABS, "scan");
+    const [descriptionModalOpen, setDescriptionModalOpen] = useState(false);
     const [infoModalOpen, infoModalHandlers] = useDisclosure(false, {
-            onOpen: () => {
-                CheckInListQuery.refetch();
-            }
-        }
-    );
-
-    const products = checkInList?.products;
-    const queryFilters: QueryFilters = {
-        pageNumber: 1,
-        query: searchQueryDebounced,
-        perPage: 150,
-        filterFields: {
-            status: {operator: QueryFilterOperator.Equals, value: 'ACTIVE'},
+        onOpen: () => {
+            CheckInListQuery.refetch();
         },
-    };
+    });
 
-    const attendeesQuery = useGetCheckInListAttendees(
+    const controller = useCheckInController({
         checkInListShortId,
-        queryFilters,
-        checkInList?.is_active && !checkInList?.is_expired,
+        checkInList,
+        hidListeningEnabled: activeTab === "scan",
+    });
+
+    const progressStatsQuery = useGetCheckInListStatsPublic(
+        checkInListShortId,
+        !!checkInList?.is_active && !checkInList?.is_expired && controller.showOccurrenceFilter && controller.occurrenceFilter !== null,
+        controller.occurrenceFilter,
     );
-    const attendees = attendeesQuery?.data?.data;
-    const checkInMutation = useCreateCheckInPublic(queryFilters);
-    const deleteCheckInMutation = useDeleteCheckInPublic(queryFilters);
-    const areOfflinePaymentsEnabled = eventSettings?.payment_providers?.includes('OFFLINE');
-    const allowOrdersAwaitingOfflinePaymentToCheckIn = areOfflinePaymentsEnabled
-        && eventSettings?.allow_orders_awaiting_offline_payment_to_check_in;
 
-    // Save sound preference to localStorage
     useEffect(() => {
-        if (!isSsr()) {
-            localStorage.setItem("scannerSoundOn", JSON.stringify(isSoundOn));
+        if (isSsr()) return;
+        if (!checkInListShortId) return;
+        if (!checkInList?.description) return;
+        const key = `checkInDescriptionSeen:${checkInListShortId}`;
+        if (!localStorage.getItem(key)) {
+            setDescriptionModalOpen(true);
         }
-    }, [isSoundOn]);
+    }, [checkInListShortId, checkInList?.description]);
 
-    // Sound helpers
-    const playSuccessSound = useCallback(() => {
-        if (isSoundOn && scanSuccessAudioRef.current) {
-            scanSuccessAudioRef.current.play().catch(() => {
-                // Ignore audio play errors (e.g., user hasn't interacted with page)
-            });
+    const dismissDescription = () => {
+        setDescriptionModalOpen(false);
+        if (!isSsr() && checkInListShortId) {
+            localStorage.setItem(`checkInDescriptionSeen:${checkInListShortId}`, "1");
         }
-    }, [isSoundOn]);
-
-    const playErrorSound = useCallback(() => {
-        if (isSoundOn && scanErrorAudioRef.current) {
-            scanErrorAudioRef.current.play().catch(() => {
-                // Ignore audio play errors (e.g., user hasn't interacted with page)
-            });
-        }
-    }, [isSoundOn]);
-
-    const playClickSound = useCallback(() => {
-        if (isSoundOn && scanSuccessAudioRef.current) {
-            // Use success sound for click feedback
-            scanSuccessAudioRef.current.currentTime = 0; // Reset to start for quick successive clicks
-            scanSuccessAudioRef.current.play().catch(() => {
-                // Ignore audio play errors
-            });
-        }
-    }, [isSoundOn]);
-
-    const handleCheckInAction = (attendee: Attendee, action: 'check-in' | 'check-in-and-mark-order-as-paid') => {
-        checkInMutation.mutate({
-            checkInListShortId: checkInListShortId,
-            attendeePublicId: attendee.public_id,
-            action: action,
-        }, {
-            onSuccess: ({errors}) => {
-                if (errors && errors[attendee.public_id]) {
-                    showError(errors[attendee.public_id]);
-                    playErrorSound();
-                    return;
-                }
-                showSuccess(<Trans>{attendee.first_name} <b>checked in</b> successfully</Trans>);
-                playSuccessSound();
-                checkInModalHandlers.close();
-                setSelectedAttendee(null);
-            },
-            onError: (error) => {
-                playErrorSound();
-                if (!networkStatus.online) {
-                    showError(t`You are offline`);
-                    return;
-                }
-
-                if (error instanceof AxiosError) {
-                    showError(error?.response?.data?.message || t`Unable to check in attendee`);
-                }
-            }
-        });
     };
 
-    const handleCheckInToggle = (attendee: Attendee) => {
-        if (attendee.check_in) {
-            deleteCheckInMutation.mutate({
-                checkInListShortId: checkInListShortId,
-                checkInShortId: attendee.check_in.short_id,
-            }, {
-                onSuccess: () => {
-                    showSuccess(<Trans>{attendee.first_name} <b>checked out</b> successfully</Trans>);
-                    playSuccessSound();
-                },
-                onError: (error) => {
-                    playErrorSound();
-                    if (!networkStatus.online) {
-                        showError(t`You are offline`);
-                        return;
-                    }
-
-                    if (error instanceof AxiosError) {
-                        showError(error?.response?.data?.message || t`Unable to check out attendee`);
-                    } else {
-                        showError(t`Unable to check out attendee`);
-                    }
-                }
-            });
-            return;
-        }
-
-        const isAttendeeAwaitingPayment = attendee.status === 'AWAITING_PAYMENT';
-
-        if (allowOrdersAwaitingOfflinePaymentToCheckIn && isAttendeeAwaitingPayment) {
-            setSelectedAttendee(attendee);
-            checkInModalHandlers.open();
-            return;
-        }
-
-        if (!allowOrdersAwaitingOfflinePaymentToCheckIn && isAttendeeAwaitingPayment) {
-            showError(t`You cannot check in attendees with unpaid orders. This setting can be changed in the event settings.`);
-            return;
-        }
-
-        handleCheckInAction(attendee, 'check-in');
-    };
-
-    const handleQrCheckIn = useCallback(async (attendeePublicId: string) => {
-        // Prevent processing if already handling a request
-        if (isProcessingRef.current) {
-            return;
-        }
-
-        // Check if this barcode was recently processed (within last 3 seconds)
-        const now = Date.now();
-        if (processedBarcodesRef.current.has(attendeePublicId) &&
-            now - lastScanTimeRef.current < 3000) {
-            showError(t`This ticket was just scanned. Please wait before scanning again.`);
-            playErrorSound();
-            return;
-        }
-
-        isProcessingRef.current = true;
-        lastScanTimeRef.current = now;
-
-        // Find the attendee in the current list or fetch them
-        let attendee = attendees?.find(a => a.public_id === attendeePublicId);
-
-        if (!attendee) {
-            try {
-                const {data} = await publicCheckInClient.getCheckInListAttendee(checkInListShortId, attendeePublicId);
-                attendee = data;
-            } catch (error) {
-                showError(t`Unable to fetch attendee`);
-                playErrorSound();
-                isProcessingRef.current = false;
-                return;
-            }
-
-            if (!attendee) {
-                showError(t`Attendee not found`);
-                playErrorSound();
-                isProcessingRef.current = false;
-                return;
-            }
-        }
-
-        // Check if already checked in
-        if (attendee.check_in) {
-            showError(<Trans>{attendee.first_name} {attendee.last_name} is already checked in</Trans>);
-            playErrorSound();
-            processedBarcodesRef.current.add(attendeePublicId);
-            isProcessingRef.current = false;
-            return;
-        }
-
-        const isAttendeeAwaitingPayment = attendee.status === 'AWAITING_PAYMENT';
-
-        if (allowOrdersAwaitingOfflinePaymentToCheckIn && isAttendeeAwaitingPayment) {
-            setSelectedAttendee(attendee);
-            checkInModalHandlers.open();
-            isProcessingRef.current = false;
-            return;
-        }
-
-        if (!allowOrdersAwaitingOfflinePaymentToCheckIn && isAttendeeAwaitingPayment) {
-            showError(t`You cannot check in attendees with unpaid orders. This setting can be changed in the event settings.`);
-            playErrorSound();
-            isProcessingRef.current = false;
-            return;
-        }
-
-        // Add to processed set before making the request
-        processedBarcodesRef.current.add(attendeePublicId);
-
-        // Clear old entries from the set after 10 seconds
-        setTimeout(() => {
-            processedBarcodesRef.current.delete(attendeePublicId);
-        }, 10000);
-
-        await handleCheckInAction(attendee, 'check-in');
-        isProcessingRef.current = false;
-    }, [attendees, checkInListShortId, allowOrdersAwaitingOfflinePaymentToCheckIn, checkInModalHandlers, handleCheckInAction, playErrorSound]);
-
-
-    // Process completed barcode
-    const processBarcode = useCallback((barcode: string) => {
-        if (barcode.startsWith('A-') && barcode.length > 3) {
-            handleQrCheckIn(barcode);
-        }
-    }, [handleQrCheckIn]);
-
-    // Track page focus
-    useEffect(() => {
-        const handleFocus = () => setPageHasFocus(true);
-        const handleBlur = () => setPageHasFocus(false);
-
-        window.addEventListener('focus', handleFocus);
-        window.addEventListener('blur', handleBlur);
-
-        return () => {
-            window.removeEventListener('focus', handleFocus);
-            window.removeEventListener('blur', handleBlur);
-        };
-    }, []);
-
-    // Global keyboard listener for HID scanner mode
-    useEffect(() => {
-        if (!hidScannerMode) return;
-
-        const handleKeyPress = (e: KeyboardEvent) => {
-            // Ignore if user is typing in an input field
-            if (e.target instanceof HTMLInputElement ||
-                e.target instanceof HTMLTextAreaElement) {
-                return;
-            }
-
-            if (e.key === 'Enter') {
-                // Process the accumulated barcode on Enter
-                if (currentBarcode.length > 0) {
-                    processBarcode(currentBarcode);
-                    setCurrentBarcode('');
-                }
-            } else if (e.key.length === 1) {
-                // Accumulate characters
-                setCurrentBarcode(prev => {
-                    const newBarcode = prev + e.key;
-
-                    // Clear any existing timeout
-                    if (barcodeTimeoutRef.current) {
-                        clearTimeout(barcodeTimeoutRef.current);
-                    }
-
-                    // Set timeout to clear barcode if no more input (scanner stopped)
-                    barcodeTimeoutRef.current = setTimeout(() => {
-                        // Auto-process if it looks like a complete barcode
-                        if (newBarcode.startsWith('A-') && newBarcode.length > 3) {
-                            processBarcode(newBarcode);
-                        }
-                        setCurrentBarcode('');
-                    }, 100);
-
-                    return newBarcode;
-                });
-            }
-        };
-
-        window.addEventListener('keypress', handleKeyPress);
-
-        return () => {
-            window.removeEventListener('keypress', handleKeyPress);
-            if (barcodeTimeoutRef.current) {
-                clearTimeout(barcodeTimeoutRef.current);
-            }
-        };
-    }, [hidScannerMode, currentBarcode, processBarcode]);
+    const tabs: BottomNavTab<CheckInTab>[] = [
+        {id: "scan", label: t`Scan`, icon: <IconQrcode size={22} stroke={1.7}/>},
+        {id: "search", label: t`Search`, icon: <IconSearch size={20} stroke={1.8}/>},
+        {id: "stats", label: t`Stats`, icon: <IconChartBar size={20} stroke={1.8}/>},
+    ];
 
     if (CheckInListQuery.error && (CheckInListQuery.error as any).response?.status === 404) {
         return (
             <NoResultsSplash
                 heading={t`Check-in list not found`}
-                imageHref={'/blank-slate/check-in-lists.svg'}
+                imageHref={"/blank-slate/check-in-lists.svg"}
                 subHeading={(
                     <>
                         <p>
@@ -354,14 +90,14 @@ const CheckIn = () => {
                         </p>
                     </>
                 )}
-            />)
+            />);
     }
 
     if (checkInList?.is_expired) {
         return (
             <NoResultsSplash
                 heading={t`Check-in list has expired`}
-                imageHref={'/blank-slate/check-in-lists.svg'}
+                imageHref={"/blank-slate/check-in-lists.svg"}
                 subHeading={(
                     <>
                         <p>
@@ -371,21 +107,43 @@ const CheckIn = () => {
                         </p>
                     </>
                 )}
-            />)
+            />);
+    }
+
+    if (checkInList?.event_occurrence?.status === EventOccurrenceStatus.CANCELLED) {
+        return (
+            <NoResultsSplash
+                heading={t`Session cancelled`}
+                imageHref={"/blank-slate/check-in-lists.svg"}
+                subHeading={(
+                    <>
+                        <p>
+                            <Trans>
+                                This check-in list is scoped to a session that has been cancelled, so it can no longer be used for check-ins.
+                            </Trans>
+                        </p>
+                        <p>
+                            <Trans>
+                                Create a new check-in list for an active session, or contact the organizer if you think this is a mistake.
+                            </Trans>
+                        </p>
+                    </>
+                )}
+            />);
     }
 
     if (checkInList && !checkInList?.is_active) {
         return (
             <NoResultsSplash
                 heading={t`Check-in list is not active`}
-                imageHref={'/blank-slate/check-in-lists.svg'}
+                imageHref={"/blank-slate/check-in-lists.svg"}
                 subHeading={(
                     <>
                         <p>
                             {t`This check-in list is not yet active and is not available for check-ins.`}
                         </p>
                         <p>
-                            Check-in list will activate in{' '}<br/>
+                            Check-in list will activate in{" "}<br/>
                             <b>
                                 <Countdown
                                     targetDate={checkInList.activates_at as string}
@@ -395,133 +153,130 @@ const CheckIn = () => {
                         </p>
                     </>
                 )}
-            />)
+            />);
     }
 
+    const filteredStats = progressStatsQuery.data?.data;
+    const totalAttendees = filteredStats?.total_attendees ?? checkInList?.total_attendees ?? 0;
+    const checkedInCount = filteredStats?.checked_in_attendees ?? checkInList?.checked_in_attendees ?? 0;
+
     return (
-        <div className={classes.container}>
-            <Header
-                fullWidth
-                rightContent={(
-                    <>
-                        {!networkStatus.online && (
-                            <div className={classes.offline}/>
-                        )}
-                        <ActionIcon
-                            display={'flex'}
-                            variant={'transparent'}
-                            color={'white'}
-                            onClick={() => infoModalHandlers.open()}
-                        >
-                            <IconInfoCircle/>
-                        </ActionIcon>
-                    </>
-                )}/>
-            <HidScannerStatus
-                isActive={hidScannerMode}
-                pageHasFocus={pageHasFocus}
-                onDisable={() => setHidScannerMode(false)}
-            />
-            <div className={classes.header}>
-                <div>
-                    <h4 className={classes.title}>
-                        <Truncate text={checkInList?.name} length={30}/>
-                    </h4>
-                </div>
-                <div className={classes.search}>
-                    <div className={classes.searchBar}>
-                        <SearchBar
-                            className={classes.searchInput}
-                            mb={20}
-                            value={searchQuery}
-                            onChange={(event) => setSearchQuery(event.target.value)}
-                            onClear={() => setSearchQuery('')}
-                            placeholder={t`Search by name, order #, attendee # or email...`}
-                        />
-                        <Button variant={'light'} size={'md'} className={classes.scanButton}
-                                onClick={() => setScannerSelectionOpen(true)} leftSection={<IconQrcode/>}>
-                            {t`Scan`}
-                        </Button>
-                        <ActionIcon 
-                            aria-label={isSoundOn ? t`Turn sound off` : t`Turn sound on`} 
-                            variant={'light'} 
-                            size={'xl'}
-                            onClick={() => setIsSoundOn(!isSoundOn)}
-                        >
-                            {isSoundOn ? <IconVolume size={24}/> : <IconVolumeOff size={24}/>}
-                        </ActionIcon>
-                        <ActionIcon aria-label={t`Scan`} variant={'light'} size={'xl'}
-                                    className={classes.scanIcon}
-                                    onClick={() => setScannerSelectionOpen(true)}>
-                            <IconQrcode size={32}/>
-                        </ActionIcon>
+        <div className={classes.app}>
+            <header className={classes.topBar}>
+                <div className={classes.topBarMain}>
+                    <div className={classes.topLabel}>{t`Check-in`}</div>
+                    <div className={classes.topTitle}>
+                        <Truncate text={checkInList?.name ?? ""} length={26}/>
                     </div>
+                    {checkInList?.event_occurrence && event?.timezone && (
+                        <div className={classes.topScope}>
+                            <IconCalendarEvent size={12}/>
+                            <span>
+                                {formatDateWithLocale(checkInList.event_occurrence.start_date, 'shortDate', event.timezone)}
+                                {' · '}
+                                {formatDateWithLocale(checkInList.event_occurrence.start_date, 'timeOnly', event.timezone)}
+                                {checkInList.event_occurrence.label ? ` · ${checkInList.event_occurrence.label}` : ''}
+                            </span>
+                        </div>
+                    )}
                 </div>
-            </div>
-            <AttendeeList
-                attendees={attendees}
-                products={products}
-                isLoading={attendeesQuery.isFetching}
-                isCheckInPending={checkInMutation.isPending}
-                isDeletePending={deleteCheckInMutation.isPending}
-                allowOrdersAwaitingOfflinePaymentToCheckIn={allowOrdersAwaitingOfflinePaymentToCheckIn || false}
-                onCheckInToggle={handleCheckInToggle}
-                onClickSound={playClickSound}
-            />
-            <CheckInOptionsModal
-                isOpen={checkInModalOpen}
-                attendee={selectedAttendee}
-                isPending={checkInMutation.isPending}
-                onClose={() => {
-                    checkInModalHandlers.close();
-                    setSelectedAttendee(null);
-                }}
-                onCheckIn={(action) => selectedAttendee && handleCheckInAction(selectedAttendee, action)}
-            />
-            <ScannerSelectionModal
-                isOpen={scannerSelectionOpen}
-                isHidScannerActive={hidScannerMode}
-                onClose={() => setScannerSelectionOpen(false)}
-                onCameraSelect={() => {
-                    setScannerSelectionOpen(false);
-                    setQrScannerOpen(true);
-                }}
-                onHidScannerSelect={() => {
-                    setScannerSelectionOpen(false);
-                    if (!hidScannerMode) {
-                        setHidScannerMode(true);
-                    }
-                }}
-            />
-            {qrScannerOpen && (
-                <Modal.Root
-                    opened
-                    onClose={() => setQrScannerOpen(false)}
-                    fullScreen
-                    radius={0}
-                    transitionProps={{transition: 'fade', duration: 200}}
-                    padding={'none'}
-                >
-                    <Modal.Overlay/>
-                    <Modal.Content>
-                        <QRScannerComponent
-                            onAttendeeScanned={handleQrCheckIn}
-                            onClose={() => setQrScannerOpen(false)}
-                            isSoundOn={isSoundOn}
-                        />
-                    </Modal.Content>
-                </Modal.Root>
+                <div className={classes.topRight}>
+                    {totalAttendees > 0 && (
+                        <div className={classes.progressChip} aria-label={t`Check-in progress`}>
+                            <span className={classes.progressValue}>{checkedInCount}</span>
+                            <span className={classes.progressOf}>/{totalAttendees}</span>
+                        </div>
+                    )}
+                    {!networkStatus.online && (
+                        <div className={classes.offlineBadge} aria-label={t`Offline`}>
+                            <IconWifiOff size={14}/>
+                            <span>{t`Offline`}</span>
+                        </div>
+                    )}
+                    <ActionIcon
+                        variant="subtle"
+                        color="gray"
+                        radius="xl"
+                        onClick={() => infoModalHandlers.open()}
+                        aria-label={t`Check-in list info`}
+                        className={classes.infoBtn}
+                    >
+                        <IconInfoCircle size={20}/>
+                    </ActionIcon>
+                </div>
+            </header>
+
+            {controller.showOccurrenceFilter && event?.timezone && (
+                <div className={classes.occurrenceFilterBar}>
+                    <OccurrenceFilterPill
+                        occurrences={controller.pillOccurrences ?? []}
+                        activeOccurrenceId={controller.occurrenceFilter}
+                        timezone={event.timezone}
+                        onSelect={controller.setOccurrenceFilter}
+                    />
+                </div>
             )}
+
+            <main className={classes.content}>
+                {activeTab === "scan" && (
+                    <ScanTab
+                        mode={controller.scanMode}
+                        onModeChange={controller.setScanMode}
+                        hidPageHasFocus={controller.pageHasFocus}
+                        hidBuffer={controller.hidBuffer}
+                        isSoundOn={controller.isSoundOn}
+                        onSoundToggle={controller.toggleSound}
+                        onAttendeeScanned={controller.handleQrCheckIn}
+                        onOpenRecentScan={controller.setDetailAttendeePublicId}
+                        recentScans={controller.recentScans}
+                    />
+                )}
+                {activeTab === "search" && (
+                    <SearchTab
+                        attendees={controller.attendees}
+                        products={controller.products}
+                        searchQuery={controller.searchQuery}
+                        onSearchChange={controller.setSearchQuery}
+                        onCheckInToggle={controller.handleCheckInToggle}
+                        onOpenDetail={controller.setDetailAttendeePublicId}
+                        isLoading={controller.isAttendeesLoading}
+                        isCheckInPending={controller.isCheckInPending}
+                        isDeletePending={controller.isDeletePending}
+                        allowOrdersAwaitingOfflinePaymentToCheckIn={controller.allowOrdersAwaitingOfflinePaymentToCheckIn}
+                        eventType={event?.type as EventType | undefined}
+                        timezone={event?.timezone}
+                        showRowOccurrences={controller.showOccurrenceFilter}
+                    />
+                )}
+                {activeTab === "stats" && (
+                    <StatsTab
+                        checkInListShortId={checkInListShortId}
+                        enabled={!!checkInList?.is_active && !checkInList?.is_expired}
+                        eventOccurrenceId={controller.activeOccurrenceId}
+                    />
+                )}
+            </main>
+
+            <BottomNav tabs={tabs} active={activeTab} onChange={setActiveTab} ariaLabel={t`Check-in navigation`}/>
+
             <CheckInInfoModal
                 isOpen={infoModalOpen}
                 checkInList={checkInList}
                 onClose={infoModalHandlers.close}
             />
-            {/* Audio elements for HID scanner sounds */}
-            <audio ref={scanSuccessAudioRef} src="/sounds/scan-success.wav"/>
-            <audio ref={scanErrorAudioRef} src="/sounds/scan-error.wav"/>
+            <CheckInDescriptionModal
+                isOpen={descriptionModalOpen}
+                description={checkInList?.description}
+                onDismiss={dismissDescription}
+            />
+            <CheckInModals
+                controller={controller}
+                checkInListShortId={checkInListShortId}
+                eventType={event?.type}
+                timezone={event?.timezone}
+            />
         </div>
     );
-}
+};
 
 export default CheckIn;

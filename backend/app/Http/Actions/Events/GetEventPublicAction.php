@@ -2,10 +2,6 @@
 
 namespace HiEvents\Http\Actions\Events;
 
-use HiEvents\DomainObjects\Enums\Role;
-use HiEvents\DomainObjects\EventDomainObject;
-use HiEvents\DomainObjects\Status\EventStatus;
-use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\Event\EventResourcePublic;
 use HiEvents\Services\Application\Handlers\Event\DTO\GetPublicEventDTO;
 use HiEvents\Services\Application\Handlers\Event\GetPublicEventHandler;
@@ -14,14 +10,14 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Psr\Log\LoggerInterface;
 
-class GetEventPublicAction extends BaseAction
+class GetEventPublicAction extends BasePublicEventAction
 {
+    private const MAX_FILTER_IDS = 100;
+
     public function __construct(
         private readonly GetPublicEventHandler $getPublicEventHandler,
-        private readonly LoggerInterface       $logger,
-    )
-    {
-    }
+        private readonly LoggerInterface $logger,
+    ) {}
 
     public function __invoke(int $eventId, Request $request): Response|JsonResponse
     {
@@ -30,11 +26,14 @@ class GetEventPublicAction extends BaseAction
             'ipAddress' => $this->getClientIp($request),
             'promoCode' => strtolower($request->string('promo_code')),
             'isAuthenticated' => $this->isUserAuthenticated(),
+            'eventOccurrenceId' => $request->integer('event_occurrence_id') ?: null,
+            'productIds' => $this->parseIdList($request->query('product_ids')),
+            'productCategoryIds' => $this->parseIdList($request->query('product_category_ids')),
         ]));
 
-        if (!$this->canUserViewEvent($event)) {
+        if (! $this->canUserViewEvent($event)) {
             $this->logger->debug(__('Event with ID :eventId is not live and user is not authenticated', [
-                'eventId' => $eventId
+                'eventId' => $eventId,
             ]));
 
             return $this->notFoundResponse();
@@ -43,24 +42,20 @@ class GetEventPublicAction extends BaseAction
         return $this->resourceResponse(EventResourcePublic::class, $event);
     }
 
-    private function canUserViewEvent(EventDomainObject $event): bool
+    /**
+     * @return int[]
+     */
+    private function parseIdList(mixed $value): array
     {
-        if ($event->getStatus() === EventStatus::LIVE->name) {
-            return true;
-        }
+        $values = is_array($value) ? $value : explode(',', (string) $value);
 
-        if ($this->isUserAuthenticated() && $event->getAccountId() === $this->getAuthenticatedAccountId()) {
-            return true;
-        }
-
-        if ($this->isUserAuthenticated() && $this->getAuthenticatedUserRole() === Role::SUPERADMIN) {
-            $this->logger->debug(__('Superadmin user is viewing non-live event with ID :eventId', [
-                'eventId' => $event->getId(),
-                'accountId' => $this->getAuthenticatedAccountId(),
-            ]));
-            return true;
-        }
-
-        return false;
+        return collect($values)
+            ->filter(static fn ($id) => is_scalar($id) && preg_match('/^\s*\d+\s*$/', (string) $id) === 1)
+            ->map(static fn ($id) => (int) $id)
+            ->filter(static fn (int $id) => $id > 0)
+            ->unique()
+            ->take(self::MAX_FILTER_IDS)
+            ->values()
+            ->all();
     }
 }

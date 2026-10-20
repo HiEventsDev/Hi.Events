@@ -5,9 +5,15 @@ namespace HiEvents\Http\Request\Organizer\Settings;
 use HiEvents\DomainObjects\Enums\AttendeeDetailsCollectionMethod;
 use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
 use HiEvents\DomainObjects\Enums\HomepageFontFamily;
+use HiEvents\DomainObjects\Enums\HomepageSectionType;
 use HiEvents\DomainObjects\Enums\OrganizerHomepageVisibility;
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\Enums\TrackingPixelProvider;
 use HiEvents\Http\Request\BaseRequest;
+use HiEvents\Repository\Interfaces\OrganizerSettingsRepositoryInterface;
+use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
+use HiEvents\Services\Domain\Auth\AuthUserService;
+use HiEvents\Validators\Rules\HomepageSectionRules;
 use HiEvents\Validators\Rules\RulesHelper;
 use Illuminate\Validation\Rule;
 
@@ -18,7 +24,7 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
         return [
             function ($validator) {
                 $pixels = $this->input('tracking_pixels', []);
-                if (!is_array($pixels)) {
+                if (! is_array($pixels)) {
                     return;
                 }
 
@@ -34,11 +40,36 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
                             "tracking_pixels.{$index}.provider",
                             __('Google Tag Manager is not available on hosted plans for security reasons.')
                         );
+
+                        continue;
+                    }
+
+                    if ($provider === TrackingPixelProvider::GOOGLE_TAG_MANAGER
+                        && app(AuthUserService::class)->isApiKeyRequest()
+                        && ! in_array($pixelId, $this->existingTagManagerIds(), true)
+                    ) {
+                        $validator->errors()->add(
+                            "tracking_pixels.{$index}.provider",
+                            __('Google Tag Manager containers can only be added from the dashboard, not with an API key.')
+                        );
+
+                        continue;
+                    }
+
+                    if ($provider === TrackingPixelProvider::GOOGLE_TAG_MANAGER
+                        && app(AccountUserAccessService::class)->isWithheldFromCurrentUser(Permission::MANAGE_ACCOUNT)
+                        && ! in_array($pixelId, $this->existingTagManagerIds(), true)
+                    ) {
+                        $validator->errors()->add(
+                            "tracking_pixels.{$index}.provider",
+                            __('Only account admins can add a Google Tag Manager container.')
+                        );
+
                         continue;
                     }
 
                     if ($provider && $pixelId !== '') {
-                        if (!preg_match($provider->pixelIdPattern(), $pixelId)) {
+                        if (! preg_match($provider->pixelIdPattern(), $pixelId)) {
                             $validator->errors()->add(
                                 "tracking_pixels.{$index}.pixel_id",
                                 $provider->pixelIdFormatDescription()
@@ -47,8 +78,8 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
                     }
                 }
 
-                $enabledPixels = collect($pixels)->filter(fn ($p) => !empty($p['enabled']));
-                if ($enabledPixels->isNotEmpty() && !$this->input('tracking_consent_acknowledged')) {
+                $enabledPixels = collect($pixels)->filter(fn ($p) => ! empty($p['enabled']));
+                if ($enabledPixels->isNotEmpty() && ! $this->input('tracking_consent_acknowledged')) {
                     $validator->errors()->add(
                         'tracking_consent_acknowledged',
                         __('You must acknowledge your data controller responsibilities before enabling tracking pixels.')
@@ -74,6 +105,7 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
             'linkedin_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
             'discord_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
             'tiktok_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'bluesky_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
             'youtube_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
             'snapchat_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
             'twitch_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
@@ -92,16 +124,6 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
 
             'website_url' => ['sometimes', 'nullable', 'url'],
 
-            // Location details
-            'location_details' => ['sometimes', 'array'],
-            'location_details.venue_name' => ['sometimes', 'nullable', 'string', 'max:255'],
-            'location_details.address_line_1' => ['sometimes', 'nullable', 'string', 'max:255'],
-            'location_details.address_line_2' => ['sometimes', 'nullable', 'string', 'max:255'],
-            'location_details.city' => ['sometimes', 'nullable', 'string', 'max:85'],
-            'location_details.state_or_region' => ['sometimes', 'nullable', 'string', 'max:85'],
-            'location_details.zip_or_postal_code' => ['sometimes', 'nullable', 'string', 'max:85'],
-            'location_details.country' => ['sometimes', 'nullable', 'string', 'max:2'],
-
             // Homepage
             'homepage_visibility' => ['nullable', Rule::in(OrganizerHomepageVisibility::valuesArray())],
 
@@ -112,6 +134,7 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
             'homepage_theme_settings.mode' => ['nullable', 'string', Rule::in(['light', 'dark'])],
             'homepage_theme_settings.background_type' => ['nullable', 'string', Rule::in(HomepageBackgroundType::valuesArray())],
             'homepage_theme_settings.font_family' => ['nullable', 'string', Rule::in(HomepageFontFamily::valuesArray())],
+            ...HomepageSectionRules::rules(HomepageSectionType::organizerValues()),
 
             // SEO
             'seo_keywords' => ['sometimes', 'nullable', 'string', 'max:255'],
@@ -128,6 +151,29 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
             'tracking_pixels.*.pixel_id' => ['required', 'string', 'max:50', 'regex:/^[a-zA-Z0-9\-_]+$/'],
             'tracking_pixels.*.enabled' => ['required', 'boolean'],
             'tracking_consent_acknowledged' => ['sometimes', 'nullable', 'boolean'],
+
+            'first_day_of_week' => ['sometimes', 'integer', 'between:0,6'],
         ];
+    }
+
+    public function messages(): array
+    {
+        return HomepageSectionRules::messages();
+    }
+
+    /**
+     * @return string[]
+     */
+    private function existingTagManagerIds(): array
+    {
+        $pixels = app(OrganizerSettingsRepositoryInterface::class)
+            ->findFirstWhere(['organizer_id' => (int) $this->route('organizer_id')])
+            ?->getTrackingPixels();
+
+        return collect(is_string($pixels) ? json_decode($pixels, true) : $pixels)
+            ->filter(fn ($pixel) => is_array($pixel) && ($pixel['provider'] ?? null) === TrackingPixelProvider::GOOGLE_TAG_MANAGER->value)
+            ->map(fn (array $pixel) => (string) ($pixel['pixel_id'] ?? ''))
+            ->values()
+            ->all();
     }
 }

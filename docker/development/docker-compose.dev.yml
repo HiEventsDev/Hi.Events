@@ -109,8 +109,11 @@ services:
             POSTGRES_DB: '${DB_DATABASE}'
             POSTGRES_USER: '${DB_USERNAME}'
             POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
+            TEST_DB_NAME: '${TEST_DB_NAME:-hievents_test}'
         volumes:
             - 'app-pgsql:/var/lib/postgresql/data'
+            # Init scripts run once on a fresh data volume — creates hievents_test.
+            - './pgsql-init:/docker-entrypoint-initdb.d:ro'
         networks:
             - app
         healthcheck:

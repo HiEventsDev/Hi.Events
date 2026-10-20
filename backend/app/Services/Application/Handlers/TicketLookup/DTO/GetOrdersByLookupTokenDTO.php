@@ -8,6 +8,5 @@ class GetOrdersByLookupTokenDTO extends BaseDataObject
 {
     public function __construct(
         public readonly string $token,
-    ) {
-    }
+    ) {}
 }

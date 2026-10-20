@@ -1,64 +1,93 @@
 import {PageBody} from "../../../common/PageBody";
+import {CreateButton} from "../../../common/CreateButton";
 import {PageTitle} from "../../../common/PageTitle";
-import {t} from "@lingui/macro";
+import {t, Trans} from "@lingui/macro";
 import {useParams} from "react-router";
 import {TableSkeleton} from "../../../common/TableSkeleton";
 import {useDisclosure} from "@mantine/hooks";
-import {ToolBar} from "../../../common/ToolBar";
-import {SearchBarWrapper} from "../../../common/SearchBar";
-import {Button} from "@mantine/core";
-import {IconPlus} from "@tabler/icons-react";
+import {ActionIcon, Button, Tooltip} from "@mantine/core";
+import {IconCopy, IconPlus, IconQrcode} from "@tabler/icons-react";
 import {useFilterQueryParamSync} from "../../../../hooks/useFilterQueryParamSync.ts";
 import {QueryFilters} from "../../../../types.ts";
 import {Pagination} from "../../../common/Pagination";
 import {useGetEventCheckInLists} from "../../../../queries/useGetCheckInLists.ts";
-import {CheckInListList} from "../../../common/CheckInListList";
+import {useGetEvent} from "../../../../queries/useGetEvent.ts";
+import {CheckInListTable, checkInListUrl, copyCheckInListLink} from "../../../common/CheckInListTable";
 import {CreateCheckInListModal} from "../../../modals/CreateCheckInListModal";
+import {Callout} from "../../../common/Callout";
+import classes from "./CheckInLists.module.scss";
 
 const CheckInLists = () => {
     const {eventId} = useParams();
+    const {data: event} = useGetEvent(eventId);
     const [searchParams, setSearchParams] = useFilterQueryParamSync();
-    const {data: checkInListsData} = useGetEventCheckInLists(
+    const checkInListsQuery = useGetEventCheckInLists(
         eventId,
         searchParams as QueryFilters,
     );
-    const checkInLists = checkInListsData?.data;
-    const pagination = checkInListsData?.meta;
+    const checkInLists = checkInListsQuery?.data?.data;
+    const pagination = checkInListsQuery?.data?.meta;
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
+    const defaultCheckInList = checkInLists?.find(checkInList => checkInList.is_system_default);
 
     return (
         <PageBody>
             <PageTitle
-                subheading={t`Set up check-in lists for different entrances, sessions, or days.`}
+                subheading={t`Scan tickets at the door with a phone, tablet, or USB scanner.`}
             >
                 {t`Check-In Lists`}
             </PageTitle>
 
-            <ToolBar searchComponent={() => (
-                <SearchBarWrapper
-                    placeholder={t`Search check-in lists...`}
-                    setSearchParams={setSearchParams}
-                    searchParams={searchParams}
-                    pagination={pagination}
-                />
-            )}>
+            <Callout variant="info" title={t`Every event has a check-in list`}>
+                <Trans>
+                    Door staff open the check-in link on any device — no account needed. Treat the link like a shared
+                    password. Add more check-in lists to split entry by entrance, date, or ticket type.
+                </Trans>
+            </Callout>
+
+            <div className={classes.actions}>
                 <Button
-                    leftSection={<IconPlus/>}
+                    leftSection={<IconQrcode/>}
                     color={'green'}
-                    onClick={openCreateModal}>{t`Create Check-In List`}
+                    size={'sm'}
+                    disabled={!defaultCheckInList}
+                    data-testid="check-in-open-default-button"
+                    onClick={() => defaultCheckInList
+                        && window.open(checkInListUrl(defaultCheckInList.short_id), '_blank')}
+                >
+                    {t`Open Check-In`}
                 </Button>
-            </ToolBar>
+                <Tooltip label={t`Copy check-in link`}>
+                    <ActionIcon
+                        variant="light"
+                        size="lg"
+                        disabled={!defaultCheckInList}
+                        aria-label={t`Copy check-in link`}
+                        onClick={() => defaultCheckInList && copyCheckInListLink(defaultCheckInList.short_id)}
+                    >
+                        <IconCopy size={18}/>
+                    </ActionIcon>
+                </Tooltip>
+                <CreateButton
+                    leftSection={<IconPlus/>}
+                    variant={'light'}
+                    size={'sm'}
+                    data-testid="checkin-list-create-button"
+                    onClick={openCreateModal}>{t`Create Check-In List`}
+                </CreateButton>
+            </div>
 
-            <TableSkeleton isVisible={!checkInLists}/>
+            <TableSkeleton isVisible={!checkInLists || checkInListsQuery.isFetching}/>
 
-            {checkInLists && <CheckInListList
+            {checkInLists && <CheckInListTable
                 checkInLists={checkInLists}
                 openCreateModal={openCreateModal}
+                event={event}
             />}
 
             {createModalOpen && <CreateCheckInListModal onClose={closeCreateModal}/>}
 
-            {(!!checkInLists?.length && (pagination?.total || 0) >= 20) && (
+            {!!checkInLists?.length && (
                 <Pagination value={searchParams.pageNumber}
                             onChange={(value) => setSearchParams({pageNumber: value})}
                             total={Number(pagination?.last_page)}

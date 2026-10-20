@@ -1,11 +1,11 @@
 <x-mail::layout>
     {{-- Header --}}
     <x-slot:header>
-@php
+        @php
             $logoPath = null;
             $organizerName = null;
             $organizerId = null;
-            
+
             // 1. Resolve organizer ID from active variables or fallback request contexts
             if (isset($event) && $event->organizer) {
                 $organizerId = $event->organizer->id;
@@ -29,19 +29,19 @@
                     $dbOrg = \DB::table('organizers')->where('id', $organizerId)->first();
                     $organizerName = $dbOrg->name ?? null;
                 }
-                
+
                 $dbImage = \DB::table('images')
                     ->where('entity_id', $organizerId)
                     ->where('entity_type', 'HiEvents\DomainObjects\OrganizerDomainObject')
                     ->first();
-                    
+
                 if ($dbImage) {
                     $logoPath = $dbImage->path;
                 }
             }
         @endphp
 
-        <x-mail::header :url="config('app.frontend_url')">
+        <x-mail::header :url="config('app.email_logo_link_url', config('app.frontend_url'))">
             @if($logoPath)
                 {{-- Render the true dynamic tenant organizer logo asset link --}}
                 <img src="{{ config('app.frontend_url') }}/storage/{{ $logoPath }}" class="logo" alt="{{ $organizerName }}" style="max-width: 300px;">
@@ -49,8 +49,7 @@
                 {{-- Fallback to global setting --}}
                 <img src="{{ $appLogo }}" class="logo" alt="{{ config('app.name') }}" style="max-width: 300px;">
             @else
-                {{-- Clean fallback typography --}}
-		<h2 style="margin:0; font-family: sans-serif; color: #333333;">{{ $organizerName ?? env('VITE_APP_NAME', 'Hi.Events') }}</h2>
+                <img src="{{ config('app.frontend_url') }}/logos/hi-events-stacked-light.png" class="logo" alt="{{ config('app.name') }}">
             @endif
         </x-mail::header>
     </x-slot:header>
@@ -72,14 +71,9 @@
         <x-mail::footer>
             @if($appEmailFooter = config('app.email_footer_text'))
                 {{ $appEmailFooter }}
+            @elseif(app(\HiEvents\Enterprise\Licensing\LicenceService::class)->allows(\HiEvents\Enterprise\Licensing\LicensedFeature::WHITE_LABEL))
+                © {{ date('Y') }} {{ config('app.name') }}
             @else
-                {{-- (c) Hi.Events Ltd 2025 --}}
-                {{-- PLEASE NOTE: --}}
-                {{-- Hi.Events is licensed under the GNU Affero General Public License (AGPL) version 3. --}}
-                {{-- You can find the full license text at: https://github.com/HiEventsDev/hi.events/blob/main/LICENSE --}}
-                {{-- In accordance with Section 7(b) of the AGPL, we ask that you retain the "Powered by Hi.Events" notice. --}}
-                {{-- If you wish to remove this notice, a commercial license is available at: https://hi.events/licensing --}}
-
                 © {{ date('Y') }} {{ config('app.name') }} | Powered by <a title="Manage events and sell tickets online with Hi.Events" href="https://hi.events?utm_source=app-email-footer">Hi.Events</a>
             @endif
         </x-mail::footer>

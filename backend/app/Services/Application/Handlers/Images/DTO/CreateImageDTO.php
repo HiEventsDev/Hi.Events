@@ -8,14 +8,12 @@ use Illuminate\Http\UploadedFile;
 class CreateImageDTO
 {
     public function __construct(
-        public readonly int          $userId,
-        public readonly int          $accountId,
+        public readonly int $userId,
+        public readonly int $accountId,
         public readonly UploadedFile $image,
-        public readonly ?ImageType   $imageType = null,
-        public readonly ?int         $entityId = null,
-    )
-    {
-    }
+        public readonly ?ImageType $imageType = null,
+        public readonly ?int $entityId = null,
+    ) {}
 
     public function isGeneric(): bool
     {

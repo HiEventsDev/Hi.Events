@@ -9,8 +9,7 @@ class PreviewEmailTemplateHandler
 {
     public function __construct(
         private readonly EmailTemplateService $emailTemplateService
-    ) {
-    }
+    ) {}
 
     public function handle(PreviewEmailTemplateDTO $dto): array
     {

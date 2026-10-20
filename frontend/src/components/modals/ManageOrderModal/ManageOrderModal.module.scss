@@ -1,18 +1,29 @@
 @use "../../../styles/mixins";
 
-.container {
-  padding: 0.5rem;
+.reference {
+    font-family: var(--mantine-font-family-monospace);
+    letter-spacing: 0;
 }
 
-.header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-  padding: 0 0.5rem;
+.separator {
+    color: var(--mantine-color-gray-4);
 }
 
-.orderInfo {
-  display: flex;
-  flex-direction: column;
+.separator,
+.email {
+    @include mixins.respond-below(sm) {
+        display: none;
+    }
+}
+
+.actions {
+    padding-top: var(--mantine-spacing-md);
+}
+
+.form {
+    padding-top: var(--mantine-spacing-lg);
+}
+
+.notes {
+    white-space: pre-line;
 }

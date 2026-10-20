@@ -2,7 +2,10 @@
 
 namespace HiEvents\Services\Application\Handlers\Attendee;
 
+use HiEvents\DomainObjects\EventLocationDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
@@ -19,13 +22,11 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 readonly class ResendAttendeeTicketHandler
 {
     public function __construct(
-        private SendAttendeeTicketService   $sendAttendeeProductService,
+        private SendAttendeeTicketService $sendAttendeeProductService,
         private AttendeeRepositoryInterface $attendeeRepository,
-        private EventRepositoryInterface    $eventRepository,
-        private LoggerInterface             $logger,
-    )
-    {
-    }
+        private EventRepositoryInterface $eventRepository,
+        private LoggerInterface $logger,
+    ) {}
 
     /**
      * @throws ResourceConflictException
@@ -36,22 +37,40 @@ readonly class ResendAttendeeTicketHandler
             ->loadRelation(new Relationship(OrderDomainObject::class, nested: [
                 new Relationship(OrderItemDomainObject::class),
             ], name: 'order'))
+            ->loadRelation(new Relationship(
+                domainObject: EventOccurrenceDomainObject::class,
+                nested: [
+                    new Relationship(domainObject: EventLocationDomainObject::class, nested: [
+                        new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                    ], name: 'event_location'),
+                ],
+                name: 'event_occurrence',
+            ))
             ->findFirstWhere([
                 'id' => $resendAttendeeProductDTO->attendeeId,
                 'event_id' => $resendAttendeeProductDTO->eventId,
             ]);
 
-        if (!$attendee) {
-            throw new ResourceNotFoundException();
+        if (! $attendee) {
+            throw new ResourceNotFoundException;
         }
 
         if ($attendee->getStatus() !== AttendeeStatus::ACTIVE->name) {
-            throw new ResourceConflictException('You cannot resend the ticket of an inactive attendee');
+            throw new ResourceConflictException(__('You cannot resend the ticket of an inactive attendee'));
+        }
+
+        if ($attendee->getEmail() === null) {
+            throw new ResourceConflictException(
+                __('This attendee has no email address. Add one before resending the ticket.')
+            );
         }
 
         $event = $this->eventRepository
             ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
             ->loadRelation(EventSettingDomainObject::class)
+            ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, nested: [
+                new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+            ], name: 'event_location'))
             ->findById($resendAttendeeProductDTO->eventId);
 
         $this->sendAttendeeProductService->send(
@@ -64,7 +83,7 @@ readonly class ResendAttendeeTicketHandler
 
         $this->logger->info('Attendee ticket resent', [
             'attendeeId' => $resendAttendeeProductDTO->attendeeId,
-            'eventId' => $resendAttendeeProductDTO->eventId
+            'eventId' => $resendAttendeeProductDTO->eventId,
         ]);
     }
 }

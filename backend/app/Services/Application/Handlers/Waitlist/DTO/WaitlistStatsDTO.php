@@ -15,7 +15,5 @@ class WaitlistStatsDTO extends BaseDataObject
         public int $expired,
         /** @var WaitlistProductStatsDTO[] */
         public array $products = [],
-    )
-    {
-    }
+    ) {}
 }

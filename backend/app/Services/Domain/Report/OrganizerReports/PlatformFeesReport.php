@@ -16,20 +16,19 @@ class PlatformFeesReport
     private const CACHE_TTL_SECONDS = 30;
 
     public function __construct(
-        private readonly Repository                   $cache,
-        private readonly DatabaseManager              $queryBuilder,
+        private readonly Repository $cache,
+        private readonly DatabaseManager $queryBuilder,
         private readonly OrganizerRepositoryInterface $organizerRepository,
-    ) {
-    }
+    ) {}
 
     public function generateReport(
-        int     $organizerId,
+        int $organizerId,
         ?string $currency = null,
         ?Carbon $startDate = null,
         ?Carbon $endDate = null,
-        ?int    $eventId = null,
-        int     $page = 1,
-        int     $perPage = 1000,
+        ?int $eventId = null,
+        int $page = 1,
+        int $perPage = 1000,
     ): PaginatedReportDTO {
         $organizer = $this->organizerRepository->findById($organizerId);
         $timezone = $organizer->getTimezone();
@@ -44,15 +43,15 @@ class PlatformFeesReport
         $cacheKey = $this->getCacheKeyWithEvent($organizerId, $currency, $startDate, $endDate, $eventId, $page, $perPage);
 
         $total = $this->cache->remember(
-            key: $cacheKey . '.count',
+            key: $cacheKey.'.count',
             ttl: Carbon::now()->addSeconds(self::CACHE_TTL_SECONDS),
-            callback: fn() => $this->getCount($organizerId, $startDate, $endDate, $currency, $eventId)
+            callback: fn () => $this->getCount($organizerId, $startDate, $endDate, $currency, $eventId)
         );
 
         $results = $this->cache->remember(
             key: $cacheKey,
             ttl: Carbon::now()->addSeconds(self::CACHE_TTL_SECONDS),
-            callback: fn() => $this->queryBuilder->select(
+            callback: fn () => $this->queryBuilder->select(
                 $this->buildSqlQuery($startDate, $endDate, $currency, $eventId, $page, $perPage),
                 [
                     'organizer_id' => $organizerId,
@@ -179,12 +178,13 @@ SQL;
         if ($eventId === null) {
             return '';
         }
+
         return "AND e.id = $eventId";
     }
 
     private function getCacheKeyWithEvent(int $organizerId, ?string $currency, ?Carbon $startDate, ?Carbon $endDate, ?int $eventId, int $page, int $perPage): string
     {
-        return static::class . "$organizerId.$currency.{$startDate?->toDateString()}.{$endDate?->toDateString()}.$eventId.$page.$perPage";
+        return static::class."$organizerId.$currency.{$startDate?->toDateString()}.{$endDate?->toDateString()}.$eventId.$page.$perPage";
     }
 
     private function buildCurrencyFilter(string $column, ?string $currency): string
@@ -193,6 +193,7 @@ SQL;
             return '';
         }
         $escapedCurrency = addslashes($currency);
+
         return "AND $column = '$escapedCurrency'";
     }
 }

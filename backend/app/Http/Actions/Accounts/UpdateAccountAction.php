@@ -2,14 +2,16 @@
 
 namespace HiEvents\Http\Actions\Accounts;
 
-use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\RequiresPermission;
 use HiEvents\Http\Request\Account\UpdateAccountRequest;
 use HiEvents\Resources\Account\AccountResource;
 use HiEvents\Services\Application\Handlers\Account\DTO\UpdateAccountDTO;
 use HiEvents\Services\Application\Handlers\Account\UpdateAccountHanlder;
 use Illuminate\Http\JsonResponse;
 
+#[RequiresPermission(Permission::MANAGE_ACCOUNT)]
 class UpdateAccountAction extends BaseAction
 {
     private UpdateAccountHanlder $updateAccountHandler;
@@ -21,8 +23,6 @@ class UpdateAccountAction extends BaseAction
 
     public function __invoke(UpdateAccountRequest $request): JsonResponse
     {
-        $this->minimumAllowedRole(Role::ADMIN);
-
         $authUser = $this->getAuthenticatedUser();
 
         $payload = array_merge($request->validated(), [

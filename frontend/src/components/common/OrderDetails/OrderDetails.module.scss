@@ -1,31 +1,32 @@
 @use "../../../styles/mixins";
 
 .orderDetails {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--mantine-spacing-xl);
+  row-gap: var(--mantine-spacing-md);
 
-  .block {
-    width: 50%;
-    margin-bottom: var(--hi-spacing-md);
+  @include mixins.respond-below(sm) {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  @include mixins.respond-below(md) {
-    flex-direction: column;
-    flex-wrap: nowrap;
-
-    .block {
-      margin-bottom: 10px;
-      width: auto;
-
-      &:last-of-type {
-        margin-bottom: 0;
-      }
-    }
+  .block {
+    min-width: 0;
   }
 
   .title {
-    font-weight: bold;
+    font-size: var(--mantine-font-size-xs);
+    font-weight: 400;
+    color: var(--mantine-color-dimmed);
+    margin-bottom: 3px;
+  }
+
+  .amount,
+  .value {
+    font-size: var(--mantine-font-size-sm);
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--mantine-color-text);
+    overflow-wrap: anywhere;
   }
 }

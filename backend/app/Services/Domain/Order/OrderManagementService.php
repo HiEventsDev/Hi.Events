@@ -10,6 +10,7 @@ use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\DomainObjects\WidgetDomainObject;
 use HiEvents\Helper\IdHelper;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\Tax\TaxAndFeeOrderRollupService;
@@ -18,11 +19,9 @@ use Illuminate\Support\Collection;
 class OrderManagementService
 {
     public function __construct(
-        readonly private OrderRepositoryInterface    $orderRepository,
-        readonly private TaxAndFeeOrderRollupService $taxAndFeeOrderRollupService,
-    )
-    {
-    }
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly TaxAndFeeOrderRollupService $taxAndFeeOrderRollupService,
+    ) {}
 
     public function deleteExistingOrders(int $eventId, string $sessionId): void
     {
@@ -34,15 +33,15 @@ class OrderManagementService
     }
 
     public function createNewOrder(
-        int                    $eventId,
-        EventDomainObject      $event,
-        int                    $timeOutMinutes,
-        string                 $locale,
+        int $eventId,
+        EventDomainObject $event,
+        int $timeOutMinutes,
+        string $locale,
         ?PromoCodeDomainObject $promoCode,
         ?AffiliateDomainObject $affiliate = null,
-        ?string                $sessionId = null,
-    ): OrderDomainObject
-    {
+        ?string $sessionId = null,
+        ?WidgetDomainObject $widget = null,
+    ): OrderDomainObject {
         $reservedUntil = Carbon::now()->addMinutes($timeOutMinutes);
 
         return $this->orderRepository->create([
@@ -56,6 +55,7 @@ class OrderManagementService
             'promo_code_id' => $promoCode?->getId(),
             'promo_code' => $promoCode?->getCode(),
             'affiliate_id' => $affiliate?->getId(),
+            'widget_id' => $widget?->getId(),
             'locale' => $locale,
         ]);
     }
@@ -64,9 +64,7 @@ class OrderManagementService
      * Update order totals by summing up all order items.
      * Platform fee and its tax are included at the item level.
      *
-     * @param OrderDomainObject $order
-     * @param Collection<OrderItemDomainObject> $orderItems
-     * @return OrderDomainObject
+     * @param  Collection<OrderItemDomainObject>  $orderItems
      */
     public function updateOrderTotals(OrderDomainObject $order, Collection $orderItems): OrderDomainObject
     {

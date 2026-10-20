@@ -20,6 +20,9 @@ class AuthenticatedResponseResource extends JsonResource
             'expires_in' => $this->expiresIn,
             'user' => new UserResource($this->user),
             'accounts' => AccountResource::collection($this->accounts),
+            $this->mergeWhen($this->recoveryCodesRemaining !== null, fn () => [
+                'two_factor_recovery_codes_remaining' => $this->recoveryCodesRemaining,
+            ]),
         ];
     }
 }

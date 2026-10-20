@@ -4,13 +4,13 @@ import {useEffect, useState} from "react";
 import {showSuccess} from "../../../../../../utilites/notifications.tsx";
 import {useGetOrganizerSettings} from "../../../../../../queries/useGetOrganizerSettings.ts";
 import {useUpdateOrganizerSettings} from "../../../../../../mutations/useUpdateOrganizerSettings.ts";
-import {useGetAccount} from "../../../../../../queries/useGetAccount.ts";
+import {useGetOrganizer} from "../../../../../../queries/useGetOrganizer.ts";
 import {PlatformFeesSettings as PlatformFeesSettingsBase} from "../../../../../common/PlatformFeesSettings";
 
 export const PlatformFeesSettings = () => {
     const {organizerId} = useParams();
     const organizerSettingsQuery = useGetOrganizerSettings(organizerId);
-    const accountQuery = useGetAccount();
+    const organizerQuery = useGetOrganizer(organizerId);
     const updateMutation = useUpdateOrganizerSettings();
     const [currentValue, setCurrentValue] = useState(false);
 
@@ -34,7 +34,7 @@ export const PlatformFeesSettings = () => {
 
     return (
         <PlatformFeesSettingsBase
-            configuration={accountQuery.data?.configuration}
+            configuration={organizerQuery.data?.configuration}
             currentValue={currentValue}
             onSave={handleSave}
             isLoading={organizerSettingsQuery.isLoading}

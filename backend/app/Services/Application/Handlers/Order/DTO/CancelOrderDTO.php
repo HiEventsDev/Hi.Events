@@ -10,7 +10,5 @@ class CancelOrderDTO extends BaseDTO
         public int $eventId,
         public int $orderId,
         public bool $refund = false
-    )
-    {
-    }
+    ) {}
 }

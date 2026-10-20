@@ -13,19 +13,16 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 class SendOrganizerContactMessageHandler
 {
     public function __construct(
-        private readonly Mailer                       $mailer,
+        private readonly Mailer $mailer,
         private readonly OrganizerRepositoryInterface $organizerRepository,
-        private readonly HtmlPurifierService          $purifier,
-    )
-    {
-    }
+        private readonly HtmlPurifierService $purifier,
+    ) {}
 
     public function handle(SendOrganizerContactMessageDTO $dto): void
     {
         $organizer = $this->organizerRepository->findById($dto->organizer_id);
 
-        // Don't allow people to contact organizers that are not live, except for the organizer's own account
-        if ($organizer->getStatus() !== OrganizerStatus::LIVE->value && $dto->account_id !== $organizer->getAccountId()) {
+        if ($organizer->getStatus() !== OrganizerStatus::LIVE->value) {
             throw new ResourceNotFoundException(__('Organizer not found'));
         }
 

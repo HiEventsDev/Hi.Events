@@ -12,7 +12,7 @@ class UserDomainObject extends Generated\UserDomainObjectAbstract
 
     public function getFullName(): string
     {
-        return $this->getFirstName() . ' ' . $this->getLastName();
+        return $this->getFirstName().' '.$this->getLastName();
     }
 
     public function setPendingEmail(?string $pending_email): Generated\UserDomainObjectAbstract

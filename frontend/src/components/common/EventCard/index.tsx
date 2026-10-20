@@ -1,5 +1,6 @@
 import {ActionIcon, Tooltip} from '@mantine/core';
-import {Event, IdParam, Product} from "../../../types.ts";
+import {useAccess} from "../../../hooks/useAccess.ts";
+import {Event, EventType, IdParam, LocationType, Product} from "../../../types.ts";
 import classes from "./EventCard.module.scss";
 import {NavLink, useNavigate} from "react-router";
 import {
@@ -7,6 +8,8 @@ import {
     IconCopy,
     IconDotsVertical,
     IconEye,
+    IconArmchair,
+    IconRepeat,
     IconSettings,
 } from "@tabler/icons-react";
 import {t} from "@lingui/macro"
@@ -20,8 +23,10 @@ import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {useUpdateEventStatus} from "../../../mutations/useUpdateEventStatus.ts";
 import {formatCurrency} from "../../../utilites/currency.ts";
 import {formatNumber} from "../../../utilites/helpers.ts";
-import {formatDateWithLocale, relativeDate} from "../../../utilites/dates.ts";
+import {formatDateWithLocale, isValidDate, relativeDate} from "../../../utilites/dates.ts";
 import {Card} from "../Card";
+import {summariseEventLocations} from "../../../utilites/effectiveLocation.ts";
+import {formatAddress} from "../../../utilites/addressUtilities.ts";
 
 const placeholderGradients = [
     'linear-gradient(135deg, var(--mantine-color-violet-5) 0%, var(--mantine-color-indigo-5) 100%)',
@@ -36,10 +41,12 @@ const placeholderGradients = [
 
 interface EventCardProps {
     event: Event;
+    compact?: boolean;
 }
 
-export function EventCard({event}: EventCardProps) {
+export function EventCard({event, compact = false}: EventCardProps) {
     const navigate = useNavigate();
+    const access = useAccess();
     const [isDuplicateModalOpen, duplicateModal] = useDisclosure(false);
     const [eventId, setEventId] = useState<IdParam>();
     const statusToggleMutation = useUpdateEventStatus();
@@ -54,6 +61,11 @@ export function EventCard({event}: EventCardProps) {
     }
 
     const handleStatusToggle = () => {
+        if (event?.status === 'PENDING_MANUAL_REVIEW') {
+            showError(t`This event is pending manual review and its status cannot be changed until the review is complete.`);
+            return;
+        }
+
         const message = event?.status !== 'ARCHIVED'
             ? t`Are you sure you want to archive this event?`
             : t`Are you sure you want to restore this event? It will be restored as a draft event.`;
@@ -75,26 +87,35 @@ export function EventCard({event}: EventCardProps) {
 
     const getStatusConfig = () => {
         if (event.status === 'ARCHIVED') {
-            return {label: t`Archived`, status: 'archived'};
+            return {label: t`Archived`, status: 'archived', tone: 'muted'};
         }
         if (event.lifecycle_status === 'ENDED') {
-            return {label: t`Ended`, status: 'ended'};
+            return {label: t`Ended`, status: 'ended', tone: 'muted'};
+        }
+        if (event.status === 'PENDING_MANUAL_REVIEW') {
+            return {label: t`Pending Review`, status: 'draft', tone: 'warning'};
         }
         if (event.status === 'DRAFT') {
-            return {label: t`Draft`, status: 'draft'};
+            return {label: t`Draft`, status: 'draft', tone: 'warning'};
         }
         if (event.lifecycle_status === 'ONGOING') {
-            return {label: t`Live`, status: 'live', pulse: true};
+            return {label: t`Live`, status: 'live', tone: 'success', pulse: true};
         }
-        return {label: t`On Sale`, status: 'onsale'};
+        return {label: t`On Sale`, status: 'onsale', tone: 'success'};
     };
 
     const getLocationText = () => {
-        if (event.settings?.is_online_event) return t`Online`;
-        const location = event.settings?.location_details;
-        if (location?.venue_name) return location.venue_name;
-        if (location?.city) return location.city;
-        return null;
+        const locationSummary = summariseEventLocations(event);
+        if (locationSummary.kind === 'none') return null;
+        if (locationSummary.kind === 'varied') {
+            return locationSummary.types.length > 1 ? t`Online & in-person` : t`Multiple locations`;
+        }
+        const eventLocation = locationSummary.eventLocation;
+        if (eventLocation.type === LocationType.Online) return t`Online`;
+        const city = eventLocation.location?.structured_address?.city;
+        const venueName = eventLocation.location?.name || eventLocation.location?.structured_address?.venue_name;
+        const formatted = eventLocation.location?.structured_address ? formatAddress(eventLocation.location.structured_address) : '';
+        return venueName ?? city ?? (formatted ? formatted : null);
     };
 
     const getTicketAvailability = () => {
@@ -141,22 +162,22 @@ export function EventCard({event}: EventCardProps) {
                     label: t`Duplicate event`,
                     icon: <IconCopy size={14}/>,
                     onClick: handleDuplicate,
+                    dataTestId: 'event-duplicate-menu-item',
+                    visible: !access.isReadOnly && access.canManageOrganizer(event.organizer_id),
                 },
                 {
                     label: event?.status === 'ARCHIVED' ? t`Restore event` : t`Archive event`,
                     icon: <IconArchive size={14}/>,
                     onClick: handleStatusToggle,
+                    visible: !access.isReadOnly,
                 },
             ],
         },
     ];
 
-    const monthShort = formatDateWithLocale(event.start_date, 'monthShort', event.timezone);
-    const dayOfMonth = formatDateWithLocale(event.start_date, 'dayOfMonth', event.timezone);
-    const shortDateTime = formatDateWithLocale(event.start_date, 'shortDateTime', event.timezone);
-    const relativeDateStr = relativeDate(event.start_date);
     const locationText = getLocationText();
 
+    const canViewFinancials = access.can('VIEW_FINANCIALS');
     const revenue = event?.statistics?.sales_total_gross || 0;
     const attendees = event?.statistics?.attendees_registered || 0;
 
@@ -165,6 +186,116 @@ export function EventCard({event}: EventCardProps) {
 
     const isEnded = event.lifecycle_status === 'ENDED';
     const isDraft = event.status === 'DRAFT';
+    const isRecurring = event.type === EventType.RECURRING;
+    const isSeated = event.has_seat_map === true;
+
+    const displayDate = (isRecurring && event.next_occurrence_start_date) || event.start_date;
+    const hasDate = isValidDate(displayDate);
+    const monthShort = formatDateWithLocale(displayDate, 'monthShort', event.timezone);
+    const dayOfMonth = formatDateWithLocale(displayDate, 'dayOfMonth', event.timezone);
+    const shortDateTime = formatDateWithLocale(displayDate, 'shortDateTime', event.timezone);
+    const relativeDateStr = relativeDate(displayDate);
+
+    if (compact) {
+        return (
+            <>
+                <div className={`${classes.eventCardCompact} ${isEnded ? classes.isEnded : ''} ${isDraft ? classes.isDraft : ''}`}>
+                    <NavLink to={`/manage/event/${event.id}/dashboard`} className={classes.cardLinkCompact}>
+                        <div className={classes.compactThumb}>
+                            <div
+                                className={`${classes.compactImage} ${!coverImage ? classes.placeholderImage : ''}`}
+                                style={coverImage
+                                    ? {backgroundImage: `url(${coverImage.url})`}
+                                    : {background: placeholderGradient}
+                                }
+                            />
+                            {hasDate && (
+                                <div className={`${classes.compactDateBadge}`}>
+                                    <span className={classes.compactDateDay}>{dayOfMonth}</span>
+                                    <span className={classes.compactDateMonth}>{monthShort}</span>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className={classes.compactContent}>
+                            <div className={classes.compactPrimary}>
+                                <span className={classes.compactTitle}>{event.title}</span>
+                                {isRecurring && (
+                                    <span className={classes.compactRecurringIcon} aria-label={t`Recurring`}>
+                                        <IconRepeat size={12}/>
+                                    </span>
+                                )}
+                                {isSeated && (
+                                    <span className={classes.compactRecurringIcon} aria-label={t`Reserved seating`}>
+                                        <IconArmchair size={12}/>
+                                    </span>
+                                )}
+                            </div>
+                            <div className={classes.compactMeta}>
+                                <span className={`${classes.compactStatus} ${classes[`compactStatus-${statusConfig.tone}`]}`}>
+                                    {statusConfig.pulse && <span className={classes.compactStatusDot}/>}
+                                    {statusConfig.label}
+                                </span>
+                                <span className={classes.compactDot}>·</span>
+                                <span className={classes.compactMetaItem}>
+                                    {hasDate ? shortDateTime : t`No date added`}
+                                </span>
+                                {hasDate && (
+                                    <>
+                                        <span className={classes.compactDot}>·</span>
+                                        <span className={classes.compactMetaItem}>{relativeDateStr}</span>
+                                    </>
+                                )}
+                                {locationText && (
+                                    <>
+                                        <span className={classes.compactDot}>·</span>
+                                        <span className={`${classes.compactMetaItem} ${classes.compactLocation}`}>
+                                            {locationText}
+                                        </span>
+                                    </>
+                                )}
+                                {ticketAvailability && (
+                                    <>
+                                        <span className={classes.compactDot}>·</span>
+                                        <span className={`${classes.compactTickets} ${classes[`compactTickets-${ticketAvailability.status}`]}`}>
+                                            {ticketAvailability.text}
+                                        </span>
+                                    </>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className={classes.compactStats}>
+                            <div className={classes.compactStat}>
+                                <span className={classes.compactStatValue}>{formatNumber(attendees)}</span>
+                                <span className={classes.compactStatLabel}>{t`Attendees`}</span>
+                            </div>
+                            {canViewFinancials && <div className={classes.compactStat}>
+                                <span className={classes.compactStatValue}>{formatCurrency(revenue, event?.currency)}</span>
+                                <span className={classes.compactStatLabel}>{t`Revenue`}</span>
+                            </div>}
+                        </div>
+
+                        <div className={classes.compactMenuButton} onClick={(e) => e.preventDefault()}>
+                            <ActionMenu
+                                itemsGroups={menuItems}
+                                target={
+                                    <ActionIcon
+                                        className={classes.actionButton}
+                                        size="sm"
+                                        variant="subtle"
+                                    >
+                                        <IconDotsVertical size={16}/>
+                                    </ActionIcon>
+                                }
+                            />
+                        </div>
+                    </NavLink>
+                </div>
+                {isDuplicateModalOpen && <DuplicateEventModal eventId={eventId} onClose={duplicateModal.close}/>}
+            </>
+        );
+    }
 
     return (
         <>
@@ -185,18 +316,41 @@ export function EventCard({event}: EventCardProps) {
                             {statusConfig.label}
                         </div>
 
-                        <div className={classes.dateBadge}>
-                            <span className={classes.dateDay}>{dayOfMonth}</span>
-                            <span className={classes.dateMonth}>{monthShort}</span>
-                        </div>
+                        {hasDate && (
+                            <div className={classes.dateBadge}>
+                                <span className={classes.dateDay}>{dayOfMonth}</span>
+                                <span className={classes.dateMonth}>{monthShort}</span>
+                            </div>
+                        )}
+
+                        {(isRecurring || isSeated) && (
+                            <div className={classes.recurringBadge}>
+                                {isRecurring && <IconRepeat size={12} aria-label={t`Recurring`}/>}
+                                {isSeated && <IconArmchair size={12} aria-label={t`Reserved seating`}/>}
+                            </div>
+                        )}
                     </div>
 
                     <div className={classes.content}>
                         <div className={classes.contentMain}>
                             <h3 className={classes.title}>{event.title}</h3>
                             <div className={classes.meta}>
-                                <span className={classes.eventDate}>{shortDateTime}</span>
-                                <span className={classes.relativeDate}>({relativeDateStr})</span>
+                                <span className={classes.eventDate}>
+                                    {hasDate ? shortDateTime : t`No date added`}
+                                    {isRecurring && (
+                                        <span className={classes.recurringLabel}>
+                                            <IconRepeat size={11}/>
+                                            {t`Recurring`}
+                                        </span>
+                                    )}
+                                    {isSeated && (
+                                        <span className={classes.recurringLabel}>
+                                            <IconArmchair size={11}/>
+                                            {t`Seated`}
+                                        </span>
+                                    )}
+                                </span>
+                                {hasDate && <span className={classes.relativeDate}>({relativeDateStr})</span>}
                                 {locationText && (
                                     <>
                                         <span className={classes.separator}>·</span>
@@ -205,13 +359,29 @@ export function EventCard({event}: EventCardProps) {
                                 )}
                             </div>
                             <div className={classes.footer}>
-                                <NavLink
-                                    to={`/manage/organizer/${event?.organizer?.id}`}
-                                    className={classes.organizer}
-                                    onClick={(e) => e.stopPropagation()}
-                                >
-                                    {event?.organizer?.name}
-                                </NavLink>
+                                {access.canManageOrganizer(event.organizer_id) ? (
+                                    <span
+                                        role="link"
+                                        tabIndex={0}
+                                        className={classes.organizer}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            navigate(`/manage/organizer/${event?.organizer?.id}`);
+                                        }}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter' || e.key === ' ') {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                navigate(`/manage/organizer/${event?.organizer?.id}`);
+                                            }
+                                        }}
+                                    >
+                                        {event?.organizer?.name}
+                                    </span>
+                                ) : (
+                                    <span className={classes.organizer}>{event?.organizer?.name}</span>
+                                )}
                                 {ticketAvailability && (
                                     <span className={`${classes.ticketStatus} ${classes[`ticket-${ticketAvailability.status}`]}`}>
                                         {ticketAvailability.text}
@@ -227,14 +397,14 @@ export function EventCard({event}: EventCardProps) {
                                     <span className={classes.statLabel}>{t`Attendees`}</span>
                                 </div>
                             </Tooltip>
-                            <Tooltip label={t`Gross revenue`} withArrow position="top">
+                            {canViewFinancials && <Tooltip label={t`Gross revenue`} withArrow position="top">
                                 <div className={classes.stat}>
                                     <span className={classes.statValueRevenue}>
                                         {formatCurrency(revenue, event?.currency)}
                                     </span>
                                     <span className={classes.statLabel}>{t`Revenue`}</span>
                                 </div>
-                            </Tooltip>
+                            </Tooltip>}
                         </div>
 
                         <div className={classes.menuButton} onClick={(e) => e.preventDefault()}>

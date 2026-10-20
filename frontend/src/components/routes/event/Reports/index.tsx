@@ -1,15 +1,17 @@
 import {PageTitle} from "../../../common/PageTitle";
 import {t} from "@lingui/macro";
 import {PageBody} from "../../../common/PageBody";
-import {IconChartBar, IconChevronRight, IconReportMoney} from "@tabler/icons-react";
+import {IconArmchair, IconCalendarEvent, IconChartBar, IconChevronRight, IconReportMoney} from "@tabler/icons-react";
 import classes from './Reports.module.scss';
 import {Card} from "../../../common/Card";
 import {Avatar, UnstyledButton} from "@mantine/core";
 import {Link, useParams} from "react-router";
-import {ReportTypes} from "../../../../types.ts";
+import {EventType, ReportTypes} from "../../../../types.ts";
+import {useGetEvent} from "../../../../queries/useGetEvent.ts";
 
 const Reports = () => {
     const {eventId} = useParams();
+    const {data: event} = useGetEvent(eventId);
 
     const reports = [
         {
@@ -29,7 +31,19 @@ const Reports = () => {
             title: t`Promo Codes Report`,
             description: t`Promo code usage and discount breakdown`,
             icon: <Avatar size={40} color={'#634fc0'}><IconReportMoney/></Avatar>
-        }
+        },
+        ...(event?.type === EventType.RECURRING ? [{
+            id: ReportTypes.OccurrenceSummary,
+            title: t`Occurrence Summary`,
+            description: t`Sales, attendance, and check-in breakdown per occurrence`,
+            icon: <Avatar size={40} color={'#e07000'}><IconCalendarEvent/></Avatar>
+        }] : []),
+        ...(event?.has_seat_map ? [{
+            id: ReportTypes.SeatingSales,
+            title: t`Seating Sales`,
+            description: t`Capacity, sold, held and free seats per price band and area, with revenue per band`,
+            icon: <Avatar size={40} color={'#2f9e44'}><IconArmchair/></Avatar>
+        }] : []),
     ];
 
     return (

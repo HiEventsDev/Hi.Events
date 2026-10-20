@@ -5,8 +5,8 @@ namespace Tests\Unit\Services\Application\Handlers\Affiliate;
 use HiEvents\DomainObjects\AffiliateDomainObject;
 use HiEvents\DomainObjects\Status\AffiliateStatus;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
-use HiEvents\Services\Application\Handlers\Affiliate\UpdateAffiliateHandler;
 use HiEvents\Services\Application\Handlers\Affiliate\DTO\UpsertAffiliateDTO;
+use HiEvents\Services\Application\Handlers\Affiliate\UpdateAffiliateHandler;
 use Mockery as m;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tests\TestCase;
@@ -14,6 +14,7 @@ use Tests\TestCase;
 class UpdateAffiliateHandlerTest extends TestCase
 {
     private AffiliateRepositoryInterface $affiliateRepository;
+
     private UpdateAffiliateHandler $handler;
 
     protected function setUp(): void
@@ -24,7 +25,7 @@ class UpdateAffiliateHandlerTest extends TestCase
         $this->handler = new UpdateAffiliateHandler($this->affiliateRepository);
     }
 
-    public function testHandleSuccessfullyUpdatesAffiliate(): void
+    public function test_handle_successfully_updates_affiliate(): void
     {
         $affiliateId = 1;
         $eventId = 2;
@@ -43,7 +44,7 @@ class UpdateAffiliateHandlerTest extends TestCase
             ->once()
             ->with([
                 'id' => $affiliateId,
-                'event_id' => $eventId
+                'event_id' => $eventId,
             ])
             ->andReturn($existingAffiliate);
 
@@ -62,7 +63,7 @@ class UpdateAffiliateHandlerTest extends TestCase
         $this->assertSame($updatedAffiliate, $result);
     }
 
-    public function testHandleSuccessfullyUpdatesAffiliateWithNullEmail(): void
+    public function test_handle_successfully_updates_affiliate_with_null_email(): void
     {
         $affiliateId = 1;
         $eventId = 2;
@@ -81,7 +82,7 @@ class UpdateAffiliateHandlerTest extends TestCase
             ->once()
             ->with([
                 'id' => $affiliateId,
-                'event_id' => $eventId
+                'event_id' => $eventId,
             ])
             ->andReturn($existingAffiliate);
 
@@ -99,7 +100,7 @@ class UpdateAffiliateHandlerTest extends TestCase
         $this->assertSame($updatedAffiliate, $result);
     }
 
-    public function testHandleFiltersOutNullValues(): void
+    public function test_handle_filters_out_null_values(): void
     {
         $affiliateId = 1;
         $eventId = 2;
@@ -118,7 +119,7 @@ class UpdateAffiliateHandlerTest extends TestCase
             ->once()
             ->with([
                 'id' => $affiliateId,
-                'event_id' => $eventId
+                'event_id' => $eventId,
             ])
             ->andReturn($existingAffiliate);
 
@@ -136,7 +137,7 @@ class UpdateAffiliateHandlerTest extends TestCase
         $this->assertSame($updatedAffiliate, $result);
     }
 
-    public function testHandleThrowsExceptionWhenAffiliateNotFound(): void
+    public function test_handle_throws_exception_when_affiliate_not_found(): void
     {
         $affiliateId = 1;
         $eventId = 2;
@@ -152,7 +153,7 @@ class UpdateAffiliateHandlerTest extends TestCase
             ->once()
             ->with([
                 'id' => $affiliateId,
-                'event_id' => $eventId
+                'event_id' => $eventId,
             ])
             ->andReturn(null);
 
@@ -165,7 +166,7 @@ class UpdateAffiliateHandlerTest extends TestCase
         $this->handler->handle($affiliateId, $eventId, $dto);
     }
 
-    public function testHandleChecksCorrectEventId(): void
+    public function test_handle_checks_correct_event_id(): void
     {
         $affiliateId = 1;
         $eventId = 2;
@@ -181,7 +182,7 @@ class UpdateAffiliateHandlerTest extends TestCase
             ->once()
             ->with([
                 'id' => $affiliateId,
-                'event_id' => $eventId
+                'event_id' => $eventId,
             ])
             ->andReturn(null);
 

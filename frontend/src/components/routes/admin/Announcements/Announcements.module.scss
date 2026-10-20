@@ -1,0 +1,34 @@
+.announcementsTable {
+  td {
+    white-space: nowrap;
+  }
+
+  td:first-child {
+    white-space: normal;
+    min-width: 220px;
+  }
+
+  :global(.mantine-Badge-label) {
+    overflow: visible;
+    text-overflow: clip;
+  }
+}
+
+.emojiPreview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px;
+  padding-bottom: 4px;
+}
+
+.bannerPreview {
+  border: 1px dashed var(--hi-color-gray-2);
+  border-radius: var(--hi-radius-md);
+  overflow: hidden;
+
+  > div {
+    position: static;
+    animation: none;
+  }
+}

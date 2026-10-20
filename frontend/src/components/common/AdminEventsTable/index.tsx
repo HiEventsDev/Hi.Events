@@ -51,6 +51,8 @@ const AdminEventsTable = ({events, onSort, sortBy, sortDirection, onViewEvent, o
                 return 'yellow';
             case 'ARCHIVED':
                 return 'gray';
+            case 'PENDING_MANUAL_REVIEW':
+                return 'orange';
             default:
                 return 'blue';
         }

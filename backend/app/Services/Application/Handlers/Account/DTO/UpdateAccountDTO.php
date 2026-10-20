@@ -12,7 +12,5 @@ class UpdateAccountDTO extends BaseDTO
         public readonly string $name,
         public readonly string $currency_code,
         public readonly string $timezone,
-    )
-    {
-    }
+    ) {}
 }

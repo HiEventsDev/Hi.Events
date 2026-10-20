@@ -24,19 +24,29 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                                 }) => {
     const isMobile = useMediaQuery('(max-width: 768px)');
 
-    const renderLinks = () => {
-        return navItems.map((item) => {
+    const isHeading = (item: NavItem) => !item.link && item.link !== "" && item.onClick === undefined;
 
-            if (!item.link && item.link !== "" && item.onClick === undefined) {
+    const visibleItems = () => {
+        const shown = navItems.filter(item => !item.showWhen || item.showWhen());
+
+        return shown.filter((item, index) => {
+            if (!isHeading(item)) {
+                return true;
+            }
+            const next = shown[index + 1];
+            return !!next && !isHeading(next);
+        });
+    };
+
+    const renderLinks = () => {
+        return visibleItems().map((item) => {
+
+            if (isHeading(item)) {
                 return (
                     <div className={classes.sectionHeading} key={item.label}>
                         {item.label}
                     </div>
                 );
-            }
-
-            if (item.showWhen && !item.showWhen()) {
-                return null;
             }
 
             if (item.loading) {
@@ -47,7 +57,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             return (
                 <NavLink
                     to={item.comingSoon ? '#' : (item.link ?? '#')}
-                    key={item.label}
+                    key={item.link ?? item.label}
                     onClick={() => {
                         if (isMobile) {
                             setSidebarOpen(false);
@@ -62,8 +72,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 >
                     {item.icon && <item.icon size={20} className={classes.linkIcon} stroke={1.5}/>}
                     <span>{item.label}</span>
-                    {item.badge !== undefined &&
-                        <Badge size="xs" radius="xl" className={classes.navBadge}>{item.badge}</Badge>}
+                    {item.badge !== undefined && (
+                        <Badge
+                            size="xs"
+                            radius="xl"
+                            className={item.badgeColor ? classes.navBadgeAlert : classes.navBadge}
+                        >
+                            {item.badge}
+                        </Badge>
+                    )}
                     {item.comingSoon &&
                         <Badge ml={'4px'} size={'xs'} className={classes.comingSoonBadge}>{t`Coming Soon`}</Badge>}
                 </NavLink>
@@ -76,7 +93,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <div className={classes.logo}>
                 <NavLink to={`/manage/events`}>
                     <img
-                        style={{maxWidth: '160px', margin: "10px auto"}}
                         src={getConfig("VITE_APP_LOGO_LIGHT", "/logos/hi-events-text-dark.svg")}
                         alt={t`${getConfig("VITE_APP_NAME", "Hi.Events")} logo`}
                     />

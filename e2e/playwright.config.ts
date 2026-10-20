@@ -1,0 +1,38 @@
+import 'dotenv/config';
+import { defineConfig, devices } from '@playwright/test';
+import { grantedConsentCookie } from './utils/consent';
+
+const baseURL = process.env.E2E_BASE_URL ?? 'http://localhost:8123';
+const isCI = !!process.env.CI;
+
+export default defineConfig({
+  testDir: './tests',
+  globalSetup: './global-setup.ts',
+  fullyParallel: true,
+  forbidOnly: isCI,
+  retries: isCI ? 2 : 0,
+  workers: isCI ? 2 : 4,
+  timeout: 60_000,
+  expect: { timeout: 15_000 },
+  reporter: isCI
+    ? [['github'], ['html', { open: 'never' }], ['json', { outputFile: 'test-results/results.json' }], ['list']]
+    : [['html', { open: 'on-failure' }], ['list']],
+  use: {
+    baseURL,
+    ignoreHTTPSErrors: true,
+    trace: 'retain-on-failure',
+    video: 'retain-on-failure',
+    screenshot: 'only-on-failure',
+    testIdAttribute: 'data-testid',
+    storageState: { cookies: [grantedConsentCookie()], origins: [] },
+  },
+  projects: [
+    {
+      name: 'chromium',
+      use: {
+        ...devices['Desktop Chrome'],
+        launchOptions: { args: ['--host-resolver-rules=MAP mock-oidc 127.0.0.1'] },
+      },
+    },
+  ],
+});

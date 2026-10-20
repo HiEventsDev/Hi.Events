@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace HiEvents\Services\Application\Handlers\Admin;
 
 use HiEvents\Exceptions\CannotDeleteEntityException;
-use HiEvents\Repository\Interfaces\AccountConfigurationRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrganizerConfigurationRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 
 class DeleteConfigurationHandler
 {
     public function __construct(
-        private readonly AccountConfigurationRepositoryInterface $repository,
-    ) {
-    }
+        private readonly OrganizerConfigurationRepositoryInterface $repository,
+        private readonly OrganizerRepositoryInterface $organizerRepository,
+    ) {}
 
     /**
      * @throws CannotDeleteEntityException
@@ -21,9 +22,21 @@ class DeleteConfigurationHandler
     {
         $configuration = $this->repository->findById($configurationId);
 
-        if ($configuration->getIsSystemDefault()) {
+        if ($configuration->isDefault()) {
             throw new CannotDeleteEntityException(
-                __('The system default configuration cannot be deleted.')
+                __('Default configurations cannot be deleted.')
+            );
+        }
+
+        $assignedOrganizerCount = $this->organizerRepository->countWhere([
+            'organizer_configuration_id' => $configurationId,
+        ]);
+
+        if ($assignedOrganizerCount > 0) {
+            throw new CannotDeleteEntityException(
+                __('This plan is still assigned to :count organizer(s). Reassign them before deleting it.', [
+                    'count' => $assignedOrganizerCount,
+                ])
             );
         }
 

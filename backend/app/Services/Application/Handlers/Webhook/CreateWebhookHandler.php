@@ -12,22 +12,20 @@ class CreateWebhookHandler
 {
     public function __construct(
         private readonly CreateWebhookService $createWebhookService,
-        private readonly DatabaseManager      $databaseManager,
-    )
-    {
-    }
+        private readonly DatabaseManager $databaseManager,
+    ) {}
 
     /**
      * @throws Throwable
      */
     public function handle(CreateWebhookDTO $upsertWebhookDTO): mixed
     {
-        return $this->databaseManager->transaction(fn() => $this->createWebhook($upsertWebhookDTO));
+        return $this->databaseManager->transaction(fn () => $this->createWebhook($upsertWebhookDTO));
     }
 
     private function createWebhook(CreateWebhookDTO $upsertWebhookDTO): WebhookDomainObject
     {
-        $webhookDomainObject = (new WebhookDomainObject())
+        $webhookDomainObject = (new WebhookDomainObject)
             ->setUrl($upsertWebhookDTO->url)
             ->setEventTypes($upsertWebhookDTO->eventTypes)
             ->setEventId($upsertWebhookDTO->eventId)

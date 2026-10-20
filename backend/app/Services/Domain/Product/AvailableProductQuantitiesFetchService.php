@@ -5,10 +5,20 @@ namespace HiEvents\Services\Domain\Product;
 use HiEvents\Constants;
 use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
 use HiEvents\DomainObjects\Enums\CapacityAssignmentAppliesTo;
-use HiEvents\DomainObjects\Status\CapacityAssignmentStatus;
-use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\DomainObjects\Enums\ProductQuantityAppliesTo;
+use HiEvents\DomainObjects\Enums\ProductType;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
+use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
 use HiEvents\DomainObjects\ProductDomainObject;
+use HiEvents\DomainObjects\ProductPriceOccurrenceOverrideDomainObject;
+use HiEvents\DomainObjects\Status\CapacityAssignmentStatus;
+use HiEvents\Enterprise\Seating\Services\Domain\EventSeatMapLookupService;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatAvailabilityService;
 use HiEvents\Repository\Interfaces\CapacityAssignmentRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Repository\Interfaces\ProductPriceOccurrenceOverrideRepositoryInterface;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesDTO;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesResponseDTO;
 use Illuminate\Config\Repository as Config;
@@ -19,35 +29,235 @@ use Illuminate\Support\Collection;
 class AvailableProductQuantitiesFetchService
 {
     public function __construct(
-        private readonly DatabaseManager                       $db,
-        private readonly Config                                $config,
-        private readonly Cache                                 $cache,
+        private readonly DatabaseManager $db,
+        private readonly Config $config,
+        private readonly Cache $cache,
         private readonly CapacityAssignmentRepositoryInterface $capacityAssignmentRepository,
-    )
-    {
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
+        private readonly ProductPriceOccurrenceOverrideRepositoryInterface $priceOverrideRepository,
+        private readonly SoldAndReservedQuantitiesService $soldAndReservedQuantities,
+        private readonly SeatAvailabilityService $seatAvailabilityService,
+        private readonly EventSeatMapLookupService $eventSeatMapLookup,
+    ) {}
+
+    public function getAvailableProductQuantities(
+        int $eventId,
+        bool $ignoreCache = false,
+        ?int $eventOccurrenceId = null,
+        bool $applyOccurrenceLimits = true,
+        bool $allowPastOccurrence = false,
+    ): AvailableProductQuantitiesResponseDTO {
+        if ($eventOccurrenceId === null) {
+            return $this->cachedEventWideQuantities([$eventId], $ignoreCache)[$eventId]
+                ?? $this->calculateEventWideQuantities(collect([$this->eventRepository->findById($eventId)]), $ignoreCache)[$eventId];
+        }
+
+        $event = $this->eventRepository->findById($eventId);
+        $isRecurring = $event->isRecurring();
+
+        $capacities = $this->fetchCapacitiesByEventId($isRecurring ? [] : [$eventId])[$eventId] ?? collect();
+        $quantities = $this->applyCapacities($this->fetchProductQuantities([$eventId])[$eventId] ?? collect(), $capacities);
+
+        $occurrence = $this->occurrenceRepository->findById($eventOccurrenceId);
+        if ($isRecurring) {
+            $quantities = $this->applyPerOccurrenceQuantities($quantities, $eventId, $eventOccurrenceId);
+        }
+        $quantities = $this->applyFreeSeats($quantities, $this->seatAvailabilityService->freeCountByProduct($eventId, $eventOccurrenceId));
+
+        $occurrenceReserved = null;
+        if ($applyOccurrenceLimits) {
+            if ($this->occurrenceLimitsCapacity($occurrence, $allowPastOccurrence)) {
+                $occurrenceReserved = $this->soldAndReservedQuantities->getReservedTicketsForOccurrence($eventOccurrenceId);
+            }
+            $quantities = $this->applyOccurrenceCapacity($quantities, $occurrence, $occurrenceReserved, $allowPastOccurrence);
+        }
+
+        return new AvailableProductQuantitiesResponseDTO(
+            productQuantities: $quantities,
+            capacities: $capacities,
+            occurrence: $occurrence,
+            occurrenceReservedQuantity: $occurrenceReserved,
+        );
     }
 
-    public function getAvailableProductQuantities(int $eventId, bool $ignoreCache = false): AvailableProductQuantitiesResponseDTO
+    /**
+     * @param  Collection<int, EventDomainObject>  $events
+     * @return array<int, AvailableProductQuantitiesResponseDTO> keyed by event id
+     */
+    public function getEventWideQuantitiesForEvents(Collection $events): array
     {
-        if (!$ignoreCache && $this->config->get('app.homepage_product_quantities_cache_ttl')) {
-            $cachedData = $this->getDataFromCache($eventId);
-            if ($cachedData) {
-                return $cachedData;
+        $cached = $this->cachedEventWideQuantities(
+            $events->map(fn (EventDomainObject $event) => $event->getId())->all(),
+            ignoreCache: false,
+        );
+
+        return $cached + $this->calculateEventWideQuantities(
+            $events->reject(fn (EventDomainObject $event) => isset($cached[$event->getId()])),
+            ignoreCache: false,
+        );
+    }
+
+    /**
+     * @param  Collection<int, EventDomainObject>  $events
+     * @return array<int, AvailableProductQuantitiesResponseDTO>
+     */
+    private function calculateEventWideQuantities(Collection $events, bool $ignoreCache): array
+    {
+        if ($events->isEmpty()) {
+            return [];
+        }
+
+        $eventIds = $events->map(fn (EventDomainObject $event) => $event->getId())->values()->all();
+        $recurringEventIds = $events
+            ->filter(fn (EventDomainObject $event) => $event->isRecurring())
+            ->map(fn (EventDomainObject $event) => $event->getId())
+            ->values()
+            ->all();
+
+        $capacitiesByEventId = $this->fetchCapacitiesByEventId(array_values(array_diff($eventIds, $recurringEventIds)));
+        $quantitiesByEventId = $this->fetchProductQuantities($eventIds);
+        $freeSeatsByEventId = $this->seatAvailabilityService->freeCountByProductForEvents(
+            $this->seatAvailabilityOccurrenceIds($eventIds, $recurringEventIds),
+        );
+
+        $results = [];
+        foreach ($eventIds as $eventId) {
+            $capacities = $capacitiesByEventId[$eventId] ?? collect();
+            $quantities = $this->applyCapacities($quantitiesByEventId[$eventId] ?? collect(), $capacities);
+
+            if (in_array($eventId, $recurringEventIds, true)) {
+                $quantities = $this->ignorePerOccurrenceQuantities($quantities);
+            }
+
+            $results[$eventId] = new AvailableProductQuantitiesResponseDTO(
+                productQuantities: $this->applyFreeSeats($quantities, $freeSeatsByEventId[$eventId] ?? []),
+                capacities: $capacities,
+            );
+        }
+
+        $ttl = $this->config->get('app.homepage_product_quantities_cache_ttl');
+        if (! $ignoreCache && $ttl) {
+            $this->cache->setMultiple(
+                collect($results)->mapWithKeys(fn (AvailableProductQuantitiesResponseDTO $dto, int $eventId) => [$this->getCacheKey($eventId) => $dto])->all(),
+                $ttl,
+            );
+        }
+
+        return $results;
+    }
+
+    /**
+     * @param  int[]  $eventIds
+     * @return array<int, AvailableProductQuantitiesResponseDTO>
+     */
+    private function cachedEventWideQuantities(array $eventIds, bool $ignoreCache): array
+    {
+        if ($ignoreCache || ! $this->config->get('app.homepage_product_quantities_cache_ttl')) {
+            return [];
+        }
+
+        $cached = $this->cache->getMultiple(array_map(fn (int $eventId) => $this->getCacheKey($eventId), $eventIds));
+
+        $results = [];
+        foreach ($eventIds as $eventId) {
+            $dto = $cached[$this->getCacheKey($eventId)] ?? null;
+            if ($dto instanceof AvailableProductQuantitiesResponseDTO) {
+                $results[$eventId] = $dto;
             }
         }
 
-        $capacities = $this->capacityAssignmentRepository
+        return $results;
+    }
+
+    /**
+     * @param  int[]  $eventIds
+     * @param  int[]  $recurringEventIds
+     * @return array<int, int|null> occurrence id to count seat claims against, keyed by seated event id
+     */
+    private function seatAvailabilityOccurrenceIds(array $eventIds, array $recurringEventIds): array
+    {
+        $seatedEventIds = array_keys(array_filter($this->eventSeatMapLookup->findSummariesForEvents($eventIds)));
+        $soleOccurrenceIds = $this->soleOccurrenceIds(array_values(array_diff($seatedEventIds, $recurringEventIds)));
+
+        $occurrenceIds = [];
+        foreach ($seatedEventIds as $eventId) {
+            $occurrenceIds[$eventId] = $soleOccurrenceIds[$eventId] ?? null;
+        }
+
+        return $occurrenceIds;
+    }
+
+    /**
+     * @param  int[]  $eventIds
+     * @return array<int, int> occurrence id keyed by event id
+     */
+    private function soleOccurrenceIds(array $eventIds): array
+    {
+        if ($eventIds === []) {
+            return [];
+        }
+
+        return $this->occurrenceRepository
+            ->findWhereIn(
+                EventOccurrenceDomainObjectAbstract::EVENT_ID,
+                $eventIds,
+                columns: [EventOccurrenceDomainObjectAbstract::ID, EventOccurrenceDomainObjectAbstract::EVENT_ID],
+            )
+            ->mapWithKeys(fn (EventOccurrenceDomainObject $occurrence) => [$occurrence->getEventId() => $occurrence->getId()])
+            ->all();
+    }
+
+    /**
+     * @param  array<int, int>  $freeByProduct
+     */
+    private function applyFreeSeats(Collection $quantities, array $freeByProduct): Collection
+    {
+        if ($freeByProduct === []) {
+            return $quantities;
+        }
+
+        return $quantities->map(function (AvailableProductQuantitiesDTO $dto) use ($freeByProduct) {
+            if (isset($freeByProduct[$dto->product_id])) {
+                $dto->seats_available = $freeByProduct[$dto->product_id];
+                $dto->quantity_available_before_seats = $dto->quantity_available;
+                $dto->quantity_available = $dto->quantity_available === Constants::INFINITE
+                    ? $dto->seats_available
+                    : min($dto->quantity_available, $dto->seats_available);
+            }
+
+            return $dto;
+        });
+    }
+
+    /**
+     * @param  int[]  $eventIds
+     * @return array<int, Collection<int, CapacityAssignmentDomainObject>> keyed by event id
+     */
+    private function fetchCapacitiesByEventId(array $eventIds): array
+    {
+        if ($eventIds === []) {
+            return [];
+        }
+
+        return $this->capacityAssignmentRepository
             ->loadRelation(ProductDomainObject::class)
-            ->findWhere([
-                'event_id' => $eventId,
+            ->findWhereIn('event_id', $eventIds, [
                 'applies_to' => CapacityAssignmentAppliesTo::PRODUCTS->name,
                 'status' => CapacityAssignmentStatus::ACTIVE->name,
-            ]);
+            ])
+            ->groupBy(fn (CapacityAssignmentDomainObject $capacity) => $capacity->getEventId())
+            ->all();
+    }
 
-        $reservedProductQuantities = $this->fetchReservedProductQuantities($eventId);
+    /**
+     * @param  Collection<int, CapacityAssignmentDomainObject>  $capacities
+     */
+    private function applyCapacities(Collection $quantities, Collection $capacities): Collection
+    {
         $productCapacities = $this->calculateProductCapacities($capacities);
 
-        $quantities = $reservedProductQuantities->map(function (AvailableProductQuantitiesDTO $dto) use ($productCapacities) {
+        return $quantities->map(function (AvailableProductQuantitiesDTO $dto) use ($productCapacities) {
             $productId = $dto->product_id;
             if (isset($productCapacities[$productId])) {
                 $dto->quantity_available = min(array_merge([$dto->quantity_available], $productCapacities[$productId]->map->getAvailableCapacity()->toArray()));
@@ -56,95 +266,161 @@ class AvailableProductQuantitiesFetchService
 
             return $dto;
         });
-
-        $finalData = new AvailableProductQuantitiesResponseDTO(
-            productQuantities: $quantities,
-            capacities: $capacities
-        );
-
-        if (!$ignoreCache && $this->config->get('app.homepage_product_quantities_cache_ttl')) {
-            $this->cache->put($this->getCacheKey($eventId), $finalData, $this->config->get('app.homepage_product_quantities_cache_ttl'));
-        }
-
-        return $finalData;
     }
 
-    private function fetchReservedProductQuantities(int $eventId): Collection
+    private function applyPerOccurrenceQuantities(Collection $quantities, int $eventId, int $eventOccurrenceId): Collection
     {
-        $result = $this->db->select(<<<SQL
-        WITH reserved_quantities AS (
-            SELECT
-                products.id AS product_id,
-                product_prices.id AS product_price_id,
-                SUM(
-                    CASE
-                        WHEN orders.status = :reserved
-                             AND orders.reserved_until > NOW()
-                             AND orders.deleted_at IS NULL
-                        THEN order_items.quantity
-                        ELSE 0
-                    END
-                ) AS quantity_reserved
-            FROM products
-            JOIN product_prices ON products.id = product_prices.product_id
-            LEFT JOIN order_items ON order_items.product_id = products.id
-                AND order_items.product_price_id = product_prices.id
-            LEFT JOIN orders ON orders.id = order_items.order_id
-                AND orders.event_id = products.event_id
-                AND orders.deleted_at IS NULL
-            WHERE
-                products.event_id = :eventId
-                AND products.deleted_at IS NULL
-                AND product_prices.deleted_at IS NULL
-            GROUP BY products.id, product_prices.id
-        )
-        SELECT
-            products.id AS product_id,
-            product_prices.id AS product_price_id,
-            products.title AS product_title,
-            product_prices.label AS price_label,
-            product_prices.initial_quantity_available,
-            product_prices.quantity_sold,
-            GREATEST(
-                COALESCE(
-                    product_prices.initial_quantity_available
-                    - product_prices.quantity_sold
-                    - COALESCE(reserved_quantities.quantity_reserved, 0),
-                0),
-            0) AS quantity_available,
-            COALESCE(reserved_quantities.quantity_reserved, 0) AS quantity_reserved,
-            CASE WHEN product_prices.initial_quantity_available IS NULL
-                THEN TRUE
-                ELSE FALSE
-                END AS unlimited_quantity_available
-        FROM products
-        JOIN product_prices ON products.id = product_prices.product_id
-        LEFT JOIN reserved_quantities ON products.id = reserved_quantities.product_id
-            AND product_prices.id = reserved_quantities.product_price_id
-        WHERE
-            products.event_id = :eventId
-            AND products.deleted_at IS NULL
-            AND product_prices.deleted_at IS NULL
-        GROUP BY products.id, product_prices.id, reserved_quantities.quantity_reserved;
-    SQL, [
-            'eventId' => $eventId,
-            'reserved' => OrderStatus::RESERVED->name
-        ]);
+        $perOccurrenceRows = $quantities->filter(
+            fn (AvailableProductQuantitiesDTO $dto) => $dto->quantity_applies_to === ProductQuantityAppliesTo::OCCURRENCE->name
+        );
 
-        return collect($result)->map(fn($row) => AvailableProductQuantitiesDTO::fromArray([
-            'product_id' => $row->product_id,
-            'price_id' => $row->product_price_id,
-            'product_title' => $row->product_title,
-            'price_label' => $row->price_label,
-            'quantity_available' => $row->unlimited_quantity_available ? Constants::INFINITE : $row->quantity_available,
-            'initial_quantity_available' => $row->initial_quantity_available,
-            'quantity_reserved' => $row->quantity_reserved,
-            'capacities' => new Collection(),
-        ]));
+        if ($perOccurrenceRows->isEmpty()) {
+            return $quantities;
+        }
+
+        $overrides = $this->priceOverrideRepository
+            ->findWhere([ProductPriceOccurrenceOverrideDomainObject::EVENT_OCCURRENCE_ID => $eventOccurrenceId])
+            ->keyBy(fn (ProductPriceOccurrenceOverrideDomainObject $override) => $override->getProductPriceId());
+
+        $reserved = $this->soldAndReservedQuantities->getReservedByPrice([$eventId], $eventOccurrenceId);
+
+        $sold = [];
+        foreach ($perOccurrenceRows->pluck('product_type')->unique() as $productType) {
+            $sold[$productType] = $this->soldAndReservedQuantities->getSoldByPriceForOccurrence(
+                $eventOccurrenceId,
+                ProductType::fromName($productType),
+            );
+        }
+
+        return $quantities->map(function (AvailableProductQuantitiesDTO $dto) use ($overrides, $reserved, $sold) {
+            if ($dto->quantity_applies_to !== ProductQuantityAppliesTo::OCCURRENCE->name) {
+                return $dto;
+            }
+
+            /** @var ProductPriceOccurrenceOverrideDomainObject|null $override */
+            $override = $overrides->get($dto->price_id);
+            $cap = $override?->getQuantityAvailable() ?? $dto->initial_quantity_available;
+
+            if ($cap === null) {
+                $dto->quantity_available = Constants::INFINITE;
+                $dto->quantity_reserved = $reserved[$dto->price_id] ?? 0;
+
+                return $dto;
+            }
+
+            $dto->quantity_reserved = $reserved[$dto->price_id] ?? 0;
+            $dto->quantity_available = max(0, $cap - ($sold[$dto->product_type][$dto->price_id] ?? 0) - $dto->quantity_reserved);
+
+            return $dto;
+        });
+    }
+
+    private function ignorePerOccurrenceQuantities(Collection $quantities): Collection
+    {
+        return $quantities->map(function (AvailableProductQuantitiesDTO $dto) {
+            if ($dto->quantity_applies_to === ProductQuantityAppliesTo::OCCURRENCE->name) {
+                $dto->quantity_available = Constants::INFINITE;
+            }
+
+            return $dto;
+        });
+    }
+
+    private function occurrenceLimitsCapacity(?EventOccurrenceDomainObject $occurrence, bool $allowPastOccurrence): bool
+    {
+        return $occurrence !== null
+            && ! $occurrence->isCancelled()
+            && ($allowPastOccurrence || ! $occurrence->isPast())
+            && $occurrence->getCapacity() !== null;
+    }
+
+    private function applyOccurrenceCapacity(
+        Collection $quantities,
+        ?EventOccurrenceDomainObject $occurrence,
+        ?int $reservedForOccurrence,
+        bool $allowPastOccurrence,
+    ): Collection {
+        if ($occurrence === null || $occurrence->isCancelled() || ($occurrence->isPast() && ! $allowPastOccurrence)) {
+            return $quantities->map(function (AvailableProductQuantitiesDTO $dto) {
+                $dto->quantity_available = 0;
+
+                return $dto;
+            });
+        }
+
+        if ($occurrence->getCapacity() === null) {
+            return $quantities;
+        }
+
+        $occurrenceAvailable = max(0, $occurrence->getCapacity() - $occurrence->getUsedCapacity() - $reservedForOccurrence);
+
+        return $quantities->map(function (AvailableProductQuantitiesDTO $dto) use ($occurrenceAvailable) {
+            if ($dto->product_type !== ProductType::TICKET->name) {
+                return $dto;
+            }
+
+            if ($dto->quantity_available !== Constants::INFINITE) {
+                $dto->quantity_available = min($dto->quantity_available, $occurrenceAvailable);
+            } else {
+                $dto->quantity_available = $occurrenceAvailable;
+            }
+
+            return $dto;
+        });
     }
 
     /**
-     * @param Collection<CapacityAssignmentDomainObject> $capacities
+     * @param  int[]  $eventIds
+     * @return array<int, Collection<int, AvailableProductQuantitiesDTO>> keyed by event id
+     */
+    private function fetchProductQuantities(array $eventIds): array
+    {
+        $rows = $this->db->select(<<<'SQL'
+        SELECT
+            products.event_id,
+            products.id AS product_id,
+            product_prices.id AS product_price_id,
+            products.title AS product_title,
+            products.product_type AS product_type,
+            product_prices.label AS price_label,
+            product_prices.initial_quantity_available,
+            product_prices.quantity_sold,
+            product_prices.quantity_applies_to
+        FROM products
+        JOIN product_prices ON products.id = product_prices.product_id
+        WHERE
+            products.event_id = ANY(CAST(:eventIds AS bigint[]))
+            AND products.deleted_at IS NULL
+            AND product_prices.deleted_at IS NULL
+    SQL, ['eventIds' => '{'.implode(',', array_map('intval', $eventIds)).'}']);
+
+        $reserved = $this->soldAndReservedQuantities->getReservedByPrice($eventIds);
+
+        return collect($rows)
+            ->groupBy('event_id')
+            ->map(fn (Collection $eventRows) => $eventRows->map(function ($row) use ($reserved) {
+                $quantityReserved = $reserved[$row->product_price_id] ?? 0;
+
+                return AvailableProductQuantitiesDTO::fromArray([
+                    'product_id' => $row->product_id,
+                    'price_id' => $row->product_price_id,
+                    'product_title' => $row->product_title,
+                    'product_type' => $row->product_type,
+                    'quantity_applies_to' => $row->quantity_applies_to,
+                    'price_label' => $row->price_label,
+                    'quantity_available' => $row->initial_quantity_available === null
+                        ? Constants::INFINITE
+                        : max(0, $row->initial_quantity_available - $row->quantity_sold - $quantityReserved),
+                    'initial_quantity_available' => $row->initial_quantity_available,
+                    'quantity_reserved' => $quantityReserved,
+                    'capacities' => new Collection,
+                ]);
+            })->values())
+            ->all();
+    }
+
+    /**
+     * @param  Collection<CapacityAssignmentDomainObject>  $capacities
      */
     private function calculateProductCapacities(Collection $capacities): array
     {
@@ -152,7 +428,7 @@ class AvailableProductQuantitiesFetchService
         foreach ($capacities as $capacity) {
             foreach ($capacity->getProducts() as $product) {
                 $productId = $product->getId();
-                if (!isset($productCapacities[$productId])) {
+                if (! isset($productCapacities[$productId])) {
                     $productCapacities[$productId] = collect();
                 }
 
@@ -161,11 +437,6 @@ class AvailableProductQuantitiesFetchService
         }
 
         return $productCapacities;
-    }
-
-    private function getDataFromCache(int $eventId): ?AvailableProductQuantitiesResponseDTO
-    {
-        return $this->cache->get($this->getCacheKey($eventId));
     }
 
     private function getCacheKey(int $eventId): string

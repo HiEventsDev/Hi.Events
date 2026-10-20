@@ -2,7 +2,7 @@
 
 .topBar {
   grid-area: topbar;
-  background: linear-gradient(90deg, var(--mantine-color-primary-9), var(--mantine-color-secondary-9));
+  background: var(--hi-ink);
   display: flex;
   flex-direction: column;
   transition: box-shadow 0.3s ease;
@@ -23,15 +23,13 @@
 
   .breadcrumbsRow {
     padding: 10px 20px;
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
-    background-color: #fff;
-    backdrop-filter: blur(8px);
+    background-color: var(--hi-color-white);
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    border-top-left-radius: var(--hi-radius-md);
-    box-shadow: 3px 0px 8px rgb(0 0 0 / 8%);
+    border-top-left-radius: var(--hi-radius-lg);
+    border-bottom: 1px solid var(--hi-color-border);
     position: relative;
     z-index: 5;
     min-height: 44px;
@@ -46,7 +44,6 @@
     flex-shrink: 0;
 
     @include mixins.respond-below(sm) {
-      // Hide text in buttons, show only icons on very small screens
       :global(.mantine-Button-label) {
         display: none;
       }
@@ -61,8 +58,8 @@
     font-weight: 500;
     display: flex;
     align-items: center;
-    font-size: 0.85rem;
-    color: var(--hi-text-light);
+    font-size: 0.8125rem;
+    color: var(--hi-color-text-muted);
     flex: 1;
     min-width: 0;
     overflow-x: auto;
@@ -74,7 +71,6 @@
       display: none;
     }
 
-    // Mantine Breadcrumbs container
     :global(.mantine-Breadcrumbs-root) {
       flex-wrap: nowrap;
       min-width: 0;
@@ -92,7 +88,6 @@
         max-width: 80px;
       }
 
-      // Don't truncate the last breadcrumb (often an action like "Create Event")
       &:last-child {
         max-width: none;
         flex-shrink: 0;
@@ -100,7 +95,7 @@
     }
 
     a {
-      color: var(--hi-text-light);
+      color: var(--hi-color-text-muted);
       transition: color 0.2s ease;
       position: relative;
       @include mixins.ellipsis();
@@ -135,26 +130,16 @@
     display: flex;
     align-items: center;
     margin-left: auto;
-  }
-
-  .statusToggleContainer {
-    display: flex;
-    align-items: center;
-    position: relative;
-    margin-left: 16px;
-    margin-right: auto;
-
-    @include mixins.respond-below(md) {
-      margin-left: 16px;
-    }
+    flex-shrink: 0;
   }
 
   &.withShadow {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
   }
 
   .burger {
     --burger-color: var(--hi-color-white);
+    flex-shrink: 0;
     @include mixins.respond-above(md) {
       display: none;
     }
@@ -167,16 +152,18 @@
     display: flex;
     justify-content: center;
     padding-inline: 5px;
+    min-width: 0;
 
     a {
       display: flex;
+      min-width: 0;
     }
 
     img {
-      max-width: 120px;
+      max-width: min(120px, 100%);
 
       @include mixins.respond-below(sm) {
-        max-width: 100px;
+        max-width: min(100px, 100%);
       }
     }
 
@@ -189,50 +176,5 @@
     display: flex;
     align-items: center;
     color: var(--hi-color-white);
-  }
-
-  @include mixins.respond-below(md) {
-    .topBarMain {
-      background: linear-gradient(90deg, var(--mantine-color-primary-9), var(--mantine-color-secondary-9));
-    }
-  }
-
-  .entityPageButton {
-    margin-right: 8px;
-    display: flex;
-    align-items: center;
-    font-weight: 500;
-    transition: transform 0.2s ease;
-    color: #fff;
-
-    &:hover {
-      transform: translateY(-1px);
-    }
-
-    .entityPageButtonText {
-      // Default: hide both
-      .mobile,
-      .desktop {
-        display: none;
-      }
-
-      // Show mobile text from sm and up
-      @include mixins.respond-above(sm) {
-        .mobile {
-          display: block;
-        }
-      }
-
-      // Switch to desktop text at md and up
-      @include mixins.respond-above(md) {
-        .mobile {
-          display: none;
-        }
-
-        .desktop {
-          display: block;
-        }
-      }
-    }
   }
 }

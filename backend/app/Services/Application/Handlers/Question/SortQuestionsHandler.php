@@ -9,9 +9,7 @@ readonly class SortQuestionsHandler
 {
     public function __construct(
         private QuestionRepositoryInterface $questionRepository,
-    )
-    {
-    }
+    ) {}
 
     public function handle(int $eventId, array $data): void
     {
@@ -20,12 +18,12 @@ readonly class SortQuestionsHandler
         $questionIdResult = $this->questionRepository->findWhere([
             'event_id' => $eventId,
         ])
-            ->map(fn($product) => $product->getId())
+            ->map(fn ($product) => $product->getId())
             ->toArray();
 
         $extraInOrdered = array_diff($orderedQuestionIds, $questionIdResult);
 
-        if (!empty($extraInOrdered)) {
+        if (! empty($extraInOrdered)) {
             throw new ResourceNotFoundException(
                 __('One or more of the ordered question IDs do not exist for the event.')
             );

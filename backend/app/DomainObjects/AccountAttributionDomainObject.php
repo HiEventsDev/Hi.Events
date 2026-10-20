@@ -2,6 +2,4 @@
 
 namespace HiEvents\DomainObjects;
 
-class AccountAttributionDomainObject extends Generated\AccountAttributionDomainObjectAbstract
-{
-}
+class AccountAttributionDomainObject extends Generated\AccountAttributionDomainObjectAbstract {}

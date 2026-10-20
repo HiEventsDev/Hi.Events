@@ -1,5 +1,7 @@
 <?php
 
+use HiEvents\Models\User;
+
 return [
 
     /*
@@ -44,6 +46,11 @@ return [
             'driver' => 'jwt',
             'provider' => 'users',
         ],
+
+        'sanctum' => [
+            'driver' => 'sanctum',
+            'provider' => 'users',
+        ],
     ],
 
     /*
@@ -66,7 +73,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => \HiEvents\Models\User::class,
+            'model' => User::class,
         ],
 
         // 'users' => [

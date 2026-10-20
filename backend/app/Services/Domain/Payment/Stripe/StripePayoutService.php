@@ -2,9 +2,9 @@
 
 namespace HiEvents\Services\Domain\Payment\Stripe;
 
-use HiEvents\Repository\Interfaces\StripePayoutsRepositoryInterface;
-use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderPaymentPlatformFeeRepositoryInterface;
+use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
+use HiEvents\Repository\Interfaces\StripePayoutsRepositoryInterface;
 use HiEvents\Services\Domain\Payment\Stripe\DTOs\StripePayoutCreationDTO;
 use Psr\Log\LoggerInterface;
 
@@ -15,8 +15,7 @@ class StripePayoutService
         private readonly StripePaymentsRepositoryInterface $stripePaymentsRepository,
         private readonly OrderPaymentPlatformFeeRepositoryInterface $orderPaymentPlatformFeeRepository,
         private readonly LoggerInterface $logger,
-    ) {
-    }
+    ) {}
 
     public function createOrUpdatePayout(StripePayoutCreationDTO $dto): void
     {
@@ -28,12 +27,13 @@ class StripePayoutService
 
         if ($payments->isEmpty()) {
             $this->logger->warning('No payments found for payout', ['payout_id' => $dto->payoutId]);
+
             return;
         }
 
         // Get charge IDs to query order_payment_platform_fees
         $chargeIds = $payments
-            ->map(fn($payment) => $payment->getChargeId())
+            ->map(fn ($payment) => $payment->getChargeId())
             ->filter()
             ->unique()
             ->values()
@@ -41,6 +41,7 @@ class StripePayoutService
 
         if (empty($chargeIds)) {
             $this->logger->warning('No charge IDs found for payout payments', ['payout_id' => $dto->payoutId]);
+
             return;
         }
 
@@ -62,6 +63,7 @@ class StripePayoutService
 
             // Still create the payout record without VAT data
             $this->createOrUpdatePayoutRecord($dto, null, null, false);
+
             return;
         }
 
@@ -99,17 +101,18 @@ class StripePayoutService
                     'payout_currency' => $payoutCurrency,
                     'charge_id' => $platformFee->getChargeId(),
                 ]);
+
                 continue; // Skip this payment
             }
 
             // Simple conversion: settlement currency (major units) → payout currency (minor units)
             // Since currencies match, just multiply by 100
             if ($vatMajor !== null) {
-                $totalVatMinor += (int)round($vatMajor * 100);
+                $totalVatMinor += (int) round($vatMajor * 100);
             }
 
             if ($netMajor !== null) {
-                $totalNetMinor += (int)round($netMajor * 100);
+                $totalNetMinor += (int) round($netMajor * 100);
             }
         }
 
@@ -121,8 +124,7 @@ class StripePayoutService
         ?int $totalVatMinor,
         ?int $totalNetMinor,
         bool $reconciled
-    ): void
-    {
+    ): void {
         $attributes = [
             'payout_id' => $dto->payoutId,
             'stripe_platform' => $dto->stripePlatform,

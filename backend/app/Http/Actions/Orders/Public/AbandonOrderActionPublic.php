@@ -15,9 +15,7 @@ class AbandonOrderActionPublic extends BaseAction
 {
     public function __construct(
         private readonly AbandonOrderPublicHandler $abandonOrderPublicHandler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(int $eventId, string $orderShortId): JsonResponse
     {

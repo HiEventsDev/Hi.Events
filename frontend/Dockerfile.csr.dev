@@ -3,6 +3,7 @@ FROM node:alpine
 WORKDIR /app
 
 COPY ./package.json ./yarn.lock ./
+COPY ./patches ./patches
 
 RUN yarn install
 

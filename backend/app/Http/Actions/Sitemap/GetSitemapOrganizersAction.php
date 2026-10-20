@@ -15,8 +15,7 @@ class GetSitemapOrganizersAction extends BaseAction
 
     public function __construct(
         private readonly GetSitemapOrganizersHandler $handler,
-    ) {
-    }
+    ) {}
 
     public function __invoke(int $page): Response
     {

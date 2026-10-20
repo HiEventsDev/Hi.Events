@@ -6,6 +6,7 @@ type ErrorResponse = {
     response?: {
         data?: {
             errors?: Record<string, string>;
+            message?: string;
         };
         status?: number;
     };
@@ -17,8 +18,11 @@ export const useFormErrorResponseHandler = () => {
         error: ErrorResponse | any,
         errorMessage = t`Please check the provided information is correct`
     ) => {
-        if (error?.response?.data?.errors) {
-            form.setErrors(error.response.data.errors);
+        const fieldErrors = error?.response?.data?.errors;
+        const hasFieldErrors = !!fieldErrors && Object.keys(fieldErrors).length > 0;
+
+        if (hasFieldErrors) {
+            form.setErrors(fieldErrors);
         }
 
         if (error?.response?.status && error.response.status >= 500) {
@@ -41,7 +45,8 @@ export const useFormErrorResponseHandler = () => {
         }
 
         if (error?.response?.status && error.response.status >= 400) {
-            showError(errorMessage);
+            const serverMessage = error.response.data?.message;
+            showError(hasFieldErrors || !serverMessage ? errorMessage : serverMessage);
             return;
         }
 

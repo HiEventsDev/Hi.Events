@@ -17,6 +17,7 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     final public const CHECKED_IN_BY = 'checked_in_by';
     final public const CHECKED_OUT_BY = 'checked_out_by';
     final public const PRODUCT_PRICE_ID = 'product_price_id';
+    final public const EVENT_OCCURRENCE_ID = 'event_occurrence_id';
     final public const SHORT_ID = 'short_id';
     final public const FIRST_NAME = 'first_name';
     final public const LAST_NAME = 'last_name';
@@ -29,6 +30,8 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     final public const DELETED_AT = 'deleted_at';
     final public const LOCALE = 'locale';
     final public const NOTES = 'notes';
+    final public const SEAT_UID = 'seat_uid';
+    final public const SEAT_LABEL = 'seat_label';
 
     protected int $id;
     protected int $order_id;
@@ -37,10 +40,11 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     protected ?int $checked_in_by = null;
     protected ?int $checked_out_by = null;
     protected int $product_price_id;
+    protected ?int $event_occurrence_id = null;
     protected string $short_id;
     protected string $first_name = '';
     protected string $last_name = '';
-    protected string $email;
+    protected ?string $email = null;
     protected string $public_id;
     protected string $status;
     protected ?string $checked_in_at = null;
@@ -49,6 +53,8 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     protected ?string $deleted_at = null;
     protected string $locale = 'en';
     protected ?string $notes = null;
+    protected ?string $seat_uid = null;
+    protected ?string $seat_label = null;
 
     public function toArray(): array
     {
@@ -60,6 +66,7 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
                     'checked_in_by' => $this->checked_in_by ?? null,
                     'checked_out_by' => $this->checked_out_by ?? null,
                     'product_price_id' => $this->product_price_id ?? null,
+                    'event_occurrence_id' => $this->event_occurrence_id ?? null,
                     'short_id' => $this->short_id ?? null,
                     'first_name' => $this->first_name ?? null,
                     'last_name' => $this->last_name ?? null,
@@ -72,6 +79,8 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
                     'deleted_at' => $this->deleted_at ?? null,
                     'locale' => $this->locale ?? null,
                     'notes' => $this->notes ?? null,
+                    'seat_uid' => $this->seat_uid ?? null,
+                    'seat_label' => $this->seat_label ?? null,
                 ];
     }
 
@@ -152,6 +161,17 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
         return $this->product_price_id;
     }
 
+    public function setEventOccurrenceId(?int $event_occurrence_id): self
+    {
+        $this->event_occurrence_id = $event_occurrence_id;
+        return $this;
+    }
+
+    public function getEventOccurrenceId(): ?int
+    {
+        return $this->event_occurrence_id;
+    }
+
     public function setShortId(string $short_id): self
     {
         $this->short_id = $short_id;
@@ -185,13 +205,13 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
         return $this->last_name;
     }
 
-    public function setEmail(string $email): self
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
         return $this;
     }
 
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -282,5 +302,27 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     public function getNotes(): ?string
     {
         return $this->notes;
+    }
+
+    public function setSeatUid(?string $seat_uid): self
+    {
+        $this->seat_uid = $seat_uid;
+        return $this;
+    }
+
+    public function getSeatUid(): ?string
+    {
+        return $this->seat_uid;
+    }
+
+    public function setSeatLabel(?string $seat_label): self
+    {
+        $this->seat_label = $seat_label;
+        return $this;
+    }
+
+    public function getSeatLabel(): ?string
+    {
+        return $this->seat_label;
     }
 }

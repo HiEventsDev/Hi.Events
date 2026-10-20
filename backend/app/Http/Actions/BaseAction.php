@@ -6,7 +6,7 @@ namespace HiEvents\Http\Actions;
 
 use HiEvents\DataTransferObjects\BaseDataObject;
 use HiEvents\DataTransferObjects\BaseDTO;
-use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\Interfaces\DomainObjectInterface;
 use HiEvents\DomainObjects\Interfaces\IsFilterable;
 use HiEvents\DomainObjects\Interfaces\IsSortable;
@@ -15,6 +15,8 @@ use HiEvents\Exceptions\UnauthorizedException;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Resources\BaseResource;
+use HiEvents\Services\Domain\Auth\Access\AccountUserAccess;
+use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
 use HiEvents\Services\Domain\Auth\AuthUserService;
 use HiEvents\Services\Infrastructure\Authorization\IsAuthorizedService;
 use Illuminate\Contracts\Pagination\Paginator;
@@ -32,20 +34,25 @@ abstract class BaseAction extends Controller
 {
     use ValidatesRequests;
 
+    private const FINANCIAL_QUERY_FIELDS = [
+        'total_gross',
+        'total_before_additions',
+        'total_tax',
+        'total_fee',
+        'total_refunded',
+        'total_sales_gross',
+    ];
+
     /**
-     * @param class-string<BaseResource> $resource
-     * @param Collection|DomainObjectInterface|LengthAwarePaginator $data
-     * @param int $statusCode
-     * @param class-string<IsSortable|IsFilterable> $domainObject
-     * @return JsonResponse
+     * @param  class-string<BaseResource>  $resource
+     * @param  class-string<IsSortable|IsFilterable>  $domainObject
      */
     protected function filterableResourceResponse(
-        string                                                $resource,
+        string $resource,
         Collection|DomainObjectInterface|LengthAwarePaginator $data,
-        string                                                $domainObject,
-        int                                                   $statusCode = ResponseCodes::HTTP_OK,
-    ): JsonResponse
-    {
+        string $domainObject,
+        int $statusCode = ResponseCodes::HTTP_OK,
+    ): JsonResponse {
         $metaFields = [];
 
         if (is_a($domainObject, IsFilterable::class, true)) {
@@ -62,23 +69,16 @@ abstract class BaseAction extends Controller
     }
 
     /**
-     * @param class-string<BaseResource> $resource
-     * @param Collection|DomainObjectInterface|LengthAwarePaginator|BaseDTO|Paginator|BaseDataObject $data
-     * @param int $statusCode
-     * @param array $meta
-     * @param array $headers
-     * @param array $errors
-     * @return JsonResponse
+     * @param  class-string<BaseResource>  $resource
      */
     protected function resourceResponse(
-        string                                                                                 $resource,
+        string $resource,
         Collection|DomainObjectInterface|LengthAwarePaginator|BaseDTO|Paginator|BaseDataObject $data,
-        int                                                                                    $statusCode = ResponseCodes::HTTP_OK,
-        array                                                                                  $meta = [],
-        array                                                                                  $headers = [],
-        array                                                                                  $errors = [],
-    ): JsonResponse
-    {
+        int $statusCode = ResponseCodes::HTTP_OK,
+        array $meta = [],
+        array $headers = [],
+        array $errors = [],
+    ): JsonResponse {
         if ($data instanceof Collection || $data instanceof Paginator) {
             $additional = array_filter([
                 'meta' => $meta ?? null,
@@ -117,10 +117,9 @@ abstract class BaseAction extends Controller
 
     protected function errorResponse(
         string $message,
-        int    $statusCode = ResponseCodes::HTTP_BAD_REQUEST,
-        array  $errors = [],
-    ): JsonResponse
-    {
+        int $statusCode = ResponseCodes::HTTP_BAD_REQUEST,
+        array $errors = [],
+    ): JsonResponse {
         return $this->jsonResponse([
             'message' => $message,
             'errors' => $errors,
@@ -129,10 +128,9 @@ abstract class BaseAction extends Controller
 
     protected function jsonResponse(
         mixed $data,
-        int   $statusCode = ResponseCodes::HTTP_OK,
-        bool  $wrapInData = false,
-    ): JsonResponse
-    {
+        int $statusCode = ResponseCodes::HTTP_OK,
+        bool $wrapInData = false,
+    ): JsonResponse {
         if ($wrapInData) {
             $data = [
                 'data' => $data,
@@ -144,10 +142,9 @@ abstract class BaseAction extends Controller
 
     protected function xmlResponse(
         string $xmlContent,
-        int    $statusCode = ResponseCodes::HTTP_OK,
-        array  $headers = [],
-    ): LaravelResponse
-    {
+        int $statusCode = ResponseCodes::HTTP_OK,
+        array $headers = [],
+    ): LaravelResponse {
         $defaultHeaders = [
             'Content-Type' => 'application/xml',
         ];
@@ -157,11 +154,7 @@ abstract class BaseAction extends Controller
         return Response::make($xmlContent, $statusCode, $allHeaders);
     }
 
-    protected function isActionAuthorized(
-        int    $entityId,
-        string $entityType,
-        Role   $minimumRole = Role::ORGANIZER
-    ): void
+    protected function isActionAuthorized(int $entityId, string $entityType): void
     {
         /** @var IsAuthorizedService $authService */
         $authService = app()->make(IsAuthorizedService::class);
@@ -171,8 +164,55 @@ abstract class BaseAction extends Controller
             $entityType,
             $this->getAuthenticatedUser(),
             $this->getAuthenticatedAccountId(),
-            $minimumRole
         );
+    }
+
+    protected function isOrganizerReadAuthorized(int $organizerId): void
+    {
+        /** @var IsAuthorizedService $authService */
+        $authService = app()->make(IsAuthorizedService::class);
+
+        $authService->isOrganizerReadAuthorized(
+            $organizerId,
+            $this->getAuthenticatedUser(),
+            $this->getAuthenticatedAccountId(),
+        );
+    }
+
+    protected function isAccountReadAuthorized(int $accountId): void
+    {
+        /** @var IsAuthorizedService $authService */
+        $authService = app()->make(IsAuthorizedService::class);
+
+        $authService->isAccountReadAuthorized(
+            $accountId,
+            $this->getAuthenticatedUser(),
+            $this->getAuthenticatedAccountId(),
+        );
+    }
+
+    protected function getAuthenticatedAccess(): AccountUserAccess
+    {
+        $access = app(AccountUserAccessService::class)->forCurrentUser();
+
+        if ($access === null) {
+            throw new UnauthorizedException;
+        }
+
+        return $access;
+    }
+
+    protected function isWithheldFromCurrentUser(Permission $permission): bool
+    {
+        return app(AccountUserAccessService::class)->isWithheldFromCurrentUser($permission);
+    }
+
+    protected function requirePermission(Permission $permission): void
+    {
+        /** @var IsAuthorizedService $authService */
+        $authService = app()->make(IsAuthorizedService::class);
+
+        $authService->validatePermission($permission, $this->getAuthenticatedUser());
     }
 
     protected function getAuthenticatedAccountId(): int
@@ -189,24 +229,7 @@ abstract class BaseAction extends Controller
             return $accountId;
         }
 
-        throw new UnauthorizedException();
-    }
-
-    protected function getAuthenticatedUserRole(): Role
-    {
-        if (Auth::check()) {
-            /** @var AuthUserService $service */
-            $service = app(AuthUserService::class);
-            $role = $service->getAuthenticatedUserRole();
-
-            if ($role === null) {
-                throw new UnauthorizedException(__('No user role found in token'));
-            }
-
-            return $role;
-        }
-
-        throw new UnauthorizedException();
+        throw new UnauthorizedException;
     }
 
     protected function getAuthenticatedUser(): UserDomainObject|DomainObjectInterface
@@ -214,10 +237,11 @@ abstract class BaseAction extends Controller
         if (Auth::check()) {
             /** @var AuthUserService $service */
             $service = app(AuthUserService::class);
+
             return $service->getUser();
         }
 
-        throw new UnauthorizedException();
+        throw new UnauthorizedException;
     }
 
     protected function isUserAuthenticated(): bool
@@ -225,12 +249,30 @@ abstract class BaseAction extends Controller
         return Auth::check();
     }
 
-    protected function minimumAllowedRole(Role $minimumRole): void
+    protected function getAuthTokenId(): ?string
+    {
+        return app(AuthUserService::class)->getSessionTokenId();
+    }
+
+    protected function isImpersonating(): bool
+    {
+        return app(AuthUserService::class)->isImpersonating();
+    }
+
+    protected function impersonationForbiddenResponse(string $message): JsonResponse
+    {
+        return $this->jsonResponse([
+            'message' => $message,
+            'error_code' => 'IMPERSONATION_NOT_ALLOWED',
+        ], ResponseCodes::HTTP_FORBIDDEN);
+    }
+
+    protected function requireSuperAdmin(): void
     {
         /** @var IsAuthorizedService $authService */
         $authService = app()->make(IsAuthorizedService::class);
 
-        $authService->validateUserRole($minimumRole, $this->getAuthenticatedUser());
+        $authService->validateSuperAdmin($this->getAuthenticatedUser());
     }
 
     public function getClientIp(Request $request): ?string
@@ -245,7 +287,17 @@ abstract class BaseAction extends Controller
 
     public function getPaginationQueryParams(Request $request): QueryParamsDTO
     {
-        return QueryParamsDTO::fromArray($request->query->all());
+        $params = $request->query->all();
+
+        if ($this->isWithheldFromCurrentUser(Permission::VIEW_FINANCIALS)) {
+            $params['filter_fields'] = array_diff_key((array) ($params['filter_fields'] ?? []), array_flip(self::FINANCIAL_QUERY_FIELDS));
+
+            if (in_array($params['sort_by'] ?? null, self::FINANCIAL_QUERY_FIELDS, true)) {
+                unset($params['sort_by'], $params['sort_direction']);
+            }
+        }
+
+        return QueryParamsDTO::fromArray($params);
     }
 
     public function isIncludeRequested(Request $request, string $include): bool

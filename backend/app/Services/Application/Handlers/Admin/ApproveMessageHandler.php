@@ -17,11 +17,9 @@ class ApproveMessageHandler
 {
     public function __construct(
         private readonly MessageRepositoryInterface $messageRepository,
-        private readonly DatabaseManager            $databaseManager,
-        private readonly MessageDispatchService     $messageDispatchService,
-    )
-    {
-    }
+        private readonly DatabaseManager $databaseManager,
+        private readonly MessageDispatchService $messageDispatchService,
+    ) {}
 
     public function handle(int $messageId): MessageDomainObject
     {

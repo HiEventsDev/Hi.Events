@@ -13,8 +13,7 @@ class UnauthorizedException extends AccessDeniedHttpException
         ?Throwable $previous = null,
         int $code = ResponseCodes::HTTP_FORBIDDEN,
         array $headers = []
-    )
-    {
+    ) {
         parent::__construct($message, $previous, $code, $headers);
     }
 }

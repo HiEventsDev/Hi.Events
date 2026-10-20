@@ -6,7 +6,8 @@ import {showSuccess} from "../../../../../../utilites/notifications.tsx";
 import {t} from "@lingui/macro";
 import {Card} from "../../../../../common/Card";
 import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
-import {Alert, Button, Checkbox, Switch, Text, TextInput} from "@mantine/core";
+import {Button, Checkbox, Switch, Text, TextInput} from "@mantine/core";
+import {Callout} from "../../../../../common/Callout";
 import {
     IconBrandFacebook,
     IconBrandGoogle,
@@ -241,9 +242,9 @@ export const TrackingPixelSettings = () => {
 
                     {hasAnyPixels && (
                         <>
-                            <Alert variant="light" color="yellow" mt="lg" mb="md">
+                            <Callout variant="tip" style={{marginTop: 24}}>
                                 {t`By adding tracking pixels, you acknowledge that you and this platform are joint controllers of the data collected. You are responsible for ensuring you have a lawful basis for this processing under applicable privacy laws (GDPR, CCPA, etc.).`}
-                            </Alert>
+                            </Callout>
                             <Checkbox
                                 {...form.getInputProps('tracking_consent_acknowledged', {type: 'checkbox'})}
                                 label={t`I acknowledge my responsibilities as a data controller`}

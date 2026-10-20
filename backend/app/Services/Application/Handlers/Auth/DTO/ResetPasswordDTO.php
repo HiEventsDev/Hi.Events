@@ -11,7 +11,5 @@ class ResetPasswordDTO extends BaseDTO
         public readonly string $password,
         public readonly string $ipAddress,
         public readonly string $userAgent,
-    )
-    {
-    }
+    ) {}
 }

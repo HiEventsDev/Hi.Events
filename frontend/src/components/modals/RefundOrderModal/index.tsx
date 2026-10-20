@@ -1,4 +1,4 @@
-import {Alert, Button, Checkbox, Group, LoadingOverlay, NumberInput, Paper, Stack, Text, Title} from "@mantine/core";
+import {Button, Checkbox, Group, LoadingOverlay, NumberInput, Paper, Stack, Text, Title} from "@mantine/core";
 import {GenericModalProps, IdParam, Order} from "../../../types.ts";
 import {useForm, UseFormReturnType} from "@mantine/form";
 import {useParams} from "react-router";
@@ -8,11 +8,13 @@ import {Currency} from "../../common/Currency";
 import {useRefundOrder} from "../../../mutations/useRefundOrder.ts";
 import {RefundOrderPayload} from "../../../api/order.client.ts";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
-import {IconCash, IconCreditCard, IconInfoCircle} from "@tabler/icons-react";
+import {IconCash, IconCreditCard} from "@tabler/icons-react";
+import {Callout} from "../../common/Callout";
 import {showSuccess} from "../../../utilites/notifications.tsx";
 import {Modal} from "../../common/Modal";
 import classes from './RefundOrderModal.module.scss';
 import {t} from "@lingui/macro";
+import {isOfflineOrder} from "../../../utilites/orderHelper.ts";
 
 interface RefundOrderModalProps extends GenericModalProps {
     orderId: IdParam;
@@ -55,7 +57,7 @@ export const RefundOrderModal = ({onClose, orderId}: RefundOrderModalProps) => {
         },
         {
             onSuccess: () => {
-                showSuccess(t`Your refund is processing.`)
+                showSuccess(isOfflineOrder(order) ? t`Refund recorded successfully.` : t`Your refund is processing.`)
                 form.reset();
                 onClose();
             },
@@ -68,10 +70,16 @@ export const RefundOrderModal = ({onClose, orderId}: RefundOrderModalProps) => {
     const modalForm = ({order, form}: { order: Order, form: UseFormReturnType<RefundOrderPayload> }) => {
         const remainingAmount = order.total_gross - order.total_refunded;
         const isPartialRefund = form.values.amount < remainingAmount;
+        const isOffline = isOfflineOrder(order);
 
         return (
             <form onSubmit={form.onSubmit(handleSubmit)}>
                 <Stack gap="md">
+                    {isOffline && (
+                        <Callout variant="warning">
+                            {t`This order was paid offline. Refunding it will only update your reporting — you will need to return the payment to the customer yourself.`}
+                        </Callout>
+                    )}
                     <Paper radius="md" p="md" withBorder>
                         <Stack gap="sm">
                             <Group justify="space-between">
@@ -119,11 +127,13 @@ export const RefundOrderModal = ({onClose, orderId}: RefundOrderModalProps) => {
                         }}
                     />
                     <Stack gap="xs">
-                        <Checkbox
-                            {...form.getInputProps('notify_buyer', {type: 'checkbox'})}
-                            label={t`Send refund notification email`}
-                            description={t`Customer will receive an email confirming the refund`}
-                        />
+                        {order.email && (
+                            <Checkbox
+                                {...form.getInputProps('notify_buyer', {type: 'checkbox'})}
+                                label={t`Send refund notification email`}
+                                description={t`Customer will receive an email confirming the refund`}
+                            />
+                        )}
 
                         {order.status !== 'CANCELLED' && (
                             <Checkbox
@@ -135,9 +145,9 @@ export const RefundOrderModal = ({onClose, orderId}: RefundOrderModalProps) => {
                     </Stack>
 
                     {(isPartialRefund && Number(form.values.amount) > 0) && (
-                        <Alert icon={<IconInfoCircle/>} color="blue" variant="light">
+                        <Callout variant="info">
                             {t`You are issuing a partial refund. The customer will be refunded ${Number(form.values.amount).toFixed(2)} ${order.currency}.`}
-                        </Alert>
+                        </Callout>
                     )}
 
                     <Button
@@ -145,9 +155,9 @@ export const RefundOrderModal = ({onClose, orderId}: RefundOrderModalProps) => {
                         fullWidth
                         size="md"
                         type={'submit'}
-                        leftSection={<IconCreditCard size={20}/>}
+                        leftSection={isOffline ? <IconCash size={20}/> : <IconCreditCard size={20}/>}
                     >
-                        {t`Process Refund`}
+                        {isOffline ? t`Record Refund` : t`Process Refund`}
                     </Button>
                 </Stack>
             </form>);
@@ -156,26 +166,15 @@ export const RefundOrderModal = ({onClose, orderId}: RefundOrderModalProps) => {
     const CannotRefund = ({message}: { message: string }) => {
         return (
             <Stack gap="md">
-                <Alert
-                    icon={<IconInfoCircle size={24}/>}
-                    color={'blue'}
-                    variant="light"
-                    styles={{
-                        message: {fontSize: '0.95rem'}
-                    }}
-                >
+                <Callout variant="info">
                     {message}
-                </Alert>
+                </Callout>
                 <Button fullWidth onClick={onClose} variant="light">{t`Close`}</Button>
             </Stack>
         )
     }
 
     const getModalBody = () => {
-        if (order.is_manually_created) {
-            return <CannotRefund message={t`You cannot refund a manually created order.`}/>
-        }
-
         if (isRefundPending) {
             return <CannotRefund
                 message={t`There is a refund pending. Please wait for it to complete before requesting another refund.`}/>

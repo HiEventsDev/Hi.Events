@@ -5,21 +5,21 @@ declare(strict_types=1);
 namespace HiEvents\Repository\Eloquent;
 
 use Exception;
-use HiEvents\Constants;
 use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\Http\DTO\QueryParamsDTO;
+use HiEvents\Models\BoxOffice;
 use HiEvents\Models\CapacityAssignment;
 use HiEvents\Models\CheckInList;
 use HiEvents\Models\Product;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use RuntimeException;
 use Throwable;
 
 /**
@@ -30,13 +30,13 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     public function findByEventId(int $eventId, QueryParamsDTO $params): LengthAwarePaginator
     {
         $where = [
-            [ProductDomainObjectAbstract::EVENT_ID, '=', $eventId]
+            [ProductDomainObjectAbstract::EVENT_ID, '=', $eventId],
         ];
 
-        if (!empty($params->query)) {
+        if (! empty($params->query)) {
             $where[] = static function (Builder $builder) use ($params) {
                 $builder
-                    ->where(ProductDomainObjectAbstract::TITLE, 'ilike', '%' . $params->query . '%');
+                    ->where(ProductDomainObjectAbstract::TITLE, 'ilike', '%'.$params->query.'%');
             };
         }
 
@@ -52,53 +52,9 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         );
     }
 
-    /**
-     * @param int $productId
-     * @param int $productPriceId
-     * @return int
-     */
-    public function getQuantityRemainingForProductPrice(int $productId, int $productPriceId): int
-    {
-        $query = <<<SQL
-        SELECT
-            COALESCE(product_prices.initial_quantity_available, 0) - (
-                product_prices.quantity_sold + COALESCE((
-                    SELECT sum(order_items.quantity)
-                    FROM orders
-                    INNER JOIN order_items ON orders.id = order_items.order_id
-                    WHERE order_items.product_price_id = :productPriceId
-                    AND orders.status in ('RESERVED')
-                    AND current_timestamp < orders.reserved_until
-                    AND orders.deleted_at IS NULL
-                    AND order_items.deleted_at IS NULL
-                ), 0)
-            ) AS quantity_remaining,
-            product_prices.initial_quantity_available IS NULL AS unlimited_products_available
-        FROM product_prices
-        WHERE product_prices.id = :productPriceId
-        AND product_prices.product_id = :productId
-        AND product_prices.deleted_at IS NULL
-    SQL;
-
-        $result = $this->db->selectOne($query, [
-            'productPriceId' => $productPriceId,
-            'productId' => $productId
-        ]);
-
-        if ($result === null) {
-            throw new RuntimeException('Product price not found');
-        }
-
-        if ($result->unlimited_products_available) {
-            return Constants::INFINITE;
-        }
-
-        return (int)$result->quantity_remaining;
-    }
-
     public function getTaxesByProductId(int $productId): Collection
     {
-        $query = <<<SQL
+        $query = <<<'SQL'
             SELECT tf.*
             FROM product_taxes_and_fees ttf
             INNER JOIN taxes_and_fees tf ON tf.id = ttf.tax_and_fee_id
@@ -107,7 +63,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         SQL;
 
         $taxAndFees = $this->db->select($query, [
-            'productId' => $productId
+            'productId' => $productId,
         ]);
 
         return $this->handleResults($taxAndFees, TaxAndFeesDomainObject::class);
@@ -115,7 +71,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     public function getProductsByTaxId(int $taxId): Collection
     {
-        $query = <<<SQL
+        $query = <<<'SQL'
             SELECT t.*
             FROM product_taxes_and_fees ttf
             INNER JOIN products t ON t.id = ttf.product_id
@@ -124,7 +80,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         SQL;
 
         $products = $this->model->select($query, [
-            'taxAndFeeId' => $taxId
+            'taxAndFeeId' => $taxId,
         ]);
 
         return $this->handleResults($products, ProductDomainObject::class);
@@ -142,6 +98,38 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     public function addTaxesAndFeesToProduct(int $productId, array $taxIds): void
     {
         Product::findOrFail($productId)?->tax_and_fees()->sync($taxIds);
+    }
+
+    public function syncAddons(int $productId, array $addonProductIds): void
+    {
+        $syncData = [];
+        foreach (array_values($addonProductIds) as $position => $addonProductId) {
+            $syncData[$addonProductId] = ['order' => $position];
+        }
+
+        Product::findOrFail($productId)->addons()->sync($syncData);
+    }
+
+    public function detachAddonAssociations(int $productId): void
+    {
+        $this->runQuery(
+            fn () => $this->db->table('product_addons')
+                ->where('product_id', $productId)
+                ->orWhere('addon_product_id', $productId)
+                ->delete()
+        );
+    }
+
+    public function findParentProductIds(array $addonProductIds): Collection
+    {
+        return $this->runQuery(
+            fn () => collect(
+                $this->db->table('product_addons')
+                    ->whereIn('addon_product_id', $addonProductIds)
+                    ->get(['product_id', 'addon_product_id'])
+            )->groupBy('addon_product_id')
+                ->map(fn ($rows) => $rows->pluck('product_id')->all())
+        );
     }
 
     public function addCapacityAssignmentToProducts(int $capacityAssignmentId, array $productIds): void
@@ -187,6 +175,31 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         $checkInList?->products()->detach();
     }
 
+    public function addBoxOfficeToProducts(int $boxOfficeId, array $productIds): void
+    {
+        $productIds = array_unique($productIds);
+
+        Product::whereNotIn('id', $productIds)
+            ->whereHas('box_offices', function ($query) use ($boxOfficeId) {
+                $query->where('box_office_id', $boxOfficeId);
+            })
+            ->each(function (Product $product) use ($boxOfficeId) {
+                $product->box_offices()->detach($boxOfficeId);
+            });
+
+        Product::whereIn('id', $productIds)
+            ->each(function (Product $product) use ($boxOfficeId) {
+                $product->box_offices()->syncWithoutDetaching([$boxOfficeId]);
+            });
+    }
+
+    public function removeBoxOfficeFromProducts(int $boxOfficeId): void
+    {
+        $boxOffice = BoxOffice::find($boxOfficeId);
+
+        $boxOffice?->products()->detach();
+    }
+
     public function removeCapacityAssignmentFromProducts(int $capacityAssignmentId): void
     {
         $capacityAssignment = CapacityAssignment::find($capacityAssignmentId);
@@ -208,22 +221,22 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
             $productParameters = [
                 'eventId' => $eventId,
-                'productIds' => '{' . implode(',', $productIds) . '}',
-                'productOrders' => '{' . implode(',', $productOrders) . '}',
-                'productCategoryIds' => '{' . implode(',', $productCategoryIds) . '}',
+                'productIds' => '{'.implode(',', $productIds).'}',
+                'productOrders' => '{'.implode(',', $productOrders).'}',
+                'productCategoryIds' => '{'.implode(',', $productCategoryIds).'}',
             ];
 
-            $productUpdateQuery = "WITH new_order AS (
+            $productUpdateQuery = 'WITH new_order AS (
                                   SELECT unnest(:productIds::bigint[]) AS product_id,
                                          unnest(:productOrders::int[]) AS order,
                                          unnest(:productCategoryIds::bigint[]) AS category_id
                               )
                               UPDATE products
-                              SET \"order\" = new_order.order,
+                              SET "order" = new_order.order,
                                   product_category_id = new_order.category_id,
                                   updated_at = NOW()
                               FROM new_order
-                              WHERE products.id = new_order.product_id AND products.event_id = :eventId";
+                              WHERE products.id = new_order.product_id AND products.event_id = :eventId';
 
             $this->db->update($productUpdateQuery, $productParameters);
 
@@ -232,19 +245,19 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
             $categoryParameters = [
                 'eventId' => $eventId,
-                'categoryIds' => '{' . implode(',', $categoryIds) . '}',
-                'categoryOrders' => '{' . implode(',', $categoryOrders) . '}',
+                'categoryIds' => '{'.implode(',', $categoryIds).'}',
+                'categoryOrders' => '{'.implode(',', $categoryOrders).'}',
             ];
 
-            $categoryUpdateQuery = "WITH new_category_order AS (
+            $categoryUpdateQuery = 'WITH new_category_order AS (
                                   SELECT unnest(:categoryIds::bigint[]) AS category_id,
                                          unnest(:categoryOrders::int[]) AS order
                               )
                               UPDATE product_categories
-                              SET \"order\" = new_category_order.order,
+                              SET "order" = new_category_order.order,
                                   updated_at = NOW()
                               FROM new_category_order
-                              WHERE product_categories.id = new_category_order.category_id AND product_categories.event_id = :eventId";
+                              WHERE product_categories.id = new_category_order.category_id AND product_categories.event_id = :eventId';
 
             $this->db->update($categoryUpdateQuery, $categoryParameters);
 
@@ -257,15 +270,26 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     public function hasAssociatedOrders(int $productId): bool
     {
-        return $this->db->table('order_items')
-            ->join('orders', 'order_items.order_id', '=', 'orders.id')
-            ->whereIn('orders.status', [
-                OrderStatus::COMPLETED->name,
-                OrderStatus::CANCELLED->name,
-                OrderStatus::AWAITING_OFFLINE_PAYMENT->name,
-            ])
-            ->where('order_items.product_id', $productId)
-            ->exists();
+        return $this->runQuery(
+            fn () => $this->db->table('order_items')
+                ->join('orders', 'order_items.order_id', '=', 'orders.id')
+                ->where('order_items.product_id', $productId)
+                ->where(static function (QueryBuilder $query) {
+                    $query
+                        ->whereIn('orders.status', [
+                            OrderStatus::COMPLETED->name,
+                            OrderStatus::CANCELLED->name,
+                            OrderStatus::AWAITING_OFFLINE_PAYMENT->name,
+                        ])
+                        ->orWhere(static function (QueryBuilder $reserved) {
+                            $reserved
+                                ->where('orders.status', OrderStatus::RESERVED->name)
+                                ->where('orders.reserved_until', '>', now())
+                                ->whereNull('orders.deleted_at');
+                        });
+                })
+                ->exists()
+        );
     }
 
     public function getModel(): string

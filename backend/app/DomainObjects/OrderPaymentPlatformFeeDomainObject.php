@@ -2,6 +2,4 @@
 
 namespace HiEvents\DomainObjects;
 
-class OrderPaymentPlatformFeeDomainObject extends Generated\OrderPaymentPlatformFeeDomainObjectAbstract
-{
-}
+class OrderPaymentPlatformFeeDomainObject extends Generated\OrderPaymentPlatformFeeDomainObjectAbstract {}

@@ -1,5 +1,6 @@
 import {CapacityAssignment, IdParam} from "../../../types";
-import {Badge, Button, Progress} from "@mantine/core";
+import {CreateButton} from "../CreateButton";
+import {Badge, Progress} from "@mantine/core";
 import {t, Trans} from "@lingui/macro";
 import {IconHelp, IconPencil, IconPlus, IconTrash} from "@tabler/icons-react";
 import Truncate from "../Truncate";
@@ -53,12 +54,12 @@ export const CapacityAssignmentList = ({capacityAssignments, openCreateModal}: C
                                 </p>
                             </Trans>
                         </p>
-                        <Button
+                        <CreateButton
                             size={'xs'}
                             leftSection={<IconPlus/>}
                             color={'green'}
                             onClick={() => openCreateModal()}>{t`Create Capacity Assignment`}
-                        </Button>
+                        </CreateButton>
                     </>
                 )}
             />
@@ -141,6 +142,7 @@ export const CapacityAssignmentList = ({capacityAssignments, openCreateModal}: C
                                                 items: [
                                                     {
                                                         label: t`Edit Capacity`,
+                                                        requiresEdit: true,
                                                         icon: <IconPencil size={14}/>,
                                                         onClick: () => {
                                                             setSelectedCapacityAssignmentId(assignment.id as IdParam);
@@ -154,6 +156,7 @@ export const CapacityAssignmentList = ({capacityAssignments, openCreateModal}: C
                                                 items: [
                                                     {
                                                         label: t`Delete Capacity`,
+                                                        requiresEdit: true,
                                                         icon: <IconTrash size={14}/>,
                                                         onClick: () => {
                                                             confirmationDialog(

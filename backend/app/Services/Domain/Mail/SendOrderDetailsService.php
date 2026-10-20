@@ -4,43 +4,87 @@ namespace HiEvents\Services\Domain\Mail;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventLocationDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\InvoiceDomainObject;
+use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
+use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\Mail\Order\OrderFailed;
-use HiEvents\Mail\Order\OrderSummary;
 use HiEvents\Mail\Organizer\OrderSummaryForOrganizer;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\Attendee\SendAttendeeTicketService;
 use HiEvents\Services\Domain\Email\MailBuilderService;
+use Illuminate\Mail\Mailer;
+use Illuminate\Support\Collection;
 
 class SendOrderDetailsService
 {
     public function __construct(
-        private readonly EventRepositoryInterface  $eventRepository,
-        private readonly OrderRepositoryInterface  $orderRepository,
-        private readonly AccountMailerFactory      $accountMailerFactory,
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly Mailer $mailer,
+        private readonly AccountMailerFactory $accountMailerFactory,
         private readonly SendAttendeeTicketService $sendAttendeeTicketService,
-        private readonly MailBuilderService        $mailBuilderService,
-    )
-    {
-    }
+        private readonly MailBuilderService $mailBuilderService,
+        private readonly TeamOrderNotificationRecipientService $teamRecipientService,
+    ) {}
 
     public function sendOrderSummaryAndTicketEmails(OrderDomainObject $order): void
     {
         $order = $this->orderRepository
-            ->loadRelation(OrderItemDomainObject::class)
-            ->loadRelation(AttendeeDomainObject::class)
+            ->loadRelation(new Relationship(
+                domainObject: OrderItemDomainObject::class,
+                nested: [
+                    new Relationship(
+                        domainObject: EventOccurrenceDomainObject::class,
+                        nested: [
+                            new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                                new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                            ]),
+                        ],
+                        name: 'event_occurrence',
+                    ),
+                ],
+            ))
+            ->loadRelation(new Relationship(
+                domainObject: AttendeeDomainObject::class,
+                nested: [
+                    new Relationship(
+                        domainObject: EventOccurrenceDomainObject::class,
+                        nested: [
+                            new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                                new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                            ]),
+                        ],
+                        name: 'event_occurrence',
+                    ),
+                    new Relationship(
+                        domainObject: ProductDomainObject::class,
+                        name: 'product',
+                    ),
+                ],
+            ))
             ->loadRelation(InvoiceDomainObject::class)
             ->findById($order->getId());
 
         $event = $this->eventRepository
             ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
             ->loadRelation(new Relationship(EventSettingDomainObject::class))
+            ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+            ]))
+            ->loadRelation(new Relationship(EventOccurrenceDomainObject::class, nested: [
+                new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                    new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                ]),
+            ]))
             ->findById($order->getEventId());
 
         $mailer = $this->accountMailerFactory->forAccount($event->getAccountId());
@@ -50,7 +94,7 @@ class SendOrderDetailsService
             $this->sendAttendeeTicketEmails($order, $event);
         }
 
-        if ($order->isOrderFailed()) {
+        if ($order->isOrderFailed() && $order->getEmail() !== null && ! $order->isBoxOfficeOrder()) {
             $mailer
                 ->to($order->getEmail())
                 ->locale($order->getLocale())
@@ -64,13 +108,16 @@ class SendOrderDetailsService
     }
 
     public function sendCustomerOrderSummary(
-        OrderDomainObject        $order,
-        EventDomainObject        $event,
-        OrganizerDomainObject    $organizer,
+        OrderDomainObject $order,
+        EventDomainObject $event,
+        OrganizerDomainObject $organizer,
         EventSettingDomainObject $eventSettings,
-        ?InvoiceDomainObject     $invoice = null
-    ): void
-    {
+        ?InvoiceDomainObject $invoice = null,
+    ): void {
+        if ($order->getEmail() === null) {
+            return;
+        }
+
         $mailer = $this->accountMailerFactory->forAccount($event->getAccountId());
 
         $mail = $this->mailBuilderService->buildOrderSummaryMail(
@@ -78,7 +125,7 @@ class SendOrderDetailsService
             $event,
             $eventSettings,
             $organizer,
-            $invoice
+            $invoice,
         );
 
         $mailer
@@ -89,22 +136,17 @@ class SendOrderDetailsService
 
     private function sendAttendeeTicketEmails(OrderDomainObject $order, EventDomainObject $event): void
     {
-        $sentEmails = [];
-        foreach ($order->getAttendees() as $attendee) {
-            if (in_array($attendee->getEmail(), $sentEmails, true)) {
-                continue;
-            }
-
-            $this->sendAttendeeTicketService->send(
+        ($order->getAttendees() ?? collect())
+            ->filter(fn (AttendeeDomainObject $attendee) => $attendee->getEmail() !== null
+                && $attendee->getStatus() !== AttendeeStatus::CANCELLED->name)
+            ->groupBy(fn (AttendeeDomainObject $attendee) => $attendee->getEmail())
+            ->each(fn (Collection $attendees) => $this->sendAttendeeTicketService->sendTickets(
                 order: $order,
-                attendee: $attendee,
+                attendees: $attendees->values(),
                 event: $event,
                 eventSettings: $event->getEventSettings(),
                 organizer: $event->getOrganizer(),
-            );
-
-            $sentEmails[] = $attendee->getEmail();
-        }
+            ));
     }
 
     private function sendOrderSummaryEmails(
@@ -121,12 +163,27 @@ class SendOrderDetailsService
             invoice: $order->getLatestInvoice(),
         );
 
-        if ($order->getIsManuallyCreated() || !$event->getEventSettings()->getNotifyOrganizerOfNewOrders()) {
+        if ($order->getIsManuallyCreated() || $order->isBoxOfficeOrder()) {
             return;
         }
 
-        $mailer
-            ->to($event->getOrganizer()->getEmail())
-            ->send(new OrderSummaryForOrganizer($order, $event));
+        $notifiesOrganizer = $event->getEventSettings()->getNotifyOrganizerOfNewOrders();
+
+        if ($notifiesOrganizer) {
+            $mailer
+                ->to($event->getOrganizer()->getEmail())
+                ->send(new OrderSummaryForOrganizer($order, $event));
+        }
+
+        $teamRecipients = $this->teamRecipientService->recipientsFor(
+            event: $event,
+            excludeEmail: $notifiesOrganizer ? $event->getOrganizer()->getEmail() : null,
+        );
+
+        foreach ($teamRecipients as $email) {
+            $mailer
+                ->to($email)
+                ->send(new OrderSummaryForOrganizer($order, $event));
+        }
     }
 }

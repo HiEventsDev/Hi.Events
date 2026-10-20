@@ -2,6 +2,4 @@
 
 namespace HiEvents\Exceptions;
 
-class CreateStripeConnectAccountFailedException extends BaseException
-{
-}
+class CreateStripeConnectAccountFailedException extends BaseException {}

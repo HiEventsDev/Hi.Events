@@ -15,7 +15,17 @@ interface AttendeeRepositoryInterface extends RepositoryInterface
 {
     public function findByEventId(int $eventId, QueryParamsDTO $params): LengthAwarePaginator;
 
-    public function findByEventIdForExport(int $eventId): Collection;
+    public function findByEventIdForExport(int $eventId, ?int $eventOccurrenceId = null): Collection;
 
     public function getAttendeesByCheckInShortId(string $shortId, QueryParamsDTO $params): Paginator;
+
+    /**
+     * @return array<int, int> product_price_id => quantity
+     */
+    public function getSoldQuantitiesByPriceForOccurrence(int $occurrenceId): array;
+
+    /**
+     * @return array<int, int> product_price_id => highest quantity sold on any single occurrence
+     */
+    public function getMaxSoldPerOccurrenceByPrice(array $productPriceIds): array;
 }

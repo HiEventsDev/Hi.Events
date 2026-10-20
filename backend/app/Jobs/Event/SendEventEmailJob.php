@@ -7,6 +7,7 @@ use HiEvents\DomainObjects\Status\OutgoingMessageStatus;
 use HiEvents\Mail\Event\EventMessage;
 use HiEvents\Repository\Interfaces\OutgoingMessageRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Message\DTO\SendMessageDTO;
+use HiEvents\Services\Domain\Email\Delivery\EmailProviderMessageIdResolver;
 use HiEvents\Services\Domain\Mail\AccountMailerFactory;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -21,48 +22,57 @@ class SendEventEmailJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public function __construct(
-        private readonly string         $email,
-        private readonly string         $toName,
-        private readonly EventMessage   $eventMessage,
+        private readonly string $email,
+        private readonly string $toName,
+        private readonly EventMessage $eventMessage,
         private readonly SendMessageDTO $messageData,
-        private readonly int            $accountId,
-    )
-    {
-    }
+        private readonly int $accountId,
+    ) {}
 
-    /**
-     * @throws Throwable
-     */
     public function handle(
-        Mailer                             $mailer,
+        Mailer $mailer,
         OutgoingMessageRepositoryInterface $outgoingMessageRepository,
-        AccountMailerFactory               $accountMailerFactory,
-    ): void
-    {
+        EmailProviderMessageIdResolver $providerMessageIdResolver,
+        AccountMailerFactory $accountMailerFactory,
+    ): void {
         $resolvedMailer = $accountMailerFactory->forAccount($this->accountId);
 
+        $sentMessage = $resolvedMailer
+            ->to($this->email, $this->toName)
+            ->sendNow($this->eventMessage);
+
         try {
-            $resolvedMailer
-                ->to($this->email, $this->toName)
-                ->send($this->eventMessage);
+            $outgoingMessageRepository->create($this->outgoingMessageAttributes(
+                OutgoingMessageStatus::SENT,
+                $sentMessage === null
+                    ? null
+                    : $providerMessageIdResolver->resolve($sentMessage->getSymfonySentMessage()),
+            ));
         } catch (Throwable $exception) {
-            $outgoingMessageRepository->create([
-                OutgoingMessageDomainObjectAbstract::MESSAGE_ID => $this->messageData->id,
-                OutgoingMessageDomainObjectAbstract::EVENT_ID => $this->messageData->event_id,
-                OutgoingMessageDomainObjectAbstract::STATUS => OutgoingMessageStatus::FAILED->name,
-                OutgoingMessageDomainObjectAbstract::RECIPIENT => $this->email,
-                OutgoingMessageDomainObjectAbstract::SUBJECT => $this->messageData->subject,
+            logger()?->error('Failed to record sent event email', [
+                'message_id' => $this->messageData->id,
+                'recipient' => $this->email,
+                'error' => $exception->getMessage(),
             ]);
-
-            throw $exception;
         }
+    }
 
-        $outgoingMessageRepository->create([
+    public function failed(?Throwable $exception): void
+    {
+        app(OutgoingMessageRepositoryInterface::class)->create(
+            $this->outgoingMessageAttributes(OutgoingMessageStatus::FAILED, null),
+        );
+    }
+
+    private function outgoingMessageAttributes(OutgoingMessageStatus $status, ?string $providerMessageId): array
+    {
+        return [
             OutgoingMessageDomainObjectAbstract::MESSAGE_ID => $this->messageData->id,
             OutgoingMessageDomainObjectAbstract::EVENT_ID => $this->messageData->event_id,
-            OutgoingMessageDomainObjectAbstract::STATUS => OutgoingMessageStatus::SENT->name,
+            OutgoingMessageDomainObjectAbstract::STATUS => $status->name,
             OutgoingMessageDomainObjectAbstract::RECIPIENT => $this->email,
             OutgoingMessageDomainObjectAbstract::SUBJECT => $this->messageData->subject,
-        ]);
+            OutgoingMessageDomainObjectAbstract::PROVIDER_MESSAGE_ID => $providerMessageId,
+        ];
     }
 }

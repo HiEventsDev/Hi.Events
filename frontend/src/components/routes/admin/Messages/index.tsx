@@ -233,6 +233,7 @@ const Messages = () => {
                                                             <ActionIcon
                                                                 variant="subtle"
                                                                 color="green"
+                                                                data-testid="admin-approve-message-button"
                                                                 onClick={() => handleApprove(message.id)}
                                                                 loading={approveMutation.isPending}
                                                             >

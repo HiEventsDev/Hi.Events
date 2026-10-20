@@ -15,15 +15,12 @@ class CreateAttendeeCheckInPublicAction extends BaseAction
 {
     public function __construct(
         private readonly CreateAttendeeCheckInPublicHandler $createAttendeeCheckInPublicHandler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(
-        string                             $checkInListUuid,
+        string $checkInListUuid,
         CreateAttendeeCheckInPublicRequest $request,
-    ): JsonResponse
-    {
+    ): JsonResponse {
         try {
             $checkIns = $this->createAttendeeCheckInPublicHandler->handle(CreateAttendeeCheckInPublicDTO::from([
                 'checkInListUuid' => $checkInListUuid,

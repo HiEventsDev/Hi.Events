@@ -10,16 +10,16 @@ use Psr\Log\LoggerInterface;
 class ImageMetadataService
 {
     private const LQIP_MAX_DIMENSION = 16;
+
     private const LQIP_QUALITY = 60;
 
     public function __construct(
         private readonly LoggerInterface $logger,
-    ) {
-    }
+    ) {}
 
     public function extractMetadata(UploadedFile $image): ?ImageMetadataDTO
     {
-        if (!$this->isImagickAvailable()) {
+        if (! $this->isImagickAvailable()) {
             return null;
         }
 
@@ -41,7 +41,7 @@ class ImageMetadataService
                 lqip_base64: $lqipBase64,
             );
         } catch (\Exception $e) {
-            $this->logger->warning('Failed to extract image metadata: ' . $e->getMessage());
+            $this->logger->warning('Failed to extract image metadata: '.$e->getMessage());
 
             return null;
         }
@@ -91,6 +91,6 @@ class ImageMetadataService
         $clone->clear();
         $clone->destroy();
 
-        return 'data:image/webp;base64,' . base64_encode($blob);
+        return 'data:image/webp;base64,'.base64_encode($blob);
     }
 }

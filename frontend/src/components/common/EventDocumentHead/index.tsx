@@ -1,14 +1,20 @@
 /* eslint-disable lingui/no-unlocalized-strings */
 import {Helmet} from "react-helmet-async";
-import {Event} from "../../../types";
+import {Event, LocationType} from "../../../types";
 import {eventCoverImageUrl, eventHomepageUrl} from "../../../utilites/urlHelper.ts";
 import {utcToTz} from "../../../utilites/dates.ts";
+import {summariseEventLocations} from "../../../utilites/effectiveLocation.ts";
+import {formatAddress} from "../../../utilites/addressUtilities.ts";
+import {htmlSafeJsonStringify} from "../../../utilites/safeScriptJson.js";
+import {useGetEventLineupPublic} from "../../../queries/useGetEventLineupPublic.ts";
+import {lineupStructuredData} from "../../../utilites/lineupStructuredData.ts";
 
 interface EventDocumentHeadProps {
     event: Event;
 }
 
 export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
+    const {data: lineup} = useGetEventLineupPublic(event.id);
     const eventSettings = event.settings;
     const products = event.product_categories?.flatMap(category => category.products) ?? [];
     const title = (eventSettings?.seo_title ?? event.title) + ' | ' + event.organizer?.name;
@@ -16,28 +22,64 @@ export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
     const keywords = eventSettings?.seo_keywords;
     const image = eventCoverImageUrl(event);
     const url = eventHomepageUrl(event);
-    const startDate = utcToTz(new Date(event.start_date), event.timezone);
-    const endDate = event.end_date ? utcToTz(new Date(event.end_date), event.timezone) : undefined;
+    const seriesStartDate = event.next_occurrence_start_date || event.start_date;
+    const seriesEndDate = event.last_occurrence_date || event.end_date;
+    const startDate = utcToTz(new Date(seriesStartDate), event.timezone);
+    const endDate = seriesEndDate ? utcToTz(new Date(seriesEndDate), event.timezone) : undefined;
 
-    const address = {
+    const locationSummary = summariseEventLocations(event);
+    const effective = locationSummary.kind === 'single' ? locationSummary.eventLocation : null;
+    const structuredAddress = effective?.type === LocationType.InPerson ? effective.location?.structured_address : null;
+
+    const address = structuredAddress ? {
         "@type": "http://schema.org/PostalAddress",
-        streetAddress: eventSettings?.location_details?.address_line_1,
-        addressLocality: eventSettings?.location_details?.city,
-        addressRegion: eventSettings?.location_details?.state_or_region,
-        postalCode: eventSettings?.location_details?.zip_or_postal_code,
-        addressCountry: eventSettings?.location_details?.country
-    };
+        streetAddress: structuredAddress.address_line_1,
+        addressLocality: structuredAddress.city,
+        addressRegion: structuredAddress.state_or_region,
+        postalCode: structuredAddress.zip_or_postal_code,
+        addressCountry: structuredAddress.country
+    } : null;
 
-    // Filter out undefined address properties
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    Object.keys(address).forEach(key => address[key] === undefined && delete address[key]);
+    if (address) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        Object.keys(address).forEach(key => address[key] === undefined && delete address[key]);
+    }
 
-    const location = eventSettings?.location_details && Object.keys(address).length > 1 ? {
+    const latitude = effective?.type === LocationType.InPerson ? effective.location?.latitude : null;
+    const longitude = effective?.type === LocationType.InPerson ? effective.location?.longitude : null;
+    const geo = latitude != null && longitude != null ? {
+        "@type": "http://schema.org/GeoCoordinates",
+        latitude,
+        longitude,
+    } : null;
+
+    const venueName = effective?.type === LocationType.InPerson
+        ? (effective.location?.name || effective.location?.structured_address?.venue_name || null)
+        : null;
+    const placeName = venueName
+        ?? (effective?.type === LocationType.InPerson && structuredAddress ? formatAddress(structuredAddress) : null);
+
+    const includePlace = effective?.type === LocationType.InPerson && address && Object.keys(address).length > 1;
+    const location = includePlace ? {
         "@type": "http://schema.org/Place",
-        name: event.location_details?.venue_name,
-        address
+        name: placeName,
+        address,
+        ...(geo ? {geo} : {}),
     } : {};
+
+    const attendanceType = locationSummary.kind === 'single'
+        ? locationSummary.eventLocation.type
+        : locationSummary.kind === 'varied' && locationSummary.types.length === 1
+            ? locationSummary.types[0]
+            : null;
+    const eventAttendanceMode = locationSummary.kind === 'varied' && locationSummary.types.length > 1
+        ? "https://schema.org/MixedEventAttendanceMode"
+        : attendanceType === LocationType.Online
+            ? "https://schema.org/OnlineEventAttendanceMode"
+            : attendanceType === LocationType.InPerson
+                ? "https://schema.org/OfflineEventAttendanceMode"
+                : undefined;
 
     const schemaOrgJSONLD = {
         "@context": "http://schema.org",
@@ -56,7 +98,7 @@ export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
         },
         url,
         eventStatus: 'https://schema.org/EventScheduled',
-        eventAttendanceMode: event.settings?.is_online_event ? "https://schema.org/OnlineEventAttendanceMode" : "https://schema.org/OfflineEventAttendanceMode",
+        eventAttendanceMode,
         currency: event.currency,
         offers: products.map(product => ({
             "@type": "http://schema.org/Offer",
@@ -66,6 +108,7 @@ export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
             validFrom: startDate,
             availability: product?.is_available ? "http://schema.org/InStock" : "http://schema.org/SoldOut",
         })),
+        ...lineupStructuredData(event, lineup, url, includePlace ? {name: placeName, address, geo} : undefined),
     };
 
     return (
@@ -85,12 +128,12 @@ export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
             {image && <meta name="twitter:image" content={image}/>}
             <meta name="twitter:card" content="summary_large_image"/>
 
-            <meta name="robots" content="index, follow"/>
+            <meta name="robots" content={eventSettings?.allow_search_engine_indexing === false ? "noindex, nofollow" : "index, follow"}/>
 
             <link rel="canonical" href={url}/>
 
             <script type="application/ld+json">
-                {JSON.stringify(schemaOrgJSONLD)}
+                {htmlSafeJsonStringify(schemaOrgJSONLD)}
             </script>
         </Helmet>
     );

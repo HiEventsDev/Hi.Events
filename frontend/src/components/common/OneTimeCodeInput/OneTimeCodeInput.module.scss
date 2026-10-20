@@ -1,0 +1,158 @@
+@use "../../../styles/mixins.scss";
+
+.wrapper {
+  width: 100%;
+}
+
+.field {
+  position: relative;
+  width: 100%;
+}
+
+.input {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: transparent;
+  caret-color: transparent;
+  font-size: 16px;
+  letter-spacing: -1em;
+  cursor: text;
+
+  &::selection {
+    background: transparent;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.slots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  @include mixins.respond-below(sm) {
+    gap: 0.3125rem;
+  }
+}
+
+.separator {
+  flex: 0 0 8px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--hi-color-gray-2);
+}
+
+.slot {
+  position: relative;
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  max-width: 52px;
+  height: 60px;
+  border: 1px solid var(--hi-color-gray-2);
+  border-radius: var(--hi-radius-lg);
+  background: var(--hi-color-white);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 1.625rem;
+  font-weight: 600;
+  color: var(--hi-text);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+
+  @include mixins.respond-below(sm) {
+    height: 52px;
+    font-size: 1.375rem;
+  }
+
+  &.filled {
+    border-color: color-mix(in srgb, var(--hi-color-gray-dark) 45%, var(--hi-color-gray-2));
+    animation: pop 0.14s ease-out;
+  }
+
+  &.active {
+    border-color: var(--mantine-color-secondary-5);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--mantine-color-secondary-5) 14%, transparent);
+  }
+}
+
+.caret {
+  width: 2px;
+  height: 26px;
+  border-radius: 1px;
+  background: var(--mantine-color-secondary-5);
+  animation: blink 1.1s steps(1) infinite;
+}
+
+.invalid .slot {
+  border-color: var(--hi-color-danger);
+  color: var(--hi-color-danger);
+
+  &.active {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--hi-color-danger) 14%, transparent);
+  }
+}
+
+.shake {
+  animation: shake 0.36s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+.disabled .slot {
+  background: var(--hi-color-gray);
+  color: var(--hi-color-gray-dark);
+}
+
+.error {
+  margin-top: 0.625rem;
+  font-size: 0.8125rem;
+  color: var(--hi-color-danger);
+  text-align: center;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.92);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes shake {
+  10%, 90% {
+    transform: translateX(-1px);
+  }
+  20%, 80% {
+    transform: translateX(3px);
+  }
+  30%, 50%, 70% {
+    transform: translateX(-5px);
+  }
+  40%, 60% {
+    transform: translateX(5px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slot.filled, .shake, .caret {
+    animation: none;
+  }
+}

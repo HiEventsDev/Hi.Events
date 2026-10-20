@@ -31,15 +31,15 @@ class AffiliateRepository extends BaseRepository implements AffiliateRepositoryI
     public function findByEventId(int $eventId, QueryParamsDTO $params): LengthAwarePaginator
     {
         $where = [
-            [AffiliateDomainObjectAbstract::EVENT_ID, '=', $eventId]
+            [AffiliateDomainObjectAbstract::EVENT_ID, '=', $eventId],
         ];
 
         if ($params->query) {
             $where[] = static function (Builder $builder) use ($params) {
                 $builder
-                    ->orWhere(AffiliateDomainObjectAbstract::NAME, 'ilike', '%' . $params->query . '%')
-                    ->orWhere(AffiliateDomainObjectAbstract::CODE, 'ilike', '%' . $params->query . '%')
-                    ->orWhere(AffiliateDomainObjectAbstract::EMAIL, 'ilike', '%' . $params->query . '%');
+                    ->orWhere(AffiliateDomainObjectAbstract::NAME, 'ilike', '%'.$params->query.'%')
+                    ->orWhere(AffiliateDomainObjectAbstract::CODE, 'ilike', '%'.$params->query.'%')
+                    ->orWhere(AffiliateDomainObjectAbstract::EMAIL, 'ilike', '%'.$params->query.'%');
             };
         }
 
@@ -66,9 +66,18 @@ class AffiliateRepository extends BaseRepository implements AffiliateRepositoryI
 
     public function incrementSales(int $affiliateId, float $amount): void
     {
-        $this->model->where('id', $affiliateId)
+        $this->runQuery(fn () => $this->model->where('id', $affiliateId)
             ->increment('total_sales', 1, [
-                'total_sales_gross' => $this->db->raw('total_sales_gross + ' . $amount)
-            ]);
+                'total_sales_gross' => $this->db->raw('total_sales_gross + '.$amount),
+            ]));
+    }
+
+    public function decrementSales(int $affiliateId, float $amount): void
+    {
+        $this->runQuery(fn () => $this->model->where('id', $affiliateId)
+            ->update([
+                'total_sales' => $this->db->raw('GREATEST(0, total_sales - 1)'),
+                'total_sales_gross' => $this->db->raw('GREATEST(0, total_sales_gross - '.$amount.')'),
+            ]));
     }
 }

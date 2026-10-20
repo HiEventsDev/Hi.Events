@@ -35,6 +35,9 @@ return [
     // @see: https://docs.sentry.io/platforms/php/guides/laravel/configuration/options/#send-default-pii
     'send_default_pii' => env('SENTRY_SEND_DEFAULT_PII', false),
 
+    // @see: https://docs.sentry.io/platforms/php/guides/laravel/logs/
+    'enable_logs' => filter_var(env('SENTRY_ENABLE_LOGS', false), FILTER_VALIDATE_BOOLEAN),
+
     // @see: https://docs.sentry.io/platforms/php/guides/laravel/configuration/options/#ignore-exceptions
     // 'ignore_exceptions' => [],
 

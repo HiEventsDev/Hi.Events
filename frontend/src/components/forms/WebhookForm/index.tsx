@@ -128,6 +128,12 @@ export const WebhookForm = ({ form, isEventContext = false }: WebhookFormProps) 
             value: 'checkin.deleted',
             description: t`When a check-in is deleted`,
         },
+        {
+            icon: <IconBolt size={14} />,
+            label: t`Occurrence Cancelled`,
+            value: 'occurrence.cancelled',
+            description: t`When a date is cancelled on a recurring event`,
+        },
     ];
 
     return (
@@ -146,6 +152,7 @@ export const WebhookForm = ({ form, isEventContext = false }: WebhookFormProps) 
                 required
                 form={form}
                 name="event_types"
+                dataTestId="webhook-event-types"
                 optionList={isEventContext
                     ? eventTypeOptions.filter(o => !EVENT_LEVEL_TYPES.includes(o.value as string))
                     : eventTypeOptions

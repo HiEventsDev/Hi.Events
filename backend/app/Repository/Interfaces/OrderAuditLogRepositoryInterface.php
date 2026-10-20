@@ -9,7 +9,4 @@ use HiEvents\DomainObjects\OrderAuditLogDomainObject;
 /**
  * @extends RepositoryInterface<OrderAuditLogDomainObject>
  */
-interface OrderAuditLogRepositoryInterface extends RepositoryInterface
-{
-
-}
+interface OrderAuditLogRepositoryInterface extends RepositoryInterface {}

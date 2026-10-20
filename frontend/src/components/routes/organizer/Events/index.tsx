@@ -1,4 +1,5 @@
 import {useFilterQueryParamSync} from "../../../../hooks/useFilterQueryParamSync.ts";
+import {WriteAccess} from "../../../common/WriteAccess";
 import {useDisclosure} from "@mantine/hooks";
 import {Event, QueryFilters} from "../../../../types.ts";
 import {useParams} from "react-router";
@@ -42,15 +43,16 @@ const Events = () => {
             <PageTitle>
                 {t`Events`}
             </PageTitle>
-            <ToolBar searchComponent={() => (
-                <SearchBarWrapper
-                    placeholder={t`Search by event name...`}
-                    setSearchParams={setSearchParams}
-                    searchParams={searchParams}
-                    pagination={pagination}
-                />
-            )}>
-                <>
+            <ToolBar
+                searchComponent={() => (
+                    <SearchBarWrapper
+                        placeholder={t`Search by event name...`}
+                        setSearchParams={setSearchParams}
+                        searchParams={searchParams}
+                    />
+                )}
+            >
+                <WriteAccess>
                     <Button
                         color={'green'}
                         rightSection={
@@ -61,7 +63,7 @@ const Events = () => {
                     >
                         {t`Create Event`}
                     </Button>
-                </>
+                </WriteAccess>
             </ToolBar>
 
             <EventsDashboardStatusButtons

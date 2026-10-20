@@ -2,7 +2,13 @@
 
 namespace HiEvents\Exceptions;
 
+use HiEvents\Enterprise\Licensing\Exceptions\FeatureNotLicensedException;
+use HiEvents\Enterprise\Sso\Exceptions\SsoRequiredException;
+use HiEvents\Services\Domain\Auth\AuthUserService;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Sentry\Laravel\Facade as Sentry;
 use Sentry\State\Scope;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as SymfonyResourceNotFoundException;
@@ -10,6 +16,8 @@ use Throwable;
 
 class Handler extends ExceptionHandler
 {
+    public const FEATURE_UNAVAILABLE_ERROR_CODE = 'FEATURE_UNAVAILABLE';
+
     /**
      * A list of the exception types that are not reported.
      *
@@ -19,6 +27,8 @@ class Handler extends ExceptionHandler
         ResourceNotFoundException::class,
         ResourceConflictException::class,
         SymfonyResourceNotFoundException::class,
+        SsoException::class,
+        SsoRequiredException::class,
     ];
 
     /**
@@ -34,8 +44,8 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param Throwable $e
      * @return void
+     *
      * @throws Throwable
      */
     public function report(Throwable $e)
@@ -45,14 +55,15 @@ class Handler extends ExceptionHandler
                 $user = auth()->user();
                 if ($user) {
                     $ip = request()->ip();
-                    $isImpersonating = (bool) auth()->payload()->get('is_impersonating', false);
-                    $impersonatorId = $isImpersonating ? auth()->payload()->get('impersonator_id') : null;
+                    $authUserService = app(AuthUserService::class);
+                    $isImpersonating = $authUserService->isImpersonating();
+                    $impersonatorId = $authUserService->getImpersonatorId();
 
                     Sentry::configureScope(function (Scope $scope) use ($user, $ip, $isImpersonating, $impersonatorId): void {
                         $scope->setUser([
                             'id' => $user->id,
                             'email' => $user->email,
-                            'username' => trim($user->first_name . ' ' . $user->last_name),
+                            'username' => trim($user->first_name.' '.$user->last_name),
                             'ip_address' => $ip,
                         ]);
 
@@ -73,9 +84,9 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param Throwable $exception
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @param  Request  $request
+     * @return JsonResponse|Response
+     *
      * @throws Throwable
      */
     public function render($request, Throwable $exception)
@@ -84,6 +95,20 @@ class Handler extends ExceptionHandler
             return response()->json([
                 'message' => $exception->getMessage() ?: 'Resource not found',
             ], 404);
+        }
+
+        if ($exception instanceof FeatureNotLicensedException || $exception instanceof FeatureNotEnabledException) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+                'error_code' => self::FEATURE_UNAVAILABLE_ERROR_CODE,
+            ], Response::HTTP_FORBIDDEN);
+        }
+
+        if ($exception instanceof CodedAccessException) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+                'error_code' => $exception::ERROR_CODE,
+            ], Response::HTTP_FORBIDDEN);
         }
 
         return parent::render($request, $exception);

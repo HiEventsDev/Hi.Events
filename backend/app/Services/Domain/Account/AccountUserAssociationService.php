@@ -14,19 +14,16 @@ readonly class AccountUserAssociationService
 {
     public function __construct(
         private AccountUserRepositoryInterface $accountUserRepository,
-    )
-    {
-    }
+    ) {}
 
     public function associate(
-        UserDomainObject    $user,
+        UserDomainObject $user,
         AccountDomainObject $account,
-        Role                $role,
-        ?UserStatus         $status = null,
-        ?int                $invitedByUserId = null,
-        bool                $isAccountOwner = false,
-    ): AccountUserDomainObject
-    {
+        Role $role,
+        ?UserStatus $status = null,
+        ?int $invitedByUserId = null,
+        bool $isAccountOwner = false,
+    ): AccountUserDomainObject {
         if ($role === Role::SUPERADMIN) {
             throw new UnauthorizedException(__('Cannot associate a user with SUPERADMIN role to an account'));
         }

@@ -3,12 +3,16 @@
 namespace Tests\Unit\Services\Domain\Email;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\Enums\LocationType;
+use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventLocationDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
-use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\Services\Domain\Email\EmailTokenContextBuilder;
 use Illuminate\Support\Collection;
 use Mockery;
@@ -21,7 +25,13 @@ class EmailTokenContextBuilderTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->contextBuilder = new EmailTokenContextBuilder();
+        $this->contextBuilder = app(EmailTokenContextBuilder::class);
+    }
+
+    protected function tearDown(): void
+    {
+        Mockery::close();
+        parent::tearDown();
     }
 
     public function test_builds_order_confirmation_context(): void
@@ -44,22 +54,19 @@ class EmailTokenContextBuilderTest extends TestCase
         $this->assertArrayHasKey('organizer', $context);
         $this->assertArrayHasKey('settings', $context);
 
-        // Test order context
         $this->assertEquals('ORD-123456', $context['order']['number']);
-        $this->assertEquals('$9,999.00', $context['order']['total']); // Updated expected format
+        $this->assertEquals('$9,999.00', $context['order']['total']);
+        $this->assertEquals('Stalls · A-1, Stalls · A-2', $context['order']['seats']);
         $this->assertEquals('John', $context['order']['first_name']);
         $this->assertEquals('Doe', $context['order']['last_name']);
         $this->assertEquals('john@example.com', $context['order']['email']);
 
-        // Test event context
         $this->assertEquals('Amazing Event', $context['event']['title']);
         $this->assertEquals('This is an amazing event', $context['event']['description']);
 
-        // Test organizer context
         $this->assertEquals('Great Organizer', $context['organizer']['name']);
         $this->assertEquals('contact@organizer.com', $context['organizer']['email']);
 
-        // Test settings context
         $this->assertEquals('support@event.com', $context['settings']['support_email']);
     }
 
@@ -86,18 +93,15 @@ class EmailTokenContextBuilderTest extends TestCase
         $this->assertArrayHasKey('event', $context);
         $this->assertArrayHasKey('organizer', $context);
 
-        // Test attendee context
         $this->assertEquals('Jane Smith', $context['attendee']['name']);
         $this->assertEquals('jane@example.com', $context['attendee']['email']);
+        $this->assertEquals('Stalls · C-14', $context['attendee']['seat']);
 
-        // Test ticket context
         $this->assertEquals('General Admission', $context['ticket']['name']);
-        $this->assertEquals('$4,999.00', $context['ticket']['price']); // Updated expected format
+        $this->assertEquals('$4,999.00', $context['ticket']['price']);
 
-        // Test event context
         $this->assertEquals('Amazing Event', $context['event']['title']);
-        
-        // Test organizer context
+
         $this->assertEquals('Great Organizer', $context['organizer']['name']);
     }
 
@@ -115,13 +119,11 @@ class EmailTokenContextBuilderTest extends TestCase
             $eventSettings
         );
 
-        // Test that expected nested structure exists
         $this->assertArrayHasKey('order', $context);
         $this->assertArrayHasKey('event', $context);
         $this->assertArrayHasKey('organizer', $context);
         $this->assertArrayHasKey('settings', $context);
-        
-        // Test that expected properties are included
+
         $this->assertArrayHasKey('number', $context['order']);
         $this->assertArrayHasKey('first_name', $context['order']);
         $this->assertArrayHasKey('title', $context['event']);
@@ -143,19 +145,334 @@ class EmailTokenContextBuilderTest extends TestCase
             $eventSettings
         );
 
-        // Test that expected nested structure exists
         $this->assertArrayHasKey('attendee', $context);
         $this->assertArrayHasKey('ticket', $context);
         $this->assertArrayHasKey('event', $context);
         $this->assertArrayHasKey('organizer', $context);
-        
-        // Test that expected properties are included
+
         $this->assertArrayHasKey('name', $context['attendee']);
         $this->assertArrayHasKey('name', $context['ticket']);
         $this->assertArrayHasKey('title', $context['event']);
     }
 
-    private function createMockOrder(): OrderDomainObject
+    public function test_escapes_user_tokens_inside_offline_payment_instructions(): void
+    {
+        $order = $this->createMockOrder('<img src=x onerror=alert(1)>');
+        $event = $this->createMockEvent();
+        $organizer = $this->createMockOrganizer();
+        $eventSettings = Mockery::mock(EventSettingDomainObject::class, [
+            'getSupportEmail' => 'support@event.com',
+            'getOfflinePaymentInstructions' => 'Dear {{ order.first_name }}, transfer via <a href="https://bank.example">bank</a>',
+            'getPostCheckoutMessage' => 'Thanks!',
+        ]);
+
+        $context = $this->contextBuilder->buildOrderConfirmationContext(
+            $order,
+            $event,
+            $organizer,
+            $eventSettings
+        );
+
+        $instructions = $context['settings']['offline_payment_instructions'];
+
+        $this->assertStringContainsString('&lt;img src=x onerror=alert(1)&gt;', $instructions);
+        $this->assertStringNotContainsString('<img', $instructions);
+        $this->assertStringContainsString('bank.example', $instructions);
+    }
+
+    public function test_contexb_values_stay_raw_for_plain_text_rendering(): void
+    {
+        $order = $this->createMockOrder('<b>John</b>');
+        $event = $this->createMockEvent();
+        $organizer = $this->createMockOrganizer();
+        $eventSettings = $this->createMockEventSettings();
+
+        $context = $this->contextBuilder->buildOrderConfirmationContext(
+            $order,
+            $event,
+            $organizer,
+            $eventSettings
+        );
+
+        $this->assertEquals('<b>John</b>', $context['order']['first_name']);
+    }
+
+    public function test_occurrence_dates_override_event_dates(): void
+    {
+        $order = $this->createMockOrder();
+        $event = $this->createMockEvent();
+        $organizer = $this->createMockOrganizer();
+        $eventSettings = $this->createMockEventSettings();
+        $occurrence = $this->createMockOccurrence();
+
+        $context = $this->contextBuilder->buildOrderConfirmationContext(
+            $order, $event, $organizer, $eventSettings, $occurrence
+        );
+
+        $this->assertArrayHasKey('occurrence', $context);
+        $this->assertNotEmpty($context['occurrence']['start_date']);
+        $this->assertNotEmpty($context['occurrence']['start_time']);
+        $this->assertNotEmpty($context['occurrence']['end_date']);
+        $this->assertNotEmpty($context['occurrence']['end_time']);
+        $this->assertEquals('Afternoon Show', $context['occurrence']['label']);
+        $this->assertStringContainsString('Afternoon Show', $context['event']['title']);
+    }
+
+    public function test_occurrence_tokens_empty_when_no_occurrence(): void
+    {
+        $order = $this->createMockOrder();
+        $event = $this->createMockEvent();
+        $organizer = $this->createMockOrganizer();
+        $eventSettings = $this->createMockEventSettings();
+
+        $context = $this->contextBuilder->buildOrderConfirmationContext(
+            $order, $event, $organizer, $eventSettings
+        );
+
+        $this->assertArrayHasKey('occurrence', $context);
+        $this->assertEquals('', $context['occurrence']['label']);
+    }
+
+    public function test_uses_the_orders_only_occurrence_when_none_is_passed(): void
+    {
+        $occurrence = (new EventOccurrenceDomainObject)
+            ->setId(7)
+            ->setStartDate('2024-03-10 18:00:00')
+            ->setEndDate('2024-03-10 20:00:00')
+            ->setLabel('Evening');
+        $order = $this->createMockOrder(occurrence: $occurrence);
+
+        $context = $this->contextBuilder->buildOrderConfirmationContext(
+            $order, $this->createMockEvent(), $this->createMockOrganizer(), $this->createMockEventSettings()
+        );
+
+        $this->assertEquals('March 10, 2024', $context['event']['date']);
+        $this->assertEquals('Evening', $context['occurrence']['label']);
+        $this->assertEquals('Amazing Event - Evening', $context['event']['title']);
+    }
+
+    public function test_explicit_occurrence_wins_over_the_orders_occurrences(): void
+    {
+        $orderOccurrence = (new EventOccurrenceDomainObject)
+            ->setId(7)
+            ->setStartDate('2024-03-10 18:00:00')
+            ->setEndDate('2024-03-10 20:00:00');
+        $order = $this->createMockOrder(occurrence: $orderOccurrence);
+
+        $context = $this->contextBuilder->buildOrderConfirmationContext(
+            $order, $this->createMockEvent(), $this->createMockOrganizer(), $this->createMockEventSettings(), $this->createMockOccurrence()
+        );
+
+        $this->assertEquals('Afternoon Show', $context['occurrence']['label']);
+        $this->assertNotEquals('March 10, 2024', $context['event']['date']);
+    }
+
+    public function test_event_in_person_location_in_token_context(): void
+    {
+        $order = $this->createMockOrder();
+        $organizer = $this->createMockOrganizer();
+        $eventSettings = $this->createMockEventSettings();
+
+        $venue = $this->makeVenueLocation(
+            name: 'The Arena',
+            structuredAddress: [
+                'venue_name' => 'The Arena',
+                'address_line_1' => '1 Stadium Way',
+                'city' => 'Dublin',
+                'country' => 'IE',
+            ],
+            latitude: 53.3478,
+            longitude: -6.2289,
+        );
+        $eventLocation = $this->makeEventLocation(
+            type: LocationType::IN_PERSON,
+            location: $venue,
+            label: 'Main entrance',
+        );
+
+        $event = $this->createMockEventWithLocation($eventLocation);
+
+        $context = $this->contextBuilder->buildOrderConfirmationContext(
+            $order, $event, $organizer, $eventSettings
+        );
+
+        $this->assertArrayHasKey('event_location', $context);
+        $this->assertSame(LocationType::IN_PERSON->name, $context['event_location']['type']);
+        $this->assertFalse($context['event_location']['is_online']);
+        $this->assertNull($context['event_location']['online_connection_details']);
+        $this->assertSame('The Arena', $context['event_location']['name']);
+        $this->assertIsArray($context['event_location']['structured_address']);
+        $this->assertNotEmpty($context['event_location']['formatted_address']);
+
+        $this->assertSame(
+            $context['event_location']['structured_address'],
+            $context['event']['location_details'],
+        );
+    }
+
+    public function test_event_online_location_in_token_context(): void
+    {
+        $order = $this->createMockOrder();
+        $organizer = $this->createMockOrganizer();
+        $eventSettings = $this->createMockEventSettings();
+
+        $eventLocation = $this->makeEventLocation(
+            type: LocationType::ONLINE,
+            location: null,
+            onlineDetails: '<p>Zoom: example.zoom.us/j/123</p>',
+        );
+
+        $event = $this->createMockEventWithLocation($eventLocation);
+
+        $context = $this->contextBuilder->buildOrderConfirmationContext(
+            $order, $event, $organizer, $eventSettings
+        );
+
+        $this->assertSame(LocationType::ONLINE->name, $context['event_location']['type']);
+        $this->assertTrue($context['event_location']['is_online']);
+        $this->assertSame(
+            '<p>Zoom: example.zoom.us/j/123</p>',
+            $context['event_location']['online_connection_details'],
+        );
+        $this->assertNull($context['event_location']['structured_address']);
+        $this->assertNull($context['event']['location_details']);
+    }
+
+    public function test_occurrence_event_location_overrides_event_event_location(): void
+    {
+        $order = $this->createMockOrder();
+        $organizer = $this->createMockOrganizer();
+        $eventSettings = $this->createMockEventSettings();
+
+        $eventVenue = $this->makeVenueLocation(
+            name: 'Event Default Venue',
+            structuredAddress: ['venue_name' => 'Event Default Venue'],
+        );
+        $eventEventLocation = $this->makeEventLocation(
+            type: LocationType::IN_PERSON,
+            location: $eventVenue,
+        );
+        $event = $this->createMockEventWithLocation($eventEventLocation);
+
+        $occVenue = $this->makeVenueLocation(
+            name: 'Occurrence Override Venue',
+            structuredAddress: ['venue_name' => 'Occurrence Override Venue'],
+        );
+        $occEventLocation = $this->makeEventLocation(
+            type: LocationType::IN_PERSON,
+            location: $occVenue,
+        );
+        $occurrence = $this->createMockOccurrenceWithLocation($occEventLocation);
+
+        $context = $this->contextBuilder->buildOrderConfirmationContext(
+            $order, $event, $organizer, $eventSettings, $occurrence
+        );
+
+        $this->assertSame('Occurrence Override Venue', $context['event_location']['name']);
+        $this->assertSame(
+            ['venue_name' => 'Occurrence Override Venue'],
+            $context['event_location']['structured_address'],
+        );
+    }
+
+    public function test_occurrence_inherits_event_event_location_when_null(): void
+    {
+        $order = $this->createMockOrder();
+        $organizer = $this->createMockOrganizer();
+        $eventSettings = $this->createMockEventSettings();
+
+        $eventVenue = $this->makeVenueLocation(
+            name: 'Event Default Venue',
+            structuredAddress: ['venue_name' => 'Event Default Venue'],
+        );
+        $eventEventLocation = $this->makeEventLocation(
+            type: LocationType::IN_PERSON,
+            location: $eventVenue,
+        );
+        $event = $this->createMockEventWithLocation($eventEventLocation);
+
+        $occurrence = $this->createMockOccurrenceWithLocation(null);
+
+        $context = $this->contextBuilder->buildOrderConfirmationContext(
+            $order, $event, $organizer, $eventSettings, $occurrence
+        );
+
+        $this->assertSame('Event Default Venue', $context['event_location']['name']);
+    }
+
+    public function test_safe_fallback_when_event_location_and_occurrence_location_both_null(): void
+    {
+        $order = $this->createMockOrder();
+        $organizer = $this->createMockOrganizer();
+        $eventSettings = $this->createMockEventSettings();
+
+        $event = $this->createMockEventWithLocation(null);
+        $occurrence = $this->createMockOccurrenceWithLocation(null);
+
+        $context = $this->contextBuilder->buildOrderConfirmationContext(
+            $order, $event, $organizer, $eventSettings, $occurrence
+        );
+
+        $this->assertArrayHasKey('event_location', $context);
+        $this->assertNull($context['event_location']['type']);
+        $this->assertFalse($context['event_location']['is_online']);
+        $this->assertNull($context['event_location']['online_connection_details']);
+        $this->assertNull($context['event_location']['name']);
+        $this->assertNull($context['event_location']['structured_address']);
+        $this->assertNull($context['event']['location_details']);
+    }
+
+    private function makeVenueLocation(
+        string $name = 'A Venue',
+        ?array $structuredAddress = null,
+        ?float $latitude = null,
+        ?float $longitude = null,
+    ): LocationDomainObject {
+        $loc = Mockery::mock(LocationDomainObject::class);
+        $loc->shouldReceive('getName')->andReturn($name);
+        $loc->shouldReceive('getStructuredAddress')->andReturn($structuredAddress);
+        $loc->shouldReceive('getLatitude')->andReturn($latitude);
+        $loc->shouldReceive('getLongitude')->andReturn($longitude);
+
+        return $loc;
+    }
+
+    private function makeEventLocation(
+        LocationType $type,
+        ?LocationDomainObject $location = null,
+        ?string $onlineDetails = null,
+        ?string $label = null,
+    ): EventLocationDomainObject {
+        $el = Mockery::mock(EventLocationDomainObject::class);
+        $el->shouldReceive('getType')->andReturn($type->name);
+        $el->shouldReceive('getLocation')->andReturn($location);
+        $el->shouldReceive('getOnlineEventConnectionDetails')->andReturn($onlineDetails);
+        $el->shouldReceive('getLabel')->andReturn($label);
+
+        return $el;
+    }
+
+    private function createMockOccurrence(): Mockery\MockInterface
+    {
+        return Mockery::mock(EventOccurrenceDomainObject::class, [
+            'getStartDate' => '2024-07-20 14:00:00',
+            'getEndDate' => '2024-07-20 18:00:00',
+            'getLabel' => 'Afternoon Show',
+            'getEventLocation' => null,
+        ]);
+    }
+
+    private function createMockOccurrenceWithLocation(?EventLocationDomainObject $eventLocation): Mockery\MockInterface
+    {
+        return Mockery::mock(EventOccurrenceDomainObject::class, [
+            'getStartDate' => '2024-07-20 14:00:00',
+            'getEndDate' => '2024-07-20 18:00:00',
+            'getLabel' => 'Afternoon Show',
+            'getEventLocation' => $eventLocation,
+        ]);
+    }
+
+    private function createMockOrder(string $firstName = 'John', ?EventOccurrenceDomainObject $occurrence = null): OrderDomainObject
     {
         $orderItem = Mockery::mock(OrderItemDomainObject::class, [
             'getProductPriceId' => 123,
@@ -168,7 +485,7 @@ class EmailTokenContextBuilderTest extends TestCase
         return Mockery::mock(OrderDomainObject::class, [
             'getPublicId' => 'ORD-123456',
             'getTotalGross' => 9999,
-            'getFirstName' => 'John',
+            'getFirstName' => $firstName,
             'getLastName' => 'Doe',
             'getEmail' => 'john@example.com',
             'getCreatedAt' => '2024-01-15 10:30:00',
@@ -178,6 +495,8 @@ class EmailTokenContextBuilderTest extends TestCase
             'getOrderItems' => $orderItems,
             'getCurrency' => 'USD',
             'getLocale' => 'en',
+            'getSeatLabels' => ['Stalls · A-1', 'Stalls · A-2'],
+            'getSingleEventOccurrence' => $occurrence,
         ]);
     }
 
@@ -191,6 +510,21 @@ class EmailTokenContextBuilderTest extends TestCase
             'getTimezone' => 'America/New_York',
             'getCurrency' => 'USD',
             'getId' => 1,
+            'getEventLocation' => null,
+        ]);
+    }
+
+    private function createMockEventWithLocation(?EventLocationDomainObject $eventLocation): EventDomainObject
+    {
+        return Mockery::mock(EventDomainObject::class, [
+            'getTitle' => 'Amazing Event',
+            'getDescription' => 'This is an amazing event',
+            'getStartDate' => '2024-02-15 19:00:00',
+            'getEndDate' => '2024-02-15 22:00:00',
+            'getTimezone' => 'America/New_York',
+            'getCurrency' => 'USD',
+            'getId' => 1,
+            'getEventLocation' => $eventLocation,
         ]);
     }
 
@@ -208,7 +542,6 @@ class EmailTokenContextBuilderTest extends TestCase
             'getSupportEmail' => 'support@event.com',
             'getOfflinePaymentInstructions' => 'Pay by bank transfer',
             'getPostCheckoutMessage' => 'Thank you for your purchase!',
-            'getLocationDetails' => null,
         ]);
     }
 
@@ -220,6 +553,7 @@ class EmailTokenContextBuilderTest extends TestCase
             'getEmail' => 'jane@example.com',
             'getProductPriceId' => 123,
             'getShortId' => 'ATT123',
+            'getSeatLabel' => 'Stalls · C-14',
         ]);
     }
 }

@@ -13,17 +13,16 @@ class EventPageViewIncrementService
 
     public function __construct(
         private readonly CacheManager $cacheManager,
-        private readonly Repository   $config,
+        private readonly Repository $config,
         private readonly QueueManager $queueManager,
-    )
-    {
+    ) {
         $this->batchSize = $this->config->get('app.homepage_views_update_batch_size');
     }
 
     public function increment(int $eventId, string $userIpAddress): void
     {
-        $eventViewsCacheKey = 'event_views_' . $eventId;
-        $userViewCacheKey = 'event_view_user_' . $eventId . '_' . $userIpAddress;
+        $eventViewsCacheKey = 'event_views_'.$eventId;
+        $userViewCacheKey = 'event_view_user_'.$eventId.'_'.$userIpAddress;
 
         if ($this->cacheManager->has($userViewCacheKey)) {
             return;

@@ -26,6 +26,7 @@ export const HomepageAndCheckoutSettings = () => {
             order_timeout_in_minutes: 15,
             attendee_details_collection_method: 'PER_TICKET' as 'PER_TICKET' | 'PER_ORDER',
             show_marketing_opt_in: true,
+            allow_copy_details_to_all_attendees: true,
         },
         transformValues: (values) => ({
             ...values,
@@ -58,6 +59,7 @@ export const HomepageAndCheckoutSettings = () => {
                 order_timeout_in_minutes: eventSettingsQuery.data.order_timeout_in_minutes,
                 attendee_details_collection_method: eventSettingsQuery.data.attendee_details_collection_method || 'PER_TICKET',
                 show_marketing_opt_in: eventSettingsQuery.data.show_marketing_opt_in ?? true,
+                allow_copy_details_to_all_attendees: eventSettingsQuery.data.allow_copy_details_to_all_attendees ?? true,
             });
         }
     }, [eventSettingsQuery.isFetched]);
@@ -126,6 +128,13 @@ export const HomepageAndCheckoutSettings = () => {
                         label={t`Show marketing opt-in checkbox`}
                         description={t`Display a checkbox allowing customers to opt-in to receive marketing communications from this event organizer.`}
                         {...form.getInputProps('show_marketing_opt_in', {type: 'checkbox'})}
+                    />
+
+                    <Switch
+                        mt="md"
+                        label={t`Allow buyers to copy their details to all attendees`}
+                        description={t`When enabled, buyers can copy their own name and email onto all attendees at once. Turn this off to remove the "All attendees" option; buyers can still copy to the first attendee, and the rest must be entered individually.`}
+                        {...form.getInputProps('allow_copy_details_to_all_attendees', {type: 'checkbox'})}
                     />
 
                     <Button loading={updateMutation.isPending} type={'submit'}>

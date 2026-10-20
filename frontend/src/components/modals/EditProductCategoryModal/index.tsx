@@ -1,5 +1,5 @@
 import {GenericModalProps, IdParam, ProductCategory} from "../../../types.ts";
-import {Modal} from "../../common/Modal";
+import {Modal, ModalFooter} from "../../common/Modal";
 import {t} from "@lingui/macro";
 import {LoadingMask} from "../../common/LoadingMask";
 import {Button} from "@mantine/core";
@@ -60,15 +60,19 @@ export const EditProductCategoryModal = ({onClose, productCategoryId}: GenericMo
         <Modal
             onClose={onClose}
             heading={t`Edit Product Category`}
+            size={'lg'}
             opened
         >
             <form onSubmit={form.onSubmit(handleEditProduct)}>
                 <ProductCategoryForm form={form}/>
                 <LoadingMask/>
 
-                <Button type="submit" fullWidth mt="xl" disabled={mutation.isPending}>
-                    {mutation.isPending ? t`Working...` : t`Edit Product Category`}
-                </Button>
+                <ModalFooter>
+                    <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                    <Button type="submit" disabled={mutation.isPending}>
+                        {mutation.isPending ? t`Working...` : t`Save Changes`}
+                    </Button>
+                </ModalFooter>
             </form>
         </Modal>
     )

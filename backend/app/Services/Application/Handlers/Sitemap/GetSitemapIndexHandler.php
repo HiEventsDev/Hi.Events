@@ -12,14 +12,14 @@ use Illuminate\Support\Facades\Cache;
 class GetSitemapIndexHandler
 {
     private const CACHE_KEY = 'sitemap:index';
+
     private const MIN_PAGES = 1;
 
     public function __construct(
         private readonly EventRepositoryInterface $eventRepository,
         private readonly OrganizerRepositoryInterface $organizerRepository,
         private readonly SitemapGeneratorService $sitemapGenerator,
-    ) {
-    }
+    ) {}
 
     public function handle(): string
     {

@@ -31,6 +31,7 @@ class AdminFailedJobResource extends JsonResource
     private function getExceptionSummary(): string
     {
         $lines = explode("\n", $this->exception);
+
         return $lines[0] ?? 'Unknown error';
     }
 }

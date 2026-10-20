@@ -1,0 +1,31 @@
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--hi-color-text-muted);
+
+  &::before {
+    content: "";
+    flex-shrink: 0;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--hi-color-text-tertiary);
+  }
+}
+
+.success::before {
+  background: var(--hi-color-success);
+}
+
+.warning {
+  color: var(--hi-color-warning);
+
+  &::before {
+    background: var(--hi-color-warning);
+  }
+}
+
+.strong {
+  font-weight: 500;
+}

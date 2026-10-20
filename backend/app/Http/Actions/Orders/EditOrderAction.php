@@ -14,9 +14,7 @@ class EditOrderAction extends BaseAction
 {
     public function __construct(
         private readonly EditOrderHandler $handler
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(EditOrderRequest $request, int $eventId, int $orderId): JsonResponse
     {
@@ -33,5 +31,4 @@ class EditOrderAction extends BaseAction
 
         return $this->resourceResponse(OrderResource::class, $order);
     }
-
 }

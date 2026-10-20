@@ -6,8 +6,8 @@ use HiEvents\DomainObjects\Enums\EmailTemplateType;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Resources\EmailTemplateResource;
-use HiEvents\Services\Application\Handlers\EmailTemplate\GetEmailTemplatesHandler;
 use HiEvents\Services\Application\Handlers\EmailTemplate\DTO\GetEmailTemplatesDTO;
+use HiEvents\Services\Application\Handlers\EmailTemplate\GetEmailTemplatesHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Enum;
@@ -16,8 +16,7 @@ class GetOrganizerEmailTemplatesAction extends BaseAction
 {
     public function __construct(
         private readonly GetEmailTemplatesHandler $handler
-    ) {
-    }
+    ) {}
 
     public function __invoke(Request $request, int $organizerId): JsonResponse
     {

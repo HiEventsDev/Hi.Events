@@ -5,10 +5,10 @@ import {useGetOrganizerEvents} from "../../../../../queries/useGetOrganizerEvent
 import {formatCurrency} from "../../../../../utilites/currency.ts";
 import OrganizerReportTable from "../../../../common/OrganizerReportTable";
 import {t} from "@lingui/macro";
-import {Alert, Select} from "@mantine/core";
-import {IconAlertTriangle} from "@tabler/icons-react";
+import {Select} from "@mantine/core";
 import {useState} from "react";
 import classes from "./PlatformFeesReport.module.scss";
+import {Callout} from "../../../../common/Callout";
 
 const PlatformFeesReport = () => {
     const {organizerId} = useParams();
@@ -109,14 +109,9 @@ const PlatformFeesReport = () => {
 
     return (
         <>
-            <Alert
-                icon={<IconAlertTriangle size={16} />}
-                title={t`Important Notice`}
-                color="yellow"
-                mb="lg"
-            >
+            <Callout variant="tip" title={t`Important Notice`} style={{marginBottom: 24}}>
                 {t`This report is for informational purposes only. Always consult with a tax professional before using this data for accounting or tax purposes. Please cross-reference with your Stripe dashboard as Hi.Events may be missing historical data.`}
-            </Alert>
+            </Callout>
 
             <div className={classes.eventFilter}>
                 <Select

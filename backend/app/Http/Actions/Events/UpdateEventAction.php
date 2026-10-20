@@ -17,9 +17,7 @@ class UpdateEventAction extends BaseAction
 {
     public function __construct(
         private readonly UpdateEventHandler $updateEventHandler
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws Throwable|ValidationException
@@ -38,6 +36,7 @@ class UpdateEventAction extends BaseAction
                             'id' => $eventId,
                             'account_id' => $this->getAuthenticatedAccountId(),
                             'user_id' => $authorisedUser->getId(),
+                            'description_provided' => $request->exists('description'),
                         ]
                     )
                 )

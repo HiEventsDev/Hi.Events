@@ -3,15 +3,18 @@
 namespace HiEvents\Validators;
 
 use HiEvents\DomainObjects\Enums\EventCategory;
+use HiEvents\DomainObjects\Enums\EventType;
+use HiEvents\DomainObjects\Enums\LocationType;
 use Illuminate\Validation\Rule;
 
 trait EventRules
 {
     public function eventRules(): array
     {
-        $currencies = include __DIR__ . '/../../data/currencies.php';
+        $currencies = include __DIR__.'/../../data/currencies.php';
 
         return array_merge($this->minimalRules(), [
+            'type' => ['nullable', Rule::in(EventType::valuesArray())],
             'timezone' => ['timezone:all'],
             'organizer_id' => ['required', 'integer'],
             'currency' => [Rule::in(array_values($currencies))],
@@ -20,26 +23,30 @@ trait EventRules
             'attributes.*.name' => ['string', 'min:1', 'max:50', 'required'],
             'attributes.*.value' => ['min:1', 'max:1000', 'required'],
             'attributes.*.is_public' => ['boolean', 'required'],
-            'location_details' => ['array'],
-            'location_details.venue_name' => ['string', 'max:100'],
-            'location_details.address_line_1' => ['required_with:location_details', 'string', 'max:255'],
-            'location_details.address_line_2' => ['string', 'max:255', 'nullable'],
-            'location_details.city' => ['required_with:location_details', 'string', 'max:85'],
-            'location_details.state_or_region' => ['string', 'max:85'],
-            'location_details.zip_or_postal_code' => ['required_with:location_details', 'string', 'max:85'],
-            'location_details.country' => ['required_with:location_details', 'string', 'max:2'],
+            'event_location' => ['nullable', 'array'],
+            'event_location.type' => ['required_with:event_location', Rule::in(LocationType::valuesArray())],
+            'event_location.location_id' => [
+                'nullable', 'integer',
+                'required_if:event_location.type,'.LocationType::IN_PERSON->name,
+            ],
+            'event_location.online_event_connection_details' => [
+                'nullable', 'string', 'max:10000',
+                'required_if:event_location.type,'.LocationType::ONLINE->name,
+            ],
         ]);
     }
 
     public function minimalRules(): array
     {
+        $isRecurring = $this->input('type') === EventType::RECURRING->name;
+
         return [
             'title' => ['string', 'required', 'max:150', 'min:1'],
             'description' => ['string', 'min:1', 'max:50000', 'nullable'],
             'start_date' => [
                 'date',
-                'required',
-                Rule::when($this->input('end_date') !== null, ['before_or_equal:end_date'])
+                $isRecurring ? 'nullable' : 'required',
+                Rule::when($this->input('end_date') !== null, ['before_or_equal:end_date']),
             ],
             'end_date' => ['date', 'nullable'],
         ];
@@ -52,11 +59,7 @@ trait EventRules
             'attributes.*.name.required' => __('The attribute name is required'),
             'attributes.*.value.required' => __('The attribute value is required'),
             'attributes.*.is_public.required' => __('The attribute is_public fields is required'),
-            'location_details.address_line_1.required' => __('The address line 1 field is required'),
-            'location_details.city.required' => __('The city field is required'),
-            'location_details.zip_or_postal_code.required' => __('The zip or postal code field is required'),
-            'location_details.country.required' => __('The country field is required'),
-            'location_details.country.max' => __('The country field should be a 2 character ISO 3166 code'),
+            'event_location.location_id.required_if' => __('A saved location must be selected for in-person events'),
         ];
     }
 }

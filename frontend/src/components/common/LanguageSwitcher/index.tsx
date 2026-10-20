@@ -16,6 +16,8 @@ export const LanguageSwitcher = () => {
                 return t`German`;
             case "en":
                 return t`English`;
+            case "fi":
+                return t`Finnish`;
             case "es":
                 return t`Spanish`;
             case "fr":
@@ -40,6 +42,14 @@ export const LanguageSwitcher = () => {
                 return t`Polish`;
             case "se":
                 return t`Swedish`;
+            case "sk":
+                return t`Slovak`;
+            case "el":
+                return t`Greek`;
+            case "ko":
+                return t`Korean`;
+            case "ja":
+                return t`Japanese`;
             default:
                 // Defensive fallback: if a new locale is added to SupportedLocales
                 // but not handled here, return the locale code itself rather than
@@ -63,12 +73,13 @@ export const LanguageSwitcher = () => {
                 }))}
                 defaultValue={getClientLocale()}
                 placeholder={t`English`}
-                onChange={(value) =>
-                    dynamicActivateLocale(value as string).then(() => {
-                        document.cookie = `locale=${value};path=/;max-age=31536000`;
-                        // this shouldn't be necessary, but it is due to the wide use of t`...` in the codebase
-                        window.location.reload();
-                    })}
+                onChange={(value) => {
+                    if (!value) return;
+                    document.cookie = `locale=${value};path=/;max-age=31536000`;
+                    dynamicActivateLocale(value).finally(() => {
+                        window.location.href = window.location.pathname + window.location.search;
+                    });
+                }}
             />
         </>
     )

@@ -1,5 +1,13 @@
 import { Node } from '@tiptap/core';
 
+declare module '@tiptap/core' {
+    interface Commands<ReturnType> {
+        liquidVariable: {
+            insertLiquidVariable: (variable: string) => ReturnType;
+        };
+    }
+}
+
 export const LiquidVariable = Node.create({
     name: 'liquidVariable',
 

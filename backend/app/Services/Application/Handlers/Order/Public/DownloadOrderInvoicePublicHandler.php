@@ -9,9 +9,7 @@ class DownloadOrderInvoicePublicHandler
 {
     public function __construct(
         private readonly GenerateOrderInvoicePDFService $generateOrderInvoicePDFService,
-    )
-    {
-    }
+    ) {}
 
     public function handle(int $eventId, string $orderShortId): InvoicePdfResponseDTO
     {

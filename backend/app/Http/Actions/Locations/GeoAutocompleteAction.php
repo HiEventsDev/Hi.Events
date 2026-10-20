@@ -1,0 +1,61 @@
+<?php
+
+declare(strict_types=1);
+
+namespace HiEvents\Http\Actions\Locations;
+
+use Dedoc\Scramble\Attributes\QueryParameter;
+use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\ResponseCodes;
+use HiEvents\Resources\Location\GeoSuggestionResource;
+use HiEvents\Services\Application\Handlers\Location\GeoAutocompleteHandler;
+use HiEvents\Services\Infrastructure\Geo\Exception\GeoProviderException;
+use HiEvents\Services\Infrastructure\Geo\Exception\GeoProviderQuotaExceededException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+
+class GeoAutocompleteAction extends BaseAction
+{
+    private const int MAX_QUERY_LENGTH = 200;
+
+    public function __construct(
+        private readonly GeoAutocompleteHandler $handler,
+    ) {}
+
+    #[QueryParameter('query', description: 'Address search term.', type: 'string', required: true)]
+    #[QueryParameter('locale', description: 'Locale for the returned suggestions.', type: 'string')]
+    #[QueryParameter('country', description: 'Two-letter country code used to bias the results.', type: 'string')]
+    public function __invoke(int $organizerId, Request $request): JsonResponse
+    {
+        $this->isActionAuthorized($organizerId, OrganizerDomainObject::class);
+
+        $rawQuery = $request->query('query');
+        $query = mb_substr(is_string($rawQuery) ? $rawQuery : '', 0, self::MAX_QUERY_LENGTH);
+        $locale = $request->query('locale');
+        $country = $request->query('country');
+
+        try {
+            $suggestions = $this->handler->handle(
+                query: $query,
+                locale: is_string($locale) ? $locale : null,
+                country: is_string($country) ? $country : null,
+            );
+        } catch (GeoProviderQuotaExceededException) {
+            return $this->errorResponse(
+                message: __('Address suggestions are rate limited. Try again shortly or enter the address manually.'),
+                statusCode: ResponseCodes::HTTP_TOO_MANY_REQUESTS,
+            );
+        } catch (GeoProviderException) {
+            return $this->errorResponse(
+                message: __('Address suggestions are temporarily unavailable. Try again or enter the address manually.'),
+                statusCode: ResponseCodes::HTTP_BAD_GATEWAY,
+            );
+        }
+
+        return $this->resourceResponse(
+            resource: GeoSuggestionResource::class,
+            data: collect($suggestions),
+        );
+    }
+}

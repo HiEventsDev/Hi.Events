@@ -1,0 +1,207 @@
+.header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.totals {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    font-size: var(--mantine-font-size-sm);
+    color: var(--mantine-color-gray-6);
+
+    strong {
+        color: var(--mantine-color-text);
+        font-weight: 600;
+    }
+}
+
+.sectionHeader {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.sectionTitle {
+    font-size: var(--mantine-font-size-lg);
+    font-weight: 600;
+}
+
+.container {
+    padding: var(--mantine-spacing-xl);
+
+    @media (max-width: 600px) {
+        padding: var(--mantine-spacing-md);
+    }
+}
+
+.kpiStrip {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    border: 1px solid var(--mantine-color-gray-2);
+    border-radius: var(--mantine-radius-md);
+    background: var(--mantine-color-body);
+    overflow: hidden;
+
+    @media (max-width: 900px) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.kpi {
+    padding: 14px 16px;
+    border-right: 1px solid var(--mantine-color-gray-2);
+    min-width: 0;
+
+    &:last-child {
+        border-right: none;
+    }
+
+    @media (max-width: 900px) {
+        border-bottom: 1px solid var(--mantine-color-gray-2);
+
+        &:nth-child(odd) {
+            border-right: none;
+        }
+
+        &:first-child {
+            grid-column: 1 / -1;
+        }
+
+        &:nth-last-child(-n + 2) {
+            border-bottom: none;
+        }
+    }
+}
+
+.kpiLabel {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--mantine-color-gray-6);
+    margin-bottom: 4px;
+}
+
+.kpiValue {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.2;
+    font-variant-numeric: tabular-nums;
+}
+
+.kpiSubValue {
+    font-size: var(--mantine-font-size-sm);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+
+    @media (max-width: 1100px) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.numeric {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.eventCell {
+    min-width: 140px;
+}
+
+.eventLinkIcon {
+    flex-shrink: 0;
+}
+
+.compactTable.compactTable {
+    @media (max-width: 600px) {
+        :global(thead tr th),
+        :global(tbody tr td) {
+            padding: 10px 8px;
+        }
+    }
+}
+
+.eventLink {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 4px;
+    font-weight: 500;
+    font-size: var(--mantine-font-size-sm);
+    color: var(--mantine-color-text);
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.subLink {
+    font-size: 12px;
+    color: var(--mantine-color-gray-6);
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.empty {
+    padding: 24px 16px;
+    text-align: center;
+    color: var(--mantine-color-gray-6);
+    font-size: var(--mantine-font-size-sm);
+}
+
+.attentionRow {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+
+    @media (max-width: 900px) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.attentionItem {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 10px 14px;
+    border: 1px solid var(--mantine-color-gray-2);
+    border-radius: var(--mantine-radius-md);
+    background: var(--mantine-color-body);
+    color: var(--mantine-color-gray-6);
+    font-size: var(--mantine-font-size-sm);
+    text-decoration: none;
+    min-width: 0;
+
+    &:hover {
+        border-color: var(--mantine-color-gray-4);
+    }
+}
+
+.attentionActive {
+    border-color: var(--mantine-color-orange-3);
+    background: var(--mantine-color-orange-0);
+    color: var(--mantine-color-orange-9);
+}
+
+.attentionCount {
+    font-size: var(--mantine-font-size-lg);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}

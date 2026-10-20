@@ -14,14 +14,12 @@ class GetSitemapIndexAction extends BaseAction
 
     public function __construct(
         private readonly GetSitemapIndexHandler $handler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(): Response
     {
         $xml = $this->handler->handle();
-        $cacheTtl = (int)config('sitemap.cache_ttl');
+        $cacheTtl = (int) config('sitemap.cache_ttl');
 
         return $this->xmlResponse(
             xmlContent: $xml,

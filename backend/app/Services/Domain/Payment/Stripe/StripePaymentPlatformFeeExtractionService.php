@@ -16,27 +16,24 @@ use Throwable;
 class StripePaymentPlatformFeeExtractionService
 {
     public function __construct(
-        private readonly StripeClientFactory                        $stripeClientFactory,
-        private readonly OrderPaymentPlatformFeeService             $orderPaymentPlatformFeeService,
+        private readonly StripeClientFactory $stripeClientFactory,
+        private readonly OrderPaymentPlatformFeeService $orderPaymentPlatformFeeService,
         private readonly OrderPaymentPlatformFeeRepositoryInterface $orderPaymentPlatformFeeRepository,
-        private readonly LoggerInterface                            $logger,
-    )
-    {
-    }
+        private readonly LoggerInterface $logger,
+    ) {}
 
     public function extractAndStorePlatformFee(
-        OrderDomainObject         $order,
-        Charge                    $charge,
+        OrderDomainObject $order,
+        Charge $charge,
         StripePaymentDomainObject $stripePayment
-    ): void
-    {
+    ): void {
         try {
             $this->logger->info(__('Extracting platform fee for order'), [
                 'order_id' => $order->getId(),
                 'charge_id' => $charge->id,
             ]);
 
-            if (!$charge->balance_transaction || is_string($charge->balance_transaction)) {
+            if (! $charge->balance_transaction || is_string($charge->balance_transaction)) {
                 $this->logger->info(__('Retrieving balance transaction from Stripe'), [
                     'charge_id' => $charge->id,
                     'order_id' => $order->getId(),
@@ -58,11 +55,12 @@ class StripePaymentPlatformFeeExtractionService
                 $charge = $stripeClient->charges->retrieve($charge->id, $params, $opts);
             }
 
-            if (!$charge->balance_transaction || is_string($charge->balance_transaction)) {
+            if (! $charge->balance_transaction || is_string($charge->balance_transaction)) {
                 $this->logger->warning(__('No balance transaction found for charge'), [
                     'charge_id' => $charge->id,
                     'order_id' => $order->getId(),
                 ]);
+
                 return;
             }
 
@@ -79,6 +77,7 @@ class StripePaymentPlatformFeeExtractionService
                     'transaction_id' => $balanceTransaction->id,
                     'charge_id' => $charge->id,
                 ]);
+
                 return;
             }
             $feeDetails = $this->extractFeeDetails($balanceTransaction);
@@ -183,9 +182,8 @@ class StripePaymentPlatformFeeExtractionService
     private function convertApplicationFeeToSettlementCurrency(
         StripePaymentDomainObject $stripePayment,
         $balanceTransaction
-    ): array
-    {
-        if (!config('app.tax.eu_vat_handling_enabled')) {
+    ): array {
+        if (! config('app.tax.eu_vat_handling_enabled')) {
             return [
                 'net' => null,
                 'vat' => null,
@@ -218,8 +216,8 @@ class StripePaymentPlatformFeeExtractionService
             : $vatMajor;
 
         // Convert to minor units (settlement currency)
-        $netAmountMinorUnit = $netConverted !== null ? (int)round($netConverted * 100) : null;
-        $vatAmountMinorUnit = $vatConverted !== null ? (int)round($vatConverted * 100) : null;
+        $netAmountMinorUnit = $netConverted !== null ? (int) round($netConverted * 100) : null;
+        $vatAmountMinorUnit = $vatConverted !== null ? (int) round($vatConverted * 100) : null;
 
         return [
             'net' => $netAmountMinorUnit,

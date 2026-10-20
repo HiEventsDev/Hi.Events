@@ -12,9 +12,7 @@ class GetProductCategoryAction extends BaseAction
 {
     public function __construct(
         private readonly GetProductCategoryHandler $getProductCategoryHandler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(int $eventId, int $productCategoryId): JsonResponse
     {

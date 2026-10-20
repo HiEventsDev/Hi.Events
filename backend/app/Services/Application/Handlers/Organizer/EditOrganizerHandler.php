@@ -6,6 +6,7 @@ use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Organizer\DTO\EditOrganizerDTO;
+use HiEvents\Services\Domain\Event\EventSpamCheckDispatchService;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
@@ -14,11 +15,10 @@ class EditOrganizerHandler
 {
     public function __construct(
         private readonly OrganizerRepositoryInterface $organizerRepository,
-        private readonly DatabaseManager              $databaseManager,
-        private readonly HtmlPurifierService          $htmlPurifierService,
-    )
-    {
-    }
+        private readonly DatabaseManager $databaseManager,
+        private readonly HtmlPurifierService $htmlPurifierService,
+        private readonly EventSpamCheckDispatchService $eventSpamCheckDispatchService,
+    ) {}
 
     /**
      * @throws Throwable
@@ -26,7 +26,7 @@ class EditOrganizerHandler
     public function handle(EditOrganizerDTO $organizerData): OrganizerDomainObject
     {
         return $this->databaseManager->transaction(
-            fn() => $this->editOrganizer($organizerData)
+            fn () => $this->editOrganizer($organizerData)
         );
     }
 
@@ -48,6 +48,8 @@ class EditOrganizerHandler
                 'account_id' => $organizerData->account_id,
             ]
         );
+
+        $this->eventSpamCheckDispatchService->dispatchForOrganizer($organizerData->id);
 
         return $this->organizerRepository
             ->loadRelation(ImageDomainObject::class)

@@ -2,6 +2,7 @@
 
 namespace HiEvents\Http\Actions\Orders;
 
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Exceptions\RefundNotPossibleException;
@@ -22,9 +23,7 @@ class CancelOrderAction extends BaseAction
 {
     public function __construct(
         private readonly CancelOrderHandler $cancelOrderHandler,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws Throwable
@@ -33,6 +32,10 @@ class CancelOrderAction extends BaseAction
     public function __invoke(int $eventId, int $orderId, Request $request): JsonResponse|Response
     {
         $this->isActionAuthorized($eventId, EventDomainObject::class);
+
+        if ($request->boolean('refund')) {
+            $this->requirePermission(Permission::ISSUE_REFUNDS);
+        }
 
         try {
             $order = $this->cancelOrderHandler->handle(new CancelOrderDTO(
@@ -45,7 +48,7 @@ class CancelOrderAction extends BaseAction
         } catch (ApiErrorException|RefundNotPossibleException $exception) {
             throw ValidationException::withMessages([
                 'refund' => $exception instanceof ApiErrorException
-                    ? 'Stripe error: ' . $exception->getMessage()
+                    ? 'Stripe error: '.$exception->getMessage()
                     : $exception->getMessage(),
             ]);
         }

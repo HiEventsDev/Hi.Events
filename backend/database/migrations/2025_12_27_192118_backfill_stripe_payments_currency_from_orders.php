@@ -7,7 +7,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        DB::statement(<<<SQL
+        DB::statement(<<<'SQL'
             UPDATE stripe_payments sp
             SET currency = o.currency
             FROM orders o

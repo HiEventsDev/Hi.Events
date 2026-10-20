@@ -16,9 +16,7 @@ class DeleteEventEmailTemplateAction extends BaseEmailTemplateAction
 {
     public function __construct(
         private readonly DeleteEmailTemplateHandler $handler
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(int $eventId, int $templateId): Response|JsonResponse
     {
@@ -35,6 +33,7 @@ class DeleteEventEmailTemplateAction extends BaseEmailTemplateAction
                 new DeleteEmailTemplateDTO(
                     id: $templateId,
                     account_id: $this->getAuthenticatedAccountId(),
+                    event_id: $eventId,
                 )
             );
         } catch (EmailTemplateNotFoundException $e) {

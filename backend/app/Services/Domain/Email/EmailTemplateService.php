@@ -7,6 +7,7 @@ use HiEvents\DomainObjects\Enums\EmailTemplateType;
 use HiEvents\Repository\Interfaces\EmailTemplateRepositoryInterface;
 use HiEvents\Services\Domain\Email\DTO\RenderedEmailTemplateDTO;
 use HiEvents\Services\Infrastructure\Email\LiquidTemplateRenderer;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class EmailTemplateService
@@ -14,9 +15,10 @@ class EmailTemplateService
     public function __construct(
         private readonly EmailTemplateRepositoryInterface $emailTemplateRepository,
         private readonly LiquidTemplateRenderer $liquidRenderer,
-        private readonly EmailTokenContextBuilder $tokenBuilder
-    ) {
-    }
+        private readonly EmailTokenContextBuilder $tokenBuilder,
+        private readonly EmailContextHtmlEscaper $contextHtmlEscaper,
+        private readonly HtmlPurifierService $purifier,
+    ) {}
 
     public function getTemplateByType(
         EmailTemplateType $type,
@@ -35,16 +37,13 @@ class EmailTemplateService
     public function renderTemplate(EmailTemplateDomainObject $template, array $context): RenderedEmailTemplateDTO
     {
         $renderedSubject = $this->liquidRenderer->render($template->getSubject(), $context);
-        $renderedBody = $this->liquidRenderer->render($template->getBody(), $context);
+        $renderedBody = $this->renderBody($template->getBody(), $context);
 
         $cta = null;
 
-        // Handle CTA if present
         if ($template->getCta()) {
             $templateCta = $template->getCta();
             if (isset($templateCta['label'], $templateCta['url_token'])) {
-                // Replace the URL token with actual value from context
-                // Handle dot notation (e.g., 'order.url' -> $context['order']['url'])
                 $ctaUrl = $this->getValueFromDotNotation($context, $templateCta['url_token']) ?? '#';
                 $cta = [
                     'label' => $templateCta['label'],
@@ -60,15 +59,12 @@ class EmailTemplateService
         );
     }
 
-    /**
-     * Get default template content
-     */
     public function getDefaultTemplate(EmailTemplateType $type): array
     {
         $defaults = $this->getDefaultTemplates();
         $ctaDefaults = $this->getDefaultCTAs();
 
-        $template = $defaults[$type->value] ?? throw new ResourceNotFoundException('No default template for type ' . $type->value);
+        $template = $defaults[$type->value] ?? throw new ResourceNotFoundException('No default template for type '.$type->value);
 
         $template['cta'] = $ctaDefaults[$type->value] ?? null;
 
@@ -79,9 +75,8 @@ class EmailTemplateService
     {
         $context = $this->tokenBuilder->buildPreviewContext($type->value);
 
-        $renderedBody = $this->liquidRenderer->render($body, $context);
+        $renderedBody = $this->renderBody($body, $context);
 
-        // Add CTA button if provided
         if ($cta && isset($cta['label'])) {
             $ctaUrl = $this->getValueFromDotNotation($context, $cta['url_token'] ?? '') ?? '#';
             $ctaHtml = sprintf(
@@ -97,8 +92,15 @@ class EmailTemplateService
         return [
             'subject' => $this->liquidRenderer->render($subject, $context),
             'body' => $renderedBody,
-            'context' => $context, // Return context for debugging
+            'context' => $context,
         ];
+    }
+
+    private function renderBody(string $body, array $context): string
+    {
+        return (string) $this->purifier->purify(
+            $this->liquidRenderer->render($body, $this->contextHtmlEscaper->escape($context)),
+        );
     }
 
     public function validateTemplate(string $subject, string $body): array
@@ -121,17 +123,13 @@ class EmailTemplateService
         ];
     }
 
-    /**
-     * Get value from array using dot notation
-     * e.g., 'order.url' will get $array['order']['url']
-     */
     private function getValueFromDotNotation(array $array, string $key)
     {
         $keys = explode('.', $key);
         $value = $array;
 
         foreach ($keys as $k) {
-            if (!isset($value[$k])) {
+            if (! isset($value[$k])) {
                 return null;
             }
             $value = $value[$k];
@@ -150,6 +148,10 @@ class EmailTemplateService
             EmailTemplateType::ATTENDEE_TICKET->value => [
                 'label' => __('View Ticket'),
                 'url_token' => 'ticket.url',
+            ],
+            EmailTemplateType::OCCURRENCE_CANCELLATION->value => [
+                'label' => __('View Event'),
+                'url_token' => 'event.url',
             ],
         ];
     }
@@ -180,6 +182,14 @@ Congratulations! Your order for <strong>{{ event.title }}</strong> on <strong>{{
 {% if event.full_address %}<strong>Location:</strong> {{ event.full_address }}<br>{% endif %}
 <br>
 
+{% if lineup.names.size > 0 or lineup.slots.size > 0 %}
+<strong>{{ lineup.heading }}</strong><br>
+{% if lineup.names.size > 0 %}{{ lineup.names | join: ", " }}<br>{% endif %}
+{% for slot in lineup.slots %}{{ slot.time }} · {{ slot.title }}{% if slot.stage %} · {{ slot.stage }}{% endif %}<br>{% endfor %}
+<a href="{{ lineup.url }}">{% if lineup.slots.size > 0 %}See the full schedule{% else %}See the full lineup{% endif %}</a><br>
+<br>
+{% endif %}
+
 {% if settings.post_checkout_message %}
 <strong>Additional Information</strong><br>
 {{ settings.post_checkout_message }}<br>
@@ -188,8 +198,26 @@ Congratulations! Your order for <strong>{{ event.title }}</strong> on <strong>{{
 <strong>Order Summary</strong><br>
 <strong>Order Number:</strong> {{ order.number }}<br>
 <strong>Total Amount:</strong> {{ order.total }}<br>
+{% if order.seats %}<strong>Seats:</strong> {{ order.seats }}<br>{% endif %}
 
 If you have any questions or need assistance, please contact <a href="mailto:{{ settings.support_email }}">{{ settings.support_email }}</a>.<br>
+
+Best regards,<br>
+{{ organizer.name }}
+LIQUID
+            ],
+            EmailTemplateType::OCCURRENCE_CANCELLATION->value => [
+                'subject' => '{{ event.title }} on {{ occurrence.start_date }} has been cancelled',
+                'body' => <<<'LIQUID'
+Hello,<br>
+
+We're sorry to let you know that <strong>{{ event.title }}</strong> scheduled for <strong>{{ occurrence.start_date }}</strong> at <strong>{{ occurrence.start_time }}</strong> has been cancelled.<br>
+
+{% if cancellation.refund_issued %}
+A refund for your order will be processed automatically. Please allow a few business days for the refund to appear on your statement.<br>
+{% else %}
+If you have any questions about your order, please respond to this email or contact <a href="mailto:{{ settings.support_email }}">{{ settings.support_email }}</a>.<br>
+{% endif %}
 
 Best regards,<br>
 {{ organizer.name }}
@@ -215,9 +243,18 @@ Please find your ticket details below.<br>
 {% if event.full_address %}<strong>Location:</strong> {{ event.full_address }}<br>{% endif %}
 <br>
 
+{% if lineup.names.size > 0 or lineup.slots.size > 0 %}
+<strong>{{ lineup.heading }}</strong><br>
+{% if lineup.names.size > 0 %}{{ lineup.names | join: ", " }}<br>{% endif %}
+{% for slot in lineup.slots %}{{ slot.time }} · {{ slot.title }}{% if slot.stage %} · {{ slot.stage }}{% endif %}<br>{% endfor %}
+<a href="{{ lineup.url }}">{% if lineup.slots.size > 0 %}See the full schedule{% else %}See the full lineup{% endif %}</a><br>
+<br>
+{% endif %}
+
 <strong>Your Ticket</strong><br>
 <strong>Ticket Type:</strong> {{ ticket.name }}<br>
 <strong>Price:</strong> {{ ticket.price }}<br>
+{% if attendee.seat %}<strong>Seat:</strong> {{ attendee.seat }}<br>{% endif %}
 <strong>Attendee:</strong> {{ attendee.name }}<br>
 
 <strong>💡Remember:</strong> Please have your ticket ready when you arrive at the event.<br>

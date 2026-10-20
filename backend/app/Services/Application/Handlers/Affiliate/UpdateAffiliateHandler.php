@@ -13,18 +13,16 @@ class UpdateAffiliateHandler
 {
     public function __construct(
         private readonly AffiliateRepositoryInterface $affiliateRepository,
-    )
-    {
-    }
+    ) {}
 
     public function handle(int $affiliateId, int $eventId, UpsertAffiliateDTO $dto): AffiliateDomainObject
     {
         $existingAffiliate = $this->affiliateRepository->findFirstWhere([
             'id' => $affiliateId,
-            'event_id' => $eventId
+            'event_id' => $eventId,
         ]);
 
-        if (!$existingAffiliate) {
+        if (! $existingAffiliate) {
             throw new NotFoundHttpException(__('Affiliate not found'));
         }
 
@@ -32,7 +30,7 @@ class UpdateAffiliateHandler
             'name' => $dto->name,
             'email' => $dto->email,
             'status' => $dto->status->value,
-        ], static fn($value) => $value !== null);
+        ], static fn ($value) => $value !== null);
 
         return $this->affiliateRepository->updateFromArray($affiliateId, $updateData);
     }

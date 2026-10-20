@@ -2,6 +2,4 @@
 
 namespace HiEvents\DomainObjects;
 
-class StripeCustomerDomainObject extends Generated\StripeCustomerDomainObjectAbstract
-{
-}
+class StripeCustomerDomainObject extends Generated\StripeCustomerDomainObjectAbstract {}

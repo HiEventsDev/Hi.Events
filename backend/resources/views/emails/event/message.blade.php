@@ -4,7 +4,13 @@
 
 @php /** @see \HiEvents\Mail\Event\EventMessage */ @endphp
 
+@php $organizerName = $event->getOrganizer()?->getName() ?: __('the event organizer') @endphp
+
 <x-mail::message>
+<div style="background-color: #f7f5fb; border: 1px solid #ebe7f2; border-radius: 10px; padding: 10px 16px; margin: 0 0 24px 0; color: #56506a; font-size: 13px; line-height: 1.6; text-align: center;">
+{{ __('This message is from :organizer, not from :platform.', ['organizer' => $organizerName, 'platform' => config('app.name')]) }}
+</div>
+
 {!! $messageData->message !!}
 
 {!! $eventSettings->getGetEmailFooterHtml() !!}

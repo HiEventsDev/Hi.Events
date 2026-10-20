@@ -10,10 +10,11 @@ class GetPaymentIntentActionPublic extends BaseAction
 {
     public function __construct(
         private readonly GetPaymentIntentHandler $getPaymentIntentHandler,
-    )
-    {
-    }
+    ) {}
 
+    /**
+     * @response array{status: string, paymentIntentId: string, amount: string}
+     */
     public function __invoke(int $eventId, string $orderShortId): JsonResponse
     {
         $createIntent = $this->getPaymentIntentHandler->handle(

@@ -1,16 +1,14 @@
-import {Button} from "@mantine/core";
 import {GenericModalProps, IdParam, Product, ProductPriceType, ProductType} from "../../../types.ts";
 import {useForm} from "@mantine/form";
 import {useParams} from "react-router";
 import {useEffect} from "react";
 import {ProductForm} from "../../forms/ProductForm";
-import {Modal} from "../../common/Modal";
+import {ProductDrawer} from "../../forms/ProductForm/ProductDrawer.tsx";
 import {useUpdateProduct} from "../../../mutations/useUpdateProduct.ts";
 import {showSuccess} from "../../../utilites/notifications.tsx";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
 import {t} from "@lingui/macro";
 import {useGetProduct} from "../../../queries/useGetProduct.ts";
-import {LoadingMask} from "../../common/LoadingMask";
 import {utcToTz} from "../../../utilites/dates.ts";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 
@@ -32,12 +30,15 @@ export const EditProductModal = ({onClose, productId}: GenericModalProps & { pro
             start_collapsed: undefined,
             show_quantity_remaining: undefined,
             hide_when_sold_out: undefined,
+            sequential_tier_release_enabled: undefined,
             is_hidden_without_promo_code: undefined,
             is_highlighted: false,
             highlight_message: undefined,
             waitlist_enabled: null,
             type: ProductPriceType.Paid,
             tax_and_fee_ids: [],
+            addon_product_ids: [],
+            is_addon_only: false,
             prices: [],
             product_type: ProductType.Ticket,
             product_category_id: undefined,
@@ -64,25 +65,31 @@ export const EditProductModal = ({onClose, productId}: GenericModalProps & { pro
             show_quantity_remaining: product.show_quantity_remaining,
             start_collapsed: product.start_collapsed,
             hide_when_sold_out: product.hide_when_sold_out,
+            sequential_tier_release_enabled: product.sequential_tier_release_enabled,
             is_hidden_without_promo_code: product.is_hidden_without_promo_code,
             type: product.type,
             tax_and_fee_ids: product.taxes_and_fees?.map(t => String(t.id)) ?? [],
+            addon_product_ids: product.addon_product_ids?.map(String) ?? [],
+            is_addon_only: product.is_addon_only ?? false,
             is_hidden: product.is_hidden,
             is_highlighted: product.is_highlighted,
             highlight_message: product.highlight_message,
             waitlist_enabled: product.waitlist_enabled ?? null,
             product_type: product.product_type,
             product_category_id: String(product.product_category_id),
+            price: product.type === ProductPriceType.Free ? 0.00 : undefined,
             prices: product.prices?.map(p => ({
                 price: p.price ?? 0,
                 label: p.label,
                 sale_start_date: utcToTz(p.sale_start_date, event.timezone),
                 sale_end_date: utcToTz(p.sale_end_date, event.timezone),
                 initial_quantity_available: p.initial_quantity_available ?? undefined,
+                quantity_applies_to: p.quantity_applies_to,
                 id: p.id,
                 is_hidden: p.is_hidden,
             })) ?? [],
         });
+        form.resetDirty();
     }, [product, event]);
 
     const handleEditProduct = (product: Product) => {
@@ -101,19 +108,18 @@ export const EditProductModal = ({onClose, productId}: GenericModalProps & { pro
     }
 
     return (
-        <Modal
+        <ProductDrawer
             onClose={onClose}
-            heading={t`Edit Product`}
-            opened
+            title={t`Edit Product`}
+            event={event}
+            form={form}
+            loading={!product || !event}
+            submitLabel={t`Edit Product`}
+            submitLoading={mutation.isPending}
+            submitTestId="product-edit-submit-button"
+            onSubmit={handleEditProduct}
         >
-            <form onSubmit={form.onSubmit(handleEditProduct)}>
-                <ProductForm product={product} form={form}/>
-                <LoadingMask/>
-
-                <Button type="submit" fullWidth mt="xl" disabled={mutation.isPending}>
-                    {mutation.isPending ? t`Working...` : t`Edit Product`}
-                </Button>
-            </form>
-        </Modal>
+            <ProductForm product={product} form={form}/>
+        </ProductDrawer>
     )
 };

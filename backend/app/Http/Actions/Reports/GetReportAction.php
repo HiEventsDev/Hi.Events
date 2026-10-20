@@ -2,9 +2,11 @@
 
 namespace HiEvents\Http\Actions\Reports;
 
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\Enums\ReportTypes;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\RequiresPermission;
 use HiEvents\Http\Request\Report\GetReportRequest;
 use HiEvents\Services\Application\Handlers\Reports\DTO\GetReportDTO;
 use HiEvents\Services\Application\Handlers\Reports\GetReportHandler;
@@ -13,11 +15,10 @@ use Illuminate\Support\Carbon;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
+#[RequiresPermission(Permission::VIEW_FINANCIALS)]
 class GetReportAction extends BaseAction
 {
-    public function __construct(private readonly GetReportHandler $reportHandler)
-    {
-    }
+    public function __construct(private readonly GetReportHandler $reportHandler) {}
 
     /**
      * @throws ValidationException
@@ -28,8 +29,8 @@ class GetReportAction extends BaseAction
 
         $this->validateDateRange($request);
 
-        if (!in_array($reportType, ReportTypes::valuesArray(), true)) {
-            throw new BadRequestHttpException('Invalid report type.');
+        if (! in_array($reportType, ReportTypes::valuesArray(), true)) {
+            throw new BadRequestHttpException(__('Invalid report type.'));
         }
 
         $reportData = $this->reportHandler->handle(
@@ -38,6 +39,7 @@ class GetReportAction extends BaseAction
                 reportType: ReportTypes::from($reportType),
                 startDate: $request->validated('start_date'),
                 endDate: $request->validated('end_date'),
+                occurrenceId: $request->validated('occurrence_id') ? (int) $request->validated('occurrence_id') : null,
             ),
         );
 
@@ -55,7 +57,9 @@ class GetReportAction extends BaseAction
         $diffInDays = Carbon::parse($startDate)->diffInDays(Carbon::parse($endDate));
 
         if ($diffInDays > 370) {
-            throw ValidationException::withMessages(['start_date' => 'Date range must be less than 370 days.']);
+            throw ValidationException::withMessages([
+                'start_date' => __('Date range must be less than 370 days.'),
+            ]);
         }
     }
 }

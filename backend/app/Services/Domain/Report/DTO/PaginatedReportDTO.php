@@ -9,13 +9,11 @@ class PaginatedReportDTO extends BaseDataObject
 {
     public function __construct(
         public readonly Collection $data,
-        public readonly int        $total,
-        public readonly int        $page,
-        public readonly int        $perPage,
-        public readonly int        $lastPage,
-    )
-    {
-    }
+        public readonly int $total,
+        public readonly int $page,
+        public readonly int $perPage,
+        public readonly int $lastPage,
+    ) {}
 
     public function toArray(): array
     {

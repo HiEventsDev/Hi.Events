@@ -2,8 +2,8 @@ import {IdParam, Product} from "../types.ts";
 import {productClient} from "../api/product.client.ts";
 import {queryClient} from "../utilites/queryClient.ts";
 import {GET_EVENT_PRODUCT_CATEGORIES_QUERY_KEY} from "../queries/useGetProductCategories.ts";
+import {GET_EVENT_QUERY_KEY} from "../queries/useGetEvent.ts";
 import {useMutation} from "@tanstack/react-query";
-import {GET_PRODUCTS_QUERY_KEY} from "../queries/useGetProducts.ts";
 
 export const useCreateProduct = () => {
     return useMutation({
@@ -14,8 +14,10 @@ export const useCreateProduct = () => {
 
         onSuccess: (_, variables) => {
             return Promise.all([
-                queryClient.invalidateQueries({queryKey: [GET_EVENT_PRODUCT_CATEGORIES_QUERY_KEY, variables.eventId]}),
-                queryClient.invalidateQueries({queryKey: [GET_PRODUCTS_QUERY_KEY]})
+                queryClient.invalidateQueries({
+                    queryKey: [GET_EVENT_PRODUCT_CATEGORIES_QUERY_KEY, variables.eventId],
+                }),
+                queryClient.invalidateQueries({queryKey: [GET_EVENT_QUERY_KEY]}),
             ]);
         }
     });

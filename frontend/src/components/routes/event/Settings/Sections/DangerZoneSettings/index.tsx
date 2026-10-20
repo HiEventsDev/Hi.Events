@@ -1,5 +1,6 @@
 import {t} from "@lingui/macro";
-import {Button, Alert, TextInput, Stack, Text} from "@mantine/core";
+import {Button, TextInput, Stack, Text} from "@mantine/core";
+import {Callout} from "../../../../../common/Callout";
 import {useNavigate, useParams} from "react-router";
 import {useState} from "react";
 import {DangerZone, DangerZoneSection} from "../../../../../common/DangerZone";
@@ -10,14 +11,14 @@ import {useGetEvent} from "../../../../../../queries/useGetEvent.ts";
 import {showSuccess, showError} from "../../../../../../utilites/notifications.tsx";
 import {confirmationDialog} from "../../../../../../utilites/confirmationDialog.tsx";
 import {EventStatus} from "../../../../../../types.ts";
-import {IconInfoCircle, IconTrash, IconArchive, IconArrowBackUp} from "@tabler/icons-react";
-import {useIsCurrentUserAdmin} from "../../../../../../hooks/useIsCurrentUserAdmin.ts";
+import {IconTrash, IconArchive, IconArrowBackUp} from "@tabler/icons-react";
+import {useAccess} from "../../../../../../hooks/useAccess.ts";
 import {BouncingEmoji} from "../../../../../common/BouncingEmoji";
 
 export const DangerZoneSettings = () => {
     const {eventId} = useParams();
     const navigate = useNavigate();
-    const isAdmin = useIsCurrentUserAdmin();
+    const isAdmin = useAccess().can('DELETE_EVENTS');
     const {data: deletionStatus, isLoading: isDeletionStatusLoading} = useGetEventDeletionStatus(eventId!);
     const {data: event} = useGetEvent(eventId!);
     const deleteMutation = useDeleteEvent();
@@ -25,7 +26,9 @@ export const DangerZoneSettings = () => {
     const [deleteConfirmation, setDeleteConfirmation] = useState('');
 
     const isArchived = event?.status === EventStatus.ARCHIVED;
-    const isDeleteConfirmed = deleteConfirmation.toLowerCase() === 'delete';
+    const isPendingReview = event?.status === EventStatus.PENDING_MANUAL_REVIEW;
+    const deleteConfirmationPhrase = t`delete`;
+    const isDeleteConfirmed = deleteConfirmation.trim().toLocaleLowerCase() === deleteConfirmationPhrase.toLocaleLowerCase();
 
     const handleDelete = () => {
         const organizerId = event?.organizer?.id;
@@ -88,9 +91,9 @@ export const DangerZoneSettings = () => {
                 action={
                     <>
                         {!isDeletionStatusLoading && !deletionStatus?.can_delete && (
-                            <Alert icon={<IconInfoCircle size={16}/>} variant="light" color="gray" mb="sm">
+                            <Callout variant="info" style={{marginBottom: 8}}>
                                 {deletionStatus?.reason}
-                            </Alert>
+                            </Callout>
                         )}
                         {deletionStatus?.can_delete && (
                             <Stack gap="xs" maw={400}>
@@ -98,7 +101,7 @@ export const DangerZoneSettings = () => {
                                     {t`Type "delete" to confirm`}
                                 </Text>
                                 <TextInput
-                                    placeholder={t`delete`}
+                                    placeholder={deleteConfirmationPhrase}
                                     value={deleteConfirmation}
                                     onChange={(e) => setDeleteConfirmation(e.currentTarget.value)}
                                 />
@@ -108,6 +111,7 @@ export const DangerZoneSettings = () => {
                             mt="sm"
                             color="red"
                             variant="outline"
+                            data-testid="event-delete-button"
                             onClick={handleDelete}
                             loading={deleteMutation.isPending}
                             disabled={!deletionStatus?.can_delete || isDeletionStatusLoading || !isDeleteConfirmed}
@@ -121,9 +125,11 @@ export const DangerZoneSettings = () => {
             <DangerZoneSection
                 title={isArchived ? t`Restore Event` : t`Archive Event`}
                 description={
-                    isArchived
-                        ? t`Restore this event to make it visible again.`
-                        : t`Archive this event to hide it from the public. You can restore it later.`
+                    isPendingReview
+                        ? t`This event is pending manual review. Its status cannot be changed until the review is complete.`
+                        : isArchived
+                            ? t`Restore this event to make it visible again.`
+                            : t`Archive this event to hide it from the public. You can restore it later.`
                 }
                 action={
                     <Button
@@ -131,6 +137,7 @@ export const DangerZoneSettings = () => {
                         variant="outline"
                         onClick={handleArchiveToggle}
                         loading={statusMutation.isPending}
+                        disabled={isPendingReview}
                         leftSection={isArchived ? <IconArrowBackUp size={16}/> : <IconArchive size={16}/>}
                     >
                         {isArchived ? t`Restore Event` : t`Archive Event`}

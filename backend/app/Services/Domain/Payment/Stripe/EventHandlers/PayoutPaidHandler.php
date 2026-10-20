@@ -4,10 +4,10 @@ namespace HiEvents\Services\Domain\Payment\Stripe\EventHandlers;
 
 use HiEvents\DomainObjects\Generated\StripePaymentDomainObjectAbstract;
 use HiEvents\Repository\Eloquent\StripePaymentsRepository;
+use HiEvents\Services\Domain\Payment\Stripe\DTOs\StripePayoutCreationDTO;
+use HiEvents\Services\Domain\Payment\Stripe\StripePayoutService;
 use HiEvents\Services\Infrastructure\Stripe\StripeClientFactory;
 use HiEvents\Services\Infrastructure\Stripe\StripeConfigurationService;
-use HiEvents\Services\Domain\Payment\Stripe\StripePayoutService;
-use HiEvents\Services\Domain\Payment\Stripe\DTOs\StripePayoutCreationDTO;
 use Psr\Log\LoggerInterface;
 use Stripe\ApplicationFee;
 use Stripe\Payout;
@@ -18,14 +18,12 @@ class PayoutPaidHandler
     private const PAGE_LIMIT = 100;
 
     public function __construct(
-        private readonly StripePaymentsRepository   $stripePaymentsRepository,
-        private readonly StripeClientFactory        $stripeClientFactory,
-        private readonly LoggerInterface            $logger,
+        private readonly StripePaymentsRepository $stripePaymentsRepository,
+        private readonly StripeClientFactory $stripeClientFactory,
+        private readonly LoggerInterface $logger,
         private readonly StripeConfigurationService $stripeConfigurationService,
-        private readonly StripePayoutService        $stripePayoutService,
-    )
-    {
-    }
+        private readonly StripePayoutService $stripePayoutService,
+    ) {}
 
     public function handleEvent(Payout $payout, ?string $connectedAccountId = null): void
     {
@@ -35,6 +33,7 @@ class PayoutPaidHandler
                     'payout_id' => $payout->id,
                     'account' => $connectedAccountId,
                 ]);
+
                 return;
             }
 
@@ -50,6 +49,7 @@ class PayoutPaidHandler
                     'payout_id' => $payout->id,
                     'status' => $payout->status,
                 ]);
+
                 return;
             }
 
@@ -80,18 +80,19 @@ class PayoutPaidHandler
                 ]);
 
                 $applicationFeeTxns = collect($transactions->data)
-                    ->filter(fn($txn) => $txn->type === 'application_fee' && $txn->source instanceof ApplicationFee)
+                    ->filter(fn ($txn) => $txn->type === 'application_fee' && $txn->source instanceof ApplicationFee)
                     ->values();
 
                 if ($applicationFeeTxns->isEmpty()) {
                     $this->logger->debug('No application_fee transactions found for this page');
                     $lastId = count($transactions->data) ? end($transactions->data)->id : null;
                     $page++;
+
                     continue;
                 }
 
                 $chargeIds = $applicationFeeTxns
-                    ->map(fn($txn) => $txn->source->originating_transaction ?? $txn->source->charge ?? $txn->source->fee_source->charge ?? null)
+                    ->map(fn ($txn) => $txn->source->originating_transaction ?? $txn->source->charge ?? $txn->source->fee_source->charge ?? null)
                     ->filter()
                     ->unique()
                     ->values();
@@ -100,6 +101,7 @@ class PayoutPaidHandler
                     $this->logger->debug('No valid charge IDs found for this payout page');
                     $lastId = count($transactions->data) ? end($transactions->data)->id : null;
                     $page++;
+
                     continue;
                 }
 
@@ -113,7 +115,7 @@ class PayoutPaidHandler
                             'payout_stripe_fee' => abs($txn->fee ?? 0),
                             'payout_net_amount' => $txn->net ?? null,
                             'payout_currency' => strtoupper($txn->currency ?? ''),
-                            'payout_exchange_rate' => $txn->exchange_rate ? (float)$txn->exchange_rate : null,
+                            'payout_exchange_rate' => $txn->exchange_rate ? (float) $txn->exchange_rate : null,
                         ];
                     }
                 }
@@ -122,7 +124,7 @@ class PayoutPaidHandler
                     ->findWhereIn(StripePaymentDomainObjectAbstract::CHARGE_ID, $chargeIds->toArray());
 
                 $foundPayments = $payments
-                    ->filter(fn($payment) => $payment->getChargeId() !== null);
+                    ->filter(fn ($payment) => $payment->getChargeId() !== null);
 
                 $this->logger->debug('Found matching Stripe payments for payout reconciliation', [
                     'payout_id' => $payout->id,
@@ -130,7 +132,7 @@ class PayoutPaidHandler
                     'total_charge_ids' => $chargeIds->count(),
                 ]);
 
-                $foundChargeIds = $foundPayments->map(fn($payment) => $payment->getChargeId())->values();
+                $foundChargeIds = $foundPayments->map(fn ($payment) => $payment->getChargeId())->values();
                 $missing = $chargeIds->diff($foundChargeIds);
 
                 if ($missing->isNotEmpty()) {
@@ -148,7 +150,7 @@ class PayoutPaidHandler
                     $chargeId = $payment->getChargeId();
                     $txnData = $chargeToTxnData[$chargeId] ?? null;
 
-                    if (!$txnData) {
+                    if (! $txnData) {
                         continue;
                     }
 
@@ -187,7 +189,7 @@ class PayoutPaidHandler
                 stripePlatform: $this->stripeConfigurationService->getPrimaryPlatform()?->value ?? null,
                 amountMinor: $payout->amount ?? null,
                 currency: $payout->currency ?? null,
-                payoutDate: isset($payout->arrival_date) ? (new \DateTimeImmutable())->setTimestamp($payout->arrival_date) : null,
+                payoutDate: isset($payout->arrival_date) ? (new \DateTimeImmutable)->setTimestamp($payout->arrival_date) : null,
                 status: $payout->status,
                 metadata: $payout->metadata?->toArray(),
             );

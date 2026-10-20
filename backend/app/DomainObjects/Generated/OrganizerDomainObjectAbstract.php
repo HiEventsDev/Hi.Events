@@ -12,6 +12,8 @@ abstract class OrganizerDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     final public const PLURAL_NAME = 'organizers';
     final public const ID = 'id';
     final public const ACCOUNT_ID = 'account_id';
+    final public const ORGANIZER_CONFIGURATION_ID = 'organizer_configuration_id';
+    final public const LOCATION_ID = 'location_id';
     final public const NAME = 'name';
     final public const EMAIL = 'email';
     final public const PHONE = 'phone';
@@ -23,9 +25,12 @@ abstract class OrganizerDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     final public const CURRENCY = 'currency';
     final public const TIMEZONE = 'timezone';
     final public const STATUS = 'status';
+    final public const STRIPE_TERMINAL_LOCATION_ID = 'stripe_terminal_location_id';
 
     protected int $id;
     protected int $account_id;
+    protected ?int $organizer_configuration_id = null;
+    protected ?int $location_id = null;
     protected string $name;
     protected string $email;
     protected ?string $phone = null;
@@ -37,12 +42,15 @@ abstract class OrganizerDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     protected string $currency = 'USD';
     protected string $timezone;
     protected string $status = 'DRAFT';
+    protected ?string $stripe_terminal_location_id = null;
 
     public function toArray(): array
     {
         return [
                     'id' => $this->id ?? null,
                     'account_id' => $this->account_id ?? null,
+                    'organizer_configuration_id' => $this->organizer_configuration_id ?? null,
+                    'location_id' => $this->location_id ?? null,
                     'name' => $this->name ?? null,
                     'email' => $this->email ?? null,
                     'phone' => $this->phone ?? null,
@@ -54,6 +62,7 @@ abstract class OrganizerDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
                     'currency' => $this->currency ?? null,
                     'timezone' => $this->timezone ?? null,
                     'status' => $this->status ?? null,
+                    'stripe_terminal_location_id' => $this->stripe_terminal_location_id ?? null,
                 ];
     }
 
@@ -77,6 +86,28 @@ abstract class OrganizerDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     public function getAccountId(): int
     {
         return $this->account_id;
+    }
+
+    public function setOrganizerConfigurationId(?int $organizer_configuration_id): self
+    {
+        $this->organizer_configuration_id = $organizer_configuration_id;
+        return $this;
+    }
+
+    public function getOrganizerConfigurationId(): ?int
+    {
+        return $this->organizer_configuration_id;
+    }
+
+    public function setLocationId(?int $location_id): self
+    {
+        $this->location_id = $location_id;
+        return $this;
+    }
+
+    public function getLocationId(): ?int
+    {
+        return $this->location_id;
     }
 
     public function setName(string $name): self
@@ -198,5 +229,16 @@ abstract class OrganizerDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     public function getStatus(): string
     {
         return $this->status;
+    }
+
+    public function setStripeTerminalLocationId(?string $stripe_terminal_location_id): self
+    {
+        $this->stripe_terminal_location_id = $stripe_terminal_location_id;
+        return $this;
+    }
+
+    public function getStripeTerminalLocationId(): ?string
+    {
+        return $this->stripe_terminal_location_id;
     }
 }

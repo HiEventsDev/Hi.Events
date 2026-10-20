@@ -1,0 +1,140 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$repo_root"
+
+php_version=8.5
+pg_version=15
+
+step() {
+  printf '\n==> %s\n' "$*"
+  step_started=$SECONDS
+}
+
+done_step() {
+  printf '    (%ss)\n' "$((SECONDS - step_started))"
+}
+
+export DEBIAN_FRONTEND=noninteractive
+
+step "System packages (PHP $php_version, PostgreSQL $pg_version)"
+php_packages=(
+  "php$php_version-cli" "php$php_version-bcmath" "php$php_version-curl" "php$php_version-gd"
+  "php$php_version-intl" "php$php_version-mbstring" "php$php_version-pgsql" "php$php_version-sqlite3"
+  "php$php_version-xml" "php$php_version-zip" "php$php_version-imagick" "php$php_version-redis"
+)
+apt_packages=("${php_packages[@]}" "postgresql-$pg_version" postgresql-client nginx unzip)
+missing=()
+for pkg in "${apt_packages[@]}"; do
+  dpkg-query -W -f='${Status}' "$pkg" 2>/dev/null | grep -q 'install ok installed' || missing+=("$pkg")
+done
+if ((${#missing[@]})); then
+  if [ ! -f /etc/apt/sources.list.d/php.list ]; then
+    sudo install -m 0755 -d /etc/apt/keyrings
+    sudo curl -fsSL https://packages.sury.org/php/apt.gpg -o /etc/apt/keyrings/sury-php.gpg
+    echo "deb [signed-by=/etc/apt/keyrings/sury-php.gpg] https://packages.sury.org/php/ $(. /etc/os-release && echo "$VERSION_CODENAME") main" |
+      sudo tee /etc/apt/sources.list.d/php.list >/dev/null
+  fi
+  sudo apt-get update -qq
+  sudo -E apt-get install -y -qq --no-install-recommends "${missing[@]}"
+fi
+if systemctl is-enabled --quiet nginx 2>/dev/null; then
+  sudo systemctl disable --now nginx
+fi
+done_step
+
+step "Composer"
+if ! command -v composer >/dev/null 2>&1; then
+  sudo curl -fsSL https://getcomposer.org/download/latest-stable/composer.phar -o /usr/local/bin/composer
+  sudo chmod 0755 /usr/local/bin/composer
+fi
+composer --version
+done_step
+
+step "PostgreSQL"
+pg_conf="/etc/postgresql/$pg_version/main/conf.d/zz-amp-orb.conf"
+if [ ! -f "$pg_conf" ]; then
+  printf '%s\n' "fsync = off" "synchronous_commit = off" "full_page_writes = off" |
+    sudo tee "$pg_conf" >/dev/null
+  sudo systemctl restart "postgresql@$pg_version-main"
+fi
+sudo systemctl enable --now "postgresql@$pg_version-main" >/dev/null 2>&1
+for _ in $(seq 1 30); do
+  pg_isready -q -h 127.0.0.1 && break
+  sleep 1
+done
+pg_isready -h 127.0.0.1
+if ! sudo -u postgres psql -tAc "SELECT 1 FROM pg_roles WHERE rolname = 'username'" | grep -q 1; then
+  sudo -u postgres psql -qc "CREATE ROLE username LOGIN SUPERUSER PASSWORD 'password'"
+fi
+for db in backend hievents_test; do
+  if ! sudo -u postgres psql -tAc "SELECT 1 FROM pg_database WHERE datname = '$db'" | grep -q 1; then
+    sudo -u postgres createdb -O username "$db"
+  fi
+done
+if ! grep -Eq '^127\.0\.0\.1[[:space:]].*\bpgsql\b' /etc/hosts; then
+  echo "127.0.0.1 pgsql" | sudo tee -a /etc/hosts >/dev/null
+fi
+done_step
+
+step "Backend environment"
+if [ ! -f backend/.env ]; then
+  sed \
+    -e 's|^APP_URL=.*|APP_URL=http://localhost:8000|' \
+    -e 's|^APP_FRONTEND_URL=.*|APP_FRONTEND_URL=http://localhost:5678|' \
+    -e 's|^APP_CDN_URL=.*|APP_CDN_URL=http://localhost:8000/storage|' \
+    -e 's|^FILESYSTEM_PUBLIC_DISK=.*|FILESYSTEM_PUBLIC_DISK=public|' \
+    -e 's|^FILESYSTEM_PRIVATE_DISK=.*|FILESYSTEM_PRIVATE_DISK=local|' \
+    -e 's|^MAIL_MAILER=.*|MAIL_MAILER=log|' \
+    backend/.env.example >backend/.env
+fi
+mkdir -p backend/bootstrap/cache backend/storage/framework/{cache,sessions,views} backend/storage/logs
+done_step
+
+step "Composer install (backend)"
+(cd backend && composer install --no-interaction --no-progress --prefer-dist)
+done_step
+
+step "Migrate development database"
+(cd backend && php artisan migrate --force --no-interaction)
+[ -e backend/public/storage ] || (cd backend && php artisan storage:link --no-interaction)
+done_step
+
+step "Frontend environment and dependencies"
+if [ ! -f frontend/.env ]; then
+  sed \
+    -e 's|^VITE_API_URL_CLIENT=.*|VITE_API_URL_CLIENT=http://localhost:8000|' \
+    -e 's|^VITE_API_URL_SERVER=.*|VITE_API_URL_SERVER=http://localhost:8000|' \
+    -e 's|^VITE_FRONTEND_URL=.*|VITE_FRONTEND_URL=http://localhost:5678|' \
+    frontend/.env.example >frontend/.env
+fi
+(cd frontend && yarn install --frozen-lockfile --non-interactive --silent)
+done_step
+
+step "E2E dependencies"
+if [ ! -d e2e/node_modules ] || [ e2e/package-lock.json -nt e2e/node_modules/.package-lock.json ]; then
+  (cd e2e && npm ci --no-audit --no-fund --loglevel=error)
+fi
+done_step
+
+step "Orb agent notes"
+notes_marker="<!-- hi-events orb notes -->"
+agents_file="$HOME/.config/amp/AGENTS.md"
+mkdir -p "$(dirname "$agents_file")"
+if ! grep -Fqx "$notes_marker" "$agents_file" 2>/dev/null; then
+  cat >>"$agents_file" <<'EOF'
+
+<!-- hi-events orb notes -->
+# Hi.Events in an orb
+
+- There is no Docker stack in the orb. Run the `docker compose ... exec backend` commands from AGENTS.md directly in `backend/`, e.g. `php -d memory_limit=1G vendor/bin/phpunit --testsuite=Unit`, `./vendor/bin/pint --test`.
+- PHP 8.5, Composer, and PostgreSQL 15 are installed natively. Postgres runs under systemd on 127.0.0.1:5432 (role `username` / `password`, databases `backend` and `hievents_test`); the hostname `pgsql` resolves to 127.0.0.1, so `backend/.env` and `backend/.env.testing` work unchanged.
+- `backend/.env` is set up for a native dev server: `php artisan serve --port 8000` (API at http://localhost:8000, no `/api` prefix), mail goes to the log, files use local disks, no Redis or Mailpit.
+- `frontend/.env` points at that API; run the SSR dev server with `yarn dev:ssr` in `frontend/` (http://localhost:5678).
+- `amp orb services ensure` starts the whole app behind one portal (`.amp/services.yaml`): nginx routes `/api/` to the backend and everything else to the frontend, like the Docker dev stack.
+EOF
+fi
+done_step
+
+printf '\nSetup complete.\n'

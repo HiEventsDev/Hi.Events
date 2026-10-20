@@ -9,7 +9,5 @@ class OrderEvent extends BaseDomainEvent
     public function __construct(
         public DomainEventType $type,
         public int $orderId,
-    )
-    {
-    }
+    ) {}
 }

@@ -13,7 +13,13 @@ use Illuminate\Pagination\LengthAwarePaginator;
  */
 interface OrganizerRepositoryInterface extends RepositoryInterface
 {
-    public function getOrganizerStats(int $organizerId, int $accountId, string $currencyCode): OrganizerStatsResponseDTO;
+    public function getOrganizerStats(
+        int $organizerId,
+        int $accountId,
+        string $currencyCode,
+        string $startDate,
+        string $endDate,
+    ): OrganizerStatsResponseDTO;
 
     public function getSitemapOrganizers(int $page, int $perPage): LengthAwarePaginator;
 

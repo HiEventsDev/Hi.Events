@@ -11,9 +11,9 @@ class AllowedSorts
 
     public function __construct(array $allowedSorts)
     {
-        $this->allowedSorts = new Collection();
+        $this->allowedSorts = new Collection;
         foreach ($allowedSorts as $key => $directions) {
-            if (!isset($directions['asc']) && !isset($directions['desc'])) {
+            if (! isset($directions['asc']) && ! isset($directions['desc'])) {
                 throw new InvalidArgumentException(
                     sprintf('AllowedSorts for "%s" must contain at least an asc description or a desc description', $key)
                 );
@@ -35,11 +35,11 @@ class AllowedSorts
         return $this->allowedSorts->mapWithKeys(function (AllowedSort $sort) {
             $sortOptions = [];
 
-            if (!is_null($sort->ascDescription)) {
+            if (! is_null($sort->ascDescription)) {
                 $sortOptions['asc'] = $sort->ascDescription;
             }
 
-            if (!is_null($sort->descDescription)) {
+            if (! is_null($sort->descDescription)) {
                 $sortOptions['desc'] = $sort->descDescription;
             }
 

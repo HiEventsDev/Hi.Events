@@ -18,22 +18,18 @@ class OpenExchangeRatesCurrencyConversionClient implements CurrencyConversionCli
     private string $apiKey;
 
     private const CACHE_TTL = 43200; // 12 hours in seconds
+
     private const API_URL = 'https://openexchangerates.org/api/latest.json';
 
     public function __construct(
-        string                           $apiKey,
-        private readonly CacheInterface  $cache,
+        string $apiKey,
+        private readonly CacheInterface $cache,
         private readonly LoggerInterface $logger,
-    )
-    {
+    ) {
         $this->apiKey = $apiKey;
     }
 
     /**
-     * @param Currency $fromCurrency
-     * @param Currency $toCurrency
-     * @param float $amount
-     * @return MoneyValue
      * @throws CurrencyConversionErrorException
      * @throws InvalidArgumentException
      * @throws JsonException
@@ -52,7 +48,7 @@ class OpenExchangeRatesCurrencyConversionClient implements CurrencyConversionCli
         $fromCurrencyCode = $fromCurrency->getCurrencyCode();
         $toCurrencyCode = $toCurrency->getCurrencyCode();
 
-        if (!isset($rates[$fromCurrencyCode], $rates[$toCurrencyCode])) {
+        if (! isset($rates[$fromCurrencyCode], $rates[$toCurrencyCode])) {
             throw new CurrencyConversionErrorException("Invalid currency conversion: $fromCurrencyCode to $toCurrencyCode");
         }
 
@@ -87,7 +83,7 @@ class OpenExchangeRatesCurrencyConversionClient implements CurrencyConversionCli
 
             $data = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
 
-            if (!isset($data['rates']) || !is_array($data['rates'])) {
+            if (! isset($data['rates']) || ! is_array($data['rates'])) {
                 throw new CurrencyConversionErrorException('Invalid response from Open Exchange Rates API.');
             }
 

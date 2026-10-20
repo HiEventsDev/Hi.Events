@@ -14,9 +14,7 @@ class CancelWaitlistEntryActionPublic extends BaseAction
 {
     public function __construct(
         private readonly CancelWaitlistEntryService $cancelWaitlistEntryService,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(int $eventId, string $token): Response|JsonResponse
     {

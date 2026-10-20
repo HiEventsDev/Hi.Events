@@ -7,7 +7,4 @@ use HiEvents\DomainObjects\OrganizerSettingDomainObject;
 /**
  * @extends RepositoryInterface<OrganizerSettingDomainObject>
  */
-interface OrganizerSettingsRepositoryInterface extends RepositoryInterface
-{
-
-}
+interface OrganizerSettingsRepositoryInterface extends RepositoryInterface {}

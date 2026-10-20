@@ -17,13 +17,11 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 class GetPaymentIntentHandler
 {
     public function __construct(
-        private readonly StripeClientFactory           $stripeClientFactory,
-        private readonly OrderRepositoryInterface      $orderRepository,
-        private readonly LoggerInterface               $logger,
+        private readonly StripeClientFactory $stripeClientFactory,
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly LoggerInterface $logger,
         private readonly PaymentIntentSucceededHandler $paymentIntentSucceededHandler,
-    )
-    {
-    }
+    ) {}
 
     public function handle(int $eventId, string $orderShortId): StripePaymentIntentPublicDTO
     {
@@ -35,7 +33,7 @@ class GetPaymentIntentHandler
             ))
             ->findFirstWhere([
                 'event_id' => $eventId,
-                'short_id' => $orderShortId
+                'short_id' => $orderShortId,
             ]);
 
         $accountId = $order->getStripePayment()->getConnectedAccountId();
@@ -55,7 +53,7 @@ class GetPaymentIntentHandler
                 'payment_intent_id' => $order->getStripePayment()->getPaymentIntentId(),
             ]);
 
-            throw new ResourceNotFoundException('Payment intent not found: ' . $e->getMessage());
+            throw new ResourceNotFoundException('Payment intent not found: '.$e->getMessage());
         }
 
         // If the payment intent is a success and the order's payment status is not received, we manually handle the event here.

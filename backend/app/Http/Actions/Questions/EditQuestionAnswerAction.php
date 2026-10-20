@@ -15,17 +15,14 @@ class EditQuestionAnswerAction extends BaseAction
 {
     public function __construct(
         private readonly EditQuestionAnswerHandler $editQuestionAnswerHandler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(
-        int                       $eventId,
-        int                       $questionId,
-        int                       $questionAnswerId,
+        int $eventId,
+        int $questionId,
+        int $questionAnswerId,
         EditQuestionAnswerRequest $request,
-    ): Response
-    {
+    ): Response {
         $this->isActionAuthorized($eventId, EventDomainObject::class);
 
         try {

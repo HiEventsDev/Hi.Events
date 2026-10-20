@@ -1,82 +1,148 @@
 import {t} from "@lingui/macro";
-import {Button, Select, Switch, TextInput} from "@mantine/core";
+import {Button, Switch, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {useParams} from "react-router";
 import {useEffect} from "react";
-import {Event} from "../../../../../../types.ts";
 import {Card} from "../../../../../common/Card";
-import {showSuccess} from "../../../../../../utilites/notifications.tsx";
+import {showError, showSuccess} from "../../../../../../utilites/notifications.tsx";
 import {useFormErrorResponseHandler} from "../../../../../../hooks/useFormErrorResponseHandler.tsx";
 import {useUpdateEventSettings} from "../../../../../../mutations/useUpdateEventSettings.ts";
-import countries from "../../../../../../../data/countries.json";
 import {useGetEventSettings} from "../../../../../../queries/useGetEventSettings.ts";
-import {InputGroup} from "../../../../../common/InputGroup";
+import {useGetEvent} from "../../../../../../queries/useGetEvent.ts";
 import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
 import {Editor} from "../../../../../common/Editor";
 import {isEmptyHtml} from "../../../../../../utilites/helpers.ts";
+import {isAddressSet, sameAddress} from "../../../../../../utilites/addressUtilities.ts";
+import {LocationPicker, LocationPickerValue} from "../../../../../common/LocationPicker";
+import {useCreateLocation} from "../../../../../../mutations/useCreateLocation.ts";
+import {useUpdateEventLocation} from "../../../../../../mutations/useUpdateEventLocation.ts";
+import {LocationType} from "../../../../../../types.ts";
 
 export const LocationSettings = () => {
     const {eventId} = useParams();
+    const eventQuery = useGetEvent(eventId);
     const eventSettingsQuery = useGetEventSettings(eventId);
-    const updateMutation = useUpdateEventSettings();
+    const updateSettingsMutation = useUpdateEventSettings();
+    const updateEventLocationMutation = useUpdateEventLocation();
+    const createLocationMutation = useCreateLocation();
+    const event = eventQuery.data;
+    const organizerId = event?.organizer?.id ?? event?.organizer_id;
+
     const form = useForm({
         initialValues: {
-            location_details: {
-                venue_name: '',
-                address_line_1: '',
-                address_line_2: '',
-                city: '',
-                state_or_region: '',
-                zip_or_postal_code: '',
-                country: '',
-            },
+            location: null as LocationPickerValue | null,
             is_online_event: false,
-            online_event_connection_details: '',
-            maps_url: '',
+            online_event_connection_details: "",
+            maps_url: "",
+        },
+        validate: {
+            online_event_connection_details: (value, values) => {
+                if (values.is_online_event && (!value || isEmptyHtml(value))) {
+                    return t`Connection details are required for online events`;
+                }
+                return null;
+            },
+            location: (value, values) => {
+                if (values.is_online_event) {
+                    return null;
+                }
+                if (!value || (value.kind === 'new' && !isAddressSet(value.address))) {
+                    return t`Enter a venue name or address for in-person events`;
+                }
+                return null;
+            },
         },
         transformValues: (values) => ({
             ...values,
-            online_event_connection_details: isEmptyHtml(values.online_event_connection_details) ? null : values.online_event_connection_details,
+            online_event_connection_details: isEmptyHtml(values.online_event_connection_details)
+                ? null
+                : values.online_event_connection_details,
         }),
     });
     const formErrorHandle = useFormErrorResponseHandler();
 
     useEffect(() => {
-        if (eventSettingsQuery?.isFetched && eventSettingsQuery.data) {
+        if (eventSettingsQuery?.isFetched && eventSettingsQuery.data && eventQuery.isFetched && eventQuery.data) {
+            const eventLocation = event?.event_location;
             form.setValues({
-                location_details: {
-                    venue_name: eventSettingsQuery.data.location_details?.venue_name || '',
-                    address_line_1: eventSettingsQuery.data.location_details?.address_line_1 || '',
-                    address_line_2: eventSettingsQuery.data.location_details?.address_line_2 || '',
-                    city: eventSettingsQuery.data.location_details?.city || '',
-                    state_or_region: eventSettingsQuery.data.location_details?.state_or_region || '',
-                    zip_or_postal_code: eventSettingsQuery.data.location_details?.zip_or_postal_code || '',
-                    country: eventSettingsQuery.data.location_details?.country || '',
-                },
-                is_online_event: eventSettingsQuery.data.is_online_event || false,
-                online_event_connection_details: eventSettingsQuery.data.online_event_connection_details,
-                maps_url: eventSettingsQuery.data.maps_url || '',
+                location: eventLocation?.location_id && eventLocation.location
+                    ? {kind: 'saved', location: eventLocation.location}
+                    : null,
+                is_online_event: eventLocation?.type === LocationType.Online,
+                online_event_connection_details: eventLocation?.online_event_connection_details ?? "",
+                maps_url: eventSettingsQuery.data.maps_url || "",
             });
         }
-    }, [eventSettingsQuery.isFetched]);
+    }, [eventSettingsQuery.isFetched, eventQuery.isFetched]);
 
-    const handleSubmit = (values: Partial<Event>) => {
-        if (form.values.is_online_event) {
-            values.location_details = undefined;
+    const resolveLocationId = async (value: LocationPickerValue): Promise<number | null> => {
+        if (value.kind === 'saved') {
+            return value.location.id ? Number(value.location.id) : null;
         }
 
-        updateMutation.mutate({
-            eventSettings: values,
-            eventId: eventId,
-        }, {
-            onSuccess: () => {
-                showSuccess(t`Successfully Updated Location`);
+        if (!organizerId || !isAddressSet(value.address)) {
+            return null;
+        }
+
+        const existingLocationId = event?.event_location?.location_id ?? null;
+        const existingAddress = event?.event_location?.location?.structured_address ?? null;
+        if (existingLocationId !== null && existingAddress !== null && sameAddress(existingAddress, value.address)) {
+            return existingLocationId;
+        }
+
+        const created = await createLocationMutation.mutateAsync({
+            organizerId,
+            payload: {
+                name: value.address.venue_name || null,
+                structured_address: value.address,
+                latitude: value.latitude,
+                longitude: value.longitude,
+                provider: value.provider,
+                provider_place_id: value.providerPlaceId,
             },
-            onError: (error) => {
-                formErrorHandle(form, error);
-            }
         });
-    }
+
+        return (created.data.id as number | undefined) ?? null;
+    };
+
+    const handleSubmit = async (values: {location: LocationPickerValue | null; is_online_event?: boolean; online_event_connection_details?: string | null; maps_url?: string}) => {
+        if (!eventId || !event) return;
+        try {
+            if (values.is_online_event) {
+                await updateEventLocationMutation.mutateAsync({
+                    eventId,
+                    eventLocation: {
+                        type: LocationType.Online,
+                        online_event_connection_details: values.online_event_connection_details ?? null,
+                    },
+                });
+            } else {
+                const locationIdForEvent = values.location ? await resolveLocationId(values.location) : null;
+
+                if (locationIdForEvent === null) {
+                    showError(t`Enter a venue name or address for in-person events`);
+                    return;
+                }
+
+                await updateEventLocationMutation.mutateAsync({
+                    eventId,
+                    eventLocation: {
+                        type: LocationType.InPerson,
+                        location_id: locationIdForEvent,
+                    },
+                });
+            }
+
+            await updateSettingsMutation.mutateAsync({
+                eventSettings: {maps_url: values.maps_url},
+                eventId,
+            });
+
+            showSuccess(t`Successfully Updated Location`);
+        } catch (error) {
+            formErrorHandle(form, error);
+        }
+    };
 
     return (
         <Card>
@@ -85,76 +151,37 @@ export const LocationSettings = () => {
                 description={t`Event location & venue details`}
             />
             <form onSubmit={form.onSubmit(handleSubmit)}>
-                <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending}>
+                <fieldset disabled={eventSettingsQuery.isLoading || updateSettingsMutation.isPending || createLocationMutation.isPending || updateEventLocationMutation.isPending}>
                     <Switch
-                        {...form.getInputProps('is_online_event', {type: 'checkbox'})}
+                        {...form.getInputProps("is_online_event", {type: "checkbox"})}
                         label={t`This is an online event`}
                     />
 
                     {form.values.is_online_event && (
                         <Editor
-                            value={form.values.online_event_connection_details || ''}
+                            value={form.values.online_event_connection_details || ""}
                             error={form.errors.online_event_connection_details as string}
                             label={t`Connection Details`}
                             description={(
                                 <>
-                                    <p>
-                                        {t`Include connection details for your online event. These details will be shown on the order summary page and attendee ticket page.`}
-                                    </p>
-                                    <p>
-                                        {t`These details will only be shown if order is completed successfully. Orders awaiting payment will not show this message.`}
-                                    </p>
+                                    <p>{t`Include connection details for your online event. These details will be shown on the order summary page and attendee ticket page.`}</p>
+                                    <p>{t`These details will only be shown if the order is completed successfully.`}</p>
                                 </>
                             )}
-                            onChange={(value) => form.setFieldValue('online_event_connection_details', value)}
+                            onChange={(value) => form.setFieldValue("online_event_connection_details", value)}
                         />
                     )}
-                    {!form.values.is_online_event && (
+
+                    {(!form.values.is_online_event && organizerId) && (
                         <>
-                            <TextInput
-                                {...form.getInputProps('location_details.venue_name')}
-                                label={t`Venue Name`}
-                                placeholder={t`Conference Center`}
+                            <LocationPicker
+                                organizerId={organizerId}
+                                value={form.values.location}
+                                onChange={(value) => form.setFieldValue('location', value)}
+                                error={form.errors.location}
                             />
-                            <InputGroup>
-                                <TextInput
-                                    {...form.getInputProps('location_details.address_line_1')}
-                                    label={t`Address Line 1`}
-                                    placeholder={t`123 Main Street`}
-                                />
-                                <TextInput
-                                    {...form.getInputProps('location_details.address_line_2')}
-                                    label={t`Address Line 2`}
-                                    placeholder={t`Suite 100`}
-                                />
-                            </InputGroup>
-                            <InputGroup>
-                                <TextInput
-                                    {...form.getInputProps('location_details.city')}
-                                    label={t`City`}
-                                    placeholder={t`San Francisco`}
-                                />
-                                <TextInput
-                                    {...form.getInputProps('location_details.state_or_region')}
-                                    label={t`State or Region`}
-                                    placeholder={t`California`}
-                                />
-                            </InputGroup>
-                            <InputGroup>
-                                <TextInput
-                                    {...form.getInputProps('location_details.zip_or_postal_code')}
-                                    label={t`Zip or Postal Code`}
-                                    placeholder={t`94103`}
-                                />
-                                <Select searchable
-                                        data={countries}
-                                        {...form.getInputProps('location_details.country')}
-                                        label={t`Country`}
-                                        placeholder={t`United States`}
-                                />
-                            </InputGroup>
                             <TextInput
-                                {...form.getInputProps('maps_url')}
+                                {...form.getInputProps("maps_url")}
                                 description={t`If blank, the address will be used to generate a Google Maps link`}
                                 label={t`Custom Maps URL`}
                                 placeholder={t`https://example-maps-service.com/...`}
@@ -162,11 +189,11 @@ export const LocationSettings = () => {
                         </>
                     )}
 
-                    <Button loading={updateMutation.isPending} type={'submit'}>
+                    <Button loading={updateSettingsMutation.isPending || createLocationMutation.isPending || updateEventLocationMutation.isPending} type={"submit"}>
                         {t`Save`}
                     </Button>
                 </fieldset>
             </form>
         </Card>
     );
-}
+};

@@ -1,0 +1,239 @@
+@use "../../../styles/mixins.scss";
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.item {
+  position: relative;
+}
+
+.button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 46px;
+  padding: 0.5rem 2.75rem;
+  border-radius: var(--hi-radius-lg);
+  border: 1px solid #747775;
+  background: #fff;
+  color: #1f1f1f;
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+
+  @include mixins.respond-below(sm) {
+    min-height: 48px;
+  }
+
+  &:hover:not(:disabled) {
+    background: #f8f9fa;
+    box-shadow: 0 1px 3px rgba(60, 64, 67, 0.16);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--mantine-color-secondary-5);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    cursor: default;
+  }
+
+  &:disabled:not([aria-busy="true"]) {
+    opacity: 0.55;
+  }
+}
+
+.google {
+  font-family: Roboto, var(--mantine-font-family, inherit);
+  font-weight: 500;
+}
+
+.microsoft {
+  border-color: #8c8c8c;
+  color: #5e5e5e;
+  font-family: "Segoe UI", var(--mantine-font-family, inherit);
+}
+
+.mark {
+  position: absolute;
+  left: 0.875rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+
+  img {
+    object-fit: contain;
+    border-radius: 3px;
+  }
+}
+
+.spinner {
+  position: absolute;
+  right: 0.875rem;
+  top: 50%;
+  margin-top: -8px;
+  display: flex;
+}
+
+.lastUsed {
+  position: absolute;
+  top: -0.5rem;
+  right: 0.75rem;
+  padding: 0 0.375rem;
+  background: var(--hi-color-white, #fff);
+  color: var(--hi-color-text-muted);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1rem;
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+  color: var(--hi-color-text-tertiary);
+  font-size: 0.8125rem;
+  font-weight: 500;
+
+  &::before,
+  &::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--hi-color-gray-2);
+  }
+}
+
+.inAppActions {
+  display: flex;
+  margin-top: 0.625rem;
+}
+
+.copyButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--hi-radius-md, 8px);
+  border: 1px solid var(--hi-color-gray-2);
+  background: #fff;
+  color: var(--hi-text);
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--mantine-color-secondary-5);
+    outline-offset: 2px;
+  }
+}
+
+.copyFallback {
+  width: 100%;
+  padding: 0.375rem 0.5rem;
+  border: 1px solid var(--hi-color-gray-2);
+  border-radius: var(--hi-radius-md, 8px);
+  background: #fff;
+  font-family: inherit;
+  font-size: 0.8125rem;
+  color: var(--hi-text);
+}
+
+.enterpriseButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 44px;
+  border: 0;
+  border-radius: var(--hi-radius-lg);
+  background: transparent;
+  color: var(--hi-text);
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  @include mixins.respond-below(sm) {
+    min-height: 48px;
+  }
+
+  &:hover:not(:disabled) {
+    background: var(--mantine-color-gray-1);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--mantine-color-secondary-5);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: default;
+  }
+}
+
+.stack + .enterpriseButton {
+  margin-top: 0.75rem;
+}
+
+.discovery {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  p {
+    margin: 0;
+    color: var(--hi-color-text-muted);
+    line-height: 1.5;
+  }
+
+  input {
+    font-size: 16px;
+  }
+}
+
+.backLink {
+  align-self: center;
+  border: 0;
+  background: none;
+  padding: 0.25rem;
+  color: var(--hi-color-text-muted);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--mantine-color-secondary-5);
+  }
+}

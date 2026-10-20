@@ -1,0 +1,203 @@
+name: E2E Tests
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'backend/**'
+      - 'frontend/**'
+      - 'e2e/**'
+      - 'docker/e2e/**'
+      - '.github/workflows/e2e.yml'
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+    paths:
+      - 'backend/**'
+      - 'frontend/**'
+      - 'e2e/**'
+      - 'docker/e2e/**'
+      - '.github/workflows/e2e.yml'
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: e2e-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set.outputs.matrix }}
+      title: ${{ steps.set.outputs.title }}
+    steps:
+      - id: set
+        env:
+          FULL: ${{ github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'full-e2e') }}
+          TRIGGER: ${{ github.event_name == 'schedule' && 'nightly' || github.event_name == 'push' && format('after merge to {0}', github.ref_name) || github.event_name == 'workflow_dispatch' && 'manual run' || 'pull request' }}
+        run: |
+          if [ "$FULL" = "true" ]; then
+            echo 'matrix={"include":[{"id":"self-hosted-1","mode":"self-hosted","saas":"false","shard":"1/2","pw_args":"--shard=1/2"},{"id":"self-hosted-2","mode":"self-hosted","saas":"false","shard":"2/2","pw_args":"--shard=2/2"},{"id":"saas-1","mode":"saas","saas":"true","shard":"1/2","pw_args":"--shard=1/2"},{"id":"saas-2","mode":"saas","saas":"true","shard":"2/2","pw_args":"--shard=2/2"}]}' >> "$GITHUB_OUTPUT"
+            echo "title=E2E full suite ($TRIGGER)" >> "$GITHUB_OUTPUT"
+          else
+            echo 'matrix={"include":[{"id":"smoke","mode":"self-hosted","saas":"false","shard":"smoke","pw_args":"--grep @smoke"}]}' >> "$GITHUB_OUTPUT"
+            echo "title=E2E smoke tests" >> "$GITHUB_OUTPUT"
+          fi
+
+  e2e:
+    name: e2e (${{ matrix.mode }}, ${{ matrix.shard }})
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+
+    permissions:
+      contents: read
+
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+
+    env:
+      COMPOSE_FILE: docker/e2e/docker-compose.e2e.yml
+      E2E_IMAGE_TAG: ci
+      E2E_SAAS_MODE: ${{ matrix.saas }}
+      STRIPE_PUBLIC_KEY: ${{ secrets.STRIPE_TEST_PUBLIC_KEY }}
+      STRIPE_SECRET_KEY: ${{ secrets.STRIPE_TEST_SECRET_KEY }}
+      E2E_STRIPE_CONNECT_ACCOUNT_ID: ${{ secrets.E2E_STRIPE_CONNECT_ACCOUNT_ID }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build backend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          load: true
+          tags: hievents-e2e-backend:ci
+          cache-from: type=gha,scope=e2e-backend
+          cache-to: type=gha,scope=e2e-backend,mode=max
+
+      - name: Build frontend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile.ssr
+          load: true
+          tags: hievents-e2e-frontend:ci
+          cache-from: type=gha,scope=e2e-frontend
+          cache-to: type=gha,scope=e2e-frontend,mode=max
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: e2e/package-lock.json
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('e2e/package-lock.json') }}
+
+      - name: Run E2E suite
+        id: run
+        run: ./e2e/run-e2e.sh -- ${{ matrix.pw_args }}
+
+      - name: Package results for the summary
+        if: ${{ !cancelled() }}
+        env:
+          MODE: ${{ matrix.mode }}
+          SHARD: ${{ matrix.shard }}
+          OUTCOME: ${{ steps.run.outcome }}
+        run: |
+          mkdir -p e2e-summary-input
+          [ -f e2e/test-results/results.json ] && cp e2e/test-results/results.json e2e-summary-input/
+          node -e 'console.log(JSON.stringify({mode: process.env.MODE, shard: process.env.SHARD, outcome: process.env.OUTCOME}))' > e2e-summary-input/meta.json
+
+      - name: Upload results for the summary
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-results-${{ matrix.id }}
+          path: e2e-summary-input/
+          retention-days: 3
+
+      - name: Collect stack logs on failure
+        if: failure()
+        run: docker compose -f "$COMPOSE_FILE" logs --no-color > e2e/compose-logs.txt
+
+      - name: Upload report and artifacts
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ matrix.id }}
+          path: |
+            e2e/playwright-report/
+            e2e/test-results/
+            e2e/compose-logs.txt
+          retention-days: 14
+
+      - name: Tear down the stack
+        if: always()
+        run: docker compose -f "$COMPOSE_FILE" down -v
+
+  summary:
+    needs: [plan, e2e]
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: e2e/scripts
+
+      - name: Download results
+        uses: actions/download-artifact@v4
+        with:
+          pattern: e2e-results-*
+          path: reports
+
+      - name: Write summary
+        env:
+          SUMMARY_TITLE: ${{ needs.plan.outputs.title }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: node e2e/scripts/github-summary.mjs reports | tee e2e-summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Comment summary on PR
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const marker = '<!-- e2e-summary -->';
+            const summary = fs.existsSync('e2e-summary.md')
+              ? fs.readFileSync('e2e-summary.md', 'utf8')
+              : '⚠️ No summary was generated. Check the "Write summary" step logs.';
+            const body = `${marker}\n${summary}`.slice(0, 65000);
+            try {
+              const comments = await github.paginate(github.rest.issues.listComments, {
+                ...context.repo,
+                issue_number: context.issue.number,
+                per_page: 100,
+              });
+              const existing = comments.find((c) => c.body?.includes(marker) || c.body?.includes('<!-- e2e-summary-'));
+              if (existing) {
+                await github.rest.issues.updateComment({ ...context.repo, comment_id: existing.id, body });
+              } else {
+                await github.rest.issues.createComment({ ...context.repo, issue_number: context.issue.number, body });
+              }
+            } catch (error) {
+              core.warning(`Could not post PR comment (fork PRs have a read-only token): ${error.message}`);
+            }

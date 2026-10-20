@@ -24,8 +24,8 @@ class QuestionResource extends BaseResource
             'belongs_to' => $this->getBelongsTo(),
             'is_hidden' => $this->getIsHidden(),
             'product_ids' => $this->when(
-                !is_null($this->getProducts()),
-                fn() => $this->getProducts()->map(fn($product) => $product->getId())
+                ! is_null($this->getProducts()),
+                fn () => $this->getProducts()->map(fn ($product) => $product->getId())
             ),
         ];
     }

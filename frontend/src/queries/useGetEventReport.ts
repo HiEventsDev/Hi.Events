@@ -8,7 +8,8 @@ export const useGetEventReport = (
     eventId: IdParam,
     reportType: IdParam,
     startDate?: Date | null,
-    endDate?: Date | null
+    endDate?: Date | null,
+    occurrenceId?: IdParam,
 ) => {
     return useQuery({
         queryKey: [
@@ -16,7 +17,8 @@ export const useGetEventReport = (
             eventId,
             reportType,
             startDate?.toISOString(),
-            endDate?.toISOString()
+            endDate?.toISOString(),
+            occurrenceId,
         ],
         queryFn: async () => {
             const startDateString = startDate?.toISOString();
@@ -26,7 +28,8 @@ export const useGetEventReport = (
                 eventId,
                 reportType,
                 startDateString,
-                endDateString
+                endDateString,
+                occurrenceId,
             );
         },
         enabled: !!eventId && !!reportType && (!!startDate && !!endDate) || (!startDate && !endDate)

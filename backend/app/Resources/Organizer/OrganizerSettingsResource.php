@@ -21,6 +21,7 @@ class OrganizerSettingsResource extends BaseResource
             'default_allow_attendee_self_edit' => $this->getDefaultAllowAttendeeSelfEdit(),
             'social_media_handles' => $this->getSocialMediaHandles(),
             'homepage_theme_settings' => $this->getHomepageThemeSettings(),
+            'homepage_sections' => $this->getHomepageSections(),
             'homepage_visibility' => $this->getHomepageVisibility(),
             'homepage_password' => $this->getHomepagePassword(),
             'website_url' => $this->getWebsiteUrl(),
@@ -28,9 +29,9 @@ class OrganizerSettingsResource extends BaseResource
             'seo_title' => $this->getSeoTitle(),
             'seo_description' => $this->getSeoDescription(),
             'allow_search_engine_indexing' => $this->getAllowSearchEngineIndexing(),
-            'location_details' => $this->getLocationDetails(),
             'tracking_pixels' => $this->getTrackingPixels(),
             'tracking_consent_acknowledged' => $this->getTrackingConsentAcknowledged(),
+            'first_day_of_week' => $this->getFirstDayOfWeek(),
         ];
     }
 }

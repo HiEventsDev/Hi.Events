@@ -15,5 +15,4 @@ class OrderRefund extends BaseModel
             'amount' => 'float',
         ];
     }
-
 }

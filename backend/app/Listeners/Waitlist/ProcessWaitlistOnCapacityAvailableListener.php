@@ -11,16 +11,16 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Waitlist\ProcessWaitlistService;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class ProcessWaitlistOnCapacityAvailableListener implements ShouldQueue
 {
     public function __construct(
-        private readonly EventRepositoryInterface               $eventRepository,
-        private readonly ProcessWaitlistService                 $processWaitlistService,
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly ProcessWaitlistService $processWaitlistService,
         private readonly AvailableProductQuantitiesFetchService $availableQuantitiesService,
-    )
-    {
-    }
+    ) {}
 
     public function handle(CapacityChangedEvent $event): void
     {
@@ -34,13 +34,16 @@ class ProcessWaitlistOnCapacityAvailableListener implements ShouldQueue
 
         $eventSettings = $eventDomainObject->getEventSettings();
 
-        if (!$eventSettings?->getWaitlistAutoProcess()) {
+        if (! $eventSettings?->getWaitlistAutoProcess()) {
             return;
         }
+
+        $eventOccurrenceId = $event->eventOccurrenceId ?? null;
 
         $quantities = $this->availableQuantitiesService->getAvailableProductQuantities(
             $event->eventId,
             ignoreCache: true,
+            eventOccurrenceId: $eventOccurrenceId,
         );
 
         foreach ($quantities->productQuantities as $productQuantity) {
@@ -60,9 +63,18 @@ class ProcessWaitlistOnCapacityAvailableListener implements ShouldQueue
                     quantity: $availableCount,
                     event: $eventDomainObject,
                     eventSettings: $eventSettings,
+                    eventOccurrenceId: $eventOccurrenceId,
                 );
             } catch (NoCapacityAvailableException) {
                 // Expected: no waiting entries or capacity consumed by pending offers
+            } catch (Throwable $e) {
+                Log::error('ProcessWaitlistOnCapacityAvailableListener failed', [
+                    'event_id' => $event->eventId,
+                    'product_id' => $event->productId,
+                    'price_id' => $productQuantity->price_id,
+                    'error' => $e->getMessage(),
+                ]);
+                throw $e;
             }
         }
     }

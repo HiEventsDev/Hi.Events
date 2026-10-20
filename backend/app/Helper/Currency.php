@@ -22,7 +22,7 @@ class Currency
         'VUV',
         'XAF',
         'XOF',
-        'XPF'
+        'XPF',
     ];
 
     public static function isZeroDecimalCurrency(string $currencyCode): bool
@@ -33,8 +33,14 @@ class Currency
     public static function format(float|int $amount, string $currencyCode, string $locale = 'en_US'): string
     {
         $currencyCode = strtoupper($currencyCode);
-        $formatter = new NumberFormatter($locale . '@currency=' . $currencyCode, NumberFormatter::CURRENCY);
+        $formatter = new NumberFormatter($locale.'@currency='.$currencyCode, NumberFormatter::CURRENCY);
+
         return $formatter->formatCurrency($amount, $currencyCode);
+    }
+
+    public static function fromMinorUnits(int $minorUnits, string $currencyCode): float
+    {
+        return $minorUnits / (self::isZeroDecimalCurrency($currencyCode) ? 1 : 100);
     }
 
     public static function round(float $value, $precision = 2): float

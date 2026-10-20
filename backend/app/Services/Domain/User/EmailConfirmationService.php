@@ -19,16 +19,14 @@ use Throwable;
 class EmailConfirmationService
 {
     public function __construct(
-        private readonly Mailer                       $mailer,
-        private readonly EncryptedPayloadService      $encryptedPayloadService,
-        private readonly UserRepositoryInterface      $userRepository,
-        private readonly DatabaseManager              $databaseManager,
+        private readonly Mailer $mailer,
+        private readonly EncryptedPayloadService $encryptedPayloadService,
+        private readonly UserRepositoryInterface $userRepository,
+        private readonly DatabaseManager $databaseManager,
         private readonly EmailVerificationCodeService $emailVerificationCodeService,
-        private readonly VerifyUserEmailService       $verifyUserEmailService,
-        private readonly EventRepositoryInterface     $eventRepository,
-    )
-    {
-    }
+        private readonly VerifyUserEmailService $verifyUserEmailService,
+        private readonly EventRepositoryInterface $eventRepository,
+    ) {}
 
     /**
      * @throws DecryptionFailedException
@@ -57,7 +55,6 @@ class EmailConfirmationService
                 ->to($user->getEmail())
                 ->locale($user->getLocale())
                 ->send(new EmailConfirmationCodeEmail(
-                    $user,
                     $this->emailVerificationCodeService->storeAndReturnCode($user->getEmail()),
                 ));
 
@@ -70,6 +67,6 @@ class EmailConfirmationService
 
         $this->mailer
             ->to($user->getEmail())
-            ->send(new ConfirmEmailAddressEmail($user, $token));
+            ->send(new ConfirmEmailAddressEmail($token));
     }
 }

@@ -2,7 +2,4 @@
 
 namespace HiEvents\Validators\DTO;
 
-class CompleteOrderResponseDTO
-{
-
-}
+class CompleteOrderResponseDTO {}

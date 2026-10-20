@@ -1,19 +1,9 @@
-import {NodeViewWrapper} from '@tiptap/react';
+import {NodeViewWrapper, ReactNodeViewProps} from '@tiptap/react';
 import {Badge, Tooltip} from '@mantine/core';
 import {IconCode} from '@tabler/icons-react';
 
-interface TokenComponentProps {
-    node: {
-        attrs: {
-            tokenName: string;
-            tokenDescription: string;
-        };
-    };
-    selected: boolean;
-}
-
-export const TokenComponent = ({node, selected}: TokenComponentProps) => {
-    const {tokenName, tokenDescription} = node.attrs;
+export const TokenComponent = ({node, selected}: ReactNodeViewProps) => {
+    const {tokenName, tokenDescription} = node.attrs as { tokenName: string; tokenDescription: string };
 
     const tokenBadge = (
         <Badge

@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Application\Handlers\Admin;
 
+use HiEvents\DomainObjects\Enums\AuthMethod;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Exceptions\UnauthorizedException;
 use HiEvents\Models\User;
@@ -13,10 +14,8 @@ class StartImpersonationHandler
 {
     public function __construct(
         private readonly AccountUserRepositoryInterface $accountUserRepository,
-        private readonly AuthManager                    $authManager,
-    )
-    {
-    }
+        private readonly AuthManager $authManager,
+    ) {}
 
     /**
      * @throws UnauthorizedException
@@ -28,19 +27,21 @@ class StartImpersonationHandler
 
         $accountUser = $this->accountUserRepository->findFirstWhere([
             'user_id' => $targetUser->id,
-            'account_id' => $dto->accountId
+            'account_id' => $dto->accountId,
         ]);
 
-        if (!$accountUser) {
+        if (! $accountUser) {
             throw new UnauthorizedException(__('User does not belong to this account'));
         }
 
-        if (!$this->authManager->user()?->canImpersonate() || $accountUser->getRole() === Role::SUPERADMIN->name) {
+        if (! $this->authManager->user()?->canImpersonate() || $accountUser->getRole() === Role::SUPERADMIN->name) {
             throw new UnauthorizedException(__('Impersonation not allowed'));
         }
 
         return $this->authManager->claims([
             'account_id' => $dto->accountId,
+            'role' => $accountUser->getRole(),
+            'auth_method' => AuthMethod::IMPERSONATION->value,
             'impersonator_id' => $dto->impersonatorId,
             'is_impersonating' => true,
         ])->login($targetUser);

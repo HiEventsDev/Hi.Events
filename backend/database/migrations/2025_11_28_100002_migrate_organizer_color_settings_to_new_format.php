@@ -51,9 +51,9 @@ return new class extends Migration
 
         // Handle short hex formats and colors with alpha
         if (strlen($hex) === 3) {
-            $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+            $hex = $hex[0].$hex[0].$hex[1].$hex[1].$hex[2].$hex[2];
         } elseif (strlen($hex) === 4) {
-            $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+            $hex = $hex[0].$hex[0].$hex[1].$hex[1].$hex[2].$hex[2];
         } elseif (strlen($hex) === 8) {
             $hex = substr($hex, 0, 6);
         }

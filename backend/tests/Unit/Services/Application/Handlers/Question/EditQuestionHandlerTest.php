@@ -7,6 +7,7 @@ use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
 use HiEvents\DomainObjects\QuestionDomainObject;
 use HiEvents\Services\Application\Handlers\Question\DTO\UpsertQuestionDTO;
 use HiEvents\Services\Application\Handlers\Question\EditQuestionHandler;
+use HiEvents\Services\Domain\Event\EventSpamCheckDispatchService;
 use HiEvents\Services\Domain\Question\EditQuestionService;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Mockery;
@@ -17,12 +18,12 @@ class EditQuestionHandlerTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    public function testDescriptionIsPurifiedOnEdit(): void
+    public function test_description_is_purified_on_edit(): void
     {
         $editQuestionService = Mockery::mock(EditQuestionService::class);
         $purifier = Mockery::mock(HtmlPurifierService::class);
 
-        $purifier->shouldReceive('purify')->andReturnUsing(fn($v) => is_string($v) ? 'PURIFIED:' . $v : $v);
+        $purifier->shouldReceive('purify')->andReturnUsing(fn ($v) => is_string($v) ? 'PURIFIED:'.$v : $v);
 
         $capturedQuestion = null;
         $editQuestionService
@@ -30,10 +31,11 @@ class EditQuestionHandlerTest extends TestCase
             ->once()
             ->andReturnUsing(function ($question) use (&$capturedQuestion) {
                 $capturedQuestion = $question;
+
                 return $question;
             });
 
-        $handler = new EditQuestionHandler($editQuestionService, $purifier);
+        $handler = new EditQuestionHandler($editQuestionService, $purifier, Mockery::mock(EventSpamCheckDispatchService::class)->shouldIgnoreMissing());
 
         $dto = new UpsertQuestionDTO(
             title: 'Dietary requirements',

@@ -1,0 +1,174 @@
+.root {
+    width: 100%;
+    height: 100%;
+    display: block;
+    touch-action: none;
+    user-select: none;
+    background: #fafafb;
+}
+
+.interactive {
+    cursor: grab;
+
+    &:active {
+        cursor: grabbing;
+    }
+}
+
+.seat {
+    stroke: rgba(0, 0, 0, 0.12);
+    stroke-width: 1;
+    transition: fill 120ms ease, opacity 120ms ease;
+}
+
+.seatFree {
+    cursor: pointer;
+
+    &:hover {
+        stroke: #111;
+        stroke-width: 2;
+    }
+}
+
+.seatSelected {
+    fill: #16a34a !important;
+    stroke: #0b5d2a;
+    stroke-width: 2;
+    cursor: pointer;
+}
+
+.seatUnavailable {
+    fill: #dcdce2 !important;
+    stroke: none;
+    opacity: 0.7;
+}
+
+.seatNumber {
+    fill: #fff;
+    font-weight: 600;
+    text-anchor: middle;
+    dominant-baseline: central;
+    pointer-events: none;
+}
+
+.hideNumbers .seatNumber,
+.hideNumbers .rowLabel {
+    display: none;
+}
+
+.rowLabel {
+    fill: #6b6b76;
+    font-size: 11px;
+    font-weight: 600;
+    text-anchor: middle;
+    dominant-baseline: central;
+    pointer-events: none;
+}
+
+.accessibleMark {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 2;
+    pointer-events: none;
+}
+
+.companionMark {
+    fill: none;
+    stroke: #33205a;
+    stroke-width: 1.5;
+    stroke-dasharray: 3 2;
+    pointer-events: none;
+}
+
+.objectLabel,
+.zoneLabel,
+.tableLabel,
+.textLabel {
+    text-anchor: middle;
+    dominant-baseline: central;
+    pointer-events: none;
+    font-weight: 600;
+}
+
+.objectLabel {
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.tableSurface {
+    fill: #efeef3;
+    stroke: #cfcdd8;
+}
+
+.tableLabel {
+    fill: #55536a;
+    font-size: 12px;
+}
+
+.textLabel {
+    fill: #33324a;
+}
+
+.zone {
+    fill-opacity: 0.18;
+    stroke-width: 2;
+    stroke-dasharray: 8 6;
+}
+
+.zoneFree {
+    cursor: pointer;
+
+    &:hover {
+        fill-opacity: 0.32;
+    }
+}
+
+.zoneUnavailable {
+    fill: #dcdce2 !important;
+    stroke: #b9b9c4 !important;
+}
+
+.zoneLabel {
+    fill: #33324a;
+    font-size: 14px;
+}
+
+.zoneMeta {
+    fill: #55536a;
+    font-size: 11px;
+    text-anchor: middle;
+    pointer-events: none;
+}
+
+.seatSold {
+    fill: #55536a !important;
+    stroke: none;
+    cursor: pointer;
+}
+
+.seatHeld {
+    fill: #f59e0b !important;
+    stroke: none;
+    cursor: pointer;
+}
+
+.seatBlocked {
+    fill: #fff !important;
+    stroke: #be123c;
+    stroke-width: 2;
+    stroke-dasharray: 3 2;
+    cursor: pointer;
+
+    ~ .seatNumber {
+        fill: #be123c;
+    }
+}
+
+.marquee {
+    fill: rgba(117, 95, 177, 0.1);
+    stroke: #755fb1;
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke;
+    pointer-events: none;
+}

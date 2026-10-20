@@ -4,12 +4,16 @@ namespace HiEvents\Services\Domain\SelfService;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\OrderAuditAction;
-use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventLocationDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\InvoiceDomainObject;
+use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
+use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -39,15 +43,37 @@ class SelfServiceResendEmailService
             ->loadRelation(new Relationship(OrderDomainObject::class, nested: [
                 new Relationship(OrderItemDomainObject::class),
             ], name: 'order'))
+            ->loadRelation(new Relationship(
+                domainObject: EventOccurrenceDomainObject::class,
+                nested: [
+                    new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                        new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                    ]),
+                ],
+                name: 'event_occurrence',
+            ))
+            ->loadRelation(new Relationship(
+                domainObject: ProductDomainObject::class,
+                name: 'product',
+            ))
             ->findFirstWhere([
                 'id' => $attendeeId,
                 'order_id' => $orderId,
                 'event_id' => $eventId,
             ]);
 
+        if ($attendee->getEmail() === null) {
+            throw new ResourceConflictException(
+                __('This ticket has no email address associated with it.')
+            );
+        }
+
         $event = $this->eventRepository
             ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
             ->loadRelation(EventSettingDomainObject::class)
+            ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+            ]))
             ->findById($eventId);
 
         $this->sendAttendeeTicketService->send(
@@ -75,17 +101,57 @@ class SelfServiceResendEmailService
         ?string $userAgent
     ): void {
         $order = $this->orderRepository
-            ->loadRelation(OrderItemDomainObject::class)
-            ->loadRelation(AttendeeDomainObject::class)
+            ->loadRelation(new Relationship(
+                domainObject: OrderItemDomainObject::class,
+                nested: [
+                    new Relationship(
+                        domainObject: EventOccurrenceDomainObject::class,
+                        nested: [
+                            new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                                new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                            ]),
+                        ],
+                        name: 'event_occurrence',
+                    ),
+                ],
+            ))
+            ->loadRelation(new Relationship(
+                domainObject: AttendeeDomainObject::class,
+                nested: [
+                    new Relationship(
+                        domainObject: EventOccurrenceDomainObject::class,
+                        nested: [
+                            new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                                new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                            ]),
+                        ],
+                        name: 'event_occurrence',
+                    ),
+                ],
+            ))
             ->loadRelation(InvoiceDomainObject::class)
             ->findFirstWhere([
                 'id' => $orderId,
                 'event_id' => $eventId,
             ]);
 
+        if ($order->getEmail() === null) {
+            throw new ResourceConflictException(
+                __('This order has no email address associated with it.')
+            );
+        }
+
         $event = $this->eventRepository
             ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
             ->loadRelation(new Relationship(EventSettingDomainObject::class))
+            ->loadRelation(new Relationship(domainObject: EventOccurrenceDomainObject::class, nested: [
+                new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                    new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                ]),
+            ]))
+            ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+            ]))
             ->findById($eventId);
 
         $this->sendOrderDetailsService->sendCustomerOrderSummary(

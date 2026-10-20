@@ -11,18 +11,20 @@ use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 class GetWaitlistStatsHandler
 {
     public function __construct(
-        private readonly WaitlistEntryRepositoryInterface       $waitlistEntryRepository,
+        private readonly WaitlistEntryRepositoryInterface $waitlistEntryRepository,
         private readonly AvailableProductQuantitiesFetchService $availableQuantitiesService,
-    )
-    {
-    }
+    ) {}
 
-    public function handle(int $eventId): WaitlistStatsDTO
+    public function handle(int $eventId, ?int $eventOccurrenceId = null): WaitlistStatsDTO
     {
-        $stats = $this->waitlistEntryRepository->getStatsByEventId($eventId);
-        $productRows = $this->waitlistEntryRepository->getProductStatsByEventId($eventId);
+        $stats = $this->waitlistEntryRepository->getStatsByEventId($eventId, $eventOccurrenceId);
+        $productRows = $this->waitlistEntryRepository->getProductStatsByEventId($eventId, $eventOccurrenceId);
 
-        $quantities = $this->availableQuantitiesService->getAvailableProductQuantities($eventId, ignoreCache: true);
+        $quantities = $this->availableQuantitiesService->getAvailableProductQuantities(
+            $eventId,
+            ignoreCache: true,
+            eventOccurrenceId: $eventOccurrenceId,
+        );
 
         $products = $productRows->map(function ($row) use ($quantities) {
             $actualAvailable = $this->getAvailableCountForPrice($quantities, (int) $row->product_price_id);
@@ -56,6 +58,7 @@ class GetWaitlistStatsHandler
                 if ($available === Constants::INFINITE) {
                     return Constants::INFINITE;
                 }
+
                 return $available;
             }
         }
