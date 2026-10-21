@@ -35,9 +35,10 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: daveearley/hi.events-all-in-one
+          flavor: |
+            latest=false
           tags: |
             type=ref,event=tag
-            type=raw,value=latest,enable=${{ github.event.release.prerelease == false }}
 
       - name: Build and push All-in-one Docker image
         uses: docker/build-push-action@v5
@@ -57,9 +58,10 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: daveearley/hi.events-backend
+          flavor: |
+            latest=false
           tags: |
             type=ref,event=tag
-            type=raw,value=latest,enable=${{ github.event.release.prerelease == false }}
 
       - name: Build and push Backend Docker image
         uses: docker/build-push-action@v3
@@ -76,9 +78,10 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: daveearley/hi.events-frontend
+          flavor: |
+            latest=false
           tags: |
             type=ref,event=tag
-            type=raw,value=latest,enable=${{ github.event.release.prerelease == false }}
 
       - name: Build and push Frontend Docker image
         uses: docker/build-push-action@v3
