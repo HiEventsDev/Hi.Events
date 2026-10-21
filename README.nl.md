@@ -132,6 +132,8 @@ Gebouwd met **Laravel 13** (PHP >=8.3) · **React 19** met SSR · **TypeScript**
 git clone https://github.com/HiEventsDev/hi.events.git
 cd hi.events/docker/all-in-one
 
+cp .env.example .env
+
 # Generate keys (Linux/macOS)
 echo "APP_KEY=base64:$(openssl rand -base64 32)" >> .env
 echo "JWT_SECRET=$(openssl rand -base64 32)" >> .env
