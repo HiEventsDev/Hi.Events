@@ -36,7 +36,6 @@ interface EventIntroProps extends EventHostProps {
     lastOccurrenceDate: string | null;
     status: IntroStatus | null;
     location: EventLocationDisplay | null;
-    locationDetailsBelow: boolean;
     variedLocationLabel: string | null;
 }
 
@@ -89,7 +88,6 @@ export const EventIntro = ({
                                lastOccurrenceDate,
                                status,
                                location,
-                               locationDetailsBelow,
                                variedLocationLabel,
                                ...hostProps
                            }: EventIntroProps) => {
@@ -129,10 +127,8 @@ export const EventIntro = ({
                 {location && !location.isOnline && (location.venueName || location.full) && (
                     <Fact
                         tile={<span className={classes.factTile}><IconMapPin/></span>}
-                        title={locationDetailsBelow ? location.venueName || location.short || location.full : location.venueName || location.full}
-                        detail={locationDetailsBelow
-                            ? (location.venueName ? location.city : null)
-                            : (location.venueName ? location.full : null)}
+                        title={location.venueName || location.full}
+                        detail={location.venueName ? location.full : null}
                         extra={location.mapsUrl && (
                             <a href={location.mapsUrl} target="_blank" rel="nofollow ugc noopener noreferrer" className={classes.factLink}>
                                 {t`Get directions`}

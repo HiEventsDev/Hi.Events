@@ -249,7 +249,6 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
             lastOccurrenceDate={event.type === EventType.RECURRING ? lastOccurrenceDate : null}
             status={status}
             location={location}
-            locationDetailsBelow={hasVenue && homepageSections.some(section => section.type === 'LOCATION')}
             variedLocationLabel={variedLocationLabel}
         />
     );
@@ -311,7 +310,6 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                 <div
                     ref={layout.poster ? undefined : setContentNode}
                     className={classes.body}
-                    data-has-cover={!layout.poster && cover ? '' : undefined}
                     data-rail={ticketRail || undefined}
                     data-poster={layout.poster || undefined}
                     style={ticketRail ? {'--main-rows': mainRowCount} as CSSProperties : undefined}
