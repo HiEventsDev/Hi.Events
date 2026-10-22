@@ -224,7 +224,7 @@ class CreateEventService
         $terminology = ProductTerminology::forCategory($event->getCategory());
 
         $homepageThemeSettings = [
-            'accent' => $organizerThemeSettings['accent'] ?? '#8b5cf6',
+            'accent' => $organizerThemeSettings['accent'] ?? '#7c3aed',
             'background' => $organizerThemeSettings['background'] ?? '#f5f3ff',
             'mode' => $organizerThemeSettings['mode'] ?? 'light',
             'background_type' => $eventCoverCreated

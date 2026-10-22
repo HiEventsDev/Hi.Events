@@ -87,6 +87,7 @@ Integrations call the API with API keys, so endpoints in the `auth:api,sanctum` 
 ## Frontend
 
 - SSR app: guard `window`/`document`, and keep per-request state in `AsyncLocalStorage` (`utilites/ssrRequestContext.ts`), never in axios defaults or module globals.
+- Public routes set `handle: {styles: '<module path>'}` in `router.tsx` so production SSR links their CSS in `<head>` and skips the white `ssr-loader` overlay; without it the page paints unstyled and shifts (CLS) on hydration.
 - React Query for all API calls (patterns: `queries/useGetCapacityAssignment.ts`, `mutations/useCreateAffiliate.ts`).
 - Mantine components; SCSS modules for layout. Reuse existing components before adding new ones, and skip unnecessary React imports.
 - Notifications via `showSuccess`/`showError` (`utilites/notifications.tsx`), never Mantine's `showNotification`; validation errors via `useFormErrorResponseHandler`. Handle errors in parent components.

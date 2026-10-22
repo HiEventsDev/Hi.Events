@@ -5,7 +5,10 @@ import {IconChevronLeft, IconChevronRight, IconX} from "@tabler/icons-react";
 import {HomepageSection, Image} from "../../../../types.ts";
 import {HomepageSectionClasses} from "../Lineup";
 import {SectionShell} from "./SectionShell.tsx";
+import {responsiveImage} from "../../../../utilites/imageTransform.ts";
 import classes from "./Sections.module.scss";
+
+const MAX_TILES = 5;
 
 export const GallerySection = ({images: availableImages, section, sectionClasses}: {
     images: Image[],
@@ -21,11 +24,16 @@ export const GallerySection = ({images: availableImages, section, sectionClasses
         return null;
     }
 
+    const tiles = images.slice(0, MAX_TILES);
+    const hiddenCount = images.length - tiles.length;
+    const totalCount = images.length;
+
     return (
         <SectionShell section={section} sectionClasses={sectionClasses}>
-            <div className={classes.gallery} data-count={Math.min(images.length, 5)}>
-                {images.map((image, index) => {
+            <div className={classes.gallery} data-count={tiles.length}>
+                {tiles.map((image, index) => {
                     const photoNumber = index + 1;
+                    const showsMore = hiddenCount > 0 && index === tiles.length - 1;
                     return (
                         <button
                             key={image.id}
@@ -33,9 +41,10 @@ export const GallerySection = ({images: availableImages, section, sectionClasses
                             className={classes.galleryItem}
                             style={{backgroundColor: image.avg_colour ?? undefined}}
                             onClick={() => setLightbox({index, opened: true})}
-                            aria-label={t`Open photo ${photoNumber}`}
+                            aria-label={showsMore ? t`View all ${totalCount} photos` : t`Open photo ${photoNumber}`}
                         >
-                            <img src={image.url} alt="" loading="lazy" decoding="async"/>
+                            <img {...responsiveImage(image.url, '(min-width: 768px) 340px, 50vw')} alt="" loading="lazy" decoding="async"/>
+                            {showsMore && <span className={classes.galleryMore} aria-hidden="true">+{hiddenCount}</span>}
                         </button>
                     );
                 })}

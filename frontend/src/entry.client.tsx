@@ -12,6 +12,7 @@ declare global {
     interface Window {
         __REHYDRATED_STATE__?: DehydratedState;
         __THEME_COLORS__?: ThemeColors;
+        __SSR_STYLED__?: boolean;
     }
 }
 
@@ -39,7 +40,7 @@ async function initClientApp() {
 
     hydrateRoot(
         document.getElementById("app") as HTMLElement,
-        <App queryClient={queryClient} locale={rawLocale} themeColors={themeColors} dehydratedState={dehydratedState}>
+        <App queryClient={queryClient} locale={rawLocale} themeColors={themeColors} dehydratedState={dehydratedState} ssrStyled={window.__SSR_STYLED__}>
             <RouterProvider router={browserRouter}/>
         </App>
     );

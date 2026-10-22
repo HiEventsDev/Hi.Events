@@ -9,7 +9,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
 import { isSsr } from "./helpers.ts";
-import { getClientLocale, SupportedLocales } from "../locales.ts";
+import { getClientLocale, SupportedLocales, toDayjsLocale, toIntlLocale } from "../locales.ts";
 import { localeFormats } from "./dateLocales.ts";
 
 dayjs.extend(utc);
@@ -49,7 +49,34 @@ export const formatDateWithLocale = (
     const safeLocale = getSafeLocale(resolvedLocale);
     const format = localeFormats[safeLocale][formatType];
 
-    return dayjs.utc(date).tz(tz).locale(safeLocale).format(format);
+    return dayjs.utc(date).tz(tz).locale(toDayjsLocale(safeLocale)).format(format);
+};
+
+export const formatLongDay = (date: string, tz: string): string => {
+    const withYear = dayjs.utc(date).tz(tz).year() !== dayjs().tz(tz).year();
+
+    return new Intl.DateTimeFormat(toIntlLocale(getSafeLocale(getClientLocale())), {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+        year: withYear ? 'numeric' : undefined,
+        timeZone: tz,
+    }).format(dayjs.utc(date).toDate());
+};
+
+export const formatWeekday = (date: string, tz: string): string => new Intl.DateTimeFormat(
+    toIntlLocale(getSafeLocale(getClientLocale())),
+    {weekday: 'long', timeZone: tz},
+).format(dayjs.utc(date).toDate());
+
+export const formatMonthHeading = (date: string, tz: string): string => {
+    const withYear = dayjs.utc(date).tz(tz).year() !== dayjs().tz(tz).year();
+
+    return new Intl.DateTimeFormat(toIntlLocale(getSafeLocale(getClientLocale())), {
+        month: 'long',
+        year: withYear ? 'numeric' : undefined,
+        timeZone: tz,
+    }).format(dayjs.utc(date).toDate());
 };
 
 export const isSameDayInTimezone = (a: string, b: string, tz: string): boolean =>
@@ -99,7 +126,7 @@ export const relativeDate = (date: string): string => {
     const dateInUTC = dayjs.utc(date);
     const locale = getClientLocale();
 
-    return dayjs().locale(locale).to(dateInUTC);
+    return dayjs().locale(toDayjsLocale(locale)).to(dateInUTC);
 };
 
 export const getDateTimePickerFormat = (): string => {
@@ -162,6 +189,3 @@ export const utcDateToEpochMs = (date: string): number => {
     return dayjs.utc(date).valueOf();
 };
 
-export const isDateInPast = (date: string): boolean => {
-    return dayjs.utc(date).diff(dayjs()) < 0;
-}

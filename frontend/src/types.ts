@@ -76,12 +76,15 @@ export interface ColorTheme {
     homepage_secondary_text_color: string;
 }
 
+export type EventLayout = 'MARQUEE' | 'FLYER' | 'STORY' | 'INVITE';
+
 export interface HomepageThemeSettings {
     accent: string;
     background: string;
     mode: 'light' | 'dark';
     background_type: 'COLOR' | 'MIRROR_COVER_IMAGE';
     font_family?: string;
+    layout?: EventLayout;
 }
 
 export interface LoginResponse {
@@ -569,6 +572,7 @@ export type HomepageSectionType =
     | 'SCHEDULE'
     | 'LOCATION'
     | 'ORGANIZER'
+    | 'MORE_EVENTS'
     | 'EVENTS'
     | 'CONTACT'
     | 'PAST_EVENTS'

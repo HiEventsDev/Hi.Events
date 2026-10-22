@@ -380,6 +380,14 @@ msgstr "{enforcedCount, plural, one {# medlem måste logga in med {providerName}
 msgid "{eventCount, plural, one {# event} other {# events}}"
 msgstr "{eventCount, plural, one {# evenemang} other {# evenemang}}"
 
+#: src/components/layouts/OrganizerHomepage/index.tsx:110
+msgid "{eventCount, plural, one {# past event} other {# past events}}"
+msgstr "{eventCount, plural, one {# tidigare evenemang} other {# tidigare evenemang}}"
+
+#: src/components/layouts/OrganizerHomepage/index.tsx:111
+msgid "{eventCount, plural, one {# upcoming event} other {# upcoming events}}"
+msgstr "{eventCount, plural, one {# kommande evenemang} other {# kommande evenemang}}"
+
 #: src/components/common/OrganizerWebhookTable/index.tsx:81
 #: src/components/common/WebhookTable/index.tsx:81
 msgid "{eventCount} events"
@@ -466,6 +474,10 @@ msgstr "{minutes} min"
 msgid "{minutes} minutes and {seconds} seconds"
 msgstr "{minutes} minuter och {seconds} sekunder"
 
+#: src/components/layouts/OrganizerHomepage/EventList/index.tsx:98
+msgid "{moreDatesCount, plural, one {+# more date} other {+# more dates}}"
+msgstr "{moreDatesCount, plural, one {+# datum till} other {+# fler datum}}"
+
 #: src/components/routes/event/Lineup/QuickAddPerson.tsx:55
 msgid "{name} added to the lineup"
 msgstr "{name} har lagts till i line-upen"
@@ -530,7 +542,7 @@ msgstr "{peopleAdded, plural, one {# person tillagd} other {# personer tillagda}
 msgid "{productCount} ticket types configured"
 msgstr "{productCount} biljettyper konfigurerade"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:219
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:224
 msgid "{provider} video found"
 msgstr "{provider}-video hittad"
 
@@ -647,10 +659,6 @@ msgstr "+{0} fler valutor"
 msgid "+{extra} more"
 msgstr "+{extra} till"
 
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:129
-msgid "+{moreDatesCount} more dates"
-msgstr "+{moreDatesCount} fler datum"
-
 #: src/components/routes/product-widget/SelectProducts/WidgetLineupStrip.tsx:43
 msgid "+{remaining} more"
 msgstr "+{remaining} till"
@@ -662,10 +670,6 @@ msgstr "+1 234 567 890"
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1039
 msgid "+1 day"
 msgstr "+1 dag"
-
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:129
-msgid "+1 more date"
-msgstr "+1 datum till"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:524
 msgid "+Tax/Fees"
@@ -877,6 +881,10 @@ msgstr "en ändrad längd"
 msgid "A check-in list lets staff scan tickets at the door on a phone, tablet, or USB scanner. Share the link with your team, no account needed."
 msgstr "En incheckningslista låter personalen skanna biljetter vid dörren med telefon, surfplatta eller USB-skanner. Dela länken med ditt team, inget konto behövs."
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:31
+msgid "A compact, centred card"
+msgstr "Ett kompakt, centrerat kort"
+
 #: src/components/forms/QuestionForm/index.tsx:138
 msgid "A date input. Perfect for asking for a date of birth etc."
 msgstr "Ett datumfält. Perfekt för att fråga efter födelsedatum osv."
@@ -889,15 +897,19 @@ msgstr "En rullgardinsmeny tillåter endast ett val"
 msgid "A few quick steps and you're ready to start selling."
 msgstr "Några snabba steg så är du redo att börja sälja."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:233
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:26
+msgid "A focused reading column. Tickets appear wherever you place them in Sections."
+msgstr "En fokuserad läskolumn. Biljetterna visas där du placerar dem under Sektioner."
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:238
 msgid "A gallery can have up to {MAX_GALLERY_PHOTOS} photos."
 msgstr "Ett galleri kan innehålla upp till {MAX_GALLERY_PHOTOS} foton."
 
-#: src/utilites/homepageSections.ts:54
+#: src/utilites/homepageSections.ts:56
 msgid "A grid of photos that opens full screen."
 msgstr "Ett rutnät med foton som öppnas i helskärm."
 
-#: src/utilites/homepageSections.ts:52
+#: src/utilites/homepageSections.ts:54
 msgid "A heading and formatted text. Travel info, house rules, anything."
 msgstr "En rubrik och formaterad text. Resväg, husregler, vad som helst."
 
@@ -908,6 +920,10 @@ msgstr "Ett meddelande som visas när det inte finns några produkter i denna ka
 #: src/components/forms/QuestionForm/index.tsx:108
 msgid "A multi line text input"
 msgstr "Ett flerradigt textfält"
+
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:32
+msgid "A narrow card with the details centred. Suits smaller and private events."
+msgstr "Ett smalt kort med centrerade detaljer. Passar mindre och privata evenemang."
 
 #: src/components/routes/welcome/index.tsx:119
 msgid "A new verification code has been sent to your email"
@@ -970,7 +986,7 @@ msgstr "En URL krävs när en knappetikett är angiven"
 msgid "A weekday pattern"
 msgstr "Ett veckodagsmönster"
 
-#: src/utilites/homepageSections.ts:58
+#: src/utilites/homepageSections.ts:60
 msgid "A YouTube or Vimeo video, loaded when someone presses play."
 msgstr "En YouTube- eller Vimeo-video som laddas när någon trycker på spela."
 
@@ -986,8 +1002,8 @@ msgstr "Avbryta den här försäljningen? En kortbetalning som väntar på läsa
 msgid "Abandoned"
 msgstr "Övergiven"
 
-#: src/components/layouts/EventHomepage/index.tsx:273
-#: src/components/layouts/OrganizerHomepage/index.tsx:292
+#: src/components/layouts/EventHomepage/index.tsx:199
+#: src/components/layouts/OrganizerHomepage/index.tsx:215
 #: src/components/widget/WidgetSections/index.tsx:90
 #: src/utilites/homepageSections.ts:21
 msgid "About"
@@ -1266,7 +1282,7 @@ msgid "Add a date"
 msgstr "Lägg till ett datum"
 
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:34
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:67
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:68
 msgid "Add a description"
 msgstr "Lägg till en beskrivning"
 
@@ -1343,7 +1359,7 @@ msgstr "Lägg till eventuella anteckningar om ordern. Dessa kommer inte vara syn
 msgid "Add any notes about the order..."
 msgstr "Lägg till eventuella anteckningar om ordern..."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:79
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:80
 msgid "Add at least one question below."
 msgstr "Lägg till minst en fråga nedan."
 
@@ -1457,7 +1473,7 @@ msgstr "Lägg till produkt"
 msgid "Add Product to Category"
 msgstr "Lägg till produkt i kategori"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:172
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:177
 msgid "Add question"
 msgstr "Lägg till fråga"
 
@@ -1471,8 +1487,8 @@ msgstr "Lägg till fråga"
 msgid "Add reader"
 msgstr "Lägg till läsare"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:216
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:223
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:220
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:227
 msgid "Add section"
 msgstr "Lägg till sektion"
 
@@ -1480,7 +1496,7 @@ msgstr "Lägg till sektion"
 msgid "Add slot"
 msgstr "Lägg till pass"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:77
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:78
 msgid "Add some text below."
 msgstr "Lägg till lite text nedan."
 
@@ -1551,8 +1567,8 @@ msgstr "Lägg till i kalender"
 
 #: src/components/common/AddEventToCalendarButton/index.tsx:15
 #: src/components/common/AddToCalendarCTA/index.tsx:25
-#: src/components/layouts/EventHomepage/index.tsx:614
-#: src/components/layouts/EventHomepage/index.tsx:615
+#: src/components/layouts/EventHomepage/EventIntro.tsx:71
+#: src/components/layouts/EventHomepage/EventIntro.tsx:71
 msgid "Add to Calendar"
 msgstr "Lägg till i kalendern"
 
@@ -2029,13 +2045,17 @@ msgstr "Alltid till försäljning"
 msgid "Always shown"
 msgstr "Visas alltid"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:92
-msgid "Always shown. Move it to change where tickets appear on the page."
-msgstr "Visas alltid. Flytta den för att ändra var biljetterna visas på sidan."
-
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:81
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:82
 msgid "Always shown. Move it to change where your events list appears."
 msgstr "Visas alltid. Flytta den för att ändra var din evenemangslista visas."
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:97
+msgid "Always shown. Move it to change where your tickets appear."
+msgstr "Visas alltid. Flytta den för att ändra var dina biljetter visas."
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:96
+msgid "Always shown. On large screens tickets sit beside your page content; move it to change where they appear on phones and tablets."
+msgstr "Visas alltid. På stora skärmar visas biljetterna bredvid sidans innehåll; flytta den för att ändra var de visas på mobiler och surfplattor."
 
 #: src/components/common/DateTimeField/index.tsx:87
 #: src/components/modals/CreateEventModal/DateTimeChip.tsx:96
@@ -2150,11 +2170,11 @@ msgstr "Meddelanden"
 msgid "Anonymize"
 msgstr "Anonymisera"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:194
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:199
 msgid "Answer"
 msgstr "Svar"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:197
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:202
 msgid "Answer {number}"
 msgstr "Svar {number}"
 
@@ -3286,7 +3306,7 @@ msgstr "Knapptext"
 msgid "Button text"
 msgstr "Knapptext"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:201
+#: src/components/routes/event/HomepageDesigner/index.tsx:216
 msgid "Button Text"
 msgstr "Knapptext"
 
@@ -3842,8 +3862,8 @@ msgstr "Kontrollera nyckeln"
 msgid "Check out"
 msgstr "Checka ut"
 
-#: src/components/layouts/EventHomepage/index.tsx:601
-#: src/components/layouts/EventHomepage/index.tsx:602
+#: src/components/layouts/EventHomepage/EventIntro.tsx:60
+#: src/components/layouts/EventHomepage/EventIntro.tsx:61
 msgid "Check out this event: {0}"
 msgstr "Kolla in det här evenemanget: {0}"
 
@@ -4325,7 +4345,7 @@ msgstr "stäng"
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:208
 #: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:56
 #: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:86
-#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:113
+#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:121
 #: src/components/modals/CreateEventModal/index.tsx:288
 #: src/components/modals/JoinWaitlistModal/index.tsx:116
 #: src/components/modals/JoinWaitlistModal/index.tsx:143
@@ -4783,10 +4803,10 @@ msgid "Consecutive"
 msgstr "Löpande"
 
 #: src/components/common/WaitlistTable/index.tsx:155
-#: src/components/layouts/EventHomepage/index.tsx:446
-#: src/components/layouts/OrganizerHomepage/index.tsx:186
-#: src/components/layouts/OrganizerHomepage/index.tsx:301
-#: src/utilites/homepageSections.ts:33
+#: src/components/layouts/EventHomepage/OrganizerSection.tsx:60
+#: src/components/layouts/OrganizerHomepage/index.tsx:117
+#: src/components/layouts/OrganizerHomepage/index.tsx:224
+#: src/utilites/homepageSections.ts:35
 msgid "Contact"
 msgstr "Kontakt"
 
@@ -4818,9 +4838,9 @@ msgstr "Innehåll krävs"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:146
 #: src/components/common/WidgetEditor/BehaviourPanel.tsx:33
-#: src/components/layouts/EventHomepage/index.tsx:226
+#: src/components/layouts/EventHomepage/index.tsx:141
 #: src/components/layouts/ProductWidget/index.tsx:94
-#: src/components/routes/event/HomepageDesigner/index.tsx:206
+#: src/components/routes/event/HomepageDesigner/index.tsx:221
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1173
 #: src/components/routes/settings/Security/SignInMethods.tsx:251
 #: src/ee/seating/components/SeatPicker/Basket.tsx:200
@@ -4828,7 +4848,7 @@ msgstr "Innehåll krävs"
 msgid "Continue"
 msgstr "Fortsätt"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:204
+#: src/components/routes/event/HomepageDesigner/index.tsx:219
 msgid "Continue Button"
 msgstr "Fortsätt-knapp"
 
@@ -4845,7 +4865,7 @@ msgstr "Fortsätt konfigurering"
 msgid "Continue to checkout"
 msgstr "Fortsätt till kassan"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1335
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1338
 msgid "Continue to Checkout"
 msgstr "Fortsätt till kassan"
 
@@ -5244,7 +5264,7 @@ msgstr "Antalen inkluderar alla kommande datum. Varje person erbjuds en plats f�
 msgid "Cover"
 msgstr "Omslag"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:162
+#: src/components/routes/event/HomepageDesigner/index.tsx:177
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:150
 msgid "Cover Image"
 msgstr "Omslagsbild"
@@ -5253,7 +5273,7 @@ msgstr "Omslagsbild"
 msgid "Cover image added"
 msgstr "Omslagsbild tillagd"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:176
+#: src/components/routes/event/HomepageDesigner/index.tsx:191
 msgid "Cover image will be displayed at the top of your event page"
 msgstr "Omslagsbilden visas högst upp på din evenemangssida"
 
@@ -6293,7 +6313,7 @@ msgstr "Fick du inte koden?"
 msgid "Different location"
 msgstr "Annan plats"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:83
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:84
 msgid "Directly below Events, it's a Past tab on the events list. Anywhere else, it shows your most recent past events."
 msgstr "Direkt under Evenemang är det en flik Tidigare i evenemangslistan. Någon annanstans visar den dina senaste tidigare evenemang."
 
@@ -6384,7 +6404,7 @@ msgstr "Stäng meddelande"
 msgid "Dismiss setup checklist"
 msgstr "Dölj checklistan för uppstart"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1352
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1355
 msgid "Dismiss this message"
 msgstr "Stäng detta meddelande"
 
@@ -6541,16 +6561,16 @@ msgstr "Dra i handtaget för att ändra ordning. Dra ett namn till spelschemat f
 msgid "Drag to draw a stage. Change it to a bar, dance floor, entrance, pillar or wall on the right."
 msgstr "Dra för att rita en scen. Ändra den till en bar, dansgolv, entré, pelare eller vägg till höger."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:289
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:293
 #: src/components/routes/event/Lineup/PeopleRail.tsx:140
 msgid "Drag to reorder {label}"
 msgstr "Dra för att ändra ordning på {label}"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:178
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:181
 msgid "Drag to reorder. Hidden sections stay saved but don't show on your organizer page."
 msgstr "Dra för att ändra ordning. Dolda sektioner sparas men visas inte på din arrangörssida."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:177
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:180
 msgid "Drag to reorder. Sections marked Empty appear on your event page once they have content."
 msgstr "Dra för att ändra ordning. Sektioner markerade som Tom visas på din evenemangssida när de har innehåll."
 
@@ -6648,7 +6668,7 @@ msgstr "t.ex. 180 (3 timmar)"
 msgid "e.g. Founder at Acme, or Berlin techno"
 msgstr "t.ex. Grundare på Acme, eller Berlintechno"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:147
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:152
 msgid "e.g. Is there parking?"
 msgstr "t.ex. Finns det parkering?"
 
@@ -6842,7 +6862,7 @@ msgstr "Redigera uppgifter"
 msgid "Edit fee"
 msgstr "Redigera avgift"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:340
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:344
 msgid "Edit in Tickets & Products"
 msgstr "Redigera under Biljetter och produkter"
 
@@ -6850,11 +6870,11 @@ msgstr "Redigera under Biljetter och produkter"
 msgid "Edit individual seats"
 msgstr "Redigera enskilda platser"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:71
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:72
 msgid "Edit it in Event Settings"
 msgstr "Redigera i Evenemangsinställningar"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:75
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:76
 msgid "Edit it in Settings"
 msgstr "Redigera i Inställningar"
 
@@ -7123,7 +7143,7 @@ msgid "Emoji is required for modals"
 msgstr "Emoji krävs för modaler"
 
 #: src/components/common/WidgetEditor/SectionsPicker.tsx:77
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:299
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:303
 msgid "Empty"
 msgstr "Tom"
 
@@ -7237,7 +7257,7 @@ msgstr "Engelska"
 msgid "Enter a capacity value or choose unlimited."
 msgstr "Ange en kapacitet eller välj obegränsat."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:373
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:378
 msgid "Enter a full link starting with https://"
 msgstr "Ange en fullständig länk som börjar med https://"
 
@@ -7592,7 +7612,7 @@ msgstr "Evenemanget är inte live"
 msgid "Event Page"
 msgstr "Evenemangssida"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:141
+#: src/components/routes/event/HomepageDesigner/index.tsx:143
 msgid "Event Preview"
 msgstr "Förhandsvisning av evenemang"
 
@@ -7651,7 +7671,7 @@ msgstr "Evenemang uppdaterat"
 #: src/components/common/AdminAccountsTable/index.tsx:82
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:127
 #: src/components/layouts/Admin/index.tsx:20
-#: src/components/layouts/OrganizerHomepage/index.tsx:218
+#: src/components/layouts/OrganizerHomepage/index.tsx:144
 #: src/components/layouts/OrganizerLayout/index.tsx:118
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:180
 #: src/components/routes/admin/Attribution/index.tsx:195
@@ -7659,11 +7679,11 @@ msgstr "Evenemang uppdaterat"
 #: src/components/routes/admin/Events/index.tsx:77
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:236
 #: src/components/routes/organizer/Events/index.tsx:46
-#: src/utilites/homepageSections.ts:31
+#: src/utilites/homepageSections.ts:33
 msgid "Events"
 msgstr "Evenemang"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:302
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:306
 msgid "Events are always shown"
 msgstr "Evenemang visas alltid"
 
@@ -8280,7 +8300,7 @@ msgstr "Misslyckas sedan {0}"
 msgid "Family"
 msgstr "Familj"
 
-#: src/utilites/homepageSections.ts:41
+#: src/utilites/homepageSections.ts:43
 msgid "FAQ"
 msgstr "Vanliga frågor"
 
@@ -8590,9 +8610,13 @@ msgstr "Blixt på"
 msgid "Flickr"
 msgstr "Flickr"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:212
+#: src/components/routes/event/HomepageDesigner/index.tsx:227
 msgid "Floating Button"
 msgstr "Flytande knapp"
+
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:18
+msgid "Flyer"
+msgstr "Flyer"
 
 #: src/components/common/ThemeFontControl/index.tsx:64
 msgid "Font Family"
@@ -8824,13 +8848,11 @@ msgstr "Skaffa en licens"
 msgid "Get an Enterprise licence key."
 msgstr "Skaffa en Enterprise-licensnyckel."
 
+#: src/components/layouts/EventHomepage/EventIntro.tsx:133
+#: src/components/layouts/EventHomepage/LocationSection.tsx:23
 #: src/components/widget/WidgetSections/index.tsx:117
 msgid "Get directions"
 msgstr "Vägbeskrivning"
-
-#: src/components/layouts/EventHomepage/index.tsx:307
-msgid "Get Directions"
-msgstr "Få vägbeskrivning"
 
 #: src/components/layouts/OrganizerLayout/index.tsx:95
 msgid "Get Paid"
@@ -8852,8 +8874,9 @@ msgstr "Sätt igång"
 msgid "Get tickets"
 msgstr "Köp biljetter"
 
-#: src/components/layouts/EventHomepage/index.tsx:225
-#: src/components/routes/event/HomepageDesigner/index.tsx:214
+#: src/components/layouts/EventHomepage/index.tsx:140
+#: src/components/layouts/OrganizerHomepage/EventList/index.tsx:196
+#: src/components/routes/event/HomepageDesigner/index.tsx:229
 msgid "Get Tickets"
 msgstr "Köp biljetter"
 
@@ -9013,7 +9036,8 @@ msgstr "Gästhantering"
 msgid "Guests"
 msgstr "Gäster"
 
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:81
+#: src/components/layouts/EventHomepage/index.tsx:132
+#: src/components/layouts/OrganizerHomepage/EventList/index.tsx:79
 #: src/components/routes/event/EventDashboard/NextOccurrenceHero/index.tsx:45
 #: src/components/routes/event/EventDashboard/NextOccurrenceHero/index.tsx:159
 msgid "Happening now"
@@ -9039,7 +9063,7 @@ msgstr "Har du en kampanjkod?"
 msgid "Head"
 msgstr "Honnörsbord"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:347
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:351
 msgid "Heading"
 msgstr "Rubrik"
 
@@ -9135,7 +9159,7 @@ msgstr "Dold"
 msgid "Hidden — sales ended {end}."
 msgstr "Dold – försäljningen avslutades {end}."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:86
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:87
 msgid "Hidden automatically when empty."
 msgstr "Döljs automatiskt när den är tom."
 
@@ -9183,7 +9207,7 @@ msgstr "Dölj"
 msgid "Hide \"Have a promo code?\""
 msgstr "Dölj ”Har du en kampanjkod?”"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:308
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:312
 msgid "Hide {label}"
 msgstr "Dölj {label}"
 
@@ -9236,7 +9260,7 @@ msgstr "Dölj produkt om användaren saknar giltig kampanjkod"
 msgid "Hide product when sold out"
 msgstr "Dölj produkt när den är slutsåld"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:302
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:306
 msgid "Hide section"
 msgstr "Dölj sektion"
 
@@ -9305,7 +9329,7 @@ msgstr "Håll tillbaka {0} platser"
 msgid "Hold back {0} seats on {dateCount} dates"
 msgstr "Håll tillbaka {0} platser på {dateCount} datum"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:139
+#: src/components/routes/event/HomepageDesigner/index.tsx:141
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:125
 msgid "Homepage Design"
 msgstr "Startsidedesign"
@@ -9434,7 +9458,7 @@ msgstr "Jag har lagt till den, fortsätt"
 msgid "If a key leaks, revoke it straight away and create a new one."
 msgstr "Om en nyckel läcker, återkalla den direkt och skapa en ny."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1307
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1310
 msgid "If a new tab did not open automatically, please click the button below to continue to checkout."
 msgstr "Om en ny flik inte öppnades automatiskt, klicka på knappen nedan för att fortsätta till kassan."
 
@@ -9490,7 +9514,7 @@ msgstr "Bilden har laddats upp"
 msgid "Image URL"
 msgstr "Bild-URL"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:160
+#: src/components/routes/event/HomepageDesigner/index.tsx:175
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:146
 msgid "Images"
 msgstr "Bilder"
@@ -9726,6 +9750,10 @@ msgstr "Inbjudan skickades igen!"
 msgid "Invitation revoked!"
 msgstr "Inbjudan återkallad!"
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:30
+msgid "Invite"
+msgstr "Inbjudan"
+
 #: src/components/modals/InviteUserModal/index.tsx:50
 msgid "Invite a team member"
 msgstr "Bjud in en teammedlem"
@@ -9865,7 +9893,7 @@ msgstr "Johnson"
 msgid "Join {0}"
 msgstr "Gå med i {0}"
 
-#: src/components/layouts/EventHomepage/index.tsx:663
+#: src/components/layouts/EventHomepage/EventIntro.tsx:123
 msgid "Join from anywhere"
 msgstr "Delta varifrån som helst"
 
@@ -10131,6 +10159,7 @@ msgstr "Senaste incheckningarna"
 
 #: src/components/common/WidgetEditor/ContentFields.tsx:163
 #: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:100
+#: src/components/routes/event/HomepageDesigner/index.tsx:149
 msgid "Layout"
 msgstr "Layout"
 
@@ -10307,7 +10336,7 @@ msgstr "Line-up"
 msgid "Lineup & Schedule"
 msgstr "Line-up och schema"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:86
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:87
 msgid "Lineup & Schedule page"
 msgstr "Line-up och schema-sidan"
 
@@ -10466,7 +10495,7 @@ msgstr "Läser in innehåll från {service}"
 #: src/components/common/LocationPicker/index.tsx:221
 #: src/components/common/LocationPicker/index.tsx:294
 #: src/components/common/WidgetEditor/SectionsPicker.tsx:34
-#: src/components/layouts/EventHomepage/index.tsx:285
+#: src/components/layouts/EventHomepage/index.tsx:209
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:474
 #: src/components/routes/event/Settings/index.tsx:56
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:150
@@ -10524,7 +10553,7 @@ msgstr "Logotypen visas i sidhuvudet"
 msgid "Logo will be displayed on the ticket"
 msgstr "Logotypen visas på biljetten"
 
-#: src/utilites/homepageSections.ts:60
+#: src/utilites/homepageSections.ts:62
 msgid "Logos of your sponsors and partners, with links."
 msgstr "Logotyper för dina sponsorer och partner, med länkar."
 
@@ -10639,7 +10668,7 @@ msgstr "Hantera order"
 msgid "Manage payment and invoicing settings for this event."
 msgstr "Hantera betalnings- och fakturainställningar för detta evenemang."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:86
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:87
 msgid "Manage people, stages and times on the"
 msgstr "Hantera personer, scener och tider på"
 
@@ -10709,6 +10738,10 @@ msgstr "Markera som validerad (administratörsbeslut)"
 #: src/components/modals/MessageRecipientsModal/index.tsx:21
 msgid "Marked as spam"
 msgstr "Markerat som skräppost"
+
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:12
+msgid "Marquee"
+msgstr "Marquee"
 
 #: src/components/common/WidgetEditor/AppearancePanel.tsx:60
 msgid "Match event page"
@@ -10999,8 +11032,13 @@ msgid "More dates"
 msgstr "Fler datum"
 
 #: src/components/widget/WidgetSections/index.tsx:144
+#: src/utilites/homepageSections.ts:31
 msgid "More events"
 msgstr "Fler evenemang"
+
+#: src/components/layouts/EventHomepage/MoreEventsSection.tsx:31
+msgid "More from {0}"
+msgstr "Mer från {0}"
 
 #: src/ee/seating/components/SeatPicker/SeatSheet.tsx:74
 msgid "More places"
@@ -11032,7 +11070,7 @@ msgstr "Flytten avbröts. {label} är tillbaka på sin ursprungliga position."
 
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:203
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:603
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:138
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:143
 msgid "Move down"
 msgstr "Flytta ned"
 
@@ -11040,7 +11078,7 @@ msgstr "Flytta ned"
 msgid "Move its seats to another band first"
 msgstr "Flytta först dess platser till en annan prisgrupp"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:257
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:262
 msgid "Move left"
 msgstr "Flytta vänster"
 
@@ -11054,7 +11092,7 @@ msgstr "Flytta till område"
 
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:196
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:595
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:135
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:140
 msgid "Move up"
 msgstr "Flytta upp"
 
@@ -11062,14 +11100,14 @@ msgstr "Flytta upp"
 msgid "Multi line text box"
 msgstr "Flerradigt textfält"
 
-#: src/components/layouts/EventHomepage/index.tsx:638
+#: src/components/layouts/EventHomepage/EventIntro.tsx:117
 msgid "Multiple dates until {lastOccurrenceDate}"
 msgstr "Flera datum till och med {lastOccurrenceDate}"
 
 #: src/components/common/EventCard/index.tsx:111
-#: src/components/layouts/EventHomepage/index.tsx:197
+#: src/components/layouts/EventHomepage/index.tsx:107
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:29
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:36
+#: src/components/layouts/OrganizerHomepage/EventList/index.tsx:33
 #: src/components/widget/WidgetSections/index.tsx:58
 msgid "Multiple locations"
 msgstr "Flera platser"
@@ -11305,9 +11343,13 @@ msgstr "Nästa månad"
 msgid "Next occurrence"
 msgstr "Nästa datum"
 
-#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:119
+#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:127
 msgid "Next photo"
 msgstr "Nästa foto"
+
+#: src/components/layouts/OrganizerHomepage/EventList/index.tsx:186
+msgid "Next up"
+msgstr "Härnäst"
 
 #: src/components/modals/CreateEventModal/index.tsx:475
 msgid "Next, you'll add tickets and set up your event page."
@@ -11724,7 +11766,7 @@ msgid "No Paid Orders"
 msgstr "Inga betalda beställningar"
 
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:148
-#: src/components/layouts/OrganizerHomepage/index.tsx:241
+#: src/components/layouts/OrganizerHomepage/index.tsx:172
 msgid "No past events"
 msgstr "Inga tidigare evenemang"
 
@@ -11906,7 +11948,7 @@ msgid "No upcoming dates"
 msgstr "Inga kommande datum"
 
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:148
-#: src/components/layouts/OrganizerHomepage/index.tsx:241
+#: src/components/layouts/OrganizerHomepage/index.tsx:172
 msgid "No upcoming events"
 msgstr "Inga kommande evenemang"
 
@@ -12085,7 +12127,7 @@ msgstr "Delas inte"
 msgid "Not shown to buyers."
 msgstr "Visas inte för köpare."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:325
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:329
 msgid "Not shown yet."
 msgstr "Visas inte ännu."
 
@@ -12359,6 +12401,10 @@ msgstr "den {day} {month}"
 msgid "On a product priced at 50.00, this adds {exampleAmount}."
 msgstr "På en produkt som kostar 50.00 lägger detta till {exampleAmount}."
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:14
+msgid "On large screens tickets stay beside your content as people scroll. Suits conferences and long lineups."
+msgstr "På stora skärmar stannar biljetterna bredvid innehållet när man scrollar. Passar konferenser och stora line-ups."
+
 #: src/components/routes/organizer/People/index.tsx:70
 msgid "On live events"
 msgstr "I publicerade evenemang"
@@ -12413,6 +12459,10 @@ msgstr "När du skapar ett evenemang visas det här."
 msgid "Once you start collecting data, you'll see it here."
 msgstr "När du börjar samla in data visas det här."
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:25
+msgid "One column, top to bottom"
+msgstr "En kolumn, uppifrån och ned"
+
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:97
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:118
 #: src/components/modals/CreateEventModal/index.tsx:225
@@ -12435,7 +12485,6 @@ msgstr "Pågående"
 
 #: src/components/common/EventCard/index.tsx:114
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:32
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:39
 #: src/components/routes/event/OccurrencesTab/index.tsx:341
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:482
 #: src/components/routes/my-tickets/index.tsx:56
@@ -12452,12 +12501,12 @@ msgstr "Digitalt – ange anslutningsuppgifter"
 
 #: src/components/common/EventCard/index.tsx:111
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:29
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:36
+#: src/components/layouts/OrganizerHomepage/EventList/index.tsx:33
 #: src/components/widget/WidgetSections/index.tsx:58
 msgid "Online & in-person"
 msgstr "Digitalt och på plats"
 
-#: src/components/layouts/EventHomepage/index.tsx:198
+#: src/components/layouts/EventHomepage/index.tsx:107
 msgid "Online & in-person — see schedule"
 msgstr "Digitalt och på plats – se schemat"
 
@@ -12467,8 +12516,8 @@ msgstr "Digitalt och på plats – se schemat"
 msgid "Online event"
 msgstr "Digitalt evenemang"
 
-#: src/components/layouts/EventHomepage/index.tsx:661
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:119
+#: src/components/layouts/EventHomepage/EventIntro.tsx:123
+#: src/components/layouts/OrganizerHomepage/EventList/index.tsx:93
 msgid "Online Event"
 msgstr "Onlineevenemang"
 
@@ -12630,7 +12679,7 @@ msgstr "Öppna startsidedesignern"
 msgid "Open occurrence"
 msgstr "Öppna datum"
 
-#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:36
+#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:43
 msgid "Open photo {photoNumber}"
 msgstr "Öppna foto {photoNumber}"
 
@@ -12969,7 +13018,7 @@ msgstr "Organisationsnamn"
 #: src/components/common/TeamAccessFields/index.tsx:36
 #: src/components/common/TeamAccessFields/index.tsx:96
 #: src/components/common/WidgetEditor/SectionsPicker.tsx:36
-#: src/components/layouts/EventHomepage/index.tsx:356
+#: src/components/layouts/EventHomepage/index.tsx:213
 #: src/components/modals/CreateEventModal/index.tsx:270
 #: src/components/routes/admin/SpamEvents/index.tsx:166
 #: src/components/routes/admin/SpamEvents/index.tsx:327
@@ -13019,7 +13068,7 @@ msgstr "Arrangörens utbetalningsinställningar"
 msgid "Organizer restored successfully"
 msgstr "Arrangören har återställts"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:52
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:53
 msgid "Organizer settings"
 msgstr "Arrangörsinställningar"
 
@@ -13131,6 +13180,10 @@ msgstr "Sida"
 #: src/components/common/SsoButtons/index.tsx:50
 msgid "Page address"
 msgstr "Sidans adress"
+
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:48
+msgid "Page layout"
+msgstr "Sidlayout"
 
 #: src/components/forms/StripeCheckoutForm/index.tsx:142
 msgid "Page no longer available"
@@ -13248,7 +13301,7 @@ msgid "Passwords are not the same"
 msgstr "Lösenorden är inte samma"
 
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:138
-#: src/components/layouts/OrganizerHomepage/index.tsx:231
+#: src/components/layouts/OrganizerHomepage/index.tsx:163
 #: src/components/routes/event/OccurrencesTab/index.tsx:522
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:30
 msgid "Past"
@@ -13259,7 +13312,7 @@ msgid "Past due"
 msgstr "Förfallen"
 
 #: src/components/layouts/OrganizerHomepage/OrganizerPastEventsSection.tsx:25
-#: src/utilites/homepageSections.ts:35
+#: src/utilites/homepageSections.ts:37
 msgid "Past events"
 msgstr "Tidigare evenemang"
 
@@ -13267,11 +13320,11 @@ msgstr "Tidigare evenemang"
 msgid "Paste"
 msgstr "Klistra in"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:219
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:224
 msgid "Paste a YouTube or Vimeo link"
 msgstr "Klistra in en YouTube- eller Vimeo-länk"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:81
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:82
 msgid "Paste a YouTube or Vimeo link below."
 msgstr "Klistra in en YouTube- eller Vimeo-länk nedan."
 
@@ -13587,11 +13640,11 @@ msgstr "Foto {photoNumber}"
 msgid "Photo {position}"
 msgstr "Foto {position}"
 
-#: src/utilites/homepageSections.ts:39
+#: src/utilites/homepageSections.ts:41
 msgid "Photo gallery"
 msgstr "Fotogalleri"
 
-#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:94
+#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:102
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:229
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:328
 msgid "Photos"
@@ -13739,7 +13792,7 @@ msgstr "Kontrollera din e-post för att bekräfta din e-postadress"
 msgid "Please check your ticket for the updated time. Your tickets are still valid — no action is needed unless the new times don't work for you. Reply to this email if you have any questions."
 msgstr "Kontrollera den nya tiden på din biljett. Dina biljetter gäller fortfarande – du behöver inte göra något om inte de nya tiderna krockar för dig. Svara på det här mejlet om du har frågor."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1298
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1301
 msgid "Please continue in the new tab"
 msgstr "Fortsätt i den nya fliken"
 
@@ -13929,7 +13982,7 @@ msgstr "Föregående dag"
 msgid "Previous month"
 msgstr "Föregående månad"
 
-#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:116
+#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:124
 msgid "Previous photo"
 msgstr "Föregående foto"
 
@@ -14024,8 +14077,7 @@ msgid "Printed {0}"
 msgstr "Utskrivet {0}"
 
 #: src/components/common/CookieConsentBanner/index.tsx:82
-#: src/components/layouts/EventHomepage/index.tsx:739
-#: src/components/layouts/OrganizerHomepage/index.tsx:199
+#: src/components/layouts/HomepageFrame/index.tsx:65
 msgid "Privacy Policy"
 msgstr "Integritetspolicy"
 
@@ -14330,8 +14382,8 @@ msgstr "Tillgängligt antal"
 msgid "Quantity this date"
 msgstr "Antal detta datum"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:134
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:151
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:139
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:156
 msgid "Question {number}"
 msgstr "Fråga {number}"
 
@@ -14361,7 +14413,11 @@ msgstr "Frågor"
 msgid "Questions & Answers"
 msgstr "Frågor och svar"
 
-#: src/utilites/homepageSections.ts:56
+#: src/components/layouts/EventHomepage/OrganizerSection.tsx:39
+msgid "Questions about this event? Get in touch."
+msgstr "Frågor om evenemanget? Hör av dig."
+
+#: src/utilites/homepageSections.ts:58
 msgid "Questions and answers people can expand."
 msgstr "Frågor och svar som kan fällas ut."
 
@@ -14416,7 +14472,7 @@ msgstr "Återaktivera det här datumet? Det öppnas för försäljning igen."
 msgid "Read and write"
 msgstr "Läsa och skriva"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:460
+#: src/components/layouts/OrganizerHomepage/index.tsx:327
 #: src/components/widget/WidgetSections/index.tsx:91
 msgid "Read more"
 msgstr "Läs mer"
@@ -14824,7 +14880,7 @@ msgstr "Ta bort undantag"
 msgid "Remove overrides for this date"
 msgstr "Ta bort åsidosättningar för detta datum"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:260
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:265
 msgid "Remove photo"
 msgstr "Ta bort foto"
 
@@ -14832,7 +14888,7 @@ msgstr "Ta bort foto"
 msgid "Remove photo {position}"
 msgstr "Ta bort foto {position}"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:141
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:146
 msgid "Remove question"
 msgstr "Ta bort fråga"
 
@@ -14844,7 +14900,7 @@ msgstr "Ta bort plats {0}"
 msgid "Remove seat map"
 msgstr "Ta bort sittplatskarta"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:366
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:370
 msgid "Remove section"
 msgstr "Ta bort sektion"
 
@@ -14852,7 +14908,7 @@ msgstr "Ta bort sektion"
 msgid "Remove sold out dates and times from the event page entirely. When disabled, they remain visible and are labelled as sold out."
 msgstr "Tar bort slutsålda datum och tider helt från evenemangssidan. När inaktiverat förblir de synliga och märks som slutsålda."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:318
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:323
 msgid "Remove sponsor"
 msgstr "Ta bort sponsor"
 
@@ -15424,7 +15480,7 @@ msgstr "Försäljning per licensår"
 
 #: src/components/common/ProductPriceAvailability/index.tsx:24
 #: src/components/common/ProductPriceAvailability/index.tsx:63
-#: src/components/layouts/EventHomepage/index.tsx:212
+#: src/components/layouts/EventHomepage/index.tsx:127
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:33
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:54
 msgid "Sales ended"
@@ -16066,12 +16122,13 @@ msgstr "Sektion"
 msgid "Section name"
 msgstr "Sektionsnamn"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:314
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:318
 msgid "Section settings for {label}"
 msgstr "Sektionsinställningar för {label}"
 
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:83
-#: src/components/routes/event/HomepageDesigner/index.tsx:147
+#: src/components/layouts/EventHomepage/SectionNav.tsx:133
+#: src/components/routes/event/HomepageDesigner/index.tsx:161
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:133
 msgid "Sections"
 msgstr "Sektioner"
@@ -16097,7 +16154,7 @@ msgstr "Visa alla"
 msgid "See all prices"
 msgstr "Visa alla priser"
 
-#: src/components/layouts/EventHomepage/index.tsx:688
+#: src/components/layouts/EventHomepage/EventIntro.tsx:141
 msgid "See schedule"
 msgstr "Se schemat"
 
@@ -16670,7 +16727,10 @@ msgid "Shape"
 msgstr "Form"
 
 #: src/components/common/ShareIcon/index.tsx:30
-#: src/components/layouts/EventHomepage/index.tsx:606
+#: src/components/layouts/EventHomepage/EventIntro.tsx:65
+#: src/components/layouts/EventHomepage/EventIntro.tsx:65
+#: src/components/layouts/OrganizerHomepage/index.tsx:336
+#: src/components/layouts/OrganizerHomepage/index.tsx:336
 #: src/components/layouts/OrganizerLayout/index.tsx:269
 #: src/components/modals/ShareModal/index.tsx:37
 #: src/components/modals/ShareModal/index.tsx:165
@@ -16721,7 +16781,7 @@ msgstr "Tiderna förskjutna för {count} datum"
 msgid "Show"
 msgstr "Visa"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:308
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:312
 msgid "Show {label}"
 msgstr "Visa {label}"
 
@@ -16757,7 +16817,7 @@ msgstr "Visa initialer i stället"
 msgid "Show keys"
 msgstr "Visa nycklar"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:460
+#: src/components/layouts/OrganizerHomepage/index.tsx:327
 #: src/components/widget/WidgetSections/index.tsx:91
 msgid "Show less"
 msgstr "Visa mindre"
@@ -16811,7 +16871,7 @@ msgstr "Visa återstående kapacitet på evenemangets datum"
 msgid "Show remaining capacity to buyers"
 msgstr "Visa återstående kapacitet för köpare"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:302
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:306
 msgid "Show section"
 msgstr "Visa sektion"
 
@@ -16844,7 +16904,7 @@ msgstr "Visas på en publik evenemangssida"
 msgid "Showing the first {0} — the remaining {1} session(s) will still be targeted when the message is sent."
 msgstr "Visar de {0} första – de återstående {1} tillfällena omfattas ändå när meddelandet skickas."
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:205
+#: src/components/routes/event/HomepageDesigner/index.tsx:220
 msgid "Shown below the ticket list"
 msgstr "Visas under biljettlistan"
 
@@ -16852,7 +16912,7 @@ msgstr "Visas under biljettlistan"
 msgid "Shown bouncing at the top of the modal"
 msgstr "Visas studsande högst upp i modalen"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:213
+#: src/components/routes/event/HomepageDesigner/index.tsx:228
 msgid "Shown on scroll and jumps to the tickets section"
 msgstr "Visas vid scrollning och hoppar till biljettsektionen"
 
@@ -16888,7 +16948,7 @@ msgstr "Visar vanliga adressfält, inklusive land"
 msgid "Shows remaining"
 msgstr "Visar återstående"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:88
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:89
 msgid "Shows the venue and a map. Hidden automatically for online events."
 msgstr "Visar platsen och en karta. Döljs automatiskt för onlineevenemang."
 
@@ -16896,19 +16956,23 @@ msgstr "Visar platsen och en karta. Döljs automatiskt för onlineevenemang."
 msgid "Shows tickets"
 msgstr "Visar biljetter"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:71
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:93
+msgid "Shows up to three of your other upcoming events. Hidden automatically when there are none."
+msgstr "Visar upp till tre av dina andra kommande evenemang. Döljs automatiskt när det inte finns några."
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:72
 msgid "Shows your event description."
 msgstr "Visar evenemangets beskrivning."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:74
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:75
 msgid "Shows your organizer description. Placed above every other section, it appears in your profile card."
 msgstr "Visar din arrangörsbeskrivning. Placerad ovanför alla andra sektioner visas den i ditt profilkort."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:90
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:91
 msgid "Shows your organizer profile with a contact button."
 msgstr "Visar din arrangörsprofil med en kontaktknapp."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:79
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:80
 msgid "Shows your social links and a contact button. Placed above every other section, it appears in your profile card."
 msgstr "Visar dina sociala länkar och en kontaktknapp. Placerad ovanför alla andra sektioner visas den i ditt profilkort."
 
@@ -17207,7 +17271,7 @@ msgid "Sold out"
 msgstr "Slutsålt"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:128
-#: src/components/layouts/EventHomepage/index.tsx:218
+#: src/components/layouts/EventHomepage/index.tsx:131
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:221
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:22
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:336
@@ -17382,12 +17446,12 @@ msgstr "Dela upp incheckningen på dagar, områden eller biljettyper. Dela länk
 msgid "Split door sales by entrance, date, or ticket type. You'll get a link and a PIN to share with staff — no account needed on their end."
 msgstr "Dela upp dörrförsäljningen per entré, datum eller biljettyp. Du får en länk och en PIN att dela med personalen – inget konto behövs hos dem."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:312
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:317
 msgid "Sponsor name"
 msgstr "Sponsorns namn"
 
 #: src/components/layouts/EventHomepage/Sections/SponsorsSection.tsx:21
-#: src/utilites/homepageSections.ts:45
+#: src/utilites/homepageSections.ts:47
 msgid "Sponsors"
 msgstr "Sponsorer"
 
@@ -17734,6 +17798,10 @@ msgstr "Slutar fungera {0}. Vi skickar ett e-postmeddelande till dig en vecka in
 msgid "Store it somewhere safe, like a password manager or your integration's secret settings. Anyone with this key can use the API as you."
 msgstr "Förvara den på ett säkert ställe, som en lösenordshanterare eller integrationens hemliga inställningar. Alla som har den här nyckeln kan använda API:et som du."
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:24
+msgid "Story"
+msgstr "Berättelse"
+
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:34
 msgid "Straight rows, central aisle."
 msgstr "Raka rader, mittgång."
@@ -17918,7 +17986,7 @@ msgstr "Evenemanget uppdaterades"
 msgid "Successfully Updated Event Defaults"
 msgstr "Standardinställningarna för evenemang uppdaterades"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:119
+#: src/components/routes/event/HomepageDesigner/index.tsx:121
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:93
 msgid "Successfully Updated Homepage Design"
 msgstr "Startsidedesignen uppdaterades"
@@ -18248,8 +18316,7 @@ msgstr "Betalsätt"
 msgid "Term"
 msgstr "Sökord"
 
-#: src/components/layouts/EventHomepage/index.tsx:745
-#: src/components/layouts/OrganizerHomepage/index.tsx:205
+#: src/components/layouts/HomepageFrame/index.tsx:68
 msgid "Terms of Service"
 msgstr "Användarvillkor"
 
@@ -18264,9 +18331,9 @@ msgid "Test sign-in"
 msgstr "Testinloggning"
 
 #: src/components/common/WidgetEditor/AppearancePanel.tsx:83
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:54
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:55
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:99
-#: src/utilites/homepageSections.ts:37
+#: src/utilites/homepageSections.ts:39
 msgid "Text"
 msgstr "Text"
 
@@ -18279,7 +18346,7 @@ msgstr "Tack för att du deltog!"
 msgid "Thanks,"
 msgstr "Tack,"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:220
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:225
 msgid "That doesn't look like a YouTube or Vimeo video link"
 msgstr "Det ser inte ut som en YouTube- eller Vimeo-videolänk"
 
@@ -18632,7 +18699,7 @@ msgstr "Teater"
 msgid "Theatre with sections"
 msgstr "Teater med sektioner"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:181
+#: src/components/routes/event/HomepageDesigner/index.tsx:196
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:192
 msgid "Theme & Colors"
 msgstr "Tema och färger"
@@ -18737,7 +18804,7 @@ msgstr "Detta konto är schemalagt för radering"
 msgid "This account is scheduled for deletion on <0>{scheduledDate}</0>"
 msgstr "Detta konto är schemalagt för radering den <0>{scheduledDate}</0>"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:198
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:203
 msgid "This answer is too long. Shorten it before saving."
 msgstr "Svaret är för långt. Korta ner det innan du sparar."
 
@@ -18855,7 +18922,7 @@ msgstr "Den här enheten"
 msgid "This disconnects {stripeAccountId} from this organizer. Paid ticket sales will stop working until you connect a Stripe account again."
 msgstr "Detta kopplar från {stripeAccountId} från den här arrangören. Försäljning av betalbiljetter slutar fungera tills du ansluter ett Stripe-konto igen."
 
-#: src/components/layouts/EventHomepage/index.tsx:650
+#: src/components/layouts/EventHomepage/index.tsx:129
 msgid "This event has ended"
 msgstr "Det här evenemanget har avslutats"
 
@@ -19279,7 +19346,7 @@ msgstr "Biljetten skickades igen"
 msgid "Ticket sales have ended for this event"
 msgstr "Biljettförsäljningen för det här evenemanget är avslutad"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:339
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:343
 msgid "Ticket titles come from your product categories."
 msgstr "Biljettrubrikerna kommer från dina produktkategorier."
 
@@ -19304,6 +19371,7 @@ msgstr "biljetter"
 #: src/components/common/WidgetEditor/SectionsPicker.tsx:28
 #: src/components/common/WidgetEditor/TypePicker.tsx:7
 #: src/components/forms/ProductForm/buildPreviewEvent.ts:139
+#: src/components/layouts/EventHomepage/index.tsx:167
 #: src/components/routes/admin/Dashboard/index.tsx:263
 #: src/components/routes/my-tickets/index.tsx:101
 #: src/ee/box-office/components/layouts/BoxOffice/SaleComplete.tsx:111
@@ -19320,7 +19388,7 @@ msgstr "Biljetter och produkter"
 msgid "Tickets and {extraSections} more"
 msgstr "Biljetter och {extraSections} till"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:302
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:306
 msgid "Tickets are always shown"
 msgstr "Biljetter visas alltid"
 
@@ -19852,7 +19920,7 @@ msgstr "Skriv koden som din autentiseringsapp visar för {0}."
 msgid "Type to search..."
 msgstr "Skriv för att söka..."
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:190
+#: src/components/routes/event/HomepageDesigner/index.tsx:205
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:201
 msgid "Typography"
 msgstr "Typografi"
@@ -20151,14 +20219,14 @@ msgstr "Upp till {max} per order"
 msgid "up to {perDateAllocation} per date"
 msgstr "upp till {perDateAllocation} per datum"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:283
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:288
 msgid "Up to 40 photos, at least 400 × 300px. The first one is shown largest."
 msgstr "Upp till 40 foton, minst 400 × 300px. Det första visas störst."
 
 #: src/components/common/EventsDashboardStatusButtons/index.tsx:20
 #: src/components/common/EventStatusBadge/index.tsx:16
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:137
-#: src/components/layouts/OrganizerHomepage/index.tsx:225
+#: src/components/layouts/OrganizerHomepage/index.tsx:154
 #: src/components/routes/event/OccurrencesTab/index.tsx:521
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:33
 msgid "Upcoming"
@@ -20262,15 +20330,15 @@ msgstr "Ladda upp en logotyp för din arrangör"
 msgid "Upload Image"
 msgstr "Ladda upp bild"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:83
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:84
 msgid "Upload some photos below."
 msgstr "Ladda upp några foton nedan."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:338
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:343
 msgid "Upload sponsor logos"
 msgstr "Ladda upp sponsorlogotyper"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:85
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:86
 msgid "Upload sponsor logos below."
 msgstr "Ladda upp sponsorlogotyper nedan."
 
@@ -20321,8 +20389,8 @@ msgstr "Använd <0>Liquid-mallar</0> för att anpassa dina mejl"
 msgid "Use a different account"
 msgstr "Använd ett annat konto"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:273
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:332
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:278
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:337
 #: src/components/routes/event/Lineup/ProfileImagesField.tsx:136
 msgid "Use a JPG, PNG or WebP image under 5MB."
 msgstr "Använd en JPG-, PNG- eller WebP-bild under 5 MB."
@@ -20636,11 +20704,11 @@ msgstr "Verifierar..."
 msgid "via {providerName}"
 msgstr "via {providerName}"
 
-#: src/utilites/homepageSections.ts:43
+#: src/utilites/homepageSections.ts:45
 msgid "Video"
 msgstr "Video"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:215
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:220
 msgid "Video link"
 msgstr "Videolänk"
 
@@ -20656,9 +20724,17 @@ msgstr "Vy"
 msgid "View {name}"
 msgstr "Visa {name}"
 
+#: src/components/layouts/EventHomepage/MoreEventsSection.tsx:33
+msgid "View all"
+msgstr "Visa alla"
+
 #: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:70
 msgid "View All"
 msgstr "Visa alla"
+
+#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:43
+msgid "View all {totalCount} photos"
+msgstr "Visa alla {totalCount} foton"
 
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:387
 msgid "View all →"
@@ -20676,7 +20752,7 @@ msgstr "Visa alla incheckningslistor"
 msgid "View all messages sent across the platform"
 msgstr "Visa alla meddelanden skickade på plattformen"
 
-#: src/components/layouts/OrganizerHomepage/OrganizerPastEventsSection.tsx:32
+#: src/components/layouts/OrganizerHomepage/OrganizerPastEventsSection.tsx:30
 msgid "View all past events"
 msgstr "Visa alla tidigare evenemang"
 
@@ -20737,10 +20813,6 @@ msgstr "Visa evenemangsida"
 msgid "View logs"
 msgstr "Visa loggar"
 
-#: src/components/layouts/EventHomepage/index.tsx:344
-msgid "View Map"
-msgstr "Visa karta"
-
 #: src/components/routes/admin/Messages/index.tsx:222
 msgid "View Message"
 msgstr "Visa meddelande"
@@ -20748,10 +20820,6 @@ msgstr "Visa meddelande"
 #: src/components/routes/event/Lineup/index.tsx:72
 msgid "View on event page"
 msgstr "Visa på evenemangssidan"
-
-#: src/components/layouts/EventHomepage/index.tsx:717
-msgid "View on Google Maps"
-msgstr "Visa på Google Maps"
 
 #: src/components/layouts/Event/index.tsx:247
 #: src/components/layouts/OrganizerLayout/index.tsx:237
@@ -20784,7 +20852,7 @@ msgstr "Visa ordrar"
 msgid "View Organizer Homepage"
 msgstr "Visa arrangörens startsida"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:247
+#: src/components/layouts/OrganizerHomepage/index.tsx:175
 msgid "View past events"
 msgstr "Visa tidigare evenemang"
 
@@ -21026,7 +21094,7 @@ msgstr "Det uppstod ett problem när sidan skulle laddas. Försök igen."
 msgid "We partner with Stripe to send payouts straight to your bank account."
 msgstr "Vi samarbetar med Stripe för att skicka utbetalningar direkt till ditt bankkonto."
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:163
+#: src/components/routes/event/HomepageDesigner/index.tsx:178
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:151
 msgid "We recommend dimensions of 1950px by 650px, a ratio of 3:1, and a maximum file size of 5MB"
 msgstr "Vi rekommenderar 1950×650 px, bildförhållande 3:1 och maximal filstorlek 5 MB"
@@ -21436,6 +21504,10 @@ msgstr "Vem står på scen?"
 msgid "Whole account"
 msgstr "Hela kontot"
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:13
+msgid "Wide cover, tickets alongside"
+msgstr "Bred omslagsbild, biljetter bredvid"
+
 #: src/components/common/WidgetEditor/index.tsx:238
 msgid "Widget"
 msgstr "Widget"
@@ -21606,11 +21678,11 @@ msgstr "Du är offline"
 msgid "You belong to more than one account. Choose where you'd like to go."
 msgstr "Du tillhör mer än ett konto. Välj vart du vill gå."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:214
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:218
 msgid "You can add up to {MAX_SECTIONS} sections."
 msgstr "Du kan lägga till upp till {MAX_SECTIONS} sektioner."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:294
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:299
 msgid "You can add up to {MAX_SPONSORS} sponsors."
 msgstr "Du kan lägga till upp till {MAX_SPONSORS} sponsorer."
 
@@ -21860,7 +21932,7 @@ msgstr "Du är inloggad som {0}"
 msgid "You're unsubscribed"
 msgstr "Du är avregistrerad"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:326
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:331
 msgid "You've added the maximum of {MAX_SPONSORS} sponsors."
 msgstr "Du har lagt till maxantalet {MAX_SPONSORS} sponsorer."
 
@@ -21924,6 +21996,10 @@ msgstr "Ditt konto skyddas bara av ditt lösenord. Dina återställningskoder oc
 msgid "Your affiliates have been exported successfully."
 msgstr "Dina affiliates har exporterats."
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:19
+msgid "Your artwork as a poster"
+msgstr "Din grafik som affisch"
+
 #: src/components/routes/event/attendees.tsx:165
 msgid "Your attendees have been exported successfully."
 msgstr "Dina deltagare har exporterats."
@@ -21939,6 +22015,14 @@ msgstr "Din webbläsare blockerade kopieringen. Markera nyckeln och kopiera den 
 #: src/components/modals/CheckInListSuccessModal/index.tsx:23
 msgid "Your check-in list has been created successfully. Share the link below with your check-in staff."
 msgstr "Din incheckningslista har skapats. Dela länken nedan med din incheckningspersonal."
+
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:73
+msgid "Your cover image is landscape, so it will look small here. Flyer works best with square or portrait artwork."
+msgstr "Omslagsbilden är liggande och ser därför liten ut här. Flyer fungerar bäst med kvadratiska eller stående bilder."
+
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:20
+msgid "Your cover sits beside the details like a poster. Best with square or portrait artwork."
+msgstr "Omslagsbilden visas bredvid detaljerna som en affisch. Fungerar bäst med kvadratiska eller stående bilder."
 
 #: src/components/layouts/Checkout/index.tsx:461
 msgid "Your current order will be lost."
@@ -22083,11 +22167,11 @@ msgstr "Din organisation använder enkel inloggning"
 msgid "Your organizer address"
 msgstr "Din arrangörsadress"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:67
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:68
 msgid "Your organizer has no description yet."
 msgstr "Din arrangör har ingen beskrivning än."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:51
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:52
 msgid "Your organizer profile isn't published."
 msgstr "Din arrangörsprofil är inte publicerad."
 

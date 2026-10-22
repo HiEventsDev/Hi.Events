@@ -380,6 +380,14 @@ msgstr "{enforcedCount, plural, other {#人のメンバーは{providerName}で�
 msgid "{eventCount, plural, one {# event} other {# events}}"
 msgstr "{eventCount, plural, other {#件のイベント}}"
 
+#: src/components/layouts/OrganizerHomepage/index.tsx:110
+msgid "{eventCount, plural, one {# past event} other {# past events}}"
+msgstr "{eventCount, plural, other {過去のイベント #件}}"
+
+#: src/components/layouts/OrganizerHomepage/index.tsx:111
+msgid "{eventCount, plural, one {# upcoming event} other {# upcoming events}}"
+msgstr "{eventCount, plural, other {今後のイベント #件}}"
+
 #: src/components/common/OrganizerWebhookTable/index.tsx:81
 #: src/components/common/WebhookTable/index.tsx:81
 msgid "{eventCount} events"
@@ -466,6 +474,10 @@ msgstr "{minutes} 分"
 msgid "{minutes} minutes and {seconds} seconds"
 msgstr "{minutes}分{seconds}秒"
 
+#: src/components/layouts/OrganizerHomepage/EventList/index.tsx:98
+msgid "{moreDatesCount, plural, one {+# more date} other {+# more dates}}"
+msgstr "{moreDatesCount, plural, one {他#日程} other {他#日程}}"
+
 #: src/components/routes/event/Lineup/QuickAddPerson.tsx:55
 msgid "{name} added to the lineup"
 msgstr "{name} をラインナップに追加しました"
@@ -530,7 +542,7 @@ msgstr "{peopleAdded, plural, other {# 人を追加しました}}"
 msgid "{productCount} ticket types configured"
 msgstr "{productCount}種類のチケットタイプを設定済み"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:219
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:224
 msgid "{provider} video found"
 msgstr "{provider} の動画が見つかりました"
 
@@ -647,10 +659,6 @@ msgstr "他{0}通貨"
 msgid "+{extra} more"
 msgstr "+{extra} 件"
 
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:129
-msgid "+{moreDatesCount} more dates"
-msgstr "他{moreDatesCount}日程"
-
 #: src/components/routes/product-widget/SelectProducts/WidgetLineupStrip.tsx:43
 msgid "+{remaining} more"
 msgstr "ほか {remaining} 件"
@@ -662,10 +670,6 @@ msgstr "+1 234 567 890"
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1039
 msgid "+1 day"
 msgstr "+1日"
-
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:129
-msgid "+1 more date"
-msgstr "他1日程"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:524
 msgid "+Tax/Fees"
@@ -877,6 +881,10 @@ msgstr "所要時間の変更"
 msgid "A check-in list lets staff scan tickets at the door on a phone, tablet, or USB scanner. Share the link with your team, no account needed."
 msgstr "チェックインリストを使うと、スタッフが会場の入口でスマートフォン、タブレット、またはUSBスキャナーでチケットをスキャンできます。リンクをチームと共有してください。アカウントは不要です。"
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:31
+msgid "A compact, centred card"
+msgstr "コンパクトな中央寄せカード"
+
 #: src/components/forms/QuestionForm/index.tsx:138
 msgid "A date input. Perfect for asking for a date of birth etc."
 msgstr "日付入力です。生年月日の入力などに最適です。"
@@ -889,15 +897,19 @@ msgstr "ドロップダウン入力では、1つだけ選択できます"
 msgid "A few quick steps and you're ready to start selling."
 msgstr "いくつかの簡単な手順で、販売を開始できます。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:233
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:26
+msgid "A focused reading column. Tickets appear wherever you place them in Sections."
+msgstr "読みやすい1カラム構成。チケットはセクションで配置した場所に表示されます。"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:238
 msgid "A gallery can have up to {MAX_GALLERY_PHOTOS} photos."
 msgstr "ギャラリーには最大 {MAX_GALLERY_PHOTOS} 枚の写真を追加できます。"
 
-#: src/utilites/homepageSections.ts:54
+#: src/utilites/homepageSections.ts:56
 msgid "A grid of photos that opens full screen."
 msgstr "全画面で開ける写真のグリッド。"
 
-#: src/utilites/homepageSections.ts:52
+#: src/utilites/homepageSections.ts:54
 msgid "A heading and formatted text. Travel info, house rules, anything."
 msgstr "見出しと書式付きテキスト。アクセス情報や注意事項などに。"
 
@@ -908,6 +920,10 @@ msgstr "このカテゴリーに商品がない場合に表示するメッセー
 #: src/components/forms/QuestionForm/index.tsx:108
 msgid "A multi line text input"
 msgstr "複数行のテキスト入力"
+
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:32
+msgid "A narrow card with the details centred. Suits smaller and private events."
+msgstr "詳細を中央に配置した幅の狭いカード。小規模イベントやプライベートイベントに最適です。"
 
 #: src/components/routes/welcome/index.tsx:119
 msgid "A new verification code has been sent to your email"
@@ -970,7 +986,7 @@ msgstr "ボタンのラベルを設定する場合は、URLが必要です"
 msgid "A weekday pattern"
 msgstr "曜日パターン"
 
-#: src/utilites/homepageSections.ts:58
+#: src/utilites/homepageSections.ts:60
 msgid "A YouTube or Vimeo video, loaded when someone presses play."
 msgstr "YouTube または Vimeo の動画。再生時に読み込まれます。"
 
@@ -986,8 +1002,8 @@ msgstr "この販売を中止しますか？リーダーで待機中のカード
 msgid "Abandoned"
 msgstr "中止済み"
 
-#: src/components/layouts/EventHomepage/index.tsx:273
-#: src/components/layouts/OrganizerHomepage/index.tsx:292
+#: src/components/layouts/EventHomepage/index.tsx:199
+#: src/components/layouts/OrganizerHomepage/index.tsx:215
 #: src/components/widget/WidgetSections/index.tsx:90
 #: src/utilites/homepageSections.ts:21
 msgid "About"
@@ -1266,7 +1282,7 @@ msgid "Add a date"
 msgstr "日付を追加"
 
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:34
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:67
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:68
 msgid "Add a description"
 msgstr "説明を追加"
 
@@ -1343,7 +1359,7 @@ msgstr "注文に関するメモを追加します。お客様には表示され
 msgid "Add any notes about the order..."
 msgstr "注文に関するメモを追加..."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:79
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:80
 msgid "Add at least one question below."
 msgstr "下に質問を1つ以上追加してください。"
 
@@ -1457,7 +1473,7 @@ msgstr "商品を追加"
 msgid "Add Product to Category"
 msgstr "カテゴリーに商品を追加"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:172
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:177
 msgid "Add question"
 msgstr "質問を追加"
 
@@ -1471,8 +1487,8 @@ msgstr "質問を追加"
 msgid "Add reader"
 msgstr "リーダーを追加"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:216
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:223
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:220
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:227
 msgid "Add section"
 msgstr "セクションを追加"
 
@@ -1480,7 +1496,7 @@ msgstr "セクションを追加"
 msgid "Add slot"
 msgstr "枠を追加"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:77
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:78
 msgid "Add some text below."
 msgstr "下にテキストを追加してください。"
 
@@ -1551,8 +1567,8 @@ msgstr "カレンダーに追加"
 
 #: src/components/common/AddEventToCalendarButton/index.tsx:15
 #: src/components/common/AddToCalendarCTA/index.tsx:25
-#: src/components/layouts/EventHomepage/index.tsx:614
-#: src/components/layouts/EventHomepage/index.tsx:615
+#: src/components/layouts/EventHomepage/EventIntro.tsx:71
+#: src/components/layouts/EventHomepage/EventIntro.tsx:71
 msgid "Add to Calendar"
 msgstr "カレンダーに追加"
 
@@ -2029,13 +2045,17 @@ msgstr "常に販売中"
 msgid "Always shown"
 msgstr "常に表示"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:92
-msgid "Always shown. Move it to change where tickets appear on the page."
-msgstr "常に表示されます。移動するとページ上のチケットの位置を変更できます。"
-
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:81
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:82
 msgid "Always shown. Move it to change where your events list appears."
 msgstr "常に表示されます。移動するとイベント一覧の表示位置を変更できます。"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:97
+msgid "Always shown. Move it to change where your tickets appear."
+msgstr "常に表示されます。移動するとチケットの表示位置を変更できます。"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:96
+msgid "Always shown. On large screens tickets sit beside your page content; move it to change where they appear on phones and tablets."
+msgstr "常に表示されます。大きな画面ではチケットはページ内容の横に表示されます。移動すると、スマートフォンとタブレットでの表示位置を変更できます。"
 
 #: src/components/common/DateTimeField/index.tsx:87
 #: src/components/modals/CreateEventModal/DateTimeChip.tsx:96
@@ -2150,11 +2170,11 @@ msgstr "お知らせ"
 msgid "Anonymize"
 msgstr "匿名化"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:194
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:199
 msgid "Answer"
 msgstr "回答"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:197
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:202
 msgid "Answer {number}"
 msgstr "回答 {number}"
 
@@ -3286,7 +3306,7 @@ msgstr "ボタンのラベル"
 msgid "Button text"
 msgstr "ボタンのテキスト"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:201
+#: src/components/routes/event/HomepageDesigner/index.tsx:216
 msgid "Button Text"
 msgstr "ボタンのテキスト"
 
@@ -3842,8 +3862,8 @@ msgstr "キーを確認"
 msgid "Check out"
 msgstr "チェックアウト"
 
-#: src/components/layouts/EventHomepage/index.tsx:601
-#: src/components/layouts/EventHomepage/index.tsx:602
+#: src/components/layouts/EventHomepage/EventIntro.tsx:60
+#: src/components/layouts/EventHomepage/EventIntro.tsx:61
 msgid "Check out this event: {0}"
 msgstr "このイベントをチェック：{0}"
 
@@ -4325,7 +4345,7 @@ msgstr "閉じる"
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:208
 #: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:56
 #: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:86
-#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:113
+#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:121
 #: src/components/modals/CreateEventModal/index.tsx:288
 #: src/components/modals/JoinWaitlistModal/index.tsx:116
 #: src/components/modals/JoinWaitlistModal/index.tsx:143
@@ -4783,10 +4803,10 @@ msgid "Consecutive"
 msgstr "連続"
 
 #: src/components/common/WaitlistTable/index.tsx:155
-#: src/components/layouts/EventHomepage/index.tsx:446
-#: src/components/layouts/OrganizerHomepage/index.tsx:186
-#: src/components/layouts/OrganizerHomepage/index.tsx:301
-#: src/utilites/homepageSections.ts:33
+#: src/components/layouts/EventHomepage/OrganizerSection.tsx:60
+#: src/components/layouts/OrganizerHomepage/index.tsx:117
+#: src/components/layouts/OrganizerHomepage/index.tsx:224
+#: src/utilites/homepageSections.ts:35
 msgid "Contact"
 msgstr "お問い合わせ"
 
@@ -4818,9 +4838,9 @@ msgstr "コンテンツは必須です"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:146
 #: src/components/common/WidgetEditor/BehaviourPanel.tsx:33
-#: src/components/layouts/EventHomepage/index.tsx:226
+#: src/components/layouts/EventHomepage/index.tsx:141
 #: src/components/layouts/ProductWidget/index.tsx:94
-#: src/components/routes/event/HomepageDesigner/index.tsx:206
+#: src/components/routes/event/HomepageDesigner/index.tsx:221
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1173
 #: src/components/routes/settings/Security/SignInMethods.tsx:251
 #: src/ee/seating/components/SeatPicker/Basket.tsx:200
@@ -4828,7 +4848,7 @@ msgstr "コンテンツは必須です"
 msgid "Continue"
 msgstr "続行"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:204
+#: src/components/routes/event/HomepageDesigner/index.tsx:219
 msgid "Continue Button"
 msgstr "続行ボタン"
 
@@ -4845,7 +4865,7 @@ msgstr "セットアップを続行"
 msgid "Continue to checkout"
 msgstr "チェックアウトに進む"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1335
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1338
 msgid "Continue to Checkout"
 msgstr "チェックアウトに進む"
 
@@ -5244,7 +5264,7 @@ msgstr "件数には、今後のすべての日付が含まれます。各参加
 msgid "Cover"
 msgstr "カバー"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:162
+#: src/components/routes/event/HomepageDesigner/index.tsx:177
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:150
 msgid "Cover Image"
 msgstr "カバー画像"
@@ -5253,7 +5273,7 @@ msgstr "カバー画像"
 msgid "Cover image added"
 msgstr "カバー画像を追加しました"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:176
+#: src/components/routes/event/HomepageDesigner/index.tsx:191
 msgid "Cover image will be displayed at the top of your event page"
 msgstr "カバー画像は、イベントページの上部に表示されます"
 
@@ -6293,7 +6313,7 @@ msgstr "コードが届きませんか？"
 msgid "Different location"
 msgstr "別の場所"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:83
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:84
 msgid "Directly below Events, it's a Past tab on the events list. Anywhere else, it shows your most recent past events."
 msgstr "「イベント」の直下にある場合、イベント一覧の「過去」タブになります。それ以外の場所では、最近の過去のイベントを表示します。"
 
@@ -6384,7 +6404,7 @@ msgstr "お知らせを閉じる"
 msgid "Dismiss setup checklist"
 msgstr "セットアップチェックリストを閉じる"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1352
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1355
 msgid "Dismiss this message"
 msgstr "このメッセージを閉じる"
 
@@ -6541,16 +6561,16 @@ msgstr "ハンドルをドラッグして並べ替えます。名前をタイム
 msgid "Drag to draw a stage. Change it to a bar, dance floor, entrance, pillar or wall on the right."
 msgstr "ドラッグしてステージを描画します。右側でバー、ダンスフロア、入口、柱、壁に変更できます。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:289
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:293
 #: src/components/routes/event/Lineup/PeopleRail.tsx:140
 msgid "Drag to reorder {label}"
 msgstr "ドラッグして{label}を並べ替え"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:178
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:181
 msgid "Drag to reorder. Hidden sections stay saved but don't show on your organizer page."
 msgstr "ドラッグして並べ替えます。非表示のセクションは保存されますが、主催者ページには表示されません。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:177
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:180
 msgid "Drag to reorder. Sections marked Empty appear on your event page once they have content."
 msgstr "ドラッグして並べ替えます。「空」と表示されたセクションは、コンテンツが追加されるとイベントページに表示されます。"
 
@@ -6648,7 +6668,7 @@ msgstr "例：180（3時間）"
 msgid "e.g. Founder at Acme, or Berlin techno"
 msgstr "例：Acme 創業者、ベルリン・テクノ"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:147
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:152
 msgid "e.g. Is there parking?"
 msgstr "例：駐車場はありますか？"
 
@@ -6842,7 +6862,7 @@ msgstr "詳細を編集"
 msgid "Edit fee"
 msgstr "手数料を編集"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:340
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:344
 msgid "Edit in Tickets & Products"
 msgstr "「チケットと商品」で編集"
 
@@ -6850,11 +6870,11 @@ msgstr "「チケットと商品」で編集"
 msgid "Edit individual seats"
 msgstr "個別の座席を編集"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:71
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:72
 msgid "Edit it in Event Settings"
 msgstr "イベント設定で編集"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:75
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:76
 msgid "Edit it in Settings"
 msgstr "設定で編集"
 
@@ -7123,7 +7143,7 @@ msgid "Emoji is required for modals"
 msgstr "モーダルには絵文字が必要です"
 
 #: src/components/common/WidgetEditor/SectionsPicker.tsx:77
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:299
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:303
 msgid "Empty"
 msgstr "空"
 
@@ -7237,7 +7257,7 @@ msgstr "英語"
 msgid "Enter a capacity value or choose unlimited."
 msgstr "定員の値を入力するか、無制限を選択してください。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:373
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:378
 msgid "Enter a full link starting with https://"
 msgstr "https:// で始まる完全なリンクを入力してください"
 
@@ -7592,7 +7612,7 @@ msgstr "イベントは公開されていません"
 msgid "Event Page"
 msgstr "イベントページ"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:141
+#: src/components/routes/event/HomepageDesigner/index.tsx:143
 msgid "Event Preview"
 msgstr "イベントのプレビュー"
 
@@ -7651,7 +7671,7 @@ msgstr "イベントを更新しました"
 #: src/components/common/AdminAccountsTable/index.tsx:82
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:127
 #: src/components/layouts/Admin/index.tsx:20
-#: src/components/layouts/OrganizerHomepage/index.tsx:218
+#: src/components/layouts/OrganizerHomepage/index.tsx:144
 #: src/components/layouts/OrganizerLayout/index.tsx:118
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:180
 #: src/components/routes/admin/Attribution/index.tsx:195
@@ -7659,11 +7679,11 @@ msgstr "イベントを更新しました"
 #: src/components/routes/admin/Events/index.tsx:77
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:236
 #: src/components/routes/organizer/Events/index.tsx:46
-#: src/utilites/homepageSections.ts:31
+#: src/utilites/homepageSections.ts:33
 msgid "Events"
 msgstr "イベント"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:302
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:306
 msgid "Events are always shown"
 msgstr "イベントは常に表示されます"
 
@@ -8280,7 +8300,7 @@ msgstr "{0}から失敗中"
 msgid "Family"
 msgstr "ファミリー"
 
-#: src/utilites/homepageSections.ts:41
+#: src/utilites/homepageSections.ts:43
 msgid "FAQ"
 msgstr "よくある質問"
 
@@ -8590,9 +8610,13 @@ msgstr "フラッシュオン"
 msgid "Flickr"
 msgstr "Flickr"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:212
+#: src/components/routes/event/HomepageDesigner/index.tsx:227
 msgid "Floating Button"
 msgstr "フローティングボタン"
+
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:18
+msgid "Flyer"
+msgstr "フライヤー"
 
 #: src/components/common/ThemeFontControl/index.tsx:64
 msgid "Font Family"
@@ -8824,13 +8848,11 @@ msgstr "ライセンスを取得"
 msgid "Get an Enterprise licence key."
 msgstr "エンタープライズライセンスキーを取得します。"
 
+#: src/components/layouts/EventHomepage/EventIntro.tsx:133
+#: src/components/layouts/EventHomepage/LocationSection.tsx:23
 #: src/components/widget/WidgetSections/index.tsx:117
 msgid "Get directions"
 msgstr "経路を表示"
-
-#: src/components/layouts/EventHomepage/index.tsx:307
-msgid "Get Directions"
-msgstr "道順を表示"
 
 #: src/components/layouts/OrganizerLayout/index.tsx:95
 msgid "Get Paid"
@@ -8852,8 +8874,9 @@ msgstr "はじめる"
 msgid "Get tickets"
 msgstr "チケットを入手"
 
-#: src/components/layouts/EventHomepage/index.tsx:225
-#: src/components/routes/event/HomepageDesigner/index.tsx:214
+#: src/components/layouts/EventHomepage/index.tsx:140
+#: src/components/layouts/OrganizerHomepage/EventList/index.tsx:196
+#: src/components/routes/event/HomepageDesigner/index.tsx:229
 msgid "Get Tickets"
 msgstr "チケットを入手"
 
@@ -9013,7 +9036,8 @@ msgstr "ゲスト管理"
 msgid "Guests"
 msgstr "ゲスト"
 
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:81
+#: src/components/layouts/EventHomepage/index.tsx:132
+#: src/components/layouts/OrganizerHomepage/EventList/index.tsx:79
 #: src/components/routes/event/EventDashboard/NextOccurrenceHero/index.tsx:45
 #: src/components/routes/event/EventDashboard/NextOccurrenceHero/index.tsx:159
 msgid "Happening now"
@@ -9039,7 +9063,7 @@ msgstr "プロモーションコードをお持ちですか？"
 msgid "Head"
 msgstr "ヘッド"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:347
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:351
 msgid "Heading"
 msgstr "見出し"
 
@@ -9135,7 +9159,7 @@ msgstr "非表示"
 msgid "Hidden — sales ended {end}."
 msgstr "非表示 — 販売は{end}に終了しました。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:86
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:87
 msgid "Hidden automatically when empty."
 msgstr "空の場合は自動的に非表示になります。"
 
@@ -9183,7 +9207,7 @@ msgstr "非表示"
 msgid "Hide \"Have a promo code?\""
 msgstr "「プロモーションコードをお持ちですか？」を非表示"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:308
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:312
 msgid "Hide {label}"
 msgstr "{label}を非表示"
 
@@ -9236,7 +9260,7 @@ msgstr "該当するプロモーションコードがない限り商品を非表
 msgid "Hide product when sold out"
 msgstr "完売時は商品を非表示にする"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:302
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:306
 msgid "Hide section"
 msgstr "セクションを非表示"
 
@@ -9305,7 +9329,7 @@ msgstr "{0}席を保留にする"
 msgid "Hold back {0} seats on {dateCount} dates"
 msgstr "{dateCount}件の日付で{0}席を保留にする"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:139
+#: src/components/routes/event/HomepageDesigner/index.tsx:141
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:125
 msgid "Homepage Design"
 msgstr "ホームページデザイン"
@@ -9434,7 +9458,7 @@ msgstr "追加しました。続行"
 msgid "If a key leaks, revoke it straight away and create a new one."
 msgstr "キーが漏洩した場合は、すぐに無効化して新しいキーを作成してください。"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1307
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1310
 msgid "If a new tab did not open automatically, please click the button below to continue to checkout."
 msgstr "新しいタブが自動的に開かない場合は、下のボタンをクリックしてチェックアウトに進んでください。"
 
@@ -9490,7 +9514,7 @@ msgstr "画像をアップロードしました"
 msgid "Image URL"
 msgstr "画像URL"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:160
+#: src/components/routes/event/HomepageDesigner/index.tsx:175
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:146
 msgid "Images"
 msgstr "画像"
@@ -9726,6 +9750,10 @@ msgstr "招待を再送信しました！"
 msgid "Invitation revoked!"
 msgstr "招待を取り消しました！"
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:30
+msgid "Invite"
+msgstr "招待状"
+
 #: src/components/modals/InviteUserModal/index.tsx:50
 msgid "Invite a team member"
 msgstr "チームメンバーを招待"
@@ -9865,7 +9893,7 @@ msgstr "Johnson"
 msgid "Join {0}"
 msgstr "{0} に参加"
 
-#: src/components/layouts/EventHomepage/index.tsx:663
+#: src/components/layouts/EventHomepage/EventIntro.tsx:123
 msgid "Join from anywhere"
 msgstr "どこからでも参加"
 
@@ -10131,6 +10159,7 @@ msgstr "最新のチェックイン"
 
 #: src/components/common/WidgetEditor/ContentFields.tsx:163
 #: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:100
+#: src/components/routes/event/HomepageDesigner/index.tsx:149
 msgid "Layout"
 msgstr "レイアウト"
 
@@ -10307,7 +10336,7 @@ msgstr "ラインナップ"
 msgid "Lineup & Schedule"
 msgstr "ラインナップとスケジュール"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:86
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:87
 msgid "Lineup & Schedule page"
 msgstr "ラインナップとスケジュールページ"
 
@@ -10466,7 +10495,7 @@ msgstr "{service} からコンテンツを読み込みます"
 #: src/components/common/LocationPicker/index.tsx:221
 #: src/components/common/LocationPicker/index.tsx:294
 #: src/components/common/WidgetEditor/SectionsPicker.tsx:34
-#: src/components/layouts/EventHomepage/index.tsx:285
+#: src/components/layouts/EventHomepage/index.tsx:209
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:474
 #: src/components/routes/event/Settings/index.tsx:56
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:150
@@ -10524,7 +10553,7 @@ msgstr "ロゴはヘッダーに表示されます"
 msgid "Logo will be displayed on the ticket"
 msgstr "ロゴはチケットに表示されます"
 
-#: src/utilites/homepageSections.ts:60
+#: src/utilites/homepageSections.ts:62
 msgid "Logos of your sponsors and partners, with links."
 msgstr "スポンサーやパートナーのロゴ（リンク付き）。"
 
@@ -10639,7 +10668,7 @@ msgstr "注文を管理"
 msgid "Manage payment and invoicing settings for this event."
 msgstr "このイベントの支払いと請求書の設定を管理します。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:86
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:87
 msgid "Manage people, stages and times on the"
 msgstr "出演者、ステージ、時間の管理はこちら："
 
@@ -10709,6 +10738,10 @@ msgstr "検証済みにする（管理者による上書き）"
 #: src/components/modals/MessageRecipientsModal/index.tsx:21
 msgid "Marked as spam"
 msgstr "迷惑メールとして報告"
+
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:12
+msgid "Marquee"
+msgstr "マーキー"
 
 #: src/components/common/WidgetEditor/AppearancePanel.tsx:60
 msgid "Match event page"
@@ -10999,8 +11032,13 @@ msgid "More dates"
 msgstr "その他の日付"
 
 #: src/components/widget/WidgetSections/index.tsx:144
+#: src/utilites/homepageSections.ts:31
 msgid "More events"
 msgstr "その他のイベント"
+
+#: src/components/layouts/EventHomepage/MoreEventsSection.tsx:31
+msgid "More from {0}"
+msgstr "{0}のその他のイベント"
 
 #: src/ee/seating/components/SeatPicker/SeatSheet.tsx:74
 msgid "More places"
@@ -11032,7 +11070,7 @@ msgstr "移動をキャンセルしました。{label}は元の位置に戻り�
 
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:203
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:603
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:138
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:143
 msgid "Move down"
 msgstr "下に移動"
 
@@ -11040,7 +11078,7 @@ msgstr "下に移動"
 msgid "Move its seats to another band first"
 msgstr "先に座席を別のバンドに移動してください"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:257
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:262
 msgid "Move left"
 msgstr "左へ移動"
 
@@ -11054,7 +11092,7 @@ msgstr "エリアに移動"
 
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:196
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:595
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:135
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:140
 msgid "Move up"
 msgstr "上に移動"
 
@@ -11062,14 +11100,14 @@ msgstr "上に移動"
 msgid "Multi line text box"
 msgstr "複数行テキストボックス"
 
-#: src/components/layouts/EventHomepage/index.tsx:638
+#: src/components/layouts/EventHomepage/EventIntro.tsx:117
 msgid "Multiple dates until {lastOccurrenceDate}"
 msgstr "{lastOccurrenceDate}までの複数日程"
 
 #: src/components/common/EventCard/index.tsx:111
-#: src/components/layouts/EventHomepage/index.tsx:197
+#: src/components/layouts/EventHomepage/index.tsx:107
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:29
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:36
+#: src/components/layouts/OrganizerHomepage/EventList/index.tsx:33
 #: src/components/widget/WidgetSections/index.tsx:58
 msgid "Multiple locations"
 msgstr "複数の場所"
@@ -11305,9 +11343,13 @@ msgstr "来月"
 msgid "Next occurrence"
 msgstr "次回の開催"
 
-#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:119
+#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:127
 msgid "Next photo"
 msgstr "次の写真"
+
+#: src/components/layouts/OrganizerHomepage/EventList/index.tsx:186
+msgid "Next up"
+msgstr "次のイベント"
 
 #: src/components/modals/CreateEventModal/index.tsx:475
 msgid "Next, you'll add tickets and set up your event page."
@@ -11724,7 +11766,7 @@ msgid "No Paid Orders"
 msgstr "支払い済みの注文はありません"
 
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:148
-#: src/components/layouts/OrganizerHomepage/index.tsx:241
+#: src/components/layouts/OrganizerHomepage/index.tsx:172
 msgid "No past events"
 msgstr "過去のイベントはありません"
 
@@ -11906,7 +11948,7 @@ msgid "No upcoming dates"
 msgstr "今後の日付はありません"
 
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:148
-#: src/components/layouts/OrganizerHomepage/index.tsx:241
+#: src/components/layouts/OrganizerHomepage/index.tsx:172
 msgid "No upcoming events"
 msgstr "今後のイベントはありません"
 
@@ -12085,7 +12127,7 @@ msgstr "共有されていません"
 msgid "Not shown to buyers."
 msgstr "購入者には表示されません。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:325
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:329
 msgid "Not shown yet."
 msgstr "まだ表示されていません。"
 
@@ -12359,6 +12401,10 @@ msgstr "{month}{day}日"
 msgid "On a product priced at 50.00, this adds {exampleAmount}."
 msgstr "50.00 の商品の場合、{exampleAmount} が加算されます。"
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:14
+msgid "On large screens tickets stay beside your content as people scroll. Suits conferences and long lineups."
+msgstr "大きな画面では、スクロールしてもチケットがコンテンツの横に表示され続けます。カンファレンスや出演者の多いイベントに最適です。"
+
 #: src/components/routes/organizer/People/index.tsx:70
 msgid "On live events"
 msgstr "公開中のイベント"
@@ -12413,6 +12459,10 @@ msgstr "イベントを作成すると、ここに表示されます。"
 msgid "Once you start collecting data, you'll see it here."
 msgstr "データの収集を開始すると、ここに表示されます。"
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:25
+msgid "One column, top to bottom"
+msgstr "上から下への1カラム"
+
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:97
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:118
 #: src/components/modals/CreateEventModal/index.tsx:225
@@ -12435,7 +12485,6 @@ msgstr "開催中"
 
 #: src/components/common/EventCard/index.tsx:114
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:32
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:39
 #: src/components/routes/event/OccurrencesTab/index.tsx:341
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:482
 #: src/components/routes/my-tickets/index.tsx:56
@@ -12452,12 +12501,12 @@ msgstr "オンライン — 接続情報を入力"
 
 #: src/components/common/EventCard/index.tsx:111
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:29
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:36
+#: src/components/layouts/OrganizerHomepage/EventList/index.tsx:33
 #: src/components/widget/WidgetSections/index.tsx:58
 msgid "Online & in-person"
 msgstr "オンライン＆対面"
 
-#: src/components/layouts/EventHomepage/index.tsx:198
+#: src/components/layouts/EventHomepage/index.tsx:107
 msgid "Online & in-person — see schedule"
 msgstr "オンライン＆対面 — スケジュールを参照"
 
@@ -12467,8 +12516,8 @@ msgstr "オンライン＆対面 — スケジュールを参照"
 msgid "Online event"
 msgstr "オンラインイベント"
 
-#: src/components/layouts/EventHomepage/index.tsx:661
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:119
+#: src/components/layouts/EventHomepage/EventIntro.tsx:123
+#: src/components/layouts/OrganizerHomepage/EventList/index.tsx:93
 msgid "Online Event"
 msgstr "オンラインイベント"
 
@@ -12630,7 +12679,7 @@ msgstr "ホームページデザイナーを開く"
 msgid "Open occurrence"
 msgstr "開催回を開く"
 
-#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:36
+#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:43
 msgid "Open photo {photoNumber}"
 msgstr "写真 {photoNumber} を開く"
 
@@ -12969,7 +13018,7 @@ msgstr "組織名"
 #: src/components/common/TeamAccessFields/index.tsx:36
 #: src/components/common/TeamAccessFields/index.tsx:96
 #: src/components/common/WidgetEditor/SectionsPicker.tsx:36
-#: src/components/layouts/EventHomepage/index.tsx:356
+#: src/components/layouts/EventHomepage/index.tsx:213
 #: src/components/modals/CreateEventModal/index.tsx:270
 #: src/components/routes/admin/SpamEvents/index.tsx:166
 #: src/components/routes/admin/SpamEvents/index.tsx:327
@@ -13019,7 +13068,7 @@ msgstr "主催者の入金設定"
 msgid "Organizer restored successfully"
 msgstr "主催者を復元しました"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:52
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:53
 msgid "Organizer settings"
 msgstr "主催者設定"
 
@@ -13131,6 +13180,10 @@ msgstr "ページ"
 #: src/components/common/SsoButtons/index.tsx:50
 msgid "Page address"
 msgstr "ページのアドレス"
+
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:48
+msgid "Page layout"
+msgstr "ページレイアウト"
 
 #: src/components/forms/StripeCheckoutForm/index.tsx:142
 msgid "Page no longer available"
@@ -13248,7 +13301,7 @@ msgid "Passwords are not the same"
 msgstr "パスワードが一致しません"
 
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:138
-#: src/components/layouts/OrganizerHomepage/index.tsx:231
+#: src/components/layouts/OrganizerHomepage/index.tsx:163
 #: src/components/routes/event/OccurrencesTab/index.tsx:522
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:30
 msgid "Past"
@@ -13259,7 +13312,7 @@ msgid "Past due"
 msgstr "支払い期限超過"
 
 #: src/components/layouts/OrganizerHomepage/OrganizerPastEventsSection.tsx:25
-#: src/utilites/homepageSections.ts:35
+#: src/utilites/homepageSections.ts:37
 msgid "Past events"
 msgstr "過去のイベント"
 
@@ -13267,11 +13320,11 @@ msgstr "過去のイベント"
 msgid "Paste"
 msgstr "貼り付け"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:219
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:224
 msgid "Paste a YouTube or Vimeo link"
 msgstr "YouTube または Vimeo のリンクを貼り付け"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:81
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:82
 msgid "Paste a YouTube or Vimeo link below."
 msgstr "下にYouTubeまたはVimeoのリンクを貼り付けてください。"
 
@@ -13587,11 +13640,11 @@ msgstr "写真 {photoNumber}"
 msgid "Photo {position}"
 msgstr "写真 {position}"
 
-#: src/utilites/homepageSections.ts:39
+#: src/utilites/homepageSections.ts:41
 msgid "Photo gallery"
 msgstr "フォトギャラリー"
 
-#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:94
+#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:102
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:229
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:328
 msgid "Photos"
@@ -13739,7 +13792,7 @@ msgstr "メールアドレスを確認するため、メールをご確認くだ
 msgid "Please check your ticket for the updated time. Your tickets are still valid — no action is needed unless the new times don't work for you. Reply to this email if you have any questions."
 msgstr "更新された時間については、チケットをご確認ください。チケットは引き続き有効です。新しい時間が都合に合わない場合を除き、対応は不要です。ご不明な点がございましたら、このメールにご返信ください。"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1298
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1301
 msgid "Please continue in the new tab"
 msgstr "新しいタブで続行してください"
 
@@ -13929,7 +13982,7 @@ msgstr "前日"
 msgid "Previous month"
 msgstr "前月"
 
-#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:116
+#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:124
 msgid "Previous photo"
 msgstr "前の写真"
 
@@ -14024,8 +14077,7 @@ msgid "Printed {0}"
 msgstr "{0}に印刷"
 
 #: src/components/common/CookieConsentBanner/index.tsx:82
-#: src/components/layouts/EventHomepage/index.tsx:739
-#: src/components/layouts/OrganizerHomepage/index.tsx:199
+#: src/components/layouts/HomepageFrame/index.tsx:65
 msgid "Privacy Policy"
 msgstr "プライバシーポリシー"
 
@@ -14330,8 +14382,8 @@ msgstr "利用可能な数量"
 msgid "Quantity this date"
 msgstr "この日付の数量"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:134
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:151
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:139
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:156
 msgid "Question {number}"
 msgstr "質問 {number}"
 
@@ -14361,7 +14413,11 @@ msgstr "質問"
 msgid "Questions & Answers"
 msgstr "質問と回答"
 
-#: src/utilites/homepageSections.ts:56
+#: src/components/layouts/EventHomepage/OrganizerSection.tsx:39
+msgid "Questions about this event? Get in touch."
+msgstr "このイベントについてご質問がありますか？お気軽にお問い合わせください。"
+
+#: src/utilites/homepageSections.ts:58
 msgid "Questions and answers people can expand."
 msgstr "展開して読める質問と回答。"
 
@@ -14416,7 +14472,7 @@ msgstr "この日付を再有効化しますか？今後の販売のために再
 msgid "Read and write"
 msgstr "読み取りと書き込み"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:460
+#: src/components/layouts/OrganizerHomepage/index.tsx:327
 #: src/components/widget/WidgetSections/index.tsx:91
 msgid "Read more"
 msgstr "続きを読む"
@@ -14824,7 +14880,7 @@ msgstr "上書きを削除"
 msgid "Remove overrides for this date"
 msgstr "この日付の上書きを削除"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:260
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:265
 msgid "Remove photo"
 msgstr "写真を削除"
 
@@ -14832,7 +14888,7 @@ msgstr "写真を削除"
 msgid "Remove photo {position}"
 msgstr "写真{position}を削除"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:141
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:146
 msgid "Remove question"
 msgstr "質問を削除"
 
@@ -14844,7 +14900,7 @@ msgstr "座席{0}を削除"
 msgid "Remove seat map"
 msgstr "座席マップを削除"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:366
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:370
 msgid "Remove section"
 msgstr "セクションを削除"
 
@@ -14852,7 +14908,7 @@ msgstr "セクションを削除"
 msgid "Remove sold out dates and times from the event page entirely. When disabled, they remain visible and are labelled as sold out."
 msgstr "完売した日付と時間をイベントページから完全に削除します。無効にすると、表示されたまま、完売と表示されます。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:318
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:323
 msgid "Remove sponsor"
 msgstr "スポンサーを削除"
 
@@ -15424,7 +15480,7 @@ msgstr "ライセンス年度別の売上"
 
 #: src/components/common/ProductPriceAvailability/index.tsx:24
 #: src/components/common/ProductPriceAvailability/index.tsx:63
-#: src/components/layouts/EventHomepage/index.tsx:212
+#: src/components/layouts/EventHomepage/index.tsx:127
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:33
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:54
 msgid "Sales ended"
@@ -16066,12 +16122,13 @@ msgstr "セクション"
 msgid "Section name"
 msgstr "セクション名"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:314
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:318
 msgid "Section settings for {label}"
 msgstr "{label}のセクション設定"
 
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:83
-#: src/components/routes/event/HomepageDesigner/index.tsx:147
+#: src/components/layouts/EventHomepage/SectionNav.tsx:133
+#: src/components/routes/event/HomepageDesigner/index.tsx:161
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:133
 msgid "Sections"
 msgstr "セクション"
@@ -16097,7 +16154,7 @@ msgstr "すべて表示"
 msgid "See all prices"
 msgstr "すべての価格を表示"
 
-#: src/components/layouts/EventHomepage/index.tsx:688
+#: src/components/layouts/EventHomepage/EventIntro.tsx:141
 msgid "See schedule"
 msgstr "スケジュールを表示"
 
@@ -16670,7 +16727,10 @@ msgid "Shape"
 msgstr "形状"
 
 #: src/components/common/ShareIcon/index.tsx:30
-#: src/components/layouts/EventHomepage/index.tsx:606
+#: src/components/layouts/EventHomepage/EventIntro.tsx:65
+#: src/components/layouts/EventHomepage/EventIntro.tsx:65
+#: src/components/layouts/OrganizerHomepage/index.tsx:336
+#: src/components/layouts/OrganizerHomepage/index.tsx:336
 #: src/components/layouts/OrganizerLayout/index.tsx:269
 #: src/components/modals/ShareModal/index.tsx:37
 #: src/components/modals/ShareModal/index.tsx:165
@@ -16721,7 +16781,7 @@ msgstr "{count}件の日付の時間をずらしました"
 msgid "Show"
 msgstr "表示"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:308
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:312
 msgid "Show {label}"
 msgstr "{label}を表示"
 
@@ -16757,7 +16817,7 @@ msgstr "代わりにイニシャルを表示"
 msgid "Show keys"
 msgstr "キーを表示"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:460
+#: src/components/layouts/OrganizerHomepage/index.tsx:327
 #: src/components/widget/WidgetSections/index.tsx:91
 msgid "Show less"
 msgstr "表示を減らす"
@@ -16811,7 +16871,7 @@ msgstr "イベント日程に残り定員を表示する"
 msgid "Show remaining capacity to buyers"
 msgstr "購入者に残り定員を表示する"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:302
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:306
 msgid "Show section"
 msgstr "セクションを表示"
 
@@ -16844,7 +16904,7 @@ msgstr "公開イベントページに表示中"
 msgid "Showing the first {0} — the remaining {1} session(s) will still be targeted when the message is sent."
 msgstr "最初の{0}件を表示しています。残りの{1}件のセッションも、メッセージ送信時には対象になります。"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:205
+#: src/components/routes/event/HomepageDesigner/index.tsx:220
 msgid "Shown below the ticket list"
 msgstr "チケットリストの下に表示されます"
 
@@ -16852,7 +16912,7 @@ msgstr "チケットリストの下に表示されます"
 msgid "Shown bouncing at the top of the modal"
 msgstr "モーダルの上部にバウンドしながら表示されます"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:213
+#: src/components/routes/event/HomepageDesigner/index.tsx:228
 msgid "Shown on scroll and jumps to the tickets section"
 msgstr "スクロール時に表示され、チケットセクションにジャンプします"
 
@@ -16888,7 +16948,7 @@ msgstr "国を含む一般的な住所フィールドを表示します"
 msgid "Shows remaining"
 msgstr "残りを表示"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:88
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:89
 msgid "Shows the venue and a map. Hidden automatically for online events."
 msgstr "会場と地図を表示します。オンラインイベントでは自動的に非表示になります。"
 
@@ -16896,19 +16956,23 @@ msgstr "会場と地図を表示します。オンラインイベントでは自
 msgid "Shows tickets"
 msgstr "チケットを表示"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:71
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:93
+msgid "Shows up to three of your other upcoming events. Hidden automatically when there are none."
+msgstr "今後開催される他のイベントを最大3件表示します。該当するイベントがない場合は自動的に非表示になります。"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:72
 msgid "Shows your event description."
 msgstr "イベントの説明を表示します。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:74
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:75
 msgid "Shows your organizer description. Placed above every other section, it appears in your profile card."
 msgstr "主催者の説明を表示します。他のすべてのセクションより上に配置すると、プロフィールカードに表示されます。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:90
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:91
 msgid "Shows your organizer profile with a contact button."
 msgstr "お問い合わせボタン付きで主催者プロフィールを表示します。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:79
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:80
 msgid "Shows your social links and a contact button. Placed above every other section, it appears in your profile card."
 msgstr "SNSリンクとお問い合わせボタンを表示します。他のすべてのセクションより上に配置すると、プロフィールカードに表示されます。"
 
@@ -17207,7 +17271,7 @@ msgid "Sold out"
 msgstr "完売"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:128
-#: src/components/layouts/EventHomepage/index.tsx:218
+#: src/components/layouts/EventHomepage/index.tsx:131
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:221
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:22
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:336
@@ -17382,12 +17446,12 @@ msgstr "日付、エリア、チケットタイプ別にチェックインを分
 msgid "Split door sales by entrance, date, or ticket type. You'll get a link and a PIN to share with staff — no account needed on their end."
 msgstr "入口、日付、チケットタイプ別に入口での販売を分けます。スタッフと共有するためのリンクとPINが発行されます。スタッフ側のアカウントは不要です。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:312
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:317
 msgid "Sponsor name"
 msgstr "スポンサー名"
 
 #: src/components/layouts/EventHomepage/Sections/SponsorsSection.tsx:21
-#: src/utilites/homepageSections.ts:45
+#: src/utilites/homepageSections.ts:47
 msgid "Sponsors"
 msgstr "スポンサー"
 
@@ -17734,6 +17798,10 @@ msgstr "{0}に動作しなくなります。1週間前にメールでお知ら�
 msgid "Store it somewhere safe, like a password manager or your integration's secret settings. Anyone with this key can use the API as you."
 msgstr "パスワードマネージャーや連携先のシークレット設定など、安全な場所に保管してください。このキーを持つ人は誰でも、あなたとしてAPIを使用できます。"
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:24
+msgid "Story"
+msgstr "ストーリー"
+
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:34
 msgid "Straight rows, central aisle."
 msgstr "まっすぐな列と中央の通路。"
@@ -17918,7 +17986,7 @@ msgstr "イベントを更新しました"
 msgid "Successfully Updated Event Defaults"
 msgstr "イベントのデフォルトを更新しました"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:119
+#: src/components/routes/event/HomepageDesigner/index.tsx:121
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:93
 msgid "Successfully Updated Homepage Design"
 msgstr "ホームページデザインを更新しました"
@@ -18248,8 +18316,7 @@ msgstr "お預かり"
 msgid "Term"
 msgstr "期間"
 
-#: src/components/layouts/EventHomepage/index.tsx:745
-#: src/components/layouts/OrganizerHomepage/index.tsx:205
+#: src/components/layouts/HomepageFrame/index.tsx:68
 msgid "Terms of Service"
 msgstr "利用規約"
 
@@ -18264,9 +18331,9 @@ msgid "Test sign-in"
 msgstr "テストサインイン"
 
 #: src/components/common/WidgetEditor/AppearancePanel.tsx:83
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:54
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:55
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:99
-#: src/utilites/homepageSections.ts:37
+#: src/utilites/homepageSections.ts:39
 msgid "Text"
 msgstr "テキスト"
 
@@ -18279,7 +18346,7 @@ msgstr "ご参加ありがとうございました！"
 msgid "Thanks,"
 msgstr "よろしくお願いいたします。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:220
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:225
 msgid "That doesn't look like a YouTube or Vimeo video link"
 msgstr "YouTube または Vimeo の動画リンクではないようです"
 
@@ -18632,7 +18699,7 @@ msgstr "劇場"
 msgid "Theatre with sections"
 msgstr "セクション付きの劇場"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:181
+#: src/components/routes/event/HomepageDesigner/index.tsx:196
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:192
 msgid "Theme & Colors"
 msgstr "テーマとカラー"
@@ -18737,7 +18804,7 @@ msgstr "このアカウントは削除が予定されています"
 msgid "This account is scheduled for deletion on <0>{scheduledDate}</0>"
 msgstr "このアカウントは<0>{scheduledDate}</0>に削除される予定です"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:198
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:203
 msgid "This answer is too long. Shorten it before saving."
 msgstr "この回答は長すぎます。保存する前に短くしてください。"
 
@@ -18855,7 +18922,7 @@ msgstr "このデバイス"
 msgid "This disconnects {stripeAccountId} from this organizer. Paid ticket sales will stop working until you connect a Stripe account again."
 msgstr "これにより、{stripeAccountId}とこの主催者の接続が解除されます。再度Stripeアカウントを接続するまで、有料チケットの販売は機能しません。"
 
-#: src/components/layouts/EventHomepage/index.tsx:650
+#: src/components/layouts/EventHomepage/index.tsx:129
 msgid "This event has ended"
 msgstr "このイベントは終了しました"
 
@@ -19279,7 +19346,7 @@ msgstr "チケットを再送信しました"
 msgid "Ticket sales have ended for this event"
 msgstr "このイベントのチケット販売は終了しました"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:339
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:343
 msgid "Ticket titles come from your product categories."
 msgstr "チケットのタイトルは商品カテゴリから表示されます。"
 
@@ -19304,6 +19371,7 @@ msgstr "チケット"
 #: src/components/common/WidgetEditor/SectionsPicker.tsx:28
 #: src/components/common/WidgetEditor/TypePicker.tsx:7
 #: src/components/forms/ProductForm/buildPreviewEvent.ts:139
+#: src/components/layouts/EventHomepage/index.tsx:167
 #: src/components/routes/admin/Dashboard/index.tsx:263
 #: src/components/routes/my-tickets/index.tsx:101
 #: src/ee/box-office/components/layouts/BoxOffice/SaleComplete.tsx:111
@@ -19320,7 +19388,7 @@ msgstr "チケットと商品"
 msgid "Tickets and {extraSections} more"
 msgstr "チケットとほか{extraSections}件"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:302
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:306
 msgid "Tickets are always shown"
 msgstr "チケットは常に表示されます"
 
@@ -19852,7 +19920,7 @@ msgstr "{0}について、認証アプリに表示されているコードを入
 msgid "Type to search..."
 msgstr "入力して検索..."
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:190
+#: src/components/routes/event/HomepageDesigner/index.tsx:205
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:201
 msgid "Typography"
 msgstr "タイポグラフィ"
@@ -20151,14 +20219,14 @@ msgstr "1注文あたり最大{max}まで"
 msgid "up to {perDateAllocation} per date"
 msgstr "日付ごとに最大{perDateAllocation}まで"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:283
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:288
 msgid "Up to 40 photos, at least 400 × 300px. The first one is shown largest."
 msgstr "最大 40 枚、400 × 300px 以上。最初の写真が最も大きく表示されます。"
 
 #: src/components/common/EventsDashboardStatusButtons/index.tsx:20
 #: src/components/common/EventStatusBadge/index.tsx:16
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:137
-#: src/components/layouts/OrganizerHomepage/index.tsx:225
+#: src/components/layouts/OrganizerHomepage/index.tsx:154
 #: src/components/routes/event/OccurrencesTab/index.tsx:521
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:33
 msgid "Upcoming"
@@ -20262,15 +20330,15 @@ msgstr "主催者のロゴをアップロード"
 msgid "Upload Image"
 msgstr "画像をアップロード"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:83
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:84
 msgid "Upload some photos below."
 msgstr "下に写真をアップロードしてください。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:338
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:343
 msgid "Upload sponsor logos"
 msgstr "スポンサーロゴをアップロード"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:85
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:86
 msgid "Upload sponsor logos below."
 msgstr "下にスポンサーのロゴをアップロードしてください。"
 
@@ -20321,8 +20389,8 @@ msgstr "<0>Liquidテンプレート</0>を使って、メールをパーソナ�
 msgid "Use a different account"
 msgstr "別のアカウントを使用"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:273
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:332
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:278
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:337
 #: src/components/routes/event/Lineup/ProfileImagesField.tsx:136
 msgid "Use a JPG, PNG or WebP image under 5MB."
 msgstr "5MB 未満の JPG、PNG、WebP 画像を使用してください。"
@@ -20636,11 +20704,11 @@ msgstr "確認中..."
 msgid "via {providerName}"
 msgstr "{providerName} 経由"
 
-#: src/utilites/homepageSections.ts:43
+#: src/utilites/homepageSections.ts:45
 msgid "Video"
 msgstr "動画"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:215
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:220
 msgid "Video link"
 msgstr "動画リンク"
 
@@ -20656,9 +20724,17 @@ msgstr "表示形式"
 msgid "View {name}"
 msgstr "{name}を表示"
 
+#: src/components/layouts/EventHomepage/MoreEventsSection.tsx:33
+msgid "View all"
+msgstr "すべて表示"
+
 #: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:70
 msgid "View All"
 msgstr "すべて表示"
+
+#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:43
+msgid "View all {totalCount} photos"
+msgstr "{totalCount}枚の写真をすべて表示"
 
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:387
 msgid "View all →"
@@ -20676,7 +20752,7 @@ msgstr "すべてのチェックインリストを表示"
 msgid "View all messages sent across the platform"
 msgstr "プラットフォーム全体で送信されたすべてのメッセージを表示します"
 
-#: src/components/layouts/OrganizerHomepage/OrganizerPastEventsSection.tsx:32
+#: src/components/layouts/OrganizerHomepage/OrganizerPastEventsSection.tsx:30
 msgid "View all past events"
 msgstr "過去のイベントをすべて見る"
 
@@ -20737,10 +20813,6 @@ msgstr "イベントページを表示"
 msgid "View logs"
 msgstr "ログを表示"
 
-#: src/components/layouts/EventHomepage/index.tsx:344
-msgid "View Map"
-msgstr "マップを表示"
-
 #: src/components/routes/admin/Messages/index.tsx:222
 msgid "View Message"
 msgstr "メッセージを表示"
@@ -20748,10 +20820,6 @@ msgstr "メッセージを表示"
 #: src/components/routes/event/Lineup/index.tsx:72
 msgid "View on event page"
 msgstr "イベントページで表示"
-
-#: src/components/layouts/EventHomepage/index.tsx:717
-msgid "View on Google Maps"
-msgstr "Googleマップで表示"
 
 #: src/components/layouts/Event/index.tsx:247
 #: src/components/layouts/OrganizerLayout/index.tsx:237
@@ -20784,7 +20852,7 @@ msgstr "注文を表示"
 msgid "View Organizer Homepage"
 msgstr "主催者ホームページを表示"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:247
+#: src/components/layouts/OrganizerHomepage/index.tsx:175
 msgid "View past events"
 msgstr "過去のイベントを表示"
 
@@ -21026,7 +21094,7 @@ msgstr "このページの読み込み中に問題が発生しました。もう
 msgid "We partner with Stripe to send payouts straight to your bank account."
 msgstr "Stripeと提携して、お客様の銀行口座に直接入金します。"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:163
+#: src/components/routes/event/HomepageDesigner/index.tsx:178
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:151
 msgid "We recommend dimensions of 1950px by 650px, a ratio of 3:1, and a maximum file size of 5MB"
 msgstr "推奨サイズは1950px × 650px（比率3:1）、最大ファイルサイズは5MBです"
@@ -21436,6 +21504,10 @@ msgstr "出演者"
 msgid "Whole account"
 msgstr "アカウント全体"
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:13
+msgid "Wide cover, tickets alongside"
+msgstr "ワイドなカバー画像とチケットを横に配置"
+
 #: src/components/common/WidgetEditor/index.tsx:238
 msgid "Widget"
 msgstr "ウィジェット"
@@ -21606,11 +21678,11 @@ msgstr "オフラインです"
 msgid "You belong to more than one account. Choose where you'd like to go."
 msgstr "複数のアカウントに所属しています。移動先を選択してください。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:214
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:218
 msgid "You can add up to {MAX_SECTIONS} sections."
 msgstr "セクションは最大 {MAX_SECTIONS} 件まで追加できます。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:294
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:299
 msgid "You can add up to {MAX_SPONSORS} sponsors."
 msgstr "スポンサーは最大 {MAX_SPONSORS} 件まで追加できます。"
 
@@ -21860,7 +21932,7 @@ msgstr "{0} としてサインインしています"
 msgid "You're unsubscribed"
 msgstr "配信を停止しました"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:326
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:331
 msgid "You've added the maximum of {MAX_SPONSORS} sponsors."
 msgstr "スポンサーは上限の {MAX_SPONSORS} 件まで追加済みです。"
 
@@ -21924,6 +21996,10 @@ msgstr "アカウントはパスワードのみで保護されます。リカバ
 msgid "Your affiliates have been exported successfully."
 msgstr "アフィリエイトを正常にエクスポートしました。"
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:19
+msgid "Your artwork as a poster"
+msgstr "アートワークをポスターとして表示"
+
 #: src/components/routes/event/attendees.tsx:165
 msgid "Your attendees have been exported successfully."
 msgstr "参加者を正常にエクスポートしました。"
@@ -21939,6 +22015,14 @@ msgstr "ブラウザーがコピーをブロックしました。キーを選択
 #: src/components/modals/CheckInListSuccessModal/index.tsx:23
 msgid "Your check-in list has been created successfully. Share the link below with your check-in staff."
 msgstr "チェックインリストを作成しました。下のリンクをチェックインスタッフと共有してください。"
+
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:73
+msgid "Your cover image is landscape, so it will look small here. Flyer works best with square or portrait artwork."
+msgstr "カバー画像が横長のため、ここでは小さく表示されます。フライヤーは正方形または縦長の画像に最適です。"
+
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:20
+msgid "Your cover sits beside the details like a poster. Best with square or portrait artwork."
+msgstr "カバー画像がポスターのように詳細の横に表示されます。正方形または縦長の画像に最適です。"
 
 #: src/components/layouts/Checkout/index.tsx:461
 msgid "Your current order will be lost."
@@ -22083,11 +22167,11 @@ msgstr "組織はシングルサインオンを使用しています"
 msgid "Your organizer address"
 msgstr "主催者の住所"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:67
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:68
 msgid "Your organizer has no description yet."
 msgstr "主催者の説明はまだありません。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:51
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:52
 msgid "Your organizer profile isn't published."
 msgstr "主催者プロフィールが公開されていません。"
 

@@ -380,6 +380,14 @@ msgstr "{enforcedCount, plural, other {# 位成員需要使用 {providerName} �
 msgid "{eventCount, plural, one {# event} other {# events}}"
 msgstr "{eventCount, plural, other {# 個活動}}"
 
+#: src/components/layouts/OrganizerHomepage/index.tsx:110
+msgid "{eventCount, plural, one {# past event} other {# past events}}"
+msgstr "{eventCount, plural, other {# 場過往活動}}"
+
+#: src/components/layouts/OrganizerHomepage/index.tsx:111
+msgid "{eventCount, plural, one {# upcoming event} other {# upcoming events}}"
+msgstr "{eventCount, plural, other {# 場即將舉行的活動}}"
+
 #: src/components/common/OrganizerWebhookTable/index.tsx:81
 #: src/components/common/WebhookTable/index.tsx:81
 msgid "{eventCount} events"
@@ -466,6 +474,10 @@ msgstr "{minutes} 分鐘"
 msgid "{minutes} minutes and {seconds} seconds"
 msgstr "{minutes} 分鐘和 {seconds} 秒"
 
+#: src/components/layouts/OrganizerHomepage/EventList/index.tsx:98
+msgid "{moreDatesCount, plural, one {+# more date} other {+# more dates}}"
+msgstr "{moreDatesCount, plural, one {另有 # 個日期} other {另有 # 個日期}}"
+
 #: src/components/routes/event/Lineup/QuickAddPerson.tsx:55
 msgid "{name} added to the lineup"
 msgstr "已將 {name} 加入陣容"
@@ -530,7 +542,7 @@ msgstr "{peopleAdded, plural, other {已新增 # 人}}"
 msgid "{productCount} ticket types configured"
 msgstr "已設定 {productCount} 種門票類型"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:219
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:224
 msgid "{provider} video found"
 msgstr "已找到 {provider} 影片"
 
@@ -647,10 +659,6 @@ msgstr "另外 {0} 種貨幣"
 msgid "+{extra} more"
 msgstr "+{extra} 個"
 
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:129
-msgid "+{moreDatesCount} more dates"
-msgstr "另有 {moreDatesCount} 個日期"
-
 #: src/components/routes/product-widget/SelectProducts/WidgetLineupStrip.tsx:43
 msgid "+{remaining} more"
 msgstr "另外 {remaining} 項"
@@ -662,10 +670,6 @@ msgstr "+1 234 567 890"
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1039
 msgid "+1 day"
 msgstr "+1 天"
-
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:129
-msgid "+1 more date"
-msgstr "另有 1 個日期"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:524
 msgid "+Tax/Fees"
@@ -877,6 +881,10 @@ msgstr "時長變更"
 msgid "A check-in list lets staff scan tickets at the door on a phone, tablet, or USB scanner. Share the link with your team, no account needed."
 msgstr "簽到列表讓工作人員可在現場以手機、平板或 USB 掃描器掃描門票。把連結分享給團隊即可，無需帳戶。"
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:31
+msgid "A compact, centred card"
+msgstr "置中的精簡卡片"
+
 #: src/components/forms/QuestionForm/index.tsx:138
 msgid "A date input. Perfect for asking for a date of birth etc."
 msgstr "日期輸入字段。非常適合詢問出生日期等。"
@@ -889,15 +897,19 @@ msgstr "下拉式輸入法只允許一個選擇"
 msgid "A few quick steps and you're ready to start selling."
 msgstr "只需幾個簡單步驟，你就可以開始售票。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:233
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:26
+msgid "A focused reading column. Tickets appear wherever you place them in Sections."
+msgstr "專注的單欄閱讀版面。門票會顯示在你於區塊中放置的位置。"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:238
 msgid "A gallery can have up to {MAX_GALLERY_PHOTOS} photos."
 msgstr "相簿最多可包含 {MAX_GALLERY_PHOTOS} 張相片。"
 
-#: src/utilites/homepageSections.ts:54
+#: src/utilites/homepageSections.ts:56
 msgid "A grid of photos that opens full screen."
 msgstr "相片網格，點擊可全螢幕查看。"
 
-#: src/utilites/homepageSections.ts:52
+#: src/utilites/homepageSections.ts:54
 msgid "A heading and formatted text. Travel info, house rules, anything."
 msgstr "標題及格式化文字。交通資訊、場地規則等皆可。"
 
@@ -908,6 +920,10 @@ msgstr "當此類別中沒有產品時顯示的訊息。"
 #: src/components/forms/QuestionForm/index.tsx:108
 msgid "A multi line text input"
 msgstr "多行文本輸入"
+
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:32
+msgid "A narrow card with the details centred. Suits smaller and private events."
+msgstr "詳情置中的窄卡片，適合小型及私人活動。"
 
 #: src/components/routes/welcome/index.tsx:119
 msgid "A new verification code has been sent to your email"
@@ -970,7 +986,7 @@ msgstr "設定按鈕文字後必須填寫連結"
 msgid "A weekday pattern"
 msgstr "按星期模式"
 
-#: src/utilites/homepageSections.ts:58
+#: src/utilites/homepageSections.ts:60
 msgid "A YouTube or Vimeo video, loaded when someone presses play."
 msgstr "YouTube 或 Vimeo 影片，按下播放時才載入。"
 
@@ -986,8 +1002,8 @@ msgstr "放棄此銷售？讀卡機上等待中的拍卡付款將被取消，其
 msgid "Abandoned"
 msgstr "已放棄"
 
-#: src/components/layouts/EventHomepage/index.tsx:273
-#: src/components/layouts/OrganizerHomepage/index.tsx:292
+#: src/components/layouts/EventHomepage/index.tsx:199
+#: src/components/layouts/OrganizerHomepage/index.tsx:215
 #: src/components/widget/WidgetSections/index.tsx:90
 #: src/utilites/homepageSections.ts:21
 msgid "About"
@@ -1266,7 +1282,7 @@ msgid "Add a date"
 msgstr "新增日期"
 
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:34
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:67
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:68
 msgid "Add a description"
 msgstr "新增描述"
 
@@ -1343,7 +1359,7 @@ msgstr "添加關於訂單的備註。這些信息不會對客户可見。"
 msgid "Add any notes about the order..."
 msgstr "添加關於訂單的備註..."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:79
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:80
 msgid "Add at least one question below."
 msgstr "請在下方新增至少一個問題。"
 
@@ -1457,7 +1473,7 @@ msgstr "添加產品"
 msgid "Add Product to Category"
 msgstr "將產品添加到類別"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:172
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:177
 msgid "Add question"
 msgstr "新增問題"
 
@@ -1471,8 +1487,8 @@ msgstr "新增問題"
 msgid "Add reader"
 msgstr "新增讀卡機"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:216
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:223
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:220
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:227
 msgid "Add section"
 msgstr "新增區塊"
 
@@ -1480,7 +1496,7 @@ msgstr "新增區塊"
 msgid "Add slot"
 msgstr "新增時段"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:77
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:78
 msgid "Add some text below."
 msgstr "請在下方新增一些文字。"
 
@@ -1551,8 +1567,8 @@ msgstr "加入日曆"
 
 #: src/components/common/AddEventToCalendarButton/index.tsx:15
 #: src/components/common/AddToCalendarCTA/index.tsx:25
-#: src/components/layouts/EventHomepage/index.tsx:614
-#: src/components/layouts/EventHomepage/index.tsx:615
+#: src/components/layouts/EventHomepage/EventIntro.tsx:71
+#: src/components/layouts/EventHomepage/EventIntro.tsx:71
 msgid "Add to Calendar"
 msgstr "添加到日曆"
 
@@ -2029,13 +2045,17 @@ msgstr "一直發售"
 msgid "Always shown"
 msgstr "一律顯示"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:92
-msgid "Always shown. Move it to change where tickets appear on the page."
-msgstr "一律顯示。移動它可調整門票在頁面上的位置。"
-
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:81
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:82
 msgid "Always shown. Move it to change where your events list appears."
 msgstr "始終顯示。移動它以更改活動列表的顯示位置。"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:97
+msgid "Always shown. Move it to change where your tickets appear."
+msgstr "一律顯示。移動它可更改門票的顯示位置。"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:96
+msgid "Always shown. On large screens tickets sit beside your page content; move it to change where they appear on phones and tablets."
+msgstr "一律顯示。在大螢幕上，門票會顯示在頁面內容旁邊；移動它可調整門票在手機和平板電腦上的位置。"
 
 #: src/components/common/DateTimeField/index.tsx:87
 #: src/components/modals/CreateEventModal/DateTimeChip.tsx:96
@@ -2150,11 +2170,11 @@ msgstr "公告"
 msgid "Anonymize"
 msgstr "匿名化"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:194
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:199
 msgid "Answer"
 msgstr "答案"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:197
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:202
 msgid "Answer {number}"
 msgstr "答案 {number}"
 
@@ -3286,7 +3306,7 @@ msgstr "按鈕標籤"
 msgid "Button text"
 msgstr "按鈕文字"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:201
+#: src/components/routes/event/HomepageDesigner/index.tsx:216
 msgid "Button Text"
 msgstr "按鈕文字"
 
@@ -3842,8 +3862,8 @@ msgstr "檢查金鑰"
 msgid "Check out"
 msgstr "取消簽到"
 
-#: src/components/layouts/EventHomepage/index.tsx:601
-#: src/components/layouts/EventHomepage/index.tsx:602
+#: src/components/layouts/EventHomepage/EventIntro.tsx:60
+#: src/components/layouts/EventHomepage/EventIntro.tsx:61
 msgid "Check out this event: {0}"
 msgstr "看看這個活動：{0}"
 
@@ -4325,7 +4345,7 @@ msgstr "關閉"
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:208
 #: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:56
 #: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:86
-#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:113
+#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:121
 #: src/components/modals/CreateEventModal/index.tsx:288
 #: src/components/modals/JoinWaitlistModal/index.tsx:116
 #: src/components/modals/JoinWaitlistModal/index.tsx:143
@@ -4783,10 +4803,10 @@ msgid "Consecutive"
 msgstr "連續"
 
 #: src/components/common/WaitlistTable/index.tsx:155
-#: src/components/layouts/EventHomepage/index.tsx:446
-#: src/components/layouts/OrganizerHomepage/index.tsx:186
-#: src/components/layouts/OrganizerHomepage/index.tsx:301
-#: src/utilites/homepageSections.ts:33
+#: src/components/layouts/EventHomepage/OrganizerSection.tsx:60
+#: src/components/layouts/OrganizerHomepage/index.tsx:117
+#: src/components/layouts/OrganizerHomepage/index.tsx:224
+#: src/utilites/homepageSections.ts:35
 msgid "Contact"
 msgstr "聯絡"
 
@@ -4818,9 +4838,9 @@ msgstr "內容為必填"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:146
 #: src/components/common/WidgetEditor/BehaviourPanel.tsx:33
-#: src/components/layouts/EventHomepage/index.tsx:226
+#: src/components/layouts/EventHomepage/index.tsx:141
 #: src/components/layouts/ProductWidget/index.tsx:94
-#: src/components/routes/event/HomepageDesigner/index.tsx:206
+#: src/components/routes/event/HomepageDesigner/index.tsx:221
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1173
 #: src/components/routes/settings/Security/SignInMethods.tsx:251
 #: src/ee/seating/components/SeatPicker/Basket.tsx:200
@@ -4828,7 +4848,7 @@ msgstr "內容為必填"
 msgid "Continue"
 msgstr "繼續"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:204
+#: src/components/routes/event/HomepageDesigner/index.tsx:219
 msgid "Continue Button"
 msgstr "繼續按鈕"
 
@@ -4845,7 +4865,7 @@ msgstr "繼續設置"
 msgid "Continue to checkout"
 msgstr "繼續結帳"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1335
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1338
 msgid "Continue to Checkout"
 msgstr "繼續結帳"
 
@@ -5244,7 +5264,7 @@ msgstr "統計包含所有即將舉行的日期。每人將獲得其所選日期
 msgid "Cover"
 msgstr "封面"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:162
+#: src/components/routes/event/HomepageDesigner/index.tsx:177
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:150
 msgid "Cover Image"
 msgstr "封面圖片"
@@ -5253,7 +5273,7 @@ msgstr "封面圖片"
 msgid "Cover image added"
 msgstr "封面圖片已新增"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:176
+#: src/components/routes/event/HomepageDesigner/index.tsx:191
 msgid "Cover image will be displayed at the top of your event page"
 msgstr "封面圖片將顯示在活動頁面頂部"
 
@@ -6293,7 +6313,7 @@ msgstr "收唔到驗證碼？"
 msgid "Different location"
 msgstr "不同地點"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:83
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:84
 msgid "Directly below Events, it's a Past tab on the events list. Anywhere else, it shows your most recent past events."
 msgstr "緊接在「活動」下方時，它是活動列表中的「往期」分頁。放在其他位置時，會顯示您最近的往期活動。"
 
@@ -6384,7 +6404,7 @@ msgstr "關閉公告"
 msgid "Dismiss setup checklist"
 msgstr "隱藏設定清單"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1352
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1355
 msgid "Dismiss this message"
 msgstr "關閉此訊息"
 
@@ -6541,16 +6561,16 @@ msgstr "拖動手柄以排序。將名字拖到時間表上即可安排時間。
 msgid "Drag to draw a stage. Change it to a bar, dance floor, entrance, pillar or wall on the right."
 msgstr "拖曳繪製舞台。在右側將其更改為吧枱、舞池、入口、柱子或牆。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:289
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:293
 #: src/components/routes/event/Lineup/PeopleRail.tsx:140
 msgid "Drag to reorder {label}"
 msgstr "拖曳以重新排序 {label}"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:178
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:181
 msgid "Drag to reorder. Hidden sections stay saved but don't show on your organizer page."
 msgstr "拖曳以重新排序。隱藏的區塊會保留，但不會顯示在您的主辦方頁面上。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:177
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:180
 msgid "Drag to reorder. Sections marked Empty appear on your event page once they have content."
 msgstr "拖曳以重新排序。標記為「空」的分區在有內容後會顯示在活動頁面上。"
 
@@ -6648,7 +6668,7 @@ msgstr "例如 180（3小時）"
 msgid "e.g. Founder at Acme, or Berlin techno"
 msgstr "例如：Acme 創辦人，或柏林 Techno"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:147
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:152
 msgid "e.g. Is there parking?"
 msgstr "例如：有泊車位嗎？"
 
@@ -6842,7 +6862,7 @@ msgstr "編輯詳情"
 msgid "Edit fee"
 msgstr "編輯費用"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:340
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:344
 msgid "Edit in Tickets & Products"
 msgstr "在「票券與產品」中編輯"
 
@@ -6850,11 +6870,11 @@ msgstr "在「票券與產品」中編輯"
 msgid "Edit individual seats"
 msgstr "編輯單個座位"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:71
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:72
 msgid "Edit it in Event Settings"
 msgstr "在活動設定中編輯"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:75
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:76
 msgid "Edit it in Settings"
 msgstr "在設定中編輯"
 
@@ -7123,7 +7143,7 @@ msgid "Emoji is required for modals"
 msgstr "彈窗必須設定表情符號"
 
 #: src/components/common/WidgetEditor/SectionsPicker.tsx:77
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:299
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:303
 msgid "Empty"
 msgstr "空"
 
@@ -7237,7 +7257,7 @@ msgstr "英語"
 msgid "Enter a capacity value or choose unlimited."
 msgstr "請輸入容量數值或選擇不限。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:373
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:378
 msgid "Enter a full link starting with https://"
 msgstr "請輸入以 https:// 開頭的完整連結"
 
@@ -7592,7 +7612,7 @@ msgstr "活動未上線"
 msgid "Event Page"
 msgstr "活動頁面"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:141
+#: src/components/routes/event/HomepageDesigner/index.tsx:143
 msgid "Event Preview"
 msgstr "活動預覽"
 
@@ -7651,7 +7671,7 @@ msgstr "活動已更新"
 #: src/components/common/AdminAccountsTable/index.tsx:82
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:127
 #: src/components/layouts/Admin/index.tsx:20
-#: src/components/layouts/OrganizerHomepage/index.tsx:218
+#: src/components/layouts/OrganizerHomepage/index.tsx:144
 #: src/components/layouts/OrganizerLayout/index.tsx:118
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:180
 #: src/components/routes/admin/Attribution/index.tsx:195
@@ -7659,11 +7679,11 @@ msgstr "活動已更新"
 #: src/components/routes/admin/Events/index.tsx:77
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:236
 #: src/components/routes/organizer/Events/index.tsx:46
-#: src/utilites/homepageSections.ts:31
+#: src/utilites/homepageSections.ts:33
 msgid "Events"
 msgstr "活動"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:302
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:306
 msgid "Events are always shown"
 msgstr "活動始終顯示"
 
@@ -8280,7 +8300,7 @@ msgstr "自 {0} 起失敗"
 msgid "Family"
 msgstr "親子"
 
-#: src/utilites/homepageSections.ts:41
+#: src/utilites/homepageSections.ts:43
 msgid "FAQ"
 msgstr "常見問題"
 
@@ -8590,9 +8610,13 @@ msgstr "閃光燈開啟"
 msgid "Flickr"
 msgstr "Flickr"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:212
+#: src/components/routes/event/HomepageDesigner/index.tsx:227
 msgid "Floating Button"
 msgstr "浮動按鈕"
+
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:18
+msgid "Flyer"
+msgstr "海報風"
 
 #: src/components/common/ThemeFontControl/index.tsx:64
 msgid "Font Family"
@@ -8824,12 +8848,10 @@ msgstr "取得授權"
 msgid "Get an Enterprise licence key."
 msgstr "取得企業版授權金鑰。"
 
+#: src/components/layouts/EventHomepage/EventIntro.tsx:133
+#: src/components/layouts/EventHomepage/LocationSection.tsx:23
 #: src/components/widget/WidgetSections/index.tsx:117
 msgid "Get directions"
-msgstr "取得路線"
-
-#: src/components/layouts/EventHomepage/index.tsx:307
-msgid "Get Directions"
 msgstr "取得路線"
 
 #: src/components/layouts/OrganizerLayout/index.tsx:95
@@ -8852,8 +8874,9 @@ msgstr "開始使用"
 msgid "Get tickets"
 msgstr "購票"
 
-#: src/components/layouts/EventHomepage/index.tsx:225
-#: src/components/routes/event/HomepageDesigner/index.tsx:214
+#: src/components/layouts/EventHomepage/index.tsx:140
+#: src/components/layouts/OrganizerHomepage/EventList/index.tsx:196
+#: src/components/routes/event/HomepageDesigner/index.tsx:229
 msgid "Get Tickets"
 msgstr "購票"
 
@@ -9013,7 +9036,8 @@ msgstr "賓客管理"
 msgid "Guests"
 msgstr "賓客"
 
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:81
+#: src/components/layouts/EventHomepage/index.tsx:132
+#: src/components/layouts/OrganizerHomepage/EventList/index.tsx:79
 #: src/components/routes/event/EventDashboard/NextOccurrenceHero/index.tsx:45
 #: src/components/routes/event/EventDashboard/NextOccurrenceHero/index.tsx:159
 msgid "Happening now"
@@ -9039,7 +9063,7 @@ msgstr "有促銷代碼嗎？"
 msgid "Head"
 msgstr "主家席"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:347
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:351
 msgid "Heading"
 msgstr "標題"
 
@@ -9135,7 +9159,7 @@ msgstr "隱藏"
 msgid "Hidden — sales ended {end}."
 msgstr "已隱藏 — 銷售已於 {end} 結束。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:86
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:87
 msgid "Hidden automatically when empty."
 msgstr "內容為空時自動隱藏。"
 
@@ -9183,7 +9207,7 @@ msgstr "隱藏"
 msgid "Hide \"Have a promo code?\""
 msgstr "隱藏「有促銷代碼嗎？」"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:308
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:312
 msgid "Hide {label}"
 msgstr "隱藏 {label}"
 
@@ -9236,7 +9260,7 @@ msgstr "除非用户有適用的促銷代碼，否則隱藏產品"
 msgid "Hide product when sold out"
 msgstr "售罄時隱藏產品"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:302
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:306
 msgid "Hide section"
 msgstr "隱藏區塊"
 
@@ -9305,7 +9329,7 @@ msgstr "保留 {0} 個座位"
 msgid "Hold back {0} seats on {dateCount} dates"
 msgstr "在 {dateCount} 個日期保留 {0} 個座位"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:139
+#: src/components/routes/event/HomepageDesigner/index.tsx:141
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:125
 msgid "Homepage Design"
 msgstr "主頁設計"
@@ -9434,7 +9458,7 @@ msgstr "我已新增,繼續"
 msgid "If a key leaks, revoke it straight away and create a new one."
 msgstr "如果金鑰外洩，請立即撤銷並建立新金鑰。"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1307
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1310
 msgid "If a new tab did not open automatically, please click the button below to continue to checkout."
 msgstr "如果未自動開啟新分頁，請點擊下方按鈕繼續結帳。"
 
@@ -9490,7 +9514,7 @@ msgstr "圖片上傳成功"
 msgid "Image URL"
 msgstr "圖片網址"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:160
+#: src/components/routes/event/HomepageDesigner/index.tsx:175
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:146
 msgid "Images"
 msgstr "圖片"
@@ -9726,6 +9750,10 @@ msgstr "再次發出邀請！"
 msgid "Invitation revoked!"
 msgstr "撤銷邀請！"
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:30
+msgid "Invite"
+msgstr "邀請函"
+
 #: src/components/modals/InviteUserModal/index.tsx:50
 msgid "Invite a team member"
 msgstr "邀請團隊成員"
@@ -9865,7 +9893,7 @@ msgstr "約翰遜"
 msgid "Join {0}"
 msgstr "加入 {0}"
 
-#: src/components/layouts/EventHomepage/index.tsx:663
+#: src/components/layouts/EventHomepage/EventIntro.tsx:123
 msgid "Join from anywhere"
 msgstr "隨時隨地加入"
 
@@ -10131,6 +10159,7 @@ msgstr "最新簽到"
 
 #: src/components/common/WidgetEditor/ContentFields.tsx:163
 #: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:100
+#: src/components/routes/event/HomepageDesigner/index.tsx:149
 msgid "Layout"
 msgstr "版面"
 
@@ -10307,7 +10336,7 @@ msgstr "陣容"
 msgid "Lineup & Schedule"
 msgstr "陣容與時間表"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:86
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:87
 msgid "Lineup & Schedule page"
 msgstr "陣容與排程頁面"
 
@@ -10466,7 +10495,7 @@ msgstr "從 {service} 載入內容"
 #: src/components/common/LocationPicker/index.tsx:221
 #: src/components/common/LocationPicker/index.tsx:294
 #: src/components/common/WidgetEditor/SectionsPicker.tsx:34
-#: src/components/layouts/EventHomepage/index.tsx:285
+#: src/components/layouts/EventHomepage/index.tsx:209
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:474
 #: src/components/routes/event/Settings/index.tsx:56
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:150
@@ -10524,7 +10553,7 @@ msgstr "標誌將顯示於頁首"
 msgid "Logo will be displayed on the ticket"
 msgstr "標誌將顯示在門票上"
 
-#: src/utilites/homepageSections.ts:60
+#: src/utilites/homepageSections.ts:62
 msgid "Logos of your sponsors and partners, with links."
 msgstr "您的贊助商及合作夥伴的標誌，附連結。"
 
@@ -10639,7 +10668,7 @@ msgstr "管理訂單"
 msgid "Manage payment and invoicing settings for this event."
 msgstr "管理此活動的支付和發票設置。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:86
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:87
 msgid "Manage people, stages and times on the"
 msgstr "管理人員、舞台及時間，請前往"
 
@@ -10709,6 +10738,10 @@ msgstr "標示為已核實（管理員特批）"
 #: src/components/modals/MessageRecipientsModal/index.tsx:21
 msgid "Marked as spam"
 msgstr "被標記為垃圾郵件"
+
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:12
+msgid "Marquee"
+msgstr "大幕"
 
 #: src/components/common/WidgetEditor/AppearancePanel.tsx:60
 msgid "Match event page"
@@ -10999,8 +11032,13 @@ msgid "More dates"
 msgstr "更多日期"
 
 #: src/components/widget/WidgetSections/index.tsx:144
+#: src/utilites/homepageSections.ts:31
 msgid "More events"
 msgstr "更多活動"
+
+#: src/components/layouts/EventHomepage/MoreEventsSection.tsx:31
+msgid "More from {0}"
+msgstr "{0} 的更多活動"
 
 #: src/ee/seating/components/SeatPicker/SeatSheet.tsx:74
 msgid "More places"
@@ -11032,7 +11070,7 @@ msgstr "已取消移動。{label} 已回到原來位置。"
 
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:203
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:603
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:138
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:143
 msgid "Move down"
 msgstr "下移"
 
@@ -11040,7 +11078,7 @@ msgstr "下移"
 msgid "Move its seats to another band first"
 msgstr "請先將其座位移到其他價位區"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:257
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:262
 msgid "Move left"
 msgstr "向左移"
 
@@ -11054,7 +11092,7 @@ msgstr "移至區域"
 
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:196
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:595
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:135
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:140
 msgid "Move up"
 msgstr "上移"
 
@@ -11062,14 +11100,14 @@ msgstr "上移"
 msgid "Multi line text box"
 msgstr "多行文本框"
 
-#: src/components/layouts/EventHomepage/index.tsx:638
+#: src/components/layouts/EventHomepage/EventIntro.tsx:117
 msgid "Multiple dates until {lastOccurrenceDate}"
 msgstr "多個日期，截至 {lastOccurrenceDate}"
 
 #: src/components/common/EventCard/index.tsx:111
-#: src/components/layouts/EventHomepage/index.tsx:197
+#: src/components/layouts/EventHomepage/index.tsx:107
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:29
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:36
+#: src/components/layouts/OrganizerHomepage/EventList/index.tsx:33
 #: src/components/widget/WidgetSections/index.tsx:58
 msgid "Multiple locations"
 msgstr "多個地點"
@@ -11305,9 +11343,13 @@ msgstr "下個月"
 msgid "Next occurrence"
 msgstr "下一場次"
 
-#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:119
+#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:127
 msgid "Next photo"
 msgstr "下一張相片"
+
+#: src/components/layouts/OrganizerHomepage/EventList/index.tsx:186
+msgid "Next up"
+msgstr "下一場"
 
 #: src/components/modals/CreateEventModal/index.tsx:475
 msgid "Next, you'll add tickets and set up your event page."
@@ -11724,7 +11766,7 @@ msgid "No Paid Orders"
 msgstr "無付費訂單"
 
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:148
-#: src/components/layouts/OrganizerHomepage/index.tsx:241
+#: src/components/layouts/OrganizerHomepage/index.tsx:172
 msgid "No past events"
 msgstr "沒有過往活動"
 
@@ -11906,7 +11948,7 @@ msgid "No upcoming dates"
 msgstr "沒有即將舉行的日期"
 
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:148
-#: src/components/layouts/OrganizerHomepage/index.tsx:241
+#: src/components/layouts/OrganizerHomepage/index.tsx:172
 msgid "No upcoming events"
 msgstr "沒有即將舉行的活動"
 
@@ -12085,7 +12127,7 @@ msgstr "未分享"
 msgid "Not shown to buyers."
 msgstr "不會向買家顯示。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:325
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:329
 msgid "Not shown yet."
 msgstr "尚未顯示。"
 
@@ -12359,6 +12401,10 @@ msgstr "於{month}{day}日"
 msgid "On a product priced at 50.00, this adds {exampleAmount}."
 msgstr "價格為 50.00 的產品將會加收 {exampleAmount}。"
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:14
+msgid "On large screens tickets stay beside your content as people scroll. Suits conferences and long lineups."
+msgstr "在大螢幕上，捲動時門票會一直顯示在內容旁邊。適合會議及陣容豐富的活動。"
+
 #: src/components/routes/organizer/People/index.tsx:70
 msgid "On live events"
 msgstr "於已上線的活動"
@@ -12413,6 +12459,10 @@ msgstr "創建事件後，您就可以在這裏看到它。"
 msgid "Once you start collecting data, you'll see it here."
 msgstr "一旦開始收集數據，您將在這裏看到。"
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:25
+msgid "One column, top to bottom"
+msgstr "單欄，由上而下"
+
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:97
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:118
 #: src/components/modals/CreateEventModal/index.tsx:225
@@ -12435,7 +12485,6 @@ msgstr "持續進行"
 
 #: src/components/common/EventCard/index.tsx:114
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:32
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:39
 #: src/components/routes/event/OccurrencesTab/index.tsx:341
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:482
 #: src/components/routes/my-tickets/index.tsx:56
@@ -12452,12 +12501,12 @@ msgstr "網上 — 請填寫連線資料"
 
 #: src/components/common/EventCard/index.tsx:111
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:29
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:36
+#: src/components/layouts/OrganizerHomepage/EventList/index.tsx:33
 #: src/components/widget/WidgetSections/index.tsx:58
 msgid "Online & in-person"
 msgstr "網上及實體"
 
-#: src/components/layouts/EventHomepage/index.tsx:198
+#: src/components/layouts/EventHomepage/index.tsx:107
 msgid "Online & in-person — see schedule"
 msgstr "網上及實體 — 詳見排程"
 
@@ -12467,8 +12516,8 @@ msgstr "網上及實體 — 詳見排程"
 msgid "Online event"
 msgstr "網上活動"
 
-#: src/components/layouts/EventHomepage/index.tsx:661
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:119
+#: src/components/layouts/EventHomepage/EventIntro.tsx:123
+#: src/components/layouts/OrganizerHomepage/EventList/index.tsx:93
 msgid "Online Event"
 msgstr "線上活動"
 
@@ -12630,7 +12679,7 @@ msgstr "開啟首頁設計器"
 msgid "Open occurrence"
 msgstr "開啟場次"
 
-#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:36
+#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:43
 msgid "Open photo {photoNumber}"
 msgstr "開啟相片 {photoNumber}"
 
@@ -12969,7 +13018,7 @@ msgstr "組織名稱"
 #: src/components/common/TeamAccessFields/index.tsx:36
 #: src/components/common/TeamAccessFields/index.tsx:96
 #: src/components/common/WidgetEditor/SectionsPicker.tsx:36
-#: src/components/layouts/EventHomepage/index.tsx:356
+#: src/components/layouts/EventHomepage/index.tsx:213
 #: src/components/modals/CreateEventModal/index.tsx:270
 #: src/components/routes/admin/SpamEvents/index.tsx:166
 #: src/components/routes/admin/SpamEvents/index.tsx:327
@@ -13019,7 +13068,7 @@ msgstr "組織者收款設定"
 msgid "Organizer restored successfully"
 msgstr "主辦方已成功還原"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:52
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:53
 msgid "Organizer settings"
 msgstr "主辦方設定"
 
@@ -13131,6 +13180,10 @@ msgstr "頁面"
 #: src/components/common/SsoButtons/index.tsx:50
 msgid "Page address"
 msgstr "頁面地址"
+
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:48
+msgid "Page layout"
+msgstr "頁面版面"
 
 #: src/components/forms/StripeCheckoutForm/index.tsx:142
 msgid "Page no longer available"
@@ -13248,7 +13301,7 @@ msgid "Passwords are not the same"
 msgstr "密碼不一樣"
 
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:138
-#: src/components/layouts/OrganizerHomepage/index.tsx:231
+#: src/components/layouts/OrganizerHomepage/index.tsx:163
 #: src/components/routes/event/OccurrencesTab/index.tsx:522
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:30
 msgid "Past"
@@ -13259,7 +13312,7 @@ msgid "Past due"
 msgstr "已逾期"
 
 #: src/components/layouts/OrganizerHomepage/OrganizerPastEventsSection.tsx:25
-#: src/utilites/homepageSections.ts:35
+#: src/utilites/homepageSections.ts:37
 msgid "Past events"
 msgstr "往期活動"
 
@@ -13267,11 +13320,11 @@ msgstr "往期活動"
 msgid "Paste"
 msgstr "貼上"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:219
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:224
 msgid "Paste a YouTube or Vimeo link"
 msgstr "貼上 YouTube 或 Vimeo 連結"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:81
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:82
 msgid "Paste a YouTube or Vimeo link below."
 msgstr "請在下方貼上 YouTube 或 Vimeo 連結。"
 
@@ -13587,11 +13640,11 @@ msgstr "相片 {photoNumber}"
 msgid "Photo {position}"
 msgstr "相片 {position}"
 
-#: src/utilites/homepageSections.ts:39
+#: src/utilites/homepageSections.ts:41
 msgid "Photo gallery"
 msgstr "相片集"
 
-#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:94
+#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:102
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:229
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:328
 msgid "Photos"
@@ -13739,7 +13792,7 @@ msgstr "請檢查您的電子郵件以確認您的電子郵件地址"
 msgid "Please check your ticket for the updated time. Your tickets are still valid — no action is needed unless the new times don't work for you. Reply to this email if you have any questions."
 msgstr "請查看門票上的最新時間。你的門票仍然有效 — 除非新時間不合適，否則毋須任何操作。如有疑問，請直接回覆此電郵。"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1298
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1301
 msgid "Please continue in the new tab"
 msgstr "請在新標籤頁中繼續"
 
@@ -13929,7 +13982,7 @@ msgstr "前一天"
 msgid "Previous month"
 msgstr "上個月"
 
-#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:116
+#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:124
 msgid "Previous photo"
 msgstr "上一張相片"
 
@@ -14024,8 +14077,7 @@ msgid "Printed {0}"
 msgstr "列印於 {0}"
 
 #: src/components/common/CookieConsentBanner/index.tsx:82
-#: src/components/layouts/EventHomepage/index.tsx:739
-#: src/components/layouts/OrganizerHomepage/index.tsx:199
+#: src/components/layouts/HomepageFrame/index.tsx:65
 msgid "Privacy Policy"
 msgstr "私隱政策"
 
@@ -14330,8 +14382,8 @@ msgstr "可用數量"
 msgid "Quantity this date"
 msgstr "此日期數量"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:134
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:151
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:139
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:156
 msgid "Question {number}"
 msgstr "問題 {number}"
 
@@ -14361,7 +14413,11 @@ msgstr "問題"
 msgid "Questions & Answers"
 msgstr "問與答"
 
-#: src/utilites/homepageSections.ts:56
+#: src/components/layouts/EventHomepage/OrganizerSection.tsx:39
+msgid "Questions about this event? Get in touch."
+msgstr "對此活動有疑問？歡迎聯絡。"
+
+#: src/utilites/homepageSections.ts:58
 msgid "Questions and answers people can expand."
 msgstr "可展開查看的問與答。"
 
@@ -14416,7 +14472,7 @@ msgstr "重新啟用此日期？它會重新開放售票。"
 msgid "Read and write"
 msgstr "讀寫"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:460
+#: src/components/layouts/OrganizerHomepage/index.tsx:327
 #: src/components/widget/WidgetSections/index.tsx:91
 msgid "Read more"
 msgstr "閱讀更多"
@@ -14824,7 +14880,7 @@ msgstr "移除覆寫"
 msgid "Remove overrides for this date"
 msgstr "移除此日期的覆寫設定"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:260
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:265
 msgid "Remove photo"
 msgstr "移除相片"
 
@@ -14832,7 +14888,7 @@ msgstr "移除相片"
 msgid "Remove photo {position}"
 msgstr "移除第 {position} 張相片"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:141
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:146
 msgid "Remove question"
 msgstr "移除問題"
 
@@ -14844,7 +14900,7 @@ msgstr "移除座位 {0}"
 msgid "Remove seat map"
 msgstr "移除座位圖"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:366
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:370
 msgid "Remove section"
 msgstr "移除區塊"
 
@@ -14852,7 +14908,7 @@ msgstr "移除區塊"
 msgid "Remove sold out dates and times from the event page entirely. When disabled, they remain visible and are labelled as sold out."
 msgstr "從活動頁面完全移除已售罄的日期和時間。停用時，它們仍然可見並標示為已售罄。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:318
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:323
 msgid "Remove sponsor"
 msgstr "移除贊助商"
 
@@ -15424,7 +15480,7 @@ msgstr "按授權年度劃分的銷售額"
 
 #: src/components/common/ProductPriceAvailability/index.tsx:24
 #: src/components/common/ProductPriceAvailability/index.tsx:63
-#: src/components/layouts/EventHomepage/index.tsx:212
+#: src/components/layouts/EventHomepage/index.tsx:127
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:33
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:54
 msgid "Sales ended"
@@ -16066,12 +16122,13 @@ msgstr "分區"
 msgid "Section name"
 msgstr "分區名稱"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:314
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:318
 msgid "Section settings for {label}"
 msgstr "{label} 的區塊設定"
 
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:83
-#: src/components/routes/event/HomepageDesigner/index.tsx:147
+#: src/components/layouts/EventHomepage/SectionNav.tsx:133
+#: src/components/routes/event/HomepageDesigner/index.tsx:161
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:133
 msgid "Sections"
 msgstr "區塊"
@@ -16097,7 +16154,7 @@ msgstr "查看全部"
 msgid "See all prices"
 msgstr "查看所有價格"
 
-#: src/components/layouts/EventHomepage/index.tsx:688
+#: src/components/layouts/EventHomepage/EventIntro.tsx:141
 msgid "See schedule"
 msgstr "查看排程"
 
@@ -16670,7 +16727,10 @@ msgid "Shape"
 msgstr "形狀"
 
 #: src/components/common/ShareIcon/index.tsx:30
-#: src/components/layouts/EventHomepage/index.tsx:606
+#: src/components/layouts/EventHomepage/EventIntro.tsx:65
+#: src/components/layouts/EventHomepage/EventIntro.tsx:65
+#: src/components/layouts/OrganizerHomepage/index.tsx:336
+#: src/components/layouts/OrganizerHomepage/index.tsx:336
 #: src/components/layouts/OrganizerLayout/index.tsx:269
 #: src/components/modals/ShareModal/index.tsx:37
 #: src/components/modals/ShareModal/index.tsx:165
@@ -16721,7 +16781,7 @@ msgstr "已調整 {count} 個日期的時間"
 msgid "Show"
 msgstr "顯示"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:308
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:312
 msgid "Show {label}"
 msgstr "顯示 {label}"
 
@@ -16757,7 +16817,7 @@ msgstr "改為顯示姓名縮寫"
 msgid "Show keys"
 msgstr "顯示金鑰"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:460
+#: src/components/layouts/OrganizerHomepage/index.tsx:327
 #: src/components/widget/WidgetSections/index.tsx:91
 msgid "Show less"
 msgstr "收起"
@@ -16811,7 +16871,7 @@ msgstr "在活動日期上顯示餘下容量"
 msgid "Show remaining capacity to buyers"
 msgstr "向買家顯示餘下容量"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:302
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:306
 msgid "Show section"
 msgstr "顯示區塊"
 
@@ -16844,7 +16904,7 @@ msgstr "正於公開活動頁面顯示"
 msgid "Showing the first {0} — the remaining {1} session(s) will still be targeted when the message is sent."
 msgstr "只顯示首 {0} 個 — 傳送訊息時仍會涵蓋其餘 {1} 個場次。"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:205
+#: src/components/routes/event/HomepageDesigner/index.tsx:220
 msgid "Shown below the ticket list"
 msgstr "顯示在門票列表下方"
 
@@ -16852,7 +16912,7 @@ msgstr "顯示在門票列表下方"
 msgid "Shown bouncing at the top of the modal"
 msgstr "在彈窗頂部彈跳顯示"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:213
+#: src/components/routes/event/HomepageDesigner/index.tsx:228
 msgid "Shown on scroll and jumps to the tickets section"
 msgstr "捲動時顯示，並跳至門票區域"
 
@@ -16888,7 +16948,7 @@ msgstr "顯示常用地址字段，包括國家"
 msgid "Shows remaining"
 msgstr "顯示餘下數量"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:88
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:89
 msgid "Shows the venue and a map. Hidden automatically for online events."
 msgstr "顯示場地及地圖。網上活動會自動隱藏。"
 
@@ -16896,19 +16956,23 @@ msgstr "顯示場地及地圖。網上活動會自動隱藏。"
 msgid "Shows tickets"
 msgstr "顯示門票"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:71
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:93
+msgid "Shows up to three of your other upcoming events. Hidden automatically when there are none."
+msgstr "最多顯示您的三場其他即將舉行的活動。沒有時會自動隱藏。"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:72
 msgid "Shows your event description."
 msgstr "顯示你的活動描述。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:74
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:75
 msgid "Shows your organizer description. Placed above every other section, it appears in your profile card."
 msgstr "顯示您的主辦方簡介。放在所有其他區塊之上時，會顯示在您的個人資料卡中。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:90
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:91
 msgid "Shows your organizer profile with a contact button."
 msgstr "顯示你的主辦方資料及聯絡按鈕。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:79
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:80
 msgid "Shows your social links and a contact button. Placed above every other section, it appears in your profile card."
 msgstr "顯示您的社交連結及聯絡按鈕。放在所有其他區塊之上時，會顯示在您的個人資料卡中。"
 
@@ -17207,7 +17271,7 @@ msgid "Sold out"
 msgstr "售罄"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:128
-#: src/components/layouts/EventHomepage/index.tsx:218
+#: src/components/layouts/EventHomepage/index.tsx:131
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:221
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:22
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:336
@@ -17382,12 +17446,12 @@ msgstr "按日子、區域或門票類型分拆簽到。將連結分享給工作
 msgid "Split door sales by entrance, date, or ticket type. You'll get a link and a PIN to share with staff — no account needed on their end."
 msgstr "按入口、日期或票種拆分門口銷售。你會獲得連結和 PIN 碼分享給工作人員，他們無需帳戶。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:312
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:317
 msgid "Sponsor name"
 msgstr "贊助商名稱"
 
 #: src/components/layouts/EventHomepage/Sections/SponsorsSection.tsx:21
-#: src/utilites/homepageSections.ts:45
+#: src/utilites/homepageSections.ts:47
 msgid "Sponsors"
 msgstr "贊助商"
 
@@ -17734,6 +17798,10 @@ msgstr "將於 {0} 停止運作。我們會提前一星期以電郵提醒您。"
 msgid "Store it somewhere safe, like a password manager or your integration's secret settings. Anyone with this key can use the API as you."
 msgstr "請將它存放在安全的地方，例如密碼管理器或整合服務的機密設定中。任何擁有此金鑰的人都可以以您的身分使用 API。"
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:24
+msgid "Story"
+msgstr "故事"
+
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:34
 msgid "Straight rows, central aisle."
 msgstr "筆直排列，中央通道。"
@@ -17918,7 +17986,7 @@ msgstr "成功更新活動"
 msgid "Successfully Updated Event Defaults"
 msgstr "成功更新活動預設值"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:119
+#: src/components/routes/event/HomepageDesigner/index.tsx:121
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:93
 msgid "Successfully Updated Homepage Design"
 msgstr "成功更新主頁設計"
@@ -18248,8 +18316,7 @@ msgstr "付款方式"
 msgid "Term"
 msgstr "關鍵字"
 
-#: src/components/layouts/EventHomepage/index.tsx:745
-#: src/components/layouts/OrganizerHomepage/index.tsx:205
+#: src/components/layouts/HomepageFrame/index.tsx:68
 msgid "Terms of Service"
 msgstr "服務條款"
 
@@ -18264,9 +18331,9 @@ msgid "Test sign-in"
 msgstr "測試登入"
 
 #: src/components/common/WidgetEditor/AppearancePanel.tsx:83
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:54
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:55
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:99
-#: src/utilites/homepageSections.ts:37
+#: src/utilites/homepageSections.ts:39
 msgid "Text"
 msgstr "文本"
 
@@ -18279,7 +18346,7 @@ msgstr "感謝您的參與！"
 msgid "Thanks,"
 msgstr "多謝，"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:220
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:225
 msgid "That doesn't look like a YouTube or Vimeo video link"
 msgstr "這看來不是 YouTube 或 Vimeo 影片連結"
 
@@ -18632,7 +18699,7 @@ msgstr "劇院"
 msgid "Theatre with sections"
 msgstr "分區劇院"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:181
+#: src/components/routes/event/HomepageDesigner/index.tsx:196
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:192
 msgid "Theme & Colors"
 msgstr "主題與顏色"
@@ -18737,7 +18804,7 @@ msgstr "此帳戶已計劃刪除"
 msgid "This account is scheduled for deletion on <0>{scheduledDate}</0>"
 msgstr "此帳戶已計劃於 <0>{scheduledDate}</0> 刪除"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:198
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:203
 msgid "This answer is too long. Shorten it before saving."
 msgstr "此答案太長，請縮短後再儲存。"
 
@@ -18855,7 +18922,7 @@ msgstr "此裝置"
 msgid "This disconnects {stripeAccountId} from this organizer. Paid ticket sales will stop working until you connect a Stripe account again."
 msgstr "此操作將中斷 {stripeAccountId} 與此主辦方的連接。在您重新連接 Stripe 帳戶之前，付費門票銷售將無法進行。"
 
-#: src/components/layouts/EventHomepage/index.tsx:650
+#: src/components/layouts/EventHomepage/index.tsx:129
 msgid "This event has ended"
 msgstr "此活動已結束"
 
@@ -19279,7 +19346,7 @@ msgstr "門票重新發送成功"
 msgid "Ticket sales have ended for this event"
 msgstr "此活動的售票已結束"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:339
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:343
 msgid "Ticket titles come from your product categories."
 msgstr "票券標題來自你的產品分類。"
 
@@ -19304,6 +19371,7 @@ msgstr "門票"
 #: src/components/common/WidgetEditor/SectionsPicker.tsx:28
 #: src/components/common/WidgetEditor/TypePicker.tsx:7
 #: src/components/forms/ProductForm/buildPreviewEvent.ts:139
+#: src/components/layouts/EventHomepage/index.tsx:167
 #: src/components/routes/admin/Dashboard/index.tsx:263
 #: src/components/routes/my-tickets/index.tsx:101
 #: src/ee/box-office/components/layouts/BoxOffice/SaleComplete.tsx:111
@@ -19320,7 +19388,7 @@ msgstr "票券與產品"
 msgid "Tickets and {extraSections} more"
 msgstr "門票及其他 {extraSections} 項"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:302
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:306
 msgid "Tickets are always shown"
 msgstr "門票一律顯示"
 
@@ -19852,7 +19920,7 @@ msgstr "請輸入驗證器應用程式中為 {0} 顯示的驗證碼。"
 msgid "Type to search..."
 msgstr "輸入以搜尋..."
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:190
+#: src/components/routes/event/HomepageDesigner/index.tsx:205
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:201
 msgid "Typography"
 msgstr "排版"
@@ -20151,14 +20219,14 @@ msgstr "每張訂單最多 {max} 件"
 msgid "up to {perDateAllocation} per date"
 msgstr "每個日期最多 {perDateAllocation}"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:283
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:288
 msgid "Up to 40 photos, at least 400 × 300px. The first one is shown largest."
 msgstr "最多 40 張相片，尺寸至少 400 × 300px。第一張顯示最大。"
 
 #: src/components/common/EventsDashboardStatusButtons/index.tsx:20
 #: src/components/common/EventStatusBadge/index.tsx:16
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:137
-#: src/components/layouts/OrganizerHomepage/index.tsx:225
+#: src/components/layouts/OrganizerHomepage/index.tsx:154
 #: src/components/routes/event/OccurrencesTab/index.tsx:521
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:33
 msgid "Upcoming"
@@ -20262,15 +20330,15 @@ msgstr "上傳主辦單位的標誌"
 msgid "Upload Image"
 msgstr "上傳圖片"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:83
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:84
 msgid "Upload some photos below."
 msgstr "請在下方上載一些相片。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:338
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:343
 msgid "Upload sponsor logos"
 msgstr "上載贊助商標誌"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:85
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:86
 msgid "Upload sponsor logos below."
 msgstr "請在下方上載贊助商標誌。"
 
@@ -20321,8 +20389,8 @@ msgstr "使用 <0>Liquid 模板</0> 個性化您的郵件"
 msgid "Use a different account"
 msgstr "使用其他帳戶"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:273
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:332
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:278
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:337
 #: src/components/routes/event/Lineup/ProfileImagesField.tsx:136
 msgid "Use a JPG, PNG or WebP image under 5MB."
 msgstr "請使用小於 5MB 的 JPG、PNG 或 WebP 圖片。"
@@ -20636,11 +20704,11 @@ msgstr "驗證緊..."
 msgid "via {providerName}"
 msgstr "透過 {providerName}"
 
-#: src/utilites/homepageSections.ts:43
+#: src/utilites/homepageSections.ts:45
 msgid "Video"
 msgstr "影片"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:215
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:220
 msgid "Video link"
 msgstr "影片連結"
 
@@ -20656,9 +20724,17 @@ msgstr "檢視"
 msgid "View {name}"
 msgstr "查看 {name}"
 
+#: src/components/layouts/EventHomepage/MoreEventsSection.tsx:33
+msgid "View all"
+msgstr "查看全部"
+
 #: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:70
 msgid "View All"
 msgstr "查看全部"
+
+#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:43
+msgid "View all {totalCount} photos"
+msgstr "查看全部 {totalCount} 張相片"
 
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:387
 msgid "View all →"
@@ -20676,7 +20752,7 @@ msgstr "查看全部簽到名單"
 msgid "View all messages sent across the platform"
 msgstr "查看平台上發送的所有訊息"
 
-#: src/components/layouts/OrganizerHomepage/OrganizerPastEventsSection.tsx:32
+#: src/components/layouts/OrganizerHomepage/OrganizerPastEventsSection.tsx:30
 msgid "View all past events"
 msgstr "查看所有往期活動"
 
@@ -20737,10 +20813,6 @@ msgstr "查看活動頁面"
 msgid "View logs"
 msgstr "查看日誌"
 
-#: src/components/layouts/EventHomepage/index.tsx:344
-msgid "View Map"
-msgstr "查看地圖"
-
 #: src/components/routes/admin/Messages/index.tsx:222
 msgid "View Message"
 msgstr "查看訊息"
@@ -20748,10 +20820,6 @@ msgstr "查看訊息"
 #: src/components/routes/event/Lineup/index.tsx:72
 msgid "View on event page"
 msgstr "在活動頁面查看"
-
-#: src/components/layouts/EventHomepage/index.tsx:717
-msgid "View on Google Maps"
-msgstr "在谷歌地圖上查看"
 
 #: src/components/layouts/Event/index.tsx:247
 #: src/components/layouts/OrganizerLayout/index.tsx:237
@@ -20784,7 +20852,7 @@ msgstr "查看訂單"
 msgid "View Organizer Homepage"
 msgstr "查看主辦單位主頁"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:247
+#: src/components/layouts/OrganizerHomepage/index.tsx:175
 msgid "View past events"
 msgstr "查看過往活動"
 
@@ -21026,7 +21094,7 @@ msgstr "載入此頁面時遇到問題。請重試。"
 msgid "We partner with Stripe to send payouts straight to your bank account."
 msgstr "我們與 Stripe 合作，將款項直接轉入你的銀行帳戶。"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:163
+#: src/components/routes/event/HomepageDesigner/index.tsx:178
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:151
 msgid "We recommend dimensions of 1950px by 650px, a ratio of 3:1, and a maximum file size of 5MB"
 msgstr "我們建議尺寸為 2160px x 1080px，文件大小不超過 5MB"
@@ -21436,6 +21504,10 @@ msgstr "出場人員"
 msgid "Whole account"
 msgstr "整個帳戶"
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:13
+msgid "Wide cover, tickets alongside"
+msgstr "闊幅封面，門票在旁"
+
 #: src/components/common/WidgetEditor/index.tsx:238
 msgid "Widget"
 msgstr "小工具"
@@ -21606,11 +21678,11 @@ msgstr "您處於離線狀態"
 msgid "You belong to more than one account. Choose where you'd like to go."
 msgstr "您屬於多個帳戶。請選擇要前往的帳戶。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:214
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:218
 msgid "You can add up to {MAX_SECTIONS} sections."
 msgstr "您最多可新增 {MAX_SECTIONS} 個區塊。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:294
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:299
 msgid "You can add up to {MAX_SPONSORS} sponsors."
 msgstr "您最多可新增 {MAX_SPONSORS} 個贊助商。"
 
@@ -21860,7 +21932,7 @@ msgstr "您已以 {0} 身份登入"
 msgid "You're unsubscribed"
 msgstr "你已取消訂閱"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:326
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:331
 msgid "You've added the maximum of {MAX_SPONSORS} sponsors."
 msgstr "您已達到 {MAX_SPONSORS} 個贊助商的上限。"
 
@@ -21924,6 +21996,10 @@ msgstr "你的賬户將僅由密碼保護。你的復原碼和信任的裝置將
 msgid "Your affiliates have been exported successfully."
 msgstr "你嘅推廣夥伴已經成功匯出。"
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:19
+msgid "Your artwork as a poster"
+msgstr "把作品展示為海報"
+
 #: src/components/routes/event/attendees.tsx:165
 msgid "Your attendees have been exported successfully."
 msgstr "您的與會者已成功導出。"
@@ -21939,6 +22015,14 @@ msgstr "您的瀏覽器阻止了複製。請選取金鑰並手動複製。"
 #: src/components/modals/CheckInListSuccessModal/index.tsx:23
 msgid "Your check-in list has been created successfully. Share the link below with your check-in staff."
 msgstr "您的簽到名單已成功建立。與您的簽到工作人員共享以下連結。"
+
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:73
+msgid "Your cover image is landscape, so it will look small here. Flyer works best with square or portrait artwork."
+msgstr "你的封面是橫向圖片，在這裡會顯得較小。海報風最適合方形或直身圖片。"
+
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:20
+msgid "Your cover sits beside the details like a poster. Best with square or portrait artwork."
+msgstr "封面會像海報一樣顯示在詳情旁邊。最適合方形或直身圖片。"
 
 #: src/components/layouts/Checkout/index.tsx:461
 msgid "Your current order will be lost."
@@ -22083,11 +22167,11 @@ msgstr "您的機構使用單一登入"
 msgid "Your organizer address"
 msgstr "您主辦單位的地址"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:67
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:68
 msgid "Your organizer has no description yet."
 msgstr "您的主辦方尚未有簡介。"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:51
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:52
 msgid "Your organizer profile isn't published."
 msgstr "您的主辦方資料尚未發佈。"
 

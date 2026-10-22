@@ -65,6 +65,6 @@ test.describe('organizer homepage layout', () => {
     const event = withDefaultSections([section('TEXT'), section('TICKETS')], EVENT_DEFAULT_SECTIONS);
 
     expect(organizer.map((item) => item.type)).toEqual(['ABOUT', 'CONTACT', 'EVENTS', 'PAST_EVENTS', 'FAQ']);
-    expect(event.map((item) => item.type)).toEqual(['TEXT', 'TICKETS', 'ABOUT', 'LINEUP', 'SCHEDULE', 'LOCATION', 'ORGANIZER']);
+    expect(event.map((item) => item.type)).toEqual(['TEXT', 'TICKETS', 'ABOUT', 'LINEUP', 'SCHEDULE', 'LOCATION', 'ORGANIZER', 'MORE_EVENTS']);
   });
 });

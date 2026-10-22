@@ -11,7 +11,8 @@ import {useGetEventOccurrencesPublic} from "../../../../queries/useGetEventOccur
 import {getEventLocationDisplay} from "../../../../utilites/effectiveLocation.ts";
 import {formatDateWithLocale, formatOccurrenceEnd, getSafeLocale} from "../../../../utilites/dates.ts";
 import {localeFormats} from "../../../../utilites/dateLocales.ts";
-import {getClientLocale} from "../../../../locales.ts";
+import {byStartDate, dateKey, defaultDateKey, defaultSlot, getActiveOccurrences, isBookable, isSelectable} from "../../../../utilites/occurrenceDefaults.ts";
+import {getClientLocale, toDayjsLocale} from "../../../../locales.ts";
 import './OccurrenceSelector.scss';
 
 dayjs.extend(utc);
@@ -65,25 +66,8 @@ interface OccurrenceSelectorProps {
     waitlistAvailable?: boolean;
 }
 
-const dateKey = (occ: EventOccurrence, tz: string): string =>
-    dayjs.utc(occ.start_date).tz(tz).format('YYYY-MM-DD');
-
-const byStartDate = (a: EventOccurrence, b: EventOccurrence): number =>
-    a.start_date < b.start_date ? -1 : a.start_date > b.start_date ? 1 : 0;
-
-const isBookable = (occ: EventOccurrence): boolean =>
-    occ.status === EventOccurrenceStatus.ACTIVE && !occ.is_past;
-
-const isSelectable = (occ: EventOccurrence, waitlistAvailable?: boolean): boolean =>
-    isBookable(occ) || (occ.status === EventOccurrenceStatus.SOLD_OUT && !!waitlistAvailable);
-
 const sameId = (a?: IdParam, b?: IdParam): boolean =>
     a !== undefined && a !== null && b !== undefined && b !== null && Number(a) === Number(b);
-
-const getActiveOccurrences = (occurrences: EventOccurrence[]): EventOccurrence[] =>
-    occurrences.filter(
-        occ => (occ.status === EventOccurrenceStatus.ACTIVE || occ.status === EventOccurrenceStatus.SOLD_OUT) && !occ.is_past
-    );
 
 const capacityInfo = (occ: EventOccurrence): {label: string; low: boolean} | null => {
     if (!isBookable(occ)) return null;
@@ -92,9 +76,6 @@ const capacityInfo = (occ: EventOccurrence): {label: string; low: boolean} | nul
     const low = capacity <= LOW_AVAILABILITY_THRESHOLD;
     return {label: low ? t`Only ${capacity} left` : t`${capacity} spots left`, low};
 };
-
-const defaultSlot = (slots: EventOccurrence[], waitlistAvailable?: boolean): EventOccurrence | undefined =>
-    slots.find(isBookable) ?? slots.find(occ => isSelectable(occ, waitlistAvailable));
 
 const isListed = (occ: EventOccurrence): boolean =>
     occ.status === EventOccurrenceStatus.ACTIVE || occ.status === EventOccurrenceStatus.SOLD_OUT;
@@ -146,7 +127,7 @@ const DateCard = ({
         ? t`Today`
         : date === tomorrowKey
             ? t`Tomorrow`
-            : dayjs.utc(first.start_date).tz(tz).locale(locale).format('ddd');
+            : dayjs.utc(first.start_date).tz(tz).locale(toDayjsLocale(locale)).format('ddd');
     const soldOut = !slots.some(isBookable);
 
     return (
@@ -392,7 +373,7 @@ const ProductsPane = ({
                 <div className="hi-slot-header-time">
                     <IconClock size={13}/>
                     <span>{timeRange(selectedOccurrence, tz, locale)}</span>
-                    {timezoneNote && <span>{timezoneNote}</span>}
+                    {timezoneNote && <span suppressHydrationWarning>{timezoneNote}</span>}
                     {selectedOccurrence.label && (
                         <span className="hi-time-slot-label">{selectedOccurrence.label}</span>
                     )}
@@ -460,10 +441,7 @@ const OccurrencePicker = ({
             const occ = embeddedOccurrences.find(o => sameId(o.id, selectedOccurrenceId));
             if (occ) return dateKey(occ, tz);
         }
-        const nextBookable = event.next_occurrence_start_date
-            ? activeOccurrences.find(o => dayjs.utc(o.start_date).isSame(dayjs.utc(event.next_occurrence_start_date)))
-            : undefined;
-        return dateKey(nextBookable ?? activeOccurrences[0], tz);
+        return defaultDateKey(event, activeOccurrences);
     };
 
     const [focusedDate, setFocusedDate] = useState<string>(defaultFocusedDate);
@@ -644,7 +622,7 @@ const OccurrencePicker = ({
         const daySlots = slotsByDate[key];
         const baseLabel = daySlots && daySlots.length > 0
             ? formatDateWithLocale(daySlots[0].start_date, 'dayName', tz, locale)
-            : dayjs(key).locale(locale).format(localeFormats[locale].dayName);
+            : dayjs(key).locale(toDayjsLocale(locale)).format(localeFormats[locale].dayName);
 
         if (!calendarDays.has(key)) return baseLabel;
         if (soldOutOnlyDays.has(key)) return `${baseLabel}, ${t`sold out`}`;
@@ -670,7 +648,7 @@ const OccurrencePicker = ({
                         )}
                     </div>
                     {timezoneNote && (
-                        <span className="hi-occurrence-timezone" title={tz}>{timezoneNote}</span>
+                        <span className="hi-occurrence-timezone" title={tz} suppressHydrationWarning>{timezoneNote}</span>
                     )}
                 </div>
             )}

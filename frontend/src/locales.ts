@@ -133,6 +133,11 @@ export const toIntlLocale = (locale: string | null | undefined): string | undefi
     return intlLocaleOverrides[locale as SupportedLocales] ?? locale;
 };
 
+export const toDayjsLocale = (locale: string): string => toIntlLocale(locale) ?? locale;
+
+const localeForLanguage = (language: string): string | undefined => Object.entries(intlLocaleOverrides)
+    .find(([, intlLocale]) => intlLocale === language)?.[0];
+
 const dayjsLocaleLoaders: Partial<Record<SupportedLocales, () => Promise<unknown>>> = {
     de: () => import("dayjs/locale/de"),
     fr: () => import("dayjs/locale/fr"),
@@ -146,6 +151,8 @@ const dayjsLocaleLoaders: Partial<Record<SupportedLocales, () => Promise<unknown
     "zh-hk": () => import("dayjs/locale/zh-hk"),
     tr: () => import("dayjs/locale/tr"),
     hu: () => import("dayjs/locale/hu"),
+    pl: () => import("dayjs/locale/pl"),
+    se: () => import("dayjs/locale/sv"),
     sk: () => import("dayjs/locale/sk"),
     el: () => import("dayjs/locale/el"),
     ko: () => import("dayjs/locale/ko"),
@@ -179,6 +186,11 @@ export const getSupportedLocale = (userLocale: string) => {
     }
 
     const mainLanguage = normalizedLocale.split('-')[0];
+    const aliasedLocale = localeForLanguage(mainLanguage);
+    if (aliasedLocale) {
+        return aliasedLocale;
+    }
+
     const mainLocale = availableLocales.find(locale => locale.startsWith(mainLanguage));
     if (mainLocale) {
         return mainLocale;

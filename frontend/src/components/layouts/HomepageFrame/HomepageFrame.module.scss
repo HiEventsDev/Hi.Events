@@ -1,0 +1,354 @@
+@use "../../../styles/mixins.scss";
+@use "homepage" as hp;
+
+.page {
+  --hp-text: var(--event-primary-text-color);
+  --hp-muted: var(--event-secondary-color);
+  --hp-accent: var(--event-primary-color);
+  --hp-on-accent: var(--event-accent-contrast);
+  --hp-accent-solid: var(--event-accent-solid, var(--hp-accent));
+  --hp-surface: var(--event-content-bg-color);
+  --hp-border: var(--event-border-color);
+  --hp-border-strong: color-mix(in srgb, var(--hp-text) 22%, transparent);
+  --hp-fill: color-mix(in srgb, var(--hp-text) 4%, var(--hp-surface));
+  --hp-fill-strong: color-mix(in srgb, var(--hp-text) 8%, var(--hp-surface));
+  --hp-accent-fill: color-mix(in srgb, var(--hp-accent) 10%, var(--hp-surface));
+  --hp-accent-ink: var(--event-accent-ink);
+  --hp-shadow-sm: 0 1px 2px rgba(15, 15, 20, 0.04), 0 2px 8px -2px rgba(15, 15, 20, 0.06);
+  --hp-shadow-md: 0 1px 2px rgba(15, 15, 20, 0.04), 0 12px 32px -12px rgba(15, 15, 20, 0.16);
+  --hp-shadow-lg: 0 1px 2px rgba(15, 15, 20, 0.03), 0 24px 64px -24px rgba(15, 15, 20, 0.22);
+  --hp-glass: color-mix(in srgb, var(--hp-surface) 82%, transparent);
+  --hp-live-fill: color-mix(in srgb, #ef4444 12%, var(--hp-surface));
+  --hp-live-ink: #b91c1c;
+
+  position: relative;
+  min-height: 100vh;
+  font-family: hp.$font;
+
+  &[data-width="medium"] {
+    --hp-sheet-max: 800px;
+    --hp-content-pad: 56px;
+  }
+
+  &[data-width="narrow"] {
+    --hp-sheet-max: 640px;
+    --hp-content-pad: 48px;
+  }
+
+  color: var(--hp-text);
+  -webkit-font-smoothing: antialiased;
+
+  &[data-mode="dark"] {
+    --hp-live-fill: color-mix(in srgb, #ef4444 20%, var(--hp-surface));
+    --hp-live-ink: #fca5a5;
+    --hp-fill: color-mix(in srgb, var(--hp-text) 6%, var(--hp-surface));
+    --hp-fill-strong: color-mix(in srgb, var(--hp-text) 11%, var(--hp-surface));
+    --hp-accent-fill: color-mix(in srgb, var(--hp-accent) 16%, var(--hp-surface));
+    --hp-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 8px -2px rgba(0, 0, 0, 0.4);
+    --hp-shadow-md: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px -12px rgba(0, 0, 0, 0.6);
+    --hp-shadow-lg: 0 1px 2px rgba(0, 0, 0, 0.3), 0 24px 64px -24px rgba(0, 0, 0, 0.7);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 60% at 50% -10%, color-mix(in srgb, var(--hp-accent) 14%, transparent), transparent 70%),
+    var(--event-bg-color);
+
+  &[data-mirror] {
+    background-size: cover;
+    background-position: center;
+    filter: blur(48px) saturate(1.35);
+    transform: scale(1.2);
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: color-mix(in srgb, var(--event-bg-color) 62%, transparent);
+    }
+  }
+}
+
+.shell {
+  position: relative;
+
+  @include hp.tablet-up {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+}
+
+.sheet {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 100svh;
+  background: var(--hp-surface);
+
+  @include hp.tablet-up {
+    min-height: calc(100svh - 48px);
+    max-width: min(880px, var(--hp-sheet-max, 880px));
+    margin: 0 auto;
+    border: 1px solid var(--hp-border);
+    border-radius: hp.$sheet-radius;
+    box-shadow: var(--hp-shadow-lg);
+  }
+
+  @include hp.wide {
+    max-width: var(--hp-sheet-max, none);
+  }
+}
+
+.cover {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: var(--hp-fill);
+
+  &[data-sized] {
+    aspect-ratio: var(--cover-ratio);
+    max-height: min(68svh, 560px);
+  }
+
+  @include hp.mobile {
+    box-sizing: content-box;
+    padding-bottom: hp.$lip;
+  }
+
+  @include hp.tablet-up {
+    width: calc(100% - 20px);
+    margin: 10px 10px 0;
+    border-radius: hp.$sheet-radius - 10px;
+
+    &[data-sized] {
+      max-height: min(480px, 56vh);
+    }
+  }
+
+  @include hp.wide {
+    width: calc(100% - 24px);
+    margin: 12px 12px 0;
+    border-radius: hp.$sheet-radius - 12px;
+  }
+
+  &[data-variant="banner"][data-sized] {
+    max-height: min(36svh, 280px);
+
+    @include hp.tablet-up {
+      max-height: min(320px, 40vh);
+    }
+  }
+
+  &[data-variant="poster"] {
+    width: 100%;
+    margin: 0;
+    padding-bottom: 0;
+    box-sizing: border-box;
+    border-radius: 20px;
+    box-shadow: var(--hp-shadow-md);
+
+    &[data-sized] {
+      max-height: min(72svh, 620px);
+    }
+
+    @include hp.tablet-up {
+      &[data-sized] {
+        max-height: max(280px, calc(100svh - 200px));
+      }
+    }
+  }
+}
+
+.datePoster {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  border: 1px solid var(--hp-border);
+  border-radius: 20px;
+  background: var(--hp-surface);
+  color: var(--hp-text);
+  line-height: 1;
+
+  @include hp.mobile {
+    display: none;
+  }
+}
+
+.datePosterMonth {
+  align-self: stretch;
+  padding: 14px 0 12px;
+  background: var(--hp-accent-solid);
+  color: var(--hp-on-accent);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.datePosterDay {
+  padding: clamp(28px, 4vw, 44px) 0 10px;
+  font-size: clamp(5rem, 9vw, 7.5rem);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+}
+
+.datePosterWeekday {
+  padding-bottom: clamp(24px, 3vw, 36px);
+  color: var(--hp-muted);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.coverBackdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(32px) saturate(1.3);
+  transform: scale(1.2);
+}
+
+.coverImage {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+
+  .cover:not([data-sized]) & {
+    height: auto;
+    max-height: 560px;
+  }
+
+  .cover[data-variant="banner"]:not([data-sized]) & {
+    max-height: 320px;
+  }
+}
+
+.dateTile {
+  --tile-size: 48px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: var(--tile-size);
+  height: var(--tile-size);
+  overflow: hidden;
+  border: 1px solid var(--hp-border);
+  border-radius: calc(var(--tile-size) * 0.29);
+  background: var(--hp-surface);
+  text-align: center;
+
+  &[data-size="lg"] {
+    --tile-size: 60px;
+  }
+}
+
+.dateTileMonth {
+  padding: calc(var(--tile-size) * 0.06) 0 calc(var(--tile-size) * 0.04);
+  background: var(--hp-accent-solid);
+  color: var(--hp-on-accent);
+  font-size: calc(var(--tile-size) * 0.2);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.dateTileDay {
+  display: grid;
+  flex: 1;
+  place-items: center;
+  color: var(--hp-text);
+  font-size: calc(var(--tile-size) * 0.38);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  margin-top: auto;
+  padding: 24px 20px 32px;
+  border-top: 1px solid var(--hp-border);
+  color: var(--hp-muted);
+  font-size: 0.875rem;
+
+  @include hp.mobile {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  @include hp.tablet-up {
+    padding-inline: 40px;
+  }
+
+  @include hp.wide {
+    padding-inline: var(--hp-content-pad, 48px);
+  }
+}
+
+.poweredBy {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--hp-muted);
+
+  a {
+    color: var(--hp-text);
+    font-weight: 600;
+  }
+}
+
+.footerLinks {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+}
+
+.footerLinks .footerLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--hp-muted);
+  font: inherit;
+  font-size: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.15s hp.$ease;
+
+  &:hover {
+    color: var(--hp-text);
+    text-decoration: none;
+    opacity: 1;
+  }
+}

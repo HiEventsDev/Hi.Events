@@ -12,6 +12,7 @@ enum HomepageSectionType: string
     case SCHEDULE = 'SCHEDULE';
     case LOCATION = 'LOCATION';
     case ORGANIZER = 'ORGANIZER';
+    case MORE_EVENTS = 'MORE_EVENTS';
     case EVENTS = 'EVENTS';
     case CONTACT = 'CONTACT';
     case PAST_EVENTS = 'PAST_EVENTS';
@@ -26,7 +27,7 @@ enum HomepageSectionType: string
      */
     public static function eventBuiltIns(): array
     {
-        return [self::TICKETS, self::ABOUT, self::LINEUP, self::SCHEDULE, self::LOCATION, self::ORGANIZER];
+        return [self::TICKETS, self::ABOUT, self::LINEUP, self::SCHEDULE, self::LOCATION, self::ORGANIZER, self::MORE_EVENTS];
     }
 
     /**

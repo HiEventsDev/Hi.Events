@@ -87,6 +87,7 @@ export interface CreateEventPayload {
   organizer_id: number;
   start_date: string;
   end_date?: string;
+  description?: string;
   category: string;
   currency?: string;
   timezone?: string;

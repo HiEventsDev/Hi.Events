@@ -27,6 +27,8 @@ export const sectionTypeLabel = (type: HomepageSectionType): string => {
             return t`Location`;
         case 'ORGANIZER':
             return t`Organizer`;
+        case 'MORE_EVENTS':
+            return t`More events`;
         case 'EVENTS':
             return t`Events`;
         case 'CONTACT':

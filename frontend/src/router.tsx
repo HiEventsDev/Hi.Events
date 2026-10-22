@@ -685,6 +685,7 @@ export const router: RouteObject[] = [
     {
         path: "/events/:organizerId/:organizerSlug",
         loader: publicOrganizerRouteLoader,
+        handle: {styles: "src/components/layouts/PublicOrganizer/index.tsx"},
         async lazy() {
             const PublicOrganizer = await import("./components/layouts/PublicOrganizer");
             return { Component: PublicOrganizer.default };
@@ -694,6 +695,7 @@ export const router: RouteObject[] = [
     {
         path: "/events/:organizerId/:organizerSlug/past-events",
         loader: publicOrganizerRouteLoader,
+        handle: {styles: "src/components/layouts/PublicOrganizer/index.tsx"},
         async lazy() {
             const PublicOrganizer = await import("./components/layouts/PublicOrganizer");
             return { Component: PublicOrganizer.default };
@@ -702,6 +704,7 @@ export const router: RouteObject[] = [
     },
     {
         path: "/e/:eventId/:eventSlug",
+        handle: {styles: "src/components/layouts/EventHomepage/index.tsx"},
         async lazy() {
             const EventHomepage = await import("./components/layouts/EventHomepage");
             return { Component: EventHomepage.default };
@@ -726,6 +729,7 @@ export const router: RouteObject[] = [
     {
         path: "/event/:eventId/:eventSlug",
         loader: publicEventRouteLoader,
+        handle: {styles: "src/components/layouts/PublicEvent/index.tsx"},
         async lazy() {
             const PublicEvent = await import("./components/layouts/PublicEvent");
             return { Component: PublicEvent.default };

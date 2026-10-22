@@ -5,6 +5,7 @@ import {
     IconAlignLeft,
     IconBuildingStore,
     IconCalendarEvent,
+    IconCalendarPlus,
     IconChevronDown,
     IconCircleDashed,
     IconEye,
@@ -57,6 +58,7 @@ const ICONS: Record<HomepageSectionType, TablerIcon> = {
     EVENTS: IconCalendarEvent,
     CONTACT: IconMail,
     PAST_EVENTS: IconHistory,
+    MORE_EVENTS: IconCalendarPlus,
     ABOUT: IconInfoCircle,
     LINEUP: IconMicrophone2,
     SCHEDULE: IconTimeline,
@@ -75,6 +77,7 @@ interface SectionsEditorProps {
     sections: HomepageSection[];
     images: Image[];
     emptyStates?: Map<string, SectionEmptyState>;
+    ticketsBesideContent?: boolean;
     disabled?: boolean;
     onChange: (update: (sections: HomepageSection[]) => HomepageSection[]) => void;
     onImagesChanged: () => void;
@@ -82,7 +85,7 @@ interface SectionsEditorProps {
 
 const NO_EMPTY_STATES = new Map<string, SectionEmptyState>();
 
-const MAX_SECTIONS = 40;
+const MAX_SECTIONS = 41;
 
 const revealInvalidField = (row: HTMLElement) => {
     const field = row.querySelector<HTMLElement>('[aria-invalid="true"]');
@@ -100,7 +103,7 @@ const revealInvalidField = (row: HTMLElement) => {
 const sectionLabel = (section: HomepageSection): string =>
     (section.type === 'TICKETS' ? null : section.heading) || sectionTypeLabel(section.type);
 
-export const SectionsEditor = ({variant, entityId, sections, images, emptyStates = NO_EMPTY_STATES, disabled, onChange, onImagesChanged}: SectionsEditorProps) => {
+export const SectionsEditor = ({variant, entityId, sections, images, emptyStates = NO_EMPTY_STATES, ticketsBesideContent = false, disabled, onChange, onImagesChanged}: SectionsEditorProps) => {
     const alwaysShownType: HomepageSectionType = variant === 'event' ? 'TICKETS' : 'EVENTS';
 
     const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -199,6 +202,7 @@ export const SectionsEditor = ({variant, entityId, sections, images, emptyStates
                                     entityId={entityId}
                                     section={section}
                                     images={images}
+                                    ticketsBesideContent={ticketsBesideContent}
                                     disabled={disabled}
                                     isEmpty={emptyStates.has(section.id)}
                                     onChange={changes => update(section.id, changes)}

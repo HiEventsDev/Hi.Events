@@ -84,6 +84,20 @@ class HomepageSectionsSanitizerTest extends TestCase
         $this->assertSame(['TICKETS'], array_column($result, 'type'));
     }
 
+    public function test_event_pages_keep_the_more_events_section_with_its_heading_and_visibility(): void
+    {
+        $result = $this->sanitizer->sanitizeForEvent([
+            ['id' => 'tickets', 'type' => 'TICKETS', 'enabled' => true],
+            ['id' => 'more_events', 'type' => 'MORE_EVENTS', 'enabled' => false, 'heading' => ' <i>Also on</i> '],
+            ['id' => 'more-again', 'type' => 'MORE_EVENTS', 'enabled' => true],
+        ], 5);
+
+        $this->assertSame([
+            ['id' => 'tickets', 'type' => 'TICKETS', 'enabled' => true],
+            ['id' => 'more_events', 'type' => 'MORE_EVENTS', 'enabled' => false, 'heading' => 'Also on'],
+        ], $result);
+    }
+
     public function test_organizer_sections_keep_events_shown_and_only_use_organizer_images(): void
     {
         $result = $this->sanitizer->sanitizeForOrganizer([
@@ -93,6 +107,7 @@ class HomepageSectionsSanitizerTest extends TestCase
             ['id' => 'past-again', 'type' => 'PAST_EVENTS', 'enabled' => true],
             ['id' => 'tickets', 'type' => 'TICKETS', 'enabled' => true],
             ['id' => 'lineup', 'type' => 'LINEUP', 'enabled' => true],
+            ['id' => 'more_events', 'type' => 'MORE_EVENTS', 'enabled' => true],
             ['id' => 'g1', 'type' => 'GALLERY', 'image_ids' => [30, 10]],
             ['id' => 's1', 'type' => 'SPONSORS', 'sponsors' => [['image_id' => 40, 'url' => 'https://acme.example'], ['image_id' => 20]]],
         ], 7);
