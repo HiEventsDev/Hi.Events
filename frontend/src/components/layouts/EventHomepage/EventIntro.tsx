@@ -133,7 +133,7 @@ export const EventIntro = ({
                         detail={locationDetailsBelow
                             ? (location.venueName ? location.city : null)
                             : (location.venueName ? location.full : null)}
-                        extra={!locationDetailsBelow && location.mapsUrl && (
+                        extra={location.mapsUrl && (
                             <a href={location.mapsUrl} target="_blank" rel="nofollow ugc noopener noreferrer" className={classes.factLink}>
                                 {t`Get directions`}
                                 <IconArrowUpRight size={14}/>
