@@ -1,5 +1,5 @@
 import {useLocation, useNavigate} from "react-router";
-import {EventList, EventSpotlight} from './EventList';
+import {EventList} from './EventList';
 import classes from './OrganizerHomepage.module.scss';
 import {Fragment, useEffect, useRef, useState} from 'react';
 import {Event, GenericPaginatedResponse, HomepageSection, Organizer} from "../../../types.ts";
@@ -135,9 +135,6 @@ export const OrganizerHomepage = ({
 
     const renderEventsBlock = (heading: string | null | undefined, includesPastEvents: boolean) => {
         const showPastToggle = includesPastEvents || isPastEvents;
-        const isFirstPage = (eventsData?.meta.current_page ?? 1) === 1;
-        const spotlight = !isPastEvents && isFirstPage ? events[0] : undefined;
-        const listEvents = spotlight ? events.slice(1) : events;
 
         return (
             <section key="events" className={classes.section} id="events" ref={eventsSectionRef} data-testid="organizer-events-section">
@@ -178,10 +175,7 @@ export const OrganizerHomepage = ({
                         )}
                     </div>
                 ) : (
-                    <>
-                        {spotlight && <EventSpotlight event={spotlight as Event}/>}
-                        {listEvents.length > 0 && <EventList events={listEvents as Event[]} past={isPastEvents}/>}
-                    </>
+                    <EventList events={events as Event[]} past={isPastEvents}/>
                 )}
 
                 {eventsData && eventsData.meta.total > eventsData.meta.per_page && (
@@ -262,6 +256,7 @@ export const OrganizerHomepage = ({
                 themeSettings={themeSettings}
                 mirrorImageUrl={cover?.url}
                 footerSource="app-organizer-footer"
+                width="medium"
                 outside={(
                     <ContactOrganizerModal
                         opened={contactModalOpen}

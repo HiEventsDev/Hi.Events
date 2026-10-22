@@ -64,9 +64,9 @@ export const formatLongDay = (date: string, tz: string): string => {
     }).format(dayjs.utc(date).toDate());
 };
 
-export const formatWeekday = (date: string, tz: string): string => new Intl.DateTimeFormat(
+export const formatWeekday = (date: string, tz: string, weekday: 'long' | 'short' = 'long'): string => new Intl.DateTimeFormat(
     toIntlLocale(getSafeLocale(getClientLocale())),
-    {weekday: 'long', timeZone: tz},
+    {weekday, timeZone: tz},
 ).format(dayjs.utc(date).toDate());
 
 export const formatMonthHeading = (date: string, tz: string): string => {

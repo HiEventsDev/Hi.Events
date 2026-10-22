@@ -1,14 +1,56 @@
-.contactModal {
+.content {
+  --mantine-color-body: var(--event-content-bg-color, #ffffff);
+  --mantine-color-text: var(--event-primary-text-color, #1a1a1a);
+  --mantine-color-dimmed: var(--event-secondary-color, #525252);
+  --mantine-color-placeholder: var(--event-secondary-text-color, #737373);
+  --mantine-color-default-border: var(--event-border-color, rgba(0, 0, 0, 0.1));
+  --mantine-primary-color-filled: var(--event-primary-color, #7c3aed);
+  background: var(--mantine-color-body);
+  color: var(--mantine-color-text);
+  font-family: var(--theme-font-family, inherit);
+
+  :global(.mantine-InputWrapper-root .mantine-Input-input) {
+    --input-bg: var(--mantine-color-body);
+
+    &:not([data-error]) {
+      --input-color: var(--mantine-color-text);
+    }
+  }
+}
+
+.header {
+  background: var(--mantine-color-body);
+}
+
+.title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+.close {
+  color: var(--mantine-color-dimmed);
+
+  &:hover {
+    background: color-mix(in srgb, var(--mantine-color-text) 8%, transparent);
+  }
 }
 
 .cancelButton {
+  color: var(--mantine-color-text);
+
+  &:hover {
+    background: color-mix(in srgb, var(--mantine-color-text) 8%, transparent);
+  }
 }
 
 .submitButton {
   border-radius: 10px;
+  background: var(--event-primary-color, var(--mantine-primary-color-filled));
+  color: var(--event-accent-contrast, #ffffff);
 
   &:hover {
-    opacity: 0.9;
-    transform: translateY(-1px);
+    background: var(--event-primary-color, var(--mantine-primary-color-filled));
+    filter: brightness(0.94);
   }
 }

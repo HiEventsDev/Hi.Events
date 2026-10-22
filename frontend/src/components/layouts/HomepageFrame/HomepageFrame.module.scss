@@ -144,10 +144,14 @@
   }
 
   &[data-variant="banner"][data-sized] {
-    max-height: min(36svh, 280px);
+    max-height: min(40svh, 300px);
 
     @include hp.tablet-up {
-      max-height: min(320px, 40vh);
+      max-height: min(420px, 50vh);
+    }
+
+    .coverImage {
+      object-fit: cover;
     }
   }
 
@@ -280,6 +284,7 @@
 }
 
 .footer {
+  isolation: isolate;
   display: flex;
   align-items: center;
   justify-content: space-between;
