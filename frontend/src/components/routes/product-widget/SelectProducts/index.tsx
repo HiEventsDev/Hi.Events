@@ -60,7 +60,7 @@ import {getDisplayPrice} from "../../../common/Currency";
 import {getLineTotal} from "./priceTotals.ts";
 import {eventsClientPublic} from "../../../../api/event.client.ts";
 import {promoCodeClientPublic} from "../../../../api/promo-code.client.ts";
-import {IconCheck, IconChevronDown, IconX} from "@tabler/icons-react"
+import {IconCheck, IconChevronDown, IconTicketOff, IconX} from "@tabler/icons-react"
 import {getSessionIdentifier} from "../../../../utilites/sessionIdentifier.ts";
 import {setCheckoutSessionIdentifier} from "../../../../utilites/checkoutSession.ts";
 import {getEmbedParentUrl, getParentOrigin, sendHeightToParent} from "../../../../utilites/iframeResize.ts";
@@ -73,6 +73,7 @@ import {UserGeneratedContent} from "../../../common/UserGeneratedContent";
 import {firstApiError} from "../../../../utilites/apiErrors.ts";
 import {WIDGET_COLOR_PARAMS} from "../../../../utilites/widgetColors.ts";
 import {ProductSelection, WIDGET_PARAM} from "../../../../utilites/widgetConfig.ts";
+import {getActiveOccurrences} from "../../../../utilites/occurrenceDefaults.ts";
 
 const AFFILIATE_EXPIRY_DAYS = 30;
 
@@ -215,9 +216,13 @@ const SelectProducts = (props: SelectProductsProps) => {
         form.setFieldValue('affiliate_code', affiliateCode || null);
     }, [affiliateCode]);
 
-    const [selectedOccurrenceId, setSelectedOccurrenceId] = useState<number | undefined>(undefined);
-    const selectedOccurrenceIdRef = useRef<number | undefined>(undefined);
-    const lastSelectedOccurrenceRef = useRef<EventOccurrence | undefined>(undefined);
+    const scopedOccurrence = props.initialOccurrenceId
+        ? getActiveOccurrences(props.event?.occurrences ?? []).find(occurrence => Number(occurrence.id) === Number(props.initialOccurrenceId))
+        : undefined;
+    const scopedOccurrenceId = scopedOccurrence ? Number(scopedOccurrence.id) : undefined;
+    const [selectedOccurrenceId, setSelectedOccurrenceId] = useState<number | undefined>(scopedOccurrenceId);
+    const selectedOccurrenceIdRef = useRef<number | undefined>(scopedOccurrenceId);
+    const lastSelectedOccurrenceRef = useRef<EventOccurrence | undefined>(scopedOccurrence);
     const [pendingInitialOccurrenceId, setPendingInitialOccurrenceId] = useState<number | undefined>(() => {
         if (props.initialOccurrenceId) {
             return props.initialOccurrenceId;
@@ -266,11 +271,7 @@ const SelectProducts = (props: SelectProductsProps) => {
     const hasPerDateQuantities = (product: Product): boolean =>
         (product.prices?.length ?? 0) > 0
         && product.prices!.every(price => price.quantity_applies_to === ProductQuantityAppliesTo.Occurrence);
-    const activeOccurrences = useMemo(() => {
-        return (event?.occurrences || []).filter(
-            occ => (occ.status === EventOccurrenceStatus.ACTIVE || occ.status === EventOccurrenceStatus.SOLD_OUT) && !occ.is_past
-        );
-    }, [event?.occurrences]);
+    const activeOccurrences = useMemo(() => getActiveOccurrences(event?.occurrences || []), [event?.occurrences]);
     const needsOccurrenceSelection = isRecurring && activeOccurrences.length >= 1;
     const occurrenceSelected = !!selectedOccurrenceId;
     const eventHasEnded = useMemo(() => {
@@ -1259,7 +1260,10 @@ const SelectProducts = (props: SelectProductsProps) => {
              ref={resizeRef}
              style={widgetStyleVars}>
             {unavailableMessage && (
-                <div className={classNames(['hi-no-products'])}>
+                <div className={classNames(['hi-no-products', 'hi-unavailable'])}>
+                    <span className={'hi-unavailable-icon'} aria-hidden="true">
+                        <IconTicketOff stroke={1.75}/>
+                    </span>
                     <p className={classNames(['hi-no-products-message'])}>
                         {unavailableMessage}
                     </p>

@@ -1,9 +1,11 @@
 import type {HomepageSection, HomepageSectionType} from "../types.ts";
 
-const builtIn = (type: HomepageSectionType): HomepageSection => ({id: type.toLowerCase(), type, enabled: true});
+const OPT_IN_SECTIONS: HomepageSectionType[] = ['MORE_EVENTS'];
+
+const builtIn = (type: HomepageSectionType): HomepageSection => ({id: type.toLowerCase(), type, enabled: !OPT_IN_SECTIONS.includes(type)});
 
 export const EVENT_DEFAULT_SECTIONS: HomepageSection[] = (
-    ['TICKETS', 'ABOUT', 'LINEUP', 'SCHEDULE', 'LOCATION', 'ORGANIZER'] as HomepageSectionType[]
+    ['TICKETS', 'ABOUT', 'LINEUP', 'SCHEDULE', 'LOCATION', 'ORGANIZER', 'MORE_EVENTS'] as HomepageSectionType[]
 ).map(builtIn);
 
 export const ORGANIZER_DEFAULT_SECTIONS: HomepageSection[] = (

@@ -46,6 +46,7 @@ export const sectionEmptyState = (
                 ? {reason: t`This event has no single in-person venue.`, action: {label: t`Set the location`, to: `/manage/event/${eventId}/settings`}}
                 : null;
         case 'ORGANIZER':
+        case 'MORE_EVENTS':
             return event?.organizer && event.organizer.status !== OrganizerStatus.LIVE
                 ? {
                     reason: t`Your organizer profile isn't published.`,

@@ -1,6 +1,7 @@
 import {t} from "@lingui/macro";
 import {LineupEntry} from "../../../../api/lineup.client.ts";
 import {BILLING_TIERS, initialsFor, profilePhoto} from "../../../../utilites/lineup.ts";
+import {responsiveImage} from "../../../../utilites/imageTransform.ts";
 import classes from "./Lineup.module.scss";
 
 interface LineupGridProps {
@@ -54,7 +55,7 @@ const LineupCard = ({entry, onOpen}: { entry: LineupEntry, onOpen: () => void })
                 data-empty={!photo || undefined}
             >
                 {photo
-                    ? <img src={photo.url} alt="" loading="lazy" decoding="async"/>
+                    ? <img {...responsiveImage(photo.url, '(min-width: 768px) 340px, 50vw')} alt="" loading="lazy" decoding="async"/>
                     : <span className={classes.monogram}>{initialsFor(entry.profile.name)}</span>}
             </span>
             <span className={classes.cardBody}>

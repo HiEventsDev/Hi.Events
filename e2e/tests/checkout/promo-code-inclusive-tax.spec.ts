@@ -21,7 +21,7 @@ test.describe('promo code with tax-inclusive prices', () => {
     await api.createPromoCode(event.eventId, { code, discount_type: 'PERCENTAGE', discount: 15 });
 
     const checkout = new CheckoutPage(page);
-    await page.setViewportSize({ width: 1280, height: 400 });
+    await page.setViewportSize({ width: 390, height: 400 });
     await checkout.gotoPublicEvent(event.eventId, event.slug);
     await checkout.applyPromoCode(code);
 

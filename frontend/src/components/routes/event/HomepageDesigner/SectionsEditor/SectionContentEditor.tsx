@@ -26,6 +26,7 @@ interface SectionContentEditorProps {
     entityId: IdParam;
     section: HomepageSection;
     images: Image[];
+    ticketsBesideContent: boolean;
     disabled?: boolean;
     isEmpty?: boolean;
     onChange: (changes: SectionChanges) => void;
@@ -41,7 +42,7 @@ export const sectionExceedsLimits = (section: HomepageSection): boolean =>
     || (section.type === 'FAQ' && (section.faqs ?? []).some(faq => isFaqAnswerTooLong(faq.answer)));
 
 export const SectionContentEditor = (props: SectionContentEditorProps) => {
-    const {variant, entityId, section, disabled, isEmpty, onChange} = props;
+    const {variant, entityId, section, ticketsBesideContent, disabled, isEmpty, onChange} = props;
 
     if (isEmpty && BUILT_IN_WITH_NOTICE.includes(section.type)) {
         return null;
@@ -88,8 +89,12 @@ export const SectionContentEditor = (props: SectionContentEditorProps) => {
             return <p className={classes.help}>{t`Shows the venue and a map. Hidden automatically for online events.`}</p>;
         case 'ORGANIZER':
             return <p className={classes.help}>{t`Shows your organizer profile with a contact button.`}</p>;
+        case 'MORE_EVENTS':
+            return <p className={classes.help}>{t`Shows up to three of your other upcoming events. Hidden automatically when there are none.`}</p>;
         case 'TICKETS':
-            return <p className={classes.help}>{t`Always shown. Move it to change where tickets appear on the page.`}</p>;
+            return ticketsBesideContent
+                ? <p className={classes.help}>{t`Always shown. On large screens tickets sit beside your page content; move it to change where they appear on phones and tablets.`}</p>
+                : <p className={classes.help}>{t`Always shown. Move it to change where your tickets appear.`}</p>;
         default:
             return null;
     }

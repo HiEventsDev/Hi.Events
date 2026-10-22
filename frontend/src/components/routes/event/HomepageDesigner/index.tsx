@@ -12,7 +12,7 @@ import {showSuccess} from "../../../../utilites/notifications.tsx";
 import {t} from "@lingui/macro";
 import {useForm} from "@mantine/form";
 import {Group, Stack, Text, TextInput} from "@mantine/core";
-import {IconClick, IconHelp, IconLayoutList, IconPalette, IconPhoto, IconTypography} from "@tabler/icons-react";
+import {IconClick, IconHelp, IconLayout, IconLayoutList, IconPalette, IconPhoto, IconTypography} from "@tabler/icons-react";
 import {Tooltip} from "../../../common/Tooltip";
 import {GET_EVENT_IMAGES_QUERY_KEY, useGetEventImages} from "../../../../queries/useGetEventImages.ts";
 import {eventPreviewPath} from "../../../../utilites/urlHelper.ts";
@@ -24,6 +24,8 @@ import {ThemeFontControl} from "../../../common/ThemeFontControl";
 import {getDefaultThemeSettings, validateThemeSettings} from "../../../../utilites/themeUtils.ts";
 import {firstHomepageSectionsError, HomepageDesigner as HomepageDesignerShell, useHomepagePreview} from "../../../common/HomepageDesigner";
 import {DesignerSection} from "../../../common/DesignerShell";
+import {resolveEventLayout} from "../../../../constants/eventLayouts.ts";
+import {LayoutPicker} from "./LayoutPicker";
 
 interface FormValues {
     homepage_theme_settings: Partial<HomepageThemeSettings>;
@@ -144,9 +146,22 @@ const HomepageDesigner = () => {
             onSave={() => form.onSubmit(handleSubmit)()}
             onDiscard={() => form.reset()}
         >
+            <DesignerSection icon={<IconLayout/>} title={t`Layout`}>
+                <LayoutPicker
+                    theme={validateThemeSettings(form.values.homepage_theme_settings)}
+                    coverIsLandscape={!!existingCover?.width && !!existingCover?.height && existingCover.width > existingCover.height * 1.25}
+                    disabled={isDisabled}
+                    onChange={layout => form.setFieldValue('homepage_theme_settings', {
+                        ...form.values.homepage_theme_settings,
+                        layout,
+                    })}
+                />
+            </DesignerSection>
+
             <DesignerSection icon={<IconLayoutList/>} title={t`Sections`}>
                 <SectionsEditor
                     variant="event"
+                    ticketsBesideContent={resolveEventLayout(form.values.homepage_theme_settings.layout).ticketRail}
                     entityId={eventId!}
                     sections={form.values.homepage_sections}
                     images={eventImagesQuery.data ?? []}

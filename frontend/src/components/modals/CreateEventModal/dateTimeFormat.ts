@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import {getClientLocale} from "../../../locales.ts";
+import {getClientLocale, toDayjsLocale} from "../../../locales.ts";
 import {localeFormats} from "../../../utilites/dateLocales.ts";
 import {getSafeLocale} from "../../../utilites/dates.ts";
 
@@ -15,13 +15,13 @@ export const uses12HourClock = (): boolean => /[hA]/.test(formatsForClient().for
 
 export const formatChipDateTime = (value: string): string => {
     const {locale, formats} = formatsForClient();
-    const date = dayjs(value).locale(locale);
+    const date = dayjs(value).locale(toDayjsLocale(locale));
     return `${date.format(formats.weekdayDate)} · ${date.format(formats.timeOnly)}`;
 };
 
 export const formatChipEnd = (end: string, start?: string | null): string => {
     const {locale, formats} = formatsForClient();
-    const date = dayjs(end).locale(locale);
+    const date = dayjs(end).locale(toDayjsLocale(locale));
     if (start && dayjs(start).isSame(dayjs(end), 'day')) {
         return date.format(formats.timeOnly);
     }

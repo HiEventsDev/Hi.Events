@@ -103,16 +103,6 @@ export const summariseEventPrice = (event: Event): EventPriceSummary | null => {
 
 const startsAt = (occurrence: EventOccurrence): number => dayjs.utc(occurrence.start_date).valueOf();
 
-const isInProgress = (start: string | null | undefined, end: string | null | undefined, now: Dayjs): boolean => {
-    if (!start || !end) {
-        return false;
-    }
-    const startMoment = dayjs.utc(start);
-    const endMoment = dayjs.utc(end);
-
-    return endMoment.isAfter(startMoment) && !now.isBefore(startMoment) && now.isBefore(endMoment);
-};
-
 const distinctEnd = (start: string | null | undefined, end: string | null | undefined): string | null =>
     start && end && dayjs.utc(end).isAfter(dayjs.utc(start)) ? end : null;
 
@@ -126,7 +116,7 @@ export const summariseEventSchedule = (event: Event, now: Dayjs = dayjs()): Even
             end: distinctEnd(event.start_date, event.end_date),
             hasEnded,
             isSeriesRange: isRecurring,
-            isHappeningNow: !hasEnded && isInProgress(event.start_date, event.end_date, now),
+            isHappeningNow: event.lifecycle_status === EventLifecycleStatus.ONGOING,
             additionalDateCount: 0,
         };
     }
@@ -153,7 +143,7 @@ export const summariseEventSchedule = (event: Event, now: Dayjs = dayjs()): Even
         end: next ? distinctEnd(next.start_date, next.end_date) : null,
         hasEnded,
         isSeriesRange: false,
-        isHappeningNow: upcoming.some(occurrence => isInProgress(occurrence.start_date, occurrence.end_date, now)),
+        isHappeningNow: event.lifecycle_status === EventLifecycleStatus.ONGOING,
         additionalDateCount: otherDates.size,
     };
 };

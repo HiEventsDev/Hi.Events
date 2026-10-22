@@ -43,6 +43,9 @@ export default defineConfig({
         "process.env": process.env,
         "__APP_VERSION__": JSON.stringify(getVersion()),
     },
+    build: {
+        manifest: true,
+    },
     ssr: {
         noExternal: ["react-helmet-async"],
     },

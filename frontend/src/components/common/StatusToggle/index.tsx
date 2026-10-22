@@ -78,7 +78,7 @@ export const StatusToggle: React.FC<StatusToggleProps> = ({
 
     if (currentStatus === 'PENDING_MANUAL_REVIEW') {
         return (
-            <div className={classes.banner}>
+            <div className={classes.banner} data-status-banner="">
                 <div className={classes.content}>
                     <span className={classes.message}>
                         {t`This event is pending manual review and is not visible to the public`}
@@ -93,7 +93,7 @@ export const StatusToggle: React.FC<StatusToggleProps> = ({
         : t`This organizer profile is not published yet`;
 
     return (
-        <div className={classes.banner}>
+        <div className={classes.banner} data-status-banner="">
             <div className={classes.content}>
                 <span className={classes.message}>{message}</span>
                 <Button

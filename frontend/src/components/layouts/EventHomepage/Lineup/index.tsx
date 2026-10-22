@@ -9,6 +9,7 @@ import {ScheduleTimeline} from "./ScheduleTimeline.tsx";
 import {ProfileModal} from "./ProfileModal.tsx";
 import {SessionModal} from "./SessionModal.tsx";
 import {useReturnFocusOnClose} from "../../../../hooks/useReturnFocusOnClose.ts";
+import classes from "./Lineup.module.scss";
 
 export interface HomepageSectionClasses {
     section: string;
@@ -136,7 +137,7 @@ export const EventLineupSection = ({event, occurrence, heading, sectionClasses, 
     }
 
     return (
-        <section ref={anchorRef} className={sectionClasses.section} id="lineup" data-testid="event-lineup-section">
+        <section ref={anchorRef} className={`${sectionClasses.section} ${classes.queryContainer}`} id="lineup" data-testid="event-lineup-section">
             <div className={sectionClasses.sectionHeader}>
                 <h2 className={sectionClasses.sectionTitle}>{heading || getLineupTerminology(event.category).lineup}</h2>
             </div>
@@ -156,7 +157,7 @@ export const EventScheduleSection = ({event, occurrence, heading, sectionClasses
     }
 
     return (
-        <section ref={anchorRef} className={sectionClasses.section} id="schedule" data-testid="event-schedule-section">
+        <section ref={anchorRef} className={`${sectionClasses.section} ${classes.queryContainer}`} id="schedule" data-testid="event-schedule-section">
             <ScheduleTimeline
                 event={event}
                 lineup={lineup}

@@ -98,11 +98,11 @@ test.describe('homepage designer limits', () => {
 
   test('the section limit explains why Add section is unavailable', async ({ authedPage: page, api, account }) => {
     const event = await createLiveEventWithFreeTicket(api, account.organizerId);
-    const builtIns = ['TICKETS', 'ABOUT', 'LINEUP', 'SCHEDULE', 'LOCATION', 'ORGANIZER'];
+    const builtIns = ['TICKETS', 'ABOUT', 'LINEUP', 'SCHEDULE', 'LOCATION', 'ORGANIZER', 'MORE_EVENTS'];
     await api.updateEventSettings(event.eventId, {
       homepage_sections: [
         ...builtIns.map((type) => ({ id: type.toLowerCase(), type, enabled: true })),
-        ...Array.from({ length: 40 - builtIns.length }, (_, index) => ({ id: `text_${index}`, type: 'TEXT', enabled: true, heading: `Text ${index + 1}`, body: '<p>Hello</p>' })),
+        ...Array.from({ length: 41 - builtIns.length }, (_, index) => ({ id: `text_${index}`, type: 'TEXT', enabled: true, heading: `Text ${index + 1}`, body: '<p>Hello</p>' })),
       ],
     });
     const designer = new DesignerPage(page);
@@ -112,7 +112,7 @@ test.describe('homepage designer limits', () => {
     const addButton = page.getByTestId('homepage-add-section-button');
     await expect(addButton).toHaveAttribute('aria-disabled', 'true');
     await addButton.hover();
-    await expect(page.getByRole('tooltip', { name: 'You can add up to 40 sections.' })).toBeVisible();
+    await expect(page.getByRole('tooltip', { name: 'You can add up to 41 sections.' })).toBeVisible();
     await addButton.click({ force: true });
     await expect(page.getByTestId('homepage-add-section-text')).toHaveCount(0);
 

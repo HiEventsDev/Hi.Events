@@ -1,4 +1,4 @@
-import {ReactNode, useState} from 'react';
+import {cloneElement, ReactElement, useState} from 'react';
 import {ActionIcon, Button, CopyButton, Group, Input, Popover} from '@mantine/core';
 import {
     IconBrandFacebook,
@@ -20,7 +20,7 @@ interface ShareComponentProps {
     shareButtonText?: string;
     hideShareButtonText?: boolean;
     className?: string;
-    children?: ReactNode;
+    children?: ReactElement<{onClick?: () => void}>;
 }
 
 export const ShareComponent = ({
@@ -62,19 +62,15 @@ export const ShareComponent = ({
             withArrow
         >
             <Popover.Target>
-                <div style={{display: 'flex'}} onClick={handleShareClick}>
-                    {children ? (
-                        children
-                    ) : hideShareButtonText ? (
-                        <ActionIcon variant={'transparent'} className={className}>
-                            <IconShare size={20}/>
-                        </ActionIcon>
-                    ) : (
-                        <Button variant={'transparent'} leftSection={<IconShare size={20}/>} className={className}>
-                            {shareButtonText}
-                        </Button>
-                    )}
-                </div>
+                {children ? cloneElement(children, {onClick: handleShareClick}) : hideShareButtonText ? (
+                    <ActionIcon variant={'transparent'} className={className} onClick={handleShareClick} aria-label={shareButtonText}>
+                        <IconShare size={20}/>
+                    </ActionIcon>
+                ) : (
+                    <Button variant={'transparent'} leftSection={<IconShare size={20}/>} className={className} onClick={handleShareClick}>
+                        {shareButtonText}
+                    </Button>
+                )}
             </Popover.Target>
 
             <Popover.Dropdown style={{display: 'flex'}}>

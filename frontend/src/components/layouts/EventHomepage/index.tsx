@@ -4,47 +4,37 @@ import {CustomHomepageSection} from "./Sections";
 import {resolveHomepageSections} from "../../../utilites/homepageSections.ts";
 import {initialSelectedOccurrence} from "../../../utilites/lineupSchedule.ts";
 import SelectProducts from "../../routes/product-widget/SelectProducts";
+import {defaultOccurrence} from "../../../utilites/occurrenceDefaults.ts";
 import "../../../styles/widget/default.scss";
-import React, {Fragment, useCallback, useEffect, useRef, useState} from "react";
+import {CSSProperties, Fragment, useCallback, useEffect, useRef, useState} from "react";
 import {EventDocumentHead} from "../../common/EventDocumentHead";
-import {eventCoverImage, eventHomepageUrl, imageUrl, organizerHomepageUrl} from "../../../utilites/urlHelper.ts";
+import {eventCoverImage} from "../../../utilites/urlHelper.ts";
 import {Event, EventLifecycleStatus, EventOccurrence, EventType, HomepageSection, HomepageSectionType, OrganizerStatus} from "../../../types.ts";
 import {EventNotAvailable} from "./EventNotAvailable";
-import {
-    IconArrowUpRight,
-    IconCalendar,
-    IconCalendarOff,
-    IconCalendarPlus,
-    IconCalendarRepeat,
-    IconExternalLink,
-    IconMail,
-    IconMapPin,
-    IconMaximize,
-    IconShare,
-    IconTicket,
-    IconWorld
-} from "@tabler/icons-react";
-import {Anchor} from "@mantine/core";
 import {t} from "@lingui/macro";
-import {PoweredByFooter} from "../../common/PoweredByFooter";
 import {ContactOrganizerModal} from "../../common/ContactOrganizerModal";
-import {socialMediaConfig} from "../../../constants/socialMediaConfig";
-import {getGoogleMapsUrl, getShortLocationDisplay} from "../../../utilites/addressUtilities.ts";
 import {buildEventLocationDisplay, summariseEventLocations} from "../../../utilites/effectiveLocation.ts";
 import {StatusToggle} from "../../common/StatusToggle";
-import {getConfig} from "../../../utilites/config.ts";
-import {computeThemeVariables, validateThemeSettings} from "../../../utilites/themeUtils.ts";
+import {validateThemeSettings} from "../../../utilites/themeUtils.ts";
 import {useOrganizerTrackingPixels} from "../../../hooks/useOrganizerTrackingPixels";
-import {trackPixelEvent, hasActivePixels} from "../../../utilites/trackingPixels";
-import {CookieSettingsLink} from "../../common/CookieSettingsLink";
-import {removeTransparency} from "../../../utilites/colorHelper.ts";
-import {ensureHomepageFontLoaded} from "../../../utilites/fontLoader.ts";
-import {ShareComponent} from "../../common/ShareIcon";
-import {EventDateRange} from "../../common/EventDateRange";
-import {CalendarOptionsPopover} from "../../common/CalendarOptionsPopover";
-import {formatDateWithLocale, isDateInPast, isSameDayInTimezone} from "../../../utilites/dates.ts";
+import {hasActivePixels, trackPixelEvent} from "../../../utilites/trackingPixels";
+import {formatDateWithLocale, isSameDayInTimezone} from "../../../utilites/dates.ts";
 import {formatCurrency} from "../../../utilites/currency.ts";
+import {summariseEventPrice, summariseEventSchedule} from "../../../utilites/eventListing.ts";
+import {eventPriceLabel, eventScheduleLabel} from "../../../utilites/eventListingLabels.ts";
 import {UserGeneratedContent} from "../../common/UserGeneratedContent";
+import {HomepageFrame} from "../HomepageFrame";
+import {CoverMedia} from "../HomepageFrame/CoverMedia.tsx";
+import {DatePoster} from "../HomepageFrame/DatePoster.tsx";
+import {MoreEventsSection} from "./MoreEventsSection.tsx";
+import {EventHost, EventIntro, IntroStatus} from "./EventIntro.tsx";
+import {LocationSection} from "./LocationSection.tsx";
+import {OrganizerSection} from "./OrganizerSection.tsx";
+import {SectionNav} from "./SectionNav.tsx";
+import {CheckoutBar, CheckoutBarMode} from "./CheckoutBar.tsx";
+import {useInViewport, useStickyRail} from "./hooks.ts";
+import {scrollBehavior} from "../../../utilites/motion.ts";
+import {resolveEventLayout} from "../../../constants/eventLayouts.ts";
 
 interface EventHomepageProps {
     event?: Event;
@@ -56,16 +46,23 @@ interface EventHomepageProps {
 
 const EventHomepage = ({...loaderData}: EventHomepageProps) => {
     const {event, promoCodeValid, promoCode, initialOccurrenceId, isPreview = false} = loaderData;
-    const [showScrollButton, setShowScrollButton] = useState(false);
     const [contactModalOpen, setContactModalOpen] = useState(false);
     const [selectedOccurrence, setSelectedOccurrence] = useState<EventOccurrence | undefined>(
-        () => initialSelectedOccurrence(event?.occurrences, initialOccurrenceId),
+        () => initialOccurrenceId || !event
+            ? initialSelectedOccurrence(event?.occurrences, initialOccurrenceId)
+            : initialSelectedOccurrence(event.occurrences, null) ?? defaultOccurrence(event),
     );
     const occurrenceSelectionReported = useRef(false);
     const [selectedCart, setSelectedCart] = useState({quantity: 0, total: 0});
     const [continueButtonNode, setContinueButtonNode] = useState<HTMLButtonElement | null>(null);
-    const [continueButtonInView, setContinueButtonInView] = useState(false);
-    const ticketsSectionRef = useRef<HTMLDivElement>(null);
+    const [ticketsNode, setTicketsNode] = useState<HTMLDivElement | null>(null);
+    const [contentNode, setContentNode] = useState<HTMLDivElement | null>(null);
+    const ticketsInView = useInViewport(ticketsNode, 0);
+    const continueButtonInView = useInViewport(continueButtonNode, 0.5);
+    const [footerNode, setFooterNode] = useState<HTMLElement | null>(null);
+    const footerInView = useInViewport(footerNode, 0);
+    const layout = resolveEventLayout(event?.settings?.homepage_theme_settings?.layout);
+    useStickyRail(layout.ticketRail ? ticketsNode : null);
 
     const handleSelectedOccurrenceChange = useCallback((occurrence?: EventOccurrence) => {
         if (!occurrence && !occurrenceSelectionReported.current) {
@@ -79,21 +76,6 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
         (cart: {quantity: number; total: number}) => setSelectedCart(cart),
         [],
     );
-
-    useEffect(() => {
-        if (!continueButtonNode) {
-            setContinueButtonInView(false);
-            return;
-        }
-
-        const observer = new IntersectionObserver(
-            ([entry]) => setContinueButtonInView(entry.isIntersecting),
-            {threshold: 0.5},
-        );
-        observer.observe(continueButtonNode);
-
-        return () => observer.disconnect();
-    }, [continueButtonNode]);
 
     const {pixelsReady} = useOrganizerTrackingPixels(
         event?.organizer?.settings?.tracking_pixels
@@ -109,130 +91,67 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
         }
     }, [event?.id, pixelsReady]);
 
-    useEffect(() => {
-        let showTimer: NodeJS.Timeout;
-
-        const checkTicketsPosition = () => {
-            if (ticketsSectionRef.current) {
-                const rect = ticketsSectionRef.current.getBoundingClientRect();
-                const isBelowFold = rect.top > window.innerHeight;
-                const isAboveView = rect.bottom < 0;
-                const shouldShowButton = isBelowFold || isAboveView;
-                setShowScrollButton(shouldShowButton);
-            }
-        };
-
-        showTimer = setTimeout(() => {
-            checkTicketsPosition();
-        }, 500);
-
-        const handleScroll = () => {
-            checkTicketsPosition();
-        };
-
-        const handleResize = () => {
-            checkTicketsPosition();
-        };
-
-        window.addEventListener('scroll', handleScroll);
-        window.addEventListener('resize', handleResize);
-
-        return () => {
-            clearTimeout(showTimer);
-            window.removeEventListener('scroll', handleScroll);
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
-
-    const themeSettings = validateThemeSettings(event?.settings?.homepage_theme_settings);
-
-    useEffect(() => {
-        ensureHomepageFontLoaded(themeSettings.font_family);
-    }, [themeSettings.font_family]);
-
-    const scrollToTickets = () => {
-        ticketsSectionRef.current?.scrollIntoView({behavior: 'smooth', block: 'start'});
-    };
-
     if (!event) {
         return <EventNotAvailable/>;
     }
 
-    const cssVars = computeThemeVariables(themeSettings);
-    const backgroundType = themeSettings.background_type;
-
-    const themeStyles = {
-        '--event-bg-color': themeSettings.background,
-        '--event-content-bg-color': cssVars['--theme-surface'],
-        '--event-primary-color': themeSettings.accent,
-        '--event-primary-text-color': cssVars['--theme-text-primary'],
-        '--event-secondary-color': cssVars['--theme-text-secondary'],
-        '--event-secondary-text-color': cssVars['--theme-text-tertiary'],
-        '--event-accent-contrast': cssVars['--theme-accent-contrast'],
-        '--event-accent-soft': cssVars['--theme-accent-soft'],
-        '--event-accent-muted': cssVars['--theme-accent-muted'],
-        '--event-border-color': cssVars['--theme-border'],
-        '--theme-font-family': cssVars['--theme-font-family'],
-        fontFamily: cssVars['--theme-font-family'],
-    } as React.CSSProperties;
-
-    const coverImageData = eventCoverImage(event);
-    const coverImage = coverImageData?.url;
+    const themeSettings = validateThemeSettings(event.settings?.homepage_theme_settings);
+    const tz = event.timezone;
+    const cover = eventCoverImage(event);
     const organizer = event.organizer!;
-    const organizerSocials = organizer?.settings?.social_media_handles;
-    const organizerLogo = imageUrl('ORGANIZER_LOGO', organizer?.images);
-    const organizerLocation = organizer?.location?.structured_address;
-    const websiteUrl = organizer?.website;
+    const organizerLogo = organizer.images?.find(image => image.type === 'ORGANIZER_LOGO')?.url;
+    const organizerIsLive = organizer.status === OrganizerStatus.LIVE;
+
     const locationSummary = summariseEventLocations(event);
-    const singleLocationDisplay = locationSummary.kind === 'single'
+    const location = locationSummary.kind === 'single'
         ? buildEventLocationDisplay(event, locationSummary.eventLocation, locationSummary.isEventDefault)
         : null;
-    const hasMixedModes = locationSummary.kind === 'varied' && locationSummary.types.length > 1;
-    const hasMultipleLocations = locationSummary.kind === 'varied' && locationSummary.types.length === 1;
-    const isOnlineEvent = singleLocationDisplay?.isOnline === true;
-    const hasLocation = singleLocationDisplay !== null && !singleLocationDisplay.isOnline;
-    const venueName = singleLocationDisplay?.venueName ?? null;
-    const formattedAddress = singleLocationDisplay?.full ?? '';
-    const mapUrl = singleLocationDisplay?.mapsUrl ?? null;
-    const multipleLocationsLabel = hasMultipleLocations ? t`Multiple locations` : null;
-    const mixedModesLabel = hasMixedModes ? t`Online & in-person — see schedule` : null;
+    const hasVenue = !!location && !location.isOnline && !!(location.venueName || location.full);
+    const variedLocationLabel = locationSummary.kind !== 'varied'
+        ? null
+        : locationSummary.types.length > 1 ? t`Online & in-person — see schedule` : t`Multiple locations`;
 
-    const socialLinks = organizerSocials ? Object.entries(organizerSocials)
-        .filter(([platform, handle]) => handle && socialMediaConfig[platform as keyof typeof socialMediaConfig])
-        .map(([platform, handle]) => ({
-            platform,
-            handle: handle as string,
-            config: socialMediaConfig[platform as keyof typeof socialMediaConfig]
-        })) : [];
+    const schedule = summariseEventSchedule(event);
+    const hasUpcomingDate = event.type !== EventType.RECURRING
+        || !!event.next_occurrence_start_date
+        || (event.occurrences ?? []).some(occurrence => !occurrence.is_past);
+    const showsSingleDate = !!selectedOccurrence || (!schedule.isSeriesRange && hasUpcomingDate);
+    const dateStart = selectedOccurrence?.start_date ?? (showsSingleDate ? schedule.start : null);
+    const dateEnd = selectedOccurrence ? (selectedOccurrence.end_date ?? null) : schedule.end;
+    const seriesLabel = !showsSingleDate && schedule.isSeriesRange && schedule.start ? eventScheduleLabel(schedule, tz) : null;
+    const hasLaterDates = !!event.last_occurrence_date && !!event.next_occurrence_start_date
+        && !isSameDayInTimezone(event.last_occurrence_date, event.next_occurrence_start_date, tz);
+    const lastOccurrenceDate = hasLaterDates
+        ? formatDateWithLocale(event.last_occurrence_date!, 'shortDate', tz)
+        : null;
 
     const eventHasEnded = event.lifecycle_status === EventLifecycleStatus.ENDED;
+    const products = event.products || event.product_categories?.flatMap(category => category.products || []) || [];
+    const status: IntroStatus | null = eventHasEnded
+        ? {label: t`This event has ended`, tone: 'muted'}
+        : products.length > 0 && products.every(product => product.is_sold_out)
+            ? {label: t`Sold Out`, tone: 'muted'}
+            : event.lifecycle_status === EventLifecycleStatus.ONGOING ? {label: t`Happening now`, tone: 'live'} : null;
+    const ticketRail = layout.ticketRail && !eventHasEnded;
+    const sheetWidth = layout.ticketRail && !ticketRail ? 'medium' : layout.width;
 
-    const getStatusBadge = () => {
-        if (eventHasEnded) {
-            return {text: t`Sales ended`};
-        }
+    const price = eventHasEnded ? null : summariseEventPrice(event);
+    const priceLabel = price ? eventPriceLabel(price, event.currency) : null;
+    const shortDateLabel = dateStart
+        ? `${formatDateWithLocale(dateStart, 'weekdayDate', tz)} · ${formatDateWithLocale(dateStart, 'timeOnly', tz)}`
+        : null;
 
-        const products = event.products || event.product_categories?.flatMap(c => c.products || []) || [];
-
-        if (products.length > 0 && products.every(p => p.is_sold_out)) {
-            return {text: t`Sold Out`};
-        }
-
-        return null;
-    };
-
-    const statusBadge = getStatusBadge();
     const getTicketsButtonText = event.settings?.get_tickets_button_text || t`Get Tickets`;
     const continueButtonText = event.settings?.continue_button_text || t`Continue`;
-    const canAddToCalendar = event.type !== EventType.RECURRING || !!selectedOccurrence;
-    const hasLaterDates = !!event.last_occurrence_date && !!event.next_occurrence_start_date
-        && !isSameDayInTimezone(event.last_occurrence_date, event.next_occurrence_start_date, event.timezone);
-    const lastOccurrenceDate = hasLaterDates
-        ? formatDateWithLocale(event.last_occurrence_date!, 'shortDate', event.timezone)
-        : null;
-    const showFloatingCheckoutButton = selectedCart.quantity > 0 && !!continueButtonNode && !continueButtonInView;
+    const hasCart = selectedCart.quantity > 0 && !!continueButtonNode;
+    const checkoutBarMode: CheckoutBarMode | null = footerInView
+        ? null
+        : hasCart
+            ? (continueButtonInView === false ? 'continue' : null)
+            : (ticketsInView === false && !eventHasEnded && price?.kind !== 'soldOut' ? 'tickets' : null);
 
-    const homepageSections = resolveHomepageSections(event.settings?.homepage_sections).filter(section => section.enabled || section.type === 'TICKETS');
+    const homepageSections = resolveHomepageSections(event.settings?.homepage_sections)
+        .filter(section => section.type === 'TICKETS' ? !eventHasEnded : section.enabled);
     const sectionHeading = (type: HomepageSectionType, fallback: string) =>
         homepageSections.find(section => section.type === type)?.heading || fallback;
     const sectionClasses = {
@@ -241,238 +160,106 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
         sectionTitle: classes.sectionTitle,
     };
     const lineupOccurrence = event.type === EventType.RECURRING ? selectedOccurrence : undefined;
-
-    const ticketsBlock = (
-        <div className={`${classes.section} ${classes.ticketsSection}`} ref={ticketsSectionRef} id="tickets">
-            <SelectProducts
-                colors={{
-                    background: "transparent",
-                    primary: "var(--event-primary-color)",
-                    primaryText: "var(--event-primary-text-color)",
-                    secondary: "var(--event-primary-color)",
-                    secondaryText: "var(--event-accent-contrast)",
-                    bodyBackground: "var(--event-bg-color)",
-                }}
-                continueButtonText={event.settings?.continue_button_text}
-                padding={"0px"}
-                event={event}
-                promoCodeValid={promoCodeValid}
-                promoCode={promoCode}
-                showPoweredBy={false}
-                initialOccurrenceId={initialOccurrenceId}
-                onSelectedOccurrenceChange={handleSelectedOccurrenceChange}
-                onCartChange={handleCartChange}
-                continueButtonRef={setContinueButtonNode}
-            />
-        </div>
-    );
-
-    const aboutBlock = event?.description && (
-        <div className={classes.section}>
-            <div className={classes.sectionHeader}>
-                <h2 className={classes.sectionTitle}>{sectionHeading('ABOUT', t`About`)}</h2>
-            </div>
-            <UserGeneratedContent
-                className={classes.description}
-                html={event.description}
-            />
-        </div>
-    );
-
-    const locationBlock = hasLocation && (
-        <div className={classes.section}>
-            <div className={classes.sectionHeader}>
-                <h2 className={classes.sectionTitle}>{sectionHeading('LOCATION', t`Location`)}</h2>
-            </div>
-            <div className={classes.locationContent}>
-                <div className={classes.venueDetails}>
-                    {venueName && (
-                        <div className={classes.venueName}>
-                            {venueName}
-                        </div>
-                    )}
-                    {formattedAddress && (
-                        <div className={classes.venueAddress}>
-                            {formattedAddress}
-                        </div>
-                    )}
-                    {mapUrl && (
-                        <a
-                            href={mapUrl}
-                            target="_blank"
-                            rel="nofollow ugc noopener noreferrer"
-                            className={classes.directionsLink}
-                        >
-                            <IconArrowUpRight/>
-                            {t`Get Directions`}
-                        </a>
-                    )}
-                </div>
-                {mapUrl && (
-                    <a
-                        href={mapUrl}
-                        target="_blank"
-                        rel="nofollow ugc noopener noreferrer"
-                        className={classes.mapContainer}
-                    >
-                        <svg
-                            viewBox="0 0 200 120"
-                            preserveAspectRatio="xMidYMid slice"
-                            style={{
-                                width: '100%',
-                                height: '100%',
-                                position: 'absolute',
-                                inset: 0,
-                            }}
-                        >
-                            <rect width="200" height="120" fill="var(--accent-soft)"/>
-                            <path d="M-5 95 Q30 85, 50 90 Q80 100, 110 88 Q140 75, 170 82 Q190 86, 205 80" stroke="var(--border-color)" strokeWidth="2" fill="none" opacity="0.3"/>
-                            <line x1="0" y1="50" x2="200" y2="50" stroke="var(--border-color)" strokeWidth="2" opacity="0.2"/>
-                            <line x1="100" y1="0" x2="100" y2="120" stroke="var(--border-color)" strokeWidth="2" opacity="0.2"/>
-                            <line x1="0" y1="25" x2="200" y2="25" stroke="var(--border-color)" strokeWidth="1.5" opacity="0.2"/>
-                            <line x1="0" y1="70" x2="85" y2="70" stroke="var(--border-color)" strokeWidth="1.5" opacity="0.2"/>
-                            <line x1="115" y1="70" x2="200" y2="70" stroke="var(--border-color)" strokeWidth="1.5" opacity="0.2"/>
-                            <line x1="50" y1="0" x2="50" y2="120" stroke="var(--border-color)" strokeWidth="1.5" opacity="0.2"/>
-                            <line x1="150" y1="0" x2="150" y2="75" stroke="var(--border-color)" strokeWidth="1.5" opacity="0.2"/>
-                            <rect x="110" y="28" width="14" height="10" fill="var(--border-color)" opacity="0.25" rx="1"/>
-                            <rect x="20" y="55" width="12" height="10" fill="var(--border-color)" opacity="0.25" rx="1"/>
-                        </svg>
-                        <IconMapPin size={32} className={classes.mapPin}/>
-                        <div className={classes.mapOverlay}>
-                            <span className={classes.mapOverlayLabel}>
-                                <IconMaximize/>
-                                {t`View Map`}
-                            </span>
-                        </div>
-                    </a>
-                )}
-            </div>
-        </div>
-    );
-
-    const organizerBlock = organizer && organizer.status === OrganizerStatus.LIVE && (
-        <div className={classes.section} id="organizer">
-            <div className={classes.sectionHeader}>
-                <h2 className={classes.sectionTitle}>{sectionHeading('ORGANIZER', t`Organizer`)}</h2>
-            </div>
-            <div className={classes.organizerCard}>
-                {organizerLogo ? (
-                    <img
-                        src={organizerLogo}
-                        alt={organizer.name}
-                        className={classes.organizerAvatar}
-                    />
-                ) : (
-                    <div className={classes.organizerAvatarPlaceholder}>
-                        {organizer.name.charAt(0).toUpperCase()}
-                    </div>
-                )}
-                <div className={classes.organizerContent}>
-                    <div className={classes.organizerHeader}>
-                        <div>
-                            <h3 className={classes.organizerName}>
-                                <Anchor href={organizerHomepageUrl(organizer)}>
-                                    {organizer.name}
-                                </Anchor>
-                            </h3>
-                            {getShortLocationDisplay(organizerLocation) && (
-                                <div className={classes.organizerLocation}>
-                                    <IconMapPin/>
-                                    <a
-                                        href={getGoogleMapsUrl(organizerLocation!)}
-                                        target="_blank"
-                                        rel="nofollow ugc noopener noreferrer"
-                                    >
-                                        {getShortLocationDisplay(organizerLocation)}
-                                    </a>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-
-                    {organizer.description && (
-                        <UserGeneratedContent
-                            className={classes.organizerBio}
-                            html={organizer.description}
-                        />
-                    )}
-
-                    <div className={classes.organizerActions}>
-                        {socialLinks.length > 0 && (
-                            <div className={classes.socialLinks}>
-                                {socialLinks.map(({platform, handle, config}) => {
-                                    const IconComponent = config.icon;
-                                    const url = config.baseUrl + handle;
-                                    const label = config.name();
-                                    return (
-                                        <a
-                                            key={platform}
-                                            href={url}
-                                            target="_blank"
-                                            rel="nofollow ugc noopener noreferrer"
-                                            className={classes.socialLink}
-                                            title={label}
-                                            aria-label={label}
-                                        >
-                                            <IconComponent size={18}/>
-                                        </a>
-                                    );
-                                })}
-                            </div>
-                        )}
-                        {websiteUrl && (() => {
-                            try {
-                                const hostname = new URL(websiteUrl).hostname;
-                                return (
-                                    <a
-                                        href={websiteUrl}
-                                        target="_blank"
-                                        rel="nofollow ugc noopener noreferrer"
-                                        className={classes.socialLink}
-                                        title={hostname}
-                                    >
-                                        <IconWorld size={18}/>
-                                    </a>
-                                );
-                            } catch {
-                                return null;
-                            }
-                        })()}
-                        <button
-                            onClick={() => setContactModalOpen(true)}
-                            className={classes.contactButton}
-                        >
-                            <IconMail/>
-                            {t`Contact`}
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+    const mainRowCount = 1 + homepageSections.filter(section => section.type !== 'TICKETS').length;
 
     const renderSection = (section: HomepageSection) => {
         switch (section.type) {
             case 'TICKETS':
-                return ticketsBlock;
+                return (
+                    <div
+                        ref={setTicketsNode}
+                        id="tickets"
+                        role="region"
+                        aria-label={t`Tickets`}
+                        tabIndex={-1}
+                        className={classes.tickets}
+                    >
+                        <div className={classes.ticketsCard}>
+                            <SelectProducts
+                                colors={{
+                                    background: "transparent",
+                                    primary: "var(--event-primary-color)",
+                                    primaryText: "var(--event-primary-text-color)",
+                                    secondary: "var(--event-primary-color)",
+                                    secondaryText: "var(--event-accent-contrast)",
+                                    bodyBackground: "var(--event-bg-color)",
+                                }}
+                                continueButtonText={event.settings?.continue_button_text}
+                                padding={"0px"}
+                                event={event}
+                                promoCodeValid={promoCodeValid}
+                                promoCode={promoCode}
+                                showPoweredBy={false}
+                                initialOccurrenceId={initialOccurrenceId}
+                                onSelectedOccurrenceChange={handleSelectedOccurrenceChange}
+                                onCartChange={handleCartChange}
+                                continueButtonRef={setContinueButtonNode}
+                            />
+                        </div>
+                    </div>
+                );
             case 'ABOUT':
-                return aboutBlock;
+                return event.description ? (
+                    <section className={classes.section} id="about">
+                        <div className={classes.sectionHeader}>
+                            <h2 className={classes.sectionTitle}>{sectionHeading('ABOUT', t`About`)}</h2>
+                        </div>
+                        <UserGeneratedContent className={classes.description} html={event.description}/>
+                    </section>
+                ) : null;
             case 'LINEUP':
                 return <EventLineupSection event={event} occurrence={lineupOccurrence} heading={section.heading} sectionClasses={sectionClasses}/>;
             case 'SCHEDULE':
                 return <EventScheduleSection event={event} occurrence={lineupOccurrence} heading={section.heading} sectionClasses={sectionClasses}/>;
             case 'LOCATION':
-                return locationBlock;
+                return hasVenue ? <LocationSection heading={sectionHeading('LOCATION', t`Location`)} location={location!}/> : null;
             case 'ORGANIZER':
-                return organizerBlock;
+                return organizerIsLive ? (
+                    <OrganizerSection
+                        heading={sectionHeading('ORGANIZER', t`Organizer`)}
+                        organizer={organizer}
+                        logo={organizerLogo}
+                        onContact={() => setContactModalOpen(true)}
+                    />
+                ) : null;
+            case 'MORE_EVENTS':
+                return organizerIsLive
+                    ? <MoreEventsSection heading={section.heading} organizer={organizer} currentEventId={event.id!}/>
+                    : null;
             default:
                 return <CustomHomepageSection images={event.images ?? []} section={section} sectionClasses={sectionClasses}/>;
         }
     };
 
+    const hostProps = {
+        event,
+        organizer,
+        organizerLogo,
+        occurrence: selectedOccurrence,
+        canAddToCalendar: event.type !== EventType.RECURRING || !!selectedOccurrence,
+    };
+    const intro = (
+        <EventIntro
+            {...hostProps}
+            showHost={!layout.poster}
+            centered={layout.centeredIntro}
+            dateStart={dateStart}
+            dateEnd={dateEnd}
+            seriesLabel={seriesLabel}
+            lastOccurrenceDate={event.type === EventType.RECURRING ? lastOccurrenceDate : null}
+            status={status}
+            location={location}
+            locationDetailsBelow={hasVenue && homepageSections.some(section => section.type === 'LOCATION')}
+            variedLocationLabel={variedLocationLabel}
+        />
+    );
+    const sections = homepageSections.map(section => (
+        <Fragment key={section.id}>{renderSection(section)}</Fragment>
+    ));
+
     return (
         <>
-            {!isPreview && event?.status && event?.id && (
+            {!isPreview && event.status && event.id && (
                 <StatusToggle
                     entityType="event"
                     entityId={event.id}
@@ -485,300 +272,70 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                 />
             )}
 
-            <main
-                className={classes.pageWrapper}
-                style={themeStyles}
-                data-mode={themeSettings.mode}
-            >
-                <style>
-                    {`
-                        body, .ssr-loader {
-                            background-color: ${removeTransparency(themeSettings.background)} !important;
-                        }
-                    `}
-                </style>
-
-                {event && <EventDocumentHead event={event}/>}
-
-                {(coverImage && backgroundType === 'MIRROR_COVER_IMAGE') ? (
-                    <div
-                        className={classes.background}
-                        style={{backgroundImage: `url(${coverImage})`}}
-                    />
-                ) : (
-                    <div
-                        className={classes.background}
-                        style={{backgroundColor: 'var(--event-bg-color)'}}
-                    />
-                )}
-                <div
-                    className={classes.backgroundOverlay}
-                    style={backgroundType === 'MIRROR_COVER_IMAGE' ? {
-                        '--overlay-color': themeSettings.background
-                    } as React.CSSProperties : undefined}
-                />
-
-                <div className={classes.container}>
-                    <div className={classes.wrapper}>
-                        <div className={classes.mainCard}>
-                            <div className={classes.heroSection}>
-                                {coverImage && (
-                                    <div
-                                        className={classes.coverWrapper}
-                                        style={(coverImageData?.width && coverImageData?.height) ? {
-                                            '--cover-aspect-ratio': `${coverImageData.width} / ${coverImageData.height}`,
-                                        } as React.CSSProperties : undefined}
-                                    >
-                                        {coverImageData?.lqip_base64 && (
-                                            <img
-                                                src={coverImageData.lqip_base64}
-                                                alt=""
-                                                aria-hidden="true"
-                                                className={classes.coverLqip}
-                                            />
-                                        )}
-                                        <img
-                                            src={coverImage}
-                                            alt={event.title}
-                                            className={classes.coverImage}
-                                        />
-                                        <div className={classes.heroGradient}/>
-                                        {statusBadge && (
-                                            <div className={classes.statusBadges}>
-                                                <span className={classes.statusBadge}>
-                                                    <IconTicket/>
-                                                    {statusBadge.text}
-                                                </span>
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
-
-                                <div className={classes.eventHeader}>
-                                    <div className={classes.headerTopRow}>
-                                        {organizer && organizer.status === OrganizerStatus.LIVE ? (
-                                            <a
-                                                href={organizerHomepageUrl(organizer)}
-                                                className={classes.organizerPill}
-                                                title={organizer.name}
-                                            >
-                                                {organizerLogo ? (
-                                                    <img
-                                                        src={organizerLogo}
-                                                        alt={organizer.name}
-                                                        className={classes.organizerPillAvatar}
-                                                    />
-                                                ) : (
-                                                    <span className={classes.organizerPillAvatarPlaceholder}>
-                                                        {organizer.name.charAt(0).toUpperCase()}
-                                                    </span>
-                                                )}
-                                                <span className={classes.organizerPillName}>
-                                                    {organizer.name}
-                                                </span>
-                                            </a>
-                                        ) : (
-                                            <div className={classes.organizerPill} title={organizer?.name}>
-                                                {organizerLogo ? (
-                                                    <img
-                                                        src={organizerLogo}
-                                                        alt={organizer?.name || ''}
-                                                        className={classes.organizerPillAvatar}
-                                                    />
-                                                ) : (
-                                                    <span className={classes.organizerPillAvatarPlaceholder}>
-                                                        {organizer?.name?.charAt(0).toUpperCase() || '?'}
-                                                    </span>
-                                                )}
-                                                <span className={classes.organizerPillName}>
-                                                    {organizer?.name}
-                                                </span>
-                                            </div>
-                                        )}
-
-                                        <div className={classes.actionButtons}>
-                                            <ShareComponent
-                                                title={t`Check out this event: ${event.title}`}
-                                                text={t`Check out this event: ${event.title}`}
-                                                url={eventHomepageUrl(event)}
-                                                imageUrl={coverImage || undefined}
-                                            >
-                                                <button className={classes.actionButton} title={t`Share`}>
-                                                    <IconShare/>
-                                                </button>
-                                            </ShareComponent>
-                                            {canAddToCalendar && (
-                                                <CalendarOptionsPopover event={event} occurrence={selectedOccurrence}>
-                                                    <button
-                                                        className={classes.actionButton}
-                                                        title={t`Add to Calendar`}
-                                                        aria-label={t`Add to Calendar`}
-                                                    >
-                                                        <IconCalendarPlus/>
-                                                    </button>
-                                                </CalendarOptionsPopover>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    <h1 className={classes.eventTitle}>{event.title}</h1>
-
-                                    <div className={classes.eventMeta}>
-                                        <div className={classes.metaItem}>
-                                            <div className={classes.metaIconBox}>
-                                                <IconCalendar/>
-                                            </div>
-                                            <div className={classes.metaContent}>
-                                                <div className={classes.metaPrimary}>
-                                                    <EventDateRange event={event} occurrence={selectedOccurrence}/>
-                                                </div>
-                                                {event.type === EventType.RECURRING && lastOccurrenceDate && (
-                                                    <div className={`${classes.metaSecondary} ${classes.metaSecondaryWithIcon}`}>
-                                                        <IconCalendarRepeat size={14}/>
-                                                        {t`Multiple dates until ${lastOccurrenceDate}`}
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-
-                                        {event.type !== EventType.RECURRING && event.end_date && isDateInPast(event.end_date) && (
-                                            <div className={classes.metaItem}>
-                                                <div className={classes.metaIconBox}>
-                                                    <IconCalendarOff/>
-                                                </div>
-                                                <div className={classes.metaContent}>
-                                                    <div className={classes.metaPrimary}>{t`This event has ended`}</div>
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {isOnlineEvent && (
-                                            <div className={classes.metaItem}>
-                                                <div className={classes.metaIconBox}>
-                                                    <IconWorld/>
-                                                </div>
-                                                <div className={classes.metaContent}>
-                                                    <div className={classes.metaPrimary}>{t`Online Event`}</div>
-                                                    <div className={classes.metaSecondary}>
-                                                        {t`Join from anywhere`}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {mixedModesLabel && (
-                                            <div className={classes.metaItem}>
-                                                <div className={classes.metaIconBox}>
-                                                    <IconMapPin/>
-                                                </div>
-                                                <div className={classes.metaContent}>
-                                                    <div className={classes.metaPrimary}>{mixedModesLabel}</div>
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {multipleLocationsLabel && (
-                                            <div className={classes.metaItem}>
-                                                <div className={classes.metaIconBox}>
-                                                    <IconMapPin/>
-                                                </div>
-                                                <div className={classes.metaContent}>
-                                                    <div className={classes.metaPrimary}>{multipleLocationsLabel}</div>
-                                                    <div className={classes.metaSecondary}>
-                                                        {t`See schedule`}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {hasLocation && (
-                                            <div className={classes.metaItem}>
-                                                <div className={classes.metaIconBox}>
-                                                    <IconMapPin/>
-                                                </div>
-                                                <div className={classes.metaContent}>
-                                                    {venueName && (
-                                                        <div className={classes.metaPrimary}>
-                                                            {venueName}
-                                                        </div>
-                                                    )}
-                                                    {formattedAddress && (
-                                                        <div className={classes.metaSecondary}>
-                                                            {formattedAddress}
-                                                        </div>
-                                                    )}
-                                                    {mapUrl && (
-                                                        <a
-                                                            href={mapUrl}
-                                                            target="_blank"
-                                                            rel="nofollow ugc noopener noreferrer"
-                                                            className={classes.metaLink}
-                                                        >
-                                                            {t`View on Google Maps`}
-                                                            <IconExternalLink/>
-                                                        </a>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {homepageSections.map(section => (
-                                <Fragment key={section.id}>{renderSection(section)}</Fragment>
-                            ))}
-
-                            <div className={`${classes.section} ${classes.footerSection}`}>
-                                <PoweredByFooter className={classes.poweredByFooter}/>
-                                <div className={classes.footerLinks}>
-                                    <Anchor
-                                        href={getConfig('VITE_PRIVACY_URL', 'https://hi.events/privacy-policy?utm_source=app-event-footer')}
-                                        className={classes.footerLink}
-                                    >
-                                        {t`Privacy Policy`}
-                                    </Anchor>
-                                    <Anchor
-                                        href={getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service?utm_source=app-event-footer')}
-                                        className={classes.footerLink}
-                                    >
-                                        {t`Terms of Service`}
-                                    </Anchor>
-                                    <CookieSettingsLink className={classes.cookieSettingsLink}/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {showFloatingCheckoutButton && (
-                        <button
-                            className={classes.scrollToTicketsButton}
-                            onClick={() => continueButtonNode?.click()}
-                            data-testid="floating-checkout-button"
-                        >
-                            <IconTicket size={18}/>
-                            {selectedCart.total > 0
+            <HomepageFrame
+                themeSettings={themeSettings}
+                mirrorImageUrl={cover?.url}
+                footerSource="app-event-footer"
+                footerRef={setFooterNode}
+                width={sheetWidth}
+                header={layout.sectionNav && <SectionNav container={contentNode} title={event.title} subtitle={shortDateLabel} thumbnail={cover?.url}/>}
+                outside={(
+                    <>
+                        <CheckoutBar
+                            mode={checkoutBarMode}
+                            compactOnWide={ticketRail}
+                            priceLabel={priceLabel}
+                            dateLabel={shortDateLabel}
+                            getTicketsText={getTicketsButtonText}
+                            continueText={selectedCart.total > 0
                                 ? `${continueButtonText} (${formatCurrency(selectedCart.total, event.currency)})`
                                 : continueButtonText}
-                        </button>
-                    )}
-                    {!showFloatingCheckoutButton && showScrollButton && !eventHasEnded && (
-                        <button
-                            className={classes.scrollToTicketsButton}
-                            onClick={scrollToTickets}
-                        >
-                            <IconTicket size={18}/>
-                            {getTicketsButtonText}
-                        </button>
-                    )}
+                            onGetTickets={() => {
+                                ticketsNode?.scrollIntoView({behavior: scrollBehavior(), block: 'start'});
+                                ticketsNode?.focus({preventScroll: true});
+                            }}
+                            onContinue={() => continueButtonNode?.click()}
+                        />
+                        <ContactOrganizerModal
+                            opened={contactModalOpen}
+                            onClose={() => setContactModalOpen(false)}
+                            organizer={organizer}
+                        />
+                    </>
+                )}
+            >
+                <EventDocumentHead event={event}/>
 
-                    <ContactOrganizerModal
-                        opened={contactModalOpen}
-                        onClose={() => setContactModalOpen(false)}
-                        organizer={organizer}
-                    />
+                {!layout.poster && cover && <CoverMedia image={cover} alt={event.title}/>}
+
+                <div
+                    ref={layout.poster ? undefined : setContentNode}
+                    className={classes.body}
+                    data-has-cover={!layout.poster && cover ? '' : undefined}
+                    data-rail={ticketRail || undefined}
+                    data-poster={layout.poster || undefined}
+                    style={ticketRail ? {'--main-rows': mainRowCount} as CSSProperties : undefined}
+                >
+                    {layout.poster ? (
+                        <>
+                            <div className={classes.posterColumn}>
+                                {cover && <CoverMedia image={cover} alt={event.title} variant="poster"/>}
+                                {!cover && (dateStart ?? schedule.start) && <DatePoster date={(dateStart ?? schedule.start)!} tz={tz}/>}
+                                <EventHost {...hostProps}/>
+                            </div>
+                            <div ref={setContentNode} className={classes.mainColumn}>
+                                {intro}
+                                {sections}
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            {intro}
+                            {sections}
+                        </>
+                    )}
                 </div>
-            </main>
+            </HomepageFrame>
         </>
     );
 };

@@ -53,6 +53,47 @@ class HomepageSectionsTest extends TestCase
         $this->assertSame([$galleryImageId], $sections[4]['image_ids']);
     }
 
+    public function test_the_more_events_section_keeps_its_heading_and_can_be_hidden(): void
+    {
+        [$owner, $accountId] = $this->createAccountOwner();
+        $eventId = $this->createEventWithSettings($owner, $accountId);
+        DB::table('events')->where('id', $eventId)->update(['status' => EventStatus::LIVE->name]);
+
+        $this->patchJson("/events/$eventId/settings", [
+            'homepage_sections' => [
+                ['id' => 'more_events', 'type' => 'MORE_EVENTS', 'enabled' => false, 'heading' => 'Also on'],
+            ],
+        ], $this->headersFor($owner, $accountId))->assertOk();
+
+        $sections = $this->getJson("/public/events/$eventId")->assertOk()->json('data.settings.homepage_sections');
+
+        $this->assertSame(['tickets', 'more_events'], array_column($sections, 'id'));
+        $this->assertFalse($sections[1]['enabled']);
+        $this->assertSame('Also on', $sections[1]['heading']);
+    }
+
+    public function test_every_built_in_plus_thirty_four_custom_sections_can_be_saved(): void
+    {
+        [$owner, $accountId] = $this->createAccountOwner();
+        $eventId = $this->createEventWithSettings($owner, $accountId);
+
+        $builtIns = array_map(
+            fn (string $type) => ['id' => strtolower($type), 'type' => $type],
+            ['TICKETS', 'ABOUT', 'LINEUP', 'SCHEDULE', 'LOCATION', 'ORGANIZER', 'MORE_EVENTS'],
+        );
+        $custom = array_map(fn (int $i) => ['id' => "text_$i", 'type' => 'TEXT', 'body' => "<p>$i</p>"], range(1, 34));
+
+        $this->patchJson("/events/$eventId/settings", [
+            'homepage_sections' => [...$builtIns, ...$custom],
+        ], $this->headersFor($owner, $accountId))->assertOk();
+
+        $this->patchJson("/events/$eventId/settings", [
+            'homepage_sections' => [...$builtIns, ...$custom, ['id' => 'text_35', 'type' => 'TEXT', 'body' => '<p>35</p>']],
+        ], $this->headersFor($owner, $accountId))
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('homepage_sections');
+    }
+
     public function test_video_links_must_be_https(): void
     {
         [$owner, $accountId] = $this->createAccountOwner();

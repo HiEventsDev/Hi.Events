@@ -2,6 +2,7 @@ import {t} from "@lingui/macro";
 import {HomepageSection, Image} from "../../../../types.ts";
 import {HomepageSectionClasses} from "../Lineup";
 import {SectionShell} from "./SectionShell.tsx";
+import {sizedImageUrl} from "../../../../utilites/imageTransform.ts";
 import classes from "./Sections.module.scss";
 
 export const SponsorsSection = ({images: availableImages, section, sectionClasses}: {
@@ -21,7 +22,7 @@ export const SponsorsSection = ({images: availableImages, section, sectionClasse
         <SectionShell section={section} sectionClasses={sectionClasses} fallbackHeading={t`Sponsors`}>
             <div className={classes.sponsors}>
                 {sponsors.map(({sponsor, image}) => {
-                    const logo = <img src={image.url} alt={sponsor.name ?? ''} loading="lazy"/>;
+                    const logo = <img src={sizedImageUrl(image.url, 400)} alt={sponsor.name ?? ''} loading="lazy"/>;
 
                     return sponsor.url
                         ? (

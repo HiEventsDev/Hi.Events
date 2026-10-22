@@ -1,6 +1,7 @@
 import {ReactNode} from "react";
 import {HomepageSection} from "../../../../types.ts";
 import {HomepageSectionClasses} from "../Lineup";
+import classes from "./Sections.module.scss";
 
 interface SectionShellProps {
     section: HomepageSection;
@@ -13,7 +14,7 @@ export const SectionShell = ({section, sectionClasses, fallbackHeading, children
     const heading = section.heading || fallbackHeading;
 
     return (
-        <section className={sectionClasses.section} id={`section-${section.id}`} data-testid={`homepage-section-${section.type.toLowerCase()}`}>
+        <section className={`${sectionClasses.section} ${classes.queryContainer}`} id={`section-${section.id}`} data-testid={`homepage-section-${section.type.toLowerCase()}`}>
             {heading && (
                 <div className={sectionClasses.sectionHeader}>
                     <h2 className={sectionClasses.sectionTitle}>{heading}</h2>

@@ -17,6 +17,7 @@ import {sitemapIndexHandler, sitemapEventsHandler, sitemapOrganizersHandler} fro
 import {htmlSafeJsonStringify} from "./src/utilites/safeScriptJson.js";
 import {backendRequestHeaders, licenceSimulation} from "./src/ssr/backendRequestHeaders.js";
 import {loggableError} from "./src/ssr/loggableError.js";
+import {routeStylesheets} from "./src/ssr/routeStylesheets.js";
 
 installGlobals();
 
@@ -33,9 +34,9 @@ async function main() {
         ? await fs.readFile("./dist/client/index.html", "utf-8")
         : "";
 
-    const ssrManifest = isProduction
-        ? await fs.readFile("./dist/client/.vite/ssr-manifest.json", "utf-8")
-        : undefined;
+    const clientManifest = isProduction
+        ? JSON.parse(await fs.readFile("./dist/client/.vite/manifest.json", "utf-8").catch(() => "{}"))
+        : {};
 
     const app = express();
     app.use(cookieParser());
@@ -204,14 +205,14 @@ Sitemap: ${frontendUrl}/sitemap.xml
                 render = (await dynamicImport(path.join(__dirname, "./dist/server/entry.server.js"))).render;
             }
 
-            const { appHtml, dehydratedState, helmetContext, themeColors, htmlLang, statusCode, renderErrors } = await render(
+            const { appHtml, dehydratedState, helmetContext, themeColors, htmlLang, statusCode, renderErrors, stylesheets } = await render(
                 {
                     req,
                     res,
                     backendHeaders: backendRequestHeaders(req),
                     licenceSimulation: licenceSimulation(req),
-                },
-                ssrManifest
+                    stylesheetsFor: (entries) => routeStylesheets(clientManifest, entries),
+                }
             );
 
             if (statusCode >= 500) {
@@ -249,11 +250,16 @@ Sitemap: ${frontendUrl}/sitemap.xml
             `);
             }
 
+            const stylesheetLinks = stylesheets
+                .map((file) => `<link rel="stylesheet" crossorigin href="${base}${file}">`)
+                .join("");
+
             const html = template
                 .replace('<html lang="en">', () => `<html lang="${htmlLang}">`)
+                .replace("</head>", () => `${stylesheetLinks}</head>`)
                 .replace("<!--head-snippets-->", () => headSnippets.join("\n"))
                 .replace("<!--app-html-->", () => appHtml)
-                .replace("<!--dehydrated-state-->", () => `<script>window.__REHYDRATED_STATE__ = ${stringifiedState};window.__THEME_COLORS__ = ${stringifiedThemeColors}</script>`)
+                .replace("<!--dehydrated-state-->", () => `<script>window.__REHYDRATED_STATE__ = ${stringifiedState};window.__THEME_COLORS__ = ${stringifiedThemeColors};window.__SSR_STYLED__ = ${stylesheets.length > 0}</script>`)
                 .replace("<!--environment-variables-->", () => envVariablesHtml)
                 .replace(/<!--render-helmet-->.*?<!--\/render-helmet-->/s, () => helmetHtml);
 

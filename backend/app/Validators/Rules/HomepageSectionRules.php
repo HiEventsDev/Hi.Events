@@ -14,7 +14,7 @@ class HomepageSectionRules
     public static function rules(array $allowedTypes): array
     {
         return [
-            'homepage_sections' => ['nullable', 'array', 'max:40'],
+            'homepage_sections' => ['nullable', 'array', 'max:41'],
             'homepage_sections.*.id' => ['required', 'string', 'max:40', 'regex:/^[A-Za-z0-9_-]+$/'],
             'homepage_sections.*.type' => ['required', 'string', Rule::in($allowedTypes)],
             'homepage_sections.*.enabled' => ['boolean'],
