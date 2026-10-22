@@ -6,10 +6,6 @@
   position: relative;
   padding: 24px 20px 8px;
 
-  &[data-has-cover] {
-    @include hp.lip;
-  }
-
   @include hp.tablet-up {
     --section-bleed: 40px;
     padding: 36px 40px 16px;
@@ -230,7 +226,7 @@ a.host:hover {
   height: 48px;
   overflow: hidden;
   border: 1px solid var(--hp-border);
-  border-radius: 14px;
+  border-radius: 12px;
   background: var(--hp-surface);
   color: var(--hp-text);
 
@@ -405,7 +401,7 @@ a.host:hover {
     .hi-product-widget-container {
       --widget-card-bg-color: var(--hp-surface);
       --widget-border-color: var(--hp-border);
-      --widget-radius: 16px;
+      --widget-radius: 12px;
       --widget-accent-text-color: var(--hp-accent-ink);
       padding: 0;
       background: transparent;
@@ -420,13 +416,21 @@ a.host:hover {
     .hi-product-title h3 {
       font-family: hp.$font;
     }
+
+    .hi-product-widget-container .hi-footer-row .hi-continue-button {
+      &:disabled, &[data-disabled] {
+        background: var(--hp-fill-strong);
+        color: var(--hp-muted);
+        opacity: 1;
+      }
+    }
   }
 
   .body[data-rail] & {
     @include hp.wide {
       padding: 20px;
       border: 1px solid var(--hp-border);
-      border-radius: 24px;
+      border-radius: 18px;
       background: var(--hp-surface);
       box-shadow: var(--hp-shadow-md);
     }
@@ -439,7 +443,7 @@ a.host:hover {
   gap: 16px;
   padding: 20px;
   border: 1px solid var(--hp-border);
-  border-radius: 18px;
+  border-radius: 14px;
 }
 
 .locationText {
@@ -470,7 +474,7 @@ a.host:hover {
   gap: 14px;
   padding: 20px;
   border: 1px solid var(--hp-border);
-  border-radius: 18px;
+  border-radius: 14px;
 }
 
 .hostCardTop {
@@ -498,7 +502,7 @@ a.host:hover {
   flex-shrink: 0;
   width: 48px;
   height: 48px;
-  border-radius: 14px;
+  border-radius: 12px;
   object-fit: cover;
 
   &[data-placeholder] {

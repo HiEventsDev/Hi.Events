@@ -8,7 +8,6 @@ export const resolveEventLocation = (event: Event, occurrence?: EventOccurrence 
 export interface EventLocationDisplay {
     isOnline: boolean;
     venueName: string | null;
-    city: string | null;
     short: string | null;
     full: string | null;
     mapsUrl: string | null;
@@ -86,7 +85,7 @@ export const buildEventLocationDisplay = (
     }
 
     if (eventLocation.type === LocationType.Online) {
-        return {isOnline: true, venueName: null, city: null, short: null, full: null, mapsUrl: null};
+        return {isOnline: true, venueName: null, short: null, full: null, mapsUrl: null};
     }
 
     const address = eventLocation.location?.structured_address ?? null;
@@ -101,7 +100,6 @@ export const buildEventLocationDisplay = (
     return {
         isOnline: false,
         venueName,
-        city: address?.city?.trim() || null,
         short: short ?? venueName,
         full,
         mapsUrl: buildMapsUrl(event, allowCustomMapsUrl, eventLocation, full ? address : null),

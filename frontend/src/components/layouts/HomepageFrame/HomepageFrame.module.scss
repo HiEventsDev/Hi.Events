@@ -15,8 +15,8 @@
   --hp-accent-fill: color-mix(in srgb, var(--hp-accent) 10%, var(--hp-surface));
   --hp-accent-ink: var(--event-accent-ink);
   --hp-shadow-sm: 0 1px 2px rgba(15, 15, 20, 0.04), 0 2px 8px -2px rgba(15, 15, 20, 0.06);
-  --hp-shadow-md: 0 1px 2px rgba(15, 15, 20, 0.04), 0 12px 32px -12px rgba(15, 15, 20, 0.16);
-  --hp-shadow-lg: 0 1px 2px rgba(15, 15, 20, 0.03), 0 24px 64px -24px rgba(15, 15, 20, 0.22);
+  --hp-shadow-md: 0 1px 2px rgba(15, 15, 20, 0.05), 0 8px 20px -10px rgba(15, 15, 20, 0.18);
+  --hp-shadow-lg: 0 1px 2px rgba(15, 15, 20, 0.05), 0 16px 40px -20px rgba(15, 15, 20, 0.24);
   --hp-glass: color-mix(in srgb, var(--hp-surface) 82%, transparent);
   --hp-live-fill: color-mix(in srgb, #ef4444 12%, var(--hp-surface));
   --hp-live-ink: #b91c1c;
@@ -127,15 +127,10 @@
     max-height: min(68svh, 560px);
   }
 
-  @include hp.mobile {
-    box-sizing: content-box;
-    padding-bottom: hp.$lip;
-  }
-
   @include hp.tablet-up {
-    width: calc(100% - 20px);
-    margin: 10px 10px 0;
-    border-radius: hp.$sheet-radius - 10px;
+    width: calc(100% - 16px);
+    margin: 8px 8px 0;
+    border-radius: hp.$sheet-radius - 8px;
 
     &[data-sized] {
       max-height: min(480px, 56vh);
@@ -143,9 +138,9 @@
   }
 
   @include hp.wide {
-    width: calc(100% - 24px);
-    margin: 12px 12px 0;
-    border-radius: hp.$sheet-radius - 12px;
+    width: calc(100% - 16px);
+    margin: 8px 8px 0;
+    border-radius: hp.$sheet-radius - 8px;
   }
 
   &[data-variant="banner"][data-sized] {
@@ -159,8 +154,6 @@
   &[data-variant="poster"] {
     width: 100%;
     margin: 0;
-    padding-bottom: 0;
-    box-sizing: border-box;
     border-radius: 20px;
     box-shadow: var(--hp-shadow-md);
 

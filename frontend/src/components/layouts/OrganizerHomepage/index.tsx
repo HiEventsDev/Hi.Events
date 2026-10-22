@@ -272,7 +272,7 @@ export const OrganizerHomepage = ({
             >
                 {cover && <CoverMedia image={cover} alt={organizer.name} variant="banner"/>}
 
-                <div className={classes.body} data-has-cover={cover ? '' : undefined}>
+                <div className={classes.body}>
                     <header className={classes.profile}>
                         {logo
                             ? <img src={sizedImageUrl(logo.url, 240)} alt="" className={classes.avatar}/>

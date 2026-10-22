@@ -3,8 +3,7 @@
 $font: var(--theme-font-family, 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
 $ease: cubic-bezier(0.22, 1, 0.36, 1);
 $wide: 1080px;
-$sheet-radius: 32px;
-$lip: 22px;
+$sheet-radius: 24px;
 
 @mixin wide {
   @media (min-width: $wide) {
@@ -45,23 +44,13 @@ $compact-container: 520px;
   }
 }
 
-@mixin lip {
-  @include mobile {
-    position: relative;
-    z-index: 1;
-    margin-top: -$lip;
-    border-radius: $lip $lip 0 0;
-    background: var(--hp-surface);
-  }
-}
-
 @mixin section-title {
   margin: 0;
   font-family: $font;
-  font-size: clamp(1.125rem, 1.05rem + 0.3vw, 1.3125rem);
+  font-size: clamp(1.25rem, 1.15rem + 0.4vw, 1.5rem);
   font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: -0.015em;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
   color: var(--hp-text);
   text-wrap: balance;
 }
@@ -121,9 +110,9 @@ $compact-container: 520px;
 }
 
 @mixin rich-text {
-  color: var(--hp-muted);
+  color: color-mix(in srgb, var(--hp-text) 84%, var(--hp-surface));
   font-size: 1.0625rem;
-  line-height: 1.7;
+  line-height: 1.6;
   overflow-wrap: anywhere;
 
   @include mobile {
