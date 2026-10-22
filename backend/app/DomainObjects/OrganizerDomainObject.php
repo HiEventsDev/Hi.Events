@@ -26,6 +26,20 @@ class OrganizerDomainObject extends Generated\OrganizerDomainObjectAbstract
 
     private ?LocationDomainObject $locationRecord = null;
 
+    private ?bool $brandingRemoved = null;
+
+    public function getBrandingRemoved(): ?bool
+    {
+        return $this->brandingRemoved;
+    }
+
+    public function setBrandingRemoved(?bool $brandingRemoved): self
+    {
+        $this->brandingRemoved = $brandingRemoved;
+
+        return $this;
+    }
+
     public function getImages(): ?Collection
     {
         return $this->images;

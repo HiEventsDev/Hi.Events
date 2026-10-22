@@ -75,6 +75,8 @@ return [
         'account_danger_zone' => '/settings/account#delete-account',
         'account_users' => '/settings/team',
         'account_settings' => '/settings/account',
+        'account_billing' => '/settings/billing',
+        'register' => '/auth/register',
         'profile_security' => '/settings/security',
         'api_keys' => '/settings/api-keys',
         'event_dashboard' => '/manage/event/%d/dashboard',

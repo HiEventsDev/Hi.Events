@@ -1,6 +1,16 @@
+@php($mailBranding ??= null)
 <x-mail::layout>
     {{-- Header --}}
     <x-slot:header>
+@if($mailBranding?->hideHiEventsBranding)
+        <x-mail::header :url="$mailBranding->organizerUrl">
+@if($mailBranding->organizerLogoUrl)
+            <img src="{{ $mailBranding->organizerLogoUrl }}" class="logo" alt="{{ $mailBranding->organizerName }}">
+@else
+            <span class="organizer-name">{{ $mailBranding->organizerName }}</span>
+@endif
+        </x-mail::header>
+@else
         <x-mail::header :url="config('app.email_logo_link_url')">
             @if($appLogo = config('app.email_logo_url'))
                 <img src="{{ $appLogo }}" class="logo" alt="{{ config('app.name') }}">
@@ -8,6 +18,7 @@
                 <img src="{{ config('app.frontend_url') }}/logos/hi-events-stacked-light.png" class="logo" alt="{{ config('app.name') }}">
             @endif
         </x-mail::header>
+@endif
     </x-slot:header>
 
     {{-- Body --}}
@@ -24,11 +35,16 @@
 
     {{-- Footer --}}
     <x-slot:footer>
+@if($mailBranding?->showHiEventsPromo)
+        <x-mail::promo :url="$mailBranding->promoUrl" />
+@endif
         <x-mail::footer>
             @if($appEmailFooter = config('app.email_footer_text'))
                 {{ $appEmailFooter }}
             @elseif(app(\HiEvents\Enterprise\Licensing\LicenceService::class)->allows(\HiEvents\Enterprise\Licensing\LicensedFeature::WHITE_LABEL))
                 © {{ date('Y') }} {{ config('app.name') }}
+            @elseif($mailBranding?->hideHiEventsBranding)
+                © {{ date('Y') }} {{ $mailBranding->organizerName }}
             @else
                 {{-- (c) Hi.Events Ltd 2024-present --}}
                 {{-- Hi.Events is licensed under the GNU Affero General Public License (AGPL) version 3. --}}

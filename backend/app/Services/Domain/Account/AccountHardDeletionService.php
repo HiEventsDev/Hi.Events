@@ -198,6 +198,10 @@ class AccountHardDeletionService
                 ->update(['reviewed_by_user_id' => null]);
         }
 
+        $manifest['account_subscriptions'] = $connection->table('account_subscriptions')
+            ->where('account_id', $context->accountId)
+            ->delete();
+
         $manifest['accounts'] = $connection->table('accounts')
             ->where('id', $context->accountId)
             ->delete();

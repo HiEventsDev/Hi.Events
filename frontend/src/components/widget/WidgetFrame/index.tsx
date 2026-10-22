@@ -9,6 +9,7 @@ interface WidgetFrameProps {
     mode: 'light' | 'dark';
     children: ReactNode;
     testId?: string;
+    brandingRemoved?: boolean;
 }
 
 const useReportContentHeight = (minHeight: number) => {
@@ -58,7 +59,7 @@ const useReportContentHeight = (minHeight: number) => {
     return contentRef;
 };
 
-const FrameContent = ({style, mode, children, testId, frame}: WidgetFrameProps & { frame: FrameBindings }) => {
+const FrameContent = ({style, mode, children, testId, brandingRemoved, frame}: WidgetFrameProps & { frame: FrameBindings }) => {
     const contentRef = useReportContentHeight(frame.minHeight);
 
     return (
@@ -73,7 +74,7 @@ const FrameContent = ({style, mode, children, testId, frame}: WidgetFrameProps &
         >
             <div ref={contentRef} className={classes.content}>
                 {children}
-                <PoweredByFooter className={classes.poweredBy}/>
+                <PoweredByFooter className={classes.poweredBy} brandingRemoved={brandingRemoved}/>
             </div>
         </main>
     );

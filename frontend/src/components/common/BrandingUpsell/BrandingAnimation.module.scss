@@ -1,0 +1,135 @@
+$cycle: 7s;
+
+.stage {
+  padding: 14px 14px 8px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--hi-primary) 5%, var(--hi-color-white));
+}
+
+.animation {
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  height: auto;
+  font-family: inherit;
+
+  g {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+}
+
+.surface {
+  fill: var(--hi-color-white);
+  stroke: var(--hi-color-border);
+}
+
+.shadow {
+  fill: rgba(16, 24, 40, 0.06);
+}
+
+.cover {
+  fill: color-mix(in srgb, var(--hi-primary) 14%, white);
+}
+
+.inner {
+  fill: color-mix(in srgb, var(--hi-primary) 4%, white);
+}
+
+.lineStrong {
+  fill: color-mix(in srgb, var(--hi-text) 70%, white);
+}
+
+.line {
+  fill: color-mix(in srgb, var(--hi-text) 18%, white);
+}
+
+.link {
+  fill: color-mix(in srgb, var(--hi-primary) 60%, white);
+}
+
+.button {
+  fill: var(--hi-primary);
+}
+
+.hairline {
+  stroke: var(--hi-color-border);
+}
+
+.footerText {
+  font-size: 9px;
+  font-weight: 500;
+  fill: var(--hi-color-text-muted);
+}
+
+.wordmark {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  fill: var(--hi-primary);
+}
+
+.logoMark {
+  fill: var(--hi-text);
+}
+
+.logoLetter {
+  font-size: 13px;
+  font-weight: 700;
+  fill: var(--hi-color-white);
+}
+
+.pageFooter {
+  animation: pageFooter $cycle ease-in-out infinite;
+}
+
+.hiLogo {
+  animation: hiLogo $cycle ease-in-out infinite;
+}
+
+.organizerLogo {
+  animation: organizerLogo $cycle ease-in-out infinite;
+}
+
+.promo {
+  animation: promo $cycle ease-in-out infinite;
+}
+
+@keyframes pageFooter {
+  0%, 26% { opacity: 1; transform: translateY(0); }
+  34%, 90% { opacity: 0; transform: translateY(5px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes hiLogo {
+  0%, 38% { opacity: 1; transform: scale(1); }
+  46%, 90% { opacity: 0; transform: scale(0.85); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes organizerLogo {
+  0%, 42% { opacity: 0; transform: scale(0.7); }
+  52%, 90% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.7); }
+}
+
+@keyframes promo {
+  0%, 50% { opacity: 1; transform: translateY(0); }
+  60%, 90% { opacity: 0; transform: translateY(5px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pageFooter,
+  .hiLogo,
+  .promo {
+    animation: none;
+    opacity: 0;
+  }
+
+  .organizerLogo {
+    animation: none;
+    opacity: 1;
+  }
+}

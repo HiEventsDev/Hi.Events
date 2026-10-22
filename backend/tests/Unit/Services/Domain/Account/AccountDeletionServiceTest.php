@@ -24,12 +24,14 @@ use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\Account\AccountAnonymizationService;
 use HiEvents\Services\Domain\Account\AccountDeletionService;
 use HiEvents\Services\Domain\Account\AccountHardDeletionService;
+use HiEvents\Services\Domain\Subscription\AccountSubscriptionCancellationService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Mail;
 use Mockery;
 use Mockery\MockInterface;
 use Psr\Log\NullLogger;
+use RuntimeException;
 use Tests\TestCase;
 
 class AccountDeletionServiceTest extends TestCase
@@ -50,6 +52,8 @@ class AccountDeletionServiceTest extends TestCase
 
     private AccountUserRepositoryInterface|MockInterface $accountUserRepository;
 
+    private AccountSubscriptionCancellationService|MockInterface $subscriptionCancellationService;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -63,6 +67,7 @@ class AccountDeletionServiceTest extends TestCase
         $this->anonymizationService = Mockery::mock(AccountAnonymizationService::class);
         $this->hardDeletionService = Mockery::mock(AccountHardDeletionService::class);
         $this->accountUserRepository = Mockery::mock(AccountUserRepositoryInterface::class);
+        $this->subscriptionCancellationService = Mockery::mock(AccountSubscriptionCancellationService::class);
 
         $databaseManager = Mockery::mock(DatabaseManager::class);
         $databaseManager->shouldReceive('transaction')
@@ -78,6 +83,7 @@ class AccountDeletionServiceTest extends TestCase
             $this->accountUserRepository,
             $databaseManager,
             new NullLogger,
+            $this->subscriptionCancellationService,
         );
     }
 
@@ -171,10 +177,31 @@ class AccountDeletionServiceTest extends TestCase
             )
             ->andReturn(1);
 
+        $this->subscriptionCancellationService->shouldReceive('tryCancelAtPeriodEnd')->with(1)->once();
+
         $result = $this->service->requestDeletion(1, 5, AccountDeletionInitiator::ACCOUNT_OWNER);
 
         $this->assertInstanceOf(AccountDeletionRequestDomainObject::class, $result);
         Mail::assertQueued(AccountDeletionRequestedEmail::class);
+    }
+
+    public function test_execute_deletion_stops_when_subscription_cannot_be_cancelled(): void
+    {
+        $this->deletionRequestRepository->shouldReceive('findById')
+            ->with(10)
+            ->andReturn($this->makeDeletionRequest());
+        $this->accountRepository->shouldReceive('findById')->with(1)->andReturn($this->makeAccount());
+        $this->orderRepository->shouldReceive('accountHasCompletedOrders')->with(1)->andReturnFalse();
+
+        $this->subscriptionCancellationService->shouldReceive('cancelImmediately')
+            ->with(1)
+            ->andThrow(new RuntimeException('Stripe is down'));
+        $this->hardDeletionService->shouldNotReceive('deleteAccount');
+        $this->deletionRequestRepository->shouldNotReceive('updateFromArray');
+
+        $this->expectException(RuntimeException::class);
+
+        $this->service->executeDeletion(10);
     }
 
     public function test_immediate_deletion_queues_execution_without_grace_period_email(): void
@@ -191,6 +218,8 @@ class AccountDeletionServiceTest extends TestCase
             ->once()
             ->withArgs(fn (array $attributes) => $attributes['scheduled_deletion_at']->diffInMinutes(now(), true) < 1)
             ->andReturn($this->makeDeletionRequest());
+
+        $this->subscriptionCancellationService->shouldNotReceive('tryCancelAtPeriodEnd');
 
         $result = $this->service->requestDeletion(1, 5, AccountDeletionInitiator::ADMIN, executeImmediately: true);
 
@@ -258,6 +287,7 @@ class AccountDeletionServiceTest extends TestCase
 
         $this->hardDeletionService->shouldNotReceive('deleteAccount');
         $this->anonymizationService->shouldNotReceive('anonymizeAccount');
+        $this->subscriptionCancellationService->shouldNotReceive('cancelImmediately');
 
         $this->service->executeDeletion(10);
 
@@ -272,7 +302,8 @@ class AccountDeletionServiceTest extends TestCase
         $this->accountRepository->shouldReceive('findById')->with(1)->andReturn($this->makeAccount());
         $this->orderRepository->shouldReceive('accountHasCompletedOrders')->with(1)->andReturnFalse();
 
-        $this->hardDeletionService->shouldReceive('deleteAccount')->with(1)->once()->andReturn(['accounts' => 1]);
+        $this->subscriptionCancellationService->shouldReceive('cancelImmediately')->with(1)->once()->globally()->ordered();
+        $this->hardDeletionService->shouldReceive('deleteAccount')->with(1)->once()->globally()->ordered()->andReturn(['accounts' => 1]);
         $this->anonymizationService->shouldNotReceive('anonymizeAccount');
 
         $this->deletionRequestRepository->shouldReceive('updateFromArray')
@@ -298,7 +329,8 @@ class AccountDeletionServiceTest extends TestCase
         $this->accountRepository->shouldReceive('findById')->with(1)->andReturn($this->makeAccount());
         $this->orderRepository->shouldReceive('accountHasCompletedOrders')->with(1)->andReturnTrue();
 
-        $this->anonymizationService->shouldReceive('anonymizeAccount')->with(1)->once()->andReturn([]);
+        $this->subscriptionCancellationService->shouldReceive('cancelImmediately')->with(1)->once()->globally()->ordered();
+        $this->anonymizationService->shouldReceive('anonymizeAccount')->with(1)->once()->globally()->ordered()->andReturn([]);
         $this->hardDeletionService->shouldNotReceive('deleteAccount');
 
         $this->deletionRequestRepository->shouldReceive('updateFromArray')

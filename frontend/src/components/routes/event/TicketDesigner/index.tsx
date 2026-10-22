@@ -14,6 +14,7 @@ import {queryClient} from "../../../../utilites/queryClient.ts";
 import {GET_EVENT_IMAGES_QUERY_KEY, useGetEventImages} from "../../../../queries/useGetEventImages.ts";
 import {LoadingMask} from "../../../common/LoadingMask";
 import {DesignerSection, DesignerShell} from "../../../common/DesignerShell";
+import {BrandingDesignerSection} from "../../../common/BrandingUpsell";
 import {TicketDesignSettings, TicketPreview} from "./TicketPreview";
 
 const FOOTER_MAX_LENGTH = 500;
@@ -199,6 +200,8 @@ const TicketDesigner = () => {
                     {form.values.footer_text.length} / {FOOTER_MAX_LENGTH}
                 </Text>
             </DesignerSection>
+
+            <BrandingDesignerSection/>
         </DesignerShell>
     );
 };

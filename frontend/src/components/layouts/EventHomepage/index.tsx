@@ -276,6 +276,7 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                 mirrorImageUrl={cover?.url}
                 footerSource="app-event-footer"
                 footerRef={setFooterNode}
+                brandingRemoved={organizer.branding_removed}
                 width={sheetWidth}
                 header={layout.sectionNav && <SectionNav container={contentNode} title={event.title} subtitle={shortDateLabel} thumbnail={cover?.url}/>}
                 outside={(

@@ -44,6 +44,11 @@ class OrderSummary extends BaseMail implements ContainsEventContent
         parent::__construct();
     }
 
+    public function showsHiEventsPromo(): bool
+    {
+        return true;
+    }
+
     public function envelope(): Envelope
     {
         $subject = $this->renderedTemplate?->subject ?? __('Your Order is Confirmed!').'  🎉';

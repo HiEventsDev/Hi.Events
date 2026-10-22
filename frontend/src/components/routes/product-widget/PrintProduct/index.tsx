@@ -62,13 +62,12 @@ const PrintProduct = () => {
                 </div>
                 
                 <div className={classes.poweredBy}>
-                    <PoweredByFooter/>
+                    <PoweredByFooter brandingRemoved={event.organizer?.branding_removed}/>
                 </div>
             </div>
             
-            {/* PoweredBy footer for web view only */}
             <div className={classes.webOnlyFooter}>
-                <PoweredByFooter/>
+                <PoweredByFooter brandingRemoved={event.organizer?.branding_removed}/>
             </div>
         </div>
     )

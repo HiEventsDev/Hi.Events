@@ -17,3 +17,4 @@ paths:
 - Link `email_deliveries`, `outgoing_messages` and `account_lifecycle_nudges` through `provider_message_id`, never with foreign keys.
 - Don't add Symfony `TagHeader`s for tracking: Postmark rejects more than one tag per email.
 - Pick a delivery webhook receiver by the `{provider}` route segment (`EmailDeliveryWebhookReceiverResolver`), never by sniffing the payload. The webhook route is unthrottled on purpose: unauthenticated calls never touch the DB, and throttling Postmark's few IPs during a broadcast would drop events.
+- Event-scoped mails (`ContainsEventContent`) for Hi.Events Pro accounts go out under the organizer's name and event accent colour (`MailBrandingService`); only the display name changes, the address stays `MAIL_FROM_ADDRESS`. A new event mail sent to the organizer or team, not buyers, must override `isSentToBuyers()` to return false (see `OrderSummaryForOrganizer`).

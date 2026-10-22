@@ -14,6 +14,13 @@ use Tests\TestCase;
 
 class OrderSummaryTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        config(['app.is_hi_events' => false]);
+    }
+
     public function test_shows_the_orders_date_rather_than_the_events_first_date(): void
     {
         $html = $this->mailFor([

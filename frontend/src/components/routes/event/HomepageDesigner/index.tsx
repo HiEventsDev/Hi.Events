@@ -24,6 +24,7 @@ import {ThemeFontControl} from "../../../common/ThemeFontControl";
 import {getDefaultThemeSettings, validateThemeSettings} from "../../../../utilites/themeUtils.ts";
 import {firstHomepageSectionsError, HomepageDesigner as HomepageDesignerShell, useHomepagePreview} from "../../../common/HomepageDesigner";
 import {DesignerSection} from "../../../common/DesignerShell";
+import {BrandingDesignerSection} from "../../../common/BrandingUpsell";
 import {resolveEventLayout} from "../../../../constants/eventLayouts.ts";
 import {LayoutPicker} from "./LayoutPicker";
 
@@ -233,6 +234,8 @@ const HomepageDesigner = () => {
                     />
                 </Stack>
             </DesignerSection>
+
+            <BrandingDesignerSection/>
         </HomepageDesignerShell>
     );
 };

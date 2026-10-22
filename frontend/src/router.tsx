@@ -346,6 +346,13 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "billing",
+                async lazy() {
+                    const Billing = await import("./components/routes/settings/Billing");
+                    return { Component: Billing.default };
+                }
+            },
+            {
                 path: "taxes-and-fees",
                 async lazy() {
                     const TaxesAndFees = await import("./components/routes/settings/TaxesAndFees");

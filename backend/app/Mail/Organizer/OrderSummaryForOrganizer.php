@@ -32,6 +32,11 @@ class OrderSummaryForOrganizer extends BaseMail implements ContainsEventContent
         $this->event = $event;
     }
 
+    public function isSentToBuyers(): bool
+    {
+        return false;
+    }
+
     public function envelope(): Envelope
     {
         $subject = $this->order->getTotalGross() > 0
