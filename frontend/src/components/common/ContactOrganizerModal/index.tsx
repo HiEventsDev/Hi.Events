@@ -65,7 +65,10 @@ export const ContactOrganizerModal: React.FC<ContactOrganizerModalProps> = ({
             onClose={onClose}
             title={t`Contact ${organizer?.name || 'Organizer'}`}
             size="md"
-            className={classes.contactModal}
+            radius={18}
+            withinPortal={false}
+            overlayProps={{backgroundOpacity: 0.6, blur: 6}}
+            classNames={{content: classes.content, header: classes.header, title: classes.title, close: classes.close}}
         >
             <form onSubmit={contactForm.onSubmit(handleContactSubmit)}>
                 <InputGroup>

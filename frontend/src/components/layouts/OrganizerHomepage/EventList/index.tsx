@@ -1,14 +1,14 @@
 import {useId} from "react";
 import {Link} from "react-router";
 import {plural, t} from "@lingui/macro";
-import {IconArrowRight, IconCalendarRepeat, IconMapPin, IconWorld} from "@tabler/icons-react";
+import {IconCalendarRepeat, IconMapPin, IconWorld} from "@tabler/icons-react";
 import {Event, Image, LocationType} from "../../../../types.ts";
 import {eventHomepagePath} from "../../../../utilites/urlHelper.ts";
 import {formatDate, formatDateWithLocale, formatMonthHeading} from "../../../../utilites/dates.ts";
 import {formatAddress} from "../../../../utilites/addressUtilities.ts";
 import {summariseEventLocations} from "../../../../utilites/effectiveLocation.ts";
 import {summariseEventPrice, summariseEventSchedule} from "../../../../utilites/eventListing.ts";
-import {eventPriceLabel, eventScheduleLabel} from "../../../../utilites/eventListingLabels.ts";
+import {eventPriceLabel, eventScheduleLabel, eventTimeLabel} from "../../../../utilites/eventListingLabels.ts";
 import {decodeHtmlEntities} from "../../../../utilites/htmlEntities.ts";
 import {groupConsecutive} from "../../../../utilites/groupConsecutive.ts";
 import {responsiveImage} from "../../../../utilites/imageTransform.ts";
@@ -50,6 +50,8 @@ const listingDetails = (event: Event, past: boolean) => {
         anchorDate: anchorDate(event, past, schedule),
         cover: event.images?.find(image => image.type === 'EVENT_COVER'),
         dateLine: eventScheduleLabel(schedule, event.timezone),
+        timeLine: eventTimeLabel(schedule, event.timezone),
+        description: decodeHtmlEntities(event.description_preview || ''),
         timezone: schedule.start && !schedule.isSeriesRange ? formatDateWithLocale(schedule.start, 'timezone', event.timezone) : null,
     };
 };
@@ -63,9 +65,9 @@ const Artwork = ({image, sizes, lazy}: { image: Image, sizes: string, lazy?: boo
     </>
 );
 
-const DateLine = ({event, details, id}: { event: Event, details: ListingDetails, id: string }) => (
+const DateLine = ({event, details, id, compact}: { event: Event, details: ListingDetails, id: string, compact?: boolean }) => (
     <div className={classes.date} id={id} data-testid="organizer-event-card-date">
-        {details.dateLine}
+        {compact && details.timeLine ? details.timeLine : details.dateLine}
         {details.timezone && (
             <span title={event.timezone} className={classes.timezone} suppressHydrationWarning>{` (${details.timezone})`}</span>
         )}
@@ -127,7 +129,8 @@ const EventRow = ({event, past, titleAs: Title}: { event: Event, past: boolean, 
                 : <span className={classes.tilePlaceholder} aria-hidden="true"/>}
             <div className={classes.rowBody}>
                 <Title className={classes.title} id={`${id}-title`}>{event.title}</Title>
-                <DateLine event={event} details={details} id={`${id}-date`}/>
+                <DateLine event={event} details={details} id={`${id}-date`} compact={!!details.anchorDate}/>
+                {details.description && <p className={classes.description}>{details.description}</p>}
                 <Meta event={event} details={details} withPrice/>
             </div>
             {details.cover && (
@@ -165,44 +168,5 @@ export const EventList = ({events, past = false}: { events: Event[], past?: bool
                 );
             })}
         </div>
-    );
-};
-
-export const EventSpotlight = ({event}: { event: Event }) => {
-    const details = listingDetails(event, false);
-    const start = details.schedule.start;
-    const description = decodeHtmlEntities(event.description_preview || '');
-    const id = useId();
-
-    return (
-        <Link to={eventHomepagePath(event)} className={classes.spotlight} aria-labelledby={`${id}-title`} aria-describedby={`${id}-date`}>
-            <div className={classes.spotlightMedia} style={{backgroundColor: details.cover?.avg_colour ?? undefined}}>
-                {details.cover
-                    ? <Artwork image={details.cover} sizes="(min-width: 768px) 560px, 100vw"/>
-                    : start && (
-                        <div className={classes.spotlightArt} aria-hidden="true">
-                            <span>{formatDateWithLocale(start, 'monthShort', event.timezone)}</span>
-                            <strong>{formatDateWithLocale(start, 'dayOfMonth', event.timezone)}</strong>
-                        </div>
-                    )}
-            </div>
-            <div className={classes.spotlightBody}>
-                <div className={classes.spotlightTop}>
-                    <span className={classes.spotlightLabel}>{t`Next up`}</span>
-                    {details.schedule.isHappeningNow && <LiveBadge/>}
-                </div>
-                <DateLine event={event} details={details} id={`${id}-date`}/>
-                <h3 className={classes.spotlightTitle} id={`${id}-title`}>{event.title}</h3>
-                {description && <p className={classes.description}>{description}</p>}
-                <Meta event={event} details={details}/>
-                <div className={classes.spotlightFooter}>
-                    <Price event={event} details={details}/>
-                    <span className={classes.cta} aria-hidden="true">
-                        {event.settings?.get_tickets_button_text || t`Get Tickets`}
-                        <IconArrowRight/>
-                    </span>
-                </div>
-            </div>
-        </Link>
     );
 };

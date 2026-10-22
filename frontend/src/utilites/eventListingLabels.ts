@@ -2,7 +2,7 @@ import {t} from "@lingui/macro";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import {formatDateWithLocale, isSameDayInTimezone} from "./dates.ts";
+import {formatDateWithLocale, formatWeekday, isSameDayInTimezone} from "./dates.ts";
 import {formatCurrency} from "./currency.ts";
 import {EventPriceSummary, EventScheduleSummary} from "./eventListing.ts";
 
@@ -52,4 +52,14 @@ export const eventScheduleLabel = (schedule: EventScheduleSummary, tz: string): 
     return isSameDayInTimezone(start, end, tz)
         ? `${startLabel} – ${endTime}`
         : `${startLabel} – ${formatDay(end, tz, withYear)}, ${endTime}`;
+};
+
+export const eventTimeLabel = (schedule: EventScheduleSummary, tz: string): string | null => {
+    const {start, end} = schedule;
+    if (!start || schedule.isSeriesRange || schedule.hasEnded || (end && !isSameDayInTimezone(start, end, tz))) {
+        return null;
+    }
+    const startTime = formatDateWithLocale(start, "timeOnly", tz);
+
+    return `${formatWeekday(start, tz, 'short')} · ${end ? `${startTime} – ${formatDateWithLocale(end, "timeOnly", tz)}` : startTime}`;
 };
