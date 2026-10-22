@@ -8,6 +8,7 @@ const travelInfo = Array.from({ length: 18 }, (_, index) => `<p>Travel note ${in
 const createEventWithSections = async (api: ApiClient, organizerId: number) => {
   const event = await createLiveEventWithProduct(api, { organizerId, price: 15 });
   await api.updateEventSettings(event.eventId, {
+    homepage_theme_settings: { accent: '#7c3aed', background: '#f5f3ff', mode: 'light', background_type: 'COLOR', layout: 'MARQUEE' },
     homepage_sections: [
       { id: 'tickets', type: 'TICKETS', enabled: true },
       { id: 'travel', type: 'TEXT', enabled: true, heading: 'Getting there', body: travelInfo },

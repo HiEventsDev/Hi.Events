@@ -11,7 +11,7 @@ export interface EventLayoutDefinition {
     centeredIntro: boolean;
 }
 
-export const DEFAULT_EVENT_LAYOUT: EventLayout = 'MARQUEE';
+export const DEFAULT_EVENT_LAYOUT: EventLayout = 'STORY';
 
 export const EVENT_LAYOUTS: EventLayoutDefinition[] = [
     {value: 'MARQUEE', width: 'wide', ticketRail: true, poster: false, sectionNav: true, centeredIntro: false},

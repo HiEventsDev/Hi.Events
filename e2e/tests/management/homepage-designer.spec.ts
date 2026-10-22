@@ -56,8 +56,8 @@ test.describe('homepage designer', () => {
     const designer = new DesignerPage(authedPage);
     await designer.gotoHomepageDesigner(event.eventId);
 
-    await expect(designer.layoutOption('marquee')).toHaveAttribute('aria-checked', 'true');
-    await expect(authedPage.getByText('Suits conferences and long lineups', { exact: false })).toBeVisible();
+    await expect(designer.layoutOption('story')).toHaveAttribute('aria-checked', 'true');
+    await expect(authedPage.getByText('A focused reading column.', { exact: false })).toBeVisible();
 
     await designer.layoutOption('invite').click();
     await expect(designer.layoutOption('invite')).toHaveAttribute('aria-checked', 'true');
