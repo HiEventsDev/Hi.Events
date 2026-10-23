@@ -1,4 +1,4 @@
-import {QueryFilterCondition, QueryFilters, QueryFilterOperator} from "../types.ts";
+import {QueryFilterCondition, QueryFilters} from "../types.ts";
 
 export const queryParamsHelper = {
     PER_PAGE_PARAM: "per_page",

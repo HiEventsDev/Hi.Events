@@ -85,13 +85,12 @@ export const SortableCategory: React.FC<SortableCategoryProps> = ({
         const [movedCategory] = newCategories.splice(currentIndex, 1);
         newCategories.splice(targetIndex, 0, movedCategory);
 
-        // Prepare the sorted categories data
         const sortedCategories = newCategories.map(cat =>
             ({
-                product_category_id: cat.id as number,
+                product_category_id: cat.id,
                 sorted_products: (cat.products || []).map((product, index) => ({
-                    id: product.id as number,
-                    sort_order: index
+                    id: product.id,
+                    order: index + 1
                 }))
             }));
 

@@ -6,7 +6,6 @@ import {usePreviewEmailTemplateForOrganizer} from '../../../../../../mutations/u
 import {useDeleteEmailTemplateForOrganizer} from "../../../../../../mutations/useDeleteEmailTemplate.ts";
 import {useUpdateEmailTemplateForOrganizer} from "../../../../../../mutations/useUpdateEmailTemplate.ts";
 import {EmailTemplateSettingsBase} from '../../../../../common/EmailTemplateSettings';
-import {EmailTemplateType} from '../../../../../../types';
 
 interface EmailTemplateSettingsProps {
     organizerId: string | number;
@@ -27,8 +26,7 @@ const EmailTemplateSettings = ({organizerId}: EmailTemplateSettingsProps) => {
 
     const templates = templatesData?.data || [];
 
-    const handleCreateTemplate = (type: EmailTemplateType) => {
-        // Enable fetching default templates if not already fetched
+    const handleCreateTemplate = () => {
         if (!defaultTemplatesData) {
             setShouldFetchDefaults(true);
         }
