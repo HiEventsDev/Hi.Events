@@ -34,7 +34,7 @@ export const Products = () => {
     const {eventId} = useParams();
     const {data: event} = useGetEvent(eventId);
     const [searchTerm, setSearchTerm] = useState('');
-    const [selectedCategoryId, setSelectedCategoryId] = useState<IdParam>(null);
+    const [selectedCategoryId, setSelectedCategoryId] = useState<IdParam>();
     const [isExporting, setIsExporting] = useState(false);
 
     const productCategoriesQuery = useGetEventProductCategories(eventId);

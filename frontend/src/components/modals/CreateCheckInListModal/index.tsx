@@ -1,4 +1,4 @@
-import {CheckInList, CheckInListRequest, EventType, GenericModalProps, Product, ProductCategory} from "../../../types.ts";
+import {CheckInList, CheckInListRequest, EventType, GenericModalProps, ProductCategory} from "../../../types.ts";
 import {Modal, ModalFooter} from "../../common/Modal";
 import {t} from "@lingui/macro";
 import {CheckInListForm} from "../../forms/CheckInListForm";
@@ -12,6 +12,7 @@ import {NoResultsSplash} from "../../common/NoResultsSplash";
 import {IconPlus} from "@tabler/icons-react";
 import {CheckInListSuccessModal} from "../CheckInListSuccessModal";
 import {useState} from "react";
+import {getProductsFromEvent} from "../../../utilites/helpers.ts";
 
 interface CreateCheckInListModalProps extends GenericModalProps {
     initialOccurrenceId?: number | null;
@@ -36,10 +37,7 @@ export const CreateCheckInListModal = ({onClose, initialOccurrenceId}: CreateChe
         }
     });
     const createMutation = useCreateCheckInList();
-    const eventHasTickets = event?.product_categories
-        && event.product_categories.some(category => category.products.length > 0)
-        && event.product_categories.filter(category =>
-            category?.products?.filter((product: Product) => product.product_type === 'TICKET').length > 0).length > 0
+    const eventHasTickets = getProductsFromEvent(event)?.some(product => product.product_type === 'TICKET');
 
     const handleSubmit = (requestData: CheckInListRequest) => {
         createMutation.mutate({

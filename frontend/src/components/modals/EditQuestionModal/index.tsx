@@ -1,5 +1,5 @@
 import {Button, LoadingOverlay} from "@mantine/core";
-import {GenericModalProps, IdParam, Question, QuestionRequestData, QuestionType} from "../../../types.ts";
+import {GenericModalProps, IdParam, QuestionRequestData, QuestionType} from "../../../types.ts";
 import {useForm} from "@mantine/form";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {notifications} from "@mantine/notifications";
@@ -59,7 +59,7 @@ export const EditQuestionModal = ({onClose, questionId}: EditQuestionModalProps)
         , [questionQuery.isFetched]);
 
     const mutation = useMutation({
-        mutationFn: (questionData: Question) => questionClient.update(eventId, questionId, questionData),
+        mutationFn: (questionData: QuestionRequestData) => questionClient.update(eventId, questionId, questionData),
 
         onSuccess: () => {
             notifications.show({
@@ -94,7 +94,7 @@ export const EditQuestionModal = ({onClose, questionId}: EditQuestionModalProps)
             onClose={onClose}
             heading={t`Edit Question`}
         >
-            <form onSubmit={form.onSubmit((values) => mutation.mutate(values as any as Question))}>
+            <form onSubmit={form.onSubmit((values) => mutation.mutate(values))}>
                 <QuestionForm form={form} productCategories={productsCategories}/>
                 {!questionQuery.isFetched && <LoadingOverlay visible/>}
                 <ModalFooter>

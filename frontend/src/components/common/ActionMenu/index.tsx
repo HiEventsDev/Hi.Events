@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Group, Menu} from '@mantine/core';
+import {Button, Menu} from '@mantine/core';
 import {IconDotsVertical} from '@tabler/icons-react';
 import {useAccess} from "../../../hooks/useAccess.ts";
 

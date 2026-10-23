@@ -25,12 +25,6 @@ import {getConfig} from "./utilites/config.ts";
 import {CookieConsentBanner} from "./components/common/CookieConsentBanner";
 import {isConsentBannerEnabled} from "./utilites/cookieConsent";
 
-declare global {
-    interface Window {
-        hievents: Record<string, string>;
-    }
-}
-
 export const App: FC<
     PropsWithChildren<{
         queryClient: QueryClient;
