@@ -2,6 +2,4 @@
 
 namespace HiEvents\DomainObjects;
 
-class AnnouncementUserDomainObject extends Generated\AnnouncementUserDomainObjectAbstract
-{
-}
+class AnnouncementUserDomainObject extends Generated\AnnouncementUserDomainObjectAbstract {}

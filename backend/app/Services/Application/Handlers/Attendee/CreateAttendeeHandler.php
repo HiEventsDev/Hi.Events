@@ -225,7 +225,7 @@ class CreateAttendeeHandler
     private function createOrder(int $eventId, CreateAttendeeDTO $attendeeDTO): OrderDomainObject
     {
         $event = $this->eventRepository->findById($eventId);
-        $total = Money::of($attendeeDTO->amount_paid, $event->getCurrency());
+        $total = Money::of((string) $attendeeDTO->amount_paid, $event->getCurrency());
 
         return $this->orderRepository->create(
             [

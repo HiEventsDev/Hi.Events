@@ -16,6 +16,7 @@ use HiEvents\Enterprise\Seating\Services\Domain\SeatedProductLookupService;
 use HiEvents\Models\Event;
 use HiEvents\Models\Organizer;
 use HiEvents\Models\Profile;
+use HiEvents\Models\User;
 use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
 use HiEvents\Services\Domain\Auth\ApiKey\ApiKeyService;
 use HiEvents\Services\Infrastructure\CurrencyConversion\CurrencyConversionClientInterface;
@@ -161,6 +162,7 @@ class AppServiceProvider extends ServiceProvider
             EventDomainObject::class => Event::class,
             OrganizerDomainObject::class => Organizer::class,
             ProfileDomainObject::class => Profile::class,
+            User::class => User::class,
         ]);
     }
 

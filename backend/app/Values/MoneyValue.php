@@ -58,7 +58,7 @@ class MoneyValue
      */
     public static function fromFloat(float $amount, string $currency): MoneyValue
     {
-        return new self(Money::of($amount, $currency, null, RoundingMode::HALF_CEILING));
+        return new self(Money::of((string) $amount, $currency, roundingMode: RoundingMode::HalfCeiling));
     }
 
     /**
@@ -68,7 +68,7 @@ class MoneyValue
      */
     public static function fromMinorUnit(int $amount, string $currency): MoneyValue
     {
-        return new self(Money::ofMinor($amount, $currency, null, RoundingMode::HALF_UP));
+        return new self(Money::ofMinor($amount, $currency, roundingMode: RoundingMode::HalfUp));
     }
 
     public function __toString(): string
