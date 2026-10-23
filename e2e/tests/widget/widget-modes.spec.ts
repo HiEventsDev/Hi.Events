@@ -100,6 +100,37 @@ test.describe('widget modes', () => {
       .toEqual([expect.objectContaining({ eventId: String(event.eventId), quantity: 1, status: 'COMPLETED' })]);
   });
 
+  test('reloading a completed checkout does not tell the host page about the order again', async ({ page, api, account, baseURL }) => {
+    const event = await createLiveEventWithFreeTicket(api, account.organizerId);
+    const buyer = { firstName: 'Reload', lastName: 'Buyer', email: uniqueEmail('reload-buyer') };
+
+    await openEmbedHost(page, baseURL!, widgetMarkup({ id: String(event.eventId), 'widget-type': 'button', 'button-text': 'Book now' }));
+    await page.evaluate(() => {
+      const log: unknown[] = [];
+      (window as unknown as { hieventsOrders: unknown[] }).hieventsOrders = log;
+      window.addEventListener('hievents:order-completed', (event) => log.push((event as CustomEvent).detail));
+    });
+
+    await page.getByRole('button', { name: 'Book now' }).click();
+    const widget = await resolveWidgetFrame(page);
+    await setWidgetQuantity(widget, 1);
+    await widget.getByTestId('checkout-continue-button').click();
+    const checkoutFrame = await resolveCheckoutFrame(page);
+    await checkoutFrame.waitForURL(/\/checkout\/\d+\/[^/]+\/details/);
+    const checkout = new CheckoutPage(page, checkoutFrame);
+    await checkout.fillOrderDetails(buyer);
+    await checkout.fillFirstAttendee(buyer);
+    await checkout.completeFreeOrder();
+    const hostOrders = () => page.evaluate(() => (window as unknown as { hieventsOrders: unknown[] }).hieventsOrders.length);
+    await expect.poll(hostOrders).toBe(1);
+
+    await checkoutFrame.goto(checkoutFrame.url());
+    await expect(checkoutFrame.getByText(`You're going to ${event.title}`)).toBeVisible();
+    await page.waitForTimeout(1000);
+
+    expect(await hostOrders()).toBe(1);
+  });
+
   test('a paid order through the ticket button tells the host page its total and currency', async ({ page, api, account, baseURL }) => {
     const event = await createLiveEventWithPaidTicket(api, account.organizerId, 20);
     await api.updateEventSettings(event.eventId, { pass_platform_fee_to_buyer: false });
