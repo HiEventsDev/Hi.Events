@@ -1,6 +1,7 @@
 import {isSsr, safeSessionStorageGet, safeSessionStorageSet} from "./helpers.ts";
 
 const SESSION_KEY_PREFIX = 'hievents.checkout.session.';
+const COMPLETION_REPORTED_KEY_PREFIX = 'hievents.checkout.completionReported.';
 
 const readSessionIdentifierFromUrl = (): string | null => {
     if (isSsr()) return null;
@@ -23,4 +24,12 @@ export const getCheckoutSessionIdentifier = (orderShortId: string): string | nul
     }
 
     return safeSessionStorageGet(SESSION_KEY_PREFIX + orderShortId);
+};
+
+export const claimOrderCompletionReport = (orderShortId: string): boolean => {
+    if (safeSessionStorageGet(COMPLETION_REPORTED_KEY_PREFIX + orderShortId)) {
+        return false;
+    }
+    safeSessionStorageSet(COMPLETION_REPORTED_KEY_PREFIX + orderShortId, '1');
+    return true;
 };
