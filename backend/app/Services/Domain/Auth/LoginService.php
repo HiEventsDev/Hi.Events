@@ -10,6 +10,7 @@ use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Enterprise\Sso\Exceptions\SsoRequiredException;
 use HiEvents\Enterprise\Sso\Repository\Interfaces\AccountSsoConnectionRepositoryInterface;
 use HiEvents\Enterprise\Sso\Services\Domain\SsoEnforcementService;
+use HiEvents\Exceptions\InvitationPendingException;
 use HiEvents\Exceptions\UnauthorizedException;
 use HiEvents\Models\User;
 use HiEvents\Repository\Eloquent\Value\Relationship;
@@ -112,7 +113,7 @@ class LoginService
 
         $accounts = $userAccounts->map(fn ($accountUser) => $accountUser->getAccount());
 
-        $accountId = $this->getAccountId($accounts, $requestedAccountId);
+        $accountId = $this->getAccountId($user, $accounts, $requestedAccountId);
 
         if ($accountId === null) {
             return new LoginResponse(
@@ -168,6 +169,7 @@ class LoginService
     private function resolveAccountToSignInTo(UserDomainObject $user, ?int $requestedAccountId): ?int
     {
         return $this->getAccountId(
+            $user,
             $this->findActiveUserAccounts($user)->map(fn ($accountUser) => $accountUser->getAccount()),
             $requestedAccountId,
         );
@@ -186,10 +188,10 @@ class LoginService
     /**
      * @throws UnauthorizedException
      */
-    private function getAccountId(Collection $accounts, ?int $requestedAccountId): ?int
+    private function getAccountId(UserDomainObject $user, Collection $accounts, ?int $requestedAccountId): ?int
     {
         if ($accounts->isEmpty()) {
-            throw new UnauthorizedException(__('User account is not active'));
+            $this->throwNoActiveAccount($user);
         }
 
         if ($accounts->count() === 1) {
@@ -207,6 +209,25 @@ class LoginService
         }
 
         return null;
+    }
+
+    /**
+     * @throws UnauthorizedException
+     */
+    private function throwNoActiveAccount(UserDomainObject $user): never
+    {
+        $hasPendingInvitation = $this->accountUserRepository->findFirstWhere([
+            'user_id' => $user->getId(),
+            'status' => UserStatus::INVITED->name,
+        ]) !== null;
+
+        if ($hasPendingInvitation) {
+            throw new InvitationPendingException(
+                __('You have been invited to join a team. Open the invitation email to finish joining.'),
+            );
+        }
+
+        throw new UnauthorizedException(__('User account is not active'));
     }
 
     private function issueToken(int $userId, int $accountId, Role $userRole, AuthContext $context): string

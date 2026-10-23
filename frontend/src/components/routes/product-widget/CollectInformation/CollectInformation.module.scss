@@ -11,8 +11,8 @@ $transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   padding: 16px 20px;
   margin-bottom: 24px;
   border-radius: $radius-sm;
-  background: linear-gradient(135deg, #ecfdf5, #d1fae5);
-  border: 1px solid #a7f3d0;
+  background: var(--checkout-accent-soft);
+  border: 1px solid var(--checkout-accent-muted);
 }
 
 .waitlistBannerIcon {
@@ -20,8 +20,8 @@ $transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: #059669;
-  color: white;
+  background: var(--checkout-accent);
+  color: var(--checkout-accent-contrast);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -32,13 +32,13 @@ $transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   font-family: $font-display;
   font-size: 15px;
   font-weight: 600;
-  color: #065f46;
+  color: var(--checkout-text-primary);
   margin: 0 0 4px 0;
 }
 
 .waitlistBannerText {
   font-size: 13px;
-  color: #047857;
+  color: var(--checkout-text-secondary);
   margin: 0;
   line-height: 1.5;
 }
@@ -80,8 +80,9 @@ $transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 
 .ticketTypeHeader {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
   margin-bottom: 16px;
   margin-top: 24px;
 
@@ -95,12 +96,11 @@ $transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .ticketCountBadge {
-  background: var(--checkout-accent-soft, var(--mantine-primary-color-light));
-  color: var(--checkout-accent, var(--mantine-primary-color-filled));
-  font-size: 12px;
-  padding: 2px 10px;
-  border-radius: 12px;
-  font-weight: 500;
+  flex-shrink: 0;
+  white-space: nowrap;
+  color: var(--checkout-text-secondary, #6B7280);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
 }
 
 .attendeeCard {
@@ -149,12 +149,8 @@ $transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .copiedBadge {
-  background: var(--checkout-accent-soft, #D1FAE5);
-  color: var(--checkout-accent, #065F46);
-  font-size: 12px;
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-weight: 500;
+  color: var(--checkout-text-secondary, #6B7280);
+  font-size: 13px;
   white-space: nowrap;
 }
 

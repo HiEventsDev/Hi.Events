@@ -180,6 +180,7 @@ const measure = (page: Page) => page.evaluate(() => {
   const sheet = box(document.querySelector('main article'));
   const poster = box(document.querySelector('[class*="posterColumn"]'));
   const contentBottom = Math.max(...[...flow, box(tickets), poster].filter(rect => rect).map(rect => rect!.bottom));
+  const footerContentBottom = Math.max(...Array.from(document.querySelector('main footer')!.children).map(child => box(child)!.bottom));
 
   return {
     overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
@@ -190,7 +191,7 @@ const measure = (page: Page) => page.evaluate(() => {
     gaps,
     footerGap: Math.round(box(document.querySelector('main footer'))!.y - contentBottom),
     footerAtSheetBottom: Math.abs(box(document.querySelector('main footer'))!.bottom - sheet!.bottom) <= 1.5,
-    spaceBelowFooterContent: Math.round(sheet!.bottom - box(document.querySelector('main footer')!.lastElementChild)!.bottom),
+    spaceBelowFooterContent: Math.round(sheet!.bottom - footerContentBottom),
     fitsViewport: sheet!.bottom <= window.innerHeight + 1,
     bodyBackground: getComputedStyle(document.body).backgroundColor,
     sheetBackground: getComputedStyle(document.querySelector('main article')!).backgroundColor,

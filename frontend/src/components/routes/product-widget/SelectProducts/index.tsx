@@ -932,6 +932,24 @@ const SelectProducts = (props: SelectProductsProps) => {
                                             ? 'ended'
                                             : undefined;
 
+                                const quantityErrors = (
+                                    <>
+                                        {product.max_per_order && form.values.products && isObjectEmpty(form.errors) && (form.values.products[currentProductIndex]?.quantities.reduce((acc, {quantity}) => acc + Number(quantity), 0) > product.max_per_order) && (
+                                            <div className={'hi-product-quantity-error'}>
+                                                <Trans>The maximum number of products
+                                                    for {product.title}
+                                                    is {product.max_per_order}</Trans>
+                                            </div>
+                                        )}
+
+                                        {form.errors[`products.${currentProductIndex}`] && (
+                                            <div className={'hi-product-quantity-error'}>
+                                                {form.errors[`products.${currentProductIndex}`]}
+                                            </div>
+                                        )}
+                                    </>
+                                );
+
                                 const collapsedFromPrice = (() => {
                                     if (!isProductCollapsed || product.type !== 'TIERED') {
                                         return null;
@@ -1005,7 +1023,6 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                     form={form}
                                                     eventOccurrenceId={selectedOccurrenceId}
                                                     displayMode={'header'}
-                                                    showStepper={!isProductCollapsed}
                                                 />
                                             </div>
                                         )}
@@ -1014,6 +1031,8 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                 {t`From ${formatCurrency(collapsedFromPrice, event?.currency)}`}
                                             </div>
                                         )}
+                                        {isProductCollapsed && quantityErrors}
+                                        {isProductCollapsed && addonIds.length > 0 && getProductQuantity(Number(product.id)) > 0 && renderAddons(product)}
                                         <Collapse transitionDuration={100} expanded={!isProductCollapsed}
                                                   className={'hi-product-content'} hidden={isProductCollapsed}>
                                             {!isSimpleProduct && (
@@ -1028,19 +1047,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                 </div>
                                             )}
 
-                                            {product.max_per_order && form.values.products && isObjectEmpty(form.errors) && (form.values.products[currentProductIndex]?.quantities.reduce((acc, {quantity}) => acc + Number(quantity), 0) > product.max_per_order) && (
-                                                <div className={'hi-product-quantity-error'}>
-                                                    <Trans>The maximum number of products
-                                                        for {product.title}
-                                                        is {product.max_per_order}</Trans>
-                                                </div>
-                                            )}
-
-                                            {form.errors[`products.${currentProductIndex}`] && (
-                                                <div className={'hi-product-quantity-error'}>
-                                                    {form.errors[`products.${currentProductIndex}`]}
-                                                </div>
-                                            )}
+                                            {!isProductCollapsed && quantityErrors}
 
                                             {product.description && renderProductDetails(
                                                 Number(product.id),
@@ -1048,7 +1055,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                 'hi-product-description-row',
                                             )}
 
-                                            {addonIds.length > 0 && renderAddons(product)}
+                                            {!isProductCollapsed && addonIds.length > 0 && renderAddons(product)}
                                         </Collapse>
                                     </div>
                                 )

@@ -8,11 +8,13 @@ import {Card} from "../../../common/Card";
 import {Avatar, UnstyledButton} from "@mantine/core";
 import {Link, useParams} from "react-router";
 import {OrganizerReportTypes} from "../../../../types.ts";
+import {useGetAccount} from "../../../../queries/useGetAccount.ts";
 
 const OrganizerReports = () => {
     const {organizerId} = useParams();
 
     const canViewFinancials = useAccess().can('VIEW_FINANCIALS');
+    const {data: account} = useGetAccount();
     const reports = [
         {
             id: OrganizerReportTypes.RevenueSummary,
@@ -38,12 +40,12 @@ const OrganizerReports = () => {
             description: t`Attendance and check-in rates across all events`,
             icon: <Avatar size={40} color={'#5FB98B'}><IconUserCheck/></Avatar>
         },
-        {
+        ...(account?.is_saas_mode_enabled ? [{
             id: OrganizerReportTypes.PlatformFees,
             title: t`Platform Fees`,
             description: t`Hi.Events platform fees and VAT breakdown by transaction`,
             icon: <Avatar size={40} color={'#E67C63'}><IconReceipt/></Avatar>
-        }
+        }] : []),
     ];
 
     return (

@@ -117,6 +117,7 @@ export interface CreateProductPayload {
   show_quantity_remaining?: boolean;
   waitlist_enabled?: boolean;
   hide_when_sold_out?: boolean;
+  start_collapsed?: boolean;
   sale_start_date?: string;
   sale_end_date?: string;
   sequential_tier_release_enabled?: boolean;
