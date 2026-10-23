@@ -760,6 +760,7 @@ export interface EventDuplicatePayload extends EventBase {
     duplicate_affiliates: boolean;
     duplicate_lineup: boolean;
     duplicate_occurrences?: boolean;
+    duplicate_email_templates?: boolean;
 }
 
 export enum EventStatus {

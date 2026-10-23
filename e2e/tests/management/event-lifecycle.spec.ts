@@ -74,9 +74,15 @@ test.describe('event lifecycle', () => {
     await organizer.searchEvents(account.organizerId, event.title);
     await organizer.openEventDuplicateModal(event.title);
 
-    const nameInput = authedPage.getByRole('dialog').getByLabel(/^Name/);
-    await expect(nameInput).toHaveValue(event.title);
+    const dialog = authedPage.getByRole('dialog');
+    const nameInput = dialog.getByLabel(/^Name/);
+    await expect(nameInput).toHaveValue(`${event.title} (Copy)`);
     await nameInput.fill(duplicateTitle);
+
+    await dialog.getByRole('checkbox', { name: 'Products' }).uncheck();
+    await expect(dialog.getByRole('checkbox', { name: 'Check-in lists' })).toBeDisabled();
+    await dialog.getByRole('checkbox', { name: 'Products' }).check();
+    await expect(dialog.getByRole('checkbox', { name: 'Check-in lists' })).toBeChecked();
     await authedPage.getByRole('button', { name: 'Duplicate Event' }).click();
 
     await authedPage.waitForURL(/\/manage\/event\/\d+/);
