@@ -37,8 +37,8 @@ api.interceptors.response.use(
         }
 
         if (action.type === 'login') {
-            if (data?.error_code === 'SSO_REQUIRED') {
-                setAuthNotice('SSO_REQUIRED');
+            if (data?.error_code === 'SSO_REQUIRED' || data?.error_code === 'ACCOUNT_SUSPENDED') {
+                setAuthNotice(data.error_code);
             } else if (status === 401) {
                 queueSilentReauthAfterExpiry();
             }

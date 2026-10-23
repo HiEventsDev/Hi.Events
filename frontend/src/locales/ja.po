@@ -828,8 +828,8 @@ msgstr "1. 認証アプリを入手する"
 msgid "12 mats in the studio and one Drop-in ticket."
 msgstr "スタジオに12枚のマットと、ドロップインチケット1枚。"
 
-#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:78
-#: src/components/routes/event/TicketDesigner/TicketPreview.tsx:78
+#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:64
+#: src/components/routes/event/TicketDesigner/TicketPreview.tsx:68
 msgid "123 Sample Street"
 msgstr "サンプル通り123番地"
 
@@ -1104,7 +1104,7 @@ msgstr "アカウント · {0}"
 msgid "Account · {0} · {1}"
 msgstr "アカウント · {0} · {1}"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:78
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:82
 msgid "Account deletion cancelled"
 msgstr "アカウントの削除をキャンセルしました"
 
@@ -1117,15 +1117,15 @@ msgid "Account deletion is blocked"
 msgstr "アカウントの削除はブロックされています"
 
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:28
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:70
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:74
 msgid "Account deletion queued"
 msgstr "アカウントの削除をキューに追加しました"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:144
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:160
 msgid "Account Information"
 msgstr "アカウント情報"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:60
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:64
 msgid "Account marked as verified"
 msgstr "アカウントを認証済みにしました"
 
@@ -1134,7 +1134,7 @@ msgstr "アカウントを認証済みにしました"
 msgid "Account name"
 msgstr "アカウント名"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:113
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:126
 msgid "Account not found"
 msgstr "アカウントが見つかりません"
 
@@ -1154,11 +1154,19 @@ msgstr "アカウントは30日後に削除される予定です"
 msgid "Account Settings"
 msgstr "アカウント設定"
 
+#: src/components/routes/admin/Accounts/AccountDetail/SuspendAccountModal.tsx:25
+msgid "Account suspended"
+msgstr "アカウントを停止しました"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:90
+msgid "Account unsuspended"
+msgstr "アカウントの停止を解除しました"
+
 #: src/components/routes/settings/Account/index.tsx:59
 msgid "Account updated successfully"
 msgstr "アカウントを更新しました"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:61
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:65
 msgid "Account verification revoked"
 msgstr "アカウントの認証を取り消しました"
 
@@ -1477,7 +1485,7 @@ msgid "Add photos"
 msgstr "写真を追加"
 
 #: src/components/common/ProductsTable/ProductsBlankSlate/index.tsx:69
-#: src/components/common/ProductsTable/SortableCategory/index.tsx:186
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:185
 msgid "Add Product"
 msgstr "商品を追加"
 
@@ -1894,6 +1902,10 @@ msgstr "失敗したジョブをすべて削除しました"
 msgid "All jobs queued for retry"
 msgstr "すべてのジョブを再試行キューに追加しました"
 
+#: src/components/routes/admin/Accounts/AccountDetail/SuspendAccountModal.tsx:38
+msgid "All live events and organizer pages are moved to draft, and nobody on the account can sign in or use its API keys until it is unsuspended. Unsuspending does not republish anything."
+msgstr "公開中のすべてのイベントと主催者ページは下書きに戻り、停止が解除されるまでアカウントの誰もサインインやAPIキーの使用ができなくなります。停止を解除しても再公開はされません。"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:347
 msgid "All matching dates"
 msgstr "一致するすべての日付"
@@ -1907,7 +1919,7 @@ msgstr "すべての開催回"
 msgid "All Occurrences"
 msgstr "すべての開催回"
 
-#: src/components/common/PromoCodeTable/index.tsx:141
+#: src/components/common/PromoCodeTable/index.tsx:142
 msgid "All Products"
 msgstr "すべての商品"
 
@@ -2471,7 +2483,7 @@ msgstr "この日付を削除してもよろしいですか？この操作は元
 msgid "Are you sure you want to delete this image?"
 msgstr "この画像を削除してもよろしいですか？"
 
-#: src/components/common/PromoCodeTable/index.tsx:39
+#: src/components/common/PromoCodeTable/index.tsx:40
 msgid "Are you sure you want to delete this promo code?"
 msgstr "このプロモーションコードを削除してもよろしいですか？"
 
@@ -2492,7 +2504,7 @@ msgstr "このテンプレートを削除してもよろしいですか？この
 msgid "Are you sure you want to delete this webhook?"
 msgstr "このWebhookを削除してもよろしいですか？"
 
-#: src/components/layouts/Checkout/index.tsx:458
+#: src/components/layouts/Checkout/index.tsx:461
 msgid "Are you sure you want to leave?"
 msgstr "本当に離れますか？"
 
@@ -2651,7 +2663,7 @@ msgstr "別のプランを割り当てる"
 msgid "Assign plan"
 msgstr "プランを割り当てる"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:229
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:245
 msgid "Assigned Tier"
 msgstr "割り当てられたティア"
 
@@ -2912,7 +2924,7 @@ msgstr "支払い待ち"
 
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:117
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:225
-#: src/components/layouts/Checkout/index.tsx:339
+#: src/components/layouts/Checkout/index.tsx:342
 #: src/components/modals/ProductPurchasesModal/index.tsx:79
 #: src/components/modals/ProductPurchasesModal/index.tsx:209
 #: src/components/modals/ProductPurchasesModal/index.tsx:247
@@ -2950,7 +2962,7 @@ msgstr "Awesome Organizer Ltd."
 msgid "Back"
 msgstr "戻る"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:135
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:148
 msgid "Back to Accounts"
 msgstr "アカウントに戻る"
 
@@ -2961,8 +2973,8 @@ msgstr "アカウントに戻る"
 msgid "Back to Event"
 msgstr "イベントに戻る"
 
-#: src/components/layouts/Checkout/index.tsx:325
-#: src/components/layouts/Checkout/index.tsx:326
+#: src/components/layouts/Checkout/index.tsx:328
+#: src/components/layouts/Checkout/index.tsx:329
 msgid "Back to event page"
 msgstr "イベントページに戻る"
 
@@ -3459,7 +3471,7 @@ msgstr "認証アプリまたはリカバリーコードを使用できません
 #: src/components/common/ContactOrganizerModal/index.tsx:107
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:132
 #: src/components/common/LocationPicker/index.tsx:352
-#: src/components/common/PromoCodeTable/index.tsx:42
+#: src/components/common/PromoCodeTable/index.tsx:43
 #: src/components/common/QuestionAndAnswerList/index.tsx:126
 #: src/components/common/WaitlistTable/index.tsx:117
 #: src/components/common/WaitlistTable/index.tsx:138
@@ -3468,7 +3480,7 @@ msgstr "認証アプリまたはリカバリーコードを使用できません
 #: src/components/modals/CreateAffiliateModal/index.tsx:88
 #: src/components/modals/CreateAttendeeModal/index.tsx:335
 #: src/components/modals/CreateCapacityAssignmentModal/index.tsx:75
-#: src/components/modals/CreateCheckInListModal/index.tsx:106
+#: src/components/modals/CreateCheckInListModal/index.tsx:104
 #: src/components/modals/CreateEventModal/index.tsx:478
 #: src/components/modals/CreateOrganizerModal/index.tsx:66
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:89
@@ -3494,6 +3506,7 @@ msgstr "認証アプリまたはリカバリーコードを使用できません
 #: src/components/modals/ManageOrderModal/index.tsx:241
 #: src/components/modals/PublishEventModal/index.tsx:212
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:80
+#: src/components/routes/admin/Accounts/AccountDetail/SuspendAccountModal.tsx:65
 #: src/components/routes/admin/Announcements/index.tsx:500
 #: src/components/routes/admin/Configurations/index.tsx:269
 #: src/components/routes/admin/DeletionRequests/index.tsx:178
@@ -3556,7 +3569,7 @@ msgid "Cancel Date"
 msgstr "日付をキャンセル"
 
 #: src/components/common/PendingDeletionBanner/index.tsx:39
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:406
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:462
 #: src/components/routes/admin/DeletionRequests/index.tsx:232
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:101
 msgid "Cancel deletion"
@@ -3721,7 +3734,7 @@ msgstr "カテゴリーを使うと、商品をグループ化できます。た
 msgid "Categories help you organize your products. This title will be displayed on the public event page."
 msgstr "カテゴリーは商品の整理に役立ちます。このタイトルは公開イベントページに表示されます。"
 
-#: src/components/common/ProductsTable/SortableCategory/index.tsx:105
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:104
 msgid "Categories reordered successfully."
 msgstr "カテゴリーの並び替えが完了しました。"
 
@@ -3905,7 +3918,7 @@ msgstr "チェックアウト"
 msgid "Check out this event: {0}"
 msgstr "このイベントをチェック：{0}"
 
-#: src/components/layouts/Checkout/index.tsx:373
+#: src/components/layouts/Checkout/index.tsx:376
 msgid "Check out this event!"
 msgstr "このイベントをチェックしてみてください！"
 
@@ -3924,7 +3937,7 @@ msgstr "メールをご確認ください"
 msgid "Check your event page"
 msgstr "イベントページを確認"
 
-#: src/components/routes/auth/Login/index.tsx:220
+#: src/components/routes/auth/Login/index.tsx:231
 #: src/components/routes/my-tickets/index.tsx:191
 msgid "Check your inbox! If tickets are associated with this email, you'll receive a link to view them."
 msgstr "受信トレイをご確認ください！このメールアドレスに関連付けられたチケットがある場合、チケットを表示するためのリンクが届きます。"
@@ -4084,7 +4097,7 @@ msgstr "確認中…"
 msgid "Checkout"
 msgstr "チェックアウト"
 
-#: src/components/layouts/Checkout/index.tsx:345
+#: src/components/layouts/Checkout/index.tsx:348
 msgid "Checkout · step {stepNumber} of {stepCount}"
 msgstr "チェックアウト · ステップ{stepNumber}/{stepCount}"
 
@@ -4357,7 +4370,7 @@ msgstr "クリックして頂点を追加します。最初の頂点をクリッ
 msgid "Click to cancel"
 msgstr "クリックしてキャンセル"
 
-#: src/components/common/PromoCodeTable/index.tsx:108
+#: src/components/common/PromoCodeTable/index.tsx:109
 msgid "Click to copy"
 msgstr "クリックしてコピー"
 
@@ -4404,8 +4417,8 @@ msgstr "閉じる"
 #: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:86
 #: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:122
 #: src/components/modals/CreateEventModal/index.tsx:288
-#: src/components/modals/JoinWaitlistModal/index.tsx:116
-#: src/components/modals/JoinWaitlistModal/index.tsx:143
+#: src/components/modals/JoinWaitlistModal/index.tsx:117
+#: src/components/modals/JoinWaitlistModal/index.tsx:144
 #: src/components/modals/RefundOrderModal/index.tsx:172
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:892
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1245
@@ -4429,7 +4442,7 @@ msgid "Club"
 msgstr "クラブ"
 
 #: src/components/common/AffiliateTable/index.tsx:82
-#: src/components/common/PromoCodeTable/index.tsx:71
+#: src/components/common/PromoCodeTable/index.tsx:72
 #: src/components/forms/AffiliateForm/index.tsx:38
 #: src/components/forms/AffiliateForm/index.tsx:72
 #: src/components/forms/PromoCodeForm/index.tsx:64
@@ -5005,7 +5018,7 @@ msgstr "コピーしました"
 msgid "Copied from above"
 msgstr "上からコピーしました"
 
-#: src/components/common/PromoCodeTable/index.tsx:116
+#: src/components/common/PromoCodeTable/index.tsx:117
 msgid "copied to clipboard"
 msgstr "クリップボードにコピーしました"
 
@@ -5174,7 +5187,7 @@ msgid "Copy TXT record value"
 msgstr "TXTレコードの値をコピー"
 
 #: src/components/common/AffiliateTable/index.tsx:107
-#: src/components/common/PromoCodeTable/index.tsx:189
+#: src/components/common/PromoCodeTable/index.tsx:190
 msgid "Copy URL"
 msgstr "URLをコピー"
 
@@ -5383,7 +5396,7 @@ msgstr "パスワードを作成"
 msgid "Create a Product"
 msgstr "商品を作成"
 
-#: src/components/common/PromoCodeTable/index.tsx:59
+#: src/components/common/PromoCodeTable/index.tsx:60
 msgid "Create a Promo Code"
 msgstr "プロモーションコードを作成"
 
@@ -5396,7 +5409,7 @@ msgstr "座席マップを作成"
 msgid "Create a ticket"
 msgstr "チケットを作成"
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:72
+#: src/components/modals/CreateCheckInListModal/index.tsx:70
 #: src/ee/box-office/components/modals/CreateBoxOfficeModal/index.tsx:79
 msgid "Create a Ticket"
 msgstr "チケットを作成"
@@ -5461,8 +5474,8 @@ msgstr "ボックスオフィスを作成"
 msgid "Create Capacity Assignment"
 msgstr "定員割り当てを作成"
 
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:142
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:143
-#: src/components/common/ProductsTable/SortableCategory/index.tsx:144
 msgid "Create category"
 msgstr "カテゴリーを作成"
 
@@ -5473,8 +5486,8 @@ msgstr "カテゴリーを作成"
 
 #: src/components/common/CheckInListList/index.tsx:60
 #: src/components/common/CheckInListTable/index.tsx:295
-#: src/components/modals/CreateCheckInListModal/index.tsx:91
-#: src/components/modals/CreateCheckInListModal/index.tsx:112
+#: src/components/modals/CreateCheckInListModal/index.tsx:89
+#: src/components/modals/CreateCheckInListModal/index.tsx:110
 #: src/components/routes/event/CheckInLists/index.tsx:76
 msgid "Create Check-In List"
 msgstr "チェックインリストを作成"
@@ -5611,7 +5624,7 @@ msgid "Create your own event"
 msgstr "自分のイベントを作成"
 
 #: src/components/common/LocationsTable/index.tsx:114
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:153
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:310
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:69
@@ -5652,7 +5665,7 @@ msgstr "CTAラベルは必須です"
 #: src/components/modals/CreateEventModal/index.tsx:437
 #: src/components/modals/CreateEventModal/index.tsx:438
 #: src/components/modals/CreateOrganizerModal/index.tsx:50
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:170
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:186
 #: src/components/routes/admin/Dashboard/index.tsx:205
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:138
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:51
@@ -5827,7 +5840,7 @@ msgstr "ダンスフロア"
 #: src/components/common/LocationsTable/index.tsx:71
 #: src/components/common/OrganizerWebhookTable/index.tsx:121
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:607
-#: src/components/common/PromoCodeTable/index.tsx:194
+#: src/components/common/PromoCodeTable/index.tsx:195
 #: src/components/common/WebhookTable/index.tsx:121
 #: src/components/routes/event/Lineup/LineupPreview.tsx:132
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:103
@@ -6064,7 +6077,7 @@ msgstr "削除"
 
 #: src/components/common/LocationsTable/index.tsx:45
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:613
-#: src/components/common/PromoCodeTable/index.tsx:42
+#: src/components/common/PromoCodeTable/index.tsx:43
 #: src/components/common/QuestionsTable/index.tsx:158
 #: src/components/common/WidgetEditor/index.tsx:149
 #: src/components/common/WidgetEditor/index.tsx:261
@@ -6106,8 +6119,8 @@ msgstr "{profileName} をすべての場所から削除しますか？この主�
 msgid "Delete {spaceName}? Time slots on it stay on the schedule without a stage."
 msgstr "{spaceName} を削除しますか？このステージの時間枠は、ステージなしでスケジュールに残ります。"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:383
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:421
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:439
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:477
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:112
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:158
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:171
@@ -6135,9 +6148,9 @@ msgstr "ボックスオフィスを削除"
 msgid "Delete Capacity"
 msgstr "定員を削除"
 
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:160
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:161
-#: src/components/common/ProductsTable/SortableCategory/index.tsx:162
-#: src/components/common/ProductsTable/SortableCategory/index.tsx:211
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:210
 msgid "Delete category"
 msgstr "カテゴリーを削除"
 
@@ -6146,7 +6159,7 @@ msgstr "カテゴリーを削除"
 msgid "Delete Check-In List"
 msgstr "チェックインリストを削除"
 
-#: src/components/common/PromoCodeTable/index.tsx:198
+#: src/components/common/PromoCodeTable/index.tsx:199
 msgid "Delete code"
 msgstr "コードを削除"
 
@@ -6194,8 +6207,8 @@ msgid "Delete location"
 msgstr "場所を削除"
 
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:88
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:73
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:399
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:77
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:455
 msgid "Delete now"
 msgstr "今すぐ削除"
 
@@ -6220,7 +6233,7 @@ msgstr "プロフィールをすべての場所から削除"
 msgid "Delete Template"
 msgstr "テンプレートを削除"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:68
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:72
 msgid "Delete this account now instead of waiting for the grace period? This cannot be undone."
 msgstr "猶予期間を待たずに、このアカウントを今すぐ削除しますか？この操作は元に戻せません。"
 
@@ -6265,7 +6278,7 @@ msgstr "{0}件の日付を削除しました"
 msgid "Deleted account"
 msgstr "削除済みアカウント"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:387
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:443
 msgid "Deletion is scheduled for {0}."
 msgstr "削除予定日：{0}"
 
@@ -6439,7 +6452,7 @@ msgstr "Stripeアカウントの接続を解除"
 msgid "Discord"
 msgstr "Discord"
 
-#: src/components/common/PromoCodeTable/index.tsx:72
+#: src/components/common/PromoCodeTable/index.tsx:73
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:62
 #: src/ee/box-office/components/layouts/BoxOffice/CartPanel.tsx:119
 msgid "Discount"
@@ -6510,7 +6523,7 @@ msgstr "ドメインを確認しました"
 msgid "Don't forget!"
 msgstr "お忘れなく！"
 
-#: src/components/routes/auth/Login/index.tsx:132
+#: src/components/routes/auth/Login/index.tsx:143
 msgid "Don't have an account? <0>Sign up</0>"
 msgstr "アカウントをお持ちでない場合は、<0>新規登録</0>"
 
@@ -6571,7 +6584,7 @@ msgstr "CSVをダウンロード"
 msgid "Download invoice"
 msgstr "請求書をダウンロード"
 
-#: src/components/layouts/Checkout/index.tsx:393
+#: src/components/layouts/Checkout/index.tsx:396
 msgid "Download Invoice"
 msgstr "請求書をダウンロード"
 
@@ -6587,7 +6600,7 @@ msgstr "完了したすべての注文の売上レポート、参加者レポー
 msgid "Download spreadsheet (.xlsx)"
 msgstr "スプレッドシートをダウンロード (.xlsx)"
 
-#: src/components/layouts/Checkout/index.tsx:203
+#: src/components/layouts/Checkout/index.tsx:206
 #: src/hooks/useOrderActions.tsx:80
 msgid "Downloading Invoice"
 msgstr "請求書をダウンロード中"
@@ -6886,9 +6899,9 @@ msgstr "定員を編集"
 msgid "Edit Capacity Assignment"
 msgstr "定員割り当てを編集"
 
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:151
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:152
-#: src/components/common/ProductsTable/SortableCategory/index.tsx:153
-#: src/components/common/ProductsTable/SortableCategory/index.tsx:189
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:188
 msgid "Edit category"
 msgstr "カテゴリーを編集"
 
@@ -6898,7 +6911,7 @@ msgstr "カテゴリーを編集"
 msgid "Edit Check-In List"
 msgstr "チェックインリストを編集"
 
-#: src/components/common/PromoCodeTable/index.tsx:181
+#: src/components/common/PromoCodeTable/index.tsx:182
 msgid "Edit Code"
 msgstr "コードを編集"
 
@@ -7046,13 +7059,13 @@ msgstr "対象のチェックインリスト"
 #: src/components/common/QuestionsTable/index.tsx:264
 #: src/components/forms/AffiliateForm/index.tsx:89
 #: src/components/modals/InviteUserModal/index.tsx:61
-#: src/components/modals/JoinWaitlistModal/index.tsx:189
+#: src/components/modals/JoinWaitlistModal/index.tsx:190
 #: src/components/modals/ManageAttendeeModal/index.tsx:174
 #: src/components/modals/ManageOrderModal/index.tsx:141
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:149
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:165
 #: src/components/routes/admin/EmailDelivery/index.tsx:95
 #: src/components/routes/auth/ForgotPassword/index.tsx:69
-#: src/components/routes/auth/Login/index.tsx:176
+#: src/components/routes/auth/Login/index.tsx:187
 #: src/components/routes/auth/Register/index.tsx:153
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:99
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:70
@@ -7173,6 +7186,10 @@ msgstr "メールテンプレート"
 #: src/components/routes/organizer/Settings/index.tsx:69
 msgid "Email Templates"
 msgstr "メールテンプレート"
+
+#: src/components/routes/admin/Accounts/AccountDetail/SuspendAccountModal.tsx:57
+msgid "Email the account owner"
+msgstr "アカウント所有者にメールで知らせる"
 
 #: src/ee/box-office/components/layouts/BoxOffice/SaleComplete.tsx:137
 msgid "Email to send tickets"
@@ -7443,7 +7460,7 @@ msgid "Enter unique affiliate code"
 msgstr "一意のアフィリエイトコードを入力"
 
 #: src/components/common/ContactOrganizerModal/index.tsx:83
-#: src/components/routes/auth/Login/index.tsx:237
+#: src/components/routes/auth/Login/index.tsx:248
 #: src/components/routes/my-tickets/index.tsx:209
 msgid "Enter your email"
 msgstr "メールアドレスを入力"
@@ -7506,7 +7523,7 @@ msgid "Entries will appear here when customers join the waitlist for sold out pr
 msgstr "完売した商品にお客様がキャンセル待ち登録をすると、ここにエントリーが表示されます。"
 
 #: src/components/common/OrganizerWebhookTable/index.tsx:155
-#: src/components/layouts/Checkout/index.tsx:211
+#: src/components/layouts/Checkout/index.tsx:214
 #: src/hooks/useOrderActions.tsx:88
 msgid "Error"
 msgstr "エラー"
@@ -7647,7 +7664,7 @@ msgstr "イベントの詳細"
 msgid "Event duplicated"
 msgstr "イベントを複製しました"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:334
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:350
 msgid "Event ID: {0}"
 msgstr "イベント ID: {0}"
 
@@ -7747,12 +7764,12 @@ msgstr "イベントタイプ"
 msgid "Event Updated"
 msgstr "イベントを更新しました"
 
-#: src/components/common/AdminAccountsTable/index.tsx:82
+#: src/components/common/AdminAccountsTable/index.tsx:85
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:127
 #: src/components/layouts/Admin/index.tsx:20
 #: src/components/layouts/OrganizerHomepage/index.tsx:142
 #: src/components/layouts/OrganizerLayout/index.tsx:118
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:180
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:196
 #: src/components/routes/admin/Attribution/index.tsx:195
 #: src/components/routes/admin/Dashboard/index.tsx:398
 #: src/components/routes/admin/Events/index.tsx:77
@@ -7951,7 +7968,7 @@ msgstr "期限切れ"
 msgid "Expired {0}"
 msgstr "{0}に期限切れ"
 
-#: src/components/common/PromoCodeTable/index.tsx:75
+#: src/components/common/PromoCodeTable/index.tsx:76
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:33
 #: src/components/routes/settings/ApiKeys/index.tsx:176
@@ -8044,7 +8061,7 @@ msgstr "失敗したジョブ"
 msgid "Failed Jobs"
 msgstr "失敗したジョブ"
 
-#: src/components/layouts/Checkout/index.tsx:226
+#: src/components/layouts/Checkout/index.tsx:229
 msgid "Failed to abandon order. Please try again."
 msgstr "注文の中止に失敗しました。もう一度お試しください。"
 
@@ -8060,7 +8077,7 @@ msgstr "イベントの承認に失敗しました"
 msgid "Failed to assign configuration"
 msgstr "設定の割り当てに失敗しました"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:79
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:83
 msgid "Failed to cancel account deletion"
 msgstr "アカウント削除のキャンセルに失敗しました"
 
@@ -8117,7 +8134,7 @@ msgid "Failed to create template"
 msgstr "テンプレートの作成に失敗しました"
 
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:33
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:71
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:75
 msgid "Failed to delete account"
 msgstr "アカウントの削除に失敗しました"
 
@@ -8173,7 +8190,7 @@ msgstr "質問の削除に失敗しました"
 msgid "Failed to delete template"
 msgstr "テンプレートの削除に失敗しました"
 
-#: src/components/layouts/Checkout/index.tsx:212
+#: src/components/layouts/Checkout/index.tsx:215
 #: src/hooks/useOrderActions.tsx:89
 msgid "Failed to download invoice. Please try again."
 msgstr "請求書のダウンロードに失敗しました。もう一度お試しください。"
@@ -8315,7 +8332,15 @@ msgstr "なりすましの開始に失敗しました。もう一度お試しく
 msgid "Failed to stop impersonation. Please try again."
 msgstr "なりすましの停止に失敗しました。もう一度お試しください。"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:63
+#: src/components/routes/admin/Accounts/AccountDetail/SuspendAccountModal.tsx:29
+msgid "Failed to suspend account"
+msgstr "アカウントを停止できませんでした"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:91
+msgid "Failed to unsuspend account"
+msgstr "アカウントの停止を解除できませんでした"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:67
 msgid "Failed to update account verification"
 msgstr "アカウント認証の更新に失敗しました"
 
@@ -8347,7 +8372,7 @@ msgstr "イベントのステータスの更新に失敗しました"
 msgid "Failed to update feature flag"
 msgstr "フィーチャーフラグの更新に失敗しました"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:52
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:56
 msgid "Failed to update messaging tier"
 msgstr "メッセージ送信ティアの更新に失敗しました"
 
@@ -8598,7 +8623,7 @@ msgstr "名"
 #: src/components/common/QuestionsTable/index.tsx:262
 #: src/components/modals/EditUserModal/index.tsx:87
 #: src/components/modals/InviteUserModal/index.tsx:54
-#: src/components/modals/JoinWaitlistModal/index.tsx:179
+#: src/components/modals/JoinWaitlistModal/index.tsx:180
 #: src/components/routes/auth/AcceptInvitation/index.tsx:226
 #: src/components/routes/auth/Register/index.tsx:139
 #: src/components/routes/product-widget/CollectInformation/index.tsx:472
@@ -8733,7 +8758,7 @@ msgstr "複数の会場にまたがるイベント向け"
 msgid "For your security, sign in again to confirm it's you."
 msgstr "セキュリティのため、もう一度サインインして本人確認を行ってください。"
 
-#: src/components/routes/auth/Login/index.tsx:185
+#: src/components/routes/auth/Login/index.tsx:196
 msgid "Forgot password?"
 msgstr "パスワードをお忘れですか？"
 
@@ -8880,7 +8905,7 @@ msgid "General admission"
 msgstr "自由席"
 
 #: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:38
-#: src/components/routes/event/TicketDesigner/TicketPreview.tsx:39
+#: src/components/routes/event/TicketDesigner/TicketPreview.tsx:42
 msgid "General Admission"
 msgstr "自由席"
 
@@ -9516,7 +9541,7 @@ msgstr "ハンガリー語"
 msgid "I acknowledge my responsibilities as a data controller"
 msgstr "データ管理者としての責任を理解しました"
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:195
+#: src/components/modals/JoinWaitlistModal/index.tsx:196
 msgid "I agree to receive email notifications related to this event"
 msgstr "このイベントに関するメール通知の受信に同意します"
 
@@ -9601,10 +9626,10 @@ msgstr "画像URL"
 msgid "Images"
 msgstr "画像"
 
-#: src/components/common/AdminAccountsTable/index.tsx:134
+#: src/components/common/AdminAccountsTable/index.tsx:137
 #: src/components/common/AdminUsersTable/index.tsx:96
 #: src/components/common/AdminUsersTable/index.tsx:108
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:370
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:386
 msgid "Impersonate"
 msgstr "なりすまし"
 
@@ -9730,6 +9755,10 @@ msgstr "税金と手数料を価格に含める"
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:108
 msgid "Included"
 msgstr "含まれています"
+
+#: src/components/routes/admin/Accounts/AccountDetail/SuspendAccountModal.tsx:47
+msgid "Included in the email to the account owner."
+msgstr "アカウント所有者へのメールに記載されます。"
 
 #: src/components/common/CheckInListList/index.tsx:102
 #: src/components/common/CheckInListTable/index.tsx:95
@@ -9870,7 +9899,7 @@ msgstr "招待済み"
 msgid "Invoice"
 msgstr "請求書"
 
-#: src/components/layouts/Checkout/index.tsx:208
+#: src/components/layouts/Checkout/index.tsx:211
 #: src/hooks/useOrderActions.tsx:85
 msgid "Invoice downloaded successfully"
 msgstr "請求書をダウンロードしました"
@@ -9981,11 +10010,11 @@ msgid "Join from anywhere"
 msgstr "どこからでも参加"
 
 #: src/components/common/JoinWaitlistButton/index.tsx:38
-#: src/components/modals/JoinWaitlistModal/index.tsx:207
+#: src/components/modals/JoinWaitlistModal/index.tsx:208
 msgid "Join Waitlist"
 msgstr "キャンセル待ちに登録"
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:156
+#: src/components/modals/JoinWaitlistModal/index.tsx:157
 msgid "Join Waitlist for {productDisplayName}"
 msgstr "{productDisplayName}のキャンセル待ちに登録"
 
@@ -10001,7 +10030,7 @@ msgstr "7月"
 msgid "June"
 msgstr "6月"
 
-#: src/components/routes/auth/Login/index.tsx:208
+#: src/components/routes/auth/Login/index.tsx:219
 msgid "Just looking for your tickets?"
 msgstr "チケットをお探しですか？"
 
@@ -10186,7 +10215,7 @@ msgstr "姓"
 #: src/components/common/QuestionsTable/index.tsx:263
 #: src/components/modals/EditUserModal/index.tsx:88
 #: src/components/modals/InviteUserModal/index.tsx:55
-#: src/components/modals/JoinWaitlistModal/index.tsx:184
+#: src/components/modals/JoinWaitlistModal/index.tsx:185
 #: src/components/routes/auth/AcceptInvitation/index.tsx:232
 #: src/components/routes/auth/Register/index.tsx:145
 #: src/components/routes/product-widget/CollectInformation/index.tsx:479
@@ -10328,6 +10357,10 @@ msgstr "変更をお知らせする"
 msgid "Let them know about the changes"
 msgstr "変更をお知らせする"
 
+#: src/components/routes/admin/Accounts/AccountDetail/SuspendAccountModal.tsx:58
+msgid "Let them know the account has been suspended."
+msgstr "アカウントが停止されたことを知らせます。"
+
 #: src/ee/sso/components/SingleSignOn/index.tsx:83
 msgid "Let your team sign in with Okta, Microsoft Entra ID or Google Workspace"
 msgstr "チームがOkta、Microsoft Entra ID、Google Workspaceでサインインできるようにします"
@@ -10383,7 +10416,7 @@ msgid "Licence key not recognised"
 msgstr "ライセンスキーが認識されません"
 
 #: src/components/layouts/Admin/index.tsx:25
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:317
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:333
 #: src/components/routes/admin/LifecycleEmails/index.tsx:39
 msgid "Lifecycle Emails"
 msgstr "ライフサイクルメール"
@@ -10470,7 +10503,7 @@ msgstr "リンク"
 msgid "Links"
 msgstr "リンク"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:253
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:269
 msgid "Links Allowed"
 msgstr "リンクを許可"
 
@@ -10538,7 +10571,7 @@ msgstr "最新バージョンを読み込む"
 msgid "Loaded dates"
 msgstr "読み込み済みの日付"
 
-#: src/components/routes/event/TicketDesigner/TicketPreview.tsx:32
+#: src/components/routes/event/TicketDesigner/TicketPreview.tsx:35
 msgid "Loading preview..."
 msgstr "プレビューを読み込み中..."
 
@@ -10710,9 +10743,9 @@ msgstr "この質問を必須にする"
 #: src/components/common/EntityActions/index.tsx:44
 #: src/components/common/LocationsTable/index.tsx:60
 #: src/components/common/OrganizerWebhookTable/index.tsx:98
-#: src/components/common/PromoCodeTable/index.tsx:177
+#: src/components/common/PromoCodeTable/index.tsx:178
 #: src/components/layouts/OrganizerLayout/index.tsx:117
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:304
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:320
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:89
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:249
 msgid "Manage"
@@ -10801,7 +10834,7 @@ msgstr "参加者を手動で追加"
 msgid "Manually Add Attendee"
 msgstr "参加者を手動で追加"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:205
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:221
 msgid "Manually verified"
 msgstr "手動で認証済み"
 
@@ -10845,11 +10878,11 @@ msgstr "イベントページと同じ"
 msgid "Matches your page"
 msgstr "あなたのページと同じ"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:241
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:257
 msgid "Max Messages / 24h"
 msgstr "最大メッセージ数 / 24時間"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:247
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:263
 msgid "Max Recipients / Message"
 msgstr "メッセージあたりの最大受信者数"
 
@@ -10971,12 +11004,12 @@ msgstr "メッセージ"
 msgid "Messages to approve"
 msgstr "承認待ちのメッセージ"
 
-#: src/components/common/AdminAccountsTable/index.tsx:96
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:220
+#: src/components/common/AdminAccountsTable/index.tsx:99
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:236
 msgid "Messaging Tier"
 msgstr "メッセージ送信ティア"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:51
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:55
 msgid "Messaging tier updated successfully"
 msgstr "メッセージ送信ティアを更新しました"
 
@@ -11098,7 +11131,7 @@ msgstr "その他"
 
 #: src/components/common/EntityActions/index.tsx:159
 #: src/components/common/EntityActions/index.tsx:160
-#: src/components/common/ProductsTable/SortableCategory/index.tsx:179
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:178
 #: src/components/routes/admin/SpamEvents/index.tsx:256
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:207
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:180
@@ -11146,6 +11179,10 @@ msgstr "{0}を別の座席に移動"
 msgid "Move all dates earlier or later"
 msgstr "すべての日付を前後にずらす"
 
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:422
+msgid "Move all events and organizer pages to draft and stop members signing in."
+msgstr "すべてのイベントと主催者ページを下書きに戻し、メンバーのサインインを停止します。"
+
 #: src/ee/seating/components/AttendeeSeatField/index.tsx:34
 msgid "Move attendee"
 msgstr "参加者を移動"
@@ -11154,7 +11191,7 @@ msgstr "参加者を移動"
 msgid "Move cancelled. {label} is back in its original position."
 msgstr "移動をキャンセルしました。{label}は元の位置に戻りました。"
 
-#: src/components/common/ProductsTable/SortableCategory/index.tsx:203
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:202
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:603
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:143
 msgid "Move down"
@@ -11176,7 +11213,7 @@ msgstr "{total}枚中{position}枚目の写真を移動"
 msgid "Move to area"
 msgstr "エリアに移動"
 
-#: src/components/common/ProductsTable/SortableCategory/index.tsx:196
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:195
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:595
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:140
 msgid "Move up"
@@ -11301,7 +11338,7 @@ msgid "Net Revenue"
 msgstr "純収益"
 
 #: src/components/common/OrganizerWebhookTable/index.tsx:272
-#: src/components/common/PromoCodeTable/index.tsx:168
+#: src/components/common/PromoCodeTable/index.tsx:169
 #: src/components/common/WebhookTable/index.tsx:272
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
 #: src/components/routes/settings/Team/MemberRow.tsx:166
@@ -11458,7 +11495,7 @@ msgstr "次：注文内容の確認"
 msgid "Nightlife"
 msgstr "ナイトライフ"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:271
 #: src/components/routes/admin/Dashboard/index.tsx:409
 #: src/ee/sso/components/SingleSignOn/index.tsx:70
 msgid "No"
@@ -11754,7 +11791,7 @@ msgstr "ライセンスなし"
 msgid "No licence key is set, so reserved seating, the box office and enterprise single sign-on can't be set up. To unlock them, set APP_LICENCE_KEY in the backend environment and redeploy the backend. With Docker Compose, use docker compose up -d, because docker compose restart doesn't reload the environment."
 msgstr "ライセンスキーが設定されていないため、指定席、ボックスオフィス、エンタープライズシングルサインオンを設定できません。これらを利用可能にするには、バックエンド環境でAPP_LICENCE_KEYを設定し、バックエンドを再デプロイしてください。Docker Composeの場合、docker compose restartでは環境が再読み込みされないため、docker compose up -dを使用してください。"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:319
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:335
 msgid "No lifecycle emails have been sent to this account."
 msgstr "このアカウントにはライフサイクルメールが送信されていません。"
 
@@ -11906,7 +11943,7 @@ msgstr "商品はまだありません"
 msgid "No profiles yet. Create one here, or add people straight from an event's Lineup & Schedule page."
 msgstr "プロフィールはまだありません。ここで作成するか、イベントの「ラインナップとスケジュール」ページから直接追加してください。"
 
-#: src/components/common/PromoCodeTable/index.tsx:48
+#: src/components/common/PromoCodeTable/index.tsx:49
 msgid "No Promo Codes to show"
 msgstr "表示するプロモーションコードがありません"
 
@@ -12056,7 +12093,7 @@ msgstr "このエンドポイントのWebhookイベントはまだ記録され�
 msgid "No Webhooks"
 msgstr "Webhookがありません"
 
-#: src/components/layouts/Checkout/index.tsx:468
+#: src/components/layouts/Checkout/index.tsx:471
 msgid "No, keep me here"
 msgstr "いいえ、このまま留まる"
 
@@ -12098,7 +12135,7 @@ msgstr "まだいません。保存済みプロフィールを検索するか、
 msgid "non-edited"
 msgstr "未編集"
 
-#: src/components/common/PromoCodeTable/index.tsx:84
+#: src/components/common/PromoCodeTable/index.tsx:85
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:108
 #: src/components/forms/ProductForm/ledgerSummaries.ts:92
 #: src/components/forms/ProductForm/ledgerSummaries.ts:132
@@ -12125,8 +12162,8 @@ msgstr "まだありません"
 msgid "Normally {0}"
 msgstr "通常{0}"
 
-#: src/components/common/ProductPriceAvailability/index.tsx:46
-#: src/components/common/ProductPriceAvailability/index.tsx:76
+#: src/components/common/ProductPriceAvailability/index.tsx:47
+#: src/components/common/ProductPriceAvailability/index.tsx:77
 msgid "Not available"
 msgstr "利用できません"
 
@@ -12233,7 +12270,7 @@ msgstr "まだテストされていません"
 msgid "Not using reserved seating, the box office or enterprise single sign-on? Remove <0>APP_LICENCE_KEY</0> and redeploy."
 msgstr "指定席、ボックスオフィス、エンタープライズシングルサインオンを使用しない場合は、<0>APP_LICENCE_KEY</0>を削除して再デプロイしてください。"
 
-#: src/components/common/ProductPriceAvailability/index.tsx:43
+#: src/components/common/ProductPriceAvailability/index.tsx:44
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:31
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:53
 msgid "Not yet on sale"
@@ -12830,6 +12867,10 @@ msgstr "ラインナップから出演者を選択した場合は任意"
 msgid "Optional, kept on the deletion record"
 msgstr "任意。削除記録に保存されます"
 
+#: src/components/routes/admin/Accounts/AccountDetail/SuspendAccountModal.tsx:48
+msgid "Optional, shown to admins on this page."
+msgstr "任意。このページで管理者に表示されます。"
+
 #: src/components/routes/event/Lineup/index.tsx:344
 msgid "Optional. Useful when things happen in more than one place at the same time."
 msgstr "任意。複数の場所で同時に進行する場合に便利です。"
@@ -12907,7 +12948,7 @@ msgstr "注文がキャンセルされました"
 msgid "Order Cancelled"
 msgstr "注文がキャンセルされました"
 
-#: src/components/layouts/Checkout/index.tsx:339
+#: src/components/layouts/Checkout/index.tsx:342
 #: src/components/routes/product-widget/CollectInformation/index.tsx:378
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:401
 msgid "Order complete"
@@ -13181,7 +13222,7 @@ msgid "Organizer/default template will be used"
 msgstr "主催者/デフォルトのテンプレートが使用されます"
 
 #: src/components/layouts/SettingsLayout/index.tsx:62
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:266
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:282
 #: src/components/routes/settings/Organizers/index.tsx:81
 #: src/components/routes/settings/Team/index.tsx:143
 msgid "Organizers"
@@ -13364,7 +13405,7 @@ msgid "Pass to Buyer"
 msgstr "購入者に転嫁"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:250
-#: src/components/routes/auth/Login/index.tsx:183
+#: src/components/routes/auth/Login/index.tsx:194
 #: src/components/routes/auth/Register/index.tsx:161
 #: src/components/routes/settings/Security/SignInMethods.tsx:93
 #: src/components/routes/settings/Team/index.tsx:204
@@ -13642,7 +13683,7 @@ msgstr "日付ごと"
 msgid "per min"
 msgstr "1分あたり"
 
-#: src/components/common/PromoCodeTable/index.tsx:93
+#: src/components/common/PromoCodeTable/index.tsx:94
 msgid "per order"
 msgstr "注文ごと"
 
@@ -13655,7 +13696,7 @@ msgstr "注文ごと"
 msgid "Per page"
 msgstr "1ページあたりの件数"
 
-#: src/components/common/PromoCodeTable/index.tsx:94
+#: src/components/common/PromoCodeTable/index.tsx:95
 msgid "per product"
 msgstr "商品ごと"
 
@@ -13874,7 +13915,7 @@ msgstr "オプションを1つ以上追加してください"
 msgid "Please check the provided information is correct"
 msgstr "入力内容が正しいか確認してください"
 
-#: src/components/routes/auth/Login/index.tsx:101
+#: src/components/routes/auth/Login/index.tsx:112
 msgid "Please check your email and password and try again"
 msgstr "メールアドレスとパスワードを確認して、もう一度お試しください"
 
@@ -13898,7 +13939,7 @@ msgstr "新しいタブで続行してください"
 msgid "Please create a product"
 msgstr "商品を作成してください"
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:60
+#: src/components/modals/CreateCheckInListModal/index.tsx:58
 #: src/ee/box-office/components/modals/CreateBoxOfficeModal/index.tsx:67
 msgid "Please create a ticket"
 msgstr "チケットを作成してください"
@@ -13940,7 +13981,7 @@ msgstr "画像を指定してください。"
 msgid "Please restart the checkout process."
 msgstr "チェックアウトをやり直してください。"
 
-#: src/components/layouts/Checkout/index.tsx:437
+#: src/components/layouts/Checkout/index.tsx:440
 msgid "Please return to the event page to start over."
 msgstr "イベントページに戻って、最初からやり直してください。"
 
@@ -13978,7 +14019,7 @@ msgstr "アフィリエイトのエクスポートを準備しています。し
 msgid "Please wait while we prepare your attendees for export..."
 msgstr "参加者のエクスポートを準備しています。しばらくお待ちください..."
 
-#: src/components/layouts/Checkout/index.tsx:204
+#: src/components/layouts/Checkout/index.tsx:207
 #: src/hooks/useOrderActions.tsx:81
 msgid "Please wait while we prepare your invoice..."
 msgstr "請求書を準備しています。しばらくお待ちください..."
@@ -14157,7 +14198,7 @@ msgstr "印刷プレビューには、最後に保存したデザインが使用
 msgid "Print Ticket"
 msgstr "チケットを印刷"
 
-#: src/components/layouts/Checkout/index.tsx:381
+#: src/components/layouts/Checkout/index.tsx:384
 #: src/components/routes/my-tickets/index.tsx:136
 msgid "Print Tickets"
 msgstr "チケットを印刷"
@@ -14260,11 +14301,11 @@ msgstr "商品を更新しました"
 msgid "Product updates"
 msgstr "製品のアップデート情報"
 
-#: src/components/common/PromoCodeTable/index.tsx:158
+#: src/components/common/PromoCodeTable/index.tsx:159
 msgid "Product(s)"
 msgstr "商品"
 
-#: src/components/common/PromoCodeTable/index.tsx:74
+#: src/components/common/PromoCodeTable/index.tsx:75
 #: src/components/modals/DuplicateEventModal/index.tsx:123
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:421
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:58
@@ -14362,7 +14403,7 @@ msgstr "プロモーションコード"
 msgid "Promo Codes"
 msgstr "プロモーションコード"
 
-#: src/components/common/PromoCodeTable/index.tsx:53
+#: src/components/common/PromoCodeTable/index.tsx:54
 msgid "Promo codes can be used to offer discounts, presale access, or provide special access to your event."
 msgstr "プロモーションコードを使うと、割引、先行販売へのアクセス、イベントへの特別なアクセスを提供できます。"
 
@@ -14609,6 +14650,7 @@ msgid "Rear right"
 msgstr "後方右"
 
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:49
+#: src/components/routes/admin/Accounts/AccountDetail/SuspendAccountModal.tsx:45
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:341
 msgid "Reason"
 msgstr "理由"
@@ -14617,6 +14659,10 @@ msgstr "理由"
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:204
 msgid "Reason (optional)"
 msgstr "理由（任意）"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:406
+msgid "Reason: {0}"
+msgstr "理由: {0}"
 
 #: src/components/routes/admin/SpamEvents/index.tsx:346
 msgid "Reasons"
@@ -15332,7 +15378,7 @@ msgstr "ジョブを再試行"
 msgid "Return to Event"
 msgstr "イベントに戻る"
 
-#: src/components/layouts/Checkout/index.tsx:444
+#: src/components/layouts/Checkout/index.tsx:447
 msgid "Return to Event Page"
 msgstr "イベントページに戻る"
 
@@ -15572,8 +15618,8 @@ msgstr "販売は一時停止中です"
 msgid "Sales by licence year"
 msgstr "ライセンス年度別の売上"
 
-#: src/components/common/ProductPriceAvailability/index.tsx:24
-#: src/components/common/ProductPriceAvailability/index.tsx:63
+#: src/components/common/ProductPriceAvailability/index.tsx:25
+#: src/components/common/ProductPriceAvailability/index.tsx:64
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:33
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:54
 msgid "Sales ended"
@@ -15583,8 +15629,8 @@ msgstr "販売終了"
 msgid "Sales open in"
 msgstr "販売開始まで"
 
-#: src/components/common/ProductPriceAvailability/index.tsx:30
-#: src/components/common/ProductPriceAvailability/index.tsx:68
+#: src/components/common/ProductPriceAvailability/index.tsx:31
+#: src/components/common/ProductPriceAvailability/index.tsx:69
 msgid "Sales start"
 msgstr "販売開始"
 
@@ -15637,8 +15683,8 @@ msgstr "同じエンドポイントと署名シークレット"
 msgid "Sample ticket price"
 msgstr "サンプルのチケット価格"
 
-#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:77
-#: src/components/routes/event/TicketDesigner/TicketPreview.tsx:77
+#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:63
+#: src/components/routes/event/TicketDesigner/TicketPreview.tsx:67
 msgid "Sample Venue"
 msgstr "サンプル会場"
 
@@ -16288,7 +16334,7 @@ msgstr "日付を選択"
 msgid "Select a message to view its contents"
 msgstr "メッセージを選択して内容を表示"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:234
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:250
 msgid "Select a tier"
 msgstr "ティアを選択"
 
@@ -16382,7 +16428,7 @@ msgstr "商品を選択..."
 msgid "Select start time"
 msgstr "開始時刻を選択"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:230
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:246
 msgid "Select the messaging tier for this account. This controls message limits and link permissions."
 msgstr "このアカウントのメッセージ送信ティアを選択します。メッセージの送信上限とリンクの許可が制御されます。"
 
@@ -16507,7 +16553,7 @@ msgstr "1件の商品を販売"
 msgid "Sells every product"
 msgstr "すべての商品を販売"
 
-#: src/components/routes/auth/Login/index.tsx:247
+#: src/components/routes/auth/Login/index.tsx:258
 #: src/components/routes/my-tickets/index.tsx:219
 #: src/ee/box-office/components/layouts/BoxOffice/SaleComplete.tsx:152
 msgid "Send"
@@ -17074,7 +17120,7 @@ msgstr "お問い合わせボタン付きで主催者プロフィールを表示
 msgid "Shows your social links and a contact button. Placed above every other section, it appears in your profile card."
 msgstr "SNSリンクとお問い合わせボタンを表示します。他のすべてのセクションより上に配置すると、プロフィールカードに表示されます。"
 
-#: src/components/routes/auth/Login/index.tsx:195
+#: src/components/routes/auth/Login/index.tsx:206
 #: src/components/routes/auth/Register/index.tsx:103
 #: src/components/routes/sso/Callback/index.tsx:310
 msgid "Sign in"
@@ -17092,7 +17138,7 @@ msgstr "二要素認証の設定を始めるには、もう一度サインイン
 msgid "Sign in once to check the connection. It shows what your identity provider shares and doesn't sign you in here."
 msgstr "一度サインインして接続を確認します。IDプロバイダーが共有する情報が表示されますが、ここにサインインするわけではありません。"
 
-#: src/components/routes/auth/Login/index.tsx:151
+#: src/components/routes/auth/Login/index.tsx:162
 msgid "Sign in through your organization's identity provider instead of using a password."
 msgstr "パスワードの代わりに、組織のIDプロバイダー経由でサインインします。"
 
@@ -17104,7 +17150,7 @@ msgstr "組織の ID プロバイダーからサインインしてください�
 msgid "Sign in through your organization's identity provider to join {0}."
 msgstr "{0}に参加するには、組織のIDプロバイダーからサインインしてください。"
 
-#: src/components/routes/auth/Login/index.tsx:129
+#: src/components/routes/auth/Login/index.tsx:140
 msgid "Sign in to {0}"
 msgstr "{0} にサインイン"
 
@@ -17134,7 +17180,7 @@ msgid "Sign in with password"
 msgstr "パスワードでサインイン"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:172
-#: src/components/routes/auth/Login/index.tsx:154
+#: src/components/routes/auth/Login/index.tsx:165
 #: src/components/routes/auth/Register/index.tsx:115
 #: src/components/routes/sso/Callback/index.tsx:277
 #: src/ee/sso/components/SsoDiscovery/index.tsx:59
@@ -17197,7 +17243,7 @@ msgstr "サインイン方法"
 msgid "Sign-in settings"
 msgstr "サインイン設定"
 
-#: src/components/routes/auth/Login/index.tsx:146
+#: src/components/routes/auth/Login/index.tsx:157
 msgid "Sign-in was cancelled. Choose another way to sign in, or try again."
 msgstr "サインインがキャンセルされました。別のサインイン方法を選択するか、もう一度お試しください。"
 
@@ -17221,7 +17267,7 @@ msgstr "サインインしましたが、メールアドレスが共有されま
 msgid "Signed up"
 msgstr "登録日"
 
-#: src/components/routes/auth/Login/index.tsx:195
+#: src/components/routes/auth/Login/index.tsx:206
 msgid "Signing in"
 msgstr "サインイン中"
 
@@ -17354,8 +17400,8 @@ msgstr "完売"
 
 #: src/components/common/EventCard/index.tsx:136
 #: src/components/common/EventDateRange/index.tsx:65
-#: src/components/common/ProductPriceAvailability/index.tsx:20
-#: src/components/common/ProductPriceAvailability/index.tsx:60
+#: src/components/common/ProductPriceAvailability/index.tsx:21
+#: src/components/common/ProductPriceAvailability/index.tsx:61
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:57
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:92
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:311
@@ -17450,7 +17496,7 @@ msgstr "問題が発生しました！もう一度お試しください"
 msgid "Something went wrong."
 msgstr "問題が発生しました。"
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:140
+#: src/components/modals/JoinWaitlistModal/index.tsx:141
 msgid "Something went wrong. Please try again later."
 msgstr "問題が発生しました。しばらくしてからもう一度お試しください。"
 
@@ -17461,7 +17507,7 @@ msgstr "問題が発生しました。しばらくしてからもう一度お試
 #: src/components/routes/admin/Users/index.tsx:33
 #: src/components/routes/auth/AcceptInvitation/index.tsx:98
 #: src/components/routes/auth/AcceptInvitation/index.tsx:107
-#: src/components/routes/auth/Login/index.tsx:121
+#: src/components/routes/auth/Login/index.tsx:132
 #: src/components/routes/auth/Register/index.tsx:81
 #: src/components/routes/my-tickets/index.tsx:162
 #: src/components/routes/product-widget/SelectProducts/index.tsx:383
@@ -17646,8 +17692,8 @@ msgstr "階段"
 msgid "Stalls"
 msgstr "1階席"
 
-#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:64
-#: src/components/routes/event/TicketDesigner/TicketPreview.tsx:65
+#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:58
+#: src/components/routes/event/TicketDesigner/TicketPreview.tsx:62
 msgid "Stalls · C-14"
 msgstr "1階席 · C-14"
 
@@ -17998,7 +18044,7 @@ msgid "Subtotal"
 msgstr "小計"
 
 #: src/components/common/OrganizerWebhookTable/index.tsx:155
-#: src/components/layouts/Checkout/index.tsx:207
+#: src/components/layouts/Checkout/index.tsx:210
 #: src/hooks/useOrderActions.tsx:84
 msgid "Success"
 msgstr "成功"
@@ -18186,9 +18232,25 @@ msgstr "日曜日"
 msgid "Support Email"
 msgstr "サポートメール"
 
+#: src/components/routes/admin/Accounts/AccountDetail/SuspendAccountModal.tsx:35
+msgid "Suspend {0}"
+msgstr "{0} を停止"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:399
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:430
+#: src/components/routes/admin/Accounts/AccountDetail/SuspendAccountModal.tsx:72
+msgid "Suspend account"
+msgstr "アカウントを停止"
+
+#: src/components/common/AdminAccountsTable/index.tsx:66
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:154
 #: src/ee/sso/components/SingleSignOn/DomainList.tsx:21
 msgid "Suspended"
 msgstr "停止中"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:403
+msgid "Suspended on {0}. Members can't sign in and its API keys are blocked."
+msgstr "{0} に停止されました。メンバーはサインインできず、APIキーはブロックされています。"
 
 #: src/locales.ts:84
 msgid "Swedish"
@@ -18476,7 +18538,7 @@ msgstr "終了しました"
 msgid "The \"Powered by Hi.Events\" notice is shown again until you renew."
 msgstr "\"Powered by Hi.Events\"の表示は、更新するまで再び表示されます。"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:390
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:446
 msgid "The account has completed orders, so it will be anonymised."
 msgstr "このアカウントには完了済みの注文があるため、匿名化されます。"
 
@@ -18496,7 +18558,7 @@ msgstr "アカウントオーナーの役割とアクセス権は変更できま
 msgid "The account will be deleted as soon as the queue picks up the job."
 msgstr "キューがジョブを処理するとすぐに、アカウントは削除されます。"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:391
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:447
 msgid "The account will be permanently deleted."
 msgstr "アカウントは完全に削除されます。"
 
@@ -18897,6 +18959,11 @@ msgstr "3番目"
 msgid "This {providerName} account is already in use"
 msgstr "この {providerName} アカウントはすでに使用されています"
 
+#: src/components/routes/auth/Login/index.tsx:66
+#: src/components/routes/auth/Login/index.tsx:96
+msgid "This account has been suspended. Contact support if you think this is a mistake."
+msgstr "このアカウントは停止されています。誤りだと思われる場合はサポートまでお問い合わせください。"
+
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:178
 msgid "This account has no completed orders, so all of its data will be permanently deleted."
 msgstr "このアカウントには完了した注文がないため、すべてのデータが完全に削除されます。"
@@ -18953,7 +19020,7 @@ msgstr "このブラウザでは .xlsx ファイルを開けません。CSV と�
 msgid "This category doesn't have any products yet."
 msgstr "このカテゴリーには、まだ商品がありません。"
 
-#: src/components/common/ProductsTable/SortableCategory/index.tsx:126
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:125
 msgid "This category is hidden from public view"
 msgstr "このカテゴリーは一般には非表示です"
 
@@ -19447,7 +19514,7 @@ msgstr "チケットが見つかりません"
 msgid "Ticket or Product"
 msgstr "チケットまたは商品"
 
-#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:100
+#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:83
 msgid "Ticket Preview for"
 msgstr "チケットプレビュー："
 
@@ -19578,7 +19645,7 @@ msgstr "TikTok"
 msgid "Time"
 msgstr "時間"
 
-#: src/components/layouts/Checkout/index.tsx:355
+#: src/components/layouts/Checkout/index.tsx:358
 msgid "Time left"
 msgstr "残り時間"
 
@@ -19627,7 +19694,7 @@ msgstr "時刻はイベントのタイムゾーン（{timezone}）で読み取�
 msgid "Times in {timezoneAbbr}"
 msgstr "時間（{timezoneAbbr}）"
 
-#: src/components/common/PromoCodeTable/index.tsx:73
+#: src/components/common/PromoCodeTable/index.tsx:74
 msgid "Times used"
 msgstr "使用回数"
 
@@ -19643,7 +19710,7 @@ msgstr "タイムテーブル"
 #: src/components/modals/CreateEventModal/index.tsx:427
 #: src/components/modals/CreateEventModal/index.tsx:428
 #: src/components/modals/CreateOrganizerModal/index.tsx:59
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:161
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:177
 #: src/components/routes/auth/AcceptInvitation/index.tsx:243
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:147
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:146
@@ -19710,7 +19777,7 @@ msgid "Tomorrow"
 msgstr "明日"
 
 #: src/components/routes/auth/ForgotPassword/index.tsx:34
-#: src/components/routes/auth/Login/index.tsx:95
+#: src/components/routes/auth/Login/index.tsx:106
 #: src/components/routes/auth/Register/index.tsx:80
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:86
 #: src/hooks/useLoginSteps.ts:62
@@ -19878,7 +19945,7 @@ msgstr "フィルターを調整して、より多くの日付を表示してみ
 msgid "Try again"
 msgstr "もう一度試す"
 
-#: src/components/routes/auth/Login/index.tsx:228
+#: src/components/routes/auth/Login/index.tsx:239
 #: src/components/routes/my-tickets/index.tsx:200
 msgid "Try another email"
 msgstr "別のメールアドレスを試す"
@@ -20113,7 +20180,7 @@ msgstr "参加者を取得できません"
 msgid "Unable to find seats. Check the connection and try again."
 msgstr "座席を見つけられません。接続を確認して、もう一度お試しください。"
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:137
+#: src/components/modals/JoinWaitlistModal/index.tsx:138
 msgid "Unable to join waitlist"
 msgstr "キャンセル待ちに登録できません"
 
@@ -20255,7 +20322,7 @@ msgstr "無制限"
 msgid "Unlimited available"
 msgstr "無制限に利用可能"
 
-#: src/components/common/PromoCodeTable/index.tsx:136
+#: src/components/common/PromoCodeTable/index.tsx:137
 msgid "Unlimited usages allowed"
 msgstr "使用回数無制限"
 
@@ -20281,7 +20348,7 @@ msgstr "未払い"
 msgid "Unpaid Order"
 msgstr "未払いの注文"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:413
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:469
 msgid "Unpublish all events and delete or anonymise this account and its users."
 msgstr "すべてのイベントを非公開にし、このアカウントとそのユーザーを削除または匿名化します。"
 
@@ -20302,6 +20369,18 @@ msgstr "配信停止"
 #: src/components/routes/emails/Unsubscribe/index.tsx:42
 msgid "Unsubscribe from tips and reminders"
 msgstr "ヒントとリマインダーの配信を停止"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:93
+msgid "Unsuspend"
+msgstr "停止を解除"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:415
+msgid "Unsuspend account"
+msgstr "アカウントの停止を解除"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:88
+msgid "Unsuspend this account? Its members can sign in again. Events and organizer pages stay in draft until they republish them."
+msgstr "このアカウントの停止を解除しますか？メンバーは再びサインインできます。イベントと主催者ページは再公開されるまで下書きのままです。"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1094
 msgid "until"
@@ -20328,11 +20407,11 @@ msgstr "無題の商品"
 msgid "Untitled ticket"
 msgstr "無題のチケット"
 
-#: src/components/common/AdminAccountsTable/index.tsx:101
+#: src/components/common/AdminAccountsTable/index.tsx:104
 msgid "Untrusted"
 msgstr "未信頼"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:200
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:216
 msgid "Unverified"
 msgstr "未確認"
 
@@ -20477,7 +20556,7 @@ msgstr "画像をアップロード中..."
 msgid "URL"
 msgstr "URL"
 
-#: src/components/common/PromoCodeTable/index.tsx:187
+#: src/components/common/PromoCodeTable/index.tsx:188
 msgid "URL copied to clipboard"
 msgstr "URLをクリップボードにコピーしました"
 
@@ -20616,11 +20695,11 @@ msgstr "ログインに使用します。変更すると、新しいアドレス
 msgid "users"
 msgstr "ユーザー"
 
-#: src/components/common/AdminAccountsTable/index.tsx:89
-#: src/components/common/AdminAccountsTable/index.tsx:109
+#: src/components/common/AdminAccountsTable/index.tsx:92
+#: src/components/common/AdminAccountsTable/index.tsx:112
 #: src/components/layouts/Admin/index.tsx:19
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:187
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:349
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:203
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:365
 #: src/components/routes/admin/Users/index.tsx:51
 msgid "Users"
 msgstr "ユーザー"
@@ -20747,11 +20826,11 @@ msgstr "VAT検証サービスは一時的に利用できません"
 msgid "VAT, GST or sales tax"
 msgstr "消費税、GST、売上税など"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:289
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:305
 msgid "VAT: {0}"
 msgstr "VAT：{0}"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:294
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:310
 msgid "VAT: not registered"
 msgstr "VAT：未登録"
 
@@ -20764,7 +20843,7 @@ msgstr "会場"
 msgid "Venue Name"
 msgstr "会場名"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:198
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:214
 msgid "Verification"
 msgstr "認証"
 
@@ -20776,14 +20855,14 @@ msgstr "認証コード"
 msgid "Verification email sent. Check your inbox."
 msgstr "確認メールを送信しました。受信トレイをご確認ください。"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:200
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:216
 #: src/components/routes/admin/Attribution/index.tsx:198
 #: src/components/routes/admin/Dashboard/index.tsx:396
 #: src/ee/sso/components/SingleSignOn/DomainList.tsx:17
 msgid "Verified"
 msgstr "認証済み"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:206
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:222
 msgid "Verified accounts can send messages to attendees and manage email templates. Connecting Stripe verifies an account automatically."
 msgstr "認証済みアカウントは、参加者へのメッセージ送信とメールテンプレートの管理ができます。Stripeを接続すると、アカウントが自動的に認証されます。"
 
@@ -20910,7 +20989,7 @@ msgstr "データの閲覧とエクスポートができます。変更はでき
 msgid "View details"
 msgstr "詳細を表示"
 
-#: src/components/common/AdminAccountsTable/index.tsx:73
+#: src/components/common/AdminAccountsTable/index.tsx:76
 #: src/components/routes/admin/FailedJobs/index.tsx:190
 #: src/components/routes/admin/SpamEvents/index.tsx:204
 msgid "View Details"
@@ -21204,7 +21283,7 @@ msgstr "ファイルを読み込めませんでした。有効な .xlsx また�
 msgid "We couldn't read your clipboard. Press Ctrl+V or ⌘+V to paste instead."
 msgstr "クリップボードを読み取れませんでした。代わりに Ctrl+V または ⌘+V で貼り付けてください。"
 
-#: src/components/common/ProductsTable/SortableCategory/index.tsx:108
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:107
 msgid "We couldn't reorder the categories. Please try again."
 msgstr "カテゴリーを並び替えできませんでした。もう一度お試しください。"
 
@@ -21261,11 +21340,11 @@ msgstr "{totalOccurrences}件のセッションすべてを作成します。作
 msgid "We'll email them a link to join your account."
 msgstr "アカウントに参加するためのリンクをメールで送信します。"
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:112
+#: src/components/modals/JoinWaitlistModal/index.tsx:113
 msgid "We'll notify you by email if a spot becomes available for {productDisplayName} on {occurrenceDate}."
 msgstr "{occurrenceDate}の{productDisplayName}に空きが出た場合は、メールでお知らせします。"
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:113
+#: src/components/modals/JoinWaitlistModal/index.tsx:114
 msgid "We'll notify you by email if a spot becomes available for {productDisplayName}."
 msgstr "{productDisplayName}に空きが出た場合は、メールでお知らせします。"
 
@@ -21379,7 +21458,7 @@ msgstr "Weibo"
 msgid "Welcome aboard! Sign in to continue."
 msgstr "ようこそ！続行するにはサインインしてください。"
 
-#: src/components/routes/auth/Login/index.tsx:129
+#: src/components/routes/auth/Login/index.tsx:140
 msgid "Welcome back"
 msgstr "おかえりなさい"
 
@@ -21700,7 +21779,7 @@ msgstr "処理中"
 #: src/components/modals/EditProductCategoryModal/index.tsx:73
 #: src/components/modals/EditPromoCodeModal/index.tsx:87
 #: src/components/modals/EditQuestionModal/index.tsx:103
-#: src/components/modals/JoinWaitlistModal/index.tsx:206
+#: src/components/modals/JoinWaitlistModal/index.tsx:207
 #: src/components/routes/auth/Register/index.tsx:188
 msgid "Working..."
 msgstr "処理中..."
@@ -21746,7 +21825,7 @@ msgstr "毎年"
 msgid "years"
 msgstr "年"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:271
 #: src/components/routes/admin/Dashboard/index.tsx:409
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:221
 #: src/ee/sso/components/SingleSignOn/index.tsx:70
@@ -21757,7 +21836,7 @@ msgstr "はい"
 msgid "Yes - I have a valid EU VAT registration number"
 msgstr "はい - 有効なEU VAT登録番号を持っています"
 
-#: src/components/layouts/Checkout/index.tsx:476
+#: src/components/layouts/Checkout/index.tsx:479
 msgid "Yes, cancel my order"
 msgstr "はい、注文をキャンセルします"
 
@@ -21920,7 +21999,7 @@ msgstr "有料チケットがありますが、Stripeがまだ接続されてい
 msgid "You have reached your messaging limit."
 msgstr "メッセージの送信上限に達しました。"
 
-#: src/components/layouts/Checkout/index.tsx:434
+#: src/components/layouts/Checkout/index.tsx:437
 msgid "You have run out of time to complete your order."
 msgstr "注文を完了するための時間が過ぎました。"
 
@@ -22017,7 +22096,7 @@ msgstr "今後これらのメールは届きません。注文やアカウント
 msgid "You'll be signed out and will need to sign in again with {providerName}."
 msgstr "サインアウトされるため、{providerName}で再度サインインする必要があります。"
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:64
+#: src/components/modals/CreateCheckInListModal/index.tsx:62
 msgid "You'll need a ticket before you can create a check-in list."
 msgstr "チェックインリストを作成するには、チケットが必要です。"
 
@@ -22045,11 +22124,11 @@ msgstr "セッション時間を変更しています"
 msgid "You're going to {0}!"
 msgstr "{0}に参加します！"
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:173
+#: src/components/modals/JoinWaitlistModal/index.tsx:174
 msgid "You're joining the waitlist for {occurrenceDate}."
 msgstr "{occurrenceDate}のキャンセル待ちに登録しようとしています。"
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:108
+#: src/components/modals/JoinWaitlistModal/index.tsx:109
 msgid "You're on the waitlist!"
 msgstr "キャンセル待ちに登録しました！"
 
@@ -22077,7 +22156,7 @@ msgstr "スポンサーは上限の {MAX_SPONSORS} 件まで追加済みです�
 msgid "You've been invited"
 msgstr "招待されています"
 
-#: src/components/routes/auth/Login/index.tsx:90
+#: src/components/routes/auth/Login/index.tsx:101
 msgid "You've been invited to join a team. Open the invitation email we sent you to finish joining. If the link has expired, ask the person who invited you to send a new one."
 msgstr "チームに招待されています。お送りした招待メールを開いて参加を完了してください。リンクの有効期限が切れている場合は、招待した人に再送を依頼してください。"
 
@@ -22165,7 +22244,7 @@ msgstr "カバー画像が横長のため、ここでは小さく表示されま
 msgid "Your cover sits beside the details like a poster. Best with square or portrait artwork."
 msgstr "カバー画像がポスターのように詳細の横に表示されます。正方形または縦長の画像に最適です。"
 
-#: src/components/layouts/Checkout/index.tsx:461
+#: src/components/layouts/Checkout/index.tsx:464
 msgid "Your current order will be lost."
 msgstr "現在の注文は失われます。"
 
@@ -22270,7 +22349,7 @@ msgstr "注文の詳細を更新しました。確認メールが新しいメー
 msgid "Your order has been cancelled"
 msgstr "注文はキャンセルされました"
 
-#: src/components/layouts/Checkout/index.tsx:229
+#: src/components/layouts/Checkout/index.tsx:232
 msgid "Your order has been cancelled."
 msgstr "注文はキャンセルされました。"
 
@@ -22291,7 +22370,7 @@ msgid "Your organisation requires two-factor authentication. Set it up now to co
 msgstr "組織では二要素認証が必須です。続行するには、今すぐ設定してください。所要時間は約1分です。"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:162
-#: src/components/routes/auth/Login/index.tsx:150
+#: src/components/routes/auth/Login/index.tsx:161
 msgid "Your organization requires single sign-on"
 msgstr "組織ではシングルサインオンが必須です"
 
@@ -22316,7 +22395,7 @@ msgstr "主催者の説明はまだありません。"
 msgid "Your organizer profile isn't published."
 msgstr "主催者プロフィールが公開されていません。"
 
-#: src/components/routes/auth/Login/index.tsx:190
+#: src/components/routes/auth/Login/index.tsx:201
 #: src/components/routes/auth/Register/index.tsx:162
 msgid "Your password"
 msgstr "パスワード"

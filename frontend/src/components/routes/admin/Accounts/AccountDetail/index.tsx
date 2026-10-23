@@ -13,6 +13,8 @@ import {IdParam} from "../../../../../types";
 import {OrganizerAdminModal} from "./OrganizerAdminModal";
 import {AccountFeatureFlags} from "./AccountFeatureFlags";
 import {DeleteAccountModal} from "./DeleteAccountModal";
+import {SuspendAccountModal} from "./SuspendAccountModal";
+import {useAdminUnsuspendAccount} from "../../../../../mutations/useAdminUnsuspendAccount";
 import {useImpersonateUser} from "../../../../../hooks/useImpersonateUser";
 import {useAdminExecuteDeletionRequest} from "../../../../../mutations/useAdminExecuteDeletionRequest";
 import {useAdminCancelDeletionRequest} from "../../../../../mutations/useAdminCancelDeletionRequest";
@@ -29,6 +31,8 @@ const AccountDetail = () => {
     const updateVerificationMutation = useUpdateAccountVerification(accountId!);
     const [managedOrganizer, setManagedOrganizer] = useState<AdminOrganizerSummary | null>(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isSuspendModalOpen, setIsSuspendModalOpen] = useState(false);
+    const unsuspendMutation = useAdminUnsuspendAccount(accountId!);
     const {impersonate, isPending: isImpersonating, pendingUserId} = useImpersonateUser();
     const executeDeletionMutation = useAdminExecuteDeletionRequest();
     const cancelDeletionMutation = useAdminCancelDeletionRequest();
@@ -78,6 +82,15 @@ const AccountDetail = () => {
             onSuccess: () => showSuccess(t`Account deletion cancelled`),
             onError: (error: any) => showError(error?.response?.data?.message ?? t`Failed to cancel account deletion`),
         });
+    };
+
+    const handleUnsuspend = () => {
+        confirmationDialog(t`Unsuspend this account? Its members can sign in again. Events and organizer pages stay in draft until they republish them.`, () => {
+            unsuspendMutation.mutate(undefined, {
+                onSuccess: () => showSuccess(t`Account unsuspended`),
+                onError: (error: any) => showError(error?.response?.data?.message ?? t`Failed to unsuspend account`),
+            });
+        }, {confirm: t`Unsuspend`});
     };
 
     const getTierBadgeColor = (tierName?: string) => {
@@ -136,7 +149,10 @@ const AccountDetail = () => {
                         </Button>
                     </Group>
 
-                    <Title order={1}>{account.name}</Title>
+                    <Group gap="sm">
+                        <Title order={1}>{account.name}</Title>
+                        {account.suspended_at && <Badge color="red" size="lg">{t`Suspended`}</Badge>}
+                    </Group>
 
                     <Card className={classes.accountCard}>
                         <Stack gap="md">
@@ -380,6 +396,46 @@ const AccountDetail = () => {
 
                     <Card className={`${classes.accountCard} ${classes.dangerCard}`}>
                         <Stack gap="md">
+                            <Text size="lg" fw={600}>{t`Suspend account`}</Text>
+                            {account.suspended_at ? (
+                                <>
+                                    <Text size="sm">
+                                        {t`Suspended on ${formatDate(account.suspended_at)}. Members can't sign in and its API keys are blocked.`}
+                                    </Text>
+                                    {account.suspension_reason && (
+                                        <Text size="sm" c="dimmed">{t`Reason: ${account.suspension_reason}`}</Text>
+                                    )}
+                                    <Group>
+                                        <Button
+                                            variant="default"
+                                            onClick={handleUnsuspend}
+                                            loading={unsuspendMutation.isPending}
+                                            data-testid="admin-unsuspend-account-button"
+                                        >
+                                            {t`Unsuspend account`}
+                                        </Button>
+                                    </Group>
+                                </>
+                            ) : (
+                                <Group justify="space-between" wrap="nowrap">
+                                    <Text size="sm" c="dimmed">
+                                        {t`Move all events and organizer pages to draft and stop members signing in.`}
+                                    </Text>
+                                    <Button
+                                        color="red"
+                                        variant="light"
+                                        onClick={() => setIsSuspendModalOpen(true)}
+                                        data-testid="admin-suspend-account-button"
+                                    >
+                                        {t`Suspend account`}
+                                    </Button>
+                                </Group>
+                            )}
+                        </Stack>
+                    </Card>
+
+                    <Card className={`${classes.accountCard} ${classes.dangerCard}`}>
+                        <Stack gap="md">
                             <Text size="lg" fw={600}>{t`Delete account`}</Text>
                             {account.active_deletion_request ? (
                                 <>
@@ -426,6 +482,10 @@ const AccountDetail = () => {
                     </Card>
                 </Stack>
             </Container>
+
+            {isSuspendModalOpen && (
+                <SuspendAccountModal account={account} onClose={() => setIsSuspendModalOpen(false)}/>
+            )}
 
             {isDeleteModalOpen && (
                 <DeleteAccountModal account={account} onClose={() => setIsDeleteModalOpen(false)}/>

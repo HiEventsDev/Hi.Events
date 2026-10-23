@@ -75,6 +75,8 @@ use HiEvents\Http\Actions\Accounts\UpdateAccountAction;
 use HiEvents\Http\Actions\Accounts\UpdateAccountTwoFactorRequirementAction;
 use HiEvents\Http\Actions\Admin\Accounts\GetAccountAction as GetAdminAccountAction;
 use HiEvents\Http\Actions\Admin\Accounts\GetAllAccountsAction as GetAllAdminAccountsAction;
+use HiEvents\Http\Actions\Admin\Accounts\SuspendAccountAction;
+use HiEvents\Http\Actions\Admin\Accounts\UnsuspendAccountAction;
 use HiEvents\Http\Actions\Admin\Accounts\UpdateAccountMessagingTierAction;
 use HiEvents\Http\Actions\Admin\Accounts\UpdateAccountVerificationAction;
 use HiEvents\Http\Actions\Admin\Announcements\CreateAnnouncementAction;
@@ -864,6 +866,10 @@ $router->prefix('/admin')->middleware(['auth:api'])->group(
 
         // Account Verification
         $router->put('/accounts/{account_id}/verification', UpdateAccountVerificationAction::class);
+
+        // Account Suspension
+        $router->post('/accounts/{account_id}/suspension', SuspendAccountAction::class)->whereNumber('account_id');
+        $router->delete('/accounts/{account_id}/suspension', UnsuspendAccountAction::class)->whereNumber('account_id');
 
         // Feature Flags
         $router->get('/licence', GetLicenceAdminAction::class);

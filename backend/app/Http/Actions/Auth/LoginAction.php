@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Auth;
 
-use HiEvents\Exceptions\InvitationPendingException;
+use HiEvents\Exceptions\CodedAccessException;
 use HiEvents\Exceptions\UnauthorizedException;
 use HiEvents\Http\Request\Auth\LoginRequest;
 use HiEvents\Http\ResponseCodes;
@@ -32,10 +32,10 @@ class LoginAction extends BaseAuthAction
                 accountId: (int) $request->validated('account_id'),
                 trustedDeviceToken: $request->cookie(TrustedDeviceService::COOKIE_NAME),
             ));
-        } catch (InvitationPendingException $e) {
+        } catch (CodedAccessException $e) {
             return $this->jsonResponse([
                 'message' => $e->getMessage(),
-                'error_code' => InvitationPendingException::ERROR_CODE,
+                'error_code' => $e::ERROR_CODE,
             ], ResponseCodes::HTTP_UNAUTHORIZED);
         } catch (UnauthorizedException $e) {
             return $this->errorResponse(

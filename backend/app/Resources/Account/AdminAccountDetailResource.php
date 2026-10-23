@@ -23,6 +23,8 @@ class AdminAccountDetailResource extends BaseResource
             'timezone' => $this->resource->timezone,
             'currency_code' => $this->resource->currency_code,
             'is_manually_verified' => (bool) $this->resource->is_manually_verified,
+            'suspended_at' => $this->resource->suspended_at,
+            'suspension_reason' => $this->resource->suspension_reason,
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
             'events_count' => $this->resource->events_count ?? 0,
