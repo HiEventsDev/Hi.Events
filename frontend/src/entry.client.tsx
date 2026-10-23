@@ -1,5 +1,6 @@
 import {hydrateRoot} from "react-dom/client";
-import {createBrowserRouter, matchRoutes, RouterProvider} from "react-router-dom";
+import {createBrowserRouter, matchRoutes} from "react-router";
+import {RouterProvider} from "react-router/dom";
 
 import {router} from "./router";
 import {App} from "./App";

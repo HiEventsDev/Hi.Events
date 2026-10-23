@@ -2,6 +2,4 @@
 
 namespace HiEvents\DomainObjects;
 
-class EmailDeliveryDomainObject extends Generated\EmailDeliveryDomainObjectAbstract
-{
-}
+class EmailDeliveryDomainObject extends Generated\EmailDeliveryDomainObjectAbstract {}

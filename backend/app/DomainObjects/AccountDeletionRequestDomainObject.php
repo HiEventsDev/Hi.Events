@@ -2,6 +2,4 @@
 
 namespace HiEvents\DomainObjects;
 
-class AccountDeletionRequestDomainObject extends Generated\AccountDeletionRequestDomainObjectAbstract
-{
-}
+class AccountDeletionRequestDomainObject extends Generated\AccountDeletionRequestDomainObjectAbstract {}

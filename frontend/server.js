@@ -1,5 +1,4 @@
 import express from "express";
-import {installGlobals} from "@remix-run/node";
 import process from "process";
 import compression from "compression";
 import fs from "node:fs/promises";
@@ -18,8 +17,6 @@ import {htmlSafeJsonStringify} from "./src/utilites/safeScriptJson.js";
 import {backendRequestHeaders, licenceSimulation} from "./src/ssr/backendRequestHeaders.js";
 import {loggableError} from "./src/ssr/loggableError.js";
 import {routeStylesheets} from "./src/ssr/routeStylesheets.js";
-
-installGlobals();
 
 async function main() {
     const base = process.env.BASE || "/";
@@ -147,7 +144,7 @@ Sitemap: ${frontendUrl}/sitemap.xml
 
     const nonRenderablePathPattern = /(^|\/)\.[^/]|\.(php|asp|aspx|jsp|cgi|sql|bak|old|zip|tar|gz|rar|7z|env|ini|yml|yaml|conf|log|sh|exe|dll)$/i;
 
-    app.use("*", async (req, res, next) => {
+    app.use(async (req, res, next) => {
         if (nonRenderablePathPattern.test(req.originalUrl.split("?")[0])) {
             return res.status(404).type("text/plain").send("Not Found");
         }
@@ -169,7 +166,7 @@ Sitemap: ${frontendUrl}/sitemap.xml
         }
     };
 
-    app.use("*", (req, res, next) => {
+    app.use((req, res, next) => {
         const requestPath = requestPathOf(req);
 
         if (frameProtectedPathPattern.test(requestPath) || homepagePreviewPathPattern.test(requestPath)) {
@@ -189,7 +186,7 @@ Sitemap: ${frontendUrl}/sitemap.xml
         return next();
     });
 
-    app.use("*", async (req, res) => {
+    app.use(async (req, res) => {
         const url = req.originalUrl.replace(base, "");
 
         try {
@@ -295,7 +292,11 @@ Sitemap: ${frontendUrl}/sitemap.xml
         return res.status(500).type("text/plain").send("Internal Server Error");
     });
 
-    app.listen(port, () => {
+    app.listen(port, (error) => {
+        if (error) {
+            throw error;
+        }
+
         console.info(`SSR Serving at http://localhost:${port}`);
     });
 
