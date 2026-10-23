@@ -2,6 +2,7 @@
 import {Helmet} from "react-helmet-async";
 import {Organizer} from "../../../types";
 import {organizerHomepageUrl} from "../../../utilites/urlHelper.ts";
+import {htmlSafeJsonStringify} from "../../../utilites/safeScriptJson.js";
 
 interface OrganizerDocumentHeadProps {
     organizer: Organizer;
@@ -26,7 +27,6 @@ export const OrganizerDocumentHead = ({organizer}: OrganizerDocumentHeadProps) =
         addressCountry: organizerSettings.location_details.country
     } : undefined;
 
-    // Filter out undefined address properties
     if (address) {
         Object.keys(address).forEach(key => {
             // @ts-ignore
@@ -43,7 +43,6 @@ export const OrganizerDocumentHead = ({organizer}: OrganizerDocumentHeadProps) =
         address
     } : undefined;
 
-    // Collect social media links
     const sameAs = [];
     if (organizerSettings?.website_url) {
         sameAs.push(organizerSettings.website_url);
@@ -70,7 +69,6 @@ export const OrganizerDocumentHead = ({organizer}: OrganizerDocumentHeadProps) =
         sameAs: sameAs.length > 0 ? sameAs : undefined,
     };
 
-    // Remove undefined properties
     Object.keys(schemaOrgJSONLD).forEach(key => {
         // @ts-ignore
         if (schemaOrgJSONLD[key] === undefined) {
@@ -103,7 +101,7 @@ export const OrganizerDocumentHead = ({organizer}: OrganizerDocumentHeadProps) =
             <link rel="canonical" href={url}/>
 
             <script type="application/ld+json">
-                {JSON.stringify(schemaOrgJSONLD)}
+                {htmlSafeJsonStringify(schemaOrgJSONLD)}
             </script>
         </Helmet>
     );
