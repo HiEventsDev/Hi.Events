@@ -130,7 +130,8 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
             ->select('orders.*')
             ->join('events', 'orders.event_id', '=', 'events.id')
             ->where('events.organizer_id', $organizerId)
-            ->where('events.account_id', $accountId);
+            ->where('events.account_id', $accountId)
+            ->whereNull('events.deleted_at');
 
         $sortBy = $this->validateSortColumn($params->sort_by, OrderDomainObject::class);
         $this->model = $this->model->orderBy(

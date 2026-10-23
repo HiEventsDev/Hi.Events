@@ -231,6 +231,7 @@ use HiEvents\Http\Actions\Events\Stats\GetEventStatsAction;
 use HiEvents\Http\Actions\Events\UpdateEventAction;
 use HiEvents\Http\Actions\Events\UpdateEventLocationAction;
 use HiEvents\Http\Actions\Events\UpdateEventStatusAction;
+use HiEvents\Http\Actions\Events\UpdateEventTypeAction;
 use HiEvents\Http\Actions\EventSettings\EditEventSettingsAction;
 use HiEvents\Http\Actions\EventSettings\GetEventSettingsAction;
 use HiEvents\Http\Actions\EventSettings\GetPlatformFeePreviewAction;
@@ -618,6 +619,7 @@ $router->middleware(['auth:api,sanctum'])->group(
         $router->put('/events/{event_id}', UpdateEventAction::class);
         $router->patch('/events/{event_id}/event-location', UpdateEventLocationAction::class);
         $router->put('/events/{event_id}/status', UpdateEventStatusAction::class);
+        $router->put('/events/{event_id}/type', UpdateEventTypeAction::class);
         $router->delete('/events/{event_id}', DeleteEventAction::class);
         $router->get('/events/{event_id}/deletion-status', GetEventDeletionStatusAction::class);
         $router->post('/events/{event_id}/duplicate', DuplicateEventAction::class);

@@ -48,6 +48,15 @@ export class EventSettingsPage {
     return this.section('danger-zone').getByPlaceholder('delete');
   }
 
+  get eventTypeChangeButton(): Locator {
+    return this.page.getByTestId('event-type-change-button');
+  }
+
+  async changeEventType(confirmLabel: string): Promise<void> {
+    await this.eventTypeChangeButton.click();
+    await this.page.getByRole('dialog').getByRole('button', { name: confirmLabel }).click();
+  }
+
   get deleteButton(): Locator {
     return this.page.getByTestId('event-delete-button');
   }

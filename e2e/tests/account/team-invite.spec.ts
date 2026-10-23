@@ -36,6 +36,37 @@ test.describe('team invites', () => {
     await expect(page.getByRole('heading', { level: 1, name: /Dashboard/ })).toBeVisible();
   });
 
+  test('an invitee who resets their password instead of accepting is told to open the invitation', async ({ freshAccount, page, mailpit }) => {
+    const inviteeEmail = uniqueEmail('invitee');
+
+    const ownerPage = await freshAccount.newAuthedPage();
+    const team = new TeamPage(ownerPage);
+    await team.goto();
+    await team.inviteUser({ firstName: 'Robin', lastName: 'Member', email: inviteeEmail, role: 'Organizer' });
+    await expect(team.userRow(inviteeEmail).getByText(/^Invited$/)).toBeVisible();
+
+    await page.goto('/auth/forgot-password');
+    await page.waitForLoadState('networkidle');
+    await page.getByLabel(/^Email/).fill(inviteeEmail);
+    await page.getByRole('button', { name: 'Send reset link' }).click();
+    await expect(page.getByRole('heading', { name: 'Check your email' })).toBeVisible();
+
+    const resetUrl = await mailpit.waitForLink(inviteeEmail, /reset-password/, { subjectContains: 'Password reset' });
+    await page.goto(resetUrl.pathname);
+    await page.getByLabel(/^New Password/).fill(INVITEE_PASSWORD);
+    await page.getByLabel(/^Confirm Password/).fill(INVITEE_PASSWORD);
+    await page.getByRole('button', { name: 'Reset password' }).click();
+    await expect(page).toHaveURL(/\/auth\/login/);
+    await page.waitForLoadState('networkidle');
+
+    await page.getByLabel(/^Email/).fill(inviteeEmail);
+    await page.getByLabel(/^Password/).fill(INVITEE_PASSWORD);
+    await page.getByRole('button', { name: 'Sign in', exact: true }).click();
+
+    await expect(page.getByText(/You've been invited to join a team\. Open the invitation email/)).toBeVisible();
+    await expect(page).toHaveURL(/\/auth\/login/);
+  });
+
   test('an owner promotes a member to admin and deactivates them', async ({ freshAccount, page, mailpit, publicApi }) => {
     const memberEmail = uniqueEmail('member');
 

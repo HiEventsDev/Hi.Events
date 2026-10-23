@@ -193,7 +193,8 @@ test.describe('lineup import and export', () => {
     await expect(preview.getByRole('heading', { name: event.productTitle })).toBeVisible();
     await expect(preview.getByTestId('widget-lineup-strip')).toHaveCount(0);
     await page.getByTestId('widget-group-sections').click();
-    await page.getByTestId('widget-show-lineup-switch').click();
+    const showLineup = page.getByTestId('widget-show-lineup-switch');
+    await expect(() => showLineup.check()).toPass();
     await expect(preview.getByTestId('widget-lineup-strip')).toContainText(headliner);
     await expect(page.getByTestId('widget-embed-code')).toContainText('data-hievents-show-lineup="true"');
   });

@@ -27,13 +27,13 @@ test.describe('per-date quantity edge cases', () => {
   test('an occurrence capacity caps a per-date ticket below its quantity', async ({ page, api, publicApi, account }) => {
     const event = await createRecurringLiveEvent(api, account.organizerId, { count: 2, quantityAvailable: 5 });
     const [day1, day2] = sortedDates(event);
-    await api.updateOccurrence(event.eventId, day1.id, { start_date: day1.start_date, end_date: day1.end_date, capacity: 1 });
-    await createCompletedOrder(publicApi, event, { eventOccurrenceId: day1.id });
+    await api.updateOccurrence(event.eventId, day2.id, { start_date: day2.start_date, end_date: day2.end_date, capacity: 1 });
+    await createCompletedOrder(publicApi, event, { eventOccurrenceId: day2.id });
 
     const view = new PublicDateView(page, event);
-    await view.open(day1);
+    await view.open(day2);
     await expect(page.getByText('This date is sold out. Please choose another date.')).toBeVisible();
-    await view.expectAvailable(day2);
+    await view.expectAvailable(day1);
   });
 
   test('tiers of one product can mix per-date and all-dates quantities', async ({ page, api, publicApi, account }) => {

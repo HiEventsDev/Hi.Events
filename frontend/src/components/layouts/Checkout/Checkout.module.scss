@@ -161,7 +161,21 @@ $header-row-padding-inline: 24px;
     }
   }
 
+  :global(.mantine-SegmentedControl-root) {
+    background-color: var(--checkout-background);
+  }
+
   :global(.mantine-SegmentedControl-label[data-active]) {
     color: var(--checkout-accent-contrast) !important;
+  }
+
+  :global(.mantine-SegmentedControl-root[data-disabled='true']) {
+    :global(.mantine-SegmentedControl-indicator) {
+      background-color: var(--checkout-border);
+    }
+
+    :global(.mantine-SegmentedControl-label) {
+      color: var(--checkout-text-tertiary);
+    }
   }
 }

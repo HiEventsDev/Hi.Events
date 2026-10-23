@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {Collapse, Popover} from "@mantine/core";
-import {IconCalendarEvent, IconChevronDown, IconInfoCircle, IconShieldCheck, IconTag} from "@tabler/icons-react";
+import {IconChevronDown, IconInfoCircle, IconShieldCheck, IconTag} from "@tabler/icons-react";
 import {t} from "@lingui/macro";
 import classNames from "classnames";
 import {Event, LocationType, Order} from "../../../types.ts";
@@ -80,15 +80,11 @@ export const InlineOrderSummary = ({
             <Collapse expanded={expanded}>
                 <div className={classes.content}>
                     <div className={classes.eventInfo}>
-                        <div className={classes.eventImage}>
-                            {coverImage ? (
+                        {coverImage && (
+                            <div className={classes.eventImage}>
                                 <img src={coverImage.url} alt={event.title}/>
-                            ) : (
-                                <div className={classes.eventImagePlaceholder}>
-                                    <IconCalendarEvent size={24}/>
-                                </div>
-                            )}
-                        </div>
+                            </div>
+                        )}
                         <div className={classes.eventDetails}>
                             <div className={classes.eventTitle}>{event.title}</div>
                             <div className={classes.eventMeta}>
@@ -188,9 +184,7 @@ export const InlineOrderSummary = ({
                                     </Popover>
                                 )}
                             </span>
-                            <span className={classNames(classes.totalsValue, {
-                                [classes.totalsValueFree]: totalFee === 0
-                            })}>
+                            <span className={classes.totalsValue}>
                                 {formatCurrency(totalFee, order.currency)}
                             </span>
                         </div>

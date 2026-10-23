@@ -86,6 +86,11 @@ const Login = () => {
                 return;
             }
 
+            if (error?.response?.data?.error_code === 'INVITATION_PENDING') {
+                steps.setError(t`You've been invited to join a team. Open the invitation email we sent you to finish joining. If the link has expired, ask the person who invited you to send a new one.`);
+                return;
+            }
+
             if (error?.response?.status === 429) {
                 steps.setError(t`Too many attempts. Please wait a minute and try again.`);
                 return;
