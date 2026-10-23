@@ -35,6 +35,7 @@ class DuplicateEventHandler
             duplicateAffiliates: $data->duplicateAffiliates,
             duplicateLineup: $data->duplicateLineup,
             duplicateOccurrences: $data->duplicateOccurrences,
+            duplicateEmailTemplates: $data->duplicateEmailTemplates,
             description: $data->description,
             endDate: $data->endDate,
         );

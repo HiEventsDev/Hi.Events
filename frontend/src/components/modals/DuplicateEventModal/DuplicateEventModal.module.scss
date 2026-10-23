@@ -1,0 +1,71 @@
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mantine-spacing-sm);
+
+  :global(.mantine-InputWrapper-root) {
+    margin-bottom: 0;
+  }
+}
+
+.textButton {
+  align-self: flex-start;
+  font-size: var(--mantine-font-size-sm);
+  color: var(--mantine-color-primary-6);
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.note {
+  font-size: var(--mantine-font-size-sm);
+  color: var(--mantine-color-dimmed);
+}
+
+.optionsHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--mantine-spacing-sm);
+  margin: var(--mantine-spacing-lg) 0 var(--mantine-spacing-xs);
+}
+
+.optionsTitle {
+  margin: 0;
+  font-size: var(--mantine-font-size-md);
+  font-weight: 600;
+}
+
+.optionsMeta {
+  display: flex;
+  align-items: baseline;
+  gap: var(--mantine-spacing-sm);
+  font-size: var(--mantine-font-size-sm);
+  color: var(--mantine-color-dimmed);
+  font-variant-numeric: tabular-nums;
+}
+
+.groups {
+  border: 1px solid var(--mantine-color-gray-3);
+  border-radius: var(--mantine-radius-md);
+}
+
+.group {
+  padding: var(--mantine-spacing-sm) var(--mantine-spacing-md) var(--mantine-spacing-md);
+
+  & + & {
+    border-top: 1px solid var(--mantine-color-gray-2);
+  }
+}
+
+.groupTitle {
+  margin: 0 0 var(--mantine-spacing-xs);
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 600;
+  color: var(--mantine-color-dimmed);
+}
+
+.option :global(.mantine-Checkbox-description) {
+  margin-top: 2px;
+}
