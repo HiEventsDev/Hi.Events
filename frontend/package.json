@@ -9,7 +9,7 @@
     "build-strict:csr": "tsc && npm run build:csr",
     "preview:csr": "vite preview",
     "dev:ssr": "cross-env NODE_ENV=development node --import ./instrument.mjs server.js --port 5678",
-    "build:ssr:client": "vite build --ssrManifest --outDir dist/client",
+    "build:ssr:client": "vite build --outDir dist/client",
     "build:ssr:server": "vite build --ssr src/entry.server.tsx --outDir dist/server",
     "start": "cross-env NODE_ENV=production node --import ./instrument.mjs server.js",
     "build": "npm run messages:extract && npm run build:ssr:client && npm run build:ssr:server",

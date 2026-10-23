@@ -7,8 +7,8 @@
     max-width: 360px;
     padding: 16px;
     border-radius: 12px;
-    background: var(--event-content-bg-color, var(--organizer-content-bg-color, rgba(255, 255, 255, 0.97)));
-    border: 1px solid var(--event-border-color, var(--organizer-border-color, rgba(0, 0, 0, 0.08)));
+    background: var(--event-content-bg-color, rgba(255, 255, 255, 0.97));
+    border: 1px solid var(--event-border-color, rgba(0, 0, 0, 0.08));
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
     backdrop-filter: blur(12px);
     animation: slideUp 0.3s ease-out;
@@ -46,7 +46,7 @@
 
 .iconWrapper {
     flex-shrink: 0;
-    color: var(--event-primary-color, var(--organizer-primary-color, #8b5cf6));
+    color: var(--event-primary-color, #7c3aed);
     margin-top: 1px;
 }
 
@@ -54,11 +54,11 @@
     margin: 0;
     font-size: 13px;
     line-height: 1.45;
-    color: var(--event-primary-text-color, var(--organizer-primary-text-color, #374151));
+    color: var(--event-primary-text-color, #374151);
 }
 
 .privacyLink {
-    color: var(--event-primary-color, var(--organizer-primary-color, #8b5cf6));
+    color: var(--event-primary-color, #7c3aed);
     text-decoration: underline;
 
     &:hover {
@@ -70,7 +70,7 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 12px;
-    border-top: 1px solid var(--event-border-color, var(--organizer-border-color, rgba(0, 0, 0, 0.08)));
+    border-top: 1px solid var(--event-border-color, rgba(0, 0, 0, 0.08));
 }
 
 .category {
@@ -79,7 +79,7 @@
     justify-content: space-between;
     gap: 12px;
     padding: 10px 0;
-    border-bottom: 1px solid var(--event-border-color, var(--organizer-border-color, rgba(0, 0, 0, 0.08)));
+    border-bottom: 1px solid var(--event-border-color, rgba(0, 0, 0, 0.08));
 }
 
 .categoryText {
@@ -91,13 +91,13 @@
 .categoryLabel {
     font-size: 13px;
     font-weight: 600;
-    color: var(--event-primary-text-color, var(--organizer-primary-text-color, #111827));
+    color: var(--event-primary-text-color, #111827);
 }
 
 .categoryDescription {
     font-size: 12px;
     line-height: 1.4;
-    color: var(--event-secondary-color, var(--organizer-secondary-color, #6b7280));
+    color: var(--event-secondary-color, #6b7280);
 }
 
 .actions {
@@ -123,16 +123,16 @@
 }
 
 .primaryButton {
-    background: var(--event-primary-color, var(--organizer-primary-color, #8b5cf6));
-    color: var(--event-accent-contrast, var(--organizer-accent-contrast, #ffffff));
+    background: var(--event-primary-color, #7c3aed);
+    color: var(--event-accent-contrast, #ffffff);
 }
 
 .ghostButton {
     background: transparent;
-    color: var(--event-secondary-color, var(--organizer-secondary-color, #6b7280));
-    border: 1px solid var(--event-border-color, var(--organizer-border-color, rgba(0, 0, 0, 0.1)));
+    color: var(--event-secondary-color, #6b7280);
+    border: 1px solid var(--event-border-color, rgba(0, 0, 0, 0.1));
 
     &:hover {
-        background: var(--event-accent-soft, var(--organizer-accent-soft, rgba(0, 0, 0, 0.03)));
+        background: var(--event-accent-soft, rgba(0, 0, 0, 0.03));
     }
 }

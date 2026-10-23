@@ -12,7 +12,7 @@ import {BouncingEmoji} from "../../common/BouncingEmoji";
 import {formatDateWithLocale, getSafeLocale} from "../../../utilites/dates.ts";
 import {getClientLocale} from "../../../locales.ts";
 
-const DEFAULT_ACCENT = '#8b5cf6';
+const DEFAULT_ACCENT = '#7c3aed';
 
 interface JoinWaitlistModalProps extends GenericModalProps {
     product: Product;

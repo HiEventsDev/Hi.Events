@@ -101,6 +101,7 @@ Errors return JSON with a `message`. Validation errors (`422`) also include an `
 | `401` | `SESSION_REVOKED` | The session token was signed out everywhere, for example after a password reset |
 | `401` | `SSO_REQUIRED` | The user's organization requires single sign-on; sign in again through it |
 | `401` | `SSO_SESSION_EXPIRED` | A session started through single sign-on can't be refreshed; sign in again |
+| `401` | `INVITATION_PENDING` | `POST /auth/login` only: the user's only membership is an invitation they haven't accepted; they must open the invitation email |
 | `403` | `API_KEY_READ_ONLY` | A read-only API key tried to make a change |
 | `403` | `API_KEY_NOT_ALLOWED` | The endpoint can't be used with an API key |
 | `403` | `READ_ONLY_ROLE` | The user has view-only access to the account |

@@ -1,0 +1,195 @@
+@use "../../../styles/mixins.scss";
+
+$font: var(--theme-font-family, 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+$ease: cubic-bezier(0.22, 1, 0.36, 1);
+$wide: 1080px;
+$sheet-radius: 24px;
+
+@mixin wide {
+  @media (min-width: $wide) {
+    @content;
+  }
+}
+
+@mixin below-wide {
+  @media (max-width: $wide - 1px) {
+    @content;
+  }
+}
+
+$narrow-container: 480px;
+$compact-container: 520px;
+
+@mixin narrow {
+  @container (max-width: #{$narrow-container - 1px}) {
+    @content;
+  }
+}
+
+@mixin compact {
+  @container (max-width: #{$compact-container - 1px}) {
+    @content;
+  }
+}
+
+@mixin tablet-up {
+  @include mixins.respond-above(md) {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @include mixins.respond-below(md) {
+    @content;
+  }
+}
+
+@mixin section-title {
+  margin: 0;
+  font-family: $font;
+  font-size: clamp(1.25rem, 1.15rem + 0.4vw, 1.5rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  color: var(--hp-text);
+  text-wrap: balance;
+}
+
+@mixin focus-ring {
+  &:focus-visible {
+    outline: 2px solid var(--hp-accent-ink);
+    outline-offset: 2px;
+  }
+}
+
+@mixin pill-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--hp-border);
+  border-radius: 999px;
+  background: var(--hp-surface);
+  color: var(--hp-text);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s $ease, border-color 0.15s $ease;
+  @include focus-ring;
+
+  &:hover {
+    background: var(--hp-fill);
+    border-color: var(--hp-border-strong);
+  }
+
+  svg {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@mixin icon-button {
+  @include pill-button;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-color: transparent;
+  background: var(--hp-fill);
+  color: var(--hp-text);
+
+  &:hover {
+    border-color: transparent;
+    background: var(--hp-fill-strong);
+  }
+}
+
+@mixin rich-text {
+  color: color-mix(in srgb, var(--hp-text) 84%, var(--hp-surface));
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+
+  @include mobile {
+    font-size: 1rem;
+  }
+
+  > :first-child {
+    margin-top: 0;
+  }
+
+  > :last-child {
+    margin-bottom: 0;
+  }
+
+  p {
+    margin: 0 0 1em;
+  }
+
+  a {
+    color: var(--hp-accent-ink);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+
+  strong {
+    color: var(--hp-text);
+    font-weight: 600;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    margin: 1.6em 0 0.5em;
+    font-family: $font;
+    font-weight: 650;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: var(--hp-text);
+  }
+
+  h1 {
+    font-size: 1.375rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  h3 {
+    font-size: 1.125rem;
+  }
+
+  ul, ol {
+    margin: 0 0 1em;
+    padding-left: 1.4em;
+  }
+
+  li + li {
+    margin-top: 0.35em;
+  }
+
+  blockquote {
+    margin: 1.4em 0;
+    padding-left: 1em;
+    border-left: 3px solid var(--hp-accent);
+    color: var(--hp-text);
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    margin: 1em 0;
+    border-radius: 14px;
+  }
+
+  hr {
+    margin: 2em 0;
+    border: 0;
+    border-top: 1px solid var(--hp-border);
+  }
+}

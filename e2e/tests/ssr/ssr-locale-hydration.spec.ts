@@ -29,8 +29,13 @@ const expectCleanHydration = async (page: Page, errors: string[]) => {
   expect(errors.filter(error => /hydrat|#418|#423|#425/i.test(error))).toEqual([]);
 };
 
-const createPaidEvent = (api: ApiClient, organizerId: number): Promise<SeededEvent> =>
-  createLiveEventWithProduct(api, {organizerId, price: 25, startDate: nineInTheEveningUtc()});
+const createPaidEvent = (api: ApiClient, organizerId: number, startDate = nineInTheEveningUtc()): Promise<SeededEvent> =>
+  createLiveEventWithProduct(api, {organizerId, price: 25, startDate});
+
+const SWEDISH_MONTHS = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
+const POLISH_MONTHS = ['sty', 'lut', 'mar', 'kwi', 'maj', 'cze', 'lip', 'sie', 'wrz', 'paź', 'lis', 'gru'];
+
+const monthOf = (isoDate: string, months: string[]): string => months[new Date(isoDate).getUTCMonth()];
 
 test.describe('server-rendered dates and prices follow the visitor locale', () => {
   test.describe('German browser', () => {
@@ -41,7 +46,7 @@ test.describe('server-rendered dates and prices follow the visitor locale', () =
       const path = `/event/${event.eventId}/${event.slug}`;
 
       const html = await (await request.get(path, {headers: {'Accept-Language': 'de-DE,de;q=0.9'}})).text();
-      expect(html).toMatch(/\s21:00</);
+      expect(html).toMatch(/[\s>]21:00</);
       expect(html).not.toContain('9:00 PM');
 
       const errors = hydrationErrorsOn(page);
@@ -60,6 +65,26 @@ test.describe('server-rendered dates and prices follow the visitor locale', () =
       const errors = hydrationErrorsOn(page);
       await page.goto(path);
       await expectCleanHydration(page, errors);
+    });
+  });
+
+  test.describe('Swedish browser', () => {
+    test.use({locale: 'sv-SE'});
+
+    test('the event page is rendered in Swedish on the server and hydrates cleanly', async ({page, request, api, account}) => {
+      const startDate = nineInTheEveningUtc();
+      const event = await createPaidEvent(api, account.organizerId, startDate);
+      const path = `/event/${event.eventId}/${event.slug}`;
+
+      const html = await (await request.get(path, {headers: {'Accept-Language': 'sv-SE,sv;q=0.9'}})).text();
+      expect(html).toContain('<html lang="sv"');
+      expect(html).toContain(`>${monthOf(startDate, SWEDISH_MONTHS)}<`);
+      expect(html).toMatch(/[\s>]21:00</);
+
+      const errors = hydrationErrorsOn(page);
+      await page.goto(path);
+      await expectCleanHydration(page, errors);
+      await expect(page.locator('html')).toHaveAttribute('lang', 'sv');
     });
   });
 
@@ -83,7 +108,7 @@ test.describe('server-rendered dates and prices follow the visitor locale', () =
       const path = `/event/${event.eventId}/${event.slug}`;
 
       const html = await (await request.get(path, {headers: {'Accept-Language': 'en-US', Cookie: 'locale=fr'}})).text();
-      expect(html).toMatch(/\s21:00</);
+      expect(html).toMatch(/[\s>]21:00</);
       expect(html).not.toContain('9:00 PM');
 
       await page.context().addCookies([{name: 'locale', value: 'fr', url: baseURL!}]);
@@ -99,6 +124,21 @@ test.describe('server-rendered dates and prices follow the visitor locale', () =
       await page.goto('/auth/login');
       await expectCleanHydration(page, errors);
       await expect(page.locator('html')).toHaveAttribute('lang', 'sv');
+    });
+
+    test('a Polish language cookie renders Polish dates on the server and hydrates cleanly', async ({page, request, api, account, baseURL}) => {
+      const startDate = nineInTheEveningUtc();
+      const event = await createPaidEvent(api, account.organizerId, startDate);
+      const path = `/event/${event.eventId}/${event.slug}`;
+
+      const html = await (await request.get(path, {headers: {'Accept-Language': 'en-US', Cookie: 'locale=pl'}})).text();
+      expect(html).toContain(`>${monthOf(startDate, POLISH_MONTHS)}<`);
+
+      await page.context().addCookies([{name: 'locale', value: 'pl', url: baseURL!}]);
+      const errors = hydrationErrorsOn(page);
+      await page.goto(path);
+      await expectCleanHydration(page, errors);
+      await expect(page.locator('html')).toHaveAttribute('lang', 'pl');
     });
 
     test('a widget embedded in French renders French prices on the server and hydrates cleanly', async ({page, request, api, account}) => {

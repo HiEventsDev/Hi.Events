@@ -2,7 +2,7 @@
 import {Helmet} from "react-helmet-async";
 import {Event, LocationType} from "../../../types";
 import {eventCoverImageUrl, eventHomepageUrl} from "../../../utilites/urlHelper.ts";
-import {utcToTz} from "../../../utilites/dates.ts";
+import {formatDateWithLocale, utcToTz} from "../../../utilites/dates.ts";
 import {summariseEventLocations} from "../../../utilites/effectiveLocation.ts";
 import {formatAddress} from "../../../utilites/addressUtilities.ts";
 import {htmlSafeJsonStringify} from "../../../utilites/safeScriptJson.js";
@@ -18,7 +18,7 @@ export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
     const eventSettings = event.settings;
     const products = event.product_categories?.flatMap(category => category.products) ?? [];
     const title = (eventSettings?.seo_title ?? event.title) + ' | ' + event.organizer?.name;
-    const description = eventSettings?.seo_description ?? event.description_preview;
+    const providedDescription = eventSettings?.seo_description ?? event.description_preview;
     const keywords = eventSettings?.seo_keywords;
     const image = eventCoverImageUrl(event);
     const url = eventHomepageUrl(event);
@@ -59,6 +59,12 @@ export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
         : null;
     const placeName = venueName
         ?? (effective?.type === LocationType.InPerson && structuredAddress ? formatAddress(structuredAddress) : null);
+
+    const description = providedDescription || [
+        seriesStartDate ? formatDateWithLocale(seriesStartDate, 'fullDateTime', event.timezone) : null,
+        placeName,
+        event.organizer?.name,
+    ].filter(Boolean).join(' · ');
 
     const includePlace = effective?.type === LocationType.InPerson && address && Object.keys(address).length > 1;
     const location = includePlace ? {

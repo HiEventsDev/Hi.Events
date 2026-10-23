@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import {Product, TaxAndFee, TaxAndFeeCalculationType} from "../../../types.ts";
 import {formatCurrency} from "../../../utilites/currency.ts";
 import {getSafeLocale} from "../../../utilites/dates.ts";
-import {getClientLocale} from "../../../locales.ts";
+import {getClientLocale, toDayjsLocale} from "../../../locales.ts";
 import {localeFormats} from "../../../utilites/dateLocales.ts";
 
 export interface RowSummary {
@@ -16,7 +16,7 @@ const hasValue = (value: unknown): boolean => value !== undefined && value !== n
 export const formatLocalDateTime = (value: string | Date): string => {
     const locale = getSafeLocale(getClientLocale());
 
-    return dayjs(value).locale(locale).format(localeFormats[locale].dayMonthTime);
+    return dayjs(value).locale(toDayjsLocale(locale)).format(localeFormats[locale].dayMonthTime);
 };
 
 export const descriptionSummary = (values: Product): RowSummary => {

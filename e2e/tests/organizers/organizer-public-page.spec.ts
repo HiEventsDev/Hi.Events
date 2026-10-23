@@ -33,13 +33,15 @@ test.describe('organizer public page', () => {
     });
     const [next] = [...event.occurrences].sort((a, b) => a.start_date.localeCompare(b.start_date));
     const nextDate = new Date(next.start_date);
-    const nextLabel = `${nextDate.toLocaleString('en-US', { month: 'short', timeZone: 'UTC' })} ${nextDate.getUTCDate()}`;
+    const nextMonth = nextDate.toLocaleString('en-US', { month: 'short', timeZone: 'UTC' });
+    const nextWeekday = nextDate.toLocaleString('en-US', { weekday: 'short', timeZone: 'UTC' });
 
     const publicPage = new OrganizerPublicPage(page);
     await publicPage.goto(organizer.id, organizer.slug);
 
     const card = publicPage.eventLink(event.title);
-    await expect(card.getByTestId('organizer-event-card-date')).toContainText(nextLabel);
+    await expect(card).toContainText(new RegExp(`${nextMonth}\\s*${nextDate.getUTCDate()}(?!\\d)`));
+    await expect(card.getByTestId('organizer-event-card-date')).toContainText(nextWeekday);
     await expect(card.getByTestId('organizer-event-card-date')).toContainText(/7:00\s?PM/);
     await expect(card.getByText('+2 more dates')).toBeVisible();
     await expect(card.getByText('Happening now')).toHaveCount(0);

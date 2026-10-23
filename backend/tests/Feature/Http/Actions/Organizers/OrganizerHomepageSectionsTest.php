@@ -41,6 +41,18 @@ class OrganizerHomepageSectionsTest extends TestCase
         $this->assertSame([$galleryImageId], $sections[4]['image_ids']);
     }
 
+    public function test_event_only_sections_are_rejected(): void
+    {
+        [$owner, $accountId] = $this->createAccountOwner();
+        $organizerId = $this->createLiveOrganizerWithSettings($accountId);
+
+        $this->patchJson("/organizers/$organizerId/settings", [
+            'homepage_sections' => [['id' => 'more_events', 'type' => 'MORE_EVENTS', 'enabled' => true]],
+        ], $this->headersFor($owner, $accountId))
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('homepage_sections.0.type');
+    }
+
     public function test_other_settings_updates_keep_saved_sections(): void
     {
         [$owner, $accountId] = $this->createAccountOwner();

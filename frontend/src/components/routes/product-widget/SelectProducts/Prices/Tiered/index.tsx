@@ -20,7 +20,6 @@ interface TieredPricingProps {
     productIndex: number;
     eventOccurrenceId?: IdParam;
     displayMode?: 'header' | 'list';
-    showStepper?: boolean;
 }
 
 const getFeesAndTaxTotal = (price: ProductPrice): number => (price.tax_total || 0) + (price.fee_total || 0);
@@ -48,7 +47,6 @@ export const TieredPricing = ({
                                   productIndex,
                                   eventOccurrenceId,
                                   displayMode = 'list',
-                                  showStepper = true,
                               }: TieredPricingProps) => {
     const [limitMessages, setLimitMessages] = useState<{ [priceIndex: number]: string }>({});
     const limitTimeoutsRef = useRef<{ [priceIndex: number]: ReturnType<typeof setTimeout> }>({});
@@ -99,7 +97,7 @@ export const TieredPricing = ({
 
     const renderQuantityControl = (price: ProductPrice, index: number) => (
         <div className={'hi-product-quantity-selector'}>
-            {(product.is_available && price.is_available) && showStepper && (
+            {(product.is_available && price.is_available) && (
                 <NumberSelector
                     min={product.min_per_order ?? 0}
                     max={getQuantityCap(price)}

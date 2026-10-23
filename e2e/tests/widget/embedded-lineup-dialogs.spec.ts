@@ -10,12 +10,16 @@ const iframeHeight = (page: Page, title: string) =>
   page.locator(`iframe[title="${title}"]`).evaluate((frame) => frame.getBoundingClientRect().height);
 
 const settledIframeHeight = async (page: Page, title: string) => {
-  await page.locator(`iframe[title="${title}"]`).scrollIntoViewIfNeeded();
+  const frame = page.locator(`iframe[title="${title}"]`);
+  await frame.scrollIntoViewIfNeeded();
   let previous = -1;
   await expect.poll(async () => {
-    const current = await iframeHeight(page, title);
-    const settled = current === previous && current > 150;
-    previous = current;
+    const { height, resized } = await frame.evaluate((element: HTMLIFrameElement) => ({
+      height: element.getBoundingClientRect().height,
+      resized: element.style.height !== '',
+    }));
+    const settled = resized && height === previous;
+    previous = height;
     return settled;
   }, { intervals: [300] }).toBe(true);
   return previous;
@@ -85,7 +89,7 @@ for (const viewport of [{ name: 'desktop', width: 1280, height: 800 }, { name: '
 
       const dialog = lineup.getByRole('dialog', { name });
       await expect(dialog.getByRole('heading', { name, level: 3 })).toBeVisible();
-      await expect.poll(async () => (await dialog.boundingBox())!.height).toBeGreaterThan(Math.min(collapsedHeight, 400));
+      await expect.poll(async () => (await dialog.boundingBox())!.height).toBeGreaterThan(Math.max(collapsedHeight, 300));
 
       const dialogBox = (await dialog.boundingBox())!;
       expect(dialogBox.y).toBeGreaterThanOrEqual(0);

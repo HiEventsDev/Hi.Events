@@ -84,7 +84,7 @@ msgstr "{0} aktívnych webhookov"
 msgid "{0} API"
 msgstr "{0} API"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:974
+#: src/components/routes/product-widget/SelectProducts/index.tsx:993
 msgid "{0} available"
 msgstr "{0} dostupných"
 
@@ -311,7 +311,7 @@ msgstr "{booked} z {sellable} rezervovaných"
 msgid "{browser} on {os}"
 msgstr "{browser} na {os}"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:93
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:77
 msgid "{capacity} spots left"
 msgstr "Zostáva {capacity} miest"
 
@@ -344,7 +344,7 @@ msgstr "{count, plural, one {# slot} few {# sloty} many {# slotu} other {# sloto
 msgid "{count} add-ons"
 msgstr "Doplnky: {count}"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:117
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:98
 msgid "{count} times"
 msgstr "Počet časov: {count}"
 
@@ -379,6 +379,14 @@ msgstr "{enforcedCount, plural, one {# člen sa bude musieť prihlasovať cez {p
 #: src/components/routes/settings/Team/MemberRow.tsx:52
 msgid "{eventCount, plural, one {# event} other {# events}}"
 msgstr "{eventCount, plural, one {# podujatie} few {# podujatia} many {# podujatia} other {# podujatí}}"
+
+#: src/components/layouts/OrganizerHomepage/index.tsx:111
+msgid "{eventCount, plural, one {# past event} other {# past events}}"
+msgstr "{eventCount, plural, one {# minulé podujatie} few {# minulé podujatia} many {# minulých podujatí} other {# minulých podujatí}}"
+
+#: src/components/layouts/OrganizerHomepage/index.tsx:112
+msgid "{eventCount, plural, one {# upcoming event} other {# upcoming events}}"
+msgstr "{eventCount, plural, one {# nadchádzajúce podujatie} few {# nadchádzajúce podujatia} many {# nadchádzajúcich podujatí} other {# nadchádzajúcich podujatí}}"
 
 #: src/components/common/OrganizerWebhookTable/index.tsx:81
 #: src/components/common/WebhookTable/index.tsx:81
@@ -466,6 +474,10 @@ msgstr "{minutes} min"
 msgid "{minutes} minutes and {seconds} seconds"
 msgstr "{minutes} minút a {seconds} sekúnd"
 
+#: src/components/layouts/OrganizerHomepage/EventList/index.tsx:105
+msgid "{moreDatesCount, plural, one {+# more date} other {+# more dates}}"
+msgstr "{moreDatesCount, plural, one {+# ďalší termín} other {Ďalšie termíny: #}}"
+
 #: src/components/routes/event/Lineup/QuickAddPerson.tsx:55
 msgid "{name} added to the lineup"
 msgstr "{name} pridaný do line-upu"
@@ -530,7 +542,7 @@ msgstr "{peopleAdded, plural, one {Pridaná # osoba} few {Pridané # osoby} many
 msgid "{productCount} ticket types configured"
 msgstr "Nastavené typy lístkov: {productCount}"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:219
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:224
 msgid "{provider} video found"
 msgstr "Nájdené video z {provider}"
 
@@ -575,7 +587,7 @@ msgstr "{slotCount, plural, one {# časový úsek} few {# časové úseky} many 
 msgid "{slotCount} slots"
 msgstr "Sloty: {slotCount}"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:652
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:630
 msgid "{slotCount} times available"
 msgstr "Dostupné časy: {slotCount}"
 
@@ -647,10 +659,6 @@ msgstr "+{0} ďalších mien"
 msgid "+{extra} more"
 msgstr "+{extra} ďalších"
 
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:129
-msgid "+{moreDatesCount} more dates"
-msgstr "Ďalšie termíny: {moreDatesCount}"
-
 #: src/components/routes/product-widget/SelectProducts/WidgetLineupStrip.tsx:43
 msgid "+{remaining} more"
 msgstr "+{remaining} ďalších"
@@ -662,10 +670,6 @@ msgstr "+1 234 567 890"
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1039
 msgid "+1 day"
 msgstr "+1 deň"
-
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:129
-msgid "+1 more date"
-msgstr "+1 ďalší termín"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:524
 msgid "+Tax/Fees"
@@ -792,7 +796,7 @@ msgstr "1 typ lístka"
 msgid "1 ticket type configured"
 msgstr "Nastavený 1 typ lístka"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:652
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:630
 msgid "1 time available"
 msgstr "1 dostupný čas"
 
@@ -877,6 +881,10 @@ msgstr "zmena dĺžky"
 msgid "A check-in list lets staff scan tickets at the door on a phone, tablet, or USB scanner. Share the link with your team, no account needed."
 msgstr "Check-in zoznam umožňuje personálu skenovať lístky pri vstupe telefónom, tabletom alebo USB skenérom. Zdieľajte odkaz s tímom, účet nie je potrebný."
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:31
+msgid "A compact, centred card"
+msgstr "Kompaktná karta zarovnaná na stred"
+
 #: src/components/forms/QuestionForm/index.tsx:138
 msgid "A date input. Perfect for asking for a date of birth etc."
 msgstr "Vstup dátumu. Ideálne na otázky o dátume narodenia atď."
@@ -889,15 +897,19 @@ msgstr "Rozbaľovací zoznam umožňuje iba jeden výber"
 msgid "A few quick steps and you're ready to start selling."
 msgstr "Ešte pár krokov a môžete začať predávať."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:233
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:26
+msgid "A focused reading column. Tickets appear wherever you place them in Sections."
+msgstr "Sústredený stĺpec na čítanie. Vstupenky sa zobrazia tam, kam ich umiestnite v sekciách."
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:238
 msgid "A gallery can have up to {MAX_GALLERY_PHOTOS} photos."
 msgstr "Galéria môže obsahovať najviac {MAX_GALLERY_PHOTOS} fotografií."
 
-#: src/utilites/homepageSections.ts:54
+#: src/utilites/homepageSections.ts:56
 msgid "A grid of photos that opens full screen."
 msgstr "Mriežka fotiek, ktorá sa otvára na celú obrazovku."
 
-#: src/utilites/homepageSections.ts:52
+#: src/utilites/homepageSections.ts:54
 msgid "A heading and formatted text. Travel info, house rules, anything."
 msgstr "Nadpis a formátovaný text. Doprava, pravidlá, čokoľvek."
 
@@ -908,6 +920,10 @@ msgstr "Správa, ktorá sa zobrazí, keď v tejto kategórii nie sú žiadne pro
 #: src/components/forms/QuestionForm/index.tsx:108
 msgid "A multi line text input"
 msgstr "Viacriadkový textový vstup"
+
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:32
+msgid "A narrow card with the details centred. Suits smaller and private events."
+msgstr "Úzka karta s detailmi zarovnanými na stred. Vhodná pre menšie a súkromné udalosti."
 
 #: src/components/routes/welcome/index.tsx:119
 msgid "A new verification code has been sent to your email"
@@ -924,6 +940,10 @@ msgstr "Promo kód bez zľavy môže byť použitý na odhalenie skrytých produ
 #: src/components/forms/QuestionForm/index.tsx:120
 msgid "A Radio option has multiple options but only one can be selected."
 msgstr "Prepínač má viacero možností, ale vybrať možno iba jednu."
+
+#: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:72
+msgid "A recurring event can become a single event when it has exactly one active date and no orders. The date's own prices, product visibility, capacity and label are removed; its time and location are kept."
+msgstr "Opakované podujatie sa môže stať jednorazovým, keď má presne jeden aktívny termín a žiadne objednávky. Vlastné ceny, viditeľnosť produktov, kapacita a označenie termínu sa odstránia; jeho čas a miesto zostanú zachované."
 
 #: src/ee/seating/components/routes/event/Seating/AttachSeatMap.tsx:51
 msgid "A seat map is a reusable venue layout of rows, tables and standing areas. Build one for your venue, then attach it to this event to sell seats."
@@ -970,7 +990,7 @@ msgstr "Pri nastavenom označení tlačidla je potrebná URL adresa"
 msgid "A weekday pattern"
 msgstr "Vzor dňa v týždni"
 
-#: src/utilites/homepageSections.ts:58
+#: src/utilites/homepageSections.ts:60
 msgid "A YouTube or Vimeo video, loaded when someone presses play."
 msgstr "Video z YouTube alebo Vimeo, načíta sa po stlačení prehrávania."
 
@@ -986,14 +1006,14 @@ msgstr "Opustiť tento predaj? Platba kartou čakajúca na čítačke sa zruší
 msgid "Abandoned"
 msgstr "Opustené"
 
-#: src/components/layouts/EventHomepage/index.tsx:273
-#: src/components/layouts/OrganizerHomepage/index.tsx:292
+#: src/components/layouts/EventHomepage/index.tsx:205
+#: src/components/layouts/OrganizerHomepage/index.tsx:210
 #: src/components/widget/WidgetSections/index.tsx:90
 #: src/utilites/homepageSections.ts:21
 msgid "About"
 msgstr "O udalosti"
 
-#: src/components/layouts/EventHomepage/Lineup/LineupGrid.tsx:45
+#: src/components/layouts/EventHomepage/Lineup/LineupGrid.tsx:46
 msgid "About {name}"
 msgstr "O {name}"
 
@@ -1241,7 +1261,7 @@ msgstr "Aktivita"
 msgid "Add"
 msgstr "Pridať"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:522
+#: src/components/routes/product-widget/SelectProducts/index.tsx:523
 msgid "Add {0} first"
 msgstr "Najprv pridajte {0}"
 
@@ -1266,7 +1286,7 @@ msgid "Add a date"
 msgstr "Pridať termín"
 
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:34
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:67
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:68
 msgid "Add a description"
 msgstr "Pridať popis"
 
@@ -1343,7 +1363,7 @@ msgstr "Pridajte poznámky k objednávke. Tieto nebudú viditeľné pre zákazn�
 msgid "Add any notes about the order..."
 msgstr "Pridajte poznámky k objednávke..."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:79
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:80
 msgid "Add at least one question below."
 msgstr "Nižšie pridajte aspoň jednu otázku."
 
@@ -1457,7 +1477,7 @@ msgstr "Pridať produkt"
 msgid "Add Product to Category"
 msgstr "Pridať produkt do kategórie"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:172
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:177
 msgid "Add question"
 msgstr "Pridať otázku"
 
@@ -1471,8 +1491,8 @@ msgstr "Pridať otázku"
 msgid "Add reader"
 msgstr "Pridať čítačku"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:216
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:223
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:220
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:227
 msgid "Add section"
 msgstr "Pridať sekciu"
 
@@ -1480,7 +1500,7 @@ msgstr "Pridať sekciu"
 msgid "Add slot"
 msgstr "Pridať slot"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:77
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:78
 msgid "Add some text below."
 msgstr "Nižšie pridajte nejaký text."
 
@@ -1551,8 +1571,8 @@ msgstr "Pridať do kalendára"
 
 #: src/components/common/AddEventToCalendarButton/index.tsx:15
 #: src/components/common/AddToCalendarCTA/index.tsx:25
-#: src/components/layouts/EventHomepage/index.tsx:614
-#: src/components/layouts/EventHomepage/index.tsx:615
+#: src/components/layouts/EventHomepage/EventIntro.tsx:72
+#: src/components/layouts/EventHomepage/EventIntro.tsx:72
 msgid "Add to Calendar"
 msgstr "Pridať do kalendára"
 
@@ -1594,7 +1614,7 @@ msgid "Add-on products"
 msgstr "Doplnkové produkty"
 
 #: src/components/forms/ProductForm/index.tsx:542
-#: src/components/routes/product-widget/SelectProducts/index.tsx:519
+#: src/components/routes/product-widget/SelectProducts/index.tsx:520
 msgid "Add-ons"
 msgstr "Doplnky"
 
@@ -1602,7 +1622,7 @@ msgstr "Doplnky"
 msgid "Added"
 msgstr "Pridané"
 
-#: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:82
+#: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:80
 msgid "Added at checkout"
 msgstr "Pridané pri platbe"
 
@@ -1895,7 +1915,7 @@ msgstr "Všetky roly"
 msgid "All sign-in methods"
 msgstr "Všetky spôsoby prihlásenia"
 
-#: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:135
+#: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:136
 msgid "All stages"
 msgstr "Všetky pódiá"
 
@@ -2029,13 +2049,17 @@ msgstr "Vždy v predaji"
 msgid "Always shown"
 msgstr "Vždy zobrazené"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:92
-msgid "Always shown. Move it to change where tickets appear on the page."
-msgstr "Vždy zobrazená. Presuňte ju, aby ste zmenili, kde sa vstupenky na stránke zobrazia."
-
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:81
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:82
 msgid "Always shown. Move it to change where your events list appears."
 msgstr "Vždy zobrazené. Presuňte ho, ak chcete zmeniť, kde sa zobrazí zoznam vašich udalostí."
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:97
+msgid "Always shown. Move it to change where your tickets appear."
+msgstr "Vždy zobrazená. Presuňte ju, ak chcete zmeniť, kde sa zobrazia vaše vstupenky."
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:96
+msgid "Always shown. On large screens tickets sit beside your page content; move it to change where they appear on phones and tablets."
+msgstr "Vždy zobrazená. Na veľkých obrazovkách sú vstupenky vedľa obsahu stránky; presuňte ju, aby ste zmenili, kde sa zobrazia na telefónoch a tabletoch."
 
 #: src/components/common/DateTimeField/index.tsx:87
 #: src/components/modals/CreateEventModal/DateTimeChip.tsx:96
@@ -2048,7 +2072,7 @@ msgid "Amazing, Event, Keywords..."
 msgstr "Úžasné, Udalosť, Kľúčové slová..."
 
 #: src/components/common/OrdersTable/index.tsx:280
-#: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:215
+#: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:213
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:69
 msgid "Amount"
 msgstr "Suma"
@@ -2105,7 +2129,7 @@ msgstr "Voliteľná správa na zobrazenie na zvýraznenom produkte, napr. \"Rýc
 msgid "An organizer gives access to all of its events, including new ones."
 msgstr "Organizátor poskytuje prístup ku všetkým svojim podujatiam vrátane nových."
 
-#: src/components/forms/StripeCheckoutForm/index.tsx:71
+#: src/components/forms/StripeCheckoutForm/index.tsx:72
 msgid "An unexpected error occurred."
 msgstr "Nastala neočakávaná chyba."
 
@@ -2150,11 +2174,11 @@ msgstr "Oznámenia"
 msgid "Anonymize"
 msgstr "Anonymizovať"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:194
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:199
 msgid "Answer"
 msgstr "Odpoveď"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:197
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:202
 msgid "Answer {number}"
 msgstr "Odpoveď {number}"
 
@@ -2246,11 +2270,11 @@ msgstr "Vystupuje na"
 msgid "Application (client) ID"
 msgstr "Application (client) ID"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1199
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1207
 msgid "applied"
 msgstr "použité"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1198
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1206
 msgid "applied — {0} off your order"
 msgstr "použitý — zľava {0} na vašu objednávku"
 
@@ -2295,7 +2319,7 @@ msgid "Applies to sessions started through {providerName}. People then sign in a
 msgstr "Platí pre relácie začaté cez {providerName}. Ľudia sa potom prihlásia znova."
 
 #: src/components/common/FilterModal/index.tsx:284
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1230
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1238
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:41
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:91
 msgid "Apply"
@@ -2653,7 +2677,7 @@ msgstr "Priradiť mapu sedadiel"
 msgid "Attempts"
 msgstr "Pokusy"
 
-#: src/components/routes/organizer/Reports/index.tsx:38
+#: src/components/routes/organizer/Reports/index.tsx:40
 msgid "Attendance and check-in rates across all events"
 msgstr "Miera účasti a odbavenia naprieč všetkými udalosťami"
 
@@ -2848,7 +2872,7 @@ msgstr "Dostupné"
 msgid "Available once payment completes"
 msgstr "K dispozícii po dokončení platby"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:322
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:303
 msgid "Available times on {dayName}"
 msgstr "Dostupné časy — {dayName}"
 
@@ -2922,7 +2946,7 @@ msgstr "Späť"
 msgid "Back to Accounts"
 msgstr "Späť na účty"
 
-#: src/components/forms/StripeCheckoutForm/index.tsx:144
+#: src/components/forms/StripeCheckoutForm/index.tsx:145
 #: src/components/routes/product-widget/CollectInformation/index.tsx:361
 #: src/components/routes/product-widget/CollectInformation/index.tsx:391
 #: src/components/routes/product-widget/CollectInformation/index.tsx:420
@@ -3042,7 +3066,7 @@ msgid "Bar"
 msgstr "Bar"
 
 #: src/components/routes/event/OccurrencesTab/PriceOverrideForm/index.tsx:306
-#: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:88
+#: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:86
 msgid "Base price"
 msgstr "Základná cena"
 
@@ -3286,7 +3310,7 @@ msgstr "Popis tlačidla"
 msgid "Button text"
 msgstr "Text tlačidla"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:201
+#: src/components/routes/event/HomepageDesigner/index.tsx:216
 msgid "Button Text"
 msgstr "Text tlačidla"
 
@@ -3420,7 +3444,7 @@ msgstr "Nemôžete použiť overovaciu aplikáciu ani záložné kódy?"
 
 #: src/components/common/CheckIn/CheckInOptionsModal.tsx:57
 #: src/components/common/ConfirmIdentity/ConfirmIdentityModal.tsx:58
-#: src/components/common/ContactOrganizerModal/index.tsx:104
+#: src/components/common/ContactOrganizerModal/index.tsx:107
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:132
 #: src/components/common/LocationPicker/index.tsx:352
 #: src/components/common/PromoCodeTable/index.tsx:42
@@ -3491,8 +3515,8 @@ msgstr "Nemôžete použiť overovaciu aplikáciu ani záložné kódy?"
 #: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:213
 #: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:180
 #: src/hooks/useAttendeeActions.tsx:116
-#: src/utilites/confirmationDialog.tsx:18
-#: src/utilites/confirmationDialog.tsx:54
+#: src/utilites/confirmationDialog.tsx:20
+#: src/utilites/confirmationDialog.tsx:57
 msgid "Cancel"
 msgstr "Zrušiť"
 
@@ -3764,6 +3788,28 @@ msgstr "Zmeniť sedadlá"
 msgid "Change the attendee limit"
 msgstr "Zmeniť limit účastníkov"
 
+#: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:37
+msgid "Change this event to a recurring event?"
+msgstr "Zmeniť toto podujatie na opakované podujatie?"
+
+#: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:36
+msgid "Change this event to a single event?"
+msgstr "Zmeniť toto podujatie na jednorazové podujatie?"
+
+#: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:73
+msgid "Change to a recurring event to sell tickets for several dates. You'll manage dates from the Occurrence Schedule. Capacity assignments don't apply to recurring events."
+msgstr "Zmeňte ho na opakované podujatie, ak chcete predávať vstupenky na viacero termínov. Termíny budete spravovať v Rozvrhu termínov. Priradenia kapacity sa na opakované podujatia nevzťahujú."
+
+#: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:53
+#: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:89
+msgid "Change to recurring event"
+msgstr "Zmeniť na opakované podujatie"
+
+#: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:53
+#: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:89
+msgid "Change to single event"
+msgstr "Zmeniť na jednorazové podujatie"
+
 #: src/components/modals/OfferWaitlistModal/index.tsx:102
 msgid "Change waitlist settings"
 msgstr "Zmeniť nastavenia zoznamu čakateľov"
@@ -3842,8 +3888,8 @@ msgstr "Skontrolujte kľúč"
 msgid "Check out"
 msgstr "Zrušiť príchod"
 
-#: src/components/layouts/EventHomepage/index.tsx:601
-#: src/components/layouts/EventHomepage/index.tsx:602
+#: src/components/layouts/EventHomepage/EventIntro.tsx:61
+#: src/components/layouts/EventHomepage/EventIntro.tsx:62
 msgid "Check out this event: {0}"
 msgstr "Pozrite si toto podujatie: {0}"
 
@@ -3866,7 +3912,7 @@ msgstr "Skontrolujte svoj e-mail"
 msgid "Check your event page"
 msgstr "Skontrolujte stránku udalosti"
 
-#: src/components/routes/auth/Login/index.tsx:215
+#: src/components/routes/auth/Login/index.tsx:220
 #: src/components/routes/my-tickets/index.tsx:191
 msgid "Check your inbox! If tickets are associated with this email, you'll receive a link to view them."
 msgstr "Skontrolujte doručenú poštu! Ak sú s týmto e-mailom spojené lístky, dostanete odkaz na ich zobrazenie."
@@ -3966,7 +4012,7 @@ msgid "Check-In Status"
 msgstr "Stav odbavenia"
 
 #: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:58
-#: src/components/routes/organizer/Reports/index.tsx:37
+#: src/components/routes/organizer/Reports/index.tsx:39
 msgid "Check-in Summary"
 msgstr "Súhrn odbavení"
 
@@ -4019,7 +4065,7 @@ msgstr "Kontrolujú sa vaše uložené profily…"
 msgid "Checking…"
 msgstr "Overuje sa…"
 
-#: src/components/routes/event/Settings/index.tsx:62
+#: src/components/routes/event/Settings/index.tsx:70
 msgid "Checkout"
 msgstr "Pokladňa"
 
@@ -4068,13 +4114,13 @@ msgstr "Vyberte 1 sedadlo"
 msgid "Choose a configuration"
 msgstr "Vyberte konfiguráciu"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:666
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:644
 #: src/ee/box-office/components/layouts/BoxOffice/OccurrenceSwitchSheet.tsx:48
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:170
 msgid "Choose a date"
 msgstr "Vyberte dátum"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1142
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1150
 msgid "Choose a date to see the seats"
 msgstr "Vyberte dátum, aby ste videli miesta"
 
@@ -4111,7 +4157,7 @@ msgstr "Vyberte miesto na pláne a pridajte ho do objednávky"
 msgid "Choose a spreadsheet to import"
 msgstr "Vyberte tabuľku na import"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:666
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:644
 msgid "Choose a time"
 msgstr "Vyberte čas"
 
@@ -4192,6 +4238,10 @@ msgstr "Vyberte lístky"
 #: src/components/modals/CreateEventModal/index.tsx:122
 msgid "Choose when your event starts"
 msgstr "Vyberte, kedy sa vaše podujatie začína"
+
+#: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:65
+msgid "Choose whether this event happens once or on several dates"
+msgstr "Vyberte, či sa toto podujatie koná raz alebo vo viacerých termínoch"
 
 #: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:159
 msgid "Choose who must use it"
@@ -4314,7 +4364,7 @@ msgstr "Client ID"
 msgid "Client secret"
 msgstr "Client secret"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1236
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1244
 msgid "close"
 msgstr "zavrieť"
 
@@ -4325,15 +4375,15 @@ msgstr "zavrieť"
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:208
 #: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:56
 #: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:86
-#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:113
+#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:122
 #: src/components/modals/CreateEventModal/index.tsx:288
 #: src/components/modals/JoinWaitlistModal/index.tsx:116
 #: src/components/modals/JoinWaitlistModal/index.tsx:143
 #: src/components/modals/RefundOrderModal/index.tsx:172
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:892
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1237
-#: src/utilites/confirmationDialog.tsx:41
-#: src/utilites/confirmationDialog.tsx:56
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1245
+#: src/utilites/confirmationDialog.tsx:44
+#: src/utilites/confirmationDialog.tsx:59
 #: src/utilites/notifications.tsx:6
 msgid "Close"
 msgstr "Zavrieť"
@@ -4580,7 +4630,7 @@ msgstr "Konfigurácia bola úspešne aktualizovaná"
 msgid "Configurations"
 msgstr "Konfigurácie"
 
-#: src/components/routes/event/Settings/index.tsx:174
+#: src/components/routes/event/Settings/index.tsx:182
 msgid "Configure event details, location, checkout options, and email notifications."
 msgstr "Nakonfigurujte podrobnosti udalosti, miesto, možnosti pokladne a e-mailové notifikácie."
 
@@ -4604,8 +4654,8 @@ msgstr "Nastavte, ktoré produkty sú dostupné pre tento dátum, a voliteľne u
 msgid "Configured Discount"
 msgstr "Nakonfigurovaná zľava"
 
-#: src/utilites/confirmationDialog.tsx:17
-#: src/utilites/confirmationDialog.tsx:53
+#: src/utilites/confirmationDialog.tsx:19
+#: src/utilites/confirmationDialog.tsx:56
 msgid "Confirm"
 msgstr "Potvrdiť"
 
@@ -4783,10 +4833,10 @@ msgid "Consecutive"
 msgstr "Postupne"
 
 #: src/components/common/WaitlistTable/index.tsx:155
-#: src/components/layouts/EventHomepage/index.tsx:446
-#: src/components/layouts/OrganizerHomepage/index.tsx:186
-#: src/components/layouts/OrganizerHomepage/index.tsx:301
-#: src/utilites/homepageSections.ts:33
+#: src/components/layouts/EventHomepage/OrganizerSection.tsx:58
+#: src/components/layouts/OrganizerHomepage/index.tsx:118
+#: src/components/layouts/OrganizerHomepage/index.tsx:219
+#: src/utilites/homepageSections.ts:35
 msgid "Contact"
 msgstr "Kontakt"
 
@@ -4818,17 +4868,17 @@ msgstr "Obsah je povinný"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:146
 #: src/components/common/WidgetEditor/BehaviourPanel.tsx:33
-#: src/components/layouts/EventHomepage/index.tsx:226
+#: src/components/layouts/EventHomepage/index.tsx:145
 #: src/components/layouts/ProductWidget/index.tsx:94
-#: src/components/routes/event/HomepageDesigner/index.tsx:206
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1173
+#: src/components/routes/event/HomepageDesigner/index.tsx:221
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1181
 #: src/components/routes/settings/Security/SignInMethods.tsx:251
 #: src/ee/seating/components/SeatPicker/Basket.tsx:200
 #: src/ee/sso/components/SsoDiscovery/index.tsx:73
 msgid "Continue"
 msgstr "Pokračovať"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:204
+#: src/components/routes/event/HomepageDesigner/index.tsx:219
 msgid "Continue Button"
 msgstr "Tlačidlo Pokračovať"
 
@@ -4845,7 +4895,7 @@ msgstr "Pokračovať v nastavení"
 msgid "Continue to checkout"
 msgstr "Pokračovať k platbe"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1335
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1346
 msgid "Continue to Checkout"
 msgstr "Pokračovať na pokladňu"
 
@@ -5244,7 +5294,7 @@ msgstr "Počty zahŕňajú všetky nadchádzajúce dátumy. Každej osobe je pon
 msgid "Cover"
 msgstr "Obal"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:162
+#: src/components/routes/event/HomepageDesigner/index.tsx:177
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:150
 msgid "Cover Image"
 msgstr "Obrázok obalu"
@@ -5253,7 +5303,7 @@ msgstr "Obrázok obalu"
 msgid "Cover image added"
 msgstr "Titulný obrázok pridaný"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:176
+#: src/components/routes/event/HomepageDesigner/index.tsx:191
 msgid "Cover image will be displayed at the top of your event page"
 msgstr "Obrázok obalu sa zobrazí v hornej časti stránky udalosti"
 
@@ -5709,11 +5759,11 @@ msgid "Customize your event page"
 msgstr "Prispôsobte stránku svojej udalosti"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:63
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:33
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:34
 msgid "Daily"
 msgstr "Denne"
 
-#: src/components/routes/organizer/Reports/index.tsx:20
+#: src/components/routes/organizer/Reports/index.tsx:22
 msgid "Daily revenue, taxes, fees, and refunds across all events"
 msgstr "Denné príjmy, dane, poplatky a vrátenia naprieč všetkými udalosťami"
 
@@ -5754,7 +5804,7 @@ msgstr "Nebezpečná zóna"
 #: src/components/common/DangerZone/index.tsx:30
 #: src/components/common/EntityActions/index.tsx:32
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:573
-#: src/components/routes/event/Settings/index.tsx:104
+#: src/components/routes/event/Settings/index.tsx:112
 #: src/components/routes/organizer/Settings/index.tsx:81
 msgid "Danger Zone"
 msgstr "Nebezpečná zóna"
@@ -5894,7 +5944,7 @@ msgstr "Deň/Mesiac"
 msgid "days"
 msgstr "dni"
 
-#: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:112
+#: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:113
 #: src/components/routes/event/Lineup/ScheduleBuilder/index.tsx:100
 msgid "Days"
 msgstr "Dni"
@@ -6256,7 +6306,7 @@ msgstr "Počítač"
 #: src/components/routes/event/OccurrencesTab/BookingSummary/index.tsx:103
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:417
 #: src/components/routes/product-widget/CollectInformation/index.tsx:435
-#: src/components/routes/product-widget/SelectProducts/index.tsx:577
+#: src/components/routes/product-widget/SelectProducts/index.tsx:578
 msgid "Details"
 msgstr "Podrobnosti"
 
@@ -6293,7 +6343,7 @@ msgstr "Nedostali ste kód?"
 msgid "Different location"
 msgstr "Iné miesto"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:83
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:84
 msgid "Directly below Events, it's a Past tab on the events list. Anywhere else, it shows your most recent past events."
 msgstr "Priamo pod Udalosťami je to karta Minulé v zozname udalostí. Inde zobrazuje vaše najnovšie minulé udalosti."
 
@@ -6384,7 +6434,7 @@ msgstr "Zavrieť oznámenie"
 msgid "Dismiss setup checklist"
 msgstr "Skryť kontrolný zoznam nastavenia"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1352
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1363
 msgid "Dismiss this message"
 msgstr "Zamietnuť túto správu"
 
@@ -6425,7 +6475,7 @@ msgstr "Doména je overená"
 msgid "Don't forget!"
 msgstr "Nezabudnite!"
 
-#: src/components/routes/auth/Login/index.tsx:127
+#: src/components/routes/auth/Login/index.tsx:132
 msgid "Don't have an account? <0>Sign up</0>"
 msgstr "Nemáte účet? <0>Zaregistrujte sa</0>"
 
@@ -6541,16 +6591,16 @@ msgstr "Potiahnutím úchytu zmeníte poradie. Presunutím mena do časového ro
 msgid "Drag to draw a stage. Change it to a bar, dance floor, entrance, pillar or wall on the right."
 msgstr "Potiahnutím nakreslite pódium. Zmeňte ho na bar, tanečný parket, vchod, stĺp alebo stenu vpravo."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:289
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:293
 #: src/components/routes/event/Lineup/PeopleRail.tsx:140
 msgid "Drag to reorder {label}"
 msgstr "Presunutím zmeníte poradie: {label}"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:178
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:181
 msgid "Drag to reorder. Hidden sections stay saved but don't show on your organizer page."
 msgstr "Ťahaním zmeníte poradie. Skryté sekcie zostanú uložené, ale nezobrazia sa na vašej stránke organizátora."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:177
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:180
 msgid "Drag to reorder. Sections marked Empty appear on your event page once they have content."
 msgstr "Presunutím zmeníte poradie. Sekcie označené ako Prázdne sa zobrazia na stránke vašej udalosti, keď budú mať obsah."
 
@@ -6648,7 +6698,7 @@ msgstr "napr. 180 (3 hodiny)"
 msgid "e.g. Founder at Acme, or Berlin techno"
 msgstr "napr. Zakladateľ v Acme alebo berlínske techno"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:147
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:152
 msgid "e.g. Is there parking?"
 msgstr "napr. Je tam parkovanie?"
 
@@ -6842,7 +6892,7 @@ msgstr "Upraviť podrobnosti"
 msgid "Edit fee"
 msgstr "Upraviť poplatok"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:340
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:344
 msgid "Edit in Tickets & Products"
 msgstr "Upraviť v časti Lístky a produkty"
 
@@ -6850,11 +6900,11 @@ msgstr "Upraviť v časti Lístky a produkty"
 msgid "Edit individual seats"
 msgstr "Upraviť jednotlivé sedadlá"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:71
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:72
 msgid "Edit it in Event Settings"
 msgstr "Upravte to v Nastaveniach udalosti"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:75
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:76
 msgid "Edit it in Settings"
 msgstr "Upraviť v Nastaveniach"
 
@@ -6967,7 +7017,7 @@ msgstr "Oprávnené zoznamy odbavení"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:149
 #: src/components/routes/admin/EmailDelivery/index.tsx:95
 #: src/components/routes/auth/ForgotPassword/index.tsx:69
-#: src/components/routes/auth/Login/index.tsx:171
+#: src/components/routes/auth/Login/index.tsx:176
 #: src/components/routes/auth/Register/index.tsx:153
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:99
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:70
@@ -6987,7 +7037,7 @@ msgstr "Nastavenia e-mailu a notifikácií"
 msgid "Email & scheduled messages"
 msgstr "E-maily a naplánované správy"
 
-#: src/components/routes/event/Settings/index.tsx:80
+#: src/components/routes/event/Settings/index.tsx:88
 msgid "Email & Templates"
 msgstr "E-mail a šablóny"
 
@@ -7123,7 +7173,7 @@ msgid "Emoji is required for modals"
 msgstr "Pre modálne okná je potrebné emoji"
 
 #: src/components/common/WidgetEditor/SectionsPicker.tsx:77
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:299
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:303
 msgid "Empty"
 msgstr "Prázdne"
 
@@ -7237,7 +7287,7 @@ msgstr "Angličtina"
 msgid "Enter a capacity value or choose unlimited."
 msgstr "Zadajte kapacitu alebo zvoľte neobmedzené."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:373
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:378
 msgid "Enter a full link starting with https://"
 msgstr "Zadajte úplný odkaz začínajúci https://"
 
@@ -7352,8 +7402,8 @@ msgstr "Zadajte URL vydavateľa začínajúcu na https://."
 msgid "Enter unique affiliate code"
 msgstr "Zadajte jedinečný partnerský kód"
 
-#: src/components/common/ContactOrganizerModal/index.tsx:80
-#: src/components/routes/auth/Login/index.tsx:232
+#: src/components/common/ContactOrganizerModal/index.tsx:83
+#: src/components/routes/auth/Login/index.tsx:237
 #: src/components/routes/my-tickets/index.tsx:209
 msgid "Enter your email"
 msgstr "Zadajte svoj e-mail"
@@ -7370,7 +7420,7 @@ msgstr "Zadajte svoje krstné meno"
 msgid "Enter your Google Workspace domain, like example.com."
 msgstr "Zadajte svoju doménu Google Workspace, napríklad example.com."
 
-#: src/components/common/ContactOrganizerModal/index.tsx:74
+#: src/components/common/ContactOrganizerModal/index.tsx:77
 msgid "Enter your name"
 msgstr "Zadajte svoje meno"
 
@@ -7490,6 +7540,14 @@ msgstr "Udalosť archivovaná"
 msgid "Event archived successfully"
 msgstr "Udalosť bola úspešne archivovaná"
 
+#: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:43
+msgid "Event changed to a recurring event"
+msgstr "Podujatie bolo zmenené na opakované"
+
+#: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:42
+msgid "Event changed to a single event"
+msgstr "Podujatie bolo zmenené na jednorazové"
+
 #: src/components/routes/admin/SpamEvents/index.tsx:94
 msgid "Event confirmed as spam"
 msgstr "Podujatie bolo potvrdené ako spam"
@@ -7543,7 +7601,7 @@ msgstr "Udalosť bola odstránená a odstránenie účtu bolo zaradené do front
 msgid "Event deleted successfully"
 msgstr "Udalosť bola úspešne odstránená"
 
-#: src/components/routes/event/Settings/index.tsx:50
+#: src/components/routes/event/Settings/index.tsx:52
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:72
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:641
 msgid "Event Details"
@@ -7592,7 +7650,7 @@ msgstr "Udalosť nie je zverejnená"
 msgid "Event Page"
 msgstr "Stránka udalosti"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:141
+#: src/components/routes/event/HomepageDesigner/index.tsx:143
 msgid "Event Preview"
 msgstr "Ukážka podujatia"
 
@@ -7601,7 +7659,7 @@ msgid "Event restored successfully"
 msgstr "Udalosť bola úspešne obnovená"
 
 #: src/components/layouts/Event/index.tsx:134
-#: src/components/routes/event/Settings/index.tsx:175
+#: src/components/routes/event/Settings/index.tsx:183
 msgid "Event Settings"
 msgstr "Nastavenia udalosti"
 
@@ -7638,6 +7696,11 @@ msgstr "Udalosť je príliš nová"
 msgid "Event totals"
 msgstr "Súhrn podujatia"
 
+#: src/components/routes/event/Settings/index.tsx:58
+#: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:64
+msgid "Event Type"
+msgstr "Typ podujatia"
+
 #: src/components/common/OrganizerWebhookTable/index.tsx:243
 #: src/components/common/WebhookTable/index.tsx:243
 #: src/components/forms/WebhookForm/index.tsx:149
@@ -7651,7 +7714,7 @@ msgstr "Udalosť aktualizovaná"
 #: src/components/common/AdminAccountsTable/index.tsx:82
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:127
 #: src/components/layouts/Admin/index.tsx:20
-#: src/components/layouts/OrganizerHomepage/index.tsx:218
+#: src/components/layouts/OrganizerHomepage/index.tsx:142
 #: src/components/layouts/OrganizerLayout/index.tsx:118
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:180
 #: src/components/routes/admin/Attribution/index.tsx:195
@@ -7659,16 +7722,16 @@ msgstr "Udalosť aktualizovaná"
 #: src/components/routes/admin/Events/index.tsx:77
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:236
 #: src/components/routes/organizer/Events/index.tsx:46
-#: src/utilites/homepageSections.ts:31
+#: src/utilites/homepageSections.ts:33
 msgid "Events"
 msgstr "Udalosti"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:302
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:306
 msgid "Events are always shown"
 msgstr "Udalosti sa zobrazujú vždy"
 
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:120
-#: src/components/routes/organizer/Reports/index.tsx:25
+#: src/components/routes/organizer/Reports/index.tsx:27
 msgid "Events Performance"
 msgstr "Výkonnosť udalostí"
 
@@ -7680,8 +7743,8 @@ msgstr "Widget udalostí"
 msgid "Every"
 msgstr "Každé"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:38
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:39
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:40
 msgid "Every {0}"
 msgstr "Každý {0}"
 
@@ -7689,24 +7752,24 @@ msgstr "Každý {0}"
 msgid "Every {0} {cadenceUnit}"
 msgstr "Každých {0} {cadenceUnit}"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:33
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:34
 msgid "Every {0} days"
 msgstr "Každých {0} dní"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:42
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:43
 msgid "Every {0} months"
 msgstr "Každých {0} mesiacov"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:36
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:37
 msgid "Every {0} weeks"
 msgstr "Každých {0} týždňov"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:38
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:39
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:40
 msgid "Every {0} weeks on {1}"
 msgstr "Každých {0} týždňov v {1}"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:44
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:45
 msgid "Every {0} years"
 msgstr "Každých {0} rokov"
 
@@ -7778,7 +7841,7 @@ msgstr "Všetko ostatné — ťuknutím upravíte"
 msgid "Everything looks good"
 msgstr "Všetko vyzerá dobre"
 
-#: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:299
+#: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:300
 msgid "Everywhere"
 msgstr "Všade"
 
@@ -7986,6 +8049,10 @@ msgstr "Nepodarilo sa zrušiť správu"
 #: src/components/modals/CancelOrderModal/index.tsx:46
 msgid "Failed to cancel order"
 msgstr "Nepodarilo sa zrušiť objednávku"
+
+#: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:48
+msgid "Failed to change the event type"
+msgstr "Typ podujatia sa nepodarilo zmeniť"
 
 #: src/components/routes/admin/SpamEvents/index.tsx:97
 msgid "Failed to confirm event as spam"
@@ -8280,7 +8347,7 @@ msgstr "Zlyháva od {0}"
 msgid "Family"
 msgstr "Rodina"
 
-#: src/utilites/homepageSections.ts:41
+#: src/utilites/homepageSections.ts:43
 msgid "FAQ"
 msgstr "Časté otázky"
 
@@ -8342,11 +8409,11 @@ msgstr "Vlastný poplatok uložený"
 msgid "Fee updated"
 msgstr "Poplatok aktualizovaný"
 
-#: src/components/common/InlineOrderSummary/index.tsx:168
+#: src/components/common/InlineOrderSummary/index.tsx:164
 #: src/components/common/OrdersTable/index.tsx:291
 #: src/components/forms/ProductForm/index.tsx:497
 #: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:54
-#: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:90
+#: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:88
 #: src/components/routes/settings/TaxesAndFees/index.tsx:126
 msgid "Fees"
 msgstr "Poplatky"
@@ -8590,9 +8657,13 @@ msgstr "Blesk zapnutý"
 msgid "Flickr"
 msgstr "Flickr"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:212
+#: src/components/routes/event/HomepageDesigner/index.tsx:227
 msgid "Floating Button"
 msgstr "Plávajúce tlačidlo"
+
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:18
+msgid "Flyer"
+msgstr "Leták"
 
 #: src/components/common/ThemeFontControl/index.tsx:64
 msgid "Font Family"
@@ -8626,7 +8697,7 @@ msgstr "Pre podujatia na viacerých miestach"
 msgid "For your security, sign in again to confirm it's you."
 msgstr "Z bezpečnostných dôvodov sa znova prihláste a potvrďte, že ste to vy."
 
-#: src/components/routes/auth/Login/index.tsx:180
+#: src/components/routes/auth/Login/index.tsx:185
 msgid "Forgot password?"
 msgstr "Zabudli ste heslo?"
 
@@ -8654,8 +8725,8 @@ msgstr "Foyer"
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:160
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:170
 #: src/components/forms/ProductForm/index.tsx:296
-#: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:159
-#: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:231
+#: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:157
+#: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:229
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:37
 #: src/ee/box-office/components/layouts/BoxOffice/ProductTile.tsx:54
 #: src/ee/box-office/utilites/boxOfficeTender.ts:15
@@ -8683,7 +8754,7 @@ msgstr "Pi"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:50
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:46
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:28
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:29
 msgid "Friday"
 msgstr "Piatok"
 
@@ -8691,7 +8762,7 @@ msgstr "Piatok"
 msgid "From"
 msgstr "Od"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1013
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1031
 msgid "From {0}"
 msgstr "Od {0}"
 
@@ -8824,13 +8895,11 @@ msgstr "Získať licenciu"
 msgid "Get an Enterprise licence key."
 msgstr "Získajte licenčný kľúč Enterprise."
 
+#: src/components/layouts/EventHomepage/EventIntro.tsx:134
+#: src/components/layouts/EventHomepage/LocationSection.tsx:23
 #: src/components/widget/WidgetSections/index.tsx:117
 msgid "Get directions"
 msgstr "Navigovať"
-
-#: src/components/layouts/EventHomepage/index.tsx:307
-msgid "Get Directions"
-msgstr "Získať trasu"
 
 #: src/components/layouts/OrganizerLayout/index.tsx:95
 msgid "Get Paid"
@@ -8852,8 +8921,8 @@ msgstr "Začať"
 msgid "Get tickets"
 msgstr "Získať lístky"
 
-#: src/components/layouts/EventHomepage/index.tsx:225
-#: src/components/routes/event/HomepageDesigner/index.tsx:214
+#: src/components/layouts/EventHomepage/index.tsx:144
+#: src/components/routes/event/HomepageDesigner/index.tsx:229
 msgid "Get Tickets"
 msgstr "Získať lístky"
 
@@ -9013,7 +9082,8 @@ msgstr "Správa hostí"
 msgid "Guests"
 msgstr "Hostia"
 
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:81
+#: src/components/layouts/EventHomepage/index.tsx:134
+#: src/components/layouts/OrganizerHomepage/EventList/index.tsx:86
 #: src/components/routes/event/EventDashboard/NextOccurrenceHero/index.tsx:45
 #: src/components/routes/event/EventDashboard/NextOccurrenceHero/index.tsx:159
 msgid "Happening now"
@@ -9031,7 +9101,7 @@ msgstr "Trvalé odrazy"
 msgid "Hard delete"
 msgstr "Trvalé vymazanie"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1186
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1194
 msgid "Have a promo code?"
 msgstr "Máte promo kód?"
 
@@ -9039,7 +9109,7 @@ msgstr "Máte promo kód?"
 msgid "Head"
 msgstr "Čestný stôl"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:347
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:351
 msgid "Heading"
 msgstr "Nadpis"
 
@@ -9112,7 +9182,7 @@ msgstr "Hi.Events Cloud"
 msgid "Hi.Events Fee"
 msgstr "Poplatok Hi.Events"
 
-#: src/components/routes/organizer/Reports/index.tsx:44
+#: src/components/routes/organizer/Reports/index.tsx:46
 msgid "Hi.Events platform fees and VAT breakdown by transaction"
 msgstr "Poplatky platformy Hi.Events a rozklad DPH podľa transakcií"
 
@@ -9135,7 +9205,7 @@ msgstr "Skryté"
 msgid "Hidden — sales ended {end}."
 msgstr "Skryté — predaj skončil {end}."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:86
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:87
 msgid "Hidden automatically when empty."
 msgstr "Automaticky skrytá, ak je prázdna."
 
@@ -9174,8 +9244,8 @@ msgid "Hidden questions are only visible to the event organizer and not to the c
 msgstr "Skryté otázky sú viditeľné iba pre organizátora udalosti, nie pre zákazníka."
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:554
-#: src/components/routes/product-widget/SelectProducts/index.tsx:896
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1128
+#: src/components/routes/product-widget/SelectProducts/index.tsx:897
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1136
 msgid "Hide"
 msgstr "Skryť"
 
@@ -9183,7 +9253,7 @@ msgstr "Skryť"
 msgid "Hide \"Have a promo code?\""
 msgstr "Skryť „Máte promo kód?“"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:308
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:312
 msgid "Hide {label}"
 msgstr "Skryť {label}"
 
@@ -9199,7 +9269,7 @@ msgstr "Skryť všetky ceny"
 msgid "Hide Answers"
 msgstr "Skryť odpovede"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:296
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:277
 msgid "Hide calendar"
 msgstr "Skryť kalendár"
 
@@ -9236,7 +9306,7 @@ msgstr "Skryť produkt, pokiaľ používateľ nemá platný promo kód"
 msgid "Hide product when sold out"
 msgstr "Skryť produkt po vypredaní"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:302
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:306
 msgid "Hide section"
 msgstr "Skryť sekciu"
 
@@ -9305,7 +9375,7 @@ msgstr "Pozdržať {0} sedadiel"
 msgid "Hold back {0} seats on {dateCount} dates"
 msgstr "Pozdržať {0} sedadiel v {dateCount} dátumoch"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:139
+#: src/components/routes/event/HomepageDesigner/index.tsx:141
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:125
 msgid "Homepage Design"
 msgstr "Dizajn domovskej stránky"
@@ -9434,7 +9504,7 @@ msgstr "Pridal(a) som ho, pokračovať"
 msgid "If a key leaks, revoke it straight away and create a new one."
 msgstr "Ak kľúč unikne, okamžite ho odvolajte a vytvorte nový."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1307
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1318
 msgid "If a new tab did not open automatically, please click the button below to continue to checkout."
 msgstr "Ak sa nová karta neotvorila automaticky, kliknite na tlačidlo nižšie a pokračujte na pokladňu."
 
@@ -9490,7 +9560,7 @@ msgstr "Obrázok bol úspešne nahraný"
 msgid "Image URL"
 msgstr "URL obrázka"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:160
+#: src/components/routes/event/HomepageDesigner/index.tsx:175
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:146
 msgid "Images"
 msgstr "Obrázky"
@@ -9546,7 +9616,7 @@ msgstr "za posledných {0} min"
 msgid "In person — set a venue"
 msgstr "Osobne — zadajte miesto"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:331
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:312
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/OrdersTab.tsx:84
 msgid "In progress"
 msgstr "Prebieha"
@@ -9726,6 +9796,10 @@ msgstr "Pozvánka znovu odoslaná!"
 msgid "Invitation revoked!"
 msgstr "Pozvánka odvolaná!"
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:30
+msgid "Invite"
+msgstr "Pozvánka"
+
 #: src/components/modals/InviteUserModal/index.tsx:50
 msgid "Invite a team member"
 msgstr "Pozvať člena tímu"
@@ -9865,7 +9939,7 @@ msgstr "Novák"
 msgid "Join {0}"
 msgstr "Pripojiť sa k {0}"
 
-#: src/components/layouts/EventHomepage/index.tsx:663
+#: src/components/layouts/EventHomepage/EventIntro.tsx:124
 msgid "Join from anywhere"
 msgstr "Pripojte sa odkiaľkoľvek"
 
@@ -9890,7 +9964,7 @@ msgstr "Júl"
 msgid "June"
 msgstr "Jún"
 
-#: src/components/routes/auth/Login/index.tsx:203
+#: src/components/routes/auth/Login/index.tsx:208
 msgid "Just looking for your tickets?"
 msgstr "Hľadáte len svoje lístky?"
 
@@ -10130,7 +10204,8 @@ msgid "Latest check-ins"
 msgstr "Najnovšie check-iny"
 
 #: src/components/common/WidgetEditor/ContentFields.tsx:163
-#: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:100
+#: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:101
+#: src/components/routes/event/HomepageDesigner/index.tsx:149
 msgid "Layout"
 msgstr "Rozloženie"
 
@@ -10307,7 +10382,7 @@ msgstr "Line-up"
 msgid "Lineup & Schedule"
 msgstr "Line-up a harmonogram"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:86
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:87
 msgid "Lineup & Schedule page"
 msgstr "stránke Line-up a harmonogram"
 
@@ -10364,7 +10439,7 @@ msgid "Links to: {0}"
 msgstr "Odkazuje na: {0}"
 
 #: src/components/common/WidgetEditor/ContentFields.tsx:165
-#: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:102
+#: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:103
 #: src/components/routes/event/Lineup/index.tsx:225
 #: src/components/routes/event/OccurrencesTab/index.tsx:508
 msgid "List"
@@ -10466,9 +10541,9 @@ msgstr "Načítava obsah z {service}"
 #: src/components/common/LocationPicker/index.tsx:221
 #: src/components/common/LocationPicker/index.tsx:294
 #: src/components/common/WidgetEditor/SectionsPicker.tsx:34
-#: src/components/layouts/EventHomepage/index.tsx:285
+#: src/components/layouts/EventHomepage/index.tsx:215
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:474
-#: src/components/routes/event/Settings/index.tsx:56
+#: src/components/routes/event/Settings/index.tsx:64
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:150
 #: src/components/routes/my-tickets/index.tsx:90
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:350
@@ -10524,7 +10599,7 @@ msgstr "Logo sa zobrazí v hlavičke"
 msgid "Logo will be displayed on the ticket"
 msgstr "Logo sa zobrazí na lístku"
 
-#: src/utilites/homepageSections.ts:60
+#: src/utilites/homepageSections.ts:62
 msgid "Logos of your sponsors and partners, with links."
 msgstr "Logá vašich sponzorov a partnerov s odkazmi."
 
@@ -10639,7 +10714,7 @@ msgstr "Spravovať objednávku"
 msgid "Manage payment and invoicing settings for this event."
 msgstr "Spravovať nastavenia platby a fakturácie pre túto udalosť."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:86
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:87
 msgid "Manage people, stages and times on the"
 msgstr "Ľudí, pódiá a časy spravujte na"
 
@@ -10710,6 +10785,10 @@ msgstr "Označiť ako overené (rozhodnutie správcu)"
 msgid "Marked as spam"
 msgstr "Označené ako spam"
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:12
+msgid "Marquee"
+msgstr "Plagát"
+
 #: src/components/common/WidgetEditor/AppearancePanel.tsx:60
 msgid "Match event page"
 msgstr "Ako stránka udalosti"
@@ -10734,7 +10813,7 @@ msgstr "Max. správ / 24 h"
 msgid "Max Recipients / Message"
 msgstr "Max. príjemcov / správa"
 
-#: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:69
+#: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:67
 msgid "Maximum {cap} per order"
 msgstr "Maximálne {cap} na objednávku"
 
@@ -10779,7 +10858,7 @@ msgid "Members with an email on a verified domain must sign in with {providerNam
 msgstr "Členovia s e-mailom na overenej doméne sa musia prihlasovať cez {providerName}. Ich ostatné relácie sa ukončia."
 
 #: src/components/common/AttendeeTable/index.tsx:164
-#: src/components/common/ContactOrganizerModal/index.tsx:88
+#: src/components/common/ContactOrganizerModal/index.tsx:91
 #: src/components/common/OrdersTable/index.tsx:167
 #: src/components/modals/SendMessageModal/index.tsx:455
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:63
@@ -10896,7 +10975,7 @@ msgstr "minúty"
 msgid "Minutes"
 msgstr "Minúty"
 
-#: src/components/routes/event/Settings/index.tsx:86
+#: src/components/routes/event/Settings/index.tsx:94
 msgid "Miscellaneous"
 msgstr "Rôzne"
 
@@ -10940,7 +11019,7 @@ msgstr "Po"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:46
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:42
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:27
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:28
 msgid "Monday"
 msgstr "Pondelok"
 
@@ -10961,7 +11040,7 @@ msgid "Month/Day"
 msgstr "Mesiac/Deň"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:65
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:42
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:43
 msgid "Monthly"
 msgstr "Mesačne"
 
@@ -10973,7 +11052,7 @@ msgstr "mesiace"
 msgid "more"
 msgstr "viac"
 
-#: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:260
+#: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:261
 msgid "More"
 msgstr "Viac"
 
@@ -10994,13 +11073,18 @@ msgstr "Ďalšie akcie pre {displayName}"
 msgid "More choices"
 msgstr "Viac možností"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:296
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:277
 msgid "More dates"
 msgstr "Ďalšie dátumy"
 
 #: src/components/widget/WidgetSections/index.tsx:144
+#: src/utilites/homepageSections.ts:31
 msgid "More events"
 msgstr "Ďalšie udalosti"
+
+#: src/components/layouts/EventHomepage/MoreEventsSection.tsx:31
+msgid "More from {0}"
+msgstr "Viac od {0}"
 
 #: src/ee/seating/components/SeatPicker/SeatSheet.tsx:74
 msgid "More places"
@@ -11032,7 +11116,7 @@ msgstr "Presun zrušený. Položka {label} je späť na pôvodnej pozícii."
 
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:203
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:603
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:138
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:143
 msgid "Move down"
 msgstr "Posunúť nadol"
 
@@ -11040,7 +11124,7 @@ msgstr "Posunúť nadol"
 msgid "Move its seats to another band first"
 msgstr "Najprv presuňte jej miesta do inej kategórie"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:257
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:262
 msgid "Move left"
 msgstr "Posunúť doľava"
 
@@ -11054,7 +11138,7 @@ msgstr "Presunúť do oblasti"
 
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:196
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:595
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:135
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:140
 msgid "Move up"
 msgstr "Posunúť nahor"
 
@@ -11062,14 +11146,14 @@ msgstr "Posunúť nahor"
 msgid "Multi line text box"
 msgstr "Viacriadkové textové pole"
 
-#: src/components/layouts/EventHomepage/index.tsx:638
+#: src/components/layouts/EventHomepage/EventIntro.tsx:118
 msgid "Multiple dates until {lastOccurrenceDate}"
 msgstr "Viac termínov do {lastOccurrenceDate}"
 
 #: src/components/common/EventCard/index.tsx:111
-#: src/components/layouts/EventHomepage/index.tsx:197
+#: src/components/layouts/EventHomepage/index.tsx:112
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:29
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:36
+#: src/components/layouts/OrganizerHomepage/EventList/index.tsx:38
 #: src/components/widget/WidgetSections/index.tsx:58
 msgid "Multiple locations"
 msgstr "Viacero miest"
@@ -11305,7 +11389,7 @@ msgstr "Nasledujúci mesiac"
 msgid "Next occurrence"
 msgstr "Nasledujúci termín"
 
-#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:119
+#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:128
 msgid "Next photo"
 msgstr "Ďalšia fotka"
 
@@ -11500,7 +11584,7 @@ msgstr "Žiadne dáta na zobrazenie. Vyberte rozsah dátumov."
 msgid "No date added"
 msgstr "Nepridaný žiadny termín"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:745
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:723
 msgid "No dates available this month. Try navigating to another month."
 msgstr "V tomto mesiaci nie sú dostupné žiadne termíny. Skúste iný mesiac."
 
@@ -11724,7 +11808,7 @@ msgid "No Paid Orders"
 msgstr "Žiadne zaplatené objednávky"
 
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:148
-#: src/components/layouts/OrganizerHomepage/index.tsx:241
+#: src/components/layouts/OrganizerHomepage/index.tsx:170
 msgid "No past events"
 msgstr "Žiadne minulé udalosti"
 
@@ -11906,7 +11990,7 @@ msgid "No upcoming dates"
 msgstr "Žiadne nadchádzajúce termíny"
 
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:148
-#: src/components/layouts/OrganizerHomepage/index.tsx:241
+#: src/components/layouts/OrganizerHomepage/index.tsx:170
 msgid "No upcoming events"
 msgstr "Žiadne nadchádzajúce udalosti"
 
@@ -12085,7 +12169,7 @@ msgstr "Nezdieľa sa"
 msgid "Not shown to buyers."
 msgstr "Nezobrazuje sa kupujúcim."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:325
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:329
 msgid "Not shown yet."
 msgstr "Zatiaľ sa nezobrazuje."
 
@@ -12132,7 +12216,7 @@ msgstr "Poznámky"
 msgid "Nothing has been scheduled yet."
 msgstr "Zatiaľ nič nie je naplánované."
 
-#: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:153
+#: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:154
 msgid "Nothing is scheduled on {filteredSpaceName} this day."
 msgstr "V tento deň nie je na {filteredSpaceName} nič naplánované."
 
@@ -12359,11 +12443,15 @@ msgstr "{day}. {month}"
 msgid "On a product priced at 50.00, this adds {exampleAmount}."
 msgstr "Pri produkte s cenou 50.00 to pridá {exampleAmount}."
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:14
+msgid "On large screens tickets stay beside your content as people scroll. Suits conferences and long lineups."
+msgstr "Na veľkých obrazovkách zostávajú vstupenky pri posúvaní vedľa obsahu. Vhodné pre konferencie a rozsiahle line-upy."
+
 #: src/components/routes/organizer/People/index.tsx:70
 msgid "On live events"
 msgstr "Na zverejnených udalostiach"
 
-#: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:232
+#: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:233
 msgid "On now"
 msgstr "Práve prebieha"
 
@@ -12413,6 +12501,10 @@ msgstr "Po vytvorení udalosti ju uvidíte tu."
 msgid "Once you start collecting data, you'll see it here."
 msgstr "Po začatí zberu dát ich uvidíte tu."
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:25
+msgid "One column, top to bottom"
+msgstr "Jeden stĺpec zhora nadol"
+
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:97
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:118
 #: src/components/modals/CreateEventModal/index.tsx:225
@@ -12435,11 +12527,10 @@ msgstr "Prebiehajúce"
 
 #: src/components/common/EventCard/index.tsx:114
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:32
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:39
 #: src/components/routes/event/OccurrencesTab/index.tsx:341
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:482
 #: src/components/routes/my-tickets/index.tsx:56
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:412
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:393
 #: src/components/routes/product-widget/Payment/index.tsx:127
 #: src/ee/box-office/components/layouts/BoxOffice/ReaderPicker.tsx:16
 #: src/ee/box-office/components/routes/organizer/Payments/TerminalReaders/index.tsx:37
@@ -12452,12 +12543,12 @@ msgstr "Online — zadajte údaje na pripojenie"
 
 #: src/components/common/EventCard/index.tsx:111
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:29
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:36
+#: src/components/layouts/OrganizerHomepage/EventList/index.tsx:38
 #: src/components/widget/WidgetSections/index.tsx:58
 msgid "Online & in-person"
 msgstr "Online aj osobne"
 
-#: src/components/layouts/EventHomepage/index.tsx:198
+#: src/components/layouts/EventHomepage/index.tsx:112
 msgid "Online & in-person — see schedule"
 msgstr "Online aj osobne — pozrite rozvrh"
 
@@ -12467,8 +12558,8 @@ msgstr "Online aj osobne — pozrite rozvrh"
 msgid "Online event"
 msgstr "Online podujatie"
 
-#: src/components/layouts/EventHomepage/index.tsx:661
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:119
+#: src/components/layouts/EventHomepage/EventIntro.tsx:124
+#: src/components/layouts/OrganizerHomepage/EventList/index.tsx:100
 msgid "Online Event"
 msgstr "Online udalosť"
 
@@ -12480,11 +12571,11 @@ msgstr "Podrobnosti online udalosti"
 msgid "Online ticket sales for events with reserved seating keep working."
 msgstr "Online predaj vstupeniek na podujatia s rezervovanými miestami naďalej funguje."
 
-#: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:69
+#: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:67
 msgid "Only {cap} available"
 msgstr "K dispozícii len {cap}"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:93
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:77
 msgid "Only {capacity} left"
 msgstr "Zostáva už len {capacity}"
 
@@ -12630,7 +12721,7 @@ msgstr "Otvoriť návrhára domovskej stránky"
 msgid "Open occurrence"
 msgstr "Otvoriť termín"
 
-#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:36
+#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:44
 msgid "Open photo {photoNumber}"
 msgstr "Otvoriť fotku {photoNumber}"
 
@@ -12969,7 +13060,7 @@ msgstr "Názov organizácie"
 #: src/components/common/TeamAccessFields/index.tsx:36
 #: src/components/common/TeamAccessFields/index.tsx:96
 #: src/components/common/WidgetEditor/SectionsPicker.tsx:36
-#: src/components/layouts/EventHomepage/index.tsx:356
+#: src/components/layouts/EventHomepage/index.tsx:219
 #: src/components/modals/CreateEventModal/index.tsx:270
 #: src/components/routes/admin/SpamEvents/index.tsx:166
 #: src/components/routes/admin/SpamEvents/index.tsx:327
@@ -13019,7 +13110,7 @@ msgstr "Nastavenia výplat organizátora"
 msgid "Organizer restored successfully"
 msgstr "Organizátor bol úspešne obnovený"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:52
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:53
 msgid "Organizer settings"
 msgstr "Nastavenia organizátora"
 
@@ -13132,7 +13223,11 @@ msgstr "Stránka"
 msgid "Page address"
 msgstr "Adresa stránky"
 
-#: src/components/forms/StripeCheckoutForm/index.tsx:142
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:48
+msgid "Page layout"
+msgstr "Rozloženie stránky"
+
+#: src/components/forms/StripeCheckoutForm/index.tsx:143
 msgid "Page no longer available"
 msgstr "Stránka už nie je dostupná"
 
@@ -13221,7 +13316,7 @@ msgid "Pass to Buyer"
 msgstr "Preniesť na kupujúceho"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:250
-#: src/components/routes/auth/Login/index.tsx:178
+#: src/components/routes/auth/Login/index.tsx:183
 #: src/components/routes/auth/Register/index.tsx:161
 #: src/components/routes/settings/Security/SignInMethods.tsx:93
 #: src/components/routes/settings/Team/index.tsx:204
@@ -13248,7 +13343,7 @@ msgid "Passwords are not the same"
 msgstr "Heslá sa nezhodujú"
 
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:138
-#: src/components/layouts/OrganizerHomepage/index.tsx:231
+#: src/components/layouts/OrganizerHomepage/index.tsx:161
 #: src/components/routes/event/OccurrencesTab/index.tsx:522
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:30
 msgid "Past"
@@ -13259,7 +13354,7 @@ msgid "Past due"
 msgstr "Po splatnosti"
 
 #: src/components/layouts/OrganizerHomepage/OrganizerPastEventsSection.tsx:25
-#: src/utilites/homepageSections.ts:35
+#: src/utilites/homepageSections.ts:37
 msgid "Past events"
 msgstr "Minulé udalosti"
 
@@ -13267,11 +13362,11 @@ msgstr "Minulé udalosti"
 msgid "Paste"
 msgstr "Vložiť"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:219
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:224
 msgid "Paste a YouTube or Vimeo link"
 msgstr "Vložte odkaz na YouTube alebo Vimeo"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:81
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:82
 msgid "Paste a YouTube or Vimeo link below."
 msgstr "Nižšie vložte odkaz na YouTube alebo Vimeo."
 
@@ -13322,7 +13417,7 @@ msgstr "Pozastavené"
 msgid "Pay"
 msgstr "Zaplatiť"
 
-#: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:214
+#: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:212
 msgid "Pay what you want"
 msgstr "Zaplaťte, koľko chcete"
 
@@ -13337,7 +13432,7 @@ msgstr "Obsah požiadavky"
 msgid "Payment"
 msgstr "Platba"
 
-#: src/components/routes/event/Settings/index.tsx:98
+#: src/components/routes/event/Settings/index.tsx:106
 msgid "Payment & Invoicing"
 msgstr "Platba a fakturácia"
 
@@ -13380,7 +13475,7 @@ msgstr "Platba nebola dokončená"
 msgid "Payment provider"
 msgstr "Poskytovateľ platby"
 
-#: src/components/forms/StripeCheckoutForm/index.tsx:130
+#: src/components/forms/StripeCheckoutForm/index.tsx:131
 msgid "Payment received"
 msgstr "Platba prijatá"
 
@@ -13393,7 +13488,7 @@ msgstr "Platba prijatá"
 msgid "Payment Status"
 msgstr "Stav platby"
 
-#: src/components/forms/StripeCheckoutForm/index.tsx:96
+#: src/components/forms/StripeCheckoutForm/index.tsx:97
 msgid "Payment succeeded!"
 msgstr "Platba prebehla úspešne!"
 
@@ -13587,11 +13682,11 @@ msgstr "Fotka {photoNumber}"
 msgid "Photo {position}"
 msgstr "Fotka {position}"
 
-#: src/utilites/homepageSections.ts:39
+#: src/utilites/homepageSections.ts:41
 msgid "Photo gallery"
 msgstr "Galéria fotiek"
 
-#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:94
+#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:103
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:229
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:328
 msgid "Photos"
@@ -13694,9 +13789,9 @@ msgstr "Poplatok platformy"
 msgid "Platform fee of {0} deducted from your payout"
 msgstr "Poplatok platformy {0} odpočítaný z vašej výplaty"
 
-#: src/components/routes/event/Settings/index.tsx:114
+#: src/components/routes/event/Settings/index.tsx:122
 #: src/components/routes/event/Settings/Sections/PlatformFeesSettings/index.tsx:48
-#: src/components/routes/organizer/Reports/index.tsx:43
+#: src/components/routes/organizer/Reports/index.tsx:45
 #: src/components/routes/organizer/Settings/index.tsx:106
 #: src/components/routes/organizer/Settings/Sections/PlatformFeesSettings/index.tsx:42
 msgid "Platform Fees"
@@ -13723,7 +13818,7 @@ msgstr "Pridajte aspoň jednu možnosť"
 msgid "Please check the provided information is correct"
 msgstr "Skontrolujte, či sú zadané informácie správne"
 
-#: src/components/routes/auth/Login/index.tsx:96
+#: src/components/routes/auth/Login/index.tsx:101
 msgid "Please check your email and password and try again"
 msgstr "Skontrolujte e-mail a heslo a skúste znovu"
 
@@ -13739,7 +13834,7 @@ msgstr "Skontrolujte e-mail na potvrdenie e-mailovej adresy"
 msgid "Please check your ticket for the updated time. Your tickets are still valid — no action is needed unless the new times don't work for you. Reply to this email if you have any questions."
 msgstr "Skontrolujte si na lístku nový čas. Vaše lístky zostávajú platné — nemusíte robiť nič, pokiaľ vám nové časy nevyhovujú. Ak máte otázky, odpovedzte na tento e-mail."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1298
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1309
 msgid "Please continue in the new tab"
 msgstr "Pokračujte na novej karte"
 
@@ -13793,7 +13888,7 @@ msgstr "Reštartujte proces pokladne."
 msgid "Please return to the event page to start over."
 msgstr "Vráťte sa na stránku udalosti a začnite odznova."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:756
+#: src/components/routes/product-widget/SelectProducts/index.tsx:757
 msgid "Please select a date and time"
 msgstr "Vyberte dátum a čas"
 
@@ -13805,7 +13900,7 @@ msgstr "Vyberte rozsah dátumov"
 msgid "Please select an image."
 msgstr "Vyberte obrázok."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:784
+#: src/components/routes/product-widget/SelectProducts/index.tsx:785
 msgid "Please select at least one product"
 msgstr "Vyberte aspoň jeden produkt"
 
@@ -13929,7 +14024,7 @@ msgstr "Predchádzajúci deň"
 msgid "Previous month"
 msgstr "Predchádzajúci mesiac"
 
-#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:116
+#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:125
 msgid "Previous photo"
 msgstr "Predchádzajúca fotka"
 
@@ -14024,8 +14119,7 @@ msgid "Printed {0}"
 msgstr "Vytlačené {0}"
 
 #: src/components/common/CookieConsentBanner/index.tsx:82
-#: src/components/layouts/EventHomepage/index.tsx:739
-#: src/components/layouts/OrganizerHomepage/index.tsx:199
+#: src/components/layouts/HomepageFrame/index.tsx:64
 msgid "Privacy Policy"
 msgstr "Zásady ochrany osobných údajov"
 
@@ -14166,7 +14260,7 @@ msgstr "Profily patria organizátorovi. Na ich úpravu potrebujete prístup k or
 msgid "Progress"
 msgstr "Priebeh"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:666
+#: src/components/routes/product-widget/SelectProducts/index.tsx:667
 msgid "Promo {promo_code} code applied"
 msgstr "Promo kód {promo_code} bol uplatnený"
 
@@ -14174,7 +14268,7 @@ msgstr "Promo kód {promo_code} bol uplatnený"
 #: src/components/common/WidgetEditor/ContentFields.tsx:139
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:107
 #: src/components/modals/ManageOrderModal/index.tsx:183
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1225
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1233
 msgid "Promo code"
 msgstr "Promo kód"
 
@@ -14330,8 +14424,8 @@ msgstr "Dostupné množstvo"
 msgid "Quantity this date"
 msgstr "Množstvo v tento dátum"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:134
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:151
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:139
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:156
 msgid "Question {number}"
 msgstr "Otázka {number}"
 
@@ -14361,7 +14455,7 @@ msgstr "Otázky"
 msgid "Questions & Answers"
 msgstr "Otázky a odpovede"
 
-#: src/utilites/homepageSections.ts:56
+#: src/utilites/homepageSections.ts:58
 msgid "Questions and answers people can expand."
 msgstr "Rozbaľovacie otázky a odpovede."
 
@@ -14416,7 +14510,7 @@ msgstr "Obnoviť tento termín? Predaj sa naň znova otvorí."
 msgid "Read and write"
 msgstr "Čítanie a zápis"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:460
+#: src/components/layouts/OrganizerHomepage/index.tsx:323
 #: src/components/widget/WidgetSections/index.tsx:91
 msgid "Read more"
 msgstr "Čítať viac"
@@ -14554,7 +14648,7 @@ msgstr "Obdĺžnikový"
 msgid "Recurring"
 msgstr "Opakujúce sa"
 
-#: src/components/routes/event/Settings/index.tsx:68
+#: src/components/routes/event/Settings/index.tsx:76
 msgid "Recurring Event"
 msgstr "Opakujúce sa podujatie"
 
@@ -14717,7 +14811,7 @@ msgstr "Zostáva"
 msgid "Remaining Uses"
 msgstr "Zostatok použití"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1205
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1213
 msgid "remove"
 msgstr "odstrániť"
 
@@ -14731,7 +14825,7 @@ msgstr "odstrániť"
 #: src/components/routes/event/Lineup/ProfileImagesField.tsx:92
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:140
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:217
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1206
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1214
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:82
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:89
 #: src/ee/seating/components/SeatPicker/Basket.tsx:124
@@ -14824,7 +14918,7 @@ msgstr "Odstrániť prepísanie"
 msgid "Remove overrides for this date"
 msgstr "Odstrániť prepísania pre tento dátum"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:260
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:265
 msgid "Remove photo"
 msgstr "Odstrániť fotku"
 
@@ -14832,7 +14926,7 @@ msgstr "Odstrániť fotku"
 msgid "Remove photo {position}"
 msgstr "Odstrániť fotku {position}"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:141
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:146
 msgid "Remove question"
 msgstr "Odstrániť otázku"
 
@@ -14844,7 +14938,7 @@ msgstr "Odstrániť sedadlo {0}"
 msgid "Remove seat map"
 msgstr "Odstrániť mapu sedadiel"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:366
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:370
 msgid "Remove section"
 msgstr "Odstrániť sekciu"
 
@@ -14852,7 +14946,7 @@ msgstr "Odstrániť sekciu"
 msgid "Remove sold out dates and times from the event page entirely. When disabled, they remain visible and are labelled as sold out."
 msgstr "Úplne odstráni vypredané dátumy a časy zo stránky podujatia. Ak je vypnuté, zostanú viditeľné a budú označené ako vypredané."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:318
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:323
 msgid "Remove sponsor"
 msgstr "Odstrániť sponzora"
 
@@ -14939,7 +15033,7 @@ msgstr "Správa nenájdená"
 #: src/components/layouts/Event/index.tsx:120
 #: src/components/layouts/OrganizerLayout/index.tsx:112
 #: src/components/routes/event/Reports/index.tsx:54
-#: src/components/routes/organizer/Reports/index.tsx:53
+#: src/components/routes/organizer/Reports/index.tsx:55
 msgid "Reports"
 msgstr "Reporty"
 
@@ -15215,7 +15309,7 @@ msgstr "Použite znova prepojenie Stripe od iného organizátora na tomto účte
 msgid "Revenue"
 msgstr "Príjmy"
 
-#: src/components/routes/organizer/Reports/index.tsx:19
+#: src/components/routes/organizer/Reports/index.tsx:21
 #: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:67
 msgid "Revenue Summary"
 msgstr "Súhrn príjmov"
@@ -15424,7 +15518,6 @@ msgstr "Predaj podľa licenčného roka"
 
 #: src/components/common/ProductPriceAvailability/index.tsx:24
 #: src/components/common/ProductPriceAvailability/index.tsx:63
-#: src/components/layouts/EventHomepage/index.tsx:212
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:33
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:54
 msgid "Sales ended"
@@ -15460,7 +15553,7 @@ msgstr "Rozpis predaja, účasti a check-inov podľa termínu"
 msgid "Sales, availability and check-in switch to the date you pick."
 msgstr "Predaj, dostupnosť a check-in sa prepnú na zvolený dátum."
 
-#: src/components/routes/organizer/Reports/index.tsx:26
+#: src/components/routes/organizer/Reports/index.tsx:28
 msgid "Sales, orders, and performance metrics for all events"
 msgstr "Predaje, objednávky a metriky výkonnosti pre všetky udalosti"
 
@@ -15491,7 +15584,7 @@ msgstr "So"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:51
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:47
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:28
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:29
 msgid "Saturday"
 msgstr "Sobota"
 
@@ -16066,17 +16159,18 @@ msgstr "Sekcia"
 msgid "Section name"
 msgstr "Názov sekcie"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:314
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:318
 msgid "Section settings for {label}"
 msgstr "Nastavenia sekcie {label}"
 
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:83
-#: src/components/routes/event/HomepageDesigner/index.tsx:147
+#: src/components/layouts/EventHomepage/SectionNav.tsx:139
+#: src/components/routes/event/HomepageDesigner/index.tsx:161
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:133
 msgid "Sections"
 msgstr "Sekcie"
 
-#: src/components/common/InlineOrderSummary/index.tsx:243
+#: src/components/common/InlineOrderSummary/index.tsx:237
 msgid "Secure Checkout"
 msgstr "Bezpečná pokladňa"
 
@@ -16097,7 +16191,7 @@ msgstr "Zobraziť všetko"
 msgid "See all prices"
 msgstr "Zobraziť všetky ceny"
 
-#: src/components/layouts/EventHomepage/index.tsx:688
+#: src/components/layouts/EventHomepage/EventIntro.tsx:142
 msgid "See schedule"
 msgstr "Pozrieť rozvrh"
 
@@ -16352,7 +16446,7 @@ msgstr "Predáva 1 produkt"
 msgid "Sells every product"
 msgstr "Predáva všetky produkty"
 
-#: src/components/routes/auth/Login/index.tsx:242
+#: src/components/routes/auth/Login/index.tsx:247
 #: src/components/routes/my-tickets/index.tsx:219
 #: src/ee/box-office/components/layouts/BoxOffice/SaleComplete.tsx:152
 msgid "Send"
@@ -16382,7 +16476,7 @@ msgstr "Posielajte ho v hlavičke Authorization v každej požiadavke."
 msgid "Send me a copy"
 msgstr "Poslať mi kópiu"
 
-#: src/components/common/ContactOrganizerModal/index.tsx:112
+#: src/components/common/ContactOrganizerModal/index.tsx:115
 #: src/components/modals/SendMessageModal/index.tsx:552
 msgid "Send Message"
 msgstr "Odoslať správu"
@@ -16470,7 +16564,7 @@ msgstr "Odoslané zákazníkom pri zadaní objednávky"
 msgid "Sent to each attendee with their ticket details"
 msgstr "Odoslané každému účastníkovi s podrobnosťami lístka"
 
-#: src/components/routes/event/Settings/index.tsx:74
+#: src/components/routes/event/Settings/index.tsx:82
 #: src/components/routes/organizer/Settings/index.tsx:63
 msgid "SEO"
 msgstr "SEO"
@@ -16670,7 +16764,10 @@ msgid "Shape"
 msgstr "Tvar"
 
 #: src/components/common/ShareIcon/index.tsx:30
-#: src/components/layouts/EventHomepage/index.tsx:606
+#: src/components/layouts/EventHomepage/EventIntro.tsx:66
+#: src/components/layouts/EventHomepage/EventIntro.tsx:66
+#: src/components/layouts/OrganizerHomepage/index.tsx:332
+#: src/components/layouts/OrganizerHomepage/index.tsx:332
 #: src/components/layouts/OrganizerLayout/index.tsx:269
 #: src/components/modals/ShareModal/index.tsx:37
 #: src/components/modals/ShareModal/index.tsx:165
@@ -16721,7 +16818,7 @@ msgstr "Časy posunuté pre {count} termín(ov)"
 msgid "Show"
 msgstr "Zobraziť"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:308
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:312
 msgid "Show {label}"
 msgstr "Zobraziť {label}"
 
@@ -16757,7 +16854,7 @@ msgstr "Namiesto toho zobraziť iniciály"
 msgid "Show keys"
 msgstr "Zobraziť kľúče"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:460
+#: src/components/layouts/OrganizerHomepage/index.tsx:323
 #: src/components/widget/WidgetSections/index.tsx:91
 msgid "Show less"
 msgstr "Zobraziť menej"
@@ -16774,8 +16871,8 @@ msgstr "Zobraziť zaškrtávacie políčko marketingového súhlasu"
 msgid "Show marketing opt-in checkbox by default"
 msgstr "Predvolene zobraziť zaškrtávacie políčko marketingového súhlasu"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:896
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1128
+#: src/components/routes/product-widget/SelectProducts/index.tsx:897
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1136
 msgid "Show more"
 msgstr "Zobraziť viac"
 
@@ -16811,7 +16908,7 @@ msgstr "Zobrazovať zostávajúcu kapacitu pri termínoch podujatia"
 msgid "Show remaining capacity to buyers"
 msgstr "Zobrazovať zostávajúcu kapacitu kupujúcim"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:302
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:306
 msgid "Show section"
 msgstr "Zobraziť sekciu"
 
@@ -16844,7 +16941,7 @@ msgstr "Zobrazené na verejnej stránke udalosti"
 msgid "Showing the first {0} — the remaining {1} session(s) will still be targeted when the message is sent."
 msgstr "Zobrazujeme prvých {0} — zvyšných {1} termín(ov) bude pri odoslaní správy zahrnutých tiež."
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:205
+#: src/components/routes/event/HomepageDesigner/index.tsx:220
 msgid "Shown below the ticket list"
 msgstr "Zobrazuje sa pod zoznamom vstupeniek"
 
@@ -16852,7 +16949,7 @@ msgstr "Zobrazuje sa pod zoznamom vstupeniek"
 msgid "Shown bouncing at the top of the modal"
 msgstr "Zobrazuje sa poskakujúco v hornej časti modálneho okna"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:213
+#: src/components/routes/event/HomepageDesigner/index.tsx:228
 msgid "Shown on scroll and jumps to the tickets section"
 msgstr "Zobrazí sa pri posúvaní a presunie na sekciu vstupeniek"
 
@@ -16888,7 +16985,7 @@ msgstr "Zobrazuje bežné polia adresy vrátane krajiny"
 msgid "Shows remaining"
 msgstr "Zobrazuje zostávajúce"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:88
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:89
 msgid "Shows the venue and a map. Hidden automatically for online events."
 msgstr "Zobrazuje miesto konania a mapu. Pri online udalostiach sa automaticky skryje."
 
@@ -16896,23 +16993,27 @@ msgstr "Zobrazuje miesto konania a mapu. Pri online udalostiach sa automaticky s
 msgid "Shows tickets"
 msgstr "Zobrazí vstupenky"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:71
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:93
+msgid "Shows up to three of your other upcoming events. Hidden automatically when there are none."
+msgstr "Zobrazuje až tri vaše ďalšie nadchádzajúce udalosti. Automaticky sa skryje, keď žiadne nie sú."
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:72
 msgid "Shows your event description."
 msgstr "Zobrazuje popis vašej udalosti."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:74
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:75
 msgid "Shows your organizer description. Placed above every other section, it appears in your profile card."
 msgstr "Zobrazuje popis organizátora. Ak je nad všetkými ostatnými sekciami, zobrazí sa na vašej profilovej karte."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:90
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:91
 msgid "Shows your organizer profile with a contact button."
 msgstr "Zobrazuje váš profil organizátora s tlačidlom kontaktu."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:79
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:80
 msgid "Shows your social links and a contact button. Placed above every other section, it appears in your profile card."
 msgstr "Zobrazuje vaše sociálne odkazy a tlačidlo kontaktu. Ak je nad všetkými ostatnými sekciami, zobrazia sa na vašej profilovej karte."
 
-#: src/components/routes/auth/Login/index.tsx:190
+#: src/components/routes/auth/Login/index.tsx:195
 #: src/components/routes/auth/Register/index.tsx:103
 #: src/components/routes/sso/Callback/index.tsx:310
 msgid "Sign in"
@@ -16930,7 +17031,7 @@ msgstr "Znova sa prihláste a začnite nastavovať dvojfaktorové overenie."
 msgid "Sign in once to check the connection. It shows what your identity provider shares and doesn't sign you in here."
 msgstr "Prihláste sa raz a skontrolujte pripojenie. Zobrazí, čo váš poskytovateľ identity zdieľa, a neprihlási vás tu."
 
-#: src/components/routes/auth/Login/index.tsx:146
+#: src/components/routes/auth/Login/index.tsx:151
 msgid "Sign in through your organization's identity provider instead of using a password."
 msgstr "Prihláste sa cez poskytovateľa identity vašej organizácie namiesto hesla."
 
@@ -16942,7 +17043,7 @@ msgstr "Prihláste sa radšej cez poskytovateľa identity vašej organizácie."
 msgid "Sign in through your organization's identity provider to join {0}."
 msgstr "Ak sa chcete pripojiť k {0}, prihláste sa cez poskytovateľa identity vašej organizácie."
 
-#: src/components/routes/auth/Login/index.tsx:124
+#: src/components/routes/auth/Login/index.tsx:129
 msgid "Sign in to {0}"
 msgstr "Prihlásiť sa do {0}"
 
@@ -16972,7 +17073,7 @@ msgid "Sign in with password"
 msgstr "Prihlásiť sa heslom"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:172
-#: src/components/routes/auth/Login/index.tsx:149
+#: src/components/routes/auth/Login/index.tsx:154
 #: src/components/routes/auth/Register/index.tsx:115
 #: src/components/routes/sso/Callback/index.tsx:277
 #: src/ee/sso/components/SsoDiscovery/index.tsx:59
@@ -17035,7 +17136,7 @@ msgstr "Možnosti prihlásenia"
 msgid "Sign-in settings"
 msgstr "Nastavenia prihlásenia"
 
-#: src/components/routes/auth/Login/index.tsx:141
+#: src/components/routes/auth/Login/index.tsx:146
 msgid "Sign-in was cancelled. Choose another way to sign in, or try again."
 msgstr "Prihlásenie bolo zrušené. Vyberte iný spôsob prihlásenia alebo to skúste znova."
 
@@ -17059,7 +17160,7 @@ msgstr "Prihlásený, ale e-mail sa nezdieľal"
 msgid "Signed up"
 msgstr "Registrácia"
 
-#: src/components/routes/auth/Login/index.tsx:190
+#: src/components/routes/auth/Login/index.tsx:195
 msgid "Signing in"
 msgstr "Prihlasovanie"
 
@@ -17186,7 +17287,7 @@ msgstr "Predal(a)"
 msgid "Sold by {operatorName}"
 msgstr "Predal(a) {operatorName}"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:650
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:628
 msgid "sold out"
 msgstr "vypredané"
 
@@ -17195,8 +17296,8 @@ msgstr "vypredané"
 #: src/components/common/ProductPriceAvailability/index.tsx:20
 #: src/components/common/ProductPriceAvailability/index.tsx:60
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:57
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:111
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:330
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:92
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:311
 #: src/ee/box-office/components/layouts/BoxOffice/ProductTile.tsx:56
 #: src/ee/seating/components/SeatMapRenderer/index.tsx:200
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:35
@@ -17207,15 +17308,15 @@ msgid "Sold out"
 msgstr "Vypredané"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:128
-#: src/components/layouts/EventHomepage/index.tsx:218
+#: src/components/layouts/EventHomepage/index.tsx:133
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:221
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:22
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:336
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:405
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:317
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:386
 msgid "Sold Out"
 msgstr "Vypredané"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:336
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:317
 msgid "Sold Out, waitlist available"
 msgstr "Vypredané, čakacia listina k dispozícii"
 
@@ -17284,7 +17385,7 @@ msgstr "Niečo sa pokazilo, skúste to znovu alebo kontaktujte podporu, ak probl
 msgid "Something went wrong! Please try again"
 msgstr "Niečo sa pokazilo! Skúste to znovu"
 
-#: src/components/forms/StripeCheckoutForm/index.tsx:105
+#: src/components/forms/StripeCheckoutForm/index.tsx:106
 msgid "Something went wrong."
 msgstr "Niečo sa pokazilo."
 
@@ -17299,10 +17400,10 @@ msgstr "Niečo sa pokazilo. Skúste to neskôr."
 #: src/components/routes/admin/Users/index.tsx:33
 #: src/components/routes/auth/AcceptInvitation/index.tsx:98
 #: src/components/routes/auth/AcceptInvitation/index.tsx:107
-#: src/components/routes/auth/Login/index.tsx:116
+#: src/components/routes/auth/Login/index.tsx:121
 #: src/components/routes/auth/Register/index.tsx:81
 #: src/components/routes/my-tickets/index.tsx:162
-#: src/components/routes/product-widget/SelectProducts/index.tsx:382
+#: src/components/routes/product-widget/SelectProducts/index.tsx:383
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:79
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:123
 #: src/components/routes/settings/ApiKeys/index.tsx:80
@@ -17326,7 +17427,7 @@ msgstr "Niečo sa pokazilo. Skúste to neskôr."
 msgid "Something went wrong. Please try again."
 msgstr "Niečo sa pokazilo. Skúste to znovu."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:798
+#: src/components/routes/product-widget/SelectProducts/index.tsx:799
 msgid "Sorry, this promo code is not recognized"
 msgstr "Ľutujeme, tento promo kód nie je rozpoznaný"
 
@@ -17382,12 +17483,12 @@ msgstr "Rozdeľte check-in podľa dní, zón alebo typov lístkov. Zdieľajte od
 msgid "Split door sales by entrance, date, or ticket type. You'll get a link and a PIN to share with staff — no account needed on their end."
 msgstr "Rozdeľte predaj pri vchode podľa vchodu, dátumu alebo typu lístka. Dostanete odkaz a PIN na zdieľanie s personálom — účet nepotrebujú."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:312
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:317
 msgid "Sponsor name"
 msgstr "Názov sponzora"
 
-#: src/components/layouts/EventHomepage/Sections/SponsorsSection.tsx:21
-#: src/utilites/homepageSections.ts:45
+#: src/components/layouts/EventHomepage/Sections/SponsorsSection.tsx:22
+#: src/utilites/homepageSections.ts:47
 msgid "Sponsors"
 msgstr "Sponzori"
 
@@ -17465,7 +17566,7 @@ msgstr "Pódium bolo vymazané"
 msgid "Stage or room"
 msgstr "Pódium alebo sála"
 
-#: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:105
+#: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:106
 msgid "Stages"
 msgstr "Pódiá"
 
@@ -17734,6 +17835,10 @@ msgstr "Prestane fungovať {0}. Týždeň vopred vám pošleme e-mail."
 msgid "Store it somewhere safe, like a password manager or your integration's secret settings. Anyone with this key can use the API as you."
 msgstr "Uložte si ho na bezpečné miesto, napríklad do správcu hesiel alebo do tajných nastavení integrácie. Ktokoľvek s týmto kľúčom môže používať API vo vašom mene."
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:24
+msgid "Story"
+msgstr "Príbeh"
+
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:34
 msgid "Straight rows, central aisle."
 msgstr "Rovné rady, stredná ulička."
@@ -17826,7 +17931,7 @@ msgstr "Predmet sa zobrazí tu"
 msgid "Subject:"
 msgstr "Predmet:"
 
-#: src/components/common/InlineOrderSummary/index.tsx:160
+#: src/components/common/InlineOrderSummary/index.tsx:156
 #: src/components/common/OrderSummary/index.tsx:53
 msgid "Subtotal"
 msgstr "Medzisúčet"
@@ -17918,7 +18023,7 @@ msgstr "Udalosť bola úspešne aktualizovaná"
 msgid "Successfully Updated Event Defaults"
 msgstr "Predvolené nastavenia udalosti boli úspešne aktualizované"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:119
+#: src/components/routes/event/HomepageDesigner/index.tsx:121
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:93
 msgid "Successfully Updated Homepage Design"
 msgstr "Dizajn domovskej stránky bol úspešne aktualizovaný"
@@ -18013,7 +18118,7 @@ msgstr "Ne"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:45
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:48
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:28
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:29
 msgid "Sunday"
 msgstr "Nedeľa"
 
@@ -18116,11 +18221,11 @@ msgstr "Cielené na účastníkov z {0} vybraných termínov."
 #: src/components/common/OrdersTable/index.tsx:290
 #: src/components/forms/TaxAndFeeForm/index.tsx:21
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:89
-#: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:93
+#: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:91
 msgid "Tax"
 msgstr "Daň"
 
-#: src/components/routes/organizer/Reports/index.tsx:32
+#: src/components/routes/organizer/Reports/index.tsx:34
 msgid "Tax collected grouped by tax type and event"
 msgstr "Vybraná daň zoskupená podľa typu dane a udalosti"
 
@@ -18144,7 +18249,7 @@ msgstr "Daňové informácie na spodku všetkých faktúr (napr. číslo DPH, da
 msgid "Tax Name"
 msgstr "Názov dane"
 
-#: src/components/routes/organizer/Reports/index.tsx:31
+#: src/components/routes/organizer/Reports/index.tsx:33
 #: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:62
 msgid "Tax Summary"
 msgstr "Súhrn daní"
@@ -18153,7 +18258,7 @@ msgstr "Súhrn daní"
 msgid "Tax updated"
 msgstr "Daň aktualizovaná"
 
-#: src/components/common/InlineOrderSummary/index.tsx:201
+#: src/components/common/InlineOrderSummary/index.tsx:195
 #: src/components/forms/ProductForm/index.tsx:494
 #: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:48
 #: src/components/routes/settings/TaxesAndFees/index.tsx:123
@@ -18248,8 +18353,7 @@ msgstr "Spôsob platby"
 msgid "Term"
 msgstr "Výraz"
 
-#: src/components/layouts/EventHomepage/index.tsx:745
-#: src/components/layouts/OrganizerHomepage/index.tsx:205
+#: src/components/layouts/HomepageFrame/index.tsx:67
 msgid "Terms of Service"
 msgstr "Podmienky služby"
 
@@ -18264,9 +18368,9 @@ msgid "Test sign-in"
 msgstr "Testovacie prihlásenie"
 
 #: src/components/common/WidgetEditor/AppearancePanel.tsx:83
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:54
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:55
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:99
-#: src/utilites/homepageSections.ts:37
+#: src/utilites/homepageSections.ts:39
 msgid "Text"
 msgstr "Text"
 
@@ -18279,7 +18383,7 @@ msgstr "Ďakujeme za účasť!"
 msgid "Thanks,"
 msgstr "Ďakujeme,"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:220
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:225
 msgid "That doesn't look like a YouTube or Vimeo video link"
 msgstr "Toto nevyzerá ako odkaz na video z YouTube alebo Vimeo"
 
@@ -18287,8 +18391,8 @@ msgstr "Toto nevyzerá ako odkaz na video z YouTube alebo Vimeo"
 msgid "That overlaps \"{conflict}\" on the same stage"
 msgstr "Prekrýva sa s \"{conflict}\" na rovnakom pódiu"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:357
-#: src/components/routes/product-widget/SelectProducts/index.tsx:710
+#: src/components/routes/product-widget/SelectProducts/index.tsx:358
+#: src/components/routes/product-widget/SelectProducts/index.tsx:711
 msgid "That promo code is invalid"
 msgstr "Tento promo kód je neplatný"
 
@@ -18373,6 +18477,10 @@ msgstr "Mena používaná pre ceny vstupeniek tohto podujatia."
 msgid "The customer cancelled on the reader"
 msgstr "Zákazník zrušil na čítačke"
 
+#: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:55
+msgid "The date's own prices, product visibility, capacity and label will be removed. This can't be undone."
+msgstr "Vlastné ceny termínu, viditeľnosť produktov, kapacita a označenie budú odstránené. Túto akciu nie je možné vrátiť späť."
+
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:156
 msgid "The day your calendars and date pickers start on."
 msgstr "Deň, ktorým začínajú vaše kalendáre a výbery dátumu."
@@ -18447,7 +18555,7 @@ msgstr "Odkaz, ku ktorému sa pokúšate pristúpiť, vypršal alebo už nie je 
 msgid "The link you clicked is invalid."
 msgstr "Odkaz, na ktorý ste klikli, je neplatný."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1032
+#: src/components/routes/product-widget/SelectProducts/index.tsx:939
 msgid "The maximum number of products for {0}is {1}"
 msgstr "Maximálny počet produktov pre {0} je {1}"
 
@@ -18632,24 +18740,24 @@ msgstr "Divadlo"
 msgid "Theatre with sections"
 msgstr "Divadlo so sekciami"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:181
+#: src/components/routes/event/HomepageDesigner/index.tsx:196
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:192
 msgid "Theme & Colors"
 msgstr "Téma a farby"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1250
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1258
 msgid "There are no products available for this date. Please choose another date."
 msgstr "Pre tento termín nie sú dostupné žiadne produkty. Vyberte iný termín."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:820
+#: src/components/routes/product-widget/SelectProducts/index.tsx:821
 msgid "There are no products available for this event"
 msgstr "Pre túto udalosť nie sú dostupné žiadne produkty"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:905
+#: src/components/routes/product-widget/SelectProducts/index.tsx:906
 msgid "There are no products available in this category"
 msgstr "V tejto kategórii nie sú dostupné žiadne produkty"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:817
+#: src/components/routes/product-widget/SelectProducts/index.tsx:818
 msgid "There are no upcoming dates for this event"
 msgstr "Toto podujatie nemá žiadne nadchádzajúce termíny"
 
@@ -18737,7 +18845,7 @@ msgstr "Tento účet je naplánovaný na vymazanie"
 msgid "This account is scheduled for deletion on <0>{scheduledDate}</0>"
 msgstr "Tento účet je naplánovaný na vymazanie dňa <0>{scheduledDate}</0>"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:198
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:203
 msgid "This answer is too long. Shorten it before saving."
 msgstr "Táto odpoveď je príliš dlhá. Pred uložením ju skráťte."
 
@@ -18835,11 +18943,11 @@ msgstr "Tento termín je v minulosti. Vytvorí sa, ale účastníkom sa medzi na
 msgid "This date is marked sold out."
 msgstr "Tento termín je označený ako vypredaný."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:764
+#: src/components/routes/product-widget/SelectProducts/index.tsx:765
 msgid "This date is no longer available. Please select another date."
 msgstr "Tento termín už nie je dostupný. Vyberte iný termín."
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:776
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:754
 msgid "This date is sold out. Please choose another date."
 msgstr "Tento dátum je vypredaný. Vyberte si iný dátum."
 
@@ -18855,7 +18963,11 @@ msgstr "Toto zariadenie"
 msgid "This disconnects {stripeAccountId} from this organizer. Paid ticket sales will stop working until you connect a Stripe account again."
 msgstr "Týmto odpojíte {stripeAccountId} od tohto organizátora. Predaj platených vstupeniek prestane fungovať, kým znova nepripojíte účet Stripe."
 
-#: src/components/layouts/EventHomepage/index.tsx:650
+#: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:30
+msgid "This event already has orders, so you won't be able to change it back to a single event."
+msgstr "Toto podujatie už má objednávky, takže ho nebudete môcť zmeniť späť na jednorazové podujatie."
+
+#: src/components/layouts/EventHomepage/index.tsx:131
 msgid "This event has ended"
 msgstr "Táto udalosť sa skončila"
 
@@ -18901,7 +19013,7 @@ msgstr "Toto podujatie čaká na manuálnu kontrolu a jeho stav nie je možné z
 msgid "This event is pending manual review. Its status cannot be changed until the review is complete."
 msgstr "Toto podujatie čaká na manuálnu kontrolu. Jeho stav nie je možné zmeniť, kým sa kontrola nedokončí."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:816
+#: src/components/routes/product-widget/SelectProducts/index.tsx:817
 msgid "This event is sold out"
 msgstr "Toto podujatie je vypredané"
 
@@ -18953,6 +19065,14 @@ msgstr "Toto je sedadlo pre sprievod používateľa invalidného vozíka. Najprv
 #: src/components/routes/welcome/index.tsx:402
 msgid "This is a recurring event"
 msgstr "Toto je opakujúce sa podujatie"
+
+#: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:68
+msgid "This is a recurring event."
+msgstr "Toto je opakované podujatie."
+
+#: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:68
+msgid "This is a single event."
+msgstr "Toto je jednorazové podujatie."
 
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:157
 msgid "This is an online event"
@@ -19015,7 +19135,7 @@ msgstr "Tento názov je viditeľný pre koncových používateľov"
 msgid "This occurrence is at capacity"
 msgstr "Tento termín má naplnenú kapacitu"
 
-#: src/components/forms/StripeCheckoutForm/index.tsx:131
+#: src/components/forms/StripeCheckoutForm/index.tsx:132
 msgid "This order has already been paid."
 msgstr "Táto objednávka už bola zaplatená."
 
@@ -19039,7 +19159,7 @@ msgstr "Táto objednávka sa spracováva."
 msgid "This order is complete."
 msgstr "Táto objednávka je dokončená."
 
-#: src/components/forms/StripeCheckoutForm/index.tsx:143
+#: src/components/forms/StripeCheckoutForm/index.tsx:144
 msgid "This order page is no longer available."
 msgstr "Táto stránka objednávky už nie je dostupná."
 
@@ -19190,7 +19310,7 @@ msgstr "Št"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:49
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:45
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:28
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:29
 msgid "Thursday"
 msgstr "Štvrtok"
 
@@ -19275,11 +19395,11 @@ msgstr "Cena lístka"
 msgid "Ticket resent successfully"
 msgstr "Lístok bol úspešne znovu odoslaný"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:812
+#: src/components/routes/product-widget/SelectProducts/index.tsx:813
 msgid "Ticket sales have ended for this event"
 msgstr "Predaj lístkov na toto podujatie sa skončil"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:339
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:343
 msgid "Ticket titles come from your product categories."
 msgstr "Názvy lístkov pochádzajú z vašich kategórií produktov."
 
@@ -19304,6 +19424,7 @@ msgstr "lístky"
 #: src/components/common/WidgetEditor/SectionsPicker.tsx:28
 #: src/components/common/WidgetEditor/TypePicker.tsx:7
 #: src/components/forms/ProductForm/buildPreviewEvent.ts:139
+#: src/components/layouts/EventHomepage/index.tsx:173
 #: src/components/routes/admin/Dashboard/index.tsx:263
 #: src/components/routes/my-tickets/index.tsx:101
 #: src/ee/box-office/components/layouts/BoxOffice/SaleComplete.tsx:111
@@ -19320,7 +19441,7 @@ msgstr "Lístky a produkty"
 msgid "Tickets and {extraSections} more"
 msgstr "Vstupenky a ďalšie {extraSections}"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:302
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:306
 msgid "Tickets are always shown"
 msgstr "Vstupenky sa zobrazujú vždy"
 
@@ -19430,7 +19551,7 @@ msgstr "Časy"
 msgid "Times are read in the event's time zone ({timezone})."
 msgstr "Časy sa čítajú v časovom pásme podujatia ({timezone})."
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:656
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:634
 msgid "Times in {timezoneAbbr}"
 msgstr "Časy v {timezoneAbbr}"
 
@@ -19503,7 +19624,7 @@ msgstr "Ak chcete túto položku presunúť, stlačte medzerník alebo Enter. Š
 #: src/components/common/PeriodSelector/index.tsx:30
 #: src/components/layouts/CheckIn/OccurrenceFilterPill.tsx:119
 #: src/components/routes/event/OccurrencesTab/GroupedOccurrenceTable/index.tsx:44
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:146
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:127
 msgid "Today"
 msgstr "Dnes"
 
@@ -19512,12 +19633,12 @@ msgid "Toggle columns"
 msgstr "Prepnúť stĺpce"
 
 #: src/components/routes/event/OccurrencesTab/GroupedOccurrenceTable/index.tsx:47
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:148
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:129
 msgid "Tomorrow"
 msgstr "Zajtra"
 
 #: src/components/routes/auth/ForgotPassword/index.tsx:34
-#: src/components/routes/auth/Login/index.tsx:90
+#: src/components/routes/auth/Login/index.tsx:95
 #: src/components/routes/auth/Register/index.tsx:80
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:86
 #: src/hooks/useLoginSteps.ts:62
@@ -19547,12 +19668,12 @@ msgid "total"
 msgstr "celkom"
 
 #: src/components/common/AdminOrdersTable/index.tsx:81
-#: src/components/common/InlineOrderSummary/index.tsx:231
+#: src/components/common/InlineOrderSummary/index.tsx:225
 #: src/components/common/OrderSummary/index.tsx:104
 #: src/components/layouts/CheckIn/tabs/StatsTab.tsx:99
 #: src/components/modals/ManageOrderModal/index.tsx:117
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:359
-#: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:95
+#: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:93
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/OrdersTab.tsx:114
 msgid "Total"
 msgstr "Celkom"
@@ -19669,7 +19790,7 @@ msgstr "Upravte filtre, aby ste videli viac termínov."
 
 #: src/components/common/OrganizerReportTable/index.tsx:273
 #: src/components/common/ReportTable/index.tsx:254
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1113
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1121
 #: src/components/routes/settings/ApiKeys/index.tsx:188
 #: src/components/routes/settings/ApiReference/index.tsx:83
 #: src/components/routes/settings/Organizers/index.tsx:41
@@ -19685,7 +19806,7 @@ msgstr "Upravte filtre, aby ste videli viac termínov."
 msgid "Try again"
 msgstr "Skúsiť znova"
 
-#: src/components/routes/auth/Login/index.tsx:223
+#: src/components/routes/auth/Login/index.tsx:228
 #: src/components/routes/my-tickets/index.tsx:200
 msgid "Try another email"
 msgstr "Skúste iný e-mail"
@@ -19704,7 +19825,7 @@ msgstr "Ut"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:47
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:43
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:27
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:28
 msgid "Tuesday"
 msgstr "Utorok"
 
@@ -19852,7 +19973,7 @@ msgstr "Zadajte kód, ktorý overovacia aplikácia zobrazuje pre {0}."
 msgid "Type to search..."
 msgstr "Píšte pre vyhľadávanie..."
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:190
+#: src/components/routes/event/HomepageDesigner/index.tsx:205
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:201
 msgid "Typography"
 msgstr "Typografia"
@@ -19896,7 +20017,7 @@ msgstr "Nepodarilo sa dokončiť predaj"
 msgid "Unable to create product. Please check the your details"
 msgstr "Nie je možné vytvoriť produkt. Skontrolujte svoje údaje"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:344
+#: src/components/routes/product-widget/SelectProducts/index.tsx:345
 msgid "Unable to create product. Please check your details"
 msgstr "Nie je možné vytvoriť produkt. Skontrolujte svoje údaje"
 
@@ -19928,7 +20049,7 @@ msgstr "Nie je možné pridať sa do zoznamu čakateľov"
 msgid "Unable to load attendee details."
 msgstr "Údaje o účastníkovi sa nepodarilo načítať."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:400
+#: src/components/routes/product-widget/SelectProducts/index.tsx:401
 msgid "Unable to load products for this date. Please try again."
 msgstr "Produkty pre tento termín sa nepodarilo načítať. Skúste to znova."
 
@@ -20058,7 +20179,7 @@ msgstr "Neznáme zariadenie"
 msgid "Unlimited"
 msgstr "Neobmedzené"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:967
+#: src/components/routes/product-widget/SelectProducts/index.tsx:986
 msgid "Unlimited available"
 msgstr "Neobmedzene dostupné"
 
@@ -20151,20 +20272,20 @@ msgstr "Najviac {max} na objednávku"
 msgid "up to {perDateAllocation} per date"
 msgstr "najviac {perDateAllocation} na dátum"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:283
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:288
 msgid "Up to 40 photos, at least 400 × 300px. The first one is shown largest."
 msgstr "Až 40 fotiek, aspoň 400 × 300px. Prvá sa zobrazí najväčšia."
 
 #: src/components/common/EventsDashboardStatusButtons/index.tsx:20
 #: src/components/common/EventStatusBadge/index.tsx:16
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:137
-#: src/components/layouts/OrganizerHomepage/index.tsx:225
+#: src/components/layouts/OrganizerHomepage/index.tsx:152
 #: src/components/routes/event/OccurrencesTab/index.tsx:521
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:33
 msgid "Upcoming"
 msgstr "Nadchádzajúce"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:263
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:244
 msgid "Upcoming dates"
 msgstr "Nadchádzajúce dátumy"
 
@@ -20262,15 +20383,15 @@ msgstr "Nahrať logo pre vášho organizátora"
 msgid "Upload Image"
 msgstr "Nahrať obrázok"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:83
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:84
 msgid "Upload some photos below."
 msgstr "Nižšie nahrajte niekoľko fotiek."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:338
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:343
 msgid "Upload sponsor logos"
 msgstr "Nahrať logá sponzorov"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:85
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:86
 msgid "Upload sponsor logos below."
 msgstr "Nižšie nahrajte logá sponzorov."
 
@@ -20321,8 +20442,8 @@ msgstr "Použite <0>Liquid šablonovanie</0> na personalizáciu e-mailov"
 msgid "Use a different account"
 msgstr "Použiť iný účet"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:273
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:332
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:278
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:337
 #: src/components/routes/event/Lineup/ProfileImagesField.tsx:136
 msgid "Use a JPG, PNG or WebP image under 5MB."
 msgstr "Použite obrázok JPG, PNG alebo WebP menší ako 5MB."
@@ -20636,11 +20757,11 @@ msgstr "Overovanie..."
 msgid "via {providerName}"
 msgstr "cez {providerName}"
 
-#: src/utilites/homepageSections.ts:43
+#: src/utilites/homepageSections.ts:45
 msgid "Video"
 msgstr "Video"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:215
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:220
 msgid "Video link"
 msgstr "Odkaz na video"
 
@@ -20656,9 +20777,17 @@ msgstr "Zobrazenie"
 msgid "View {name}"
 msgstr "Zobraziť {name}"
 
+#: src/components/layouts/EventHomepage/MoreEventsSection.tsx:33
+msgid "View all"
+msgstr "Zobraziť všetko"
+
 #: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:70
 msgid "View All"
 msgstr "Zobraziť všetko"
+
+#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:44
+msgid "View all {totalCount} photos"
+msgstr "Zobraziť všetky fotky ({totalCount})"
 
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:387
 msgid "View all →"
@@ -20676,11 +20805,11 @@ msgstr "Zobraziť všetky check-in zoznamy"
 msgid "View all messages sent across the platform"
 msgstr "Zobraziť všetky správy odoslané naprieč platformou"
 
-#: src/components/layouts/OrganizerHomepage/OrganizerPastEventsSection.tsx:32
+#: src/components/layouts/OrganizerHomepage/OrganizerPastEventsSection.tsx:30
 msgid "View all past events"
 msgstr "Zobraziť všetky minulé udalosti"
 
-#: src/components/routes/organizer/Reports/index.tsx:52
+#: src/components/routes/organizer/Reports/index.tsx:54
 msgid "View and download reports across all your events. Only completed orders are included."
 msgstr "Zobraziť a stiahnuť správy naprieč všetkými udalosťami. Zahrnuté sú iba dokončené objednávky."
 
@@ -20737,10 +20866,6 @@ msgstr "Zobraziť stránku udalosti"
 msgid "View logs"
 msgstr "Zobraziť protokoly"
 
-#: src/components/layouts/EventHomepage/index.tsx:344
-msgid "View Map"
-msgstr "Zobraziť mapu"
-
 #: src/components/routes/admin/Messages/index.tsx:222
 msgid "View Message"
 msgstr "Zobraziť správu"
@@ -20748,10 +20873,6 @@ msgstr "Zobraziť správu"
 #: src/components/routes/event/Lineup/index.tsx:72
 msgid "View on event page"
 msgstr "Zobraziť na stránke udalosti"
-
-#: src/components/layouts/EventHomepage/index.tsx:717
-msgid "View on Google Maps"
-msgstr "Zobraziť na Google Maps"
 
 #: src/components/layouts/Event/index.tsx:247
 #: src/components/layouts/OrganizerLayout/index.tsx:237
@@ -20766,7 +20887,7 @@ msgstr "Iba na zobrazenie"
 msgid "View Order"
 msgstr "Zobraziť objednávku"
 
-#: src/components/forms/StripeCheckoutForm/index.tsx:132
+#: src/components/forms/StripeCheckoutForm/index.tsx:133
 #: src/components/routes/product-widget/CollectInformation/index.tsx:381
 msgid "View Order Details"
 msgstr "Zobraziť podrobnosti objednávky"
@@ -20784,7 +20905,7 @@ msgstr "Zobraziť objednávky"
 msgid "View Organizer Homepage"
 msgstr "Zobraziť domovskú stránku organizátora"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:247
+#: src/components/layouts/OrganizerHomepage/index.tsx:173
 msgid "View past events"
 msgstr "Zobraziť minulé podujatia"
 
@@ -20885,11 +21006,11 @@ msgstr "Čaká sa na sken…"
 #: src/components/forms/ProductForm/index.tsx:466
 #: src/components/layouts/AuthLayout/AuthShell.tsx:16
 #: src/components/layouts/Event/index.tsx:154
-#: src/components/routes/event/Settings/index.tsx:92
+#: src/components/routes/event/Settings/index.tsx:100
 #: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:55
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:73
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:111
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:330
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:92
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:311
 msgid "Waitlist"
 msgstr "Čakací zoznam"
 
@@ -20981,7 +21102,7 @@ msgstr "Nepodarilo sa načítať dáta. Skúste to znovu."
 msgid "We couldn't load the products. Please try again."
 msgstr "Produkty sa nepodarilo načítať. Skúste to znova."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1110
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1118
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:457
 msgid "We couldn't load the seating map. Please try again."
 msgstr "Nepodarilo sa načítať mapu sedadiel. Skúste to znova."
@@ -21026,7 +21147,7 @@ msgstr "Nastala chyba pri načítaní tejto stránky. Skúste to znovu."
 msgid "We partner with Stripe to send payouts straight to your bank account."
 msgstr "Spolupracujeme so Stripe, aby výplaty išli priamo na váš bankový účet."
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:163
+#: src/components/routes/event/HomepageDesigner/index.tsx:178
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:151
 msgid "We recommend dimensions of 1950px by 650px, a ratio of 3:1, and a maximum file size of 5MB"
 msgstr "Odporúčame rozmery 1950px x 650px, pomer 3:1 a maximálnu veľkosť súboru 5 MB"
@@ -21155,7 +21276,7 @@ msgstr "St"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:48
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:44
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:27
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:28
 msgid "Wednesday"
 msgstr "Streda"
 
@@ -21164,7 +21285,7 @@ msgid "week"
 msgstr "týždeň"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:64
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:36
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:37
 msgid "Weekly"
 msgstr "Týždenne"
 
@@ -21181,7 +21302,7 @@ msgstr "Weibo"
 msgid "Welcome aboard! Sign in to continue."
 msgstr "Vitajte! Prihláste sa a pokračujte."
 
-#: src/components/routes/auth/Login/index.tsx:124
+#: src/components/routes/auth/Login/index.tsx:129
 msgid "Welcome back"
 msgstr "Vitajte späť"
 
@@ -21436,6 +21557,10 @@ msgstr "Kto vystupuje?"
 msgid "Whole account"
 msgstr "Celý účet"
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:13
+msgid "Wide cover, tickets alongside"
+msgstr "Široký obal, vstupenky vedľa"
+
 #: src/components/common/WidgetEditor/index.tsx:238
 msgid "Widget"
 msgstr "Widget"
@@ -21513,7 +21638,7 @@ msgstr "Workshop s early bird"
 msgid "Workspace domain"
 msgstr "Doména Workspace"
 
-#: src/components/common/ContactOrganizerModal/index.tsx:89
+#: src/components/common/ContactOrganizerModal/index.tsx:92
 msgid "Write your message here..."
 msgstr "Napíšte správu tu..."
 
@@ -21533,7 +21658,7 @@ msgid "Year to date"
 msgstr "Od začiatku roka"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:66
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:44
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:45
 msgid "Yearly"
 msgstr "Ročne"
 
@@ -21606,11 +21731,11 @@ msgstr "Ste offline"
 msgid "You belong to more than one account. Choose where you'd like to go."
 msgstr "Patríte do viacerých účtov. Vyberte, kam chcete prejsť."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:214
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:218
 msgid "You can add up to {MAX_SECTIONS} sections."
 msgstr "Môžete pridať najviac {MAX_SECTIONS} sekcií."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:294
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:299
 msgid "You can add up to {MAX_SPONSORS} sponsors."
 msgstr "Môžete pridať najviac {MAX_SPONSORS} sponzorov."
 
@@ -21641,6 +21766,10 @@ msgstr "Ďalšie servisné poplatky a dane môžete nakonfigurovať v nastavenia
 #: src/components/forms/ProductForm/index.tsx:612
 msgid "You can create a promo code which targets this product on the"
 msgstr "Môžete vytvoriť promo kód, ktorý cieli na tento produkt na"
+
+#: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:31
+msgid "You can only change it back to a single event while it has exactly one date and no orders. Once someone places an order, this can't be undone."
+msgstr "Späť na jednorazové podujatie ho môžete zmeniť len vtedy, keď má presne jeden termín a žiadne objednávky. Keď niekto zadá objednávku, túto zmenu už nebude možné vrátiť."
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1133
 msgid "You can override this for individual dates later."
@@ -21860,13 +21989,17 @@ msgstr "Ste prihlásení ako {0}"
 msgid "You're unsubscribed"
 msgstr "Boli ste odhlásený"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:326
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:331
 msgid "You've added the maximum of {MAX_SPONSORS} sponsors."
 msgstr "Pridali ste maximálny počet sponzorov ({MAX_SPONSORS})."
 
 #: src/components/routes/sso/Callback/SsoErrorState.tsx:63
 msgid "You've been invited"
 msgstr "Dostali ste pozvánku"
+
+#: src/components/routes/auth/Login/index.tsx:90
+msgid "You've been invited to join a team. Open the invitation email we sent you to finish joining. If the link has expired, ask the person who invited you to send a new one."
+msgstr "Boli ste pozvaní do tímu. Otvorte e-mail s pozvánkou, ktorý sme vám poslali, a dokončite pripojenie. Ak platnosť odkazu vypršala, požiadajte osobu, ktorá vás pozvala, o novú pozvánku."
 
 #: src/components/routes/product-widget/CollectInformation/index.tsx:448
 msgid "You've been offered a spot!"
@@ -21924,6 +22057,10 @@ msgstr "Váš účet bude chránený iba heslom. Záložné kódy a dôveryhodn�
 msgid "Your affiliates have been exported successfully."
 msgstr "Vaši partneri boli úspešne exportovaní."
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:19
+msgid "Your artwork as a poster"
+msgstr "Vaša grafika ako plagát"
+
 #: src/components/routes/event/attendees.tsx:165
 msgid "Your attendees have been exported successfully."
 msgstr "Vaši účastníci boli úspešne exportovaní."
@@ -21940,6 +22077,14 @@ msgstr "Váš prehliadač zablokoval kopírovanie. Označte kľúč a skopírujt
 msgid "Your check-in list has been created successfully. Share the link below with your check-in staff."
 msgstr "Váš zoznam odbavení bol úspešne vytvorený. Zdieľajte odkaz nižšie so svojím personálom odbavenia."
 
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:73
+msgid "Your cover image is landscape, so it will look small here. Flyer works best with square or portrait artwork."
+msgstr "Obal je na šírku, preto bude tu vyzerať malý. Leták funguje najlepšie so štvorcovými alebo vertikálnymi obrázkami."
+
+#: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:20
+msgid "Your cover sits beside the details like a poster. Best with square or portrait artwork."
+msgstr "Obal sa zobrazí vedľa detailov ako plagát. Najlepšie funguje so štvorcovými alebo vertikálnymi obrázkami."
+
 #: src/components/layouts/Checkout/index.tsx:461
 msgid "Your current order will be lost."
 msgstr "Vaša aktuálna objednávka bude stratená."
@@ -21952,7 +22097,7 @@ msgstr "Vaše aktuálne záložné kódy okamžite prestanú fungovať. Na potvr
 msgid "Your Details"
 msgstr "Vaše údaje"
 
-#: src/components/common/ContactOrganizerModal/index.tsx:79
+#: src/components/common/ContactOrganizerModal/index.tsx:82
 msgid "Your Email"
 msgstr "Váš e-mail"
 
@@ -22021,7 +22166,7 @@ msgstr "Vaše správy sa zobrazia tu"
 msgid "Your name"
 msgstr "Vaše meno"
 
-#: src/components/common/ContactOrganizerModal/index.tsx:73
+#: src/components/common/ContactOrganizerModal/index.tsx:76
 msgid "Your Name"
 msgstr "Vaše meno"
 
@@ -22066,7 +22211,7 @@ msgid "Your organisation requires two-factor authentication. Set it up now to co
 msgstr "Vaša organizácia vyžaduje dvojfaktorové overenie. Nastavte ho teraz a pokračujte. Zaberie to asi minútu."
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:162
-#: src/components/routes/auth/Login/index.tsx:145
+#: src/components/routes/auth/Login/index.tsx:150
 msgid "Your organization requires single sign-on"
 msgstr "Vaša organizácia vyžaduje jednotné prihlásenie"
 
@@ -22083,15 +22228,15 @@ msgstr "Vaša organizácia používa jednotné prihlásenie"
 msgid "Your organizer address"
 msgstr "Adresa vášho organizátora"
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:67
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:68
 msgid "Your organizer has no description yet."
 msgstr "Váš organizátor zatiaľ nemá popis."
 
-#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:51
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:52
 msgid "Your organizer profile isn't published."
 msgstr "Váš profil organizátora nie je zverejnený."
 
-#: src/components/routes/auth/Login/index.tsx:185
+#: src/components/routes/auth/Login/index.tsx:190
 #: src/components/routes/auth/Register/index.tsx:162
 msgid "Your password"
 msgstr "Vaše heslo"
@@ -22100,19 +22245,19 @@ msgstr "Vaše heslo"
 msgid "Your password was reset. Sign in with your new password."
 msgstr "Vaše heslo bolo obnovené. Prihláste sa novým heslom."
 
-#: src/components/forms/StripeCheckoutForm/index.tsx:99
+#: src/components/forms/StripeCheckoutForm/index.tsx:100
 msgid "Your payment is processing."
 msgstr "Vaša platba sa spracováva."
 
-#: src/components/common/InlineOrderSummary/index.tsx:245
+#: src/components/common/InlineOrderSummary/index.tsx:239
 msgid "Your payment is protected with bank-level encryption"
 msgstr "Vaša platba je chránená šifrovaním na bankovej úrovni"
 
-#: src/components/forms/StripeCheckoutForm/index.tsx:102
+#: src/components/forms/StripeCheckoutForm/index.tsx:103
 msgid "Your payment was not successful, please try again."
 msgstr "Vaša platba nebola úspešná, skúste to znovu."
 
-#: src/components/forms/StripeCheckoutForm/index.tsx:163
+#: src/components/forms/StripeCheckoutForm/index.tsx:169
 msgid "Your payment was unsuccessful. Please try again."
 msgstr "Vaša platba bola neúspešná. Skúste to znovu."
 

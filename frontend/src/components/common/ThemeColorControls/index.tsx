@@ -14,7 +14,7 @@ interface ThemeColorControlsProps {
 }
 
 const ACCENT_SWATCHES = [
-    '#8b5cf6',
+    '#7c3aed',
     '#6366f1',
     '#2563eb',
     '#0891b2',
@@ -122,7 +122,7 @@ export const ThemeColorControls = ({
                 label={t`Accent Color`}
                 description={t`Used for buttons, links and highlights`}
                 size="sm"
-                value={values.accent || '#8b5cf6'}
+                value={values.accent || '#7c3aed'}
                 onChange={handleAccentChange}
                 swatches={ACCENT_SWATCHES}
                 swatchesPerRow={10}

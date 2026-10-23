@@ -1,4 +1,5 @@
 import {modals} from "@mantine/modals";
+import {Text} from "@mantine/core";
 import {t} from "@lingui/macro";
 
 interface ConfirmationDialogOptions {
@@ -6,6 +7,7 @@ interface ConfirmationDialogOptions {
     cancel?: string;
     useCheckoutColors?: boolean;
     destructive?: boolean;
+    description?: string;
 }
 
 export const confirmationDialog = (
@@ -35,6 +37,7 @@ export const confirmationDialog = (
 
     modals.openConfirmModal({
         title: message,
+        children: options?.description ? <Text size="sm">{options.description}</Text> : undefined,
         labels,
         styles: checkoutStyles,
         confirmProps: options?.destructive ? {color: 'red'} : undefined,

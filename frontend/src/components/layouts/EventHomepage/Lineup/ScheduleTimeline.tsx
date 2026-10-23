@@ -5,11 +5,12 @@ import {IconLayoutColumns, IconList, IconMapPin} from "@tabler/icons-react";
 import {Event} from "../../../../types.ts";
 import {EventLineup, EventSpace, LineupEntry, ScheduleItem} from "../../../../api/lineup.client.ts";
 import {formatDateWithLocale, getSafeLocale} from "../../../../utilites/dates.ts";
-import {getClientLocale} from "../../../../locales.ts";
+import {getClientLocale, toDayjsLocale} from "../../../../locales.ts";
 import {initialsFor, profilePhoto, scheduleItemTitle} from "../../../../utilites/lineup.ts";
 import {assignScheduleLanes, groupScheduleByDay} from "../../../../utilites/lineupSchedule.ts";
 import {UserGeneratedContent} from "../../../common/UserGeneratedContent";
 import {HomepageSectionClasses} from "./index.tsx";
+import {sizedImageUrl} from "../../../../utilites/imageTransform.ts";
 import classes from "./Lineup.module.scss";
 
 interface ScheduleTimelineProps {
@@ -45,7 +46,7 @@ const useNow = () => {
 };
 
 const formatScheduleWeekday = (utcDate: string, tz: string) =>
-    dayjs.utc(utcDate).tz(tz).locale(getSafeLocale(getClientLocale())).format('dddd');
+    dayjs.utc(utcDate).tz(tz).locale(toDayjsLocale(getSafeLocale(getClientLocale()))).format('dddd');
 
 const isLive = (item: ScheduleItem, now: number | null) => now !== null
     && dayjs.utc(item.starts_at).valueOf() <= now
@@ -277,7 +278,7 @@ export const PerformerAvatar = ({entry, size = 'sm'}: { entry: LineupEntry, size
 
     return (
         <span className={classes.avatar} data-size={size} style={photo?.avg_colour ? {backgroundColor: photo.avg_colour} : undefined} aria-hidden>
-            {photo ? <img src={photo.url} alt="" loading="lazy"/> : initialsFor(entry.profile.name)}
+            {photo ? <img src={sizedImageUrl(photo.url, 120)} alt="" loading="lazy"/> : initialsFor(entry.profile.name)}
         </span>
     );
 };

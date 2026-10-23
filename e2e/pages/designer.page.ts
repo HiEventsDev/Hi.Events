@@ -46,6 +46,10 @@ export class DesignerPage {
     return this.page.frameLocator('iframe[title="Event Preview"]');
   }
 
+  layoutOption(layout: 'marquee' | 'flyer' | 'story' | 'invite'): Locator {
+    return this.page.getByTestId(`homepage-layout-${layout}`);
+  }
+
   sectionRow(type: string): Locator {
     return this.page.getByTestId(`homepage-section-row-${type}`);
   }

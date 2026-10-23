@@ -1,6 +1,6 @@
 import { test, expect } from '../../fixtures';
 import { DesignerPage } from '../../pages/designer.page';
-import { createDraftEventWithTicket } from '../../api/factory';
+import { createDraftEventWithTicket, createLiveEventWithFreeTicket } from '../../api/factory';
 
 test.describe('homepage designer', () => {
   test('an organizer previews and saves a new continue button label', { tag: '@smoke' }, async ({ authedPage, api, account }) => {
@@ -49,5 +49,28 @@ test.describe('homepage designer', () => {
 
     await authedPage.getByRole('link', { name: 'Ticket Designer' }).click();
     await expect(authedPage).toHaveURL(/\/ticket-designer$/);
+  });
+
+  test('an organizer switches the page layout, sees it in the preview and publishes it', async ({ authedPage, page, api, account }) => {
+    const event = await createLiveEventWithFreeTicket(api, account.organizerId);
+    const designer = new DesignerPage(authedPage);
+    await designer.gotoHomepageDesigner(event.eventId);
+
+    await expect(designer.layoutOption('story')).toHaveAttribute('aria-checked', 'true');
+    await expect(authedPage.getByText('A focused reading column.', { exact: false })).toBeVisible();
+
+    await designer.layoutOption('invite').click();
+    await expect(designer.layoutOption('invite')).toHaveAttribute('aria-checked', 'true');
+    await expect(designer.unsavedStatus).toBeVisible();
+    await expect(designer.eventPreview.getByRole('heading', { level: 1, name: event.title })).toHaveCSS('text-align', 'center');
+
+    await designer.saveButton.click();
+    await expect(authedPage.getByText('Successfully Updated Homepage Design')).toBeVisible();
+    await expect
+      .poll(async () => ((await api.getEventSettings(event.eventId)).homepage_theme_settings as { layout?: string }).layout)
+      .toBe('INVITE');
+
+    await page.goto(`/event/${event.eventId}/${event.slug}`);
+    await expect(page.getByRole('heading', { level: 1, name: event.title })).toHaveCSS('text-align', 'center');
   });
 });

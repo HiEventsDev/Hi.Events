@@ -1,6 +1,7 @@
 import {PageBody} from "../../../common/PageBody";
 import {useAccess} from "../../../../hooks/useAccess.ts";
 import {EventDetailsForm} from "./Sections/EventDetailsForm";
+import {EventTypeSettings} from "./Sections/EventTypeSettings";
 import {LocationSettings} from "./Sections/LocationSettings";
 import {HomepageAndCheckoutSettings} from "./Sections/HomepageAndCheckoutSettings";
 import {EmailSettings} from "./Sections/EmailSettings";
@@ -14,6 +15,7 @@ import {
     IconAlertTriangle,
     IconAt,
     IconBrandGoogleAnalytics,
+    IconCalendarRepeat,
     IconBuildingStore,
     IconCreditCard,
     IconHome,
@@ -50,6 +52,12 @@ export const Settings = () => {
                 label: t`Event Details`,
                 icon: IconBuildingStore,
                 component: EventDetailsForm
+            },
+            {
+                id: 'event-type',
+                label: t`Event Type`,
+                icon: IconCalendarRepeat,
+                component: EventTypeSettings
             },
             {
                 id: 'location-settings',

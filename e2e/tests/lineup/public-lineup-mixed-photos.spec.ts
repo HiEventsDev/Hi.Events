@@ -62,6 +62,10 @@ test.describe('public lineup cards with and without photos', () => {
 
     await page.setViewportSize({ width: 390, height: 844 });
     await new PublicEventPage(page).goto(event.eventId, event.slug);
-    expect((await box(card(names.headlinerPlain))).height).toBeLessThan(200);
+    const phonePhoto = await box(card(names.headlinerPhoto));
+    const phonePlain = await box(card(names.headlinerPlain));
+    expect(Math.abs(phonePlain.y - phonePhoto.y)).toBeLessThan(1);
+    expect(Math.abs(phonePlain.height - phonePhoto.height)).toBeLessThan(1);
+    expect(phonePlain.width).toBeLessThan(200);
   });
 });

@@ -3,6 +3,7 @@
   --hi-text: var(--widget-primary-text-color, #1a1a1a);
   --hi-accent: var(--widget-secondary-color, var(--hi-primary, #7b5db8));
   --hi-accent-contrast: var(--widget-secondary-text-color, #ffffff);
+  --hi-accent-text: var(--widget-accent-text-color, var(--hi-accent));
   --hi-outline-source: var(--widget-primary-color, var(--hi-text));
 
   --hi-card-bg: var(--widget-card-bg-color, color-mix(in srgb, var(--hi-text) 2%, var(--hi-bg)));
@@ -22,7 +23,7 @@
   --hi-success-text: color-mix(in srgb, var(--hi-success) 75%, var(--hi-text));
   --hi-warn: #d97706;
   --hi-warn-soft: color-mix(in srgb, var(--hi-warn) 14%, var(--hi-card-bg));
-  --hi-warn-text: color-mix(in srgb, var(--hi-warn) 80%, var(--hi-text));
+  --hi-warn-text: color-mix(in srgb, var(--hi-warn) 65%, var(--hi-text));
   --hi-ease: cubic-bezier(0.4, 0, 0.2, 1);
   --hi-radius-lg: var(--widget-radius, 16px);
   --hi-radius-md: calc(var(--hi-radius-lg) * 0.8125);
@@ -47,6 +48,35 @@
     .hi-no-products-message {
       margin: 12px 0;
       font-size: 14px;
+    }
+  }
+
+  .hi-unavailable {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: var(--hi-radius-md);
+    background: var(--hi-soft-surface);
+    text-align: left;
+
+    .hi-unavailable-icon {
+      display: inline-flex;
+      flex-shrink: 0;
+      color: var(--hi-muted);
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    .hi-no-products-message {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.4;
+      color: var(--hi-text);
     }
   }
 
@@ -214,7 +244,7 @@
     }
 
     &[data-unavailable='sold-out'] .hi-price-tier-price-amount {
-      opacity: 0.55;
+      color: var(--hi-muted);
 
       .hi-price-amount {
         text-decoration: line-through;
@@ -251,7 +281,7 @@
       &[data-unavailable] {
         .hi-price-tier-label,
         .hi-price-tier-price-amount {
-          opacity: 0.55;
+          color: var(--hi-muted);
         }
       }
 
@@ -370,7 +400,7 @@
     transition: color 150ms var(--hi-ease);
 
     &:hover {
-      color: var(--hi-accent);
+      color: var(--hi-accent-text);
     }
 
     svg {
@@ -453,7 +483,7 @@
     font-family: inherit;
     font-size: 12.5px;
     font-weight: 600;
-    color: var(--hi-accent);
+    color: var(--hi-accent-text);
 
     svg {
       transition: transform 150ms var(--hi-ease);
@@ -565,7 +595,7 @@
 
   .hi-waitlist-button {
     background: var(--hi-soft-accent);
-    color: var(--hi-accent);
+    color: var(--hi-accent-text);
     border: none;
     font-family: inherit;
     font-size: 12px;
@@ -604,7 +634,7 @@
       transition: color 150ms var(--hi-ease);
 
       &:hover {
-        color: var(--hi-accent);
+        color: var(--hi-accent-text);
       }
     }
 
@@ -635,7 +665,7 @@
     .hi-apply-promo-code-button {
       background: transparent;
       border: 1.5px solid var(--hi-accent);
-      color: var(--hi-accent);
+      color: var(--hi-accent-text);
       border-radius: var(--hi-radius-sm, 10px);
       font-weight: 600;
       transition: background-color 150ms var(--hi-ease);
@@ -800,7 +830,7 @@
   gap: 2px;
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--hi-accent);
+  color: var(--hi-accent-text);
   text-decoration: none;
 
   &:hover {

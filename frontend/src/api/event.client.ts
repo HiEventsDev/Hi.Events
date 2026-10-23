@@ -6,6 +6,7 @@ import {
     EventDuplicatePayload,
     EventCounts,
     EventStats,
+    EventType,
     GenericDataResponse,
     GenericPaginatedResponse,
     IdParam,
@@ -112,6 +113,12 @@ export const eventsClient = {
     updateEventStatus: async (eventId: IdParam, status: string) => {
         const response = await api.put<GenericDataResponse<Event>>('events/' + eventId + '/status', {
             status
+        });
+        return response.data;
+    },
+    updateEventType: async (eventId: IdParam, type: EventType) => {
+        const response = await api.put<GenericDataResponse<Event>>('events/' + eventId + '/type', {
+            type
         });
         return response.data;
     },

@@ -5,6 +5,7 @@ import {i18n} from "@lingui/core";
 import {I18nProvider} from "@lingui/react";
 import {ModalsProvider} from "@mantine/modals";
 import {DatesProvider} from "@mantine/dates";
+import {toDayjsLocale} from "./locales.ts";
 import {DehydratedState, HydrationBoundary, QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {Helmet, HelmetProvider} from "react-helmet-async";
 import type {ThemeColors} from "./utilites/themeColors.ts";
@@ -37,6 +38,7 @@ export const App: FC<
         themeColors: ThemeColors;
         helmetContext?: any;
         dehydratedState?: DehydratedState;
+        ssrStyled?: boolean;
     }>
 > = (props) => {
     const [isLoadedOnBrowser, setIsLoadedOnBrowser] = React.useState(false);
@@ -46,7 +48,7 @@ export const App: FC<
 
     return (
         <React.StrictMode>
-            <div
+            {!props.ssrStyled && <div
                 className="ssr-loader"
                 style={{
                     top: 0,
@@ -62,7 +64,7 @@ export const App: FC<
                     zIndex: 1000,
                     display: isLoadedOnBrowser ? "none" : "block",
                 }}
-            />
+            />}
             <MantineProvider
                 cssVariablesResolver={v8CssVariablesResolver}
                 theme={{
@@ -75,7 +77,7 @@ export const App: FC<
             >
                 <HelmetProvider context={props.helmetContext}>
                     <I18nProvider i18n={i18n}>
-                        <DatesProvider settings={{locale: props.locale}}>
+                        <DatesProvider settings={{locale: toDayjsLocale(props.locale)}}>
                         <QueryClientProvider client={props.queryClient}>
                             <HydrationBoundary state={props.dehydratedState}>
                                 <StartupChecks/>

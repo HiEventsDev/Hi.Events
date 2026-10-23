@@ -10,6 +10,11 @@
   padding: 3px;
   background: var(--hi-card-bg, transparent);
   transition: border-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:has(input:focus-visible) {
+    outline: 2px solid var(--hi-accent-text, var(--hi-accent, currentColor));
+    outline-offset: 2px;
+  }
 }
 
 .control {
@@ -44,11 +49,11 @@
 
 .increment {
   background: var(--hi-soft-accent, rgba(0, 0, 0, 0.06));
-  color: var(--hi-accent, inherit);
+  color: var(--hi-accent-text, var(--hi-accent, inherit));
 
   &.control:hover {
     background: var(--hi-soft-accent-strong, var(--hi-soft-accent, rgba(0, 0, 0, 0.1)));
-    color: var(--hi-accent, inherit);
+    color: var(--hi-accent-text, var(--hi-accent, inherit));
   }
 
   &[data-limit] {

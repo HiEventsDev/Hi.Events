@@ -1,29 +1,28 @@
 import {useLocation, useNavigate} from "react-router";
-import {ActionIcon, Anchor} from '@mantine/core';
-import {EventCard} from './EventCard';
+import {EventList} from './EventList';
 import classes from './OrganizerHomepage.module.scss';
-import React, {Fragment, useEffect, useRef, useState} from 'react';
+import {Fragment, useEffect, useRef, useState} from 'react';
 import {Event, GenericPaginatedResponse, HomepageSection, Organizer} from "../../../types.ts";
 import {OrganizerDocumentHead} from "../../common/OrganizerDocumentHead";
-import {IconCalendarOff, IconExternalLink, IconMail, IconMapPin, IconWorld} from '@tabler/icons-react';
-import {t} from "@lingui/macro";
-import {PoweredByFooter} from "../../common/PoweredByFooter";
-import {socialMediaConfig} from "../../../constants/socialMediaConfig";
+import {IconCalendarEvent, IconCalendarOff, IconMail, IconMapPin, IconShare2, IconWorld} from '@tabler/icons-react';
+import {plural, t} from "@lingui/macro";
 import {ContactOrganizerModal} from "../../common/ContactOrganizerModal";
-import {formatAddress, getShortLocationDisplay} from "../../../utilites/addressUtilities.ts";
-import {organizerHomepagePath} from "../../../utilites/urlHelper.ts";
-import {removeTransparency} from "../../../utilites/colorHelper.ts";
+import {getGoogleMapsUrl, getShortLocationDisplay} from "../../../utilites/addressUtilities.ts";
+import {organizerHomepagePath, organizerHomepageUrl} from "../../../utilites/urlHelper.ts";
 import {StatusToggle} from "../../common/StatusToggle";
-import {getConfig} from "../../../utilites/config.ts";
 import {Pagination} from "../../common/Pagination";
-import {computeThemeVariables, validateThemeSettings} from "../../../utilites/themeUtils.ts";
-import {ensureHomepageFontLoaded} from "../../../utilites/fontLoader.ts";
+import {validateThemeSettings} from "../../../utilites/themeUtils.ts";
 import {useOrganizerTrackingPixels} from "../../../hooks/useOrganizerTrackingPixels";
-import {CookieSettingsLink} from "../../common/CookieSettingsLink";
 import {UserGeneratedContent} from "../../common/UserGeneratedContent";
+import {ShareComponent} from "../../common/ShareIcon";
 import {resolveOrganizerHomepageSections} from "../../../utilites/homepageSections.ts";
 import {organizerHomepageLayout} from "../../../utilites/homepageSectionLayout.ts";
+import {organizerSocialLinks, websiteHostname} from "../../../utilites/organizerLinks.ts";
 import {CustomHomepageSection} from "../EventHomepage/Sections";
+import {HomepageFrame} from "../HomepageFrame";
+import {CoverMedia} from "../HomepageFrame/CoverMedia.tsx";
+import {scrollBehavior} from "../../../utilites/motion.ts";
+import {sizedImageUrl} from "../../../utilites/imageTransform.ts";
 import {OrganizerPastEventsSection} from "./OrganizerPastEventsSection.tsx";
 
 interface OrganizerHomepageProps {
@@ -34,14 +33,6 @@ interface OrganizerHomepageProps {
 }
 
 const KEEP_EVENTS_IN_VIEW = {keepEventsInView: true};
-
-const hostnameOf = (url: string): string | null => {
-    try {
-        return new URL(url).hostname;
-    } catch {
-        return null;
-    }
-};
 
 export const OrganizerHomepage = ({
                                       organizer,
@@ -55,12 +46,12 @@ export const OrganizerHomepage = ({
     const [descriptionExpanded, setDescriptionExpanded] = useState(false);
     const [descriptionOverflows, setDescriptionOverflows] = useState(false);
     const descriptionRef = useRef<HTMLDivElement>(null);
-    const eventsSectionRef = useRef<HTMLDivElement>(null);
+    const eventsSectionRef = useRef<HTMLElement>(null);
 
     useEffect(() => {
         const handle = setTimeout(() => {
             if (location.state?.keepEventsInView) {
-                eventsSectionRef.current?.scrollIntoView({behavior: 'smooth', block: 'start'});
+                eventsSectionRef.current?.scrollIntoView({behavior: scrollBehavior(), block: 'start'});
                 return;
             }
             window.scrollTo(0, 0);
@@ -86,12 +77,6 @@ export const OrganizerHomepage = ({
         organizer?.settings?.tracking_pixels
     );
 
-    const themeSettings = validateThemeSettings(organizer?.settings?.homepage_theme_settings);
-
-    useEffect(() => {
-        ensureHomepageFontLoaded(themeSettings.font_family);
-    }, [themeSettings.font_family]);
-
     if (!organizer) {
         return null;
     }
@@ -103,129 +88,74 @@ export const OrganizerHomepage = ({
         );
     };
 
-    // Social links
-    const socialLinks = organizer.settings?.social_media_handles ? Object.entries(organizer.settings.social_media_handles)
-        .filter(([platform, handle]) => handle && socialMediaConfig[platform as keyof typeof socialMediaConfig])
-        .map(([platform, handle]) => ({
-            platform,
-            handle: handle as string,
-            config: socialMediaConfig[platform as keyof typeof socialMediaConfig]
-        })) : [];
-
+    const themeSettings = validateThemeSettings(organizer.settings?.homepage_theme_settings);
+    const socialLinks = organizerSocialLinks(organizer);
     const websiteUrl = organizer.website;
-    const websiteHostname = websiteUrl ? hostnameOf(websiteUrl) : null;
-
-    const getGoogleMapsUrl = (locationDetails: any) => {
-        if (!locationDetails) return '';
-        return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(formatAddress(locationDetails))}`;
-    };
-
-    // Images
-    const organizerLogo = organizer.images?.find(img => img.type === 'ORGANIZER_LOGO');
-    const organizerCover = organizer.images?.find(img => img.type === 'ORGANIZER_COVER');
-
+    const website = websiteUrl ? websiteHostname(websiteUrl) : null;
+    const address = organizer.location?.structured_address;
+    const shortAddress = getShortLocationDisplay(address);
+    const logo = organizer.images?.find(image => image.type === 'ORGANIZER_LOGO');
+    const cover = organizer.images?.find(image => image.type === 'ORGANIZER_COVER');
     const events = eventsData?.data || [];
-
-    const cssVars = computeThemeVariables(themeSettings);
-    const backgroundType = themeSettings.background_type;
-
-    const themeStyles = {
-        '--organizer-bg-color': themeSettings.background,
-        '--organizer-content-bg-color': cssVars['--theme-surface'],
-        '--organizer-primary-color': themeSettings.accent,
-        '--organizer-primary-text-color': cssVars['--theme-text-primary'],
-        '--organizer-secondary-color': cssVars['--theme-text-secondary'],
-        '--organizer-secondary-text-color': cssVars['--theme-text-tertiary'],
-        '--organizer-accent-contrast': cssVars['--theme-accent-contrast'],
-        '--organizer-accent-soft': cssVars['--theme-accent-soft'],
-        '--organizer-accent-muted': cssVars['--theme-accent-muted'],
-        '--organizer-border-color': cssVars['--theme-border'],
-        '--theme-font-family': cssVars['--theme-font-family'],
-        fontFamily: cssVars['--theme-font-family'],
-    } as React.CSSProperties;
-
     const layout = organizerHomepageLayout(resolveOrganizerHomepageSections(organizer.settings?.homepage_sections));
     const sectionClasses = {
-        section: classes.sectionCard,
-        sectionHeader: classes.sectionCardHeader,
-        sectionTitle: classes.eventsTitle,
+        section: classes.section,
+        sectionHeader: classes.sectionHeader,
+        sectionTitle: classes.sectionTitle,
     };
 
+    const eventCount = eventsData?.meta.total ?? 0;
+    const eventCountLabel = eventCount === 0
+        ? null
+        : isPastEvents
+            ? plural(eventCount, {one: '# past event', other: '# past events'})
+            : plural(eventCount, {one: '# upcoming event', other: '# upcoming events'});
+
     const contactActions = (
-        <div className={classes.profileActions}>
-            {(socialLinks.length > 0) && (
-                <div className={classes.socialLinks}>
-                    {socialLinks.map(({platform, handle, config}) => {
-                        const IconComponent = config.icon;
-                        const url = config.baseUrl + handle;
-                        const label = config.name();
-                        return (
-                            <ActionIcon
-                                key={platform}
-                                component="a"
-                                href={url}
-                                target="_blank"
-                                rel="nofollow ugc noopener noreferrer"
-                                title={label}
-                                aria-label={label}
-                                className={classes.socialIcon}
-                                variant="subtle"
-                                size="md"
-                            >
-                                <IconComponent size={16}/>
-                            </ActionIcon>
-                        );
-                    })}
-                </div>
-            )}
-            <button
-                onClick={() => setContactModalOpen(true)}
-                className={classes.contactButton}
-            >
-                <IconMail size={14} style={{marginRight: 6}}/>
+        <div className={classes.contactActions}>
+            <button type="button" onClick={() => setContactModalOpen(true)} className={classes.contactButton}>
+                <IconMail/>
                 {t`Contact`}
             </button>
+            {socialLinks.map(({platform, url, label, Icon}) => (
+                <a
+                    key={platform}
+                    href={url}
+                    target="_blank"
+                    rel="nofollow ugc noopener noreferrer"
+                    title={label}
+                    aria-label={label}
+                    className={classes.iconButton}
+                >
+                    <Icon/>
+                </a>
+            ))}
         </div>
     );
 
-    const footer = (
-        <div className={classes.footerSection}>
-            <PoweredByFooter className={classes.poweredByFooter}/>
-            <div className={classes.footerLinks}>
-                <Anchor
-                    href={getConfig('VITE_PRIVACY_URL', 'https://hi.events/privacy-policy?utm_source=app-organizer-footer')}
-                    className={classes.footerLink}
-                >
-                    {t`Privacy Policy`}
-                </Anchor>
-                <Anchor
-                    href={getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service?utm_source=app-organizer-footer')}
-                    className={classes.footerLink}
-                >
-                    {t`Terms of Service`}
-                </Anchor>
-                <CookieSettingsLink className={classes.cookieSettingsLink}/>
-            </div>
-        </div>
-    );
-
-    const renderEventsBlock = (heading: string | null | undefined, includesPastEvents: boolean, withFooter: boolean) => {
+    const renderEventsBlock = (heading: string | null | undefined, includesPastEvents: boolean) => {
         const showPastToggle = includesPastEvents || isPastEvents;
 
         return (
-            <div key="events" className={classes.eventsSection} ref={eventsSectionRef} data-testid="organizer-events-section">
-                <div className={classes.eventsHeader}>
-                    <h2 className={classes.eventsTitle}>{heading || t`Events`}</h2>
+            <section key="events" className={classes.section} id="events" ref={eventsSectionRef} data-testid="organizer-events-section">
+                <div className={classes.sectionHeader}>
+                    <h2 className={classes.sectionTitle}>{heading || t`Events`}</h2>
                     {showPastToggle && (
-                        <div className={classes.filterToggle}>
+                        <div className={classes.segmented}>
                             <button
-                                className={`${classes.filterButton} ${!isPastEvents ? classes.filterButtonActive : ''}`}
+                                type="button"
+                                className={classes.segment}
+                                data-active={!isPastEvents || undefined}
+                                aria-pressed={!isPastEvents}
                                 onClick={() => handleFilterChange(false)}
                             >
                                 {t`Upcoming`}
                             </button>
                             <button
-                                className={`${classes.filterButton} ${isPastEvents ? classes.filterButtonActive : ''}`}
+                                type="button"
+                                className={classes.segment}
+                                data-active={isPastEvents || undefined}
+                                aria-pressed={isPastEvents}
                                 onClick={() => handleFilterChange(true)}
                             >
                                 {t`Past`}
@@ -234,36 +164,25 @@ export const OrganizerHomepage = ({
                     )}
                 </div>
 
-                <div className={classes.eventsList}>
-                    {events.length === 0 ? (
-                        <div className={classes.noEvents}>
-                            <IconCalendarOff size={32}/>
-                            <p>{isPastEvents ? t`No past events` : t`No upcoming events`}</p>
-                            {!isPastEvents && showPastToggle && (
-                                <button
-                                    className={classes.noEventsLink}
-                                    onClick={() => handleFilterChange(true)}
-                                >
-                                    {t`View past events`}
-                                </button>
-                            )}
-                        </div>
-                    ) : (
-                        <div className={classes.eventsContainer}>
-                            {events.map((event) => (
-                                <EventCard
-                                    key={event.id}
-                                    event={event as Event}
-                                />
-                            ))}
-                        </div>
-                    )}
-                </div>
+                {events.length === 0 ? (
+                    <div className={classes.emptyState}>
+                        <span className={classes.emptyIcon}><IconCalendarOff/></span>
+                        <p>{isPastEvents ? t`No past events` : t`No upcoming events`}</p>
+                        {!isPastEvents && showPastToggle && (
+                            <button type="button" className={classes.textButton} onClick={() => handleFilterChange(true)}>
+                                {t`View past events`}
+                            </button>
+                        )}
+                    </div>
+                ) : (
+                    <EventList events={events as Event[]} past={isPastEvents}/>
+                )}
 
                 {eventsData && eventsData.meta.total > eventsData.meta.per_page && (
-                    <div className={classes.paginationWrapper}>
+                    <div className={classes.pagination}>
                         <Pagination
-                            size="sm"
+                            size="md"
+                            radius="xl"
                             siblings={1}
                             marginTop={0}
                             total={eventsData.meta.last_page}
@@ -274,12 +193,11 @@ export const OrganizerHomepage = ({
                                     : `${organizerHomepagePath(organizer)}?page=${page}`;
                                 navigate(newPath, {state: KEEP_EVENTS_IN_VIEW});
                             }}
-                            className={classes.paginationComponent}
+                            className={classes.paginationControls}
                         />
                     </div>
                 )}
-                {withFooter && footer}
-            </div>
+            </section>
         );
     };
 
@@ -287,18 +205,18 @@ export const OrganizerHomepage = ({
         switch (section.type) {
             case 'ABOUT':
                 return organizer.description ? (
-                    <section className={classes.sectionCard} data-testid="homepage-section-about">
-                        <div className={classes.sectionCardHeader}>
-                            <h2 className={classes.eventsTitle}>{section.heading || t`About`}</h2>
+                    <section className={classes.section} id="about" data-testid="homepage-section-about">
+                        <div className={classes.sectionHeader}>
+                            <h2 className={classes.sectionTitle}>{section.heading || t`About`}</h2>
                         </div>
                         <UserGeneratedContent className={classes.description} html={organizer.description}/>
                     </section>
                 ) : null;
             case 'CONTACT':
                 return (
-                    <section className={classes.sectionCard} data-testid="homepage-section-contact">
-                        <div className={classes.sectionCardHeader}>
-                            <h2 className={classes.eventsTitle}>{section.heading || t`Contact`}</h2>
+                    <section className={classes.section} id="contact" data-testid="homepage-section-contact">
+                        <div className={classes.sectionHeader}>
+                            <h2 className={classes.sectionTitle}>{section.heading || t`Contact`}</h2>
                         </div>
                         {contactActions}
                     </section>
@@ -319,7 +237,7 @@ export const OrganizerHomepage = ({
 
     return (
         <>
-            {!isPreview && organizer?.status && organizer?.id && (
+            {!isPreview && organizer.status && organizer.id && (
                 <StatusToggle
                     entityType="organizer"
                     entityId={organizer.id}
@@ -332,160 +250,97 @@ export const OrganizerHomepage = ({
                 />
             )}
 
-            {organizer && <OrganizerDocumentHead organizer={organizer}/>}
-            <main className={classes.pageWrapper} style={themeStyles} data-mode={themeSettings.mode}>
-                <style>
-                    {`
-                        body, .ssr-loader {
-                            background-color: ${removeTransparency(themeSettings.background)} !important;
-                        }
-                    `}
-                </style>
+            <OrganizerDocumentHead organizer={organizer}/>
 
-                {/* Background */}
-                {(organizerCover && backgroundType === 'MIRROR_COVER_IMAGE') ? (
-                    <div
-                        className={classes.background}
-                        style={{backgroundImage: `url(${organizerCover.url})`}}
-                    />
-                ) : (
-                    <div
-                        className={classes.background}
-                        style={{backgroundColor: 'var(--organizer-bg-color)'}}
-                    />
-                )}
-                <div
-                    className={classes.backgroundOverlay}
-                    style={backgroundType === 'MIRROR_COVER_IMAGE' ? {
-                        '--overlay-color': themeSettings.background
-                    } as React.CSSProperties : undefined}
-                />
-
-                <div className={classes.container}>
-                    <div className={classes.wrapper}>
-                        {/* Hero Section */}
-                        <div className={classes.heroSection}>
-                            {organizerCover && (
-                                <div
-                                    className={classes.coverWrapper}
-                                    style={organizerCover?.width && organizerCover?.height ? {
-                                        '--cover-aspect-ratio': `${organizerCover.width} / ${organizerCover.height}`,
-                                    } as React.CSSProperties : undefined}
-                                >
-                                    {organizerCover?.lqip_base64 && (
-                                        <img
-                                            src={organizerCover.lqip_base64}
-                                            alt=""
-                                            aria-hidden="true"
-                                            className={classes.coverLqip}
-                                        />
-                                    )}
-                                    <img
-                                        src={organizerCover.url}
-                                        alt={organizer.name}
-                                        className={classes.coverImage}
-                                    />
-                                </div>
-                            )}
-                            <div className={classes.organizerContentWrapper}>
-                                <div className={classes.organizerContent}>
-                                    <div className={classes.organizerProfile}>
-                                        <div className={classes.profileMain}>
-                                            {organizerLogo && (
-                                                <div className={classes.logoWrapper}>
-                                                    <img
-                                                        src={organizerLogo.url}
-                                                        alt={organizer.name}
-                                                        className={classes.logo}
-                                                    />
-                                                </div>
-                                            )}
-                                            <div className={classes.organizerInfo}>
-                                                <div className={classes.nameSection}>
-                                                    <h1>{organizer?.name}</h1>
-                                                    <div className={classes.organizerMeta}>
-                                                        {getShortLocationDisplay(organizer?.location?.structured_address) && (
-                                                            <div className={classes.metaItem}>
-                                                                <IconMapPin size={15} className={classes.metaIcon}/>
-                                                                <a
-                                                                    href={getGoogleMapsUrl(organizer.location!.structured_address!)}
-                                                                    target="_blank"
-                                                                    rel="nofollow ugc noopener noreferrer"
-                                                                    className={classes.mapLink}
-                                                                >
-                                                                    <span>{getShortLocationDisplay(organizer.location!.structured_address!)}</span>
-                                                                    <IconExternalLink size={12}/>
-                                                                </a>
-                                                            </div>
-                                                        )}
-                                                        {websiteUrl && websiteHostname && (
-                                                            <div className={classes.metaItem}>
-                                                                <IconWorld size={15} className={classes.metaIcon}/>
-                                                                <a
-                                                                    href={websiteUrl}
-                                                                    target="_blank"
-                                                                    rel="nofollow ugc noopener noreferrer"
-                                                                >
-                                                                    {websiteHostname}
-                                                                </a>
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                                {layout.heroContact && contactActions}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {layout.heroAbout && organizer?.description && (
-                                        <>
-                                            {layout.heroAbout.heading && (
-                                                <h2 className={classes.heroAboutHeading}>{layout.heroAbout.heading}</h2>
-                                            )}
-                                            <div
-                                                ref={descriptionRef}
-                                                className={`${classes.descriptionBlock}${descriptionExpanded ? '' : ` ${classes.descriptionClamp}`}`}
-                                                data-overflows={descriptionOverflows || undefined}
-                                            >
-                                                <UserGeneratedContent
-                                                    className={classes.description}
-                                                    html={organizer.description}
-                                                />
-                                            </div>
-                                            {(descriptionOverflows || descriptionExpanded) && (
-                                                <button
-                                                    className={classes.descriptionToggle}
-                                                    aria-expanded={descriptionExpanded}
-                                                    onClick={() => setDescriptionExpanded(!descriptionExpanded)}
-                                                >
-                                                    {descriptionExpanded ? t`Show less` : t`Read more`}
-                                                </button>
-                                            )}
-                                        </>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-
-                        {layout.blocks.map((block, index) => {
-                            const isLast = index === layout.blocks.length - 1;
-                            if (block.kind === 'events') {
-                                return renderEventsBlock(block.section.heading, block.includesPastEvents, isLast);
-                            }
-                            return <Fragment key={block.section.id}>{renderSection(block.section)}</Fragment>;
-                        })}
-                        {layout.blocks[layout.blocks.length - 1]?.kind !== 'events' && (
-                            <div className={classes.footerCard}>{footer}</div>
-                        )}
-                    </div>
-
-                    {/* Contact Modal */}
+            <HomepageFrame
+                themeSettings={themeSettings}
+                mirrorImageUrl={cover?.url}
+                footerSource="app-organizer-footer"
+                width="medium"
+                outside={(
                     <ContactOrganizerModal
                         opened={contactModalOpen}
                         onClose={() => setContactModalOpen(false)}
                         organizer={organizer}
                     />
+                )}
+            >
+                {cover && <CoverMedia image={cover} alt={organizer.name} variant="banner"/>}
+
+                <div className={classes.body}>
+                    <header className={classes.profile}>
+                        {logo
+                            ? <img src={sizedImageUrl(logo.url, 240)} alt="" className={classes.avatar}/>
+                            : <span className={classes.avatar} data-placeholder="" aria-hidden="true">{organizer.name.charAt(0).toUpperCase()}</span>}
+
+                        <div className={classes.identity}>
+                            <h1 className={classes.name}>{organizer.name}</h1>
+                            {(shortAddress || website || eventCountLabel) && (
+                                <div className={classes.meta}>
+                                    {shortAddress && address && (
+                                        <a href={getGoogleMapsUrl(address)} target="_blank" rel="nofollow ugc noopener noreferrer" className={classes.metaItem}>
+                                            <IconMapPin/>
+                                            {shortAddress}
+                                        </a>
+                                    )}
+                                    {websiteUrl && website && (
+                                        <a href={websiteUrl} target="_blank" rel="nofollow ugc noopener noreferrer" className={classes.metaItem}>
+                                            <IconWorld/>
+                                            {website}
+                                        </a>
+                                    )}
+                                    {eventCountLabel && (
+                                        <a href="#events" className={classes.metaItem}>
+                                            <IconCalendarEvent/>
+                                            {eventCountLabel}
+                                        </a>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+
+                        {layout.heroAbout && organizer.description && (
+                            <div className={classes.bio}>
+                                {layout.heroAbout.heading && (
+                                    <h2 className={classes.bioHeading}>{layout.heroAbout.heading}</h2>
+                                )}
+                                <div
+                                    ref={descriptionRef}
+                                    onFocus={() => setDescriptionExpanded(true)}
+                                    className={classes.bioText}
+                                    data-clamped={descriptionExpanded ? undefined : ''}
+                                    data-overflows={descriptionOverflows || undefined}
+                                >
+                                    <UserGeneratedContent className={classes.description} html={organizer.description}/>
+                                </div>
+                                {(descriptionOverflows || descriptionExpanded) && (
+                                    <button
+                                        type="button"
+                                        className={classes.textButton}
+                                        aria-expanded={descriptionExpanded}
+                                        onClick={() => setDescriptionExpanded(!descriptionExpanded)}
+                                    >
+                                        {descriptionExpanded ? t`Show less` : t`Read more`}
+                                    </button>
+                                )}
+                            </div>
+                        )}
+
+                        <div className={classes.profileActions}>
+                            {layout.heroContact && contactActions}
+                            <ShareComponent title={organizer.name} text={organizer.name} url={organizerHomepageUrl(organizer)}>
+                                <button type="button" className={classes.iconButton} title={t`Share`} aria-label={t`Share`}>
+                                    <IconShare2/>
+                                </button>
+                            </ShareComponent>
+                        </div>
+                    </header>
+
+                    {layout.blocks.map(block => block.kind === 'events'
+                        ? renderEventsBlock(block.section.heading, block.includesPastEvents)
+                        : <Fragment key={block.section.id}>{renderSection(block.section)}</Fragment>)}
                 </div>
-            </main>
+            </HomepageFrame>
         </>
     );
 };

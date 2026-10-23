@@ -23,9 +23,9 @@ class HomepageSectionValidationMessagesTest extends TestCase
 
         return [
             'too many sections' => [
-                array_map(fn (int $index) => ['id' => "text_$index", 'type' => 'TEXT'], range(1, 41)),
+                array_map(fn (int $index) => ['id' => "text_$index", 'type' => 'TEXT'], range(1, 42)),
                 'homepage_sections',
-                'You can add up to 40 sections.',
+                'You can add up to 41 sections.',
             ],
             'sections not a list' => ['nope', 'homepage_sections', self::INVALID_SECTION],
             'malformed section id' => [[['id' => 'bad id!', 'type' => 'TEXT']], 'homepage_sections.0.id', self::INVALID_SECTION],
