@@ -15,6 +15,7 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventLocationDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\DomainObjects\Generated\EmailTemplateDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\EventLocationDomainObjectAbstract;
 use HiEvents\DomainObjects\ImageDomainObject;
@@ -36,6 +37,7 @@ use HiEvents\Helper\IdHelper;
 use HiEvents\Helper\StringHelper;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
+use HiEvents\Repository\Interfaces\EmailTemplateRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventLocationRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -43,6 +45,7 @@ use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductOccurrenceVisibilityRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceOccurrenceOverrideRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
+use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
 use HiEvents\Services\Domain\CapacityAssignment\CreateCapacityAssignmentService;
 use HiEvents\Services\Domain\CheckInList\CreateCheckInListService;
 use HiEvents\Services\Domain\CreateWebhookService;
@@ -83,6 +86,8 @@ class DuplicateEventService
         private readonly FeatureFlagService $featureFlagService,
         private readonly EventLineupCloneService $eventLineupCloneService,
         private readonly HomepageSectionImageCloneService $homepageSectionImageCloneService,
+        private readonly QuestionRepositoryInterface $questionRepository,
+        private readonly EmailTemplateRepositoryInterface $emailTemplateRepository,
     ) {}
 
     /**
@@ -106,6 +111,7 @@ class DuplicateEventService
         bool $duplicateAffiliates = true,
         bool $duplicateOccurrences = true,
         bool $duplicateLineup = true,
+        bool $duplicateEmailTemplates = true,
         ?string $description = null,
         ?string $endDate = null,
     ): EventDomainObject {
@@ -141,14 +147,15 @@ class DuplicateEventService
                 $oldToNewOccurrenceMap = $this->cloneOccurrences($event, $newEvent->getId());
             }
 
+            $oldToNewQuestionMap = [];
             if ($duplicateQuestions) {
-                $this->clonePerOrderQuestions($event, $newEvent->getId());
+                $oldToNewQuestionMap = $this->clonePerOrderQuestions($event, $newEvent->getId());
             }
 
             $oldPriceToNewPriceMap = [];
             $oldProductToNewProductMap = [];
             if ($duplicateProducts) {
-                [$oldProductToNewProductMap, $oldPriceToNewPriceMap] = $this->cloneExistingProducts(
+                [$oldProductToNewProductMap, $oldPriceToNewPriceMap, $oldToNewProductQuestionMap] = $this->cloneExistingProducts(
                     event: $event,
                     newEventId: $newEvent->getId(),
                     duplicateQuestions: $duplicateQuestions,
@@ -156,8 +163,13 @@ class DuplicateEventService
                     duplicateCheckInLists: $duplicateCheckInLists,
                     oldToNewOccurrenceMap: $oldToNewOccurrenceMap,
                 );
+                $oldToNewQuestionMap += $oldToNewProductQuestionMap;
             } else {
                 $this->createProductCategoryService->createDefaultProductCategory($newEvent);
+            }
+
+            if ($oldToNewQuestionMap !== []) {
+                $this->restoreQuestionOrder($event, $newEvent->getId(), $oldToNewQuestionMap);
             }
 
             if ($duplicatePromoCodes) {
@@ -173,11 +185,11 @@ class DuplicateEventService
             }
 
             if ($duplicateEventCoverImage) {
-                $this->cloneEventCoverImage($event, $newEvent->getId());
+                $this->cloneEventImage($event, $newEvent->getId(), ImageType::EVENT_COVER);
             }
 
             if ($duplicateTicketLogo) {
-                $this->cloneTicketLogo($event, $newEvent->getId());
+                $this->cloneEventImage($event, $newEvent->getId(), ImageType::TICKET_LOGO);
             }
 
             if ($duplicateSettings) {
@@ -190,6 +202,10 @@ class DuplicateEventService
 
             if ($duplicateAffiliates) {
                 $this->duplicateAffiliates($event, $newEvent);
+            }
+
+            if ($duplicateEmailTemplates) {
+                $this->cloneEmailTemplates($event, $newEvent->getId());
             }
 
             if ($duplicateLineup) {
@@ -275,10 +291,9 @@ class DuplicateEventService
     }
 
     /**
+     * @return array{0: array<int, int>, 1: array<int, int>, 2: array<int, int>}
+     *
      * @throws Throwable
-     */
-    /**
-     * @return array{0: array<int, int>, 1: array<int, int>} [$oldProductToNewProductMap, $oldPriceToNewPriceMap]
      */
     private function cloneExistingProducts(
         EventDomainObject $event,
@@ -298,6 +313,7 @@ class DuplicateEventService
                     ->setNoProductsMessage($productCategory->getNoProductsMessage())
                     ->setDescription($productCategory->getDescription())
                     ->setIsHidden($productCategory->getIsHidden())
+                    ->setOrder($productCategory->getOrder())
                     ->setEventId($newEventId),
             );
 
@@ -305,6 +321,7 @@ class DuplicateEventService
             foreach ($productCategory->getProducts() as $product) {
                 $product->setEventId($newEventId);
                 $product->setProductCategoryId($newCategory->getId());
+                $this->moveSaleDatesToEventTimezone($product, $event);
                 $newProduct = $this->createProductService->createProduct(
                     product: $product,
                     accountId: $event->getAccountId(),
@@ -324,9 +341,9 @@ class DuplicateEventService
 
         $this->cloneProductAddons($event, $oldProductToNewProductMap);
 
-        if ($duplicateQuestions) {
-            $this->clonePerProductQuestions($event, $newEventId, $oldProductToNewProductMap);
-        }
+        $oldToNewQuestionMap = $duplicateQuestions
+            ? $this->clonePerProductQuestions($event, $newEventId, $oldProductToNewProductMap)
+            : [];
 
         if ($duplicateCapacityAssignments) {
             $this->cloneCapacityAssignments($event, $newEventId, $oldProductToNewProductMap);
@@ -337,7 +354,20 @@ class DuplicateEventService
             $this->cloneBoxOffices($event, $newEventId, $oldProductToNewProductMap, $oldToNewOccurrenceMap, $oldToNewCheckInListMap);
         }
 
-        return [$oldProductToNewProductMap, $oldPriceToNewPriceMap];
+        return [$oldProductToNewProductMap, $oldPriceToNewPriceMap, $oldToNewQuestionMap];
+    }
+
+    private function moveSaleDatesToEventTimezone(ProductDomainObject $product, EventDomainObject $event): void
+    {
+        $product
+            ->setSaleStartDate($this->toEventTimezone($product->getSaleStartDate(), $event))
+            ->setSaleEndDate($this->toEventTimezone($product->getSaleEndDate(), $event));
+
+        foreach ($product->getProductPrices() ?? [] as $price) {
+            $price
+                ->setSaleStartDate($this->toEventTimezone($price->getSaleStartDate(), $event))
+                ->setSaleEndDate($this->toEventTimezone($price->getSaleEndDate(), $event));
+        }
     }
 
     private function cloneProductAddons(EventDomainObject $event, array $oldProductToNewProductMap): void
@@ -364,21 +394,19 @@ class DuplicateEventService
     }
 
     /**
+     * @return array<int, int>
+     *
      * @throws Throwable
      */
-    private function clonePerProductQuestions(EventDomainObject $event, int $newEventId, array $oldProductToNewProductMap): void
+    private function clonePerProductQuestions(EventDomainObject $event, int $newEventId, array $oldProductToNewProductMap): array
     {
+        $oldToNewQuestionMap = [];
+
         foreach ($event->getQuestions() as $question) {
             if ($question->getBelongsTo() === QuestionBelongsTo::PRODUCT->name) {
-                $this->createQuestionService->createQuestion(
-                    (new QuestionDomainObject)
-                        ->setTitle($question->getTitle())
-                        ->setEventId($newEventId)
-                        ->setBelongsTo($question->getBelongsTo())
-                        ->setType($question->getType())
-                        ->setRequired($question->getRequired())
-                        ->setOptions($question->getOptions())
-                        ->setIsHidden($question->getIsHidden()),
+                $oldToNewQuestionMap[$question->getId()] = $this->cloneQuestion(
+                    $question,
+                    $newEventId,
                     array_map(
                         static fn (ProductDomainObject $product) => $oldProductToNewProductMap[$product->getId()],
                         $question->getProducts()?->all(),
@@ -386,29 +414,60 @@ class DuplicateEventService
                 );
             }
         }
+
+        return $oldToNewQuestionMap;
+    }
+
+    /**
+     * @return array<int, int>
+     *
+     * @throws Throwable
+     */
+    private function clonePerOrderQuestions(EventDomainObject $event, int $newEventId): array
+    {
+        $oldToNewQuestionMap = [];
+
+        foreach ($event->getQuestions() as $question) {
+            if ($question->getBelongsTo() === QuestionBelongsTo::ORDER->name) {
+                $oldToNewQuestionMap[$question->getId()] = $this->cloneQuestion($question, $newEventId, []);
+            }
+        }
+
+        return $oldToNewQuestionMap;
     }
 
     /**
      * @throws Throwable
      */
-    private function clonePerOrderQuestions(EventDomainObject $event, int $newEventId): void
+    private function cloneQuestion(QuestionDomainObject $question, int $newEventId, array $productIds): int
     {
-        foreach ($event->getQuestions() as $question) {
-            if ($question->getBelongsTo() === QuestionBelongsTo::ORDER->name) {
-                $this->createQuestionService->createQuestion(
-                    (new QuestionDomainObject)
-                        ->setTitle($question->getTitle())
-                        ->setDescription($question->getDescription())
-                        ->setEventId($newEventId)
-                        ->setBelongsTo($question->getBelongsTo())
-                        ->setType($question->getType())
-                        ->setRequired($question->getRequired())
-                        ->setOptions($question->getOptions())
-                        ->setIsHidden($question->getIsHidden()),
-                    [],
-                );
-            }
-        }
+        return $this->createQuestionService->createQuestion(
+            (new QuestionDomainObject)
+                ->setTitle($question->getTitle())
+                ->setDescription($question->getDescription())
+                ->setEventId($newEventId)
+                ->setBelongsTo($question->getBelongsTo())
+                ->setType($question->getType())
+                ->setRequired($question->getRequired())
+                ->setOptions($question->getOptions())
+                ->setIsHidden($question->getIsHidden()),
+            $productIds,
+        )->getId();
+    }
+
+    private function restoreQuestionOrder(EventDomainObject $event, int $newEventId, array $oldToNewQuestionMap): void
+    {
+        $orderedNewQuestionIds = $event->getQuestions()
+            ->filter(fn (QuestionDomainObject $question) => isset($oldToNewQuestionMap[$question->getId()]))
+            ->sortBy([
+                fn (QuestionDomainObject $a, QuestionDomainObject $b) => $a->getOrder() <=> $b->getOrder(),
+                fn (QuestionDomainObject $a, QuestionDomainObject $b) => $a->getId() <=> $b->getId(),
+            ])
+            ->map(fn (QuestionDomainObject $question) => $oldToNewQuestionMap[$question->getId()])
+            ->values()
+            ->all();
+
+        $this->questionRepository->sortQuestions($newEventId, $orderedNewQuestionIds);
     }
 
     /**
@@ -472,6 +531,10 @@ class DuplicateEventService
                 continue;
             }
 
+            if ($this->belongsToUncopiedOccurrence($event, $checkInList->getEventOccurrenceId(), $oldToNewOccurrenceMap)) {
+                continue;
+            }
+
             $sourceOccurrenceId = $checkInList->getEventOccurrenceId();
             $newOccurrenceId = $sourceOccurrenceId !== null
                 ? ($oldToNewOccurrenceMap[$sourceOccurrenceId] ?? null)
@@ -510,6 +573,10 @@ class DuplicateEventService
                 continue;
             }
 
+            if ($this->belongsToUncopiedOccurrence($event, $boxOffice->getEventOccurrenceId(), $oldToNewOccurrenceMap)) {
+                continue;
+            }
+
             $sourceOccurrenceId = $boxOffice->getEventOccurrenceId();
             $newOccurrenceId = $sourceOccurrenceId !== null
                 ? ($oldToNewOccurrenceMap[$sourceOccurrenceId] ?? null)
@@ -540,43 +607,59 @@ class DuplicateEventService
         }
     }
 
+    private function belongsToUncopiedOccurrence(EventDomainObject $event, ?int $sourceOccurrenceId, array $oldToNewOccurrenceMap): bool
+    {
+        return $sourceOccurrenceId !== null
+            && $event->getType() === EventType::RECURRING->name
+            && ! isset($oldToNewOccurrenceMap[$sourceOccurrenceId]);
+    }
+
     private function toEventTimezone(?string $utcDate, EventDomainObject $event): ?string
     {
         return $utcDate === null ? null : DateHelper::convertFromUTC($utcDate, $event->getTimezone());
     }
 
-    private function cloneEventCoverImage(EventDomainObject $event, int $newEventId): void
+    private function cloneEventImage(EventDomainObject $event, int $newEventId, ImageType $type): void
     {
-        /** @var ImageDomainObject $coverImage */
-        $coverImage = $event->getImages()?->first(fn (ImageDomainObject $image) => $image->getType() === ImageType::EVENT_COVER->name);
-        if ($coverImage) {
-            $this->imageRepository->create([
-                'entity_id' => $newEventId,
-                'entity_type' => EventDomainObject::class,
-                'type' => ImageType::EVENT_COVER->name,
-                'disk' => $coverImage->getDisk(),
-                'path' => $coverImage->getPath(),
-                'filename' => $coverImage->getFileName(),
-                'size' => $coverImage->getSize(),
-                'mime_type' => $coverImage->getMimeType(),
-            ]);
+        /** @var ImageDomainObject|null $image */
+        $image = $event->getImages()?->first(fn (ImageDomainObject $image) => $image->getType() === $type->name);
+        if ($image === null) {
+            return;
         }
+
+        $this->imageRepository->create([
+            'account_id' => $image->getAccountId(),
+            'entity_id' => $newEventId,
+            'entity_type' => EventDomainObject::class,
+            'type' => $type->name,
+            'disk' => $image->getDisk(),
+            'path' => $image->getPath(),
+            'filename' => $image->getFilename(),
+            'size' => $image->getSize(),
+            'mime_type' => $image->getMimeType(),
+            'width' => $image->getWidth(),
+            'height' => $image->getHeight(),
+            'avg_colour' => $image->getAvgColour(),
+            'lqip_base64' => $image->getLqipBase64(),
+        ]);
     }
 
-    private function cloneTicketLogo(EventDomainObject $event, int $newEventId): void
+    private function cloneEmailTemplates(EventDomainObject $event, int $newEventId): void
     {
-        /** @var ImageDomainObject $ticketLogo */
-        $ticketLogo = $event->getImages()?->first(fn (ImageDomainObject $image) => $image->getType() === ImageType::TICKET_LOGO->name);
-        if ($ticketLogo) {
-            $this->imageRepository->create([
-                'entity_id' => $newEventId,
-                'entity_type' => EventDomainObject::class,
-                'type' => ImageType::TICKET_LOGO->name,
-                'disk' => $ticketLogo->getDisk(),
-                'path' => $ticketLogo->getPath(),
-                'filename' => $ticketLogo->getFileName(),
-                'size' => $ticketLogo->getSize(),
-                'mime_type' => $ticketLogo->getMimeType(),
+        $templates = $this->emailTemplateRepository->findWhere([
+            EmailTemplateDomainObjectAbstract::EVENT_ID => $event->getId(),
+        ]);
+
+        foreach ($templates as $template) {
+            $this->emailTemplateRepository->create([
+                EmailTemplateDomainObjectAbstract::ACCOUNT_ID => $template->getAccountId(),
+                EmailTemplateDomainObjectAbstract::EVENT_ID => $newEventId,
+                EmailTemplateDomainObjectAbstract::TEMPLATE_TYPE => $template->getTemplateType(),
+                EmailTemplateDomainObjectAbstract::SUBJECT => $template->getSubject(),
+                EmailTemplateDomainObjectAbstract::BODY => $template->getBody(),
+                EmailTemplateDomainObjectAbstract::CTA => $template->getCta(),
+                EmailTemplateDomainObjectAbstract::ENGINE => $template->getEngine(),
+                EmailTemplateDomainObjectAbstract::IS_ACTIVE => $template->getIsActive(),
             ]);
         }
     }

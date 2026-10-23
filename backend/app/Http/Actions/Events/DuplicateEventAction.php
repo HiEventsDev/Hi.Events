@@ -53,6 +53,7 @@ class DuplicateEventAction extends BaseAction
                 duplicateAffiliates: $request->validated('duplicate_affiliates'),
                 duplicateLineup: $request->validated('duplicate_lineup') ?? true,
                 duplicateOccurrences: $request->validated('duplicate_occurrences') ?? true,
+                duplicateEmailTemplates: $request->validated('duplicate_email_templates') ?? true,
                 description: $request->validated('description'),
                 endDate: $request->validated('end_date'),
             ));
