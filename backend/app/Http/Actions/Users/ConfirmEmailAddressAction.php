@@ -3,6 +3,7 @@
 namespace HiEvents\Http\Actions\Users;
 
 use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Exceptions\EmailConfirmationTokenMismatchException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Attributes\AllowedForReadOnlyUsers;
 use HiEvents\Services\Application\Handlers\User\ConfirmEmailAddressHandler;
@@ -34,7 +35,7 @@ class ConfirmEmailAddressAction extends BaseAction
             ));
         } catch (EncryptedPayloadExpiredException) {
             return $this->errorResponse(__('The email confirmation link has expired. Please request a new one.'));
-        } catch (DecryptionFailedException) {
+        } catch (DecryptionFailedException|EmailConfirmationTokenMismatchException) {
             return $this->errorResponse(__('The email confirmation link is invalid.'));
         }
 

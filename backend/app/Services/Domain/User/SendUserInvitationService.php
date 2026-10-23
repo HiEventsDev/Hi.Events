@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Domain\User;
 
+use HiEvents\DomainObjects\Enums\EncryptedPayloadPurpose;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Exceptions\AccountNotVerifiedException;
 use HiEvents\Helper\Url;
@@ -49,6 +50,7 @@ class SendUserInvitationService
                 'user_id' => $invitedUser->getId(),
                 'account_id' => $accountId,
             ],
+            purpose: EncryptedPayloadPurpose::INVITATION,
             expiry: now()->addWeek(),
         );
 

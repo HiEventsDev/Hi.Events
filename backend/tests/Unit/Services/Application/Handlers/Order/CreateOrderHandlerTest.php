@@ -2,12 +2,14 @@
 
 namespace Tests\Unit\Services\Application\Handlers\Order;
 
+use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
 use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\DomainObjects\WidgetDomainObject;
 use HiEvents\Enterprise\Seating\Services\Domain\EventSeatMapLookupService;
@@ -417,6 +419,41 @@ class CreateOrderHandlerTest extends TestCase
 
         $result = $this->handler->handle($eventId, $dto);
         $this->assertInstanceOf(OrderDomainObject::class, $result);
+    }
+
+    public function test_rejects_an_order_that_overflows_a_shared_capacity_pool_held_by_reserved_orders(): void
+    {
+        $eventId = 1;
+
+        $this->databaseManager->shouldReceive('statement')->andReturn(true);
+        $this->setupEventMock($eventId);
+        $this->orderManagementService->shouldReceive('deleteExistingOrders');
+
+        $reservedOnOtherProduct = AvailableProductQuantitiesDTO::fromArray([
+            'product_id' => 11,
+            'price_id' => 101,
+            'product_title' => 'Test',
+            'product_type' => ProductType::TICKET->name,
+            'price_label' => null,
+            'quantity_available' => 100,
+            'quantity_reserved' => 100,
+            'initial_quantity_available' => 100,
+        ]);
+        $pool = (new CapacityAssignmentDomainObject)
+            ->setCapacity(100)
+            ->setUsedCapacity(0)
+            ->setProducts(collect([(new ProductDomainObject)->setId(10), (new ProductDomainObject)->setId(11)]));
+
+        $this->availabilityService->shouldReceive('getAvailableProductQuantities')
+            ->andReturn(new AvailableProductQuantitiesResponseDTO(
+                productQuantities: collect([$this->createAvailabilityDTO(10, 100, 100), $reservedOnOtherProduct]),
+                capacities: collect([$pool]),
+            ));
+
+        $this->orderManagementService->shouldNotReceive('createNewOrder');
+
+        $this->expectException(ValidationException::class);
+        $this->handler->handle($eventId, $this->createOrderDTO(quantity: 100));
     }
 
     public function test_rejects_same_price_across_occurrences_exceeding_total_availability(): void

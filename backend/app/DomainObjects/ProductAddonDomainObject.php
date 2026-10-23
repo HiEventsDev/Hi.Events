@@ -2,6 +2,4 @@
 
 namespace HiEvents\DomainObjects;
 
-class ProductAddonDomainObject extends Generated\ProductAddonDomainObjectAbstract
-{
-}
+class ProductAddonDomainObject extends Generated\ProductAddonDomainObjectAbstract {}

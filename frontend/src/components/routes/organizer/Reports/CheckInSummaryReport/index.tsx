@@ -58,7 +58,6 @@ const CheckInSummaryReport = () => {
             title={t`Check-in Summary`}
             columns={columns}
             isLoading={organizerQuery.isLoading}
-            downloadFileName="check_in_summary_report.csv"
             showDateFilter={false}
             organizer={organizer}
             showCurrencyFilter={false}

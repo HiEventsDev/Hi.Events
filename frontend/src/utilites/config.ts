@@ -2,6 +2,11 @@ import { ConfigKeys } from "../types.ts";
 import { isSsr } from "./helpers.ts";
 import process from "process";
 
+declare global {
+    interface Window {
+        hievents: Record<string, string>;
+    }
+}
 
 export const clientBuildEnv: { [K in ConfigKeys]: string } = {
     'VITE_APP_PRIMARY_COLOR': import.meta.env.VITE_APP_PRIMARY_COLOR,

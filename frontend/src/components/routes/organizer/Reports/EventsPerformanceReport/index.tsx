@@ -120,7 +120,6 @@ const EventsPerformanceReport = () => {
             title={t`Events Performance`}
             columns={columns}
             isLoading={organizerQuery.isLoading}
-            downloadFileName="events_performance_report.csv"
             showDateFilter={false}
             organizer={organizer}
             showCurrencyFilter={true}

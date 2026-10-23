@@ -1,5 +1,6 @@
 import {hydrateRoot} from "react-dom/client";
-import {createBrowserRouter, matchRoutes, RouterProvider} from "react-router-dom";
+import {createBrowserRouter, matchRoutes} from "react-router";
+import {RouterProvider} from "react-router/dom";
 
 import {router} from "./router";
 import {App} from "./App";
@@ -30,7 +31,7 @@ async function initClientApp() {
     if (matches && matches.length > 0) {
         await Promise.all(
             matches.map(async (m) => {
-                const routeModule = await m.route.lazy?.();
+                const routeModule = typeof m.route.lazy === "function" ? await m.route.lazy() : undefined;
                 Object.assign(m.route, {...routeModule, lazy: undefined});
             })
         );

@@ -4,6 +4,22 @@ import { useGetMe } from "../../../queries/useGetMe.ts";
 import { User } from "../../../types.ts";
 import { getConfig } from "../../../utilites/config.ts";
 
+interface ChatwootSdk {
+    run: (options: { websiteToken: string; baseUrl: string }) => void;
+}
+
+interface ChatwootApi {
+    setUser: (identifier: string, user: { email: string; name: string; locale: string }) => void;
+    setCustomAttributes: (attributes: Record<string, string | number | boolean | undefined>) => void;
+}
+
+declare global {
+    interface Window {
+        chatwootSDK: ChatwootSdk;
+        $chatwoot?: ChatwootApi;
+    }
+}
+
 const CHATWOOT_ROUTES = ["/manage", "/settings", "/welcome"];
 
 const ChatwootWidget = () => {

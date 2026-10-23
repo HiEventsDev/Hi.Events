@@ -1,6 +1,6 @@
-import {Button, ComboboxItem, Group, Select, Skeleton, Table as MantineTable} from '@mantine/core';
+import {Button, Group, Select, Skeleton, Table as MantineTable} from '@mantine/core';
 import {t} from '@lingui/macro';
-import {DatePickerInput} from "@mantine/dates";
+import {DatePickerInput, DatesRangeValue} from "@mantine/dates";
 import {IconArrowDown, IconArrowsSort, IconArrowUp, IconCalendar} from "@tabler/icons-react";
 import React, {useMemo, useState} from "react";
 import {PageTitle} from "../PageTitle";
@@ -133,7 +133,7 @@ const ReportTable = <T extends Record<string, any>>({
         return [start.toDate(), end.toDate()];
     };
 
-    const handlePeriodChange = (value: string | null, _: ComboboxItem) => {
+    const handlePeriodChange = (value: string | null) => {
         if (!value) return;
         setSelectedPeriod(value);
         const newRange = calculateDateRange(value);
@@ -141,7 +141,7 @@ const ReportTable = <T extends Record<string, any>>({
         onDateRangeChange?.(newRange);
     };
 
-    const handleDateRangeChange = (newRange: [Date | null, Date | null]) => {
+    const handleDateRangeChange = (newRange: DatesRangeValue<string>) => {
         const [start, end] = newRange;
         const tzStart = start ? dayjs(start).tz(event.timezone) : null;
         const tzEnd = end ? dayjs(end).tz(event.timezone) : null;

@@ -198,6 +198,9 @@ fi
 
 step "Running migrations and setup"
 $COMPOSE_CMD exec backend php artisan key:generate
+if grep -qE '^JWT_SECRET=(2hoccgHb9r1fqW1lU16C6khSHVa7O0eai6FxkWK95UtQ0LqNDTO5mq1RzDwcq18I)?$' ./../../backend/.env; then
+    $COMPOSE_CMD exec backend php artisan jwt:secret --force
+fi
 $COMPOSE_CMD exec backend php artisan migrate
 $COMPOSE_CMD exec backend chmod -R 775 /var/www/html/vendor/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/Serializer
 $COMPOSE_CMD exec backend php artisan storage:link

@@ -8,8 +8,10 @@ let cachedIframeId: string | null = null;
 let cachedParentUrl: string | null = null;
 let cachedEmbedMode: string | null = null;
 
+const isFramed = (): boolean => window.parent !== window;
+
 const resolveParam = (urlParam: string, storageKey: string, cached: string | null): string | null => {
-    if (isSsr()) return null;
+    if (isSsr() || !isFramed()) return null;
     if (cached) return cached;
 
     const fromUrl = new URLSearchParams(window.location.search).get(urlParam);

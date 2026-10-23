@@ -62,7 +62,6 @@ const TaxSummaryReport = () => {
             title={t`Tax Summary`}
             columns={columns}
             isLoading={organizerQuery.isLoading}
-            downloadFileName="tax_summary_report.csv"
             showDateFilter={true}
             organizer={organizer}
             showCurrencyFilter={true}

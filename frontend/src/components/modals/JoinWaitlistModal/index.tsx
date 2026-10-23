@@ -67,6 +67,7 @@ export const JoinWaitlistModal = ({onClose, product, event, productPriceId, even
                 ...values,
                 product_price_id: Number(productPriceId),
                 event_occurrence_id: eventOccurrenceId ? Number(eventOccurrenceId) : undefined,
+                promo_code: new URLSearchParams(window.location.search).get('promo_code') || undefined,
             },
         }, {
             onSuccess: () => {

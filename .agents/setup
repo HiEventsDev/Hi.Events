@@ -96,6 +96,13 @@ step "Composer install (backend)"
 (cd backend && composer install --no-interaction --no-progress --prefer-dist)
 done_step
 
+step "Backend keys"
+grep -qE '^APP_KEY=.+' backend/.env || (cd backend && php artisan key:generate --force --no-interaction)
+if grep -qE '^JWT_SECRET=(2hoccgHb9r1fqW1lU16C6khSHVa7O0eai6FxkWK95UtQ0LqNDTO5mq1RzDwcq18I)?$' backend/.env; then
+  (cd backend && php artisan jwt:secret --force --no-interaction)
+fi
+done_step
+
 step "Migrate development database"
 (cd backend && php artisan migrate --force --no-interaction)
 [ -e backend/public/storage ] || (cd backend && php artisan storage:link --no-interaction)

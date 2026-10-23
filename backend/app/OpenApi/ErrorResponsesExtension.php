@@ -15,6 +15,8 @@ use Illuminate\Support\Str;
 
 class ErrorResponsesExtension extends OperationExtension
 {
+    private const TOO_MANY_REQUESTS = 'Too many requests. Retry once the rate limit window resets.';
+
     public function handle(Operation $operation, RouteInfo $routeInfo): void
     {
         $middleware = collect($routeInfo->route->gatherMiddleware())->filter(fn ($m) => is_string($m));
@@ -38,11 +40,12 @@ class ErrorResponsesExtension extends OperationExtension
         }
 
         if ($middleware->contains(fn (string $m) => str_starts_with($m, 'throttle:')) && ! $existingCodes->contains(429)) {
-            $operation->addResponse($this->messageResponse(
-                429,
-                'Too many requests. Retry once the rate limit window resets.',
-            ));
+            $operation->addResponse($this->messageResponse(429, self::TOO_MANY_REQUESTS));
         }
+
+        collect($operation->responses)
+            ->filter(static fn ($response) => $response instanceof Response && $response->code === 429 && $response->description === '')
+            ->each(static fn (Response $response) => $response->setDescription(self::TOO_MANY_REQUESTS));
     }
 
     private function messageResponse(int $statusCode, string $description): Response

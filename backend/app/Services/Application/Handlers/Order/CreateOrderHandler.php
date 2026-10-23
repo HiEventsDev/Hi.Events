@@ -245,6 +245,14 @@ class CreateOrderHandler
                 }
             }
         }
+
+        $quantityByProductId = array_map(array_sum(...), $requestedQuantities);
+
+        if ($availability->firstOverflowingPool($quantityByProductId) !== null) {
+            throw ValidationException::withMessages([
+                'products' => __('Not enough products available. Please try again.'),
+            ]);
+        }
     }
 
     private function sumTicketQuantities(Collection $products, AvailableProductQuantitiesResponseDTO $availability): int

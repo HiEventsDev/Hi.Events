@@ -2111,6 +2111,7 @@ export interface JoinWaitlistRequest {
     first_name: string;
     last_name?: string;
     locale?: string;
+    promo_code?: string;
 }
 
 export interface WaitlistProductStats {

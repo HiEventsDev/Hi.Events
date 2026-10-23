@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Services\Application\Handlers\User;
 
+use HiEvents\DomainObjects\Enums\EncryptedPayloadPurpose;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Enterprise\Sso\Exceptions\AccountSsoConfigurationException;
 use HiEvents\Enterprise\Sso\Services\Domain\SsoEnforcementService;
@@ -119,6 +120,6 @@ class ConfirmEmailChangeHandlerTest extends TestCase
 
     private function givenTokenPayload(array $payload): void
     {
-        $this->encryptedPayloadService->shouldReceive('decryptPayload')->with('token')->andReturn($payload);
+        $this->encryptedPayloadService->shouldReceive('decryptPayload')->with('token', EncryptedPayloadPurpose::EMAIL_CHANGE)->andReturn($payload);
     }
 }

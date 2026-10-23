@@ -167,7 +167,7 @@ export class ApiClient {
     );
   }
 
-  updateOrganizerSettings(organizerId: number, settings: { first_day_of_week?: number }): Promise<void> {
+  updateOrganizerSettings(organizerId: number, settings: { first_day_of_week?: number; facebook_handle?: string }): Promise<void> {
     return check(this.request.patch(`organizers/${organizerId}/settings`, { headers: jsonHeaders, data: settings }));
   }
 
@@ -199,7 +199,7 @@ export class ApiClient {
   }
 
   getLineup(eventId: number): Promise<{
-    entries: { profile: { name: string; tagline: string | null; links: { type: string; url: string }[] } }[];
+    entries: { profile: { id: number; name: string; tagline: string | null; links: { type: string; url: string }[] } }[];
     schedule_items: { starts_at: string }[];
   }> {
     return unwrap(this.request.get(`events/${eventId}/lineup`, { headers: jsonHeaders }));
