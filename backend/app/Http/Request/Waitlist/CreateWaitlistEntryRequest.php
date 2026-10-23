@@ -24,6 +24,7 @@ class CreateWaitlistEntryRequest extends BaseRequest
             'email' => ['required', 'email', 'max:255'],
             'first_name' => ['required', 'string', 'max:255', new PersonNameRule],
             'last_name' => ['nullable', 'string', 'max:255', new PersonNameRule],
+            'promo_code' => ['nullable', 'string', 'max:255'],
         ];
     }
 }

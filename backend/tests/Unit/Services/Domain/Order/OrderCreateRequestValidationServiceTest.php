@@ -1097,6 +1097,7 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $price->shouldReceive('getLabel')->andReturn(null);
         $price->shouldReceive('isBeforeSaleStartDate')->andReturn($priceBeforeSaleStart);
         $price->shouldReceive('isAfterSaleEndDate')->andReturn($priceAfterSaleEnd);
+        $price->shouldReceive('isOnSale')->andReturn(! $priceBeforeSaleStart && ! $priceAfterSaleEnd);
         $price->shouldReceive('setQuantityReserved')->andReturnSelf();
         $price->shouldReceive('isQuantityPerOccurrence')->andReturn(false);
         $price->shouldReceive('isLockedBehindEarlierTier')->andReturn(false);
@@ -1139,6 +1140,7 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $price->shouldReceive('getLabel')->andReturn(null);
         $price->shouldReceive('isBeforeSaleStartDate')->andReturn(false);
         $price->shouldReceive('isAfterSaleEndDate')->andReturn(false);
+        $price->shouldReceive('isOnSale')->andReturn(true);
         $price->shouldReceive('setQuantityReserved')->andReturnSelf();
         $price->shouldReceive('isQuantityPerOccurrence')->andReturn(false);
         $price->shouldReceive('isLockedBehindEarlierTier')->andReturn(false);

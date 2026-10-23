@@ -94,4 +94,20 @@ test.describe('organizer public page', () => {
     const message = await mailpit.getMessage(summary.ID);
     expect(`${message.Text}\n${message.HTML}`).toContain(reference);
   });
+
+  test('organizer social handles cannot break out of the structured data script', async ({ page, api }) => {
+    const organizer = await createFreshOrganizer(api, uniqueName('E2E Script Org'));
+    await api.updateOrganizerSettings(organizer.id, {
+      facebook_handle: 'x</script><script>window.__organizerInjected=true</script>',
+    });
+    await api.updateOrganizerStatus(organizer.id, 'LIVE');
+
+    const response = await page.request.get(`/events/${organizer.id}/${organizer.slug}`);
+    expect(await response.text()).not.toContain('<script>window.__organizerInjected');
+
+    const publicPage = new OrganizerPublicPage(page);
+    await publicPage.goto(organizer.id, organizer.slug);
+    await expect(page.getByRole('heading', { name: organizer.name })).toBeVisible();
+    expect(await page.evaluate(() => (window as unknown as { __organizerInjected?: boolean }).__organizerInjected)).toBeUndefined();
+  });
 });

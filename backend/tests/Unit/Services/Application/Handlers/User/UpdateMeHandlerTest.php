@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Services\Application\Handlers\User;
 
+use HiEvents\DomainObjects\Enums\EncryptedPayloadPurpose;
 use HiEvents\DomainObjects\Enums\SsoTicketType;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Enterprise\Sso\Exceptions\AccountSsoConfigurationException;
@@ -86,7 +87,7 @@ class UpdateMeHandlerTest extends TestCase
         $this->encryptedPayloadService
             ->shouldReceive('encryptPayload')
             ->once()
-            ->with(['id' => 1, 'email' => 'new@example.com'])
+            ->with(['id' => 1, 'email' => 'new@example.com'], EncryptedPayloadPurpose::EMAIL_CHANGE)
             ->andReturn('token');
 
         $this->handler->handle($this->dto('new@example.com'));

@@ -28,6 +28,7 @@ return [
     'trusted_proxies' => env('APP_TRUSTED_PROXIES', '*'),
     'ssr_shared_secret' => env('APP_SSR_SHARED_SECRET'),
     'public_order_rate_limit_per_minute' => env('APP_PUBLIC_ORDER_RATE_LIMIT_PER_MINUTE', 60),
+    'public_order_reserved_quantity_per_ip' => env('APP_PUBLIC_ORDER_RESERVED_QUANTITY_PER_IP'),
     'public_promo_code_rate_limit_per_minute' => env('APP_PUBLIC_PROMO_CODE_RATE_LIMIT_PER_MINUTE', 10),
     'register_rate_limit_per_hour' => env('APP_REGISTER_RATE_LIMIT_PER_HOUR', 10),
     'public_payment_intent_rate_limit_per_hour' => env('APP_PUBLIC_PAYMENT_INTENT_RATE_LIMIT_PER_HOUR', 120),

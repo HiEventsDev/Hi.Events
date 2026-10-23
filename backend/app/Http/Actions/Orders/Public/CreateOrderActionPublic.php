@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\Enterprise\Seating\Exceptions\SeatSelectionInvalidException;
 use HiEvents\Enterprise\Seating\Exceptions\SeatsUnavailableException;
 use HiEvents\Exceptions\EventNotOpenForOrdersException;
+use HiEvents\Exceptions\OrderReservationLimitExceededException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Order\CreateOrderRequest;
 use HiEvents\Http\ResponseCodes;
@@ -19,6 +20,7 @@ use HiEvents\Services\Application\Handlers\Order\DTO\ProductOrderDetailsDTO;
 use HiEvents\Services\Application\Locale\LocaleService;
 use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
 use HiEvents\Services\Domain\Order\OrderCreateRequestValidationService;
+use HiEvents\Services\Domain\Order\PublicOrderQuantityLimiter;
 use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
@@ -33,6 +35,7 @@ class CreateOrderActionPublic extends BaseAction
         private readonly LocaleService $localeService,
         private readonly EventRepositoryInterface $eventRepository,
         private readonly AccountUserAccessService $accessService,
+        private readonly PublicOrderQuantityLimiter $quantityLimiter,
     ) {}
 
     /**
@@ -48,19 +51,29 @@ class CreateOrderActionPublic extends BaseAction
     {
         $validatedData = $this->orderCreateRequestValidationService->validateRequestData($eventId, $request->all());
         $sessionId = $this->sessionIdentifierService->getSessionId();
+        $accountOwnsEvent = $this->authenticatedAccountOwnsEvent($eventId);
+
+        $createOrder = fn () => $this->orderHandler->handle(
+            eventId: $eventId,
+            createOrderPublicDTO: CreateOrderPublicDTO::fromArray([
+                'can_order_unpublished_event' => $accountOwnsEvent,
+                'promo_code' => $request->input('promo_code'),
+                'affiliate_code' => $request->input('affiliate_code'),
+                'widget_id' => $request->input('widget_id'),
+                'products' => ProductOrderDetailsDTO::collectionFromArray($validatedData['products']),
+                'session_identifier' => $sessionId,
+                'order_locale' => $this->localeService->getLocaleOrDefault($request->getPreferredLanguage()),
+            ])
+        );
 
         try {
-            $order = $this->orderHandler->handle(
-                eventId: $eventId,
-                createOrderPublicDTO: CreateOrderPublicDTO::fromArray([
-                    'can_order_unpublished_event' => $this->authenticatedAccountOwnsEvent($eventId),
-                    'promo_code' => $request->input('promo_code'),
-                    'affiliate_code' => $request->input('affiliate_code'),
-                    'widget_id' => $request->input('widget_id'),
-                    'products' => ProductOrderDetailsDTO::collectionFromArray($validatedData['products']),
-                    'session_identifier' => $sessionId,
-                    'order_locale' => $this->localeService->getLocaleOrDefault($request->getPreferredLanguage()),
-                ])
+            $order = $accountOwnsEvent
+                ? $createOrder()
+                : $this->quantityLimiter->reserve($eventId, $request->ip(), $this->requestedQuantity($validatedData['products']), $createOrder, $sessionId);
+        } catch (OrderReservationLimitExceededException $exception) {
+            return $this->errorResponse(
+                message: $exception->getMessage(),
+                statusCode: ResponseCodes::HTTP_TOO_MANY_REQUESTS,
             );
         } catch (EventNotOpenForOrdersException $exception) {
             return $this->errorResponse(
@@ -87,6 +100,13 @@ class CreateOrderActionPublic extends BaseAction
 
         return $response->withCookie(
             cookie: $this->sessionIdentifierService->getSessionCookie(),
+        );
+    }
+
+    private function requestedQuantity(array $products): int
+    {
+        return (int) collect($products)->sum(
+            fn (array $product) => collect($product['quantities'] ?? [])->sum('quantity'),
         );
     }
 

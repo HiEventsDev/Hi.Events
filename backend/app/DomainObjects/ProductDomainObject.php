@@ -173,9 +173,24 @@ class ProductDomainObject extends Generated\ProductDomainObjectAbstract implemen
             && (new Carbon($this->getSaleEndDate()))->isPast();
     }
 
+    public function isOnSale(): bool
+    {
+        return ! $this->getIsHidden()
+            && ! $this->isBeforeSaleStartDate()
+            && ! $this->isAfterSaleEndDate();
+    }
+
+    public function isOnPublicSale(?PromoCodeDomainObject $promoCode = null): bool
+    {
+        if ($this->getIsHiddenWithoutPromoCode() && ! $promoCode?->appliesToProduct($this)) {
+            return false;
+        }
+
+        return $this->isOnSale();
+    }
+
     public function isAvailable(): bool
     {
-        // If all prices are hidden, it's not available
         if ($this->getType() === ProductPriceType::TIERED->name && $this->getProductPrices()?->isEmpty()) {
             return false;
         }

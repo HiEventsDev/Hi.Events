@@ -3,7 +3,9 @@
 namespace HiEvents\Services\Domain\User;
 
 use Carbon\Carbon;
+use HiEvents\DomainObjects\Enums\EncryptedPayloadPurpose;
 use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Exceptions\EmailConfirmationTokenMismatchException;
 use HiEvents\Mail\Account\ConfirmEmailAddressEmail;
 use HiEvents\Mail\Account\EmailConfirmationCodeEmail;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -30,14 +32,19 @@ class EmailConfirmationService
 
     /**
      * @throws DecryptionFailedException
+     * @throws EmailConfirmationTokenMismatchException
      * @throws EncryptedPayloadExpiredException|Throwable
      */
     public function confirmEmailAddress(string $token, int $accountId): void
     {
         $this->databaseManager->transaction(function () use ($accountId, $token) {
-            ['id' => $userId] = $this->encryptedPayloadService->decryptPayload($token);
+            $payload = $this->encryptedPayloadService->decryptPayload($token, EncryptedPayloadPurpose::EMAIL_CONFIRMATION);
 
-            $user = $this->userRepository->findByIdAndAccountId($userId, $accountId);
+            $user = $this->userRepository->findByIdAndAccountId($payload['id'], $accountId);
+
+            if (isset($payload['email']) && strcasecmp($payload['email'], $user->getEmail()) !== 0) {
+                throw new EmailConfirmationTokenMismatchException(__('The email confirmation link is invalid.'));
+            }
 
             $this->verifyUserEmailService->markEmailAsVerified($user, $accountId);
         });
@@ -63,7 +70,8 @@ class EmailConfirmationService
 
         $token = $this->encryptedPayloadService->encryptPayload([
             'id' => $user->getId(),
-        ], Carbon::now()->addMonths(6));
+            'email' => $user->getEmail(),
+        ], EncryptedPayloadPurpose::EMAIL_CONFIRMATION, Carbon::now()->addMonths(6));
 
         $this->mailer
             ->to($user->getEmail())

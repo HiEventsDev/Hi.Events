@@ -167,7 +167,7 @@ export class ApiClient {
     );
   }
 
-  updateOrganizerSettings(organizerId: number, settings: { first_day_of_week?: number }): Promise<void> {
+  updateOrganizerSettings(organizerId: number, settings: { first_day_of_week?: number; facebook_handle?: string }): Promise<void> {
     return check(this.request.patch(`organizers/${organizerId}/settings`, { headers: jsonHeaders, data: settings }));
   }
 

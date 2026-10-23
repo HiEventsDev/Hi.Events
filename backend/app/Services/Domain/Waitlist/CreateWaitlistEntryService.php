@@ -4,6 +4,8 @@ namespace HiEvents\Services\Domain\Waitlist;
 
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
+use HiEvents\DomainObjects\ProductPriceDomainObject;
+use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\DomainObjects\Status\WaitlistEntryStatus;
 use HiEvents\DomainObjects\WaitlistEntryDomainObject;
 use HiEvents\Enterprise\Seating\Services\Domain\SeatedProductLookupService;
@@ -30,8 +32,11 @@ class CreateWaitlistEntryService
         CreateWaitlistEntryDTO $dto,
         EventSettingDomainObject $eventSettings,
         ProductDomainObject $product,
+        ProductPriceDomainObject $productPrice,
+        ?PromoCodeDomainObject $promoCode = null,
     ): WaitlistEntryDomainObject {
         $this->validateWaitlistEnabled($product);
+        $this->validateOnPublicSale($product, $productPrice, $promoCode);
 
         /** @var WaitlistEntryDomainObject $entry */
         $entry = $this->databaseManager->transaction(function () use ($dto) {
@@ -69,6 +74,19 @@ class CreateWaitlistEntryService
 
         if ($this->seatedProductLookup->isSeated($product->getId())) {
             throw new ResourceConflictException(__('The waitlist is not available for reserved seating tickets'));
+        }
+    }
+
+    /**
+     * @throws ResourceConflictException
+     */
+    private function validateOnPublicSale(
+        ProductDomainObject $product,
+        ProductPriceDomainObject $productPrice,
+        ?PromoCodeDomainObject $promoCode,
+    ): void {
+        if (! $product->isOnPublicSale($promoCode) || ! $productPrice->isOnSale()) {
+            throw new ResourceConflictException(__('Waitlist is not enabled for this product'));
         }
     }
 

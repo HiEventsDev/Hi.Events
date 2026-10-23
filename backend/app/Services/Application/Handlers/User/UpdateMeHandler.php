@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Application\Handlers\User;
 
+use HiEvents\DomainObjects\Enums\EncryptedPayloadPurpose;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Enterprise\Sso\Exceptions\AccountSsoConfigurationException;
 use HiEvents\Enterprise\Sso\Services\Domain\SsoEnforcementService;
@@ -182,7 +183,7 @@ readonly class UpdateMeHandler
             ->send(new ConfirmEmailChangeMail($newEmail, $this->encryptedPayloadService->encryptPayload([
                 'id' => $existingUser->getId(),
                 'email' => $newEmail,
-            ]))
+            ], EncryptedPayloadPurpose::EMAIL_CHANGE))
             );
     }
 

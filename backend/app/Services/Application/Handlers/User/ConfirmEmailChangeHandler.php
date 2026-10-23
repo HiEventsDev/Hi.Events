@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Application\Handlers\User;
 
+use HiEvents\DomainObjects\Enums\EncryptedPayloadPurpose;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Enterprise\Sso\Exceptions\AccountSsoConfigurationException;
 use HiEvents\Enterprise\Sso\Services\Domain\SsoEnforcementService;
@@ -30,7 +31,7 @@ readonly class ConfirmEmailChangeHandler
     public function handle(ConfirmEmailChangeDTO $data): UserDomainObject
     {
         return $this->databaseManager->transaction(function () use ($data) {
-            $payload = $this->encryptedPayloadService->decryptPayload($data->token);
+            $payload = $this->encryptedPayloadService->decryptPayload($data->token, EncryptedPayloadPurpose::EMAIL_CHANGE);
             $userId = $payload['id'];
 
             $user = $this->userRepository->findByIdAndAccountId($userId, $data->accountId);

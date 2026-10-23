@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Auth\Sso;
 
+use HiEvents\DomainObjects\Enums\EncryptedPayloadPurpose;
 use HiEvents\DomainObjects\Enums\FeatureFlag;
 use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\Models\AccountConfiguration;
@@ -135,7 +136,7 @@ class SsoInvitationEnforcementTest extends TestCase
         return app(EncryptedPayloadService::class)->encryptPayload([
             'user_id' => $user->id,
             'account_id' => $accountId,
-        ]);
+        ], EncryptedPayloadPurpose::INVITATION);
     }
 
     private function membershipStatus(User $user, int $accountId): string

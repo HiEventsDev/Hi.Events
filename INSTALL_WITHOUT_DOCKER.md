@@ -96,12 +96,13 @@ Hi.Events has two main directories: `backend` (Laravel) and `frontend` (React).
    composer install
    ```
 
-6. **Generate Application Key:**
+6. **Generate Application Key and JWT Secret:**
 
-   Generate the Laravel application key:
+   Generate the Laravel application key and the secret that signs login tokens:
 
    ```bash
    php artisan key:generate
+   php artisan jwt:secret --force
    ```
 
 7. **Run Migrations:**
