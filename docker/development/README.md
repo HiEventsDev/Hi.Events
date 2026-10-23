@@ -97,6 +97,7 @@ docker-compose -f docker-compose.dev.yml exec frontend cp .env.example .env
 
 ```bash
 docker-compose -f docker-compose.dev.yml exec backend php artisan key:generate
+docker-compose -f docker-compose.dev.yml exec backend php artisan jwt:secret --force
 docker-compose -f docker-compose.dev.yml exec backend php artisan migrate
 docker-compose -f docker-compose.dev.yml exec backend chmod -R 775 /var/www/html/vendor/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/Serializer
 docker-compose -f docker-compose.dev.yml exec backend php artisan storage:link

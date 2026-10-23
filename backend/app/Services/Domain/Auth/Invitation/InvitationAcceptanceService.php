@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Domain\Auth\Invitation;
 
+use HiEvents\DomainObjects\Enums\EncryptedPayloadPurpose;
 use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
@@ -39,7 +40,7 @@ class InvitationAcceptanceService
      */
     public function findPending(string $invitationToken): PendingInvitation
     {
-        ['user_id' => $userId, 'account_id' => $accountId] = $this->encryptedPayloadService->decryptPayload($invitationToken);
+        ['user_id' => $userId, 'account_id' => $accountId] = $this->encryptedPayloadService->decryptPayload($invitationToken, EncryptedPayloadPurpose::INVITATION);
 
         try {
             $user = $this->userRepository->findByIdAndAccountId($userId, $accountId);

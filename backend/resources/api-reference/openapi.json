@@ -12245,7 +12245,7 @@
             }
           },
           "429": {
-            "description": "",
+            "description": "Too many requests. Retry once the rate limit window resets.",
             "content": {
               "application/json": {
                 "schema": {
@@ -12408,7 +12408,7 @@
             }
           },
           "429": {
-            "description": "",
+            "description": "Too many requests. Retry once the rate limit window resets.",
             "content": {
               "application/json": {
                 "schema": {
@@ -12715,7 +12715,7 @@
             }
           },
           "429": {
-            "description": "",
+            "description": "Too many requests. Retry once the rate limit window resets.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14547,11 +14547,8 @@
               }
             }
           },
-          "422": {
-            "$ref": "#/components/responses/ValidationException"
-          },
-          "404": {
-            "description": "The requested resource was not found.",
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14559,17 +14556,25 @@
                   "properties": {
                     "message": {
                       "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
                     }
                   },
                   "required": [
-                    "message"
+                    "message",
+                    "errors"
                   ]
                 }
               }
             }
           },
-          "429": {
-            "description": "Too many requests. Retry once the rate limit window resets.",
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
+          },
+          "404": {
+            "description": "The requested resource was not found.",
             "content": {
               "application/json": {
                 "schema": {
@@ -28376,6 +28381,13 @@
             "maxLength": 255
           },
           "last_name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 255
+          },
+          "promo_code": {
             "type": [
               "string",
               "null"

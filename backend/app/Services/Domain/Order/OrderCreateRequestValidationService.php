@@ -646,13 +646,7 @@ class OrderCreateRequestValidationService
 
     private function isPriceUnavailable(?ProductPriceDomainObject $price): bool
     {
-        if ($price === null) {
-            return true;
-        }
-
-        return $price->getIsHidden()
-            || $price->isBeforeSaleStartDate()
-            || $price->isAfterSaleEndDate();
+        return $price === null || ! $price->isOnSale();
     }
 
     /**

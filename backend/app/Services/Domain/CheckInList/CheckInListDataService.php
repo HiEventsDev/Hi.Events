@@ -37,14 +37,6 @@ class CheckInListDataService
             );
         }
 
-        if (empty($allowedProductIds) && $attendee->getEventId() !== $checkInList->getEventId()) {
-            throw new CannotCheckInException(
-                __('Attendee :attendee_name does not belong to this event', [
-                    'attendee_name' => $attendee->getFullName(),
-                ])
-            );
-        }
-
         if ($checkInList->getEventOccurrenceId() !== null
             && $attendee->getEventOccurrenceId() !== $checkInList->getEventOccurrenceId()
         ) {
@@ -62,13 +54,14 @@ class CheckInListDataService
      * @throws Exception
      * @throws CannotCheckInException
      */
-    public function getAttendees(Collection $attendeePublicIds): Collection
+    public function getAttendees(CheckInListDomainObject $checkInList, Collection $attendeePublicIds): Collection
     {
         $attendeePublicIds = array_unique($attendeePublicIds->toArray());
 
         $attendees = $this->attendeeRepository->findWhereIn(
             field: AttendeeDomainObjectAbstract::PUBLIC_ID,
-            values: $attendeePublicIds
+            values: $attendeePublicIds,
+            additionalWhere: [AttendeeDomainObjectAbstract::EVENT_ID => $checkInList->getEventId()],
         );
 
         if (count($attendees) !== count($attendeePublicIds)) {

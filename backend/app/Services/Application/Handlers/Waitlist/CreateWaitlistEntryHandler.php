@@ -4,6 +4,8 @@ namespace HiEvents\Services\Application\Handlers\Waitlist;
 
 use HiEvents\DomainObjects\Enums\EventType;
 use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
+use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\DomainObjects\WaitlistEntryDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
@@ -14,8 +16,10 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
+use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Waitlist\DTO\CreateWaitlistEntryDTO;
 use HiEvents\Services\Domain\EventOccurrence\OccurrencePurchaseEligibilityService;
+use HiEvents\Services\Domain\PromoCode\PromoCodeUsageValidationService;
 use HiEvents\Services\Domain\Waitlist\CreateWaitlistEntryService;
 use Illuminate\Validation\ValidationException;
 
@@ -29,6 +33,8 @@ class CreateWaitlistEntryHandler
         private readonly ProductRepositoryInterface $productRepository,
         private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
         private readonly OccurrencePurchaseEligibilityService $occurrenceEligibilityService,
+        private readonly PromoCodeRepositoryInterface $promoCodeRepository,
+        private readonly PromoCodeUsageValidationService $promoCodeUsageValidationService,
     ) {}
 
     /**
@@ -72,6 +78,7 @@ class CreateWaitlistEntryHandler
                     last_name: $dto->last_name,
                     locale: $dto->locale,
                     event_occurrence_id: $occurrence->getId(),
+                    promo_code: $dto->promo_code,
                 );
             }
         }
@@ -109,6 +116,26 @@ class CreateWaitlistEntryHandler
             );
         }
 
-        return $this->createWaitlistEntryService->createEntry($dto, $eventSettings, $product);
+        return $this->createWaitlistEntryService->createEntry(
+            $dto,
+            $eventSettings,
+            $product,
+            $productPrice,
+            $this->getUsablePromoCode($dto),
+        );
+    }
+
+    private function getUsablePromoCode(CreateWaitlistEntryDTO $dto): ?PromoCodeDomainObject
+    {
+        if ($dto->promo_code === null || trim($dto->promo_code) === '') {
+            return null;
+        }
+
+        $promoCode = $this->promoCodeRepository->findFirstWhere([
+            PromoCodeDomainObjectAbstract::CODE => strtolower(trim($dto->promo_code)),
+            PromoCodeDomainObjectAbstract::EVENT_ID => $dto->event_id,
+        ]);
+
+        return $this->promoCodeUsageValidationService->isPromoCodeUsable($promoCode) ? $promoCode : null;
     }
 }
