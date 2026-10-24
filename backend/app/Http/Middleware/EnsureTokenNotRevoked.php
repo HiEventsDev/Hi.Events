@@ -43,7 +43,7 @@ class EnsureTokenNotRevoked
             ], Response::HTTP_UNAUTHORIZED);
         }
 
-        $this->treatAsAnonymous($request);
+        $this->authUserService->treatRequestAsAnonymous($request);
 
         return $next($request);
     }
@@ -92,16 +92,6 @@ class EnsureTokenNotRevoked
     private function carriesToken(Request $request): bool
     {
         return $request->bearerToken() !== null || $request->cookies->has('token');
-    }
-
-    private function treatAsAnonymous(Request $request): void
-    {
-        $request->headers->remove('Authorization');
-        $request->server->remove('HTTP_AUTHORIZATION');
-        $request->server->remove('REDIRECT_HTTP_AUTHORIZATION');
-        $request->cookies->remove('token');
-        app('tymon.jwt')->unsetToken();
-        Auth::guard('api')->forgetUser();
     }
 
     private function routeRequiresAuthentication(Request $request): bool

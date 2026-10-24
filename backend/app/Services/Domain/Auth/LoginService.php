@@ -10,6 +10,7 @@ use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Enterprise\Sso\Exceptions\SsoRequiredException;
 use HiEvents\Enterprise\Sso\Repository\Interfaces\AccountSsoConnectionRepositoryInterface;
 use HiEvents\Enterprise\Sso\Services\Domain\SsoEnforcementService;
+use HiEvents\Exceptions\AccountSuspendedException;
 use HiEvents\Exceptions\InvitationPendingException;
 use HiEvents\Exceptions\UnauthorizedException;
 use HiEvents\Models\User;
@@ -175,14 +176,27 @@ class LoginService
         );
     }
 
+    /**
+     * @throws AccountSuspendedException
+     */
     private function findActiveUserAccounts(UserDomainObject $user): Collection
     {
-        return $this->accountUserRepository
+        $activeMemberships = $this->accountUserRepository
             ->loadRelation(new Relationship(domainObject: AccountDomainObject::class, name: 'account'))
             ->findWhere([
                 'user_id' => $user->getId(),
                 'status' => UserStatus::ACTIVE->name,
             ]);
+
+        $membershipsOfUnsuspendedAccounts = $activeMemberships
+            ->filter(fn (AccountUserDomainObject $accountUser) => $accountUser->getAccount()?->getSuspendedAt() === null)
+            ->values();
+
+        if ($membershipsOfUnsuspendedAccounts->isEmpty() && $activeMemberships->isNotEmpty()) {
+            throw new AccountSuspendedException(__('This account has been suspended.'));
+        }
+
+        return $membershipsOfUnsuspendedAccounts;
     }
 
     /**

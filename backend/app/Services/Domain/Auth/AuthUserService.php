@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Models\User;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use Illuminate\Auth\AuthManager;
+use Illuminate\Http\Request;
 use Laravel\Sanctum\PersonalAccessToken;
 use PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException;
 use Throwable;
@@ -98,6 +99,16 @@ class AuthUserService
         if (! $this->isApiKeyRequest()) {
             $this->authManager->logout();
         }
+    }
+
+    public function treatRequestAsAnonymous(Request $request): void
+    {
+        $request->headers->remove('Authorization');
+        $request->server->remove('HTTP_AUTHORIZATION');
+        $request->server->remove('REDIRECT_HTTP_AUTHORIZATION');
+        $request->cookies->remove('token');
+        app('tymon.jwt')->unsetToken();
+        $this->authManager->guard('api')->forgetUser();
     }
 
     public function getUser(): UserDomainObject|DomainObjectInterface|null

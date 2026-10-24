@@ -19,7 +19,7 @@ import {withLoadingNotification} from "../../../utilites/withLoadingNotification
 import {useAbandonOrderPublic} from "../../../mutations/useAbandonOrderPublic.ts";
 import {showError, showInfo} from "../../../utilites/notifications.tsx";
 import {isDateInFuture, utcDateToEpochMs} from "../../../utilites/dates.ts";
-import {getCheckoutSessionIdentifier} from "../../../utilites/checkoutSession.ts";
+import {claimOrderCompletionReport, getCheckoutSessionIdentifier} from "../../../utilites/checkoutSession.ts";
 import {PoweredByFooter} from "../../common/PoweredByFooter";
 import {detectMode} from "../../../utilites/themeUtils.ts";
 import {CheckoutThemeProvider} from "./CheckoutThemeProvider.tsx";
@@ -166,6 +166,9 @@ const Checkout = () => {
             return;
         }
         reportedOrderRef.current = order.short_id;
+        if (!claimOrderCompletionReport(order.short_id)) {
+            return;
+        }
         postToParent('hievents:order-completed', {
             eventId,
             currency: order.currency,

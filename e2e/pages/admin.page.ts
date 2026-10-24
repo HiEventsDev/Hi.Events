@@ -71,6 +71,12 @@ export class AdminPage {
     await this.page.getByTestId('admin-delete-account-confirm-button').click();
   }
 
+  async suspendAccount(reason: string): Promise<void> {
+    await this.page.getByTestId('admin-suspend-account-button').click();
+    await this.page.getByLabel('Reason').fill(reason);
+    await this.page.getByTestId('admin-suspend-account-confirm-button').click();
+  }
+
   async gotoLifecycleEmails(): Promise<void> {
     await this.page.goto('/admin/lifecycle-emails');
     await this.page.waitForLoadState('networkidle');

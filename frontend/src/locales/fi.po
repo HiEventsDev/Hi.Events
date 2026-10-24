@@ -828,8 +828,8 @@ msgstr "1. Hanki todennussovellus"
 msgid "12 mats in the studio and one Drop-in ticket."
 msgstr "12 mattoa studiossa ja yksi Drop-in-lippu."
 
-#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:78
-#: src/components/routes/event/TicketDesigner/TicketPreview.tsx:78
+#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:64
+#: src/components/routes/event/TicketDesigner/TicketPreview.tsx:68
 msgid "123 Sample Street"
 msgstr "123 Sample Street"
 
@@ -1104,7 +1104,7 @@ msgstr "Tili · {0}"
 msgid "Account · {0} · {1}"
 msgstr "Tili · {0} · {1}"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:78
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:82
 msgid "Account deletion cancelled"
 msgstr "Tilin poisto peruttu"
 
@@ -1117,15 +1117,15 @@ msgid "Account deletion is blocked"
 msgstr "Tilin poistaminen on estetty"
 
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:28
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:70
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:74
 msgid "Account deletion queued"
 msgstr "Tilin poisto jonossa"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:144
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:160
 msgid "Account Information"
 msgstr "Tilitiedot"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:60
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:64
 msgid "Account marked as verified"
 msgstr "Tili vahvistettu"
 
@@ -1134,7 +1134,7 @@ msgstr "Tili vahvistettu"
 msgid "Account name"
 msgstr "Tilin nimi"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:113
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:126
 msgid "Account not found"
 msgstr "Tiliä ei löydy"
 
@@ -1154,11 +1154,19 @@ msgstr "Tili ajastettu poistettavaksi 30 päivän kuluttua"
 msgid "Account Settings"
 msgstr "Tiliasetukset"
 
+#: src/components/routes/admin/Accounts/AccountDetail/SuspendAccountModal.tsx:25
+msgid "Account suspended"
+msgstr "Tili jäädytetty"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:90
+msgid "Account unsuspended"
+msgstr "Tilin jäädytys poistettu"
+
 #: src/components/routes/settings/Account/index.tsx:59
 msgid "Account updated successfully"
 msgstr "Tili päivitetty onnistuneesti"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:61
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:65
 msgid "Account verification revoked"
 msgstr "Tilin vahvistus peruttu"
 
@@ -1477,7 +1485,7 @@ msgid "Add photos"
 msgstr "Lisää kuvia"
 
 #: src/components/common/ProductsTable/ProductsBlankSlate/index.tsx:69
-#: src/components/common/ProductsTable/SortableCategory/index.tsx:186
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:185
 msgid "Add Product"
 msgstr "Lisää tuote"
 
@@ -1894,6 +1902,10 @@ msgstr "Kaikki epäonnistuneet tehtävät poistettu"
 msgid "All jobs queued for retry"
 msgstr "Kaikki tehtävät asetettu uudelleenyritykseen"
 
+#: src/components/routes/admin/Accounts/AccountDetail/SuspendAccountModal.tsx:38
+msgid "All live events and organizer pages are moved to draft, and nobody on the account can sign in or use its API keys until it is unsuspended. Unsuspending does not republish anything."
+msgstr "Kaikki julkaistut tapahtumat ja järjestäjäsivut siirretään luonnoksiksi, eikä kukaan tilillä voi kirjautua sisään tai käyttää sen API-avaimia ennen kuin jäädytys poistetaan. Jäädytyksen poistaminen ei julkaise mitään uudelleen."
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:347
 msgid "All matching dates"
 msgstr "Kaikki vastaavat päivämäärät"
@@ -1907,7 +1919,7 @@ msgstr "Kaikki tapahtumakerrat"
 msgid "All Occurrences"
 msgstr "Kaikki tapahtumakerrat"
 
-#: src/components/common/PromoCodeTable/index.tsx:141
+#: src/components/common/PromoCodeTable/index.tsx:142
 msgid "All Products"
 msgstr "Kaikki tuotteet"
 
@@ -2471,7 +2483,7 @@ msgstr "Haluatko varmasti poistaa tämän päivämäärän? Tätä toimintoa ei 
 msgid "Are you sure you want to delete this image?"
 msgstr "Haluatko varmasti poistaa tämän kuvan?"
 
-#: src/components/common/PromoCodeTable/index.tsx:39
+#: src/components/common/PromoCodeTable/index.tsx:40
 msgid "Are you sure you want to delete this promo code?"
 msgstr "Haluatko varmasti poistaa tämän kampanjakoodin?"
 
@@ -2492,7 +2504,7 @@ msgstr "Haluatko varmasti poistaa tämän mallineen? Tätä toimintoa ei voi per
 msgid "Are you sure you want to delete this webhook?"
 msgstr "Haluatko varmasti poistaa tämän webhookin?"
 
-#: src/components/layouts/Checkout/index.tsx:458
+#: src/components/layouts/Checkout/index.tsx:461
 msgid "Are you sure you want to leave?"
 msgstr "Haluatko varmasti poistua?"
 
@@ -2651,7 +2663,7 @@ msgstr "Määritä eri suunnitelma"
 msgid "Assign plan"
 msgstr "Määritä suunnitelma"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:229
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:245
 msgid "Assigned Tier"
 msgstr "Määritetty taso"
 
@@ -2912,7 +2924,7 @@ msgstr "Odottaa maksua"
 
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:117
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:225
-#: src/components/layouts/Checkout/index.tsx:339
+#: src/components/layouts/Checkout/index.tsx:342
 #: src/components/modals/ProductPurchasesModal/index.tsx:79
 #: src/components/modals/ProductPurchasesModal/index.tsx:209
 #: src/components/modals/ProductPurchasesModal/index.tsx:247
@@ -2950,7 +2962,7 @@ msgstr "Awesome Organizer Ltd."
 msgid "Back"
 msgstr "Takaisin"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:135
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:148
 msgid "Back to Accounts"
 msgstr "Takaisin tileihin"
 
@@ -2961,8 +2973,8 @@ msgstr "Takaisin tileihin"
 msgid "Back to Event"
 msgstr "Takaisin tapahtumaan"
 
-#: src/components/layouts/Checkout/index.tsx:325
-#: src/components/layouts/Checkout/index.tsx:326
+#: src/components/layouts/Checkout/index.tsx:328
+#: src/components/layouts/Checkout/index.tsx:329
 msgid "Back to event page"
 msgstr "Takaisin tapahtumasivulle"
 
@@ -3459,7 +3471,7 @@ msgstr "Etkö voi käyttää todennussovellusta tai palautuskoodeja?"
 #: src/components/common/ContactOrganizerModal/index.tsx:107
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:132
 #: src/components/common/LocationPicker/index.tsx:352
-#: src/components/common/PromoCodeTable/index.tsx:42
+#: src/components/common/PromoCodeTable/index.tsx:43
 #: src/components/common/QuestionAndAnswerList/index.tsx:126
 #: src/components/common/WaitlistTable/index.tsx:117
 #: src/components/common/WaitlistTable/index.tsx:138
@@ -3468,7 +3480,7 @@ msgstr "Etkö voi käyttää todennussovellusta tai palautuskoodeja?"
 #: src/components/modals/CreateAffiliateModal/index.tsx:88
 #: src/components/modals/CreateAttendeeModal/index.tsx:335
 #: src/components/modals/CreateCapacityAssignmentModal/index.tsx:75
-#: src/components/modals/CreateCheckInListModal/index.tsx:106
+#: src/components/modals/CreateCheckInListModal/index.tsx:104
 #: src/components/modals/CreateEventModal/index.tsx:478
 #: src/components/modals/CreateOrganizerModal/index.tsx:66
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:89
@@ -3494,6 +3506,7 @@ msgstr "Etkö voi käyttää todennussovellusta tai palautuskoodeja?"
 #: src/components/modals/ManageOrderModal/index.tsx:241
 #: src/components/modals/PublishEventModal/index.tsx:212
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:80
+#: src/components/routes/admin/Accounts/AccountDetail/SuspendAccountModal.tsx:65
 #: src/components/routes/admin/Announcements/index.tsx:500
 #: src/components/routes/admin/Configurations/index.tsx:269
 #: src/components/routes/admin/DeletionRequests/index.tsx:178
@@ -3556,7 +3569,7 @@ msgid "Cancel Date"
 msgstr "Peruuta päivämäärä"
 
 #: src/components/common/PendingDeletionBanner/index.tsx:39
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:406
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:462
 #: src/components/routes/admin/DeletionRequests/index.tsx:232
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:101
 msgid "Cancel deletion"
@@ -3721,7 +3734,7 @@ msgstr "Kategoriat auttavat ryhmittelemään tuotteita. Esimerkiksi voit luoda k
 msgid "Categories help you organize your products. This title will be displayed on the public event page."
 msgstr "Kategoriat auttavat järjestämään tuotteitasi. Tämä otsikko näytetään julkisella tapahtumasivulla."
 
-#: src/components/common/ProductsTable/SortableCategory/index.tsx:105
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:104
 msgid "Categories reordered successfully."
 msgstr "Kategoriat järjestettiin uudelleen onnistuneesti."
 
@@ -3905,7 +3918,7 @@ msgstr "Kirjaa ulos"
 msgid "Check out this event: {0}"
 msgstr "Tutustu tähän tapahtumaan: {0}"
 
-#: src/components/layouts/Checkout/index.tsx:373
+#: src/components/layouts/Checkout/index.tsx:376
 msgid "Check out this event!"
 msgstr "Tutustu tähän tapahtumaan!"
 
@@ -3924,7 +3937,7 @@ msgstr "Tarkista sähköpostisi"
 msgid "Check your event page"
 msgstr "Tarkista tapahtumasivu"
 
-#: src/components/routes/auth/Login/index.tsx:220
+#: src/components/routes/auth/Login/index.tsx:231
 #: src/components/routes/my-tickets/index.tsx:191
 msgid "Check your inbox! If tickets are associated with this email, you'll receive a link to view them."
 msgstr "Tarkista postilaatikkosi! Jos tähän sähköpostiin liittyy lippuja, saat linkin niiden tarkastelemiseen."
@@ -4084,7 +4097,7 @@ msgstr "Tarkistetaan…"
 msgid "Checkout"
 msgstr "Kassa"
 
-#: src/components/layouts/Checkout/index.tsx:345
+#: src/components/layouts/Checkout/index.tsx:348
 msgid "Checkout · step {stepNumber} of {stepCount}"
 msgstr "Kassa · vaihe {stepNumber}/{stepCount}"
 
@@ -4357,7 +4370,7 @@ msgstr "Lisää kulmia napsauttamalla. Napsauta ensimmäistä kulmaa tai paina E
 msgid "Click to cancel"
 msgstr "Napsauta peruuttaaksesi"
 
-#: src/components/common/PromoCodeTable/index.tsx:108
+#: src/components/common/PromoCodeTable/index.tsx:109
 msgid "Click to copy"
 msgstr "Napsauta kopioidaksesi"
 
@@ -4404,8 +4417,8 @@ msgstr "sulje"
 #: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:86
 #: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:122
 #: src/components/modals/CreateEventModal/index.tsx:288
-#: src/components/modals/JoinWaitlistModal/index.tsx:116
-#: src/components/modals/JoinWaitlistModal/index.tsx:143
+#: src/components/modals/JoinWaitlistModal/index.tsx:117
+#: src/components/modals/JoinWaitlistModal/index.tsx:144
 #: src/components/modals/RefundOrderModal/index.tsx:172
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:892
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1245
@@ -4429,7 +4442,7 @@ msgid "Club"
 msgstr "Klubi"
 
 #: src/components/common/AffiliateTable/index.tsx:82
-#: src/components/common/PromoCodeTable/index.tsx:71
+#: src/components/common/PromoCodeTable/index.tsx:72
 #: src/components/forms/AffiliateForm/index.tsx:38
 #: src/components/forms/AffiliateForm/index.tsx:72
 #: src/components/forms/PromoCodeForm/index.tsx:64
@@ -5005,7 +5018,7 @@ msgstr "Kopioitu"
 msgid "Copied from above"
 msgstr "Kopioitu yllä olevasta"
 
-#: src/components/common/PromoCodeTable/index.tsx:116
+#: src/components/common/PromoCodeTable/index.tsx:117
 msgid "copied to clipboard"
 msgstr "kopioitu leikepöydälle"
 
@@ -5174,7 +5187,7 @@ msgid "Copy TXT record value"
 msgstr "Kopioi TXT-tietueen arvo"
 
 #: src/components/common/AffiliateTable/index.tsx:107
-#: src/components/common/PromoCodeTable/index.tsx:189
+#: src/components/common/PromoCodeTable/index.tsx:190
 msgid "Copy URL"
 msgstr "Kopioi URL"
 
@@ -5383,7 +5396,7 @@ msgstr "Luo salasana"
 msgid "Create a Product"
 msgstr "Luo tuote"
 
-#: src/components/common/PromoCodeTable/index.tsx:59
+#: src/components/common/PromoCodeTable/index.tsx:60
 msgid "Create a Promo Code"
 msgstr "Luo kampanjakoodi"
 
@@ -5396,7 +5409,7 @@ msgstr "Luo istumakartta"
 msgid "Create a ticket"
 msgstr "Luo lippu"
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:72
+#: src/components/modals/CreateCheckInListModal/index.tsx:70
 #: src/ee/box-office/components/modals/CreateBoxOfficeModal/index.tsx:79
 msgid "Create a Ticket"
 msgstr "Luo lippu"
@@ -5461,8 +5474,8 @@ msgstr "Luo lippukassa"
 msgid "Create Capacity Assignment"
 msgstr "Luo kapasiteetin kohdistus"
 
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:142
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:143
-#: src/components/common/ProductsTable/SortableCategory/index.tsx:144
 msgid "Create category"
 msgstr "Luo kategoria"
 
@@ -5473,8 +5486,8 @@ msgstr "Luo kategoria"
 
 #: src/components/common/CheckInListList/index.tsx:60
 #: src/components/common/CheckInListTable/index.tsx:295
-#: src/components/modals/CreateCheckInListModal/index.tsx:91
-#: src/components/modals/CreateCheckInListModal/index.tsx:112
+#: src/components/modals/CreateCheckInListModal/index.tsx:89
+#: src/components/modals/CreateCheckInListModal/index.tsx:110
 #: src/components/routes/event/CheckInLists/index.tsx:76
 msgid "Create Check-In List"
 msgstr "Luo sisäänkirjauslista"
@@ -5611,7 +5624,7 @@ msgid "Create your own event"
 msgstr "Luo oma tapahtumasi"
 
 #: src/components/common/LocationsTable/index.tsx:114
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:153
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:310
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:69
@@ -5652,7 +5665,7 @@ msgstr "CTA-etiketti on pakollinen"
 #: src/components/modals/CreateEventModal/index.tsx:437
 #: src/components/modals/CreateEventModal/index.tsx:438
 #: src/components/modals/CreateOrganizerModal/index.tsx:50
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:170
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:186
 #: src/components/routes/admin/Dashboard/index.tsx:205
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:138
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:51
@@ -5827,7 +5840,7 @@ msgstr "Tanssilattia"
 #: src/components/common/LocationsTable/index.tsx:71
 #: src/components/common/OrganizerWebhookTable/index.tsx:121
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:607
-#: src/components/common/PromoCodeTable/index.tsx:194
+#: src/components/common/PromoCodeTable/index.tsx:195
 #: src/components/common/WebhookTable/index.tsx:121
 #: src/components/routes/event/Lineup/LineupPreview.tsx:132
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:103
@@ -6064,7 +6077,7 @@ msgstr "poista"
 
 #: src/components/common/LocationsTable/index.tsx:45
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:613
-#: src/components/common/PromoCodeTable/index.tsx:42
+#: src/components/common/PromoCodeTable/index.tsx:43
 #: src/components/common/QuestionsTable/index.tsx:158
 #: src/components/common/WidgetEditor/index.tsx:149
 #: src/components/common/WidgetEditor/index.tsx:261
@@ -6106,8 +6119,8 @@ msgstr "Poistetaanko {profileName} kaikkialta? Hänet poistetaan tämän järjes
 msgid "Delete {spaceName}? Time slots on it stay on the schedule without a stage."
 msgstr "Poistetaanko {spaceName}? Sen aikavälit jäävät aikatauluun ilman lavaa."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:383
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:421
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:439
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:477
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:112
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:158
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:171
@@ -6135,9 +6148,9 @@ msgstr "Poista lippukassa"
 msgid "Delete Capacity"
 msgstr "Poista kapasiteetti"
 
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:160
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:161
-#: src/components/common/ProductsTable/SortableCategory/index.tsx:162
-#: src/components/common/ProductsTable/SortableCategory/index.tsx:211
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:210
 msgid "Delete category"
 msgstr "Poista kategoria"
 
@@ -6146,7 +6159,7 @@ msgstr "Poista kategoria"
 msgid "Delete Check-In List"
 msgstr "Poista sisäänkirjauslista"
 
-#: src/components/common/PromoCodeTable/index.tsx:198
+#: src/components/common/PromoCodeTable/index.tsx:199
 msgid "Delete code"
 msgstr "Poista koodi"
 
@@ -6194,8 +6207,8 @@ msgid "Delete location"
 msgstr "Poista sijainti"
 
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:88
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:73
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:399
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:77
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:455
 msgid "Delete now"
 msgstr "Poista nyt"
 
@@ -6220,7 +6233,7 @@ msgstr "Poista profiili kaikkialta"
 msgid "Delete Template"
 msgstr "Poista malli"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:68
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:72
 msgid "Delete this account now instead of waiting for the grace period? This cannot be undone."
 msgstr "Poistetaanko tämä tili nyt odottamatta harkinta-aikaa? Tätä ei voi perua."
 
@@ -6265,7 +6278,7 @@ msgstr "Poistettiin {0} päivää"
 msgid "Deleted account"
 msgstr "Tilin poisto peruutettu"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:387
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:443
 msgid "Deletion is scheduled for {0}."
 msgstr "Poisto on ajastettu ajankohtaan {0}."
 
@@ -6439,7 +6452,7 @@ msgstr "Katkaise Stripe-tilin yhteys"
 msgid "Discord"
 msgstr "Discord"
 
-#: src/components/common/PromoCodeTable/index.tsx:72
+#: src/components/common/PromoCodeTable/index.tsx:73
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:62
 #: src/ee/box-office/components/layouts/BoxOffice/CartPanel.tsx:119
 msgid "Discount"
@@ -6510,7 +6523,7 @@ msgstr "Verkkotunnus vahvistettu"
 msgid "Don't forget!"
 msgstr "Älä unohda!"
 
-#: src/components/routes/auth/Login/index.tsx:132
+#: src/components/routes/auth/Login/index.tsx:143
 msgid "Don't have an account? <0>Sign up</0>"
 msgstr "Eikö sinulla ole tiliä? <0>Rekisteröidy</0>"
 
@@ -6571,7 +6584,7 @@ msgstr "Lataa CSV"
 msgid "Download invoice"
 msgstr "Lataa lasku"
 
-#: src/components/layouts/Checkout/index.tsx:393
+#: src/components/layouts/Checkout/index.tsx:396
 msgid "Download Invoice"
 msgstr "Lataa lasku"
 
@@ -6587,7 +6600,7 @@ msgstr "Lataa myynti-, osallistuja- ja talousraportit kaikista valmiista tilauks
 msgid "Download spreadsheet (.xlsx)"
 msgstr "Lataa taulukko (.xlsx)"
 
-#: src/components/layouts/Checkout/index.tsx:203
+#: src/components/layouts/Checkout/index.tsx:206
 #: src/hooks/useOrderActions.tsx:80
 msgid "Downloading Invoice"
 msgstr "Ladataan laskua"
@@ -6886,9 +6899,9 @@ msgstr "Muokkaa kapasiteettia"
 msgid "Edit Capacity Assignment"
 msgstr "Muokkaa kapasiteetin kohdistusta"
 
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:151
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:152
-#: src/components/common/ProductsTable/SortableCategory/index.tsx:153
-#: src/components/common/ProductsTable/SortableCategory/index.tsx:189
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:188
 msgid "Edit category"
 msgstr "Muokkaa kategoriaa"
 
@@ -6898,7 +6911,7 @@ msgstr "Muokkaa kategoriaa"
 msgid "Edit Check-In List"
 msgstr "Muokkaa sisäänkirjautumislistaa"
 
-#: src/components/common/PromoCodeTable/index.tsx:181
+#: src/components/common/PromoCodeTable/index.tsx:182
 msgid "Edit Code"
 msgstr "Muokkaa koodia"
 
@@ -7046,13 +7059,13 @@ msgstr "Kelpoiset sisäänkirjautumislistat"
 #: src/components/common/QuestionsTable/index.tsx:264
 #: src/components/forms/AffiliateForm/index.tsx:89
 #: src/components/modals/InviteUserModal/index.tsx:61
-#: src/components/modals/JoinWaitlistModal/index.tsx:189
+#: src/components/modals/JoinWaitlistModal/index.tsx:190
 #: src/components/modals/ManageAttendeeModal/index.tsx:174
 #: src/components/modals/ManageOrderModal/index.tsx:141
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:149
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:165
 #: src/components/routes/admin/EmailDelivery/index.tsx:95
 #: src/components/routes/auth/ForgotPassword/index.tsx:69
-#: src/components/routes/auth/Login/index.tsx:176
+#: src/components/routes/auth/Login/index.tsx:187
 #: src/components/routes/auth/Register/index.tsx:153
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:99
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:70
@@ -7173,6 +7186,10 @@ msgstr "Sähköpostipohjat"
 #: src/components/routes/organizer/Settings/index.tsx:69
 msgid "Email Templates"
 msgstr "Sähköpostipohjat"
+
+#: src/components/routes/admin/Accounts/AccountDetail/SuspendAccountModal.tsx:57
+msgid "Email the account owner"
+msgstr "Lähetä sähköposti tilin omistajalle"
 
 #: src/ee/box-office/components/layouts/BoxOffice/SaleComplete.tsx:137
 msgid "Email to send tickets"
@@ -7443,7 +7460,7 @@ msgid "Enter unique affiliate code"
 msgstr "Anna uniikki kumppanikoodi"
 
 #: src/components/common/ContactOrganizerModal/index.tsx:83
-#: src/components/routes/auth/Login/index.tsx:237
+#: src/components/routes/auth/Login/index.tsx:248
 #: src/components/routes/my-tickets/index.tsx:209
 msgid "Enter your email"
 msgstr "Anna sähköpostiosoitteesi"
@@ -7506,7 +7523,7 @@ msgid "Entries will appear here when customers join the waitlist for sold out pr
 msgstr "Merkinnät näkyvät tässä, kun asiakkaat liittyvät jonotuslistalle loppuunmyytyjen tuotteiden kohdalla."
 
 #: src/components/common/OrganizerWebhookTable/index.tsx:155
-#: src/components/layouts/Checkout/index.tsx:211
+#: src/components/layouts/Checkout/index.tsx:214
 #: src/hooks/useOrderActions.tsx:88
 msgid "Error"
 msgstr "Virhe"
@@ -7647,7 +7664,7 @@ msgstr "Tapahtumatiedot"
 msgid "Event duplicated"
 msgstr "Tapahtuma kopioitu"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:334
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:350
 msgid "Event ID: {0}"
 msgstr "Tapahtuman tunnus: {0}"
 
@@ -7747,12 +7764,12 @@ msgstr "Tapahtumatyypit"
 msgid "Event Updated"
 msgstr "Tapahtuma päivitetty"
 
-#: src/components/common/AdminAccountsTable/index.tsx:82
+#: src/components/common/AdminAccountsTable/index.tsx:85
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:127
 #: src/components/layouts/Admin/index.tsx:20
 #: src/components/layouts/OrganizerHomepage/index.tsx:142
 #: src/components/layouts/OrganizerLayout/index.tsx:118
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:180
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:196
 #: src/components/routes/admin/Attribution/index.tsx:195
 #: src/components/routes/admin/Dashboard/index.tsx:398
 #: src/components/routes/admin/Events/index.tsx:77
@@ -7951,7 +7968,7 @@ msgstr "Vanhentunut"
 msgid "Expired {0}"
 msgstr "Vanheni {0}"
 
-#: src/components/common/PromoCodeTable/index.tsx:75
+#: src/components/common/PromoCodeTable/index.tsx:76
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:33
 #: src/components/routes/settings/ApiKeys/index.tsx:176
@@ -8044,7 +8061,7 @@ msgstr "Epäonnistuneet työt"
 msgid "Failed Jobs"
 msgstr "Epäonnistuneet tehtävät"
 
-#: src/components/layouts/Checkout/index.tsx:226
+#: src/components/layouts/Checkout/index.tsx:229
 msgid "Failed to abandon order. Please try again."
 msgstr "Tilauksen hylkääminen epäonnistui. Yritä uudelleen."
 
@@ -8060,7 +8077,7 @@ msgstr "Tapahtuman hyväksyminen epäonnistui"
 msgid "Failed to assign configuration"
 msgstr "Määrityksen kohdistaminen epäonnistui"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:79
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:83
 msgid "Failed to cancel account deletion"
 msgstr "Tilin poiston peruminen epäonnistui"
 
@@ -8117,7 +8134,7 @@ msgid "Failed to create template"
 msgstr "Mallin luonti epäonnistui"
 
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:33
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:71
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:75
 msgid "Failed to delete account"
 msgstr "Tilin poistaminen epäonnistui"
 
@@ -8173,7 +8190,7 @@ msgstr "Kysymyksen poisto epäonnistui"
 msgid "Failed to delete template"
 msgstr "Mallin poisto epäonnistui"
 
-#: src/components/layouts/Checkout/index.tsx:212
+#: src/components/layouts/Checkout/index.tsx:215
 #: src/hooks/useOrderActions.tsx:89
 msgid "Failed to download invoice. Please try again."
 msgstr "Laskun lataus epäonnistui. Yritä uudelleen."
@@ -8315,7 +8332,15 @@ msgstr "Henkilöitymisen aloittaminen epäonnistui. Yritä uudelleen."
 msgid "Failed to stop impersonation. Please try again."
 msgstr "Henkilöitymisen lopettaminen epäonnistui. Yritä uudelleen."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:63
+#: src/components/routes/admin/Accounts/AccountDetail/SuspendAccountModal.tsx:29
+msgid "Failed to suspend account"
+msgstr "Tilin jäädyttäminen epäonnistui"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:91
+msgid "Failed to unsuspend account"
+msgstr "Tilin jäädytyksen poistaminen epäonnistui"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:67
 msgid "Failed to update account verification"
 msgstr "Tilin vahvistamisen päivittäminen epäonnistui"
 
@@ -8347,7 +8372,7 @@ msgstr "Tapahtuman tilan päivitys epäonnistui"
 msgid "Failed to update feature flag"
 msgstr "Ominaisuuslipun päivitys epäonnistui"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:52
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:56
 msgid "Failed to update messaging tier"
 msgstr "Viestitasojen päivitys epäonnistui"
 
@@ -8598,7 +8623,7 @@ msgstr "Etunimi"
 #: src/components/common/QuestionsTable/index.tsx:262
 #: src/components/modals/EditUserModal/index.tsx:87
 #: src/components/modals/InviteUserModal/index.tsx:54
-#: src/components/modals/JoinWaitlistModal/index.tsx:179
+#: src/components/modals/JoinWaitlistModal/index.tsx:180
 #: src/components/routes/auth/AcceptInvitation/index.tsx:226
 #: src/components/routes/auth/Register/index.tsx:139
 #: src/components/routes/product-widget/CollectInformation/index.tsx:472
@@ -8733,7 +8758,7 @@ msgstr "Tapahtumille, joilla on useampi tapahtumapaikka"
 msgid "For your security, sign in again to confirm it's you."
 msgstr "Kirjaudu turvallisuussyistä uudelleen sisään vahvistaaksesi henkilöllisyytesi."
 
-#: src/components/routes/auth/Login/index.tsx:185
+#: src/components/routes/auth/Login/index.tsx:196
 msgid "Forgot password?"
 msgstr "Unohtuiko salasana?"
 
@@ -8880,7 +8905,7 @@ msgid "General admission"
 msgstr "Yleislippu"
 
 #: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:38
-#: src/components/routes/event/TicketDesigner/TicketPreview.tsx:39
+#: src/components/routes/event/TicketDesigner/TicketPreview.tsx:42
 msgid "General Admission"
 msgstr "Yleisöpaikka"
 
@@ -9516,7 +9541,7 @@ msgstr "Unkari"
 msgid "I acknowledge my responsibilities as a data controller"
 msgstr "Vahvistan vastuuni rekisterinpitäjänä"
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:195
+#: src/components/modals/JoinWaitlistModal/index.tsx:196
 msgid "I agree to receive email notifications related to this event"
 msgstr "Hyväksyn vastaanottaa sähköpostitiedotteita tähän tapahtumaan liittyen"
 
@@ -9601,10 +9626,10 @@ msgstr "Kuvan URL"
 msgid "Images"
 msgstr "Kuvat"
 
-#: src/components/common/AdminAccountsTable/index.tsx:134
+#: src/components/common/AdminAccountsTable/index.tsx:137
 #: src/components/common/AdminUsersTable/index.tsx:96
 #: src/components/common/AdminUsersTable/index.tsx:108
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:370
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:386
 msgid "Impersonate"
 msgstr "Impersonoi"
 
@@ -9730,6 +9755,10 @@ msgstr "Sisällytä verot ja maksut hintaan"
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:108
 msgid "Included"
 msgstr "Sisältyy"
+
+#: src/components/routes/admin/Accounts/AccountDetail/SuspendAccountModal.tsx:47
+msgid "Included in the email to the account owner."
+msgstr "Sisällytetään tilin omistajalle lähetettävään sähköpostiin."
 
 #: src/components/common/CheckInListList/index.tsx:102
 #: src/components/common/CheckInListTable/index.tsx:95
@@ -9870,7 +9899,7 @@ msgstr "Kutsuttu"
 msgid "Invoice"
 msgstr "Lasku"
 
-#: src/components/layouts/Checkout/index.tsx:208
+#: src/components/layouts/Checkout/index.tsx:211
 #: src/hooks/useOrderActions.tsx:85
 msgid "Invoice downloaded successfully"
 msgstr "Lasku ladattu onnistuneesti"
@@ -9981,11 +10010,11 @@ msgid "Join from anywhere"
 msgstr "Liity mistä tahansa"
 
 #: src/components/common/JoinWaitlistButton/index.tsx:38
-#: src/components/modals/JoinWaitlistModal/index.tsx:207
+#: src/components/modals/JoinWaitlistModal/index.tsx:208
 msgid "Join Waitlist"
 msgstr "Liity jonolistalle"
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:156
+#: src/components/modals/JoinWaitlistModal/index.tsx:157
 msgid "Join Waitlist for {productDisplayName}"
 msgstr "Liity jonolistalle tuotteelle {productDisplayName}"
 
@@ -10001,7 +10030,7 @@ msgstr "Heinäkuu"
 msgid "June"
 msgstr "Kesäkuu"
 
-#: src/components/routes/auth/Login/index.tsx:208
+#: src/components/routes/auth/Login/index.tsx:219
 msgid "Just looking for your tickets?"
 msgstr "Etsitkö vain lippujasi?"
 
@@ -10186,7 +10215,7 @@ msgstr "Sukunimi"
 #: src/components/common/QuestionsTable/index.tsx:263
 #: src/components/modals/EditUserModal/index.tsx:88
 #: src/components/modals/InviteUserModal/index.tsx:55
-#: src/components/modals/JoinWaitlistModal/index.tsx:184
+#: src/components/modals/JoinWaitlistModal/index.tsx:185
 #: src/components/routes/auth/AcceptInvitation/index.tsx:232
 #: src/components/routes/auth/Register/index.tsx:145
 #: src/components/routes/product-widget/CollectInformation/index.tsx:479
@@ -10328,6 +10357,10 @@ msgstr "Ilmoita heille muutoksesta"
 msgid "Let them know about the changes"
 msgstr "Ilmoita heille muutoksista"
 
+#: src/components/routes/admin/Accounts/AccountDetail/SuspendAccountModal.tsx:58
+msgid "Let them know the account has been suspended."
+msgstr "Kerro heille, että tili on jäädytetty."
+
 #: src/ee/sso/components/SingleSignOn/index.tsx:83
 msgid "Let your team sign in with Okta, Microsoft Entra ID or Google Workspace"
 msgstr "Anna tiimisi kirjautua Okta-, Microsoft Entra ID- tai Google Workspace -tunnuksilla"
@@ -10383,7 +10416,7 @@ msgid "Licence key not recognised"
 msgstr "Lisenssiavainta ei tunnistettu"
 
 #: src/components/layouts/Admin/index.tsx:25
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:317
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:333
 #: src/components/routes/admin/LifecycleEmails/index.tsx:39
 msgid "Lifecycle Emails"
 msgstr "Elinkaarisähköpostit"
@@ -10470,7 +10503,7 @@ msgstr "Linkit"
 msgid "Links"
 msgstr "Linkit"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:253
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:269
 msgid "Links Allowed"
 msgstr "Linkit sallittu"
 
@@ -10538,7 +10571,7 @@ msgstr "Lataa uusin versio"
 msgid "Loaded dates"
 msgstr "Ladatut päivät"
 
-#: src/components/routes/event/TicketDesigner/TicketPreview.tsx:32
+#: src/components/routes/event/TicketDesigner/TicketPreview.tsx:35
 msgid "Loading preview..."
 msgstr "Esikatselua ladataan..."
 
@@ -10710,9 +10743,9 @@ msgstr "Tee tästä kysymyksestä pakollinen"
 #: src/components/common/EntityActions/index.tsx:44
 #: src/components/common/LocationsTable/index.tsx:60
 #: src/components/common/OrganizerWebhookTable/index.tsx:98
-#: src/components/common/PromoCodeTable/index.tsx:177
+#: src/components/common/PromoCodeTable/index.tsx:178
 #: src/components/layouts/OrganizerLayout/index.tsx:117
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:304
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:320
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:89
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:249
 msgid "Manage"
@@ -10801,7 +10834,7 @@ msgstr "Lisää osallistuja manuaalisesti"
 msgid "Manually Add Attendee"
 msgstr "Lisää osallistuja manuaalisesti"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:205
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:221
 msgid "Manually verified"
 msgstr "Manuaalisesti vahvistettu"
 
@@ -10845,11 +10878,11 @@ msgstr "Sama kuin tapahtumasivu"
 msgid "Matches your page"
 msgstr "Sama kuin sivusi"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:241
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:257
 msgid "Max Messages / 24h"
 msgstr "Enimmäisviestit / 24 h"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:247
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:263
 msgid "Max Recipients / Message"
 msgstr "Enimmäisvastaanottajat / viesti"
 
@@ -10971,12 +11004,12 @@ msgstr "Viestit"
 msgid "Messages to approve"
 msgstr "Hyväksyttävät viestit"
 
-#: src/components/common/AdminAccountsTable/index.tsx:96
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:220
+#: src/components/common/AdminAccountsTable/index.tsx:99
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:236
 msgid "Messaging Tier"
 msgstr "Viestintätaso"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:51
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:55
 msgid "Messaging tier updated successfully"
 msgstr "Viestintätaso päivitettiin onnistuneesti"
 
@@ -11098,7 +11131,7 @@ msgstr "Lisää"
 
 #: src/components/common/EntityActions/index.tsx:159
 #: src/components/common/EntityActions/index.tsx:160
-#: src/components/common/ProductsTable/SortableCategory/index.tsx:179
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:178
 #: src/components/routes/admin/SpamEvents/index.tsx:256
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:207
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:180
@@ -11146,6 +11179,10 @@ msgstr "Siirrä {0} toiselle paikalle"
 msgid "Move all dates earlier or later"
 msgstr "Siirrä kaikkia päivämääriä aikaisemmaksi tai myöhemmäksi"
 
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:422
+msgid "Move all events and organizer pages to draft and stop members signing in."
+msgstr "Siirrä kaikki tapahtumat ja järjestäjäsivut luonnoksiksi ja estä jäseniä kirjautumasta."
+
 #: src/ee/seating/components/AttendeeSeatField/index.tsx:34
 msgid "Move attendee"
 msgstr "Siirrä osallistuja"
@@ -11154,7 +11191,7 @@ msgstr "Siirrä osallistuja"
 msgid "Move cancelled. {label} is back in its original position."
 msgstr "Siirto peruttu. {label} on palautettu alkuperäiselle paikalleen."
 
-#: src/components/common/ProductsTable/SortableCategory/index.tsx:203
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:202
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:603
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:143
 msgid "Move down"
@@ -11176,7 +11213,7 @@ msgstr "Siirrä kuvaa {position}/{total}"
 msgid "Move to area"
 msgstr "Siirrä alueelle"
 
-#: src/components/common/ProductsTable/SortableCategory/index.tsx:196
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:195
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:595
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:140
 msgid "Move up"
@@ -11301,7 +11338,7 @@ msgid "Net Revenue"
 msgstr "Nettotuotot"
 
 #: src/components/common/OrganizerWebhookTable/index.tsx:272
-#: src/components/common/PromoCodeTable/index.tsx:168
+#: src/components/common/PromoCodeTable/index.tsx:169
 #: src/components/common/WebhookTable/index.tsx:272
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
 #: src/components/routes/settings/Team/MemberRow.tsx:166
@@ -11458,7 +11495,7 @@ msgstr "Seuraavaksi: tarkastele tilaustasi"
 msgid "Nightlife"
 msgstr "Yöelämä"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:271
 #: src/components/routes/admin/Dashboard/index.tsx:409
 #: src/ee/sso/components/SingleSignOn/index.tsx:70
 msgid "No"
@@ -11754,7 +11791,7 @@ msgstr "Ei lisenssiä"
 msgid "No licence key is set, so reserved seating, the box office and enterprise single sign-on can't be set up. To unlock them, set APP_LICENCE_KEY in the backend environment and redeploy the backend. With Docker Compose, use docker compose up -d, because docker compose restart doesn't reload the environment."
 msgstr "Lisenssiavainta ei ole asetettu, joten varattuja istumapaikkoja, lipunmyyntiä ovella ja yritysten kertakirjautumista ei voi määrittää. Avaa ne asettamalla APP_LICENCE_KEY taustajärjestelmän ympäristöön ja ottamalla taustajärjestelmä uudelleen käyttöön. Docker Composea käytettäessä käytä komentoa docker compose up -d, koska docker compose restart ei lataa ympäristöä uudelleen."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:319
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:335
 msgid "No lifecycle emails have been sent to this account."
 msgstr "Tälle tilille ei ole lähetetty elinkaarisähköposteja."
 
@@ -11906,7 +11943,7 @@ msgstr "Ei tuotteita vielä"
 msgid "No profiles yet. Create one here, or add people straight from an event's Lineup & Schedule page."
 msgstr "Ei vielä profiileja. Luo profiili tässä tai lisää henkilöitä suoraan tapahtuman Esiintyjät ja aikataulu -sivulta."
 
-#: src/components/common/PromoCodeTable/index.tsx:48
+#: src/components/common/PromoCodeTable/index.tsx:49
 msgid "No Promo Codes to show"
 msgstr "Ei näytettäviä alennuskoodeja"
 
@@ -12056,7 +12093,7 @@ msgstr "Tälle päätepisteelle ei ole vielä kirjattu webhook-tapahtumia. Tapah
 msgid "No Webhooks"
 msgstr "Ei webhookeja"
 
-#: src/components/layouts/Checkout/index.tsx:468
+#: src/components/layouts/Checkout/index.tsx:471
 msgid "No, keep me here"
 msgstr "Ei, pidä minut täällä"
 
@@ -12098,7 +12135,7 @@ msgstr "Ei vielä ketään. Hae tallennetuista profiileista tai kirjoita uusi ni
 msgid "non-edited"
 msgstr "ei muokattu"
 
-#: src/components/common/PromoCodeTable/index.tsx:84
+#: src/components/common/PromoCodeTable/index.tsx:85
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:108
 #: src/components/forms/ProductForm/ledgerSummaries.ts:92
 #: src/components/forms/ProductForm/ledgerSummaries.ts:132
@@ -12125,8 +12162,8 @@ msgstr "Ei vielä"
 msgid "Normally {0}"
 msgstr "Yleensä {0}"
 
-#: src/components/common/ProductPriceAvailability/index.tsx:46
-#: src/components/common/ProductPriceAvailability/index.tsx:76
+#: src/components/common/ProductPriceAvailability/index.tsx:47
+#: src/components/common/ProductPriceAvailability/index.tsx:77
 msgid "Not available"
 msgstr "Ei saatavilla"
 
@@ -12233,7 +12270,7 @@ msgstr "Ei vielä testattu"
 msgid "Not using reserved seating, the box office or enterprise single sign-on? Remove <0>APP_LICENCE_KEY</0> and redeploy."
 msgstr "Etkö käytä varattuja istumapaikkoja, lipunmyyntiä ovella tai yritysten kertakirjautumista? Poista <0>APP_LICENCE_KEY</0> ja ota taustajärjestelmä uudelleen käyttöön."
 
-#: src/components/common/ProductPriceAvailability/index.tsx:43
+#: src/components/common/ProductPriceAvailability/index.tsx:44
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:31
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:53
 msgid "Not yet on sale"
@@ -12830,6 +12867,10 @@ msgstr "Valinnainen, kun esiintyjälistalta valitaan henkilö"
 msgid "Optional, kept on the deletion record"
 msgstr "Valinnainen, tallennetaan poistotietueeseen"
 
+#: src/components/routes/admin/Accounts/AccountDetail/SuspendAccountModal.tsx:48
+msgid "Optional, shown to admins on this page."
+msgstr "Valinnainen, näkyy ylläpitäjille tällä sivulla."
+
 #: src/components/routes/event/Lineup/index.tsx:344
 msgid "Optional. Useful when things happen in more than one place at the same time."
 msgstr "Valinnainen. Hyödyllinen, kun ohjelmaa on useassa paikassa samaan aikaan."
@@ -12907,7 +12948,7 @@ msgstr "Tilaus peruutettu"
 msgid "Order Cancelled"
 msgstr "Tilaus peruutettu"
 
-#: src/components/layouts/Checkout/index.tsx:339
+#: src/components/layouts/Checkout/index.tsx:342
 #: src/components/routes/product-widget/CollectInformation/index.tsx:378
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:401
 msgid "Order complete"
@@ -13181,7 +13222,7 @@ msgid "Organizer/default template will be used"
 msgstr "Järjestäjän/oletuspohja käytetään."
 
 #: src/components/layouts/SettingsLayout/index.tsx:62
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:266
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:282
 #: src/components/routes/settings/Organizers/index.tsx:81
 #: src/components/routes/settings/Team/index.tsx:143
 msgid "Organizers"
@@ -13364,7 +13405,7 @@ msgid "Pass to Buyer"
 msgstr "Peri ostajalta"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:250
-#: src/components/routes/auth/Login/index.tsx:183
+#: src/components/routes/auth/Login/index.tsx:194
 #: src/components/routes/auth/Register/index.tsx:161
 #: src/components/routes/settings/Security/SignInMethods.tsx:93
 #: src/components/routes/settings/Team/index.tsx:204
@@ -13642,7 +13683,7 @@ msgstr "Per päivämäärä"
 msgid "per min"
 msgstr "minuutissa"
 
-#: src/components/common/PromoCodeTable/index.tsx:93
+#: src/components/common/PromoCodeTable/index.tsx:94
 msgid "per order"
 msgstr "tilausta kohden"
 
@@ -13655,7 +13696,7 @@ msgstr "tilausta kohden"
 msgid "Per page"
 msgstr "Sivua kohden"
 
-#: src/components/common/PromoCodeTable/index.tsx:94
+#: src/components/common/PromoCodeTable/index.tsx:95
 msgid "per product"
 msgstr "tuotetta kohden"
 
@@ -13874,7 +13915,7 @@ msgstr "Lisää vähintään yksi vaihtoehto"
 msgid "Please check the provided information is correct"
 msgstr "Tarkista, että annetut tiedot ovat oikein"
 
-#: src/components/routes/auth/Login/index.tsx:101
+#: src/components/routes/auth/Login/index.tsx:112
 msgid "Please check your email and password and try again"
 msgstr "Tarkista sähköpostiosoitteesi ja salasanasi ja yritä uudelleen"
 
@@ -13898,7 +13939,7 @@ msgstr "Jatka uudessa välilehdessä"
 msgid "Please create a product"
 msgstr "Luo ensin tuote"
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:60
+#: src/components/modals/CreateCheckInListModal/index.tsx:58
 #: src/ee/box-office/components/modals/CreateBoxOfficeModal/index.tsx:67
 msgid "Please create a ticket"
 msgstr "Luo ensin lippu"
@@ -13940,7 +13981,7 @@ msgstr "Anna kuva."
 msgid "Please restart the checkout process."
 msgstr "Käynnistä kassaprosessi uudelleen."
 
-#: src/components/layouts/Checkout/index.tsx:437
+#: src/components/layouts/Checkout/index.tsx:440
 msgid "Please return to the event page to start over."
 msgstr "Palaa tapahtumasivulle aloittaaksesi alusta."
 
@@ -13978,7 +14019,7 @@ msgstr "Odota, kun valmistamme kumppaneitasi vientiä varten..."
 msgid "Please wait while we prepare your attendees for export..."
 msgstr "Odota, kun valmistamme osallistujiasi vientiä varten..."
 
-#: src/components/layouts/Checkout/index.tsx:204
+#: src/components/layouts/Checkout/index.tsx:207
 #: src/hooks/useOrderActions.tsx:81
 msgid "Please wait while we prepare your invoice..."
 msgstr "Odota, kun valmistamme laskuasi..."
@@ -14157,7 +14198,7 @@ msgstr "Tulostuksen esikatselu käyttää viimeksi tallennettua ulkoasua"
 msgid "Print Ticket"
 msgstr "Tulosta lippu"
 
-#: src/components/layouts/Checkout/index.tsx:381
+#: src/components/layouts/Checkout/index.tsx:384
 #: src/components/routes/my-tickets/index.tsx:136
 msgid "Print Tickets"
 msgstr "Tulosta liput"
@@ -14260,11 +14301,11 @@ msgstr "Tuotetta päivitetty"
 msgid "Product updates"
 msgstr "Tuoteuutiset"
 
-#: src/components/common/PromoCodeTable/index.tsx:158
+#: src/components/common/PromoCodeTable/index.tsx:159
 msgid "Product(s)"
 msgstr "Tuote(t)"
 
-#: src/components/common/PromoCodeTable/index.tsx:74
+#: src/components/common/PromoCodeTable/index.tsx:75
 #: src/components/modals/DuplicateEventModal/index.tsx:123
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:421
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:58
@@ -14362,7 +14403,7 @@ msgstr "Kampanjakoodit"
 msgid "Promo Codes"
 msgstr "Kampanjakoodit"
 
-#: src/components/common/PromoCodeTable/index.tsx:53
+#: src/components/common/PromoCodeTable/index.tsx:54
 msgid "Promo codes can be used to offer discounts, presale access, or provide special access to your event."
 msgstr "Kampanjakoodeja voi käyttää alennusten tarjoamiseen, ennakkopääsyn avaamiseen tai erityisen pääsyn antamiseen tapahtumaasi."
 
@@ -14609,6 +14650,7 @@ msgid "Rear right"
 msgstr "Takana oikealla"
 
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:49
+#: src/components/routes/admin/Accounts/AccountDetail/SuspendAccountModal.tsx:45
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:341
 msgid "Reason"
 msgstr "Syy"
@@ -14617,6 +14659,10 @@ msgstr "Syy"
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:204
 msgid "Reason (optional)"
 msgstr "Syy (valinnainen)"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:406
+msgid "Reason: {0}"
+msgstr "Syy: {0}"
 
 #: src/components/routes/admin/SpamEvents/index.tsx:346
 msgid "Reasons"
@@ -15332,7 +15378,7 @@ msgstr "Yritä tehtävää uudelleen"
 msgid "Return to Event"
 msgstr "Palaa tapahtumaan"
 
-#: src/components/layouts/Checkout/index.tsx:444
+#: src/components/layouts/Checkout/index.tsx:447
 msgid "Return to Event Page"
 msgstr "Palaa tapahtumasivulle"
 
@@ -15572,8 +15618,8 @@ msgstr "Myynti on tauolla"
 msgid "Sales by licence year"
 msgstr "Myynti lisenssivuosittain"
 
-#: src/components/common/ProductPriceAvailability/index.tsx:24
-#: src/components/common/ProductPriceAvailability/index.tsx:63
+#: src/components/common/ProductPriceAvailability/index.tsx:25
+#: src/components/common/ProductPriceAvailability/index.tsx:64
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:33
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:54
 msgid "Sales ended"
@@ -15583,8 +15629,8 @@ msgstr "Myynti päättynyt"
 msgid "Sales open in"
 msgstr "Myynti avautuu"
 
-#: src/components/common/ProductPriceAvailability/index.tsx:30
-#: src/components/common/ProductPriceAvailability/index.tsx:68
+#: src/components/common/ProductPriceAvailability/index.tsx:31
+#: src/components/common/ProductPriceAvailability/index.tsx:69
 msgid "Sales start"
 msgstr "Myynti alkaa"
 
@@ -15637,8 +15683,8 @@ msgstr "Samat päätepisteet ja allekirjoitusavaimet"
 msgid "Sample ticket price"
 msgstr "Esimerkkilipun hinta"
 
-#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:77
-#: src/components/routes/event/TicketDesigner/TicketPreview.tsx:77
+#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:63
+#: src/components/routes/event/TicketDesigner/TicketPreview.tsx:67
 msgid "Sample Venue"
 msgstr "Esimerkkipaikka"
 
@@ -16288,7 +16334,7 @@ msgstr "Valitse päivämäärä"
 msgid "Select a message to view its contents"
 msgstr "Valitse viesti nähdäksesi sen sisällön"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:234
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:250
 msgid "Select a tier"
 msgstr "Valitse taso"
 
@@ -16382,7 +16428,7 @@ msgstr "Valitse tuotteet..."
 msgid "Select start time"
 msgstr "Valitse aloitusaika"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:230
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:246
 msgid "Select the messaging tier for this account. This controls message limits and link permissions."
 msgstr "Valitse tämän tilin viestintätaso. Tämä vaikuttaa viestien määrään ja linkkien käyttöoikeuksiin."
 
@@ -16507,7 +16553,7 @@ msgstr "Myy 1 tuotteen"
 msgid "Sells every product"
 msgstr "Myy kaikkia tuotteita"
 
-#: src/components/routes/auth/Login/index.tsx:247
+#: src/components/routes/auth/Login/index.tsx:258
 #: src/components/routes/my-tickets/index.tsx:219
 #: src/ee/box-office/components/layouts/BoxOffice/SaleComplete.tsx:152
 msgid "Send"
@@ -17074,7 +17120,7 @@ msgstr "Näyttää järjestäjäprofiilisi ja yhteydenottopainikkeen."
 msgid "Shows your social links and a contact button. Placed above every other section, it appears in your profile card."
 msgstr "Näyttää some-linkkisi ja yhteydenottopainikkeen. Kaikkien muiden osioiden yläpuolella ne näkyvät profiilikortissasi."
 
-#: src/components/routes/auth/Login/index.tsx:195
+#: src/components/routes/auth/Login/index.tsx:206
 #: src/components/routes/auth/Register/index.tsx:103
 #: src/components/routes/sso/Callback/index.tsx:310
 msgid "Sign in"
@@ -17092,7 +17138,7 @@ msgstr "Kirjaudu uudelleen sisään aloittaaksesi kaksivaiheisen tunnistautumise
 msgid "Sign in once to check the connection. It shows what your identity provider shares and doesn't sign you in here."
 msgstr "Kirjaudu kerran sisään yhteyden tarkistamiseksi. Se näyttää, mitä identiteetintarjoajasi jakaa, eikä kirjaa sinua sisään tässä."
 
-#: src/components/routes/auth/Login/index.tsx:151
+#: src/components/routes/auth/Login/index.tsx:162
 msgid "Sign in through your organization's identity provider instead of using a password."
 msgstr "Kirjaudu sisään organisaatiosi identiteetintarjoajan kautta salasanan sijaan."
 
@@ -17104,7 +17150,7 @@ msgstr "Kirjaudu sisään organisaatiosi identiteetintarjoajan kautta."
 msgid "Sign in through your organization's identity provider to join {0}."
 msgstr "Kirjaudu sisään organisaatiosi identiteetintarjoajan kautta liittyäksesi tiliin {0}."
 
-#: src/components/routes/auth/Login/index.tsx:129
+#: src/components/routes/auth/Login/index.tsx:140
 msgid "Sign in to {0}"
 msgstr "Kirjaudu palveluun {0}"
 
@@ -17134,7 +17180,7 @@ msgid "Sign in with password"
 msgstr "Kirjaudu salasanalla"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:172
-#: src/components/routes/auth/Login/index.tsx:154
+#: src/components/routes/auth/Login/index.tsx:165
 #: src/components/routes/auth/Register/index.tsx:115
 #: src/components/routes/sso/Callback/index.tsx:277
 #: src/ee/sso/components/SsoDiscovery/index.tsx:59
@@ -17197,7 +17243,7 @@ msgstr "Kirjautumisvaihtoehdot"
 msgid "Sign-in settings"
 msgstr "Kirjautumisasetukset"
 
-#: src/components/routes/auth/Login/index.tsx:146
+#: src/components/routes/auth/Login/index.tsx:157
 msgid "Sign-in was cancelled. Choose another way to sign in, or try again."
 msgstr "Kirjautuminen peruttiin. Valitse toinen kirjautumistapa tai yritä uudelleen."
 
@@ -17221,7 +17267,7 @@ msgstr "Kirjauduttu sisään, mutta sähköpostiosoitetta ei jaettu"
 msgid "Signed up"
 msgstr "Rekisteröitynyt"
 
-#: src/components/routes/auth/Login/index.tsx:195
+#: src/components/routes/auth/Login/index.tsx:206
 msgid "Signing in"
 msgstr "Kirjaudutaan sisään"
 
@@ -17354,8 +17400,8 @@ msgstr "loppuunmyyty"
 
 #: src/components/common/EventCard/index.tsx:136
 #: src/components/common/EventDateRange/index.tsx:65
-#: src/components/common/ProductPriceAvailability/index.tsx:20
-#: src/components/common/ProductPriceAvailability/index.tsx:60
+#: src/components/common/ProductPriceAvailability/index.tsx:21
+#: src/components/common/ProductPriceAvailability/index.tsx:61
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:57
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:92
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:311
@@ -17450,7 +17496,7 @@ msgstr "Jotain meni pieleen! Yritä uudelleen"
 msgid "Something went wrong."
 msgstr "Jotain meni pieleen."
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:140
+#: src/components/modals/JoinWaitlistModal/index.tsx:141
 msgid "Something went wrong. Please try again later."
 msgstr "Jotain meni pieleen. Yritä myöhemmin uudelleen."
 
@@ -17461,7 +17507,7 @@ msgstr "Jotain meni pieleen. Yritä myöhemmin uudelleen."
 #: src/components/routes/admin/Users/index.tsx:33
 #: src/components/routes/auth/AcceptInvitation/index.tsx:98
 #: src/components/routes/auth/AcceptInvitation/index.tsx:107
-#: src/components/routes/auth/Login/index.tsx:121
+#: src/components/routes/auth/Login/index.tsx:132
 #: src/components/routes/auth/Register/index.tsx:81
 #: src/components/routes/my-tickets/index.tsx:162
 #: src/components/routes/product-widget/SelectProducts/index.tsx:383
@@ -17646,8 +17692,8 @@ msgstr "Portaat"
 msgid "Stalls"
 msgstr "Permanto"
 
-#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:64
-#: src/components/routes/event/TicketDesigner/TicketPreview.tsx:65
+#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:58
+#: src/components/routes/event/TicketDesigner/TicketPreview.tsx:62
 msgid "Stalls · C-14"
 msgstr "Permanto · C-14"
 
@@ -17998,7 +18044,7 @@ msgid "Subtotal"
 msgstr "Välisumma"
 
 #: src/components/common/OrganizerWebhookTable/index.tsx:155
-#: src/components/layouts/Checkout/index.tsx:207
+#: src/components/layouts/Checkout/index.tsx:210
 #: src/hooks/useOrderActions.tsx:84
 msgid "Success"
 msgstr "Onnistui"
@@ -18186,9 +18232,25 @@ msgstr "Sunnuntai"
 msgid "Support Email"
 msgstr "Tukisähköposti"
 
+#: src/components/routes/admin/Accounts/AccountDetail/SuspendAccountModal.tsx:35
+msgid "Suspend {0}"
+msgstr "Jäädytä {0}"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:399
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:430
+#: src/components/routes/admin/Accounts/AccountDetail/SuspendAccountModal.tsx:72
+msgid "Suspend account"
+msgstr "Jäädytä tili"
+
+#: src/components/common/AdminAccountsTable/index.tsx:66
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:154
 #: src/ee/sso/components/SingleSignOn/DomainList.tsx:21
 msgid "Suspended"
 msgstr "Jäädytetty"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:403
+msgid "Suspended on {0}. Members can't sign in and its API keys are blocked."
+msgstr "Jäädytetty {0}. Jäsenet eivät voi kirjautua sisään ja sen API-avaimet on estetty."
 
 #: src/locales.ts:84
 msgid "Swedish"
@@ -18476,7 +18538,7 @@ msgstr "Se on paketissa"
 msgid "The \"Powered by Hi.Events\" notice is shown again until you renew."
 msgstr "”Powered by Hi.Events” -ilmoitus näytetään taas, kunnes jatkat lisenssiä."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:390
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:446
 msgid "The account has completed orders, so it will be anonymised."
 msgstr "Tilillä on valmiita tilauksia, joten se anonymisoidaan."
 
@@ -18496,7 +18558,7 @@ msgstr "Tilin omistajan roolia ja pääsyä ei voi muuttaa."
 msgid "The account will be deleted as soon as the queue picks up the job."
 msgstr "Tili poistetaan heti, kun jono käsittelee tehtävän."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:391
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:447
 msgid "The account will be permanently deleted."
 msgstr "Tili poistetaan pysyvästi."
 
@@ -18897,6 +18959,11 @@ msgstr "Kolmas"
 msgid "This {providerName} account is already in use"
 msgstr "Tämä {providerName}-tili on jo käytössä"
 
+#: src/components/routes/auth/Login/index.tsx:66
+#: src/components/routes/auth/Login/index.tsx:96
+msgid "This account has been suspended. Contact support if you think this is a mistake."
+msgstr "Tämä tili on jäädytetty. Ota yhteyttä tukeen, jos uskot tämän olevan virhe."
+
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:178
 msgid "This account has no completed orders, so all of its data will be permanently deleted."
 msgstr "Tällä tilillä ei ole valmiita tilauksia, joten kaikki sen tiedot poistetaan pysyvästi."
@@ -18953,7 +19020,7 @@ msgstr "Tämä selain ei voi avata .xlsx-tiedostoja. Tallenna tiedosto CSV-muodo
 msgid "This category doesn't have any products yet."
 msgstr "Tässä kategoriassa ei ole vielä tuotteita."
 
-#: src/components/common/ProductsTable/SortableCategory/index.tsx:126
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:125
 msgid "This category is hidden from public view"
 msgstr "Tämä kategoria on piilotettu julkisesta näkymästä"
 
@@ -19447,7 +19514,7 @@ msgstr "Lippua ei löytynyt"
 msgid "Ticket or Product"
 msgstr "Lippu tai tuote"
 
-#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:100
+#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:83
 msgid "Ticket Preview for"
 msgstr "Lipun esikatselu tapahtumalle"
 
@@ -19578,7 +19645,7 @@ msgstr "TikTok"
 msgid "Time"
 msgstr "Aika"
 
-#: src/components/layouts/Checkout/index.tsx:355
+#: src/components/layouts/Checkout/index.tsx:358
 msgid "Time left"
 msgstr "Aikaa jäljellä"
 
@@ -19627,7 +19694,7 @@ msgstr "Ajat luetaan tapahtuman aikavyöhykkeellä ({timezone})."
 msgid "Times in {timezoneAbbr}"
 msgstr "Ajat aikavyöhykkeellä {timezoneAbbr}"
 
-#: src/components/common/PromoCodeTable/index.tsx:73
+#: src/components/common/PromoCodeTable/index.tsx:74
 msgid "Times used"
 msgstr "Käyttökerrat"
 
@@ -19643,7 +19710,7 @@ msgstr "Aikataulu"
 #: src/components/modals/CreateEventModal/index.tsx:427
 #: src/components/modals/CreateEventModal/index.tsx:428
 #: src/components/modals/CreateOrganizerModal/index.tsx:59
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:161
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:177
 #: src/components/routes/auth/AcceptInvitation/index.tsx:243
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:147
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:146
@@ -19710,7 +19777,7 @@ msgid "Tomorrow"
 msgstr "Huomenna"
 
 #: src/components/routes/auth/ForgotPassword/index.tsx:34
-#: src/components/routes/auth/Login/index.tsx:95
+#: src/components/routes/auth/Login/index.tsx:106
 #: src/components/routes/auth/Register/index.tsx:80
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:86
 #: src/hooks/useLoginSteps.ts:62
@@ -19878,7 +19945,7 @@ msgstr "Kokeile muuttaa suodattimia nähdäksesi lisää ajankohtia."
 msgid "Try again"
 msgstr "Yritä uudelleen"
 
-#: src/components/routes/auth/Login/index.tsx:228
+#: src/components/routes/auth/Login/index.tsx:239
 #: src/components/routes/my-tickets/index.tsx:200
 msgid "Try another email"
 msgstr "Kokeile toista sähköpostiosoitetta"
@@ -20113,7 +20180,7 @@ msgstr "Osallistujan tietojen hakeminen ei onnistu"
 msgid "Unable to find seats. Check the connection and try again."
 msgstr "Paikkoja ei löytynyt. Tarkista yhteys ja yritä uudelleen."
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:137
+#: src/components/modals/JoinWaitlistModal/index.tsx:138
 msgid "Unable to join waitlist"
 msgstr "Jonotuslistalle liittyminen ei onnistu"
 
@@ -20255,7 +20322,7 @@ msgstr "Rajoittamaton"
 msgid "Unlimited available"
 msgstr "Rajattomasti saatavilla"
 
-#: src/components/common/PromoCodeTable/index.tsx:136
+#: src/components/common/PromoCodeTable/index.tsx:137
 msgid "Unlimited usages allowed"
 msgstr "Rajaton käyttö sallittu"
 
@@ -20281,7 +20348,7 @@ msgstr "Maksamatta"
 msgid "Unpaid Order"
 msgstr "Maksamaton tilaus"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:413
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:469
 msgid "Unpublish all events and delete or anonymise this account and its users."
 msgstr "Poista kaikkien tapahtumien julkaisu ja poista tai anonymisoi tämä tili ja sen käyttäjät."
 
@@ -20302,6 +20369,18 @@ msgstr "Peruuta tilaus"
 #: src/components/routes/emails/Unsubscribe/index.tsx:42
 msgid "Unsubscribe from tips and reminders"
 msgstr "Peruuta vinkit ja muistutukset"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:93
+msgid "Unsuspend"
+msgstr "Poista jäädytys"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:415
+msgid "Unsuspend account"
+msgstr "Poista tilin jäädytys"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:88
+msgid "Unsuspend this account? Its members can sign in again. Events and organizer pages stay in draft until they republish them."
+msgstr "Poistetaanko tämän tilin jäädytys? Sen jäsenet voivat kirjautua uudelleen. Tapahtumat ja järjestäjäsivut pysyvät luonnoksina, kunnes ne julkaistaan uudelleen."
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1094
 msgid "until"
@@ -20328,11 +20407,11 @@ msgstr "Nimetön tuote"
 msgid "Untitled ticket"
 msgstr "Nimetön lippu"
 
-#: src/components/common/AdminAccountsTable/index.tsx:101
+#: src/components/common/AdminAccountsTable/index.tsx:104
 msgid "Untrusted"
 msgstr "Epäluotettu"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:200
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:216
 msgid "Unverified"
 msgstr "Vahvistamaton"
 
@@ -20477,7 +20556,7 @@ msgstr "Ladataan kuvaa..."
 msgid "URL"
 msgstr "URL"
 
-#: src/components/common/PromoCodeTable/index.tsx:187
+#: src/components/common/PromoCodeTable/index.tsx:188
 msgid "URL copied to clipboard"
 msgstr "URL kopioitu leikepöydälle"
 
@@ -20616,11 +20695,11 @@ msgstr "Käytetään kirjautumiseen. Kun vaihdat sen, uuteen osoitteeseen lähet
 msgid "users"
 msgstr "käyttäjää"
 
-#: src/components/common/AdminAccountsTable/index.tsx:89
-#: src/components/common/AdminAccountsTable/index.tsx:109
+#: src/components/common/AdminAccountsTable/index.tsx:92
+#: src/components/common/AdminAccountsTable/index.tsx:112
 #: src/components/layouts/Admin/index.tsx:19
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:187
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:349
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:203
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:365
 #: src/components/routes/admin/Users/index.tsx:51
 msgid "Users"
 msgstr "Käyttäjät"
@@ -20747,11 +20826,11 @@ msgstr "ALV-tunnisteen vahvistuspalvelu ei ole tilapäisesti käytettävissä"
 msgid "VAT, GST or sales tax"
 msgstr "ALV tai myyntivero"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:289
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:305
 msgid "VAT: {0}"
 msgstr "ALV: {0}"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:294
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:310
 msgid "VAT: not registered"
 msgstr "ALV: ei rekisteröity"
 
@@ -20764,7 +20843,7 @@ msgstr "Tapahtumapaikka"
 msgid "Venue Name"
 msgstr "Tapahtumapaikan nimi"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:198
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:214
 msgid "Verification"
 msgstr "Vahvistus"
 
@@ -20776,14 +20855,14 @@ msgstr "Vahvistuskoodi"
 msgid "Verification email sent. Check your inbox."
 msgstr "Vahvistussähköposti lähetetty. Tarkista saapuneet viestisi."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:200
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:216
 #: src/components/routes/admin/Attribution/index.tsx:198
 #: src/components/routes/admin/Dashboard/index.tsx:396
 #: src/ee/sso/components/SingleSignOn/DomainList.tsx:17
 msgid "Verified"
 msgstr "Vahvistettu"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:206
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:222
 msgid "Verified accounts can send messages to attendees and manage email templates. Connecting Stripe verifies an account automatically."
 msgstr "Vahvistetut käyttäjät voivat lähtettää osallistujille sähköpostiviestejä ja hallita viestipohjia. Stripen yhdistäminen vahvistaa tilin automaattisesti."
 
@@ -20910,7 +20989,7 @@ msgstr "Tarkastele tietoja ja suorita vientejä. Ei voi muuttaa mitään."
 msgid "View details"
 msgstr "Näytä tiedot"
 
-#: src/components/common/AdminAccountsTable/index.tsx:73
+#: src/components/common/AdminAccountsTable/index.tsx:76
 #: src/components/routes/admin/FailedJobs/index.tsx:190
 #: src/components/routes/admin/SpamEvents/index.tsx:204
 msgid "View Details"
@@ -21204,7 +21283,7 @@ msgstr "Tiedostoa ei voitu lukea. Tarkista, että se on kelvollinen .xlsx- tai .
 msgid "We couldn't read your clipboard. Press Ctrl+V or ⌘+V to paste instead."
 msgstr "Leikepöytää ei voitu lukea. Liitä painamalla Ctrl+V tai ⌘+V."
 
-#: src/components/common/ProductsTable/SortableCategory/index.tsx:108
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:107
 msgid "We couldn't reorder the categories. Please try again."
 msgstr "Kategorioiden järjestyksen muuttaminen ei onnistunut. Yritä uudelleen."
 
@@ -21261,11 +21340,11 @@ msgstr "Luomme kaikki {totalOccurrences} istuntoa — voit muokata tai poistaa m
 msgid "We'll email them a link to join your account."
 msgstr "Lähetämme sähköpostilla linkin tiliisi liittymistä varten."
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:112
+#: src/components/modals/JoinWaitlistModal/index.tsx:113
 msgid "We'll notify you by email if a spot becomes available for {productDisplayName} on {occurrenceDate}."
 msgstr "Ilmoitamme sinulle sähköpostitse, jos tuotteelle {productDisplayName} vapautuu paikka päivänä {occurrenceDate}."
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:113
+#: src/components/modals/JoinWaitlistModal/index.tsx:114
 msgid "We'll notify you by email if a spot becomes available for {productDisplayName}."
 msgstr "Ilmoitamme sinulle sähköpostitse, jos tuotteelle {productDisplayName} vapautuu paikka."
 
@@ -21379,7 +21458,7 @@ msgstr "Weibo"
 msgid "Welcome aboard! Sign in to continue."
 msgstr "Tervetuloa mukaan! Kirjaudu sisään jatkaaksesi."
 
-#: src/components/routes/auth/Login/index.tsx:129
+#: src/components/routes/auth/Login/index.tsx:140
 msgid "Welcome back"
 msgstr "Tervetuloa takaisin"
 
@@ -21700,7 +21779,7 @@ msgstr "Käsitellään"
 #: src/components/modals/EditProductCategoryModal/index.tsx:73
 #: src/components/modals/EditPromoCodeModal/index.tsx:87
 #: src/components/modals/EditQuestionModal/index.tsx:103
-#: src/components/modals/JoinWaitlistModal/index.tsx:206
+#: src/components/modals/JoinWaitlistModal/index.tsx:207
 #: src/components/routes/auth/Register/index.tsx:188
 msgid "Working..."
 msgstr "Käsitellään..."
@@ -21746,7 +21825,7 @@ msgstr "Vuosittain"
 msgid "years"
 msgstr "vuotta"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:271
 #: src/components/routes/admin/Dashboard/index.tsx:409
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:221
 #: src/ee/sso/components/SingleSignOn/index.tsx:70
@@ -21757,7 +21836,7 @@ msgstr "Kyllä"
 msgid "Yes - I have a valid EU VAT registration number"
 msgstr "Kyllä – minulla on voimassa oleva EU:n ALV-rekisteritunniste"
 
-#: src/components/layouts/Checkout/index.tsx:476
+#: src/components/layouts/Checkout/index.tsx:479
 msgid "Yes, cancel my order"
 msgstr "Kyllä, peru tilaukseni"
 
@@ -21920,7 +21999,7 @@ msgstr "Tapahtumallasi on maksullisia lippuja, mutta Stripea ei ole vielä yhdis
 msgid "You have reached your messaging limit."
 msgstr "Olet saavuttanut viestintärajasi."
 
-#: src/components/layouts/Checkout/index.tsx:434
+#: src/components/layouts/Checkout/index.tsx:437
 msgid "You have run out of time to complete your order."
 msgstr "Tilauksesi viimeistelyyn varattu aika on päättynyt."
 
@@ -22017,7 +22096,7 @@ msgstr "Et saa enää näitä sähköposteja. Tilauksiisi ja tiliisi liittyviä 
 msgid "You'll be signed out and will need to sign in again with {providerName}."
 msgstr "Sinut kirjataan ulos ja sinun on kirjauduttava uudelleen sisään palvelun {providerName} kautta."
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:64
+#: src/components/modals/CreateCheckInListModal/index.tsx:62
 msgid "You'll need a ticket before you can create a check-in list."
 msgstr "Tarvitset lipun ennen kuin voit luoda sisäänkirjautumislistan."
 
@@ -22045,11 +22124,11 @@ msgstr "Olet muuttamassa istuntojen aikoja"
 msgid "You're going to {0}!"
 msgstr "Olet menossa tapahtumaan {0}!"
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:173
+#: src/components/modals/JoinWaitlistModal/index.tsx:174
 msgid "You're joining the waitlist for {occurrenceDate}."
 msgstr "Liityt päivämäärän {occurrenceDate} jonotuslistalle."
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:108
+#: src/components/modals/JoinWaitlistModal/index.tsx:109
 msgid "You're on the waitlist!"
 msgstr "Olet jonotuslistalla!"
 
@@ -22077,7 +22156,7 @@ msgstr "Olet lisännyt enimmäismäärän eli {MAX_SPONSORS} sponsoria."
 msgid "You've been invited"
 msgstr "Sinut on kutsuttu"
 
-#: src/components/routes/auth/Login/index.tsx:90
+#: src/components/routes/auth/Login/index.tsx:101
 msgid "You've been invited to join a team. Open the invitation email we sent you to finish joining. If the link has expired, ask the person who invited you to send a new one."
 msgstr "Sinut on kutsuttu liittymään tiimiin. Avaa lähettämämme kutsusähköposti viimeistelläksesi liittymisen. Jos linkki on vanhentunut, pyydä sinut kutsunutta henkilöä lähettämään uusi kutsu."
 
@@ -22165,7 +22244,7 @@ msgstr "Kansikuvasi on vaakasuuntainen, joten se näyttää tässä pieneltä. F
 msgid "Your cover sits beside the details like a poster. Best with square or portrait artwork."
 msgstr "Kansikuvasi näkyy tietojen vieressä kuin juliste. Toimii parhaiten neliön muotoisilla tai pystysuuntaisilla kuvilla."
 
-#: src/components/layouts/Checkout/index.tsx:461
+#: src/components/layouts/Checkout/index.tsx:464
 msgid "Your current order will be lost."
 msgstr "Nykyinen tilauksesi menetetään."
 
@@ -22270,7 +22349,7 @@ msgstr "Tilauksesi tiedot on päivitetty. Vahvistussähköposti on lähetetty uu
 msgid "Your order has been cancelled"
 msgstr "Tilauksesi on peruttu"
 
-#: src/components/layouts/Checkout/index.tsx:229
+#: src/components/layouts/Checkout/index.tsx:232
 msgid "Your order has been cancelled."
 msgstr "Tilauksesi on peruttu."
 
@@ -22291,7 +22370,7 @@ msgid "Your organisation requires two-factor authentication. Set it up now to co
 msgstr "Organisaatiosi edellyttää kaksivaiheista tunnistautumista. Ota se käyttöön nyt jatkaaksesi. Siihen menee noin minuutti."
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:162
-#: src/components/routes/auth/Login/index.tsx:150
+#: src/components/routes/auth/Login/index.tsx:161
 msgid "Your organization requires single sign-on"
 msgstr "Organisaatiosi vaatii kertakirjautumisen"
 
@@ -22316,7 +22395,7 @@ msgstr "Järjestäjälläsi ei ole vielä kuvausta."
 msgid "Your organizer profile isn't published."
 msgstr "Järjestäjäprofiiliasi ei ole julkaistu."
 
-#: src/components/routes/auth/Login/index.tsx:190
+#: src/components/routes/auth/Login/index.tsx:201
 #: src/components/routes/auth/Register/index.tsx:162
 msgid "Your password"
 msgstr "Salasanasi"
