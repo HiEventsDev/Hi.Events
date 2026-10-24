@@ -16,6 +16,7 @@ class AdminAccountResource extends BaseResource
             'timezone' => $this->resource->timezone,
             'currency_code' => $this->resource->currency_code,
             'created_at' => $this->resource->created_at,
+            'suspended_at' => $this->resource->suspended_at,
             'events_count' => $this->resource->events_count ?? 0,
             'users_count' => $this->resource->users_count ?? 0,
             'users' => $this->resource->users->map(function ($user) {

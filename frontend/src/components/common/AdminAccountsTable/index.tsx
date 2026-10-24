@@ -1,4 +1,4 @@
-import {Badge, Button, Stack, Text} from "@mantine/core";
+import {Badge, Button, Group, Stack, Text} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {AdminAccount} from "../../../api/admin.client";
 import {IconCalendar, IconWorld, IconBuildingBank, IconUsers, IconEye, IconMessage} from "@tabler/icons-react";
@@ -61,7 +61,10 @@ const AdminAccountsTable = ({accounts, onImpersonate, isLoading}: AdminAccountsT
                 <div key={account.id} className={classes.accountCard}>
                     <div className={classes.cardHeader}>
                         <div className={classes.accountInfo}>
-                            <h3 className={classes.accountName}>{account.name}</h3>
+                            <Group gap="xs">
+                                <h3 className={classes.accountName}>{account.name}</h3>
+                                {account.suspended_at && <Badge size="sm" color="red">{t`Suspended`}</Badge>}
+                            </Group>
                             <span className={classes.accountEmail}>{account.email}</span>
                         </div>
                         <Button

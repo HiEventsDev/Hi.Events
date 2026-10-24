@@ -49,6 +49,10 @@ abstract class AccountDomainObjectAbstract extends AbstractDomainObject
 
     final public const REQUIRE_TWO_FACTOR_AUTHENTICATION = 'require_two_factor_authentication';
 
+    final public const SUSPENDED_AT = 'suspended_at';
+
+    final public const SUSPENSION_REASON = 'suspension_reason';
+
     protected int $id;
 
     protected ?int $account_configuration_id = null;
@@ -85,6 +89,10 @@ abstract class AccountDomainObjectAbstract extends AbstractDomainObject
 
     protected bool $require_two_factor_authentication = false;
 
+    protected ?string $suspended_at = null;
+
+    protected ?string $suspension_reason = null;
+
     public function toArray(): array
     {
         return [
@@ -106,6 +114,8 @@ abstract class AccountDomainObjectAbstract extends AbstractDomainObject
             'is_manually_verified' => $this->is_manually_verified ?? null,
             'country' => $this->country ?? null,
             'require_two_factor_authentication' => $this->require_two_factor_authentication ?? null,
+            'suspended_at' => $this->suspended_at ?? null,
+            'suspension_reason' => $this->suspension_reason ?? null,
         ];
     }
 
@@ -323,5 +333,29 @@ abstract class AccountDomainObjectAbstract extends AbstractDomainObject
     public function getRequireTwoFactorAuthentication(): bool
     {
         return $this->require_two_factor_authentication;
+    }
+
+    public function setSuspendedAt(?string $suspended_at): self
+    {
+        $this->suspended_at = $suspended_at;
+
+        return $this;
+    }
+
+    public function getSuspendedAt(): ?string
+    {
+        return $this->suspended_at;
+    }
+
+    public function setSuspensionReason(?string $suspension_reason): self
+    {
+        $this->suspension_reason = $suspension_reason;
+
+        return $this;
+    }
+
+    public function getSuspensionReason(): ?string
+    {
+        return $this->suspension_reason;
     }
 }
