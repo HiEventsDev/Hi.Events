@@ -26,6 +26,7 @@ use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\GetOrderPublicDTO;
 use HiEvents\Services\Domain\Order\OfflinePaymentInstructionsRenderService;
+use HiEvents\Services\Domain\Subscription\AccountSubscriptionAccessService;
 use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
@@ -35,6 +36,7 @@ class GetOrderPublicHandler
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly CheckoutSessionManagementService $sessionIdentifierService,
         private readonly OfflinePaymentInstructionsRenderService $offlinePaymentInstructionsRenderService,
+        private readonly AccountSubscriptionAccessService $accountSubscriptionAccessService,
     ) {}
 
     public function handle(GetOrderPublicDTO $getOrderData): OrderDomainObject
@@ -55,6 +57,11 @@ class GetOrderPublicHandler
         }
 
         $this->offlinePaymentInstructionsRenderService->renderForOrder($order);
+
+        $organizer = $order->getEvent()?->getOrganizer();
+        $organizer?->setBrandingRemoved(
+            $this->accountSubscriptionAccessService->hasActiveSubscription($organizer->getAccountId())
+        );
 
         return $order;
     }

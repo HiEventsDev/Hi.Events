@@ -466,7 +466,7 @@ msgid "{min}–{max} per order"
 msgstr ""
 
 #: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:35
-#: src/components/routes/event/Lineup/RunSheetPrint.tsx:154
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:156
 msgid "{minutes} min"
 msgstr ""
 
@@ -828,7 +828,7 @@ msgstr "1. Установите приложение-аутентификато�
 msgid "12 mats in the studio and one Drop-in ticket."
 msgstr ""
 
-#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:64
+#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:66
 #: src/components/routes/event/TicketDesigner/TicketPreview.tsx:68
 msgid "123 Sample Street"
 msgstr ""
@@ -1038,7 +1038,7 @@ msgid "Absorb Fee"
 msgstr ""
 
 #: src/components/common/ThemeColorControls/index.tsx:122
-#: src/components/routes/event/TicketDesigner/index.tsx:154
+#: src/components/routes/event/TicketDesigner/index.tsx:155
 msgid "Accent Color"
 msgstr ""
 
@@ -1085,7 +1085,7 @@ msgid "Accessible"
 msgstr "Доступное"
 
 #: src/components/common/AdminOrdersTable/index.tsx:70
-#: src/components/layouts/SettingsLayout/index.tsx:60
+#: src/components/layouts/SettingsLayout/index.tsx:64
 #: src/components/routes/admin/Dashboard/index.tsx:330
 #: src/components/routes/admin/Dashboard/index.tsx:394
 #: src/components/routes/admin/DeletionRequests/index.tsx:117
@@ -1248,6 +1248,7 @@ msgstr ""
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:217
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:20
 #: src/components/routes/organizer/Payments/CapabilityList.tsx:57
+#: src/components/routes/settings/Billing/index.tsx:45
 #: src/components/routes/settings/Team/MemberRow.tsx:28
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:187
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:31
@@ -1877,7 +1878,7 @@ msgstr ""
 msgid "All dates · shared"
 msgstr ""
 
-#: src/components/routes/event/Lineup/RunSheetPrint.tsx:74
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:76
 msgid "All days"
 msgstr ""
 
@@ -2262,7 +2263,7 @@ msgstr "Любой, у кого есть эта ссылка и PIN, может 
 msgid "Anything else?"
 msgstr "Что-нибудь ещё?"
 
-#: src/components/layouts/SettingsLayout/index.tsx:64
+#: src/components/layouts/SettingsLayout/index.tsx:74
 #: src/components/routes/settings/ApiKeys/index.tsx:111
 msgid "API keys"
 msgstr "API-ключи"
@@ -2271,8 +2272,8 @@ msgstr "API-ключи"
 msgid "API keys can't be created while you're impersonating someone."
 msgstr "Нельзя создавать API-ключи, пока вы действуете от имени другого пользователя."
 
-#: src/components/layouts/SettingsLayout/index.tsx:75
-#: src/components/layouts/SettingsLayout/index.tsx:79
+#: src/components/layouts/SettingsLayout/index.tsx:85
+#: src/components/layouts/SettingsLayout/index.tsx:89
 #: src/components/routes/settings/ApiKeys/index.tsx:122
 msgid "API reference"
 msgstr "Справочник API"
@@ -2329,6 +2330,10 @@ msgstr ""
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:365
 msgid "Applies to every {0}, non-cancelled date in this event — including dates not currently loaded."
 msgstr ""
+
+#: src/components/routes/settings/Billing/index.tsx:163
+msgid "Applies to every organizer and event in this account."
+msgstr "Действует для всех организаторов и мероприятий этого аккаунта."
 
 #: src/ee/seating/components/routes/event/Seating/BandProductsCard.tsx:135
 msgid "Applies to every tier of this ticket"
@@ -2952,7 +2957,7 @@ msgstr ""
 
 #: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:52
 #: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:82
-#: src/components/layouts/SettingsLayout/index.tsx:56
+#: src/components/layouts/SettingsLayout/index.tsx:60
 #: src/components/modals/CreateEventModal/index.tsx:251
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:151
 #: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:87
@@ -3124,6 +3129,16 @@ msgstr "Лучшие доступные"
 msgid "Bigger map"
 msgstr "Увеличить карту"
 
+#: src/components/common/BrandingUpsell/PlanIntervalPicker.tsx:54
+msgid "Billed once a year"
+msgstr "Оплата раз в год"
+
+#: src/components/layouts/SettingsLayout/index.tsx:70
+#: src/components/routes/settings/Billing/index.tsx:198
+msgctxt "Account subscription"
+msgid "Billing"
+msgstr "Оплата"
+
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:76
 msgctxt "Lineup spreadsheet column"
 msgid "Billing"
@@ -3138,6 +3153,11 @@ msgstr ""
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:307
 msgid "Billing Address"
 msgstr ""
+
+#: src/components/common/BrandingUpsell/PlanIntervalPicker.tsx:62
+#: src/components/routes/settings/Billing/index.tsx:175
+msgid "Billing period"
+msgstr "Период оплаты"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:200
 msgid "Billing Settings"
@@ -3268,6 +3288,10 @@ msgstr "Продажа в кассе"
 msgid "Box office updated"
 msgstr "Касса обновлена"
 
+#: src/components/common/BrandingUpsell/BrandingDesignerSection.tsx:34
+msgid "Branding"
+msgstr "Брендинг"
+
 #: src/components/modals/DuplicateEventModal/index.tsx:156
 msgid "Branding & emails"
 msgstr "Брендинг и письма"
@@ -3334,7 +3358,7 @@ msgstr ""
 msgid "Button text"
 msgstr "Текст кнопки"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:216
+#: src/components/routes/event/HomepageDesigner/index.tsx:217
 msgid "Button Text"
 msgstr ""
 
@@ -3554,6 +3578,10 @@ msgstr ""
 msgid "Cancel all products and release them back to the pool"
 msgstr "Отменить все продукты и вернуть их в общий пул"
 
+#: src/components/common/BrandingUpsell/PlanIntervalPicker.tsx:47
+msgid "Cancel anytime"
+msgstr "Отмена в любой момент"
+
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:200
 msgid "Cancel card payment"
 msgstr "Отменить оплату картой"
@@ -3626,6 +3654,10 @@ msgstr "Отмена отменит всех участников, связан�
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:106
 msgid "Cancelled"
 msgstr ""
+
+#: src/components/routes/settings/Billing/index.tsx:42
+msgid "Cancelling"
+msgstr "Отменяется"
 
 #: src/components/routes/event/OccurrencesTab/index.tsx:259
 msgid "Cancelling {0} date(s). This may take a moment to complete."
@@ -3838,6 +3870,10 @@ msgstr "Сделать разовым"
 #: src/components/modals/OfferWaitlistModal/index.tsx:102
 msgid "Change waitlist settings"
 msgstr ""
+
+#: src/components/routes/settings/Billing/index.tsx:144
+msgid "Change your card, switch between monthly and yearly billing, download invoices or cancel."
+msgstr "Смените карту, переключитесь между ежемесячной и ежегодной оплатой, скачайте счета или отмените подписку."
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:213
 msgid "Changed duration for {count} date(s)"
@@ -4408,6 +4444,7 @@ msgstr "Секрет клиента"
 msgid "close"
 msgstr ""
 
+#: src/components/common/BrandingUpsell/BrandingUpgradeModal.tsx:41
 #: src/components/common/Modal/index.tsx:33
 #: src/components/common/SideDrawer/index.tsx:117
 #: src/components/common/WidgetEditor/WidgetPreview.tsx:128
@@ -4503,7 +4540,7 @@ msgstr ""
 msgid "Collect details per ticket"
 msgstr ""
 
-#: src/components/routes/event/TicketDesigner/index.tsx:151
+#: src/components/routes/event/TicketDesigner/index.tsx:152
 msgid "Color"
 msgstr ""
 
@@ -4910,7 +4947,7 @@ msgstr ""
 #: src/components/common/WidgetEditor/BehaviourPanel.tsx:33
 #: src/components/layouts/EventHomepage/index.tsx:145
 #: src/components/layouts/ProductWidget/index.tsx:94
-#: src/components/routes/event/HomepageDesigner/index.tsx:221
+#: src/components/routes/event/HomepageDesigner/index.tsx:222
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1181
 #: src/components/routes/settings/Security/SignInMethods.tsx:251
 #: src/ee/seating/components/SeatPicker/Basket.tsx:200
@@ -4918,7 +4955,7 @@ msgstr ""
 msgid "Continue"
 msgstr ""
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:219
+#: src/components/routes/event/HomepageDesigner/index.tsx:220
 msgid "Continue Button"
 msgstr ""
 
@@ -4951,6 +4988,8 @@ msgstr ""
 msgid "Continue to next step"
 msgstr ""
 
+#: src/components/common/BrandingUpsell/BrandingUpgradeModal.tsx:45
+#: src/components/routes/settings/Billing/index.tsx:189
 #: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:83
 msgid "Continue to payment"
 msgstr "Перейти к оплате"
@@ -5000,7 +5039,7 @@ msgstr "Настройки cookie"
 #: src/components/common/AttendeeTicket/index.tsx:192
 #: src/components/common/CopyButton/index.tsx:14
 #: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:84
-#: src/components/common/WidgetEditor/index.tsx:220
+#: src/components/common/WidgetEditor/index.tsx:221
 #: src/components/common/WidgetEditor/InstallPanel.tsx:52
 #: src/components/modals/CheckInListSuccessModal/index.tsx:42
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:75
@@ -5078,7 +5117,7 @@ msgstr "Копировать ссылку для регистрации"
 msgid "Copy Check-In URL"
 msgstr ""
 
-#: src/components/common/WidgetEditor/index.tsx:220
+#: src/components/common/WidgetEditor/index.tsx:221
 msgid "Copy code"
 msgstr "Копировать код"
 
@@ -5166,7 +5205,7 @@ msgstr "Скопируйте URL эмитента, ID клиента и секр
 msgid "Copy the key again from your licence email, without quotes or spaces."
 msgstr "Скопируйте ключ ещё раз из письма с лицензией, без кавычек и пробелов."
 
-#: src/components/common/WidgetEditor/index.tsx:183
+#: src/components/common/WidgetEditor/index.tsx:184
 msgid "Copy the new code to your site"
 msgstr "Скопируйте новый код на сайт"
 
@@ -5338,8 +5377,8 @@ msgstr ""
 msgid "Cover image"
 msgstr "Обложка"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:177
-#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:150
+#: src/components/routes/event/HomepageDesigner/index.tsx:178
+#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:151
 msgid "Cover Image"
 msgstr ""
 
@@ -5347,11 +5386,11 @@ msgstr ""
 msgid "Cover image added"
 msgstr ""
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:191
+#: src/components/routes/event/HomepageDesigner/index.tsx:192
 msgid "Cover image will be displayed at the top of your event page"
 msgstr ""
 
-#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:164
+#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:165
 msgid "Cover image will be displayed at the top of your organizer page"
 msgstr ""
 
@@ -5765,7 +5804,7 @@ msgstr "Клиент получит email с подтверждением воз
 msgid "Customers"
 msgstr ""
 
-#: src/components/common/WidgetEditor/index.tsx:280
+#: src/components/common/WidgetEditor/index.tsx:281
 msgid "Customise"
 msgstr "Настройка"
 
@@ -6079,8 +6118,8 @@ msgstr ""
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:613
 #: src/components/common/PromoCodeTable/index.tsx:43
 #: src/components/common/QuestionsTable/index.tsx:158
-#: src/components/common/WidgetEditor/index.tsx:149
-#: src/components/common/WidgetEditor/index.tsx:261
+#: src/components/common/WidgetEditor/index.tsx:150
+#: src/components/common/WidgetEditor/index.tsx:262
 #: src/components/routes/admin/Announcements/index.tsx:226
 #: src/components/routes/admin/FailedJobs/index.tsx:209
 #: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:64
@@ -6096,7 +6135,7 @@ msgstr ""
 msgid "Delete \"{0}\"?"
 msgstr "Удалить \"{0}\"?"
 
-#: src/components/common/WidgetEditor/index.tsx:148
+#: src/components/common/WidgetEditor/index.tsx:149
 msgid "Delete \"{widgetName}\"? Pages that embed it will fall back to the settings in their embed code."
 msgstr "Удалить «{widgetName}»? Страницы, где он встроен, будут использовать настройки из своего кода встраивания."
 
@@ -6367,7 +6406,7 @@ msgstr "Разработка"
 msgid "Development licence"
 msgstr "Лицензия для разработки"
 
-#: src/components/common/PoweredByFooter/index.tsx:98
+#: src/components/common/PoweredByFooter/index.tsx:100
 msgid "Development licence, not for production use"
 msgstr "Лицензия для разработки, не для использования в продакшене"
 
@@ -6410,7 +6449,7 @@ msgstr ""
 
 #: src/components/common/DesignerShell/index.tsx:160
 #: src/components/common/SettingsPage/index.tsx:131
-#: src/components/common/WidgetEditor/index.tsx:93
+#: src/components/common/WidgetEditor/index.tsx:94
 #: src/components/forms/ProductForm/ProductDrawer.tsx:60
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:751
 msgid "Discard"
@@ -6421,7 +6460,7 @@ msgstr ""
 msgid "Discard changes?"
 msgstr ""
 
-#: src/components/common/WidgetEditor/index.tsx:93
+#: src/components/common/WidgetEditor/index.tsx:94
 msgid "Discard your unsaved changes to this widget?"
 msgstr "Отменить несохранённые изменения этого виджета?"
 
@@ -6429,7 +6468,7 @@ msgstr "Отменить несохранённые изменения этог�
 msgid "Discard your unsaved changes?"
 msgstr ""
 
-#: src/components/routes/event/TicketDesigner/index.tsx:182
+#: src/components/routes/event/TicketDesigner/index.tsx:183
 msgid "Disclaimers, contact info or a thank-you note, on a single line"
 msgstr ""
 
@@ -7205,7 +7244,11 @@ msgstr ""
 msgid "Email verified successfully!"
 msgstr ""
 
-#: src/components/common/WidgetEditor/index.tsx:188
+#: src/components/common/BrandingUpsell/IncludedFeatures.tsx:17
+msgid "Emails sent under your organizer name, with buttons and links in your event's colour"
+msgstr "Письма отправляются от имени вашего организатора, а кнопки и ссылки окрашены в цвет вашего мероприятия"
+
+#: src/components/common/WidgetEditor/index.tsx:189
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:113
 msgid "Embed Widget"
 msgstr ""
@@ -7270,7 +7313,7 @@ msgctxt "Lineup spreadsheet column"
 msgid "End"
 msgstr ""
 
-#: src/components/routes/event/Lineup/RunSheetPrint.tsx:135
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:137
 msgid "End"
 msgstr ""
 
@@ -7327,6 +7370,10 @@ msgstr ""
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:108
 msgid "Ends before it starts"
 msgstr ""
+
+#: src/components/routes/settings/Billing/index.tsx:122
+msgid "Ends on"
+msgstr "Заканчивается"
 
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:187
 msgid "Ends the next day"
@@ -7624,14 +7671,14 @@ msgstr ""
 msgid "Event dashboard"
 msgstr ""
 
-#: src/components/routes/event/TicketDesigner/index.tsx:164
+#: src/components/routes/event/TicketDesigner/index.tsx:165
 #: src/components/routes/my-tickets/index.tsx:79
 #: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:29
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:337
 msgid "Event Date"
 msgstr ""
 
-#: src/components/routes/event/TicketDesigner/index.tsx:166
+#: src/components/routes/event/TicketDesigner/index.tsx:167
 msgid "Event date display"
 msgstr ""
 
@@ -7701,7 +7748,7 @@ msgstr "Событие не опубликовано"
 msgid "Event Page"
 msgstr ""
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:143
+#: src/components/routes/event/HomepageDesigner/index.tsx:144
 msgid "Event Preview"
 msgstr ""
 
@@ -7786,7 +7833,7 @@ msgstr ""
 msgid "Events Performance"
 msgstr ""
 
-#: src/components/common/WidgetEditor/index.tsx:188
+#: src/components/common/WidgetEditor/index.tsx:189
 msgid "Events Widget"
 msgstr "Виджет событий"
 
@@ -8716,7 +8763,7 @@ msgstr ""
 msgid "Flickr"
 msgstr "Flickr"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:227
+#: src/components/routes/event/HomepageDesigner/index.tsx:228
 msgid "Floating Button"
 msgstr ""
 
@@ -8732,11 +8779,11 @@ msgstr ""
 msgid "Food & Drink"
 msgstr ""
 
-#: src/components/routes/event/TicketDesigner/index.tsx:179
+#: src/components/routes/event/TicketDesigner/index.tsx:180
 msgid "Footer"
 msgstr ""
 
-#: src/components/routes/event/TicketDesigner/index.tsx:181
+#: src/components/routes/event/TicketDesigner/index.tsx:182
 msgid "Footer Text"
 msgstr ""
 
@@ -8893,7 +8940,7 @@ msgstr ""
 msgid "Future dates only"
 msgstr ""
 
-#: src/components/layouts/SettingsLayout/index.tsx:61
+#: src/components/layouts/SettingsLayout/index.tsx:65
 #: src/components/routes/settings/Account/index.tsx:70
 msgid "General"
 msgstr ""
@@ -8902,7 +8949,7 @@ msgstr ""
 msgid "General admission"
 msgstr ""
 
-#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:38
+#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:40
 #: src/components/routes/event/TicketDesigner/TicketPreview.tsx:42
 msgid "General Admission"
 msgstr ""
@@ -8977,7 +9024,7 @@ msgid "Get tickets"
 msgstr "Купить билеты"
 
 #: src/components/layouts/EventHomepage/index.tsx:144
-#: src/components/routes/event/HomepageDesigner/index.tsx:229
+#: src/components/routes/event/HomepageDesigner/index.tsx:230
 msgid "Get Tickets"
 msgstr ""
 
@@ -9121,7 +9168,7 @@ msgstr ""
 msgid "Gross Sales"
 msgstr ""
 
-#: src/components/routes/event/Lineup/RunSheetPrint.tsx:83
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:85
 msgid "Group by stage or room"
 msgstr ""
 
@@ -9233,6 +9280,14 @@ msgstr ""
 msgid "Hi,"
 msgstr ""
 
+#: src/components/common/BrandingUpsell/BrandingAnimation.tsx:14
+msgid "Hi.Events branding is removed from your event page, and your logo replaces it in emails"
+msgstr "Брендинг Hi.Events исчезает со страницы мероприятия, а в письмах его заменяет ваш логотип"
+
+#: src/components/routes/settings/Billing/index.tsx:124
+msgid "Hi.Events branding returns after this date. You can resume the subscription before then."
+msgstr "После этой даты брендинг Hi.Events вернётся. До этого вы можете возобновить подписку."
+
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:50
 msgid "Hi.Events Cloud"
 msgstr ""
@@ -9272,7 +9327,7 @@ msgstr ""
 msgid "Hidden from attendees - only visible to organizers"
 msgstr ""
 
-#: src/components/routes/event/Lineup/RunSheetPrint.tsx:162
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:164
 msgid "Hidden from event page: {hiddenNames}"
 msgstr ""
 
@@ -9345,6 +9400,10 @@ msgstr ""
 msgid "Hide from event page"
 msgstr ""
 
+#: src/components/common/BrandingUpsell/BrandingDesignerSection.tsx:36
+msgid "Hide Hi.Events branding"
+msgstr "Скрыть брендинг Hi.Events"
+
 #: src/components/routes/admin/Announcements/index.tsx:496
 msgid "Hide Preview"
 msgstr ""
@@ -9373,7 +9432,7 @@ msgstr ""
 msgid "Hide sold out dates and times"
 msgstr "Скрывать распроданные даты и время"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:173
+#: src/components/routes/event/TicketDesigner/index.tsx:174
 msgid "Hide the date"
 msgstr ""
 
@@ -9434,8 +9493,8 @@ msgstr "Снять с продажи мест: {0}"
 msgid "Hold back {0} seats on {dateCount} dates"
 msgstr "Снять с продажи мест: {0} на дат: {dateCount}"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:141
-#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:125
+#: src/components/routes/event/HomepageDesigner/index.tsx:142
+#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:126
 msgid "Homepage Design"
 msgstr ""
 
@@ -9619,8 +9678,8 @@ msgstr ""
 msgid "Image URL"
 msgstr ""
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:175
-#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:146
+#: src/components/routes/event/HomepageDesigner/index.tsx:176
+#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:147
 msgid "Images"
 msgstr ""
 
@@ -9750,6 +9809,7 @@ msgstr ""
 msgid "Include tax and fees in the price"
 msgstr ""
 
+#: src/components/routes/settings/Billing/index.tsx:143
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:108
 msgid "Included"
 msgstr ""
@@ -9757,6 +9817,10 @@ msgstr ""
 #: src/components/routes/admin/Accounts/AccountDetail/SuspendAccountModal.tsx:47
 msgid "Included in the email to the account owner."
 msgstr "Включается в письмо владельцу аккаунта."
+
+#: src/components/common/BrandingUpsell/BrandingDesignerSection.tsx:21
+msgid "Included in your plan. Hi.Events branding is hidden on your event pages, widgets, tickets and emails."
+msgstr "Входит в ваш тариф. Брендинг Hi.Events скрыт на страницах мероприятий, в виджетах, билетах и письмах."
 
 #: src/components/common/CheckInListList/index.tsx:102
 #: src/components/common/CheckInListTable/index.tsx:95
@@ -10269,7 +10333,7 @@ msgstr ""
 
 #: src/components/common/WidgetEditor/ContentFields.tsx:163
 #: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:101
-#: src/components/routes/event/HomepageDesigner/index.tsx:149
+#: src/components/routes/event/HomepageDesigner/index.tsx:150
 msgid "Layout"
 msgstr ""
 
@@ -10325,7 +10389,7 @@ msgstr "Выйти без сохранения? Ваши изменения в �
 msgid "Leave without saving? Your design changes will be lost."
 msgstr ""
 
-#: src/components/common/WidgetEditor/index.tsx:83
+#: src/components/common/WidgetEditor/index.tsx:84
 msgid "Leave without saving? Your widget changes will be lost."
 msgstr "Выйти без сохранения? Изменения виджета будут потеряны."
 
@@ -10339,7 +10403,7 @@ msgstr "Слева"
 msgid "Left wing"
 msgstr "Левое крыло"
 
-#: src/components/routes/event/Lineup/RunSheetPrint.tsx:136
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:138
 msgid "Length"
 msgstr ""
 
@@ -10520,7 +10584,7 @@ msgstr ""
 msgid "List view"
 msgstr "Список"
 
-#: src/components/common/WidgetEditor/index.tsx:230
+#: src/components/common/WidgetEditor/index.tsx:231
 msgid "List your upcoming events on your own website. Visitors can buy tickets without leaving your page."
 msgstr "Показывайте предстоящие события на своём сайте. Посетители смогут купить билеты, не покидая вашу страницу."
 
@@ -10648,8 +10712,8 @@ msgstr "локаций"
 msgid "Locations"
 msgstr "Локации"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:133
-#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:171
+#: src/components/routes/event/TicketDesigner/index.tsx:134
+#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:172
 #: src/components/routes/organizer/Settings/Sections/ImageAssetSettings/index.tsx:26
 msgid "Logo"
 msgstr ""
@@ -10662,11 +10726,11 @@ msgstr ""
 msgid "Logo and cover image for your organizer"
 msgstr ""
 
-#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:185
+#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:186
 msgid "Logo will be displayed in the header"
 msgstr ""
 
-#: src/components/routes/event/TicketDesigner/index.tsx:146
+#: src/components/routes/event/TicketDesigner/index.tsx:147
 msgid "Logo will be displayed on the ticket"
 msgstr ""
 
@@ -10735,6 +10799,10 @@ msgstr "Убедитесь, что ID token содержат claims email и ema
 msgid "Make this question mandatory"
 msgstr ""
 
+#: src/components/common/BrandingUpsell/BrandingUpgradeModal.tsx:28
+msgid "Make your event pages, widgets, tickets and emails look like they're entirely yours. Applies to every organizer and event in this account."
+msgstr "Пусть ваши страницы мероприятий, виджеты, билеты и письма выглядят полностью вашими. Действует для всех организаторов и мероприятий этого аккаунта."
+
 #: src/components/common/CapacityAssignmentList/index.tsx:141
 #: src/components/common/CheckInListList/index.tsx:144
 #: src/components/common/CheckInListTable/index.tsx:221
@@ -10756,6 +10824,11 @@ msgstr ""
 #: src/hooks/useAttendeeActions.tsx:87
 msgid "Manage attendee"
 msgstr ""
+
+#: src/components/common/BrandingUpsell/BrandingDesignerSection.tsx:26
+#: src/components/routes/settings/Billing/index.tsx:146
+msgid "Manage billing"
+msgstr "Управление оплатой"
 
 #: src/components/routes/event/OccurrencesTab/index.tsx:498
 msgid "Manage dates and times for your recurring event"
@@ -11110,6 +11183,7 @@ msgstr "Месяц"
 msgid "Month/Day"
 msgstr ""
 
+#: src/components/common/BrandingUpsell/PlanIntervalPicker.tsx:44
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:65
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:43
 msgid "Monthly"
@@ -11444,7 +11518,7 @@ msgstr ""
 msgid "New total"
 msgstr "Новый итог"
 
-#: src/components/common/WidgetEditor/index.tsx:244
+#: src/components/common/WidgetEditor/index.tsx:245
 msgid "New widget"
 msgstr "Новый виджет"
 
@@ -11773,6 +11847,14 @@ msgstr ""
 msgid "No flagged events awaiting review"
 msgstr "Нет помеченных событий, ожидающих проверки"
 
+#: src/components/common/BrandingUpsell/IncludedFeatures.tsx:9
+msgid "No Hi.Events branding on your event pages, organizer pages, checkout or embedded widgets"
+msgstr "Без брендинга Hi.Events на страницах мероприятий, страницах организатора, при оформлении заказа и во встроенных виджетах"
+
+#: src/components/common/BrandingUpsell/IncludedFeatures.tsx:21
+msgid "No Hi.Events promotion in the emails your attendees receive"
+msgstr "Без рекламы Hi.Events в письмах, которые получают ваши участники"
+
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:184
 msgid "No instructions have been added yet."
 msgstr "Инструкции ещё не добавлены."
@@ -12026,7 +12108,7 @@ msgstr "Схем залов пока нет"
 msgid "No stage"
 msgstr ""
 
-#: src/components/routes/event/Lineup/RunSheetPrint.tsx:55
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:57
 msgid "No stage or room"
 msgstr ""
 
@@ -12219,6 +12301,10 @@ msgstr ""
 msgid "Not marked as verified"
 msgstr "Не отмечен как подтверждённый"
 
+#: src/components/common/BrandingUpsell/BrandingUpgradeModal.tsx:41
+msgid "Not now"
+msgstr "Не сейчас"
+
 #: src/components/routes/auth/RequiredTwoFactorSetup/index.tsx:55
 msgid "Not now, log out"
 msgstr "Не сейчас, выйти"
@@ -12287,11 +12373,11 @@ msgstr "Примечание для покупателей"
 #: src/components/modals/ManageAttendeeModal/index.tsx:271
 #: src/components/modals/ManageOrderModal/index.tsx:281
 #: src/components/modals/ManageOrderModal/index.tsx:311
-#: src/components/routes/event/Lineup/RunSheetPrint.tsx:139
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:141
 msgid "Notes"
 msgstr ""
 
-#: src/components/routes/event/Lineup/RunSheetPrint.tsx:96
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:98
 msgid "Nothing has been scheduled yet."
 msgstr ""
 
@@ -12666,6 +12752,10 @@ msgstr ""
 msgid "Only account administrators can delete or archive organizers. Contact your account admin for assistance."
 msgstr ""
 
+#: src/components/common/BrandingUpsell/BrandingUpgradeModal.tsx:35
+msgid "Only account admins can change billing. Ask an admin to upgrade from Settings → Billing."
+msgstr "Изменять оплату могут только администраторы аккаунта. Попросите администратора обновить тариф в разделе Настройки → Оплата."
+
 #: src/components/routes/settings/Account/index.tsx:113
 msgid "Only account admins can change these settings."
 msgstr ""
@@ -12698,7 +12788,7 @@ msgstr ""
 msgid "Only send to orders with these statuses"
 msgstr ""
 
-#: src/components/routes/event/TicketDesigner/index.tsx:171
+#: src/components/routes/event/TicketDesigner/index.tsx:172
 msgid "Only show start date and time"
 msgstr ""
 
@@ -13172,7 +13262,7 @@ msgstr ""
 msgid "Organizer deleted successfully"
 msgstr ""
 
-#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:127
+#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:128
 msgid "Organizer Homepage Preview"
 msgstr ""
 
@@ -13219,7 +13309,7 @@ msgstr ""
 msgid "Organizer/default template will be used"
 msgstr ""
 
-#: src/components/layouts/SettingsLayout/index.tsx:62
+#: src/components/layouts/SettingsLayout/index.tsx:66
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:282
 #: src/components/routes/settings/Organizers/index.tsx:81
 #: src/components/routes/settings/Team/index.tsx:143
@@ -13449,6 +13539,10 @@ msgstr ""
 msgid "Past events"
 msgstr ""
 
+#: src/components/routes/settings/Billing/index.tsx:181
+msgid "Past invoices"
+msgstr "Прошлые счета"
+
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:447
 msgid "Paste"
 msgstr ""
@@ -13501,6 +13595,7 @@ msgstr ""
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:141
 #: src/components/forms/WebhookForm/index.tsx:28
+#: src/components/routes/settings/Billing/index.tsx:36
 msgid "Paused"
 msgstr ""
 
@@ -13539,6 +13634,10 @@ msgstr ""
 msgid "Payment Due Period"
 msgstr ""
 
+#: src/components/routes/settings/Billing/index.tsx:32
+msgid "Payment failed"
+msgstr "Платёж не прошёл"
+
 #: src/components/common/OrderStatusBadge/index.tsx:14
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:62
 msgid "Payment Failed"
@@ -13560,6 +13659,10 @@ msgstr ""
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:184
 msgid "Payment not completed"
 msgstr "Оплата не завершена"
+
+#: src/components/routes/settings/Billing/index.tsx:34
+msgid "Payment processing"
+msgstr "Платёж обрабатывается"
 
 #: src/components/common/OrderDetails/index.tsx:102
 #: src/components/modals/ManageOrderModal/index.tsx:164
@@ -13681,6 +13784,10 @@ msgstr ""
 msgid "per min"
 msgstr ""
 
+#: src/components/common/BrandingUpsell/PlanIntervalPicker.tsx:46
+msgid "per month"
+msgstr "в месяц"
+
 #: src/components/common/PromoCodeTable/index.tsx:94
 msgid "per order"
 msgstr "за заказ"
@@ -13702,6 +13809,10 @@ msgstr "за товар"
 #: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:32
 msgid "Per ticket"
 msgstr ""
+
+#: src/components/common/BrandingUpsell/PlanIntervalPicker.tsx:53
+msgid "per year"
+msgstr "в год"
 
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:68
 msgid "Percent"
@@ -13761,7 +13872,7 @@ msgstr ""
 msgid "Person"
 msgstr ""
 
-#: src/components/layouts/SettingsLayout/index.tsx:57
+#: src/components/layouts/SettingsLayout/index.tsx:61
 msgid "Personal"
 msgstr ""
 
@@ -13863,7 +13974,7 @@ msgstr ""
 msgid "Plan"
 msgstr "План"
 
-#: src/components/common/PoweredByFooter/index.tsx:67
+#: src/components/common/PoweredByFooter/index.tsx:69
 msgid "Planning an event?"
 msgstr ""
 
@@ -14058,7 +14169,8 @@ msgstr ""
 msgid "Post Checkout message"
 msgstr ""
 
-#: src/components/common/PoweredByFooter/index.tsx:79
+#: src/components/common/BrandingUpsell/BrandingAnimation.tsx:28
+#: src/components/common/PoweredByFooter/index.tsx:81
 msgid "Powered by"
 msgstr ""
 
@@ -14171,7 +14283,7 @@ msgid "Pricing"
 msgstr ""
 
 #: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:90
-#: src/components/routes/event/Lineup/RunSheetPrint.tsx:86
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:88
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:228
 msgid "Print"
 msgstr "Печать"
@@ -14184,11 +14296,11 @@ msgstr ""
 msgid "Print map"
 msgstr "Печать плана"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:121
+#: src/components/routes/event/TicketDesigner/index.tsx:122
 msgid "Print Preview"
 msgstr ""
 
-#: src/components/routes/event/TicketDesigner/index.tsx:110
+#: src/components/routes/event/TicketDesigner/index.tsx:111
 msgid "Print preview uses your last saved design"
 msgstr ""
 
@@ -14214,7 +14326,7 @@ msgid "Printed {0}"
 msgstr "Напечатано {0}"
 
 #: src/components/common/CookieConsentBanner/index.tsx:82
-#: src/components/layouts/HomepageFrame/index.tsx:64
+#: src/components/layouts/HomepageFrame/index.tsx:65
 msgid "Privacy Policy"
 msgstr ""
 
@@ -14325,7 +14437,7 @@ msgstr ""
 msgid "Products sorted successfully"
 msgstr ""
 
-#: src/components/layouts/SettingsLayout/index.tsx:58
+#: src/components/layouts/SettingsLayout/index.tsx:62
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:271
 #: src/components/routes/settings/Profile/index.tsx:170
 msgid "Profile"
@@ -14603,7 +14715,7 @@ msgstr ""
 msgid "Read and write"
 msgstr "Чтение и запись"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:323
+#: src/components/layouts/OrganizerHomepage/index.tsx:324
 #: src/components/widget/WidgetSections/index.tsx:91
 msgid "Read more"
 msgstr "Читать далее"
@@ -14934,6 +15046,10 @@ msgstr ""
 msgid "Remove \"{0}\"? It has already expired."
 msgstr "Удалить «{0}»? Срок его действия уже истёк."
 
+#: src/components/common/BrandingUpsell/BrandingDesignerSection.tsx:31
+msgid "Remove \"Powered by Hi.Events\" from your pages, widgets, tickets and emails, and show your own logo instead."
+msgstr "Уберите «Powered by Hi.Events» со своих страниц, виджетов, билетов и писем и покажите свой логотип."
+
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:37
 #: src/ee/seating/components/SeatPicker/Basket.tsx:123
 #: src/ee/sso/components/SingleSignOn/DomainList.tsx:99
@@ -14991,6 +15107,15 @@ msgstr "Удалить со схемы"
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:190
 msgid "Remove from this lineup"
 msgstr ""
+
+#: src/components/common/BrandingUpsell/BrandingUpgradeModal.tsx:24
+#: src/components/routes/settings/Billing/index.tsx:156
+msgid "Remove Hi.Events branding"
+msgstr "Убрать брендинг Hi.Events"
+
+#: src/components/routes/settings/Billing/index.tsx:199
+msgid "Remove Hi.Events branding from everything your attendees see, and put your own logo in their emails."
+msgstr "Уберите брендинг Hi.Events со всего, что видят ваши участники, и разместите свой логотип в их письмах."
 
 #: src/components/routes/settings/ApiKeys/index.tsx:81
 msgid "Remove key"
@@ -15073,8 +15198,8 @@ msgstr "Удалить время"
 msgid "Removed from the lineup"
 msgstr ""
 
-#: src/components/common/WidgetEditor/index.tsx:258
-#: src/components/common/WidgetEditor/index.tsx:309
+#: src/components/common/WidgetEditor/index.tsx:259
+#: src/components/common/WidgetEditor/index.tsx:312
 msgid "Rename"
 msgstr "Переименовать"
 
@@ -15082,7 +15207,7 @@ msgstr "Переименовать"
 msgid "Rename and save"
 msgstr "Переименовать и сохранить"
 
-#: src/components/common/WidgetEditor/index.tsx:308
+#: src/components/common/WidgetEditor/index.tsx:311
 msgid "Rename widget"
 msgstr "Переименовать виджет"
 
@@ -15098,6 +15223,10 @@ msgstr "Продлить лицензию"
 #: src/ee/licensing/components/LicenceModal/index.tsx:51
 msgid "Renew your licence."
 msgstr "Продлите лицензию."
+
+#: src/components/routes/settings/Billing/index.tsx:122
+msgid "Renews on"
+msgstr "Продлевается"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:66
 msgid "Reopen for new sales"
@@ -15527,11 +15656,11 @@ msgstr "Правила сохранены"
 msgid "Run a successful test sign-in before turning this on."
 msgstr "Выполните успешный тестовый вход, прежде чем включать это."
 
-#: src/components/routes/event/Lineup/RunSheetPrint.tsx:92
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:94
 msgid "Run sheet"
 msgstr ""
 
-#: src/components/routes/event/Lineup/RunSheetPrint.tsx:60
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:62
 msgid "Run sheet · {eventTitle}"
 msgstr ""
 
@@ -15679,7 +15808,7 @@ msgstr "Те же адреса и секреты подписи"
 msgid "Sample ticket price"
 msgstr ""
 
-#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:63
+#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:65
 #: src/components/routes/event/TicketDesigner/TicketPreview.tsx:67
 msgid "Sample Venue"
 msgstr ""
@@ -15725,8 +15854,12 @@ msgstr ""
 msgid "Save {0} connection"
 msgstr "Сохранить подключение {0}"
 
+#: src/components/common/BrandingUpsell/PlanIntervalPicker.tsx:54
+msgid "Save {saving}% vs monthly"
+msgstr "Экономия {saving}% по сравнению с ежемесячной оплатой"
+
 #: src/components/common/SettingsPage/index.tsx:143
-#: src/components/common/WidgetEditor/index.tsx:203
+#: src/components/common/WidgetEditor/index.tsx:204
 #: src/components/modals/EditTaxOrFeeModal/index.tsx:45
 #: src/components/modals/EditUserModal/index.tsx:104
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:222
@@ -15802,9 +15935,9 @@ msgstr ""
 msgid "Save VAT Settings"
 msgstr ""
 
-#: src/components/common/WidgetEditor/index.tsx:203
-#: src/components/common/WidgetEditor/index.tsx:308
-#: src/components/common/WidgetEditor/index.tsx:309
+#: src/components/common/WidgetEditor/index.tsx:204
+#: src/components/common/WidgetEditor/index.tsx:311
+#: src/components/common/WidgetEditor/index.tsx:312
 msgid "Save widget"
 msgstr "Сохранить виджет"
 
@@ -15812,11 +15945,11 @@ msgstr "Сохранить виджет"
 msgid "Save your recovery codes"
 msgstr "Сохраните резервные коды"
 
-#: src/components/common/WidgetEditor/index.tsx:181
+#: src/components/common/WidgetEditor/index.tsx:182
 msgid "Save, then copy the new code"
 msgstr "Сохраните, затем скопируйте новый код"
 
-#: src/components/common/WidgetEditor/index.tsx:183
+#: src/components/common/WidgetEditor/index.tsx:184
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:127
 #: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:47
 #: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:124
@@ -15851,7 +15984,7 @@ msgstr ""
 msgid "Saved to this organizer so you can reuse it at any event"
 msgstr ""
 
-#: src/components/common/WidgetEditor/index.tsx:245
+#: src/components/common/WidgetEditor/index.tsx:246
 msgid "Saved widgets"
 msgstr "Сохранённые виджеты"
 
@@ -16271,8 +16404,8 @@ msgstr "Настройки раздела: {label}"
 
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:83
 #: src/components/layouts/EventHomepage/SectionNav.tsx:139
-#: src/components/routes/event/HomepageDesigner/index.tsx:161
-#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:133
+#: src/components/routes/event/HomepageDesigner/index.tsx:162
+#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:134
 msgid "Sections"
 msgstr ""
 
@@ -16284,7 +16417,7 @@ msgstr ""
 msgid "Secure your account"
 msgstr "Защитите свой аккаунт"
 
-#: src/components/layouts/SettingsLayout/index.tsx:59
+#: src/components/layouts/SettingsLayout/index.tsx:63
 #: src/components/routes/settings/Security/index.tsx:236
 msgid "Security"
 msgstr "Безопасность"
@@ -16509,7 +16642,7 @@ msgstr ""
 msgid "Sell tickets at the door with cash, comps, or a card reader."
 msgstr "Продавайте билеты на входе за наличные, бесплатно или через картридер."
 
-#: src/components/common/WidgetEditor/index.tsx:231
+#: src/components/common/WidgetEditor/index.tsx:232
 msgid "Sell tickets on your own website. Pick a widget, then paste its code into your site."
 msgstr "Продавайте билеты на своём сайте. Выберите виджет и вставьте его код на сайт."
 
@@ -16832,8 +16965,8 @@ msgid "Setting updated"
 msgstr ""
 
 #: src/components/layouts/OrganizerLayout/index.tsx:119
-#: src/components/layouts/SettingsLayout/index.tsx:73
-#: src/components/layouts/SettingsLayout/index.tsx:80
+#: src/components/layouts/SettingsLayout/index.tsx:83
+#: src/components/layouts/SettingsLayout/index.tsx:90
 #: src/components/modals/DuplicateEventModal/index.tsx:158
 msgid "Settings"
 msgstr ""
@@ -16869,8 +17002,8 @@ msgstr "Форма"
 #: src/components/common/ShareIcon/index.tsx:30
 #: src/components/layouts/EventHomepage/EventIntro.tsx:66
 #: src/components/layouts/EventHomepage/EventIntro.tsx:66
-#: src/components/layouts/OrganizerHomepage/index.tsx:332
-#: src/components/layouts/OrganizerHomepage/index.tsx:332
+#: src/components/layouts/OrganizerHomepage/index.tsx:333
+#: src/components/layouts/OrganizerHomepage/index.tsx:333
 #: src/components/layouts/OrganizerLayout/index.tsx:269
 #: src/components/modals/ShareModal/index.tsx:37
 #: src/components/modals/ShareModal/index.tsx:165
@@ -16941,7 +17074,7 @@ msgstr ""
 msgid "Show available product quantity"
 msgstr ""
 
-#: src/components/routes/event/TicketDesigner/index.tsx:172
+#: src/components/routes/event/TicketDesigner/index.tsx:173
 msgid "Show entire date range"
 msgstr ""
 
@@ -16957,7 +17090,7 @@ msgstr ""
 msgid "Show keys"
 msgstr "Показать ключи"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:323
+#: src/components/layouts/OrganizerHomepage/index.tsx:324
 #: src/components/widget/WidgetSections/index.tsx:91
 msgid "Show less"
 msgstr "Свернуть"
@@ -17044,7 +17177,7 @@ msgstr ""
 msgid "Showing the first {0} — the remaining {1} session(s) will still be targeted when the message is sent."
 msgstr ""
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:220
+#: src/components/routes/event/HomepageDesigner/index.tsx:221
 msgid "Shown below the ticket list"
 msgstr ""
 
@@ -17052,7 +17185,7 @@ msgstr ""
 msgid "Shown bouncing at the top of the modal"
 msgstr ""
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:228
+#: src/components/routes/event/HomepageDesigner/index.tsx:229
 msgid "Shown on scroll and jumps to the tickets section"
 msgstr ""
 
@@ -17444,6 +17577,10 @@ msgstr ""
 msgid "Some details are hidden from public access. Log in to view everything."
 msgstr ""
 
+#: src/components/routes/settings/Billing/index.tsx:140
+msgid "Some payment methods take a little while to confirm. Your branding is removed as soon as Stripe confirms it."
+msgstr "Некоторые способы оплаты подтверждаются не сразу. Брендинг будет убран, как только Stripe подтвердит платёж."
+
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:538
 msgid "Some rows were rejected and nothing was imported. Fix the highlighted rows in your spreadsheet, then choose the file again."
 msgstr ""
@@ -17526,6 +17663,7 @@ msgstr ""
 #: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:19
 #: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:53
 #: src/hooks/useLoginSteps.ts:68
+#: src/hooks/useSubscriptionRedirect.ts:25
 #: src/utilites/ssoErrors.ts:17
 msgid "Something went wrong. Please try again."
 msgstr ""
@@ -17603,7 +17741,7 @@ msgstr ""
 msgid "Spotify, YouTube, SoundCloud, Instagram, LinkedIn, a website and more. Each link gets the right icon automatically."
 msgstr ""
 
-#: src/components/routes/event/TicketDesigner/index.tsx:135
+#: src/components/routes/event/TicketDesigner/index.tsx:136
 msgid "Square, at least 200 × 200px"
 msgstr ""
 
@@ -17642,7 +17780,7 @@ msgctxt "Lineup spreadsheet column"
 msgid "Stage"
 msgstr "Сцена"
 
-#: src/components/routes/event/Lineup/RunSheetPrint.tsx:137
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:139
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleCalendar.tsx:144
 #: src/ee/seating/components/lib/templates.ts:96
 #: src/ee/seating/components/lib/templates.ts:126
@@ -17688,7 +17826,7 @@ msgstr "Лестница"
 msgid "Stalls"
 msgstr ""
 
-#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:58
+#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:60
 #: src/components/routes/event/TicketDesigner/TicketPreview.tsx:62
 msgid "Stalls · C-14"
 msgstr "Партер · C-14"
@@ -17729,7 +17867,7 @@ msgctxt "Lineup spreadsheet column"
 msgid "Start"
 msgstr ""
 
-#: src/components/routes/event/Lineup/RunSheetPrint.tsx:134
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:136
 msgid "Start"
 msgstr ""
 
@@ -17868,6 +18006,7 @@ msgstr ""
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:51
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:88
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:62
+#: src/components/routes/settings/Billing/index.tsx:117
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:177
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:164
 msgid "Status"
@@ -17976,6 +18115,10 @@ msgstr ""
 msgid "Stripe didn't return a setup link. Please try again."
 msgstr ""
 
+#: src/components/routes/settings/Billing/index.tsx:171
+msgid "Stripe hasn't confirmed your payment yet. Refresh this page in a few minutes before trying again."
+msgstr "Stripe ещё не подтвердил ваш платёж. Обновите страницу через несколько минут, прежде чем пытаться снова."
+
 #: src/ee/box-office/components/routes/organizer/Payments/TerminalReaders/index.tsx:75
 msgid "Stripe is not configured on this installation, so card readers are unavailable."
 msgstr "Stripe не настроен в этой установке, поэтому картридеры недоступны."
@@ -18033,6 +18176,10 @@ msgstr ""
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:268
 msgid "Subject:"
 msgstr ""
+
+#: src/components/routes/settings/Billing/index.tsx:116
+msgid "Subscription"
+msgstr "Подписка"
 
 #: src/components/common/InlineOrderSummary/index.tsx:156
 #: src/components/common/OrderSummary/index.tsx:53
@@ -18126,8 +18273,8 @@ msgstr ""
 msgid "Successfully Updated Event Defaults"
 msgstr ""
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:121
-#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:93
+#: src/components/routes/event/HomepageDesigner/index.tsx:122
+#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:94
 msgid "Successfully Updated Homepage Design"
 msgstr ""
 
@@ -18391,7 +18538,7 @@ msgstr ""
 msgid "Taxes & fees applied"
 msgstr ""
 
-#: src/components/layouts/SettingsLayout/index.tsx:65
+#: src/components/layouts/SettingsLayout/index.tsx:75
 #: src/components/routes/settings/TaxesAndFees/index.tsx:134
 msgid "Taxes and fees"
 msgstr ""
@@ -18402,7 +18549,7 @@ msgstr ""
 
 #: src/components/layouts/Event/index.tsx:166
 #: src/components/layouts/OrganizerLayout/index.tsx:133
-#: src/components/layouts/SettingsLayout/index.tsx:63
+#: src/components/layouts/SettingsLayout/index.tsx:67
 #: src/components/routes/event/Team/index.tsx:13
 #: src/components/routes/organizer/Team/index.tsx:13
 #: src/components/routes/settings/Team/index.tsx:152
@@ -18471,7 +18618,7 @@ msgstr "Способ оплаты"
 msgid "Term"
 msgstr "Ключевое слово"
 
-#: src/components/layouts/HomepageFrame/index.tsx:67
+#: src/components/layouts/HomepageFrame/index.tsx:68
 msgid "Terms of Service"
 msgstr ""
 
@@ -18492,9 +18639,13 @@ msgstr "Тестовый вход"
 msgid "Text"
 msgstr "Текст"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:183
+#: src/components/routes/event/TicketDesigner/index.tsx:184
 msgid "Thank you for attending!"
 msgstr ""
+
+#: src/components/routes/settings/Billing/index.tsx:63
+msgid "Thanks for subscribing. Your branding changes apply as soon as Stripe confirms the payment."
+msgstr "Спасибо за подписку. Изменения брендинга вступят в силу, как только Stripe подтвердит платёж."
 
 #: src/components/routes/event/OccurrencesTab/rescheduleMessageTemplate.ts:55
 #: src/components/routes/event/OccurrencesTab/rescheduleMessageTemplate.ts:77
@@ -18862,8 +19013,8 @@ msgstr "Театр"
 msgid "Theatre with sections"
 msgstr ""
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:196
-#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:192
+#: src/components/routes/event/HomepageDesigner/index.tsx:197
+#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:193
 msgid "Theme & Colors"
 msgstr ""
 
@@ -19465,11 +19616,11 @@ msgstr ""
 msgid "Ticket allocation"
 msgstr ""
 
-#: src/components/routes/event/TicketDesigner/index.tsx:103
+#: src/components/routes/event/TicketDesigner/index.tsx:104
 msgid "Ticket Design"
 msgstr ""
 
-#: src/components/routes/event/TicketDesigner/index.tsx:79
+#: src/components/routes/event/TicketDesigner/index.tsx:80
 msgid "Ticket design saved successfully"
 msgstr ""
 
@@ -19510,7 +19661,7 @@ msgstr ""
 msgid "Ticket or Product"
 msgstr ""
 
-#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:83
+#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:85
 msgid "Ticket Preview for"
 msgstr "Предпросмотр билета для"
 
@@ -19902,6 +20053,10 @@ msgstr ""
 msgid "Treated as one person. Separate several people with a semicolon."
 msgstr "Считается одним человеком. Разделяйте нескольких людей точкой с запятой."
 
+#: src/components/routes/settings/Billing/index.tsx:38
+msgid "Trial"
+msgstr "Пробный период"
+
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:87
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:125
 msgid "Trust this device for 30 days"
@@ -19946,7 +20101,7 @@ msgstr "Попробовать снова"
 msgid "Try another email"
 msgstr ""
 
-#: src/components/common/PoweredByFooter/index.tsx:74
+#: src/components/common/PoweredByFooter/index.tsx:76
 msgid "Try Hi.Events Free"
 msgstr ""
 
@@ -20108,8 +20263,8 @@ msgstr "Введите код, который приложение-аутент�
 msgid "Type to search..."
 msgstr ""
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:205
-#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:201
+#: src/components/routes/event/HomepageDesigner/index.tsx:206
+#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:202
 msgid "Typography"
 msgstr ""
 
@@ -20160,7 +20315,7 @@ msgstr ""
 msgid "Unable to create question. Please check the your details"
 msgstr ""
 
-#: src/components/common/WidgetEditor/index.tsx:160
+#: src/components/common/WidgetEditor/index.tsx:161
 msgid "Unable to delete the widget"
 msgstr "Не удалось удалить виджет"
 
@@ -20192,11 +20347,11 @@ msgstr ""
 msgid "Unable to remove the card reader"
 msgstr "Не удалось удалить картридер"
 
-#: src/components/common/WidgetEditor/index.tsx:137
+#: src/components/common/WidgetEditor/index.tsx:138
 msgid "Unable to rename the widget"
 msgstr "Не удалось переименовать виджет"
 
-#: src/components/common/WidgetEditor/index.tsx:121
+#: src/components/common/WidgetEditor/index.tsx:122
 msgid "Unable to save the widget. Please check your settings and try again."
 msgstr "Не удалось сохранить виджет. Проверьте настройки и повторите попытку."
 
@@ -20354,7 +20509,7 @@ msgstr ""
 
 #: src/components/common/DesignerShell/index.tsx:149
 #: src/components/common/SettingsPage/index.tsx:128
-#: src/components/common/WidgetEditor/index.tsx:181
+#: src/components/common/WidgetEditor/index.tsx:182
 msgid "Unsaved changes"
 msgstr ""
 
@@ -20468,6 +20623,10 @@ msgstr ""
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:38
 msgid "Update location"
 msgstr ""
+
+#: src/components/routes/settings/Billing/index.tsx:133
+msgid "Update your payment method"
+msgstr "Обновите способ оплаты"
 
 #: src/components/routes/event/OccurrencesTab/rescheduleMessageTemplate.ts:71
 msgid "Update: {subjectTitle} — schedule changes"
@@ -20659,7 +20818,7 @@ msgstr "Использовать цену билета"
 msgid "Use your authenticator app instead"
 msgstr "Использовать приложение-аутентификатор"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:155
+#: src/components/routes/event/TicketDesigner/index.tsx:156
 msgid "Used for borders, highlights, and QR code styling"
 msgstr ""
 
@@ -21155,6 +21314,10 @@ msgstr ""
 msgid "Waiting for scan…"
 msgstr ""
 
+#: src/components/routes/settings/Billing/index.tsx:162
+msgid "Waiting for Stripe to confirm your payment…"
+msgstr "Ожидаем подтверждения платежа от Stripe…"
+
 #: src/components/forms/ProductForm/index.tsx:466
 #: src/components/layouts/AuthLayout/AuthShell.tsx:16
 #: src/components/layouts/Event/index.tsx:154
@@ -21263,9 +21426,13 @@ msgstr "Не удалось загрузить схему зала. Пожалу
 msgid "We couldn't load this box office"
 msgstr "Не удалось загрузить эту кассу"
 
-#: src/components/routes/event/Lineup/RunSheetPrint.tsx:28
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:29
 msgid "We couldn't load this run sheet. Check you have access to this event and try again."
 msgstr ""
+
+#: src/components/routes/settings/Billing/index.tsx:101
+msgid "We couldn't load your billing details. Please refresh the page to try again."
+msgstr "Не удалось загрузить данные об оплате. Обновите страницу, чтобы попробовать снова."
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:97
 msgid "We couldn't reach Stripe just now. Please try again in a moment."
@@ -21299,12 +21466,12 @@ msgstr ""
 msgid "We partner with Stripe to send payouts straight to your bank account."
 msgstr ""
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:178
-#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:151
+#: src/components/routes/event/HomepageDesigner/index.tsx:179
+#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:152
 msgid "We recommend dimensions of 1950px by 650px, a ratio of 3:1, and a maximum file size of 5MB"
 msgstr ""
 
-#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:172
+#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:173
 msgid "We recommend dimensions of 400px by 400px, and a maximum file size of 5MB"
 msgstr ""
 
@@ -21474,7 +21641,7 @@ msgstr ""
 msgid "Wellness"
 msgstr ""
 
-#: src/components/routes/event/Lineup/RunSheetPrint.tsx:138
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:140
 msgid "What"
 msgstr ""
 
@@ -21717,15 +21884,15 @@ msgstr ""
 msgid "Wide cover, tickets alongside"
 msgstr "Широкая обложка, билеты рядом"
 
-#: src/components/common/WidgetEditor/index.tsx:238
+#: src/components/common/WidgetEditor/index.tsx:239
 msgid "Widget"
 msgstr "Виджет"
 
-#: src/components/common/WidgetEditor/index.tsx:119
+#: src/components/common/WidgetEditor/index.tsx:120
 msgid "Widget created"
 msgstr "Виджет создан"
 
-#: src/components/common/WidgetEditor/index.tsx:158
+#: src/components/common/WidgetEditor/index.tsx:159
 msgid "Widget deleted"
 msgstr "Виджет удалён"
 
@@ -21734,7 +21901,7 @@ msgstr "Виджет удалён"
 msgid "Widget Embed"
 msgstr ""
 
-#: src/components/common/WidgetEditor/index.tsx:252
+#: src/components/common/WidgetEditor/index.tsx:253
 msgid "Widget options"
 msgstr "Параметры виджета"
 
@@ -21743,7 +21910,7 @@ msgstr "Параметры виджета"
 msgid "Widget preview"
 msgstr "Предпросмотр виджета"
 
-#: src/components/common/WidgetEditor/index.tsx:119
+#: src/components/common/WidgetEditor/index.tsx:120
 msgid "Widget saved"
 msgstr "Виджет сохранён"
 
@@ -21812,6 +21979,7 @@ msgstr ""
 msgid "Year to date"
 msgstr ""
 
+#: src/components/common/BrandingUpsell/PlanIntervalPicker.tsx:51
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:66
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:45
 msgid "Yearly"
@@ -22108,6 +22276,10 @@ msgstr ""
 msgid "You'll need at least one product to get started. Free, paid or let the user decide what to pay."
 msgstr ""
 
+#: src/components/routes/settings/Billing/index.tsx:178
+msgid "You'll pay securely with Stripe. Cancel anytime."
+msgstr "Вы платите безопасно через Stripe. Отменить можно в любой момент."
+
 #: src/components/modals/CreateEventModal/index.tsx:374
 msgid "You'll set the dates and schedule after the event is created."
 msgstr ""
@@ -22292,6 +22464,10 @@ msgstr "ваш поставщик удостоверений"
 msgid "Your identity provider returned an error: {providerError}"
 msgstr "Ваш поставщик удостоверений вернул ошибку: {providerError}"
 
+#: src/components/routes/settings/Billing/index.tsx:134
+msgid "Your last payment didn't go through. Update your card to keep your branding removed."
+msgstr "Последний платёж не прошёл. Обновите карту, чтобы брендинг оставался убранным."
+
 #: src/ee/licensing/components/LicenceModal/index.tsx:80
 msgid "Your licence doesn't include {notIncludedList}. Nothing new can be set up, but anything already set up can still be viewed or removed."
 msgstr ""
@@ -22387,6 +22563,10 @@ msgstr ""
 msgid "Your organizer has no description yet."
 msgstr ""
 
+#: src/components/common/BrandingUpsell/IncludedFeatures.tsx:13
+msgid "Your organizer logo at the top of order and ticket emails, in place of the Hi.Events logo"
+msgstr "Логотип вашего организатора вверху писем о заказах и билетах вместо логотипа Hi.Events"
+
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:52
 msgid "Your organizer profile isn't published."
 msgstr ""
@@ -22407,6 +22587,11 @@ msgstr ""
 #: src/components/common/InlineOrderSummary/index.tsx:239
 msgid "Your payment is protected with bank-level encryption"
 msgstr ""
+
+#: src/components/routes/settings/Billing/index.tsx:139
+#: src/components/routes/settings/Billing/index.tsx:170
+msgid "Your payment is still processing"
+msgstr "Ваш платёж всё ещё обрабатывается"
 
 #: src/components/forms/StripeCheckoutForm/index.tsx:103
 msgid "Your payment was not successful, please try again."

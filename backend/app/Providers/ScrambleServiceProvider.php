@@ -10,6 +10,7 @@ use Dedoc\Scramble\Support\Generator\OpenApi;
 use Dedoc\Scramble\Support\Generator\Operation;
 use Dedoc\Scramble\Support\Generator\Path;
 use Dedoc\Scramble\Support\Generator\SecurityScheme;
+use Dedoc\Scramble\Support\Generator\Types\ObjectType;
 use Dedoc\Scramble\Support\RouteInfo;
 use HiEvents\OpenApi\IntegrationApiReference;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -21,9 +22,16 @@ use Illuminate\Support\Str;
 
 class ScrambleServiceProvider extends ServiceProvider
 {
-    private const LICENSING_NAMESPACE = 'HiEvents\\Enterprise\\Licensing\\';
+    private const UNDOCUMENTED_ACTION_NAMESPACES = [
+        'HiEvents\\Enterprise\\Licensing\\',
+        'HiEvents\\Http\\Actions\\Accounts\\Subscription\\',
+    ];
 
     private const ACTION_NAMESPACE_PATTERN = '/^HiEvents\\\\(Enterprise\\\\(\w+)\\\\)?Http\\\\Actions\\\\/';
+
+    private const UNDOCUMENTED_PROPERTIES = [
+        'OrganizerResourcePublic' => ['branding_removed'],
+    ];
 
     public function register(): void
     {
@@ -48,7 +56,7 @@ class ScrambleServiceProvider extends ServiceProvider
                     return false;
                 }
 
-                if (str_starts_with($route->getActionName(), self::LICENSING_NAMESPACE)) {
+                if (Str::startsWith($route->getActionName(), self::UNDOCUMENTED_ACTION_NAMESPACES)) {
                     return false;
                 }
 
@@ -89,7 +97,22 @@ class ScrambleServiceProvider extends ServiceProvider
                     ->filter(static fn (Collection $operations): bool => $operations->count() > 1)
                     ->flatten()
                     ->each(static fn (Operation $operation) => $operation->setOperationId(self::routeQualifiedOperationId($operation)));
+
+                self::removeUndocumentedProperties($openApi);
             });
+    }
+
+    private static function removeUndocumentedProperties(OpenApi $openApi): void
+    {
+        foreach (self::UNDOCUMENTED_PROPERTIES as $schemaName => $properties) {
+            $type = $openApi->components->schemas[$schemaName]->type ?? null;
+            if (! $type instanceof ObjectType) {
+                continue;
+            }
+
+            $type->properties = array_diff_key($type->properties, array_flip($properties));
+            $type->required = array_values(array_diff($type->required, $properties));
+        }
     }
 
     private static function routeQualifiedOperationId(Operation $operation): string

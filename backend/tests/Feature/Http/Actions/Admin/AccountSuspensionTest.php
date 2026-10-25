@@ -5,12 +5,18 @@ namespace Tests\Feature\Http\Actions\Admin;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Mail\Account\AccountSuspendedEmail;
 use HiEvents\Models\User;
+use HiEvents\Services\Infrastructure\Stripe\StripeClientFactory;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Testing\TestResponse;
+use Mockery;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
+use Stripe\Collection;
+use Stripe\Service\SubscriptionService;
+use Stripe\StripeClient;
+use Stripe\Subscription;
 use Tests\Concerns\ActsAsAccountUsers;
 use Tests\Concerns\UsesApiKeys;
 use Tests\TestCase;
@@ -199,6 +205,34 @@ class AccountSuspensionTest extends TestCase
     {
         $this->deleteJson("/admin/accounts/{$this->accountId}/suspension", [], $this->superadminHeaders())
             ->assertStatus(409);
+    }
+
+    public function test_suspending_stops_the_accounts_subscription_from_renewing(): void
+    {
+        DB::table('account_subscriptions')->insert([
+            'account_id' => $this->accountId,
+            'stripe_customer_id' => 'cus_suspended',
+            'stripe_subscription_id' => 'sub_live',
+            'status' => 'ACTIVE',
+            'cancel_at_period_end' => false,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $stripeSubscriptions = Mockery::mock(SubscriptionService::class);
+        $stripeSubscriptions->shouldReceive('all')->andReturn(Collection::constructFrom(['object' => 'list', 'data' => [
+            Subscription::constructFrom(['id' => 'sub_live', 'status' => 'active', 'cancel_at_period_end' => false]),
+        ]]));
+        $stripeSubscriptions->shouldReceive('update')->with('sub_live', ['cancel_at_period_end' => true])->once();
+        $stripeClient = Mockery::mock(StripeClient::class);
+        $stripeClient->shouldReceive('getService')->with('subscriptions')->andReturn($stripeSubscriptions);
+        $stripeClientFactory = Mockery::mock(StripeClientFactory::class);
+        $stripeClientFactory->shouldReceive('createForBilling')->andReturn($stripeClient);
+        $this->app->instance(StripeClientFactory::class, $stripeClientFactory);
+
+        $this->suspend(['reason' => 'Chargebacks'])->assertOk();
+
+        $this->assertTrue((bool) DB::table('account_subscriptions')->where('account_id', $this->accountId)->value('cancel_at_period_end'));
     }
 
     private function suspend(array $payload = []): TestResponse

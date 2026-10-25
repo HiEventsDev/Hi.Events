@@ -1,0 +1,30 @@
+.value {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--hi-text);
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid var(--hi-color-border);
+
+  @container (max-width: 560px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.heroText {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.heroLead {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--hi-color-text-muted);
+}

@@ -1,0 +1,110 @@
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--hi-text);
+
+  li {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: var(--hi-color-success);
+  }
+}
+
+.intervals {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+
+  @media (max-width: 420px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.interval {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  border: 1px solid var(--hi-color-border);
+  border-radius: 10px;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+
+  &[data-checked] {
+    border-color: var(--hi-primary);
+    box-shadow: 0 0 0 1px var(--hi-primary);
+  }
+}
+
+.intervalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.intervalLabel {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--hi-text);
+}
+
+.intervalPrice {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.amount {
+  font-size: 1.375rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--hi-text);
+}
+
+.period {
+  font-size: 0.8125rem;
+  color: var(--hi-color-text-muted);
+}
+
+.intervalNote {
+  font-size: 0.75rem;
+  color: var(--hi-color-text-muted);
+
+  &[data-highlight] {
+    font-weight: 600;
+    color: var(--hi-color-success);
+  }
+}
+
+.modalBody {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.lead {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--hi-text);
+}
+
+.askAdmin {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: var(--hi-text);
+  background: color-mix(in srgb, var(--hi-text) 4%, transparent);
+}

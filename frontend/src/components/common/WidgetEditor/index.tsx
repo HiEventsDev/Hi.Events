@@ -26,6 +26,7 @@ import {NameModal} from "./NameModal.tsx";
 import {CustomiseGroups} from "./CustomiseGroups.tsx";
 import {LayoutPicker, LineupNotice} from "./ContentFields.tsx";
 import {InstallPanel} from "./InstallPanel.tsx";
+import {BrandingDesignerSection} from "../BrandingUpsell";
 import {useLineupSectionAvailability} from "./sectionAvailability.ts";
 
 const UNSAVED = 'unsaved';
@@ -292,6 +293,8 @@ export const WidgetEditor = ({target, theme, event, occurrences, homepageSection
                     locked={locked}
                 />
             </DesignerSection>
+
+            {type !== 'BUTTON' && <BrandingDesignerSection/>}
 
             <InstallPanel
                 type={type}

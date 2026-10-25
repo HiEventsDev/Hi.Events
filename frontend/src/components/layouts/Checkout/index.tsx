@@ -418,7 +418,7 @@ const Checkout = () => {
                     <Outlet/>
                     {isModal && currentStep !== 'summary' && (
                         <>
-                            <PoweredByFooter style={{marginTop: '12px', paddingBottom: '16px'}}/>
+                            <PoweredByFooter style={{marginTop: '12px', paddingBottom: '16px'}} brandingRemoved={!publicEvent || publicEvent.organizer?.branding_removed}/>
                             <CookieSettingsLink/>
                         </>
                     )}

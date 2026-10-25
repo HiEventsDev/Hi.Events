@@ -1,5 +1,14 @@
 import {api} from "./client.ts";
-import {Account, AccountDeletionRequest, AccountDeletionStatus, GenericDataResponse, IdParam, User} from "../types.ts";
+import {
+    Account,
+    AccountDeletionRequest,
+    AccountDeletionStatus,
+    AccountSubscription,
+    GenericDataResponse,
+    IdParam,
+    SubscriptionBillingInterval,
+    User,
+} from "../types.ts";
 
 interface CreateAccountRequest {
     first_name: string;
@@ -37,6 +46,20 @@ export const accountClient = {
     },
     cancelDeletion: async () => {
         const response = await api.delete<GenericDataResponse<AccountDeletionRequest>>('accounts/deletion-request');
+        return response.data;
+    },
+    getSubscription: async (accountId: IdParam, refreshFromStripe: boolean) => {
+        const response = await api.get<GenericDataResponse<AccountSubscription>>(`accounts/${accountId}/subscription`, {
+            params: refreshFromStripe ? {refresh: 1} : undefined,
+        });
+        return response.data;
+    },
+    createSubscriptionCheckoutSession: async (accountId: IdParam, interval: SubscriptionBillingInterval) => {
+        const response = await api.post<{ url: string }>(`accounts/${accountId}/subscription/checkout-session`, {interval});
+        return response.data;
+    },
+    createSubscriptionPortalSession: async (accountId: IdParam) => {
+        const response = await api.post<{ url: string }>(`accounts/${accountId}/subscription/portal-session`);
         return response.data;
     },
 }

@@ -37,6 +37,7 @@ return [
         'secret_key' => env('STRIPE_SECRET_KEY'),
         'public_key' => env('STRIPE_PUBLIC_KEY'),
         'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+        'billing_webhook_secret' => env('STRIPE_BILLING_WEBHOOK_SECRET'),
 
         // Canadian platform (Optional)
         'ca_secret_key' => env('STRIPE_CA_SECRET_KEY', env('STRIPE_SECRET_KEY')),

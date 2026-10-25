@@ -34,6 +34,13 @@
             }
         }
     </style>
+@if(($mailBranding ?? null)?->linkColor)
+    <style>
+        .content-cell a:not(.button) {
+            color: {{ $mailBranding->linkColor }};
+        }
+    </style>
+@endif
 </head>
 <body>
 

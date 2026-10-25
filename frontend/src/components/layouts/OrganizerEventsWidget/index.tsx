@@ -126,7 +126,7 @@ const OrganizerEventsWidget = () => {
     }
 
     return (
-        <WidgetFrame style={appearance.style} mode={appearance.mode} testId="events-widget">
+        <WidgetFrame style={appearance.style} mode={appearance.mode} testId="events-widget" brandingRemoved={organizerQuery.data?.branding_removed}>
             {config.show_past && (
                 <SegmentedControl
                     className={classes.tabs}

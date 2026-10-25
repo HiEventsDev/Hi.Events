@@ -16,13 +16,14 @@ interface HomepageFrameProps {
     mirrorImageUrl?: string | null;
     footerSource: string;
     footerRef?: Ref<HTMLElement>;
+    brandingRemoved?: boolean;
     width?: SheetWidth;
     header?: ReactNode;
     outside?: ReactNode;
     children: ReactNode;
 }
 
-export const HomepageFrame = ({themeSettings, mirrorImageUrl, footerSource, footerRef, width = 'wide', header, outside, children}: HomepageFrameProps) => {
+export const HomepageFrame = ({themeSettings, mirrorImageUrl, footerSource, footerRef, brandingRemoved, width = 'wide', header, outside, children}: HomepageFrameProps) => {
     useEffect(() => {
         ensureHomepageFontLoaded(themeSettings.font_family);
     }, [themeSettings.font_family]);
@@ -48,7 +49,7 @@ export const HomepageFrame = ({themeSettings, mirrorImageUrl, footerSource, foot
             <div className={classes.shell}>
                 <article className={classes.sheet}>
                     {children}
-                    <HomepageFooter source={footerSource} footerRef={footerRef}/>
+                    <HomepageFooter source={footerSource} footerRef={footerRef} brandingRemoved={brandingRemoved}/>
                 </article>
             </div>
             {outside}
@@ -56,9 +57,9 @@ export const HomepageFrame = ({themeSettings, mirrorImageUrl, footerSource, foot
     );
 };
 
-const HomepageFooter = ({source, footerRef}: { source: string, footerRef?: Ref<HTMLElement> }) => (
+const HomepageFooter = ({source, footerRef, brandingRemoved}: { source: string, footerRef?: Ref<HTMLElement>, brandingRemoved?: boolean }) => (
     <footer ref={footerRef} className={classes.footer}>
-        <PoweredByFooter className={classes.poweredBy}/>
+        <PoweredByFooter className={classes.poweredBy} brandingRemoved={brandingRemoved}/>
         <div className={classes.footerLinks}>
             <Anchor href={getConfig('VITE_PRIVACY_URL', `https://hi.events/privacy-policy?utm_source=${source}`)} className={classes.footerLink}>
                 {t`Privacy Policy`}

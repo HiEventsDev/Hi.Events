@@ -32,6 +32,8 @@ class GroupedAttendeeTicketMailTest extends TestCase
     {
         parent::setUp();
 
+        config(['app.is_hi_events' => false]);
+
         $this->firstDate = (new EventOccurrenceDomainObject)
             ->setId(1)
             ->setStartDate('2026-11-05 18:00:00')

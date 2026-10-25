@@ -257,6 +257,7 @@ export const OrganizerHomepage = ({
                 mirrorImageUrl={cover?.url}
                 footerSource="app-organizer-footer"
                 width="medium"
+                brandingRemoved={organizer.branding_removed}
                 outside={(
                     <ContactOrganizerModal
                         opened={contactModalOpen}

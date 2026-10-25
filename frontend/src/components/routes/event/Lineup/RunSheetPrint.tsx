@@ -12,6 +12,7 @@ import {groupScheduleByDay} from "../../../../utilites/lineupSchedule.ts";
 import {EventLineup, LineupEntry, ScheduleItem} from "../../../../api/lineup.client.ts";
 import {Event} from "../../../../types.ts";
 import {PoweredByFooter} from "../../../common/PoweredByFooter";
+import {useBrandingSubscription} from "../../../../hooks/useBrandingSubscription.ts";
 import classes from "./RunSheetPrint.module.scss";
 
 const ALL_DAYS = 'all';
@@ -38,6 +39,7 @@ const RunSheetPrint = () => {
 };
 
 const RunSheet = ({event, lineup}: { event: Event, lineup: EventLineup }) => {
+    const {isActive} = useBrandingSubscription();
     const tz = event.timezone;
     const days = useMemo(() => groupScheduleByDay(lineup.schedule_items, tz), [lineup.schedule_items, tz]);
     const entriesById = useMemo(() => new Map(lineup.entries.map(entry => [entry.id, entry])), [lineup.entries]);
@@ -108,7 +110,7 @@ const RunSheet = ({event, lineup}: { event: Event, lineup: EventLineup }) => {
             ))}
 
             <div className={classes.footer}>
-                <PoweredByFooter/>
+                <PoweredByFooter brandingRemoved={isActive}/>
             </div>
         </div>
     );

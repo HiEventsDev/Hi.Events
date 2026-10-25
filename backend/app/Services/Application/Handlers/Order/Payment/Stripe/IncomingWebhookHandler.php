@@ -8,6 +8,7 @@ use HiEvents\Services\Application\Handlers\Order\Payment\Stripe\DTO\StripeWebhoo
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\AccountUpdateHandler;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\ChargeRefundUpdatedHandler;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\ChargeSucceededHandler;
+use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\CustomerSubscriptionUpdatedHandler;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\PaymentIntentFailedHandler;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\PaymentIntentSucceededHandler;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\PayoutPaidHandler;
@@ -36,6 +37,9 @@ class IncomingWebhookHandler
         Event::PAYOUT_PAID,
         Event::PAYOUT_UPDATED,
         Event::TERMINAL_READER_ACTION_FAILED,
+        Event::CUSTOMER_SUBSCRIPTION_CREATED,
+        Event::CUSTOMER_SUBSCRIPTION_UPDATED,
+        Event::CUSTOMER_SUBSCRIPTION_DELETED,
     ];
 
     public function __construct(
@@ -46,6 +50,7 @@ class IncomingWebhookHandler
         private readonly AccountUpdateHandler $accountUpdateHandler,
         private readonly PayoutPaidHandler $payoutPaidHandler,
         private readonly TerminalReaderActionFailedHandler $terminalReaderActionFailedHandler,
+        private readonly CustomerSubscriptionUpdatedHandler $customerSubscriptionUpdatedHandler,
         private readonly Logger $logger,
         private readonly Repository $cache,
         private readonly StripeConfigurationService $stripeConfigurationService,
@@ -111,6 +116,11 @@ class IncomingWebhookHandler
                     break;
                 case Event::TERMINAL_READER_ACTION_FAILED:
                     $this->terminalReaderActionFailedHandler->handleEvent($event->data->object, $event->created);
+                    break;
+                case Event::CUSTOMER_SUBSCRIPTION_CREATED:
+                case Event::CUSTOMER_SUBSCRIPTION_UPDATED:
+                case Event::CUSTOMER_SUBSCRIPTION_DELETED:
+                    $this->customerSubscriptionUpdatedHandler->handleEvent($event->data->object, $event->account);
                     break;
             }
 
