@@ -11,6 +11,7 @@ use HiEvents\DomainObjects\EventStatisticDomainObject;
 use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\EventSettingDomainObjectAbstract;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Http\DTO\QueryParamsDTO;
@@ -27,6 +28,8 @@ use Illuminate\Support\Facades\DB;
  */
 class EventRepository extends BaseRepository implements EventRepositoryInterface
 {
+    private const SITEMAP_ENDED_EVENT_RETENTION_DAYS = 120;
+
     protected function getModel(): string
     {
         return Event::class;
@@ -204,16 +207,12 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
 
     public function getSitemapEvents(int $page, int $perPage): LengthAwarePaginator
     {
-        return $this->handleResults($this->model
+        return $this->handleResults($this->sitemapEventsQuery()
             ->select([
                 'events.'.EventDomainObjectAbstract::ID,
                 'events.'.EventDomainObjectAbstract::TITLE,
                 'events.'.EventDomainObjectAbstract::UPDATED_AT,
             ])
-            ->join('event_settings', 'events.id', '=', 'event_settings.event_id')
-            ->where('events.'.EventDomainObjectAbstract::STATUS, EventStatus::LIVE->name)
-            ->where('event_settings.'.EventSettingDomainObjectAbstract::ALLOW_SEARCH_ENGINE_INDEXING, true)
-            ->whereNull('events.'.EventDomainObjectAbstract::DELETED_AT)
             ->orderBy('events.'.EventDomainObjectAbstract::ID)
             ->paginate($perPage, ['*'], 'page', $page));
     }
@@ -230,13 +229,28 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
 
     public function getSitemapEventCount(): int
     {
+        return $this->sitemapEventsQuery()->count();
+    }
+
+    private function sitemapEventsQuery(): Builder
+    {
         return $this->model
             ->newQuery()
             ->join('event_settings', 'events.id', '=', 'event_settings.event_id')
             ->where('events.'.EventDomainObjectAbstract::STATUS, EventStatus::LIVE->name)
             ->where('event_settings.'.EventSettingDomainObjectAbstract::ALLOW_SEARCH_ENGINE_INDEXING, true)
             ->whereNull('events.'.EventDomainObjectAbstract::DELETED_AT)
-            ->count();
+            ->whereExists(function ($query) {
+                $query->select(DB::raw(1))
+                    ->from('event_occurrences')
+                    ->whereColumn('event_occurrences.event_id', 'events.id')
+                    ->whereNull('event_occurrences.deleted_at')
+                    ->where('event_occurrences.status', '!=', EventOccurrenceStatus::CANCELLED->name)
+                    ->whereRaw(
+                        'COALESCE(event_occurrences.end_date, event_occurrences.start_date) >= ?',
+                        [now()->subDays(self::SITEMAP_ENDED_EVENT_RETENTION_DAYS)]
+                    );
+            });
     }
 
     public function getUpcomingEventsWithCompletedOrders(int $accountId): Collection

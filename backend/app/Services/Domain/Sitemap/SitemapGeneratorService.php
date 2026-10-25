@@ -21,16 +21,6 @@ class SitemapGeneratorService
 
     private const INDENT_STRING = '  ';
 
-    private const CHANGEFREQ_DAILY = 'daily';
-
-    private const CHANGEFREQ_WEEKLY = 'weekly';
-
-    private const PRIORITY_HIGH = '0.8';
-
-    private const PRIORITY_MEDIUM = '0.6';
-
-    private const PRIORITY_LOW = '0.5';
-
     private const DEFAULT_EVENT_SLUG = 'event';
 
     private const DEFAULT_ORGANIZER_SLUG = 'organizer';
@@ -88,10 +78,8 @@ class SitemapGeneratorService
         $writer->startElement('urlset');
         $writer->writeAttribute('xmlns', self::SITEMAP_NAMESPACE);
 
-        $now = now();
-
         foreach ($events as $event) {
-            $this->writeEventUrl($writer, $event, $baseUrl, $now);
+            $this->writeEventUrl($writer, $event, $baseUrl);
         }
 
         $writer->endElement();
@@ -110,27 +98,12 @@ class SitemapGeneratorService
         return $writer;
     }
 
-    private function writeEventUrl(XMLWriter $writer, EventDomainObject $event, string $baseUrl, Carbon $now): void
+    private function writeEventUrl(XMLWriter $writer, EventDomainObject $event, string $baseUrl): void
     {
         $slug = Str::slug($event->getTitle()) ?: self::DEFAULT_EVENT_SLUG;
         $eventUrl = $baseUrl.sprintf(self::EVENT_URL_PATTERN, $event->getId(), $slug);
 
-        $isUpcoming = $this->isEventUpcoming($event, $now);
-        $lastMod = Carbon::parse($event->getUpdatedAt())->toAtomString();
-
-        $writer->startElement('url');
-        $writer->writeElement('loc', $eventUrl);
-        $writer->writeElement('lastmod', $lastMod);
-        $writer->writeElement('changefreq', $isUpcoming ? self::CHANGEFREQ_DAILY : self::CHANGEFREQ_WEEKLY);
-        $writer->writeElement('priority', $isUpcoming ? self::PRIORITY_HIGH : self::PRIORITY_LOW);
-        $writer->endElement();
-    }
-
-    private function isEventUpcoming(EventDomainObject $event, Carbon $now): bool
-    {
-        $startDate = $event->getStartDate();
-
-        return $startDate !== null && Carbon::parse($startDate)->gte($now);
+        $this->writeUrlEntry($writer, $eventUrl, $event->getUpdatedAt());
     }
 
     /**
@@ -158,13 +131,15 @@ class SitemapGeneratorService
     {
         $slug = Str::slug($organizer->getName()) ?: self::DEFAULT_ORGANIZER_SLUG;
         $organizerUrl = $baseUrl.sprintf(self::ORGANIZER_URL_PATTERN, $organizer->getId(), $slug);
-        $lastMod = Carbon::parse($organizer->getUpdatedAt())->toAtomString();
 
+        $this->writeUrlEntry($writer, $organizerUrl, $organizer->getUpdatedAt());
+    }
+
+    private function writeUrlEntry(XMLWriter $writer, string $loc, string $updatedAt): void
+    {
         $writer->startElement('url');
-        $writer->writeElement('loc', $organizerUrl);
-        $writer->writeElement('lastmod', $lastMod);
-        $writer->writeElement('changefreq', self::CHANGEFREQ_WEEKLY);
-        $writer->writeElement('priority', self::PRIORITY_MEDIUM);
+        $writer->writeElement('loc', $loc);
+        $writer->writeElement('lastmod', Carbon::parse($updatedAt)->toAtomString());
         $writer->endElement();
     }
 }
