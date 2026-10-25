@@ -194,6 +194,70 @@ class EventRepositoryTest extends TestCase
         $this->assertLessThan(array_search($olderId, $ids, true), array_search($newerId, $ids, true));
     }
 
+    public function test_sitemap_includes_live_indexable_events_with_upcoming_or_recently_ended_occurrences(): void
+    {
+        $countBefore = $this->app->make(EventRepository::class)->getSitemapEventCount();
+
+        $upcomingId = $this->createSitemapEvent();
+        $this->createOccurrence($upcomingId, now()->addDay(), now()->addDay()->addHours(2));
+
+        $recentlyEndedId = $this->createSitemapEvent();
+        $this->createOccurrence($recentlyEndedId, now()->subDays(100), null);
+
+        $longEndedId = $this->createSitemapEvent();
+        $this->createOccurrence($longEndedId, now()->subDays(130), now()->subDays(130)->addHours(2));
+
+        $cancelledId = $this->createSitemapEvent();
+        $this->createOccurrence($cancelledId, now()->addDay(), now()->addDay()->addHours(2), status: 'CANCELLED');
+
+        $withoutOccurrencesId = $this->createSitemapEvent();
+
+        $ids = $this->sitemapEventIds();
+
+        $this->assertContains($upcomingId, $ids);
+        $this->assertContains($recentlyEndedId, $ids);
+        $this->assertNotContains($longEndedId, $ids);
+        $this->assertNotContains($cancelledId, $ids);
+        $this->assertNotContains($withoutOccurrencesId, $ids);
+        $this->assertSame($countBefore + 2, $this->app->make(EventRepository::class)->getSitemapEventCount());
+    }
+
+    public function test_sitemap_excludes_unpublished_and_non_indexable_events(): void
+    {
+        $draftId = $this->createSitemapEvent(status: 'DRAFT');
+        $this->createOccurrence($draftId, now()->addDay(), now()->addDay()->addHours(2));
+
+        $noIndexId = $this->createSitemapEvent(allowIndexing: false);
+        $this->createOccurrence($noIndexId, now()->addDay(), now()->addDay()->addHours(2));
+
+        $ids = $this->sitemapEventIds();
+
+        $this->assertNotContains($draftId, $ids);
+        $this->assertNotContains($noIndexId, $ids);
+    }
+
+    private function sitemapEventIds(): array
+    {
+        return collect($this->app->make(EventRepository::class)->getSitemapEvents(1, 10000)->items())
+            ->map(fn (EventDomainObject $event) => $event->getId())
+            ->all();
+    }
+
+    private function createSitemapEvent(string $status = 'LIVE', bool $allowIndexing = true): int
+    {
+        $eventId = $this->createEvent('Sitemap event '.uniqid(), status: $status);
+        $now = now()->toDateTimeString();
+
+        DB::table('event_settings')->insert([
+            'event_id' => $eventId,
+            'allow_search_engine_indexing' => $allowIndexing,
+            'created_at' => $now,
+            'updated_at' => $now,
+        ]);
+
+        return $eventId;
+    }
+
     private function findEventIds(string $eventsStatus, string $sortBy = 'created_at', string $sortDirection = 'desc'): array
     {
         $params = QueryParamsDTO::fromArray([
@@ -234,7 +298,7 @@ class EventRepositoryTest extends TestCase
         ]);
     }
 
-    private function createOccurrence(int $eventId, $startDate, $endDate): void
+    private function createOccurrence(int $eventId, $startDate, $endDate, string $status = 'ACTIVE'): void
     {
         $now = now()->toDateTimeString();
 
@@ -243,7 +307,7 @@ class EventRepositoryTest extends TestCase
             'event_id' => $eventId,
             'start_date' => $startDate->toDateTimeString(),
             'end_date' => $endDate?->toDateTimeString(),
-            'status' => 'ACTIVE',
+            'status' => $status,
             'used_capacity' => 0,
             'is_overridden' => false,
             'created_at' => $now,
