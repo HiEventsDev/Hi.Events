@@ -80,6 +80,7 @@ return [
         'profile_security' => '/settings/security',
         'api_keys' => '/settings/api-keys',
         'event_dashboard' => '/manage/event/%d/dashboard',
+        'organizer_events' => '/manage/organizer/%d/events/%s',
         'welcome' => '/welcome',
         'lifecycle_email_unsubscribe' => '/emails/unsubscribe/%s',
         'sso_callback' => '/sso/callback',

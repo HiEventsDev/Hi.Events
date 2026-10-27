@@ -15,6 +15,7 @@ use HiEvents\Services\Domain\LifecycleEmail\DTO\LifecycleEmailTemplateDTO;
 use HiEvents\Services\Domain\LifecycleEmail\LifecycleEmailTemplateService;
 use HiEvents\Services\Domain\LifecycleEmail\LifecycleEmailUnsubscribeTokens;
 use HiEvents\Services\Domain\LifecycleEmail\Nudges\EventDraftStaleNudge;
+use HiEvents\Services\Domain\LifecycleEmail\Nudges\LapsedPayerNudge;
 use HiEvents\Services\Domain\LifecycleEmail\Nudges\LifecycleNudgeRegistry;
 use HiEvents\Services\Domain\LifecycleEmail\Nudges\LiveEventNoSalesNudge;
 use HiEvents\Services\Domain\LifecycleEmail\Nudges\NoEventCreatedNudge;
@@ -27,6 +28,7 @@ use Illuminate\Config\Repository as ConfigRepository;
 use Illuminate\Support\Carbon;
 use Mockery;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class LifecycleEmailTemplateServiceTest extends TestCase
@@ -50,6 +52,7 @@ class LifecycleEmailTemplateServiceTest extends TestCase
             new StripeOnboardingIncompleteNudge($nudgeRepository, new StripeConnectTimezones),
             new EventDraftStaleNudge($nudgeRepository),
             new LiveEventNoSalesNudge($nudgeRepository),
+            new LapsedPayerNudge($nudgeRepository),
         );
         $this->service = new LifecycleEmailTemplateService(
             templateRepository: $this->repository,
@@ -201,6 +204,33 @@ class LifecycleEmailTemplateServiceTest extends TestCase
         $this->assertSame('Fish & <Chips> is waiting to be published', $mail->envelope()->subject);
         $this->assertStringContainsString('Fish &amp; &lt;Chips&gt;', $mail->render());
         $this->assertStringContainsString('https://example.com/manage/event/1/dashboard', $mail->render());
+    }
+
+    /**
+     * @return array<string, array{string, string}>
+     */
+    public static function firstNameCasing(): array
+    {
+        return [
+            'all caps' => ['JOHN', 'John'],
+            'all lowercase' => ['mary ann', 'Mary Ann'],
+            'accented lowercase' => ['élodie', 'Élodie'],
+            'mixed case is kept' => ['McDonald', 'McDonald'],
+        ];
+    }
+
+    #[DataProvider('firstNameCasing')]
+    public function test_build_mail_title_cases_a_first_name_typed_in_one_case(string $firstName, string $expected): void
+    {
+        $template = $this->registry->for(LifecycleNudgeType::EVENT_DRAFT_STALE)->defaultTemplate();
+
+        $mail = $this->service->buildMail($template, new LifecycleEmailRecipientDTO(
+            firstName: $firstName,
+            ctaUrl: 'https://example.com',
+            context: ['event' => ['title' => 'Gig']],
+        ));
+
+        $this->assertStringContainsString('Hi '.$expected.',', $mail->render());
     }
 
     public function test_every_nudge_type_has_a_nudge_whose_defaults_render_with_its_sample_data(): void

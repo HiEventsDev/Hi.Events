@@ -796,6 +796,393 @@ class LifecycleNudgeSweepServiceTest extends TestCase
         $this->assertSame([], $this->sent);
     }
 
+    public function test_sends_lapsed_payer_nudge_sixty_days_after_the_last_sold_date(): void
+    {
+        $account = $this->seedAccountWithOwner('owner@example.com', verified: true, createdDaysAgo: 200);
+        $event = $this->seedEventWithSoldDate($account, endedDaysAgo: 61);
+
+        $this->sweep();
+
+        $this->assertSame(['owner@example.com'], $this->sentRecipients());
+        $email = $this->sent[0];
+        $this->assertSame('Planning your next event?', $email->getSubject());
+        $this->assertSame('lapsed_payer', $email->getHeaders()->get('X-Tag')?->getBodyAsString());
+        $this->assertStringContainsString(sprintf('/manage/organizer/%d/events/ended', $event->organizer_id), $email->getHtmlBody());
+        $this->assertStringNotContainsString('box office', $email->getHtmlBody());
+        $this->assertDatabaseHas('account_lifecycle_nudges', [
+            'account_id' => $account->id,
+            'nudge_type' => LifecycleNudgeType::LAPSED_PAYER->name,
+            'event_id' => $event->id,
+        ]);
+    }
+
+    public function test_lapsed_payer_nudge_reaches_accounts_that_lapsed_before_the_template_was_enabled_and_mentions_new_features(): void
+    {
+        $account = $this->seedAccountWithOwner('owner@example.com', verified: true, createdDaysAgo: 400);
+        $this->seedEventWithSoldDate($account, endedDaysAgo: 120);
+
+        $this->sweep();
+
+        $this->assertSame(['owner@example.com'], $this->sentRecipients());
+        $this->assertStringContainsString('box office', $this->sent[0]->getHtmlBody());
+    }
+
+    public function test_anchors_the_lapsed_payer_nudge_on_the_latest_sold_date(): void
+    {
+        $account = $this->seedAccountWithOwner('owner@example.com', verified: true, createdDaysAgo: 400);
+        $this->seedEventWithSoldDate($account, endedDaysAgo: 200);
+        $latest = $this->seedEventWithSoldDate($account, endedDaysAgo: 70, createdDaysAgo: 230);
+
+        $this->sweep();
+
+        $this->assertSame(['owner@example.com'], $this->sentRecipients());
+        $this->assertStringContainsString(sprintf('/manage/organizer/%d/events/ended', $latest->organizer_id), $this->sent[0]->getHtmlBody());
+        $this->assertStringNotContainsString('box office', $this->sent[0]->getHtmlBody());
+        $this->assertDatabaseHas('account_lifecycle_nudges', ['account_id' => $account->id, 'event_id' => $latest->id]);
+    }
+
+    public function test_falls_back_to_the_previous_sold_date_when_the_latest_event_was_deleted(): void
+    {
+        $account = $this->seedAccountWithOwner('owner@example.com', verified: true, createdDaysAgo: 400);
+        $earlier = $this->seedEventWithSoldDate($account, endedDaysAgo: 200);
+        $deleted = $this->seedEventWithSoldDate($account, endedDaysAgo: 100, createdDaysAgo: 230);
+        DB::table('events')->where('id', $deleted->id)->update(['deleted_at' => now()->subDays(90)]);
+
+        $this->sweep();
+
+        $this->assertSame(['owner@example.com'], $this->sentRecipients());
+        $this->assertDatabaseHas('account_lifecycle_nudges', ['account_id' => $account->id, 'event_id' => $earlier->id]);
+    }
+
+    public function test_does_not_send_lapsed_payer_nudge_before_sixty_days(): void
+    {
+        $account = $this->seedAccountWithOwner('owner@example.com', verified: true, createdDaysAgo: 200);
+        $this->seedEventWithSoldDate($account, endedDaysAgo: 59);
+
+        $this->sweep();
+
+        $this->assertSame([], $this->sentRecipients());
+    }
+
+    public function test_does_not_send_lapsed_payer_nudge_beyond_eighteen_months(): void
+    {
+        $account = $this->seedAccountWithOwner('owner@example.com', verified: true, createdDaysAgo: 800);
+        $this->seedEventWithSoldDate($account, endedDaysAgo: 560);
+
+        $this->sweep();
+
+        $this->assertSame([], $this->sentRecipients());
+    }
+
+    public function test_does_not_send_lapsed_payer_nudge_when_an_event_was_created_recently(): void
+    {
+        $account = $this->seedAccountWithOwner('owner@example.com', verified: true, createdDaysAgo: 200);
+        $event = $this->seedEventWithSoldDate($account, endedDaysAgo: 70);
+        $draft = $this->seedEvent($account, createdDaysAgo: 10, organizer: Organizer::findOrFail($event->organizer_id));
+        DB::table('events')->where('id', $draft->id)->update(['deleted_at' => now()]);
+
+        $this->sweep();
+
+        $this->assertSame([], $this->sentRecipients());
+    }
+
+    public function test_sends_lapsed_payer_nudge_when_a_later_draft_was_abandoned_long_ago(): void
+    {
+        $account = $this->seedAccountWithOwner('owner@example.com', verified: true, createdDaysAgo: 300);
+        $event = $this->seedEventWithSoldDate($account, endedDaysAgo: 150);
+        $this->seedEvent($account, createdDaysAgo: 100, organizer: Organizer::findOrFail($event->organizer_id));
+
+        $this->sweep();
+
+        $this->assertSame(['owner@example.com'], $this->sentRecipients());
+    }
+
+    public function test_does_not_send_lapsed_payer_nudge_when_a_date_is_upcoming(): void
+    {
+        $account = $this->seedAccountWithOwner('owner@example.com', verified: true, createdDaysAgo: 200);
+        $event = $this->seedEventWithSoldDate($account, endedDaysAgo: 70);
+        $this->seedOccurrence($event, startsInDays: 200);
+
+        $this->sweep();
+
+        $this->assertSame([], $this->sentRecipients());
+    }
+
+    public function test_does_not_send_lapsed_payer_nudge_while_another_event_is_still_running(): void
+    {
+        $account = $this->seedAccountWithOwner('owner@example.com', verified: true, createdDaysAgo: 300);
+        $this->seedEventWithSoldDate($account, endedDaysAgo: 70);
+        $running = $this->seedEvent($account, createdDaysAgo: 250, status: 'LIVE', organizer: $this->seedOrganizer($account));
+        DB::table('event_occurrences')->insert([
+            'short_id' => 'oc_'.uniqid(),
+            'event_id' => $running->id,
+            'start_date' => now()->subDays(200),
+            'end_date' => now()->addDays(30),
+            'status' => 'ACTIVE',
+            'created_at' => now()->subDays(250),
+            'updated_at' => now()->subDays(250),
+        ]);
+
+        $this->sweep();
+
+        $this->assertSame([], $this->sentRecipients());
+    }
+
+    public function test_does_not_send_lapsed_payer_nudge_when_a_later_date_ran_recently_without_paid_sales(): void
+    {
+        $account = $this->seedAccountWithOwner('owner@example.com', verified: true, createdDaysAgo: 200);
+        $event = $this->seedEventWithSoldDate($account, endedDaysAgo: 90);
+        $this->seedOccurrence($event, startsInDays: -30);
+
+        $this->sweep();
+
+        $this->assertSame([], $this->sentRecipients());
+    }
+
+    public function test_sends_lapsed_payer_nudge_when_unsold_later_dates_ended_over_sixty_days_ago(): void
+    {
+        $account = $this->seedAccountWithOwner('owner@example.com', verified: true, createdDaysAgo: 400);
+        $event = $this->seedEventWithSoldDate($account, endedDaysAgo: 200);
+        $this->seedOccurrence($event, startsInDays: -100);
+
+        $this->sweep();
+
+        $this->assertSame(['owner@example.com'], $this->sentRecipients());
+    }
+
+    public function test_does_not_send_lapsed_payer_nudge_when_the_event_still_has_a_cancelled_future_date(): void
+    {
+        $account = $this->seedAccountWithOwner('owner@example.com', verified: true, createdDaysAgo: 200);
+        $event = $this->seedEventWithSoldDate($account, endedDaysAgo: 70);
+        $this->seedOccurrence($event, startsInDays: 30);
+        DB::table('event_occurrences')->where('event_id', $event->id)->where('start_date', '>', now())->update(['status' => 'CANCELLED']);
+
+        $this->sweep();
+
+        $this->assertSame([], $this->sentRecipients());
+    }
+
+    public function test_does_not_send_lapsed_payer_nudge_when_the_last_sold_date_was_cancelled(): void
+    {
+        $account = $this->seedAccountWithOwner('owner@example.com', verified: true, createdDaysAgo: 200);
+        $event = $this->seedEventWithSoldDate($account, endedDaysAgo: 70);
+        DB::table('event_occurrences')->where('event_id', $event->id)->update(['status' => 'CANCELLED']);
+
+        $this->sweep();
+
+        $this->assertSame([], $this->sentRecipients());
+    }
+
+    public function test_does_not_send_lapsed_payer_nudge_when_only_one_person_bought(): void
+    {
+        $account = $this->seedAccountWithOwner('owner@example.com', verified: true, createdDaysAgo: 200);
+        $this->seedEventWithSoldDate($account, endedDaysAgo: 70, orders: [
+            ['email' => 'friend@example.com'],
+            ['email' => 'FRIEND@example.com'],
+        ]);
+
+        $this->sweep();
+
+        $this->assertSame([], $this->sentRecipients());
+    }
+
+    public function test_purchases_by_the_organizer_do_not_count_as_buyers(): void
+    {
+        $account = $this->seedAccountWithOwner('owner@example.com', verified: true, createdDaysAgo: 200);
+        $this->seedEventWithSoldDate($account, endedDaysAgo: 70, orders: [
+            ['email' => 'buyer@example.com'],
+            ['email' => 'Owner@Example.com'],
+            ['email' => 'ORGANIZER@example.com'],
+        ]);
+
+        $this->sweep();
+
+        $this->assertSame([], $this->sentRecipients());
+    }
+
+    public function test_does_not_send_lapsed_payer_nudge_for_fully_refunded_orders(): void
+    {
+        $account = $this->seedAccountWithOwner('owner@example.com', verified: true, createdDaysAgo: 200);
+        $this->seedEventWithSoldDate($account, endedDaysAgo: 70, orders: [
+            ['email' => 'a@example.com', 'total_refunded' => 25, 'refund_status' => 'REFUNDED'],
+            ['email' => 'b@example.com', 'total_refunded' => 23, 'refund_status' => 'REFUNDED'],
+        ]);
+
+        $this->sweep();
+
+        $this->assertSame([], $this->sentRecipients());
+    }
+
+    public function test_partially_refunded_orders_still_count_as_paid(): void
+    {
+        $account = $this->seedAccountWithOwner('owner@example.com', verified: true, createdDaysAgo: 200);
+        $this->seedEventWithSoldDate($account, endedDaysAgo: 70, orders: [
+            ['email' => 'a@example.com', 'total_refunded' => 10, 'refund_status' => 'PARTIALLY_REFUNDED'],
+            ['email' => 'b@example.com'],
+        ]);
+
+        $this->sweep();
+
+        $this->assertSame(['owner@example.com'], $this->sentRecipients());
+    }
+
+    public function test_does_not_send_lapsed_payer_nudge_for_unpaid_or_manual_orders(): void
+    {
+        $account = $this->seedAccountWithOwner('owner@example.com', verified: true, createdDaysAgo: 200);
+        $this->seedEventWithSoldDate($account, endedDaysAgo: 70, orders: [
+            ['email' => 'a@example.com', 'is_manually_created' => true],
+            ['email' => 'b@example.com', 'payment_provider' => null],
+            ['email' => 'c@example.com', 'payment_status' => 'PAYMENT_FAILED'],
+            ['email' => 'd@example.com', 'status' => 'AWAITING_OFFLINE_PAYMENT', 'payment_status' => 'AWAITING_OFFLINE_PAYMENT'],
+            ['email' => 'e@example.com', 'total_gross' => 0],
+        ]);
+
+        $this->sweep();
+
+        $this->assertSame([], $this->sentRecipients());
+    }
+
+    public function test_offline_payments_marked_as_received_count_as_paid(): void
+    {
+        $account = $this->seedAccountWithOwner('owner@example.com', verified: true, createdDaysAgo: 200);
+        $this->seedEventWithSoldDate($account, endedDaysAgo: 70, orders: [
+            ['email' => 'a@example.com', 'payment_provider' => 'OFFLINE'],
+            ['email' => 'b@example.com', 'payment_provider' => 'OFFLINE'],
+        ]);
+
+        $this->sweep();
+
+        $this->assertSame(['owner@example.com'], $this->sentRecipients());
+    }
+
+    public function test_does_not_send_lapsed_payer_nudge_for_an_event_under_spam_review(): void
+    {
+        $account = $this->seedAccountWithOwner('owner@example.com', verified: true, createdDaysAgo: 200);
+        $event = $this->seedEventWithSoldDate($account, endedDaysAgo: 70);
+        DB::table('events')->where('id', $event->id)->update(['status' => 'PENDING_MANUAL_REVIEW']);
+
+        $this->sweep();
+
+        $this->assertSame([], $this->sentRecipients());
+    }
+
+    public function test_does_not_send_lapsed_payer_nudge_when_the_organizer_was_deleted(): void
+    {
+        $account = $this->seedAccountWithOwner('owner@example.com', verified: true, createdDaysAgo: 200);
+        $event = $this->seedEventWithSoldDate($account, endedDaysAgo: 70);
+        DB::table('organizers')->where('id', $event->organizer_id)->update(['deleted_at' => now()]);
+
+        $this->sweep();
+
+        $this->assertSame([], $this->sentRecipients());
+    }
+
+    public function test_links_an_archived_event_to_the_archived_events_list(): void
+    {
+        $account = $this->seedAccountWithOwner('owner@example.com', verified: true, createdDaysAgo: 200);
+        $event = $this->seedEventWithSoldDate($account, endedDaysAgo: 70);
+        DB::table('events')->where('id', $event->id)->update(['status' => 'ARCHIVED']);
+
+        $this->sweep();
+
+        $this->assertSame(['owner@example.com'], $this->sentRecipients());
+        $this->assertStringContainsString(sprintf('/manage/organizer/%d/events/archived', $event->organizer_id), $this->sent[0]->getHtmlBody());
+    }
+
+    public function test_does_not_send_lapsed_payer_nudge_to_an_unsubscribed_owner(): void
+    {
+        $account = $this->seedAccountWithOwner('owner@example.com', verified: true, createdDaysAgo: 200);
+        $this->seedEventWithSoldDate($account, endedDaysAgo: 70);
+        $account->users()->first()->forceFill(['lifecycle_emails_unsubscribed_at' => now()])->save();
+
+        $this->sweep();
+
+        $this->assertSame([], $this->sentRecipients());
+    }
+
+    public function test_does_not_send_lapsed_payer_nudge_to_an_invited_owner(): void
+    {
+        $account = $this->seedAccountWithOwner('owner@example.com', verified: true, ownerStatus: 'INVITED', createdDaysAgo: 200);
+        $this->seedEventWithSoldDate($account, endedDaysAgo: 70);
+
+        $this->sweep();
+
+        $this->assertSame([], $this->sentRecipients());
+    }
+
+    public function test_does_not_send_lapsed_payer_nudge_when_the_account_has_a_pending_deletion_request(): void
+    {
+        $account = $this->seedAccountWithOwner('owner@example.com', verified: true, createdDaysAgo: 200);
+        $this->seedEventWithSoldDate($account, endedDaysAgo: 70);
+        DB::table('account_deletion_requests')->insert([
+            'account_id' => $account->id,
+            'requested_by_user_id' => $account->users()->first()->id,
+            'initiated_by' => 'USER',
+            'status' => 'REQUESTED',
+            'expected_outcome' => 'ANONYMIZE',
+            'scheduled_deletion_at' => now()->addDays(30),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $this->sweep();
+
+        $this->assertSame([], $this->sentRecipients());
+    }
+
+    public function test_does_not_send_the_lapsed_payer_nudge_twice(): void
+    {
+        $account = $this->seedAccountWithOwner('owner@example.com', verified: true, createdDaysAgo: 200);
+        $this->seedEventWithSoldDate($account, endedDaysAgo: 70);
+
+        $this->sweep();
+        Carbon::setTestNow(now()->addDays(10));
+        $this->sweep();
+
+        $this->assertSame(['owner@example.com'], $this->sentRecipients());
+    }
+
+    public function test_one_person_owning_two_lapsed_accounts_gets_the_lapsed_payer_nudge_once(): void
+    {
+        $first = $this->seedAccountWithOwner('shared@example.com', verified: true, createdDaysAgo: 200);
+        $this->seedEventWithSoldDate($first, endedDaysAgo: 70);
+        $second = $this->seedAccountWithOwner('shared@example.com', verified: true, reuseUserEmail: true, createdDaysAgo: 200);
+        $this->seedEventWithSoldDate($second, endedDaysAgo: 80);
+
+        $this->sweep();
+        Carbon::setTestNow(now()->addDays(10));
+        $this->sweep();
+
+        $this->assertSame(['shared@example.com'], $this->sentRecipients());
+    }
+
+    public function test_does_not_nudge_a_suspended_account(): void
+    {
+        $noEventAccount = $this->seedAccountWithOwner('no-event@example.com', verified: true, createdDaysAgo: 4);
+        $draftAccount = $this->seedAccountWithOwner('draft@example.com', verified: true);
+        $this->seedEvent($draftAccount, createdDaysAgo: 5);
+        $stripeAccount = $this->seedAccountWithOwner('stripe@example.com', verified: true);
+        $stripeOrganizer = $this->seedOrganizer($stripeAccount);
+        $this->seedStripePlatform($stripeOrganizer, completed: false);
+        $this->seedPaidProduct($this->seedEvent($stripeAccount, createdDaysAgo: 2, organizer: $stripeOrganizer), createdHoursAgo: 48);
+        $liveAccount = $this->seedAccountWithOwner('live@example.com', verified: true);
+        $this->seedReadyLiveEvent($liveAccount, readyDaysAgo: 8);
+        $lapsedAccount = $this->seedAccountWithOwner('lapsed@example.com', verified: true, createdDaysAgo: 200);
+        $this->seedEventWithSoldDate($lapsedAccount, endedDaysAgo: 70);
+        $accountIds = [$noEventAccount->id, $draftAccount->id, $stripeAccount->id, $liveAccount->id, $lapsedAccount->id];
+
+        DB::table('accounts')->whereIn('id', $accountIds)->update(['suspended_at' => now()]);
+        $this->sweep();
+        $this->assertSame([], $this->sentRecipients());
+
+        DB::table('accounts')->whereIn('id', $accountIds)->update(['suspended_at' => null]);
+        $this->sweep();
+        $this->assertEqualsCanonicalizing(
+            ['no-event@example.com', 'draft@example.com', 'stripe@example.com', 'live@example.com', 'lapsed@example.com'],
+            $this->sentRecipients(),
+        );
+    }
+
     private function sweep(): void
     {
         $this->app->make(LifecycleNudgeSweepService::class)->sweep();
@@ -982,6 +1369,68 @@ class LifecycleNudgeSweepServiceTest extends TestCase
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+    }
+
+    /**
+     * @param  array<int, array<string, mixed>>  $orders
+     */
+    private function seedEventWithSoldDate(
+        Account $account,
+        int $endedDaysAgo,
+        ?int $createdDaysAgo = null,
+        array $orders = [['email' => 'first-buyer@example.com'], ['email' => 'second-buyer@example.com']],
+    ): Event {
+        $organizer = $this->seedOrganizer($account);
+        $this->seedStripePlatform($organizer, completed: true);
+        $event = $this->seedEvent(
+            $account,
+            createdDaysAgo: $createdDaysAgo ?? $endedDaysAgo + 30,
+            status: 'LIVE',
+            organizer: $organizer,
+        );
+        $this->seedPaidProduct($event);
+        $product = Product::where('event_id', $event->id)->firstOrFail();
+        $occurrenceId = DB::table('event_occurrences')->insertGetId([
+            'short_id' => 'oc_'.uniqid(),
+            'event_id' => $event->id,
+            'start_date' => now()->subDays($endedDaysAgo)->subHours(3),
+            'end_date' => now()->subDays($endedDaysAgo),
+            'status' => 'ACTIVE',
+            'created_at' => $event->created_at,
+            'updated_at' => $event->created_at,
+        ]);
+
+        foreach ($orders as $order) {
+            $orderId = DB::table('orders')->insertGetId([
+                'short_id' => 'o_'.uniqid(),
+                'public_id' => 'O-'.uniqid(),
+                'event_id' => $event->id,
+                'currency' => 'USD',
+                'status' => 'COMPLETED',
+                'payment_status' => 'PAYMENT_RECEIVED',
+                'total_gross' => 25,
+                'total_refunded' => 0,
+                'total_before_additions' => 25,
+                'payment_provider' => 'STRIPE',
+                'is_manually_created' => false,
+                'created_at' => $event->created_at,
+                'updated_at' => $event->created_at,
+                ...$order,
+            ]);
+            DB::table('order_items')->insert([
+                'order_id' => $orderId,
+                'product_id' => $product->id,
+                'product_price_id' => ProductPrice::where('product_id', $product->id)->value('id'),
+                'event_occurrence_id' => $occurrenceId,
+                'item_name' => 'Ticket',
+                'quantity' => 1,
+                'price' => 25,
+                'total_before_additions' => 25,
+                'total_gross' => 25,
+            ]);
+        }
+
+        return $event;
     }
 
     private function seedOrder(Event $event, string $status): void

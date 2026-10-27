@@ -88,7 +88,7 @@ class LifecycleEmailAdminTest extends TestCase
     {
         $this->getJson('/admin/lifecycle-emails', $this->headers($this->superAdminToken))
             ->assertStatus(ResponseCodes::HTTP_OK)
-            ->assertJsonCount(4, 'data')
+            ->assertJsonCount(5, 'data')
             ->assertJsonPath('data.0.enabled_at', null);
 
         $this->putJson('/admin/lifecycle-emails/EVENT_DRAFT_STALE', [

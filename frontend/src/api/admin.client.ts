@@ -129,7 +129,7 @@ export interface AdminRequestAccountDeletionPayload {
     execute_immediately: boolean;
 }
 
-export type LifecycleNudgeType = 'NO_EVENT_CREATED' | 'STRIPE_ONBOARDING_INCOMPLETE' | 'EVENT_DRAFT_STALE' | 'LIVE_EVENT_NO_SALES';
+export type LifecycleNudgeType = 'NO_EVENT_CREATED' | 'STRIPE_ONBOARDING_INCOMPLETE' | 'EVENT_DRAFT_STALE' | 'LIVE_EVENT_NO_SALES' | 'LAPSED_PAYER';
 
 export interface LifecycleEmailContent {
     subject: string;

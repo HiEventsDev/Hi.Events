@@ -16,7 +16,7 @@ class AdminLifecycleEmailResource extends BaseResource
     public function toArray(Request $request): array
     {
         return [
-            /** @var 'NO_EVENT_CREATED'|'STRIPE_ONBOARDING_INCOMPLETE'|'EVENT_DRAFT_STALE'|'LIVE_EVENT_NO_SALES' */
+            /** @var 'NO_EVENT_CREATED'|'STRIPE_ONBOARDING_INCOMPLETE'|'EVENT_DRAFT_STALE'|'LIVE_EVENT_NO_SALES'|'LAPSED_PAYER' */
             'nudge_type' => $this->template->nudgeType->name,
             'subject' => $this->template->subject,
             'body' => $this->template->body,
