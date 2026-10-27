@@ -26,6 +26,12 @@ export const getLifecycleEmailLabel = (nudgeType: string): { name: string, trigg
                 trigger: t`7 days after a live upcoming paid event was last edited or its organizer connected Stripe, whichever is later, if the account has never had an order.`,
                 destination: t`Event dashboard`,
             };
+        case 'LAPSED_PAYER':
+            return {
+                name: t`Paid organizer gone quiet`,
+                trigger: t`60 days after the last date the account sold paid tickets for, if nothing new has been created and nothing is upcoming. Unlike the other emails, this also reaches accounts that went quiet before it was enabled, back to 18 months.`,
+                destination: t`Organizer's past events`,
+            };
         default:
             return {name: nudgeType, trigger: '', destination: ''};
     }

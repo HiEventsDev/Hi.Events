@@ -44,6 +44,8 @@ class Url
 
     public const EVENT_DASHBOARD = 'app.frontend_urls.event_dashboard';
 
+    public const ORGANIZER_EVENTS = 'app.frontend_urls.organizer_events';
+
     public const WELCOME = 'app.frontend_urls.welcome';
 
     public const LIFECYCLE_EMAIL_UNSUBSCRIBE = 'app.frontend_urls.lifecycle_email_unsubscribe';

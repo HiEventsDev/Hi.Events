@@ -13,6 +13,7 @@ class LifecycleNudgeRegistry
         private readonly StripeOnboardingIncompleteNudge $stripeOnboardingIncomplete,
         private readonly EventDraftStaleNudge $eventDraftStale,
         private readonly LiveEventNoSalesNudge $liveEventNoSales,
+        private readonly LapsedPayerNudge $lapsedPayer,
     ) {}
 
     public function for(LifecycleNudgeType $type): LifecycleNudgeInterface
@@ -22,6 +23,7 @@ class LifecycleNudgeRegistry
             LifecycleNudgeType::STRIPE_ONBOARDING_INCOMPLETE => $this->stripeOnboardingIncomplete,
             LifecycleNudgeType::EVENT_DRAFT_STALE => $this->eventDraftStale,
             LifecycleNudgeType::LIVE_EVENT_NO_SALES => $this->liveEventNoSales,
+            LifecycleNudgeType::LAPSED_PAYER => $this->lapsedPayer,
         };
     }
 

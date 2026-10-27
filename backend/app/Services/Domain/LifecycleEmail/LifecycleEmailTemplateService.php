@@ -146,9 +146,18 @@ class LifecycleEmailTemplateService
     private function contextFor(LifecycleEmailRecipientDTO $recipient): array
     {
         return [
-            'first_name' => $recipient->firstName,
+            'first_name' => $this->normaliseNameCase($recipient->firstName),
             ...$recipient->context,
         ];
+    }
+
+    private function normaliseNameCase(string $name): string
+    {
+        if ($name !== mb_strtoupper($name) && $name !== mb_strtolower($name)) {
+            return $name;
+        }
+
+        return mb_convert_case($name, MB_CASE_TITLE);
     }
 
     private function toDTO(LifecycleNudgeType $nudgeType, ?LifecycleEmailTemplateDomainObject $saved): LifecycleEmailTemplateDTO
