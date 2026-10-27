@@ -581,7 +581,7 @@ export const RecurrenceScheduleDrawer = ({onClose, onGenerationStarted}: Recurre
                 time_slots: parseTimeSlotsFromRule(rule),
                 range_start: startFromRule ? startFromRule.slice(0, 10) : fallbackStart,
                 range_type: rule.range?.type || 'until',
-                range_until: rule.range?.until || '',
+                range_until: rule.range?.until ? rule.range.until.slice(0, 10) : '',
                 range_count: rule.range?.count || 10,
                 default_capacity: rule.default_capacity ?? undefined,
                 monthly_pattern: rule.monthly_pattern || 'by_day_of_month',

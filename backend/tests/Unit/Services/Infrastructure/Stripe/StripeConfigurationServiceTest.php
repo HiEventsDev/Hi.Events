@@ -91,6 +91,16 @@ class StripeConfigurationServiceTest extends TestCase
         $this->assertEquals('whsec_ireland', $result['ie']);
     }
 
+    public function test_get_all_webhook_secrets_includes_the_billing_endpoint(): void
+    {
+        config([
+            'services.stripe.webhook_secret' => 'whsec_default',
+            'services.stripe.billing_webhook_secret' => 'whsec_billing',
+        ]);
+
+        $this->assertEquals('whsec_billing', $this->service->getAllWebhookSecrets()['billing']);
+    }
+
     public function test_get_primary_platform_returns_correct_enum(): void
     {
         config(['services.stripe.primary_platform' => 'ie']);
@@ -124,6 +134,7 @@ class StripeConfigurationServiceTest extends TestCase
             'services.stripe.webhook_secret' => 'whsec_default',
             'services.stripe.ca_webhook_secret' => 'whsec_canada',
             'services.stripe.ie_webhook_secret' => null,
+            'services.stripe.billing_webhook_secret' => null,
         ]);
 
         $result = $this->service->getAllWebhookSecrets();

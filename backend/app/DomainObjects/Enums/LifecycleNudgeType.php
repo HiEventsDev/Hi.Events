@@ -10,4 +10,5 @@ enum LifecycleNudgeType
     case STRIPE_ONBOARDING_INCOMPLETE;
     case EVENT_DRAFT_STALE;
     case LIVE_EVENT_NO_SALES;
+    case LAPSED_PAYER;
 }

@@ -23,6 +23,7 @@ import {ThemeFontControl} from "../../../common/ThemeFontControl";
 import {getDefaultThemeSettings, validateThemeSettings} from "../../../../utilites/themeUtils.ts";
 import {firstHomepageSectionsError, HomepageDesigner, useHomepagePreview} from "../../../common/HomepageDesigner";
 import {DesignerSection} from "../../../common/DesignerShell";
+import {BrandingDesignerSection} from "../../../common/BrandingUpsell";
 
 interface FormValues {
     homepage_theme_settings: Partial<HomepageThemeSettings>;
@@ -208,6 +209,8 @@ const OrganizerHomepageDesigner = () => {
                     disabled={isDisabled}
                 />
             </DesignerSection>
+
+            <BrandingDesignerSection/>
         </HomepageDesigner>
     );
 };

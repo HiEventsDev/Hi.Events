@@ -47,9 +47,11 @@ const poweredByLink = (host: string, medium: string): string => {
  * obscure this notice without a licence. If you hear from us or them, it will start as a friendly
  * conversation, and you'll have 30 days to get a licence or restore the notice.
  */
-export const PoweredByFooter = (
-    props: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
-) => {
+type PoweredByFooterProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
+    brandingRemoved?: boolean;
+};
+
+export const PoweredByFooter = ({brandingRemoved, ...props}: PoweredByFooterProps) => {
     const {data: instance, isPending, isError} = useGetInstanceInfo();
 
     const [link, setLink] = useState(() => poweredByLink(configuredHost(), "app"));
@@ -58,7 +60,7 @@ export const PoweredByFooter = (
         setLink(poweredByLink(window.location.hostname, window.location.pathname.includes("/widget") ? "widget" : "app"));
     }, []);
 
-    if (iHavePurchasedALicence() || isPending || (!isError && instance?.white_label)) {
+    if (brandingRemoved || iHavePurchasedALicence() || isPending || (!isError && instance?.white_label)) {
         return <></>;
     }
 

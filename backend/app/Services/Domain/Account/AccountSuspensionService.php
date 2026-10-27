@@ -15,6 +15,7 @@ use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
+use HiEvents\Services\Domain\Subscription\AccountSubscriptionCancellationService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
@@ -32,6 +33,7 @@ class AccountSuspensionService
         private readonly OrganizerRepositoryInterface $organizerRepository,
         private readonly DatabaseManager $databaseManager,
         private readonly LoggerInterface $logger,
+        private readonly AccountSubscriptionCancellationService $subscriptionCancellationService,
     ) {}
 
     public function isAccountSuspended(int $accountId): bool
@@ -98,6 +100,8 @@ class AccountSuspensionService
         });
 
         Cache::forget($this->getSuspendedCacheKey($accountId));
+
+        $this->subscriptionCancellationService->tryCancelAtPeriodEnd($accountId);
 
         $this->logger->info('Account suspended', [
             'account_id' => $accountId,

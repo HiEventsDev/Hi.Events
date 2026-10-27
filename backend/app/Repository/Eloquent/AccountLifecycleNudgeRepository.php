@@ -11,10 +11,13 @@ use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\Status\AccountDeletionRequestStatus;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\DomainObjects\Status\EventStatus;
+use HiEvents\DomainObjects\Status\OrderPaymentStatus;
+use HiEvents\DomainObjects\Status\OrderRefundStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Models\AccountLifecycleNudge;
 use HiEvents\Repository\DTO\LifecycleEmail\AccountOwnerNudgeCandidateDTO;
 use HiEvents\Repository\DTO\LifecycleEmail\EventNudgeCandidateDTO;
+use HiEvents\Repository\DTO\LifecycleEmail\LapsedPayerNudgeCandidateDTO;
 use HiEvents\Repository\DTO\LifecycleEmail\LifecycleNudgeSendCountsDTO;
 use HiEvents\Repository\DTO\LifecycleEmail\StripeOnboardingNudgeCandidateDTO;
 use HiEvents\Repository\Interfaces\AccountLifecycleNudgeRepositoryInterface;
@@ -53,6 +56,7 @@ class AccountLifecycleNudgeRepository extends BaseRepository implements AccountL
                                   AND u.lifecycle_emails_unsubscribed_at IS NULL
             WHERE a.deleted_at IS NULL
               AND a.account_verified_at IS NOT NULL
+              AND a.suspended_at IS NULL
               AND a.created_at >= ?
               AND a.created_at <= ?
               AND NOT EXISTS (SELECT 1 FROM events e WHERE e.account_id = a.id)
@@ -111,6 +115,7 @@ class AccountLifecycleNudgeRepository extends BaseRepository implements AccountL
             JOIN organizers o            ON o.id = fpp.organizer_id AND o.deleted_at IS NULL
             JOIN accounts a              ON a.id = o.account_id AND a.deleted_at IS NULL
                                          AND a.account_verified_at IS NOT NULL
+                                         AND a.suspended_at IS NULL
             JOIN account_users au        ON au.account_id = a.id AND au.is_account_owner = true
                                          AND au.status = 'ACTIVE' AND au.deleted_at IS NULL
             JOIN users u                 ON u.id = au.user_id AND u.deleted_at IS NULL
@@ -162,6 +167,7 @@ class AccountLifecycleNudgeRepository extends BaseRepository implements AccountL
             FROM events e
             JOIN accounts a       ON a.id = e.account_id AND a.deleted_at IS NULL
                                   AND a.account_verified_at IS NOT NULL
+                                  AND a.suspended_at IS NULL
             JOIN account_users au ON au.account_id = a.id AND au.is_account_owner = true
                                   AND au.status = 'ACTIVE' AND au.deleted_at IS NULL
             JOIN users u          ON u.id = au.user_id AND u.deleted_at IS NULL
@@ -213,6 +219,7 @@ class AccountLifecycleNudgeRepository extends BaseRepository implements AccountL
             FROM events e
             JOIN accounts a       ON a.id = e.account_id AND a.deleted_at IS NULL
                                   AND a.account_verified_at IS NOT NULL
+                                  AND a.suspended_at IS NULL
             JOIN account_users au ON au.account_id = a.id AND au.is_account_owner = true
                                   AND au.status = 'ACTIVE' AND au.deleted_at IS NULL
             JOIN users u          ON u.id = au.user_id AND u.deleted_at IS NULL
@@ -263,6 +270,114 @@ class AccountLifecycleNudgeRepository extends BaseRepository implements AccountL
             userId: (int) $row->user_id,
             eventId: (int) $row->event_id,
             eventTitle: $row->title,
+            email: $row->email,
+            firstName: $row->first_name,
+        ));
+    }
+
+    public function findLapsedPayerCandidates(
+        CarbonInterface $lapsedAfter,
+        CarbonInterface $lapsedBefore,
+        CarbonInterface $upcomingAfter,
+        int $limit,
+    ): Collection {
+        $rows = $this->db->select(<<<'SQL'
+            WITH paid_sales AS (
+                SELECT e.account_id, e.id AS event_id, e.organizer_id, e.title, e.status AS event_status,
+                       eo.status AS occurrence_status, COALESCE(eo.end_date, eo.start_date) AS ended_at,
+                       LOWER(o.email) AS buyer_email
+                FROM orders o
+                JOIN events e             ON e.id = o.event_id AND e.deleted_at IS NULL
+                JOIN organizers og        ON og.id = e.organizer_id AND og.deleted_at IS NULL
+                JOIN order_items oi       ON oi.order_id = o.id AND oi.deleted_at IS NULL
+                JOIN event_occurrences eo ON eo.id = oi.event_occurrence_id AND eo.deleted_at IS NULL
+                WHERE o.status = :completed
+                  AND o.payment_status = :payment_received
+                  AND o.refund_status IS DISTINCT FROM :refunded
+                  AND o.deleted_at IS NULL
+                  AND o.is_manually_created = false
+                  AND o.payment_provider IS NOT NULL
+                  AND o.total_gross - COALESCE(o.total_refunded, 0) > 0
+                  AND COALESCE(eo.end_date, eo.start_date) >= :lapsed_after
+                  AND NOT EXISTS (SELECT 1 FROM account_users bau
+                                  JOIN users bu ON bu.id = bau.user_id
+                                  WHERE bau.account_id = e.account_id AND LOWER(bu.email) = LOWER(o.email))
+                  AND NOT EXISTS (SELECT 1 FROM organizers bog
+                                  WHERE bog.account_id = e.account_id AND LOWER(bog.email) = LOWER(o.email))
+            ),
+            last_sold_date AS (
+                SELECT DISTINCT ON (account_id) *
+                FROM paid_sales
+                WHERE account_id IN (SELECT account_id FROM paid_sales
+                                     GROUP BY account_id HAVING COUNT(DISTINCT buyer_email) >= 2)
+                ORDER BY account_id, ended_at DESC
+            )
+            SELECT * FROM (
+                SELECT DISTINCT ON (a.id)
+                    a.id AS account_id, lsd.event_id, lsd.organizer_id, lsd.title, lsd.event_status, lsd.ended_at,
+                    u.id AS user_id, u.email, u.first_name
+                FROM last_sold_date lsd
+                JOIN accounts a       ON a.id = lsd.account_id AND a.deleted_at IS NULL
+                                      AND a.account_verified_at IS NOT NULL
+                                      AND a.suspended_at IS NULL
+                JOIN account_users au ON au.account_id = a.id AND au.is_account_owner = true
+                                      AND au.status = 'ACTIVE' AND au.deleted_at IS NULL
+                JOIN users u          ON u.id = au.user_id AND u.deleted_at IS NULL
+                                      AND u.lifecycle_emails_unsubscribed_at IS NULL
+                WHERE lsd.ended_at <= :lapsed_before
+                  AND lsd.event_status <> :pending_review
+                  AND lsd.occurrence_status = :active
+                  AND NOT EXISTS (SELECT 1 FROM events ne
+                                  WHERE ne.account_id = a.id AND ne.created_at > :created_since)
+                  AND NOT EXISTS (SELECT 1 FROM event_occurrences reo
+                                  JOIN events re ON re.id = reo.event_id AND re.deleted_at IS NULL
+                                  WHERE re.account_id = a.id AND reo.deleted_at IS NULL
+                                    AND reo.status = :recent_active
+                                    AND COALESCE(reo.end_date, reo.start_date) > :ran_since)
+                  AND NOT EXISTS (SELECT 1 FROM event_occurrences ueo
+                                  JOIN events ue ON ue.id = ueo.event_id AND ue.deleted_at IS NULL
+                                  WHERE ue.account_id = a.id AND ueo.deleted_at IS NULL
+                                    AND COALESCE(ueo.end_date, ueo.start_date) >= :upcoming_after)
+                  AND NOT EXISTS (SELECT 1 FROM account_deletion_requests adr
+                                  WHERE adr.account_id = a.id AND adr.status = :deletion_requested)
+                  AND NOT EXISTS (SELECT 1 FROM account_lifecycle_nudges n
+                                  WHERE n.account_id = a.id
+                                    AND (n.nudge_type = :nudge_type OR n.created_at > :quiet_since))
+                  AND NOT EXISTS (SELECT 1 FROM account_lifecycle_nudges sn
+                                  JOIN account_users sau ON sau.account_id = sn.account_id
+                                                         AND sau.is_account_owner = true
+                                  WHERE sau.user_id = u.id AND sn.nudge_type = :owner_nudge_type)
+                ORDER BY a.id
+            ) candidates
+            ORDER BY ended_at DESC
+            LIMIT :limit
+        SQL, [
+            'completed' => OrderStatus::COMPLETED->name,
+            'payment_received' => OrderPaymentStatus::PAYMENT_RECEIVED->name,
+            'refunded' => OrderRefundStatus::REFUNDED->name,
+            'lapsed_after' => $lapsedAfter->toDateTimeString(),
+            'lapsed_before' => $lapsedBefore->toDateTimeString(),
+            'pending_review' => EventStatus::PENDING_MANUAL_REVIEW->name,
+            'active' => EventOccurrenceStatus::ACTIVE->name,
+            'created_since' => $lapsedBefore->toDateTimeString(),
+            'recent_active' => EventOccurrenceStatus::ACTIVE->name,
+            'ran_since' => $lapsedBefore->toDateTimeString(),
+            'upcoming_after' => $upcomingAfter->toDateTimeString(),
+            'deletion_requested' => AccountDeletionRequestStatus::REQUESTED->name,
+            'nudge_type' => LifecycleNudgeType::LAPSED_PAYER->name,
+            'quiet_since' => $this->quietPeriodStart(),
+            'owner_nudge_type' => LifecycleNudgeType::LAPSED_PAYER->name,
+            'limit' => $limit,
+        ]);
+
+        return collect($rows)->map(static fn (object $row) => new LapsedPayerNudgeCandidateDTO(
+            accountId: (int) $row->account_id,
+            userId: (int) $row->user_id,
+            eventId: (int) $row->event_id,
+            organizerId: (int) $row->organizer_id,
+            eventTitle: $row->title,
+            isEventArchived: $row->event_status === EventStatus::ARCHIVED->name,
+            lastSoldDateEndedAt: (string) $row->ended_at,
             email: $row->email,
             firstName: $row->first_name,
         ));

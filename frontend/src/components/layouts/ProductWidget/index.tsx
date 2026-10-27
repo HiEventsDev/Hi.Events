@@ -109,7 +109,7 @@ const ProductWidget = () => {
     );
 
     return (
-        <WidgetFrame style={appearance.style} mode={appearance.mode} testId="ticket-widget">
+        <WidgetFrame style={appearance.style} mode={appearance.mode} testId="ticket-widget" brandingRemoved={event.organizer?.branding_removed}>
             <WidgetSectionStack>
                 {config.isModal && !showsHeader && (
                     <WidgetEventHeader event={event} occurrence={selectedOccurrence} reserveCloseButton compact/>

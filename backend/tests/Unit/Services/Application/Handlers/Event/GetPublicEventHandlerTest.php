@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
+use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\ProductCategoryDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
@@ -24,6 +25,7 @@ use HiEvents\Services\Domain\Event\EventPageViewIncrementService;
 use HiEvents\Services\Domain\EventOccurrence\PublicOccurrenceVisibilityService;
 use HiEvents\Services\Domain\Product\ProductFilterService;
 use HiEvents\Services\Domain\Product\PublicProductSelectionFilter;
+use HiEvents\Services\Domain\Subscription\AccountSubscriptionAccessService;
 use Illuminate\Support\Collection;
 use Mockery as m;
 use Tests\TestCase;
@@ -42,6 +44,8 @@ class GetPublicEventHandlerTest extends TestCase
 
     private GetPublicEventHandler $handler;
 
+    private AccountSubscriptionAccessService $accountSubscriptionAccessService;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -51,6 +55,7 @@ class GetPublicEventHandlerTest extends TestCase
         $this->promoCodeRepository = m::mock(PromoCodeRepositoryInterface::class);
         $this->ticketFilterService = m::mock(ProductFilterService::class);
         $this->eventPageViewIncrementService = m::mock(EventPageViewIncrementService::class);
+        $this->accountSubscriptionAccessService = m::mock(AccountSubscriptionAccessService::class);
 
         $this->handler = new GetPublicEventHandler(
             $this->eventRepository,
@@ -61,7 +66,27 @@ class GetPublicEventHandlerTest extends TestCase
             new PublicOccurrenceVisibilityService,
             m::mock(EventSeatMapLookupService::class, ['existsForEvent' => false]),
             new PublicProductSelectionFilter,
+            $this->accountSubscriptionAccessService,
         );
+    }
+
+    public function test_marks_the_organizer_branding_as_removed_when_the_account_has_an_active_subscription(): void
+    {
+        $data = new GetPublicEventDTO(eventId: 1, isAuthenticated: true, ipAddress: '127.0.0.1', promoCode: null);
+        $organizer = (new OrganizerDomainObject)->setId(3)->setAccountId(7);
+        $event = (new EventDomainObject)
+            ->setAccountId(7)
+            ->setOrganizer($organizer)
+            ->setProductCategories(collect());
+
+        $this->setupEventRepositoryMock($event, $data->eventId);
+        $this->promoCodeRepository->shouldReceive('findFirstWhere')->once()->andReturnNull();
+        $this->ticketFilterService->shouldReceive('filter')->once()->withAnyArgs()->andReturn(collect());
+        $this->accountSubscriptionAccessService->shouldReceive('hasActiveSubscription')->with(7)->once()->andReturnTrue();
+
+        $result = $this->handler->handle($data);
+
+        $this->assertTrue($result->getOrganizer()->getBrandingRemoved());
     }
 
     public function test_handle_without_promo_code_and_unauthenticated_user(): void

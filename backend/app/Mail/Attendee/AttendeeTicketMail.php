@@ -55,6 +55,11 @@ class AttendeeTicketMail extends BaseMail implements ContainsEventContent
         $this->lineup = $lineup;
     }
 
+    public function showsHiEventsPromo(): bool
+    {
+        return true;
+    }
+
     public function envelope(): Envelope
     {
         $replacements = ['event' => Str::limit($this->event->getTitle(), 50)];

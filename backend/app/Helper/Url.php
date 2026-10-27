@@ -38,7 +38,13 @@ class Url
 
     public const ACCOUNT_SETTINGS = 'app.frontend_urls.account_settings';
 
+    public const ACCOUNT_BILLING = 'app.frontend_urls.account_billing';
+
+    public const REGISTER = 'app.frontend_urls.register';
+
     public const EVENT_DASHBOARD = 'app.frontend_urls.event_dashboard';
+
+    public const ORGANIZER_EVENTS = 'app.frontend_urls.organizer_events';
 
     public const WELCOME = 'app.frontend_urls.welcome';
 

@@ -34,7 +34,7 @@ class GetPublicOrganizerAction extends BaseAction
 
         return $this->resourceResponse(
             resource: OrganizerResourcePublic::class,
-            data: $this->handler->handle($organizerId),
+            data: $organizer,
         );
     }
 

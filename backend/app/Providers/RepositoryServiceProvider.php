@@ -27,6 +27,7 @@ use HiEvents\Repository\Eloquent\AccountFeatureFlagOverrideRepository;
 use HiEvents\Repository\Eloquent\AccountLifecycleNudgeRepository;
 use HiEvents\Repository\Eloquent\AccountMessagingTierRepository;
 use HiEvents\Repository\Eloquent\AccountRepository;
+use HiEvents\Repository\Eloquent\AccountSubscriptionRepository;
 use HiEvents\Repository\Eloquent\AccountUserAccessGrantRepository;
 use HiEvents\Repository\Eloquent\AccountUserPermissionRepository;
 use HiEvents\Repository\Eloquent\AccountUserRepository;
@@ -103,6 +104,7 @@ use HiEvents\Repository\Interfaces\AccountFeatureFlagOverrideRepositoryInterface
 use HiEvents\Repository\Interfaces\AccountLifecycleNudgeRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountMessagingTierRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
+use HiEvents\Repository\Interfaces\AccountSubscriptionRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountUserAccessGrantRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountUserPermissionRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
@@ -246,6 +248,7 @@ class RepositoryServiceProvider extends ServiceProvider
         OrganizerConfigurationRepositoryInterface::class => OrganizerConfigurationRepository::class,
         TicketLookupTokenRepositoryInterface::class => TicketLookupTokenRepository::class,
         AccountMessagingTierRepositoryInterface::class => AccountMessagingTierRepository::class,
+        AccountSubscriptionRepositoryInterface::class => AccountSubscriptionRepository::class,
         AnnouncementRepositoryInterface::class => AnnouncementRepository::class,
         AnnouncementUserRepositoryInterface::class => AnnouncementUserRepository::class,
         WaitlistEntryRepositoryInterface::class => WaitlistEntryRepository::class,

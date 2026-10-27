@@ -5,6 +5,7 @@ import {useGetEventSettings} from '../../../../queries/useGetEventSettings.ts';
 import {useGetEventImages} from '../../../../queries/useGetEventImages.ts';
 import {AttendeeTicket} from '../../../common/AttendeeTicket';
 import {PoweredByFooter} from '../../../common/PoweredByFooter';
+import {useBrandingSubscription} from '../../../../hooks/useBrandingSubscription.ts';
 import {t} from '@lingui/macro';
 import {useEffect} from "react";
 import {resolveEventLocation} from "../../../../utilites/effectiveLocation.ts";
@@ -13,6 +14,7 @@ import classes from '../../../routes/product-widget/PrintOrder/PrintOrder.module
 
 const TicketDesignerPrint = () => {
     const {eventId} = useParams();
+    const {isActive, isSettled} = useBrandingSubscription();
     const eventQuery = useGetEvent(eventId);
     const meQuery = useGetMe();
     const settingsQuery = useGetEventSettings(eventId);
@@ -24,10 +26,10 @@ const TicketDesignerPrint = () => {
     const images = imagesQuery.data;
 
     useEffect(() => {
-        if (event && user && settings) {
+        if (event && user && settings && isSettled) {
             setTimeout(() => window?.print(), 500);
         }
-    }, [event, user, settings]);
+    }, [event, user, settings, isSettled]);
 
     if (!event || !user || !settings) {
         return null;
@@ -89,7 +91,7 @@ const TicketDesignerPrint = () => {
                     hideButtons
                 />
                 <div className={classes.poweredBy}>
-                    <PoweredByFooter/>
+                    <PoweredByFooter brandingRemoved={isActive}/>
                 </div>
             </div>
         </div>

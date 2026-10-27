@@ -3,6 +3,7 @@
 namespace HiEvents\Mail;
 
 use HiEvents\Mail\Concerns\ContainsEventContent;
+use HiEvents\Services\Domain\Mail\MailBrandingService;
 use HiEvents\Services\Domain\Mail\UnpublishedEventMailPolicy;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -25,6 +26,16 @@ abstract class BaseMail extends Mailable implements ShouldQueue
 
     abstract public function content(): Content;
 
+    public function showsHiEventsPromo(): bool
+    {
+        return false;
+    }
+
+    public function isSentToBuyers(): bool
+    {
+        return true;
+    }
+
     public function send($mailer): ?SentMessage
     {
         if ($this instanceof ContainsEventContent
@@ -45,7 +56,25 @@ abstract class BaseMail extends Mailable implements ShouldQueue
             return $replacement->send($mailer);
         }
 
-        return parent::send($mailer);
+        return $this->withMailBranding(fn () => parent::send($mailer));
+    }
+
+    private function withMailBranding(callable $callback): mixed
+    {
+        $branding = app(MailBrandingService::class)->forMail($this);
+
+        if ($branding->senderName !== null && $this->from === []) {
+            $this->from(config('mail.from.address'), $branding->senderName);
+        }
+
+        $view = app('view');
+        $view->share('mailBranding', $branding);
+
+        try {
+            return $callback();
+        } finally {
+            $view->share('mailBranding', null);
+        }
     }
 
     private function asRecipients(array $addresses): array

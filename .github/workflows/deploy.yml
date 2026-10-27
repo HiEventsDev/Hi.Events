@@ -34,7 +34,7 @@ concurrency:
 jobs:
   backend:
     name: Deploy Backend
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - uses: actions/checkout@v3
@@ -117,6 +117,7 @@ jobs:
         env:
           VAPOR_API_TOKEN: ${{ secrets.VAPOR_API_TOKEN }}
           SENTRY_RELEASE: ${{ github.sha }}
+          BUILDX_NO_DEFAULT_ATTESTATIONS: 1
 
   frontend:
     name: Deploy Frontend

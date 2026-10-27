@@ -6,6 +6,7 @@ import {
     IconAdjustmentsHorizontal,
     IconArrowLeft,
     IconBuildingStore,
+    IconCreditCard,
     IconKey,
     IconReceiptTax,
     IconShieldLock,
@@ -15,6 +16,7 @@ import {
 import AppLayout from "../AppLayout";
 import {BreadcrumbItem, NavItem} from "../AppLayout/types.ts";
 import {useAccess} from "../../../hooks/useAccess.ts";
+import {useBrandingSubscription} from "../../../hooks/useBrandingSubscription.ts";
 import {safeSessionStorageGet, safeSessionStorageSet} from "../../../utilites/helpers.ts";
 import {getConfig} from "../../../utilites/config.ts";
 
@@ -51,6 +53,8 @@ const SettingsLayout = () => {
     const location = useLocation();
     const returnPath = useReturnPath();
     const {can, isLoaded, isRestricted} = useAccess();
+    const {subscription, canManageBilling} = useBrandingSubscription();
+    const isBillingPage = location.pathname.startsWith('/settings/billing');
 
     const navItems: NavItem[] = [
         {link: returnPath, label: t`Back`, icon: IconArrowLeft, isActive: () => false},
@@ -61,6 +65,12 @@ const SettingsLayout = () => {
         {link: '/settings/account', label: t`General`, icon: IconAdjustmentsHorizontal, showWhen: () => !isRestricted},
         {link: '/settings/organizers', label: t`Organizers`, icon: IconBuildingStore, showWhen: () => !isRestricted},
         {link: '/settings/team', label: t`Team`, icon: IconUsers, showWhen: () => !isRestricted && can('MANAGE_TEAM')},
+        {
+            link: '/settings/billing',
+            label: t({message: 'Billing', context: 'Account subscription'}),
+            icon: IconCreditCard,
+            showWhen: () => canManageBilling && (subscription?.available ?? isBillingPage),
+        },
         {link: '/settings/api-keys', label: t`API keys`, icon: IconKey},
         {link: '/settings/taxes-and-fees', label: t`Taxes and fees`, icon: IconReceiptTax, showWhen: () => !isRestricted},
     ];

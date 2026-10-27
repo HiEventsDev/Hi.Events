@@ -198,7 +198,7 @@ export const AttendeeTicket = ({
 
             {showPoweredBy && (
                 <div className={classes.poweredBy}>
-                    <PoweredByFooter/>
+                    <PoweredByFooter brandingRemoved={event.organizer?.branding_removed}/>
                 </div>
             )}
         </div>

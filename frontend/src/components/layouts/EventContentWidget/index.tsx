@@ -59,7 +59,7 @@ const EventContentWidget = ({variant}: EventContentWidgetProps) => {
         : !lineup?.schedule_items.length;
 
     return (
-        <WidgetFrame style={appearance.style} mode={appearance.mode} testId={`${variant}-widget`}>
+        <WidgetFrame style={appearance.style} mode={appearance.mode} testId={`${variant}-widget`} brandingRemoved={event.organizer?.branding_removed}>
             {isEmpty ? (
                 <WidgetMessage title={t`Coming soon`} description={t`Check back later for updates.`}/>
             ) : (

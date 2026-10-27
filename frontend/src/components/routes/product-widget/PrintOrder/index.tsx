@@ -61,9 +61,8 @@ export const PrintOrder = () => {
                 );
             })}
             
-            {/* PoweredBy footer for web view only */}
             <div className={classes.webOnlyFooter}>
-                <PoweredByFooter/>
+                <PoweredByFooter brandingRemoved={event.organizer?.branding_removed}/>
             </div>
         </div>
     );

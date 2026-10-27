@@ -9,6 +9,7 @@ use HiEvents\DomainObjects\AccountLifecycleNudgeDomainObject;
 use HiEvents\DomainObjects\Enums\LifecycleNudgeType;
 use HiEvents\Repository\DTO\LifecycleEmail\AccountOwnerNudgeCandidateDTO;
 use HiEvents\Repository\DTO\LifecycleEmail\EventNudgeCandidateDTO;
+use HiEvents\Repository\DTO\LifecycleEmail\LapsedPayerNudgeCandidateDTO;
 use HiEvents\Repository\DTO\LifecycleEmail\LifecycleNudgeSendCountsDTO;
 use HiEvents\Repository\DTO\LifecycleEmail\StripeOnboardingNudgeCandidateDTO;
 use Illuminate\Support\Collection;
@@ -53,6 +54,16 @@ interface AccountLifecycleNudgeRepositoryInterface extends RepositoryInterface
     public function findLiveEventWithoutSalesCandidates(
         CarbonInterface $readyAfter,
         CarbonInterface $readyBefore,
+        CarbonInterface $upcomingAfter,
+        int $limit,
+    ): Collection;
+
+    /**
+     * @return Collection<int, LapsedPayerNudgeCandidateDTO>
+     */
+    public function findLapsedPayerCandidates(
+        CarbonInterface $lapsedAfter,
+        CarbonInterface $lapsedBefore,
         CarbonInterface $upcomingAfter,
         int $limit,
     ): Collection;

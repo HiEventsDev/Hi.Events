@@ -16,6 +16,13 @@ use Tests\TestCase;
 
 class AttendeeTicketMailOccurrenceDatesTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        config(['app.is_hi_events' => false]);
+    }
+
     public function test_an_occurrence_without_an_end_shows_only_its_own_date(): void
     {
         $firstDate = $this->occurrence(1, '2026-11-02 19:00:00', null);
