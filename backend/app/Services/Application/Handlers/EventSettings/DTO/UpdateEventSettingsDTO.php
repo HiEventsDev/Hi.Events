@@ -50,6 +50,10 @@ class UpdateEventSettingsDTO extends BaseDTO
         public readonly array $payment_providers = [],
         public readonly ?string $offline_payment_instructions = null,
         public readonly bool $allow_orders_awaiting_offline_payment_to_check_in = false,
+        public readonly bool $offline_payment_reporting_enabled = true,
+        public readonly bool $offline_payment_order_reference_enabled = true,
+        public readonly bool $payment_links_enabled = false,
+        public readonly int $payment_link_expiry_hours = 72,
 
         // Invoice settings
         public readonly bool $enable_invoicing = false,

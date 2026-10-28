@@ -104,6 +104,10 @@ msgstr "{0}のデフォルト"
 msgid "{0} delivered · {1} opened · {2} clicked · {3} bounced"
 msgstr "配信 {0} · 開封 {1} · クリック {2} · バウンス {3}"
 
+#: src/components/routes/product-widget/Payment/index.tsx:186
+msgid "{0} due after you place your order"
+msgstr "注文後に {0} のお支払いが必要です"
+
 #: src/components/routes/admin/FeatureFlags/index.tsx:91
 msgid "{0} forced off"
 msgstr "{0}を強制的にオフにしました"
@@ -262,7 +266,7 @@ msgstr "{0}販売済み"
 msgid "{0} standing"
 msgstr "{0}立ち見"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:635
+#: src/components/routes/product-widget/CollectInformation/index.tsx:641
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/OrdersTab.tsx:93
 msgid "{0} tickets"
 msgstr "{0}枚のチケット"
@@ -352,6 +356,7 @@ msgstr "{count}回"
 msgid "{days, plural, one {# day} other {# days}}"
 msgstr "{days, plural, other {# 日}}"
 
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:25
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:47
 msgid "{days} days"
 msgstr "{days}日"
@@ -421,6 +426,10 @@ msgstr "{hours} 時間"
 msgid "{hours} h {remainder} min"
 msgstr "{hours} 時間 {remainder} 分"
 
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:28
+msgid "{hours} hours"
+msgstr "{hours}時間"
+
 #: src/components/common/Countdown/index.tsx:70
 msgid "{hours} hours, {minutes} minutes, and {seconds} seconds"
 msgstr "{hours}時間{minutes}分{seconds}秒"
@@ -481,6 +490,10 @@ msgstr "{moreDatesCount, plural, one {他#日程} other {他#日程}}"
 #: src/components/routes/event/Lineup/QuickAddPerson.tsx:55
 msgid "{name} added to the lineup"
 msgstr "{name} をラインナップに追加しました"
+
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:286
+msgid "{name} has asked you to pay for their order"
+msgstr "{name}さんから注文の支払いを依頼されました"
 
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:705
 msgid "{newCount, plural, one {Creates a new profile for {newNames}} other {Creates new profiles for {newNames}}}"
@@ -742,6 +755,7 @@ msgstr "影響を受けるセッション全体で1名の参加者が登録さ�
 msgid "1 attendee is registered for this session."
 msgstr "このセッションには1名の参加者が登録されています。"
 
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:25
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:47
 msgid "1 day"
 msgstr "1日"
@@ -757,6 +771,10 @@ msgstr "開始日の1日後"
 #: src/components/modals/SendMessageModal/index.tsx:123
 msgid "1 day before event"
 msgstr "イベントの1日前"
+
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:28
+msgid "1 hour"
+msgstr "1時間"
 
 #: src/components/modals/SendMessageModal/index.tsx:124
 msgid "1 hour before event"
@@ -791,7 +809,7 @@ msgstr "選択する席：1"
 msgid "1 slot"
 msgstr "1 枠"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:634
+#: src/components/routes/product-widget/CollectInformation/index.tsx:640
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/OrdersTab.tsx:92
 msgid "1 ticket"
 msgstr "1枚のチケット"
@@ -881,7 +899,7 @@ msgstr "URLを設定する場合は、ボタンのラベルが必要です"
 msgid "A button that opens tickets in a pop-up."
 msgstr "チケットをポップアップで開くボタン。"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:224
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:253
 msgid "A cancellation notice has been sent to"
 msgstr "キャンセル通知を送信しました："
 
@@ -1014,7 +1032,7 @@ msgstr "販売を中止"
 msgid "Abandon this sale? A card payment waiting on the reader is cancelled, and its tickets and seats are released."
 msgstr "この販売を中止しますか？リーダーで待機中のカード決済はキャンセルされ、チケットと座席は解放されます。"
 
-#: src/components/common/OrdersTable/index.tsx:374
+#: src/components/common/OrdersTable/index.tsx:384
 msgid "Abandoned"
 msgstr "中止済み"
 
@@ -1050,11 +1068,11 @@ msgstr "アクセントカラー"
 msgid "Accept all"
 msgstr "すべて承認"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:102
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:113
 msgid "Accept bank transfers, checks, or other offline payment methods"
 msgstr "銀行振込、小切手、その他のオフライン決済方法を受け付ける"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:97
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:108
 msgid "Accept credit card payments with Stripe"
 msgstr "Stripeでクレジットカード決済を受け付ける"
 
@@ -1212,7 +1230,7 @@ msgstr "対応が必要です：VAT情報が必要です"
 #: src/components/common/AdminEventsTable/index.tsx:114
 #: src/components/common/AffiliateTable/index.tsx:170
 #: src/components/common/EntityActions/index.tsx:28
-#: src/components/common/OrdersTable/index.tsx:383
+#: src/components/common/OrdersTable/index.tsx:393
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:548
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:555
 #: src/components/common/WaitlistTable/index.tsx:57
@@ -1376,11 +1394,11 @@ msgstr "参加者に関するメモを追加します。参加者には表示さ
 msgid "Add any notes about the attendee..."
 msgstr "参加者に関するメモを追加..."
 
-#: src/components/modals/ManageOrderModal/index.tsx:282
+#: src/components/modals/ManageOrderModal/index.tsx:301
 msgid "Add any notes about the order. These will not be visible to the customer."
 msgstr "注文に関するメモを追加します。お客様には表示されません。"
 
-#: src/components/modals/ManageOrderModal/index.tsx:286
+#: src/components/modals/ManageOrderModal/index.tsx:305
 msgid "Add any notes about the order..."
 msgstr "注文に関するメモを追加..."
 
@@ -1447,10 +1465,6 @@ msgstr "ドメインを追加"
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:136
 msgid "Add event details"
 msgstr "イベントの詳細を追加"
-
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:164
-msgid "Add instructions for offline payments (e.g., bank transfer details, where to send checks, payment deadlines)"
-msgstr "オフライン決済の案内を追加します（例：銀行振込の詳細、小切手の送付先、支払期限など）"
 
 #: src/components/routes/event/Lineup/ProfileLinksField.tsx:63
 msgid "Add link"
@@ -1655,14 +1669,14 @@ msgstr "新しい商品に自動的に追加されます"
 msgid "Additional Fees"
 msgstr "追加手数料"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:418
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:447
 msgid "Additional Information"
 msgstr "追加情報"
 
 #: src/components/common/LocationsTable/index.tsx:113
 #: src/components/common/OrderDetails/index.tsx:122
 #: src/components/forms/QuestionForm/index.tsx:130
-#: src/components/modals/ManageOrderModal/index.tsx:191
+#: src/components/modals/ManageOrderModal/index.tsx:210
 #: src/components/routes/organizer/Settings/index.tsx:51
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:103
 msgid "Address"
@@ -1674,8 +1688,8 @@ msgstr "住所1行目"
 
 #: src/components/common/LocationPicker/index.tsx:237
 #: src/components/modals/LocationEditModal/index.tsx:144
-#: src/components/routes/product-widget/CollectInformation/index.tsx:561
-#: src/components/routes/product-widget/CollectInformation/index.tsx:562
+#: src/components/routes/product-widget/CollectInformation/index.tsx:567
+#: src/components/routes/product-widget/CollectInformation/index.tsx:568
 msgid "Address Line 1"
 msgstr "住所1行目"
 
@@ -1685,8 +1699,8 @@ msgstr "住所2行目"
 
 #: src/components/common/LocationPicker/index.tsx:242
 #: src/components/modals/LocationEditModal/index.tsx:145
-#: src/components/routes/product-widget/CollectInformation/index.tsx:566
-#: src/components/routes/product-widget/CollectInformation/index.tsx:567
+#: src/components/routes/product-widget/CollectInformation/index.tsx:572
+#: src/components/routes/product-widget/CollectInformation/index.tsx:573
 msgid "Address Line 2"
 msgstr "住所2行目"
 
@@ -1697,6 +1711,10 @@ msgstr "ページを追加します"
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:265
 msgid "Adds a page, names attendees"
 msgstr "ページを追加し、参加者名を記載します"
+
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:216
+msgid "Adds an \"I've paid\" button to unpaid orders. You and your team get an email when a buyer uses it. You still mark the order as paid yourself."
+msgstr "未払いの注文に「支払い済み」ボタンを追加します。購入者が使うと、あなたとチームにメールが届きます。注文を支払い済みにするのは引き続きあなたです。"
 
 #: src/components/common/TeamAccessFields/index.tsx:32
 #: src/components/common/TeamAccessFields/index.tsx:90
@@ -1830,7 +1848,7 @@ msgid "All areas"
 msgstr "すべてのエリア"
 
 #: src/components/common/MessageList/index.tsx:29
-#: src/components/routes/product-widget/CollectInformation/index.tsx:543
+#: src/components/routes/product-widget/CollectInformation/index.tsx:549
 msgid "All attendees"
 msgstr "すべての参加者"
 
@@ -1987,10 +2005,6 @@ msgstr "サインイン時にメールアドレスへのアクセスを許可し
 msgid "Allow accounts in this organizational directory only, and add the redirect URI below as a Web redirect URI."
 msgstr "この組織ディレクトリ内のアカウントのみを許可し、以下のリダイレクトURIをWebリダイレクトURIとして追加してください。"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:190
-msgid "Allow attendees associated with unpaid orders to check in"
-msgstr "未払いの注文に紐付く参加者のチェックインを許可する"
-
 #: src/components/common/SelfServiceSettings/index.tsx:23
 msgid "Allow attendees to update their ticket information (name, email) via a secure link sent with their order confirmation."
 msgstr "注文確認メールで送信される安全なリンクから、参加者が自分のチケット情報（名前、メールアドレス）を更新できるようにします。"
@@ -2041,6 +2055,10 @@ msgstr "すでにアカウントをお持ちですか？<0>{0}</0>"
 #: src/components/layouts/CheckIn/tabs/ScanTab.tsx:141
 msgid "Already in"
 msgstr "入場済み"
+
+#: src/components/routes/product-widget/OrderSummaryAndProducts/ReportOfflinePayment/index.tsx:38
+msgid "Already paid?"
+msgstr "支払い済みですか？"
 
 #: src/components/modals/RefundOrderModal/index.tsx:93
 msgid "Already Refunded"
@@ -2096,11 +2114,15 @@ msgstr "午前/午後"
 msgid "Amazing, Event, Keywords..."
 msgstr "素晴らしい、イベント、キーワード..."
 
-#: src/components/common/OrdersTable/index.tsx:280
+#: src/components/common/OrdersTable/index.tsx:281
 #: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:213
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:69
 msgid "Amount"
 msgstr "金額"
+
+#: src/components/common/OfflinePaymentDetails/index.tsx:47
+msgid "Amount due"
+msgstr "お支払い金額"
 
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:74
 msgid "Amount off"
@@ -2262,6 +2284,10 @@ msgstr "確認済みドメインのメールアドレスで{providerName}にサ�
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:73
 msgid "Anyone with this link and PIN can sell tickets for this event, like a shared document link. The PIN won't be shown again, but you can reset it any time from the box office menu."
 msgstr "このリンクとPINを知っている人は誰でも、共有ドキュメントのリンクのように、このイベントのチケットを販売できます。PINは再表示されませんが、ボックスオフィスのメニューからいつでもリセットできます。"
+
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:118
+msgid "Anyone with this link can see the payment details for this order, so only share it with the person paying."
+msgstr "このリンクを持つ人は誰でもこの注文の支払い情報を見られるため、支払う人とだけ共有してください。"
 
 #: src/ee/seating/components/SeatPicker/index.tsx:55
 msgid "Anything else?"
@@ -2513,7 +2539,7 @@ msgstr "このテンプレートを削除してもよろしいですか？この
 msgid "Are you sure you want to delete this webhook?"
 msgstr "このWebhookを削除してもよろしいですか？"
 
-#: src/components/layouts/Checkout/index.tsx:461
+#: src/components/layouts/Checkout/index.tsx:523
 msgid "Are you sure you want to leave?"
 msgstr "本当に離れますか？"
 
@@ -2549,11 +2575,11 @@ msgstr "この主催者プロフィールを公開してもよろしいですか
 msgid "Are you sure you want to remove this entry from the waitlist?"
 msgstr "このエントリーをキャンセル待ちリストから削除してもよろしいですか？"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:548
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:593
 msgid "Are you sure you want to resend the order confirmation to {0}?"
 msgstr "{0}に注文確認メールを再送信してもよろしいですか？"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:523
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:568
 msgid "Are you sure you want to resend the ticket to {0}?"
 msgstr "{0}にチケットを再送信してもよろしいですか？"
 
@@ -2636,6 +2662,10 @@ msgstr "アカウント管理者にアクセス権の付与を依頼するか、
 msgid "Ask an account admin to update your permissions."
 msgstr "アカウント管理者に権限の更新を依頼してください。"
 
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:193
+msgid "Ask buyers to use their order reference when paying"
+msgstr "支払い時に注文番号を使うよう購入者に依頼する"
+
 #: src/components/common/QuestionsTable/index.tsx:395
 msgid "Ask for name and email for each ticket purchased"
 msgstr "購入したチケットごとに氏名とメールアドレスを尋ねる"
@@ -2716,7 +2746,7 @@ msgstr "参加者"
 
 #: src/components/common/AttendeeTicket/index.tsx:101
 #: src/components/common/QuestionsTable/index.tsx:473
-#: src/components/routes/product-widget/CollectInformation/index.tsx:664
+#: src/components/routes/product-widget/CollectInformation/index.tsx:670
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:365
 msgid "Attendee"
 msgstr "参加者"
@@ -2786,7 +2816,7 @@ msgstr "参加者のチケット"
 msgid "Attendee Updated"
 msgstr "参加者が更新されました"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:471
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:516
 msgid "Attendee updated successfully"
 msgstr "参加者を更新しました"
 
@@ -2807,7 +2837,7 @@ msgstr "参加者"
 #: src/components/common/StatBoxes/index.tsx:75
 #: src/components/layouts/Event/index.tsx:150
 #: src/components/modals/ManageOccurrenceModal/index.tsx:179
-#: src/components/modals/ManageOrderModal/index.tsx:317
+#: src/components/modals/ManageOrderModal/index.tsx:336
 #: src/components/routes/admin/Dashboard/index.tsx:367
 #: src/components/routes/admin/Messages/index.tsx:90
 #: src/components/routes/admin/Messages/index.tsx:139
@@ -2923,7 +2953,7 @@ msgid "Awaiting offline payment"
 msgstr "オフライン決済の入金待ち"
 
 #: src/components/routes/event/orders.tsx:33
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:64
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:72
 msgid "Awaiting Offline Payment"
 msgstr "オフライン決済の入金待ち"
 
@@ -2933,7 +2963,7 @@ msgstr "支払い待ち"
 
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:117
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:225
-#: src/components/layouts/Checkout/index.tsx:342
+#: src/components/layouts/Checkout/index.tsx:376
 #: src/components/modals/ProductPurchasesModal/index.tsx:79
 #: src/components/modals/ProductPurchasesModal/index.tsx:209
 #: src/components/modals/ProductPurchasesModal/index.tsx:247
@@ -2943,10 +2973,10 @@ msgstr "支払い待ち"
 
 #: src/components/common/AttendeeStatusBadge/index.tsx:29
 #: src/components/common/AttendeeTable/index.tsx:280
-#: src/components/common/OrdersTable/index.tsx:362
+#: src/components/common/OrdersTable/index.tsx:366
 #: src/components/common/OrderStatusBadge/index.tsx:10
 #: src/components/routes/event/attendees.tsx:32
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:61
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:69
 msgid "Awaiting Payment"
 msgstr "支払い待ち"
 
@@ -2976,14 +3006,14 @@ msgid "Back to Accounts"
 msgstr "アカウントに戻る"
 
 #: src/components/forms/StripeCheckoutForm/index.tsx:145
-#: src/components/routes/product-widget/CollectInformation/index.tsx:361
-#: src/components/routes/product-widget/CollectInformation/index.tsx:391
-#: src/components/routes/product-widget/CollectInformation/index.tsx:420
+#: src/components/routes/product-widget/CollectInformation/index.tsx:367
+#: src/components/routes/product-widget/CollectInformation/index.tsx:397
+#: src/components/routes/product-widget/CollectInformation/index.tsx:426
 msgid "Back to Event"
 msgstr "イベントに戻る"
 
-#: src/components/layouts/Checkout/index.tsx:328
-#: src/components/layouts/Checkout/index.tsx:329
+#: src/components/layouts/Checkout/index.tsx:362
+#: src/components/layouts/Checkout/index.tsx:363
 msgid "Back to event page"
 msgstr "イベントページに戻る"
 
@@ -3153,8 +3183,8 @@ msgstr "ビリング"
 msgid "Billing"
 msgstr "ランク"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:555
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:307
+#: src/components/routes/product-widget/CollectInformation/index.tsx:561
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:336
 msgid "Billing Address"
 msgstr "請求先住所"
 
@@ -3163,7 +3193,7 @@ msgstr "請求先住所"
 msgid "Billing period"
 msgstr "請求期間"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:200
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:259
 msgid "Billing Settings"
 msgstr "請求設定"
 
@@ -3208,7 +3238,7 @@ msgstr "この日付の予約上限"
 msgid "Booking or service fee"
 msgstr "予約手数料またはサービス料"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:219
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:248
 msgid "Bookmark this page to manage your order anytime."
 msgstr "このページをブックマークすると、いつでも注文を管理できます。"
 
@@ -3228,7 +3258,7 @@ msgstr "バウンス"
 msgid "box office"
 msgstr "ボックスオフィス"
 
-#: src/components/common/OrdersTable/index.tsx:218
+#: src/components/common/OrdersTable/index.tsx:219
 #: src/components/modals/ManageOrderModal/index.tsx:159
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:13
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:157
@@ -3390,9 +3420,17 @@ msgstr "購入者は、チェックアウト時にこの商品を選択する際
 msgid "Buyers can move to a free seat in the same band from their ticket page until the event starts."
 msgstr "購入者は、イベント開始まで、チケットページから同じバンド内の空席に変更できます。"
 
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:233
+msgid "Buyers can send a payment link to whoever is paying, such as their finance team. The person paying can use any payment method you accept."
+msgstr "購入者は、経理部門など支払いをする人に支払いリンクを送れます。支払う人は、受け付けている任意の支払い方法を使えます。"
+
 #: src/ee/seating/components/routes/event/Seating/BandProductsCard.tsx:87
 msgid "Buyers choosing a seat in a band can buy any ticket linked to it. Linked tickets are sold by seat, so their own quantity is ignored."
 msgstr "バンド内の座席を選んだ購入者は、そのバンドに紐付けられたどのチケットでも購入できます。紐付けられたチケットは座席単位で販売されるため、チケット自体の数量は無視されます。"
+
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:154
+msgid "Buyers get their tickets straight away, marked as unpaid. Mark each order as paid once the money arrives. Unpaid orders aren't counted in your sales figures until then."
+msgstr "購入者は未払いと表示されたチケットをすぐに受け取ります。入金を確認したら各注文を支払い済みにしてください。それまで未払いの注文は売上に含まれません。"
 
 #: src/components/common/PlatformFeesSettings/index.tsx:238
 msgid "Buyers see a clean price. The platform fee is deducted from your payout."
@@ -3411,8 +3449,8 @@ msgstr "続行すると、当社の<0>利用規約</0>および<1>プライバ�
 msgid "By continuing you agree to the <0>Terms of Service</0> and <1>Privacy Policy</1>."
 msgstr "続行すると、<0>利用規約</0>および<1>プライバシーポリシー</1>に同意したものとみなされます。"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:758
-#: src/components/routes/product-widget/Payment/index.tsx:157
+#: src/components/routes/product-widget/CollectInformation/index.tsx:764
+#: src/components/routes/product-widget/Payment/index.tsx:192
 msgid "By continuing, you agree to the <0>{0} Terms of Service</0>"
 msgstr "続行すると、<0>{0}利用規約</0>に同意したことになります"
 
@@ -3531,7 +3569,7 @@ msgstr "認証アプリまたはリカバリーコードを使用できません
 #: src/components/modals/InviteUserModal/index.tsx:69
 #: src/components/modals/LocationEditModal/index.tsx:162
 #: src/components/modals/ManageAttendeeModal/index.tsx:208
-#: src/components/modals/ManageOrderModal/index.tsx:241
+#: src/components/modals/ManageOrderModal/index.tsx:260
 #: src/components/modals/PublishEventModal/index.tsx:212
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:80
 #: src/components/routes/admin/Accounts/AccountDetail/SuspendAccountModal.tsx:65
@@ -3554,6 +3592,7 @@ msgstr "認証アプリまたはリカバリーコードを使用できません
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:69
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:85
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:85
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:223
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:198
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:300
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:59
@@ -3638,7 +3677,7 @@ msgstr "キャンセルすると、この注文に関連するすべての参加
 #: src/components/common/AttendeeStatusBadge/index.tsx:28
 #: src/components/common/AttendeeTable/index.tsx:286
 #: src/components/common/AttendeeTicket/index.tsx:92
-#: src/components/common/OrdersTable/index.tsx:368
+#: src/components/common/OrdersTable/index.tsx:378
 #: src/components/common/OrderStatusBadge/index.tsx:9
 #: src/components/common/WaitlistTable/index.tsx:29
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:114
@@ -3655,7 +3694,7 @@ msgstr "キャンセルすると、この注文に関連するすべての参加
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:21
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:120
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:433
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:106
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:114
 msgid "Cancelled"
 msgstr "キャンセル済み"
 
@@ -3958,7 +3997,7 @@ msgstr "チェックアウト"
 msgid "Check out this event: {0}"
 msgstr "このイベントをチェック：{0}"
 
-#: src/components/layouts/Checkout/index.tsx:376
+#: src/components/layouts/Checkout/index.tsx:428
 msgid "Check out this event!"
 msgstr "このイベントをチェックしてみてください！"
 
@@ -4073,6 +4112,10 @@ msgstr "チェックインの進捗"
 msgid "Check-in Rate"
 msgstr "チェックイン率"
 
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:222
+msgid "Check-in staff are told the order is unpaid and can mark it as paid at the door. When this is off, guests from unpaid orders can't be checked in."
+msgstr "チェックイン担当者には注文が未払いであることが表示され、入口で支払い済みにできます。オフの場合、未払い注文のゲストはチェックインできません。"
+
 #: src/components/common/AttendeeTable/index.tsx:298
 #: src/components/common/CheckInStatusModal/index.tsx:36
 #: src/components/common/CheckInStatusModal/index.tsx:140
@@ -4137,7 +4180,7 @@ msgstr "確認中…"
 msgid "Checkout"
 msgstr "チェックアウト"
 
-#: src/components/layouts/Checkout/index.tsx:348
+#: src/components/layouts/Checkout/index.tsx:382
 msgid "Checkout · step {stepNumber} of {stepCount}"
 msgstr "チェックアウト · ステップ{stepNumber}/{stepCount}"
 
@@ -4347,8 +4390,8 @@ msgstr "円形"
 #: src/components/common/CheckoutQuestion/index.tsx:162
 #: src/components/common/LocationPicker/index.tsx:249
 #: src/components/modals/LocationEditModal/index.tsx:148
-#: src/components/routes/product-widget/CollectInformation/index.tsx:575
-#: src/components/routes/product-widget/CollectInformation/index.tsx:576
+#: src/components/routes/product-widget/CollectInformation/index.tsx:581
+#: src/components/routes/product-widget/CollectInformation/index.tsx:582
 msgid "City"
 msgstr "市区町村"
 
@@ -4619,12 +4662,12 @@ msgstr "付き添い席は、車椅子スペースと一緒にのみ予約でき
 msgid "complete"
 msgstr "完了"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:754
+#: src/components/routes/product-widget/CollectInformation/index.tsx:760
 msgid "Complete Order"
 msgstr "注文を完了"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:371
-#: src/components/routes/product-widget/Payment/index.tsx:153
+#: src/components/routes/product-widget/CollectInformation/index.tsx:377
+#: src/components/routes/product-widget/Payment/index.tsx:182
 msgid "Complete Payment"
 msgstr "お支払いを完了"
 
@@ -4638,15 +4681,15 @@ msgstr "販売を完了"
 msgid "Complete Stripe setup"
 msgstr "Stripeのセットアップを完了"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:451
+#: src/components/routes/product-widget/CollectInformation/index.tsx:457
 msgid "Complete your order to secure your tickets. This offer is time-limited, so don't wait too long."
 msgstr "注文を完了してチケットを確保してください。このオファーは期間限定のため、お早めにお手続きください。"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:369
+#: src/components/routes/product-widget/CollectInformation/index.tsx:375
 msgid "Complete your payment to secure your tickets."
 msgstr "お支払いを完了してチケットを確保してください。"
 
-#: src/components/common/OrdersTable/index.tsx:350
+#: src/components/common/OrdersTable/index.tsx:354
 #: src/components/common/OrderStatusBadge/index.tsx:8
 #: src/components/modals/SendMessageModal/index.tsx:435
 #: src/components/routes/admin/DeletionRequests/index.tsx:86
@@ -4744,10 +4787,10 @@ msgstr "確認"
 msgid "Confirm comp"
 msgstr "招待を確定"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:499
-#: src/components/routes/product-widget/CollectInformation/index.tsx:500
-#: src/components/routes/product-widget/CollectInformation/index.tsx:712
-#: src/components/routes/product-widget/CollectInformation/index.tsx:713
+#: src/components/routes/product-widget/CollectInformation/index.tsx:505
+#: src/components/routes/product-widget/CollectInformation/index.tsx:506
+#: src/components/routes/product-widget/CollectInformation/index.tsx:718
+#: src/components/routes/product-widget/CollectInformation/index.tsx:719
 msgid "Confirm Email Address"
 msgstr "メールアドレスを確認"
 
@@ -4805,7 +4848,7 @@ msgstr "確認コード"
 msgid "Confirmation email sent! Please check your inbox."
 msgstr "確認メールを送信しました！受信トレイをご確認ください。"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:214
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:243
 msgid "Confirmation sent to"
 msgstr "確認メールの送信先："
 
@@ -4998,7 +5041,7 @@ msgstr "次のステップに進む"
 msgid "Continue to payment"
 msgstr "お支払いに進む"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:754
+#: src/components/routes/product-widget/CollectInformation/index.tsx:760
 msgid "Continue to Payment"
 msgstr "お支払いに進む"
 
@@ -5042,14 +5085,16 @@ msgstr "Cookie設定"
 
 #: src/components/common/AttendeeTicket/index.tsx:192
 #: src/components/common/CopyButton/index.tsx:14
+#: src/components/common/OfflinePaymentDetails/index.tsx:31
 #: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:84
 #: src/components/common/WidgetEditor/index.tsx:221
 #: src/components/common/WidgetEditor/InstallPanel.tsx:52
 #: src/components/modals/CheckInListSuccessModal/index.tsx:42
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:75
-#: src/components/modals/ManageOrderModal/index.tsx:208
+#: src/components/modals/ManageOrderModal/index.tsx:227
 #: src/components/modals/ShareModal/index.tsx:255
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:364
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:70
 #: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:20
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:188
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:51
@@ -5057,7 +5102,7 @@ msgstr "Cookie設定"
 msgid "Copied"
 msgstr "コピーしました"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:674
+#: src/components/routes/product-widget/CollectInformation/index.tsx:680
 msgid "Copied from above"
 msgstr "上からコピーしました"
 
@@ -5079,10 +5124,11 @@ msgid "Copies step-by-step instructions to paste into ChatGPT, Claude, Cursor or
 msgstr "ChatGPT、Claude、Cursor、またはサイトビルダーのAIアシスタントに貼り付けるための手順をコピーします"
 
 #: src/components/common/CopyButton/index.tsx:14
+#: src/components/common/OfflinePaymentDetails/index.tsx:31
 #: src/components/modals/CheckInListSuccessModal/index.tsx:42
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:75
-#: src/components/modals/ManageOrderModal/index.tsx:208
-#: src/components/modals/ManageOrderModal/index.tsx:214
+#: src/components/modals/ManageOrderModal/index.tsx:227
+#: src/components/modals/ManageOrderModal/index.tsx:233
 #: src/components/modals/ShareModal/index.tsx:255
 #: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:20
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:51
@@ -5101,6 +5147,10 @@ msgstr "アフィリエイトリンクをコピー"
 #: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:84
 msgid "Copy all"
 msgstr "すべてコピー"
+
+#: src/components/common/OfflinePaymentDetails/index.tsx:50
+msgid "Copy amount due"
+msgstr "お支払い金額をコピー"
 
 #: src/ee/box-office/components/routes/event/BoxOffices/index.tsx:89
 #: src/ee/box-office/components/routes/event/BoxOffices/index.tsx:94
@@ -5137,12 +5187,12 @@ msgstr "コマンドをコピー"
 msgid "Copy customer link"
 msgstr "お客様向けリンクをコピー"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:519
+#: src/components/routes/product-widget/CollectInformation/index.tsx:525
 msgid "Copy details to first attendee"
 msgstr "詳細を最初の参加者にコピー"
 
 #: src/components/common/AttendeeTable/index.tsx:174
-#: src/components/common/OrdersTable/index.tsx:177
+#: src/components/common/OrdersTable/index.tsx:178
 msgid "Copy Email"
 msgstr "メールアドレスをコピー"
 
@@ -5156,6 +5206,7 @@ msgstr "キーをコピー"
 
 #: src/components/common/SsoButtons/index.tsx:54
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:67
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:70
 msgid "Copy link"
 msgstr "リンクをコピー"
 
@@ -5164,9 +5215,13 @@ msgstr "リンクをコピー"
 msgid "Copy Link"
 msgstr "リンクをコピー"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:529
+#: src/components/routes/product-widget/CollectInformation/index.tsx:535
 msgid "Copy my details to:"
 msgstr "自分の情報をコピー："
+
+#: src/components/common/OfflinePaymentDetails/index.tsx:59
+msgid "Copy payment reference"
+msgstr "支払い参照番号をコピー"
 
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:66
 msgid "Copy PIN"
@@ -5364,7 +5419,7 @@ msgstr "確認メールを送信できませんでした。もう一度お試し
 #: src/components/common/CheckoutQuestion/index.tsx:174
 #: src/components/common/LocationPicker/index.tsx:268
 #: src/components/modals/LocationEditModal/index.tsx:157
-#: src/components/routes/product-widget/CollectInformation/index.tsx:595
+#: src/components/routes/product-widget/CollectInformation/index.tsx:601
 msgid "Country"
 msgstr "国"
 
@@ -5599,6 +5654,10 @@ msgstr "主催者を作成"
 msgid "Create Organizer"
 msgstr "主催者を作成"
 
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:230
+msgid "Create payment link"
+msgstr "支払いリンクを作成"
+
 #: src/components/modals/CreateProductModal/index.tsx:91
 msgid "Create Product"
 msgstr "商品を作成"
@@ -5674,6 +5733,10 @@ msgstr "自分のイベントを作成"
 #: src/components/routes/settings/ApiKeys/index.tsx:174
 msgid "Created"
 msgstr "作成済み"
+
+#: src/components/modals/ManageOrderModal/index.tsx:197
+msgid "Created {0}"
+msgstr "作成日 {0}"
 
 #: src/components/routes/event/OccurrencesTab/index.tsx:603
 msgid "Creating {0} dates. This may take a moment."
@@ -5791,7 +5854,7 @@ msgid "Custom template"
 msgstr "カスタムテンプレート"
 
 #: src/components/common/AdminOrdersTable/index.tsx:71
-#: src/components/common/OrdersTable/index.tsx:116
+#: src/components/common/OrdersTable/index.tsx:117
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:169
 msgid "Customer"
 msgstr "お客様"
@@ -6393,10 +6456,10 @@ msgstr "デスクトップ"
 #: src/components/modals/EditUserModal/index.tsx:85
 #: src/components/modals/InviteUserModal/index.tsx:52
 #: src/components/modals/ManageAttendeeModal/index.tsx:266
-#: src/components/modals/ManageOrderModal/index.tsx:300
+#: src/components/modals/ManageOrderModal/index.tsx:319
 #: src/components/routes/event/OccurrencesTab/BookingSummary/index.tsx:103
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:417
-#: src/components/routes/product-widget/CollectInformation/index.tsx:435
+#: src/components/routes/product-widget/CollectInformation/index.tsx:441
 #: src/components/routes/product-widget/SelectProducts/index.tsx:578
 msgid "Details"
 msgstr "詳細"
@@ -6545,7 +6608,7 @@ msgstr "チケットウィジェットに、各日付の残り枠数を表示し
 msgid "Display name"
 msgstr "表示名"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:223
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:282
 msgid "Document Label"
 msgstr "ドキュメントラベル"
 
@@ -6585,6 +6648,8 @@ msgstr "寄付"
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:73
 #: src/components/modals/CreateWebhookModal/index.tsx:73
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:123
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:122
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:200
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:207
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:50
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:81
@@ -6627,7 +6692,7 @@ msgstr "CSVをダウンロード"
 msgid "Download invoice"
 msgstr "請求書をダウンロード"
 
-#: src/components/layouts/Checkout/index.tsx:396
+#: src/components/layouts/Checkout/index.tsx:450
 msgid "Download Invoice"
 msgstr "請求書をダウンロード"
 
@@ -6643,7 +6708,7 @@ msgstr "完了したすべての注文の売上レポート、参加者レポー
 msgid "Download spreadsheet (.xlsx)"
 msgstr "スプレッドシートをダウンロード (.xlsx)"
 
-#: src/components/layouts/Checkout/index.tsx:206
+#: src/components/layouts/Checkout/index.tsx:240
 #: src/hooks/useOrderActions.tsx:80
 msgid "Downloading Invoice"
 msgstr "請求書をダウンロード中"
@@ -6814,6 +6879,10 @@ msgstr "例：新機能：キャンセル待ち"
 msgid "e.g. Opening remarks, Lunch, Doors open"
 msgstr "例：開会の挨拶、ランチ、開場"
 
+#: src/components/routes/product-widget/OrderSummaryAndProducts/ReportOfflinePayment/index.tsx:58
+msgid "e.g. Paid by Acme Ltd, PO 4471"
+msgstr "例: Acme株式会社が支払い、発注番号 4471"
+
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:139
 msgid "e.g. Sam"
 msgstr "例：太郎"
@@ -6880,7 +6949,7 @@ msgstr "早割"
 #: src/components/common/QuestionsTable/index.tsx:150
 #: src/components/routes/admin/Announcements/index.tsx:211
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:57
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:253
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:282
 #: src/components/routes/settings/TaxesAndFees/index.tsx:68
 #: src/components/routes/settings/Team/MemberRow.tsx:177
 #: src/ee/box-office/components/layouts/BoxOffice/CartPanel.tsx:147
@@ -6921,7 +6990,7 @@ msgstr "お知らせを編集"
 msgid "Edit Answer"
 msgstr "回答を編集"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:137
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:145
 msgid "Edit Attendee"
 msgstr "参加者を編集"
 
@@ -7113,7 +7182,7 @@ msgstr "対象のチェックインリスト"
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:99
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:70
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:270
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:299
 #: src/components/routes/settings/Profile/index.tsx:215
 #: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:74
 #: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:127
@@ -7134,19 +7203,19 @@ msgstr "メールとテンプレート"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:228
 #: src/components/modals/ManageAttendeeModal/index.tsx:232
-#: src/components/modals/ManageOrderModal/index.tsx:274
+#: src/components/modals/ManageOrderModal/index.tsx:293
 msgid "Email address"
 msgstr "メールアドレス"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:490
-#: src/components/routes/product-widget/CollectInformation/index.tsx:491
-#: src/components/routes/product-widget/CollectInformation/index.tsx:702
-#: src/components/routes/product-widget/CollectInformation/index.tsx:703
+#: src/components/routes/product-widget/CollectInformation/index.tsx:496
+#: src/components/routes/product-widget/CollectInformation/index.tsx:497
+#: src/components/routes/product-widget/CollectInformation/index.tsx:708
+#: src/components/routes/product-widget/CollectInformation/index.tsx:709
 msgid "Email Address"
 msgstr "メールアドレス"
 
 #: src/components/common/AttendeeTable/index.tsx:89
-#: src/components/common/OrdersTable/index.tsx:73
+#: src/components/common/OrdersTable/index.tsx:74
 msgid "Email address copied to clipboard"
 msgstr "メールアドレスをクリップボードにコピーしました"
 
@@ -7191,6 +7260,10 @@ msgstr "メールのフッターメッセージ"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:34
 msgid "Email is required"
 msgstr "メールアドレスは必須です"
+
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:80
+msgid "Email it"
+msgstr "メールで送信"
 
 #: src/components/routes/settings/Security/SignInMethods.tsx:114
 msgid "Email me a link to set a password"
@@ -7288,7 +7361,7 @@ msgstr "参加者のセルフサービスを有効にする"
 msgid "Enable attendee self-service by default"
 msgstr "参加者のセルフサービスをデフォルトで有効にする"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:214
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:273
 msgid "Enable Invoicing"
 msgstr "請求書発行を有効にする"
 
@@ -7574,7 +7647,7 @@ msgid "Entries will appear here when customers join the waitlist for sold out pr
 msgstr "完売した商品にお客様がキャンセル待ち登録をすると、ここにエントリーが表示されます。"
 
 #: src/components/common/OrganizerWebhookTable/index.tsx:155
-#: src/components/layouts/Checkout/index.tsx:214
+#: src/components/layouts/Checkout/index.tsx:248
 #: src/hooks/useOrderActions.tsx:88
 msgid "Error"
 msgstr "エラー"
@@ -7680,7 +7753,7 @@ msgstr "イベントダッシュボード"
 #: src/components/routes/event/TicketDesigner/index.tsx:165
 #: src/components/routes/my-tickets/index.tsx:79
 #: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:29
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:337
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:366
 msgid "Event Date"
 msgstr "イベント日"
 
@@ -7707,7 +7780,7 @@ msgstr "イベントを削除しました"
 
 #: src/components/routes/event/Settings/index.tsx:52
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:72
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:641
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:702
 msgid "Event Details"
 msgstr "イベントの詳細"
 
@@ -8112,7 +8185,7 @@ msgstr "失敗したジョブ"
 msgid "Failed Jobs"
 msgstr "失敗したジョブ"
 
-#: src/components/layouts/Checkout/index.tsx:229
+#: src/components/layouts/Checkout/index.tsx:263
 msgid "Failed to abandon order. Please try again."
 msgstr "注文の中止に失敗しました。もう一度お試しください。"
 
@@ -8241,7 +8314,7 @@ msgstr "質問の削除に失敗しました"
 msgid "Failed to delete template"
 msgstr "テンプレートの削除に失敗しました"
 
-#: src/components/layouts/Checkout/index.tsx:215
+#: src/components/layouts/Checkout/index.tsx:249
 #: src/hooks/useOrderActions.tsx:89
 msgid "Failed to download invoice. Please try again."
 msgstr "請求書のダウンロードに失敗しました。もう一度お試しください。"
@@ -8314,11 +8387,11 @@ msgstr "日付の再開に失敗しました"
 msgid "Failed to reorder questions"
 msgstr "質問の並び替えに失敗しました"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:564
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:609
 msgid "Failed to resend order confirmation"
 msgstr "注文確認メールの再送信に失敗しました"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:540
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:585
 msgid "Failed to resend ticket"
 msgstr "チケットの再送信に失敗しました"
 
@@ -8403,7 +8476,7 @@ msgstr "アフィリエイトの更新に失敗しました"
 msgid "Failed to update answer."
 msgstr "回答の更新に失敗しました。"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:480
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:525
 msgid "Failed to update attendee"
 msgstr "参加者の更新に失敗しました"
 
@@ -8427,7 +8500,7 @@ msgstr "フィーチャーフラグの更新に失敗しました"
 msgid "Failed to update messaging tier"
 msgstr "メッセージ送信ティアの更新に失敗しました"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:515
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:560
 msgid "Failed to update order"
 msgstr "注文の更新に失敗しました"
 
@@ -8522,7 +8595,7 @@ msgid "Fee updated"
 msgstr "手数料を更新しました"
 
 #: src/components/common/InlineOrderSummary/index.tsx:164
-#: src/components/common/OrdersTable/index.tsx:291
+#: src/components/common/OrdersTable/index.tsx:292
 #: src/components/forms/ProductForm/index.tsx:497
 #: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:54
 #: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:88
@@ -8552,8 +8625,8 @@ msgstr "席数を減らす"
 msgid "File is too large. Maximum size is 5MB."
 msgstr "ファイルが大きすぎます。最大サイズは5MBです。"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:511
-#: src/components/routes/product-widget/CollectInformation/index.tsx:531
+#: src/components/routes/product-widget/CollectInformation/index.tsx:517
+#: src/components/routes/product-widget/CollectInformation/index.tsx:537
 msgid "Fill in your details above first"
 msgstr "先に上記のご自身の情報を入力してください"
 
@@ -8647,7 +8720,7 @@ msgstr "最初の7日間"
 msgid "First 90 days"
 msgstr "最初の90日間"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:542
+#: src/components/routes/product-widget/CollectInformation/index.tsx:548
 msgid "First attendee"
 msgstr "最初の参加者"
 
@@ -8655,15 +8728,15 @@ msgstr "最初の参加者"
 msgid "First day of the week"
 msgstr "週の始まり"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:239
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:298
 msgid "First Invoice Number"
 msgstr "最初の請求書番号"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:214
 #: src/components/modals/ManageAttendeeModal/index.tsx:226
-#: src/components/modals/ManageOrderModal/index.tsx:261
-#: src/components/routes/product-widget/CollectInformation/index.tsx:473
-#: src/components/routes/product-widget/CollectInformation/index.tsx:685
+#: src/components/modals/ManageOrderModal/index.tsx:280
+#: src/components/routes/product-widget/CollectInformation/index.tsx:479
+#: src/components/routes/product-widget/CollectInformation/index.tsx:691
 #: src/components/routes/settings/Profile/index.tsx:199
 #: src/components/routes/settings/Profile/index.tsx:200
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:182
@@ -8677,8 +8750,8 @@ msgstr "名"
 #: src/components/modals/JoinWaitlistModal/index.tsx:180
 #: src/components/routes/auth/AcceptInvitation/index.tsx:226
 #: src/components/routes/auth/Register/index.tsx:139
-#: src/components/routes/product-widget/CollectInformation/index.tsx:472
-#: src/components/routes/product-widget/CollectInformation/index.tsx:684
+#: src/components/routes/product-widget/CollectInformation/index.tsx:478
+#: src/components/routes/product-widget/CollectInformation/index.tsx:690
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:55
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:55
 msgid "First Name"
@@ -9085,7 +9158,7 @@ msgstr "戻る"
 msgid "Go back to profile"
 msgstr "プロフィールに戻る"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:408
+#: src/components/routes/product-widget/CollectInformation/index.tsx:414
 msgid "Go to Event Page"
 msgstr "イベントページへ"
 
@@ -9190,7 +9263,7 @@ msgstr "ゲスト"
 msgid "Guest Management"
 msgstr "ゲスト管理"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:652
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:713
 msgid "Guests"
 msgstr "ゲスト"
 
@@ -9499,6 +9572,10 @@ msgstr "{0}席を保留にする"
 msgid "Hold back {0} seats on {dateCount} dates"
 msgstr "{dateCount}件の日付で{0}席を保留にする"
 
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:241
+msgid "Hold places for"
+msgstr "席を確保する時間"
+
 #: src/components/routes/event/HomepageDesigner/index.tsx:142
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:126
 msgid "Homepage Design"
@@ -9510,13 +9587,17 @@ msgid "Homepage Designer"
 msgstr "ホームページデザイナー"
 
 #: src/components/modals/ManageAttendeeModal/index.tsx:227
-#: src/components/modals/ManageOrderModal/index.tsx:262
+#: src/components/modals/ManageOrderModal/index.tsx:281
 msgid "Homer"
 msgstr "Homer"
 
 #: src/utilites/lineup.ts:34
 msgid "Hosts"
 msgstr "ホスト"
+
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:243
+msgid "hours"
+msgstr "時間"
 
 #: src/components/common/DateTimeField/index.tsx:85
 #: src/components/modals/CreateEventModal/DateTimeChip.tsx:94
@@ -9538,6 +9619,10 @@ msgstr "客席マップ"
 msgid "House right"
 msgstr "客席右"
 
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:158
+msgid "How buyers pay"
+msgstr "購入者の支払い方法"
+
 #: src/components/common/CapacityHelp/index.tsx:110
 #: src/components/common/CapacityHelp/index.tsx:165
 msgid "How capacity works"
@@ -9550,6 +9635,10 @@ msgstr "割引はどのように適用されますか？"
 #: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:71
 msgid "How long a customer has to complete their purchase after receiving an offer. Leave empty for no timeout."
 msgstr "オファーを受け取ったお客様が購入を完了するまでの時間。空欄の場合は制限なしです。"
+
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:242
+msgid "How long places stay reserved while waiting for payment through a link. Holds never run past the start of the event."
+msgstr "リンクでの支払いを待つ間、席を確保しておく時間。確保はイベント開始時刻を過ぎることはありません。"
 
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:122
 msgid "How many minutes the customer has to complete their order. We recommend at least 15 minutes"
@@ -9567,6 +9656,14 @@ msgstr "このコードは何回使用できますか？"
 #: src/ee/seating/components/SeatPicker/SeatSheet.tsx:72
 msgid "How many?"
 msgstr "何件ですか？"
+
+#: src/components/routes/product-widget/Payment/PaymentMethods/Offline/index.tsx:7
+msgid "How paying later works"
+msgstr "後払いの流れ"
+
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:459
+msgid "How to pay"
+msgstr "お支払い方法"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:449
 msgid "How VAT is applied to the platform fees we charge you."
@@ -9624,6 +9721,10 @@ msgstr "リカバリーコードを安全な場所に保存しました"
 msgid "I've added it, continue"
 msgstr "追加しました。続行"
 
+#: src/components/routes/product-widget/OrderSummaryAndProducts/ReportOfflinePayment/index.tsx:70
+msgid "I've made the payment"
+msgstr "支払いを完了しました"
+
 #: src/components/routes/settings/ApiKeys/index.tsx:224
 msgid "If a key leaks, revoke it straight away and create a new one."
 msgstr "キーが漏洩した場合は、すぐに無効化して新しいキーを作成してください。"
@@ -9639,10 +9740,6 @@ msgstr "空欄の場合、住所からGoogleマップのリンクが生成され
 #: src/components/forms/ProductCategoryForm/index.tsx:38
 msgid "If checked, this category will be hidden from the public."
 msgstr "チェックすると、このカテゴリーは一般には非表示になります。"
-
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:191
-msgid "If enabled, check-in staff can either mark attendees as checked in or mark the order as paid and check in the attendees. If disabled, attendees associated with unpaid orders cannot be checked in."
-msgstr "有効にすると、チェックインスタッフは、参加者をチェックイン済みにするか、注文を支払い済みにして参加者をチェックインできます。無効にすると、未払いの注文に紐付く参加者はチェックインできません。"
 
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:77
 msgid "If enabled, the organizer will receive an email notification when a new order is placed"
@@ -9815,6 +9912,10 @@ msgstr "オンラインイベントの接続情報を含めます。この情報
 msgid "Include tax and fees in the price"
 msgstr "税金と手数料を価格に含める"
 
+#: src/components/common/OfflinePaymentDetails/index.tsx:64
+msgid "Include this reference with your payment so the organizer can match it to your order."
+msgstr "主催者が注文と照合できるよう、お支払いの際にこの参照番号を記載してください。"
+
 #: src/components/routes/settings/Billing/index.tsx:143
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:108
 msgid "Included"
@@ -9886,6 +9987,11 @@ msgstr "Instagram"
 #: src/components/layouts/AuthLayout/AuthShell.tsx:13
 msgid "Instant Stripe payouts"
 msgstr "Stripeによる即時入金"
+
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:165
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:180
+msgid "Instructions"
+msgstr "案内"
 
 #: src/components/layouts/Event/index.tsx:163
 #: src/components/layouts/OrganizerLayout/index.tsx:130
@@ -9963,24 +10069,24 @@ msgstr "チームを招待"
 msgid "Invited"
 msgstr "招待済み"
 
-#: src/components/common/OrdersTable/index.tsx:233
+#: src/components/common/OrdersTable/index.tsx:234
 msgid "Invoice"
 msgstr "請求書"
 
-#: src/components/layouts/Checkout/index.tsx:211
+#: src/components/layouts/Checkout/index.tsx:245
 #: src/hooks/useOrderActions.tsx:85
 msgid "Invoice downloaded successfully"
 msgstr "請求書をダウンロードしました"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:285
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:344
 msgid "Invoice Notes"
 msgstr "請求書メモ"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:230
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:289
 msgid "Invoice Numbering"
 msgstr "請求書番号"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:210
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:269
 msgid "Invoice Settings"
 msgstr "請求書設定"
 
@@ -10013,19 +10119,23 @@ msgstr "非公開になったか、削除された可能性があります。リ
 msgid "It's connected to another user. Use a different {providerName} account."
 msgstr "別のユーザーに接続されています。別の {providerName} アカウントを使用してください。"
 
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:194
+msgid "It's shown above your instructions so you can match every payment to its order. Turn this off if you give buyers your own reference, or if none applies, such as cash at the door."
+msgstr "案内の上に表示されるので、各入金を注文と照合できます。独自の参照番号を伝える場合や、入口での現金払いなど参照番号が不要な場合はオフにしてください。"
+
 #: src/locales.ts:62
 msgid "Italian"
 msgstr "イタリア語"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:664
+#: src/components/routes/product-widget/CollectInformation/index.tsx:670
 msgid "Item"
 msgstr "項目"
 
-#: src/components/common/OrdersTable/index.tsx:272
+#: src/components/common/OrdersTable/index.tsx:273
 msgid "item(s)"
 msgstr "件"
 
-#: src/components/common/OrdersTable/index.tsx:254
+#: src/components/common/OrdersTable/index.tsx:255
 #: src/components/modals/ManageOrderModal/index.tsx:121
 msgid "Items"
 msgstr "項目"
@@ -10127,7 +10237,7 @@ msgstr "編集を続ける"
 msgid "Keep it short — banners show a single line. {0}/200"
 msgstr "短くしてください — バナーは1行で表示されます。{0}/200"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:608
+#: src/components/routes/product-widget/CollectInformation/index.tsx:614
 msgid "Keep me updated on news and events from {0}"
 msgstr "{0}のニュースやイベント情報を受け取る"
 
@@ -10272,7 +10382,7 @@ msgstr "最終アクティブ"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:221
 #: src/components/modals/ManageAttendeeModal/index.tsx:228
-#: src/components/modals/ManageOrderModal/index.tsx:267
+#: src/components/modals/ManageOrderModal/index.tsx:286
 #: src/components/routes/settings/Profile/index.tsx:206
 #: src/components/routes/settings/Profile/index.tsx:207
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:189
@@ -10286,10 +10396,10 @@ msgstr "姓"
 #: src/components/modals/JoinWaitlistModal/index.tsx:185
 #: src/components/routes/auth/AcceptInvitation/index.tsx:232
 #: src/components/routes/auth/Register/index.tsx:145
-#: src/components/routes/product-widget/CollectInformation/index.tsx:479
-#: src/components/routes/product-widget/CollectInformation/index.tsx:480
-#: src/components/routes/product-widget/CollectInformation/index.tsx:691
-#: src/components/routes/product-widget/CollectInformation/index.tsx:692
+#: src/components/routes/product-widget/CollectInformation/index.tsx:485
+#: src/components/routes/product-widget/CollectInformation/index.tsx:486
+#: src/components/routes/product-widget/CollectInformation/index.tsx:697
+#: src/components/routes/product-widget/CollectInformation/index.tsx:698
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:62
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:62
 msgid "Last Name"
@@ -10351,7 +10461,7 @@ msgstr "離れる"
 msgid "Leave “from” as today to start right away."
 msgstr "すぐに開始する場合は、「開始」を今日のままにしてください。"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:224
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:283
 msgid "Leave blank to use the default word \"Invoice\""
 msgstr "空欄の場合は、デフォルトの\"請求書\"という語が使用されます"
 
@@ -10416,6 +10526,18 @@ msgstr "長さ"
 #: src/ee/seating/components/routes/event/Seating/SeatingRulesCard.tsx:46
 msgid "Let buyers change their seat after booking"
 msgstr "購入後に座席を変更できるようにする"
+
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:215
+msgid "Let buyers tell you when they have paid"
+msgstr "購入者が支払い完了を知らせられるようにする"
+
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:221
+msgid "Let guests from unpaid orders check in"
+msgstr "未払い注文のゲストのチェックインを許可"
+
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:232
+msgid "Let someone else pay for an order"
+msgstr "他の人に注文の支払いを任せる"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:307
 msgid "Let them know about the change"
@@ -10687,7 +10809,7 @@ msgstr "{service} からコンテンツを読み込みます"
 #: src/components/routes/event/Settings/index.tsx:64
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:150
 #: src/components/routes/my-tickets/index.tsx:90
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:350
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:379
 #: src/components/widget/WidgetSections/index.tsx:109
 #: src/utilites/homepageSections.ts:27
 msgid "Location"
@@ -10789,7 +10911,7 @@ msgstr "メイン写真"
 msgid "Make {tierName}"
 msgstr "{tierName}にする"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:203
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:262
 msgid "Make billing address mandatory during checkout"
 msgstr "チェックアウト時に請求先住所を必須にする"
 
@@ -10860,7 +10982,7 @@ msgstr "Stripeで管理"
 msgid "Manage order"
 msgstr "注文を管理"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:110
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:121
 msgid "Manage payment and invoicing settings for this event."
 msgstr "このイベントの支払いと請求書の設定を管理します。"
 
@@ -11009,7 +11131,7 @@ msgstr "確認済みドメインのメールアドレスを持つメンバーは
 
 #: src/components/common/AttendeeTable/index.tsx:164
 #: src/components/common/ContactOrganizerModal/index.tsx:91
-#: src/components/common/OrdersTable/index.tsx:167
+#: src/components/common/OrdersTable/index.tsx:168
 #: src/components/modals/SendMessageModal/index.tsx:455
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:63
 msgid "Message"
@@ -11359,7 +11481,7 @@ msgstr "マイチケット"
 #: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:71
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:81
 #: src/components/routes/organizer/People/index.tsx:119
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:248
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:277
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:226
 #: src/components/routes/settings/Profile/index.tsx:195
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:91
@@ -11560,12 +11682,16 @@ msgstr "次に、チケットを追加して、イベントページを設定し
 msgid "Next: {nextFormatted}"
 msgstr "次：{nextFormatted}"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:437
+#: src/components/routes/product-widget/Payment/index.tsx:119
+msgid "Next: how to pay"
+msgstr "次へ: お支払い方法"
+
+#: src/components/routes/product-widget/CollectInformation/index.tsx:443
 msgid "Next: payment"
 msgstr "次：お支払い"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:438
-#: src/components/routes/product-widget/Payment/index.tsx:98
+#: src/components/routes/product-widget/CollectInformation/index.tsx:444
+#: src/components/routes/product-widget/Payment/index.tsx:119
 msgid "Next: review your order"
 msgstr "次：注文内容の確認"
 
@@ -11783,7 +11909,7 @@ msgstr "メールなし"
 #: src/components/common/AdminOrdersTable/index.tsx:111
 #: src/components/common/AttendeeTable/index.tsx:134
 #: src/components/common/OrderDetails/index.tsx:39
-#: src/components/common/OrdersTable/index.tsx:137
+#: src/components/common/OrdersTable/index.tsx:138
 #: src/components/modals/ManageAttendeeModal/index.tsx:177
 #: src/components/modals/ManageOrderModal/index.tsx:144
 msgid "No email provided"
@@ -11861,11 +11987,11 @@ msgstr "イベントページ、主催者ページ、チェックアウト、埋
 msgid "No Hi.Events promotion in the emails your attendees receive"
 msgstr "参加者に届くメールにHi.Eventsの宣伝なし"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:184
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:186
 msgid "No instructions have been added yet."
 msgstr "案内はまだ追加されていません。"
 
-#: src/components/common/OrdersTable/index.tsx:238
+#: src/components/common/OrdersTable/index.tsx:239
 msgid "No invoice"
 msgstr "請求書なし"
 
@@ -11946,7 +12072,7 @@ msgstr "注文への質問はまだありません"
 msgid "No orders found"
 msgstr "注文が見つかりません"
 
-#: src/components/common/OrdersTable/index.tsx:404
+#: src/components/common/OrdersTable/index.tsx:414
 msgid "No orders to show"
 msgstr "表示する注文がありません"
 
@@ -11979,12 +12105,12 @@ msgstr "支払い済みの注文はありません"
 msgid "No past events"
 msgstr "過去のイベントはありません"
 
-#: src/components/routes/product-widget/Payment/index.tsx:89
+#: src/components/routes/product-widget/Payment/index.tsx:108
 msgid "No payment methods are currently available. Please contact the event organizer for assistance."
 msgstr "現在利用できる決済方法がありません。イベント主催者にお問い合わせください。"
 
-#: src/components/common/OrderStatusBadge/index.tsx:13
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:60
+#: src/components/common/OrderStatusBadge/index.tsx:14
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:68
 msgid "No Payment Required"
 msgstr "お支払いは不要です"
 
@@ -12179,7 +12305,7 @@ msgstr "このエンドポイントのWebhookイベントはまだ記録され�
 msgid "No Webhooks"
 msgstr "Webhookがありません"
 
-#: src/components/layouts/Checkout/index.tsx:471
+#: src/components/layouts/Checkout/index.tsx:533
 msgid "No, keep me here"
 msgstr "いいえ、このまま留まる"
 
@@ -12225,7 +12351,7 @@ msgstr "未編集"
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:108
 #: src/components/forms/ProductForm/ledgerSummaries.ts:92
 #: src/components/forms/ProductForm/ledgerSummaries.ts:132
-#: src/components/routes/product-widget/CollectInformation/index.tsx:541
+#: src/components/routes/product-widget/CollectInformation/index.tsx:547
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:50
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:293
 msgid "None"
@@ -12370,15 +12496,23 @@ msgstr "まだ販売開始前です"
 msgid "Not you?"
 msgstr "別のユーザーですか？"
 
+#: src/components/routes/product-widget/OrderSummaryAndProducts/ReportOfflinePayment/index.tsx:57
+msgid "Note for the organizer (optional)"
+msgstr "主催者へのメモ(任意)"
+
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:299
 msgid "Note shown to buyers"
 msgstr "購入者に表示されるメモ"
 
+#: src/components/modals/ManageOrderModal/index.tsx:189
+msgid "Note: {0}"
+msgstr "メモ: {0}"
+
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:238
 #: src/components/modals/ManageAttendeeModal/index.tsx:249
 #: src/components/modals/ManageAttendeeModal/index.tsx:271
-#: src/components/modals/ManageOrderModal/index.tsx:281
-#: src/components/modals/ManageOrderModal/index.tsx:311
+#: src/components/modals/ManageOrderModal/index.tsx:300
+#: src/components/modals/ManageOrderModal/index.tsx:330
 #: src/components/routes/event/Lineup/RunSheetPrint.tsx:141
 msgid "Notes"
 msgstr "メモ"
@@ -12431,7 +12565,7 @@ msgstr "開始番号"
 msgid "Number of dates to create"
 msgstr "作成する日付の数"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:250
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:309
 msgid "Number of days allowed for payment (leave blank to omit payment terms from invoices)"
 msgstr "支払い期限の日数（請求書に支払い条件を記載しない場合は空欄のままにしてください）"
 
@@ -12440,7 +12574,7 @@ msgstr "支払い期限の日数（請求書に支払い条件を記載しない
 msgid "Number of seats"
 msgstr "座席数"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:232
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:291
 msgid "Number Prefix"
 msgstr "番号のプレフィックス"
 
@@ -12538,10 +12672,9 @@ msgstr "オファー済み"
 msgid "Offers expire after {timeoutHours} hours."
 msgstr "オファーは{timeoutHours}時間後に失効します。"
 
-#: src/components/common/OrdersTable/index.tsx:327
+#: src/components/common/OrdersTable/index.tsx:328
 #: src/components/layouts/CheckIn/index.tsx:191
 #: src/components/layouts/CheckIn/index.tsx:193
-#: src/components/routes/product-widget/Payment/index.tsx:135
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:196
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:198
 #: src/ee/box-office/components/layouts/BoxOffice/ReaderPicker.tsx:16
@@ -12549,29 +12682,13 @@ msgstr "オファーは{timeoutHours}時間後に失効します。"
 msgid "Offline"
 msgstr "オフライン"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:156
-msgid "Offline orders are not reflected in event statistics until the order is marked as paid."
-msgstr "オフライン注文は、支払い済みにするまでイベント統計に反映されません。"
-
-#: src/components/routes/product-widget/Payment/index.tsx:79
+#: src/components/routes/product-widget/Payment/index.tsx:98
 msgid "Offline payment failed. Please try again or contact the event organizer."
 msgstr "オフライン決済に失敗しました。もう一度お試しいただくか、イベント主催者にお問い合わせください。"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:89
-msgid "Offline Payment Instructions"
-msgstr "オフライン決済の案内"
-
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:101
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:112
 msgid "Offline Payments"
 msgstr "オフライン決済"
-
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:150
-msgid "Offline Payments Information"
-msgstr "オフライン決済の情報"
-
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:145
-msgid "Offline Payments Settings"
-msgstr "オフライン決済の設定"
 
 #: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:187
 msgid "Okta domain"
@@ -12668,6 +12785,10 @@ msgstr "イベントを作成すると、ここに表示されます。"
 msgid "Once you start collecting data, you'll see it here."
 msgstr "データの収集を開始すると、ここに表示されます。"
 
+#: src/components/routes/product-widget/OrderSummaryAndProducts/ReportOfflinePayment/index.tsx:53
+msgid "Once you've sent the payment, let the organizer know so they can look out for it. Your order stays unpaid until they confirm it."
+msgstr "支払いを送金したら、主催者が確認できるように知らせてください。主催者が確認するまで、注文は未払いのままです。"
+
 #: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:25
 msgid "One column, top to bottom"
 msgstr "上から下への1カラム"
@@ -12698,7 +12819,6 @@ msgstr "開催中"
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:482
 #: src/components/routes/my-tickets/index.tsx:56
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:393
-#: src/components/routes/product-widget/Payment/index.tsx:127
 #: src/ee/box-office/components/layouts/BoxOffice/ReaderPicker.tsx:16
 #: src/ee/box-office/components/routes/organizer/Payments/TerminalReaders/index.tsx:37
 msgid "Online"
@@ -12774,7 +12894,7 @@ msgstr "チームのアクセス権を管理できるのは管理者のみです
 msgid "Only available as an add-on"
 msgstr "アドオンとしてのみ利用可能"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:179
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:181
 msgid "Only members who can manage payments can change these instructions."
 msgstr "この案内を変更できるのは、支払いを管理できるメンバーのみです。"
 
@@ -12937,7 +13057,7 @@ msgstr "オプション{i}"
 msgid "Optional"
 msgstr "任意"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:286
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:345
 msgid "Optional additional information to appear on all invoices (e.g., payment terms, late payment fees, return policy)"
 msgstr "すべての請求書に表示する任意の追加情報（例：支払い条件、延滞料、返品ポリシー）"
 
@@ -12949,7 +13069,7 @@ msgstr "任意の行動喚起"
 msgid "Optional nickname shown in pickers, e.g. \"HQ Conference Room\""
 msgstr "選択画面に表示される任意のニックネーム。例：\"本社会議室\""
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:233
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:292
 msgid "Optional prefix for invoice numbers (e.g., INV-)"
 msgstr "請求書番号の任意のプレフィックス（例：INV-）"
 
@@ -13033,8 +13153,8 @@ msgstr "注文および請求書の記録は、税務上の目的で匿名化さ
 msgid "Order answers"
 msgstr "注文への回答"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:388
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:391
+#: src/components/routes/product-widget/CollectInformation/index.tsx:394
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:420
 msgid "Order cancelled"
 msgstr "注文がキャンセルされました"
 
@@ -13042,9 +13162,9 @@ msgstr "注文がキャンセルされました"
 msgid "Order Cancelled"
 msgstr "注文がキャンセルされました"
 
-#: src/components/layouts/Checkout/index.tsx:342
-#: src/components/routes/product-widget/CollectInformation/index.tsx:378
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:401
+#: src/components/layouts/Checkout/index.tsx:376
+#: src/components/routes/product-widget/CollectInformation/index.tsx:384
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:430
 msgid "Order complete"
 msgstr "注文が完了しました"
 
@@ -13053,7 +13173,7 @@ msgstr "注文が完了しました"
 msgid "Order Confirmation"
 msgstr "注文確認"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:558
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:603
 msgid "Order confirmation resent successfully"
 msgstr "注文確認メールを再送信しました"
 
@@ -13061,7 +13181,7 @@ msgstr "注文確認メールを再送信しました"
 msgid "Order Created"
 msgstr "注文が作成されました"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:287
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:316
 msgid "Order Date"
 msgstr "注文日"
 
@@ -13069,8 +13189,8 @@ msgstr "注文日"
 msgid "Order details"
 msgstr "注文の詳細"
 
-#: src/components/common/OrdersTable/index.tsx:191
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:627
+#: src/components/common/OrdersTable/index.tsx:192
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:688
 msgid "Order Details"
 msgstr "注文の詳細"
 
@@ -13103,11 +13223,11 @@ msgstr "注文を支払い済みにしました"
 msgid "Order Marked as Paid"
 msgstr "注文を支払い済みにしました"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:403
+#: src/components/routes/product-widget/CollectInformation/index.tsx:409
 msgid "Order not found"
 msgstr "注文が見つかりません"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:575
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:620
 msgid "Order Not Found"
 msgstr "注文が見つかりません"
 
@@ -13127,6 +13247,10 @@ msgstr "特定の商品を持つ注文者"
 msgid "Order owners with products"
 msgstr "商品を持つ注文者"
 
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:199
+msgid "Order placed, payment pending"
+msgstr "注文完了、支払い待ち"
+
 #: src/components/modals/DuplicateEventModal/index.tsx:135
 msgid "Order questions only. Attendee questions need products."
 msgstr "注文の質問のみ。参加者の質問には商品が必要です。"
@@ -13135,7 +13259,7 @@ msgstr "注文の質問のみ。参加者の質問には商品が必要です。
 msgid "Order Ref"
 msgstr "注文参照"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:264
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:293
 msgid "Order Reference"
 msgstr "注文参照番号"
 
@@ -13152,7 +13276,7 @@ msgid "Order statuses"
 msgstr "注文ステータス"
 
 #: src/components/common/InlineOrderSummary/index.tsx:66
-#: src/components/modals/ManageOrderModal/index.tsx:305
+#: src/components/modals/ManageOrderModal/index.tsx:324
 msgid "Order Summary"
 msgstr "注文概要"
 
@@ -13172,11 +13296,11 @@ msgstr "注文合計"
 msgid "Order Updated"
 msgstr "注文が更新されました"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:497
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:542
 msgid "Order updated successfully"
 msgstr "注文を更新しました"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:358
+#: src/components/routes/product-widget/CollectInformation/index.tsx:364
 msgid "Order was cancelled"
 msgstr "注文はキャンセルされました"
 
@@ -13226,16 +13350,16 @@ msgstr "注文："
 msgid "Organic Accounts"
 msgstr "オーガニックアカウント"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:268
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:327
 msgid "Organization Address"
 msgstr "組織の住所"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:259
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:318
 msgid "Organization Details"
 msgstr "組織の詳細"
 
 #: src/components/forms/OrganizerForm/index.tsx:32
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:261
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:320
 msgid "Organization Name"
 msgstr "組織名"
 
@@ -13248,7 +13372,7 @@ msgstr "組織名"
 #: src/components/routes/admin/SpamEvents/index.tsx:166
 #: src/components/routes/admin/SpamEvents/index.tsx:327
 #: src/components/routes/events/Dashboard/index.tsx:198
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:369
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:398
 #: src/components/widget/WidgetSections/index.tsx:135
 #: src/utilites/homepageSections.ts:29
 msgid "Organizer"
@@ -13334,7 +13458,7 @@ msgstr "主催者（すべてのイベントを含む）"
 msgid "Organizers and events"
 msgstr "主催者とイベント"
 
-#: src/components/common/OrdersTable/index.tsx:332
+#: src/components/common/OrdersTable/index.tsx:333
 #: src/components/routes/admin/EmailDelivery/index.tsx:31
 #: src/constants/eventCategories.ts:31
 msgid "Other"
@@ -13488,13 +13612,13 @@ msgstr "一部返金"
 msgid "Partially refunded"
 msgstr "一部返金済み"
 
-#: src/components/common/OrderStatusBadge/index.tsx:16
+#: src/components/common/OrderStatusBadge/index.tsx:17
 #: src/components/routes/event/orders.tsx:38
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:75
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:83
 msgid "Partially Refunded"
 msgstr "一部返金済み"
 
-#: src/components/common/OrdersTable/index.tsx:296
+#: src/components/common/OrdersTable/index.tsx:297
 msgid "Partially refunded: {0}"
 msgstr "一部返金済み：{0}"
 
@@ -13613,9 +13737,33 @@ msgstr "patrick@acme.com"
 msgid "Paused"
 msgstr "一時停止中"
 
-#: src/components/routes/product-widget/Payment/index.tsx:151
+#: src/components/routes/product-widget/Payment/index.tsx:180
 msgid "Pay"
 msgstr "支払う"
+
+#: src/components/layouts/Checkout/index.tsx:392
+msgid "Pay by"
+msgstr "支払期限"
+
+#: src/components/layouts/Checkout/index.tsx:393
+msgid "Pay by {0}"
+msgstr "支払期限 {0}"
+
+#: src/components/routes/product-widget/Payment/index.tsx:118
+msgid "Pay for this order"
+msgstr "この注文を支払う"
+
+#: src/components/routes/product-widget/Payment/index.tsx:152
+msgid "Pay later"
+msgstr "後で支払う"
+
+#: src/components/routes/product-widget/Payment/index.tsx:144
+msgid "Pay now"
+msgstr "今すぐ支払う"
+
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:233
+msgid "Pay using the instructions below. {registrantName} has been emailed the order details, and the organizer will confirm the order once your payment arrives."
+msgstr "以下の手順に従って支払ってください。{registrantName}さんには注文の詳細がメールで送信されており、支払いが届き次第、主催者が注文を確定します。"
 
 #: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:212
 msgid "Pay what you want"
@@ -13626,9 +13774,9 @@ msgstr "任意の金額で支払い"
 msgid "Payload"
 msgstr "ペイロード"
 
-#: src/components/common/OrdersTable/index.tsx:307
+#: src/components/common/OrdersTable/index.tsx:308
 #: src/components/common/ProgressStepper/index.tsx:19
-#: src/components/routes/product-widget/Payment/index.tsx:98
+#: src/components/routes/product-widget/Payment/index.tsx:119
 msgid "Payment"
 msgstr "お支払い"
 
@@ -13636,15 +13784,23 @@ msgstr "お支払い"
 msgid "Payment & Invoicing"
 msgstr "お支払いと請求書"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:109
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:120
 msgid "Payment & Invoicing Settings"
 msgstr "お支払いと請求書の設定"
+
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:196
+msgid "Payment complete"
+msgstr "支払い完了"
 
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:53
 msgid "Payment Date"
 msgstr "支払日"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:249
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:116
+msgid "Payment details: {0}"
+msgstr "支払い情報: {0}"
+
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:308
 msgid "Payment Due Period"
 msgstr "支払い期限"
 
@@ -13652,21 +13808,25 @@ msgstr "支払い期限"
 msgid "Payment failed"
 msgstr "支払いに失敗しました"
 
-#: src/components/common/OrderStatusBadge/index.tsx:14
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:62
+#: src/components/common/OrderStatusBadge/index.tsx:15
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:70
 msgid "Payment Failed"
 msgstr "お支払いに失敗しました"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:427
-#: src/components/routes/product-widget/Payment/PaymentMethods/Offline/index.tsx:14
-msgid "Payment Instructions"
-msgstr "お支払いの案内"
+#: src/components/modals/ManageOrderModal/index.tsx:194
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:57
+msgid "Payment link"
+msgstr "支払いリンク"
 
-#: src/components/routes/product-widget/Payment/index.tsx:118
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:264
+msgid "Payment link created"
+msgstr "支払いリンクを作成しました"
+
+#: src/components/routes/product-widget/Payment/index.tsx:135
 msgid "Payment method"
 msgstr "支払い方法"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:116
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:127
 msgid "Payment Methods"
 msgstr "支払い方法"
 
@@ -13687,12 +13847,33 @@ msgstr "決済プロバイダー"
 msgid "Payment received"
 msgstr "お支払いを受領しました"
 
-#: src/components/common/OrderStatusBadge/index.tsx:12
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:63
+#: src/components/common/OrderStatusBadge/index.tsx:13
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:71
 msgid "Payment Received"
 msgstr "お支払いを受領しました"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:300
+#: src/components/common/OfflinePaymentDetails/index.tsx:56
+msgid "Payment reference"
+msgstr "支払い参照番号"
+
+#: src/components/common/OrdersTable/index.tsx:372
+#: src/components/common/OrderStatusBadge/index.tsx:12
+msgid "Payment reported"
+msgstr "支払い報告済み"
+
+#: src/components/modals/ManageOrderModal/index.tsx:183
+msgid "Payment reported by buyer"
+msgstr "購入者が支払いを報告"
+
+#: src/components/layouts/Checkout/index.tsx:382
+msgid "Payment request"
+msgstr "支払い依頼"
+
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:96
+msgid "Payment request: {0}"
+msgstr "支払い依頼：{0}"
+
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:329
 msgid "Payment Status"
 msgstr "支払いステータス"
 
@@ -13700,7 +13881,7 @@ msgstr "支払いステータス"
 msgid "Payment succeeded!"
 msgstr "お支払いが完了しました！"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:247
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:306
 msgid "Payment Terms"
 msgstr "支払い条件"
 
@@ -13975,9 +14156,17 @@ msgstr "ウィジェットを特定の日付に固定するか、訪問者に選
 msgid "Pinterest"
 msgstr "Pinterest"
 
+#: src/components/routes/product-widget/Payment/index.tsx:177
+msgid "Place order"
+msgstr "注文する"
+
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:65
 msgid "Place tables"
 msgstr "テーブルを配置"
+
+#: src/components/routes/product-widget/Payment/PaymentMethods/Offline/index.tsx:9
+msgid "Place your order. Your places are held and your tickets are issued, marked as unpaid."
+msgstr "注文を確定します。席は確保され、チケットは未払いとして発行されます。"
 
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:269
 #: src/components/modals/ManageOrderModal/index.tsx:129
@@ -14096,6 +14285,14 @@ msgstr "VAT番号を入力してください"
 msgid "Please Note"
 msgstr "ご注意"
 
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:97
+msgid "Please pay {amount} for my registration for {0} by {payBy}. You can see the order and pay here:"
+msgstr "{0}の登録料{amount}を{payBy}までにお支払いください。注文の確認と支払いはこちらから行えます："
+
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:117
+msgid "Please pay {amount} for my registration for {0}. The payment details and reference are here:"
+msgstr "{0} の参加登録について {amount} のお支払いをお願いします。支払い情報と参照番号はこちらです:"
+
 #: src/components/common/Editor/Controls/InsertImageControl/index.tsx:36
 msgid "Please provide an image."
 msgstr "画像を指定してください。"
@@ -14104,7 +14301,7 @@ msgstr "画像を指定してください。"
 msgid "Please restart the checkout process."
 msgstr "チェックアウトをやり直してください。"
 
-#: src/components/layouts/Checkout/index.tsx:440
+#: src/components/layouts/Checkout/index.tsx:502
 msgid "Please return to the event page to start over."
 msgstr "イベントページに戻って、最初からやり直してください。"
 
@@ -14142,7 +14339,7 @@ msgstr "アフィリエイトのエクスポートを準備しています。し
 msgid "Please wait while we prepare your attendees for export..."
 msgstr "参加者のエクスポートを準備しています。しばらくお待ちください..."
 
-#: src/components/layouts/Checkout/index.tsx:207
+#: src/components/layouts/Checkout/index.tsx:241
 #: src/hooks/useOrderActions.tsx:81
 msgid "Please wait while we prepare your invoice..."
 msgstr "請求書を準備しています。しばらくお待ちください..."
@@ -14302,7 +14499,7 @@ msgstr "料金"
 msgid "Print"
 msgstr "印刷"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:661
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:722
 msgid "Print All Tickets"
 msgstr "すべてのチケットを印刷"
 
@@ -14318,11 +14515,11 @@ msgstr "印刷プレビュー"
 msgid "Print preview uses your last saved design"
 msgstr "印刷プレビューには、最後に保存したデザインが使用されます"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:124
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:132
 msgid "Print Ticket"
 msgstr "チケットを印刷"
 
-#: src/components/layouts/Checkout/index.tsx:384
+#: src/components/layouts/Checkout/index.tsx:438
 #: src/components/routes/my-tickets/index.tsx:136
 msgid "Print Tickets"
 msgstr "チケットを印刷"
@@ -14348,7 +14545,7 @@ msgstr "プライバシーポリシー"
 msgid "Process Refund"
 msgstr "返金を処理"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:410
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:439
 msgid "Processing order"
 msgstr "注文を処理中"
 
@@ -14488,7 +14685,7 @@ msgstr "プロモーションコード{promo_code}を適用しました"
 #: src/components/common/OrderDetails/index.tsx:112
 #: src/components/common/WidgetEditor/ContentFields.tsx:139
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:107
-#: src/components/modals/ManageOrderModal/index.tsx:183
+#: src/components/modals/ManageOrderModal/index.tsx:202
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1233
 msgid "Promo code"
 msgstr "プロモーションコード"
@@ -14672,7 +14869,7 @@ msgid "Questions"
 msgstr "質問"
 
 #: src/components/modals/ManageAttendeeModal/index.tsx:283
-#: src/components/modals/ManageOrderModal/index.tsx:328
+#: src/components/modals/ManageOrderModal/index.tsx:347
 msgid "Questions & Answers"
 msgstr "質問と回答"
 
@@ -14702,10 +14899,10 @@ msgstr "ラジオオプション"
 msgid "Rate"
 msgstr "レート"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:478
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:513
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:538
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:562
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:523
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:558
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:583
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:607
 msgid "Rate limit exceeded. Please try again later."
 msgstr "レート制限を超えました。しばらくしてからもう一度お試しください。"
 
@@ -14940,12 +15137,12 @@ msgstr "この日付のすべての注文を返金"
 msgid "Refund amount"
 msgstr "返金額"
 
-#: src/components/common/OrdersTable/index.tsx:298
+#: src/components/common/OrdersTable/index.tsx:299
 #: src/components/modals/ProductPurchasesModal/index.tsx:67
 msgid "Refund failed"
 msgstr "返金に失敗しました"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:73
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:81
 msgid "Refund Failed"
 msgstr "返金に失敗しました"
 
@@ -14957,13 +15154,13 @@ msgstr "注文を返金"
 msgid "Refund Order {0}"
 msgstr "注文{0}を返金"
 
-#: src/components/common/OrdersTable/index.tsx:297
+#: src/components/common/OrdersTable/index.tsx:298
 #: src/components/modals/ProductPurchasesModal/index.tsx:65
 msgid "Refund pending"
 msgstr "返金保留中"
 
-#: src/components/common/OrderStatusBadge/index.tsx:17
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:72
+#: src/components/common/OrderStatusBadge/index.tsx:18
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:80
 msgid "Refund Pending"
 msgstr "返金保留中"
 
@@ -14972,7 +15169,7 @@ msgid "Refund recorded successfully."
 msgstr "返金を記録しました。"
 
 #: src/components/routes/event/orders.tsx:80
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:293
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:322
 msgid "Refund Status"
 msgstr "返金ステータス"
 
@@ -14980,20 +15177,20 @@ msgstr "返金ステータス"
 msgid "Refund, cancel with a refund, and mark orders as paid."
 msgstr "返金、返金付きキャンセル、注文の支払い済みマーク。"
 
-#: src/components/common/OrderStatusBadge/index.tsx:15
+#: src/components/common/OrderStatusBadge/index.tsx:16
 #: src/components/common/OrderSummary/index.tsx:92
 #: src/components/common/StatBoxes/index.tsx:89
 #: src/components/modals/ProductPurchasesModal/index.tsx:61
 #: src/components/modals/ProductPurchasesModal/index.tsx:248
 #: src/components/routes/event/orders.tsx:37
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:436
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:74
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:82
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:37
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:104
 msgid "Refunded"
 msgstr "返金済み"
 
-#: src/components/common/OrdersTable/index.tsx:295
+#: src/components/common/OrdersTable/index.tsx:296
 msgid "Refunded: {0}"
 msgstr "返金済み：{0}"
 
@@ -15292,7 +15489,7 @@ msgstr "リクエスト済み"
 msgid "Requested by"
 msgstr "リクエスト者"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:202
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:261
 msgid "Require Billing Address"
 msgstr "請求先住所を必須にする"
 
@@ -15346,7 +15543,7 @@ msgstr "再送信"
 msgid "Resend code"
 msgstr "コードを再送信"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:275
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:304
 msgid "Resend Confirmation"
 msgstr "確認メールを再送信"
 
@@ -15383,7 +15580,7 @@ msgstr "{displayName}に招待を再送信"
 msgid "Resend order email"
 msgstr "注文メールを再送信"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:147
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:155
 msgid "Resend Ticket"
 msgstr "チケットを再送信"
 
@@ -15391,7 +15588,7 @@ msgstr "チケットを再送信"
 msgid "Resend ticket email"
 msgstr "チケットメールを再送信"
 
-#: src/components/common/OrdersTable/index.tsx:356
+#: src/components/common/OrdersTable/index.tsx:360
 msgid "Reserved"
 msgstr "予約済み"
 
@@ -15407,7 +15604,7 @@ msgstr "指定席"
 msgid "Reserved seating"
 msgstr "指定席"
 
-#: src/components/common/OrdersTable/index.tsx:244
+#: src/components/common/OrdersTable/index.tsx:245
 msgid "Reserved until"
 msgstr "予約期限"
 
@@ -15519,7 +15716,7 @@ msgstr "ジョブを再試行"
 msgid "Return to Event"
 msgstr "イベントに戻る"
 
-#: src/components/layouts/Checkout/index.tsx:447
+#: src/components/layouts/Checkout/index.tsx:509
 msgid "Return to Event Page"
 msgstr "イベントページに戻る"
 
@@ -15572,6 +15769,10 @@ msgstr "自動チェックでスパムの可能性があるとフラグ付けさ
 #: src/components/routes/auth/Login/RecoveryCodeNotice.tsx:37
 msgid "Review security settings"
 msgstr "セキュリティ設定を確認"
+
+#: src/components/routes/product-widget/Payment/index.tsx:118
+msgid "Review the order, then choose how to pay"
+msgstr "注文内容を確認し、支払い方法を選択してください"
 
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:82
 msgid "Revoke"
@@ -15850,7 +16051,7 @@ msgstr "土曜日"
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:141
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:193
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:94
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:298
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:357
 #: src/components/routes/event/Settings/Sections/RecurringEventSettings/index.tsx:72
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:85
 #: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:80
@@ -15894,7 +16095,7 @@ msgstr "変更を保存"
 #: src/components/modals/EditWebhookModal/index.tsx:88
 #: src/components/modals/LocationEditModal/index.tsx:164
 #: src/components/modals/ManageAttendeeModal/index.tsx:211
-#: src/components/modals/ManageOrderModal/index.tsx:244
+#: src/components/modals/ManageOrderModal/index.tsx:263
 #: src/components/routes/admin/Announcements/index.tsx:506
 #: src/components/routes/admin/Configurations/index.tsx:274
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:564
@@ -16708,6 +16909,10 @@ msgstr "送信"
 msgid "Send a message"
 msgstr "メッセージを送信"
 
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:192
+msgid "Send a payment link"
+msgstr "支払いリンクを送る"
+
 #: src/components/modals/SendMessageModal/index.tsx:571
 msgid "Send as test"
 msgstr "テストとして送信"
@@ -16760,6 +16965,14 @@ msgstr "テストを送信"
 #: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:205
 msgid "Send test to me"
 msgstr "自分にテスト送信"
+
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:110
+msgid "Send this link to whoever is paying, such as your finance team. They'll see the amount due, the payment reference and how to pay, and can tell the organizer once they've paid. Your tickets aren't shown to them."
+msgstr "経理部門など、支払いをする人にこのリンクを送ってください。支払い金額、支払い参照番号、支払い方法が表示され、支払い後に主催者へ知らせることができます。あなたのチケットは表示されません。"
+
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:111
+msgid "Send this link to whoever is paying, such as your finance team. They'll see the amount due, the payment reference and how to pay. Your tickets aren't shown to them."
+msgstr "経理部門など、支払いをする人にこのリンクを送ってください。支払い金額、支払い参照番号、支払い方法が表示されます。あなたのチケットは表示されません。"
 
 #: src/components/modals/SendMessageModal/index.tsx:364
 msgid "Send to all occurrences, or choose a specific one"
@@ -16917,7 +17130,7 @@ msgstr "場所を設定"
 msgid "Set the OAuth consent screen's user type to Internal."
 msgstr "OAuth consent screenのユーザーの種類を「Internal」に設定します。"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:240
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:299
 msgid "Set the starting number for invoice numbering. This cannot be changed once invoices have been generated."
 msgstr "請求書番号の開始番号を設定します。請求書が生成された後は変更できません。"
 
@@ -17025,6 +17238,7 @@ msgstr "形状"
 #: src/components/modals/ShareModal/index.tsx:165
 #: src/components/modals/ShareModal/index.tsx:186
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:65
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:76
 msgid "Share"
 msgstr "共有"
 
@@ -17040,6 +17254,10 @@ msgstr "アフィリエイトリンクを共有"
 msgid "Share Event"
 msgstr "イベントを共有"
 
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:271
+msgid "Share link"
+msgstr "リンクを共有"
+
 #: src/components/layouts/OrganizerLayout/index.tsx:266
 #: src/components/layouts/OrganizerLayout/index.tsx:308
 msgid "Share Organizer Page"
@@ -17052,6 +17270,10 @@ msgstr "下のリンクとPINを入口スタッフと共有してください。
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:28
 msgid "Share the new PIN with your door staff. Anyone who was signed in has been signed out."
 msgstr "新しいPINを入口スタッフと共有してください。サインイン中だった全員がサインアウトされました。"
+
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:107
+msgid "Share the payment details"
+msgstr "支払い情報を共有"
 
 #: src/components/routes/event/CapacityAssignments/index.tsx:35
 msgid "Shared Capacity Management"
@@ -17429,7 +17651,7 @@ msgid "Simple and widely used, with optional cloud sync"
 msgstr "シンプルで広く使われており、クラウド同期も選べます"
 
 #: src/components/modals/ManageAttendeeModal/index.tsx:229
-#: src/components/modals/ManageOrderModal/index.tsx:268
+#: src/components/modals/ManageOrderModal/index.tsx:287
 msgid "Simpson"
 msgstr "Simpson"
 
@@ -17535,7 +17757,7 @@ msgstr "販売済み"
 msgid "Sold by"
 msgstr "販売元"
 
-#: src/components/common/OrdersTable/index.tsx:219
+#: src/components/common/OrdersTable/index.tsx:220
 msgid "Sold by {operatorName}"
 msgstr "販売元：{operatorName}"
 
@@ -17613,6 +17835,18 @@ msgstr "長すぎるテキストがあります。名前とタイトルは255文
 msgid "Some text may be hard to read"
 msgstr "一部のテキストが読みにくい場合があります"
 
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:229
+msgid "Someone else paying"
+msgstr "ほかの人が支払う"
+
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:251
+msgid "Someone else paying? Send them a payment link"
+msgstr "他の人が支払いますか？支払いリンクを送りましょう"
+
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:162
+msgid "Someone else paying? Share the payment details"
+msgstr "ほかの人が支払いますか?支払い情報を共有"
+
 #: src/ee/seating/components/SeatPicker/Basket.tsx:99
 msgid "Someone just took {0}. Pick another seat, or let us find similar seats for you."
 msgstr "たった今、他の人が{0}を取得しました。別の座席を選ぶか、近い座席を自動で探します。"
@@ -17623,7 +17857,7 @@ msgstr "「Zapier」や「ウェブサイト同期」など、どこで使用し
 
 #: src/components/common/ErrorDisplay/index.tsx:15
 #: src/components/routes/auth/AcceptInvitation/index.tsx:61
-#: src/components/routes/product-widget/CollectInformation/index.tsx:417
+#: src/components/routes/product-widget/CollectInformation/index.tsx:423
 #: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:64
 msgid "Something went wrong"
 msgstr "問題が発生しました"
@@ -17979,8 +18213,8 @@ msgstr "明日開始"
 #: src/components/common/CheckoutQuestion/index.tsx:165
 #: src/components/common/LocationPicker/index.tsx:254
 #: src/components/modals/LocationEditModal/index.tsx:149
-#: src/components/routes/product-widget/CollectInformation/index.tsx:581
-#: src/components/routes/product-widget/CollectInformation/index.tsx:582
+#: src/components/routes/product-widget/CollectInformation/index.tsx:587
+#: src/components/routes/product-widget/CollectInformation/index.tsx:588
 msgid "State or Region"
 msgstr "都道府県・地域"
 
@@ -18002,7 +18236,7 @@ msgstr "統計"
 #: src/components/common/AttendeeTable/index.tsx:265
 #: src/components/common/CheckInListTable/index.tsx:167
 #: src/components/common/OrderDetails/index.tsx:73
-#: src/components/common/OrdersTable/index.tsx:341
+#: src/components/common/OrdersTable/index.tsx:342
 #: src/components/common/OrganizerWebhookTable/index.tsx:244
 #: src/components/common/ProductsTable/index.tsx:100
 #: src/components/common/WaitlistTable/index.tsx:208
@@ -18101,9 +18335,9 @@ msgstr "ストーリー"
 msgid "Straight rows, central aisle."
 msgstr "まっすぐな列と中央の通路。"
 
-#: src/components/common/OrdersTable/index.tsx:322
+#: src/components/common/OrdersTable/index.tsx:323
 #: src/components/routes/admin/Dashboard/index.tsx:397
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:96
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:107
 msgid "Stripe"
 msgstr "Stripe"
 
@@ -18203,7 +18437,7 @@ msgid "Subtotal"
 msgstr "小計"
 
 #: src/components/common/OrganizerWebhookTable/index.tsx:155
-#: src/components/layouts/Checkout/index.tsx:210
+#: src/components/layouts/Checkout/index.tsx:244
 #: src/hooks/useOrderActions.tsx:84
 msgid "Success"
 msgstr "成功"
@@ -18314,7 +18548,7 @@ msgstr "注文を更新しました"
 msgid "Successfully Updated Organizer"
 msgstr "主催者を更新しました"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:80
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:96
 msgid "Successfully Updated Payment & Invoicing Settings"
 msgstr "お支払いと請求書の設定を更新しました"
 
@@ -18365,7 +18599,7 @@ msgstr "Webhookを更新しました"
 
 #: src/components/common/ProgressStepper/index.tsx:20
 #: src/components/common/ProgressStepper/index.tsx:24
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:597
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:642
 msgid "Summary"
 msgstr "サマリー"
 
@@ -18499,7 +18733,7 @@ msgid "Targeting attendees across {0} selected sessions."
 msgstr "選択した{0}件のセッションにわたる参加者を対象にしています。"
 
 #: src/components/common/AdminOrdersTable/index.tsx:84
-#: src/components/common/OrdersTable/index.tsx:290
+#: src/components/common/OrdersTable/index.tsx:291
 #: src/components/forms/TaxAndFeeForm/index.tsx:21
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:89
 #: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:91
@@ -18518,11 +18752,11 @@ msgstr "税金を作成しました"
 msgid "Tax deleted"
 msgstr "税金を削除しました"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:276
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:335
 msgid "Tax Details"
 msgstr "税金の詳細"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:277
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:336
 msgid "Tax information to appear at the bottom of all invoices (e.g., VAT number, tax registration)"
 msgstr "すべての請求書の下部に表示する税務情報（例：VAT番号、税務登録情報）"
 
@@ -18589,6 +18823,10 @@ msgstr "テクノロジー"
 #: src/constants/socialMediaConfig.ts:40
 msgid "Telegram"
 msgstr "Telegram"
+
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:166
+msgid "Tell buyers how to pay, such as your bank details, where to send a cheque, or that they pay at the door. Include any deadline. Buyers see this on their order page and in their confirmation email once they've placed their order."
+msgstr "支払い方法を購入者に伝えてください。振込先、小切手の送付先、または入口での支払いなど。期限があれば記載してください。購入者は注文後、注文ページと確認メールでこれを確認できます。"
 
 #: src/components/routes/welcome/index.tsx:47
 msgid "Tell us about your organization. This information will be displayed on your event pages."
@@ -18659,6 +18897,10 @@ msgstr "テキスト"
 msgid "Thank you for attending!"
 msgstr "ご参加ありがとうございました！"
 
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:228
+msgid "Thank you. {registrantName}'s order is confirmed and their confirmation has been emailed to"
+msgstr "ありがとうございます。{registrantName}さんの注文は確定し、確認メールが次のアドレスに送信されました："
+
 #: src/components/routes/settings/Billing/index.tsx:63
 msgid "Thanks for subscribing. Your branding changes apply as soon as Stripe confirms the payment."
 msgstr "ご登録ありがとうございます。Stripeが支払いを確認し次第、ブランド設定が反映されます。"
@@ -18724,6 +18966,10 @@ msgstr "キューがジョブを処理するとすぐに、アカウントは削
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:447
 msgid "The account will be permanently deleted."
 msgstr "アカウントは完全に削除されます。"
+
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:289
+msgid "The amount due is {amount}. Please pay by {0}, after which the places are released. Once you pay, the confirmation is emailed to {1}."
+msgstr "お支払い金額は{amount}です。{0}までにお支払いください。期限を過ぎると席は解放されます。支払いが完了すると、確認メールが{1}に送信されます。"
 
 #: src/ee/seating/components/AttendeeSeatField/index.tsx:49
 msgid "The attendee could not be moved"
@@ -18848,9 +19094,29 @@ msgstr "{0}の商品の最大数は{1}です"
 msgid "The new event keeps this event's repeat schedule. You can change its dates after duplicating."
 msgstr "新しいイベントはこのイベントの繰り返しスケジュールを引き継ぎます。日程は複製後に変更できます。"
 
+#: src/components/layouts/Checkout/index.tsx:499
+msgid "The order was not paid in time, so the places are no longer held. Let {0} know so they can register again."
+msgstr "期限内に支払いがなかったため、席の確保は解除されました。再度登録できるよう{0}さんにお知らせください。"
+
+#: src/components/layouts/Checkout/index.tsx:500
+msgid "The order was not paid in time, so the places are no longer held. Let the person who registered know so they can register again."
+msgstr "期限内に支払いがなかったため、席の確保は解除されました。再度登録できるよう、登録した方にお知らせください。"
+
+#: src/components/layouts/Checkout/index.tsx:501
+msgid "The order was not paid in time, so your places have been released. Return to the event page to start a new order."
+msgstr "期限内に支払いがなかったため、席は解放されました。イベントページに戻って新しい注文を開始してください。"
+
 #: src/components/modals/CancelOrderModal/index.tsx:77
 msgid "The order will be marked as refunded. You will need to return the payment to the customer yourself."
 msgstr "注文は返金済みとしてマークされます。お客様への返金は、ご自身で行う必要があります。"
+
+#: src/components/routes/product-widget/Payment/PaymentMethods/Offline/index.tsx:15
+msgid "The organizer confirms your order once your payment arrives."
+msgstr "入金が確認されると、主催者が注文を確定します。"
+
+#: src/components/routes/product-widget/OrderSummaryAndProducts/ReportOfflinePayment/index.tsx:44
+msgid "The organizer knows you've paid"
+msgstr "主催者はあなたの支払いを把握しています"
 
 #: src/components/layouts/PublicOrganizer/OrganizerNotFound/index.tsx:9
 #: src/components/layouts/PublicOrganizer/OrganizerNotFound/index.tsx:11
@@ -18872,6 +19138,10 @@ msgstr "お探しのページは存在しません"
 #: src/components/common/WidgetEditor/TypePicker.tsx:9
 msgid "The people on your bill, grouped by billing."
 msgstr "出演者を格付けごとにまとめて表示します。"
+
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:215
+msgid "The person paying sees your order and the amount due, then pays using any available payment method. They can't change your registration."
+msgstr "支払う人はあなたの注文とお支払い金額を確認し、利用可能な任意の支払い方法で支払います。登録内容を変更することはできません。"
 
 #: src/components/common/PlatformFeesSettings/index.tsx:215
 msgid "The platform fee is added to the ticket price. Buyers pay more, but you receive the full ticket price."
@@ -19332,10 +19602,6 @@ msgstr "この機能にはHi.Eventsエンタープライズライセンスが必
 msgid "This field is required"
 msgstr "このフィールドは必須です"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:90
-msgid "This information will be shown on the payment page, order summary page, and order confirmation email."
-msgstr "この情報は、支払いページ、注文概要ページ、注文確認メールに表示されます。"
-
 #: src/components/routes/sso/Callback/SsoErrorState.tsx:115
 msgid "This invitation is for {0}"
 msgstr "この招待は {0} 宛てです"
@@ -19437,19 +19703,19 @@ msgstr "この注文はすでに支払い済みです。"
 msgid "This order has already been refunded."
 msgstr "この注文はすでに返金されています。"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:392
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:421
 msgid "This order has been cancelled."
 msgstr "この注文はキャンセルされました。"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:346
+#: src/components/routes/product-widget/CollectInformation/index.tsx:352
 msgid "This order has expired. Please start again."
 msgstr "この注文は期限切れです。最初からやり直してください。"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:411
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:440
 msgid "This order is being processed."
 msgstr "この注文は処理中です。"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:402
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:431
 msgid "This order is complete."
 msgstr "この注文は完了しています。"
 
@@ -19457,11 +19723,11 @@ msgstr "この注文は完了しています。"
 msgid "This order page is no longer available."
 msgstr "この注文ページは利用できなくなりました。"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:359
+#: src/components/routes/product-widget/CollectInformation/index.tsx:365
 msgid "This order was abandoned. You can start a new order anytime."
 msgstr "この注文は中止されました。いつでも新しい注文を開始できます。"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:389
+#: src/components/routes/product-widget/CollectInformation/index.tsx:395
 msgid "This order was cancelled. You can start a new order anytime."
 msgstr "この注文はキャンセルされました。いつでも新しい注文を開始できます。"
 
@@ -19480,6 +19746,10 @@ msgstr "この主催者プロフィールはまだ公開されていません"
 #: src/components/forms/ProductForm/index.tsx:620
 msgid "This overrides all visibility settings and will hide the product from all customers."
 msgstr "すべての表示設定を上書きし、すべてのお客様に対してこの商品を非表示にします。"
+
+#: src/components/layouts/Checkout/index.tsx:492
+msgid "This payment link has expired"
+msgstr "この支払いリンクは有効期限が切れています"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplatePreviewPane.tsx:70
 msgid "This preview shows how your email will look with sample data. Actual emails will use real values."
@@ -19685,7 +19955,7 @@ msgstr "チケットプレビュー："
 msgid "Ticket price"
 msgstr "チケット価格"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:534
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:579
 msgid "Ticket resent successfully"
 msgstr "チケットを再送信しました"
 
@@ -19808,7 +20078,7 @@ msgstr "TikTok"
 msgid "Time"
 msgstr "時間"
 
-#: src/components/layouts/Checkout/index.tsx:358
+#: src/components/layouts/Checkout/index.tsx:410
 msgid "Time left"
 msgstr "残り時間"
 
@@ -19877,7 +20147,7 @@ msgstr "タイムテーブル"
 #: src/components/routes/auth/AcceptInvitation/index.tsx:243
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:147
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:146
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:364
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:393
 #: src/components/routes/settings/Account/index.tsx:96
 #: src/components/routes/settings/Profile/index.tsx:239
 msgid "Timezone"
@@ -20026,7 +20296,7 @@ msgid "Total orders"
 msgstr "注文合計"
 
 #: src/components/common/OrderDetails/index.tsx:91
-#: src/components/modals/ManageOrderModal/index.tsx:187
+#: src/components/modals/ManageOrderModal/index.tsx:206
 msgid "Total refunded"
 msgstr "返金合計"
 
@@ -20515,6 +20785,10 @@ msgstr "未払い"
 msgid "Unpaid Order"
 msgstr "未払いの注文"
 
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:212
+msgid "Unpaid orders"
+msgstr "未払いの注文"
+
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:469
 msgid "Unpublish all events and delete or anonymise this account and its users."
 msgstr "すべてのイベントを非公開にし、このアカウントとそのユーザーを削除または匿名化します。"
@@ -20816,6 +21090,10 @@ msgstr "すべての参加者に購入者の情報を使用"
 #: src/components/common/LocationPicker/index.tsx:285
 msgid "Use this address"
 msgstr "この住所を使用"
+
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:206
+msgid "Use this if someone else, such as your finance team, is paying for your order."
+msgstr "経理部門など、他の人があなたの注文を支払う場合に使用してください。"
 
 #: src/ee/box-office/components/layouts/BoxOffice/ReaderSwitchSheet.tsx:64
 msgid "Use this reader"
@@ -21215,7 +21493,7 @@ msgid "View Order"
 msgstr "注文を表示"
 
 #: src/components/forms/StripeCheckoutForm/index.tsx:133
-#: src/components/routes/product-widget/CollectInformation/index.tsx:381
+#: src/components/routes/product-widget/CollectInformation/index.tsx:387
 msgid "View Order Details"
 msgstr "注文の詳細を表示"
 
@@ -21246,7 +21524,7 @@ msgstr "販売を表示"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:59
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:72
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:116
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:124
 msgid "View Ticket"
 msgstr "チケットを表示"
 
@@ -21322,7 +21600,7 @@ msgstr "取り消し済み"
 msgid "Waiting"
 msgstr "待機中"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:368
+#: src/components/routes/product-widget/CollectInformation/index.tsx:374
 msgid "Waiting for payment"
 msgstr "お支払い待ち"
 
@@ -21349,7 +21627,7 @@ msgstr "キャンセル待ち"
 msgid "Waitlist Enabled"
 msgstr "キャンセル待ちが有効"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:403
+#: src/components/routes/product-widget/CollectInformation/index.tsx:409
 msgid "Waitlist offer expired"
 msgstr "キャンセル待ちのオファーが失効しました"
 
@@ -21376,6 +21654,11 @@ msgstr "本人確認ができませんでした"
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:167
 msgid "We couldn't copy that Stripe connection. Please try again."
 msgstr "そのStripe接続をコピーできませんでした。もう一度お試しください。"
+
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:144
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:183
+msgid "We couldn't create a payment link. Please try again."
+msgstr "支払いリンクを作成できませんでした。もう一度お試しください。"
 
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:66
 msgid "We couldn't delete the category. Please try again."
@@ -21405,7 +21688,7 @@ msgstr "現在、座席を見つけられませんでした。もう一度お試
 msgid "We couldn't find that many seats together. Try fewer seats or pick them on the map."
 msgstr "その数の座席をまとめて見つけられませんでした。座席数を減らすか、マップ上で選択してください。"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:576
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:621
 msgid "We couldn't find the order you're looking for. The link may have expired or the order details may have changed."
 msgstr "お探しの注文が見つかりませんでした。リンクの有効期限が切れたか、注文の詳細が変更された可能性があります。"
 
@@ -21413,7 +21696,7 @@ msgstr "お探しの注文が見つかりませんでした。リンクの有効
 msgid "We couldn't find the ticket you're looking for. The link may have expired or the ticket details may have changed."
 msgstr "お探しのチケットが見つかりませんでした。リンクの有効期限が切れたか、チケットの詳細が変更された可能性があります。"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:406
+#: src/components/routes/product-widget/CollectInformation/index.tsx:412
 msgid "We couldn't find this order. It may have been removed."
 msgstr "この注文が見つかりませんでした。削除された可能性があります。"
 
@@ -21466,6 +21749,10 @@ msgstr "クリップボードを読み取れませんでした。代わりに Ct
 msgid "We couldn't reorder the categories. Please try again."
 msgstr "カテゴリーを並び替えできませんでした。もう一度お試しください。"
 
+#: src/components/routes/product-widget/OrderSummaryAndProducts/ReportOfflinePayment/index.tsx:31
+msgid "We couldn't send your message. Please try again."
+msgstr "メッセージを送信できませんでした。もう一度お試しください。"
+
 #: src/components/routes/sso/Callback/SsoErrorState.tsx:154
 msgid "We couldn't sign you in"
 msgstr "サインインできませんでした"
@@ -21474,7 +21761,7 @@ msgstr "サインインできませんでした"
 msgid "We couldn't sign you in with {providerName}"
 msgstr "{providerName} でサインインできませんでした"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:418
+#: src/components/routes/product-widget/CollectInformation/index.tsx:424
 msgid "We hit a snag loading this page. Please try again."
 msgstr "このページの読み込み中に問題が発生しました。もう一度お試しください。"
 
@@ -21519,6 +21806,10 @@ msgstr "{totalOccurrences}件のセッションすべてを作成します。作
 msgid "We'll email them a link to join your account."
 msgstr "アカウントに参加するためのリンクをメールで送信します。"
 
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:219
+msgid "We'll email you the link too, and send your order confirmation as soon as they complete checkout."
+msgstr "リンクはあなたにもメールでお送りし、支払いが完了次第、注文確認をお送りします。"
+
 #: src/components/modals/JoinWaitlistModal/index.tsx:113
 msgid "We'll notify you by email if a spot becomes available for {productDisplayName} on {occurrenceDate}."
 msgstr "{occurrenceDate}の{productDisplayName}に空きが出た場合は、メールでお知らせします。"
@@ -21532,7 +21823,7 @@ msgstr "{productDisplayName}に空きが出た場合は、メールでお知ら�
 msgid "We'll open a message composer with a pre-filled template after saving. You review and send it — nothing is sent automatically."
 msgstr "保存後に、入力済みのテンプレート付きのメッセージ作成画面が開きます。内容を確認して送信してください。自動では何も送信されません。"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:465
+#: src/components/routes/product-widget/CollectInformation/index.tsx:471
 msgid "We'll send your tickets to this email"
 msgstr "チケットはこのメールアドレスに送信されます"
 
@@ -21543,6 +21834,10 @@ msgstr "バックグラウンドでVAT番号を検証します。問題があれ
 #: src/components/routes/product-widget/PaymentReturn/index.tsx:91
 msgid "We're processing your order. Please wait..."
 msgstr "注文を処理しています。しばらくお待ちください..."
+
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:98
+msgid "We've also emailed this link to {0}. Anyone with the link can view and pay for this order, so only share it with the person paying. It stops working on {payBy}."
+msgstr "このリンクは{0}にもメールで送信しました。リンクを持っている人は誰でもこの注文を閲覧・支払いできるため、支払う人とだけ共有してください。リンクは{payBy}に無効になります。"
 
 #: src/components/routes/event/OccurrencesTab/rescheduleMessageTemplate.ts:75
 msgid "We've made changes to the schedule for \"{title}\" — {description} affecting {affectedCount} session(s)."
@@ -21664,6 +21959,10 @@ msgstr "内容"
 #: src/components/forms/ProductForm/index.tsx:345
 msgid "What are Tiered Products?"
 msgstr "ティア制商品とは？"
+
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:200
+msgid "What buyers see"
+msgstr "購入者に表示される内容"
 
 #: src/components/modals/CreateProductCategoryModal/index.tsx:51
 msgid "What is a Category?"
@@ -21818,7 +22117,7 @@ msgstr "お客様がチケットを購入すると、その注文がここに表
 msgid "When enabled, buyers can copy their own name and email onto all attendees at once. Turn this off to remove the \"All attendees\" option; buyers can still copy to the first attendee, and the rest must be entered individually."
 msgstr "有効にすると、購入者は自分の名前とメールアドレスを、すべての参加者に一度にコピーできます。オフにすると\"すべての参加者\"オプションが削除されます。購入者は引き続き最初の参加者にコピーできますが、残りは個別に入力する必要があります。"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:215
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:274
 msgid "When enabled, invoices will be generated for ticket orders. Invoices will sent along with the order confirmation email. Attendees can also download their invoices from the order confirmation page."
 msgstr "有効にすると、チケットの注文に対して請求書が生成されます。請求書は注文確認メールとともに送信されます。参加者は、注文確認ページから請求書をダウンロードすることもできます。"
 
@@ -21833,10 +22132,6 @@ msgstr "有効にすると、新しいイベントのチェックアウト時に
 #: src/components/routes/admin/Configurations/index.tsx:264
 msgid "When enabled, no application fees will be charged on Stripe Connect transactions. Use this for countries where application fees are not supported."
 msgstr "有効にすると、Stripe Connectの取引でアプリケーション手数料が課されません。アプリケーション手数料に対応していない国でご利用ください。"
-
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:152
-msgid "When offline payments are enabled, users will be able to complete their orders and receive their tickets. Their tickets will clearly indicate the order is not paid, and the check-in tool will notify the check-in staff if an order requires payment."
-msgstr "オフライン決済を有効にすると、ユーザーは注文を完了してチケットを受け取れます。チケットには未払いであることが明記され、注文に支払いが必要な場合は、チェックインツールがチェックインスタッフに通知します。"
 
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:183
 msgid "When sales close"
@@ -22016,7 +22311,7 @@ msgstr "はい"
 msgid "Yes - I have a valid EU VAT registration number"
 msgstr "はい - 有効なEU VAT登録番号を持っています"
 
-#: src/components/layouts/Checkout/index.tsx:479
+#: src/components/layouts/Checkout/index.tsx:541
 msgid "Yes, cancel my order"
 msgstr "はい、注文をキャンセルします"
 
@@ -22179,7 +22474,7 @@ msgstr "有料チケットがありますが、Stripeがまだ接続されてい
 msgid "You have reached your messaging limit."
 msgstr "メッセージの送信上限に達しました。"
 
-#: src/components/layouts/Checkout/index.tsx:437
+#: src/components/layouts/Checkout/index.tsx:493
 msgid "You have run out of time to complete your order."
 msgstr "注文を完了するための時間が過ぎました。"
 
@@ -22252,6 +22547,10 @@ msgstr "現在パスワードなしでサインインしています。予備の
 msgid "You signed in as {0}. Use the account the invitation was sent to."
 msgstr "{0} としてサインインしています。招待が送信されたアカウントを使用してください。"
 
+#: src/components/routes/product-widget/OrderSummaryAndProducts/ReportOfflinePayment/index.tsx:46
+msgid "You told them on {0}. They'll confirm the order once the payment arrives, and a confirmation email will be sent to {1}."
+msgstr "{0}に主催者へ知らせました。支払いが届き次第、主催者が注文を確定し、確認メールが{1}に送信されます。"
+
 #: src/components/routes/auth/Login/RecoveryCodeNotice.tsx:28
 msgid "You used a recovery code. You have {remaining} recovery codes left."
 msgstr "リカバリーコードを使用しました。残りのリカバリーコードは{remaining}個です。"
@@ -22259,10 +22558,6 @@ msgstr "リカバリーコードを使用しました。残りのリカバリー
 #: src/components/routes/auth/Login/RecoveryCodeNotice.tsx:27
 msgid "You used a recovery code. You have 1 recovery code left."
 msgstr "リカバリーコードを使用しました。残りのリカバリーコードは1個です。"
-
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:154
-msgid "You will have to mark an order as paid manually. This can be done on the manage order page."
-msgstr "注文は手動で支払い済みにする必要があります。注文の管理ページから行えます。"
 
 #: src/components/routes/settings/Security/SignInMethods.tsx:250
 msgid "You won't be able to sign in with {0} any more. Other devices signed in to your account will be signed out."
@@ -22296,6 +22591,14 @@ msgstr "始めるには、少なくとも1つの商品が必要です。無料�
 msgid "You'll pay securely with Stripe. Cancel anytime."
 msgstr "Stripeで安全にお支払いいただけます。いつでも解約できます。"
 
+#: src/components/routes/product-widget/Payment/PaymentMethods/Offline/index.tsx:13
+msgid "You'll see how to pay and the amount due on the next screen, and we'll email them to you."
+msgstr "次の画面でお支払い方法と金額が表示され、メールでもお送りします。"
+
+#: src/components/routes/product-widget/Payment/PaymentMethods/Offline/index.tsx:12
+msgid "You'll see how to pay and the amount due on the next screen."
+msgstr "次の画面でお支払い方法と金額が表示されます。"
+
 #: src/components/modals/CreateEventModal/index.tsx:374
 msgid "You'll set the dates and schedule after the event is created."
 msgstr "日付とスケジュールは、イベントの作成後に設定します。"
@@ -22304,7 +22607,7 @@ msgstr "日付とスケジュールは、イベントの作成後に設定しま
 msgid "You're changing session times"
 msgstr "セッション時間を変更しています"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:182
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:196
 msgid "You're going to {0}!"
 msgstr "{0}に参加します！"
 
@@ -22336,6 +22639,10 @@ msgstr "配信を停止しました"
 msgid "You've added the maximum of {MAX_SPONSORS} sponsors."
 msgstr "スポンサーは上限の {MAX_SPONSORS} 件まで追加済みです。"
 
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:286
+msgid "You've been asked to pay for this order"
+msgstr "この注文の支払いを依頼されています"
+
 #: src/components/routes/sso/Callback/SsoErrorState.tsx:63
 msgid "You've been invited"
 msgstr "招待されています"
@@ -22344,7 +22651,7 @@ msgstr "招待されています"
 msgid "You've been invited to join a team. Open the invitation email we sent you to finish joining. If the link has expired, ask the person who invited you to send a new one."
 msgstr "チームに招待されています。お送りした招待メールを開いて参加を完了してください。リンクの有効期限が切れている場合は、招待した人に再送を依頼してください。"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:448
+#: src/components/routes/product-widget/CollectInformation/index.tsx:454
 msgid "You've been offered a spot!"
 msgstr "枠が提供されました！"
 
@@ -22428,7 +22735,7 @@ msgstr "カバー画像が横長のため、ここでは小さく表示されま
 msgid "Your cover sits beside the details like a poster. Best with square or portrait artwork."
 msgstr "カバー画像がポスターのように詳細の横に表示されます。正方形または縦長の画像に最適です。"
 
-#: src/components/layouts/Checkout/index.tsx:464
+#: src/components/layouts/Checkout/index.tsx:526
 msgid "Your current order will be lost."
 msgstr "現在の注文は失われます。"
 
@@ -22436,7 +22743,7 @@ msgstr "現在の注文は失われます。"
 msgid "Your current recovery codes will stop working straight away. Enter a code from your authenticator app to confirm."
 msgstr "現在のリカバリーコードは、すぐに使用できなくなります。確認のため、認証アプリのコードを入力してください。"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:462
+#: src/components/routes/product-widget/CollectInformation/index.tsx:468
 msgid "Your Details"
 msgstr "お客様情報"
 
@@ -22479,6 +22786,10 @@ msgstr "ご利用の ID プロバイダー"
 #: src/components/routes/sso/Callback/index.tsx:151
 msgid "Your identity provider returned an error: {providerError}"
 msgstr "IDプロバイダーがエラーを返しました: {providerError}"
+
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:204
+msgid "Your instructions appear here."
+msgstr "ここに案内が表示されます。"
 
 #: src/components/routes/settings/Billing/index.tsx:134
 msgid "Your last payment didn't go through. Update your card to keep your branding removed."
@@ -22529,19 +22840,19 @@ msgstr "新しいパスワードは8文字以上にしてください。"
 msgid "Your new recovery codes"
 msgstr "新しいリカバリーコード"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:613
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:663
 msgid "Your order details have been updated. A confirmation email has been sent to the new email address."
 msgstr "注文の詳細を更新しました。確認メールが新しいメールアドレスに送信されました。"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:183
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:197
 msgid "Your order has been cancelled"
 msgstr "注文はキャンセルされました"
 
-#: src/components/layouts/Checkout/index.tsx:232
+#: src/components/layouts/Checkout/index.tsx:266
 msgid "Your order has been cancelled."
 msgstr "注文はキャンセルされました。"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:185
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:199
 msgid "Your order is awaiting payment"
 msgstr "注文は支払い待ちです"
 
@@ -22549,7 +22860,7 @@ msgstr "注文は支払い待ちです"
 msgid "Your orders have been exported successfully."
 msgstr "注文を正常にエクスポートしました。"
 
-#: src/components/common/OrdersTable/index.tsx:407
+#: src/components/common/OrdersTable/index.tsx:417
 msgid "Your orders will appear here once they start rolling in."
 msgstr "注文が入り始めると、ここに表示されます。"
 
@@ -22609,6 +22920,14 @@ msgstr "お支払いは、銀行レベルの暗号化で保護されています
 msgid "Your payment is still processing"
 msgstr "お支払いはまだ処理中です"
 
+#: src/components/layouts/Checkout/index.tsx:492
+msgid "Your payment link has expired"
+msgstr "支払いリンクの有効期限が切れました"
+
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:192
+msgid "Your payment link is ready"
+msgstr "支払いリンクの準備ができました"
+
 #: src/components/forms/StripeCheckoutForm/index.tsx:103
 msgid "Your payment was not successful, please try again."
 msgstr "お支払いは成功しませんでした。もう一度お試しください。"
@@ -22616,6 +22935,18 @@ msgstr "お支払いは成功しませんでした。もう一度お試しくだ
 #: src/components/forms/StripeCheckoutForm/index.tsx:169
 msgid "Your payment was unsuccessful. Please try again."
 msgstr "お支払いは成功しませんでした。もう一度お試しください。"
+
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:211
+msgid "Your places are held for up to {0} while you wait for payment. If nobody pays in time, they are released."
+msgstr "支払いを待つ間、席は最大{0}確保されます。期限内に誰も支払わない場合、席は解放されます。"
+
+#: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:266
+msgid "Your places are held until {0}. Whoever has the link can pay, or you can still pay yourself below."
+msgstr "席は{0}まで確保されています。リンクを持っている人が支払うか、下からご自身で支払うこともできます。"
+
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:238
+msgid "Your places are reserved. The organizer will confirm your order once your payment arrives."
+msgstr "席は確保されています。支払いが届き次第、主催者が注文を確定します。"
 
 #: src/components/common/PlatformFeesSettings/index.tsx:152
 msgid "Your Plan"
@@ -22669,7 +23000,7 @@ msgstr "チケット対象："
 msgid "Your ticket is still valid — no action is needed unless the new time doesn't work for you. Please reply to this email if you have any questions."
 msgstr "チケットは引き続き有効です。新しい時間が都合に合わない場合を除き、対応は不要です。ご不明な点がございましたら、このメールにご返信ください。"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:379
+#: src/components/routes/product-widget/CollectInformation/index.tsx:385
 msgid "Your tickets have been confirmed."
 msgstr "チケットが確定しました。"
 
@@ -22685,7 +23016,7 @@ msgstr "VAT番号は検証待ちです"
 msgid "Your VAT number will be validated when you save"
 msgstr "VAT番号は、保存時に検証されます"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:405
+#: src/components/routes/product-widget/CollectInformation/index.tsx:411
 msgid "Your waitlist offer has expired and we were unable to complete your order. Please rejoin the waitlist to be notified when more spots become available."
 msgstr "キャンセル待ちのオファーの有効期限が切れたため、注文を完了できませんでした。空きが出たときに通知を受け取るには、もう一度キャンセル待ちに登録してください。"
 
@@ -22698,7 +23029,7 @@ msgstr "your-website.com"
 msgid "YouTube"
 msgstr "YouTube"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:589
+#: src/components/routes/product-widget/CollectInformation/index.tsx:595
 msgid "ZIP / Postal Code"
 msgstr "郵便番号"
 
@@ -22708,7 +23039,7 @@ msgstr "郵便番号"
 msgid "Zip or Postal Code"
 msgstr "郵便番号"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:590
+#: src/components/routes/product-widget/CollectInformation/index.tsx:596
 msgid "ZIP or Postal Code"
 msgstr "郵便番号"
 

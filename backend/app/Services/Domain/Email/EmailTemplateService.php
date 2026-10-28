@@ -160,19 +160,23 @@ class EmailTemplateService
     {
         return [
             EmailTemplateType::ORDER_CONFIRMATION->value => [
-                'subject' => 'Your Order is Confirmed! 🎉',
+                'subject' => '{% if order.is_awaiting_offline_payment %}Order placed: payment needed{% else %}Your Order is Confirmed! 🎉{% endif %}',
                 'body' => <<<'LIQUID'
-<strong>Your Order is Confirmed! 🎉</strong><br>
-
 {% if order.is_awaiting_offline_payment %}
-<strong>ℹ️ Payment Pending:</strong> Your order is pending payment. Tickets have been issued but will not be valid until payment is received.<br>
-<strong>Payment Instructions</strong><br>
-Please follow the instructions below to complete your payment:<br>
+<strong>Order placed: payment needed</strong><br>
+Your order is pending payment. Tickets have been issued but will not be valid until payment is received.<br>
+<strong>How to pay</strong><br>
+<strong>Amount due:</strong> {{ order.total }}<br>
+{% if order.payment_reference %}
+<strong>Payment reference:</strong> {{ order.payment_reference }}<br>
+Include this reference with your payment so the organizer can match it to your order.<br>
+{% endif %}
 {% if settings.offline_payment_instructions %}
 {{ settings.offline_payment_instructions }}<br>
 {% endif %}
 
 {% else %}
+<strong>Your Order is Confirmed! 🎉</strong><br>
 Congratulations! Your order for <strong>{{ event.title }}</strong> on <strong>{{ event.date }}</strong> at <strong>{{ event.time }}</strong> was successful. Please find your order details below.<br>
 {% endif %}
 

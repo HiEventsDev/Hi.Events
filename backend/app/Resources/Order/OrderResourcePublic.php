@@ -45,6 +45,12 @@ class OrderResourcePublic extends BaseResource
             'email' => $this->getEmail(),
             'public_id' => $this->getPublicId(),
             'is_payment_required' => $this->isPaymentRequired(),
+            'payment_link_created_at' => $this->getPaymentLinkCreatedAt(),
+            'is_payment_link_payer' => $this->isAccessedViaPaymentLink(),
+            'offline_payment_reported_at' => $this->getOfflinePaymentReportedAt(),
+            $this->mergeWhen($this->getPaymentLinkUrl() !== null && ($this->isOrderReserved() || $this->isOrderAwaitingOfflinePayment()), fn () => [
+                'payment_link_url' => $this->getPaymentLinkUrl(),
+            ]),
             'promo_code' => $this->getPromoCode(),
             'taxes_and_fees_rollup' => $this->getTaxesAndFeesRollup(),
             'event' => $this->when(

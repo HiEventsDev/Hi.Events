@@ -98,6 +98,50 @@ test.describe('event settings', () => {
     expect(saved.offline_payment_instructions).toContain(instructions);
   });
 
+  test('payment follow-up options only appear once offline payments are enabled', async ({ authedPage, api, account }) => {
+    const event = await createDraftEvent(api, account.organizerId);
+
+    const settings = new EventSettingsPage(authedPage);
+    await settings.goto(event.eventId);
+
+    await expect(settings.offlinePaymentReportingSwitch).toBeHidden();
+    await expect(settings.paymentLinksSwitch).toBeHidden();
+    await expect(settings.offlinePaymentOrderReferenceSwitch).toBeHidden();
+
+    await settings.offlinePaymentsCheckbox.check();
+    await settings.saveSection('payment-settings');
+    await expect(settings.section('payment-settings').getByText('Payment instructions are required when offline payments are enabled.')).toBeVisible();
+
+    const instructions = uniqueName('Wire the funds to account');
+    await settings.offlineInstructionsEditor.fill(instructions);
+
+    await expect(settings.offlinePaymentOrderReferenceSwitch).toBeChecked();
+    await expect(settings.paymentReferencePreview.getByText(instructions)).toBeVisible();
+    await expect(settings.paymentReferencePreview.getByText('O-ABC1234')).toBeVisible();
+    await settings.offlinePaymentOrderReferenceSwitch.uncheck({ force: true });
+    await expect(settings.paymentReferencePreview).toBeHidden();
+
+    await expect(settings.offlinePaymentReportingSwitch).toBeChecked();
+    await expect(settings.paymentLinksSwitch).not.toBeChecked();
+    await expect(settings.paymentLinkHoldHoursInput).toBeHidden();
+
+    await settings.paymentLinksSwitch.check({ force: true });
+    await settings.paymentLinkHoldHoursInput.fill('96');
+    await settings.saveSection('payment-settings');
+    await expect(authedPage.getByText('Successfully Updated Payment & Invoicing Settings')).toBeVisible();
+
+    await expect
+      .poll(async () => (await api.getEventSettings(event.eventId)).payment_links_enabled)
+      .toBe(true);
+    const saved = await api.getEventSettings(event.eventId);
+    expect(saved.payment_link_expiry_hours).toBe(96);
+    expect(saved.offline_payment_reporting_enabled).toBe(true);
+    expect(saved.offline_payment_order_reference_enabled).toBe(false);
+
+    await settings.offlinePaymentsCheckbox.uncheck();
+    await expect(settings.paymentLinksSwitch).toBeHidden();
+  });
+
   test('an organizer updates SEO and miscellaneous settings', async ({ authedPage, api, account }) => {
     const event = await createDraftEvent(api, account.organizerId);
     const seoTitle = uniqueName('E2E SEO Title');

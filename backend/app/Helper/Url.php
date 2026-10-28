@@ -24,6 +24,8 @@ class Url
 
     public const ORDER_DETAILS = 'app.frontend_urls.order_details';
 
+    public const ORDER_PAYMENT = 'app.frontend_urls.order_payment';
+
     public const ORGANIZER_ORDER_SUMMARY = 'app.frontend_urls.organizer_order_summary';
 
     public const TICKET_LOOKUP = 'app.frontend_urls.ticket_lookup';

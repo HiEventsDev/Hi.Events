@@ -71,6 +71,10 @@ class UpdateEventSettingsHandler
                     'payment_providers' => $settings->payment_providers,
                     'offline_payment_instructions' => $this->purifier->purify($settings->offline_payment_instructions),
                     'allow_orders_awaiting_offline_payment_to_check_in' => $settings->allow_orders_awaiting_offline_payment_to_check_in,
+                    'offline_payment_reporting_enabled' => $settings->offline_payment_reporting_enabled,
+                    'offline_payment_order_reference_enabled' => $settings->offline_payment_order_reference_enabled,
+                    'payment_links_enabled' => $settings->payment_links_enabled,
+                    'payment_link_expiry_hours' => $settings->payment_link_expiry_hours,
 
                     // Invoice settings
                     'enable_invoicing' => $settings->enable_invoicing,

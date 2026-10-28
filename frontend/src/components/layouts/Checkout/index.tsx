@@ -4,7 +4,7 @@ import {useGetOrderPublic} from "../../../queries/useGetOrderPublic.ts";
 import {t} from "@lingui/macro";
 import {Countdown} from "../../common/Countdown";
 import {ActionIcon, Button, Group, Modal, Tooltip} from "@mantine/core";
-import {IconArrowLeft, IconClock, IconPrinter, IconReceipt} from "@tabler/icons-react";
+import {IconArrowLeft, IconCalendarDue, IconClock, IconPrinter, IconReceipt} from "@tabler/icons-react";
 import {eventHomepagePath, eventHomepageUrl} from "../../../utilites/urlHelper.ts";
 import {ShareComponent} from "../../common/ShareIcon";
 import {AddToEventCalendarButton} from "../../common/AddEventToCalendarButton";
@@ -18,8 +18,9 @@ import {downloadBinary} from "../../../utilites/download.ts";
 import {withLoadingNotification} from "../../../utilites/withLoadingNotification.tsx";
 import {useAbandonOrderPublic} from "../../../mutations/useAbandonOrderPublic.ts";
 import {showError, showInfo} from "../../../utilites/notifications.tsx";
-import {isDateInFuture, utcDateToEpochMs} from "../../../utilites/dates.ts";
-import {claimOrderCompletionReport, getCheckoutSessionIdentifier} from "../../../utilites/checkoutSession.ts";
+import {dateToBrowserTz, formatDateWithLocale, isDateInFuture, utcDateToEpochMs} from "../../../utilites/dates.ts";
+import {isSsr} from "../../../utilites/helpers.ts";
+import {claimOrderCompletionReport, getCheckoutSessionIdentifier, isCheckoutSessionStored} from "../../../utilites/checkoutSession.ts";
 import {PoweredByFooter} from "../../common/PoweredByFooter";
 import {detectMode} from "../../../utilites/themeUtils.ts";
 import {CheckoutThemeProvider} from "./CheckoutThemeProvider.tsx";
@@ -50,6 +51,8 @@ const Checkout = () => {
     const orderIsCompleted = order?.status === 'COMPLETED';
     const orderIsReserved = order?.status === 'RESERVED';
     const orderIsAwaitingOfflinePayment = order?.status === 'AWAITING_OFFLINE_PAYMENT';
+    const orderHasPaymentLink = orderIsReserved && !!order?.payment_link_created_at;
+    const isPaymentLinkPayer = !!order?.is_payment_link_payer;
     const [isExpired, setIsExpired] = useState(false);
     const orderHasAttendees = order?.attendees && order.attendees.length > 0;
     const [showAbandonDialog, setShowAbandonDialog] = useState(false);
@@ -68,6 +71,20 @@ const Checkout = () => {
     }, []);
 
     const closeModal = useCallback(() => postToParent('hievents:close-checkout'), [postToParent]);
+
+    useEffect(() => {
+        if (!orderShortId || !searchParams.has('session_identifier')) {
+            return;
+        }
+        const token = getCheckoutSessionIdentifier(orderShortId);
+        if (!token || !isCheckoutSessionStored(orderShortId, token)) {
+            return;
+        }
+        const remaining = new URLSearchParams(searchParams);
+        remaining.delete('session_identifier');
+        const search = remaining.toString();
+        navigate({pathname: location.pathname, search: search ? `?${search}` : ''}, {replace: true, preventScrollReset: true});
+    }, [orderShortId, searchParams]);
     const reportedOrderRef = useRef<string | null>(null);
 
     const getCurrentStep = (): 'details' | 'payment' | 'summary' => {
@@ -89,13 +106,14 @@ const Checkout = () => {
 
     const isOrderReservedAndNotExpired = orderIsReserved && order?.reserved_until
         && isDateInFuture(order.reserved_until);
+    const canAbandonOrder = !!isOrderReservedAndNotExpired && !orderHasPaymentLink;
 
     const blocker = useBlocker(
         ({currentLocation, nextLocation}) => {
             const isLeavingCheckout = !nextLocation.pathname.startsWith('/checkout/');
             return (
                 !isAbandoning &&
-                !!isOrderReservedAndNotExpired &&
+                canAbandonOrder &&
                 currentLocation.pathname !== nextLocation.pathname &&
                 isLeavingCheckout
             );
@@ -116,13 +134,13 @@ const Checkout = () => {
 
     const handleRequestClose = useCallback(() => {
         postToParent('hievents:close-pending');
-        if (isOrderReservedAndNotExpired) {
+        if (canAbandonOrder) {
             setPendingClose(true);
             setShowAbandonDialog(true);
         } else {
             closeModal();
         }
-    }, [postToParent, closeModal, isOrderReservedAndNotExpired]);
+    }, [postToParent, closeModal, canAbandonOrder]);
 
     useEffect(() => {
         if (!isModal) return;
@@ -195,6 +213,22 @@ const Checkout = () => {
         }
     }, [isModal, order?.is_expired]);
 
+    useEffect(() => {
+        if (!orderHasPaymentLink || !order?.reserved_until) {
+            return;
+        }
+        const msUntilExpiry = utcDateToEpochMs(order.reserved_until) - Date.now();
+        if (msUntilExpiry <= 0) {
+            setIsExpired(true);
+            return;
+        }
+        if (msUntilExpiry > 2147483647) {
+            return;
+        }
+        const timeout = window.setTimeout(() => setIsExpired(true), msUntilExpiry);
+        return () => window.clearTimeout(timeout);
+    }, [orderHasPaymentLink, order?.reserved_until]);
+
     const handleInvoiceDownload = async (invoice: Invoice) => {
         await withLoadingNotification(
             async () => {
@@ -255,7 +289,7 @@ const Checkout = () => {
     };
 
     const handleEventHomepageClick = (e: React.MouseEvent) => {
-        if (isOrderReservedAndNotExpired && event) {
+        if (canAbandonOrder && event) {
             e.preventDefault();
             setPendingNavigation(eventHomepagePath(event));
             setShowAbandonDialog(true);
@@ -345,7 +379,7 @@ const Checkout = () => {
 
                                         {orderIsReserved && (
                                             <span className={classes.eyebrow}>
-                                                {t`Checkout · step ${stepNumber} of ${stepCount}`}
+                                                {isPaymentLinkPayer ? t`Payment request` : t`Checkout · step ${stepNumber} of ${stepCount}`}
                                             </span>
                                         )}
                                         <span className={classes.eventName}>{event.title}</span>
@@ -353,7 +387,25 @@ const Checkout = () => {
 
                                     <div className={classes.headerSpacer}/>
 
-                                    {orderIsReserved && (
+                                    {orderHasPaymentLink && (
+                                        <>
+                                            <span className={classes.timerCaption}>{t`Pay by`}</span>
+                                            <Tooltip label={t`Pay by ${dateToBrowserTz(order.reserved_until, event.timezone)}`}>
+                                                <div className={classes.timerChip} data-testid="checkout-pay-by">
+                                                    <IconCalendarDue size={14}/>
+                                                    <span className={classes.countdown} suppressHydrationWarning>
+                                                        {formatDateWithLocale(
+                                                            order.reserved_until,
+                                                            'dayMonthTime',
+                                                            isSsr() ? event.timezone : Intl.DateTimeFormat().resolvedOptions().timeZone,
+                                                        )}
+                                                    </span>
+                                                </div>
+                                            </Tooltip>
+                                        </>
+                                    )}
+
+                                    {orderIsReserved && !orderHasPaymentLink && (
                                         <>
                                             <span className={classes.timerCaption}>{t`Time left`}</span>
                                             <div className={classes.timerChip} data-testid="checkout-timer">
@@ -378,9 +430,11 @@ const Checkout = () => {
                                                 hideShareButtonText
                                             />
 
-                                            <AddToEventCalendarButton event={event} occurrence={order?.order_items?.[0]?.event_occurrence}/>
+                                            {!isPaymentLinkPayer && (
+                                                <AddToEventCalendarButton event={event} occurrence={order?.order_items?.[0]?.event_occurrence}/>
+                                            )}
 
-                                            {orderHasAttendees && (
+                                            {(orderHasAttendees && !isPaymentLinkPayer) && (
                                                 <Tooltip label={t`Print Tickets`}>
                                                     <ActionIcon
                                                         variant="subtle"
@@ -434,10 +488,18 @@ const Checkout = () => {
             >
                 <div style={{textAlign: 'center', padding: '20px 0'}}>
                     <h3 style={{color: 'var(--checkout-text-primary)', margin: '0 0 8px 0'}}>
-                        {t`You have run out of time to complete your order.`}
+                        {orderHasPaymentLink
+                            ? (isPaymentLinkPayer ? t`This payment link has expired` : t`Your payment link has expired`)
+                            : t`You have run out of time to complete your order.`}
                     </h3>
                     <p style={{color: 'var(--checkout-text-secondary)', margin: '0'}}>
-                        {t`Please return to the event page to start over.`}
+                        {orderHasPaymentLink
+                            ? (isPaymentLinkPayer
+                                ? (order?.first_name
+                                    ? t`The order was not paid in time, so the places are no longer held. Let ${order.first_name} know so they can register again.`
+                                    : t`The order was not paid in time, so the places are no longer held. Let the person who registered know so they can register again.`)
+                                : t`The order was not paid in time, so your places have been released. Return to the event page to start a new order.`)
+                            : t`Please return to the event page to start over.`}
                     </p>
                     <Button
                         onClick={handleReturn}

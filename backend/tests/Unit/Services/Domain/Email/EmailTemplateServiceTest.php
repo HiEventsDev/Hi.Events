@@ -119,6 +119,15 @@ class EmailTemplateServiceTest extends TestCase
         $this->assertSame('<strong>Thanks!</strong> <p>Details</p>', $result->body);
     }
 
+    public function test_the_default_order_confirmation_subject_does_not_call_an_unpaid_order_confirmed(): void
+    {
+        $subject = $this->emailTemplateService->getDefaultTemplate(EmailTemplateType::ORDER_CONFIRMATION)['subject'];
+        $renderer = new LiquidTemplateRenderer;
+
+        $this->assertSame('Order placed: payment needed', $renderer->render($subject, ['order' => ['is_awaiting_offline_payment' => true]]));
+        $this->assertSame('Your Order is Confirmed! 🎉', $renderer->render($subject, ['order' => ['is_awaiting_offline_payment' => false]]));
+    }
+
     public function test_gets_event_level_template_when_exists(): void
     {
         $eventTemplate = $this->createMockTemplate(

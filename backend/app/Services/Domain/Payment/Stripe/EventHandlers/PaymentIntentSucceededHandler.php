@@ -352,6 +352,15 @@ class PaymentIntentSucceededHandler
             );
         }
 
+        if ($stripePayment->getOrder()->isOrderAwaitingOfflinePayment()) {
+            $this->rejectForRefund(
+                $stripePayment,
+                __('Payment was successful, but the order had already been placed to pay later. Order: :id', [
+                    'id' => $stripePayment->getOrderId(),
+                ])
+            );
+        }
+
         if (! in_array($stripePayment->getOrder()->getPaymentStatus(), [
             OrderPaymentStatus::AWAITING_PAYMENT->name,
             OrderPaymentStatus::PAYMENT_FAILED->name,

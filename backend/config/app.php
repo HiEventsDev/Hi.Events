@@ -70,6 +70,7 @@ return [
         'attendee_product' => '/product/%d/%s',
         'order_summary' => '/checkout/%d/%s/summary',
         'order_details' => '/checkout/%d/%s/details',
+        'order_payment' => '/checkout/%d/%s/payment',
         'organizer_order_summary' => '/manage/event/%d/orders#order-%d',
         'ticket_lookup' => '/my-tickets/%s',
         'account_danger_zone' => '/settings/account#delete-account',

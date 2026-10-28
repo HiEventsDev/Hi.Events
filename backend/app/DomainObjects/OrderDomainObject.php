@@ -39,6 +39,10 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
 
     public ?string $sessionIdentifier = null;
 
+    private ?string $paymentLinkUrl = null;
+
+    private bool $accessedViaPaymentLink = false;
+
     public static function getAllowedFilterFields(): array
     {
         return [
@@ -335,6 +339,35 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
     public function getSessionIdentifier(): ?string
     {
         return $this->sessionIdentifier;
+    }
+
+    public function setPaymentLinkUrl(?string $paymentLinkUrl): OrderDomainObject
+    {
+        $this->paymentLinkUrl = $paymentLinkUrl;
+
+        return $this;
+    }
+
+    public function getPaymentLinkUrl(): ?string
+    {
+        return $this->paymentLinkUrl;
+    }
+
+    public function setAccessedViaPaymentLink(bool $accessedViaPaymentLink): OrderDomainObject
+    {
+        $this->accessedViaPaymentLink = $accessedViaPaymentLink;
+
+        return $this;
+    }
+
+    public function isAccessedViaPaymentLink(): bool
+    {
+        return $this->accessedViaPaymentLink;
+    }
+
+    public function hasPaymentLink(): bool
+    {
+        return $this->getPaymentLinkCreatedAt() !== null;
     }
 
     public function isRefundable(): bool

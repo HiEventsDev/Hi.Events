@@ -667,6 +667,10 @@ export interface EventSettings {
     offline_payment_instructions: string;
     payment_providers: PaymentProvider[];
     allow_orders_awaiting_offline_payment_to_check_in: boolean;
+    offline_payment_reporting_enabled: boolean;
+    offline_payment_order_reference_enabled: boolean;
+    payment_links_enabled: boolean;
+    payment_link_expiry_hours: number;
 
     // Invoice settings
     enable_invoicing: boolean;
@@ -1441,6 +1445,11 @@ export interface Order {
     event?: Event;
     latest_invoice?: Invoice;
     session_identifier?: string;
+    payment_link_created_at?: string | null;
+    payment_link_url?: string;
+    is_payment_link_payer?: boolean;
+    offline_payment_reported_at?: string | null;
+    offline_payment_note?: string | null;
 }
 
 export interface Invoice {

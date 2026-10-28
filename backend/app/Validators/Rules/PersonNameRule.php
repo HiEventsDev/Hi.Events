@@ -9,10 +9,12 @@ class PersonNameRule implements ValidationRule
 {
     public const MAX_LENGTH = 50;
 
+    public const LINKABLE_DOMAIN_PATTERN = '/\.(com|net|org|info|biz|io|co|ly|me|app|xyz|site|online|link|shop|top|click|live|store|ru|cn|tk)\b/iu';
+
     private const DISALLOWED_PATTERNS = [
         '/[<>@{}]/u',
         '/https?:|www\./iu',
-        '/\.(com|net|org|info|biz|io|co|ly|me|app|xyz|site|online|link|shop|top|click|live|store|ru|cn|tk)\b/iu',
+        self::LINKABLE_DOMAIN_PATTERN,
         '/(\p{Nd}\P{Nd}{0,3}){5,}/u',
     ];
 

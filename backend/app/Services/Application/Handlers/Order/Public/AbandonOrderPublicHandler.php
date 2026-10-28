@@ -73,6 +73,10 @@ class AbandonOrderPublicHandler
             throw new ResourceConflictException(__('Order has already expired'));
         }
 
+        if ($order->hasPaymentLink()) {
+            throw new ResourceConflictException(__('This order is waiting for payment through a payment link'));
+        }
+
         return $order;
     }
 

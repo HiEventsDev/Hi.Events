@@ -179,6 +179,25 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
             label: t`Reference`,
             value: order.box_office_reference,
         }] : []),
+        ...(order.offline_payment_reported_at ? [{
+            label: t`Payment reported by buyer`,
+            value: (
+                <>
+                    <Tooltip label={prettyDate(order.offline_payment_reported_at, event.timezone)} position="bottom" withArrow>
+                        <span>{relativeDate(order.offline_payment_reported_at)}</span>
+                    </Tooltip>
+                    {order.offline_payment_note && <div>{t`Note: ${order.offline_payment_note}`}</div>}
+                </>
+            ),
+        }] : []),
+        ...(order.payment_link_created_at ? [{
+            label: t`Payment link`,
+            value: (
+                <Tooltip label={prettyDate(order.payment_link_created_at, event.timezone)} position="bottom" withArrow>
+                    <span>{t`Created ${relativeDate(order.payment_link_created_at)}`}</span>
+                </Tooltip>
+            ),
+        }] : []),
         ...(order.promo_code ? [{
             label: t`Promo code`,
             value: order.promo_code,

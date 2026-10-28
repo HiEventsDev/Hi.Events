@@ -171,6 +171,16 @@ export const orderClientPublic = {
         return response.data;
     },
 
+    createPaymentLink: async (eventId: IdParam, orderShortId: IdParam) => {
+        const response = await publicApi.post<GenericDataResponse<Order>>(`events/${eventId}/order/${orderShortId}/payment-link`);
+        return response.data;
+    },
+
+    reportOfflinePayment: async (eventId: IdParam, orderShortId: IdParam, note: string | null) => {
+        const response = await publicApi.post<GenericDataResponse<Order>>(`events/${eventId}/order/${orderShortId}/report-offline-payment`, {note});
+        return response.data;
+    },
+
     downloadInvoice: async (eventId: IdParam, orderShortId: IdParam): Promise<Blob> => {
         const response = await publicApi.get(`events/${eventId}/order/${orderShortId}/invoice`, {
             responseType: 'blob',

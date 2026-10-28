@@ -135,6 +135,14 @@ abstract class EventSettingDomainObjectAbstract extends AbstractDomainObject
 
     final public const HOMEPAGE_SECTIONS = 'homepage_sections';
 
+    final public const OFFLINE_PAYMENT_REPORTING_ENABLED = 'offline_payment_reporting_enabled';
+
+    final public const OFFLINE_PAYMENT_ORDER_REFERENCE_ENABLED = 'offline_payment_order_reference_enabled';
+
+    final public const PAYMENT_LINKS_ENABLED = 'payment_links_enabled';
+
+    final public const PAYMENT_LINK_EXPIRY_HOURS = 'payment_link_expiry_hours';
+
     protected int $id;
 
     protected int $event_id;
@@ -257,6 +265,14 @@ abstract class EventSettingDomainObjectAbstract extends AbstractDomainObject
 
     protected array|string|null $homepage_sections = null;
 
+    protected bool $offline_payment_reporting_enabled = true;
+
+    protected bool $offline_payment_order_reference_enabled = true;
+
+    protected bool $payment_links_enabled = false;
+
+    protected int $payment_link_expiry_hours = 72;
+
     public function toArray(): array
     {
         return [
@@ -321,6 +337,10 @@ abstract class EventSettingDomainObjectAbstract extends AbstractDomainObject
             'hide_sold_out_occurrences' => $this->hide_sold_out_occurrences ?? null,
             'get_tickets_button_text' => $this->get_tickets_button_text ?? null,
             'homepage_sections' => $this->homepage_sections ?? null,
+            'offline_payment_reporting_enabled' => $this->offline_payment_reporting_enabled ?? null,
+            'offline_payment_order_reference_enabled' => $this->offline_payment_order_reference_enabled ?? null,
+            'payment_links_enabled' => $this->payment_links_enabled ?? null,
+            'payment_link_expiry_hours' => $this->payment_link_expiry_hours ?? null,
         ];
     }
 
@@ -1055,5 +1075,53 @@ abstract class EventSettingDomainObjectAbstract extends AbstractDomainObject
     public function getHomepageSections(): array|string|null
     {
         return $this->homepage_sections;
+    }
+
+    public function setOfflinePaymentReportingEnabled(bool $offline_payment_reporting_enabled): self
+    {
+        $this->offline_payment_reporting_enabled = $offline_payment_reporting_enabled;
+
+        return $this;
+    }
+
+    public function getOfflinePaymentReportingEnabled(): bool
+    {
+        return $this->offline_payment_reporting_enabled;
+    }
+
+    public function setOfflinePaymentOrderReferenceEnabled(bool $offline_payment_order_reference_enabled): self
+    {
+        $this->offline_payment_order_reference_enabled = $offline_payment_order_reference_enabled;
+
+        return $this;
+    }
+
+    public function getOfflinePaymentOrderReferenceEnabled(): bool
+    {
+        return $this->offline_payment_order_reference_enabled;
+    }
+
+    public function setPaymentLinksEnabled(bool $payment_links_enabled): self
+    {
+        $this->payment_links_enabled = $payment_links_enabled;
+
+        return $this;
+    }
+
+    public function getPaymentLinksEnabled(): bool
+    {
+        return $this->payment_links_enabled;
+    }
+
+    public function setPaymentLinkExpiryHours(int $payment_link_expiry_hours): self
+    {
+        $this->payment_link_expiry_hours = $payment_link_expiry_hours;
+
+        return $this;
+    }
+
+    public function getPaymentLinkExpiryHours(): int
+    {
+        return $this->payment_link_expiry_hours;
     }
 }

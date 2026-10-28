@@ -1,0 +1,52 @@
+@use "../../../../../styles/mixins";
+
+.wrapper {
+  margin-bottom: 40px;
+}
+
+.form {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+
+  :global(.mantine-InputWrapper-root) {
+    flex: 1;
+    margin-bottom: 0;
+  }
+
+  @include mixins.respond-below(sm) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.intro {
+  margin-bottom: 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--checkout-text-secondary, #6B7280);
+}
+
+.reported {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+
+  svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: var(--mantine-color-teal-6, #0ca678);
+  }
+}
+
+.reportedTitle {
+  font-weight: 600;
+  color: var(--checkout-text-primary, #111827);
+}
+
+.reportedText {
+  margin-top: 2px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--checkout-text-secondary, #6B7280);
+}
