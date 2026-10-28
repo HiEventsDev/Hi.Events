@@ -54,6 +54,14 @@ import {Attendee, Event, IdParam, LocationType, Order, Product} from "../../../.
 import classes from './OrderSummaryAndProducts.module.scss';
 import {clearWaitlistJoinedForEvent} from "../../../../hooks/useWaitlistJoined.ts";
 import {UserGeneratedContent} from "../../../common/UserGeneratedContent";
+import {OfflinePaymentDetails} from "../../../common/OfflinePaymentDetails";
+import {formatCurrency, plainAmount} from "../../../../utilites/currency.ts";
+import {ReportOfflinePayment} from "./ReportOfflinePayment";
+import {
+    SharePaymentDetailsEntryPoint,
+    SharePaymentDetailsModal,
+    usePaymentLinkModal,
+} from "../Payment/PaymentLink";
 
 const PaymentStatus = ({order}: { order: Order }) => {
     const paymentStatuses: Record<string, string> = {
@@ -173,16 +181,22 @@ const DetailItem = ({icon: Icon, label, value}: { icon: any, label: string, valu
     </div>
 );
 
-const WelcomeHeader = ({order, event, allowSelfEdit}: { order: Order; event: Event; allowSelfEdit: boolean }) => {
+const WelcomeHeader = ({order, event, allowSelfEdit, isPayer}: {
+    order: Order;
+    event: Event;
+    allowSelfEdit: boolean;
+    isPayer: boolean;
+}) => {
     const isCompleted = order.status === 'COMPLETED';
     const isAwaitingPayment = order.status === 'AWAITING_OFFLINE_PAYMENT';
     const isCancelled = order.status === 'CANCELLED';
+    const registrantName = order.first_name || order.email;
 
     const message = {
-        'COMPLETED': t`You're going to ${event.title}!`,
+        'COMPLETED': isPayer ? t`Payment complete` : t`You're going to ${event.title}!`,
         'CANCELLED': t`Your order has been cancelled`,
         'RESERVED': null,
-        'AWAITING_OFFLINE_PAYMENT': t`Your order is awaiting payment`,
+        'AWAITING_OFFLINE_PAYMENT': isPayer ? t`Order placed, payment pending` : t`Your order is awaiting payment`,
         'ABANDONED': null,
     }[order.status];
 
@@ -209,12 +223,27 @@ const WelcomeHeader = ({order, event, allowSelfEdit}: { order: Order; event: Eve
                 </div>
             )}
             <div className={classes.welcomeMessage}>{message}</div>
-            {isCompleted && order.email && (
+            {isPayer && isCompleted && (
+                <div className={classes.confirmationText}>
+                    {t`Thank you. ${registrantName}'s order is confirmed and their confirmation has been emailed to`} <strong>{order.email}</strong>
+                </div>
+            )}
+            {isPayer && isAwaitingPayment && (
+                <div className={classes.confirmationText}>
+                    {t`Pay using the instructions below. ${registrantName} has been emailed the order details, and the organizer will confirm the order once your payment arrives.`}
+                </div>
+            )}
+            {!isPayer && isAwaitingPayment && (
+                <div className={classes.confirmationText}>
+                    {t`Your places are reserved. The organizer will confirm your order once your payment arrives.`}
+                </div>
+            )}
+            {!isPayer && isCompleted && order.email && (
                 <div className={classes.confirmationText}>
                     {t`Confirmation sent to`} <strong>{order.email}</strong>
                 </div>
             )}
-            {isCompleted && allowSelfEdit && (
+            {isCompleted && allowSelfEdit && !isPayer && (
                 <div className={classes.selfServiceHint}>
                     {t`Bookmark this page to manage your order anytime.`}
                 </div>
@@ -422,14 +451,29 @@ const PostCheckoutMessage = ({ message }: { message: string }) => (
     </div>
 );
 
-const OfflinePaymentInstructions = ({ event }: { event: Event }) => (
-    <div style={{ marginTop: '20px', marginBottom: '40px' }}>
-        <h2>{t`Payment Instructions`}</h2>
-        <Card>
-            <UserGeneratedContent html={event?.settings?.offline_payment_instructions || ""} />
-        </Card>
-    </div>
-);
+const OfflinePaymentInstructions = ({event, order, canShare}: { event: Event; order: Order; canShare: boolean }) => {
+    const shareModal = usePaymentLinkModal();
+
+    return (
+        <div style={{marginTop: '20px', marginBottom: '40px'}}>
+            <h2>{t`How to pay`}</h2>
+            <Card>
+                <OfflinePaymentDetails
+                    amount={formatCurrency(order.total_gross, order.currency)}
+                    amountToCopy={plainAmount(order.total_gross, order.currency)}
+                    reference={event?.settings?.offline_payment_order_reference_enabled ? order.public_id : null}
+                />
+                <UserGeneratedContent html={event?.settings?.offline_payment_instructions || ""}/>
+            </Card>
+            {canShare && (
+                <>
+                    <SharePaymentDetailsEntryPoint order={order} event={event} onReady={shareModal.open}/>
+                    <SharePaymentDetailsModal opened={shareModal.opened} onClose={shareModal.close} order={order} event={event}/>
+                </>
+            )}
+        </div>
+    );
+};
 
 export const OrderSummaryAndProducts = () => {
     const {eventId, orderShortId} = useParams();
@@ -442,6 +486,7 @@ export const OrderSummaryAndProducts = () => {
 
     const [editingAttendee, setEditingAttendee] = useState<Attendee | null>(null);
     const [editOrderModalOpened, setEditOrderModalOpened] = useState(false);
+    const isPayer = !!order?.is_payment_link_payer;
 
     useEffect(() => {
         if (eventId && order && (order.status === 'COMPLETED' || order.status === 'AWAITING_OFFLINE_PAYMENT')) {
@@ -454,7 +499,7 @@ export const OrderSummaryAndProducts = () => {
     const resendAttendeeTicketMutation = useResendAttendeeTicketPublic();
     const resendOrderConfirmationMutation = useResendOrderConfirmationPublic();
 
-    const allowSelfEdit = event?.settings?.allow_attendee_self_edit ?? false;
+    const allowSelfEdit = (event?.settings?.allow_attendee_self_edit ?? false) && !isPayer;
 
     const handleEditAttendee = (attendee: Attendee, data: any) => {
         editAttendeeMutation.mutate(
@@ -596,7 +641,12 @@ export const OrderSummaryAndProducts = () => {
             <CheckoutContent>
                 <CheckoutStepTitle title={t`Summary`}/>
 
-                <WelcomeHeader order={order} event={event} allowSelfEdit={allowSelfEdit}/>
+                <WelcomeHeader
+                    order={order}
+                    event={event}
+                    allowSelfEdit={allowSelfEdit}
+                    isPayer={isPayer}
+                />
 
                 {emailUpdated && (
                     <Alert
@@ -622,7 +672,18 @@ export const OrderSummaryAndProducts = () => {
                     defaultExpanded={false}
                 />
 
-                {order?.status === 'AWAITING_OFFLINE_PAYMENT' && <OfflinePaymentInstructions event={event}/>}
+                {order?.status === 'AWAITING_OFFLINE_PAYMENT' && <OfflinePaymentInstructions
+                    event={event}
+                    order={order}
+                    canShare={!isPayer
+                        && !!order.is_payment_required
+                        && !!event?.settings?.payment_links_enabled
+                        && !!event?.settings?.payment_providers?.includes('OFFLINE')}
+                />}
+
+                {(order?.status === 'AWAITING_OFFLINE_PAYMENT' && event?.settings?.offline_payment_reporting_enabled) && (
+                    <ReportOfflinePayment order={order} event={event}/>
+                )}
 
                 <h1 className={classes.heading}>{t`Order Details`}</h1>
 
@@ -641,9 +702,9 @@ export const OrderSummaryAndProducts = () => {
                 <h1 className={classes.heading}>{t`Event Details`}</h1>
                 <EventDetails event={event} order={order}/>
 
-                {order.status === 'COMPLETED' && <AddToCalendarCTA event={event} occurrence={order.order_items?.[0]?.event_occurrence}/>}
+                {(order.status === 'COMPLETED' && !isPayer) && <AddToCalendarCTA event={event} occurrence={order.order_items?.[0]?.event_occurrence}/>}
 
-                {(order?.attendees && order.attendees.length > 0) && (
+                {(!isPayer && order?.attendees && order.attendees.length > 0) && (
                     <>
                         <Group justify="space-between" align="center">
                             <h1 className={classes.heading}>

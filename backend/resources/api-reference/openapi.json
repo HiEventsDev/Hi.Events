@@ -4775,6 +4775,9 @@
                             "is_offline_payment": {
                               "type": "boolean"
                             },
+                            "payment_reference": {
+                              "type": "string"
+                            },
                             "seats": {
                               "type": "string",
                               "const": "Stalls · C-14, Stalls · C-15"
@@ -4797,6 +4800,7 @@
                             "email",
                             "is_awaiting_offline_payment",
                             "is_offline_payment",
+                            "payment_reference",
                             "seats",
                             "locale",
                             "currency"
@@ -5870,6 +5874,9 @@
                             "is_offline_payment": {
                               "type": "boolean"
                             },
+                            "payment_reference": {
+                              "type": "string"
+                            },
                             "seats": {
                               "type": "string",
                               "const": "Stalls · C-14, Stalls · C-15"
@@ -5892,6 +5899,7 @@
                             "email",
                             "is_awaiting_offline_payment",
                             "is_offline_payment",
+                            "payment_reference",
                             "seats",
                             "locale",
                             "currency"
@@ -14740,7 +14748,7 @@
           {
             "name": "session_identifier",
             "in": "query",
-            "description": "Checkout session identifier issued when the order was created. Sets the checkout session cookie on the response.",
+            "description": "Checkout session identifier issued when the order was created, or a payment-link token. A checkout session identifier also sets the checkout session cookie on the response.",
             "schema": {
               "type": "string"
             }
@@ -15083,8 +15091,309 @@
               }
             }
           },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
           "404": {
             "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/public/events/{eventId}/order/{orderShortId}/payment-link": {
+      "post": {
+        "operationId": "public.createOrderPaymentLinkActionPublic",
+        "summary": "Create Order Payment Link (public)",
+        "tags": [
+          "Orders / Public"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "orderShortId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "`OrderResourcePublic`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/OrderResourcePublic"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Error overview."
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/public/events/{eventId}/order/{orderShortId}/report-offline-payment": {
+      "post": {
+        "operationId": "public.reportOfflinePaymentActionPublic",
+        "summary": "Report Offline Payment (public)",
+        "tags": [
+          "Orders / Public"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "orderShortId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportOfflinePaymentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`OrderResourcePublic`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/OrderResourcePublic"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
             "content": {
               "application/json": {
                 "schema": {
@@ -29776,6 +30085,18 @@
           "allow_orders_awaiting_offline_payment_to_check_in": {
             "type": "boolean"
           },
+          "offline_payment_reporting_enabled": {
+            "type": "boolean"
+          },
+          "offline_payment_order_reference_enabled": {
+            "type": "boolean"
+          },
+          "payment_links_enabled": {
+            "type": "boolean"
+          },
+          "payment_link_expiry_hours": {
+            "type": "integer"
+          },
           "enable_invoicing": {
             "type": "boolean",
             "description": "Invoice settings"
@@ -29927,6 +30248,10 @@
           "payment_providers",
           "offline_payment_instructions",
           "allow_orders_awaiting_offline_payment_to_check_in",
+          "offline_payment_reporting_enabled",
+          "offline_payment_order_reference_enabled",
+          "payment_links_enabled",
+          "payment_link_expiry_hours",
           "enable_invoicing",
           "invoice_label",
           "invoice_prefix",
@@ -30126,6 +30451,18 @@
           "allow_orders_awaiting_offline_payment_to_check_in": {
             "type": "boolean"
           },
+          "offline_payment_reporting_enabled": {
+            "type": "boolean"
+          },
+          "offline_payment_order_reference_enabled": {
+            "type": "boolean"
+          },
+          "payment_links_enabled": {
+            "type": "boolean"
+          },
+          "payment_link_expiry_hours": {
+            "type": "integer"
+          },
           "require_billing_address": {
             "type": "boolean",
             "description": "Invoice settings"
@@ -30233,6 +30570,10 @@
           "payment_providers",
           "offline_payment_instructions",
           "allow_orders_awaiting_offline_payment_to_check_in",
+          "offline_payment_reporting_enabled",
+          "offline_payment_order_reference_enabled",
+          "payment_links_enabled",
+          "payment_link_expiry_hours",
           "require_billing_address",
           "invoice_label",
           "show_marketing_opt_in",
@@ -32006,6 +32347,24 @@
               "null"
             ]
           },
+          "payment_link_created_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "offline_payment_reported_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "offline_payment_note": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
           "promo_code": {
             "type": [
               "string",
@@ -32085,6 +32444,9 @@
           "address",
           "notes",
           "payment_provider",
+          "payment_link_created_at",
+          "offline_payment_reported_at",
+          "offline_payment_note",
           "promo_code",
           "event_id"
         ],
@@ -32180,6 +32542,27 @@
           },
           "is_payment_required": {
             "type": "boolean"
+          },
+          "payment_link_created_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "is_payment_link_payer": {
+            "type": "boolean"
+          },
+          "offline_payment_reported_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "payment_link_url": {
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "promo_code": {
             "type": [
@@ -32386,6 +32769,9 @@
           "email",
           "public_id",
           "is_payment_required",
+          "payment_link_created_at",
+          "is_payment_link_payer",
+          "offline_payment_reported_at",
           "promo_code",
           "taxes_and_fees_rollup"
         ],
@@ -35196,6 +35582,19 @@
         ],
         "title": "RefundOrderRequest"
       },
+      "ReportOfflinePaymentRequest": {
+        "type": "object",
+        "properties": {
+          "note": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 100
+          }
+        },
+        "title": "ReportOfflinePaymentRequest"
+      },
       "ScheduleItemResource": {
         "type": "object",
         "properties": {
@@ -36260,6 +36659,20 @@
           },
           "allow_orders_awaiting_offline_payment_to_check_in": {
             "type": "boolean"
+          },
+          "offline_payment_reporting_enabled": {
+            "type": "boolean"
+          },
+          "offline_payment_order_reference_enabled": {
+            "type": "boolean"
+          },
+          "payment_links_enabled": {
+            "type": "boolean"
+          },
+          "payment_link_expiry_hours": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 720
           },
           "enable_invoicing": {
             "type": "boolean",

@@ -188,6 +188,11 @@ class LiquidTemplateRenderer
                 'example' => 'ORD-2024-001234',
             ],
             [
+                'token' => '{{ order.payment_reference }}',
+                'description' => __('The reference buyers should use when paying offline. Empty when the order reference is not used as the payment reference.'),
+                'example' => 'ORD-2024-001234',
+            ],
+            [
                 'token' => '{{ order.total }}',
                 'description' => __('The total order amount'),
                 'example' => '$150.00',

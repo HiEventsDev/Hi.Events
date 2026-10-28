@@ -74,7 +74,7 @@ export class CheckoutPage {
   }
 
   async chooseOfflinePayment(): Promise<void> {
-    const offlineTab = this.surface.getByRole('button', { name: 'Offline' });
+    const offlineTab = this.surface.getByRole('button', { name: 'Pay later' });
     const offlineButton = this.surface.getByTestId('offline-payment-button');
     if (await offlineTab.isVisible()) {
       await expect(async () => {

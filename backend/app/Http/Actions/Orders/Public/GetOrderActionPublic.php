@@ -18,7 +18,7 @@ class GetOrderActionPublic extends BaseAction
         private readonly CheckoutSessionManagementService $sessionService,
     ) {}
 
-    #[QueryParameter('session_identifier', description: 'Checkout session identifier issued when the order was created. Sets the checkout session cookie on the response.', type: 'string')]
+    #[QueryParameter('session_identifier', description: 'Checkout session identifier issued when the order was created, or a payment-link token. A checkout session identifier also sets the checkout session cookie on the response.', type: 'string')]
     public function __invoke(int $eventId, string $orderShortId, Request $request): JsonResponse
     {
         $order = $this->getOrderPublicHandler->handle(new GetOrderPublicDTO(
@@ -32,7 +32,7 @@ class GetOrderActionPublic extends BaseAction
             data: $order,
         );
 
-        if ($request->query->has('session_identifier')) {
+        if ($request->query->has('session_identifier') && ! $order->isAccessedViaPaymentLink()) {
             $response->headers->setCookie(
                 $this->sessionService->getSessionCookie()
             );

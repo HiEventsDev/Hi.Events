@@ -101,6 +101,32 @@ class PublicOrderQuantityLimiterTest extends TestCase
         $this->assertSame(2, $order->getId());
     }
 
+    public function test_the_buyers_own_reservation_still_counts_once_it_is_waiting_on_a_payment_link(): void
+    {
+        $limiter = $this->limiter(10);
+        $limiter->reserve(1, '203.0.113.5', 8, fn () => $this->createOrder(8, 'buyer-session'), 'buyer-session')
+            ->setPaymentLinkCreatedAt(now()->toDateTimeString())
+            ->setReservedUntil(now()->addHours(72)->toDateTimeString());
+
+        $this->expectException(OrderReservationLimitExceededException::class);
+
+        $limiter->reserve(1, '203.0.113.5', 9, fn () => $this->createOrder(9, 'buyer-session'), 'buyer-session');
+    }
+
+    public function test_a_reservation_held_by_a_payment_link_keeps_counting_for_as_long_as_it_is_held(): void
+    {
+        $limiter = $this->limiter(10);
+        $limiter->reserve(1, '203.0.113.5', 8, fn () => $this->createOrder(8), $this->newSession())
+            ->setPaymentLinkCreatedAt(now()->toDateTimeString())
+            ->setReservedUntil(now()->addDays(20)->toDateTimeString());
+
+        $this->travel(10)->days();
+
+        $this->expectException(OrderReservationLimitExceededException::class);
+
+        $limiter->reserve(1, '203.0.113.5', 9, fn () => $this->createOrder(9), $this->newSession());
+    }
+
     public function test_a_failed_order_does_not_use_up_the_budget(): void
     {
         $limiter = $this->limiter(10);

@@ -80,6 +80,7 @@ class EmailTokenContextBuilder
                 'email' => $order->getEmail() ?? '',
                 'is_awaiting_offline_payment' => $order->isOrderAwaitingOfflinePayment(),
                 'is_offline_payment' => $order->getPaymentProvider() === PaymentProviders::OFFLINE->value,
+                'payment_reference' => $eventSettings->getOfflinePaymentOrderReferenceEnabled() ? $order->getPublicId() : '',
                 'seats' => implode(', ', $order->getSeatLabels()),
             ],
 
@@ -221,6 +222,8 @@ class EmailTokenContextBuilder
 
     public function buildPreviewContext(string $templateType): array
     {
+        $previewOrderNumber = IdHelper::publicId(IdHelper::ORDER_PREFIX);
+
         $baseContext = [
             'event' => [
                 'title' => __('Summer Music Festival 2024'),
@@ -243,7 +246,7 @@ class EmailTokenContextBuilder
             ],
             'order' => [
                 'url' => 'https://example.com/order/ABC123',
-                'number' => IdHelper::publicId(IdHelper::ORDER_PREFIX),
+                'number' => $previewOrderNumber,
                 'total' => '$150.00',
                 'date' => 'January 10, 2024',
                 'first_name' => 'John',
@@ -251,6 +254,7 @@ class EmailTokenContextBuilder
                 'email' => 'john@example.com',
                 'is_awaiting_offline_payment' => false,
                 'is_offline_payment' => false,
+                'payment_reference' => $previewOrderNumber,
                 'seats' => 'Stalls · C-14, Stalls · C-15',
                 'locale' => Locale::EN->value,
                 'currency' => 'USD',

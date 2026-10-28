@@ -1,5 +1,5 @@
 import {t} from "@lingui/macro";
-import {Button, Card as MantineCard, Checkbox, Input, NumberInput, Paper, Stack, Switch, Text, TextInput} from "@mantine/core";
+import {Button, Checkbox, Input, NumberInput, Paper, Stack, Switch, Text, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {useParams} from "react-router";
 import {useEffect} from "react";
@@ -9,17 +9,21 @@ import {showSuccess} from "../../../../../../utilites/notifications.tsx";
 import {useFormErrorResponseHandler} from "../../../../../../hooks/useFormErrorResponseHandler.tsx";
 import {useUpdateEventSettings} from "../../../../../../mutations/useUpdateEventSettings.ts";
 import {useGetEventSettings} from "../../../../../../queries/useGetEventSettings.ts";
+import {useGetEvent} from "../../../../../../queries/useGetEvent.ts";
+import {formatCurrency, plainAmount} from "../../../../../../utilites/currency.ts";
 import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
 import {Editor} from "../../../../../common/Editor";
 import {LiquidTokenControl} from "../../../../../common/Editor/Controls/LiquidTokenControl";
-import {InputLabelWithHelp} from "../../../../../common/InputLabelWithHelp";
 import {isEmptyHtml} from "../../../../../../utilites/helpers.ts";
 import {useAccess} from "../../../../../../hooks/useAccess.ts";
 import {UserGeneratedContent} from "../../../../../common/UserGeneratedContent";
+import {OfflinePaymentDetails} from "../../../../../common/OfflinePaymentDetails";
+import classes from "./PaymentSettings.module.scss";
 
 export const PaymentAndInvoicingSettings = () => {
     const {eventId} = useParams();
     const eventSettingsQuery = useGetEventSettings(eventId);
+    const eventQuery = useGetEvent(eventId);
     const updateMutation = useUpdateEventSettings();
     const canEditOfflineInstructions = useAccess().can('MANAGE_PAYMENTS');
     const form = useForm({
@@ -28,6 +32,10 @@ export const PaymentAndInvoicingSettings = () => {
             payment_providers: [] as PaymentProvider[],
             offline_payment_instructions: "",
             allow_orders_awaiting_offline_payment_to_check_in: false,
+            offline_payment_reporting_enabled: true,
+            offline_payment_order_reference_enabled: true,
+            payment_links_enabled: false,
+            payment_link_expiry_hours: 72 as number | string,
             enable_invoicing: false,
             invoice_label: "",
             invoice_prefix: "",
@@ -44,6 +52,10 @@ export const PaymentAndInvoicingSettings = () => {
             offline_payment_instructions: canEditOfflineInstructions
                 ? (isEmptyHtml(values.offline_payment_instructions) ? null : values.offline_payment_instructions)
                 : (eventSettingsQuery.data?.offline_payment_instructions ?? null),
+            payment_link_expiry_hours: values.payment_link_expiry_hours === ''
+                && !(values.payment_links_enabled && values.payment_providers.includes('STRIPE'))
+                ? 72
+                : values.payment_link_expiry_hours,
             invoice_notes: isEmptyHtml(values.invoice_notes) ? null : values.invoice_notes,
             invoice_tax_details: isEmptyHtml(values.invoice_tax_details) ? null : values.invoice_tax_details,
         }),
@@ -57,6 +69,10 @@ export const PaymentAndInvoicingSettings = () => {
                 payment_providers: eventSettingsQuery.data.payment_providers || [],
                 offline_payment_instructions: eventSettingsQuery.data.offline_payment_instructions || "",
                 allow_orders_awaiting_offline_payment_to_check_in: eventSettingsQuery.data.allow_orders_awaiting_offline_payment_to_check_in || false,
+                offline_payment_reporting_enabled: eventSettingsQuery.data.offline_payment_reporting_enabled ?? true,
+                offline_payment_order_reference_enabled: eventSettingsQuery.data.offline_payment_order_reference_enabled ?? true,
+                payment_links_enabled: eventSettingsQuery.data.payment_links_enabled ?? false,
+                payment_link_expiry_hours: eventSettingsQuery.data.payment_link_expiry_hours ?? 72,
                 enable_invoicing: eventSettingsQuery.data.enable_invoicing || false,
                 invoice_label: eventSettingsQuery.data.invoice_label || "",
                 invoice_prefix: eventSettingsQuery.data.invoice_prefix || "",
@@ -84,11 +100,6 @@ export const PaymentAndInvoicingSettings = () => {
             },
         });
     };
-
-    const offlineInstructionsLabel = (
-        <InputLabelWithHelp label={t`Offline Payment Instructions`}
-                            helpText={t`This information will be shown on the payment page, order summary page, and order confirmation email.`}/>
-    );
 
     const paymentOptions = [
         {
@@ -138,61 +149,109 @@ export const PaymentAndInvoicingSettings = () => {
                             )}
 
                             {form.values.payment_providers?.includes("OFFLINE") && (
-                                <Card style={{boxShadow: 'none', marginTop: '20px'}}>
-                                    <h4 style={{
-                                        marginTop: '5px',
-                                        marginBottom: '10px'
-                                    }}>{t`Offline Payments Settings`}</h4>
-                                    <MantineCard shadow="sm" padding="lg" radius="md" withBorder mb="md">
-                                        <h4 style={{
-                                            margin: 0,
-                                            fontWeight: 'normal'
-                                        }}>{t`Offline Payments Information`}</h4>
-                                        <Text size="sm"
-                                              mt="xs">{t`When offline payments are enabled, users will be able to complete their orders and receive their tickets. Their tickets will clearly indicate the order is not paid, and the check-in tool will notify the check-in staff if an order requires payment.`}</Text>
-                                        <Text size="sm"
-                                              mt="xs">{t`You will have to mark an order as paid manually. This can be done on the manage order page.`}</Text>
-                                        <Text size="sm"
-                                              mt="xs">{t`Offline orders are not reflected in event statistics until the order is marked as paid.`}</Text>
-                                    </MantineCard>
-                                    {canEditOfflineInstructions ? (
-                                        <Editor
-                                            editorType={'simple'}
-                                            value={form.values.offline_payment_instructions}
-                                            error={form.errors.offline_payment_instructions as string}
-                                            label={offlineInstructionsLabel}
-                                            description={t`Add instructions for offline payments (e.g., bank transfer details, where to send checks, payment deadlines)`}
-                                            onChange={(value) => form.setFieldValue('offline_payment_instructions', value)}
-                                            additionalToolbarControls={
-                                                <LiquidTokenControl
-                                                    templateType={'order_confirmation'}
-                                                    excludeTokens={[
-                                                        '{{ settings.offline_payment_instructions }}',
-                                                        '{{ settings.post_checkout_message }}',
-                                                    ]}
-                                                />
-                                            }
+                                <div className={classes.offline}>
+                                    <Text size="sm" c="dimmed">
+                                        {t`Buyers get their tickets straight away, marked as unpaid. Mark each order as paid once the money arrives. Unpaid orders aren't counted in your sales figures until then.`}
+                                    </Text>
+
+                                    <div className={classes.group}>
+                                        <Text className={classes.groupTitle}>{t`How buyers pay`}</Text>
+                                        {canEditOfflineInstructions ? (
+                                            <Editor
+                                                editorType={'simple'}
+                                                required
+                                                value={form.values.offline_payment_instructions}
+                                                error={form.errors.offline_payment_instructions as string}
+                                                label={t`Instructions`}
+                                                description={t`Tell buyers how to pay, such as your bank details, where to send a cheque, or that they pay at the door. Include any deadline. Buyers see this on their order page and in their confirmation email once they've placed their order.`}
+                                                onChange={(value) => form.setFieldValue('offline_payment_instructions', value)}
+                                                additionalToolbarControls={
+                                                    <LiquidTokenControl
+                                                        templateType={'order_confirmation'}
+                                                        excludeTokens={[
+                                                            '{{ settings.offline_payment_instructions }}',
+                                                            '{{ settings.post_checkout_message }}',
+                                                        ]}
+                                                    />
+                                                }
+                                            />
+                                        ) : (
+                                            <Input.Wrapper
+                                                label={t`Instructions`}
+                                                description={t`Only members who can manage payments can change these instructions.`}
+                                                error={form.errors.offline_payment_instructions as string}
+                                            >
+                                                <Paper withBorder p="sm" radius="sm">
+                                                    {isEmptyHtml(form.values.offline_payment_instructions)
+                                                        ? <Text size="sm" c="dimmed">{t`No instructions have been added yet.`}</Text>
+                                                        : <UserGeneratedContent html={form.values.offline_payment_instructions}/>}
+                                                </Paper>
+                                            </Input.Wrapper>
+                                        )}
+                                        <Switch
+                                            data-testid="offline-payment-order-reference-switch"
+                                            label={t`Ask buyers to use their order reference when paying`}
+                                            description={t`It's shown above your instructions so you can match every payment to its order. Turn this off if you give buyers your own reference, or if none applies, such as cash at the door.`}
+                                            checked={form.values.offline_payment_order_reference_enabled}
+                                            {...form.getInputProps('offline_payment_order_reference_enabled', {type: 'checkbox'})}
                                         />
-                                    ) : (
-                                        <Input.Wrapper
-                                            label={offlineInstructionsLabel}
-                                            description={t`Only members who can manage payments can change these instructions.`}
-                                            error={form.errors.offline_payment_instructions as string}
-                                        >
-                                            <Paper withBorder p="sm" radius="sm">
-                                                {isEmptyHtml(form.values.offline_payment_instructions)
-                                                    ? <Text size="sm" c="dimmed">{t`No instructions have been added yet.`}</Text>
-                                                    : <UserGeneratedContent html={form.values.offline_payment_instructions}/>}
-                                            </Paper>
-                                        </Input.Wrapper>
-                                    )}
-                                    <Switch
-                                        label={t`Allow attendees associated with unpaid orders to check in`}
-                                        description={t`If enabled, check-in staff can either mark attendees as checked in or mark the order as paid and check in the attendees. If disabled, attendees associated with unpaid orders cannot be checked in.`}
-                                        checked={form.values.allow_orders_awaiting_offline_payment_to_check_in}
-                                        {...form.getInputProps('allow_orders_awaiting_offline_payment_to_check_in', {type: 'checkbox'})}
-                                    />
-                                </Card>
+                                        {form.values.offline_payment_order_reference_enabled && (
+                                            <div className={classes.preview} data-testid="payment-reference-preview">
+                                                <Text className={classes.previewLabel}>{t`What buyers see`}</Text>
+                                                <div className={classes.previewBody}>
+                                                    <OfflinePaymentDetails amount={formatCurrency(25, eventQuery.data?.currency)} amountToCopy={plainAmount(25, eventQuery.data?.currency ?? 'USD')} reference="O-ABC1234"/>
+                                                    {isEmptyHtml(form.values.offline_payment_instructions)
+                                                        ? <Text size="sm" c="dimmed">{t`Your instructions appear here.`}</Text>
+                                                        : <UserGeneratedContent html={form.values.offline_payment_instructions}/>}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className={classes.group}>
+                                        <Text className={classes.groupTitle}>{t`Unpaid orders`}</Text>
+                                        <Switch
+                                            data-testid="offline-payment-reporting-switch"
+                                            label={t`Let buyers tell you when they have paid`}
+                                            description={t`Adds an "I've paid" button to unpaid orders. You and your team get an email when a buyer uses it. You still mark the order as paid yourself.`}
+                                            checked={form.values.offline_payment_reporting_enabled}
+                                            {...form.getInputProps('offline_payment_reporting_enabled', {type: 'checkbox'})}
+                                        />
+                                        <Switch
+                                            label={t`Let guests from unpaid orders check in`}
+                                            description={t`Check-in staff are told the order is unpaid and can mark it as paid at the door. When this is off, guests from unpaid orders can't be checked in.`}
+                                            checked={form.values.allow_orders_awaiting_offline_payment_to_check_in}
+                                            {...form.getInputProps('allow_orders_awaiting_offline_payment_to_check_in', {type: 'checkbox'})}
+                                        />
+                                    </div>
+
+                                    <div className={classes.group}>
+                                        <Text className={classes.groupTitle}>{t`Someone else paying`}</Text>
+                                        <Switch
+                                            data-testid="payment-links-switch"
+                                            label={t`Let someone else pay for an order`}
+                                            description={t`Buyers can send a payment link to whoever is paying, such as their finance team. The person paying can use any payment method you accept.`}
+                                            checked={form.values.payment_links_enabled}
+                                            {...form.getInputProps('payment_links_enabled', {type: 'checkbox'})}
+                                        />
+                                        {(form.values.payment_links_enabled && form.values.payment_providers?.includes('STRIPE')) && (
+                                            <NumberInput
+                                                className={classes.holdHours}
+                                                styles={{wrapper: {maxWidth: 200}}}
+                                                label={t`Hold places for`}
+                                                description={t`How long places stay reserved while waiting for payment through a link. Holds never run past the start of the event.`}
+                                                rightSection={<Text size="sm" c="dimmed">{t`hours`}</Text>}
+                                                rightSectionWidth={60}
+                                                min={1}
+                                                max={720}
+                                                allowDecimal={false}
+                                                allowNegative={false}
+                                                hideControls
+                                                {...form.getInputProps('payment_link_expiry_hours')}
+                                            />
+                                        )}
+                                    </div>
+                                </div>
                             )}
                         </Paper>
 

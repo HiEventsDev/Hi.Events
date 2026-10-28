@@ -51,7 +51,9 @@ class OrderSummary extends BaseMail implements ContainsEventContent
 
     public function envelope(): Envelope
     {
-        $subject = $this->renderedTemplate?->subject ?? __('Your Order is Confirmed!').'  🎉';
+        $subject = $this->renderedTemplate?->subject ?? ($this->order->isOrderAwaitingOfflinePayment()
+            ? __('Order placed: payment needed')
+            : __('Your Order is Confirmed!').'  🎉');
 
         return new Envelope(
             replyTo: $this->eventSettings->getSupportEmail(),

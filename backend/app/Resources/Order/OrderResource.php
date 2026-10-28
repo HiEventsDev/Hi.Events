@@ -58,6 +58,9 @@ class OrderResource extends BaseResource
             'address' => $this->getAddress(),
             'notes' => $this->getNotes(),
             'payment_provider' => $this->getPaymentProvider(),
+            'payment_link_created_at' => $this->getPaymentLinkCreatedAt(),
+            'offline_payment_reported_at' => $this->getOfflinePaymentReportedAt(),
+            'offline_payment_note' => $this->getOfflinePaymentNote(),
             'promo_code' => $this->getPromoCode(),
             'event_id' => $this->getEventId(),
             'order_items' => $this->when(

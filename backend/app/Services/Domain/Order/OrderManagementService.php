@@ -29,6 +29,7 @@ class OrderManagementService
             OrderDomainObjectAbstract::SESSION_ID => $sessionId,
             OrderDomainObjectAbstract::STATUS => OrderStatus::RESERVED->name,
             OrderDomainObjectAbstract::EVENT_ID => $eventId,
+            [OrderDomainObjectAbstract::PAYMENT_LINK_CREATED_AT, 'null', null],
         ]);
     }
 

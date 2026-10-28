@@ -342,6 +342,12 @@ export const CollectInformation = () => {
     }, [isEventFetched, isOrderFetched, isQuestionsFetched]);
 
     useEffect(() => {
+        if (order?.status === 'RESERVED' && order.payment_link_created_at && !order.is_expired) {
+            navigate(eventCheckoutPath(eventId, order.short_id, 'payment'), {replace: true});
+        }
+    }, [order?.status, order?.payment_link_created_at]);
+
+    useEffect(() => {
         if ((order && event) && order?.is_expired && getEmbedMode() !== 'modal') {
             showInfo(t`This order has expired. Please start again.`);
             navigate(`/event/${eventId}/${event.slug}`);

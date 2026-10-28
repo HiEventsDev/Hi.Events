@@ -22,6 +22,17 @@ export class OrderPage {
     return this.page.getByRole('dialog');
   }
 
+  async chooseDrawerAction(action: string): Promise<void> {
+    const drawer = this.detailsDrawer();
+    const button = drawer.getByRole('button', { name: action, exact: true });
+    if (await button.isVisible()) {
+      await button.click();
+      return;
+    }
+    await drawer.getByRole('button', { name: 'More actions' }).click();
+    await this.page.getByRole('menuitem', { name: action }).click();
+  }
+
   async sendMessageToBuyer(subject: string, body: string): Promise<void> {
     await this.page.getByRole('heading', { name: 'Send a message' }).waitFor();
     await this.page.getByLabel(/^Subject/).fill(subject);

@@ -163,6 +163,7 @@ class EmailTokenContextBuilderTest extends TestCase
         $eventSettings = Mockery::mock(EventSettingDomainObject::class, [
             'getSupportEmail' => 'support@event.com',
             'getOfflinePaymentInstructions' => 'Dear {{ order.first_name }}, transfer via <a href="https://bank.example">bank</a>',
+            'getOfflinePaymentOrderReferenceEnabled' => true,
             'getPostCheckoutMessage' => 'Thanks!',
         ]);
 
@@ -178,6 +179,28 @@ class EmailTokenContextBuilderTest extends TestCase
         $this->assertStringContainsString('&lt;img src=x onerror=alert(1)&gt;', $instructions);
         $this->assertStringNotContainsString('<img', $instructions);
         $this->assertStringContainsString('bank.example', $instructions);
+    }
+
+    public function test_the_payment_reference_is_the_order_number_when_the_organizer_uses_order_references(): void
+    {
+        $order = $this->createMockOrder();
+
+        $enabled = $this->contextBuilder->buildOrderConfirmationContext(
+            $order,
+            $this->createMockEvent(),
+            $this->createMockOrganizer(),
+            $this->createMockEventSettings(),
+        );
+        $disabled = $this->contextBuilder->buildOrderConfirmationContext(
+            $order,
+            $this->createMockEvent(),
+            $this->createMockOrganizer(),
+            $this->createMockEventSettings(orderReferenceEnabled: false),
+        );
+
+        $this->assertSame($enabled['order']['number'], $enabled['order']['payment_reference']);
+        $this->assertNotSame('', $enabled['order']['payment_reference']);
+        $this->assertSame('', $disabled['order']['payment_reference']);
     }
 
     public function test_contexb_values_stay_raw_for_plain_text_rendering(): void
@@ -564,11 +587,12 @@ class EmailTokenContextBuilderTest extends TestCase
         ]);
     }
 
-    private function createMockEventSettings(): EventSettingDomainObject
+    private function createMockEventSettings(bool $orderReferenceEnabled = true): EventSettingDomainObject
     {
         return Mockery::mock(EventSettingDomainObject::class, [
             'getSupportEmail' => 'support@event.com',
             'getOfflinePaymentInstructions' => 'Pay by bank transfer',
+            'getOfflinePaymentOrderReferenceEnabled' => $orderReferenceEnabled,
             'getPostCheckoutMessage' => 'Thank you for your purchase!',
         ]);
     }

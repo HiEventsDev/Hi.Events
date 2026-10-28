@@ -79,6 +79,14 @@ class PartialUpdateEventSettingsHandler
                     : $existingSettings->getOfflinePaymentInstructions(),
                 'allow_orders_awaiting_offline_payment_to_check_in' => $eventSettingsDTO->settings['allow_orders_awaiting_offline_payment_to_check_in']
                     ?? $existingSettings->getAllowOrdersAwaitingOfflinePaymentToCheckIn(),
+                'offline_payment_reporting_enabled' => $eventSettingsDTO->settings['offline_payment_reporting_enabled']
+                    ?? $existingSettings->getOfflinePaymentReportingEnabled(),
+                'offline_payment_order_reference_enabled' => $eventSettingsDTO->settings['offline_payment_order_reference_enabled']
+                    ?? $existingSettings->getOfflinePaymentOrderReferenceEnabled(),
+                'payment_links_enabled' => $eventSettingsDTO->settings['payment_links_enabled']
+                    ?? $existingSettings->getPaymentLinksEnabled(),
+                'payment_link_expiry_hours' => $eventSettingsDTO->settings['payment_link_expiry_hours']
+                    ?? $existingSettings->getPaymentLinkExpiryHours(),
 
                 // Invoice settings
                 'enable_invoicing' => $eventSettingsDTO->settings['enable_invoicing'] ?? $existingSettings->getEnableInvoicing(),

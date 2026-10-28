@@ -52,6 +52,9 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     final public const BOX_OFFICE_CHANGE_DUE = 'box_office_change_due';
     final public const BOX_OFFICE_REFERENCE = 'box_office_reference';
     final public const BOX_OFFICE_COMPLETED_AT = 'box_office_completed_at';
+    final public const PAYMENT_LINK_CREATED_AT = 'payment_link_created_at';
+    final public const OFFLINE_PAYMENT_REPORTED_AT = 'offline_payment_reported_at';
+    final public const OFFLINE_PAYMENT_NOTE = 'offline_payment_note';
 
     protected int $id;
     protected int $event_id;
@@ -95,6 +98,9 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     protected ?float $box_office_change_due = null;
     protected ?string $box_office_reference = null;
     protected ?string $box_office_completed_at = null;
+    protected ?string $payment_link_created_at = null;
+    protected ?string $offline_payment_reported_at = null;
+    protected ?string $offline_payment_note = null;
 
     public function toArray(): array
     {
@@ -141,6 +147,9 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
                     'box_office_change_due' => $this->box_office_change_due ?? null,
                     'box_office_reference' => $this->box_office_reference ?? null,
                     'box_office_completed_at' => $this->box_office_completed_at ?? null,
+                    'payment_link_created_at' => $this->payment_link_created_at ?? null,
+                    'offline_payment_reported_at' => $this->offline_payment_reported_at ?? null,
+                    'offline_payment_note' => $this->offline_payment_note ?? null,
                 ];
     }
 
@@ -604,5 +613,38 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     public function getBoxOfficeCompletedAt(): ?string
     {
         return $this->box_office_completed_at;
+    }
+
+    public function setPaymentLinkCreatedAt(?string $payment_link_created_at): self
+    {
+        $this->payment_link_created_at = $payment_link_created_at;
+        return $this;
+    }
+
+    public function getPaymentLinkCreatedAt(): ?string
+    {
+        return $this->payment_link_created_at;
+    }
+
+    public function setOfflinePaymentReportedAt(?string $offline_payment_reported_at): self
+    {
+        $this->offline_payment_reported_at = $offline_payment_reported_at;
+        return $this;
+    }
+
+    public function getOfflinePaymentReportedAt(): ?string
+    {
+        return $this->offline_payment_reported_at;
+    }
+
+    public function setOfflinePaymentNote(?string $offline_payment_note): self
+    {
+        $this->offline_payment_note = $offline_payment_note;
+        return $this;
+    }
+
+    public function getOfflinePaymentNote(): ?string
+    {
+        return $this->offline_payment_note;
     }
 }
