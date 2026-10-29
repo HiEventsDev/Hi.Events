@@ -22,7 +22,7 @@ Self-hosted o in cloud. I tuoi eventi, il tuo brand, i tuoi dati.
 </a>
 
 <p>
-<a href="README.md">English</a> · <a href="README.de.md">Deutsch</a> · <a href="README.fr.md">Français</a> · <a href="README.it.md">Italiano</a> · <a href="README.nl.md">Nederlands</a> · <a href="README.es.md">Español</a> · <a href="README.pt.md">Português</a> · <a href="README.pt-br.md">Português (Brasil)</a> · <a href="README.pl.md">Polski</a> · <a href="README.sk.md">Slovenčina</a> · <a href="README.hu.md">Magyar</a> · <a href="README.sv.md">Svenska</a> · <a href="README.fi.md">Suomi</a> · <a href="README.el.md">Ελληνικά</a> · <a href="README.tr.md">Türkçe</a> · <a href="README.vi.md">Tiếng Việt</a> · <a href="README.zh-cn.md">简体中文</a> · <a href="README.zh-hk.md">繁體中文</a> · <a href="README.ja.md">日本語</a> · <a href="README.ko.md">한국어</a>
+<a href="README.md">English</a> · <a href="README.de.md">Deutsch</a> · <a href="README.fr.md">Français</a> · <a href="README.it.md">Italiano</a> · <a href="README.nl.md">Nederlands</a> · <a href="README.es.md">Español</a> · <a href="README.pt.md">Português</a> · <a href="README.pt-br.md">Português (Brasil)</a> · <a href="README.pl.md">Polski</a> · <a href="README.cs.md">Čeština</a> · <a href="README.sk.md">Slovenčina</a> · <a href="README.hu.md">Magyar</a> · <a href="README.sv.md">Svenska</a> · <a href="README.fi.md">Suomi</a> · <a href="README.el.md">Ελληνικά</a> · <a href="README.tr.md">Türkçe</a> · <a href="README.vi.md">Tiếng Việt</a> · <a href="README.zh-cn.md">简体中文</a> · <a href="README.zh-hk.md">繁體中文</a> · <a href="README.ja.md">日本語</a> · <a href="README.ko.md">한국어</a>
 </p>
 
 </div>
@@ -108,7 +108,7 @@ e organizzatori di conferenze. Gestiscilo in autonomia, oppure lascia che lo ges
 **🗄️ I tuoi dati**
 - Self-hosting con Docker
 - Eliminazione e anonimizzazione dell'account
-- Disponibile in 20 lingue
+- Disponibile in 21 lingue
 
 **✅ Testato**
 - Una suite di test completa viene eseguita a ogni modifica
@@ -160,7 +160,7 @@ Crea le chiavi API in **Impostazioni → Chiavi API**, dove trovi anche il rifer
 ## Lingue
 
 Inglese, Deutsch, Français, Italiano, Nederlands, Español, Português, Português (Brasil),
-Polski, Slovenčina, Magyar, Svenska, Suomi, Ελληνικά, Türkçe, Tiếng Việt, 简体中文, 繁體中文, 日本語 e 한국어.
+Polski, Čeština, Slovenčina, Magyar, Svenska, Suomi, Ελληνικά, Türkçe, Tiếng Việt, 简体中文, 繁體中文, 日本語 e 한국어.
 
 Correzioni e nuove lingue sono benvenute: consulta la [guida per i contributori](CONTRIBUTING.md).
 

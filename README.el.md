@@ -22,7 +22,7 @@
 </a>
 
 <p>
-<a href="README.md">English</a> · <a href="README.de.md">Deutsch</a> · <a href="README.fr.md">Français</a> · <a href="README.it.md">Italiano</a> · <a href="README.nl.md">Nederlands</a> · <a href="README.es.md">Español</a> · <a href="README.pt.md">Português</a> · <a href="README.pt-br.md">Português (Brasil)</a> · <a href="README.pl.md">Polski</a> · <a href="README.sk.md">Slovenčina</a> · <a href="README.hu.md">Magyar</a> · <a href="README.sv.md">Svenska</a> · <a href="README.fi.md">Suomi</a> · <a href="README.el.md">Ελληνικά</a> · <a href="README.tr.md">Türkçe</a> · <a href="README.vi.md">Tiếng Việt</a> · <a href="README.zh-cn.md">简体中文</a> · <a href="README.zh-hk.md">繁體中文</a> · <a href="README.ja.md">日本語</a> · <a href="README.ko.md">한국어</a>
+<a href="README.md">English</a> · <a href="README.de.md">Deutsch</a> · <a href="README.fr.md">Français</a> · <a href="README.it.md">Italiano</a> · <a href="README.nl.md">Nederlands</a> · <a href="README.es.md">Español</a> · <a href="README.pt.md">Português</a> · <a href="README.pt-br.md">Português (Brasil)</a> · <a href="README.pl.md">Polski</a> · <a href="README.cs.md">Čeština</a> · <a href="README.sk.md">Slovenčina</a> · <a href="README.hu.md">Magyar</a> · <a href="README.sv.md">Svenska</a> · <a href="README.fi.md">Suomi</a> · <a href="README.el.md">Ελληνικά</a> · <a href="README.tr.md">Türkçe</a> · <a href="README.vi.md">Tiếng Việt</a> · <a href="README.zh-cn.md">简体中文</a> · <a href="README.zh-hk.md">繁體中文</a> · <a href="README.ja.md">日本語</a> · <a href="README.ko.md">한국어</a>
 </p>
 
 </div>
@@ -108,7 +108,7 @@ branding, το checkout και τα δεδομένα σας.
 **🗄️ Τα δεδομένα σας**
 - Self-hosting με Docker
 - Διαγραφή και ανωνυμοποίηση λογαριασμού
-- Διαθέσιμο σε 20 γλώσσες
+- Διαθέσιμο σε 21 γλώσσες
 
 **✅ Δοκιμασμένο**
 - Ένα εκτενές σύνολο δοκιμών εκτελείται σε κάθε αλλαγή
@@ -160,7 +160,7 @@ docker compose up -d
 ## Γλώσσες
 
 English, Deutsch, Français, Italiano, Nederlands, Español, Português, Português (Brasil),
-Polski, Slovenčina, Magyar, Svenska, Suomi, Ελληνικά, Türkçe, Tiếng Việt, 简体中文, 繁體中文, 日本語 και 한국어.
+Polski, Čeština, Slovenčina, Magyar, Svenska, Suomi, Ελληνικά, Türkçe, Tiếng Việt, 简体中文, 繁體中文, 日本語 και 한국어.
 
 Διορθώσεις και νέες γλώσσες είναι ευπρόσδεκτες — δείτε τον [οδηγό συνεισφοράς](CONTRIBUTING.md).
 
