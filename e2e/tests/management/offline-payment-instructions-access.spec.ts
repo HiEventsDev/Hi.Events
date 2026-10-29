@@ -18,7 +18,7 @@ test.describe('offline payment instructions access', () => {
     await settings.goto(event.eventId);
 
     const payment = settings.section('payment-settings');
-    await expect(payment.getByText(instructions.replace(/<\/?p>/g, ''))).toBeVisible();
+    await expect(payment.getByText(instructions.replace(/<\/?p>/g, '')).first()).toBeVisible();
     await expect(payment.getByText('Only members who can manage payments can change these instructions.')).toBeVisible();
     await expect(settings.offlineInstructionsEditor).toHaveCount(0);
 

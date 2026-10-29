@@ -74,7 +74,7 @@ export class CheckoutPage {
   }
 
   async chooseOfflinePayment(): Promise<void> {
-    const offlineTab = this.surface.getByRole('button', { name: 'Offline' });
+    const offlineTab = this.surface.getByRole('button', { name: 'Pay later' });
     const offlineButton = this.surface.getByTestId('offline-payment-button');
     if (await offlineTab.isVisible()) {
       await expect(async () => {
@@ -158,10 +158,14 @@ export class CheckoutPage {
     }
   }
 
+  private payAmountButton(): Locator {
+    return this.page.getByRole('button', { name: /^Pay \D*\d/ });
+  }
+
   async clickPay(): Promise<void> {
     await this.page.getByRole('heading', { name: 'Payment' }).click();
     await this.waitForStripeFrameToSettle();
-    await this.page.getByRole('button', { name: /^Pay\b/ }).dispatchEvent('click');
+    await this.payAmountButton().dispatchEvent('click');
   }
 
   async payWithStripeTestCard(card = '4242424242424242'): Promise<void> {
@@ -170,7 +174,7 @@ export class CheckoutPage {
     try {
       await this.page.waitForURL(/\/checkout\/\d+\/[^/]+\/(payment_return|summary)/, { timeout: 15_000 });
     } catch {
-      await this.page.getByRole('button', { name: /^Pay\b/ }).dispatchEvent('click');
+      await this.payAmountButton().dispatchEvent('click');
       await this.page.waitForURL(/\/checkout\/\d+\/[^/]+\/(payment_return|summary)/, { timeout: 30_000 });
     }
   }

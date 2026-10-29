@@ -332,6 +332,26 @@ class PaymentIntentSucceededHandlerTest extends TestCase
         $this->assertSame([], $this->refundLog->orderIds, 'Only door sales auto-refund a late card success');
     }
 
+    public function test_a_card_payment_for_an_order_already_placed_to_pay_later_is_refunded(): void
+    {
+        $order = (new OrderDomainObject)->setShortId('o_test')
+            ->setId(1)
+            ->setStatus(OrderStatus::AWAITING_OFFLINE_PAYMENT->name)
+            ->setPaymentStatus(OrderPaymentStatus::AWAITING_OFFLINE_PAYMENT->name)
+            ->setPaymentProvider(PaymentProviders::OFFLINE->value);
+        $this->givenStripePaymentFor($order);
+        $this->orderRepository->shouldNotReceive('updateFromArray');
+
+        try {
+            $this->handler->handleEvent(PaymentIntent::constructFrom(['id' => 'pi_test']));
+            $this->fail('Expected CannotAcceptPaymentException was not thrown');
+        } catch (CannotAcceptPaymentException) {
+        }
+
+        $this->assertSame([1], $this->refundLog->orderIds);
+        $this->assertSame([true], $this->refundLog->notifyBuyer);
+    }
+
     public function test_expired_order_that_cannot_be_rescued_is_refunded(): void
     {
         $this->givenStripePaymentFor($this->expiredOrderAwaitingPayment());

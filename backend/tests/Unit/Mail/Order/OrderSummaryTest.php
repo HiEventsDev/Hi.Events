@@ -32,8 +32,47 @@ class OrderSummaryTest extends TestCase
         $this->assertStringNotContainsString('October 1, 2026', $html);
     }
 
-    private function mailFor(array $orderOccurrences): OrderSummary
+    public function test_an_unpaid_offline_order_shows_the_order_reference_as_the_payment_reference(): void
     {
+        $html = $this->mailFor([], OrderStatus::AWAITING_OFFLINE_PAYMENT, orderReferenceEnabled: true)->render();
+
+        $this->assertStringContainsString('Payment reference', $html);
+        $this->assertStringContainsString('Include this reference with your payment', $html);
+    }
+
+    public function test_an_unpaid_offline_order_is_not_called_confirmed_and_shows_the_amount_due(): void
+    {
+        $mail = $this->mailFor([], OrderStatus::AWAITING_OFFLINE_PAYMENT);
+        $html = $mail->render();
+
+        $this->assertSame('Order placed: payment needed', $mail->envelope()->subject);
+        $this->assertStringContainsString('Order placed: payment needed', $html);
+        $this->assertStringNotContainsString('Your Order is Confirmed', $html);
+        $this->assertStringContainsString('Amount due', $html);
+        $this->assertStringContainsString('$42.50', $html);
+    }
+
+    public function test_a_paid_order_is_still_called_confirmed(): void
+    {
+        $mail = $this->mailFor([]);
+
+        $this->assertStringContainsString('Your Order is Confirmed!', $mail->envelope()->subject);
+        $this->assertStringNotContainsString('Amount due', $mail->render());
+    }
+
+    public function test_the_payment_reference_is_left_out_when_the_organizer_uses_their_own(): void
+    {
+        $html = $this->mailFor([], OrderStatus::AWAITING_OFFLINE_PAYMENT, orderReferenceEnabled: false)->render();
+
+        $this->assertStringContainsString('How to pay', $html);
+        $this->assertStringNotContainsString('Payment reference', $html);
+    }
+
+    private function mailFor(
+        array $orderOccurrences,
+        OrderStatus $status = OrderStatus::COMPLETED,
+        bool $orderReferenceEnabled = true,
+    ): OrderSummary {
         $event = (new EventDomainObject)
             ->setId(10)
             ->setTitle('Jazz Nights')
@@ -48,8 +87,8 @@ class OrderSummaryTest extends TestCase
             ->setId(30)
             ->setShortId('o_short')
             ->setPublicId('ORD-1')
-            ->setTotalGross(0)
-            ->setStatus(OrderStatus::COMPLETED->name)
+            ->setTotalGross(42.50)
+            ->setStatus($status->name)
             ->setOrderItems(collect(array_map(
                 fn (EventOccurrenceDomainObject $occurrence) => (new OrderItemDomainObject)->setEventOccurrence($occurrence),
                 $orderOccurrences,
@@ -59,7 +98,9 @@ class OrderSummaryTest extends TestCase
             order: $order,
             event: $event,
             organizer: (new OrganizerDomainObject)->setName('Organizer')->setEmail('organizer@example.com'),
-            eventSettings: (new EventSettingDomainObject)->setSupportEmail('support@example.com'),
+            eventSettings: (new EventSettingDomainObject)
+                ->setSupportEmail('support@example.com')
+                ->setOfflinePaymentOrderReferenceEnabled($orderReferenceEnabled),
             invoice: null,
         );
     }

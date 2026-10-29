@@ -26,6 +26,10 @@ export const getCheckoutSessionIdentifier = (orderShortId: string): string | nul
     return safeSessionStorageGet(SESSION_KEY_PREFIX + orderShortId);
 };
 
+export const isCheckoutSessionStored = (orderShortId: string, token: string): boolean => {
+    return safeSessionStorageGet(SESSION_KEY_PREFIX + orderShortId) === token;
+};
+
 export const claimOrderCompletionReport = (orderShortId: string): boolean => {
     if (safeSessionStorageGet(COMPLETION_REPORTED_KEY_PREFIX + orderShortId)) {
         return false;

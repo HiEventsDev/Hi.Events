@@ -287,8 +287,10 @@ use HiEvents\Http\Actions\Orders\Payment\Stripe\GetPaymentIntentActionPublic;
 use HiEvents\Http\Actions\Orders\Public\AbandonOrderActionPublic;
 use HiEvents\Http\Actions\Orders\Public\CompleteOrderActionPublic;
 use HiEvents\Http\Actions\Orders\Public\CreateOrderActionPublic;
+use HiEvents\Http\Actions\Orders\Public\CreateOrderPaymentLinkActionPublic;
 use HiEvents\Http\Actions\Orders\Public\DownloadOrderInvoicePublicAction;
 use HiEvents\Http\Actions\Orders\Public\GetOrderActionPublic;
+use HiEvents\Http\Actions\Orders\Public\ReportOfflinePaymentActionPublic;
 use HiEvents\Http\Actions\Orders\Public\TransitionOrderToOfflinePaymentPublicAction;
 use HiEvents\Http\Actions\Orders\ResendOrderConfirmationAction;
 use HiEvents\Http\Actions\Organizers\CreateOrganizerAction;
@@ -946,6 +948,10 @@ $router->prefix('/public')->group(
         $router->get('/events/{event_id}/order/{order_short_id}', GetOrderActionPublic::class);
         $router->post('/events/{event_id}/order/{order_short_id}/abandon', AbandonOrderActionPublic::class);
         $router->post('/events/{event_id}/order/{order_short_id}/await-offline-payment', TransitionOrderToOfflinePaymentPublicAction::class);
+        $router->post('/events/{event_id}/order/{order_short_id}/payment-link', CreateOrderPaymentLinkActionPublic::class)
+            ->middleware('throttle:10,1,public-order-payment-link');
+        $router->post('/events/{event_id}/order/{order_short_id}/report-offline-payment', ReportOfflinePaymentActionPublic::class)
+            ->middleware('throttle:10,1,public-offline-payment-report');
         $router->get('/events/{event_id}/order/{order_short_id}/invoice', DownloadOrderInvoicePublicAction::class);
 
         // Attendees

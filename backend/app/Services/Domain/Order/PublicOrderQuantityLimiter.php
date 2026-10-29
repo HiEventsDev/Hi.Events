@@ -15,7 +15,7 @@ use Illuminate\Support\Collection;
 
 class PublicOrderQuantityLimiter
 {
-    private const TRACKING_SECONDS = 86400;
+    private const TRACKING_SECONDS = 30 * 86400;
 
     private const LOCK_SECONDS = 10;
 
@@ -45,7 +45,7 @@ class PublicOrderQuantityLimiter
             function () use ($key, $budget, $quantity, $createOrder, $sessionId) {
                 $liveOrders = $this->liveReservations($this->cache->get($key, []));
                 $liveQuantity = $liveOrders
-                    ->reject(fn (OrderDomainObject $order) => $order->getSessionId() === $sessionId)
+                    ->reject(fn (OrderDomainObject $order) => $order->getSessionId() === $sessionId && ! $order->hasPaymentLink())
                     ->sum(fn (OrderDomainObject $order) => $order->getOrderItems()
                         ?->sum(fn (OrderItemDomainObject $item) => $item->getQuantity()) ?? 0);
 

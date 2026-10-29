@@ -387,14 +387,14 @@ export async function runKitchenSinkCheckout(
   await expectSummaryTotals();
   await checkout.continueToPayment();
 
-  await expect(checkoutRoot.getByRole('button', { name: 'Online' })).toBeVisible();
-  await expect(checkoutRoot.getByRole('button', { name: 'Offline' })).toBeVisible();
+  await expect(checkoutRoot.getByRole('button', { name: 'Pay now' })).toBeVisible();
+  await expect(checkoutRoot.getByRole('button', { name: 'Pay later' })).toBeVisible();
   await expect(checkoutRoot.getByRole('button', { name: `Pay ${totals.total}` })).toBeVisible();
 
   if (paymentMode === 'offline') {
     await checkout.chooseOfflinePayment();
     await expect(checkoutRoot.getByText('Your order is awaiting payment')).toBeVisible();
-    await expect(checkoutRoot.getByRole('heading', { name: 'Payment Instructions' })).toBeVisible();
+    await expect(checkoutRoot.getByRole('heading', { name: 'How to pay' })).toBeVisible();
     await expect(checkoutRoot.getByText(OFFLINE_PAYMENT_INSTRUCTIONS)).toBeVisible();
   } else {
     await checkout.payWithStripeTestCard();

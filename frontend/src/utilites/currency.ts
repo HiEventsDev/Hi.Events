@@ -16,6 +16,8 @@ const ZERO_DECIMAL_CURRENCIES = [
 
 export const isZeroDecimalCurrency = (currency: string): boolean => ZERO_DECIMAL_CURRENCIES.includes(currency.toUpperCase());
 
+export const plainAmount = (value: number | string, currency: string): string => Number(value).toFixed(isZeroDecimalCurrency(currency) ? 0 : 2);
+
 export const minorUnitFactor = (currency: string): number => isZeroDecimalCurrency(currency) ? 1 : 100;
 
 export const getCurrencySymbol = (currencyCode: string): string => {

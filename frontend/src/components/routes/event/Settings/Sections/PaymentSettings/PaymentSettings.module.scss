@@ -1,0 +1,57 @@
+@use "../../../../../../styles/mixins";
+
+.offline {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin: 4px 0 0 9px;
+  padding: 4px 0 4px 22px;
+  border-left: 2px solid var(--mantine-color-gray-2);
+
+  @include mixins.respond-below(sm) {
+    margin-left: 0;
+    padding-left: 12px;
+  }
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.groupTitle {
+  margin-bottom: 8px;
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 600;
+}
+
+.preview {
+  max-width: 480px;
+  margin: -4px 0 16px 50px;
+
+  @include mixins.respond-below(sm) {
+    margin-left: 0;
+  }
+}
+
+.previewLabel {
+  margin-bottom: 6px;
+  font-size: var(--mantine-font-size-xs);
+  color: var(--mantine-color-dimmed);
+}
+
+.previewBody {
+  padding: 14px;
+  border: 1px solid var(--mantine-color-gray-3);
+  border-radius: var(--mantine-radius-md);
+  font-size: var(--mantine-font-size-sm);
+}
+
+.holdHours {
+  margin-left: 50px;
+
+  @include mixins.respond-below(sm) {
+    margin-left: 0;
+  }
+}

@@ -51,6 +51,10 @@ class EventSettingsResource extends JsonResource
             'payment_providers' => $this->getPaymentProviders(),
             'offline_payment_instructions' => $this->getOfflinePaymentInstructions(),
             'allow_orders_awaiting_offline_payment_to_check_in' => $this->getAllowOrdersAwaitingOfflinePaymentToCheckIn(),
+            'offline_payment_reporting_enabled' => $this->getOfflinePaymentReportingEnabled(),
+            'offline_payment_order_reference_enabled' => $this->getOfflinePaymentOrderReferenceEnabled(),
+            'payment_links_enabled' => $this->getPaymentLinksEnabled(),
+            'payment_link_expiry_hours' => $this->getPaymentLinkExpiryHours(),
 
             // Invoice settings
             'enable_invoicing' => $this->getEnableInvoicing(),

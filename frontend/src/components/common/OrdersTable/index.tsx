@@ -10,6 +10,7 @@ import {
     IconCheck,
     IconClock,
     IconClockPause,
+    IconCashBanknote,
     IconCopy,
     IconCreditCard,
     IconDotsVertical,
@@ -343,7 +344,10 @@ export const OrdersTable = ({orders, event, compact}: OrdersTableProps) => {
                 cell: (info: CellContext<Order, unknown>) => {
                     const order = info.row.original;
                     return (
-                        <div className={classes.statusBadge} data-status={order.status}>
+                        <div
+                            className={classes.statusBadge}
+                            data-status={order.status === 'AWAITING_OFFLINE_PAYMENT' && order.offline_payment_reported_at ? 'PAYMENT_REPORTED' : order.status}
+                        >
                             {order.status === 'COMPLETED' && (
                                 <>
                                     <IconCheck size={14}/>
@@ -356,10 +360,16 @@ export const OrdersTable = ({orders, event, compact}: OrdersTableProps) => {
                                     {t`Reserved`}
                                 </>
                             )}
-                            {order.status === 'AWAITING_OFFLINE_PAYMENT' && (
+                            {order.status === 'AWAITING_OFFLINE_PAYMENT' && !order.offline_payment_reported_at && (
                                 <>
                                     <IconClockPause size={14}/>
                                     {t`Awaiting Payment`}
+                                </>
+                            )}
+                            {order.status === 'AWAITING_OFFLINE_PAYMENT' && order.offline_payment_reported_at && (
+                                <>
+                                    <IconCashBanknote size={14}/>
+                                    {t`Payment reported`}
                                 </>
                             )}
                             {order.status === 'CANCELLED' && (

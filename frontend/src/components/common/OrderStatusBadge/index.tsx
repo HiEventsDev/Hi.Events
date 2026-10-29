@@ -9,6 +9,7 @@ const getStatusLabel = (status: string): string => {
         'CANCELLED': t`Cancelled`,
         'AWAITING_PAYMENT': t`Awaiting Payment`,
         'AWAITING_OFFLINE_PAYMENT': t`Awaiting offline payment`,
+        'PAYMENT_REPORTED': t`Payment reported`,
         'PAYMENT_RECEIVED': t`Payment Received`,
         'NO_PAYMENT_REQUIRED': t`No Payment Required`,
         'PAYMENT_FAILED': t`Payment Failed`,
@@ -26,6 +27,9 @@ export const OrderStatusBadge = ({order, variant = 'outline'}: { order: Order, v
     if (order.status === 'CANCELLED') {
         color = getStatusColor(order.status);
         title = getStatusLabel(order.status);
+    } else if (order.status === 'AWAITING_OFFLINE_PAYMENT' && order.offline_payment_reported_at) {
+        color = 'teal';
+        title = getStatusLabel('PAYMENT_REPORTED');
     } else if (order.status === 'AWAITING_OFFLINE_PAYMENT') {
         color = getStatusColor('AWAITING_PAYMENT');
         title = getStatusLabel(order.status);
