@@ -1,4 +1,4 @@
-import type { Locator, Page } from '@playwright/test';
+import { expect, type Locator, type Page } from '@playwright/test';
 
 export class CheckInListPage {
   constructor(private readonly page: Page) {}
@@ -8,13 +8,31 @@ export class CheckInListPage {
     await this.page.waitForLoadState('networkidle');
   }
 
-  async createList(name: string): Promise<void> {
+  async createList(name: string, options: { badgePrinting?: boolean; kiosk?: boolean } = {}): Promise<void> {
     await this.page.getByTestId('checkin-list-create-button').click();
     await this.page.getByLabel(/^Name/).fill(name);
+    if (options.badgePrinting) {
+      await this.openRowAndToggle(this.page.getByRole('dialog'), 'badges', 'check-in-list-badge-printing-switch');
+    }
+    if (options.kiosk) {
+      await this.toggleKiosk(this.page.getByRole('dialog'));
+    }
     await this.page.getByTestId('checkin-list-submit-button').click();
 
     await this.page.getByRole('heading', { name: 'Check-In List Created' }).waitFor();
     await this.page.getByRole('button', { name: 'Done' }).click();
+  }
+
+  async toggleKiosk(dialog: Locator): Promise<void> {
+    await this.openRowAndToggle(dialog, 'kiosk', 'check-in-list-kiosk-switch');
+  }
+
+  private async openRowAndToggle(dialog: Locator, row: string, switchTestId: string): Promise<void> {
+    await dialog.getByTestId(`check-in-list-ledger-${row}`).click();
+    const toggle = dialog.getByTestId(switchTestId);
+    const wasChecked = await toggle.isChecked();
+    await toggle.locator('xpath=ancestor::div[contains(@class, "mantine-Switch-root")]').locator('.mantine-Switch-track').click();
+    await expect(toggle).toBeChecked({ checked: !wasChecked });
   }
 
   row(name: string): Locator {

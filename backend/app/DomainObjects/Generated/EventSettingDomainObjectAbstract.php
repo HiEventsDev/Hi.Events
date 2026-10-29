@@ -143,6 +143,10 @@ abstract class EventSettingDomainObjectAbstract extends AbstractDomainObject
 
     final public const PAYMENT_LINK_EXPIRY_HOURS = 'payment_link_expiry_hours';
 
+    final public const BADGE_DESIGN_SETTINGS = 'badge_design_settings';
+
+    final public const ENABLED_FEATURES = 'enabled_features';
+
     protected int $id;
 
     protected int $event_id;
@@ -273,6 +277,10 @@ abstract class EventSettingDomainObjectAbstract extends AbstractDomainObject
 
     protected int $payment_link_expiry_hours = 72;
 
+    protected array|string|null $badge_design_settings = null;
+
+    protected array|string|null $enabled_features = null;
+
     public function toArray(): array
     {
         return [
@@ -341,6 +349,8 @@ abstract class EventSettingDomainObjectAbstract extends AbstractDomainObject
             'offline_payment_order_reference_enabled' => $this->offline_payment_order_reference_enabled ?? null,
             'payment_links_enabled' => $this->payment_links_enabled ?? null,
             'payment_link_expiry_hours' => $this->payment_link_expiry_hours ?? null,
+            'badge_design_settings' => $this->badge_design_settings ?? null,
+            'enabled_features' => $this->enabled_features ?? null,
         ];
     }
 
@@ -1123,5 +1133,29 @@ abstract class EventSettingDomainObjectAbstract extends AbstractDomainObject
     public function getPaymentLinkExpiryHours(): int
     {
         return $this->payment_link_expiry_hours;
+    }
+
+    public function setBadgeDesignSettings(array|string|null $badge_design_settings): self
+    {
+        $this->badge_design_settings = $badge_design_settings;
+
+        return $this;
+    }
+
+    public function getBadgeDesignSettings(): array|string|null
+    {
+        return $this->badge_design_settings;
+    }
+
+    public function setEnabledFeatures(array|string|null $enabled_features): self
+    {
+        $this->enabled_features = $enabled_features;
+
+        return $this;
+    }
+
+    public function getEnabledFeatures(): array|string|null
+    {
+        return $this->enabled_features;
     }
 }

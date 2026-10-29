@@ -46,6 +46,8 @@ class CreateCheckInListService
                 CheckInListDomainObjectAbstract::PUBLIC_SHOW_ATTENDEE_NOTES => $checkInList->getPublicShowAttendeeNotes(),
                 CheckInListDomainObjectAbstract::PUBLIC_SHOW_QUESTION_ANSWERS => $checkInList->getPublicShowQuestionAnswers(),
                 CheckInListDomainObjectAbstract::PUBLIC_SHOW_ORDER_DETAILS => $checkInList->getPublicShowOrderDetails(),
+                CheckInListDomainObjectAbstract::BADGE_PRINTING_ENABLED => $checkInList->getBadgePrintingEnabled(),
+                CheckInListDomainObjectAbstract::KIOSK_MODE => $checkInList->getKioskMode(),
             ]);
 
             $this->checkInListProductAssociationService->addCheckInListToProducts(

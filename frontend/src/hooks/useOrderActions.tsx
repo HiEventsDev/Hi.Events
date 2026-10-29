@@ -5,6 +5,7 @@ import {useClipboard, useDisclosure} from "@mantine/hooks";
 import {
     IconBasketCog,
     IconCopy,
+    IconIdBadge2,
     IconPencil,
     IconReceipt2,
     IconReceiptDollar,
@@ -26,6 +27,8 @@ import {withLoadingNotification} from "../utilites/withLoadingNotification.tsx";
 import {showError, showSuccess} from "../utilites/notifications.tsx";
 import {eventCheckoutUrl} from "../utilites/urlHelper.ts";
 import {isOrderRefundable} from "../utilites/orderHelper.ts";
+import {openBadgePrintWindow} from "../utilites/badges.ts";
+import {useEventFeature} from "./useEventFeature.ts";
 
 interface UseOrderActionsOptions {
     eventId: IdParam;
@@ -34,6 +37,7 @@ interface UseOrderActionsOptions {
 }
 
 export const useOrderActions = ({eventId, onManage, onEdit}: UseOrderActionsOptions) => {
+    const badgesEnabled = useEventFeature(eventId, 'BADGES');
     const [isCancelModalOpen, cancelModal] = useDisclosure(false);
     const [isMessageModalOpen, messageModal] = useDisclosure(false);
     const [isRefundModalOpen, refundModal] = useDisclosure(false);
@@ -138,6 +142,14 @@ export const useOrderActions = ({eventId, onManage, onEdit}: UseOrderActionsOpti
                 icon: <IconReceiptRefund size={14}/>,
                 onClick: () => openModal(order, refundModal),
                 group: 'secondary',
+            },
+            badgesEnabled && (order.status === 'COMPLETED' || order.status === 'AWAITING_OFFLINE_PAYMENT') && {
+                key: 'print-badges',
+                label: t`Print badges`,
+                icon: <IconIdBadge2 size={14}/>,
+                onClick: () => openBadgePrintWindow(eventId, {order_id: order.id}),
+                group: 'secondary',
+                dataTestId: 'order-print-badges-button',
             },
             !!order.short_id && {
                 key: 'copy-link',

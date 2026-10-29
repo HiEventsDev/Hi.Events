@@ -590,7 +590,7 @@ export interface Image {
     lqip_base64?: string | null;
 }
 
-export type ImageType = 'EVENT_COVER' | 'EDITOR_IMAGE' | 'ORGANIZER_LOGO' | 'ORGANIZER_COVER' | 'ORGANIZER_IMAGE' | 'TICKET_LOGO' | 'PROFILE_IMAGE' | 'EVENT_GALLERY' | 'EVENT_SPONSOR_LOGO' | 'ORGANIZER_GALLERY' | 'ORGANIZER_SPONSOR_LOGO';
+export type ImageType = 'EVENT_COVER' | 'EDITOR_IMAGE' | 'ORGANIZER_LOGO' | 'ORGANIZER_COVER' | 'ORGANIZER_IMAGE' | 'TICKET_LOGO' | 'PROFILE_IMAGE' | 'EVENT_GALLERY' | 'EVENT_SPONSOR_LOGO' | 'ORGANIZER_GALLERY' | 'ORGANIZER_SPONSOR_LOGO' | 'BADGE_LOGO' | 'BADGE_ARTWORK' | 'BADGE_SPONSORS';
 
 export type HomepageSectionType =
     'TICKETS'
@@ -636,8 +636,11 @@ export type PaymentProvider = 'STRIPE' | 'OFFLINE';
 
 export type AttendeeDetailsCollectionMethod = 'PER_TICKET' | 'PER_ORDER';
 
+export type EventFeature = 'BADGES';
+
 export interface EventSettings {
     event_id?: IdParam;
+    enabled_features?: EventFeature[];
     id?: IdParam;
     continue_button_text: string;
     get_tickets_button_text?: string;
@@ -1313,6 +1316,9 @@ export interface Attendee {
     check_in?: AttendeeCheckIn;
     is_checked_in?: boolean;
     check_ins?: AttendeeCheckIn[];
+    badge_printed_at?: string | null;
+    badge_print_count?: number;
+    badge_print_status?: BadgePrintStatus;
 }
 
 export type PublicCheckIn = Pick<AttendeeCheckIn, 'id' | 'short_id' | 'order_id' | 'attendee_id' | 'check_in_list_id' | 'product_id' | 'event_id'>;
@@ -1536,6 +1542,125 @@ export interface CheckInList {
     public_show_attendee_notes?: boolean;
     public_show_question_answers?: boolean;
     public_show_order_details?: boolean;
+    badge_printing_enabled?: boolean;
+    kiosk_mode?: boolean;
+    badge_design?: BadgeLayout;
+}
+
+export type BadgeTemplate = 'CLASSIC' | 'BANNER' | 'MINIMAL' | 'BOLD' | 'SIDEBAR' | 'ARTWORK';
+
+export type BadgeSize =
+    'A6_PORTRAIT'
+    | 'A7_PORTRAIT'
+    | 'IN_4X3_LANDSCAPE'
+    | 'IN_3X4_PORTRAIT'
+    | 'IN_4X6_PORTRAIT'
+    | 'CR80_PORTRAIT'
+    | 'CR80_LANDSCAPE'
+    | 'LABEL_62X100'
+    | 'CUSTOM';
+
+export type BadgeSheet = 'A4' | 'LETTER' | 'NONE';
+
+export type BadgeFieldSource =
+    'FIRST_NAME'
+    | 'LAST_NAME'
+    | 'FULL_NAME'
+    | 'TICKET_TYPE'
+    | 'QUESTION'
+    | 'OCCURRENCE_DATE'
+    | 'CUSTOM_TEXT';
+
+export type BadgeTextSize = 'XL' | 'L' | 'M' | 'S';
+
+export type BadgeBackMode = 'NONE' | 'SAME' | 'INFO';
+
+export type BadgeTextAlign = 'LEFT' | 'CENTER';
+
+export type BadgePrintStatus = 'NOT_PRINTED' | 'PRINTED' | 'NEEDS_REPRINT';
+
+export interface BadgeLayout {
+    template: BadgeTemplate;
+    size: BadgeSize;
+    custom_width_mm: number | null;
+    custom_height_mm: number | null;
+    sheet: BadgeSheet;
+    accent_color: string;
+    background_color: string | null;
+    text_color: string | null;
+    font_family: string;
+    text_align: BadgeTextAlign | null;
+    uppercase_names: boolean;
+    show_logo: boolean;
+    show_qr: boolean;
+    show_ribbon: boolean;
+    show_seat: boolean;
+    show_event_name: boolean;
+    show_sponsors: boolean;
+    footer_text: string | null;
+    back_mode: BadgeBackMode;
+    back_text: string | null;
+    fold_over: boolean;
+}
+
+export interface BadgeDesignLine {
+    source: BadgeFieldSource;
+    size: BadgeTextSize;
+    question_id?: number | null;
+    text?: string | null;
+}
+
+export interface BadgeRibbon {
+    product_id: number;
+    label: string | null;
+    color: string;
+}
+
+export interface BadgeDesign extends BadgeLayout {
+    lines: BadgeDesignLine[];
+    ribbons: BadgeRibbon[];
+    is_customized?: boolean;
+}
+
+export interface BadgeLine {
+    source: BadgeFieldSource;
+    size: BadgeTextSize;
+    text: string;
+}
+
+export interface Badge {
+    attendee_id: number;
+    attendee_public_id: string;
+    order_id: number;
+    product_id: number;
+    event_occurrence_id: number | null;
+    status: Attendee['status'];
+    first_name: string | null;
+    last_name: string | null;
+    lines: BadgeLine[];
+    ribbon: { label: string | null; color: string } | null;
+    seat_label: string | null;
+    badge_printed_at: string | null;
+    badge_print_count: number;
+    print_status: BadgePrintStatus;
+}
+
+export interface BadgeStats {
+    total: number;
+    printed: number;
+    not_printed: number;
+    needs_reprint: number;
+}
+
+export interface BadgeQuery {
+    attendee_ids?: IdParam[];
+    order_id?: IdParam | null;
+    product_ids?: IdParam[];
+    event_occurrence_id?: IdParam | null;
+    only_unprinted?: boolean;
+    sort_by?: 'last_name' | 'first_name' | 'product' | 'created_at';
+    page?: number;
+    per_page?: number;
 }
 
 export enum BoxOfficeTenderType {
@@ -1756,6 +1881,8 @@ export interface AttendeeDetailPublic {
     product_id: number;
     product_title: string | null;
     seat_label?: string | null;
+    badge_print_count?: number;
+    badge_print_status?: BadgePrintStatus;
     event_occurrence: EventOccurrence | null;
     check_ins: AttendeeDetailPublicCheckIn[];
     visibility: {

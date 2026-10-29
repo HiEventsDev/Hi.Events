@@ -1,0 +1,29 @@
+.sheets {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.page {
+  display: grid;
+  box-sizing: border-box;
+  background: #ffffff;
+  overflow: hidden;
+  break-after: page;
+  page-break-after: always;
+
+  &:last-child {
+    break-after: auto;
+    page-break-after: auto;
+  }
+}
+
+@media screen {
+  .sheets {
+    gap: 24px;
+  }
+
+  .page {
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08), 0 16px 40px -18px rgba(15, 23, 42, 0.35);
+  }
+}

@@ -46,6 +46,7 @@ use HiEvents\Repository\Interfaces\ProductOccurrenceVisibilityRepositoryInterfac
 use HiEvents\Repository\Interfaces\ProductPriceOccurrenceOverrideRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
+use HiEvents\Services\Domain\Badge\BadgeDesignCloneService;
 use HiEvents\Services\Domain\CapacityAssignment\CreateCapacityAssignmentService;
 use HiEvents\Services\Domain\CheckInList\CreateCheckInListService;
 use HiEvents\Services\Domain\CreateWebhookService;
@@ -86,6 +87,7 @@ class DuplicateEventService
         private readonly FeatureFlagService $featureFlagService,
         private readonly EventLineupCloneService $eventLineupCloneService,
         private readonly HomepageSectionImageCloneService $homepageSectionImageCloneService,
+        private readonly BadgeDesignCloneService $badgeDesignCloneService,
         private readonly QuestionRepositoryInterface $questionRepository,
         private readonly EmailTemplateRepositoryInterface $emailTemplateRepository,
     ) {}
@@ -194,6 +196,12 @@ class DuplicateEventService
 
             if ($duplicateSettings) {
                 $this->homepageSectionImageCloneService->clone($event, $newEvent->getId());
+                $this->badgeDesignCloneService->clone(
+                    sourceEvent: $event,
+                    newEventId: $newEvent->getId(),
+                    oldToNewQuestionMap: $oldToNewQuestionMap,
+                    oldToNewProductMap: $oldProductToNewProductMap,
+                );
             }
 
             if ($duplicateWebhooks) {
@@ -550,6 +558,8 @@ class DuplicateEventService
                     ->setPublicShowAttendeeNotes($checkInList->getPublicShowAttendeeNotes())
                     ->setPublicShowQuestionAnswers($checkInList->getPublicShowQuestionAnswers())
                     ->setPublicShowOrderDetails($checkInList->getPublicShowOrderDetails())
+                    ->setBadgePrintingEnabled($checkInList->getBadgePrintingEnabled())
+                    ->setKioskMode($checkInList->getKioskMode())
                     ->setEventId($newEventId),
                 productIds: $checkInList->getProducts()
                     ?->map(fn ($product) => $oldProductToNewProductMap[$product->getId()])?->toArray() ?? [],

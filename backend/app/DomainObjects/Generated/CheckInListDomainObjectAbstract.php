@@ -25,6 +25,8 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
     final public const PUBLIC_SHOW_QUESTION_ANSWERS = 'public_show_question_answers';
     final public const PUBLIC_SHOW_ORDER_DETAILS = 'public_show_order_details';
     final public const IS_SYSTEM_DEFAULT = 'is_system_default';
+    final public const BADGE_PRINTING_ENABLED = 'badge_printing_enabled';
+    final public const KIOSK_MODE = 'kiosk_mode';
 
     protected int $id;
     protected int $event_id;
@@ -41,6 +43,8 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
     protected bool $public_show_question_answers = false;
     protected bool $public_show_order_details = false;
     protected bool $is_system_default = false;
+    protected bool $badge_printing_enabled = false;
+    protected bool $kiosk_mode = false;
 
     public function toArray(): array
     {
@@ -60,6 +64,8 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
                     'public_show_question_answers' => $this->public_show_question_answers ?? null,
                     'public_show_order_details' => $this->public_show_order_details ?? null,
                     'is_system_default' => $this->is_system_default ?? null,
+                    'badge_printing_enabled' => $this->badge_printing_enabled ?? null,
+                    'kiosk_mode' => $this->kiosk_mode ?? null,
                 ];
     }
 
@@ -226,5 +232,27 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
     public function getIsSystemDefault(): bool
     {
         return $this->is_system_default;
+    }
+
+    public function setBadgePrintingEnabled(bool $badge_printing_enabled): self
+    {
+        $this->badge_printing_enabled = $badge_printing_enabled;
+        return $this;
+    }
+
+    public function getBadgePrintingEnabled(): bool
+    {
+        return $this->badge_printing_enabled;
+    }
+
+    public function setKioskMode(bool $kiosk_mode): self
+    {
+        $this->kiosk_mode = $kiosk_mode;
+        return $this;
+    }
+
+    public function getKioskMode(): bool
+    {
+        return $this->kiosk_mode;
     }
 }

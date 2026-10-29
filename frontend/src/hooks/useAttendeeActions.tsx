@@ -3,7 +3,7 @@ import {useAccess} from "./useAccess.ts";
 import {t, Trans} from "@lingui/macro";
 import {useDisclosure} from "@mantine/hooks";
 import {notifications} from "@mantine/notifications";
-import {IconMailForward, IconPencil, IconSend, IconTrash, IconUserCog} from "@tabler/icons-react";
+import {IconIdBadge2, IconMailForward, IconPencil, IconSend, IconTrash, IconUserCog} from "@tabler/icons-react";
 import {Attendee, IdParam, MessageType} from "../types.ts";
 import {EntityAction} from "../components/common/EntityActions";
 import {SendMessageModal} from "../components/modals/SendMessageModal";
@@ -11,6 +11,8 @@ import {useModifyAttendee} from "../mutations/useModifyAttendee.ts";
 import {useResendAttendeeTicket} from "../mutations/useResendAttendeeTicket.ts";
 import {showError, showSuccess} from "../utilites/notifications.tsx";
 import {confirmationDialog} from "../utilites/confirmationDialog.tsx";
+import {openBadgePrintWindow} from "../utilites/badges.ts";
+import {useEventFeature} from "./useEventFeature.ts";
 
 interface UseAttendeeActionsOptions {
     eventId: IdParam;
@@ -19,6 +21,7 @@ interface UseAttendeeActionsOptions {
 }
 
 export const useAttendeeActions = ({eventId, onManage, onEdit}: UseAttendeeActionsOptions) => {
+    const badgesEnabled = useEventFeature(eventId, 'BADGES');
     const [isMessageModalOpen, messageModal] = useDisclosure(false);
     const [selectedAttendee, setSelectedAttendee] = useState<Attendee>();
     const modifyMutation = useModifyAttendee();
@@ -110,6 +113,14 @@ export const useAttendeeActions = ({eventId, onManage, onEdit}: UseAttendeeActio
                 icon: <IconMailForward size={14}/>,
                 onClick: () => handleResendTicket(attendee),
                 group: 'primary',
+            },
+            badgesEnabled && !isCancelled && !!attendee.id && {
+                key: 'print-badge',
+                label: attendee.badge_print_count ? t`Reprint badge` : t`Print badge`,
+                icon: <IconIdBadge2 size={14}/>,
+                onClick: () => openBadgePrintWindow(eventId, {attendee_ids: [attendee.id as IdParam]}),
+                group: 'secondary',
+                dataTestId: 'attendee-print-badge-button',
             },
             canEdit && {
                 key: 'cancel',

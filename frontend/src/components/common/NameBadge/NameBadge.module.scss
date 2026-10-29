@@ -1,0 +1,504 @@
+.badge {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
+  container-type: size;
+  background: var(--badge-bg);
+  color: var(--badge-ink);
+  font-family: var(--badge-font);
+  text-align: var(--badge-align);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  break-inside: avoid;
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  &[data-cut-guide="true"] {
+    outline: 0.15mm dashed rgba(0, 0, 0, 0.28);
+    outline-offset: -0.075mm;
+  }
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: var(--badge-justify);
+  gap: 3cqmin;
+  min-height: 10cqmin;
+  padding: 7cqmin 7cqmin 0;
+}
+
+.logo {
+  display: block;
+  max-width: 46%;
+  max-height: 12cqmin;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.eventName {
+  min-width: 0;
+  font-size: 3.5cqmin;
+  font-weight: 650;
+  line-height: 1.25;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  opacity: 0.72;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3cqmin 7cqmin;
+}
+
+.bodyContent {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  transform-origin: var(--badge-origin) center;
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1cqmin;
+  width: 100%;
+}
+
+.line {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  overflow-wrap: anywhere;
+
+  &[data-size="XL"] {
+    font-size: 14cqmin;
+    font-weight: 800;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+  }
+
+  &[data-size="L"] {
+    font-size: 8.6cqmin;
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+  }
+
+  &[data-size="M"] {
+    margin-top: 0.8cqmin;
+    font-size: 5.4cqmin;
+    font-weight: 600;
+    line-height: 1.2;
+    opacity: 0.9;
+  }
+
+  &[data-size="S"] {
+    font-size: 4.2cqmin;
+    font-weight: 500;
+    line-height: 1.25;
+    opacity: 0.72;
+  }
+}
+
+.seat {
+  display: inline-flex;
+  align-items: baseline;
+  align-self: var(--badge-justify);
+  gap: 1.6cqmin;
+  margin-top: 3cqmin;
+  padding: 1.2cqmin 2.4cqmin;
+  border: 0.35mm solid currentColor;
+  border-radius: 1.4cqmin;
+  font-size: 4.2cqmin;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.seatLabel {
+  font-size: 0.72em;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 4cqmin;
+  padding: 0 7cqmin 5cqmin;
+}
+
+.bottomStart {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2cqmin;
+  align-items: var(--badge-justify);
+}
+
+.qr {
+  flex-shrink: 0;
+  width: 21cqmin;
+  height: 21cqmin;
+  padding: 1.4cqmin;
+  background: #ffffff;
+  border-radius: 1.2cqmin;
+
+  svg {
+    display: block;
+  }
+}
+
+.sponsors {
+  display: block;
+  max-width: 100%;
+  max-height: 9cqmin;
+  object-fit: contain;
+}
+
+.footer {
+  font-size: 3.2cqmin;
+  line-height: 1.3;
+  opacity: 0.65;
+}
+
+.ribbon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  height: 12cqmin;
+  padding: 0 5cqmin;
+  background: var(--ribbon-bg);
+  color: var(--ribbon-ink);
+}
+
+.ribbonText {
+  display: block;
+  max-width: 100%;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 4.8cqmin;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.badge[data-template="CLASSIC"] .eventName {
+  flex: 1;
+}
+
+.badge[data-template="BANNER"] {
+  .banner {
+    position: relative;
+    flex: 0 0 31%;
+    display: flex;
+    background: var(--badge-accent);
+    color: var(--badge-accent-ink);
+    overflow: hidden;
+  }
+
+  .bannerArtwork {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .bannerArtwork + .bannerContent {
+    color: #ffffff;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.05) 70%);
+  }
+
+  .bannerContent {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: var(--badge-justify);
+    justify-content: space-between;
+    gap: 2cqmin;
+    padding: 6cqmin 7cqmin 5cqmin;
+  }
+
+  .eventName {
+    opacity: 0.92;
+  }
+
+  .ribbon {
+    height: 9cqmin;
+  }
+
+  .ribbonText {
+    font-size: 4.2cqmin;
+  }
+}
+
+.badge[data-template="MINIMAL"] {
+  .head {
+    padding: 9cqmin 9cqmin 0;
+  }
+
+  .logo {
+    max-height: 9cqmin;
+  }
+
+  .body {
+    padding: 3cqmin 9cqmin;
+  }
+
+  .rule {
+    display: block;
+    align-self: var(--badge-justify);
+    width: 14cqmin;
+    height: 1.1cqmin;
+    margin: 4cqmin 0 3cqmin;
+    background: var(--badge-accent);
+  }
+
+  .minimalRibbon {
+    display: inline-flex;
+    align-items: center;
+    align-self: var(--badge-justify);
+    gap: 2cqmin;
+    font-size: 4cqmin;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .minimalRibbonMark {
+    width: 3.4cqmin;
+    height: 3.4cqmin;
+    border-radius: 0.6cqmin;
+    background: var(--ribbon-bg);
+  }
+
+  .bottom {
+    padding: 0 9cqmin 8cqmin;
+  }
+
+  .qr {
+    width: 17cqmin;
+    height: 17cqmin;
+    padding: 0;
+  }
+}
+
+.badge[data-template="BOLD"] {
+  .eventName {
+    opacity: 0.85;
+  }
+
+  .line[data-size="XL"] {
+    font-size: 17cqmin;
+    font-weight: 900;
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+  }
+
+  .line[data-size="M"],
+  .line[data-size="S"] {
+    opacity: 0.88;
+  }
+
+  .ribbon {
+    margin: 0 5cqmin 5cqmin;
+    height: 11cqmin;
+    border-radius: 1.6cqmin;
+  }
+
+  .bottom {
+    padding-bottom: 4cqmin;
+  }
+}
+
+.badge[data-template="SIDEBAR"] {
+  flex-direction: row;
+
+  .sidebar {
+    flex: 0 0 15cqmin;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ribbon-bg);
+    color: var(--ribbon-ink);
+    overflow: hidden;
+  }
+
+  .sidebarText {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    max-height: 92%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 5.6cqmin;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .sidebarMain {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .head {
+    padding: 6cqmin 6cqmin 0;
+  }
+
+  .body {
+    padding: 3cqmin 6cqmin;
+  }
+
+  .bottom {
+    padding: 0 6cqmin 5cqmin;
+  }
+}
+
+.badge[data-template="ARTWORK"] {
+  background: var(--badge-accent);
+
+  .artwork {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .artworkHead {
+    position: relative;
+    flex: 1;
+    min-height: 14cqmin;
+    padding: 6cqmin;
+
+    .logo {
+      max-height: 11cqmin;
+    }
+  }
+
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin: 0 5cqmin 5cqmin;
+    border-radius: 2.6cqmin;
+    background: #ffffff;
+    color: #111827;
+    overflow: hidden;
+  }
+
+  .card .eventName {
+    padding: 5cqmin 5cqmin 0;
+    font-size: 3.2cqmin;
+  }
+
+  .cardBody {
+    display: flex;
+    flex-direction: column;
+    padding: 2.5cqmin 5cqmin 4cqmin;
+  }
+
+  .bottom {
+    padding: 0 5cqmin 4cqmin;
+  }
+
+  .qr {
+    width: 18cqmin;
+    height: 18cqmin;
+    padding: 0;
+  }
+
+  .ribbon {
+    height: 9cqmin;
+  }
+
+  .ribbonText {
+    font-size: 4.2cqmin;
+  }
+}
+
+.badge[data-template="INFO"] {
+  .back {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5cqmin;
+    padding: 8cqmin;
+    text-align: center;
+  }
+
+  .backHead {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3cqmin;
+  }
+
+  .backText {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    white-space: pre-wrap;
+    font-size: 4.2cqmin;
+    line-height: 1.45;
+    text-align: left;
+  }
+
+  .backBottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3cqmin;
+  }
+
+  .qr {
+    width: 24cqmin;
+    height: 24cqmin;
+  }
+}
+
+.badge[data-orientation="landscape"] {
+  .line[data-size="XL"] {
+    font-size: 16cqmin;
+  }
+
+  .qr {
+    width: 26cqmin;
+    height: 26cqmin;
+  }
+
+  &[data-template="BOLD"] .line[data-size="XL"] {
+    font-size: 19cqmin;
+  }
+
+  &[data-template="BANNER"] .banner {
+    flex-basis: 28%;
+  }
+}

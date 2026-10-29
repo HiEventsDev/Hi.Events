@@ -1,4 +1,5 @@
 import {t} from "@lingui/macro";
+import {RowSummary} from "../../common/Ledger";
 import dayjs from "dayjs";
 import {Product, TaxAndFee, TaxAndFeeCalculationType} from "../../../types.ts";
 import {formatCurrency} from "../../../utilites/currency.ts";
@@ -6,10 +7,16 @@ import {getSafeLocale} from "../../../utilites/dates.ts";
 import {getClientLocale, toDayjsLocale} from "../../../locales.ts";
 import {localeFormats} from "../../../utilites/dateLocales.ts";
 
-export interface RowSummary {
-    text: string;
-    emphasized: boolean;
-}
+export type LedgerRowId =
+    | 'description'
+    | 'sale-window'
+    | 'event-page'
+    | 'waitlist'
+    | 'taxes'
+    | 'order-limits'
+    | 'addons'
+    | 'highlight'
+    | 'access';
 
 const hasValue = (value: unknown): boolean => value !== undefined && value !== null && value !== '';
 

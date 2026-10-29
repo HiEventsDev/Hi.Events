@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\Enterprise\Seating\Exceptions\SeatSelectionInvalidException;
 use HiEvents\Enterprise\Seating\Exceptions\SeatsUnavailableException;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
+use HiEvents\Services\Domain\Badge\BadgeReprintService;
 use HiEvents\Services\Domain\SelfService\OrderAuditLogService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
@@ -24,6 +25,7 @@ class AttendeeSeatMoveService
         private readonly DomainEventDispatcherService $domainEventDispatcherService,
         private readonly EventSeatMapLookupService $eventSeatMapLookup,
         private readonly DatabaseManager $databaseManager,
+        private readonly BadgeReprintService $badgeReprintService,
     ) {}
 
     /**
@@ -47,7 +49,10 @@ class AttendeeSeatMoveService
                 enforceSelectionRules: ! $isOrganizer,
             );
 
-            $moved = $this->attendeeRepository->findById($attendee->getId());
+            $moved = $this->badgeReprintService->flagIfBadgeDetailsChanged(
+                before: $attendee,
+                after: $this->attendeeRepository->findById($attendee->getId()),
+            );
 
             $previousBand = $attendee->getSeatUid() === null
                 ? null

@@ -171,6 +171,13 @@ use HiEvents\Http\Actions\Auth\Sso\StartSsoLinkAction;
 use HiEvents\Http\Actions\Auth\Sso\StartSsoReauthAction;
 use HiEvents\Http\Actions\Auth\TwoFactorLoginAction;
 use HiEvents\Http\Actions\Auth\ValidateResetPasswordTokenAction;
+use HiEvents\Http\Actions\Badges\GetBadgeDesignAction;
+use HiEvents\Http\Actions\Badges\GetBadgesAction;
+use HiEvents\Http\Actions\Badges\GetBadgeStatsAction;
+use HiEvents\Http\Actions\Badges\MarkBadgesPrintedAction;
+use HiEvents\Http\Actions\Badges\Public\GetCheckInListAttendeeBadgePublicAction;
+use HiEvents\Http\Actions\Badges\Public\MarkCheckInListAttendeeBadgePrintedPublicAction;
+use HiEvents\Http\Actions\Badges\UpsertBadgeDesignAction;
 use HiEvents\Http\Actions\CapacityAssignments\CreateCapacityAssignmentAction;
 use HiEvents\Http\Actions\CapacityAssignments\DeleteCapacityAssignmentAction;
 use HiEvents\Http\Actions\CapacityAssignments\GetCapacityAssignmentAction;
@@ -673,6 +680,12 @@ $router->middleware(['auth:api,sanctum'])->group(
         $router->post('/events/{event_id}/attendees/{attendee_public_id}/resend-ticket', ResendAttendeeTicketAction::class);
         $router->post('/events/{event_id}/attendees/{attendee_public_id}/check_in', CheckInAttendeeAction::class);
 
+        $router->get('/events/{event_id}/badge-design', GetBadgeDesignAction::class);
+        $router->put('/events/{event_id}/badge-design', UpsertBadgeDesignAction::class);
+        $router->get('/events/{event_id}/badges', GetBadgesAction::class);
+        $router->get('/events/{event_id}/badges/stats', GetBadgeStatsAction::class);
+        $router->post('/events/{event_id}/badges/printed', MarkBadgesPrintedAction::class);
+
         // Orders
         $router->get('/events/{event_id}/orders', GetOrdersAction::class);
         $router->get('/events/{event_id}/orders/{order_id}', GetOrderAction::class);
@@ -1017,6 +1030,10 @@ $router->prefix('/public')->group(
         $router->get('/check-in-lists/{check_in_list_short_id}/attendees/{attendee_public_id}/detail', GetCheckInListAttendeeDetailPublicAction::class);
         $router->post('/check-in-lists/{check_in_list_short_id}/check-ins', CreateAttendeeCheckInPublicAction::class);
         $router->delete('/check-in-lists/{check_in_list_short_id}/check-ins/{check_in_short_id}', DeleteAttendeeCheckInPublicAction::class);
+        $router->get('/check-in-lists/{check_in_list_short_id}/attendees/{attendee_public_id}/badge', GetCheckInListAttendeeBadgePublicAction::class)
+            ->middleware('throttle:120,1,public-check-in-badge');
+        $router->post('/check-in-lists/{check_in_list_short_id}/attendees/{attendee_public_id}/badge/printed', MarkCheckInListAttendeeBadgePrintedPublicAction::class)
+            ->middleware('throttle:120,1,public-check-in-badge-printed');
 
         // Color themes
         $router->get('/color-themes', GetColorThemesAction::class);

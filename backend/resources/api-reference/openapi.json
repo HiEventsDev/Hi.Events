@@ -1655,6 +1655,880 @@
         "security": []
       }
     },
+    "/events/{eventId}/badge-design": {
+      "get": {
+        "operationId": "badges.getBadgeDesignAction",
+        "summary": "Get Badge Design",
+        "tags": [
+          "Badges"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "`BadgeDesignResource`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/BadgeDesignResource"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "403": {
+            "description": "The authenticated user is not allowed to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "badges.upsertBadgeDesignAction",
+        "summary": "Upsert Badge Design",
+        "tags": [
+          "Badges"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertBadgeDesignRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`BadgeDesignResource`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/BadgeDesignResource"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "403": {
+            "description": "The authenticated user is not allowed to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/events/{eventId}/badges": {
+      "get": {
+        "operationId": "badges.getBadgesAction",
+        "summary": "Get Badges",
+        "tags": [
+          "Badges"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "attendee_ids",
+            "in": "query",
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^\\d+(,\\d+)*$",
+              "maxLength": 2400
+            }
+          },
+          {
+            "name": "product_ids",
+            "in": "query",
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^\\d+(,\\d+)*$",
+              "maxLength": 2400
+            }
+          },
+          {
+            "name": "order_id",
+            "in": "query",
+            "schema": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            }
+          },
+          {
+            "name": "event_occurrence_id",
+            "in": "query",
+            "schema": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            }
+          },
+          {
+            "name": "only_unprinted",
+            "in": "query",
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "true",
+                "false",
+                "1",
+                "0",
+                null
+              ]
+            }
+          },
+          {
+            "name": "sort_by",
+            "in": "query",
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "last_name",
+                "first_name",
+                "product",
+                "created_at",
+                null
+              ]
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "schema": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1,
+              "maximum": 1000
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated set of `BadgeResource`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/BadgeResource"
+                      }
+                    },
+                    "links": {
+                      "type": "object",
+                      "properties": {
+                        "first": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "last": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "prev": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "next": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "first",
+                        "last",
+                        "prev",
+                        "next"
+                      ]
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "current_page": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "from": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ],
+                          "minimum": 1
+                        },
+                        "last_page": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "links": {
+                          "type": "array",
+                          "description": "Generated paginator links.",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "url": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "label": {
+                                "type": "string"
+                              },
+                              "active": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "url",
+                              "label",
+                              "active"
+                            ]
+                          }
+                        },
+                        "path": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "description": "Base path for paginator generated URLs."
+                        },
+                        "per_page": {
+                          "type": "integer",
+                          "description": "Number of items shown per page.",
+                          "minimum": 0
+                        },
+                        "to": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ],
+                          "description": "Number of the last item in the slice.",
+                          "minimum": 1
+                        },
+                        "total": {
+                          "type": "integer",
+                          "description": "Total number of items being paginated.",
+                          "minimum": 0
+                        }
+                      },
+                      "required": [
+                        "current_page",
+                        "from",
+                        "last_page",
+                        "links",
+                        "path",
+                        "per_page",
+                        "to",
+                        "total"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "links",
+                    "meta"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
+          },
+          "403": {
+            "description": "The authenticated user is not allowed to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/events/{eventId}/badges/stats": {
+      "get": {
+        "operationId": "badges.getBadgeStatsAction",
+        "summary": "Get Badge Stats",
+        "tags": [
+          "Badges"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "event_occurrence_id",
+            "in": "query",
+            "schema": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "`BadgeStatsResource`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/BadgeStatsResource"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "403": {
+            "description": "The authenticated user is not allowed to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/events/{eventId}/badges/printed": {
+      "post": {
+        "operationId": "badges.markBadgesPrintedAction",
+        "summary": "Mark Badges Printed",
+        "tags": [
+          "Badges"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MarkBadgesPrintedRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "updated": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "updated"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "403": {
+            "description": "The authenticated user is not allowed to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public/check-in-lists/{checkInListShortId}/attendees/{attendeePublicId}/badge": {
+      "get": {
+        "operationId": "public.getCheckInListAttendeeBadgePublicAction",
+        "summary": "Get Check In List Attendee Badge (public)",
+        "tags": [
+          "Badges / Public"
+        ],
+        "parameters": [
+          {
+            "name": "checkInListShortId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "attendeePublicId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "`BadgeResource`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/BadgeResource"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/public/check-in-lists/{checkInListShortId}/attendees/{attendeePublicId}/badge/printed": {
+      "post": {
+        "operationId": "public.markCheckInListAttendeeBadgePrintedPublicAction",
+        "summary": "Mark Check In List Attendee Badge Printed (public)",
+        "tags": [
+          "Badges / Public"
+        ],
+        "parameters": [
+          {
+            "name": "checkInListShortId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "attendeePublicId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "`BadgeResource`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/BadgeResource"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
     "/events/{eventId}/box-offices": {
       "post": {
         "operationId": "actions.createBoxOfficeAction",
@@ -26143,6 +27017,12 @@
               "public_show_order_details": {
                 "type": "boolean"
               },
+              "badge_printing_enabled": {
+                "type": "boolean"
+              },
+              "kiosk_mode": {
+                "type": "boolean"
+              },
               "is_expired": {
                 "type": "boolean"
               },
@@ -26182,7 +27062,9 @@
               "checked_in_attendees",
               "public_show_attendee_notes",
               "public_show_question_answers",
-              "public_show_order_details"
+              "public_show_order_details",
+              "badge_printing_enabled",
+              "kiosk_mode"
             ]
           },
           "attendee": {
@@ -26254,6 +27136,23 @@
                 "type": [
                   "string",
                   "null"
+                ]
+              },
+              "badge_printed_at": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "badge_print_count": {
+                "type": "integer"
+              },
+              "badge_print_status": {
+                "type": "string",
+                "enum": [
+                  "NOT_PRINTED",
+                  "PRINTED",
+                  "NEEDS_REPRINT"
                 ]
               },
               "event_occurrence": {
@@ -26328,6 +27227,9 @@
               "seat_label",
               "locale",
               "notes",
+              "badge_printed_at",
+              "badge_print_count",
+              "badge_print_status",
               "created_at",
               "updated_at"
             ]
@@ -26367,6 +27269,17 @@
             "type": [
               "string",
               "null"
+            ]
+          },
+          "badge_print_count": {
+            "type": "integer"
+          },
+          "badge_print_status": {
+            "type": "string",
+            "enum": [
+              "NOT_PRINTED",
+              "PRINTED",
+              "NEEDS_REPRINT"
             ]
           },
           "product_id": {
@@ -26586,6 +27499,8 @@
           "last_name",
           "status",
           "seat_label",
+          "badge_print_count",
+          "badge_print_status",
           "product_id",
           "product_title",
           "event_occurrence",
@@ -26669,6 +27584,23 @@
               "null"
             ]
           },
+          "badge_printed_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "badge_print_count": {
+            "type": "integer"
+          },
+          "badge_print_status": {
+            "type": "string",
+            "enum": [
+              "NOT_PRINTED",
+              "PRINTED",
+              "NEEDS_REPRINT"
+            ]
+          },
           "event_occurrence": {
             "anyOf": [
               {
@@ -26741,6 +27673,9 @@
           "seat_label",
           "locale",
           "notes",
+          "badge_printed_at",
+          "badge_print_count",
+          "badge_print_status",
           "created_at",
           "updated_at"
         ],
@@ -26988,6 +27923,399 @@
           "event_occurrence"
         ],
         "title": "AttendeeWithCheckInPublicResource"
+      },
+      "BadgeDesignResource": {
+        "type": "object",
+        "properties": {
+          "template": {
+            "type": "string",
+            "enum": [
+              "CLASSIC",
+              "BANNER",
+              "MINIMAL",
+              "BOLD",
+              "SIDEBAR",
+              "ARTWORK"
+            ]
+          },
+          "size": {
+            "type": "string",
+            "enum": [
+              "A6_PORTRAIT",
+              "A7_PORTRAIT",
+              "IN_4X3_LANDSCAPE",
+              "IN_3X4_PORTRAIT",
+              "IN_4X6_PORTRAIT",
+              "CR80_PORTRAIT",
+              "CR80_LANDSCAPE",
+              "LABEL_62X100",
+              "CUSTOM"
+            ]
+          },
+          "custom_width_mm": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "custom_height_mm": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "sheet": {
+            "type": "string",
+            "enum": [
+              "A4",
+              "LETTER",
+              "NONE"
+            ]
+          },
+          "accent_color": {
+            "type": "string"
+          },
+          "background_color": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "text_color": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "font_family": {
+            "type": "string"
+          },
+          "text_align": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "LEFT",
+              "CENTER",
+              null
+            ]
+          },
+          "uppercase_names": {
+            "type": "boolean"
+          },
+          "show_logo": {
+            "type": "boolean"
+          },
+          "show_qr": {
+            "type": "boolean"
+          },
+          "show_ribbon": {
+            "type": "boolean"
+          },
+          "show_seat": {
+            "type": "boolean"
+          },
+          "show_event_name": {
+            "type": "boolean"
+          },
+          "show_sponsors": {
+            "type": "boolean"
+          },
+          "footer_text": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "back_mode": {
+            "type": "string",
+            "enum": [
+              "NONE",
+              "SAME",
+              "INFO"
+            ]
+          },
+          "back_text": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "fold_over": {
+            "type": "boolean"
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "FIRST_NAME",
+                    "LAST_NAME",
+                    "FULL_NAME",
+                    "TICKET_TYPE",
+                    "QUESTION",
+                    "OCCURRENCE_DATE",
+                    "CUSTOM_TEXT"
+                  ]
+                },
+                "size": {
+                  "type": "string",
+                  "enum": [
+                    "XL",
+                    "L",
+                    "M",
+                    "S"
+                  ]
+                },
+                "question_id": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "text": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "source",
+                "size",
+                "question_id",
+                "text"
+              ]
+            }
+          },
+          "ribbons": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "product_id": {
+                  "type": "integer"
+                },
+                "label": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "color": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "product_id",
+                "label",
+                "color"
+              ]
+            }
+          },
+          "is_customized": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "template",
+          "size",
+          "custom_width_mm",
+          "custom_height_mm",
+          "sheet",
+          "accent_color",
+          "background_color",
+          "text_color",
+          "font_family",
+          "text_align",
+          "uppercase_names",
+          "show_logo",
+          "show_qr",
+          "show_ribbon",
+          "show_seat",
+          "show_event_name",
+          "show_sponsors",
+          "footer_text",
+          "back_mode",
+          "back_text",
+          "fold_over",
+          "lines",
+          "ribbons",
+          "is_customized"
+        ],
+        "title": "BadgeDesignResource"
+      },
+      "BadgeResource": {
+        "type": "object",
+        "properties": {
+          "attendee_id": {
+            "type": "integer"
+          },
+          "attendee_public_id": {
+            "type": "string"
+          },
+          "order_id": {
+            "type": "integer"
+          },
+          "product_id": {
+            "type": "integer"
+          },
+          "event_occurrence_id": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "AWAITING_PAYMENT",
+              "CANCELLED"
+            ]
+          },
+          "first_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "last_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "FIRST_NAME",
+                    "LAST_NAME",
+                    "FULL_NAME",
+                    "TICKET_TYPE",
+                    "QUESTION",
+                    "OCCURRENCE_DATE",
+                    "CUSTOM_TEXT"
+                  ]
+                },
+                "size": {
+                  "type": "string",
+                  "enum": [
+                    "XL",
+                    "L",
+                    "M",
+                    "S"
+                  ]
+                },
+                "text": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "source",
+                "size",
+                "text"
+              ]
+            }
+          },
+          "ribbon": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "label": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "color": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label",
+              "color"
+            ]
+          },
+          "seat_label": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "badge_printed_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "badge_print_count": {
+            "type": "integer"
+          },
+          "print_status": {
+            "type": "string",
+            "enum": [
+              "NOT_PRINTED",
+              "PRINTED",
+              "NEEDS_REPRINT"
+            ]
+          }
+        },
+        "required": [
+          "attendee_id",
+          "attendee_public_id",
+          "order_id",
+          "product_id",
+          "event_occurrence_id",
+          "status",
+          "first_name",
+          "last_name",
+          "lines",
+          "ribbon",
+          "seat_label",
+          "badge_printed_at",
+          "badge_print_count",
+          "print_status"
+        ],
+        "title": "BadgeResource"
+      },
+      "BadgeStatsResource": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "integer"
+          },
+          "printed": {
+            "type": "integer"
+          },
+          "not_printed": {
+            "type": "integer"
+          },
+          "needs_reprint": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "total",
+          "printed",
+          "not_printed",
+          "needs_reprint"
+        ],
+        "title": "BadgeStatsResource"
       },
       "BoxOfficeResource": {
         "type": "object",
@@ -27566,6 +28894,12 @@
           "public_show_order_details": {
             "type": "boolean"
           },
+          "badge_printing_enabled": {
+            "type": "boolean"
+          },
+          "kiosk_mode": {
+            "type": "boolean"
+          },
           "is_expired": {
             "type": "boolean"
           },
@@ -27605,7 +28939,9 @@
           "checked_in_attendees",
           "public_show_attendee_notes",
           "public_show_question_answers",
-          "public_show_order_details"
+          "public_show_order_details",
+          "badge_printing_enabled",
+          "kiosk_mode"
         ],
         "title": "CheckInListResource"
       },
@@ -27743,6 +29079,158 @@
           "public_show_order_details": {
             "type": "boolean"
           },
+          "badge_printing_enabled": {
+            "type": "boolean"
+          },
+          "kiosk_mode": {
+            "type": "boolean"
+          },
+          "badge_design": {
+            "type": "object",
+            "properties": {
+              "template": {
+                "type": "string",
+                "enum": [
+                  "CLASSIC",
+                  "BANNER",
+                  "MINIMAL",
+                  "BOLD",
+                  "SIDEBAR",
+                  "ARTWORK"
+                ]
+              },
+              "size": {
+                "type": "string",
+                "enum": [
+                  "A6_PORTRAIT",
+                  "A7_PORTRAIT",
+                  "IN_4X3_LANDSCAPE",
+                  "IN_3X4_PORTRAIT",
+                  "IN_4X6_PORTRAIT",
+                  "CR80_PORTRAIT",
+                  "CR80_LANDSCAPE",
+                  "LABEL_62X100",
+                  "CUSTOM"
+                ]
+              },
+              "custom_width_mm": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "custom_height_mm": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "sheet": {
+                "type": "string",
+                "enum": [
+                  "A4",
+                  "LETTER",
+                  "NONE"
+                ]
+              },
+              "accent_color": {
+                "type": "string"
+              },
+              "background_color": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "text_color": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "font_family": {
+                "type": "string"
+              },
+              "text_align": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "LEFT",
+                  "CENTER",
+                  null
+                ]
+              },
+              "uppercase_names": {
+                "type": "boolean"
+              },
+              "show_logo": {
+                "type": "boolean"
+              },
+              "show_qr": {
+                "type": "boolean"
+              },
+              "show_ribbon": {
+                "type": "boolean"
+              },
+              "show_seat": {
+                "type": "boolean"
+              },
+              "show_event_name": {
+                "type": "boolean"
+              },
+              "show_sponsors": {
+                "type": "boolean"
+              },
+              "footer_text": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "back_mode": {
+                "type": "string",
+                "enum": [
+                  "NONE",
+                  "SAME",
+                  "INFO"
+                ]
+              },
+              "back_text": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "fold_over": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "template",
+              "size",
+              "custom_width_mm",
+              "custom_height_mm",
+              "sheet",
+              "accent_color",
+              "background_color",
+              "text_color",
+              "font_family",
+              "text_align",
+              "uppercase_names",
+              "show_logo",
+              "show_qr",
+              "show_ribbon",
+              "show_seat",
+              "show_event_name",
+              "show_sponsors",
+              "footer_text",
+              "back_mode",
+              "back_text",
+              "fold_over"
+            ]
+          },
           "is_expired": {
             "type": "boolean"
           },
@@ -27799,7 +29287,9 @@
           "checked_in_attendees",
           "public_show_attendee_notes",
           "public_show_question_answers",
-          "public_show_order_details"
+          "public_show_order_details",
+          "badge_printing_enabled",
+          "kiosk_mode"
         ],
         "title": "CheckInListResourcePublic"
       },
@@ -28082,7 +29572,10 @@
               "EVENT_COVER",
               "TICKET_LOGO",
               "EVENT_GALLERY",
-              "EVENT_SPONSOR_LOGO"
+              "EVENT_SPONSOR_LOGO",
+              "BADGE_LOGO",
+              "BADGE_ARTWORK",
+              "BADGE_SPONSORS"
             ]
           }
         },
@@ -28392,6 +29885,9 @@
               "TICKET_LOGO",
               "EVENT_GALLERY",
               "EVENT_SPONSOR_LOGO",
+              "BADGE_LOGO",
+              "BADGE_ARTWORK",
+              "BADGE_SPONSORS",
               "ORGANIZER_LOGO",
               "ORGANIZER_COVER",
               "ORGANIZER_GALLERY",
@@ -30041,7 +31537,6 @@
             "type": "string"
           },
           "ticket_design_settings": {
-            "description": "Ticket design settings",
             "anyOf": [
               {
                 "type": "null"
@@ -30059,7 +31554,6 @@
             ]
           },
           "payment_providers": {
-            "description": "Payment settings",
             "anyOf": [
               {
                 "type": "null"
@@ -30098,8 +31592,7 @@
             "type": "integer"
           },
           "enable_invoicing": {
-            "type": "boolean",
-            "description": "Invoice settings"
+            "type": "boolean"
           },
           "invoice_label": {
             "type": [
@@ -30150,19 +31643,15 @@
             ]
           },
           "show_marketing_opt_in": {
-            "type": "boolean",
-            "description": "Marketing settings"
+            "type": "boolean"
           },
           "allow_copy_details_to_all_attendees": {
-            "type": "boolean",
-            "description": "Attendee detail copy control"
+            "type": "boolean"
           },
           "pass_platform_fee_to_buyer": {
-            "type": "boolean",
-            "description": "Platform fee settings"
+            "type": "boolean"
           },
           "homepage_theme_settings": {
-            "description": "Homepage theme settings",
             "anyOf": [
               {
                 "type": "null"
@@ -30197,25 +31686,29 @@
             ]
           },
           "allow_attendee_self_edit": {
-            "type": "boolean",
-            "description": "Self-service settings"
+            "type": "boolean"
           },
           "show_available_occurrence_capacity": {
-            "type": "boolean",
-            "description": "Occurrence display"
+            "type": "boolean"
           },
           "hide_sold_out_occurrences": {
             "type": "boolean"
           },
           "waitlist_auto_process": {
-            "type": "boolean",
-            "description": "Waitlist settings"
+            "type": "boolean"
           },
           "waitlist_offer_timeout_minutes": {
             "type": [
               "integer",
               "null"
             ]
+          },
+          "enabled_features": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "const": "BADGES"
+            }
           }
         },
         "required": [
@@ -30271,7 +31764,8 @@
           "show_available_occurrence_capacity",
           "hide_sold_out_occurrences",
           "waitlist_auto_process",
-          "waitlist_offer_timeout_minutes"
+          "waitlist_offer_timeout_minutes",
+          "enabled_features"
         ],
         "title": "EventSettingsResource"
       },
@@ -31477,6 +32971,23 @@
           "updated_at"
         ],
         "title": "LocationResource"
+      },
+      "MarkBadgesPrintedRequest": {
+        "type": "object",
+        "properties": {
+          "attendee_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "minItems": 1,
+            "maxItems": 1000
+          }
+        },
+        "required": [
+          "attendee_ids"
+        ],
+        "title": "MarkBadgesPrintedRequest"
       },
       "MeResource": {
         "type": "object",
@@ -36642,7 +38153,6 @@
           },
           "payment_providers": {
             "type": "array",
-            "description": "Payment settings",
             "items": {
               "type": "string",
               "enum": [
@@ -36675,8 +38185,7 @@
             "maximum": 720
           },
           "enable_invoicing": {
-            "type": "boolean",
-            "description": "Invoice settings"
+            "type": "boolean"
           },
           "invoice_label": {
             "type": [
@@ -36737,7 +38246,6 @@
           },
           "ticket_design_settings": {
             "type": "object",
-            "description": "Ticket design settings",
             "properties": {
               "accent_color": {
                 "type": [
@@ -36790,20 +38298,16 @@
             }
           },
           "show_marketing_opt_in": {
-            "type": "boolean",
-            "description": "Marketing settings"
+            "type": "boolean"
           },
           "allow_copy_details_to_all_attendees": {
-            "type": "boolean",
-            "description": "Attendee detail copy control"
+            "type": "boolean"
           },
           "pass_platform_fee_to_buyer": {
-            "type": "boolean",
-            "description": "Platform fee settings"
+            "type": "boolean"
           },
           "homepage_theme_settings": {
             "type": "object",
-            "description": "Homepage theme settings",
             "properties": {
               "accent": {
                 "type": [
@@ -37021,19 +38525,16 @@
             "maxItems": 41
           },
           "allow_attendee_self_edit": {
-            "type": "boolean",
-            "description": "Self-service settings"
+            "type": "boolean"
           },
           "show_available_occurrence_capacity": {
-            "type": "boolean",
-            "description": "Occurrence display"
+            "type": "boolean"
           },
           "hide_sold_out_occurrences": {
             "type": "boolean"
           },
           "waitlist_auto_process": {
-            "type": "boolean",
-            "description": "Waitlist settings"
+            "type": "boolean"
           },
           "waitlist_offer_timeout_minutes": {
             "type": [
@@ -37042,6 +38543,15 @@
             ],
             "minimum": 1,
             "maximum": 10080
+          },
+          "enabled_features": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "BADGES"
+              ]
+            }
           }
         },
         "title": "UpdateEventSettingsRequest"
@@ -37145,6 +38655,252 @@
           "product_ids"
         ],
         "title": "UpdateProductVisibilityRequest"
+      },
+      "UpsertBadgeDesignRequest": {
+        "type": "object",
+        "properties": {
+          "template": {
+            "type": "string",
+            "enum": [
+              "CLASSIC",
+              "BANNER",
+              "MINIMAL",
+              "BOLD",
+              "SIDEBAR",
+              "ARTWORK"
+            ]
+          },
+          "size": {
+            "type": "string",
+            "enum": [
+              "A6_PORTRAIT",
+              "A7_PORTRAIT",
+              "IN_4X3_LANDSCAPE",
+              "IN_3X4_PORTRAIT",
+              "IN_4X6_PORTRAIT",
+              "CR80_PORTRAIT",
+              "CR80_LANDSCAPE",
+              "LABEL_62X100",
+              "CUSTOM"
+            ]
+          },
+          "custom_width_mm": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 40,
+            "maximum": 220
+          },
+          "custom_height_mm": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 40,
+            "maximum": 220
+          },
+          "sheet": {
+            "type": "string",
+            "enum": [
+              "A4",
+              "LETTER",
+              "NONE"
+            ]
+          },
+          "accent_color": {
+            "type": "string",
+            "pattern": "^#[0-9a-fA-F]{6}$"
+          },
+          "background_color": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^#[0-9a-fA-F]{6}$"
+          },
+          "text_color": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^#[0-9a-fA-F]{6}$"
+          },
+          "font_family": {
+            "type": "string",
+            "enum": [
+              "Outfit",
+              "Inter",
+              "Roboto",
+              "Open Sans",
+              "Poppins",
+              "Montserrat",
+              "Lato",
+              "Nunito",
+              "Raleway",
+              "DM Sans",
+              "Plus Jakarta Sans",
+              "Work Sans",
+              "Space Grotesk",
+              "Manrope",
+              "Oswald",
+              "Bebas Neue",
+              "Playfair Display",
+              "Merriweather",
+              "Lora"
+            ]
+          },
+          "text_align": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "LEFT",
+              "CENTER",
+              null
+            ]
+          },
+          "uppercase_names": {
+            "type": "boolean"
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "FIRST_NAME",
+                    "LAST_NAME",
+                    "FULL_NAME",
+                    "TICKET_TYPE",
+                    "QUESTION",
+                    "OCCURRENCE_DATE",
+                    "CUSTOM_TEXT"
+                  ]
+                },
+                "size": {
+                  "type": "string",
+                  "enum": [
+                    "XL",
+                    "L",
+                    "M",
+                    "S"
+                  ]
+                },
+                "question_id": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "text": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "maxLength": 80
+                }
+              },
+              "required": [
+                "source",
+                "size"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 5
+          },
+          "show_logo": {
+            "type": "boolean"
+          },
+          "show_qr": {
+            "type": "boolean"
+          },
+          "show_ribbon": {
+            "type": "boolean"
+          },
+          "show_seat": {
+            "type": "boolean"
+          },
+          "show_event_name": {
+            "type": "boolean"
+          },
+          "show_sponsors": {
+            "type": "boolean"
+          },
+          "footer_text": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 120
+          },
+          "ribbons": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "product_id": {
+                  "type": "integer"
+                },
+                "label": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "maxLength": 40
+                },
+                "color": {
+                  "type": "string",
+                  "pattern": "^#[0-9a-fA-F]{6}$"
+                }
+              },
+              "required": [
+                "product_id",
+                "color"
+              ]
+            },
+            "maxItems": 100
+          },
+          "back_mode": {
+            "type": "string",
+            "enum": [
+              "NONE",
+              "SAME",
+              "INFO"
+            ]
+          },
+          "back_text": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 600
+          },
+          "fold_over": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "template",
+          "size",
+          "sheet",
+          "accent_color",
+          "font_family",
+          "uppercase_names",
+          "lines",
+          "show_logo",
+          "show_qr",
+          "show_ribbon",
+          "show_seat",
+          "show_event_name",
+          "show_sponsors",
+          "ribbons",
+          "back_mode"
+        ],
+        "title": "UpsertBadgeDesignRequest"
       },
       "UpsertBoxOfficeRequest": {
         "type": "object",
@@ -37314,6 +39070,18 @@
             ]
           },
           "public_show_order_details": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "badge_printing_enabled": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "kiosk_mode": {
             "type": [
               "boolean",
               "null"

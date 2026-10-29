@@ -16,6 +16,7 @@ use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Attendee\DTO\PartialEditAttendeeDTO;
+use HiEvents\Services\Domain\Badge\BadgeReprintService;
 use HiEvents\Services\Domain\EventOccurrence\OccurrencePurchaseEligibilityService;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsCancellationService;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsReactivationService;
@@ -46,6 +47,7 @@ class PartialEditAttendeeHandler
         private readonly SeatingEventLockService $seatingEventLock,
         private readonly OccurrencePurchaseEligibilityService $occurrenceEligibilityService,
         private readonly AvailableProductQuantitiesFetchService $availableProductQuantitiesFetchService,
+        private readonly BadgeReprintService $badgeReprintService,
     ) {}
 
     /**
@@ -85,7 +87,7 @@ class PartialEditAttendeeHandler
             $this->cancel($attendee);
         }
 
-        return $this->attendeeRepository->updateByIdWhere(
+        $updatedAttendee = $this->attendeeRepository->updateByIdWhere(
             id: $data->attendee_id,
             attributes: [
                 'status' => $status ?? $attendee->getStatus(),
@@ -96,6 +98,8 @@ class PartialEditAttendeeHandler
             where: [
                 'event_id' => $data->event_id,
             ]);
+
+        return $this->badgeReprintService->flagIfBadgeDetailsChanged($attendee, $updatedAttendee);
     }
 
     /**
