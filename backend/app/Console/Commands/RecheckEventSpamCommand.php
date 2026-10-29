@@ -4,7 +4,6 @@ namespace HiEvents\Console\Commands;
 
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Status\EventSpamCheckStatus;
-use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Jobs\Event\EventSpamCheckJob;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSpamCheckRepositoryInterface;
@@ -17,7 +16,7 @@ class RecheckEventSpamCommand extends Command
                             {--account-id= : Only recheck events belonging to this account}
                             {--dry-run : Report what would be rechecked without dispatching}';
 
-    protected $description = 'Discard automated CLEAN spam-check results and rerun the check against live events';
+    protected $description = 'Discard automated CLEAN spam-check results and rerun the check against live and archived events';
 
     public function __construct(
         private readonly EventRepositoryInterface $eventRepository,
@@ -38,7 +37,7 @@ class RecheckEventSpamCommand extends Command
         $dryRun = (bool) $this->option('dry-run');
         $accountId = $this->option('account-id');
 
-        $where = ['status' => EventStatus::LIVE->name];
+        $where = [['status', 'in', EventSpamCheckService::CHECKED_EVENT_STATUSES]];
 
         if ($accountId !== null) {
             $where['account_id'] = (int) $accountId;
@@ -46,7 +45,7 @@ class RecheckEventSpamCommand extends Command
 
         $events = $this->eventRepository->findWhere($where);
 
-        $this->info(sprintf('Found %d live event(s) to recheck.', $events->count()));
+        $this->info(sprintf('Found %d live or archived event(s) to recheck.', $events->count()));
 
         if ($dryRun) {
             $this->warn('DRY RUN MODE - no checks cleared and no jobs dispatched');

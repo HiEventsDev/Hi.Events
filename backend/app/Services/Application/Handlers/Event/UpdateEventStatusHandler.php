@@ -16,6 +16,7 @@ use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\UpdateEventStatusDTO;
 use HiEvents\Services\Domain\Event\EventSpamCheckDispatchService;
+use HiEvents\Services\Domain\Event\EventSpamCheckService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use Illuminate\Database\DatabaseManager;
 use Psr\Log\LoggerInterface;
@@ -108,10 +109,10 @@ readonly class UpdateEventStatusHandler
             $eventType,
         );
 
-        $isBecomingLive = $updateEventStatusDTO->status === EventStatus::LIVE->name
-            && $previousStatus !== EventStatus::LIVE->name;
+        $isEnteringCheckedStatus = $updateEventStatusDTO->status !== $previousStatus
+            && in_array($updateEventStatusDTO->status, EventSpamCheckService::CHECKED_EVENT_STATUSES, true);
 
-        if ($isBecomingLive) {
+        if ($isEnteringCheckedStatus) {
             $this->eventSpamCheckDispatchService->dispatchForEvent($event->getId());
         }
 

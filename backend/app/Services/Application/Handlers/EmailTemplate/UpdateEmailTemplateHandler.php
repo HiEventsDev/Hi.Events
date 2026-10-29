@@ -9,6 +9,7 @@ use HiEvents\Exceptions\InvalidEmailTemplateException;
 use HiEvents\Repository\Interfaces\EmailTemplateRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EmailTemplate\DTO\UpsertEmailTemplateDTO;
 use HiEvents\Services\Domain\Email\EmailTemplateService;
+use HiEvents\Services\Domain\Event\EventSpamCheckDispatchService;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 
 class UpdateEmailTemplateHandler
@@ -17,6 +18,7 @@ class UpdateEmailTemplateHandler
         private readonly EmailTemplateRepositoryInterface $emailTemplateRepository,
         private readonly EmailTemplateService $emailTemplateService,
         private readonly HtmlPurifierService $purifier,
+        private readonly EventSpamCheckDispatchService $eventSpamCheckDispatchService,
     ) {}
 
     /**
@@ -48,12 +50,16 @@ class UpdateEmailTemplateHandler
             throw new EmailTemplateNotFoundException(__('Email template not found'));
         }
 
-        return $this->emailTemplateRepository->updateFromArray($template->getId(), [
+        $updatedTemplate = $this->emailTemplateRepository->updateFromArray($template->getId(), [
             'subject' => $dto->subject,
             'body' => $this->purifier->purify($dto->body),
             'cta' => $dto->cta,
             'engine' => $dto->engine->value,
             'is_active' => $dto->is_active,
         ]);
+
+        $this->eventSpamCheckDispatchService->dispatchForEmailTemplate($template);
+
+        return $updatedTemplate;
     }
 }
