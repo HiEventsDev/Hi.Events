@@ -23,8 +23,10 @@ class DuplicateEventRequest extends BaseRequest
             'duplicate_event_cover_image' => ['boolean', 'required'],
             'duplicate_webhooks' => ['boolean', 'required'],
             'duplicate_affiliates' => ['boolean', 'required'],
+            'duplicate_lineup' => ['boolean', 'nullable'],
             'duplicate_ticket_logo' => ['boolean', 'required'],
             'duplicate_occurrences' => ['boolean', 'nullable'],
+            'duplicate_email_templates' => ['boolean', 'nullable'],
         ];
 
         return array_merge($eventValidations, $duplicateValidations);

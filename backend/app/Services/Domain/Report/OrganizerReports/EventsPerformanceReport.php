@@ -38,7 +38,7 @@ class EventsPerformanceReport extends AbstractOrganizerReportService
                     SUM(o.total_refunded) AS total_refunded,
                     SUM(o.total_gross - o.total_refunded) AS net_revenue,
                     COUNT(DISTINCT o.id) AS total_orders,
-                    COUNT(DISTINCT o.email) AS unique_customers
+                    COUNT(DISTINCT COALESCE(o.email, 'order:' || o.id)) AS unique_customers
                 FROM orders o
                 WHERE o.event_id IN (SELECT id FROM organizer_events)
                     AND o.status = '$completedStatus'

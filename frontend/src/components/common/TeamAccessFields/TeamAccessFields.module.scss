@@ -1,0 +1,202 @@
+@use "../../../styles/mixins.scss";
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 0;
+  border-top: 1px solid var(--hi-color-border);
+
+  :global(.mantine-InputWrapper-root) {
+    margin-bottom: 0;
+  }
+
+  &:first-of-type {
+    padding-top: 4px;
+    border-top: 0;
+  }
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--hi-color-text-muted);
+}
+
+.roleGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+
+  @include mixins.respond-below(sm) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.scopeGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+
+  @include mixins.respond-below(sm) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.choice {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border: 1px solid var(--hi-color-border);
+  border-radius: 10px;
+  background: var(--hi-color-white);
+  transition: border-color 120ms ease, background-color 120ms ease, box-shadow 120ms ease;
+
+  &:hover:not([data-disabled]) {
+    border-color: var(--mantine-color-primary-3);
+  }
+
+  &[data-checked] {
+    border-color: var(--mantine-color-primary-5);
+    background: var(--hi-accent-brand-soft);
+    box-shadow: 0 0 0 1px var(--mantine-color-primary-5);
+  }
+
+  &[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+.choiceHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.choiceIcon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: var(--hi-color-gray);
+  color: var(--hi-text);
+
+  .choice[data-checked] & {
+    background: var(--hi-color-white);
+    color: var(--mantine-color-primary-6);
+  }
+}
+
+.choiceLabel {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--hi-text);
+}
+
+.choiceDescription {
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--hi-color-text-muted);
+}
+
+.scopeChoice {
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+.scopeText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.picker {
+  margin-top: 2px;
+}
+
+.permissions {
+  overflow: hidden;
+  border: 1px solid var(--hi-color-border);
+  border-radius: 10px;
+}
+
+.permission {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 14px;
+  cursor: pointer;
+
+  & + & {
+    border-top: 1px solid var(--hi-color-border);
+  }
+}
+
+.permissionDisabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.permissionText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.permissionHint {
+  display: block;
+  margin-top: 2px;
+  font-weight: 500;
+}
+
+.hiddenLabel {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.roleGrid .choice {
+  @include mixins.respond-below(sm) {
+    display: grid;
+    grid-template-columns: 30px minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 12px;
+    row-gap: 2px;
+
+    .choiceHead {
+      display: contents;
+
+      > :last-child {
+        grid-column: 3;
+        grid-row: 1 / span 2;
+      }
+    }
+
+    .choiceIcon {
+      grid-column: 1;
+      grid-row: 1 / span 2;
+    }
+
+    .choiceLabel,
+    .choiceDescription {
+      grid-column: 2;
+    }
+  }
+}

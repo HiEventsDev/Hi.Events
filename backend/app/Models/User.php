@@ -13,12 +13,14 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
 use Lab404\Impersonate\Models\Impersonate;
+use Laravel\Sanctum\HasApiTokens;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 use RuntimeException;
 
@@ -31,6 +33,7 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
     use Authenticatable;
     use Authorizable;
     use CanResetPassword;
+    use HasApiTokens;
     use HasFactory;
     use Impersonate;
     use MustVerifyEmail;
@@ -71,6 +74,11 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
         return $this->belongsToMany(Account::class, 'account_users')
             ->withPivot('role', 'is_account_owner', 'last_login_at', 'status')
             ->withTimestamps();
+    }
+
+    public function identities(): HasMany
+    {
+        return $this->hasMany(UserIdentity::class);
     }
 
     public function currentAccount(): HasOneThrough

@@ -1,5 +1,6 @@
 import type { Browser, BrowserContextOptions, Page } from '@playwright/test';
 import { BASE_URL, cookieDomain } from '../utils/env';
+import { grantedConsentCookie } from '../utils/consent';
 
 export function buildStorageState(token: string): BrowserContextOptions['storageState'] {
   return {
@@ -14,6 +15,7 @@ export function buildStorageState(token: string): BrowserContextOptions['storage
         secure: true,
         sameSite: 'None',
       },
+      grantedConsentCookie(),
     ],
     origins: [],
   };

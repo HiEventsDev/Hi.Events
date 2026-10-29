@@ -29,6 +29,7 @@ interface KpiCellProps {
     sparkline?: number[];
     delta?: KpiCellDelta | null;
     isLoading?: boolean;
+    testId?: string;
 }
 
 const formatPercent = (percent: number, sign: '+' | '-') => {
@@ -36,10 +37,10 @@ const formatPercent = (percent: number, sign: '+' | '-') => {
     return `${sign}${abs}%`;
 };
 
-export const KpiCell = ({label, value, sparkline, delta, isLoading = false}: KpiCellProps) => {
+export const KpiCell = ({label, value, sparkline, delta, isLoading = false, testId}: KpiCellProps) => {
     if (isLoading) {
         return (
-            <div className={classes.cell}>
+            <div className={classes.cell} data-testid={testId}>
                 <div className={classes.label}>{label}</div>
                 <div className={classes.skeletonRow}>
                     <Skeleton height={20} width={80} radius="sm"/>
@@ -72,10 +73,10 @@ export const KpiCell = ({label, value, sparkline, delta, isLoading = false}: Kpi
     }
 
     return (
-        <div className={classes.cell}>
+        <div className={classes.cell} data-testid={testId}>
             <div className={classes.label}>{label}</div>
             <div className={classes.middleRow}>
-                <div className={classes.value}>{value}</div>
+                <div className={classes.value} data-testid={testId ? `${testId}-value` : undefined}>{value}</div>
                 {sparkline && sparkline.length > 0 ? (
                     <Sparkline
                         className={classes.sparkline}

@@ -175,7 +175,7 @@ export const ShareModal = ({
                 <div className={classes.tabsContent}>
                     <Tabs.Panel value="share" pt="lg">
                         <Stack>
-                            {navigator.share && (
+                            {'share' in navigator && (
                                 <Button
                                     size="lg"
                                     variant={'outline'}

@@ -1,15 +1,24 @@
 import {useForm} from "@mantine/form";
-import {GenericModalProps, InviteUserRequest,} from "../../../types.ts";
-import {Modal} from "../../common/Modal";
+import {GenericModalProps, InviteUserRequest, TeamAccessRequest} from "../../../types.ts";
+import {Modal, ModalFooter} from "../../common/Modal";
 import {Button, SimpleGrid, TextInput} from "@mantine/core";
+import {IconSend} from "@tabler/icons-react";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
 import {t, Trans} from "@lingui/macro";
 import {useInviteUser} from "../../../mutations/useInviteUser.ts";
-import {CustomSelect, ItemProps} from "../../common/CustomSelect";
-import {IconUser, IconUserShield} from "@tabler/icons-react";
 import {showSuccess} from "../../../utilites/notifications.tsx";
+import {
+    TeamAccessFields,
+    teamAccessInitialValues,
+    TeamFormSection,
+    toTeamAccessPayload
+} from "../../common/TeamAccessFields";
 
-export const InviteUserModal = ({onClose}: GenericModalProps) => {
+interface InviteUserModalProps extends GenericModalProps {
+    initialAccess?: Partial<TeamAccessRequest>;
+}
+
+export const InviteUserModal = ({onClose, initialAccess}: InviteUserModalProps) => {
     const createMutation = useInviteUser();
     const formErrorHandler = useFormErrorResponseHandler();
 
@@ -18,13 +27,15 @@ export const InviteUserModal = ({onClose}: GenericModalProps) => {
             email: '',
             first_name: '',
             last_name: '',
-            role: 'ADMIN',
+            role: 'ORGANIZER',
+            ...teamAccessInitialValues(),
+            ...initialAccess,
         },
     });
 
     const handleCreate = (values: InviteUserRequest) => {
         createMutation.mutate({
-            inviteUserData: values,
+            inviteUserData: {...values, ...toTeamAccessPayload(values)},
         }, {
             onSuccess: () => {
                 form.reset();
@@ -35,44 +46,35 @@ export const InviteUserModal = ({onClose}: GenericModalProps) => {
         });
     };
 
-    const calcTypeOptions: ItemProps[] = [
-        {
-            icon: <IconUserShield/>,
-            label: t`Admin`,
-            value: 'ADMIN',
-            description: t`Admin users have full access to events and account settings.`,
-        },
-        {
-            icon: <IconUser/>,
-            label: t`Organizer`,
-            value: 'ORGANIZER',
-            description: t`Organizers can only manage events and products. They cannot manage users, account settings or billing information.`,
-        },
-    ];
-
     return (
-        <Modal heading={t`Invite a team member`} onClose={onClose} opened modalHeader={'branded'}>
+        <Modal heading={t`Invite a team member`} onClose={onClose} opened size="lg">
             <form onSubmit={form.onSubmit(values => handleCreate(values))}>
-                <SimpleGrid cols={2}>
-                    <TextInput required {...form.getInputProps('first_name')} label={t`First Name`}/>
-                    <TextInput  {...form.getInputProps('last_name')} label={t`Last Name`}/>
-                </SimpleGrid>
+                <TeamFormSection title={t`Details`}>
+                    <SimpleGrid cols={{base: 1, xs: 2}} spacing="sm" verticalSpacing="sm">
+                        <TextInput required {...form.getInputProps('first_name')} label={t`First Name`}/>
+                        <TextInput {...form.getInputProps('last_name')} label={t`Last Name`}/>
+                    </SimpleGrid>
+                    <TextInput
+                        required
+                        type={'email'}
+                        {...form.getInputProps('email')}
+                        label={t`Email`}
+                        description={t`We'll email them a link to join your account.`}
+                    />
+                </TeamFormSection>
 
-                <TextInput required type={'email'}  {...form.getInputProps('email')} label={t`Email`}/>
+                <TeamAccessFields form={form}/>
 
-                <CustomSelect
-                    label={t`Role`}
-                    optionList={calcTypeOptions}
-                    form={form}
-                    name={'role'}
-                />
-
-                <Button
-                    fullWidth
-                    loading={createMutation.isPending}
-                    type={'submit'}>
-                    {t`Invite Team Member`}
-                </Button>
+                <ModalFooter>
+                    <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                    <Button
+                        leftSection={<IconSend size={16}/>}
+                        loading={createMutation.isPending}
+                        type={'submit'}
+                        data-testid="invite-team-member-submit">
+                        {t`Send invitation`}
+                    </Button>
+                </ModalFooter>
             </form>
         </Modal>
     )

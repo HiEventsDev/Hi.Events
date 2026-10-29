@@ -1,5 +1,5 @@
 import {t} from "@lingui/macro";
-import {Button} from "@mantine/core";
+import {CreateButton} from "../../../common/CreateButton";
 import {IconPlus} from "@tabler/icons-react";
 import {useDisclosure} from "@mantine/hooks";
 import {useParams} from "react-router";
@@ -51,9 +51,9 @@ export default function Locations() {
                 resultCount={pagination?.total}
                 resultLabel={t`locations`}
             >
-                <Button color={'green'} size={'sm'} onClick={openCreateModal} rightSection={<IconPlus/>}>
+                <CreateButton color={'green'} size={'sm'} onClick={openCreateModal} rightSection={<IconPlus/>}>
                     {t`Add Location`}
-                </Button>
+                </CreateButton>
             </ToolBar>
 
             <TableSkeleton isVisible={!locations}/>

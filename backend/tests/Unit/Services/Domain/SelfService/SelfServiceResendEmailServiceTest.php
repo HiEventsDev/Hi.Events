@@ -10,6 +10,7 @@ use HiEvents\DomainObjects\InvoiceDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -66,10 +67,12 @@ class SelfServiceResendEmailServiceTest extends TestCase
         $eventId = 1;
 
         $order = Mockery::mock(OrderDomainObject::class);
+        $order->shouldReceive('getEmail')->andReturn('buyer@example.com');
         $orderItems = Mockery::mock(OrderItemDomainObject::class);
         $order->shouldReceive('getOrderItems')->andReturn(collect([$orderItems]));
 
         $attendee = Mockery::mock(AttendeeDomainObject::class);
+        $attendee->shouldReceive('getEmail')->andReturn('attendee@example.com');
         $attendee->shouldReceive('getOrder')->andReturn($order);
 
         $eventSettings = Mockery::mock(EventSettingDomainObject::class);
@@ -148,6 +151,7 @@ class SelfServiceResendEmailServiceTest extends TestCase
         $invoice = Mockery::mock(InvoiceDomainObject::class);
 
         $order = Mockery::mock(OrderDomainObject::class);
+        $order->shouldReceive('getEmail')->andReturn('buyer@example.com');
         $order->shouldReceive('getOrderItems')->andReturn(collect([$orderItems]));
         $order->shouldReceive('getAttendees')->andReturn(collect([$attendees]));
         $order->shouldReceive('getLatestInvoice')->andReturn($invoice);
@@ -222,7 +226,9 @@ class SelfServiceResendEmailServiceTest extends TestCase
         $eventId = 1;
 
         $order = Mockery::mock(OrderDomainObject::class);
+        $order->shouldReceive('getEmail')->andReturn('buyer@example.com');
         $attendee = Mockery::mock(AttendeeDomainObject::class);
+        $attendee->shouldReceive('getEmail')->andReturn('attendee@example.com');
         $attendee->shouldReceive('getOrder')->andReturn($order);
 
         $eventSettings = Mockery::mock(EventSettingDomainObject::class);
@@ -276,6 +282,7 @@ class SelfServiceResendEmailServiceTest extends TestCase
 
         $invoice = Mockery::mock(InvoiceDomainObject::class);
         $order = Mockery::mock(OrderDomainObject::class);
+        $order->shouldReceive('getEmail')->andReturn('buyer@example.com');
         $order->shouldReceive('getLatestInvoice')->andReturn($invoice);
 
         $eventSettings = Mockery::mock(EventSettingDomainObject::class);
@@ -324,5 +331,48 @@ class SelfServiceResendEmailServiceTest extends TestCase
     {
         Mockery::close();
         parent::tearDown();
+    }
+
+    public function test_resend_attendee_ticket_throws_when_the_attendee_has_no_email(): void
+    {
+        $attendee = Mockery::mock(AttendeeDomainObject::class);
+        $attendee->shouldReceive('getEmail')->andReturn(null);
+
+        $this->attendeeRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->attendeeRepository->shouldReceive('findFirstWhere')->once()->andReturn($attendee);
+
+        $this->sendAttendeeTicketService->shouldNotReceive('send');
+        $this->orderAuditLogService->shouldNotReceive('logEmailResent');
+
+        $this->expectException(ResourceConflictException::class);
+
+        $this->service->resendAttendeeTicket(
+            attendeeId: 456,
+            orderId: 123,
+            eventId: 1,
+            ipAddress: '192.168.1.1',
+            userAgent: 'Mozilla/5.0'
+        );
+    }
+
+    public function test_resend_order_confirmation_throws_when_the_order_has_no_email(): void
+    {
+        $order = Mockery::mock(OrderDomainObject::class);
+        $order->shouldReceive('getEmail')->andReturn(null);
+
+        $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->orderRepository->shouldReceive('findFirstWhere')->once()->andReturn($order);
+
+        $this->sendOrderDetailsService->shouldNotReceive('sendCustomerOrderSummary');
+        $this->orderAuditLogService->shouldNotReceive('logEmailResent');
+
+        $this->expectException(ResourceConflictException::class);
+
+        $this->service->resendOrderConfirmation(
+            orderId: 123,
+            eventId: 1,
+            ipAddress: '192.168.1.1',
+            userAgent: 'Mozilla/5.0'
+        );
     }
 }

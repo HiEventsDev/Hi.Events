@@ -9,6 +9,8 @@ use HiEvents\Services\Domain\Email\EmailContextHtmlEscaper;
 use HiEvents\Services\Domain\Email\EmailTemplateService;
 use HiEvents\Services\Domain\Email\EmailTokenContextBuilder;
 use HiEvents\Services\Infrastructure\Email\LiquidTemplateRenderer;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
+use HTMLPurifier;
 use Mockery;
 use Tests\TestCase;
 
@@ -35,6 +37,7 @@ class EmailTemplateServiceTest extends TestCase
             $this->mockLiquidRenderer,
             $this->mockTokenBuilder,
             new EmailContextHtmlEscaper,
+            new HtmlPurifierService(new HTMLPurifier),
         );
     }
 
@@ -45,6 +48,7 @@ class EmailTemplateServiceTest extends TestCase
             new LiquidTemplateRenderer,
             $this->mockTokenBuilder,
             new EmailContextHtmlEscaper,
+            new HtmlPurifierService(new HTMLPurifier),
         );
 
         $template = Mockery::mock(EmailTemplateDomainObject::class, [
@@ -65,6 +69,32 @@ class EmailTemplateServiceTest extends TestCase
         $this->assertSame('Order for Rock & Roll <b>Night</b>', $result->subject);
     }
 
+    public function test_markup_built_by_liquid_filters_is_purified_in_rendered_and_preview_bodies(): void
+    {
+        $service = new EmailTemplateService(
+            $this->mockRepository,
+            new LiquidTemplateRenderer,
+            $this->mockTokenBuilder,
+            new EmailContextHtmlEscaper,
+            new HtmlPurifierService(new HTMLPurifier),
+        );
+        $body = '<p>Hi {{ "%3Cimg src=x onerror=alert(1)%3E" | url_decode }}{{ "%3Csvg" | append: " onload=alert(2)%3E" | url_decode }}</p>';
+        $template = Mockery::mock(EmailTemplateDomainObject::class);
+        $template->shouldReceive('getSubject')->andReturn('Order');
+        $template->shouldReceive('getBody')->andReturn($body);
+        $template->shouldReceive('getCta')->andReturn(null);
+        $this->mockTokenBuilder->shouldReceive('buildPreviewContext')->andReturn([]);
+
+        $rendered = $service->renderTemplate($template, []);
+        $preview = $service->previewTemplate('Order', $body, EmailTemplateType::ORDER_CONFIRMATION);
+
+        foreach ([$rendered->body, $preview['body']] as $html) {
+            $this->assertStringNotContainsString('onerror', $html);
+            $this->assertStringNotContainsString('onload', $html);
+            $this->assertStringNotContainsString('<svg', $html);
+        }
+    }
+
     public function test_render_template_keeps_purified_html_tokens_unescaped_in_body(): void
     {
         $service = new EmailTemplateService(
@@ -72,6 +102,7 @@ class EmailTemplateServiceTest extends TestCase
             new LiquidTemplateRenderer,
             $this->mockTokenBuilder,
             new EmailContextHtmlEscaper,
+            new HtmlPurifierService(new HTMLPurifier),
         );
 
         $template = Mockery::mock(EmailTemplateDomainObject::class, [
@@ -86,6 +117,15 @@ class EmailTemplateServiceTest extends TestCase
         ]);
 
         $this->assertSame('<strong>Thanks!</strong> <p>Details</p>', $result->body);
+    }
+
+    public function test_the_default_order_confirmation_subject_does_not_call_an_unpaid_order_confirmed(): void
+    {
+        $subject = $this->emailTemplateService->getDefaultTemplate(EmailTemplateType::ORDER_CONFIRMATION)['subject'];
+        $renderer = new LiquidTemplateRenderer;
+
+        $this->assertSame('Order placed: payment needed', $renderer->render($subject, ['order' => ['is_awaiting_offline_payment' => true]]));
+        $this->assertSame('Your Order is Confirmed! 🎉', $renderer->render($subject, ['order' => ['is_awaiting_offline_payment' => false]]));
     }
 
     public function test_gets_event_level_template_when_exists(): void

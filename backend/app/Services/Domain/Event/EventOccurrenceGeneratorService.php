@@ -184,6 +184,34 @@ class EventOccurrenceGeneratorService
             ->distinct()
             ->pluck('event_occurrence_id');
 
-        return $withOrderItems->merge($withAttendees)->unique()->values();
+        $withPriceOverrides = DB::table('product_price_occurrence_overrides')
+            ->whereIn('event_occurrence_id', $occurrenceIds)
+            ->distinct()
+            ->pluck('event_occurrence_id');
+
+        $withVisibility = DB::table('product_occurrence_visibility')
+            ->whereIn('event_occurrence_id', $occurrenceIds)
+            ->distinct()
+            ->pluck('event_occurrence_id');
+
+        $withSeatClaims = DB::table('seat_claims')
+            ->whereIn('event_occurrence_id', $occurrenceIds)
+            ->distinct()
+            ->pluck('event_occurrence_id');
+
+        $withBoxOffices = DB::table('box_offices')
+            ->whereIn('event_occurrence_id', $occurrenceIds)
+            ->whereNull('deleted_at')
+            ->distinct()
+            ->pluck('event_occurrence_id');
+
+        return $withOrderItems
+            ->merge($withAttendees)
+            ->merge($withPriceOverrides)
+            ->merge($withVisibility)
+            ->merge($withSeatClaims)
+            ->merge($withBoxOffices)
+            ->unique()
+            ->values();
     }
 }

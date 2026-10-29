@@ -7,10 +7,12 @@ use HiEvents\DomainObjects\Generated\StripePaymentDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\OrderPaymentStatus;
+use HiEvents\Enterprise\BoxOffice\Services\Domain\Payment\Stripe\Terminal\TerminalAttemptTracker;
 use HiEvents\Events\OrderStatusChangedEvent;
 use HiEvents\Repository\Eloquent\StripePaymentsRepository;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Services\Domain\Payment\Stripe\PaymentIntentFailureGuard;
 use HiEvents\Services\Domain\Payment\Stripe\StripePaymentUpdateFromPaymentIntentService;
 use Illuminate\Database\DatabaseManager;
 use Stripe\PaymentIntent;
@@ -23,14 +25,20 @@ readonly class PaymentIntentFailedHandler
         private StripePaymentsRepository $stripePaymentsRepository,
         private DatabaseManager $databaseManager,
         private StripePaymentUpdateFromPaymentIntentService $stripePaymentUpdateFromPaymentIntentService,
+        private TerminalAttemptTracker $attemptTracker,
+        private PaymentIntentFailureGuard $paymentIntentFailureGuard,
     ) {}
 
     /**
      * @throws Throwable
      */
-    public function handleEvent(PaymentIntent $paymentIntent): void
+    public function handleEvent(PaymentIntent $paymentIntent, ?int $eventCreatedAt = null): void
     {
-        $this->databaseManager->transaction(function () use ($paymentIntent) {
+        if ($this->attemptTracker->predatesCurrentAttempt($paymentIntent->id, $eventCreatedAt)) {
+            return;
+        }
+
+        $stripePayment = $this->databaseManager->transaction(function () use ($paymentIntent) {
             /** @var StripePaymentDomainObjectAbstract $stripePayment */
             $stripePayment = $this->stripePaymentsRepository
                 ->loadRelation(new Relationship(OrderDomainObject::class, name: 'order'))
@@ -39,7 +47,7 @@ readonly class PaymentIntentFailedHandler
                 ]);
 
             if (! $stripePayment) {
-                return;
+                return null;
             }
 
             $this->stripePaymentUpdateFromPaymentIntentService->updateStripePaymentInfo($paymentIntent, $stripePayment);
@@ -49,7 +57,13 @@ readonly class PaymentIntentFailedHandler
             if ($updatedOrder !== null) {
                 OrderStatusChangedEvent::dispatch($updatedOrder);
             }
+
+            return $stripePayment;
         });
+
+        if ($stripePayment !== null && $paymentIntent->status !== PaymentIntent::STATUS_CANCELED) {
+            $this->paymentIntentFailureGuard->recordFailure($stripePayment);
+        }
     }
 
     private function updateOrderStatuses(StripePaymentDomainObjectAbstract $stripePayment): ?OrderDomainObject

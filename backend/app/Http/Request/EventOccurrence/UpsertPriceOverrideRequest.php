@@ -3,6 +3,7 @@
 namespace HiEvents\Http\Request\EventOccurrence;
 
 use HiEvents\Http\Request\BaseRequest;
+use HiEvents\Validators\Rules\RulesHelper;
 
 class UpsertPriceOverrideRequest extends BaseRequest
 {
@@ -10,7 +11,8 @@ class UpsertPriceOverrideRequest extends BaseRequest
     {
         return [
             'product_price_id' => ['required', 'integer'],
-            'price' => ['required', 'numeric', 'min:0', 'max:100000000'],
+            'price' => ['nullable', 'required_without:quantity_available', 'numeric', 'min:0', 'max:100000000'],
+            'quantity_available' => ['nullable', 'required_without:price', ...RulesHelper::INTEGER, 'min:0'],
         ];
     }
 }

@@ -16,6 +16,7 @@ type OpenCancelOccurrenceDialogArgs = {
     occurrenceId: IdParam;
     orderCount?: number;
     mutation: CancelOccurrenceMutation;
+    canRefund: boolean;
     onSuccess?: () => void;
 };
 
@@ -24,6 +25,7 @@ export const openCancelOccurrenceDialog = ({
     occurrenceId,
     orderCount = 0,
     mutation,
+    canRefund,
     onSuccess,
 }: OpenCancelOccurrenceDialogArgs) => {
     let refund = false;
@@ -40,10 +42,12 @@ export const openCancelOccurrenceDialog = ({
                         {t`This date has ${orderCount} order(s) that will be affected.`}
                     </Text>
                 )}
-                <Checkbox
-                    label={t`Refund all orders for this date`}
-                    onChange={(e) => { refund = e.currentTarget.checked; }}
-                />
+                {canRefund && (
+                    <Checkbox
+                        label={t`Refund all orders for this date`}
+                        onChange={(e) => { refund = e.currentTarget.checked; }}
+                    />
+                )}
             </>
         ),
         labels: {confirm: t`Cancel Date`, cancel: t`Go Back`},

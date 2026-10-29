@@ -3,6 +3,7 @@
 namespace HiEvents\Http\Actions\EventOccurrences;
 
 use HiEvents\DomainObjects\Enums\BulkOccurrenceAction;
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\InvalidOccurrenceDatesException;
 use HiEvents\Http\Actions\BaseAction;
@@ -24,6 +25,10 @@ class BulkUpdateOccurrencesAction extends BaseAction
     public function __invoke(int $eventId, BulkUpdateOccurrencesRequest $request): JsonResponse
     {
         $this->isActionAuthorized($eventId, EventDomainObject::class);
+
+        if ($request->validated('refund_orders')) {
+            $this->requirePermission(Permission::ISSUE_REFUNDS);
+        }
 
         $event = $this->eventRepository->findById($eventId);
 

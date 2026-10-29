@@ -9,6 +9,7 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventLocationDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\LocationDomainObject;
+use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Events\Dispatcher;
 use HiEvents\Events\EventUpdateEvent;
 use HiEvents\Exceptions\CannotChangeCurrencyException;
@@ -20,8 +21,10 @@ use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\UpdateEventDTO;
+use HiEvents\Services\Domain\Event\EventSpamCheckDispatchService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
+use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use Illuminate\Database\DatabaseManager;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
@@ -35,6 +38,8 @@ readonly class UpdateEventHandler
         private OrderRepositoryInterface $orderRepository,
         private HtmlPurifierService $purifier,
         private EventOccurrenceRepositoryInterface $occurrenceRepository,
+        private readonly EventSpamCheckDispatchService $eventSpamCheckDispatchService,
+        private readonly TransactionLockService $transactionLockService,
     ) {}
 
     /**
@@ -68,14 +73,16 @@ readonly class UpdateEventHandler
         $isCurrencyChanging = $eventData->currency !== null && $eventData->currency !== $existingEvent->getCurrency();
 
         if ($isCurrencyChanging) {
-            $this->databaseManager->statement('SELECT pg_advisory_xact_lock(?)', [$eventData->id]);
+            $this->transactionLockService->lockEvent($eventData->id);
             $this->guardCurrencyChange($eventData);
         }
 
         $attributes = [
             'title' => StringHelper::stripControlCharacters($eventData->title),
             'category' => $eventData->category?->value ?? $existingEvent->getCategory(),
-            'description' => $this->purifier->purify($eventData->description),
+            'description' => $eventData->description_provided
+                ? $this->purifier->purify($eventData->description)
+                : $existingEvent->getDescription(),
             'timezone' => $eventData->timezone ?? $existingEvent->getTimezone(),
             'currency' => $eventData->currency ?? $existingEvent->getCurrency(),
         ];
@@ -99,6 +106,24 @@ readonly class UpdateEventHandler
         }
 
         $this->updateSingleOccurrenceDates($eventData, $existingEvent);
+
+        $this->dispatchSpamCheckIfContentChanged($existingEvent, $attributes);
+    }
+
+    private function dispatchSpamCheckIfContentChanged(EventDomainObject $existingEvent, array $attributes): void
+    {
+        if ($existingEvent->getStatus() !== EventStatus::LIVE->name) {
+            return;
+        }
+
+        $contentChanged = $attributes['title'] !== $existingEvent->getTitle()
+            || $attributes['description'] !== $existingEvent->getDescription();
+
+        if (! $contentChanged) {
+            return;
+        }
+
+        $this->eventSpamCheckDispatchService->dispatchForEvent($existingEvent->getId());
     }
 
     private function updateSingleOccurrenceDates(UpdateEventDTO $eventData, EventDomainObject $existingEvent): void

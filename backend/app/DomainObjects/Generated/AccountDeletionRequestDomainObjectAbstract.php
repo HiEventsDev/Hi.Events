@@ -13,7 +13,6 @@ abstract class AccountDeletionRequestDomainObjectAbstract extends \HiEvents\Doma
     final public const ID = 'id';
     final public const ACCOUNT_ID = 'account_id';
     final public const REQUESTED_BY_USER_ID = 'requested_by_user_id';
-    final public const CANCELLED_BY_USER_ID = 'cancelled_by_user_id';
     final public const INITIATED_BY = 'initiated_by';
     final public const REASON = 'reason';
     final public const STATUS = 'status';
@@ -22,6 +21,7 @@ abstract class AccountDeletionRequestDomainObjectAbstract extends \HiEvents\Doma
     final public const SCHEDULED_DELETION_AT = 'scheduled_deletion_at';
     final public const REMINDER_SENT_AT = 'reminder_sent_at';
     final public const CANCELLED_AT = 'cancelled_at';
+    final public const CANCELLED_BY_USER_ID = 'cancelled_by_user_id';
     final public const COMPLETED_AT = 'completed_at';
     final public const DELETION_MANIFEST = 'deletion_manifest';
     final public const CREATED_AT = 'created_at';
@@ -30,7 +30,6 @@ abstract class AccountDeletionRequestDomainObjectAbstract extends \HiEvents\Doma
     protected int $id;
     protected int $account_id;
     protected int $requested_by_user_id;
-    protected ?int $cancelled_by_user_id = null;
     protected string $initiated_by;
     protected ?string $reason = null;
     protected string $status = 'REQUESTED';
@@ -39,6 +38,7 @@ abstract class AccountDeletionRequestDomainObjectAbstract extends \HiEvents\Doma
     protected string $scheduled_deletion_at;
     protected ?string $reminder_sent_at = null;
     protected ?string $cancelled_at = null;
+    protected ?int $cancelled_by_user_id = null;
     protected ?string $completed_at = null;
     protected array|string|null $deletion_manifest = null;
     protected ?string $created_at = null;
@@ -50,7 +50,6 @@ abstract class AccountDeletionRequestDomainObjectAbstract extends \HiEvents\Doma
                     'id' => $this->id ?? null,
                     'account_id' => $this->account_id ?? null,
                     'requested_by_user_id' => $this->requested_by_user_id ?? null,
-                    'cancelled_by_user_id' => $this->cancelled_by_user_id ?? null,
                     'initiated_by' => $this->initiated_by ?? null,
                     'reason' => $this->reason ?? null,
                     'status' => $this->status ?? null,
@@ -59,6 +58,7 @@ abstract class AccountDeletionRequestDomainObjectAbstract extends \HiEvents\Doma
                     'scheduled_deletion_at' => $this->scheduled_deletion_at ?? null,
                     'reminder_sent_at' => $this->reminder_sent_at ?? null,
                     'cancelled_at' => $this->cancelled_at ?? null,
+                    'cancelled_by_user_id' => $this->cancelled_by_user_id ?? null,
                     'completed_at' => $this->completed_at ?? null,
                     'deletion_manifest' => $this->deletion_manifest ?? null,
                     'created_at' => $this->created_at ?? null,
@@ -97,17 +97,6 @@ abstract class AccountDeletionRequestDomainObjectAbstract extends \HiEvents\Doma
     public function getRequestedByUserId(): int
     {
         return $this->requested_by_user_id;
-    }
-
-    public function setCancelledByUserId(?int $cancelled_by_user_id): self
-    {
-        $this->cancelled_by_user_id = $cancelled_by_user_id;
-        return $this;
-    }
-
-    public function getCancelledByUserId(): ?int
-    {
-        return $this->cancelled_by_user_id;
     }
 
     public function setInitiatedBy(string $initiated_by): self
@@ -196,6 +185,17 @@ abstract class AccountDeletionRequestDomainObjectAbstract extends \HiEvents\Doma
     public function getCancelledAt(): ?string
     {
         return $this->cancelled_at;
+    }
+
+    public function setCancelledByUserId(?int $cancelled_by_user_id): self
+    {
+        $this->cancelled_by_user_id = $cancelled_by_user_id;
+        return $this;
+    }
+
+    public function getCancelledByUserId(): ?int
+    {
+        return $this->cancelled_by_user_id;
     }
 
     public function setCompletedAt(?string $completed_at): self

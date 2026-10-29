@@ -39,14 +39,40 @@ class PartialUpdateEventSettingsHandlerTest extends TestCase
         $this->assertFalse($dto->allow_copy_details_to_all_attendees);
     }
 
+    public function test_explicit_get_tickets_button_text_is_passed_through(): void
+    {
+        $dto = $this->runPartialUpdate(
+            existingValue: true,
+            settings: ['get_tickets_button_text' => 'Grab a spot'],
+            existingGetTicketsButtonText: 'Get Tickets',
+        );
+
+        $this->assertSame('Grab a spot', $dto->get_tickets_button_text);
+    }
+
+    public function test_omitted_get_tickets_button_text_falls_back_to_existing_value(): void
+    {
+        $dto = $this->runPartialUpdate(
+            existingValue: true,
+            settings: [],
+            existingGetTicketsButtonText: 'Get Tickets',
+        );
+
+        $this->assertSame('Get Tickets', $dto->get_tickets_button_text);
+    }
+
     /**
      * Drives the partial handler and returns the UpdateEventSettingsDTO it forwards
      * to the (mocked) full handler, so we can assert how the field was resolved.
      */
-    private function runPartialUpdate(bool $existingValue, array $settings): UpdateEventSettingsDTO
-    {
+    private function runPartialUpdate(
+        bool $existingValue,
+        array $settings,
+        ?string $existingGetTicketsButtonText = null,
+    ): UpdateEventSettingsDTO {
         $existingSettings = (new EventSettingDomainObject)
             ->setAllowCopyDetailsToAllAttendees($existingValue)
+            ->setGetTicketsButtonText($existingGetTicketsButtonText)
             ->setPaymentProviders([]);
 
         $repository = Mockery::mock(EventSettingsRepositoryInterface::class);

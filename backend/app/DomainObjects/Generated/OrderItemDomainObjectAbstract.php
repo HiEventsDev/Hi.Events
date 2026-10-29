@@ -26,6 +26,7 @@ abstract class OrderItemDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     final public const TOTAL_SERVICE_FEE = 'total_service_fee';
     final public const TAXES_AND_FEES_ROLLUP = 'taxes_and_fees_rollup';
     final public const PRODUCT_TYPE = 'product_type';
+    final public const BAND_KEY = 'band_key';
 
     protected int $id;
     protected int $order_id;
@@ -43,6 +44,7 @@ abstract class OrderItemDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     protected ?float $total_service_fee = 0.0;
     protected array|string|null $taxes_and_fees_rollup = null;
     protected string $product_type = 'TICKET';
+    protected ?string $band_key = null;
 
     public function toArray(): array
     {
@@ -63,6 +65,7 @@ abstract class OrderItemDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
                     'total_service_fee' => $this->total_service_fee ?? null,
                     'taxes_and_fees_rollup' => $this->taxes_and_fees_rollup ?? null,
                     'product_type' => $this->product_type ?? null,
+                    'band_key' => $this->band_key ?? null,
                 ];
     }
 
@@ -240,5 +243,16 @@ abstract class OrderItemDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     public function getProductType(): string
     {
         return $this->product_type;
+    }
+
+    public function setBandKey(?string $band_key): self
+    {
+        $this->band_key = $band_key;
+        return $this;
+    }
+
+    public function getBandKey(): ?string
+    {
+        return $this->band_key;
     }
 }

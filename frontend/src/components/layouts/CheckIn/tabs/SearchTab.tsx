@@ -204,7 +204,7 @@ export const SearchTab = ({
                                             <>
                                                 <span className={classes.dot}>•</span>
                                                 <span className={classes.rowProduct}>
-                                                    <IconTicket size={12}/> {product.title}
+                                                    <IconTicket size={12}/> {[product.title, attendee.seat_label].filter(Boolean).join(' · ')}
                                                 </span>
                                             </>
                                         )}

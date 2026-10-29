@@ -1,34 +1,52 @@
 import type * as express from "express";
+import {AsyncLocalStorage} from "node:async_hooks";
 import ReactDOMServer from "react-dom/server";
+import {i18n} from "@lingui/core";
 import {dehydrate, QueryClient} from "@tanstack/react-query";
 
 import {router} from "./router";
 import {App} from "./App";
-import {setAuthToken} from "./utilites/apiClient.ts";
 import {createStaticHandler, createStaticRouter, StaticRouterProvider} from "react-router";
-import {dynamicActivateLocale} from "./locales.ts";
-import {setSsrQueryClient} from "./utilites/ssrQueryClient.ts";
+import {dynamicActivateLocale, getSupportedLocale, toIntlLocale} from "./locales.ts";
+import {embedLocaleForPath} from "./utilites/embedLocale.ts";
+import {SsrRequestContext, setSsrRequestContextProvider} from "./utilites/ssrRequestContext.ts";
+import {generateThemeColors} from "./utilites/themeColors.ts";
+import {prefetchInstanceInfo} from "./ee/licensing/queries/prefetchInstanceInfo.ts";
+
+const themeColors = generateThemeColors();
+
+const requestContext = new AsyncLocalStorage<SsrRequestContext>();
+
+setSsrRequestContextProvider(() => requestContext.getStore());
 
 const getLocale = (req: express.Request): string => {
+    const url = new URL(req.originalUrl || req.url, 'http://localhost');
+    const embedLocale = embedLocaleForPath(url.pathname, url.search, requestContext.getStore()?.widgetLocale);
+    if (embedLocale) {
+        return embedLocale;
+    }
+
     if (req.cookies.locale) {
-        return req.cookies.locale;
+        return getSupportedLocale(req.cookies.locale);
     }
 
     const acceptLanguage = req.headers['accept-language'];
-    return acceptLanguage ? acceptLanguage.split(',')[0].split('-')[0] : 'en';
+    return acceptLanguage ? getSupportedLocale(acceptLanguage.split(',')[0].split(';')[0].trim()) : 'en';
 }
 
-export async function render(params: {
+interface RenderParams {
     req: express.Request;
     res: express.Response;
-}) {
-    setAuthToken(params.req.cookies.token);
+    backendHeaders?: Record<string, string>;
+    licenceSimulation?: string;
+    stylesheetsFor?: (entries: string[]) => string[];
+}
 
-    // Create a fresh query client for each request
+export async function render(params: RenderParams) {
     const queryClient = new QueryClient({
         defaultOptions: {
             queries: {
-                staleTime: 60 * 1000, // 60 seconds - prevents immediate refetch on client
+                staleTime: 60 * 1000,
                 refetchOnWindowFocus: false,
                 networkMode: "always",
             },
@@ -38,7 +56,19 @@ export async function render(params: {
         },
     });
 
-    setSsrQueryClient(queryClient);
+    const context: SsrRequestContext = {
+        queryClient,
+        authToken: params.req.cookies?.token || undefined,
+        backendHeaders: params.backendHeaders ?? {},
+        licenceSimulation: params.licenceSimulation,
+    };
+
+    return requestContext.run(context, () => renderWithinContext(params, context));
+}
+
+async function renderWithinContext(params: RenderParams, ssrContext: SsrRequestContext) {
+    const {queryClient} = ssrContext;
+    await prefetchInstanceInfo(queryClient);
 
     const helmetContext = {};
 
@@ -50,15 +80,20 @@ export async function render(params: {
         throw context;
     }
 
-    await dynamicActivateLocale(getLocale(params.req));
+    const locale = await dynamicActivateLocale(getLocale(params.req));
+    ssrContext.locale = locale;
 
     const routerWithContext = createStaticRouter(dataRoutes, context);
-    
+    const stylesheets = params.stylesheetsFor?.(context.matches.flatMap(match => match.route.handle?.styles ?? [])) ?? [];
+
+    i18n.activate(locale);
     const appHtml = ReactDOMServer.renderToString(
         <App
             queryClient={queryClient}
             helmetContext={helmetContext}
-            locale={getLocale(params.req)}
+            locale={locale}
+            themeColors={themeColors}
+            ssrStyled={stylesheets.length > 0}
         >
             <StaticRouterProvider
                 router={routerWithContext}
@@ -69,13 +104,15 @@ export async function render(params: {
 
     const dehydratedState = dehydrate(queryClient);
 
-    // Clean up the SSR query client
-    setSsrQueryClient(null);
-
     return {
         appHtml: appHtml,
         dehydratedState,
         helmetContext,
+        themeColors,
+        htmlLang: toIntlLocale(locale) ?? locale,
+        statusCode: context.statusCode,
+        renderErrors: Object.values(context.errors ?? {}),
+        stylesheets,
     };
 }
 

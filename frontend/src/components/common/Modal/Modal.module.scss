@@ -1,11 +1,81 @@
+@use "../../../styles/mixins";
+
 .modalTitle {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-top: 15px;
-    margin-bottom: 5px;
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--hi-text);
 }
 
-// Branded modal header styles
+.body {
+    :global(.mantine-InputWrapper-label) {
+        margin-bottom: 2px;
+    }
+
+    :global(.mantine-InputWrapper-description) {
+        margin-bottom: 8px;
+        line-height: 1.45;
+    }
+}
+
+.footer {
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin: 8px calc(var(--mb-padding, var(--mantine-spacing-md)) * -1) calc(var(--mb-padding, var(--mantine-spacing-md)) * -1);
+    padding: 14px var(--mb-padding, var(--mantine-spacing-md));
+    border-top: 1px solid var(--hi-color-border);
+    background: var(--mantine-color-body, #fff);
+
+    @include mixins.respond-below(sm) {
+        flex-direction: column-reverse;
+
+        > * {
+            width: 100%;
+        }
+    }
+}
+
+@include mixins.respond-below(sm) {
+    .content:has(.footer:not(.footerInline)) {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .body:has(.footer:not(.footerInline)),
+    .body > form:has(> .footer:not(.footerInline)) {
+        display: flex;
+        flex: 1 0 auto;
+        flex-direction: column;
+    }
+
+    .footer:not(.footerInline) {
+        margin-top: auto;
+    }
+}
+
+.footerInline {
+    position: static;
+    margin: 8px 0 0;
+    padding: 16px 0 0;
+}
+
+.footerStart {
+    display: flex;
+    margin-right: auto;
+
+    @include mixins.respond-below(sm) {
+        margin-right: 0;
+
+        > * {
+            width: 100%;
+        }
+    }
+}
+
 .brandedHeader {
     background: var(--hi-gradient) !important;
     padding: 30px 24px !important;

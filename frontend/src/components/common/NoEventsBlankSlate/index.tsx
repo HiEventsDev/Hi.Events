@@ -5,7 +5,7 @@ import {NoResultsSplash} from "../NoResultsSplash";
 
 interface NoEventsBlankSlateProps {
     eventsState?: 'upcoming' | 'ended' | 'archived' | string
-    openCreateModal: () => void;
+    openCreateModal?: () => void;
 }
 
 export const NoEventsBlankSlate = ({eventsState, openCreateModal}: NoEventsBlankSlateProps) => {
@@ -20,12 +20,13 @@ export const NoEventsBlankSlate = ({eventsState, openCreateModal}: NoEventsBlank
                         {eventsState === 'ended' && t`No ended events to show.`}
                         {eventsState === 'archived' && t`No archived events to show.`}
                     </p>
-                    <Button
+                    {openCreateModal && <Button
                         size={'xs'}
                         leftSection={<IconPlus/>}
                         color={'green'}
-                        onClick={openCreateModal}>{t`Create Event`}
-                    </Button>
+                        onClick={openCreateModal}
+                        data-testid="create-event-blank-slate-button">{t`Create Event`}
+                    </Button>}
                 </>
             )}
         />

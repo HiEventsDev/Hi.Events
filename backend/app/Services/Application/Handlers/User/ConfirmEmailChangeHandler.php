@@ -2,7 +2,10 @@
 
 namespace HiEvents\Services\Application\Handlers\User;
 
+use HiEvents\DomainObjects\Enums\EncryptedPayloadPurpose;
 use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Enterprise\Sso\Exceptions\AccountSsoConfigurationException;
+use HiEvents\Enterprise\Sso\Services\Domain\SsoEnforcementService;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Application\Handlers\User\DTO\ConfirmEmailChangeDTO;
@@ -18,6 +21,7 @@ readonly class ConfirmEmailChangeHandler
         private LoggerInterface $logger,
         private UserRepositoryInterface $userRepository,
         private EncryptedPayloadService $encryptedPayloadService,
+        private SsoEnforcementService $ssoEnforcementService,
         private DatabaseManager $databaseManager,
     ) {}
 
@@ -27,12 +31,28 @@ readonly class ConfirmEmailChangeHandler
     public function handle(ConfirmEmailChangeDTO $data): UserDomainObject
     {
         return $this->databaseManager->transaction(function () use ($data) {
-            ['id' => $userId] = $this->encryptedPayloadService->decryptPayload($data->token);
+            $payload = $this->encryptedPayloadService->decryptPayload($data->token, EncryptedPayloadPurpose::EMAIL_CHANGE);
+            $userId = $payload['id'];
 
             $user = $this->userRepository->findByIdAndAccountId($userId, $data->accountId);
 
-            if ($user->getPendingEmail() === null) {
+            if ($user->getPendingEmail() === null || ($payload['email'] ?? null) !== $user->getPendingEmail()) {
                 throw new ResourceConflictException(__('No email change pending'));
+            }
+
+            $userWithEmail = $this->userRepository->findFirstWhere([
+                ['email', 'ilike', addcslashes($user->getPendingEmail(), '\\%_')],
+                ['id', '!=', $userId],
+            ]);
+
+            if ($userWithEmail !== null) {
+                throw new ResourceConflictException(__('This email address is already in use.'));
+            }
+
+            try {
+                $this->ssoEnforcementService->assertEmailChangeAllowed($userId, $user->getPendingEmail());
+            } catch (AccountSsoConfigurationException $exception) {
+                throw new ResourceConflictException($exception->getMessage());
             }
 
             $this->userRepository->updateWhere(

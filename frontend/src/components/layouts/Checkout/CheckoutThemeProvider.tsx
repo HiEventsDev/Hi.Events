@@ -25,7 +25,7 @@ const DARK_PALETTE = {
     background: '#121212',
     textPrimary: '#ffffff',
     textSecondary: '#a3a3a3',
-    textTertiary: '#737373',
+    textTertiary: '#8f8f8f',
     border: '#333333',
 };
 

@@ -10,6 +10,7 @@ use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatClaimService;
 use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
@@ -30,6 +31,7 @@ class CancelOccurrenceAttendeesService
         private readonly DomainEventDispatcherService $domainEventDispatcherService,
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly EventStatisticsCancellationService $statisticsCancellationService,
+        private readonly SeatClaimService $seatClaimService,
         private readonly LoggerInterface $logger,
     ) {}
 
@@ -55,6 +57,10 @@ class CancelOccurrenceAttendeesService
                 AttendeeDomainObjectAbstract::EVENT_OCCURRENCE_ID => $occurrenceId,
                 [AttendeeDomainObjectAbstract::STATUS, 'in', $statusesToCancel],
             ],
+        );
+
+        $this->seatClaimService->releaseForAttendees(
+            $attendees->map(fn (AttendeeDomainObject $attendee) => $attendee->getId())->all()
         );
 
         $ordersById = $this->orderRepository

@@ -1,0 +1,139 @@
+.preview {
+    height: 300px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--mantine-color-gray-3);
+    pointer-events: none;
+}
+
+.bandRow {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 12px;
+    align-items: start;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--mantine-color-gray-2);
+
+    @media (max-width: 640px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.bandName {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+}
+
+.swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+    flex: none;
+}
+
+.muted {
+    color: var(--mantine-color-dimmed);
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.sectionTitle {
+    margin: 0 0 4px;
+    font-size: 16px;
+}
+
+.bandPriceRow {
+    padding: 2px 0 2px 2px;
+    min-height: 30px;
+
+    :global(.mantine-InputWrapper-root) {
+        margin-bottom: 0;
+    }
+
+    &:not(:last-child) {
+        border-bottom: 1px dashed var(--mantine-color-gray-2);
+    }
+}
+
+.emptyTickets {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 28px 16px;
+    margin-top: 12px;
+    text-align: center;
+    border: 1px dashed var(--mantine-color-gray-3);
+    border-radius: 12px;
+
+    .muted {
+        max-width: 440px;
+    }
+}
+
+.emptyTicketsIcon {
+    color: var(--mantine-color-dimmed);
+    margin-bottom: 4px;
+}
+
+.blankSlateText {
+    max-width: 460px;
+    margin: 0 auto;
+}
+
+.chooserGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 12px;
+}
+
+.chooserOption {
+    border: 1.5px solid var(--mantine-color-gray-3);
+    border-radius: 12px;
+    padding: 0 0 10px;
+    overflow: hidden;
+    background: #fff;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+
+    &:hover {
+        border-color: var(--mantine-color-gray-5);
+    }
+
+    &[data-selected="true"] {
+        border-color: var(--mantine-primary-color-filled);
+        box-shadow: 0 0 0 2px var(--mantine-primary-color-light);
+    }
+}
+
+.chooserPreview {
+    height: 120px;
+    background: var(--mantine-color-gray-0);
+    border-bottom: 1px solid var(--mantine-color-gray-2);
+    pointer-events: none;
+}
+
+.chooserName {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 10px 10px 2px;
+    font-weight: 600;
+    color: var(--mantine-color-text);
+
+    svg {
+        color: var(--mantine-primary-color-filled);
+        flex: none;
+    }
+}
+
+.chooserMeta {
+    padding: 0 10px;
+    color: var(--mantine-color-dimmed);
+    font-size: 12px;
+}

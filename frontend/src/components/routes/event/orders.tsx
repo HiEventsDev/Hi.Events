@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import {useAccess} from "../../../hooks/useAccess.ts";
 import {useParams} from "react-router";
 import {Button, Group} from "@mantine/core";
 import {IconDownload} from "@tabler/icons-react";
@@ -21,25 +22,33 @@ import {withLoadingNotification} from "../../../utilites/withLoadingNotification
 import {useGetEventOccurrences} from "../../../queries/useGetEventOccurrences";
 import {SortSelector} from "../../common/SortSelector";
 import {OccurrenceSelect} from "../../common/OccurrenceSelect";
+import {useGetBoxOffices} from "../../../ee/box-office/queries/useGetBoxOffices";
+import {useLicensedFeature} from "../../../ee/licensing/hooks/useLicensedFeature.ts";
+import {FeatureFlag} from "../../../constants/featureFlags.ts";
+import {getProductsFromEvent} from "../../../utilites/helpers.ts";
 
-const orderStatuses = [
+const getOrderStatuses = () => [
     {label: t`Completed`, value: 'COMPLETED'},
     {label: t`Cancelled`, value: 'CANCELLED'},
     {label: t`Awaiting Offline Payment`, value: 'AWAITING_OFFLINE_PAYMENT'},
 ];
 
-const refundStatuses = [
+const getRefundStatuses = () => [
     {label: t`Refunded`, value: 'REFUNDED'},
     {label: t`Partially Refunded`, value: 'PARTIALLY_REFUNDED'},
 ];
 
 export const Orders: React.FC = () => {
+    const canViewFinancials = useAccess().can('VIEW_FINANCIALS');
     const {eventId} = useParams<{ eventId: string }>();
     const {data: event} = useGetEvent(eventId);
     const isRecurring = event?.type === EventType.RECURRING;
     const [searchParams, setSearchParams] = useFilterQueryParamSync();
     const ordersQuery = useGetEventOrders(eventId, searchParams as QueryFilters);
-    const {data: occurrencesData} = useGetEventOccurrences(eventId, {pageNumber: 1, perPage: 100} as QueryFilters);
+    const {data: occurrencesData} = useGetEventOccurrences(eventId, {pageNumber: 1, perPage: 100} as QueryFilters, isRecurring);
+    const boxOfficeFeature = useLicensedFeature(FeatureFlag.BOX_OFFICE);
+    const {data: boxOfficesData} = useGetBoxOffices(eventId, null, boxOfficeFeature.isVisible);
+    const boxOffices = boxOfficeFeature.isVisible ? boxOfficesData?.data || [] : [];
     const orders = ordersQuery?.data?.data;
     const pagination = ordersQuery?.data?.meta;
     const [downloadPending, setDownloadPending] = useState(false);
@@ -48,19 +57,40 @@ export const Orders: React.FC = () => {
     const occurrenceFilter = searchParams.filterFields?.event_occurrence_id;
     const selectedOccurrenceId = (occurrenceFilter && !Array.isArray(occurrenceFilter) ? String(occurrenceFilter.value) : null);
 
+    const productOptions = (getProductsFromEvent(event) || []).map(product => ({
+        label: product.title,
+        value: String(product.id),
+    }));
+
     const filterOptions: FilterOption[] = [
+        ...(productOptions.length > 0 ? [{
+            field: 'product_id',
+            label: t`Product`,
+            type: 'multi-select' as const,
+            options: productOptions,
+        }] : []),
         {
             field: 'status',
             label: t`Order Status`,
             type: 'multi-select',
-            options: orderStatuses
+            options: getOrderStatuses()
         },
         {
             field: 'refund_status',
             label: t`Refund Status`,
             type: 'multi-select',
-            options: refundStatuses
-        }
+            options: getRefundStatuses()
+        },
+        ...(boxOffices.length > 0 ? [{
+            field: 'box_office_id',
+            label: t`Box Office`,
+            type: 'multi-select' as const,
+            options: boxOffices.map(boxOffice => ({label: boxOffice.name, value: String(boxOffice.id)})),
+        }, {
+            field: 'box_office_operator_name',
+            label: t`Sold by`,
+            type: 'text' as const,
+        }] : []),
     ];
 
     const handleOccurrenceChange = (value: string | null) => {
@@ -84,11 +114,20 @@ export const Orders: React.FC = () => {
             filterFields.event_occurrence_id = {operator: QueryFilterOperator.Equals, value: selectedOccurrenceId};
         }
 
+        if (values.product_id?.length > 0) {
+            filterFields.product_id = {operator: QueryFilterOperator.In, value: values.product_id};
+        }
         if (values.status?.length > 0) {
             filterFields.status = {operator: QueryFilterOperator.In, value: values.status};
         }
         if (values.refund_status?.length > 0) {
             filterFields.refund_status = {operator: QueryFilterOperator.In, value: values.refund_status};
+        }
+        if (values.box_office_id?.length > 0) {
+            filterFields.box_office_id = {operator: QueryFilterOperator.In, value: values.box_office_id};
+        }
+        if (values.box_office_operator_name?.trim()) {
+            filterFields.box_office_operator_name = {operator: QueryFilterOperator.ILike, value: `%${values.box_office_operator_name.trim()}%`};
         }
 
         setSearchParams({
@@ -114,7 +153,11 @@ export const Orders: React.FC = () => {
         const occurrenceId = selectedOccurrenceId ? Number(selectedOccurrenceId) : null;
         await withLoadingNotification(async () => {
                 setDownloadPending(true);
-                const blob = await orderClient.exportOrders(eventId, occurrenceId);
+                const blob = await orderClient.exportOrders(
+                    eventId,
+                    occurrenceId,
+                    currentFilters.product_id.flatMap((value: string) => String(value).split(',')),
+                );
                 downloadBinary(blob, 'orders.xlsx');
             },
             {
@@ -143,6 +186,7 @@ export const Orders: React.FC = () => {
     };
 
     const currentFilters = {
+        product_id: getFilterValue(searchParams.filterFields?.product_id),
         status: getFilterValue(searchParams.filterFields?.status),
         refund_status: getFilterValue(searchParams.filterFields?.refund_status),
     };
@@ -196,7 +240,7 @@ export const Orders: React.FC = () => {
                 resultCount={pagination?.total}
                 resultLabel={t`orders`}
             >
-                <Button
+                {canViewFinancials && <Button
                     onClick={() => handleExport(eventId)}
                     rightSection={<IconDownload size={14}/>}
                     color="green"
@@ -204,7 +248,7 @@ export const Orders: React.FC = () => {
                     size="sm"
                 >
                     {t`Export`}
-                </Button>
+                </Button>}
             </ToolBar>
 
             <TableSkeleton isVisible={!orders || ordersQuery.isFetching}/>

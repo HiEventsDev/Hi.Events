@@ -1,7 +1,9 @@
 import {LoaderFunctionArgs, redirect} from "react-router";
 import {getQueryClient} from "../utilites/ssrQueryClient.ts";
 import {getOrganizerPublicQuery} from "../queries/useGetOrganizerPublic.ts";
-import {getOrganizerPublicEventsQuery} from "../queries/useGetOrganizerEventsPublic.ts";
+import {getOrganizerPublicEventsQuery, PAST_EVENTS_PREVIEW_FILTERS} from "../queries/useGetOrganizerEventsPublic.ts";
+import {organizerHomepageLayout} from "../utilites/homepageSectionLayout.ts";
+import {resolveOrganizerHomepageSections} from "../utilites/homepageSections.ts";
 
 export const publicOrganizerRouteLoader = async ({params, request}: LoaderFunctionArgs) => {
     const {organizerId, organizerSlug} = params;
@@ -52,13 +54,19 @@ export const publicOrganizerRouteLoader = async ({params, request}: LoaderFuncti
             })
         );
 
+        const hasPastEventsSection = organizerHomepageLayout(resolveOrganizerHomepageSections(organizer?.settings?.homepage_sections))
+            .blocks.some(block => block.kind === 'section' && block.section.type === 'PAST_EVENTS');
+
+        if (hasPastEventsSection && organizer.id) {
+            await getQueryClient().prefetchQuery(getOrganizerPublicEventsQuery(organizer.id, PAST_EVENTS_PREVIEW_FILTERS));
+        }
+
         return {
             organizer,
             eventsData,
             isPastEvents
         };
     } catch (error: any) {
-        // Re-throw redirect responses so React Router can handle them
         if (error instanceof Response) {
             throw error;
         }

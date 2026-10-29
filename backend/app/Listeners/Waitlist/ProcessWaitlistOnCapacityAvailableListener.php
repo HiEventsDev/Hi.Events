@@ -38,10 +38,12 @@ class ProcessWaitlistOnCapacityAvailableListener implements ShouldQueue
             return;
         }
 
+        $eventOccurrenceId = $event->eventOccurrenceId ?? null;
+
         $quantities = $this->availableQuantitiesService->getAvailableProductQuantities(
             $event->eventId,
             ignoreCache: true,
-            eventOccurrenceId: $event->eventOccurrenceId,
+            eventOccurrenceId: $eventOccurrenceId,
         );
 
         foreach ($quantities->productQuantities as $productQuantity) {
@@ -61,7 +63,7 @@ class ProcessWaitlistOnCapacityAvailableListener implements ShouldQueue
                     quantity: $availableCount,
                     event: $eventDomainObject,
                     eventSettings: $eventSettings,
-                    eventOccurrenceId: $event->eventOccurrenceId,
+                    eventOccurrenceId: $eventOccurrenceId,
                 );
             } catch (NoCapacityAvailableException) {
                 // Expected: no waiting entries or capacity consumed by pending offers

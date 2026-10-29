@@ -1,38 +1,32 @@
 import {useParams} from "react-router";
 import {useGetCheckInListPublic} from "../../../queries/useGetCheckInListPublic.ts";
-import {useCallback, useEffect, useRef, useState} from "react";
-import {useDebouncedValue, useDisclosure, useNetwork} from "@mantine/hooks";
-import {Attendee, EventOccurrenceStatus, EventType, QueryFilters, QueryFilterOperator} from "../../../types.ts";
-import {showError, showInfo, showSuccess, showSuccessWithUndo} from "../../../utilites/notifications.tsx";
+import {useEffect, useState} from "react";
+import {useDisclosure, useNetwork} from "@mantine/hooks";
+import {EventOccurrenceStatus, EventType} from "../../../types.ts";
 import {t, Trans} from "@lingui/macro";
-import {AxiosError} from "axios";
 import classes from "./CheckIn.module.scss";
 import {ActionIcon} from "@mantine/core";
-import {IconCalendarEvent, IconInfoCircle, IconWifiOff} from "@tabler/icons-react";
+import {IconCalendarEvent, IconChartBar, IconInfoCircle, IconQrcode, IconSearch, IconWifiOff} from "@tabler/icons-react";
 import {formatDateWithLocale} from "../../../utilites/dates.ts";
-import {useHaptics} from "../../../hooks/useHaptics.ts";
-import {useGetCheckInListAttendees} from "../../../queries/useGetCheckInListAttendeesPublic.ts";
 import {useGetCheckInListStatsPublic} from "../../../queries/useGetCheckInListStatsPublic.ts";
-import {useCreateCheckInPublic} from "../../../mutations/useCreateCheckInPublic.ts";
-import {useDeleteCheckInPublic} from "../../../mutations/useDeleteCheckInPublic.ts";
 import {NoResultsSplash} from "../../common/NoResultsSplash";
 import {Countdown} from "../../common/Countdown";
 import Truncate from "../../common/Truncate";
-import {publicCheckInClient} from "../../../api/check-in.client.ts";
 import {isSsr} from "../../../utilites/helpers.ts";
-import {CheckInOptionsModal} from "../../common/CheckIn/CheckInOptionsModal";
 import {CheckInInfoModal} from "../../common/CheckIn/CheckInInfoModal";
 import {CheckInDescriptionModal} from "../../common/CheckIn/CheckInDescriptionModal";
-import {BottomNav, CheckInTab} from "./BottomNav.tsx";
-import {ScanTab, ScanMode} from "./tabs/ScanTab.tsx";
+import {BottomNav, BottomNavTab} from "./BottomNav.tsx";
+import {ScanTab} from "./tabs/ScanTab.tsx";
 import {SearchTab} from "./tabs/SearchTab.tsx";
 import {StatsTab} from "./tabs/StatsTab.tsx";
-import {AttendeeDetailSheet} from "./AttendeeDetailSheet.tsx";
 import {OccurrenceFilterPill} from "./OccurrenceFilterPill.tsx";
-import {useCheckInOccurrenceFilter} from "../../../hooks/useCheckInOccurrenceFilter.ts";
-import {RecentScan, RecentScanStatus} from "./types.ts";
+import {CheckInModals} from "./CheckInModals.tsx";
+import {useCheckInController} from "../../../hooks/useCheckInController.tsx";
+import {useHashTab} from "../../../hooks/useHashTab.ts";
 
-const MAX_RECENT_SCANS = 20;
+type CheckInTab = "scan" | "search" | "stats";
+
+const CHECK_IN_TABS: readonly CheckInTab[] = ["scan", "search", "stats"];
 
 const CheckIn = () => {
     const networkStatus = useNetwork();
@@ -40,124 +34,26 @@ const CheckIn = () => {
     const CheckInListQuery = useGetCheckInListPublic(checkInListShortId);
     const checkInList = CheckInListQuery?.data?.data;
     const event = checkInList?.event;
-    const eventSettings = event?.settings;
 
-    const [activeTab, setActiveTab] = useState<CheckInTab>(() => {
-        if (isSsr()) return "scan";
-        const hash = window.location.hash.replace("#", "");
-        if (hash === "search" || hash === "stats" || hash === "scan") return hash;
-        return "scan";
-    });
+    const [activeTab, setActiveTab] = useHashTab(CHECK_IN_TABS, "scan");
     const [descriptionModalOpen, setDescriptionModalOpen] = useState(false);
-
-    useEffect(() => {
-        if (isSsr()) return;
-        if (window.location.hash !== `#${activeTab}`) {
-            window.history.replaceState(null, "", `#${activeTab}`);
-        }
-    }, [activeTab]);
-
-    useEffect(() => {
-        if (isSsr()) return;
-        const handleHashChange = () => {
-            const hash = window.location.hash.replace("#", "");
-            if (hash === "search" || hash === "stats" || hash === "scan") {
-                setActiveTab(hash);
-            }
-        };
-        window.addEventListener("hashchange", handleHashChange);
-        return () => window.removeEventListener("hashchange", handleHashChange);
-    }, []);
-    const [scanMode, setScanMode] = useState<ScanMode>(() => {
-        if (isSsr()) return "usb";
-        const stored = localStorage.getItem("checkInScanMode");
-        return stored === "camera" ? "camera" : "usb";
-    });
-    const [recentScans, setRecentScans] = useState<RecentScan[]>([]);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [searchQueryDebounced] = useDebouncedValue(searchQuery, 200);
-    const [currentBarcode, setCurrentBarcode] = useState("");
-    const [pageHasFocus, setPageHasFocus] = useState(true);
-
-    const barcodeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-    const isProcessingRef = useRef(false);
-    const processedBarcodesRef = useRef<Set<string>>(new Set());
-    const lastScanTimeRef = useRef<number>(0);
-    const scanSuccessAudioRef = useRef<HTMLAudioElement | null>(null);
-    const scanErrorAudioRef = useRef<HTMLAudioElement | null>(null);
-
-    const [isSoundOn, setIsSoundOn] = useState(() => {
-        if (isSsr()) return true;
-        const storedIsSoundOn = localStorage.getItem("scannerSoundOn");
-        return storedIsSoundOn === null ? true : JSON.parse(storedIsSoundOn);
-    });
-    const [selectedAttendee, setSelectedAttendee] = useState<Attendee | null>(null);
-    const [detailAttendeePublicId, setDetailAttendeePublicId] = useState<string | null>(null);
-    const [checkInModalOpen, checkInModalHandlers] = useDisclosure(false);
-    const haptic = useHaptics();
     const [infoModalOpen, infoModalHandlers] = useDisclosure(false, {
         onOpen: () => {
             CheckInListQuery.refetch();
         },
     });
 
-    const products = checkInList?.products;
-
-    const pillOccurrences = checkInList?.event_occurrences ?? event?.occurrences;
-
-    const showOccurrenceFilter =
-        event?.type === EventType.RECURRING
-        && !checkInList?.event_occurrence_id
-        && (pillOccurrences?.length ?? 0) > 0;
-    const {occurrenceId: occurrenceFilter, setOccurrenceId: setOccurrenceFilter, didClearStale} =
-        useCheckInOccurrenceFilter(checkInListShortId, pillOccurrences);
-
-    useEffect(() => {
-        if (didClearStale) {
-            showInfo(t`Your saved date filter is no longer available — showing all dates.`);
-        }
-    }, [didClearStale]);
-
-    const queryFilters: QueryFilters = {
-        pageNumber: 1,
-        query: searchQueryDebounced,
-        perPage: 150,
-        filterFields: {
-            status: {operator: QueryFilterOperator.Equals, value: "ACTIVE"},
-            ...(showOccurrenceFilter && occurrenceFilter !== null
-                ? {event_occurrence_id: {operator: QueryFilterOperator.Equals, value: String(occurrenceFilter)}}
-                : {}),
-        },
-    };
-
-    const attendeesQuery = useGetCheckInListAttendees(
+    const controller = useCheckInController({
         checkInListShortId,
-        queryFilters,
-        checkInList?.is_active && !checkInList?.is_expired,
-    );
-    const attendees = attendeesQuery?.data?.data;
-    const checkInMutation = useCreateCheckInPublic(queryFilters);
-    const deleteCheckInMutation = useDeleteCheckInPublic(queryFilters);
-    const areOfflinePaymentsEnabled = eventSettings?.payment_providers?.includes("OFFLINE");
-    const allowOrdersAwaitingOfflinePaymentToCheckIn = areOfflinePaymentsEnabled
-        && eventSettings?.allow_orders_awaiting_offline_payment_to_check_in;
+        checkInList,
+        hidListeningEnabled: activeTab === "scan",
+    });
+
     const progressStatsQuery = useGetCheckInListStatsPublic(
         checkInListShortId,
-        !!checkInList?.is_active && !checkInList?.is_expired && showOccurrenceFilter && occurrenceFilter !== null,
-        occurrenceFilter,
+        !!checkInList?.is_active && !checkInList?.is_expired && controller.showOccurrenceFilter && controller.occurrenceFilter !== null,
+        controller.occurrenceFilter,
     );
-
-    useEffect(() => {
-        if (!isSsr()) {
-            localStorage.setItem("scannerSoundOn", JSON.stringify(isSoundOn));
-        }
-    }, [isSoundOn]);
-
-    useEffect(() => {
-        if (!isSsr()) {
-            localStorage.setItem("checkInScanMode", scanMode);
-        }
-    }, [scanMode]);
 
     useEffect(() => {
         if (isSsr()) return;
@@ -176,289 +72,11 @@ const CheckIn = () => {
         }
     };
 
-    const playSuccessSound = useCallback(() => {
-        if (isSoundOn && scanSuccessAudioRef.current) {
-            scanSuccessAudioRef.current.currentTime = 0;
-            scanSuccessAudioRef.current.play().catch(() => {
-            });
-        }
-    }, [isSoundOn]);
-
-    const playErrorSound = useCallback(() => {
-        if (isSoundOn && scanErrorAudioRef.current) {
-            scanErrorAudioRef.current.currentTime = 0;
-            scanErrorAudioRef.current.play().catch(() => {
-            });
-        }
-    }, [isSoundOn]);
-
-    const pushRecentScan = useCallback((scan: Omit<RecentScan, "id" | "timestamp">) => {
-        setRecentScans(prev => [
-            {...scan, id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`, timestamp: Date.now()},
-            ...prev,
-        ].slice(0, MAX_RECENT_SCANS));
-    }, []);
-
-    const recordScan = useCallback((attendee: Attendee | null, code: string, status: RecentScanStatus) => {
-        const name = attendee
-            ? `${attendee.first_name ?? ""} ${attendee.last_name ?? ""}`.trim() || code
-            : code;
-        pushRecentScan({name, code, status});
-    }, [pushRecentScan]);
-
-    const undoCheckIn = useCallback((attendee: Attendee, checkInShortId: string) => {
-        deleteCheckInMutation.mutate({
-            checkInListShortId: checkInListShortId,
-            checkInShortId: checkInShortId,
-        }, {
-            onSuccess: () => {
-                showSuccess(<Trans>Check-in for {attendee.first_name} was undone</Trans>);
-                playSuccessSound();
-                haptic("tap");
-            },
-            onError: () => {
-                showError(t`Unable to undo check-in`);
-                playErrorSound();
-                haptic("error");
-            },
-        });
-    }, [deleteCheckInMutation, checkInListShortId, playSuccessSound, playErrorSound, haptic]);
-
-    const handleCheckInAction = (attendee: Attendee, action: "check-in" | "check-in-and-mark-order-as-paid") => {
-        checkInMutation.mutate({
-            checkInListShortId: checkInListShortId,
-            attendeePublicId: attendee.public_id,
-            action: action,
-        }, {
-            onSuccess: (response) => {
-                const {errors, data} = response;
-                if (errors && errors[attendee.public_id]) {
-                    showError(errors[attendee.public_id]);
-                    playErrorSound();
-                    haptic("error");
-                    recordScan(attendee, attendee.public_id, "error");
-                    return;
-                }
-                playSuccessSound();
-                haptic("success");
-                recordScan(attendee, attendee.public_id, "success");
-                checkInModalHandlers.close();
-                setSelectedAttendee(null);
-
-                const createdCheckIn = data?.find((c: any) => c.attendee_id === attendee.id);
-                const message = <Trans>{attendee.first_name} <b>checked in</b></Trans>;
-
-                if (createdCheckIn) {
-                    showSuccessWithUndo(
-                        message,
-                        () => undoCheckIn(attendee, String(createdCheckIn.short_id)),
-                        {undoLabel: t`Undo`},
-                    );
-                } else {
-                    showSuccess(message);
-                }
-            },
-            onError: (error) => {
-                playErrorSound();
-                haptic("error");
-                recordScan(attendee, attendee.public_id, "error");
-                if (!networkStatus.online) {
-                    showError(t`You are offline`);
-                    return;
-                }
-
-                if (error instanceof AxiosError) {
-                    showError(error?.response?.data?.message || t`Unable to check in attendee`);
-                }
-            },
-        });
-    };
-
-    const handleCheckInToggle = (attendee: Attendee) => {
-        if (attendee.check_in) {
-            deleteCheckInMutation.mutate({
-                checkInListShortId: checkInListShortId,
-                checkInShortId: attendee.check_in.short_id,
-            }, {
-                onSuccess: () => {
-                    showSuccess(<Trans>{attendee.first_name} <b>checked out</b> successfully</Trans>);
-                    playSuccessSound();
-                    haptic("tap");
-                },
-                onError: (error) => {
-                    playErrorSound();
-                    haptic("error");
-                    if (!networkStatus.online) {
-                        showError(t`You are offline`);
-                        return;
-                    }
-
-                    if (error instanceof AxiosError) {
-                        showError(error?.response?.data?.message || t`Unable to check out attendee`);
-                    } else {
-                        showError(t`Unable to check out attendee`);
-                    }
-                },
-            });
-            return;
-        }
-
-        const isAttendeeAwaitingPayment = attendee.status === "AWAITING_PAYMENT";
-
-        if (allowOrdersAwaitingOfflinePaymentToCheckIn && isAttendeeAwaitingPayment) {
-            setSelectedAttendee(attendee);
-            checkInModalHandlers.open();
-            return;
-        }
-
-        if (!allowOrdersAwaitingOfflinePaymentToCheckIn && isAttendeeAwaitingPayment) {
-            showError(t`You cannot check in attendees with unpaid orders. This setting can be changed in the event settings.`);
-            return;
-        }
-
-        handleCheckInAction(attendee, "check-in");
-    };
-
-    const handleQrCheckIn = useCallback(async (attendeePublicId: string) => {
-        if (isProcessingRef.current) {
-            return;
-        }
-
-        const now = Date.now();
-        if (processedBarcodesRef.current.has(attendeePublicId) &&
-            now - lastScanTimeRef.current < 3000) {
-            showError(t`This ticket was just scanned. Please wait before scanning again.`);
-            playErrorSound();
-            return;
-        }
-
-        isProcessingRef.current = true;
-        lastScanTimeRef.current = now;
-
-        let attendee = attendees?.find(a => a.public_id === attendeePublicId);
-
-        if (!attendee) {
-            try {
-                const {data} = await publicCheckInClient.getCheckInListAttendee(checkInListShortId, attendeePublicId);
-                attendee = data;
-            } catch (error) {
-                showError(t`Unable to fetch attendee`);
-                playErrorSound();
-                recordScan(null, attendeePublicId, "error");
-                isProcessingRef.current = false;
-                return;
-            }
-
-            if (!attendee) {
-                showError(t`Attendee not found`);
-                playErrorSound();
-                recordScan(null, attendeePublicId, "error");
-                isProcessingRef.current = false;
-                return;
-            }
-        }
-
-        if (attendee.check_in) {
-            showError(<Trans>{attendee.first_name} {attendee.last_name} is already checked in</Trans>);
-            playErrorSound();
-            haptic("warning");
-            recordScan(attendee, attendeePublicId, "duplicate");
-            processedBarcodesRef.current.add(attendeePublicId);
-            isProcessingRef.current = false;
-            return;
-        }
-
-        const isAttendeeAwaitingPayment = attendee.status === "AWAITING_PAYMENT";
-
-        if (allowOrdersAwaitingOfflinePaymentToCheckIn && isAttendeeAwaitingPayment) {
-            setSelectedAttendee(attendee);
-            checkInModalHandlers.open();
-            isProcessingRef.current = false;
-            return;
-        }
-
-        if (!allowOrdersAwaitingOfflinePaymentToCheckIn && isAttendeeAwaitingPayment) {
-            showError(t`You cannot check in attendees with unpaid orders. This setting can be changed in the event settings.`);
-            playErrorSound();
-            recordScan(attendee, attendeePublicId, "error");
-            isProcessingRef.current = false;
-            return;
-        }
-
-        processedBarcodesRef.current.add(attendeePublicId);
-        setTimeout(() => {
-            processedBarcodesRef.current.delete(attendeePublicId);
-        }, 10000);
-
-        await handleCheckInAction(attendee, "check-in");
-        isProcessingRef.current = false;
-    }, [attendees, checkInListShortId, allowOrdersAwaitingOfflinePaymentToCheckIn, checkInModalHandlers, handleCheckInAction, playErrorSound, recordScan]);
-
-    const processBarcode = useCallback((barcode: string) => {
-        if (barcode.startsWith("A-") && barcode.length > 3) {
-            handleQrCheckIn(barcode);
-        }
-    }, [handleQrCheckIn]);
-
-    useEffect(() => {
-        const handleFocus = () => setPageHasFocus(true);
-        const handleBlur = () => setPageHasFocus(false);
-
-        window.addEventListener("focus", handleFocus);
-        window.addEventListener("blur", handleBlur);
-
-        return () => {
-            window.removeEventListener("focus", handleFocus);
-            window.removeEventListener("blur", handleBlur);
-        };
-    }, []);
-
-    useEffect(() => {
-        const usbListeningActive = activeTab === "scan" && scanMode === "usb";
-        if (!usbListeningActive) {
-            setCurrentBarcode("");
-            return;
-        }
-
-        const handleKeyPress = (e: KeyboardEvent) => {
-            if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
-                return;
-            }
-
-            if (e.key === "Enter") {
-                if (currentBarcode.length > 0) {
-                    processBarcode(currentBarcode);
-                    setCurrentBarcode("");
-                }
-            } else if (e.key.length === 1) {
-                setCurrentBarcode(prev => {
-                    const newBarcode = prev + e.key;
-
-                    if (barcodeTimeoutRef.current) {
-                        clearTimeout(barcodeTimeoutRef.current);
-                    }
-
-                    barcodeTimeoutRef.current = setTimeout(() => {
-                        if (newBarcode.startsWith("A-") && newBarcode.length > 3) {
-                            processBarcode(newBarcode);
-                        }
-                        setCurrentBarcode("");
-                    }, 100);
-
-                    return newBarcode;
-                });
-            }
-        };
-
-        window.addEventListener("keypress", handleKeyPress);
-
-        return () => {
-            window.removeEventListener("keypress", handleKeyPress);
-            if (barcodeTimeoutRef.current) {
-                clearTimeout(barcodeTimeoutRef.current);
-            }
-        };
-    }, [activeTab, scanMode, currentBarcode, processBarcode]);
+    const tabs: BottomNavTab<CheckInTab>[] = [
+        {id: "scan", label: t`Scan`, icon: <IconQrcode size={22} stroke={1.7}/>},
+        {id: "search", label: t`Search`, icon: <IconSearch size={20} stroke={1.8}/>},
+        {id: "stats", label: t`Stats`, icon: <IconChartBar size={20} stroke={1.8}/>},
+    ];
 
     if (CheckInListQuery.error && (CheckInListQuery.error as any).response?.status === 404) {
         return (
@@ -588,13 +206,13 @@ const CheckIn = () => {
                 </div>
             </header>
 
-            {showOccurrenceFilter && event?.timezone && (
+            {controller.showOccurrenceFilter && event?.timezone && (
                 <div className={classes.occurrenceFilterBar}>
                     <OccurrenceFilterPill
-                        occurrences={pillOccurrences ?? []}
-                        activeOccurrenceId={occurrenceFilter}
+                        occurrences={controller.pillOccurrences ?? []}
+                        activeOccurrenceId={controller.occurrenceFilter}
                         timezone={event.timezone}
-                        onSelect={setOccurrenceFilter}
+                        onSelect={controller.setOccurrenceFilter}
                     />
                 </div>
             )}
@@ -602,57 +220,45 @@ const CheckIn = () => {
             <main className={classes.content}>
                 {activeTab === "scan" && (
                     <ScanTab
-                        mode={scanMode}
-                        onModeChange={setScanMode}
-                        hidPageHasFocus={pageHasFocus}
-                        hidBuffer={currentBarcode}
-                        isSoundOn={isSoundOn}
-                        onSoundToggle={() => setIsSoundOn(!isSoundOn)}
-                        onAttendeeScanned={handleQrCheckIn}
-                        onOpenRecentScan={setDetailAttendeePublicId}
-                        recentScans={recentScans}
+                        mode={controller.scanMode}
+                        onModeChange={controller.setScanMode}
+                        hidPageHasFocus={controller.pageHasFocus}
+                        hidBuffer={controller.hidBuffer}
+                        isSoundOn={controller.isSoundOn}
+                        onSoundToggle={controller.toggleSound}
+                        onAttendeeScanned={controller.handleQrCheckIn}
+                        onOpenRecentScan={controller.setDetailAttendeePublicId}
+                        recentScans={controller.recentScans}
                     />
                 )}
                 {activeTab === "search" && (
-                    <>
-                        <SearchTab
-                            attendees={attendees}
-                            products={products}
-                            searchQuery={searchQuery}
-                            onSearchChange={setSearchQuery}
-                            onCheckInToggle={handleCheckInToggle}
-                            onOpenDetail={setDetailAttendeePublicId}
-                            isLoading={attendeesQuery.isFetching}
-                            isCheckInPending={checkInMutation.isPending}
-                            isDeletePending={deleteCheckInMutation.isPending}
-                            allowOrdersAwaitingOfflinePaymentToCheckIn={allowOrdersAwaitingOfflinePaymentToCheckIn || false}
-                            eventType={event?.type as EventType | undefined}
-                            timezone={event?.timezone}
-                            showRowOccurrences={showOccurrenceFilter}
-                        />
-                    </>
+                    <SearchTab
+                        attendees={controller.attendees}
+                        products={controller.products}
+                        searchQuery={controller.searchQuery}
+                        onSearchChange={controller.setSearchQuery}
+                        onCheckInToggle={controller.handleCheckInToggle}
+                        onOpenDetail={controller.setDetailAttendeePublicId}
+                        isLoading={controller.isAttendeesLoading}
+                        isCheckInPending={controller.isCheckInPending}
+                        isDeletePending={controller.isDeletePending}
+                        allowOrdersAwaitingOfflinePaymentToCheckIn={controller.allowOrdersAwaitingOfflinePaymentToCheckIn}
+                        eventType={event?.type as EventType | undefined}
+                        timezone={event?.timezone}
+                        showRowOccurrences={controller.showOccurrenceFilter}
+                    />
                 )}
                 {activeTab === "stats" && (
                     <StatsTab
                         checkInListShortId={checkInListShortId}
                         enabled={!!checkInList?.is_active && !checkInList?.is_expired}
-                        eventOccurrenceId={showOccurrenceFilter ? occurrenceFilter : null}
+                        eventOccurrenceId={controller.activeOccurrenceId}
                     />
                 )}
             </main>
 
-            <BottomNav active={activeTab} onChange={setActiveTab}/>
+            <BottomNav tabs={tabs} active={activeTab} onChange={setActiveTab} ariaLabel={t`Check-in navigation`}/>
 
-            <CheckInOptionsModal
-                isOpen={checkInModalOpen}
-                attendee={selectedAttendee}
-                isPending={checkInMutation.isPending}
-                onClose={() => {
-                    checkInModalHandlers.close();
-                    setSelectedAttendee(null);
-                }}
-                onCheckIn={(action) => selectedAttendee && handleCheckInAction(selectedAttendee, action)}
-            />
             <CheckInInfoModal
                 isOpen={infoModalOpen}
                 checkInList={checkInList}
@@ -663,41 +269,12 @@ const CheckIn = () => {
                 description={checkInList?.description}
                 onDismiss={dismissDescription}
             />
-            <AttendeeDetailSheet
+            <CheckInModals
+                controller={controller}
                 checkInListShortId={checkInListShortId}
-                attendeePublicId={detailAttendeePublicId}
                 eventType={event?.type}
                 timezone={event?.timezone}
-                onClose={() => setDetailAttendeePublicId(null)}
-                isActionPending={checkInMutation.isPending || deleteCheckInMutation.isPending}
-                onCheckInToggle={(detail) => {
-                    const attendee: Attendee = {
-                        id: detail.id,
-                        product_id: detail.product_id,
-                        product_price_id: 0,
-                        order_id: detail.order?.id ?? 0,
-                        status: detail.status,
-                        first_name: detail.first_name,
-                        last_name: detail.last_name,
-                        email: detail.email,
-                        public_id: detail.public_id,
-                        short_id: detail.public_id,
-                        check_in: detail.check_ins?.[0] ? {
-                            id: detail.check_ins[0].id,
-                            attendee_id: detail.check_ins[0].attendee_id,
-                            check_in_list_id: detail.check_ins[0].check_in_list_id,
-                            product_id: detail.product_id,
-                            event_id: 0,
-                            short_id: detail.check_ins[0].short_id,
-                            order_id: detail.check_ins[0].order_id,
-                            created_at: detail.check_ins[0].checked_in_at,
-                        } : undefined,
-                    };
-                    handleCheckInToggle(attendee);
-                }}
             />
-            <audio ref={scanSuccessAudioRef} src="/sounds/scan-success.wav"/>
-            <audio ref={scanErrorAudioRef} src="/sounds/scan-error.wav"/>
         </div>
     );
 };

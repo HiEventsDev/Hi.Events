@@ -1,7 +1,9 @@
 import {useParams} from "react-router";
+import {WriteAccess} from "../../common/WriteAccess";
+import {useAccess} from "../../../hooks/useAccess.ts";
 import {useDisclosure} from "@mantine/hooks";
 import {Button, Menu} from "@mantine/core";
-import {IconCategory, IconChevronDown, IconPlus, IconShoppingCart} from "@tabler/icons-react";
+import {IconCategory, IconChevronDown, IconDownload, IconPlus, IconShoppingCart} from "@tabler/icons-react";
 import {PageTitle} from "../../common/PageTitle";
 import {PageBody} from "../../common/PageBody";
 import {CreateProductModal} from "../../modals/CreateProductModal";
@@ -15,7 +17,10 @@ import {useGetEventProductCategories} from "../../../queries/useGetProductCatego
 import {SearchBar} from "../../common/SearchBar";
 import {useState} from "react";
 import {CreateProductCategoryModal} from "../../modals/CreateProductCategoryModal";
-import {IdParam} from "../../../types.ts";
+import {IdParam, ProductPurchaseStatus} from "../../../types.ts";
+import {productClient} from "../../../api/product.client.ts";
+import {downloadBinary} from "../../../utilites/download.ts";
+import {showError} from "../../../utilites/notifications.tsx";
 
 export const Products = () => {
     const [createProductModalOpen, {
@@ -29,17 +34,32 @@ export const Products = () => {
     const {eventId} = useParams();
     const {data: event} = useGetEvent(eventId);
     const [searchTerm, setSearchTerm] = useState('');
-    const [selectedCategoryId, setSelectedCategoryId] = useState<IdParam>(null);
+    const [selectedCategoryId, setSelectedCategoryId] = useState<IdParam>();
+    const [isExporting, setIsExporting] = useState(false);
 
     const productCategoriesQuery = useGetEventProductCategories(eventId);
     const productCategories = productCategoriesQuery?.data?.data;
 
-    useUrlHash('create-product', () => openCreateProductModal());
+    const {can, isReadOnly} = useAccess();
+    const canViewFinancials = can('VIEW_FINANCIALS');
+    useUrlHash('create-product', () => !isReadOnly && openCreateProductModal());
 
     const openCreateProduct = (categoryId: IdParam) => {
         setSelectedCategoryId(() => categoryId);
         openCreateProductModal();
     }
+
+    const exportPurchases = async (statuses?: ProductPurchaseStatus[]) => {
+        setIsExporting(true);
+        try {
+            const blob = await productClient.exportPurchases(eventId, {statuses});
+            downloadBinary(blob, 'product-purchases.csv');
+        } catch {
+            showError(t`Failed to export purchases. Please try again.`);
+        } finally {
+            setIsExporting(false);
+        }
+    };
 
     return (
         <PageBody>
@@ -58,48 +78,76 @@ export const Products = () => {
                     />
                 )}
             >
-                <Menu
-                    transitionProps={{transition: 'pop-top-right'}}
-                    position="bottom"
-                    width={220}
-                    withinPortal
-                >
-                    <Menu.Target>
-                        <Button
-                            leftSection={<IconPlus/>}
-                            color={'green'}
-                            data-testid="product-create-button"
-                            rightSection={
-                                <IconChevronDown stroke={1.5}/>
-                            }
-                            pr={12}
-                        >
-                            {t`Create`}
-                        </Button>
-                    </Menu.Target>
-                    <Menu.Dropdown>
-                        <Menu.Item
-                            leftSection={
-                                <IconShoppingCart
-                                    stroke={1.5}
-                                />
-                            }
-                            onClick={() => openCreateProduct(undefined)}
-                        >
-                            {t`Ticket or Product`}
-                        </Menu.Item>
-                        <Menu.Item
-                            leftSection={
-                                <IconCategory
-                                    stroke={1.5}
-                                />
-                            }
-                            onClick={openCreateProductCategoryModal}
-                        >
-                            {t`Category`}
-                        </Menu.Item>
-                    </Menu.Dropdown>
-                </Menu>
+                {canViewFinancials && (
+                    <Menu position="bottom-end" width={260} withinPortal>
+                        <Menu.Target>
+                            <Button
+                                variant="default"
+                                leftSection={<IconDownload size={16}/>}
+                                rightSection={<IconChevronDown size={14} stroke={1.5}/>}
+                                loading={isExporting}
+                                data-testid="product-purchases-export-all-button"
+                            >
+                                {t`Export purchases`}
+                            </Button>
+                        </Menu.Target>
+                        <Menu.Dropdown>
+                            <Menu.Item
+                                onClick={() => exportPurchases([ProductPurchaseStatus.Sold, ProductPurchaseStatus.AwaitingPayment])}
+                                data-testid="product-purchases-export-active-menu-item"
+                            >
+                                {t`Active purchases`}
+                            </Menu.Item>
+                            <Menu.Item onClick={() => exportPurchases()}>
+                                {t`All purchases, including cancelled`}
+                            </Menu.Item>
+                        </Menu.Dropdown>
+                    </Menu>
+                )}
+                <WriteAccess>
+                    <Menu
+                        transitionProps={{transition: 'pop-top-right'}}
+                        position="bottom"
+                        width={220}
+                        withinPortal
+                    >
+                        <Menu.Target>
+                            <Button
+                                leftSection={<IconPlus/>}
+                                color={'green'}
+                                data-testid="product-create-button"
+                                rightSection={
+                                    <IconChevronDown stroke={1.5}/>
+                                }
+                                pr={12}
+                            >
+                                {t`Create`}
+                            </Button>
+                        </Menu.Target>
+                        <Menu.Dropdown>
+                            <Menu.Item
+                                leftSection={
+                                    <IconShoppingCart
+                                        stroke={1.5}
+                                    />
+                                }
+                                onClick={() => openCreateProduct(undefined)}
+                            >
+                                {t`Ticket or Product`}
+                            </Menu.Item>
+                            <Menu.Item
+                                leftSection={
+                                    <IconCategory
+                                        stroke={1.5}
+                                    />
+                                }
+                                onClick={openCreateProductCategoryModal}
+                            >
+                                {t`Category`}
+                            </Menu.Item>
+                        </Menu.Dropdown>
+                    </Menu>
+                </WriteAccess>
             </ToolBar>
 
             <TableSkeleton isVisible={!productCategories || !event}/>

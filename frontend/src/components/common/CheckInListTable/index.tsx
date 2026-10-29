@@ -1,18 +1,19 @@
 import {Anchor, Badge, Button, Progress} from '@mantine/core';
+import {CreateButton} from "../CreateButton";
 import {CheckInList, Event, EventType, IdParam} from "../../../types.ts";
 import {
     IconCalendarEvent,
     IconCheck,
     IconCopy,
-    IconExternalLink,
     IconPencil,
     IconPlus,
+    IconQrcode,
     IconTrash,
     IconUsers,
     IconX,
 } from "@tabler/icons-react";
 import {useMemo, useState} from "react";
-import {useDisclosure} from "@mantine/hooks";
+import {useDisclosure, useMediaQuery} from "@mantine/hooks";
 import {useParams} from "react-router";
 import {t, Trans} from "@lingui/macro";
 import {NoResultsSplash} from "../NoResultsSplash";
@@ -33,12 +34,21 @@ interface CheckInListTableProps {
     event?: Event;
 }
 
+export const checkInListUrl = (shortId: string) => `${window.location.origin}/check-in/${shortId}`;
+
+export const copyCheckInListLink = (shortId: string) => {
+    navigator.clipboard.writeText(checkInListUrl(shortId)).then(() => {
+        showSuccess(t`Check-In URL copied to clipboard`);
+    });
+};
+
 export const CheckInListTable = ({checkInLists, openCreateModal, event}: CheckInListTableProps) => {
     const [editModalOpen, {open: openEditModal, close: closeEditModal}] = useDisclosure(false);
     const [selectedCheckInListId, setSelectedCheckInListId] = useState<IdParam>();
     const deleteMutation = useDeleteCheckInList();
     const {eventId} = useParams();
     const isRecurring = event?.type === EventType.RECURRING;
+    const isMobile = useMediaQuery('(max-width: 768px)');
 
     const handleDeleteCheckInList = (checkInListId: IdParam, eventId: IdParam) => {
         deleteMutation.mutate({checkInListId, eventId}, {
@@ -188,6 +198,7 @@ export const CheckInListTable = ({checkInLists, openCreateModal, event}: CheckIn
                         const manageItems = [
                             {
                                 label: t`Edit Check-In List`,
+                                requiresEdit: true,
                                 icon: <IconPencil size={14}/>,
                                 onClick: () => {
                                     setSelectedCheckInListId(list.id as IdParam);
@@ -197,20 +208,13 @@ export const CheckInListTable = ({checkInLists, openCreateModal, event}: CheckIn
                             {
                                 label: t`Copy Check-In URL`,
                                 icon: <IconCopy size={14}/>,
-                                onClick: () => {
-                                    navigator.clipboard.writeText(
-                                        `${window.location.origin}/check-in/${list.short_id}`
-                                    ).then(() => {
-                                        showSuccess(t`Check-In URL copied to clipboard`);
-                                    });
-                                }
+                                onClick: () => copyCheckInListLink(list.short_id),
                             },
                             {
                                 label: t`Open Check-In Page`,
-                                icon: <IconExternalLink size={14}/>,
-                                onClick: () => {
-                                    window.open(`/check-in/${list.short_id}`, '_blank');
-                                }
+                                icon: <IconQrcode size={14}/>,
+                                onClick: () => window.open(checkInListUrl(list.short_id), '_blank'),
+                                visible: isMobile,
                             },
                         ];
                         const groups: {label: string; items: any[]}[] = [
@@ -222,6 +226,7 @@ export const CheckInListTable = ({checkInLists, openCreateModal, event}: CheckIn
                                 items: [
                                     {
                                         label: t`Delete Check-In List`,
+                                        requiresEdit: true,
                                         icon: <IconTrash size={14}/>,
                                         onClick: () => {
                                             confirmationDialog(
@@ -239,8 +244,19 @@ export const CheckInListTable = ({checkInLists, openCreateModal, event}: CheckIn
                             });
                         }
                         return (
-                            <div className={classes.actionsMenu}>
-                                <ActionMenu itemsGroups={groups}/>
+                            <div className={classes.rowActions}>
+                                {!isMobile && (
+                                    <Button
+                                        size="xs"
+                                        variant="light"
+                                        leftSection={<IconQrcode size={14}/>}
+                                        onClick={() => window.open(checkInListUrl(list.short_id), '_blank')}
+                                        data-testid="check-in-list-open-button"
+                                    >
+                                        {t`Open Check-In`}
+                                    </Button>
+                                )}
+                                <ActionMenu itemsGroups={groups} dataTestId="check-in-list-actions-menu"/>
                             </div>
                         );
                     },
@@ -257,7 +273,7 @@ export const CheckInListTable = ({checkInLists, openCreateModal, event}: CheckIn
                 return true;
             });
         },
-        [eventId, isRecurring, event?.timezone]
+        [eventId, isRecurring, event?.timezone, isMobile]
     );
 
     if (checkInLists.length === 0) {
@@ -269,16 +285,15 @@ export const CheckInListTable = ({checkInLists, openCreateModal, event}: CheckIn
                     <>
                         <p>
                             <Trans>
-                                <p>
-                                    Check-in lists help you manage event entry by day, area, or ticket type. You can link tickets to specific lists such as VIP zones or Day 1 passes and share a secure check-in link with staff. No account is required. Check-in works on mobile, desktop, or tablet, using a device camera or HID USB scanner.                                </p>
+                                A check-in list lets staff scan tickets at the door on a phone, tablet, or USB scanner. Share the link with your team, no account needed.
                             </Trans>
                         </p>
-                        <Button
+                        <CreateButton
                             size={'xs'}
                             leftSection={<IconPlus/>}
                             color={'green'}
                             onClick={() => openCreateModal()}>{t`Create Check-In List`}
-                        </Button>
+                        </CreateButton>
                     </>
                 )}
             />

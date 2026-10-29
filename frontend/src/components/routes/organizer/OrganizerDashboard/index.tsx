@@ -1,4 +1,5 @@
 import {useEffect, useMemo, useState} from 'react';
+import {useAccess} from "../../../../hooks/useAccess.ts";
 import {NavLink, useParams} from "react-router";
 import {Button, Menu, SegmentedControl, Skeleton, UnstyledButton} from '@mantine/core';
 import {AreaChart} from "@mantine/charts";
@@ -47,7 +48,9 @@ export const OrganizerDashboard = () => {
     const {organizerId} = useParams<{ organizerId: string }>();
     const {data: organizer} = useGetOrganizer(organizerId);
     const [showCreateEventModal, setShowCreateEventModal] = useState(false);
-    const [heroTab, setHeroTab] = useState<HeroTab>('sales');
+    const canViewFinancials = useAccess().can('VIEW_FINANCIALS');
+    const [selectedHeroTab, setHeroTab] = useState<HeroTab>('sales');
+    const heroTab: HeroTab = !canViewFinancials && selectedHeroTab === 'sales' ? 'orders' : selectedHeroTab;
     const [periodPreset, setPeriodPreset] = useState<PeriodPreset>('last_30_days');
 
     const [selectedCurrency, setSelectedCurrency] = useState<string>(
@@ -140,7 +143,7 @@ export const OrganizerDashboard = () => {
         dailyStats.map((d) => Number(d[key] ?? 0));
 
     const tabOptions = [
-        {value: 'sales', label: t`Sales`},
+        ...(canViewFinancials ? [{value: 'sales', label: t`Sales`}] : []),
         {value: 'orders', label: t`Orders`},
         {value: 'attendees', label: t`Attendees`},
     ];
@@ -261,13 +264,13 @@ export const OrganizerDashboard = () => {
             </div>
 
             <KpiGrid>
-                <KpiCell
+                {canViewFinancials && <KpiCell
                     label={t`Gross sales`}
                     value={stats ? formatCurrency(stats.total_gross_sales, selectedCurrency) : ''}
                     sparkline={sparkline('total_sales_gross')}
                     delta={computeDelta(stats?.total_gross_sales, previousStats?.total_gross_sales)}
                     isLoading={isStatsLoading || isPreviousLoading}
-                />
+                />}
                 <KpiCell
                     label={t`Products sold`}
                     value={stats ? formatNumber(stats.total_products_sold) : ''}
@@ -289,18 +292,22 @@ export const OrganizerDashboard = () => {
                     delta={computeDelta(stats?.total_orders, previousStats?.total_orders)}
                     isLoading={isStatsLoading || isPreviousLoading}
                 />
-                <KpiCell
-                    label={t`Total tax`}
-                    value={stats ? formatCurrency(stats.total_tax, selectedCurrency) : ''}
-                    delta={computeDelta(stats?.total_tax, previousStats?.total_tax)}
-                    isLoading={isStatsLoading || isPreviousLoading}
-                />
-                <KpiCell
-                    label={t`Total fees`}
-                    value={stats ? formatCurrency(stats.total_fees, selectedCurrency) : ''}
-                    delta={computeDelta(stats?.total_fees, previousStats?.total_fees)}
-                    isLoading={isStatsLoading || isPreviousLoading}
-                />
+                {canViewFinancials && (
+                    <>
+                        <KpiCell
+                            label={t`Total tax`}
+                            value={stats ? formatCurrency(stats.total_tax, selectedCurrency) : ''}
+                            delta={computeDelta(stats?.total_tax, previousStats?.total_tax)}
+                            isLoading={isStatsLoading || isPreviousLoading}
+                        />
+                        <KpiCell
+                            label={t`Total fees`}
+                            value={stats ? formatCurrency(stats.total_fees, selectedCurrency) : ''}
+                            delta={computeDelta(stats?.total_fees, previousStats?.total_fees)}
+                            isLoading={isStatsLoading || isPreviousLoading}
+                        />
+                    </>
+                )}
             </KpiGrid>
 
             <div className={classes.recentLists}>
@@ -345,12 +352,12 @@ export const OrganizerDashboard = () => {
                                                     </span>
                                                 </div>
                                             </div>
-                                            <div className={classes.orderStat}>
+                                            {canViewFinancials && <div className={classes.orderStat}>
                                                 <span className={classes.orderStatValue}>
                                                     {formatCurrency(order.total_gross, order.currency)}
                                                 </span>
                                                 <span className={classes.orderStatLabel}>{t`Total`}</span>
-                                            </div>
+                                            </div>}
                                             <IconChevronRight size={16} className={classes.orderChevron}/>
                                         </div>
                                     </NavLink>
@@ -400,6 +407,7 @@ export const OrganizerDashboard = () => {
                                 variant="light"
                                 size="sm"
                                 mt="xs"
+                                data-testid="create-event-blank-slate-button"
                             >
                                 <Trans>Create event</Trans>
                             </Button>

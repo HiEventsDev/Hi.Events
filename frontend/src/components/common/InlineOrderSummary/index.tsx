@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {Collapse, Popover} from "@mantine/core";
-import {IconCalendarEvent, IconChevronDown, IconInfoCircle, IconShieldCheck, IconTag} from "@tabler/icons-react";
+import {IconChevronDown, IconInfoCircle, IconShieldCheck, IconTag} from "@tabler/icons-react";
 import {t} from "@lingui/macro";
 import classNames from "classnames";
 import {Event, LocationType, Order} from "../../../types.ts";
@@ -48,8 +48,13 @@ export const InlineOrderSummary = ({
         return sum;
     }, 0) || 0;
 
+    const seatLabelsByItem = new Map<number, string[]>();
+    (order.seats ?? []).forEach(seat => {
+        seatLabelsByItem.set(seat.order_item_id, [...(seatLabelsByItem.get(seat.order_item_id) ?? []), seat.seat_label]);
+    });
+
     return (
-        <div className={classes.inlineOrderSummary}>
+        <div className={classes.inlineOrderSummary} data-testid="inline-order-summary">
             <div
                 className={classes.header}
                 onClick={() => setExpanded(!expanded)}
@@ -75,15 +80,11 @@ export const InlineOrderSummary = ({
             <Collapse expanded={expanded}>
                 <div className={classes.content}>
                     <div className={classes.eventInfo}>
-                        <div className={classes.eventImage}>
-                            {coverImage ? (
+                        {coverImage && (
+                            <div className={classes.eventImage}>
                                 <img src={coverImage.url} alt={event.title}/>
-                            ) : (
-                                <div className={classes.eventImagePlaceholder}>
-                                    <IconCalendarEvent size={24}/>
-                                </div>
-                            )}
-                        </div>
+                            </div>
+                        )}
                         <div className={classes.eventDetails}>
                             <div className={classes.eventTitle}>{event.title}</div>
                             <div className={classes.eventMeta}>
@@ -107,13 +108,19 @@ export const InlineOrderSummary = ({
                     <div className={classes.divider}/>
 
                     <div className={classes.lineItems}>
-                        {order.order_items?.map((item) => (
+                        {order.order_items?.map((item) => {
+                            const seatLabels = seatLabelsByItem.get(item.id) ?? [];
+
+                            return (
                             <div key={item.id} className={classes.lineItem}>
                                 <div className={classes.lineItemLeft}>
                                     <span title={item.item_name}
                                         className={classes.lineItemName}>{item.item_name}</span>
                                     {/* eslint-disable-next-line lingui/no-unlocalized-strings */}
                                     <span className={classes.lineItemQuantity}>× {item.quantity}</span>
+                                    {seatLabels.length > 0 && (
+                                        <span className={classes.lineItemSeats}>{seatLabels.join(', ')}</span>
+                                    )}
                                 </div>
                                 <div className={classes.lineItemPriceWrapper}>
                                     {!!item.price_before_discount && (
@@ -126,7 +133,8 @@ export const InlineOrderSummary = ({
                                     </span>
                                 </div>
                             </div>
-                        ))}
+                            );
+                        })}
                     </div>
 
                     {order.promo_code && totalDiscount > 0 && (
@@ -176,9 +184,7 @@ export const InlineOrderSummary = ({
                                     </Popover>
                                 )}
                             </span>
-                            <span className={classNames(classes.totalsValue, {
-                                [classes.totalsValueFree]: totalFee === 0
-                            })}>
+                            <span className={classes.totalsValue}>
                                 {formatCurrency(totalFee, order.currency)}
                             </span>
                         </div>

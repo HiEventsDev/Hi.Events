@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Domain\Report\Factory;
 
 use HiEvents\DomainObjects\Enums\ReportTypes;
+use HiEvents\Enterprise\Seating\Services\Domain\Report\Reports\SeatingSalesReport;
 use HiEvents\Services\Domain\Report\AbstractReportService;
 use HiEvents\Services\Domain\Report\Reports\DailySalesReport;
 use HiEvents\Services\Domain\Report\Reports\OccurrenceSummaryReport;
@@ -19,6 +20,7 @@ class ReportServiceFactory
             ReportTypes::DAILY_SALES_REPORT => App::make(DailySalesReport::class),
             ReportTypes::PROMO_CODES_REPORT => App::make(PromoCodesReport::class),
             ReportTypes::OCCURRENCE_SUMMARY => App::make(OccurrenceSummaryReport::class),
+            ReportTypes::SEATING_SALES => App::make(SeatingSalesReport::class),
         };
     }
 }

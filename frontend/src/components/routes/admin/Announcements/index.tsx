@@ -40,7 +40,7 @@ import {
     AnnouncementTargetType,
     UpsertAnnouncementData,
 } from "../../../../api/announcement.client";
-import {Modal} from "../../../common/Modal";
+import {Modal, ModalFooter} from "../../../common/Modal";
 import {Editor} from "../../../common/Editor";
 import {BouncingEmoji} from "../../../common/BouncingEmoji";
 import {AnnouncementBanner} from "../../../common/AnnouncementDisplay/AnnouncementBanner";
@@ -188,8 +188,8 @@ const Announcements = () => {
                                                             <Badge variant="outline" color="gray" size="sm">{target.label}</Badge>
                                                         </Tooltip>
                                                     </Table.Td>
-                                                    <Table.Td>{isDraft ? '—' : announcement.seen_count}</Table.Td>
-                                                    <Table.Td>{isDraft ? '—' : announcement.dismissed_count}</Table.Td>
+                                                    <Table.Td>{announcement.seen_count}</Table.Td>
+                                                    <Table.Td>{announcement.dismissed_count}</Table.Td>
                                                     <Table.Td>
                                                         <Text size="sm" c="dimmed">
                                                             {new Date(announcement.updated_at).toLocaleDateString()}
@@ -485,15 +485,19 @@ const AnnouncementFormModal = ({announcement, duplicate, onClose}: AnnouncementF
                         </div>
                     )}
 
-                    <Group grow>
-                        <Button
-                            variant="light"
-                            leftSection={<IconEye size={16}/>}
-                            onClick={() => setPreviewing((current) => !current)}
-                            data-testid="announcement-preview-button"
-                        >
-                            {previewing && isBanner ? t`Hide Preview` : t`Preview`}
-                        </Button>
+                    <ModalFooter
+                        start={(
+                            <Button
+                                variant="light"
+                                leftSection={<IconEye size={16}/>}
+                                onClick={() => setPreviewing((current) => !current)}
+                                data-testid="announcement-preview-button"
+                            >
+                                {previewing && isBanner ? t`Hide Preview` : t`Preview`}
+                            </Button>
+                        )}
+                    >
+                        <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
                         <Button
                             loading={createMutation.isPending || updateMutation.isPending}
                             type="submit"
@@ -501,7 +505,7 @@ const AnnouncementFormModal = ({announcement, duplicate, onClose}: AnnouncementF
                         >
                             {isEditing ? t`Save Changes` : t`Create Announcement`}
                         </Button>
-                    </Group>
+                    </ModalFooter>
                 </Stack>
             </form>
 

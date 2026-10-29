@@ -29,6 +29,7 @@ class AttendeeDetailPublicResource extends JsonResource
             'first_name' => $attendee->getFirstName(),
             'last_name' => $attendee->getLastName(),
             'status' => $attendee->getStatus(),
+            'seat_label' => $attendee->getSeatLabel(),
             'product_id' => $attendee->getProductId(),
             'product_title' => $product?->getTitle(),
             'event_occurrence' => $occurrence
@@ -66,10 +67,7 @@ class AttendeeDetailPublicResource extends JsonResource
             $data['order'] = [
                 'id' => $order->getId(),
                 'public_id' => $order->getPublicId(),
-                'short_id' => $order->getShortId(),
                 'status' => $order->getStatus(),
-                'total_gross' => $order->getTotalGross(),
-                'currency' => $order->getCurrency(),
                 'first_name' => $order->getFirstName(),
                 'last_name' => $order->getLastName(),
                 'email' => $order->getEmail(),

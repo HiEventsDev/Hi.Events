@@ -4,31 +4,32 @@ import {useGetOrderPublic} from "../../../queries/useGetOrderPublic.ts";
 import {t} from "@lingui/macro";
 import {Countdown} from "../../common/Countdown";
 import {ActionIcon, Button, Group, Modal, Tooltip} from "@mantine/core";
-import {IconArrowLeft, IconPrinter, IconReceipt} from "@tabler/icons-react";
+import {IconArrowLeft, IconCalendarDue, IconClock, IconPrinter, IconReceipt} from "@tabler/icons-react";
 import {eventHomepagePath, eventHomepageUrl} from "../../../utilites/urlHelper.ts";
 import {ShareComponent} from "../../common/ShareIcon";
 import {AddToEventCalendarButton} from "../../common/AddEventToCalendarButton";
-import {ProgressStepper} from "../../common/ProgressStepper";
-import {useMediaQuery} from "@mantine/hooks";
-import React, {useCallback, useEffect, useMemo, useState} from "react";
+import classNames from "classnames";
+import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {getEmbedMode, getParentOrigin} from "../../../utilites/iframeResize.ts";
+import {resolveClientEmbedLocale} from "../../../utilites/embedLocale.ts";
 import {Invoice} from "../../../types.ts";
 import {orderClientPublic} from "../../../api/order.client.ts";
 import {downloadBinary} from "../../../utilites/download.ts";
 import {withLoadingNotification} from "../../../utilites/withLoadingNotification.tsx";
 import {useAbandonOrderPublic} from "../../../mutations/useAbandonOrderPublic.ts";
 import {showError, showInfo} from "../../../utilites/notifications.tsx";
-import {isDateInFuture, utcDateToEpochMs} from "../../../utilites/dates.ts";
-import {getCheckoutSessionIdentifier} from "../../../utilites/checkoutSession.ts";
+import {dateToBrowserTz, formatDateWithLocale, isDateInFuture, utcDateToEpochMs} from "../../../utilites/dates.ts";
+import {isSsr} from "../../../utilites/helpers.ts";
+import {claimOrderCompletionReport, getCheckoutSessionIdentifier, isCheckoutSessionStored} from "../../../utilites/checkoutSession.ts";
 import {PoweredByFooter} from "../../common/PoweredByFooter";
 import {detectMode} from "../../../utilites/themeUtils.ts";
 import {CheckoutThemeProvider} from "./CheckoutThemeProvider.tsx";
 import {useOrganizerTrackingPixels} from "../../../hooks/useOrganizerTrackingPixels";
 import {trackPixelEvent, hasActivePixels} from "../../../utilites/trackingPixels";
-import {CookieConsentBanner} from "../../common/CookieConsentBanner";
+import {CookieSettingsLink} from "../../common/CookieSettingsLink";
 import {useGetEventPublic} from "../../../queries/useGetEventPublic.ts";
 
-const DEFAULT_ACCENT = '#8b5cf6';
+const DEFAULT_ACCENT = '#7c3aed';
 
 const Checkout = () => {
     const {eventId, orderShortId} = useParams();
@@ -50,7 +51,8 @@ const Checkout = () => {
     const orderIsCompleted = order?.status === 'COMPLETED';
     const orderIsReserved = order?.status === 'RESERVED';
     const orderIsAwaitingOfflinePayment = order?.status === 'AWAITING_OFFLINE_PAYMENT';
-    const isMobile = useMediaQuery('(max-width: 768px)');
+    const orderHasPaymentLink = orderIsReserved && !!order?.payment_link_created_at;
+    const isPaymentLinkPayer = !!order?.is_payment_link_payer;
     const [isExpired, setIsExpired] = useState(false);
     const orderHasAttendees = order?.attendees && order.attendees.length > 0;
     const [showAbandonDialog, setShowAbandonDialog] = useState(false);
@@ -70,6 +72,21 @@ const Checkout = () => {
 
     const closeModal = useCallback(() => postToParent('hievents:close-checkout'), [postToParent]);
 
+    useEffect(() => {
+        if (!orderShortId || !searchParams.has('session_identifier')) {
+            return;
+        }
+        const token = getCheckoutSessionIdentifier(orderShortId);
+        if (!token || !isCheckoutSessionStored(orderShortId, token)) {
+            return;
+        }
+        const remaining = new URLSearchParams(searchParams);
+        remaining.delete('session_identifier');
+        const search = remaining.toString();
+        navigate({pathname: location.pathname, search: search ? `?${search}` : ''}, {replace: true, preventScrollReset: true});
+    }, [orderShortId, searchParams]);
+    const reportedOrderRef = useRef<string | null>(null);
+
     const getCurrentStep = (): 'details' | 'payment' | 'summary' => {
         const pathname = location.pathname;
         if (pathname.includes('/payment')) return 'payment';
@@ -78,15 +95,25 @@ const Checkout = () => {
     };
     const currentStep = getCurrentStep();
 
+    const progressPercent = order?.is_payment_required
+        ? {details: 33, payment: 66, summary: 100}[currentStep]
+        : {details: 50, payment: 100, summary: 100}[currentStep];
+
+    const stepCount = order?.is_payment_required ? 3 : 2;
+    const stepNumber = order?.is_payment_required
+        ? {details: 1, payment: 2, summary: 3}[currentStep]
+        : {details: 1, payment: 2, summary: 2}[currentStep];
+
     const isOrderReservedAndNotExpired = orderIsReserved && order?.reserved_until
         && isDateInFuture(order.reserved_until);
+    const canAbandonOrder = !!isOrderReservedAndNotExpired && !orderHasPaymentLink;
 
     const blocker = useBlocker(
         ({currentLocation, nextLocation}) => {
             const isLeavingCheckout = !nextLocation.pathname.startsWith('/checkout/');
             return (
                 !isAbandoning &&
-                !!isOrderReservedAndNotExpired &&
+                canAbandonOrder &&
                 currentLocation.pathname !== nextLocation.pathname &&
                 isLeavingCheckout
             );
@@ -107,13 +134,13 @@ const Checkout = () => {
 
     const handleRequestClose = useCallback(() => {
         postToParent('hievents:close-pending');
-        if (isOrderReservedAndNotExpired) {
+        if (canAbandonOrder) {
             setPendingClose(true);
             setShowAbandonDialog(true);
         } else {
             closeModal();
         }
-    }, [postToParent, closeModal, isOrderReservedAndNotExpired]);
+    }, [postToParent, closeModal, canAbandonOrder]);
 
     useEffect(() => {
         if (!isModal) return;
@@ -145,11 +172,29 @@ const Checkout = () => {
                 ...(parentOrigin ? {sessionId: getCheckoutSessionIdentifier(String(orderShortId))} : {}),
                 step: currentStep,
                 reservedUntil: order?.reserved_until ? utcDateToEpochMs(order.reserved_until) : null,
+                locale: resolveClientEmbedLocale(),
             });
         } else if (orderIsCompleted || orderIsAwaitingOfflinePayment) {
             postToParent('hievents:checkout-cleared');
         }
     }, [isModal, isOrderReservedAndNotExpired, orderIsCompleted, orderIsAwaitingOfflinePayment, order?.reserved_until, currentStep, eventId, orderShortId, postToParent]);
+
+    useEffect(() => {
+        if (!isModal || !order || !(orderIsCompleted || orderIsAwaitingOfflinePayment) || reportedOrderRef.current === order.short_id) {
+            return;
+        }
+        reportedOrderRef.current = order.short_id;
+        if (!claimOrderCompletionReport(order.short_id)) {
+            return;
+        }
+        postToParent('hievents:order-completed', {
+            eventId,
+            currency: order.currency,
+            total: order.total_gross,
+            quantity: (order.order_items ?? []).reduce((sum, item) => sum + item.quantity, 0),
+            status: order.status,
+        });
+    }, [isModal, order, orderIsCompleted, orderIsAwaitingOfflinePayment, eventId, postToParent]);
 
     useEffect(() => {
         if (!isModal) return;
@@ -167,6 +212,22 @@ const Checkout = () => {
             setIsExpired(true);
         }
     }, [isModal, order?.is_expired]);
+
+    useEffect(() => {
+        if (!orderHasPaymentLink || !order?.reserved_until) {
+            return;
+        }
+        const msUntilExpiry = utcDateToEpochMs(order.reserved_until) - Date.now();
+        if (msUntilExpiry <= 0) {
+            setIsExpired(true);
+            return;
+        }
+        if (msUntilExpiry > 2147483647) {
+            return;
+        }
+        const timeout = window.setTimeout(() => setIsExpired(true), msUntilExpiry);
+        return () => window.clearTimeout(timeout);
+    }, [orderHasPaymentLink, order?.reserved_until]);
 
     const handleInvoiceDownload = async (invoice: Invoice) => {
         await withLoadingNotification(
@@ -228,7 +289,7 @@ const Checkout = () => {
     };
 
     const handleEventHomepageClick = (e: React.MouseEvent) => {
-        if (isOrderReservedAndNotExpired && event) {
+        if (canAbandonOrder && event) {
             e.preventDefault();
             setPendingNavigation(eventHomepagePath(event));
             setShowAbandonDialog(true);
@@ -243,22 +304,22 @@ const Checkout = () => {
         }
     }, [blocker.state]);
 
-    const {consentPending, consentGranted, onConsent} = useOrganizerTrackingPixels(
+    const {pixelsReady} = useOrganizerTrackingPixels(
         publicEvent?.organizer?.settings?.tracking_pixels
     );
 
     useEffect(() => {
-        if (event && orderIsReserved && consentGranted && hasActivePixels()) {
+        if (event && orderIsReserved && pixelsReady && hasActivePixels()) {
             trackPixelEvent({
                 eventName: 'InitiateCheckout',
                 contentName: event.title,
                 contentId: event.id,
             });
         }
-    }, [event?.id, orderIsReserved, consentGranted]);
+    }, [event?.id, orderIsReserved, pixelsReady]);
 
     useEffect(() => {
-        if (!event || !order || !consentGranted || !hasActivePixels()) return;
+        if (!event || !order || !pixelsReady || !hasActivePixels()) return;
         if (!orderIsCompleted && !orderIsAwaitingOfflinePayment) return;
 
         const key = `purchase_tracked_${order.short_id}`;
@@ -276,7 +337,7 @@ const Checkout = () => {
         if (typeof sessionStorage !== 'undefined') {
             sessionStorage.setItem(key, '1');
         }
-    }, [order?.status, order?.short_id, consentGranted]);
+    }, [order?.status, order?.short_id, pixelsReady]);
 
     const homepageSettings = event?.settings?.homepage_theme_settings;
     const accentColor = homepageSettings?.accent || DEFAULT_ACCENT;
@@ -288,61 +349,92 @@ const Checkout = () => {
                 <div className={classes.mainContent}>
                     <header className={classes.header}>
                         {(event) && (
-                            <div className={classes.actionBar} style={isModal ? {paddingRight: '44px'} : undefined}>
-                                <Group justify="space-between" wrap="nowrap">
-                                    {isModal ? (
-                                        <span/>
-                                    ) : (
-                                        <Button
-                                            title={t`Back to event page`}
-                                            variant="subtle"
-                                            leftSection={<IconArrowLeft size={20}/>}
-                                            onClick={handleEventHomepageClick}
-                                        >
-                                            {!isMobile && t`Event Homepage`}
-                                        </Button>
+                            <>
+                                <div
+                                    className={classNames(classes.headerRow, (orderIsCompleted || orderIsAwaitingOfflinePayment) && classes.headerRowComplete)}
+                                    style={isModal ? {paddingRight: '44px'} : undefined}
+                                >
+                                    {!isModal && (
+                                        <>
+                                            <ActionIcon
+                                                className={classes.backButton}
+                                                variant="subtle"
+                                                title={t`Back to event page`}
+                                                aria-label={t`Back to event page`}
+                                                onClick={handleEventHomepageClick}
+                                            >
+                                                <IconArrowLeft size={19}/>
+                                            </ActionIcon>
+                                            <span className={classes.headerDivider}/>
+                                        </>
                                     )}
 
-                                    {orderIsReserved && (
-                                        <ProgressStepper
-                                            isPaymentRequired={!!order.is_payment_required}
-                                            currentStep={currentStep}
-                                        />
-                                    )}
-
-                                    {(orderIsCompleted || orderIsAwaitingOfflinePayment) && (
-                                        <span className={classes.title}>
-                                            {t`Your Order`}
-                                        </span>
-                                    )}
-
-                                    {orderIsReserved && (
-                                        <Group gap="5px" className={classes.timerGroup}>
-                                            <span className={classes.timerLabel}>
-                                                {t`Time left:`}
+                                    <div className={classes.titleBlock}>
+                                        {(orderIsCompleted || orderIsAwaitingOfflinePayment) && (
+                                            <span
+                                                className={classNames(classes.eyebrow, orderIsAwaitingOfflinePayment ? classes.eyebrowAwaiting : classes.eyebrowComplete)}>
+                                                {orderIsAwaitingOfflinePayment ? t`Awaiting payment` : t`Order complete`}
                                             </span>
-                                            <Countdown
-                                                displayType={'short'}
-                                                className={classes.countdown}
-                                                closeToExpiryClassName={classes.countdownCloseToExpiry}
-                                                targetDate={order.reserved_until}
-                                                onExpiry={handleExpiry}
-                                            />
-                                        </Group>
+                                        )}
+
+                                        {orderIsReserved && (
+                                            <span className={classes.eyebrow}>
+                                                {isPaymentLinkPayer ? t`Payment request` : t`Checkout · step ${stepNumber} of ${stepCount}`}
+                                            </span>
+                                        )}
+                                        <span className={classes.eventName}>{event.title}</span>
+                                    </div>
+
+                                    <div className={classes.headerSpacer}/>
+
+                                    {orderHasPaymentLink && (
+                                        <>
+                                            <span className={classes.timerCaption}>{t`Pay by`}</span>
+                                            <Tooltip label={t`Pay by ${dateToBrowserTz(order.reserved_until, event.timezone)}`}>
+                                                <div className={classes.timerChip} data-testid="checkout-pay-by">
+                                                    <IconCalendarDue size={14}/>
+                                                    <span className={classes.countdown} suppressHydrationWarning>
+                                                        {formatDateWithLocale(
+                                                            order.reserved_until,
+                                                            'dayMonthTime',
+                                                            isSsr() ? event.timezone : Intl.DateTimeFormat().resolvedOptions().timeZone,
+                                                        )}
+                                                    </span>
+                                                </div>
+                                            </Tooltip>
+                                        </>
+                                    )}
+
+                                    {orderIsReserved && !orderHasPaymentLink && (
+                                        <>
+                                            <span className={classes.timerCaption}>{t`Time left`}</span>
+                                            <div className={classes.timerChip} data-testid="checkout-timer">
+                                                <IconClock size={14}/>
+                                                <Countdown
+                                                    displayType={'short'}
+                                                    className={classes.countdown}
+                                                    closeToExpiryClassName={classes.countdownCloseToExpiry}
+                                                    targetDate={order.reserved_until}
+                                                    onExpiry={handleExpiry}
+                                                />
+                                            </div>
+                                        </>
                                     )}
 
                                     {(orderIsCompleted || orderIsAwaitingOfflinePayment) && (
-                                        <Group gap="2px">
+                                        <div className={classes.headerActions}>
                                             <ShareComponent
                                                 title={event.title}
                                                 text={t`Check out this event!`}
                                                 url={eventHomepageUrl(event)}
-                                                hideShareButtonText={isMobile}
+                                                hideShareButtonText
                                             />
 
-                                            <AddToEventCalendarButton event={event} occurrence={order?.order_items?.[0]?.event_occurrence}/>
+                                            {!isPaymentLinkPayer && (
+                                                <AddToEventCalendarButton event={event} occurrence={order?.order_items?.[0]?.event_occurrence}/>
+                                            )}
 
-                                            {orderHasAttendees && (
+                                            {(orderHasAttendees && !isPaymentLinkPayer) && (
                                                 <Tooltip label={t`Print Tickets`}>
                                                     <ActionIcon
                                                         variant="subtle"
@@ -365,15 +457,24 @@ const Checkout = () => {
                                                     </ActionIcon>
                                                 </Tooltip>
                                             )}
-                                        </Group>
+                                        </div>
                                     )}
-                                </Group>
-                            </div>
+                                </div>
+
+                                {orderIsReserved && (
+                                    <div className={classes.progressTrack}>
+                                        <div className={classes.progressFill} style={{width: `${progressPercent}%`}}/>
+                                    </div>
+                                )}
+                            </>
                         )}
                     </header>
                     <Outlet/>
                     {isModal && currentStep !== 'summary' && (
-                        <PoweredByFooter style={{marginTop: '12px', paddingBottom: '16px'}}/>
+                        <>
+                            <PoweredByFooter style={{marginTop: '12px', paddingBottom: '16px'}} brandingRemoved={!publicEvent || publicEvent.organizer?.branding_removed}/>
+                            <CookieSettingsLink/>
+                        </>
                     )}
                 </div>
             </div>
@@ -387,10 +488,18 @@ const Checkout = () => {
             >
                 <div style={{textAlign: 'center', padding: '20px 0'}}>
                     <h3 style={{color: 'var(--checkout-text-primary)', margin: '0 0 8px 0'}}>
-                        {t`You have run out of time to complete your order.`}
+                        {orderHasPaymentLink
+                            ? (isPaymentLinkPayer ? t`This payment link has expired` : t`Your payment link has expired`)
+                            : t`You have run out of time to complete your order.`}
                     </h3>
                     <p style={{color: 'var(--checkout-text-secondary)', margin: '0'}}>
-                        {t`Please return to the event page to start over.`}
+                        {orderHasPaymentLink
+                            ? (isPaymentLinkPayer
+                                ? (order?.first_name
+                                    ? t`The order was not paid in time, so the places are no longer held. Let ${order.first_name} know so they can register again.`
+                                    : t`The order was not paid in time, so the places are no longer held. Let the person who registered know so they can register again.`)
+                                : t`The order was not paid in time, so your places have been released. Return to the event page to start a new order.`)
+                            : t`Please return to the event page to start over.`}
                     </p>
                     <Button
                         onClick={handleReturn}
@@ -434,9 +543,6 @@ const Checkout = () => {
                     </Group>
                 </div>
             </Modal>
-            {consentPending && (
-                <CookieConsentBanner onConsent={onConsent}/>
-            )}
         </CheckoutThemeProvider>
     );
 }

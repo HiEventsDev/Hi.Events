@@ -128,7 +128,54 @@ class MessageDispatchServiceTest extends TestCase
         Bus::assertDispatched(SendMessagesJob::class);
     }
 
-    private function makeMessage(?int $occurrenceId): MessageDomainObject
+    public function test_approved_test_message_is_dispatched_as_a_test(): void
+    {
+        $message = $this->makeMessage(occurrenceId: null, sendData: [
+            'account_id' => 99,
+            'send_copy_to_current_user' => false,
+            'is_test' => true,
+        ]);
+
+        $this->messageRepository
+            ->shouldReceive('updateWhere')
+            ->once()
+            ->with(
+                ['status' => MessageStatus::PROCESSING->name],
+                ['id' => 1, 'status' => MessageStatus::PENDING_REVIEW->name],
+            )
+            ->andReturn(1);
+
+        $this->service->dispatchMessage($message, MessageStatus::PENDING_REVIEW);
+
+        Bus::assertDispatched(SendMessagesJob::class, fn (SendMessagesJob $job) => $job->messageData->is_test === true);
+    }
+
+    public function test_test_message_with_json_send_data_is_dispatched_as_a_test(): void
+    {
+        $message = $this->makeMessage(occurrenceId: null, sendData: json_encode([
+            'account_id' => 99,
+            'is_test' => true,
+        ]));
+
+        $this->messageRepository->shouldReceive('updateWhere')->once()->andReturn(1);
+
+        $this->service->dispatchMessage($message);
+
+        Bus::assertDispatched(SendMessagesJob::class, fn (SendMessagesJob $job) => $job->messageData->is_test === true);
+    }
+
+    public function test_message_without_is_test_in_send_data_is_dispatched_as_live(): void
+    {
+        $message = $this->makeMessage(occurrenceId: null);
+
+        $this->messageRepository->shouldReceive('updateWhere')->once()->andReturn(1);
+
+        $this->service->dispatchMessage($message);
+
+        Bus::assertDispatched(SendMessagesJob::class, fn (SendMessagesJob $job) => $job->messageData->is_test === false);
+    }
+
+    private function makeMessage(?int $occurrenceId, array|string|null $sendData = null): MessageDomainObject
     {
         $message = new MessageDomainObject;
         $message->setId(1);
@@ -138,7 +185,7 @@ class MessageDispatchServiceTest extends TestCase
         $message->setType('ALL_ATTENDEES');
         $message->setSentByUserId(1);
         $message->setEventOccurrenceId($occurrenceId);
-        $message->setSendData([
+        $message->setSendData($sendData ?? [
             'account_id' => 99,
             'send_copy_to_current_user' => false,
         ]);

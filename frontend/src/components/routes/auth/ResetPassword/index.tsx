@@ -46,7 +46,7 @@ export const ResetPassword = () => {
             errorHandler(form, error);
         },
         onSuccess: () => {
-            showSuccess(t`Password reset successfully. Please login with your new password.`);
+            showSuccess(t`Your password was reset. Sign in with your new password.`);
             navigate('/auth/login');
         },
     });
@@ -76,7 +76,7 @@ export const ResetPassword = () => {
                     </Button>
                 </form>
                 <footer>
-                    <NavLink to={'/auth/login'}>{t`Back to login`}</NavLink>
+                    <NavLink to={'/auth/login'}>{t`Back to sign in`}</NavLink>
                 </footer>
             </div>
         </>

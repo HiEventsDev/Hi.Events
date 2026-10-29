@@ -13,6 +13,7 @@ import {ProductSelector} from "../../common/ProductSelector";
 import {ShowForDesktop, ShowForMobile} from "../../common/Responsive/ShowHideComponents.tsx";
 import {Callout} from "../../common/Callout";
 import {AdvancedOptions} from "../../common/AdvancedOptions";
+import {DateTimeField} from "../../common/DateTimeField";
 
 interface PromoCodeFormProps {
     form: UseFormReturnType<PromoCode>,
@@ -163,9 +164,10 @@ export const PromoCodeForm = ({form}: PromoCodeFormProps) => {
                 />
 
                 <InputGroup>
-                    <TextInput type={'datetime-local'}
+                    <DateTimeField
                                {...form.getInputProps('expiry_date')}
                                label={t`Expiry Date`}
+                               defaultTime="23:59"
                     />
                     <NumberInput min={1}
                                  placeholder={t`Unlimited`}

@@ -1,15 +1,15 @@
 import {useGetEvent} from "../../../../queries/useGetEvent.ts";
 import {useGetMe} from "../../../../queries/useGetMe.ts";
 import {t} from "@lingui/macro";
-import {IdParam, LocationType} from "../../../../types.ts";
+import {Attendee, IdParam, LocationType, Product, ProductPriceType, ProductType} from "../../../../types.ts";
+import {useGetEventSettings} from "../../../../queries/useGetEventSettings.ts";
 import {AttendeeTicket} from "../../../common/AttendeeTicket";
 import {resolveEventLocation} from "../../../../utilites/effectiveLocation.ts";
 import classes from './TicketPreview.module.scss';
 
-interface TicketDesignSettings {
+export interface TicketDesignSettings {
     accent_color: string;
-    logo_image_id: IdParam | null;
-    footer_text: string | null;
+    footer_text: string;
     date_display_mode: 'START_DATE_TIME' | 'DATE_RANGE' | 'HIDDEN';
     enabled: boolean;
 }
@@ -17,17 +17,19 @@ interface TicketDesignSettings {
 interface TicketPreviewProps {
     settings: TicketDesignSettings;
     eventId: IdParam;
-    logoUrl?: string;
+    logo?: {id: IdParam; url: string};
 }
 
-export const TicketPreview = ({settings, eventId, logoUrl}: TicketPreviewProps) => {
+export const TicketPreview = ({settings, eventId, logo}: TicketPreviewProps) => {
     const eventQuery = useGetEvent(eventId);
     const meQuery = useGetMe();
+    const eventSettingsQuery = useGetEventSettings(eventId);
 
     const event = eventQuery.data;
     const user = meQuery.data;
+    const eventSettings = eventSettingsQuery.data;
 
-    if (!event || !user) {
+    if (!event || !user || !eventSettings) {
         return (
             <div className={classes.loadingState}>
                 <p>{t`Loading preview...`}</p>
@@ -35,23 +37,18 @@ export const TicketPreview = ({settings, eventId, logoUrl}: TicketPreviewProps) 
         );
     }
 
-    const mockProduct = {
+    const mockProduct: Product = {
         id: 1,
         title: t`General Admission`,
         price: 2500,
-        type: "TICKET" as const,
-        sale_start_date: null,
-        sale_end_date: null,
-        max_per_order: null,
-        min_per_order: null,
-        quantity_available: null,
+        type: ProductPriceType.Paid,
+        product_type: ProductType.Ticket,
         is_hidden: false,
-        sort_order: 1,
         description: "",
         is_hidden_without_promo_code: false
     };
 
-    const mockAttendee = {
+    const mockAttendee: Attendee = {
         id: 1,
         public_id: "PREVIEW12345",
         short_id: "P1234",
@@ -59,18 +56,11 @@ export const TicketPreview = ({settings, eventId, logoUrl}: TicketPreviewProps) 
         last_name: user.last_name || "Doe",
         email: user.email || "john.doe@example.com",
         status: "ACTIVE" as const,
-        checked_in_at: null,
-        product_id: mockProduct.id,
+        product_id: 1,
         product: mockProduct,
         product_price_id: 1,
+        seat_label: event.has_seat_map ? t`Stalls · C-14` : null,
         order_id: 1,
-        order: {
-            id: 1,
-            short_id: "ORD123",
-            created_at: new Date().toISOString(),
-            total_gross: 2500,
-            currency: event.currency || "USD",
-        }
     };
 
     const fallbackLocationDetails = {
@@ -89,23 +79,24 @@ export const TicketPreview = ({settings, eventId, logoUrl}: TicketPreviewProps) 
         ...event,
         event_location: resolvedEventLocation,
         settings: {
-            ...event.settings,
+            ...eventSettings,
             ticket_design_settings: {
                 accent_color: settings.accent_color,
-                logo_image_id: settings.logo_image_id,
+                logo_image_id: logo?.id,
                 footer_text: settings.footer_text,
                 date_display_mode: settings.date_display_mode,
                 enabled: settings.enabled
             },
         },
-        images: logoUrl && settings.logo_image_id ? [
+        images: logo ? [
             ...((event.images || []).filter(img => img.type !== 'TICKET_LOGO')),
             {
-                id: settings.logo_image_id,
+                id: logo.id,
                 type: 'TICKET_LOGO' as const,
-                url: logoUrl,
-                size_bytes: 0,
-                filename: ''
+                url: logo.url,
+                file_name: '',
+                size: 0,
+                mime_type: '',
             }
         ] : (event.images || []).filter(img => img.type !== 'TICKET_LOGO')
     };

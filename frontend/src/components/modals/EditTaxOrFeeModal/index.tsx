@@ -1,13 +1,12 @@
 import {useForm} from "@mantine/form";
-import {TaxAndFeeForm} from "../../forms/TaxAndFeeForm";
-import {GenericModalProps, TaxAndFee, TaxAndFeeCalculationType, TaxAndFeeType} from "../../../types.ts";
-import {Modal} from "../../common/Modal";
 import {Button} from "@mantine/core";
+import {t} from "@lingui/macro";
+import {TaxAndFeeForm} from "../../forms/TaxAndFeeForm";
+import {Modal, ModalFooter} from "../../common/Modal";
+import {GenericModalProps, TaxAndFee, TaxAndFeeType} from "../../../types.ts";
+import {useUpdateTaxOrFee} from "../../../mutations/useUpdateTaxOrFee.ts";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
 import {showSuccess} from "../../../utilites/notifications.tsx";
-import {t, Trans} from "@lingui/macro";
-import {useUpdateTaxOrFee} from "../../../mutations/useUpdateTaxOrFee.ts";
-import {useEffect} from "react";
 
 interface EditTaxOrFeeModalProps extends GenericModalProps {
     taxOrFee: TaxAndFee;
@@ -18,47 +17,35 @@ export const EditTaxOrFeeModal = ({onClose, taxOrFee}: EditTaxOrFeeModalProps) =
     const formErrorHandler = useFormErrorResponseHandler();
 
     const form = useForm<TaxAndFee>({
-        initialValues: {
-            name: '',
-            type: TaxAndFeeType.Tax,
-            calculation_type: TaxAndFeeCalculationType.Percentage,
-            rate: undefined,
-            description: undefined,
-            is_default: true,
-            is_active: true,
-        },
+        initialValues: taxOrFee,
     });
 
-    useEffect(() => {
-        form.setValues(taxOrFee);
-    }, [taxOrFee]);
+    const isTax = form.values.type === TaxAndFeeType.Tax;
 
     const handleEdit = (values: TaxAndFee) => {
-        updateMutation.mutate({
-            taxOrFeeId: taxOrFee.id,
-            taxOrFeeData: values,
-        }, {
+        updateMutation.mutate({taxOrFeeId: taxOrFee.id, taxOrFeeData: values}, {
             onSuccess: () => {
-                showSuccess(<Trans>{form.values.type === TaxAndFeeType.Tax ? t`Tax` : t`Fee`} updated
-                    successfully</Trans>);
-                form.reset();
+                showSuccess(isTax ? t`Tax updated` : t`Fee updated`);
                 onClose();
             },
-            onError: (error: any) => formErrorHandler(form, error)
+            onError: (error: any) => formErrorHandler(form, error),
         });
     };
 
     return (
-        <Modal heading={ <Trans>Edit {form.values.type === TaxAndFeeType.Tax ? t`Tax` : t`Fee`}</Trans>} onClose={onClose} opened>
-            <form onSubmit={form.onSubmit(values => handleEdit(values))}>
+        <Modal opened onClose={onClose} heading={isTax ? t`Edit tax` : t`Edit fee`} size={520}>
+            <form onSubmit={(event) => {
+                event.stopPropagation();
+                form.onSubmit(handleEdit)(event);
+            }}>
                 <TaxAndFeeForm form={form}/>
-                <Button
-                    fullWidth
-                    loading={updateMutation.isPending}
-                    type={'submit'}>
-                    <Trans>Update {form.values.type === TaxAndFeeType.Tax ? t`Tax` : t`Fee`}</Trans>
-                </Button>
+                <ModalFooter>
+                    <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                    <Button type="submit" loading={updateMutation.isPending} data-testid="tax-or-fee-submit">
+                        {t`Save changes`}
+                    </Button>
+                </ModalFooter>
             </form>
         </Modal>
-    )
-}
+    );
+};

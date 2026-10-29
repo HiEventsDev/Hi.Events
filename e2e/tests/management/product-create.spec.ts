@@ -1,7 +1,8 @@
 import { test, expect } from '../../fixtures';
 import { ProductCreatePage } from '../../pages/product-create.page';
-import { createDraftEvent } from '../../api/factory';
+import { createDraftEvent, createDraftEventWithTicket } from '../../api/factory';
 import { uniqueName } from '../../utils/unique';
+import { expectDateTime, pickDateTime } from '../../utils/datePicker';
 
 test.describe('product creation', () => {
   test('an organizer creates a paid ticket and sees it listed with its price', { tag: '@smoke' }, async ({ authedPage, api, account }) => {
@@ -26,7 +27,7 @@ test.describe('product creation', () => {
     const products = new ProductCreatePage(authedPage);
     await products.goto(event.eventId);
     await products.openCreateModal();
-    await products.selectPriceType(/Donation/);
+    await products.selectPriceType('Donation');
     await authedPage.getByLabel(/^Name/).fill(title);
     await authedPage.getByLabel(/^Minimum Price/).fill('5');
     await products.submitCreate();
@@ -42,7 +43,7 @@ test.describe('product creation', () => {
     const products = new ProductCreatePage(authedPage);
     await products.goto(event.eventId);
     await products.openCreateModal();
-    await products.selectPriceType(/Tiered Product/);
+    await products.selectPriceType('Tiers');
     await authedPage.getByLabel(/^Name/).fill(title);
     await products.fillTier(0, '10', 'Early Bird');
     await products.addTier();
@@ -53,7 +54,87 @@ test.describe('product creation', () => {
     await expect(authedPage.getByText('$10.00 – $20.00', { exact: true })).toBeVisible();
   });
 
-  test('advanced options persist and are shown when reopening the edit modal', async ({ authedPage, api, account }) => {
+  test('sequential tier release requires quantities and persists on the product', async ({ authedPage, api, account }) => {
+    const event = await createDraftEvent(api, account.organizerId);
+    const title = uniqueName('Sequential Tiers');
+
+    const products = new ProductCreatePage(authedPage);
+    await products.goto(event.eventId);
+    await products.openCreateModal();
+    await products.selectPriceType('Tiers');
+    await authedPage.getByLabel(/^Name/).fill(title);
+    await products.fillTier(0, '10', 'Early Bird');
+    await products.addTier();
+    await products.fillTier(1, '20', 'Standard');
+    await products.sequentialReleaseSwitch().check();
+    await products.submitCreate();
+
+    await expect(authedPage.getByText('Every tier except the last needs a quantity when tiers are released in order.')).toBeVisible();
+
+    await authedPage.getByLabel('Quantity Available').nth(0).fill('25');
+    await products.submitCreate();
+    await expect(authedPage.getByRole('heading', { name: title })).toBeVisible();
+
+    await products.openEditModal();
+    await expect(products.sequentialReleaseSwitch()).toBeChecked();
+  });
+
+  test('an organizer drags a tier above another and the saved order follows', async ({ authedPage, api, account }) => {
+    const event = await createDraftEvent(api, account.organizerId);
+    const title = uniqueName('Reordered Tiers');
+
+    const products = new ProductCreatePage(authedPage);
+    await products.goto(event.eventId);
+    await products.openCreateModal();
+    await products.selectPriceType('Tiers');
+    await authedPage.getByLabel(/^Name/).fill(title);
+    await products.fillTier(0, '10', 'Early Bird');
+    await products.addTier();
+    await products.fillTier(1, '20', 'Standard');
+    await products.dragTierAbove(1, 0);
+
+    await expect(authedPage.getByLabel(/^Label/).nth(0)).toHaveValue('Standard');
+    await expect(authedPage.getByLabel(/^Label/).nth(1)).toHaveValue('Early Bird');
+
+    await products.submitCreate();
+    await expect(authedPage.getByRole('heading', { name: title })).toBeVisible();
+
+    const saved = (await api.listProducts(event.eventId)).find((product) => product.title === title);
+    expect(saved?.prices?.map((price) => price.label)).toEqual(['Standard', 'Early Bird']);
+  });
+
+  test('an organizer creates an add-on product and the settings persist', async ({ authedPage, api, account }) => {
+    const event = await createDraftEventWithTicket(api, account.organizerId, { productTitle: 'Main Ticket' });
+    const title = uniqueName('Parking Pass');
+
+    const products = new ProductCreatePage(authedPage);
+    await products.goto(event.eventId);
+    await products.openCreateModal();
+    await authedPage.getByLabel(/^Name/).fill(title);
+    await authedPage.getByLabel(/^Price/).fill('10');
+    await products.openLedgerRow('addons');
+    await products.selectAddonProduct('Main Ticket');
+    await products.openLedgerRow('addons');
+    await expect(authedPage.getByText('1 add-on', { exact: true })).toBeVisible();
+
+    await products.openLedgerRow('addons');
+    await products.addonOnlySwitch().check();
+    await expect(authedPage.getByRole('combobox', { name: 'Add-on products' })).toHaveCount(0);
+    await products.openLedgerRow('addons');
+    await expect(authedPage.getByText('Add-on only', { exact: true })).toBeVisible();
+    await products.submitCreate();
+
+    await expect(authedPage.getByRole('heading', { name: title })).toBeVisible();
+    await expect(authedPage.getByText('Add-on only', { exact: true })).toBeVisible();
+
+    await products.openEditModal(1);
+    await expect(authedPage.getByLabel(/^Name/)).toHaveValue(title);
+    await products.openLedgerRow('addons');
+    await expect(products.addonOnlySwitch()).toBeChecked();
+    await expect(authedPage.getByRole('combobox', { name: 'Add-on products' })).toHaveCount(0);
+  });
+
+  test('ledger settings persist and are shown when reopening the edit modal', async ({ authedPage, api, account }) => {
     const event = await createDraftEvent(api, account.organizerId);
     const title = uniqueName('Hidden Ticket');
     const saleStart = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 16);
@@ -63,11 +144,13 @@ test.describe('product creation', () => {
     await products.openCreateModal();
     await authedPage.getByLabel(/^Name/).fill(title);
     await authedPage.getByLabel(/^Price/).fill('15');
-    await products.openAdvancedOptions();
+    await products.openLedgerRow('order-limits');
     await authedPage.getByLabel('Minimum Per Order').fill('1');
     await authedPage.getByLabel('Maximum Per Order').fill('2');
-    await authedPage.getByRole('textbox', { name: 'Sale Start Date' }).fill(saleStart);
-    await products.hiddenSwitch().check();
+    await products.openLedgerRow('sale-window');
+    await pickDateTime(authedPage, authedPage.getByLabel('Sale Start Date', { exact: true }), saleStart);
+    await products.openLedgerRow('access');
+    await products.hideFromCustomers();
     await products.submitCreate();
 
     await expect(authedPage.getByRole('heading', { name: title })).toBeVisible();
@@ -75,10 +158,40 @@ test.describe('product creation', () => {
 
     await products.openEditModal();
     await expect(authedPage.getByLabel(/^Name/)).toHaveValue(title);
-    await products.openAdvancedOptions();
+    await products.openLedgerRow('order-limits');
     await expect(authedPage.getByLabel('Minimum Per Order')).toHaveValue('1');
     await expect(authedPage.getByLabel('Maximum Per Order')).toHaveValue('2');
-    await expect(authedPage.getByRole('textbox', { name: 'Sale Start Date' })).toHaveValue(saleStart);
+    await products.openLedgerRow('sale-window');
+    await expectDateTime(authedPage, authedPage.getByLabel('Sale Start Date', { exact: true }), saleStart);
+    await products.openLedgerRow('access');
     await expect(products.hiddenSwitch()).toBeChecked();
+  });
+
+  test('the live preview renders the ticket in the event page theme', async ({ authedPage, api, account }) => {
+    const event = await createDraftEvent(api, account.organizerId);
+    await api.updateEventSettings(event.eventId, {
+      homepage_theme_settings: {
+        mode: 'light',
+        accent: '#FF2D95',
+        background: '#FFFFFF',
+        background_type: 'COLOR',
+      },
+    });
+
+    const products = new ProductCreatePage(authedPage);
+    await products.goto(event.eventId);
+    await products.openCreateModal();
+    await authedPage.getByLabel(/^Name/).fill(uniqueName('Themed'));
+
+    const previewCta = authedPage.getByRole('dialog').locator('.hi-continue-button');
+    await expect(previewCta).toBeVisible();
+    await expect
+      .poll(() =>
+        previewCta.evaluate((el) => {
+          const style = getComputedStyle(el);
+          return `${style.backgroundColor} @ ${style.opacity}`;
+        }),
+      )
+      .toBe('rgb(255, 45, 149) @ 1');
   });
 });

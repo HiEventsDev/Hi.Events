@@ -6,14 +6,19 @@ namespace HiEvents\Services\Application\Handlers\EventOccurrence;
 
 use Carbon\Carbon;
 use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\BoxOfficeDomainObject;
 use HiEvents\DomainObjects\Enums\BulkOccurrenceAction;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\BoxOfficeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\OrderItemDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\SeatClaimDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\DomainObjects\Status\WaitlistEntryStatus;
+use HiEvents\Enterprise\BoxOffice\Repository\Interfaces\BoxOfficeRepositoryInterface;
+use HiEvents\Enterprise\Seating\Repository\Interfaces\SeatClaimRepositoryInterface;
 use HiEvents\Exceptions\InvalidOccurrenceDatesException;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Jobs\Occurrence\BulkCancelOccurrencesJob;
@@ -42,7 +47,9 @@ class BulkUpdateOccurrencesHandler
         private readonly RecurrenceRuleExclusionService $exclusionService,
         private readonly EventLocationUpserter $eventLocationUpserter,
         private readonly EventLocationCleaner $eventLocationCleaner,
+        private readonly BoxOfficeRepositoryInterface $boxOfficeRepository,
         private readonly DatabaseManager $databaseManager,
+        private readonly SeatClaimRepositoryInterface $seatClaimRepository,
     ) {}
 
     /**
@@ -138,6 +145,16 @@ class BulkUpdateOccurrencesHandler
             ->flip()
             ->all();
 
+        $idsWithBoxOffices = $this->boxOfficeRepository
+            ->findWhereIn(
+                field: BoxOfficeDomainObjectAbstract::EVENT_OCCURRENCE_ID,
+                values: $eligibleIds,
+                columns: [BoxOfficeDomainObjectAbstract::EVENT_OCCURRENCE_ID],
+            )
+            ->map(fn (BoxOfficeDomainObject $boxOffice) => $boxOffice->getEventOccurrenceId())
+            ->flip()
+            ->all();
+
         $deletableIds = [];
         $deletableStartDates = [];
         $deletableEventLocationIds = [];
@@ -145,7 +162,7 @@ class BulkUpdateOccurrencesHandler
         foreach ($eligible as $occurrence) {
             $id = $occurrence->getId();
 
-            if (! isset($idsWithOrders[$id]) && ! isset($idsWithAttendees[$id])) {
+            if (! isset($idsWithOrders[$id]) && ! isset($idsWithAttendees[$id]) && ! isset($idsWithBoxOffices[$id])) {
                 $deletableIds[] = $id;
                 $deletableStartDates[] = $occurrence->getStartDate();
                 if ($occurrence->getEventLocationId() !== null) {
@@ -168,6 +185,11 @@ class BulkUpdateOccurrencesHandler
                     ]],
                 ],
             );
+
+            $this->seatClaimRepository->deleteWhere([
+                [SeatClaimDomainObjectAbstract::EVENT_OCCURRENCE_ID, 'in', $deletableIds],
+                [SeatClaimDomainObjectAbstract::ORDER_ID, 'null', null],
+            ]);
 
             $this->occurrenceRepository->deleteWhere([
                 [EventOccurrenceDomainObjectAbstract::ID, 'in', $deletableIds],

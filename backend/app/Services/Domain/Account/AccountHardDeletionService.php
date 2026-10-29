@@ -91,7 +91,26 @@ class AccountHardDeletionService
                 ->whereIn('event_id', $context->eventIds)
                 ->delete();
 
+            $boxOfficeIds = $connection->table('box_offices')
+                ->whereIn('event_id', $context->eventIds)
+                ->pluck('id')
+                ->all();
+
+            if ($boxOfficeIds !== []) {
+                $manifest['product_box_offices'] = $connection->table('product_box_offices')
+                    ->whereIn('box_office_id', $boxOfficeIds)
+                    ->delete();
+            }
+
+            $manifest['box_offices'] = $connection->table('box_offices')
+                ->whereIn('event_id', $context->eventIds)
+                ->delete();
+
             $manifest['questions'] = $connection->table('questions')
+                ->whereIn('event_id', $context->eventIds)
+                ->delete();
+
+            $manifest['event_spam_checks'] = $connection->table('event_spam_checks')
                 ->whereIn('event_id', $context->eventIds)
                 ->delete();
 
@@ -116,6 +135,29 @@ class AccountHardDeletionService
                 ->whereIn('id', $context->organizerIds)
                 ->delete();
         }
+
+        $ssoConnectionIds = $connection->table('account_sso_connections')
+            ->where('account_id', $context->accountId)
+            ->pluck('id')
+            ->all();
+
+        if ($ssoConnectionIds !== []) {
+            $manifest['user_identities'] = $connection->table('user_identities')
+                ->whereIn('account_sso_connection_id', $ssoConnectionIds)
+                ->delete();
+        }
+
+        $manifest['account_sso_domains'] = $connection->table('account_sso_domains')
+            ->where('account_id', $context->accountId)
+            ->delete();
+
+        $manifest['account_sso_connections'] = $connection->table('account_sso_connections')
+            ->where('account_id', $context->accountId)
+            ->delete();
+
+        $manifest['api_keys'] = $connection->table('personal_access_tokens')
+            ->where('account_id', $context->accountId)
+            ->delete();
 
         $manifest['roles'] = $connection->table('roles')
             ->where('account_id', $context->accountId)
@@ -150,7 +192,15 @@ class AccountHardDeletionService
             $manifest['event_logs'] = $connection->table('event_logs')
                 ->whereIn('user_id', $context->soleUserIds)
                 ->delete();
+
+            $manifest['event_spam_check_reviewers'] = $connection->table('event_spam_checks')
+                ->whereIn('reviewed_by_user_id', $context->soleUserIds)
+                ->update(['reviewed_by_user_id' => null]);
         }
+
+        $manifest['account_subscriptions'] = $connection->table('account_subscriptions')
+            ->where('account_id', $context->accountId)
+            ->delete();
 
         $manifest['accounts'] = $connection->table('accounts')
             ->where('id', $context->accountId)

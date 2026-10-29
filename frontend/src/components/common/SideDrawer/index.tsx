@@ -1,6 +1,7 @@
 import {CloseButton, Drawer, DrawerProps, Skeleton} from "@mantine/core";
-import React, {useId} from "react";
+import React from "react";
 import {t} from "@lingui/macro";
+import {useReturnFocusOnClose} from "../../../hooks/useReturnFocusOnClose.ts";
 import classes from "./SideDrawer.module.scss";
 
 interface SideDrawerProps extends Omit<DrawerProps, 'position' | 'size' | 'title'> {
@@ -32,7 +33,7 @@ export const SideDrawerHeading = ({media, title, subtitle}: SideDrawerHeadingPro
     <div className={classes.heading}>
         {media && <div className={classes.headingMedia}>{media}</div>}
         <div className={classes.headingText}>
-            <div className={classes.headingTitle}>{title}</div>
+            <Drawer.Title component="div" className={classes.headingTitle}>{title}</Drawer.Title>
             {subtitle && <div className={classes.headingSubtitle}>{subtitle}</div>}
         </div>
     </div>
@@ -90,12 +91,11 @@ const ContentPlaceholder = () => (
 );
 
 export const SideDrawer = ({header, actions, footer, loading, children, ...props}: SideDrawerProps) => {
-    const headingId = useId();
+    useReturnFocusOnClose(props.opened && props.returnFocus !== false);
 
     return (
         <Drawer
             {...props}
-            aria-labelledby={headingId}
             position="right"
             size="xl"
             withCloseButton={false}
@@ -109,7 +109,7 @@ export const SideDrawer = ({header, actions, footer, loading, children, ...props
                 body: classes.body,
             }}
         >
-            <div className={classes.header} data-bordered={(header || loading) ? true : undefined} id={headingId}>
+            <div className={classes.header} data-bordered={(header || loading) ? true : undefined}>
                 {loading ? <HeadingPlaceholder/> : header}
                 <div className={classes.headerActions}>
                     {actions}

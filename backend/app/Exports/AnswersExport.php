@@ -9,9 +9,10 @@ use HiEvents\Exports\AnswerExportSheets\OrderAnswersSheet;
 use HiEvents\Exports\AnswerExportSheets\ProductAnswersSheet;
 use HiEvents\Services\Domain\Question\QuestionAnswerFormatter;
 use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\Export;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
-class AnswersExport implements WithMultipleSheets
+class AnswersExport implements Export, WithMultipleSheets
 {
     private Collection $answers;
 

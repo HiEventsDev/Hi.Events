@@ -7,6 +7,8 @@ import {ReportTypes} from "../../../../../types.ts";
 import {DailySalesReport} from "../DailySalesReport";
 import PromoCodesReport from "../PromoCodesReport";
 import OccurrenceSummaryReport from "../OccurrenceSummaryReport";
+import SeatingSalesReport from "../../../../../ee/seating/components/routes/event/Reports/SeatingSalesReport";
+import {RequirePermission} from "../../../../common/WriteAccess";
 
 const renderReport = (reportType: string) => {
     switch (reportType) {
@@ -18,6 +20,8 @@ const renderReport = (reportType: string) => {
             return <PromoCodesReport/>;
         case ReportTypes.OccurrenceSummary:
             return <OccurrenceSummaryReport/>;
+        case ReportTypes.SeatingSales:
+            return <SeatingSalesReport/>;
         default:
             return <div>Report not found</div>;
     }
@@ -37,9 +41,11 @@ const ReportLayout = () => {
             >
                 Back to Reports
             </Button>
-            <div>
-                {renderReport(reportType as string)}
-            </div>
+            <RequirePermission permission="VIEW_FINANCIALS" imageHref="/blank-slate/reports.svg">
+                <div>
+                    {renderReport(reportType as string)}
+                </div>
+            </RequirePermission>
         </PageBody>
     );
 }

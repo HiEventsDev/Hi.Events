@@ -2,10 +2,12 @@ import type { APIRequestContext, APIResponse } from '@playwright/test';
 import type {
   Affiliate,
   AttendeeRecord,
+  BoxOffice,
   CapacityAssignment,
   CheckInList,
   CreateAffiliatePayload,
   CreateAttendeePayload,
+  CreateBoxOfficePayload,
   CreateCapacityAssignmentPayload,
   CreateCheckInListPayload,
   CreateEmailTemplatePayload,
@@ -18,9 +20,11 @@ import type {
   CreateTaxOrFeePayload,
   CreateWebhookPayload,
   EmailTemplate,
+  EventImageType,
   EventRecord,
   EventSettings,
   EventStatus,
+  ImageRecord,
   InviteUserPayload,
   Me,
   Occurrence,
@@ -48,6 +52,19 @@ const unwrap = async <T>(promise: Promise<APIResponse>): Promise<T> => {
   const body = (await response.json()) as { data: T };
   return body.data;
 };
+
+export type SeatMapLayout = { schema: number; bands: unknown[]; areas: { id: string; name: string; elements: Record<string, unknown>[] }[] } & Record<string, unknown>;
+
+export interface OccupiedSeat {
+  seat_uid: string;
+  seat_label: string;
+  is_zone: boolean;
+  band_key: string;
+  status: 'HELD' | 'SOLD' | 'BLOCKED';
+  block_reason: string | null;
+  attendee_public_id: string | null;
+  attendee_name: string | null;
+}
 
 const check = async (promise: Promise<APIResponse>): Promise<void> => {
   const response = await promise;
@@ -95,11 +112,39 @@ export async function confirmEmailWithCode(
   }
 }
 
+export interface SsoConnectionPayload {
+  type: 'OKTA' | 'ENTRA' | 'GOOGLE_WORKSPACE' | 'OIDC';
+  issuer: string;
+  client_id: string;
+  client_secret: string;
+  jit_provisioning_enabled?: boolean;
+  jit_default_role?: 'ADMIN' | 'ORGANIZER' | 'VIEWER';
+}
+
+interface CurrentUser {
+  id: number;
+  feature_flags: Record<string, boolean>;
+  licence: { status: string; invalid_reason: string | null; features_in_use: string[] };
+}
+
 export class ApiClient {
   constructor(private readonly request: APIRequestContext) {}
 
   getAccount(): Promise<{ id: number; name: string }> {
     return unwrap<{ id: number; name: string }>(this.request.get('accounts', { headers: jsonHeaders }));
+  }
+
+  getMe(): Promise<CurrentUser> {
+    return unwrap<CurrentUser>(this.request.get('users/me', { headers: jsonHeaders }));
+  }
+
+  createApiKey(payload: {
+    name: string;
+    access: 'READ_ONLY' | 'READ_WRITE';
+    expires_in_days: number | null;
+    password: string;
+  }): Promise<{ id: number; key: string }> {
+    return unwrap<{ id: number; key: string }>(this.request.post('api-keys', { headers: jsonHeaders, data: payload }));
   }
 
   requestAccountDeletion(confirmation: string): Promise<{ id: number; status: string }> {
@@ -122,12 +167,58 @@ export class ApiClient {
     );
   }
 
+  updateOrganizerSettings(organizerId: number, settings: { first_day_of_week?: number; facebook_handle?: string }): Promise<void> {
+    return check(this.request.patch(`organizers/${organizerId}/settings`, { headers: jsonHeaders, data: settings }));
+  }
+
   updateOrganizerStatus(organizerId: number, status: 'LIVE' | 'DRAFT'): Promise<void> {
     return check(this.request.put(`organizers/${organizerId}/status`, { headers: jsonHeaders, data: { status } }));
   }
 
   createEvent(payload: CreateEventPayload): Promise<EventRecord> {
     return unwrap<EventRecord>(this.request.post('events', { headers: jsonHeaders, data: payload }));
+  }
+
+  uploadEventImage(
+    eventId: number,
+    image: { name: string; mimeType: string; buffer: Buffer },
+    type: EventImageType = 'EVENT_COVER',
+  ): Promise<ImageRecord> {
+    return unwrap<ImageRecord>(this.request.post(`events/${eventId}/images`, { multipart: { image, type } }));
+  }
+
+  createLineupProfile(organizerId: number, payload: { name: string; tagline?: string; bio?: string; links?: string[] }): Promise<{ id: number }> {
+    return unwrap<{ id: number }>(this.request.post(`organizers/${organizerId}/profiles`, { headers: jsonHeaders, data: payload }));
+  }
+
+  addLineupEntry(
+    eventId: number,
+    payload: { profile_id: number; billing_tier: 'HEADLINER' | 'FEATURED' | 'STANDARD'; is_hidden?: boolean },
+  ): Promise<{ id: number }> {
+    return unwrap<{ id: number }>(this.request.post(`events/${eventId}/lineup/entries`, { headers: jsonHeaders, data: payload }));
+  }
+
+  getLineup(eventId: number): Promise<{
+    entries: { profile: { id: number; name: string; tagline: string | null; links: { type: string; url: string }[] } }[];
+    schedule_items: { starts_at: string }[];
+  }> {
+    return unwrap(this.request.get(`events/${eventId}/lineup`, { headers: jsonHeaders }));
+  }
+
+  importLineup(
+    eventId: number,
+    payload: {
+      people: { name: string; billing_tier?: 'HEADLINER' | 'FEATURED' | 'STANDARD' }[];
+      slots: { starts_at: string; ends_at: string; stage?: string; title?: string; people: string[] }[];
+    },
+  ): Promise<void> {
+    return this.request
+      .post(`events/${eventId}/lineup/import`, { headers: jsonHeaders, data: payload })
+      .then(async (response) => {
+        if (!response.ok()) {
+          throw new Error(`POST lineup/import → ${response.status()}: ${await response.text()}`);
+        }
+      });
   }
 
   listProductCategories(eventId: number): Promise<ProductCategory[]> {
@@ -152,12 +243,20 @@ export class ApiClient {
     );
   }
 
+  listProducts(eventId: number): Promise<ProductRecord[]> {
+    return unwrap<ProductRecord[]>(this.request.get(`events/${eventId}/products`, { headers: jsonHeaders }));
+  }
+
   setEventStatus(eventId: number, status: EventStatus): Promise<void> {
     return check(this.request.put(`events/${eventId}/status`, { headers: jsonHeaders, data: { status } }));
   }
 
   publishEvent(eventId: number): Promise<void> {
     return this.setEventStatus(eventId, 'LIVE');
+  }
+
+  getEvent(eventId: number): Promise<EventRecord> {
+    return unwrap<EventRecord>(this.request.get(`events/${eventId}`, { headers: jsonHeaders }));
   }
 
   getEventSettings(eventId: number): Promise<EventSettings> {
@@ -198,6 +297,34 @@ export class ApiClient {
     );
   }
 
+  listBoxOffices(eventId: number): Promise<BoxOffice[]> {
+    return unwrap<BoxOffice[]>(this.request.get(`events/${eventId}/box-offices?per_page=100`));
+  }
+
+  createBoxOffice(eventId: number, payload: CreateBoxOfficePayload): Promise<BoxOffice & { pin: string }> {
+    return unwrap<BoxOffice & { pin: string }>(
+      this.request.post(`events/${eventId}/box-offices`, { headers: jsonHeaders, data: payload }),
+    );
+  }
+
+  updateBoxOffice(eventId: number, boxOfficeId: number, payload: CreateBoxOfficePayload): Promise<BoxOffice> {
+    return unwrap<BoxOffice>(
+      this.request.put(`events/${eventId}/box-offices/${boxOfficeId}`, { headers: jsonHeaders, data: payload }),
+    );
+  }
+
+  resetBoxOfficePin(eventId: number, boxOfficeId: number): Promise<BoxOffice & { pin: string }> {
+    return unwrap<BoxOffice & { pin: string }>(
+      this.request.post(`events/${eventId}/box-offices/${boxOfficeId}/reset-pin`, { headers: jsonHeaders }),
+    );
+  }
+
+  registerTerminalReader(organizerId: number, payload: { registration_code: string; label: string }): Promise<{ id: number; label: string }> {
+    return unwrap<{ id: number; label: string }>(
+      this.request.post(`organizers/${organizerId}/stripe/terminal/readers`, { headers: jsonHeaders, data: payload }),
+    );
+  }
+
   createAttendee(eventId: number, payload: CreateAttendeePayload): Promise<AttendeeRecord> {
     return unwrap<AttendeeRecord>(
       this.request.post(`events/${eventId}/attendees`, { headers: jsonHeaders, data: payload }),
@@ -216,6 +343,18 @@ export class ApiClient {
     );
   }
 
+  createEventWidget(eventId: number, payload: { name: string; type: string; settings: Record<string, unknown> }): Promise<{ id: number; short_id: string }> {
+    return unwrap<{ id: number; short_id: string }>(
+      this.request.post(`events/${eventId}/widgets`, { headers: jsonHeaders, data: payload }),
+    );
+  }
+
+  listAffiliates(eventId: number): Promise<(Affiliate & { total_sales: number })[]> {
+    return unwrap<(Affiliate & { total_sales: number })[]>(
+      this.request.get(`events/${eventId}/affiliates`, { headers: jsonHeaders }),
+    );
+  }
+
   createWebhook(eventId: number, payload: CreateWebhookPayload): Promise<Webhook> {
     return unwrap<Webhook>(
       this.request.post(`events/${eventId}/webhooks`, { headers: jsonHeaders, data: payload }),
@@ -228,12 +367,142 @@ export class ApiClient {
     );
   }
 
+  beginTwoFactorSetup(password: string): Promise<{ secret: string; otpauth_uri: string }> {
+    return unwrap<{ secret: string; otpauth_uri: string }>(
+      this.request.post('users/me/two-factor/setup', { headers: jsonHeaders, data: { password } }),
+    );
+  }
+
+  confirmTwoFactorSetup(code: string): Promise<{ recovery_codes: string[] }> {
+    return unwrap<{ recovery_codes: string[] }>(
+      this.request.post('users/me/two-factor/confirm', { headers: jsonHeaders, data: { code } }),
+    );
+  }
+
+  createSsoConnection(accountId: number, payload: SsoConnectionPayload): Promise<{ id: number; provider_key: string }> {
+    return unwrap<{ id: number; provider_key: string }>(
+      this.request.post(`accounts/${accountId}/sso/connection`, { headers: jsonHeaders, data: payload }),
+    );
+  }
+
+  setSsoConnectionStatus(accountId: number, status: 'ACTIVE' | 'INACTIVE'): Promise<void> {
+    return check(this.request.put(`accounts/${accountId}/sso/connection/status`, { headers: jsonHeaders, data: { status } }));
+  }
+
+  updateSsoEnforcement(accountId: number, enabled: boolean): Promise<void> {
+    return check(this.request.put(`accounts/${accountId}/sso/enforcement`, { headers: jsonHeaders, data: { enabled } }));
+  }
+
+  addSsoDomain(accountId: number, domain: string): Promise<void> {
+    return check(this.request.post(`accounts/${accountId}/sso/domains`, { headers: jsonHeaders, data: { domain } }));
+  }
+
+  setTwoFactorRequirement(accountId: number, required: boolean): Promise<void> {
+    return check(
+      this.request.put(`accounts/${accountId}/two-factor-requirement`, {
+        headers: jsonHeaders,
+        data: { require_two_factor_authentication: required },
+      }),
+    );
+  }
+
   inviteUser(payload: InviteUserPayload): Promise<{ id: number }> {
     return unwrap<{ id: number }>(this.request.post('users', { headers: jsonHeaders, data: payload }));
   }
 
   listOrders(eventId: number): Promise<OrderRecord[]> {
     return unwrap<OrderRecord[]>(this.request.get(`events/${eventId}/orders`, { headers: jsonHeaders }));
+  }
+
+  createSeatMap(organizerId: number, name: string, layout: unknown): Promise<{ id: number }> {
+    return unwrap<{ id: number }>(
+      this.request.post(`organizers/${organizerId}/seat-maps`, { headers: jsonHeaders, data: { name, layout } }),
+    );
+  }
+
+  getSeatMap(organizerId: number, seatMapId: number): Promise<{ layout: { areas: { elements: { id: string; aisles?: number[]; seats?: { acc: boolean }[] }[] }[] } }> {
+    return unwrap(this.request.get(`organizers/${organizerId}/seat-maps/${seatMapId}`, { headers: jsonHeaders }));
+  }
+
+  attachSeatMap(eventId: number, seatMapId: number): Promise<void> {
+    return check(this.request.post(`events/${eventId}/seat-map`, { headers: jsonHeaders, data: { seat_map_id: seatMapId } }));
+  }
+
+  linkSeatMapBands(eventId: number, bandProducts: { band_key: string; products: { product_id: number; price_adjustment?: number }[] }[]): Promise<void> {
+    return check(
+      this.request.put(`events/${eventId}/seat-map/band-products`, {
+        headers: jsonHeaders,
+        data: { band_products: bandProducts },
+      }),
+    );
+  }
+
+  updateSeatMapRules(eventId: number, rules: { prevent_orphan_seats: boolean; max_seats_per_order: number | null; allow_seat_change: boolean }): Promise<void> {
+    return check(this.request.put(`events/${eventId}/seat-map/rules`, { headers: jsonHeaders, data: rules }));
+  }
+
+  blockSeats(eventId: number, occurrenceId: number, seatUids: string[], reason: string | null = null): Promise<void> {
+    return check(
+      this.request.post(`events/${eventId}/seat-blocks`, {
+        headers: jsonHeaders,
+        data: { event_occurrence_ids: [occurrenceId], seat_uids: seatUids, reason },
+      }),
+    );
+  }
+
+  duplicateEvent(eventId: number, title: string, startDate: string): Promise<EventRecord> {
+    return unwrap<EventRecord>(
+      this.request.post(`events/${eventId}/duplicate`, {
+        headers: jsonHeaders,
+        data: {
+          title,
+          start_date: startDate,
+          duplicate_products: true,
+          duplicate_questions: false,
+          duplicate_settings: true,
+          duplicate_promo_codes: false,
+          duplicate_capacity_assignments: false,
+          duplicate_check_in_lists: false,
+          duplicate_event_cover_image: false,
+          duplicate_webhooks: false,
+          duplicate_affiliates: false,
+          duplicate_ticket_logo: false,
+        },
+      }),
+    );
+  }
+
+  occupiedSeats(eventId: number, occurrenceId: number): Promise<OccupiedSeat[]> {
+    return unwrap<OccupiedSeat[]>(
+      this.request.get(`events/${eventId}/occurrences/${occurrenceId}/occupied-seats`, { headers: jsonHeaders }),
+    );
+  }
+
+  getEventSeatMap(eventId: number): Promise<{
+    version: number;
+    layout: SeatMapLayout;
+    source_seat_map: { id: number; name: string } | null;
+    band_products: { band_key: string; products: { product_id: number; price_adjustment: number }[] }[];
+    band_prices?: { band_key: string; product_price_id: number; price: number; price_including_taxes_and_fees: number }[];
+  }> {
+    return unwrap(this.request.get(`events/${eventId}/seat-map`, { headers: jsonHeaders }));
+  }
+
+  updateEventSeatMapLayout(
+    eventId: number,
+    layout: SeatMapLayout,
+    opts: { version?: number; confirmRelabel?: boolean } = {},
+  ): Promise<APIResponse> {
+    return this.request.put(`events/${eventId}/seat-map/layout`, {
+      headers: jsonHeaders,
+      data: { layout, version: opts.version, confirm_relabel: opts.confirmRelabel },
+    });
+  }
+
+  updateSeatMap(organizerId: number, seatMapId: number, name: string, layout: SeatMapLayout): Promise<void> {
+    return check(
+      this.request.put(`organizers/${organizerId}/seat-maps/${seatMapId}`, { headers: jsonHeaders, data: { name, layout } }),
+    );
   }
 
   async findOrderIdByShortId(eventId: number, orderShortId: string): Promise<number> {
@@ -251,6 +520,25 @@ export class ApiClient {
 
   cancelOrder(eventId: number, orderId: number): Promise<void> {
     return check(this.request.post(`events/${eventId}/orders/${orderId}/cancel`, { headers: jsonHeaders }));
+  }
+
+  listAttendees(eventId: number): Promise<AttendeeRecord[]> {
+    return unwrap<AttendeeRecord[]>(this.request.get(`events/${eventId}/attendees`, { headers: jsonHeaders }));
+  }
+
+  async findAttendeeIdByPublicId(eventId: number, publicId: string): Promise<number> {
+    const attendees = await this.listAttendees(eventId);
+    const attendee = attendees.find((candidate) => candidate.public_id === publicId);
+    if (!attendee) {
+      throw new Error(`Attendee ${publicId} not found among ${attendees.length} attendees for event ${eventId}`);
+    }
+    return attendee.id;
+  }
+
+  updateAttendeeStatus(eventId: number, attendeeId: number, status: 'ACTIVE' | 'CANCELLED'): Promise<void> {
+    return check(
+      this.request.patch(`events/${eventId}/attendees/${attendeeId}`, { headers: jsonHeaders, data: { status } }),
+    );
   }
 
   async generateOccurrences(eventId: number, recurrenceRule: RecurrenceRule): Promise<void> {
@@ -294,6 +582,18 @@ export class ApiClient {
     );
   }
 
+  setOrganizerLocation(organizerId: number, locationId: number | null): Promise<void> {
+    return check(
+      this.request.patch(`organizers/${organizerId}/location`, { headers: jsonHeaders, data: { location_id: locationId } }),
+    );
+  }
+
+  createOccurrence(eventId: number, payload: UpdateOccurrencePayload): Promise<Occurrence> {
+    return unwrap<Occurrence>(
+      this.request.post(`events/${eventId}/occurrences`, { headers: jsonHeaders, data: payload }),
+    );
+  }
+
   updateOccurrence(eventId: number, occurrenceId: number, payload: UpdateOccurrencePayload): Promise<void> {
     return check(
       this.request.put(`events/${eventId}/occurrences/${occurrenceId}`, { headers: jsonHeaders, data: payload }),
@@ -323,6 +623,11 @@ export interface UpsertAnnouncementPayload {
   cta_url?: string;
 }
 
+export interface CreateConfigurationPayload {
+  name: string;
+  application_fees: { percentage: number; fixed: number; currency: string };
+}
+
 export class AdminApiClient {
   constructor(private readonly request: APIRequestContext) {}
 
@@ -331,6 +636,58 @@ export class AdminApiClient {
       this.request.put(`admin/accounts/${accountId}/messaging-tier`, {
         headers: jsonHeaders,
         data: { messaging_tier_id: messagingTierId },
+      }),
+    );
+  }
+
+  setAccountFeatureFlag(accountId: number, key: string, enabled: boolean | null): Promise<void> {
+    return check(
+      this.request.put(`admin/accounts/${accountId}/feature-flags/${key}`, {
+        headers: jsonHeaders,
+        data: { enabled },
+      }),
+    );
+  }
+
+  setAccountVerification(accountId: number, isManuallyVerified: boolean): Promise<void> {
+    return check(
+      this.request.put(`admin/accounts/${accountId}/verification`, {
+        headers: jsonHeaders,
+        data: { is_manually_verified: isManuallyVerified },
+      }),
+    );
+  }
+
+  async findAccountIdByEmail(email: string): Promise<number> {
+    const accounts = await unwrap<{ id: number; email: string }[]>(
+      this.request.get('admin/accounts', { headers: jsonHeaders, params: { search: email } }),
+    );
+
+    const match = accounts.find((account) => account.email === email);
+    if (!match) {
+      throw new Error(`No admin account found for ${email}`);
+    }
+
+    return match.id;
+  }
+
+  listConfigurations(): Promise<{ id: number; name: string; is_system_default: boolean; default_for_currency: string | null }[]> {
+    return unwrap(this.request.get('admin/configurations', { headers: jsonHeaders }));
+  }
+
+  createConfiguration(payload: CreateConfigurationPayload): Promise<{ id: number; name: string }> {
+    return unwrap(this.request.post('admin/configurations', { headers: jsonHeaders, data: payload }));
+  }
+
+  deleteConfiguration(configurationId: number): Promise<void> {
+    return check(this.request.delete(`admin/configurations/${configurationId}`, { headers: jsonHeaders }));
+  }
+
+  assignOrganizerConfiguration(organizerId: number, configurationId: number): Promise<void> {
+    return check(
+      this.request.put(`admin/organizers/${organizerId}/configuration`, {
+        headers: jsonHeaders,
+        data: { configuration_id: configurationId },
       }),
     );
   }

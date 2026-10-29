@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Admin\Organizers;
 
-use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Services\Application\Handlers\Admin\Organizer\AssignOrganizerConfigurationHandler;
 use Illuminate\Http\JsonResponse;
@@ -19,7 +18,7 @@ class AssignOrganizerConfigurationAction extends BaseAction
 
     public function __invoke(Request $request, int $organizerId): JsonResponse
     {
-        $this->minimumAllowedRole(Role::SUPERADMIN);
+        $this->requireSuperAdmin();
 
         $validated = $request->validate([
             'configuration_id' => [

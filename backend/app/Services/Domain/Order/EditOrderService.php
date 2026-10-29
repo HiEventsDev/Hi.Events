@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Domain\Order;
 
 use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
@@ -19,6 +20,7 @@ class EditOrderService
     ) {}
 
     /**
+     * @throws ResourceNotFoundException
      * @throws Throwable
      */
     public function editOrder(
@@ -30,17 +32,25 @@ class EditOrderService
         ?string $notes
     ): OrderDomainObject {
         return $this->databaseManager->transaction(function () use ($id, $firstName, $lastName, $email, $notes, $eventId) {
+            $where = [
+                'id' => $id,
+                'event_id' => $eventId,
+            ];
+
+            if ($this->orderRepository->findFirstWhere($where) === null) {
+                throw new ResourceNotFoundException(__('Order not found'));
+            }
+
             $this->orderRepository->updateWhere(
-                attributes: array_filter([
-                    'first_name' => $firstName,
-                    'last_name' => $lastName,
+                attributes: [
+                    ...array_filter([
+                        'first_name' => $firstName,
+                        'last_name' => $lastName,
+                        'notes' => $notes,
+                    ]),
                     'email' => $email,
-                    'notes' => $notes,
-                ]),
-                where: [
-                    'id' => $id,
-                    'event_id' => $eventId,
-                ]
+                ],
+                where: $where,
             );
 
             $this->domainEventDispatcherService->dispatch(
@@ -50,10 +60,7 @@ class EditOrderService
                 ),
             );
 
-            return $this->orderRepository->findFirstWhere([
-                'id' => $id,
-                'event_id' => $eventId,
-            ]);
+            return $this->orderRepository->findFirstWhere($where);
         });
     }
 }

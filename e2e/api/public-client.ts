@@ -119,3 +119,65 @@ export async function sendTicketLookupEmail(request: APIRequestContext, email: s
     throw new Error(`ticket lookup → ${response.status()}: ${await response.text()}`);
   }
 }
+
+export interface DoorOrder {
+  id: number;
+  short_id: string;
+  public_id: string;
+  status: string;
+  total_gross: number;
+  box_office_tender?: string | null;
+}
+
+export interface DoorSaleItem {
+  product_id: number;
+  product_price_id: number;
+  quantity: number;
+}
+
+export async function startBoxOfficeSession(
+  request: APIRequestContext,
+  boxOfficeShortId: string,
+  opts: { pin: string; operatorName: string; eventOccurrenceId?: number },
+): Promise<string> {
+  const session = await unwrap<{ token: string }>(
+    request.post(`public/box-offices/${boxOfficeShortId}/sessions`, {
+      headers: jsonHeaders,
+      data: {
+        operator_name: opts.operatorName,
+        pin: opts.pin,
+        ...(opts.eventOccurrenceId ? { event_occurrence_id: opts.eventOccurrenceId } : {}),
+      },
+    }),
+  );
+  return session.token;
+}
+
+export function createBoxOfficeOrder(
+  request: APIRequestContext,
+  boxOfficeShortId: string,
+  token: string,
+  items: DoorSaleItem[],
+): Promise<DoorOrder> {
+  return unwrap<DoorOrder>(
+    request.post(`public/box-offices/${boxOfficeShortId}/orders`, {
+      headers: { ...jsonHeaders, 'X-Box-Office-Session': token },
+      data: { idempotency_key: crypto.randomUUID(), items },
+    }),
+  );
+}
+
+export function tenderBoxOfficeOrder(
+  request: APIRequestContext,
+  boxOfficeShortId: string,
+  token: string,
+  orderShortId: string,
+  payload: { tender: 'CASH' | 'COMP' | 'OTHER'; amount_tendered?: number; reference?: string },
+): Promise<DoorOrder> {
+  return unwrap<DoorOrder>(
+    request.post(`public/box-offices/${boxOfficeShortId}/orders/${orderShortId}/tender`, {
+      headers: { ...jsonHeaders, 'X-Box-Office-Session': token },
+      data: payload,
+    }),
+  );
+}

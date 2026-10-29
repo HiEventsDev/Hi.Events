@@ -1,3 +1,4 @@
+import type {CSSProperties} from "react";
 import {HomepageThemeSettings} from "../types.ts";
 import {buildHomepageFontStack, DEFAULT_HOMEPAGE_FONT} from "../constants/homepageFonts.ts";
 
@@ -32,7 +33,6 @@ export function hexToRgb(hex: string): { r: number; g: number; b: number } | nul
         return null;
     }
 
-    // Handle rgb/rgba format
     const rgbMatch = hex.match(/rgba?\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i);
     if (rgbMatch) {
         return {
@@ -44,18 +44,15 @@ export function hexToRgb(hex: string): { r: number; g: number; b: number } | nul
 
     const cleanHex = hex.replace(/^#/, '').trim();
 
-    // Handle 3-digit hex
     let fullHex = cleanHex;
     if (cleanHex.length === 3) {
         fullHex = cleanHex[0] + cleanHex[0] + cleanHex[1] + cleanHex[1] + cleanHex[2] + cleanHex[2];
     }
 
-    // Handle 4-digit hex (with alpha)
     if (cleanHex.length === 4) {
         fullHex = cleanHex[0] + cleanHex[0] + cleanHex[1] + cleanHex[1] + cleanHex[2] + cleanHex[2];
     }
 
-    // Handle 8-digit hex (with alpha) - just take the first 6
     if (fullHex.length === 8) {
         fullHex = fullHex.substring(0, 6);
     }
@@ -78,7 +75,7 @@ export function hexToRgb(hex: string): { r: number; g: number; b: number } | nul
 export function calculateLuminance(hex: string): number {
     const rgb = hexToRgb(hex);
     if (!rgb) {
-        return 128; // Default to middle value
+        return 128;
     }
     return 0.2126 * rgb.r + 0.7152 * rgb.g + 0.0722 * rgb.b;
 }
@@ -88,12 +85,17 @@ export function detectMode(backgroundColor: string): 'light' | 'dark' {
     return luminance > 128 ? 'light' : 'dark';
 }
 
-export function isLightColor(hex: string): boolean {
-    return calculateLuminance(hex) > 128;
-}
+const LIGHT_TEXT_COLOR = '#ffffff';
+const DARK_TEXT_COLOR = '#1a1a1a';
 
 export function getContrastColor(backgroundColor: string): string {
-    return isLightColor(backgroundColor) ? '#1a1a1a' : '#ffffff';
+    if (!hexToRgb(backgroundColor)) {
+        return LIGHT_TEXT_COLOR;
+    }
+
+    return getContrastRatio(DARK_TEXT_COLOR, backgroundColor) > getContrastRatio(LIGHT_TEXT_COLOR, backgroundColor)
+        ? DARK_TEXT_COLOR
+        : LIGHT_TEXT_COLOR;
 }
 
 export function getDerivedColors(mode: 'light' | 'dark'): Omit<DerivedThemeColors, 'accentContrast'> {
@@ -111,7 +113,7 @@ export function getDerivedColors(mode: 'light' | 'dark'): Omit<DerivedThemeColor
         surface: '#1f1f1f',
         textPrimary: '#ffffff',
         textSecondary: '#a3a3a3',
-        textTertiary: '#737373',
+        textTertiary: '#8f8f8f',
         border: 'rgba(255, 255, 255, 0.1)',
     };
 }
@@ -123,6 +125,51 @@ export function getAccentSoft(accent: string, mode: 'light' | 'dark'): string {
     }
     const opacity = mode === 'light' ? 0.08 : 0.15;
     return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`;
+}
+
+const ACCENT_FILL_WEIGHT = {light: 0.1, dark: 0.16};
+const MIN_TEXT_CONTRAST = 4.5;
+
+const mixHex = (a: string, b: string, weight: number): string => {
+    const from = hexToRgb(a)!;
+    const to = hexToRgb(b)!;
+    const channel = (x: number, y: number) => Math.round(x * weight + y * (1 - weight)).toString(16).padStart(2, '0');
+
+    return `#${channel(from.r, to.r)}${channel(from.g, to.g)}${channel(from.b, to.b)}`;
+};
+
+export function getAccentInk(accent: string, mode: 'light' | 'dark'): string {
+    const derived = getDerivedColors(mode);
+    if (!hexToRgb(accent)) {
+        return derived.textPrimary;
+    }
+    const fill = mixHex(accent, derived.surface, ACCENT_FILL_WEIGHT[mode]);
+
+    for (let weight = 1; weight > 0; weight -= 0.05) {
+        const candidate = mixHex(accent, derived.textPrimary, weight);
+        if (Math.min(getContrastRatio(candidate, fill), getContrastRatio(candidate, derived.surface)) >= MIN_TEXT_CONTRAST) {
+            return candidate;
+        }
+    }
+
+    return derived.textPrimary;
+}
+
+export function getAccentSolid(accent: string): string {
+    if (!hexToRgb(accent)) {
+        return accent;
+    }
+    const text = getContrastColor(accent);
+    const toward = text === LIGHT_TEXT_COLOR ? '#000000' : '#ffffff';
+
+    for (let weight = 1; weight > 0; weight -= 0.05) {
+        const candidate = mixHex(accent, toward, weight);
+        if (getContrastRatio(candidate, text) >= MIN_TEXT_CONTRAST) {
+            return candidate;
+        }
+    }
+
+    return toward;
 }
 
 export function getAccentMuted(accent: string, mode: 'light' | 'dark'): string {
@@ -158,9 +205,30 @@ export function computeThemeVariables(settings: HomepageThemeSettings): ThemeCSS
     };
 }
 
+export function homepageThemeStyle(settings: HomepageThemeSettings): CSSProperties {
+    const vars = computeThemeVariables(settings);
+
+    return {
+        '--event-bg-color': settings.background,
+        '--event-content-bg-color': vars['--theme-surface'],
+        '--event-primary-color': settings.accent,
+        '--event-primary-text-color': vars['--theme-text-primary'],
+        '--event-secondary-color': vars['--theme-text-secondary'],
+        '--event-secondary-text-color': vars['--theme-text-tertiary'],
+        '--event-accent-contrast': vars['--theme-accent-contrast'],
+        '--event-accent-soft': vars['--theme-accent-soft'],
+        '--event-accent-muted': vars['--theme-accent-muted'],
+        '--event-accent-ink': getAccentInk(settings.accent, settings.mode),
+        '--event-accent-solid': getAccentSolid(settings.accent),
+        '--event-border-color': vars['--theme-border'],
+        '--theme-font-family': vars['--theme-font-family'],
+        fontFamily: vars['--theme-font-family'],
+    } as CSSProperties;
+}
+
 export function getDefaultThemeSettings(): HomepageThemeSettings {
     return {
-        accent: '#8b5cf6',
+        accent: '#7c3aed',
         background: '#f5f3ff',
         mode: 'light',
         background_type: 'COLOR',
@@ -183,13 +251,10 @@ export function validateThemeSettings(
         mode: settings.mode || detectMode(settings.background || defaults.background),
         background_type: settings.background_type || defaults.background_type,
         font_family: settings.font_family || defaults.font_family,
+        ...(settings.layout ? {layout: settings.layout} : {}),
     };
 }
 
-/**
- * Calculate relative luminance for WCAG contrast ratio
- * Uses sRGB to linear conversion per WCAG 2.1 specification
- */
 export function getRelativeLuminance(hex: string): number {
     const rgb = hexToRgb(hex);
     if (!rgb) return 0.5;
@@ -208,10 +273,6 @@ export function getRelativeLuminance(hex: string): number {
     return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
 
-/**
- * Calculate WCAG contrast ratio between two colors
- * Returns a value between 1 and 21
- */
 export function getContrastRatio(foreground: string, background: string): number {
     const l1 = getRelativeLuminance(foreground);
     const l2 = getRelativeLuminance(background);
@@ -229,11 +290,6 @@ export interface ContrastResult {
     level: 'fail' | 'AA' | 'AAA';
 }
 
-/**
- * Check if a color combination meets WCAG accessibility standards
- * AA requires 4.5:1 for normal text, 3:1 for large text
- * AAA requires 7:1 for normal text, 4.5:1 for large text
- */
 export function checkContrast(foreground: string, background: string): ContrastResult {
     const ratio = getContrastRatio(foreground, background);
 
@@ -245,10 +301,6 @@ export function checkContrast(foreground: string, background: string): ContrastR
     };
 }
 
-/**
- * Check if theme settings have any contrast issues
- * Returns true if there are readability problems
- */
 export function hasContrastIssues(settings: HomepageThemeSettings): boolean {
     const derived = getDerivedColors(settings.mode);
 

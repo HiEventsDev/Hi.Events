@@ -34,6 +34,8 @@ class OrderAnonymizer implements AccountAnonymizerInterface
                     'notes' => AnonymizationStrategy::NULLIFY,
                     'point_in_time_data' => AnonymizationStrategy::NULLIFY,
                     'public_id' => AnonymizationStrategy::RANDOM_TOKEN,
+                    'box_office_operator_name' => AnonymizationStrategy::SCRUB_TEXT,
+                    'box_office_reference' => AnonymizationStrategy::NULLIFY,
                 ],
                 context: $context,
             ),

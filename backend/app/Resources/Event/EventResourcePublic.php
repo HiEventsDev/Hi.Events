@@ -46,12 +46,20 @@ class EventResourcePublic extends BaseResource
             'end_date' => $this->getEndDate(),
             'next_occurrence_start_date' => $this->getNextOccurrenceStartDate(),
             'upcoming_occurrences_sold_out' => $this->getUpcomingOccurrencesSoldOut(),
+            'has_seat_map' => $this->getHasSeatMap(),
+            'products_sold_out' => $this->when(
+                condition: ! is_null($this->getProductsSoldOut()),
+                value: fn () => $this->getProductsSoldOut(),
+            ),
             'last_occurrence_date' => $this->when($isRecurring, fn () => $this->getLastOccurrenceStartDate()),
             'occurrences_month' => $this->when($isRecurring, fn () => $this->getOccurrencesMonth()),
+            /** @var 'SINGLE'|'RECURRING' */
             'type' => $this->getType(),
             'currency' => $this->getCurrency(),
             'slug' => $this->getSlug(),
+            /** @var 'DRAFT'|'LIVE'|'ARCHIVED'|'PENDING_MANUAL_REVIEW'|null */
             'status' => $this->getStatus(),
+            /** @var 'UPCOMING'|'ONGOING'|'ENDED' */
             'lifecycle_status' => $this->getLifecycleStatus(),
             'timezone' => $this->getTimezone(),
             'event_location' => $this->when(

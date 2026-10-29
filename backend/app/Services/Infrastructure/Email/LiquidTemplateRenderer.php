@@ -2,11 +2,11 @@
 
 namespace HiEvents\Services\Infrastructure\Email;
 
-use Exception;
 use HiEvents\DomainObjects\Enums\EmailTemplateType;
 use Liquid\Exception\ParseException;
 use Liquid\Template;
 use RuntimeException;
+use Throwable;
 
 class LiquidTemplateRenderer
 {
@@ -15,7 +15,7 @@ class LiquidTemplateRenderer
     public function __construct()
     {
         $this->liquid = new Template;
-        $this->liquid->parse(''); // Initialize
+        $this->liquid->parse('');
     }
 
     public function render(string $template, array $context): string
@@ -24,7 +24,7 @@ class LiquidTemplateRenderer
             $this->liquid->parse($template);
 
             return $this->liquid->render($context);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             throw new RuntimeException('Failed to render template: '.$e->getMessage(), 0, $e);
         }
     }
@@ -188,6 +188,11 @@ class LiquidTemplateRenderer
                 'example' => 'ORD-2024-001234',
             ],
             [
+                'token' => '{{ order.payment_reference }}',
+                'description' => __('The reference buyers should use when paying offline. Empty when the order reference is not used as the payment reference.'),
+                'example' => 'ORD-2024-001234',
+            ],
+            [
                 'token' => '{{ order.total }}',
                 'description' => __('The total order amount'),
                 'example' => '$150.00',
@@ -212,6 +217,11 @@ class LiquidTemplateRenderer
                 'description' => __('The email of the person who placed the order'),
                 'example' => 'john@example.com',
             ],
+            [
+                'token' => '{{ order.seats }}',
+                'description' => __('The seats in the order, for reserved seating events'),
+                'example' => 'Stalls · C-14, Stalls · C-15',
+            ],
         ];
 
         $attendeeTokens = [
@@ -224,6 +234,11 @@ class LiquidTemplateRenderer
                 'token' => '{{ attendee.email }}',
                 'description' => __('The attendee\'s email'),
                 'example' => 'john@example.com',
+            ],
+            [
+                'token' => '{{ attendee.seat }}',
+                'description' => __('The attendee\'s seat, for reserved seating events'),
+                'example' => 'Stalls · C-14',
             ],
             [
                 'token' => '{{ ticket.name }}',
@@ -255,9 +270,32 @@ class LiquidTemplateRenderer
             ],
         ];
 
+        $lineupTokens = [
+            [
+                'token' => '{{ lineup.heading }}',
+                'description' => __('Heading for the lineup block, such as Lineup'),
+                'example' => 'Lineup',
+            ],
+            [
+                'token' => '{{ lineup.names | join: ", " }}',
+                'description' => __('Headliners on the attendee\'s date who aren\'t already listed under the key times'),
+                'example' => 'Velvet Harbour, The Northern Arcs',
+            ],
+            [
+                'token' => '{% for slot in lineup.slots %}{{ slot.time }} {{ slot.title }} {{ slot.stage }}{% endfor %}',
+                'description' => __('Key times from the schedule for the attendee\'s date'),
+                'example' => 'Fri 25 Apr · 9:30 PM Velvet Harbour Main Stage',
+            ],
+            [
+                'token' => '{{ lineup.url }}',
+                'description' => __('Link to the full schedule on the event page'),
+                'example' => 'https://example.com/event/123/summer-fest#schedule',
+            ],
+        ];
+
         return match ($type) {
-            EmailTemplateType::ORDER_CONFIRMATION => array_merge($commonTokens, $orderTokens),
-            EmailTemplateType::ATTENDEE_TICKET => array_merge($commonTokens, $orderTokens, $attendeeTokens),
+            EmailTemplateType::ORDER_CONFIRMATION => array_merge($commonTokens, $orderTokens, $lineupTokens),
+            EmailTemplateType::ATTENDEE_TICKET => array_merge($commonTokens, $orderTokens, $attendeeTokens, $lineupTokens),
             EmailTemplateType::OCCURRENCE_CANCELLATION => array_merge($commonTokens, $cancellationTokens),
         };
     }

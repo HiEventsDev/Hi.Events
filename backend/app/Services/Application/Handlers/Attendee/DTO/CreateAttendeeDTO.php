@@ -23,6 +23,7 @@ class CreateAttendeeDTO extends BaseDTO
         public readonly bool $override_capacity = false,
         public readonly ?string $client_ip = null,
         public readonly ?string $client_user_agent = null,
+        public readonly ?string $seat_uid = null,
         #[CollectionOf(CreateAttendeeTaxAndFeeDTO::class)]
         public readonly ?Collection $taxes_and_fees = null,
     ) {}

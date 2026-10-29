@@ -1,5 +1,5 @@
 import {api} from "./client";
-import {Attendee, GenericDataResponse, GenericPaginatedResponse, IdParam, QueryFilters, TaxAndFee} from "../types";
+import {Attendee, GenericDataResponse, GenericPaginatedResponse, IdParam, QueryFilters} from "../types";
 import {queryParamsHelper} from "../utilites/queryParamsHelper.ts";
 import {publicApi} from "./public-client.ts";
 import {SupportedLocales} from "../locales.ts";
@@ -7,20 +7,27 @@ import {SupportedLocales} from "../locales.ts";
 export interface EditAttendeeRequest {
     first_name: string;
     last_name: string;
-    email: string;
+    email: string | null;
     notes?: string;
     product_id?: IdParam;
     product_price_id?: IdParam;
     status?: string;
 }
 
+export interface CreateAttendeeTaxOrFee {
+    tax_or_fee_id?: number,
+    amount: number,
+    name: string,
+}
+
 export interface CreateAttendeeRequest extends EditAttendeeRequest {
     amount_paid: number,
     send_confirmation_email: boolean,
-    taxes_and_fees: TaxAndFee[],
+    taxes_and_fees: CreateAttendeeTaxOrFee[],
     locale: SupportedLocales,
     event_occurrence_id?: number | null,
     override_capacity?: boolean,
+    seat_uid?: string,
 }
 
 export const attendeesClient = {

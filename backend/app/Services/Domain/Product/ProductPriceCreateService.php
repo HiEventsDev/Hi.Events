@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Domain\Product;
 
+use HiEvents\DomainObjects\Enums\ProductQuantityAppliesTo;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\Helper\DateHelper;
@@ -30,6 +31,9 @@ class ProductPriceCreateService
                 ? DateHelper::convertToUTC($price->getSaleEndDate(), $event->getTimezone())
                 : null,
             'initial_quantity_available' => $price->getInitialQuantityAvailable(),
+            'quantity_applies_to' => $event->isRecurring()
+                ? $price->getQuantityAppliesTo()
+                : ProductQuantityAppliesTo::EVENT->name,
             'is_hidden' => $price->getIsHidden(),
             'order' => $index + 1,
         ])));

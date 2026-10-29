@@ -2,6 +2,7 @@
 
 namespace HiEvents\Http\Actions\EventOccurrences;
 
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\EventOccurrence\CancelOccurrenceRequest;
@@ -18,6 +19,10 @@ class CancelOccurrenceAction extends BaseAction
     public function __invoke(int $eventId, int $occurrenceId, CancelOccurrenceRequest $request): JsonResponse
     {
         $this->isActionAuthorized($eventId, EventDomainObject::class);
+
+        if ($request->validated('refund_orders')) {
+            $this->requirePermission(Permission::ISSUE_REFUNDS);
+        }
 
         $occurrence = $this->handler->handle(
             eventId: $eventId,

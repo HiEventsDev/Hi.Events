@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace HiEvents\Repository\Interfaces;
 
 use HiEvents\DomainObjects\AccountAttributionDomainObject;
+use HiEvents\DomainObjects\Enums\AttributionGroupBy;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
@@ -13,7 +14,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 interface AccountAttributionRepositoryInterface extends RepositoryInterface
 {
     public function getAttributionStats(
-        string $groupBy,
+        AttributionGroupBy $groupBy,
         ?string $dateFrom,
         ?string $dateTo,
         int $perPage,

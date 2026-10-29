@@ -8,6 +8,18 @@ export class PublicEventPage {
     await this.page.waitForLoadState('networkidle');
   }
 
+  ticketsRegion(): Locator {
+    return this.page.getByRole('region', { name: 'Tickets' });
+  }
+
+  sectionBar(): Locator {
+    return this.page.getByRole('navigation', { name: 'Sections' });
+  }
+
+  moreEventsSection(): Locator {
+    return this.page.locator('section#more-events');
+  }
+
   joinWaitlistButton(): Locator {
     return this.page.getByTestId('join-waitlist-button');
   }

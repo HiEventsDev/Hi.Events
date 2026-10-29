@@ -10,10 +10,12 @@ use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\OrganizerSettingDomainObject;
 use HiEvents\DomainObjects\ProductCategoryDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
+use HiEvents\Enterprise\Seating\Services\Domain\EventSeatMapLookupService;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -22,19 +24,19 @@ use Illuminate\Http\JsonResponse;
 
 class GetEventAction extends BaseAction
 {
-    private EventRepositoryInterface $eventRepository;
-
-    public function __construct(EventRepositoryInterface $eventRepository)
-    {
-        $this->eventRepository = $eventRepository;
-    }
+    public function __construct(
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly EventSeatMapLookupService $eventSeatMapLookupService,
+    ) {}
 
     public function __invoke(int $eventId): JsonResponse
     {
         $this->isActionAuthorized($eventId, EventDomainObject::class);
 
         $event = $this->eventRepository
-            ->loadRelation(new Relationship(domainObject: OrganizerDomainObject::class, name: 'organizer'))
+            ->loadRelation(new Relationship(domainObject: OrganizerDomainObject::class, nested: [
+                new Relationship(domainObject: OrganizerSettingDomainObject::class),
+            ], name: 'organizer'))
             ->loadRelation(new Relationship(ImageDomainObject::class))
             ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
                 new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
@@ -53,6 +55,8 @@ class GetEventAction extends BaseAction
                 ])
             )
             ->findById($eventId);
+
+        $event->setHasSeatMap($this->eventSeatMapLookupService->existsForEvent($eventId));
 
         return $this->resourceResponse(EventResource::class, $event);
     }

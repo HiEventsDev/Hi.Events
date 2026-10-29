@@ -19,6 +19,7 @@ abstract class OrganizerConfigurationDomainObjectAbstract extends \HiEvents\Doma
     final public const CREATED_AT = 'created_at';
     final public const UPDATED_AT = 'updated_at';
     final public const DELETED_AT = 'deleted_at';
+    final public const DEFAULT_FOR_CURRENCY = 'default_for_currency';
 
     protected int $id;
     protected string $name;
@@ -29,6 +30,7 @@ abstract class OrganizerConfigurationDomainObjectAbstract extends \HiEvents\Doma
     protected ?string $created_at = null;
     protected ?string $updated_at = null;
     protected ?string $deleted_at = null;
+    protected ?string $default_for_currency = null;
 
     public function toArray(): array
     {
@@ -42,6 +44,7 @@ abstract class OrganizerConfigurationDomainObjectAbstract extends \HiEvents\Doma
                     'created_at' => $this->created_at ?? null,
                     'updated_at' => $this->updated_at ?? null,
                     'deleted_at' => $this->deleted_at ?? null,
+                    'default_for_currency' => $this->default_for_currency ?? null,
                 ];
     }
 
@@ -142,5 +145,16 @@ abstract class OrganizerConfigurationDomainObjectAbstract extends \HiEvents\Doma
     public function getDeletedAt(): ?string
     {
         return $this->deleted_at;
+    }
+
+    public function setDefaultForCurrency(?string $default_for_currency): self
+    {
+        $this->default_for_currency = $default_for_currency;
+        return $this;
+    }
+
+    public function getDefaultForCurrency(): ?string
+    {
+        return $this->default_for_currency;
     }
 }

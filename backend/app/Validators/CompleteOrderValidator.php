@@ -16,6 +16,7 @@ use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
 use HiEvents\Validators\Rules\OrderQuestionRule;
+use HiEvents\Validators\Rules\PersonNameRule;
 use HiEvents\Validators\Rules\ProductQuestionRule;
 use Illuminate\Routing\Route;
 
@@ -70,8 +71,8 @@ class CompleteOrderValidator extends BaseValidator
         ] : [];
 
         return [
-            'order.first_name' => ['required', 'string', 'max:40'],
-            'order.last_name' => ['required', 'string', 'max:40'],
+            'order.first_name' => ['required', 'string', 'max:40', new PersonNameRule],
+            'order.last_name' => ['required', 'string', 'max:40', new PersonNameRule],
             'order.questions' => new OrderQuestionRule($orderQuestions, $products),
             'order.email' => 'required|email',
             'order.email_confirmation' => 'required|email|same:order.email',
@@ -80,6 +81,7 @@ class CompleteOrderValidator extends BaseValidator
                 $products,
                 $eventSettings->getAttendeeDetailsCollectionMethod(),
             ),
+            'products.*.seat_uid' => ['nullable', 'string', 'max:24'],
             ...$addressRules,
         ];
     }

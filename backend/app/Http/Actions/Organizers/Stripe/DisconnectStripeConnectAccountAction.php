@@ -2,13 +2,15 @@
 
 namespace HiEvents\Http\Actions\Organizers\Stripe;
 
-use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\RequiresPermission;
 use HiEvents\Services\Application\Handlers\Organizer\Payment\Stripe\DisconnectStripeConnectAccountHandler;
 use Symfony\Component\HttpFoundation\Response;
 
+#[RequiresPermission(Permission::MANAGE_PAYMENTS)]
 class DisconnectStripeConnectAccountAction extends BaseAction
 {
     public function __construct(
@@ -17,7 +19,7 @@ class DisconnectStripeConnectAccountAction extends BaseAction
 
     public function __invoke(int $organizerId, string $stripeAccountId): Response
     {
-        $this->isActionAuthorized($organizerId, OrganizerDomainObject::class, Role::ADMIN);
+        $this->isActionAuthorized($organizerId, OrganizerDomainObject::class);
 
         try {
             $this->disconnectStripeConnectAccountHandler->handle(

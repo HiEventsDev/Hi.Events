@@ -8,6 +8,7 @@ import {
     GenericPaginatedResponse,
     IdParam,
     OccurrenceGenerationStatus,
+    OccurrenceProductAvailability,
     ProductOccurrenceVisibility,
     ProductPriceOccurrenceOverride,
     QueryFilters,
@@ -91,6 +92,13 @@ export const eventOccurrenceClient = {
         const response = await api.post<{ updated_count: number; updated_ids: number[] }>(
             `events/${eventId}/occurrences/bulk-update`,
             data
+        );
+        return response.data;
+    },
+
+    getProductAvailability: async (eventId: IdParam, occurrenceId: IdParam) => {
+        const response = await api.get<GenericDataResponse<OccurrenceProductAvailability[]>>(
+            `events/${eventId}/occurrences/${occurrenceId}/product-availability`
         );
         return response.data;
     },

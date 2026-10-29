@@ -2,7 +2,6 @@
 
 namespace HiEvents\Mail\Account;
 
-use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Helper\Url;
 use HiEvents\Mail\BaseMail;
 use Illuminate\Mail\Mailables\Content;
@@ -13,15 +12,12 @@ use Illuminate\Mail\Mailables\Envelope;
  */
 class ConfirmEmailAddressEmail extends BaseMail
 {
-    private UserDomainObject $userDomainObject;
-
     private string $token;
 
-    public function __construct(UserDomainObject $user, string $token)
+    public function __construct(string $token)
     {
         parent::__construct();
 
-        $this->userDomainObject = $user;
         $this->token = $token;
     }
 
@@ -39,7 +35,6 @@ class ConfirmEmailAddressEmail extends BaseMail
         return new Content(
             markdown: 'emails.user.confirm-email-address',
             with: [
-                'user' => $this->userDomainObject,
                 'link' => sprintf(Url::getFrontEndUrlFromConfig(Url::CONFIRM_EMAIL_ADDRESS), $this->token),
             ]
         );

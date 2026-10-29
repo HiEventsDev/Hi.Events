@@ -3,7 +3,7 @@
 namespace HiEvents\Http\Middleware;
 
 use Closure;
-use Exception;
+use HiEvents\Services\Domain\Auth\AuthUserService;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Http\Request;
 use Psr\Log\LoggerInterface;
@@ -13,27 +13,22 @@ class LogImpersonationMiddleware
     public function __construct(
         private readonly LoggerInterface $logger,
         private readonly AuthManager $authManager,
+        private readonly AuthUserService $authUserService,
     ) {}
 
     public function handle(Request $request, Closure $next)
     {
         $mutateMethods = ['POST', 'PUT', 'PATCH', 'DELETE'];
 
-        $isImpersonating = false;
-        try {
-            $isImpersonating = (bool) $this->authManager->payload()->get('is_impersonating', false);
-        } catch (Exception) {
-            // Not authenticated or no JWT token
-        }
-
-        if ($this->authManager->check()
-            && $isImpersonating
+        if ($this->authUserService->isImpersonating()
             && in_array($request->method(), $mutateMethods, true)
         ) {
-            $this->logger->info('Impersonation action by user ID '.$this->authManager->payload()->get('impersonator_id'), [
-                'impersonator_id' => $this->authManager->payload()->get('impersonator_id'),
+            $impersonatorId = $this->authUserService->getImpersonatorId();
+
+            $this->logger->info('Impersonation action by user ID '.$impersonatorId, [
+                'impersonator_id' => $impersonatorId,
                 'impersonated_user_id' => $this->authManager->user()->id,
-                'account_id' => $this->authManager->payload()->get('account_id'),
+                'account_id' => $this->authUserService->getAuthenticatedAccountId(),
                 'method' => $request->method(),
                 'url' => $request->fullUrl(),
                 'ip' => $request->ip(),

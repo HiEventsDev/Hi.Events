@@ -1,0 +1,110 @@
+@use "../../../../../styles/mixins";
+
+.notice {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  border: 1px solid var(--checkout-border, #E5E7EB);
+  border-radius: 10px;
+  background: var(--checkout-surface, #FFFFFF);
+  color: var(--checkout-text-primary, #111827);
+
+  @include mixins.respond-below(sm) {
+    flex-direction: column;
+  }
+}
+
+.noticeIcon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  color: var(--checkout-accent, var(--mantine-primary-color-filled));
+  background: var(--checkout-accent-soft, var(--mantine-primary-color-light));
+}
+
+.noticeBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.noticeTitle {
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.noticeText {
+  margin-top: 2px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--checkout-text-secondary, #6B7280);
+}
+
+.noticeAction {
+  flex-shrink: 0;
+  align-self: center;
+
+  @include mixins.respond-below(sm) {
+    align-self: stretch;
+
+    :global(.mantine-Button-root) {
+      width: 100%;
+    }
+  }
+}
+
+.entryPoint {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.points {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 16px 0 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.point {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 14px;
+  line-height: 1.5;
+
+  svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: var(--mantine-primary-color-filled);
+  }
+}
+
+.linkField {
+  :global(.mantine-TextInput-input) {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 13px;
+  }
+}
+
+.shareActions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.footnote {
+  margin-top: 16px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--mantine-color-dimmed);
+}

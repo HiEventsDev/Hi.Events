@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Application\Handlers\Admin;
 
+use HiEvents\DomainObjects\Enums\AuthMethod;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Exceptions\UnauthorizedException;
 use HiEvents\Models\User;
@@ -39,6 +40,8 @@ class StartImpersonationHandler
 
         return $this->authManager->claims([
             'account_id' => $dto->accountId,
+            'role' => $accountUser->getRole(),
+            'auth_method' => AuthMethod::IMPERSONATION->value,
             'impersonator_id' => $dto->impersonatorId,
             'is_impersonating' => true,
         ])->login($targetUser);

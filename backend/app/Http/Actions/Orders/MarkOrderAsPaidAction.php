@@ -2,15 +2,18 @@
 
 namespace HiEvents\Http\Actions\Orders;
 
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\RequiresPermission;
 use HiEvents\Resources\Order\OrderResource;
 use HiEvents\Services\Application\Handlers\Order\DTO\MarkOrderAsPaidDTO;
 use HiEvents\Services\Application\Handlers\Order\MarkOrderAsPaidHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
+#[RequiresPermission(Permission::ISSUE_REFUNDS)]
 class MarkOrderAsPaidAction extends BaseAction
 {
     public function __construct(

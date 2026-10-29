@@ -20,7 +20,7 @@ class SendMessageRequest extends FormRequest
             'message_type' => [new In(MessageTypeEnum::valuesArray()), 'required'],
             'is_test' => 'boolean',
             'send_copy_to_current_user' => 'boolean',
-            'attendee_ids' => 'max:50,array|required_if:message_type,'.MessageTypeEnum::INDIVIDUAL_ATTENDEES->name,
+            'attendee_ids' => 'array|max:50|required_if:message_type,'.MessageTypeEnum::INDIVIDUAL_ATTENDEES->name,
             'attendee_ids.*' => 'integer',
             'product_ids' => ['array', 'required_if:message_type,'.MessageTypeEnum::TICKET_HOLDERS->name],
             'order_id' => 'integer|required_if:message_type,'.MessageTypeEnum::ORDER_OWNER->name,

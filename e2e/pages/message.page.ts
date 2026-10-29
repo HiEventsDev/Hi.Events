@@ -1,4 +1,5 @@
 import type { Locator, Page } from '@playwright/test';
+import { pickDateTime } from '../utils/datePicker';
 
 export class MessagePage {
   constructor(private readonly page: Page) {}
@@ -19,7 +20,7 @@ export class MessagePage {
     await this.fillComposerForAllAttendees(subject, body);
     await this.page.getByRole('button', { name: 'Schedule for later' }).click();
     await this.page.getByRole('button', { name: 'Custom date and time' }).click();
-    await this.page.getByLabel(/^Scheduled time/).fill(scheduledAt);
+    await pickDateTime(this.page, this.page.getByLabel(/^Scheduled time/), scheduledAt);
     await this.confirmAndSubmit();
   }
 
@@ -30,6 +31,13 @@ export class MessagePage {
   async openSentMessageRecipients(): Promise<void> {
     await this.page.getByRole('button', { name: 'All attendees', exact: true }).click();
     await this.page.getByRole('heading', { name: 'Recipients' }).waitFor();
+  }
+
+  recipientStatus(email: string): Locator {
+    return this.page
+      .getByTestId('message-recipient-row')
+      .filter({ hasText: email })
+      .getByTestId('message-recipient-status');
   }
 
   async cancelScheduledMessage(): Promise<void> {

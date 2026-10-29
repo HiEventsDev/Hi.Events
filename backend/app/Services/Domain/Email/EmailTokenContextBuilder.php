@@ -38,8 +38,10 @@ class EmailTokenContextBuilder
         EventSettingDomainObject $eventSettings,
         ?EventOccurrenceDomainObject $occurrence = null,
     ): array {
+        $occurrence ??= $order->getSingleEventOccurrence();
+
         $startDateRaw = $occurrence?->getStartDate() ?? $event->getStartDate();
-        $endDateRaw = $occurrence?->getEndDate() ?? $event->getEndDate();
+        $endDateRaw = $occurrence === null ? $event->getEndDate() : $occurrence->getEndDate();
 
         $eventStartDate = $startDateRaw ? new Carbon(DateHelper::convertFromUTC($startDateRaw, $event->getTimezone())) : null;
         $eventEndDate = $endDateRaw ? new Carbon(DateHelper::convertFromUTC($endDateRaw, $event->getTimezone())) : null;
@@ -78,6 +80,8 @@ class EmailTokenContextBuilder
                 'email' => $order->getEmail() ?? '',
                 'is_awaiting_offline_payment' => $order->isOrderAwaitingOfflinePayment(),
                 'is_offline_payment' => $order->getPaymentProvider() === PaymentProviders::OFFLINE->value,
+                'payment_reference' => $eventSettings->getOfflinePaymentOrderReferenceEnabled() ? $order->getPublicId() : '',
+                'seats' => implode(', ', $order->getSeatLabels()),
             ],
 
             'organizer' => [
@@ -141,6 +145,7 @@ class EmailTokenContextBuilder
         $baseContext['attendee'] = [
             'name' => $attendee->getFirstName().' '.$attendee->getLastName(),
             'email' => $attendee->getEmail() ?? '',
+            'seat' => $attendee->getSeatLabel() ?? '',
         ];
 
         $baseContext['ticket'] = [
@@ -217,6 +222,8 @@ class EmailTokenContextBuilder
 
     public function buildPreviewContext(string $templateType): array
     {
+        $previewOrderNumber = IdHelper::publicId(IdHelper::ORDER_PREFIX);
+
         $baseContext = [
             'event' => [
                 'title' => __('Summer Music Festival 2024'),
@@ -239,7 +246,7 @@ class EmailTokenContextBuilder
             ],
             'order' => [
                 'url' => 'https://example.com/order/ABC123',
-                'number' => IdHelper::publicId(IdHelper::ORDER_PREFIX),
+                'number' => $previewOrderNumber,
                 'total' => '$150.00',
                 'date' => 'January 10, 2024',
                 'first_name' => 'John',
@@ -247,6 +254,8 @@ class EmailTokenContextBuilder
                 'email' => 'john@example.com',
                 'is_awaiting_offline_payment' => false,
                 'is_offline_payment' => false,
+                'payment_reference' => $previewOrderNumber,
+                'seats' => 'Stalls · C-14, Stalls · C-15',
                 'locale' => Locale::EN->value,
                 'currency' => 'USD',
             ],
@@ -269,6 +278,16 @@ class EmailTokenContextBuilder
             'label' => 'Session A',
         ];
 
+        $baseContext['lineup'] = [
+            'heading' => __('Lineup'),
+            'names' => ['Velvet Harbour', 'The Northern Arcs', 'Mira Solenne'],
+            'slots' => [
+                ['time' => 'Fri 25 Apr · 9:30 PM', 'title' => 'Velvet Harbour', 'stage' => __('Main Stage')],
+                ['time' => 'Sat 26 Apr · 10:00 PM', 'title' => 'The Northern Arcs', 'stage' => __('Main Stage')],
+            ],
+            'url' => 'https://example.com/event/123/summer-fest#schedule',
+        ];
+
         $baseContext['event_location'] = [
             'type' => LocationType::IN_PERSON->name,
             'is_online' => false,
@@ -285,6 +304,7 @@ class EmailTokenContextBuilder
             $baseContext['attendee'] = [
                 'name' => 'John Smith',
                 'email' => 'john@example.com',
+                'seat' => 'Stalls · C-14',
             ];
             $baseContext['ticket'] = [
                 'name' => 'VIP Pass',

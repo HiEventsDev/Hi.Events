@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Admin\DeletionRequests;
 
-use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\Status\AccountDeletionRequestStatus;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Jobs\Account\ExecuteAccountDeletionJob;
@@ -20,7 +19,7 @@ class AdminExecuteAccountDeletionAction extends BaseAction
 
     public function __invoke(int $deletionRequestId): JsonResponse
     {
-        $this->minimumAllowedRole(Role::SUPERADMIN);
+        $this->requireSuperAdmin();
 
         $deletionRequest = $this->deletionRequestRepository->findById($deletionRequestId);
 

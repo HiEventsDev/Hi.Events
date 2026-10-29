@@ -9,12 +9,12 @@ test.describe('organizer management', () => {
 
     const organizer = new OrganizerPage(authedPage);
     await organizer.gotoEventsDashboard();
-    await organizer.openCreateOrganizerModal('EO');
+    await organizer.openCreateOrganizerModal();
 
-    await expect(authedPage.getByRole('heading', { name: 'Create Organizer' })).toBeVisible();
+    await expect(authedPage.getByRole('heading', { name: 'Create organizer' })).toBeVisible();
     await expect(organizer.contactEmailInput).toHaveValue(account.email);
-    await organizer.organizationNameInput.fill(organizerName);
-    await organizer.continueSetupButton.click();
+    await organizer.organizerNameInput.fill(organizerName);
+    await organizer.createOrganizerButton.click();
 
     await expect(authedPage.getByRole('heading', { name: organizerName })).toBeVisible();
   });

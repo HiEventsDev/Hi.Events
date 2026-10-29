@@ -2,6 +2,7 @@
 
 namespace HiEvents\Http\Actions\EventOccurrences;
 
+use Dedoc\Scramble\Attributes\QueryParameter;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\Exceptions\InvalidOccurrenceDatesException;
 use HiEvents\Http\Actions\Events\BasePublicEventAction;
@@ -22,6 +23,8 @@ class GetEventOccurrencesPublicAction extends BasePublicEventAction
     /**
      * @throws ValidationException
      */
+    #[QueryParameter('start_date_from', description: 'Only return occurrences starting on or after this date (ISO 8601).', type: 'string')]
+    #[QueryParameter('start_date_to', description: 'Only return occurrences starting on or before this date (ISO 8601).', type: 'string')]
     public function __invoke(int $eventId, Request $request): Response|JsonResponse
     {
         $startDateFrom = $request->query('start_date_from');

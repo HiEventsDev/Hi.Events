@@ -24,6 +24,7 @@ use HiEvents\Services\Domain\Message\MessagingEligibilityService;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Config\Repository;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Validation\ValidationException;
 use Mockery as m;
 use Tests\TestCase;
 
@@ -228,10 +229,12 @@ class SendMessageHandlerTest extends TestCase
         $this->attendeeRepository
             ->shouldReceive('countWhere')
             ->once()
-            ->with(m::on(fn (array $where) => isset($where[0])
-                && $where[0][0] === 'event_occurrence_id'
-                && $where[0][1] === 'in'
-                && $where[0][2] === [201, 202, 203]))
+            ->with(m::on(function (array $where) {
+                $conditions = array_values(array_filter($where, 'is_array'));
+
+                return in_array(['event_occurrence_id', 'in', [201, 202, 203]], $conditions, true)
+                    && in_array(['email', 'not null', null], $conditions, true);
+            }))
             ->andReturn(42);
 
         $this->attendeeRepository->shouldReceive('findWhereIn')->andReturn(collect());
@@ -259,5 +262,77 @@ class SendMessageHandlerTest extends TestCase
             return $job->messageData->event_occurrence_ids === [201, 202, 203]
                 && $job->messageData->event_occurrence_id === null;
         });
+    }
+
+    public function test_throws_when_no_selected_attendee_has_an_email(): void
+    {
+        $dto = new SendMessageDTO(
+            account_id: 1,
+            event_id: 101,
+            subject: 'Hello',
+            message: '<p>Test</p>',
+            type: MessageTypeEnum::INDIVIDUAL_ATTENDEES,
+            is_test: false,
+            send_copy_to_current_user: false,
+            sent_by_user_id: 99,
+            order_id: null,
+            order_statuses: [],
+            attendee_ids: [10],
+            product_ids: [],
+        );
+
+        $this->givenAVerifiedAccount();
+
+        $this->attendeeRepository->shouldReceive('findWhereIn')->andReturn(collect());
+
+        $this->messageRepository->shouldNotReceive('create');
+
+        $this->expectException(ValidationException::class);
+
+        $this->handler->handle($dto);
+    }
+
+    public function test_throws_when_the_order_owner_has_no_email(): void
+    {
+        $dto = new SendMessageDTO(
+            account_id: 1,
+            event_id: 101,
+            subject: 'Hello',
+            message: '<p>Test</p>',
+            type: MessageTypeEnum::ORDER_OWNER,
+            is_test: false,
+            send_copy_to_current_user: false,
+            sent_by_user_id: 99,
+            order_id: 5,
+            order_statuses: [],
+            attendee_ids: [],
+            product_ids: [],
+        );
+
+        $this->givenAVerifiedAccount();
+
+        $order = new OrderDomainObject;
+        $order->setId(5);
+        $order->setEmail(null);
+
+        $this->orderRepository->shouldReceive('findFirstWhere')->andReturn($order);
+
+        $this->messageRepository->shouldNotReceive('create');
+
+        $this->expectException(ValidationException::class);
+
+        $this->handler->handle($dto);
+    }
+
+    private function givenAVerifiedAccount(): void
+    {
+        $account = m::mock(AccountDomainObject::class);
+        $account->shouldReceive('getAccountVerifiedAt')->andReturn(Carbon::now());
+        $account->shouldReceive('getIsManuallyVerified')->andReturn(true);
+
+        $this->accountRepository->shouldReceive('findById')->with(1)->andReturn($account);
+        $this->config->shouldReceive('get')->with('app.saas_mode_enabled')->andReturn(false);
+
+        $this->eligibilityService->shouldReceive('checkTierLimits')->andReturn(null);
     }
 }

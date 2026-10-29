@@ -1,12 +1,17 @@
-import {useState} from 'react';
+import {CSSProperties, MouseEvent, ReactNode, useState} from 'react';
+import {WriteAccess} from "../../WriteAccess";
+import {useAccess} from "../../../../hooks/useAccess.ts";
 import {
-    IconCalendarEvent,
+    IconArrowDown,
+    IconArrowUp,
     IconClock,
     IconCopyPlus,
-    IconDotsVertical,
+    IconDots,
     IconEyeOff,
+    IconHeart,
     IconLock,
     IconPackage,
+    IconPuzzle,
     IconPencil,
     IconReceipt,
     IconSend,
@@ -16,10 +21,9 @@ import {
 } from "@tabler/icons-react";
 import classes from "../ProductsTable.module.scss";
 import classNames from "classnames";
-import {Badge, Button, Group, Menu, Progress, Tooltip} from "@mantine/core";
-import Truncate from "../../Truncate";
+import {ActionIcon, Menu, Progress, Tooltip} from "@mantine/core";
 import {t, Trans} from "@lingui/macro";
-import {relativeDate} from "../../../../utilites/dates.ts";
+import {prettyDate, relativeDate} from "../../../../utilites/dates.ts";
 import {formatCurrency} from "../../../../utilites/currency.ts";
 import {
     IdParam,
@@ -28,6 +32,7 @@ import {
     ProductCategory,
     ProductPrice,
     ProductPriceType,
+    ProductQuantityAppliesTo,
     ProductType
 } from "../../../../types.ts";
 import {useDisclosure} from "@mantine/hooks";
@@ -36,6 +41,7 @@ import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
 import {confirmationDialog} from "../../../../utilites/confirmationDialog.tsx";
 import {EditProductModal} from "../../../modals/EditProductModal";
 import {SendMessageModal} from "../../../modals/SendMessageModal";
+import {ProductPurchasesModal} from "../../../modals/ProductPurchasesModal";
 import {SortArrows} from "../../SortArrows";
 import {useSortProducts} from "../../../../mutations/useSortProducts.ts";
 import {DuplicateProductModal} from "../../../modals/DuplicateProductModal";
@@ -45,12 +51,48 @@ interface SortableProductProps {
     currencyCode: string;
     category: ProductCategory;
     categories: ProductCategory[];
+    isRecurringEvent?: boolean;
+    isSeated?: boolean;
+    eventTimezone: string;
 }
 
-export const SortableProduct = ({product, currencyCode, category, categories}: SortableProductProps) => {
+const addonBadgeLabel = (count: number): string => count === 1 ? t`1 add-on` : t`${count} add-ons`;
+
+interface MetaChipProps {
+    icon: ReactNode;
+    label: string;
+    color: string;
+    tooltip?: string;
+}
+
+const MetaChip = ({icon, label, color, tooltip}: MetaChipProps) => {
+    const chip = (
+        <span className={classes.metaChip} style={{'--chip-icon-color': `var(--mantine-color-${color}-6)`} as CSSProperties}>
+            {icon}
+            {label}
+        </span>
+    );
+
+    return tooltip ? <Tooltip label={tooltip} withArrow multiline maw={280}>{chip}</Tooltip> : chip;
+};
+
+const stopRowClick = (event: MouseEvent) => event.stopPropagation();
+
+export const SortableProduct = ({
+                                    product,
+                                    currencyCode,
+                                    category,
+                                    categories,
+                                    isRecurringEvent,
+                                    isSeated,
+                                    eventTimezone,
+                                }: SortableProductProps) => {
     const [isEditModalOpen, editModal] = useDisclosure(false);
     const [isDuplicateModalOpen, duplicateModal] = useDisclosure(false);
     const [isMessageModalOpen, messageModal] = useDisclosure(false);
+    const [isPurchasesModalOpen, purchasesModal] = useDisclosure(false);
+    const {can, isReadOnly} = useAccess();
+    const canViewFinancials = can('VIEW_FINANCIALS');
     const [productId, setProductId] = useState<IdParam>();
     const deleteMutation = useDeleteProduct();
     const sortMutation = useSortProducts();
@@ -83,20 +125,20 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
 
     const getStatusInfo = (product: Product) => {
         if (product.is_sold_out) {
-            return {label: t`Sold Out`, color: 'red', variant: 'filled' as const};
+            return {key: 'sold-out', label: t`Sold Out`, color: 'red'};
         }
         if (product.is_before_sale_start_date) {
-            return {label: t`Scheduled`, color: 'blue', variant: 'light' as const};
+            return {key: 'scheduled', label: t`Scheduled`, color: 'blue'};
         }
         if (product.is_after_sale_end_date) {
-            return {label: t`Ended`, color: 'gray', variant: 'light' as const};
+            return {key: 'ended', label: t`Ended`, color: 'gray'};
         }
         if (product.is_hidden) {
-            return {label: t`Hidden`, color: 'gray', variant: 'outline' as const};
+            return {key: 'hidden', label: t`Hidden`, color: 'gray'};
         }
         return product.is_available
-            ? {label: t`On Sale`, color: 'green', variant: 'light' as const}
-            : {label: t`Paused`, color: 'orange', variant: 'light' as const};
+            ? {key: 'on-sale', label: t`On Sale`, color: 'green'}
+            : {key: 'paused', label: t`Paused`, color: 'orange'};
     }
 
     const getStatusTooltip = (product: Product) => {
@@ -150,12 +192,41 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
         return product.taxes_and_fees.map(tf => tf.name).join(', ');
     }
 
+    const quantityScope = (): 'per-date' | 'total' | 'mixed' | null => {
+        const prices = product.prices ?? [];
+        if (!isRecurringEvent || prices.length === 0) {
+            return null;
+        }
+        if (prices.every(price => price.quantity_applies_to === ProductQuantityAppliesTo.Occurrence)) {
+            return 'per-date';
+        }
+        if (prices.every(price => price.quantity_applies_to === ProductQuantityAppliesTo.Event)) {
+            return 'total';
+        }
+        return 'mixed';
+    };
+
+    const quantityScopeLabel = (): string | null => {
+        switch (quantityScope()) {
+            case 'per-date':
+                return t`per date`;
+            case 'total':
+                return t`total`;
+            case 'mixed':
+                return t`mixed`;
+            default:
+                return null;
+        }
+    };
+
+    const perDateAllocation = product.initial_quantity_available;
+
     const getSalesProgress = () => {
         const sold = Number(product.quantity_sold) || 0;
         const initial = product.initial_quantity_available;
 
         if (!initial || initial <= 0) {
-            return null; // Unlimited
+            return null;
         }
 
         const percentage = Math.min((sold / initial) * 100, 100);
@@ -247,15 +318,115 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
     const statusInfo = getStatusInfo(product);
     const priceInfo = getPriceRange(product);
     const salesProgress = getSalesProgress();
+    const isMixedCategory = currentProducts.some(p => p.product_type !== product.product_type);
+
+    const handleRowClick = () => {
+        if (window.getSelection()?.toString()) {
+            return;
+        }
+        handleModalClick(product.id, editModal);
+    };
+
+    const renderSalePeriodLine = (label: string, date: string) => (
+        <div className={classes.periodText}>
+            <span>{label}</span>
+            <span className={classes.periodDate}>{prettyDate(date, eventTimezone)}</span>
+        </div>
+    );
+
+    const renderSalePeriod = () => {
+        const startDate = product.sale_start_date as string | undefined;
+        const endDate = product.sale_end_date as string | undefined;
+
+        if (!startDate && !endDate) {
+            return <span className={classes.periodMuted}>{t`Always available`}</span>;
+        }
+        if (product.is_before_sale_start_date && startDate) {
+            return renderSalePeriodLine(t`Sale starts ${relativeDate(startDate)}`, startDate);
+        }
+        if (endDate) {
+            return renderSalePeriodLine(
+                product.is_after_sale_end_date
+                    ? t`Sale ended ${relativeDate(endDate)}`
+                    : t`Sale ends ${relativeDate(endDate)}`,
+                endDate,
+            );
+        }
+        return <span className={classes.periodMuted}>{t`No end date`}</span>;
+    };
+
+    const renderSales = () => {
+        const sold = Number(product.quantity_sold) || 0;
+
+        if (isSeated && !product.initial_quantity_available) {
+            return (
+                <span className={classes.salesCount}>
+                    {sold}
+                    <span className={classes.salesMeta}>{t`Reserved seating`}</span>
+                </span>
+            );
+        }
+
+        if (quantityScope() === 'per-date' && perDateAllocation) {
+            return (
+                <span className={classes.salesCount}>
+                    {sold}
+                    <span className={classes.salesMeta}>{t`up to ${perDateAllocation} per date`}</span>
+                </span>
+            );
+        }
+
+        if (salesProgress) {
+            return (
+                <div className={classes.salesWithProgress}>
+                    <span className={classes.salesCount}>
+                        {salesProgress.sold}
+                        <span className={classes.salesTotal}>/ {salesProgress.total}</span>
+                        {quantityScopeLabel() && (
+                            <span className={classes.salesTotal}> {quantityScopeLabel()}</span>
+                        )}
+                    </span>
+                    <Progress
+                        value={salesProgress.percentage}
+                        size={4}
+                        radius="xl"
+                        color={salesProgress.percentage >= 100 ? 'red' : salesProgress.isLow ? 'orange' : 'green'}
+                        className={classes.salesProgress}
+                    />
+                    {salesProgress.isLow && salesProgress.remaining > 0 && (
+                        <span className={classes.lowStock}>
+                            {t`${salesProgress.remaining} left`}
+                        </span>
+                    )}
+                </div>
+            );
+        }
+
+        return (
+            <span className={classes.salesCount}>
+                {sold}
+                <span className={classes.salesMeta}>{t`Unlimited`}</span>
+            </span>
+        );
+    };
+
+    const showVisibilityChip = product.is_hidden_without_promo_code
+        || (product.is_hidden && statusInfo.key !== 'hidden');
+
+    const hasChips = product.is_highlighted
+        || (product.waitlist_enabled && !isSeated)
+        || product.type === ProductPriceType.Donation
+        || showVisibilityChip
+        || product.is_addon_only
+        || !!product.addons?.length;
 
     return (
         <>
-            <div className={classNames(
-                classes.productCard,
-                {[classes.soldOut]: product.is_sold_out}
-            )}>
-                {/* Sort controls */}
-                <div className={classes.sortControls}>
+            <div
+                className={classNames(classes.productRow, {[classes.soldOut]: product.is_sold_out})}
+                onClick={handleRowClick}
+            >
+                <div className={classes.sortControls} onClick={stopRowClick}>
                     <SortArrows
                         upArrowEnabled={canMoveUp}
                         downArrowEnabled={canMoveDown}
@@ -265,254 +436,193 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
                     />
                 </div>
 
-                {/* Main content */}
-                <div className={classes.productContent}>
-                    {/* Header row with badges */}
-                    <div className={classes.productHeader}>
-                        <div className={classes.badgeRow}>
-                            <div className={classes.typeBadges}>
-                                {isTicket ? (
-                                    <Badge
-                                        leftSection={<IconTicket size={12}/>}
-                                        variant="light"
-                                        color="violet"
-                                        size="sm"
-                                    >
-                                        {t`Ticket`}
-                                    </Badge>
-                                ) : (
-                                    <Badge
-                                        leftSection={<IconPackage size={12}/>}
-                                        variant="light"
-                                        color="cyan"
-                                        size="sm"
-                                    >
-                                        {t`Product`}
-                                    </Badge>
-                                )}
-                                {product.waitlist_enabled && (
-                                    <Badge
-                                        variant="light"
-                                        color="secondary"
-                                        size="sm"
-                                        leftSection={<IconClock size={12}/>}
-                                    >
-                                        {t`Waitlist Enabled`}
-                                    </Badge>
-                                )}
-                                {product.type === ProductPriceType.Donation && (
-                                    <Badge
-                                        variant="outline"
-                                        color="pink"
-                                        size="sm"
-                                    >
-                                        {t`Donation`}
-                                    </Badge>
-                                )}
-                                {(product.is_hidden_without_promo_code || product.is_hidden) && (
-                                    <Tooltip
-                                        label={product.is_hidden
-                                            ? t`Hidden from public view`
-                                            : t`Only visible with promo code`}
-                                        withArrow
-                                    >
-                                        <Badge
-                                            variant="light"
-                                            color="gray"
-                                            size="sm"
-                                            leftSection={product.is_hidden_without_promo_code ? <IconLock size={12}/> :
-                                                <IconEyeOff size={12}/>}
-                                        >
-                                            {product.is_hidden_without_promo_code ? t`Promo Only` : t`Hidden`}
-                                        </Badge>
-                                    </Tooltip>
-                                )}
-                                {product.is_highlighted && (
-                                    <Tooltip
-                                        label={product.highlight_message || t`This product is highlighted on the event page`}
-                                        withArrow
-                                    >
-                                        <Badge
-                                            variant="light"
-                                            color="yellow"
-                                            size="sm"
-                                            leftSection={<IconSparkles size={12}/>}
-                                        >
-                                            {t`Highlighted`}
-                                        </Badge>
-                                    </Tooltip>
-                                )}
-                            </div>
-                            <Tooltip label={getStatusTooltip(product)} withArrow>
-                                <Badge
-                                    color={statusInfo.color}
-                                    variant={statusInfo.variant}
-                                    className={classes.statusBadge}
-                                >
-                                    {statusInfo.label}
-                                </Badge>
+                <div className={classes.productMain}>
+                    <div className={classes.titleLine}>
+                        {isMixedCategory && (
+                            <Tooltip label={isTicket ? t`Ticket` : t`Product`} withArrow>
+                                <span className={classes.typeIcon}>
+                                    {isTicket ? <IconTicket size={16}/> : <IconPackage size={16}/>}
+                                </span>
                             </Tooltip>
-                        </div>
+                        )}
                         <h3 className={classes.productTitle}>
-                            <Truncate text={product.title} length={80}/>
+                            <button type="button" className={classes.titleButton} title={product.title}>
+                                {product.title}
+                            </button>
                         </h3>
                     </div>
 
-                    {/* Details grid */}
-                    <div className={classes.detailsGrid}>
-                        {/* Price */}
-                        <div className={classes.detailItem}>
-                            <span className={classes.detailLabel}>{t`Price`}</span>
-                            <div className={classes.priceValue}>
-                                <span className={classNames(
-                                    classes.priceAmount,
-                                    {[classes.freePrice]: priceInfo.isFree}
-                                )}>
-                                    {priceInfo.display}
-                                </span>
-                                {hasTaxesOrFees() && (
-                                    <Tooltip label={getTaxFeeTooltip()} withArrow>
-                                        <div className={classes.taxIndicator}>
-                                            <IconReceipt size={14}/>
-                                            <span>{t`+Tax/Fees`}</span>
-                                        </div>
-                                    </Tooltip>
-                                )}
-                            </div>
+                    {hasChips && (
+                        <div className={classes.metaChips}>
+                            {product.is_highlighted && (
+                                <MetaChip
+                                    icon={<IconSparkles size={13}/>}
+                                    label={t`Highlighted`}
+                                    color="yellow"
+                                    tooltip={product.highlight_message || t`This product is highlighted on the event page`}
+                                />
+                            )}
+                            {product.waitlist_enabled && !isSeated && (
+                                <MetaChip icon={<IconClock size={13}/>} label={t`Waitlist Enabled`} color="blue"/>
+                            )}
+                            {product.type === ProductPriceType.Donation && (
+                                <MetaChip icon={<IconHeart size={13}/>} label={t`Donation`} color="pink"/>
+                            )}
+                            {showVisibilityChip && (
+                                <MetaChip
+                                    icon={product.is_hidden_without_promo_code ? <IconLock size={13}/> : <IconEyeOff size={13}/>}
+                                    label={product.is_hidden_without_promo_code ? t`Promo Only` : t`Hidden`}
+                                    color="gray"
+                                    tooltip={product.is_hidden
+                                        ? t`Hidden from public view`
+                                        : t`Only visible with promo code`}
+                                />
+                            )}
+                            {product.is_addon_only && (
+                                <MetaChip
+                                    icon={<IconPuzzle size={13}/>}
+                                    label={t`Add-on only`}
+                                    color="teal"
+                                    tooltip={t`Only shown as an add-on to the products it's attached to`}
+                                />
+                            )}
+                            {!!product.addons?.length && (
+                                <MetaChip
+                                    icon={<IconPuzzle size={13}/>}
+                                    label={addonBadgeLabel(product.addons.length)}
+                                    color="grape"
+                                    tooltip={product.addons.map(addon => addon.title).join(', ')}
+                                />
+                            )}
                         </div>
+                    )}
+                </div>
 
-                        {/* Sales / Quantity */}
-                        <div className={classes.detailItem}>
-                            <span className={classes.detailLabel}>
-                                {isTicket ? t`Attendees` : t`Sold`}
+                <div className={classes.productStats}>
+                    <div className={classes.statusCell}>
+                        <Tooltip label={getStatusTooltip(product)} withArrow>
+                            <span
+                                className={classes.status}
+                                style={{'--status-color': `var(--mantine-color-${statusInfo.color}-6)`} as CSSProperties}
+                            >
+                                <span className={classes.statusDot}/>
+                                {statusInfo.label}
                             </span>
-                            <div className={classes.salesValue}>
-                                {salesProgress ? (
-                                    <div className={classes.salesWithProgress}>
-                                        <span className={classes.salesCount}>
-                                            {salesProgress.sold}
-                                            <span className={classes.salesTotal}>/ {salesProgress.total}</span>
-                                        </span>
-                                        <Progress
-                                            value={salesProgress.percentage}
-                                            size="xs"
-                                            color={salesProgress.percentage >= 100 ? 'red' : salesProgress.isLow ? 'orange' : 'green'}
-                                            className={classes.salesProgress}
-                                        />
-                                        {salesProgress.isLow && salesProgress.remaining > 0 && (
-                                            <span className={classes.lowStock}>
-                                                {t`${salesProgress.remaining} left`}
-                                            </span>
-                                        )}
-                                    </div>
-                                ) : (
-                                    <span className={classes.salesCount}>
-                                        {Number(product.quantity_sold)}
-                                        <span className={classes.unlimited}>{t`Unlimited`}</span>
-                                    </span>
-                                )}
-                            </div>
-                        </div>
+                        </Tooltip>
+                    </div>
 
-                        {/* Sale period */}
-                        <div className={classes.detailItem}>
-                            <span className={classes.detailLabel}>{t`Sale Period`}</span>
-                            <div className={classes.dateValue}>
-                                {product.sale_start_date || product.sale_end_date ? (
-                                    <div className={classes.dateRange}>
-                                        {product.is_before_sale_start_date && product.sale_start_date && (
-                                            <Tooltip
-                                                label={t`Sale starts ${relativeDate(product.sale_start_date as string)}`}
-                                                withArrow>
-                                                <div className={classes.dateItem}>
-                                                    <IconClock size={14}/>
-                                                    <span>{relativeDate(product.sale_start_date as string)}</span>
-                                                </div>
-                                            </Tooltip>
-                                        )}
-                                        {!product.is_before_sale_start_date && product.sale_end_date && (
-                                            <Tooltip
-                                                label={t`Sale ends ${relativeDate(product.sale_end_date as string)}`}
-                                                withArrow>
-                                                <div className={classes.dateItem}>
-                                                    <IconCalendarEvent size={14}/>
-                                                    <span>{product.is_after_sale_end_date ? t`Ended` : relativeDate(product.sale_end_date as string)}</span>
-                                                </div>
-                                            </Tooltip>
-                                        )}
-                                        {!product.is_before_sale_start_date && !product.sale_end_date && (
-                                            <span className={classes.noEndDate}>{t`No end date`}</span>
-                                        )}
-                                    </div>
-                                ) : (
-                                    <span className={classes.alwaysAvailable}>{t`Always available`}</span>
-                                )}
-                            </div>
-                        </div>
+                    <div className={classes.priceCell}>
+                        <span className={classNames(classes.priceAmount, {[classes.freePrice]: priceInfo.isFree})}>
+                            {priceInfo.display}
+                        </span>
+                        {hasTaxesOrFees() && (
+                            <Tooltip
+                                label={getTaxFeeTooltip()}
+                                withArrow
+                                events={{hover: true, focus: true, touch: true}}
+                            >
+                                <span className={classes.taxIndicator} onClick={stopRowClick}>{t`+Tax/Fees`}</span>
+                            </Tooltip>
+                        )}
+                    </div>
+
+                    <div className={classes.salesCell}>
+                        <span className={classes.inlineLabel}>{isTicket ? t`Attendees` : t`Sold`}</span>
+                        {renderSales()}
+                    </div>
+
+                    <div className={classes.periodCell}>
+                        {renderSalePeriod()}
                     </div>
                 </div>
 
-                {/* Actions */}
-                <div className={classes.actionSection}>
-                    <Group wrap="nowrap" gap={0}>
-                        <Menu shadow="md" width={200} position="bottom-end">
+                <div className={classes.actionCell} onClick={stopRowClick}>
+                    {(canViewFinancials || !isReadOnly) && (
+                        <Menu shadow="md" width={210} position="bottom-end">
                             <Menu.Target>
-                                <div>
-                                    <Button
-                                        size="xs"
-                                        variant="subtle"
-                                        className={classes.actionButton}
-                                        data-testid="product-manage-button"
-                                    >
-                                        <span className={classes.actionButtonText}>{t`Manage`}</span>
-                                        <IconDotsVertical size={16} className={classes.actionButtonIcon}/>
-                                    </Button>
-                                </div>
+                                <ActionIcon
+                                    variant="subtle"
+                                    color="gray"
+                                    radius="md"
+                                    className={classes.menuButton}
+                                    aria-label={t`Actions`}
+                                    data-testid="product-manage-button"
+                                >
+                                    <IconDots size={18}/>
+                                </ActionIcon>
                             </Menu.Target>
                             <Menu.Dropdown>
                                 <Menu.Label>{t`Actions`}</Menu.Label>
 
-                                {isTicket && (
+                                {canViewFinancials && <Menu.Item
+                                    onClick={() => handleModalClick(product.id, purchasesModal)}
+                                    leftSection={<IconReceipt size={14}/>}
+                                    data-testid="product-purchases-menu-item"
+                                >
+                                    {t`View purchases`}
+                                </Menu.Item>}
+
+                                <WriteAccess>
+                                    {isTicket && (
+                                        <Menu.Item
+                                            onClick={() => handleModalClick(product.id, messageModal)}
+                                            leftSection={<IconSend size={14}/>}
+                                        >
+                                            {t`Message Attendees`}
+                                        </Menu.Item>
+                                    )}
+
                                     <Menu.Item
-                                        onClick={() => handleModalClick(product.id, messageModal)}
-                                        leftSection={<IconSend size={14}/>}
+                                        onClick={() => handleModalClick(product.id, editModal)}
+                                        leftSection={<IconPencil size={14}/>}
+                                        data-testid="product-edit-menu-item"
                                     >
-                                        {t`Message Attendees`}
+                                        <Trans>Edit {isTicket ? t`Ticket` : t`Product`}</Trans>
                                     </Menu.Item>
-                                )}
+                                    <Menu.Item
+                                        onClick={() => handleModalClick(product.id, duplicateModal)}
+                                        leftSection={<IconCopyPlus size={14}/>}
+                                    >
+                                        {t`Duplicate`}
+                                    </Menu.Item>
 
-                                <Menu.Item
-                                    onClick={() => handleModalClick(product.id, editModal)}
-                                    leftSection={<IconPencil size={14}/>}
-                                    data-testid="product-edit-menu-item"
-                                >
-                                    <Trans>Edit {isTicket ? t`Ticket` : t`Product`}</Trans>
-                                </Menu.Item>
-                                <Menu.Item
-                                    onClick={() => handleModalClick(product.id, duplicateModal)}
-                                    leftSection={<IconCopyPlus size={14}/>}
-                                >
-                                    {t`Duplicate`}
-                                </Menu.Item>
+                                    <Menu.Item
+                                        className={classes.touchOnly}
+                                        leftSection={<IconArrowUp size={14}/>}
+                                        disabled={!canMoveUp}
+                                        onClick={() => handleSort(product.id, 'up')}
+                                    >
+                                        {t`Move up`}
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        className={classes.touchOnly}
+                                        leftSection={<IconArrowDown size={14}/>}
+                                        disabled={!canMoveDown}
+                                        onClick={() => handleSort(product.id, 'down')}
+                                    >
+                                        {t`Move down`}
+                                    </Menu.Item>
 
-                                <Menu.Divider/>
-                                <Menu.Label>{t`Danger zone`}</Menu.Label>
-                                <Menu.Item
-                                    onClick={() => handleDeleteProduct(product.id, product.event_id)}
-                                    color="red"
-                                    leftSection={<IconTrash size={14}/>}
-                                >
-                                    {t`Delete`}
-                                </Menu.Item>
+                                    <Menu.Divider/>
+                                    <Menu.Label>{t`Danger zone`}</Menu.Label>
+                                    <Menu.Item
+                                        onClick={() => handleDeleteProduct(product.id, product.event_id)}
+                                        color="red"
+                                        leftSection={<IconTrash size={14}/>}
+                                    >
+                                        {t`Delete`}
+                                    </Menu.Item>
+                                </WriteAccess>
                             </Menu.Dropdown>
                         </Menu>
-                    </Group>
+                    )}
                 </div>
             </div>
 
             {isDuplicateModalOpen &&
                 <DuplicateProductModal originalProductId={productId} onClose={duplicateModal.close}/>}
             {isEditModalOpen && <EditProductModal productId={productId} onClose={editModal.close}/>}
+            {isPurchasesModalOpen && <ProductPurchasesModal productId={productId} onClose={purchasesModal.close}/>}
             {isMessageModalOpen && (
                 <SendMessageModal
                     onClose={messageModal.close}

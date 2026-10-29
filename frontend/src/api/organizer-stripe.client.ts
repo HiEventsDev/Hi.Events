@@ -4,6 +4,7 @@ import {
     IdParam,
     OrganizerStripeConnectAccountsResponse,
     OrganizerStripeConnectDetails,
+    TerminalReadersResponse,
 } from "../types.ts";
 
 export const organizerStripeClient = {
@@ -29,5 +30,21 @@ export const organizerStripeClient = {
     },
     disconnectAccount: async (organizerId: IdParam, stripeAccountId: string) => {
         await api.delete(`organizers/${organizerId}/stripe/connect_accounts/${stripeAccountId}`);
+    },
+    listTerminalReaders: async (organizerId: IdParam) => {
+        const response = await api.get<GenericDataResponse<TerminalReadersResponse>>(
+            `organizers/${organizerId}/stripe/terminal/readers`,
+        );
+        return response.data;
+    },
+    registerTerminalReader: async (organizerId: IdParam, payload: { registration_code: string; label: string }) => {
+        const response = await api.post<GenericDataResponse<{ id: number; label: string }>>(
+            `organizers/${organizerId}/stripe/terminal/readers`,
+            payload,
+        );
+        return response.data;
+    },
+    deleteTerminalReader: async (organizerId: IdParam, readerId: IdParam) => {
+        await api.delete(`organizers/${organizerId}/stripe/terminal/readers/${readerId}`);
     },
 };

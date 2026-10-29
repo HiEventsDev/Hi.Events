@@ -19,24 +19,26 @@ export const EditOrderModal = ({
                                    order,
                                    onSuccess,
                                }: EditOrderModalProps) => {
+    const emailRequired = !!order.email;
+
     const form = useForm({
         initialValues: {
             first_name: order.first_name,
             last_name: order.last_name,
-            email: order.email,
+            email: order.email ?? "",
         },
         validate: {
             first_name: (value) => !value ? t`First name is required` : null,
             last_name: (value) => !value ? t`Last name is required` : null,
             email: (value) => {
-                if (!value) return t`Email is required`;
+                if (!value) return emailRequired ? t`Email is required` : null;
                 if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return t`Invalid email`;
                 return null;
             },
         },
     });
 
-    const emailChanged = form.values.email !== order.email;
+    const emailChanged = form.values.email !== (order.email ?? "");
 
     return (
         <Modal
@@ -67,7 +69,7 @@ export const EditOrderModal = ({
                     <TextInput
                         label={t`Email`}
                         placeholder={t`Enter email`}
-                        required
+                        required={emailRequired}
                         type="email"
                         {...form.getInputProps('email')}
                     />

@@ -24,6 +24,7 @@ import {useEffect, useState} from "react";
 import {InputGroup} from "../../../common/InputGroup";
 import {Card} from "../../../common/Card";
 import {CheckoutContent} from "../../../layouts/Checkout/CheckoutContent";
+import {CheckoutStepTitle} from "../../../layouts/Checkout/CheckoutStepTitle";
 import {getConfig} from "../../../../utilites/config.ts";
 import {HomepageInfoMessage} from "../../../common/HomepageInfoMessage";
 import {InlineOrderSummary} from "../../../common/InlineOrderSummary";
@@ -35,6 +36,7 @@ import classes from "./CollectInformation.module.scss";
 import {trackEvent, AnalyticsEvents} from "../../../../utilites/analytics.ts";
 import {clearWaitlistJoinedForEvent} from "../../../../hooks/useWaitlistJoined.ts";
 import {useCheckoutPrefill, CheckoutPrefill} from "../../../../hooks/useCheckoutPrefill.ts";
+import {UserGeneratedContent} from "../../../common/UserGeneratedContent";
 
 const LoadingSkeleton = () =>
     (
@@ -201,7 +203,6 @@ export const CollectInformation = () => {
     const handleCopyOptionChange = (value: string) => {
         const option = value as 'none' | 'first' | 'all';
 
-        // Only allow copying if order details are complete
         if (option !== 'none' && !areOrderDetailsComplete()) {
             return;
         }
@@ -210,7 +211,6 @@ export const CollectInformation = () => {
         copyDetailsToAttendees(option);
     };
 
-    // Reset copy option if order details become incomplete
     useEffect(() => {
         if (copyOption !== 'none' && !areOrderDetailsComplete()) {
             setCopyOption('none');
@@ -237,7 +237,6 @@ export const CollectInformation = () => {
                     message: error?.response?.data?.message,
                 });
 
-                // if it's a 409, we need to redirect to the event page as the order is no longer valid
                 if (error.response.status === 409 && getEmbedMode() !== 'modal') {
                     navigate(eventHomepagePath(event as Event));
                 }
@@ -261,14 +260,18 @@ export const CollectInformation = () => {
         return productIdToQuestionMap;
     }
 
+    const seatsForItem = (orderItemId?: number) =>
+        (order?.seats ?? []).filter(seat => seat.order_item_id === orderItemId);
+
     const createProductsAndQuestions = (productIdToQuestionMap: Map<number, Question[]>) => {
         const products: any = [];
 
         orderItems?.forEach(orderItem => {
-            Array.from(Array(orderItem?.quantity)).map(() => {
+            Array.from(Array(orderItem?.quantity)).map((_, ticketIndex) => {
                 products.push({
                     product_price_id: orderItem?.product_price_id,
                     product_id: orderItem?.product_id,
+                    seat_uid: seatsForItem(orderItem?.id)[ticketIndex]?.seat_uid,
                     first_name: "",
                     last_name: "",
                     email: "",
@@ -336,8 +339,13 @@ export const CollectInformation = () => {
                 },
             });
         }
-        // prefill/lock intentionally omitted: they're memoized off query params that don't change during the page's lifetime
     }, [isEventFetched, isOrderFetched, isQuestionsFetched]);
+
+    useEffect(() => {
+        if (order?.status === 'RESERVED' && order.payment_link_created_at && !order.is_expired) {
+            navigate(eventCheckoutPath(eventId, order.short_id, 'payment'), {replace: true});
+        }
+    }, [order?.status, order?.payment_link_created_at]);
 
     useEffect(() => {
         if ((order && event) && order?.is_expired && getEmbedMode() !== 'modal') {
@@ -429,6 +437,13 @@ export const CollectInformation = () => {
         <form onSubmit={form.onSubmit(handleSubmit)}>
 
             <CheckoutContent>
+                <CheckoutStepTitle
+                    title={t`Details`}
+                    subtitle={order?.is_payment_required
+                        ? t`Next: payment`
+                        : t`Next: review your order`}
+                />
+
                 {isFromWaitlist && (
                     <div className={classes.waitlistBanner}>
                         <div className={classes.waitlistBannerIcon}>
@@ -576,7 +591,6 @@ export const CollectInformation = () => {
                             </InputGroup>
 
                             <InputGroup>
-                                {/* Postal Code and Country */}
                                 <TextInput
                                     label={t`ZIP / Postal Code`}
                                     placeholder={t`ZIP or Postal Code`}
@@ -613,8 +627,6 @@ export const CollectInformation = () => {
                     }
 
                     if (!productRequiresDetails && !productHasQuestions) {
-                        // Still increment productIndex for each item in the quantity
-                        // to maintain correct form field indices
                         productIndex += orderItem.quantity ?? 0;
                         return null;
                     }
@@ -638,14 +650,12 @@ export const CollectInformation = () => {
                                     copyOption === 'all' || (copyOption === 'first' && isFirstTicketAttendee)
                                 );
 
-                                // Check if current values still match the order details
                                 const currentProduct = form.values.products[currentProductIndex];
                                 const valuesMatchOrder = currentProduct &&
                                     currentProduct.first_name === form.values.order.first_name &&
                                     currentProduct.last_name === form.values.order.last_name &&
                                     currentProduct.email === form.values.order.email;
 
-                                // Only show badge if copied AND values still match
                                 const showCopiedBadge = isCopied && productRequiresDetails && valuesMatchOrder;
 
                                 const productInputs = (
@@ -660,7 +670,8 @@ export const CollectInformation = () => {
                                                         {product.product_type === 'TICKET' ? t`Attendee` : t`Item`} {index + 1}
                                                     </h4>
                                                     <span className={classes.attendeeTicketType}>
-                                                        {orderItem?.item_name}
+                                                        {[orderItem?.item_name, seatsForItem(orderItem?.id)[index]?.seat_label]
+                                                            .filter(Boolean).join(' · ')}
                                                     </span>
                                                 </div>
                                             </div>
@@ -734,7 +745,7 @@ export const CollectInformation = () => {
 
                 {!!event?.settings?.pre_checkout_message && (
                     <Card>
-                        <div dangerouslySetInnerHTML={{__html: event?.settings?.pre_checkout_message}}/>
+                        <UserGeneratedContent html={event?.settings?.pre_checkout_message}/>
                     </Card>
                 )}
 

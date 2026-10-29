@@ -1,0 +1,174 @@
+.labelWithStatus {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.statusPill {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--hi-color-gray);
+  color: var(--hi-color-text-muted);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1.6;
+
+  &.statusOn {
+    background: var(--hi-color-success-soft);
+    color: var(--hi-color-success);
+  }
+}
+
+.rowWarning {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--hi-color-warning);
+}
+
+.meter {
+  display: block;
+  max-width: 200px;
+  height: 4px;
+  margin-top: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--hi-color-gray);
+}
+
+.meterFill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--hi-color-success);
+  transition: width 0.3s ease;
+
+  &.meterLow {
+    background: var(--hi-color-warning);
+  }
+}
+
+.devices {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--hi-color-border);
+  border-radius: var(--hi-radius-lg);
+}
+
+.device {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px;
+
+  & + & {
+    border-top: 1px solid var(--hi-color-border);
+  }
+}
+
+.deviceIcon {
+  display: flex;
+  color: var(--hi-color-text-muted);
+}
+
+.deviceText {
+  flex: 1;
+  min-width: 0;
+}
+
+.deviceName {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--hi-text);
+}
+
+.identityEmail {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.currentDevice {
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--hi-accent-brand-soft);
+  color: var(--mantine-color-primary-6);
+  font-size: 0.6875rem;
+  font-weight: 600;
+}
+
+.deviceMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 8px;
+  font-size: 0.75rem;
+  color: var(--hi-color-text-tertiary);
+
+  span:not(:last-child)::after {
+    content: "·";
+    margin-left: 8px;
+  }
+}
+
+.deviceRevoke {
+  display: flex;
+  padding: 6px;
+  border-radius: var(--hi-radius-md);
+  color: var(--hi-color-text-tertiary);
+
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--hi-color-danger) 8%, transparent);
+    color: var(--hi-color-danger);
+  }
+}
+
+.modalBody {
+  display: flex;
+  flex-direction: column;
+  gap: 1.125rem;
+
+  :global(.mantine-InputWrapper-root) {
+    margin-bottom: 0;
+  }
+}
+
+.modalText {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--hi-color-text-muted);
+}
+
+.fieldLabel {
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--hi-text);
+}
+
+.inlineLink {
+  align-self: flex-start;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--mantine-color-secondary-5);
+
+  &:hover {
+    color: var(--mantine-color-secondary-7);
+  }
+}
+
+.providerLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}

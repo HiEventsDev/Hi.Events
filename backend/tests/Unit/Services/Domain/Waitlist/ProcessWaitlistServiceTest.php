@@ -13,6 +13,7 @@ use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\Status\WaitlistEntryStatus;
 use HiEvents\DomainObjects\WaitlistEntryDomainObject;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatedProductLookupService;
 use HiEvents\Exceptions\NoCapacityAvailableException;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Exceptions\ResourceNotFoundException;
@@ -22,12 +23,14 @@ use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Repository\Interfaces\WaitlistEntryRepositoryInterface;
 use HiEvents\Services\Domain\EventOccurrence\OccurrencePurchaseEligibilityService;
+use HiEvents\Services\Domain\Order\DTO\ProcessedOrderItemDTO;
 use HiEvents\Services\Domain\Order\OrderItemProcessingService;
 use HiEvents\Services\Domain\Order\OrderManagementService;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesDTO;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesResponseDTO;
 use HiEvents\Services\Domain\Waitlist\ProcessWaitlistService;
+use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Bus;
@@ -57,6 +60,8 @@ class ProcessWaitlistServiceTest extends TestCase
 
     private MockInterface|OccurrencePurchaseEligibilityService $eligibilityService;
 
+    private MockInterface|SeatedProductLookupService $seatedProductLookup;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -70,6 +75,8 @@ class ProcessWaitlistServiceTest extends TestCase
         $this->productPriceRepository = Mockery::mock(ProductPriceRepositoryInterface::class);
         $this->eventOccurrenceRepository = Mockery::mock(EventOccurrenceRepositoryInterface::class);
         $this->eligibilityService = Mockery::mock(OccurrencePurchaseEligibilityService::class);
+        $this->seatedProductLookup = Mockery::mock(SeatedProductLookupService::class);
+        $this->seatedProductLookup->shouldReceive('isSeated')->andReturnFalse()->byDefault();
 
         $defaultEligibilityOccurrence = new EventOccurrenceDomainObject;
         $defaultEligibilityOccurrence->setId(50);
@@ -101,7 +108,7 @@ class ProcessWaitlistServiceTest extends TestCase
         $this->databaseManager
             ->shouldReceive('statement')
             ->withArgs(function ($sql, $params) {
-                return $sql === 'SELECT pg_advisory_xact_lock(?)' && is_array($params);
+                return $sql === 'SELECT pg_advisory_xact_lock(?, ?)' && is_array($params);
             })
             ->zeroOrMoreTimes()
             ->andReturn(true);
@@ -126,6 +133,8 @@ class ProcessWaitlistServiceTest extends TestCase
             productPriceRepository: $this->productPriceRepository,
             eventOccurrenceRepository: $this->eventOccurrenceRepository,
             eligibilityService: $this->eligibilityService,
+            seatedProductLookup: $this->seatedProductLookup,
+            transactionLockService: new TransactionLockService($this->databaseManager),
         );
     }
 
@@ -207,7 +216,7 @@ class ProcessWaitlistServiceTest extends TestCase
         $this->orderItemProcessingService
             ->shouldReceive('process')
             ->once()
-            ->andReturn(new Collection([$orderItem]));
+            ->andReturn(new Collection([new ProcessedOrderItemDTO(order_item: $orderItem, seat_uids: [])]));
 
         $this->orderManagementService
             ->shouldReceive('updateOrderTotals')
@@ -427,7 +436,7 @@ class ProcessWaitlistServiceTest extends TestCase
         $this->orderItemProcessingService
             ->shouldReceive('process')
             ->once()
-            ->andReturn(new Collection([$orderItem]));
+            ->andReturn(new Collection([new ProcessedOrderItemDTO(order_item: $orderItem, seat_uids: [])]));
 
         $this->orderManagementService
             ->shouldReceive('updateOrderTotals')
@@ -534,7 +543,7 @@ class ProcessWaitlistServiceTest extends TestCase
 
                 return $orderArg === $order && $capturedOccurrenceId === $occurrenceId;
             })
-            ->andReturn(new Collection([$orderItem]));
+            ->andReturn(new Collection([new ProcessedOrderItemDTO(order_item: $orderItem, seat_uids: [])]));
 
         $this->orderManagementService
             ->shouldReceive('updateOrderTotals')
@@ -583,6 +592,31 @@ class ProcessWaitlistServiceTest extends TestCase
         $this->expectException(NoCapacityAvailableException::class);
 
         $this->service->offerToNext($productPriceId, $quantity, $event, $eventSettings);
+    }
+
+    public function test_seated_products_are_never_offered(): void
+    {
+        $this->databaseManager->shouldReceive('transaction')->once()->andReturnUsing(fn ($callback) => $callback());
+        $this->waitlistEntryRepository->shouldReceive('getNextWaitingEntries')->once()
+            ->andReturn(collect([(new WaitlistEntryDomainObject)->setId(1)->setProductPriceId(10)]));
+        $this->seatedProductLookup->shouldReceive('isSeated')->andReturnTrue();
+        $this->orderManagementService->shouldNotReceive('createNewOrder');
+
+        $this->expectException(NoCapacityAvailableException::class);
+
+        $this->service->offerToNext(10, 1, $this->createMockEvent(), $this->createMockEventSettings());
+    }
+
+    public function test_a_specific_entry_for_a_seated_product_cannot_be_offered(): void
+    {
+        $this->databaseManager->shouldReceive('transaction')->once()->andReturnUsing(fn ($callback) => $callback());
+        $this->waitlistEntryRepository->shouldReceive('findFirstWhere')->once()
+            ->andReturn((new WaitlistEntryDomainObject)->setId(1)->setProductPriceId(10)->setStatus(WaitlistEntryStatus::WAITING->name));
+        $this->seatedProductLookup->shouldReceive('isSeated')->andReturnTrue();
+
+        $this->expectException(ResourceConflictException::class);
+
+        $this->service->offerSpecificEntry(1, 1, $this->createMockEvent(), $this->createMockEventSettings());
     }
 
     public function test_caps_offers_at_available_capacity(): void
@@ -701,7 +735,7 @@ class ProcessWaitlistServiceTest extends TestCase
                 return $orderArg === $order
                     && $productsOrderDetails->first()->event_occurrence_id === 22;
             })
-            ->andReturn(new Collection([new OrderItemDomainObject]));
+            ->andReturn(new Collection([new ProcessedOrderItemDTO(order_item: new OrderItemDomainObject, seat_uids: [])]));
 
         $this->orderManagementService
             ->shouldReceive('updateOrderTotals')

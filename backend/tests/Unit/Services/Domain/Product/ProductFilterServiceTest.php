@@ -4,15 +4,19 @@ namespace Tests\Unit\Services\Domain\Product;
 
 use HiEvents\DomainObjects\Enums\ProductPriceType;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\DomainObjects\OrganizerConfigurationDomainObject;
 use HiEvents\DomainObjects\ProductCategoryDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatedProductLookupService;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductOccurrenceVisibilityRepositoryInterface;
 use HiEvents\Services\Domain\Order\OrderPlatformFeePassThroughService;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesDTO;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesResponseDTO;
+use HiEvents\Services\Domain\Product\DTO\ProductFilterEventContextDTO;
 use HiEvents\Services\Domain\Product\ProductFilterService;
 use HiEvents\Services\Domain\Product\ProductPriceService;
 use HiEvents\Services\Domain\Tax\TaxAndFeeCalculationService;
@@ -44,6 +48,7 @@ class ProductFilterServiceTest extends TestCase
             platformFeeService: Mockery::mock(OrderPlatformFeePassThroughService::class),
             eventRepository: $this->eventRepository,
             productOccurrenceVisibilityRepository: Mockery::mock(ProductOccurrenceVisibilityRepositoryInterface::class),
+            seatedProductLookup: Mockery::mock(SeatedProductLookupService::class, ['linksForEvent' => collect()]),
         );
     }
 
@@ -64,6 +69,35 @@ class ProductFilterServiceTest extends TestCase
         $this->assertSame([$product], $result->all());
         $this->assertSame(5, $product->getProductPrices()->first()->getQuantityAvailable());
         $this->assertTrue($product->getProductPrices()->first()->isAvailable());
+    }
+
+    public function test_an_event_context_supplies_the_configuration_and_quantities_without_lookups(): void
+    {
+        $product = $this->createFreeProduct(id: 1, priceId: 100);
+        $eventSettings = new EventSettingDomainObject;
+        $organizerConfiguration = new OrganizerConfigurationDomainObject;
+        $event = (new EventDomainObject)
+            ->setId(self::EVENT_ID)
+            ->setCurrency('EUR')
+            ->setEventSettings($eventSettings);
+
+        $this->eventRepository->shouldNotReceive('findById');
+        $this->fetchAvailableProductQuantitiesService->shouldNotReceive('getAvailableProductQuantities');
+
+        $result = $this->service->filterProducts(
+            products: collect([$product]),
+            hideSoldOutProducts: false,
+            eventContext: new ProductFilterEventContextDTO(
+                event: $event,
+                organizerConfiguration: $organizerConfiguration,
+                productQuantities: new AvailableProductQuantitiesResponseDTO(productQuantities: collect([
+                    $this->createQuantityDto(productId: 1, priceId: 100, quantityAvailable: 0),
+                ])),
+            ),
+        );
+
+        $this->assertSame([$product], $result->all());
+        $this->assertTrue($product->isSoldOut());
     }
 
     public function test_filter_products_rejects_hidden_products_when_hiding(): void
@@ -111,6 +145,94 @@ class ProductFilterServiceTest extends TestCase
         $this->assertSame([$product], $result->first()->getProducts()->values()->all());
     }
 
+    public function test_filter_products_keeps_addon_only_products(): void
+    {
+        $addonOnly = $this->createFreeProduct(id: 1, priceId: 100)->setIsAddonOnly(true);
+
+        $this->expectAccountConfigurationLoad();
+        $this->expectQuantities([
+            $this->createQuantityDto(productId: 1, priceId: 100, quantityAvailable: 5),
+        ]);
+
+        $result = $this->service->filterProducts(
+            products: collect([$addonOnly]),
+            hideSoldOutProducts: false,
+        );
+
+        $this->assertSame([$addonOnly], $result->all());
+    }
+
+    public function test_filter_products_rejects_hidden_addon_only_products(): void
+    {
+        $hiddenAddon = $this->createFreeProduct(id: 1, priceId: 100)
+            ->setIsAddonOnly(true)
+            ->setIsHidden(true);
+
+        $this->expectAccountConfigurationLoad();
+        $this->expectQuantities([
+            $this->createQuantityDto(productId: 1, priceId: 100, quantityAvailable: 5),
+        ]);
+
+        $result = $this->service->filterProducts(collect([$hiddenAddon]));
+
+        $this->assertTrue($result->isEmpty());
+    }
+
+    public function test_sequential_release_locks_later_tiers_but_keeps_them_visible(): void
+    {
+        $product = $this->createSequentialTieredProduct();
+
+        $this->expectAccountConfigurationLoad();
+        $this->expectQuantities([
+            $this->createQuantityDto(productId: 1, priceId: 100, quantityAvailable: 5),
+            $this->createQuantityDto(productId: 1, priceId: 101, quantityAvailable: 50),
+        ]);
+
+        $result = $this->service->filterProducts(collect([$product]));
+
+        $prices = $result->first()->getProductPrices()->values();
+        $this->assertCount(2, $prices);
+        $this->assertTrue($prices[0]->isAvailable());
+        $this->assertFalse($prices[0]->isLockedBehindEarlierTier());
+        $this->assertFalse($prices[1]->isAvailable());
+        $this->assertTrue($prices[1]->isLockedBehindEarlierTier());
+        $this->assertSame('Price is locked until earlier tiers sell out', $prices[1]->getOffSaleReason());
+        $this->assertSame(5, $result->first()->getQuantityAvailable());
+    }
+
+    public function test_sequential_release_unlocks_next_tier_when_earlier_tier_is_fully_reserved(): void
+    {
+        $product = $this->createSequentialTieredProduct();
+
+        $this->expectAccountConfigurationLoad();
+        $this->expectQuantities([
+            $this->createQuantityDto(productId: 1, priceId: 100, quantityAvailable: 0, quantityReserved: 10),
+            $this->createQuantityDto(productId: 1, priceId: 101, quantityAvailable: 50),
+        ]);
+
+        $result = $this->service->filterProducts(collect([$product]));
+
+        $prices = $result->first()->getProductPrices()->values();
+        $this->assertFalse($prices[0]->isAvailable());
+        $this->assertTrue($prices[0]->isSoldOut());
+        $this->assertTrue($prices[1]->isAvailable());
+        $this->assertFalse($prices[1]->isLockedBehindEarlierTier());
+    }
+
+    private function createSequentialTieredProduct(): ProductDomainObject
+    {
+        return (new ProductDomainObject)
+            ->setId(1)
+            ->setEventId(self::EVENT_ID)
+            ->setProductCategoryId(5)
+            ->setType(ProductPriceType::TIERED->name)
+            ->setSequentialTierReleaseEnabled(true)
+            ->setProductPrices(collect([
+                (new ProductPriceDomainObject)->setId(100)->setOrder(1)->setPrice(0.00)->setInitialQuantityAvailable(10)->setQuantitySold(0),
+                (new ProductPriceDomainObject)->setId(101)->setOrder(2)->setPrice(0.00)->setInitialQuantityAvailable(50)->setQuantitySold(0),
+            ]));
+    }
+
     private function createFreeProduct(int $id, int $priceId, int $productCategoryId = 5): ProductDomainObject
     {
         return (new ProductDomainObject)
@@ -125,7 +247,7 @@ class ProductFilterServiceTest extends TestCase
             ]));
     }
 
-    private function createQuantityDto(int $productId, int $priceId, int $quantityAvailable): AvailableProductQuantitiesDTO
+    private function createQuantityDto(int $productId, int $priceId, int $quantityAvailable, int $quantityReserved = 0): AvailableProductQuantitiesDTO
     {
         return new AvailableProductQuantitiesDTO(
             product_id: $productId,
@@ -133,7 +255,7 @@ class ProductFilterServiceTest extends TestCase
             product_title: 'Ticket',
             price_label: null,
             quantity_available: $quantityAvailable,
-            quantity_reserved: 0,
+            quantity_reserved: $quantityReserved,
             initial_quantity_available: null,
             product_type: 'TICKET',
         );

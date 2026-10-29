@@ -22,10 +22,10 @@ use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
+use HiEvents\Services\Domain\Order\PaymentLink\OrderCheckoutAccessService;
 use HiEvents\Services\Domain\Payment\Stripe\DTOs\CreatePaymentIntentRequestDTO;
 use HiEvents\Services\Domain\Payment\Stripe\DTOs\CreatePaymentIntentResponseDTO;
 use HiEvents\Services\Domain\Payment\Stripe\StripePaymentIntentCreationService;
-use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
 use HiEvents\Services\Infrastructure\Stripe\StripeClientFactory;
 use HiEvents\Services\Infrastructure\Stripe\StripeConfigurationService;
 use HiEvents\Values\MoneyValue;
@@ -38,7 +38,7 @@ readonly class CreatePaymentIntentHandler
     public function __construct(
         private OrderRepositoryInterface $orderRepository,
         private StripePaymentIntentCreationService $stripePaymentService,
-        private CheckoutSessionManagementService $sessionIdentifierService,
+        private OrderCheckoutAccessService $checkoutAccessService,
         private StripePaymentsRepositoryInterface $stripePaymentsRepository,
         private AccountRepositoryInterface $accountRepository,
         private OrganizerRepositoryInterface $organizerRepository,
@@ -63,7 +63,7 @@ readonly class CreatePaymentIntentHandler
             ->loadRelation(new Relationship(EventDomainObject::class, name: 'event'))
             ->findByShortId($orderShortId);
 
-        if (! $order || ! $this->sessionIdentifierService->verifySession($order->getSessionId())) {
+        if (! $order || ! $this->checkoutAccessService->resolve($order)->canPay()) {
             throw new UnauthorizedException(__('Sorry, we could not verify your session. Please create a new order.'));
         }
 

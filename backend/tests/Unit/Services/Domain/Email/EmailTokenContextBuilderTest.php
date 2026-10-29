@@ -56,6 +56,7 @@ class EmailTokenContextBuilderTest extends TestCase
 
         $this->assertEquals('ORD-123456', $context['order']['number']);
         $this->assertEquals('$9,999.00', $context['order']['total']);
+        $this->assertEquals('Stalls · A-1, Stalls · A-2', $context['order']['seats']);
         $this->assertEquals('John', $context['order']['first_name']);
         $this->assertEquals('Doe', $context['order']['last_name']);
         $this->assertEquals('john@example.com', $context['order']['email']);
@@ -94,6 +95,7 @@ class EmailTokenContextBuilderTest extends TestCase
 
         $this->assertEquals('Jane Smith', $context['attendee']['name']);
         $this->assertEquals('jane@example.com', $context['attendee']['email']);
+        $this->assertEquals('Stalls · C-14', $context['attendee']['seat']);
 
         $this->assertEquals('General Admission', $context['ticket']['name']);
         $this->assertEquals('$4,999.00', $context['ticket']['price']);
@@ -161,6 +163,7 @@ class EmailTokenContextBuilderTest extends TestCase
         $eventSettings = Mockery::mock(EventSettingDomainObject::class, [
             'getSupportEmail' => 'support@event.com',
             'getOfflinePaymentInstructions' => 'Dear {{ order.first_name }}, transfer via <a href="https://bank.example">bank</a>',
+            'getOfflinePaymentOrderReferenceEnabled' => true,
             'getPostCheckoutMessage' => 'Thanks!',
         ]);
 
@@ -178,7 +181,29 @@ class EmailTokenContextBuilderTest extends TestCase
         $this->assertStringContainsString('bank.example', $instructions);
     }
 
-    public function test_context_values_stay_raw_for_plain_text_rendering(): void
+    public function test_the_payment_reference_is_the_order_number_when_the_organizer_uses_order_references(): void
+    {
+        $order = $this->createMockOrder();
+
+        $enabled = $this->contextBuilder->buildOrderConfirmationContext(
+            $order,
+            $this->createMockEvent(),
+            $this->createMockOrganizer(),
+            $this->createMockEventSettings(),
+        );
+        $disabled = $this->contextBuilder->buildOrderConfirmationContext(
+            $order,
+            $this->createMockEvent(),
+            $this->createMockOrganizer(),
+            $this->createMockEventSettings(orderReferenceEnabled: false),
+        );
+
+        $this->assertSame($enabled['order']['number'], $enabled['order']['payment_reference']);
+        $this->assertNotSame('', $enabled['order']['payment_reference']);
+        $this->assertSame('', $disabled['order']['payment_reference']);
+    }
+
+    public function test_contexb_values_stay_raw_for_plain_text_rendering(): void
     {
         $order = $this->createMockOrder('<b>John</b>');
         $event = $this->createMockEvent();
@@ -229,6 +254,68 @@ class EmailTokenContextBuilderTest extends TestCase
 
         $this->assertArrayHasKey('occurrence', $context);
         $this->assertEquals('', $context['occurrence']['label']);
+    }
+
+    public function test_an_occurrence_without_an_end_leaves_the_end_tokens_empty(): void
+    {
+        $occurrence = (new EventOccurrenceDomainObject)
+            ->setId(7)
+            ->setStartDate('2026-11-02 19:00:00')
+            ->setEndDate(null);
+        $series = Mockery::mock(EventDomainObject::class, [
+            'getTitle' => 'Weekly Quiz',
+            'getDescription' => null,
+            'getStartDate' => '2026-11-02 19:00:00',
+            'getEndDate' => '2026-11-16 19:00:00',
+            'getTimezone' => 'UTC',
+            'getCurrency' => 'USD',
+            'getId' => 1,
+            'getEventLocation' => null,
+        ]);
+
+        $context = $this->contextBuilder->buildOrderConfirmationContext(
+            $this->createMockOrder(), $series, $this->createMockOrganizer(), $this->createMockEventSettings(), $occurrence
+        );
+
+        $this->assertEquals('November 2, 2026', $context['event']['date']);
+        $this->assertSame('', $context['event']['end_date']);
+        $this->assertSame('', $context['event']['end_time']);
+        $this->assertSame('', $context['occurrence']['end_date']);
+        $this->assertSame('', $context['occurrence']['end_time']);
+    }
+
+    public function test_uses_the_orders_only_occurrence_when_none_is_passed(): void
+    {
+        $occurrence = (new EventOccurrenceDomainObject)
+            ->setId(7)
+            ->setStartDate('2024-03-10 18:00:00')
+            ->setEndDate('2024-03-10 20:00:00')
+            ->setLabel('Evening');
+        $order = $this->createMockOrder(occurrence: $occurrence);
+
+        $context = $this->contextBuilder->buildOrderConfirmationContext(
+            $order, $this->createMockEvent(), $this->createMockOrganizer(), $this->createMockEventSettings()
+        );
+
+        $this->assertEquals('March 10, 2024', $context['event']['date']);
+        $this->assertEquals('Evening', $context['occurrence']['label']);
+        $this->assertEquals('Amazing Event - Evening', $context['event']['title']);
+    }
+
+    public function test_explicit_occurrence_wins_over_the_orders_occurrences(): void
+    {
+        $orderOccurrence = (new EventOccurrenceDomainObject)
+            ->setId(7)
+            ->setStartDate('2024-03-10 18:00:00')
+            ->setEndDate('2024-03-10 20:00:00');
+        $order = $this->createMockOrder(occurrence: $orderOccurrence);
+
+        $context = $this->contextBuilder->buildOrderConfirmationContext(
+            $order, $this->createMockEvent(), $this->createMockOrganizer(), $this->createMockEventSettings(), $this->createMockOccurrence()
+        );
+
+        $this->assertEquals('Afternoon Show', $context['occurrence']['label']);
+        $this->assertNotEquals('March 10, 2024', $context['event']['date']);
     }
 
     public function test_event_in_person_location_in_token_context(): void
@@ -436,7 +523,7 @@ class EmailTokenContextBuilderTest extends TestCase
         ]);
     }
 
-    private function createMockOrder(string $firstName = 'John'): OrderDomainObject
+    private function createMockOrder(string $firstName = 'John', ?EventOccurrenceDomainObject $occurrence = null): OrderDomainObject
     {
         $orderItem = Mockery::mock(OrderItemDomainObject::class, [
             'getProductPriceId' => 123,
@@ -459,6 +546,8 @@ class EmailTokenContextBuilderTest extends TestCase
             'getOrderItems' => $orderItems,
             'getCurrency' => 'USD',
             'getLocale' => 'en',
+            'getSeatLabels' => ['Stalls · A-1', 'Stalls · A-2'],
+            'getSingleEventOccurrence' => $occurrence,
         ]);
     }
 
@@ -498,11 +587,12 @@ class EmailTokenContextBuilderTest extends TestCase
         ]);
     }
 
-    private function createMockEventSettings(): EventSettingDomainObject
+    private function createMockEventSettings(bool $orderReferenceEnabled = true): EventSettingDomainObject
     {
         return Mockery::mock(EventSettingDomainObject::class, [
             'getSupportEmail' => 'support@event.com',
             'getOfflinePaymentInstructions' => 'Pay by bank transfer',
+            'getOfflinePaymentOrderReferenceEnabled' => $orderReferenceEnabled,
             'getPostCheckoutMessage' => 'Thank you for your purchase!',
         ]);
     }
@@ -515,6 +605,7 @@ class EmailTokenContextBuilderTest extends TestCase
             'getEmail' => 'jane@example.com',
             'getProductPriceId' => 123,
             'getShortId' => 'ATT123',
+            'getSeatLabel' => 'Stalls · C-14',
         ]);
     }
 }

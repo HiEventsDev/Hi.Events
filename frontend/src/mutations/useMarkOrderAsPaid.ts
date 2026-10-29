@@ -2,6 +2,8 @@ import {useMutation} from "@tanstack/react-query";
 import {orderClient} from "../api/order.client.ts";
 import {IdParam} from "../types.ts";
 import {GET_EVENT_ORDERS_QUERY_KEY} from "../queries/useGetEventOrders.ts";
+import {GET_EVENT_COUNTS_QUERY_KEY} from "../queries/useGetEventCounts.ts";
+import {GET_ORDER_QUERY_KEY} from "../queries/useGetOrder.ts";
 import {queryClient} from "../utilites/queryClient.ts";
 
 export const useMarkOrderAsPaid = () => {
@@ -18,6 +20,8 @@ export const useMarkOrderAsPaid = () => {
                     GET_EVENT_ORDERS_QUERY_KEY,
                 ]
             });
+            queryClient.invalidateQueries({queryKey: [GET_EVENT_COUNTS_QUERY_KEY]});
+            queryClient.invalidateQueries({queryKey: [GET_ORDER_QUERY_KEY]});
         }
     });
 }

@@ -129,6 +129,10 @@ export const AttendeeTicket = ({
 
                             <TicketField label={t`Ticket`} value={getAttendeeProductTitle(attendee, product)}/>
 
+                            {attendee.seat_label && (
+                                <TicketField label={t`Seat`} value={attendee.seat_label} emphasis/>
+                            )}
+
                             <TicketField
                                 label={t`Price`}
                                 value={productPrice > 0 ? formatCurrency(productPrice, event?.currency) : t`Free`}
@@ -194,7 +198,7 @@ export const AttendeeTicket = ({
 
             {showPoweredBy && (
                 <div className={classes.poweredBy}>
-                    <PoweredByFooter/>
+                    <PoweredByFooter brandingRemoved={event.organizer?.branding_removed}/>
                 </div>
             )}
         </div>

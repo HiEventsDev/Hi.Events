@@ -18,6 +18,7 @@ class ProductPriceOccurrenceOverrideResource extends BaseResource
             'event_occurrence_id' => $this->getEventOccurrenceId(),
             'product_price_id' => $this->getProductPriceId(),
             'price' => $this->getPrice(),
+            'quantity_available' => $this->getQuantityAvailable(),
             'created_at' => $this->getCreatedAt(),
             'updated_at' => $this->getUpdatedAt(),
         ];

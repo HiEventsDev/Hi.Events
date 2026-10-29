@@ -22,6 +22,17 @@ export class OrderPage {
     return this.page.getByRole('dialog');
   }
 
+  async chooseDrawerAction(action: string): Promise<void> {
+    const drawer = this.detailsDrawer();
+    const button = drawer.getByRole('button', { name: action, exact: true });
+    if (await button.isVisible()) {
+      await button.click();
+      return;
+    }
+    await drawer.getByRole('button', { name: 'More actions' }).click();
+    await this.page.getByRole('menuitem', { name: action }).click();
+  }
+
   async sendMessageToBuyer(subject: string, body: string): Promise<void> {
     await this.page.getByRole('heading', { name: 'Send a message' }).waitFor();
     await this.page.getByLabel(/^Subject/).fill(subject);
@@ -37,6 +48,15 @@ export class OrderPage {
   async confirmCancelOrder(): Promise<void> {
     await this.page.getByRole('heading', { name: /^Cancel Order/ }).waitFor();
     await this.page.getByRole('button', { name: 'Cancel Order' }).click();
+  }
+
+  async filterByProduct(productTitle: string): Promise<void> {
+    await this.page.getByRole('button', { name: /Filters/ }).click();
+    const dialog = this.page.getByRole('dialog');
+    await dialog.getByRole('combobox', { name: 'Product' }).click();
+    await this.page.getByRole('option', { name: productTitle }).click();
+    await dialog.getByRole('button', { name: 'Apply' }).click();
+    await dialog.waitFor({ state: 'hidden' });
   }
 
   exportButton(): Locator {

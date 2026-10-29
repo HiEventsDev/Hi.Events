@@ -17,6 +17,9 @@ use HiEvents\Services\Application\Handlers\Account\Exceptions\AccountRegistratio
 use HiEvents\Services\Application\Handlers\Auth\DTO\LoginCredentialsDTO;
 use HiEvents\Services\Application\Handlers\Auth\LoginHandler;
 use HiEvents\Services\Application\Locale\LocaleService;
+use HiEvents\Services\Domain\Account\AttributionDataSanitizer;
+use HiEvents\Services\Domain\Auth\PasswordLoginPolicy;
+use HiEvents\Services\Infrastructure\Turnstile\TurnstileVerifier;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
@@ -28,6 +31,9 @@ class CreateAccountAction extends BaseAuthAction
         private readonly CreateAccountHandler $createAccountHandler,
         private readonly LoginHandler $loginHandler,
         private readonly LocaleService $localeService,
+        private readonly TurnstileVerifier $turnstileVerifier,
+        private readonly AttributionDataSanitizer $attributionDataSanitizer,
+        private readonly PasswordLoginPolicy $passwordLoginPolicy,
     ) {}
 
     /**
@@ -36,6 +42,19 @@ class CreateAccountAction extends BaseAuthAction
      */
     public function __invoke(CreateAccountRequest $request): JsonResponse
     {
+        if ($this->passwordLoginPolicy->isDisabled()) {
+            return $this->errorResponse(
+                message: __('Password sign-up is turned off. Use one of the sign-in options instead.'),
+                statusCode: ResponseCodes::HTTP_FORBIDDEN,
+            );
+        }
+
+        if (! $this->turnstileVerifier->verify($request->validated('turnstile_token'), $this->getClientIp($request))) {
+            throw ValidationException::withMessages([
+                'turnstile_token' => __('Please complete the security check and try again.'),
+            ]);
+        }
+
         try {
             $accountData = $this->createAccountHandler->handle(CreateAccountDTO::fromArray([
                 'first_name' => $request->validated('first_name'),
@@ -49,16 +68,7 @@ class CreateAccountAction extends BaseAuthAction
                     : $this->localeService->getLocaleOrDefault($request->getPreferredLanguage()),
                 'invite_token' => $request->validated('invite_token'),
                 'marketing_opt_in' => (bool) $request->validated('marketing_opt_in'),
-                'utm_source' => $request->validated('utm_source'),
-                'utm_medium' => $request->validated('utm_medium'),
-                'utm_campaign' => $request->validated('utm_campaign'),
-                'utm_term' => $request->validated('utm_term'),
-                'utm_content' => $request->validated('utm_content'),
-                'referrer_url' => $request->validated('referrer_url'),
-                'landing_page' => $request->validated('landing_page'),
-                'gclid' => $request->validated('gclid'),
-                'fbclid' => $request->validated('fbclid'),
-                'utm_raw' => $request->validated('utm_raw'),
+                ...$this->attributionDataSanitizer->fromValidated($request->validated()),
             ]));
         } catch (EmailAlreadyExists $e) {
             throw ValidationException::withMessages([

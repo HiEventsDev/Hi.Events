@@ -36,11 +36,15 @@ class AccountDeletionExecutionTest extends TestCase
 
     private Event $event;
 
+    private Event $otherEvent;
+
     private Order $order;
 
     private Attendee $attendee;
 
     private Question $question;
+
+    private int $profileId;
 
     protected function setUp(): void
     {
@@ -99,6 +103,12 @@ class AccountDeletionExecutionTest extends TestCase
             'name' => 'Anonymized',
         ]);
 
+        $profile = DB::table('profiles')->where('id', $this->profileId)->first();
+        $this->assertNotSame('Ada Speaker', $profile->name);
+        $this->assertNull($profile->tagline);
+        $this->assertNull($profile->bio);
+        $this->assertNull($profile->links);
+
         $this->assertNotEmpty($manifest);
         $this->assertContains('orders', array_column($manifest, 'entity'));
     }
@@ -119,6 +129,121 @@ class AccountDeletionExecutionTest extends TestCase
         $this->assertDatabaseHas('users', ['id' => $this->sharedUser->id]);
         $this->assertDatabaseHas('accounts', ['id' => $this->otherAccount->id]);
         $this->assertDatabaseCount('question_answers', 1);
+    }
+
+    public function test_hard_deletion_removes_spam_checks_and_releases_reviewer(): void
+    {
+        $doomedCheckId = $this->seedSpamCheck($this->event->id, $this->soleUser->id);
+        $survivingCheckId = $this->seedSpamCheck($this->otherEvent->id, $this->soleUser->id);
+
+        $manifest = $this->app->make(AccountHardDeletionService::class)
+            ->deleteAccount($this->account->id);
+
+        $this->assertSame(1, $manifest['event_spam_checks']);
+        $this->assertDatabaseMissing('event_spam_checks', ['id' => $doomedCheckId]);
+        $this->assertDatabaseMissing('events', ['id' => $this->event->id]);
+        $this->assertDatabaseMissing('users', ['id' => $this->soleUser->id]);
+        $this->assertDatabaseHas('event_spam_checks', [
+            'id' => $survivingCheckId,
+            'event_id' => $this->otherEvent->id,
+            'reviewed_by_user_id' => null,
+        ]);
+    }
+
+    public function test_both_deletion_paths_remove_the_sso_connection_domains_and_connection_identities(): void
+    {
+        foreach ([AccountAnonymizationService::class => 'anonymizeAccount', AccountHardDeletionService::class => 'deleteAccount'] as $service => $method) {
+            $connectionId = $this->seedSsoConnection();
+
+            $this->app->make($service)->{$method}($this->account->id);
+
+            $this->assertDatabaseMissing('account_sso_connections', ['id' => $connectionId]);
+            $this->assertDatabaseMissing('account_sso_domains', ['account_id' => $this->account->id]);
+            $this->assertDatabaseMissing('user_identities', ['subject' => 'connection-subject']);
+            $this->assertDatabaseHas('user_identities', ['subject' => 'social-subject']);
+
+            DB::table('user_identities')->delete();
+        }
+    }
+
+    public function test_both_deletion_paths_remove_the_accounts_api_keys_and_keep_other_accounts_keys(): void
+    {
+        foreach ([AccountAnonymizationService::class => 'anonymizeAccount', AccountHardDeletionService::class => 'deleteAccount'] as $service => $method) {
+            $doomedKeyId = $this->seedApiKey($this->sharedUser, $this->account->id);
+            $survivingKeyId = $this->seedApiKey($this->sharedUser, $this->otherAccount->id);
+
+            $this->app->make($service)->{$method}($this->account->id);
+
+            $this->assertDatabaseMissing('personal_access_tokens', ['id' => $doomedKeyId]);
+            $this->assertDatabaseHas('personal_access_tokens', ['id' => $survivingKeyId]);
+
+            DB::table('personal_access_tokens')->delete();
+        }
+    }
+
+    private function seedApiKey(User $user, int $accountId): int
+    {
+        return DB::table('personal_access_tokens')->insertGetId([
+            'tokenable_type' => User::class,
+            'tokenable_id' => $user->id,
+            'account_id' => $accountId,
+            'name' => 'Integration',
+            'token' => hash('sha256', uniqid('', true)),
+            'token_hint' => 'abcd',
+            'abilities' => '["read"]',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+    }
+
+    private function seedSsoConnection(): int
+    {
+        $connectionId = DB::table('account_sso_connections')->insertGetId([
+            'account_id' => $this->account->id,
+            'type' => 'OKTA',
+            'issuer' => 'https://acme.okta.test',
+            'client_id' => 'client',
+            'client_secret' => encrypt('secret', false),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('account_sso_domains')->insert([
+            'account_id' => $this->account->id,
+            'domain' => 'doomed.test',
+            'verification_token' => 'token',
+            'verified_at' => now(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        foreach (['connection-subject' => $connectionId, 'social-subject' => null] as $subject => $identityConnectionId) {
+            DB::table('user_identities')->insert([
+                'user_id' => $this->sharedUser->id,
+                'account_sso_connection_id' => $identityConnectionId,
+                'provider_key' => $identityConnectionId === null ? 'google' : 'connection-'.$connectionId,
+                'issuer' => $identityConnectionId === null ? 'https://accounts.google.com' : 'https://acme.okta.test',
+                'subject' => $subject,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        return $connectionId;
+    }
+
+    private function seedSpamCheck(int $eventId, int $reviewedByUserId): int
+    {
+        return DB::table('event_spam_checks')->insertGetId([
+            'event_id' => $eventId,
+            'status' => 'CONFIRMED_SPAM',
+            'content_hash' => str_repeat('a', 64),
+            'checked_at' => now(),
+            'reviewed_by_user_id' => $reviewedByUserId,
+            'reviewed_at' => now(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 
     private function seedAccountGraph(): void
@@ -186,6 +311,16 @@ class AccountDeletionExecutionTest extends TestCase
         ]);
 
         $this->event = $this->seedEvent('Past Event', $this->account->id, $organizer->id, $this->soleUser->id, 'evt_doomed');
+        $this->profileId = DB::table('profiles')->insertGetId([
+            'account_id' => $this->account->id,
+            'organizer_id' => $organizer->id,
+            'name' => 'Ada Speaker',
+            'tagline' => 'CTO',
+            'bio' => '<p>Personal bio</p>',
+            'links' => json_encode([['type' => 'WEBSITE', 'url' => 'https://ada.example.com']]),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
 
         $product = Product::forceCreate([
             'event_id' => $this->event->id,
@@ -253,7 +388,7 @@ class AccountDeletionExecutionTest extends TestCase
             'status' => 'LIVE',
         ]);
 
-        $otherEvent = $this->seedEvent('Surviving Event', $this->otherAccount->id, $otherOrganizer->id, $this->sharedUser->id, 'evt_survivor');
+        $this->otherEvent = $otherEvent = $this->seedEvent('Surviving Event', $this->otherAccount->id, $otherOrganizer->id, $this->sharedUser->id, 'evt_survivor');
 
         $otherQuestion = Question::forceCreate([
             'event_id' => $otherEvent->id,

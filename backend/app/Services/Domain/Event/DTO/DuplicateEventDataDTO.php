@@ -21,7 +21,9 @@ class DuplicateEventDataDTO extends BaseDTO
         public bool $duplicateTicketLogo = true,
         public bool $duplicateWebhooks = true,
         public bool $duplicateAffiliates = true,
+        public bool $duplicateLineup = true,
         public bool $duplicateOccurrences = true,
+        public bool $duplicateEmailTemplates = true,
         public ?string $description = null,
         public ?string $endDate = null,
     ) {}

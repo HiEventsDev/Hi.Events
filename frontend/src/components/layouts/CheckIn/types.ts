@@ -5,5 +5,6 @@ export interface RecentScan {
     name: string;
     code: string;
     status: RecentScanStatus;
+    seatLabel: string | null;
     timestamp: number;
 }

@@ -9,6 +9,7 @@ use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\OrderPaymentStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatedOrderCompletionGuard;
 use HiEvents\Events\OrderStatusChangedEvent;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Exceptions\UnauthorizedException;
@@ -16,11 +17,12 @@ use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\TransitionOrderToOfflinePaymentPublicDTO;
 use HiEvents\Services\Domain\Order\OccurrenceStatusValidator;
+use HiEvents\Services\Domain\Order\PaymentLink\OrderCheckoutAccessService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
-use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
+use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use Illuminate\Database\DatabaseManager;
 
 class TransitionOrderToOfflinePaymentHandler
@@ -32,12 +34,16 @@ class TransitionOrderToOfflinePaymentHandler
         private readonly EventSettingsRepositoryInterface $eventSettingsRepository,
         private readonly OccurrenceStatusValidator $occurrenceStatusValidator,
         private readonly DomainEventDispatcherService $domainEventDispatcherService,
-        private readonly CheckoutSessionManagementService $sessionManagementService,
+        private readonly OrderCheckoutAccessService $checkoutAccessService,
+        private readonly SeatedOrderCompletionGuard $seatedOrderCompletionGuard,
+        private readonly TransactionLockService $transactionLockService,
     ) {}
 
     public function handle(TransitionOrderToOfflinePaymentPublicDTO $dto): OrderDomainObject
     {
         return $this->databaseManager->transaction(function () use ($dto) {
+            $this->transactionLockService->lockOrder($dto->orderShortId);
+
             /** @var OrderDomainObjectAbstract $order */
             $order = $this->orderRepository
                 ->loadRelation(OrderItemDomainObject::class)
@@ -47,8 +53,7 @@ class TransitionOrderToOfflinePaymentHandler
                 throw new ResourceConflictException(__('Order not found'));
             }
 
-            if ($order->getSessionId() === null
-                || ! $this->sessionManagementService->verifySession($order->getSessionId())) {
+            if (! $this->checkoutAccessService->resolve($order)->canPay()) {
                 throw new UnauthorizedException(
                     __('Sorry, we could not verify your session. Please restart your order.')
                 );
@@ -62,6 +67,8 @@ class TransitionOrderToOfflinePaymentHandler
             $this->validateOfflinePayment($order, $eventSettings);
 
             $this->occurrenceStatusValidator->assertOrderOccurrencesArePurchasable($order);
+
+            $this->seatedOrderCompletionGuard->assertSeatsHeld($order);
 
             $this->updateOrderStatuses($order->getId());
 

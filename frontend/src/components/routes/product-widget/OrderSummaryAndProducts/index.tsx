@@ -39,7 +39,10 @@ import {OnlineEventDetails} from "../../../common/OnlineEventDetails";
 import {AddToCalendarCTA} from "../../../common/AddToCalendarCTA";
 import {InlineOrderSummary} from "../../../common/InlineOrderSummary";
 import {CheckoutContent} from "../../../layouts/Checkout/CheckoutContent";
+import {CheckoutStepTitle} from "../../../layouts/Checkout/CheckoutStepTitle";
 import {EditAttendeeModal} from "./EditAttendeeModal";
+import {ChangeSeatButton} from "../../../../ee/seating/components/ChangeSeatButton";
+import {canAttendeeChangeSeat} from "../../../../ee/seating/components/ChangeSeatButton/canAttendeeChangeSeat.ts";
 import {EditOrderModal} from "./EditOrderModal";
 
 import {useEditAttendeePublic} from "../../../../mutations/useEditAttendeePublic";
@@ -47,10 +50,18 @@ import {useEditOrderPublic} from "../../../../mutations/useEditOrderPublic";
 import {useResendAttendeeTicketPublic} from "../../../../mutations/useResendAttendeeTicketPublic";
 import {useResendOrderConfirmationPublic} from "../../../../mutations/useResendOrderConfirmationPublic";
 
-import {Attendee, Event, LocationType, Order, Product} from "../../../../types.ts";
+import {Attendee, Event, IdParam, LocationType, Order, Product} from "../../../../types.ts";
 import classes from './OrderSummaryAndProducts.module.scss';
 import {clearWaitlistJoinedForEvent} from "../../../../hooks/useWaitlistJoined.ts";
-// Purchase tracking is handled by the parent Checkout layout
+import {UserGeneratedContent} from "../../../common/UserGeneratedContent";
+import {OfflinePaymentDetails} from "../../../common/OfflinePaymentDetails";
+import {formatCurrency, plainAmount} from "../../../../utilites/currency.ts";
+import {ReportOfflinePayment} from "./ReportOfflinePayment";
+import {
+    SharePaymentDetailsEntryPoint,
+    SharePaymentDetailsModal,
+    usePaymentLinkModal,
+} from "../Payment/PaymentLink";
 
 const PaymentStatus = ({order}: { order: Order }) => {
     const paymentStatuses: Record<string, string> = {
@@ -78,12 +89,16 @@ const RefundStatusType = ({order}: { order: Order }) => {
 const GuestListItem = ({
     attendee,
     event,
+    orderShortId,
+    canChangeSeat,
     allowSelfEdit,
     onEditClick,
     onResendClick,
 }: {
     attendee: Attendee;
     event: Event;
+    orderShortId: string;
+    canChangeSeat: boolean;
     allowSelfEdit: boolean;
     onEditClick: () => void;
     onResendClick: () => void;
@@ -99,8 +114,10 @@ const GuestListItem = ({
                     {isCancelled && <span className={classes.cancelledBadge}>{t`Cancelled`}</span>}
                 </div>
                 <div className={classes.guestDetails}>
-                    <span className={classes.guestEmail}>{attendee.email}</span>
-                    <span className={classes.guestProduct}>{productTitle}</span>
+                    {attendee.email ? <span className={classes.guestEmail}>{attendee.email}</span> : null}
+                    <span className={classes.guestProduct}>
+                        {[productTitle, attendee.seat_label].filter(Boolean).join(' · ')}
+                    </span>
                 </div>
             </div>
             <div className={classes.guestActions}>
@@ -120,6 +137,9 @@ const GuestListItem = ({
                         <IconPrinter size={18}/>
                     </ActionIcon>
                 </Tooltip>
+                {canChangeSeat && (
+                    <ChangeSeatButton eventId={event.id as IdParam} orderShortId={orderShortId} attendee={attendee}/>
+                )}
                 {allowSelfEdit && !isCancelled && (
                     <>
                         <Tooltip label={t`Edit Attendee`}>
@@ -131,15 +151,17 @@ const GuestListItem = ({
                                 <IconEdit size={18}/>
                             </ActionIcon>
                         </Tooltip>
-                        <Tooltip label={t`Resend Ticket`}>
-                            <ActionIcon
-                                variant="subtle"
-                                data-testid="resend-ticket-button"
-                                onClick={onResendClick}
-                            >
-                                <IconSend size={18}/>
-                            </ActionIcon>
-                        </Tooltip>
+                        {attendee.email ? (
+                            <Tooltip label={t`Resend Ticket`}>
+                                <ActionIcon
+                                    variant="subtle"
+                                    data-testid="resend-ticket-button"
+                                    onClick={onResendClick}
+                                >
+                                    <IconSend size={18}/>
+                                </ActionIcon>
+                            </Tooltip>
+                        ) : null}
                     </>
                 )}
             </div>
@@ -159,16 +181,22 @@ const DetailItem = ({icon: Icon, label, value}: { icon: any, label: string, valu
     </div>
 );
 
-const WelcomeHeader = ({order, event, allowSelfEdit}: { order: Order; event: Event; allowSelfEdit: boolean }) => {
+const WelcomeHeader = ({order, event, allowSelfEdit, isPayer}: {
+    order: Order;
+    event: Event;
+    allowSelfEdit: boolean;
+    isPayer: boolean;
+}) => {
     const isCompleted = order.status === 'COMPLETED';
     const isAwaitingPayment = order.status === 'AWAITING_OFFLINE_PAYMENT';
     const isCancelled = order.status === 'CANCELLED';
+    const registrantName = order.first_name || order.email;
 
     const message = {
-        'COMPLETED': t`You're going to ${event.title}!`,
+        'COMPLETED': isPayer ? t`Payment complete` : t`You're going to ${event.title}!`,
         'CANCELLED': t`Your order has been cancelled`,
         'RESERVED': null,
-        'AWAITING_OFFLINE_PAYMENT': t`Your order is awaiting payment`,
+        'AWAITING_OFFLINE_PAYMENT': isPayer ? t`Order placed, payment pending` : t`Your order is awaiting payment`,
         'ABANDONED': null,
     }[order.status];
 
@@ -195,17 +223,32 @@ const WelcomeHeader = ({order, event, allowSelfEdit}: { order: Order; event: Eve
                 </div>
             )}
             <div className={classes.welcomeMessage}>{message}</div>
-            {isCompleted && (
+            {isPayer && isCompleted && (
+                <div className={classes.confirmationText}>
+                    {t`Thank you. ${registrantName}'s order is confirmed and their confirmation has been emailed to`} <strong>{order.email}</strong>
+                </div>
+            )}
+            {isPayer && isAwaitingPayment && (
+                <div className={classes.confirmationText}>
+                    {t`Pay using the instructions below. ${registrantName} has been emailed the order details, and the organizer will confirm the order once your payment arrives.`}
+                </div>
+            )}
+            {!isPayer && isAwaitingPayment && (
+                <div className={classes.confirmationText}>
+                    {t`Your places are reserved. The organizer will confirm your order once your payment arrives.`}
+                </div>
+            )}
+            {!isPayer && isCompleted && order.email && (
                 <div className={classes.confirmationText}>
                     {t`Confirmation sent to`} <strong>{order.email}</strong>
                 </div>
             )}
-            {isCompleted && allowSelfEdit && (
+            {isCompleted && allowSelfEdit && !isPayer && (
                 <div className={classes.selfServiceHint}>
                     {t`Bookmark this page to manage your order anytime.`}
                 </div>
             )}
-            {isCancelled && (
+            {isCancelled && order.email && (
                 <div className={classes.confirmationText}>
                     {t`A cancellation notice has been sent to`} <strong>{order.email}</strong>
                 </div>
@@ -250,22 +293,24 @@ const OrderDetails = ({
                 label={t`Order Reference`}
                 value={order.public_id}
             />
-            <DetailItem
-                icon={IconMail}
-                label={t`Email`}
-                value={
-                    <Group gap="xs" wrap="nowrap">
-                        <span style={{wordBreak: 'break-all'}}>{order.email}</span>
-                        {allowSelfEdit && order.status !== 'CANCELLED' && (
-                            <Tooltip label={t`Resend Confirmation`}>
-                                <ActionIcon size="xs" variant="subtle" data-testid="resend-confirmation-button" onClick={onResendClick}>
-                                    <IconSend size={14}/>
-                                </ActionIcon>
-                            </Tooltip>
-                        )}
-                    </Group>
-                }
-            />
+            {order.email ? (
+                <DetailItem
+                    icon={IconMail}
+                    label={t`Email`}
+                    value={
+                        <Group gap="xs" wrap="nowrap">
+                            <span style={{wordBreak: 'break-all'}}>{order.email}</span>
+                            {allowSelfEdit && order.status !== 'CANCELLED' && (
+                                <Tooltip label={t`Resend Confirmation`}>
+                                    <ActionIcon size="xs" variant="subtle" data-testid="resend-confirmation-button" onClick={onResendClick}>
+                                        <IconSend size={14}/>
+                                    </ActionIcon>
+                                </Tooltip>
+                            )}
+                        </Group>
+                    }
+                />
+            ) : null}
             <DetailItem
                 icon={IconCalendar}
                 label={t`Order Date`}
@@ -401,23 +446,34 @@ const PostCheckoutMessage = ({ message }: { message: string }) => (
     <div style={{ marginTop: '20px', marginBottom: '40px' }}>
         <h1 className={classes.heading}>{t`Additional Information`}</h1>
         <Card>
-            <div dangerouslySetInnerHTML={{ __html: message }} />
+            <UserGeneratedContent html={message} />
         </Card>
     </div>
 );
 
-const OfflinePaymentInstructions = ({ event }: { event: Event }) => (
-    <div style={{ marginTop: '20px', marginBottom: '40px' }}>
-        <h2>{t`Payment Instructions`}</h2>
-        <Card>
-            <div
-                dangerouslySetInnerHTML={{
-                    __html: event?.settings?.offline_payment_instructions || "",
-                }}
-            />
-        </Card>
-    </div>
-);
+const OfflinePaymentInstructions = ({event, order, canShare}: { event: Event; order: Order; canShare: boolean }) => {
+    const shareModal = usePaymentLinkModal();
+
+    return (
+        <div style={{marginTop: '20px', marginBottom: '40px'}}>
+            <h2>{t`How to pay`}</h2>
+            <Card>
+                <OfflinePaymentDetails
+                    amount={formatCurrency(order.total_gross, order.currency)}
+                    amountToCopy={plainAmount(order.total_gross, order.currency)}
+                    reference={event?.settings?.offline_payment_order_reference_enabled ? order.public_id : null}
+                />
+                <UserGeneratedContent html={event?.settings?.offline_payment_instructions || ""}/>
+            </Card>
+            {canShare && (
+                <>
+                    <SharePaymentDetailsEntryPoint order={order} event={event} onReady={shareModal.open}/>
+                    <SharePaymentDetailsModal opened={shareModal.opened} onClose={shareModal.close} order={order} event={event}/>
+                </>
+            )}
+        </div>
+    );
+};
 
 export const OrderSummaryAndProducts = () => {
     const {eventId, orderShortId} = useParams();
@@ -430,6 +486,7 @@ export const OrderSummaryAndProducts = () => {
 
     const [editingAttendee, setEditingAttendee] = useState<Attendee | null>(null);
     const [editOrderModalOpened, setEditOrderModalOpened] = useState(false);
+    const isPayer = !!order?.is_payment_link_payer;
 
     useEffect(() => {
         if (eventId && order && (order.status === 'COMPLETED' || order.status === 'AWAITING_OFFLINE_PAYMENT')) {
@@ -442,7 +499,7 @@ export const OrderSummaryAndProducts = () => {
     const resendAttendeeTicketMutation = useResendAttendeeTicketPublic();
     const resendOrderConfirmationMutation = useResendOrderConfirmationPublic();
 
-    const allowSelfEdit = event?.settings?.allow_attendee_self_edit ?? false;
+    const allowSelfEdit = (event?.settings?.allow_attendee_self_edit ?? false) && !isPayer;
 
     const handleEditAttendee = (attendee: Attendee, data: any) => {
         editAttendeeMutation.mutate(
@@ -582,7 +639,14 @@ export const OrderSummaryAndProducts = () => {
     return (
         <>
             <CheckoutContent>
-                <WelcomeHeader order={order} event={event} allowSelfEdit={allowSelfEdit}/>
+                <CheckoutStepTitle title={t`Summary`}/>
+
+                <WelcomeHeader
+                    order={order}
+                    event={event}
+                    allowSelfEdit={allowSelfEdit}
+                    isPayer={isPayer}
+                />
 
                 {emailUpdated && (
                     <Alert
@@ -608,7 +672,18 @@ export const OrderSummaryAndProducts = () => {
                     defaultExpanded={false}
                 />
 
-                {order?.status === 'AWAITING_OFFLINE_PAYMENT' && <OfflinePaymentInstructions event={event}/>}
+                {order?.status === 'AWAITING_OFFLINE_PAYMENT' && <OfflinePaymentInstructions
+                    event={event}
+                    order={order}
+                    canShare={!isPayer
+                        && !!order.is_payment_required
+                        && !!event?.settings?.payment_links_enabled
+                        && !!event?.settings?.payment_providers?.includes('OFFLINE')}
+                />}
+
+                {(order?.status === 'AWAITING_OFFLINE_PAYMENT' && event?.settings?.offline_payment_reporting_enabled) && (
+                    <ReportOfflinePayment order={order} event={event}/>
+                )}
 
                 <h1 className={classes.heading}>{t`Order Details`}</h1>
 
@@ -627,9 +702,9 @@ export const OrderSummaryAndProducts = () => {
                 <h1 className={classes.heading}>{t`Event Details`}</h1>
                 <EventDetails event={event} order={order}/>
 
-                {order.status === 'COMPLETED' && <AddToCalendarCTA event={event} occurrence={order.order_items?.[0]?.event_occurrence}/>}
+                {(order.status === 'COMPLETED' && !isPayer) && <AddToCalendarCTA event={event} occurrence={order.order_items?.[0]?.event_occurrence}/>}
 
-                {(order?.attendees && order.attendees.length > 0) && (
+                {(!isPayer && order?.attendees && order.attendees.length > 0) && (
                     <>
                         <Group justify="space-between" align="center">
                             <h1 className={classes.heading}>
@@ -655,6 +730,8 @@ export const OrderSummaryAndProducts = () => {
                                         key={attendee.id}
                                         attendee={attendee}
                                         event={event}
+                                        orderShortId={orderShortId as string}
+                                        canChangeSeat={canAttendeeChangeSeat(attendee, order.status, allowSelfEdit)}
                                         allowSelfEdit={allowSelfEdit}
                                         onEditClick={() => setEditingAttendee(attendee)}
                                         onResendClick={() => handleResendAttendeeTicket(attendee)}
@@ -665,7 +742,7 @@ export const OrderSummaryAndProducts = () => {
                     </>
                 )}
 
-                <PoweredByFooter/>
+                <PoweredByFooter brandingRemoved={event.organizer?.branding_removed}/>
             </CheckoutContent>
 
             {editingAttendee && (

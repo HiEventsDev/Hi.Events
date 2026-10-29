@@ -1,5 +1,6 @@
 import { test, expect } from '../../fixtures';
 import { createLiveEventWithFreeTicket } from '../../api/factory';
+import { setWidgetQuantity } from '../../pages/checkout.page';
 
 test.describe('widget checkout', () => {
   test('a buyer starts checkout from the standalone product widget', async ({ page, api, account }) => {
@@ -9,7 +10,7 @@ test.describe('widget checkout', () => {
     await page.waitForLoadState('networkidle');
     await expect(page.getByRole('heading', { name: event.productTitle })).toBeVisible();
 
-    await page.locator('.hi-product-quantity-selector input').first().fill('1');
+    await setWidgetQuantity(page, 1);
 
     const [checkoutPage] = await Promise.all([
       page.context().waitForEvent('page'),

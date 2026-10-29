@@ -1,4 +1,5 @@
 import {
+    IconArrowLeft,
     IconArrowsHorizontal,
     IconBrandStripe,
     IconCalendar,
@@ -6,22 +7,28 @@ import {
     IconChartPie,
     IconChevronRight,
     IconDashboard,
+    IconDeviceTabletCode,
     IconExternalLink,
     IconEye,
     IconEyeOff,
+    IconArmchair,
     IconMapPin,
+    IconMicrophone2,
     IconPaint,
     IconSettings,
     IconShare,
     IconUsersGroup,
     IconWebhook
 } from "@tabler/icons-react";
+import { useAccess } from "../../../hooks/useAccess.ts";
 import { t } from "@lingui/macro";
 import { BreadcrumbItem, NavItem } from "../AppLayout/types.ts";
 import AppLayout from "../AppLayout";
 import { NavLink, useLocation, useParams } from "react-router";
-import { Button, Modal, Stack, Text } from "@mantine/core";
+import { Badge, Button, Modal, Stack, Text } from "@mantine/core";
 import { useGetOrganizer } from "../../../queries/useGetOrganizer.ts";
+import { useGetOrganizerSettings } from "../../../queries/useGetOrganizerSettings.ts";
+import { OrganizerDatesProvider } from "../../common/OrganizerDatesProvider";
 import { useGeoStatus } from "../../../queries/useGeoStatus.ts";
 import { useState } from "react";
 import { CreateEventModal } from "../../modals/CreateEventModal";
@@ -34,6 +41,8 @@ import { SwitchOrganizerModal } from "../../modals/SwitchOrganizerModal";
 import { CreateOrganizerModal } from "../../modals/CreateOrganizerModal";
 import { useGetOrganizers } from "../../../queries/useGetOrganizers.ts";
 import { useGetAccount } from "../../../queries/useGetAccount.ts";
+import { useLicensedFeature } from "../../../ee/licensing/hooks/useLicensedFeature.ts";
+import { FeatureFlag } from "../../../constants/featureFlags.ts";
 import { ShareModal } from "../../modals/ShareModal";
 import { organizerHomepageUrl } from "../../../utilites/urlHelper";
 import { useUpdateOrganizerStatus } from "../../../mutations/useUpdateOrganizerStatus.ts";
@@ -41,11 +50,13 @@ import { confirmationDialog } from "../../../utilites/confirmationDialog.tsx";
 import { showError, showSuccess } from "../../../utilites/notifications.tsx";
 import { useResendEmailConfirmation } from "../../../mutations/useResendEmailConfirmation.ts";
 import { useGetMe } from "../../../queries/useGetMe.ts";
+import { GenericErrorPage } from "../../common/GenericErrorPage";
 
 const OrganizerLayout = () => {
     const { organizerId } = useParams();
     const location = useLocation();
     const { data: organizer } = useGetOrganizer(organizerId);
+    const { data: organizerSettings } = useGetOrganizerSettings(organizerId);
     useGeoStatus();
     const [showCreateEventModal, setShowCreateEventModal] = useState(false);
     const [showCreateOrganizerModal, setShowCreateOrganizerModal] = useState(false);
@@ -57,8 +68,10 @@ const OrganizerLayout = () => {
         close: closeEmailVerificationModal
     }] = useDisclosure(false);
     const { data: organizerResposne } = useGetOrganizers();
-    const organizers = organizerResposne?.data;
+    const { canManageOrganizer, can, isReadOnly, isLoaded: isAccessLoaded } = useAccess();
+    const organizers = organizerResposne?.data?.filter(org => canManageOrganizer(org.id));
     const { data: account } = useGetAccount();
+    const seating = useLicensedFeature(FeatureFlag.SEATING);
     const resendEmailConfirmationMutation = useResendEmailConfirmation();
     const [emailConfirmationResent, setEmailConfirmationResent] = useState(false);
     const { data: me } = useGetMe();
@@ -78,7 +91,7 @@ const OrganizerLayout = () => {
             isActive: () => false,
             showWhen: () => organizers && organizers.length > 1,
         },
-        ...(showPayoutsSection && !isStripeConnected ? [
+        ...(showPayoutsSection && !isStripeConnected && can('MANAGE_PAYMENTS') ? [
             { label: t`Get Paid` },
             {
                 link: 'settings#payouts',
@@ -88,7 +101,12 @@ const OrganizerLayout = () => {
             },
         ] as NavItem[] : []),
         { label: 'Overview' },
-        { link: 'dashboard', label: t`Organizer Dashboard`, icon: IconDashboard },
+        {
+            link: 'dashboard',
+            label: t`Organizer Dashboard`,
+            icon: IconDashboard,
+            isActive: (isActive) => isActive || /\/manage\/organizer(\/[^/]+)?\/?$/.test(location.pathname),
+        },
         {
             link: 'reports',
             label: t`Reports`,
@@ -98,16 +116,22 @@ const OrganizerLayout = () => {
 
         { label: t`Manage` },
         { link: 'events', label: t`Events`, icon: IconCalendar },
-        { link: 'settings', label: t`Settings`, icon: IconSettings },
+        { link: 'settings', label: t`Settings`, icon: IconSettings, showWhen: () => !isReadOnly },
 
         { label: t`Tools` },
-        { link: 'organizer-homepage-designer', label: t`Homepage Designer`, icon: IconPaint },
+        { link: 'organizer-homepage-designer', label: t`Homepage Designer`, icon: IconPaint, showWhen: () => !isReadOnly },
+        { link: 'widget', label: t`Widget Embed`, icon: IconDeviceTabletCode },
 
         { label: t`Library` },
         { link: 'locations', label: t`Locations`, icon: IconMapPin },
+        { link: 'people', label: t`People`, icon: IconMicrophone2 },
+        { link: 'seat-maps', label: t`Seat Maps`, icon: IconArmchair, showWhen: () => !isReadOnly && seating.isVisible },
 
         { label: t`Integrations` },
-        { link: 'webhooks', label: t`Webhooks`, icon: IconWebhook },
+        { link: 'webhooks', label: t`Webhooks`, icon: IconWebhook, showWhen: () => can('VIEW_FINANCIALS') },
+
+        { label: t`Team` },
+        { link: 'team', label: t`Team Access`, icon: IconUsersGroup, showWhen: () => can('MANAGE_TEAM') },
     ];
 
     const handleEmailConfirmationResend = () => {
@@ -135,7 +159,6 @@ const OrganizerLayout = () => {
     });
 
     const handleStatusToggle = () => {
-        // Check if user email is verified
         if (!isUserEmailVerfied) {
             openEmailVerificationModal();
             return;
@@ -165,7 +188,7 @@ const OrganizerLayout = () => {
             link: `/manage/organizer/${organizerId}`,
             content: organizer?.name,
         },
-        {
+        ...(isReadOnly ? [] : [{
             content: (
                 <span
                     className={classes.createEventBreadcrumb}
@@ -174,10 +197,10 @@ const OrganizerLayout = () => {
                     <IconCalendarPlus size={16} /> {t`Create Event`}
                 </span>
             ),
-        }
+        }]),
     ];
 
-    const callouts: CalloutConfig[] = [
+    const callouts: CalloutConfig[] = !can('MANAGE_TEAM') ? [] : [
         {
             icon: <IconUsersGroup size={20} />,
             heading: t`Invite Your Team`,
@@ -191,16 +214,28 @@ const OrganizerLayout = () => {
         },
     ];
 
+    if (isAccessLoaded && !canManageOrganizer(organizerId)) {
+        return (
+            <GenericErrorPage
+                title={t`You don't have access to this organizer`}
+                description={t`Ask an account admin to give you access, or open one of your own events.`}
+                buttonText={t`Go to your events`}
+                buttonUrl="/manage/events"
+                buttonIcon={<IconArrowLeft size={18}/>}
+            />
+        );
+    }
 
     return (
-        <>
+        <OrganizerDatesProvider firstDayOfWeek={organizerSettings?.first_day_of_week}>
             <AppLayout
                 navItems={navItemsWithLoading}
                 breadcrumbItems={breadcrumbItems}
                 entityType="organizer"
                 topBarContent={(
                     <div className={classes.statusToggleContainer}>
-                        {organizer && (
+                        {isReadOnly && <Badge variant="white" color="dark" data-testid="view-only-badge">{t`View only`}</Badge>}
+                        {organizer && !isReadOnly && (
                             <TopBarButton
                                 onClick={handleStatusToggle}
                                 size="sm"
@@ -311,7 +346,7 @@ const OrganizerLayout = () => {
                     )}
                 </Stack>
             </Modal>
-        </>
+        </OrganizerDatesProvider>
     );
 };
 

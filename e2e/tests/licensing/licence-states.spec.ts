@@ -1,0 +1,444 @@
+import type { Page } from '@playwright/test';
+import { test, expect } from '../../fixtures';
+import { createDraftEvent, createDraftEventWithTicket, createFixtureSeatMap } from '../../api/factory';
+import type { AdminApiClient, ApiClient } from '../../api/api-client';
+import { nonSaasOnly, saasOnly } from '../../utils/mode';
+import { simulateLicence, withLicence } from '../../utils/licence';
+import { BoxOfficeManagePage } from '../../pages/box-office-manage.page';
+import { EnterpriseSsoSettings, MOCK_OIDC_URL, mockOidcIsReachable } from '../../pages/enterprise-sso.page';
+import { markSsoConnectionTested } from '../../utils/db';
+
+const licenceBadge = (page: Page) => page.getByTestId('licence-badge');
+
+async function openAccountMenu(page: Page): Promise<void> {
+  await page.getByTestId('account-menu-button').click();
+  await expect(page.getByRole('menuitem', { name: 'My Profile' })).toBeVisible();
+}
+
+async function openLicenceModal(page: Page) {
+  await openAccountMenu(page);
+  await page.getByTestId('licence-menu-item').click();
+  const modal = page.getByTestId('licence-modal');
+  await expect(modal).toBeVisible();
+  return modal;
+}
+
+async function expectNoLicenceMenuItem(page: Page): Promise<void> {
+  await openAccountMenu(page);
+  await expect(page.getByTestId('licence-menu-item')).toHaveCount(0);
+  await page.keyboard.press('Escape');
+}
+
+async function enableEnterpriseFlags(adminApi: AdminApiClient, email: string): Promise<void> {
+  const accountId = await adminApi.findAccountIdByEmail(email);
+  await adminApi.setAccountFeatureFlag(accountId, 'seating', true);
+  await adminApi.setAccountFeatureFlag(accountId, 'box_office', true);
+}
+
+async function createEventWithBoxOffice(api: ApiClient, organizerId: number): Promise<number> {
+  const { eventId } = await createDraftEvent(api, organizerId);
+  await api.createBoxOffice(eventId, { name: 'Side door' });
+  return eventId;
+}
+
+async function openOrderFilters(page: Page, eventId: number) {
+  await page.goto(`/manage/event/${eventId}/orders`);
+  await page.getByRole('button', { name: 'Filters' }).click();
+  const dialog = page.getByRole('dialog');
+  await expect(dialog.getByText('Refund Status')).toBeVisible();
+  return dialog;
+}
+
+test.describe('licence gating', () => {
+  test('an account that never set up an enterprise feature sees nothing enterprise without a licence', { tag: '@smoke' }, async ({ freshAccount, playwright }) => {
+    const { eventId } = await createDraftEvent(freshAccount.api, freshAccount.organizerId);
+    const page = await freshAccount.newAuthedPage();
+    await simulateLicence(page, 'NONE');
+
+    const filters = await openOrderFilters(page, eventId);
+    await expect(filters.getByText('Sold by')).toHaveCount(0);
+    await expect(filters.getByText('Box Office')).toHaveCount(0);
+    await page.keyboard.press('Escape');
+
+    await expect(page.getByRole('link', { name: 'Attendees' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Box Office' })).toHaveCount(0);
+    await expect(page.getByRole('link', { name: 'Seating', exact: true })).toHaveCount(0);
+    await expect(licenceBadge(page)).toHaveCount(0);
+
+    await page.goto(`/manage/organizer/${freshAccount.organizerId}/settings`);
+    await expect(page.getByText('Basic Information').first()).toBeVisible();
+    await expect(page.getByText('Card Readers')).toHaveCount(0);
+    await expect(page.getByRole('link', { name: 'Seat Maps' })).toHaveCount(0);
+    await expect(licenceBadge(page)).toHaveCount(0);
+    await expectNoLicenceMenuItem(page);
+
+    const me = await withLicence(playwright, freshAccount.token, 'NONE', api => api.getMe());
+    expect(me.licence).toMatchObject({ status: 'NONE', invalid_reason: null, features_in_use: [] });
+  });
+
+  test('a box office set up without a licence stays visible but its setup is locked', async ({ freshAccount, adminApi, playwright }) => {
+    await enableEnterpriseFlags(adminApi, freshAccount.email);
+    const eventId = await createEventWithBoxOffice(freshAccount.api, freshAccount.organizerId);
+    const page = await freshAccount.newAuthedPage();
+    await simulateLicence(page, 'NONE');
+
+    await page.goto(`/manage/event/${eventId}/box-office`);
+    await expect(page.getByTestId('licence-locked-callout')).toBeVisible();
+    await expect(page.getByText('Side door')).toBeVisible();
+    await expect(page.getByTestId('box-office-create-button')).toHaveCount(0);
+    await expect(page.getByTestId('box-office-open-default-button')).toHaveCount(0);
+    await page.getByText('Side door').click();
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+    await expect(page.getByRole('link', { name: 'Box Office' })).toBeVisible();
+
+    const filters = await openOrderFilters(page, eventId);
+    await expect(filters.getByText('Sold by')).toBeVisible();
+
+    await withLicence(playwright, freshAccount.token, 'NONE', async api => {
+      await expect(api.createBoxOffice(eventId, { name: 'Blocked' })).rejects.toThrow(/→ 403/);
+      expect((await api.listBoxOffices(eventId)).map(boxOffice => boxOffice.name)).toContain('Side door');
+    });
+  });
+
+  test('an SSO connection set up without a licence stays visible, its setup is locked and it can still be turned off', async ({ freshAccount, playwright }) => {
+    const page = await freshAccount.newAuthedPage();
+    test.skip(!(await mockOidcIsReachable(page)), `No mock identity provider at ${MOCK_OIDC_URL}`);
+    const { id: accountId } = await freshAccount.api.getAccount();
+    await freshAccount.api.createSsoConnection(accountId, {
+      type: 'OIDC',
+      issuer: `${MOCK_OIDC_URL}/licence-${Date.now().toString(36)}`,
+      client_id: 'hievents-e2e',
+      client_secret: 'e2e-secret',
+    });
+    markSsoConnectionTested(accountId);
+    await freshAccount.api.setSsoConnectionStatus(accountId, 'ACTIVE');
+    await simulateLicence(page, 'NONE');
+
+    const settings = new EnterpriseSsoSettings(page);
+    await settings.open();
+    await expect(page.getByTestId('licence-locked-callout').first()).toBeVisible();
+    await expect(settings.drawer().getByRole('button', { name: 'Edit details' })).toHaveCount(0);
+    await expect(settings.drawer().getByTestId('sso-test-sign-in')).toHaveCount(0);
+    await expect(settings.drawer().getByRole('button', { name: 'Add domain' })).toHaveCount(0);
+
+    await settings.toggle('sso-connection-active-switch');
+    await expect(page.getByText('Sign-in with your identity provider is turned off')).toBeVisible();
+    await expect(page.getByTestId('sso-connection-active-switch')).toBeDisabled();
+
+    await withLicence(playwright, freshAccount.token, 'NONE', async api => {
+      await expect(api.addSsoDomain(accountId, 'locked.test')).rejects.toThrow(/→ 403/);
+      await expect(api.setSsoConnectionStatus(accountId, 'ACTIVE')).rejects.toThrow(/→ 403/);
+    });
+  });
+
+  test('direct links to enterprise setup stay locked without a licence', async ({ freshAccount, adminApi }) => {
+    await enableEnterpriseFlags(adminApi, freshAccount.email);
+    const { eventId } = await createDraftEvent(freshAccount.api, freshAccount.organizerId);
+    const page = await freshAccount.newAuthedPage();
+    await simulateLicence(page, 'NONE');
+
+    await page.goto(`/manage/organizer/${freshAccount.organizerId}/seat-maps`);
+    await expect(page.getByTestId('licence-locked-callout')).toBeVisible();
+    await expect(page.getByTestId('seat-map-create-button')).toHaveCount(0);
+
+    await page.goto(`/manage/event/${eventId}/box-office`);
+    await expect(page.getByTestId('licence-locked-callout')).toBeVisible();
+    await expect(page.getByTestId('box-office-create-button')).toHaveCount(0);
+
+    await page.goto(`/manage/event/${eventId}/seating`);
+    await expect(page.getByTestId('licence-locked-callout')).toBeVisible();
+    await expect(page.getByTestId('seating-attach-button')).toHaveCount(0);
+    await expect(page.getByTestId('seating-create-seat-map-button')).toHaveCount(0);
+  });
+
+  test('a box office refused by the feature flag is explained instead of leaving the page', async ({ freshAccount, adminApi }) => {
+    const accountId = await adminApi.findAccountIdByEmail(freshAccount.email);
+    await adminApi.setAccountFeatureFlag(accountId, 'box_office', false);
+    const { eventId } = await createDraftEventWithTicket(freshAccount.api, freshAccount.organizerId);
+    const page = await freshAccount.newAuthedPage();
+    await simulateLicence(page, 'CLOUD');
+
+    const boxOffices = new BoxOfficeManagePage(page);
+    await boxOffices.goto(eventId);
+    await boxOffices.create('Refused door');
+
+    await expect(page.getByText('This feature is not enabled for this account')).toBeVisible();
+    await expect(page).toHaveURL(new RegExp(`/manage/event/${eventId}/box-office`));
+  });
+
+  test('a seat map template set up without a licence can still be deleted', async ({ freshAccount, adminApi }) => {
+    await enableEnterpriseFlags(adminApi, freshAccount.email);
+    const seatMapId = await createFixtureSeatMap(freshAccount.api, freshAccount.organizerId, 'theatre', 'Old hall');
+    const page = await freshAccount.newAuthedPage();
+    await simulateLicence(page, 'NONE');
+
+    await page.goto(`/manage/organizer/${freshAccount.organizerId}/seat-maps`);
+    await expect(page.getByTestId('licence-locked-callout')).toBeVisible();
+    await expect(page.getByText('Old hall')).toBeVisible();
+    await expect(page.getByTestId('seat-map-create-button')).toHaveCount(0);
+    await expect(page.getByTestId(`seat-map-edit-button-${seatMapId}`)).toHaveCount(0);
+
+    await page.getByTestId(`seat-map-delete-button-${seatMapId}`).click();
+    await page.getByRole('dialog').getByRole('button', { name: 'Confirm' }).click();
+    await expect(page.getByText('Seat map deleted')).toBeVisible();
+
+    await page.reload();
+    await expect(page.getByRole('link', { name: 'Locations' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Seat Maps' })).toHaveCount(0);
+  });
+
+  test('the grace period keeps setup unlocked', async ({ freshAccount, adminApi }) => {
+    await enableEnterpriseFlags(adminApi, freshAccount.email);
+    const eventId = await createEventWithBoxOffice(freshAccount.api, freshAccount.organizerId);
+    const page = await freshAccount.newAuthedPage();
+    await simulateLicence(page, 'GRACE');
+
+    await page.goto(`/manage/event/${eventId}/box-office`);
+    await expect(page.getByTestId('box-office-create-button')).toBeVisible();
+    await expect(page.getByTestId('licence-locked-callout')).toHaveCount(0);
+  });
+
+  test('the admin licence page warns about an upcoming expiry', async ({ superAdminPage }) => {
+    await simulateLicence(superAdminPage, 'EXPIRING');
+
+    await superAdminPage.goto('/admin/licence');
+    await expect(superAdminPage.getByTestId('admin-licence-status')).toHaveText('Active');
+    await expect(superAdminPage.getByText('This licence expires on')).toBeVisible();
+  });
+
+  test('the admin licence page shows the plan, the sales it covers and sales by licence year', async ({ superAdminPage }) => {
+    await simulateLicence(superAdminPage, 'ACTIVE');
+
+    await superAdminPage.goto('/admin/licence');
+    const card = superAdminPage.getByTestId('admin-licence-card');
+    await expect(card).toContainText('Platform');
+    await expect(card).toContainText('€300,000 of sales a year');
+    await expect(superAdminPage.getByTestId('admin-licence-features').getByText('Included', { exact: true })).toHaveCount(4);
+
+    const sales = superAdminPage.getByTestId('admin-licence-sales');
+    await expect(sales).toContainText('Paid sales before tax, after refunds, across every organizer on this install');
+    await expect(sales.getByText('Current year')).toBeVisible();
+
+    await superAdminPage.context().grantPermissions(['clipboard-read', 'clipboard-write']);
+    await sales.getByRole('button', { name: 'Copy sales report' }).first().click();
+    await expect(sales.getByRole('button', { name: 'Copied' })).toBeVisible();
+    const report = await superAdminPage.evaluate(() => navigator.clipboard.readText());
+    expect(report).toContain('Licence: lic_simulated (Simulated licence)');
+    expect(report).toContain('Plan: platform, covers EUR 300000 a year');
+    expect(report).toMatch(/Licence year: \d{4}-\d{2}-\d{2} to \d{4}-\d{2}-\d{2}/);
+    expect(report).toContain('Paid sales before tax, after refunds: ');
+  });
+
+  test('the Powered by notice follows the white-label licence', async ({ page }) => {
+    await simulateLicence(page, 'NONE');
+    await page.goto('/auth/login');
+    await expect(page.getByText('Powered by')).toBeVisible();
+    await expect(page.getByText('Development licence, not for production use')).toHaveCount(0);
+
+    await simulateLicence(page, 'ACTIVE:white_label');
+    await page.goto('/auth/login');
+    await expect(page.getByRole('button', { name: 'Sign in', exact: true })).toBeVisible();
+    await expect(page.getByText('Powered by')).toHaveCount(0);
+  });
+
+  test('the public footer flags a development licence once an enterprise feature is in use', async ({ freshAccount, adminApi, page }) => {
+    await enableEnterpriseFlags(adminApi, freshAccount.email);
+    await createEventWithBoxOffice(freshAccount.api, freshAccount.organizerId);
+
+    await simulateLicence(page, 'DEV');
+    await page.goto('/auth/login');
+    await expect(page.getByText('Development licence, not for production use')).toBeVisible();
+  });
+});
+
+test.describe('licence notices', () => {
+  nonSaasOnly();
+
+  test('an unlicensed box office is flagged to the account using it', { tag: '@smoke' }, async ({ freshAccount }) => {
+    const eventId = await createEventWithBoxOffice(freshAccount.api, freshAccount.organizerId);
+    const page = await freshAccount.newAuthedPage();
+    await simulateLicence(page, 'NONE');
+
+    await page.goto(`/manage/event/${eventId}/box-office`);
+    await expect(licenceBadge(page)).toHaveAttribute('data-tone', 'danger');
+
+    const modal = await openLicenceModal(page);
+    await expect(modal).toContainText('Setup for box office is locked');
+    await expect(modal).toContainText('New box office sign-ins are refused, so open box office sessions end within 24 hours');
+    await expect(modal.getByRole('link', { name: 'Get a licence' })).toHaveAttribute('href', /hi\.events\/licensing/);
+  });
+
+  test('an own-events licence locks a box office it does not include', async ({ freshAccount }) => {
+    const eventId = await createEventWithBoxOffice(freshAccount.api, freshAccount.organizerId);
+    const page = await freshAccount.newAuthedPage();
+    await simulateLicence(page, 'ACTIVE:white_label');
+
+    await page.goto(`/manage/event/${eventId}/box-office`);
+    await expect(page.getByTestId('licence-locked-callout')).toContainText("Your Hi.Events licence doesn't include this feature");
+    await expect(page.getByText('Side door')).toBeVisible();
+    await expect(page.getByTestId('box-office-create-button')).toHaveCount(0);
+    await expect(licenceBadge(page)).toHaveAttribute('data-tone', 'danger');
+
+    const modal = await openLicenceModal(page);
+    await expect(modal).toContainText("Your licence doesn't include box office");
+    await expect(modal).toContainText('New box office sign-ins are refused, so open box office sessions end within 24 hours');
+    await expect(modal).toContainText('Add box office to your licence');
+    await expect(modal.getByRole('link', { name: 'Upgrade licence' })).toHaveAttribute('href', /hi\.events\/licensing/);
+  });
+
+  test('a lapsed licence says what keeps working and what stops', async ({ freshAccount }) => {
+    await createFixtureSeatMap(freshAccount.api, freshAccount.organizerId, 'theatre', 'Main hall');
+    const eventId = await createEventWithBoxOffice(freshAccount.api, freshAccount.organizerId);
+    const page = await freshAccount.newAuthedPage();
+    await simulateLicence(page, 'LAPSED');
+
+    await page.goto(`/manage/event/${eventId}/box-office`);
+    await expect(licenceBadge(page)).toHaveAttribute('data-tone', 'danger');
+
+    const modal = await openLicenceModal(page);
+    await expect(modal).toContainText('Setup for reserved seating and box office is locked until you renew');
+    await expect(modal).toContainText('Online ticket sales for events with reserved seating keep working');
+    await expect(modal).toContainText('New box office sign-ins are refused, so open box office sessions end within 24 hours');
+    await expect(modal).not.toContainText('scheduled dates');
+    await expect(modal.getByRole('link', { name: 'Renew licence' })).toHaveAttribute('href', /hi\.events\/licensing/);
+  });
+
+  test('deleting the last seat map template clears the unlicensed notice', async ({ freshAccount }) => {
+    const seatMapId = await createFixtureSeatMap(freshAccount.api, freshAccount.organizerId, 'theatre', 'Old hall');
+    const page = await freshAccount.newAuthedPage();
+    await simulateLicence(page, 'NONE');
+
+    await page.goto(`/manage/organizer/${freshAccount.organizerId}/seat-maps`);
+    await expect(licenceBadge(page)).toHaveAttribute('data-tone', 'danger');
+
+    await page.getByTestId(`seat-map-delete-button-${seatMapId}`).click();
+    await page.getByRole('dialog').getByRole('button', { name: 'Confirm' }).click();
+    await expect(page.getByText('Seat map deleted')).toBeVisible();
+
+    await page.reload();
+    await expect(page.getByRole('link', { name: 'Locations' })).toBeVisible();
+    await expect(licenceBadge(page)).toHaveCount(0);
+    await expectNoLicenceMenuItem(page);
+  });
+
+  test('without white label, the grace period warns only accounts using enterprise features', async ({ freshAccount }) => {
+    const page = await freshAccount.newAuthedPage();
+    await simulateLicence(page, 'GRACE:seating,box_office');
+
+    await page.goto(`/manage/organizer/${freshAccount.organizerId}/events`);
+    await expect(page.getByRole('link', { name: 'Locations' })).toBeVisible();
+    await expect(licenceBadge(page)).toHaveCount(0);
+    await expectNoLicenceMenuItem(page);
+
+    const eventId = await createEventWithBoxOffice(freshAccount.api, freshAccount.organizerId);
+    await page.goto(`/manage/event/${eventId}/box-office`);
+    await expect(licenceBadge(page)).toHaveAttribute('data-tone', 'warning');
+
+    const modal = await openLicenceModal(page);
+    await expect(modal).toContainText('Everything stays on until');
+    await expect(modal.getByRole('link', { name: 'Renew licence' })).toHaveAttribute('href', /hi\.events\/licensing/);
+  });
+
+  test('a paid licence in its grace period warns admins even without enterprise features, because the Powered by notice will return', async ({ freshAccount }) => {
+    const page = await freshAccount.newAuthedPage();
+    await simulateLicence(page, 'GRACE');
+
+    await page.goto(`/manage/organizer/${freshAccount.organizerId}/events`);
+    await expect(licenceBadge(page)).toHaveAttribute('data-tone', 'warning');
+
+    const modal = await openLicenceModal(page);
+    await expect(modal).toContainText('Everything stays on until');
+    await expect(modal.getByText('White-label')).toBeVisible();
+  });
+
+  test('an own-events licence in its grace period warns about the expiry and the box office it does not include', async ({ freshAccount }) => {
+    const eventId = await createEventWithBoxOffice(freshAccount.api, freshAccount.organizerId);
+    const page = await freshAccount.newAuthedPage();
+    await simulateLicence(page, 'GRACE:white_label');
+
+    await page.goto(`/manage/event/${eventId}/box-office`);
+    await expect(licenceBadge(page)).toHaveAttribute('data-tone', 'warning');
+
+    const modal = await openLicenceModal(page);
+    await expect(modal).toContainText('Everything stays on until');
+    await expect(modal).toContainText("Your licence doesn't include box office");
+  });
+
+  test('a lapsed own-events licence does not promise that renewing unlocks a box office it never included', async ({ freshAccount }) => {
+    const eventId = await createEventWithBoxOffice(freshAccount.api, freshAccount.organizerId);
+    const page = await freshAccount.newAuthedPage();
+    await simulateLicence(page, 'LAPSED:white_label');
+
+    await page.goto(`/manage/event/${eventId}/box-office`);
+    await expect(licenceBadge(page)).toHaveAttribute('data-tone', 'danger');
+
+    const modal = await openLicenceModal(page);
+    await expect(modal).toContainText('"Powered by Hi.Events" notice is shown again');
+    await expect(modal).toContainText("Your licence doesn't include box office");
+    await expect(modal).toContainText('New box office sign-ins are refused');
+    await expect(modal).not.toContainText('locked until you renew');
+  });
+
+  test('an active licence shows no licence notice, even close to expiry', async ({ freshAccount }) => {
+    const eventId = await createEventWithBoxOffice(freshAccount.api, freshAccount.organizerId);
+    const page = await freshAccount.newAuthedPage();
+    await simulateLicence(page, 'EXPIRING');
+
+    await page.goto(`/manage/event/${eventId}/box-office`);
+    await expect(page.getByTestId('box-office-create-button')).toBeVisible();
+    await expect(licenceBadge(page)).toHaveCount(0);
+    await expectNoLicenceMenuItem(page);
+  });
+
+  test('an invalid licence key is explained to admins', async ({ freshAccount }) => {
+    const page = await freshAccount.newAuthedPage();
+    await simulateLicence(page, 'INVALID');
+
+    await page.goto(`/manage/organizer/${freshAccount.organizerId}/events`);
+    await expect(licenceBadge(page)).toHaveAttribute('data-tone', 'danger');
+
+    const modal = await openLicenceModal(page);
+    await expect(modal).toContainText("the key couldn't be verified");
+    await expect(modal).toContainText('The licence key signature is invalid');
+  });
+
+  test('a development licence is flagged once an enterprise feature is in use', async ({ freshAccount }) => {
+    const eventId = await createEventWithBoxOffice(freshAccount.api, freshAccount.organizerId);
+    const page = await freshAccount.newAuthedPage();
+    await simulateLicence(page, 'DEV');
+
+    await page.goto(`/manage/event/${eventId}/box-office`);
+    await expect(licenceBadge(page)).toHaveAttribute('data-tone', 'info');
+
+    const modal = await openLicenceModal(page);
+    await expect(modal).toContainText('APP_LICENCE_KEY=development unlocks reserved seating, the box office and enterprise single sign-on for development and testing');
+    await expect(modal).toContainText('The rest of Hi.Events is free for real events');
+    await expect(modal).toContainText('Remove APP_LICENCE_KEY and redeploy');
+    await expect(modal.getByRole('link', { name: 'Get a licence' })).toHaveAttribute('href', /hi\.events\/licensing/);
+  });
+
+  test('a lapsed white-label licence explains why the Powered by notice is back', async ({ freshAccount }) => {
+    const page = await freshAccount.newAuthedPage();
+    await simulateLicence(page, 'LAPSED:white_label');
+
+    await page.goto(`/manage/organizer/${freshAccount.organizerId}/events`);
+    await expect(licenceBadge(page)).toHaveAttribute('data-tone', 'danger');
+
+    const modal = await openLicenceModal(page);
+    await expect(modal).toContainText('"Powered by Hi.Events" notice is shown again');
+  });
+});
+
+test.describe('licence notices on a SaaS install', () => {
+  saasOnly();
+
+  test('tenant admins never see the operator licence notices', async ({ freshAccount }) => {
+    const eventId = await createEventWithBoxOffice(freshAccount.api, freshAccount.organizerId);
+    const page = await freshAccount.newAuthedPage();
+
+    await page.goto(`/manage/event/${eventId}/box-office`);
+    await expect(page.getByText('Side door')).toBeVisible();
+    await expect(licenceBadge(page)).toHaveCount(0);
+    await expectNoLicenceMenuItem(page);
+  });
+});

@@ -47,7 +47,7 @@ test.describe('product categories', () => {
     await expect(dialog.getByRole('heading', { name: 'Edit Product Category' })).toBeVisible();
     await expect(dialog.getByLabel(/^Name/)).toHaveValue(defaultCategory.name);
     await dialog.getByLabel(/^Name/).fill(newName);
-    await dialog.getByRole('button', { name: 'Edit Product Category' }).click();
+    await dialog.getByRole('button', { name: 'Save Changes' }).click();
 
     await expect(categoryHeading(authedPage, newName)).toBeVisible();
     await expect(categoryHeading(authedPage, defaultCategory.name)).toBeHidden();

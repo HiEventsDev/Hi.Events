@@ -4,6 +4,7 @@ import { createEventWithAttendee } from '../../api/factory';
 import { uniqueName } from '../../utils/unique';
 
 test.describe('message lifecycle', () => {
+
   test('a message to all attendees is delivered to the attendee inbox', { tag: '@smoke' }, async ({ authedPage, api, account, mailpit }) => {
     const event = await createEventWithAttendee(api, account.organizerId);
     const subject = uniqueName('Doors open early');
@@ -16,7 +17,7 @@ test.describe('message lifecycle', () => {
     await mailpit.waitForMessage(event.attendeeEmail, { subjectContains: subject });
   });
 
-  test('the recipients view of a sent message lists the attendee email', async ({ authedPage, api, account }) => {
+  test('the recipients view of a sent message lists the attendee email and its delivery status', async ({ authedPage, api, account }) => {
     const event = await createEventWithAttendee(api, account.organizerId);
     const subject = uniqueName('Parking info');
 
@@ -28,6 +29,7 @@ test.describe('message lifecycle', () => {
     await messages.openSentMessageRecipients();
 
     await expect(authedPage.getByText(event.attendeeEmail)).toBeVisible();
+    await expect(messages.recipientStatus(event.attendeeEmail)).toHaveText('Sent');
   });
 
   test('a scheduled message shows as scheduled and can be cancelled', async ({ authedPage, api, account }) => {

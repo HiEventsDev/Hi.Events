@@ -1,5 +1,5 @@
 import {api} from "./client";
-import {GenericDataResponse, IdParam, InviteUserRequest, User} from "../types";
+import {GenericDataResponse, IdParam, InviteUserRequest, TeamAccessRequest, User, UserRole} from "../types";
 
 export interface UserMeRequest {
     first_name: string;
@@ -11,13 +11,16 @@ export interface UserMeRequest {
     password_current: string;
     locale: string;
     marketing_opt_in?: boolean;
+    notify_new_orders?: boolean;
+    confirmation_password?: string;
+    reauth_proof?: string;
 }
 
-export interface UpdateUserRequest {
+export interface UpdateUserRequest extends Partial<TeamAccessRequest> {
     first_name: string;
     last_name: string;
-    role: string;
-    status: string;
+    role?: UserRole;
+    status?: string;
 }
 
 export const userClient = {
@@ -60,6 +63,9 @@ export const userClient = {
     findByID: async (userId: IdParam) => {
         const response = await api.get<GenericDataResponse<User>>(`users/${userId}`);
         return response.data;
+    },
+    resetTwoFactor: async (userId: IdParam) => {
+        await api.post(`users/${userId}/two-factor/reset`);
     },
     deleteInvitation: async (userId: IdParam) => {
         const response = await api.delete(`users/${userId}/invitation`);

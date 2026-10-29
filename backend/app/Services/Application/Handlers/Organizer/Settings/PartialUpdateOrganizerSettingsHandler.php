@@ -7,12 +7,16 @@ use HiEvents\DomainObjects\OrganizerSettingDomainObject;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerSettingsRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Organizer\DTO\PartialUpdateOrganizerSettingsDTO;
+use HiEvents\Services\Domain\Event\EventSpamCheckDispatchService;
+use HiEvents\Services\Domain\Event\HomepageSectionsSanitizer;
 
 class PartialUpdateOrganizerSettingsHandler
 {
     public function __construct(
         private readonly OrganizerSettingsRepositoryInterface $organizerSettingsRepository,
         private readonly OrganizerRepositoryInterface $organizerRepository,
+        private readonly EventSpamCheckDispatchService $eventSpamCheckDispatchService,
+        private readonly HomepageSectionsSanitizer $homepageSectionsSanitizer,
     ) {}
 
     public function handle(PartialUpdateOrganizerSettingsDTO $dto): OrganizerSettingDomainObject
@@ -34,15 +38,14 @@ class PartialUpdateOrganizerSettingsHandler
                 $organizerSettings->getDefaultAttendeeDetailsCollectionMethod()
             )?->name ?? $organizerSettings->getDefaultAttendeeDetailsCollectionMethod(),
 
-            'default_show_marketing_opt_in' => $dto->getProvided(
-                'defaultShowMarketingOptIn',
-                $organizerSettings->getDefaultShowMarketingOptIn()
-            ),
+            'default_show_marketing_opt_in' => $dto->getProvided('defaultShowMarketingOptIn')
+                ?? $organizerSettings->getDefaultShowMarketingOptIn(),
 
-            'default_pass_platform_fee_to_buyer' => $dto->getProvided(
-                'defaultPassPlatformFeeToBuyer',
-                $organizerSettings->getDefaultPassPlatformFeeToBuyer()
-            ),
+            'default_pass_platform_fee_to_buyer' => $dto->getProvided('defaultPassPlatformFeeToBuyer')
+                ?? $organizerSettings->getDefaultPassPlatformFeeToBuyer(),
+
+            'default_allow_attendee_self_edit' => $dto->getProvided('defaultAllowAttendeeSelfEdit')
+                ?? $organizerSettings->getDefaultAllowAttendeeSelfEdit(),
 
             'social_media_handles' => array_filter([
                 'facebook' => $dto->getProvided('facebookHandle', $organizerSettings->getSocialMediaHandle('facebook')),
@@ -51,6 +54,7 @@ class PartialUpdateOrganizerSettingsHandler
                 'linkedin' => $dto->getProvided('linkedinHandle', $organizerSettings->getSocialMediaHandle('linkedin')),
                 'discord' => $dto->getProvided('discordHandle', $organizerSettings->getSocialMediaHandle('discord')),
                 'tiktok' => $dto->getProvided('tiktokHandle', $organizerSettings->getSocialMediaHandle('tiktok')),
+                'bluesky' => $dto->getProvided('blueskyHandle', $organizerSettings->getSocialMediaHandle('bluesky')),
                 'youtube' => $dto->getProvided('youtubeHandle', $organizerSettings->getSocialMediaHandle('youtube')),
                 'snapchat' => $dto->getProvided('snapchatHandle', $organizerSettings->getSocialMediaHandle('snapchat')),
                 'twitch' => $dto->getProvided('twitchHandle', $organizerSettings->getSocialMediaHandle('twitch')),
@@ -74,6 +78,8 @@ class PartialUpdateOrganizerSettingsHandler
 
             'homepage_theme_settings' => $dto->getProvided('homepageThemeSettings', $organizerSettings->getHomepageThemeSettings()),
 
+            'homepage_sections' => $this->homepageSections($dto, $organizerSettings),
+
             'seo_keywords' => $dto->getProvided('seoKeywords', $organizerSettings->getSeoKeywords()),
             'seo_title' => $dto->getProvided('seoTitle', $organizerSettings->getSeoTitle()),
             'seo_description' => $dto->getProvided('seoDescription', $organizerSettings->getSeoDescription()),
@@ -83,11 +89,26 @@ class PartialUpdateOrganizerSettingsHandler
 
             'tracking_pixels' => $dto->getProvided('trackingPixels', $organizerSettings->getTrackingPixels()),
             'tracking_consent_acknowledged' => $dto->getProvided('trackingConsentAcknowledged', $organizerSettings->getTrackingConsentAcknowledged()),
+
+            'first_day_of_week' => $dto->getProvided('firstDayOfWeek', $organizerSettings->getFirstDayOfWeek()),
         ], [
             'organizer_id' => $dto->organizerId,
             'id' => $organizerSettings->getId(),
         ]);
 
+        $this->eventSpamCheckDispatchService->dispatchForOrganizer($organizer->getId());
+
         return $this->organizerSettingsRepository->findFirst($organizerSettings->getId());
+    }
+
+    private function homepageSections(PartialUpdateOrganizerSettingsDTO $dto, OrganizerSettingDomainObject $organizerSettings): array|string|null
+    {
+        if (! $dto->wasProvided('homepageSections')) {
+            return $organizerSettings->getHomepageSections();
+        }
+
+        return $dto->homepageSections === null
+            ? null
+            : $this->homepageSectionsSanitizer->sanitizeForOrganizer($dto->homepageSections, $dto->organizerId);
     }
 }

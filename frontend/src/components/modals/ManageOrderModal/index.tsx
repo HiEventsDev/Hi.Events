@@ -1,4 +1,5 @@
 import {GenericModalProps, IdParam, Product, QuestionAnswer} from "../../../types.ts";
+import {useAccess} from "../../../hooks/useAccess.ts";
 import {useParams} from "react-router";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useGetOrder} from "../../../queries/useGetOrder.ts";
@@ -23,6 +24,7 @@ import {Currency} from "../../common/Currency";
 import {formatDateWithLocale, prettyDate, relativeDate} from "../../../utilites/dates.ts";
 import {formatAddress} from "../../../utilites/addressUtilities.ts";
 import {capitalize} from "../../../utilites/stringHelper.ts";
+import {getBoxOfficeTenderLabel} from "../../../ee/box-office/utilites/boxOfficeTender.ts";
 import classes from './ManageOrderModal.module.scss';
 import {EditOrderPayload} from "../../../api/order.client.ts";
 import {
@@ -48,6 +50,7 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
     const [isEditing, setIsEditing] = useState(false);
     const errorHandler = useFormErrorResponseHandler();
     const mutation = useEditOrder();
+    const access = useAccess();
     const {getOrderActions, orderActionModals} = useOrderActions({
         eventId,
         onEdit: () => setIsEditing(true),
@@ -67,7 +70,7 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
             form.initialize({
                 first_name: order.first_name,
                 last_name: order.last_name,
-                email: order.email,
+                email: order.email ?? "",
                 notes: order.notes || "",
             });
         }
@@ -108,11 +111,12 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
             .map(item => [item.event_occurrence!.id, item.event_occurrence!])).values()
     );
 
+    const canViewFinancials = access.can('VIEW_FINANCIALS');
     const stats: DrawerStat[] = [
-        {
+        ...(canViewFinancials ? [{
             label: t`Total`,
             value: <Currency currency={order.currency} price={order.total_gross}/>,
-        },
+        }] : []),
         {
             label: t`Items`,
             value: (order.order_items ?? []).reduce((total, item) => total + item.quantity, 0),
@@ -131,10 +135,13 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
         },
     ];
 
+    const operatorName = order.box_office_operator_name;
     const fields: DrawerStat[] = [
         {
             label: t`Email`,
-            value: <Anchor href={'mailto:' + order.email} target="_blank">{order.email}</Anchor>,
+            value: order.email
+                ? <Anchor href={'mailto:' + order.email} target="_blank">{order.email}</Anchor>
+                : t`No email provided`,
         },
         ...(occurrences.length > 0 ? [{
             label: occurrences.length === 1 ? t`Occurrence` : t`Occurrences`,
@@ -147,9 +154,49 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
                 </div>
             )),
         }] : []),
-        ...(order.payment_provider ? [{
+        ...(order.box_office_id ? [{
+            label: t`Sold via`,
+            value: operatorName ? t`Box office · ${operatorName}` : t`Box office`,
+        }, {
+            label: t`Tender`,
+            value: getBoxOfficeTenderLabel(order.box_office_tender) ?? t`Unpaid`,
+        }] : order.payment_provider ? [{
             label: t`Payment provider`,
             value: capitalize(order.payment_provider),
+        }] : []),
+        ...(order.box_office_tender === 'CASH' && order.box_office_amount_tendered != null ? [{
+            label: t`Cash tendered`,
+            value: (
+                <>
+                    <Currency currency={order.currency} price={order.box_office_amount_tendered}/>
+                    {(order.box_office_change_due ?? 0) > 0 && (
+                        <> · {t`Change`} <Currency currency={order.currency} price={order.box_office_change_due ?? 0}/></>
+                    )}
+                </>
+            ),
+        }] : []),
+        ...(order.box_office_reference ? [{
+            label: t`Reference`,
+            value: order.box_office_reference,
+        }] : []),
+        ...(order.offline_payment_reported_at ? [{
+            label: t`Payment reported by buyer`,
+            value: (
+                <>
+                    <Tooltip label={prettyDate(order.offline_payment_reported_at, event.timezone)} position="bottom" withArrow>
+                        <span>{relativeDate(order.offline_payment_reported_at)}</span>
+                    </Tooltip>
+                    {order.offline_payment_note && <div>{t`Note: ${order.offline_payment_note}`}</div>}
+                </>
+            ),
+        }] : []),
+        ...(order.payment_link_created_at ? [{
+            label: t`Payment link`,
+            value: (
+                <Tooltip label={prettyDate(order.payment_link_created_at, event.timezone)} position="bottom" withArrow>
+                    <span>{t`Created ${relativeDate(order.payment_link_created_at)}`}</span>
+                </Tooltip>
+            ),
         }] : []),
         ...(order.promo_code ? [{
             label: t`Promo code`,
@@ -196,8 +243,12 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
             subtitle={(
                 <>
                     <span>{buyerName}</span>
-                    <span className={classes.separator}>·</span>
-                    <span className={classes.email}>{order.email}</span>
+                    {order.email && (
+                        <>
+                            <span className={classes.separator}>·</span>
+                            <span className={classes.email}>{order.email}</span>
+                        </>
+                    )}
                 </>
             )}
         />
@@ -234,14 +285,14 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
                             {...form.getInputProps("last_name")}
                             label={t`Last name`}
                             placeholder={t`Simpson`}
-                            required
+                            required={!order.box_office_id}
                         />
                     </InputGroup>
                     <TextInput
                         {...form.getInputProps("email")}
                         label={t`Email address`}
                         placeholder="homer@simpson.com"
-                        required
+                        required={!order.box_office_id}
                     />
                     <Textarea
                         label={
@@ -269,9 +320,11 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
                         <SideDrawerFields fields={fields}/>
                     </SideDrawerSection>
 
-                    <SideDrawerSection title={t`Order Summary`} surface>
-                        <OrderSummary event={event} order={order}/>
-                    </SideDrawerSection>
+                    {canViewFinancials && (
+                        <SideDrawerSection title={t`Order Summary`} surface>
+                            <OrderSummary event={event} order={order}/>
+                        </SideDrawerSection>
+                    )}
 
                     {order.notes && (
                         <SideDrawerSection title={t`Notes`}>

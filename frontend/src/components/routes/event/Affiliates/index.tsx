@@ -1,4 +1,6 @@
 import {PageBody} from "../../../common/PageBody";
+import {CreateButton} from "../../../common/CreateButton";
+import {useAccess} from "../../../../hooks/useAccess.ts";
 import {PageTitle} from "../../../common/PageTitle";
 import {t} from "@lingui/macro";
 import {useParams} from "react-router";
@@ -21,6 +23,7 @@ import {useState} from "react";
 import {SortSelector} from "../../../common/SortSelector";
 
 const Affiliates = () => {
+    const canViewFinancials = useAccess().can('VIEW_FINANCIALS');
     const {eventId} = useParams();
     const [searchParams, setSearchParams] = useFilterQueryParamSync();
     const {data: affiliatesData} = useGetAffiliates(
@@ -84,7 +87,7 @@ const Affiliates = () => {
                     />
                 ) : undefined}
             >
-                <Button
+                {canViewFinancials && <Button
                     onClick={() => handleExport(eventId)}
                     rightSection={<IconDownload size={14}/>}
                     color="green"
@@ -92,13 +95,13 @@ const Affiliates = () => {
                     size="sm"
                 >
                     {t`Export`}
-                </Button>
-                <Button
+                </Button>}
+                <CreateButton
                     leftSection={<IconPlus/>}
                     color={'green'}
                     data-testid="affiliate-create-button"
                     onClick={openCreateModal}>{t`Create Affiliate`}
-                </Button>
+                </CreateButton>
             </ToolBar>
 
             <TableSkeleton isVisible={!affiliates}/>

@@ -24,7 +24,7 @@ class UpdateProductVisibilityAction extends BaseAction
             new UpdateProductVisibilityDTO(
                 event_id: $eventId,
                 event_occurrence_id: $occurrenceId,
-                product_ids: $request->validated('product_ids'),
+                product_ids: array_values(array_unique(array_map('intval', $request->validated('product_ids')))),
             )
         );
 

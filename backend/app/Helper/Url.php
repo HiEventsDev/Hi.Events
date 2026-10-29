@@ -24,15 +24,39 @@ class Url
 
     public const ORDER_DETAILS = 'app.frontend_urls.order_details';
 
+    public const ORDER_PAYMENT = 'app.frontend_urls.order_payment';
+
     public const ORGANIZER_ORDER_SUMMARY = 'app.frontend_urls.organizer_order_summary';
 
     public const TICKET_LOOKUP = 'app.frontend_urls.ticket_lookup';
 
     public const ACCOUNT_DANGER_ZONE = 'app.frontend_urls.account_danger_zone';
 
+    public const PROFILE_SECURITY = 'app.frontend_urls.profile_security';
+
+    public const API_KEYS = 'app.frontend_urls.api_keys';
+
+    public const ACCOUNT_USERS = 'app.frontend_urls.account_users';
+
+    public const ACCOUNT_SETTINGS = 'app.frontend_urls.account_settings';
+
+    public const ACCOUNT_BILLING = 'app.frontend_urls.account_billing';
+
+    public const REGISTER = 'app.frontend_urls.register';
+
+    public const EVENT_DASHBOARD = 'app.frontend_urls.event_dashboard';
+
+    public const ORGANIZER_EVENTS = 'app.frontend_urls.organizer_events';
+
+    public const WELCOME = 'app.frontend_urls.welcome';
+
+    public const LIFECYCLE_EMAIL_UNSUBSCRIBE = 'app.frontend_urls.lifecycle_email_unsubscribe';
+
+    public const SSO_CALLBACK = 'app.frontend_urls.sso_callback';
+
     public static function getFrontEndUrlFromConfig(string $key, array $queryParams = []): string
     {
-        $url = config('app.frontend_url').config($key);
+        $url = rtrim((string) config('app.frontend_url'), '/').config($key);
 
         return self::addQueryParamsToUrl($queryParams, $url);
     }
@@ -50,13 +74,10 @@ class Url
      */
     public static function getCdnUrl(string $path): string
     {
-        // Fetch the CDN URL from environment variables
-        // Checking against the env variable instead of config() as config falls back to the default value
-        // and we want to ensure that if the env variable is not set, we do not use a default value.
-        $envCDNUrl = env('APP_CDN_URL');
+        $cdnUrl = config('app.cdn_url');
 
-        if ($envCDNUrl) {
-            return $envCDNUrl.'/'.$path;
+        if ($cdnUrl) {
+            return $cdnUrl.'/'.$path;
         }
 
         $disk = config('filesystems.public', 'public');

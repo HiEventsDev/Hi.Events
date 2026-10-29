@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Admin\Announcements;
 
-use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Exceptions\AnnouncementNotFoundException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Announcement\UpsertAnnouncementRequest;
@@ -21,7 +20,7 @@ class UpdateAnnouncementAction extends BaseAction
 
     public function __invoke(UpsertAnnouncementRequest $request, int $announcementId): Response
     {
-        $this->minimumAllowedRole(Role::SUPERADMIN);
+        $this->requireSuperAdmin();
 
         try {
             $announcement = $this->handler->handle(new UpsertAnnouncementDTO(

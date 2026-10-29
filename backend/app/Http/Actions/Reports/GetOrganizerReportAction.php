@@ -3,6 +3,7 @@
 namespace HiEvents\Http\Actions\Reports;
 
 use HiEvents\DomainObjects\Enums\OrganizerReportTypes;
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Report\GetOrganizerReportRequest;
@@ -19,6 +20,11 @@ class GetOrganizerReportAction extends BaseAction
     public function __construct(private readonly GetOrganizerReportHandler $reportHandler) {}
 
     /**
+     * Get Organizer Report
+     *
+     * The response rows depend on the requested `reportType`. Paginated report types return
+     * `{data, meta, links}`; non-paginated report types return `{data}`.
+     *
      * @throws ValidationException
      */
     public function __invoke(GetOrganizerReportRequest $request, int $organizerId, string $reportType): JsonResponse
@@ -29,6 +35,10 @@ class GetOrganizerReportAction extends BaseAction
 
         if (! in_array($reportType, OrganizerReportTypes::valuesArray(), true)) {
             throw new BadRequestHttpException(__('Invalid report type.'));
+        }
+
+        if (OrganizerReportTypes::from($reportType)->isFinancial()) {
+            $this->requirePermission(Permission::VIEW_FINANCIALS);
         }
 
         $reportData = $this->reportHandler->handle(

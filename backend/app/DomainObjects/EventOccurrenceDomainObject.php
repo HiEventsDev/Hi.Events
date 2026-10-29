@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\Interfaces\IsFilterable;
 use HiEvents\DomainObjects\Interfaces\IsSortable;
 use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
+use HiEvents\Services\Domain\EventOccurrence\DTO\OccurrenceBookingLimitsDTO;
 use Illuminate\Support\Collection;
 
 class EventOccurrenceDomainObject extends EventOccurrenceDomainObjectAbstract implements IsFilterable, IsSortable
@@ -25,6 +26,8 @@ class EventOccurrenceDomainObject extends EventOccurrenceDomainObjectAbstract im
     private ?EventOccurrenceStatisticDomainObject $eventOccurrenceStatistics = null;
 
     private ?EventLocationDomainObject $eventLocation = null;
+
+    private ?OccurrenceBookingLimitsDTO $bookingLimits = null;
 
     public static function getAllowedFilterFields(): array
     {
@@ -190,5 +193,17 @@ class EventOccurrenceDomainObject extends EventOccurrenceDomainObjectAbstract im
     public function getEventLocation(): ?EventLocationDomainObject
     {
         return $this->eventLocation;
+    }
+
+    public function setBookingLimits(?OccurrenceBookingLimitsDTO $bookingLimits): self
+    {
+        $this->bookingLimits = $bookingLimits;
+
+        return $this;
+    }
+
+    public function getBookingLimits(): ?OccurrenceBookingLimitsDTO
+    {
+        return $this->bookingLimits;
     }
 }

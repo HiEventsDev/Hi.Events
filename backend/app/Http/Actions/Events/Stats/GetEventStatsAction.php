@@ -2,10 +2,12 @@
 
 namespace HiEvents\Http\Actions\Events\Stats;
 
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Services\Application\Handlers\Event\DTO\EventStatsRequestDTO;
 use HiEvents\Services\Application\Handlers\Event\GetEventStatsHandler;
+use HiEvents\Services\Domain\Auth\Access\FinancialStatsRedactor;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -39,6 +41,10 @@ class GetEventStatsAction extends BaseAction
             'end_date' => $validated['end_date'] ?? null,
             'occurrence_id' => $occurrenceIdQuery !== null ? (int) $occurrenceIdQuery : null,
         ]));
+
+        if ($this->isWithheldFromCurrentUser(Permission::VIEW_FINANCIALS)) {
+            return $this->jsonResponse(app(FinancialStatsRedactor::class)->redact($stats), wrapInData: true);
+        }
 
         return $this->resourceResponse(JsonResource::class, $stats);
     }

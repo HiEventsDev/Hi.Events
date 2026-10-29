@@ -2,6 +2,7 @@
 
 namespace HiEvents\Http\Actions\Orders;
 
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
@@ -9,6 +10,8 @@ use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\QuestionAndAnswerViewDomainObject;
 use HiEvents\Exports\OrdersExport;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\AllowedForReadOnlyUsers;
+use HiEvents\Http\Attributes\RequiresPermission;
 use HiEvents\Http\DTO\FilterFieldDTO;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Repository\Eloquent\Value\Relationship;
@@ -18,6 +21,8 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
+#[AllowedForReadOnlyUsers]
+#[RequiresPermission(Permission::VIEW_FINANCIALS)]
 class ExportOrdersAction extends BaseAction
 {
     public function __construct(
@@ -38,6 +43,20 @@ class ExportOrdersAction extends BaseAction
                 field: 'event_occurrence_id',
                 operator: 'eq',
                 value: (string) $eventOccurrenceId,
+            ));
+        }
+
+        $this->validate($request, [
+            'product_ids' => ['nullable', 'array', 'max:500'],
+            'product_ids.*' => ['integer'],
+        ]);
+
+        $productIds = array_map('intval', $request->input('product_ids') ?? []);
+        if ($productIds !== []) {
+            $filterFields->push(new FilterFieldDTO(
+                field: 'product_id',
+                operator: 'in',
+                value: implode(',', $productIds),
             ));
         }
 

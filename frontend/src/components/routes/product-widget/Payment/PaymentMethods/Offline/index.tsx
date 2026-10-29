@@ -1,24 +1,18 @@
-import {Event} from "../../../../../../types.ts";
-import {Card} from "../../../../../common/Card";
 import {t} from "@lingui/macro";
+import {Card} from "../../../../../common/Card";
+import classes from "./OfflinePaymentMethod.module.scss";
 
-interface OfflinePaymentMethodProps {
-    event: Event;
-}
-
-export const OfflinePaymentMethod = ({event}: OfflinePaymentMethodProps) => {
-    const eventSettings = event?.settings;
-
-    return (
-        <div>
-            <h2>{t`Payment Instructions`}</h2>
-            <Card>
-                <div
-                    dangerouslySetInnerHTML={{
-                        __html: eventSettings?.offline_payment_instructions || "",
-                    }}
-                />
-            </Card>
-        </div>
-    );
-};
+export const OfflinePaymentMethod = ({isPayer}: { isPayer: boolean }) => (
+    <Card>
+        <div className={classes.title}>{t`How paying later works`}</div>
+        <ol className={classes.steps} data-testid="pay-later-steps">
+            <li>{t`Place your order. Your places are held and your tickets are issued, marked as unpaid.`}</li>
+            <li>
+                {isPayer
+                    ? t`You'll see how to pay and the amount due on the next screen.`
+                    : t`You'll see how to pay and the amount due on the next screen, and we'll email them to you.`}
+            </li>
+            <li>{t`The organizer confirms your order once your payment arrives.`}</li>
+        </ol>
+    </Card>
+);

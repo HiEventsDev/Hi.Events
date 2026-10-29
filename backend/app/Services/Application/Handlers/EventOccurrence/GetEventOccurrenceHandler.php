@@ -12,11 +12,13 @@ use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
+use HiEvents\Services\Domain\EventOccurrence\OccurrenceBookingLimitsService;
 
 class GetEventOccurrenceHandler
 {
     public function __construct(
         private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
+        private readonly OccurrenceBookingLimitsService $bookingLimitsService,
     ) {}
 
     public function handle(int $eventId, int $occurrenceId): EventOccurrenceDomainObject
@@ -39,6 +41,8 @@ class GetEventOccurrenceHandler
                 ])
             );
         }
+
+        $this->bookingLimitsService->attachTo(collect([$occurrence]), $eventId);
 
         return $occurrence;
     }

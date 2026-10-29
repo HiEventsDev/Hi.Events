@@ -5,6 +5,7 @@
 @php /** @var \HiEvents\DomainObjects\EventSettingDomainObject $eventSettings */ @endphp
 @php /** @var \HiEvents\DomainObjects\EventOccurrenceDomainObject|null $occurrence */ @endphp
 @php /** @var string $orderUrl */ @endphp
+@php /** @var \HiEvents\Services\Domain\Lineup\DTO\EmailLineupHighlightsDTO|null $lineup */ @endphp
 
 @php /** @see \HiEvents\Mail\Order\OrderSummary */ @endphp
 
@@ -15,7 +16,11 @@
 @endphp
 
 <x-mail::message>
+@if($order->isOrderAwaitingOfflinePayment())
+# {{ __('Order placed: payment needed') }}
+@else
 # {{ __('Your Order is Confirmed! ') }} 🎉
+@endif
 
 @if($order->isOrderAwaitingOfflinePayment() === false)
 
@@ -31,8 +36,14 @@
 </p>
 
 <div style="border-radius: 4px; background-color: #d7e8f8; color: #204e84; margin-bottom: 1.5rem; padding: 1rem;">
-<h2>{{ __('Payment Instructions') }}</h2>
-{{ __('Please follow the instructions below to complete your payment.') }}
+<h2>{{ __('How to pay') }}</h2>
+<p>
+{{ __('Amount due') }}: <b>{{ Currency::format($order->getTotalGross(), $event->getCurrency()) }}</b><br>
+@if($eventSettings->getOfflinePaymentOrderReferenceEnabled())
+{{ __('Payment reference') }}: <b>{{ $order->getPublicId() }}</b><br>
+{{ __('Include this reference with your payment so the organizer can match it to your order.') }}
+@endif
+</p>
 {!! $eventSettings->getOfflinePaymentInstructions() !!}
 </div>
 </div>
@@ -52,6 +63,8 @@
 
 </p>
 
+@include('emails.partials.lineup-highlights', ['lineup' => $lineup])
+
 @if($eventSettings->getPostCheckoutMessage() && $order->isOrderCompleted())
 <p>
 
@@ -65,6 +78,9 @@
 ## {{ __('Order Summary') }}
 - **{{ __('Order Number:') }}** {{ $order->getPublicId() }}
 - **{{ __('Total Amount:') }}** {{ Currency::format($order->getTotalGross(), $event->getCurrency()) }}
+@if($order->getSeatLabels())
+- **{{ __('Seats:') }}** {{ implode(', ', $order->getSeatLabels()) }}
+@endif
 
 <x-mail::button :url="$orderUrl">
     {{ __('View Order Summary & Tickets') }}

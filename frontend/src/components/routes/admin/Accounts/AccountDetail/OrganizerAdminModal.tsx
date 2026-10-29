@@ -90,7 +90,11 @@ export const OrganizerAdminModal = ({organizer, onClose}: Props) => {
 
     const configOptions = configurations.map((c) => ({
         value: String(c.id),
-        label: c.is_system_default ? `${c.name} (default)` : c.name,
+        label: c.is_system_default
+            ? `${c.name} (default)`
+            : c.default_for_currency
+                ? `${c.name} (${c.default_for_currency} default)`
+                : c.name,
     }));
 
     return (

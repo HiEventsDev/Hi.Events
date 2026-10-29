@@ -1,0 +1,86 @@
+@use "../../../../styles/mixins";
+
+.item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 12px 14px 20px;
+
+  & + & {
+    border-top: 1px solid var(--hi-color-border);
+  }
+
+  @include mixins.respond-below(sm, true) {
+    gap: 12px;
+    padding-left: 16px;
+  }
+}
+
+.itemText {
+  min-width: 0;
+}
+
+.itemName {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--hi-text);
+}
+
+.itemNameText {
+  @include mixins.ellipsis;
+  max-width: 100%;
+}
+
+.itemDescription {
+  @include mixins.ellipsis;
+  margin-top: 2px;
+  font-size: 0.8125rem;
+  color: var(--hi-color-text-muted);
+}
+
+.tag {
+  padding: 0 6px;
+  border: 1px solid var(--hi-color-border);
+  border-radius: var(--hi-radius-sm);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--hi-color-text-muted);
+  cursor: default;
+}
+
+.rate {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--hi-text);
+}
+
+.empty {
+  padding: 32px 24px;
+  text-align: center;
+
+  @include mixins.respond-below(sm, true) {
+    padding: 28px 16px;
+  }
+}
+
+.emptyTitle {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--hi-text);
+}
+
+.emptyText {
+  max-width: 40ch;
+  margin: 4px auto 16px;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--hi-color-text-muted);
+}

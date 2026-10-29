@@ -2,9 +2,13 @@
 
 namespace HiEvents\Services\Domain\Product;
 
+use HiEvents\DomainObjects\Generated\EventSeatMapBandProductDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\ProductPriceDomainObjectAbstract;
+use HiEvents\Enterprise\BoxOffice\Repository\Interfaces\BoxOfficeRepositoryInterface;
+use HiEvents\Enterprise\Seating\Repository\Interfaces\EventSeatMapBandProductRepositoryInterface;
 use HiEvents\Exceptions\CannotDeleteEntityException;
+use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
@@ -22,18 +26,37 @@ class DeleteProductService
         private readonly LoggerInterface $logger,
         private readonly DatabaseManager $databaseManager,
         private readonly DomainEventDispatcherService $domainEventDispatcherService,
+        private readonly EventSeatMapBandProductRepositoryInterface $bandProductRepository,
+        private readonly BoxOfficeRepositoryInterface $boxOfficeRepository,
     ) {}
 
     /**
      * @throws CannotDeleteEntityException
+     * @throws ResourceNotFoundException
      * @throws Throwable
      */
     public function deleteProduct(int $productId, int $eventId): void
     {
         $this->databaseManager->transaction(function () use ($productId, $eventId) {
+            if ($this->productRepository->findFirstWhere([
+                ProductDomainObjectAbstract::ID => $productId,
+                ProductDomainObjectAbstract::EVENT_ID => $eventId,
+            ]) === null) {
+                throw new ResourceNotFoundException(__('Product not found'));
+            }
+
             if ($this->productRepository->hasAssociatedOrders($productId)) {
                 throw new CannotDeleteEntityException(
                     __('You cannot delete this product because it has orders associated with it or is reserved by a checkout in progress. You can hide it instead.')
+                );
+            }
+
+            $boxOfficeNames = $this->boxOfficeRepository->findNamesSellingOnlyProduct($productId);
+            if ($boxOfficeNames !== []) {
+                throw new CannotDeleteEntityException(
+                    __('You cannot delete this product because it is the only product sold at this box office: :names. Change the products that box office sells first.', [
+                        'names' => implode(', ', $boxOfficeNames),
+                    ])
                 );
             }
 
@@ -49,6 +72,14 @@ class DeleteProductService
                     ProductPriceDomainObjectAbstract::PRODUCT_ID => $productId,
                 ]
             );
+
+            $this->productRepository->detachAddonAssociations($productId);
+
+            $this->boxOfficeRepository->detachProduct($productId);
+
+            $this->bandProductRepository->deleteWhere([
+                EventSeatMapBandProductDomainObjectAbstract::PRODUCT_ID => $productId,
+            ]);
         });
 
         $this->domainEventDispatcherService->dispatch(

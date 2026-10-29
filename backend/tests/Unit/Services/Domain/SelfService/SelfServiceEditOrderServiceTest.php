@@ -445,6 +445,56 @@ class SelfServiceEditOrderServiceTest extends TestCase
         });
     }
 
+    public function test_box_office_buyer_adding_first_email_sends_no_change_notification(): void
+    {
+        $order = Mockery::mock(OrderDomainObject::class);
+        $order->shouldReceive('getId')->andReturn(123);
+        $order->shouldReceive('getEventId')->andReturn(789);
+        $order->shouldReceive('getFirstName')->andReturn('Walk-up');
+        $order->shouldReceive('getLastName')->andReturn('');
+        $order->shouldReceive('getEmail')->andReturn(null);
+        $order->shouldReceive('getShortId')->andReturn('o_boxoffice123');
+        $order->shouldReceive('getLatestInvoice')->andReturn(null);
+
+        $this->orderRepository
+            ->shouldReceive('updateWhere')
+            ->once()
+            ->andReturn(1);
+
+        $mockEventSettings = Mockery::mock(EventSettingDomainObject::class);
+        $mockEventSettings->shouldReceive('getSupportEmail')->andReturn('support@example.com');
+        $mockOrganizer = Mockery::mock(OrganizerDomainObject::class);
+        $mockEvent = Mockery::mock(EventDomainObject::class);
+        $mockEvent->shouldReceive('getEventSettings')->andReturn($mockEventSettings);
+        $mockEvent->shouldReceive('getOrganizer')->andReturn($mockOrganizer);
+
+        $this->eventRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->eventRepository->shouldReceive('findById')->with(789)->andReturn($mockEvent);
+
+        $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->orderRepository->shouldReceive('findById')->with(123)->andReturn($order);
+
+        $this->sendOrderDetailsService
+            ->shouldReceive('sendCustomerOrderSummary')
+            ->once();
+
+        $this->orderAuditLogService->shouldReceive('logOrderUpdate')->once();
+
+        $result = $this->service->editOrder(
+            order: $order,
+            firstName: null,
+            lastName: null,
+            email: 'walkup@example.com',
+            ipAddress: '192.168.1.1',
+            userAgent: 'Mozilla/5.0'
+        );
+
+        $this->assertTrue($result->success);
+        $this->assertTrue($result->emailChanged);
+
+        Mail::assertNotQueued(OrderDetailsChangedMail::class);
+    }
+
     protected function tearDown(): void
     {
         Mockery::close();

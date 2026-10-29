@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Locations;
 
+use Dedoc\Scramble\Attributes\QueryParameter;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\ResponseCodes;
@@ -20,6 +21,7 @@ class GeoPlaceDetailsAction extends BaseAction
         private readonly GeoPlaceDetailsHandler $handler,
     ) {}
 
+    #[QueryParameter('locale', description: 'Locale for the returned place details.', type: 'string')]
     public function __invoke(int $organizerId, string $placeId, Request $request): JsonResponse
     {
         $this->isActionAuthorized($organizerId, OrganizerDomainObject::class);

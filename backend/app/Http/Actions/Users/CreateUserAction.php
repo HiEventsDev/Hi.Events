@@ -4,18 +4,24 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Users;
 
-use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\DomainObjects\Enums\Permission;
+use HiEvents\Exceptions\AccountNotVerifiedException;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\RequiresPermission;
 use HiEvents\Http\Request\User\CreateUserRequest;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Resources\User\UserResource;
 use HiEvents\Services\Application\Handlers\User\CreateUserHandler;
 use HiEvents\Services\Application\Handlers\User\DTO\CreateUserDTO;
+use HiEvents\Services\Domain\Auth\Access\DTO\AccountUserAccessData;
+use HiEvents\Services\Domain\Auth\Access\Exception\InvalidAccessGrantException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 use Throwable;
 
+#[RequiresPermission(Permission::MANAGE_TEAM)]
 class CreateUserAction extends BaseAction
 {
     public function __construct(
@@ -27,11 +33,10 @@ class CreateUserAction extends BaseAction
      */
     public function __invoke(CreateUserRequest $request): JsonResponse
     {
-        $this->minimumAllowedRole(Role::ADMIN);
-
         $data = array_merge($request->validated(), [
             'invited_by' => $this->getAuthenticatedUser()->getId(),
             'account_id' => $this->getAuthenticatedAccountId(),
+            'access' => AccountUserAccessData::buildFromValidated($request->validated()),
         ]);
 
         try {
@@ -40,6 +45,12 @@ class CreateUserAction extends BaseAction
             throw ValidationException::withMessages([
                 'email' => $e->getMessage(),
             ]);
+        } catch (InvalidAccessGrantException $e) {
+            throw ValidationException::withMessages([
+                'access_scope' => $e->getMessage(),
+            ]);
+        } catch (AccountNotVerifiedException $e) {
+            return $this->errorResponse($e->getMessage(), Response::HTTP_FORBIDDEN);
         }
 
         return $this->resourceResponse(

@@ -3,12 +3,14 @@
 namespace HiEvents\Http\Actions\Reports;
 
 use HiEvents\DomainObjects\Enums\OrganizerReportTypes;
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Report\GetOrganizerReportRequest;
 use HiEvents\Services\Application\Handlers\Reports\DTO\GetOrganizerReportDTO;
 use HiEvents\Services\Application\Handlers\Reports\GetOrganizerReportHandler;
 use HiEvents\Services\Domain\Report\DTO\PaginatedReportDTO;
+use HiEvents\Services\Infrastructure\Export\SpreadsheetFormulaEscaper;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -18,7 +20,10 @@ class ExportOrganizerReportAction extends BaseAction
 {
     private const MAX_EXPORT_ROWS = 15000;
 
-    public function __construct(private readonly GetOrganizerReportHandler $reportHandler) {}
+    public function __construct(
+        private readonly GetOrganizerReportHandler $reportHandler,
+        private readonly SpreadsheetFormulaEscaper $formulaEscaper,
+    ) {}
 
     /**
      * @throws ValidationException
@@ -31,6 +36,10 @@ class ExportOrganizerReportAction extends BaseAction
 
         if (! in_array($reportType, OrganizerReportTypes::valuesArray(), true)) {
             throw new BadRequestHttpException(__('Invalid report type.'));
+        }
+
+        if (OrganizerReportTypes::from($reportType)->isFinancial()) {
+            $this->requirePermission(Permission::VIEW_FINANCIALS);
         }
 
         $reportData = $this->reportHandler->handle(
@@ -60,7 +69,7 @@ class ExportOrganizerReportAction extends BaseAction
 
             foreach ($data as $row) {
                 $csvRow = $this->formatRowForReportType($row, $reportType);
-                fputcsv($handle, $csvRow);
+                fputcsv($handle, $this->formulaEscaper->escapeRow($csvRow));
             }
 
             fclose($handle);

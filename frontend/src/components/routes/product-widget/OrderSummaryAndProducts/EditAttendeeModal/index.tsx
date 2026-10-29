@@ -19,24 +19,26 @@ export const EditAttendeeModal = ({
                                       attendee,
                                       onSuccess,
                                   }: EditAttendeeModalProps) => {
+    const emailRequired = !!attendee.email;
+
     const form = useForm({
         initialValues: {
             first_name: attendee.first_name,
             last_name: attendee.last_name,
-            email: attendee.email,
+            email: attendee.email ?? "",
         },
         validate: {
             first_name: (value) => !value ? t`First name is required` : null,
             last_name: (value) => !value ? t`Last name is required` : null,
             email: (value) => {
-                if (!value) return t`Email is required`;
+                if (!value) return emailRequired ? t`Email is required` : null;
                 if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return t`Invalid email`;
                 return null;
             },
         },
     });
 
-    const emailChanged = form.values.email !== attendee.email;
+    const emailChanged = form.values.email !== (attendee.email ?? "");
 
     return (
         <Modal
@@ -67,7 +69,7 @@ export const EditAttendeeModal = ({
                     <TextInput
                         label={t`Email`}
                         placeholder={t`Enter email`}
-                        required
+                        required={emailRequired}
                         type="email"
                         {...form.getInputProps('email')}
                     />

@@ -13,7 +13,7 @@
                             <tr>
                                 <td>
                                     <a href="{{ $url }}" class="button button-{{ $color }}" target="_blank"
-                                       rel="noopener">{{ $slot }}</a>
+                                       rel="noopener"@if($color === 'primary' && ($mailBranding ?? null)?->buttonColor) style="background-color: {{ $mailBranding->buttonColor }}; color: {{ $mailBranding->buttonTextColor }}; box-shadow: none;"@endif>{{ $slot }}</a>
                                 </td>
                             </tr>
                         </table>

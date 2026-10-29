@@ -50,6 +50,10 @@ class UpdateEventSettingsDTO extends BaseDTO
         public readonly array $payment_providers = [],
         public readonly ?string $offline_payment_instructions = null,
         public readonly bool $allow_orders_awaiting_offline_payment_to_check_in = false,
+        public readonly bool $offline_payment_reporting_enabled = true,
+        public readonly bool $offline_payment_order_reference_enabled = true,
+        public readonly bool $payment_links_enabled = false,
+        public readonly int $payment_link_expiry_hours = 72,
 
         // Invoice settings
         public readonly bool $enable_invoicing = false,
@@ -77,6 +81,7 @@ class UpdateEventSettingsDTO extends BaseDTO
 
         // Homepage theme settings
         public readonly ?array $homepage_theme_settings = null,
+        public readonly ?array $homepage_sections = null,
 
         // Self-service settings
         public readonly bool $allow_attendee_self_edit = false,
@@ -88,6 +93,8 @@ class UpdateEventSettingsDTO extends BaseDTO
         // Waitlist settings
         public readonly ?bool $waitlist_auto_process = null,
         public readonly ?int $waitlist_offer_timeout_minutes = null,
+
+        public readonly ?string $get_tickets_button_text = null,
     ) {}
 
     public static function createWithDefaults(
@@ -159,7 +166,7 @@ class UpdateEventSettingsDTO extends BaseDTO
 
             // Homepage theme defaults (simplified 2-color + mode system)
             homepage_theme_settings: [
-                'accent' => '#8b5cf6',
+                'accent' => '#7c3aed',
                 'background' => '#f5f3ff',
                 'mode' => 'light',
                 'background_type' => 'COLOR',

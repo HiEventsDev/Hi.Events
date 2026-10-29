@@ -6,9 +6,14 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
+use HiEvents\Enterprise\Seating\Services\Domain\EventSeatMapLookupService;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatClaimService;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatedProductLookupService;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatingEventLockService;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
+use HiEvents\Repository\Interfaces\WidgetRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\CreateOrderHandler;
 use HiEvents\Services\Application\Handlers\Order\DTO\CreateOrderPublicDTO;
 use HiEvents\Services\Domain\EventOccurrence\OccurrencePurchaseEligibilityService;
@@ -17,6 +22,7 @@ use HiEvents\Services\Domain\Order\OrderManagementService;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesResponseDTO;
 use HiEvents\Services\Domain\PromoCode\PromoCodeUsageValidationService;
+use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use Illuminate\Database\DatabaseManager;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
@@ -57,6 +63,7 @@ class CreateOrderHandlerPromoCodeTest extends TestCase
         $event = Mockery::mock(EventDomainObject::class);
         $event->shouldReceive('getEventSettings')->andReturn($eventSettings);
         $event->shouldReceive('getCurrency')->andReturn('USD');
+        $event->shouldReceive('getStatus')->andReturn('LIVE');
 
         $eventRepository = Mockery::mock(EventRepositoryInterface::class);
         $eventRepository->shouldReceive('loadRelation')->andReturnSelf();
@@ -110,11 +117,18 @@ class CreateOrderHandlerPromoCodeTest extends TestCase
             $availabilityService,
             $occurrenceEligibilityService,
             $databaseManager,
+            Mockery::mock(SeatClaimService::class)->shouldIgnoreMissing(),
+            new SeatingEventLockService(
+                new TransactionLockService($databaseManager),
+                Mockery::mock(EventSeatMapLookupService::class)->shouldIgnoreMissing(),
+                Mockery::mock(SeatedProductLookupService::class)->shouldIgnoreMissing(),
+            ),
+            Mockery::mock(WidgetRepositoryInterface::class),
         );
 
         $dto = new CreateOrderPublicDTO(
             products: collect(),
-            is_user_authenticated: true,
+            can_order_unpublished_event: true,
             session_identifier: 'sess-123',
             order_locale: 'en',
             promo_code: 'save50',

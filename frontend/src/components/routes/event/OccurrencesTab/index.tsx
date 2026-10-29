@@ -1,6 +1,9 @@
 import {useLocation, useNavigate, useParams} from "react-router";
+import {CreateButton} from "../../../common/CreateButton";
+import {WriteAccess} from "../../../common/WriteAccess";
+import {useAccess} from "../../../../hooks/useAccess.ts";
 import {t} from "@lingui/macro";
-import {Anchor, Button, Checkbox, Group, Menu, Paper, Progress, SegmentedControl, Skeleton, Stack, Text, Tooltip} from "@mantine/core";
+import {Anchor, Button, Checkbox, Group, HoverCard, Menu, Paper, Progress, SegmentedControl, Skeleton, Stack, Text, Tooltip} from "@mantine/core";
 import {
     IconCalendar,
     IconCalendarEvent,
@@ -13,6 +16,7 @@ import {
 import {useDisclosure} from "@mantine/hooks";
 import {useCallback, useMemo, useRef, useState} from "react";
 import dayjs from "dayjs";
+import {useDatesContext} from "@mantine/dates";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import {modals} from "@mantine/modals";
@@ -24,12 +28,12 @@ import {useGetEventOccurrences} from "../../../../queries/useGetEventOccurrences
 import {useFilterQueryParamSync} from "../../../../hooks/useFilterQueryParamSync.ts";
 import {EventOccurrence, EventOccurrenceStatus, MessageType, QueryFilterFields, QueryFilterOperator, QueryFilters} from "../../../../types.ts";
 import {useGetEvent} from "../../../../queries/useGetEvent.ts";
-import {formatDateWithLocale, formatOccurrenceEnd} from "../../../../utilites/dates.ts";
+import {formatDateWithLocale, formatOccurrenceEnd, getCalendarGridStart} from "../../../../utilites/dates.ts";
 import {getEventLocationDisplay} from "../../../../utilites/effectiveLocation.ts";
 import {formatCurrency} from "../../../../utilites/currency.ts";
-import {OccurrenceEditModal} from "./OccurrenceEditModal";
+import {OccurrenceEditModal, OccurrenceEditTab} from "./OccurrenceEditModal";
 import {OccurrenceBulkEditModal} from "./OccurrenceBulkEditModal";
-import {RecurrenceScheduleModal} from "./RecurrenceScheduleModal";
+import {RecurrenceScheduleDrawer} from "./RecurrenceScheduleDrawer";
 import {CalendarView} from "./CalendarView";
 import {useCancelOccurrence} from "../../../../mutations/useCancelOccurrence.ts";
 import {useDeleteEventOccurrence} from "../../../../mutations/useDeleteEventOccurrence.ts";
@@ -39,6 +43,8 @@ import {confirmationDialog} from "../../../../utilites/confirmationDialog.tsx";
 import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
 import {GroupedOccurrenceTable, GroupedTableColumn} from "./GroupedOccurrenceTable";
 import {OccurrenceMenuItems, OccurrenceMenuActions, statusLabel, StatusIcon} from "./OccurrenceMenu";
+import {bookedLimit} from "./bookingLimits.ts";
+import {BookingBreakdown} from "./BookingSummary";
 import {openCancelOccurrenceDialog} from "./cancelOccurrenceDialog";
 import {useOccurrenceCheckIn} from "../../../../hooks/useOccurrenceCheckIn.tsx";
 import {useOccurrenceGenerationPolling} from "../../../../hooks/useOccurrenceGenerationPolling.ts";
@@ -66,6 +72,7 @@ const OccurrencesTab = () => {
         navigate(target);
     };
     const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
+    const {firstDayOfWeek} = useDatesContext();
     const [calendarMonth, setCalendarMonth] = useState<dayjs.Dayjs>(() => dayjs().startOf('month'));
 
     const timePeriod = useMemo(() => {
@@ -81,15 +88,13 @@ const OccurrencesTab = () => {
         if (!event?.timezone) return null;
         const tz = event.timezone;
         const monthStart = dayjs.tz(calendarMonth.format('YYYY-MM-01'), tz).startOf('month');
-        const startDay = monthStart.day();
-        const offset = startDay === 0 ? 6 : startDay - 1;
-        const gridStart = monthStart.subtract(offset, 'day').startOf('day');
+        const gridStart = getCalendarGridStart(monthStart, firstDayOfWeek);
         const gridEnd = gridStart.add(42, 'day').endOf('day');
         return {
             start: gridStart.utc().format('YYYY-MM-DD HH:mm:ss'),
             end: gridEnd.utc().format('YYYY-MM-DD HH:mm:ss'),
         };
-    }, [calendarMonth, event?.timezone]);
+    }, [calendarMonth, event?.timezone, firstDayOfWeek]);
 
     const queryParams: QueryFilters = useMemo(() => {
         if (viewMode === 'calendar') {
@@ -126,6 +131,7 @@ const OccurrencesTab = () => {
     const [slideoutOccurrenceId, setSlideoutOccurrenceId] = useState<number | undefined>();
     const [duplicateFrom, setDuplicateFrom] = useState<EventOccurrence | undefined>();
     const [defaultDate, setDefaultDate] = useState<string | undefined>();
+    const [editInitialTab, setEditInitialTab] = useState<OccurrenceEditTab>('details');
     const [messageOccurrenceId, setMessageOccurrenceId] = useState<number | undefined>();
     const [shareOccurrence, setShareOccurrence] = useState<EventOccurrence | undefined>();
     const {launchCheckIn, checkInModals} = useOccurrenceCheckIn(eventId);
@@ -136,10 +142,20 @@ const OccurrencesTab = () => {
     const bulkUpdateMutation = useBulkUpdateOccurrences();
     const reactivateMutation = useReactivateOccurrence();
     const refundRef = useRef(false);
+    const {can, isReadOnly} = useAccess();
+    const canIssueRefunds = can('ISSUE_REFUNDS');
 
     const handleEditClick = (occurrenceId: number) => {
         setSelectedOccurrenceId(occurrenceId);
         setDuplicateFrom(undefined);
+        setEditInitialTab('details');
+        openEditModal();
+    };
+
+    const handleProductsClick = (occurrenceId: number) => {
+        setSelectedOccurrenceId(occurrenceId);
+        setDuplicateFrom(undefined);
+        setEditInitialTab('products');
         openEditModal();
     };
 
@@ -154,6 +170,7 @@ const OccurrencesTab = () => {
         setSelectedOccurrenceId(undefined);
         setDuplicateFrom(undefined);
         setDefaultDate(undefined);
+        setEditInitialTab('details');
         openEditModal();
     };
 
@@ -161,12 +178,14 @@ const OccurrencesTab = () => {
         setSelectedOccurrenceId(undefined);
         setDuplicateFrom(undefined);
         setDefaultDate(date);
+        setEditInitialTab('details');
         openEditModal();
     };
 
     const handleDuplicate = (occ: EventOccurrence) => {
         setSelectedOccurrenceId(undefined);
         setDuplicateFrom(occ);
+        setEditInitialTab('details');
         openEditModal();
     };
 
@@ -177,6 +196,7 @@ const OccurrencesTab = () => {
             occurrenceId,
             orderCount: occ?.statistics?.orders_created ?? 0,
             mutation: cancelMutation,
+            canRefund: canIssueRefunds,
         });
     };
 
@@ -214,10 +234,12 @@ const OccurrencesTab = () => {
                     <Text size="sm" mb="md">
                         {t`Are you sure you want to cancel ${count} date(s)? Affected attendees will be notified by email.`}
                     </Text>
-                    <Checkbox
-                        label={t`Refund all orders for these dates`}
-                        onChange={(e) => { refundRef.current = e.currentTarget.checked; }}
-                    />
+                    {canIssueRefunds && (
+                        <Checkbox
+                            label={t`Refund all orders for these dates`}
+                            onChange={(e) => { refundRef.current = e.currentTarget.checked; }}
+                        />
+                    )}
                 </>
             ),
             labels: {confirm: t`Cancel ${count} date(s)`, cancel: t`Go Back`},
@@ -275,6 +297,7 @@ const OccurrencesTab = () => {
     const menuActions: OccurrenceMenuActions = {
         eventId: eventId!,
         onEdit: handleEditClick,
+        onProducts: handleProductsClick,
         onCancel: handleCancel,
         onDelete: handleDelete,
         onNavigate: navigate,
@@ -368,20 +391,33 @@ const OccurrencesTab = () => {
             },
             {
                 id: 'ticketsSold',
-                header: t`Sold`,
+                header: t`Booked`,
                 render: (occ: EventOccurrence) => {
                     const used = occ.used_capacity ?? 0;
-                    const total = occ.capacity;
+                    const total = bookedLimit(occ);
                     const pct = total ? Math.min(100, Math.round((used / total) * 100)) : 0;
+                    const limits = occ.booking_limits;
+                    const numbers = (
+                        <div className={classes.ticketsSoldNumbers}>
+                            <span className={classes.ticketsSoldCount}>{used}</span>
+                            {total != null && (
+                                <span className={classes.ticketsSoldTotal}> / {total}</span>
+                            )}
+                        </div>
+                    );
 
                     return (
                         <div className={classes.ticketsSold}>
-                            <div className={classes.ticketsSoldNumbers}>
-                                <span className={classes.ticketsSoldCount}>{used}</span>
-                                {total != null && (
-                                    <span className={classes.ticketsSoldTotal}> / {total}</span>
-                                )}
-                            </div>
+                            {limits && (limits.capacity !== null || limits.allocations.length > 0) ? (
+                                <HoverCard position="bottom-start" width={320} shadow="md" withArrow openDelay={150}>
+                                    <HoverCard.Target>
+                                        {numbers}
+                                    </HoverCard.Target>
+                                    <HoverCard.Dropdown p={0}>
+                                        <BookingBreakdown capacity={limits.capacity} booked={used} allocations={limits.allocations}/>
+                                    </HoverCard.Dropdown>
+                                </HoverCard>
+                            ) : numbers}
                             {total != null && (
                                 <Progress
                                     value={pct}
@@ -492,56 +528,74 @@ const OccurrencesTab = () => {
 
                 <div className={classes.toolbarSpacer}/>
 
-                {selectedIds.size > 0 && (
+                {selectedIds.size > 0 && !isReadOnly && (
                     <div className={classes.selectionGroup}>
                         <span className={classes.selectionCount}>{selectedIds.size} {t`selected`}</span>
-                        <button className={classes.selectionAction} data-danger onClick={handleBulkCancel}>
+                        <button
+                            className={classes.selectionAction}
+                            data-danger
+                            data-testid="occurrence-bulk-cancel-button"
+                            onClick={handleBulkCancel}
+                        >
                             {t`Cancel`}
                         </button>
-                        <button className={classes.selectionAction} data-danger onClick={handleBulkDelete}>
+                        <button
+                            className={classes.selectionAction}
+                            data-danger
+                            data-testid="occurrence-bulk-delete-button"
+                            onClick={handleBulkDelete}
+                        >
                             {t`Delete`}
                         </button>
-                        <button className={classes.selectionAction} onClick={() => setSelectedIds(new Set())}>
+                        <button
+                            className={classes.selectionAction}
+                            data-testid="occurrence-bulk-clear-selection-button"
+                            onClick={() => setSelectedIds(new Set())}
+                        >
                             {t`Clear`}
                         </button>
                         <div className={classes.toolbarDivider}/>
                     </div>
                 )}
 
-                <Button
-                    size="sm"
-                    variant="light"
-                    leftSection={<IconPencil size={14}/>}
-                    onClick={openBulkEdit}
-                >
-                    {t`Bulk Edit`}
-                </Button>
+                <WriteAccess>
+                    <Button
+                        size="sm"
+                        variant="light"
+                        leftSection={<IconPencil size={14}/>}
+                        onClick={openBulkEdit}
+                        data-testid="occurrence-bulk-edit-button"
+                    >
+                        {t`Bulk Edit`}
+                    </Button>
 
-                <Menu shadow="md" width={220}>
-                    <Menu.Target>
-                        <Button
-                            size="sm"
-                            leftSection={<IconPlus size={14}/>}
-                        >
-                            {t`Add Dates`}
-                        </Button>
-                    </Menu.Target>
-                    <Menu.Dropdown>
-                        <Menu.Item
-                            leftSection={<IconCalendarEvent size={16}/>}
-                            onClick={openGenerate}
-                            disabled={generationPolling.isGenerating}
-                        >
-                            {t`Set Up Schedule`}
-                        </Menu.Item>
-                        <Menu.Item
-                            leftSection={<IconCalendarPlus size={16}/>}
-                            onClick={handleCreateClick}
-                        >
-                            {t`Add a Single Date`}
-                        </Menu.Item>
-                    </Menu.Dropdown>
-                </Menu>
+                    <Menu shadow="md" width={220}>
+                        <Menu.Target>
+                            <CreateButton
+                                size="sm"
+                                leftSection={<IconPlus size={14}/>}
+                            >
+                                {t`Add Dates`}
+                            </CreateButton>
+                        </Menu.Target>
+                        <Menu.Dropdown>
+                            <Menu.Item
+                                leftSection={<IconCalendarEvent size={16}/>}
+                                onClick={openGenerate}
+                                disabled={generationPolling.isGenerating}
+                            >
+                                {event?.recurrence_rule ? t`Edit Schedule` : t`Set Up Schedule`}
+                            </Menu.Item>
+                            <Menu.Item
+                                leftSection={<IconCalendarPlus size={16}/>}
+                                onClick={handleCreateClick}
+                                data-testid="occurrence-add-single-date-menu-item"
+                            >
+                                {t`Add a Single Date`}
+                            </Menu.Item>
+                        </Menu.Dropdown>
+                    </Menu>
+                </WriteAccess>
             </div>
 
             {generationPolling.isGenerating && (
@@ -587,22 +641,24 @@ const OccurrencesTab = () => {
                                 </Text>
                             </Stack>
                             {!hasActiveFilters && (
-                                <Group gap="md" mt="sm">
-                                    <Button
-                                        variant="filled"
-                                        leftSection={<IconCalendarEvent size={16}/>}
-                                        onClick={openGenerate}
-                                    >
-                                        {t`Set Up Schedule`}
-                                    </Button>
-                                    <Button
-                                        variant="subtle"
-                                        color="gray"
-                                        onClick={handleCreateClick}
-                                    >
-                                        {t`or add a single date`}
-                                    </Button>
-                                </Group>
+                                <WriteAccess>
+                                    <Group gap="md" mt="sm">
+                                        <Button
+                                            variant="filled"
+                                            leftSection={<IconCalendarEvent size={16}/>}
+                                            onClick={openGenerate}
+                                        >
+                                            {t`Set Up Schedule`}
+                                        </Button>
+                                        <Button
+                                            variant="subtle"
+                                            color="gray"
+                                            onClick={handleCreateClick}
+                                        >
+                                            {t`or add a single date`}
+                                        </Button>
+                                    </Group>
+                                </WriteAccess>
                             )}
                         </Stack>
                     </Paper>
@@ -618,6 +674,7 @@ const OccurrencesTab = () => {
                         selectedIds={selectedIds}
                         onSelectionChange={setSelectedIds}
                         rowStyle={rowStyleFn}
+                        selectable={!isReadOnly}
                     />
                     {pagination && (
                         <Text className={classes.countText}>
@@ -655,6 +712,7 @@ const OccurrencesTab = () => {
                     occurrenceId={selectedOccurrenceId}
                     duplicateFrom={duplicateFrom}
                     defaultDate={defaultDate}
+                    initialTab={editInitialTab}
                 />
             )}
 
@@ -663,7 +721,7 @@ const OccurrencesTab = () => {
             )}
 
             {generateOpen && (
-                <RecurrenceScheduleModal onClose={closeGenerate} onGenerationStarted={generationPolling.start}/>
+                <RecurrenceScheduleDrawer onClose={closeGenerate} onGenerationStarted={generationPolling.start}/>
             )}
 
             {slideoutOccurrenceId && (

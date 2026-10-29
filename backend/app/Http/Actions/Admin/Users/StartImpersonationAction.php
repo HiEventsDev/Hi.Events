@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Admin\Users;
 
-use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\Auth\BaseAuthAction;
 use HiEvents\Services\Application\Handlers\Admin\DTO\StartImpersonationDTO;
 use HiEvents\Services\Application\Handlers\Admin\StartImpersonationHandler;
@@ -19,7 +18,7 @@ class StartImpersonationAction extends BaseAuthAction
 
     public function __invoke(Request $request, int $userId): JsonResponse
     {
-        $this->minimumAllowedRole(Role::SUPERADMIN);
+        $this->requireSuperAdmin();
 
         $this->validate($request, [
             'account_id' => 'required|exists:accounts,id',

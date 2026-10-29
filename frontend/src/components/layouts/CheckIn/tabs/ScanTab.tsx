@@ -127,6 +127,12 @@ export const ScanTab = ({
                                     <div className={classes.recentName}>{scan.name}</div>
                                     <div className={classes.recentMeta}>
                                         <span className={classes.recentCode}>{scan.code}</span>
+                                        {scan.seatLabel && (
+                                            <>
+                                                <span className={classes.dot}>·</span>
+                                                <span>{scan.seatLabel}</span>
+                                            </>
+                                        )}
                                         <span className={classes.dot}>·</span>
                                         <span>{relativeTime(scan.timestamp)}</span>
                                     </div>

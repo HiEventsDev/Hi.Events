@@ -1,143 +1,140 @@
 <div align="center">
 
-<img src="https://hievents-public.s3.us-west-1.amazonaws.com/website/github-banner.png?v=1" alt="Hi.Events - Open Source Event Ticketing Platform" width="100%">
+<img src=".github/assets/readme-banner.png" alt="Hi.Events - Open-source event ticketing and management platform" width="100%">
 
 # Hi.Events
 
-### Ανοιχτού κώδικα πλατφόρμα διαχείρισης εκδηλώσεων και έκδοσης εισιτηρίων
+### Πλατφόρμα ανοιχτού κώδικα για εισιτήρια και διαχείριση εκδηλώσεων
 
-Πωλήστε εισιτήρια online για συνέδρια, εκδηλώσεις νυχτερινής ζωής, συναυλίες, club nights, εργαστήρια και φεστιβάλ.  
-Self-hosted ή Cloud. Οι εκδηλώσεις σας, η μάρκα σας, τα δεδομένα σας.
+Πουλήστε εισιτήρια online για συνέδρια, νυχτερινές εκδηλώσεις, συναυλίες, βραδιές σε κλαμπ, εργαστήρια και φεστιβάλ.<br>
+Στον δικό σας server ή στο cloud. Οι εκδηλώσεις σας, το brand σας, τα δεδομένα σας.
 
-[Δοκιμάστε το Cloud →](https://app.hi.events/auth/register?utm_source=gh-readme) · [Live Demo](https://app.hi.events/event/2/hievents-conference-2030?utm_source=gh-readme) · [Τεκμηρίωση](https://hi.events/docs?utm_source=gh-readme) · [Ιστοσελίδα](https://hi.events?utm_source=gh-readme)
+[Δοκιμάστε το Cloud →](https://app.hi.events/auth/register?utm_source=gh-readme) · [Ζωντανό demo](https://app.hi.events/event/2/hievents-conference-2030?utm_source=gh-readme) · [Τεκμηρίωση](https://hi.events/docs?utm_source=gh-readme) · [Enterprise & άδειες χρήσης](https://hi.events/licensing?utm_source=gh-readme) · [Ιστότοπος](https://hi.events?utm_source=gh-readme)
 
-[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://github.com/HiEventsDev/Hi.Events/blob/develop/LICENCE)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://github.com/HiEventsDev/hi.events/blob/develop/LICENCE)
 [![GitHub Release](https://img.shields.io/github/v/release/HiEventsDev/hi.events?include_prereleases)](https://github.com/HiEventsDev/hi.events/releases)
-[![Run Unit Tests](https://github.com/HiEventsDev/hi.events/actions/workflows/unit-tests.yml/badge.svg?event=push)](https://github.com/HiEventsDev/hi.events/actions/workflows/unit-tests.yml)
+[![GitHub Stars](https://img.shields.io/github/stars/HiEventsDev/hi.events?style=flat)](https://github.com/HiEventsDev/hi.events)
 [![Docker Pulls](https://img.shields.io/docker/pulls/daveearley/hi.events-all-in-one)](https://hub.docker.com/r/daveearley/hi.events-all-in-one)
+[![E2E Tests](https://github.com/HiEventsDev/hi.events/actions/workflows/e2e.yml/badge.svg?event=push)](https://github.com/HiEventsDev/hi.events/actions/workflows/e2e.yml)
 
 <a href="https://trendshift.io/repositories/10563" target="_blank">
   <img src="https://trendshift.io/api/badge/repositories/10563" alt="HiEventsDev%2Fhi.events | Trendshift" width="250" height="55"/>
 </a>
 
 <p>
-<a href="README.de.md">Deutsch</a> · <a href="README.pt.md">Português</a> · <a href="README.fr.md">Français</a> · <a href="README.it.md">Italiano</a> · <a href="README.nl.md">Nederlands</a> · <a href="README.es.md">Español</a> · <a href="README.zh-cn.md">中文</a> · <a href="README.zh-hk.md">繁體中文</a> · <a href="README.ja.md">日本語</a> · <a href="README.vi.md">Tiếng Việt</a> · <a href="README.tr.md">Türkçe</a> · <a href="README.hu.md">Magyar</a> · <a href="README.pl.md">Polski</a> · <a href="README.cs.md">Čeština</a> · <a href="README.el.md">Ελληνικά</a>
+<a href="README.md">English</a> · <a href="README.de.md">Deutsch</a> · <a href="README.fr.md">Français</a> · <a href="README.it.md">Italiano</a> · <a href="README.nl.md">Nederlands</a> · <a href="README.es.md">Español</a> · <a href="README.pt.md">Português</a> · <a href="README.pt-br.md">Português (Brasil)</a> · <a href="README.pl.md">Polski</a> · <a href="README.cs.md">Čeština</a> · <a href="README.sk.md">Slovenčina</a> · <a href="README.hu.md">Magyar</a> · <a href="README.sv.md">Svenska</a> · <a href="README.fi.md">Suomi</a> · <a href="README.el.md">Ελληνικά</a> · <a href="README.tr.md">Türkçe</a> · <a href="README.vi.md">Tiếng Việt</a> · <a href="README.zh-cn.md">简体中文</a> · <a href="README.zh-hk.md">繁體中文</a> · <a href="README.ja.md">日本語</a> · <a href="README.ko.md">한국어</a>
 </p>
 
 </div>
 
 <br>
 
+> [!NOTE]
+> **Το Hi.Events 2.0 είναι εδώ** με επαναλαμβανόμενες εκδηλώσεις, θέσεις με κράτηση, ταμείο, line-up και πρόγραμμα,
+> single sign-on, δικαιώματα ομάδας και κλειδιά API. [Δείτε τι νέο υπάρχει →](https://github.com/HiEventsDev/hi.events/releases)
+
+<br>
+
+<img alt="Hi.Events event dashboard on desktop and an event page on mobile" src=".github/assets/readme-showcase.png" width="100%"/>
+
+<br>
+
 ## Γιατί Hi.Events;
 
-Οι περισσότερες πλατφόρμες έκδοσης εισιτηρίων χρεώνουν ανά εισιτήριο και κλειδώνουν τα δεδομένα σας στο οικοσύστημά τους. **Το Hi.Events είναι μια σύγχρονη, ανοιχτού κώδικα εναλλακτική για το Eventbrite, το Tickettailor, το Dice.fm και άλλες πλατφόρμες** για διοργανωτές που θέλουν πλήρη έλεγχο πάνω στο branding, το checkout, τα δεδομένα και την υποδομή τους.
+Οι περισσότερες πλατφόρμες εισιτηρίων παίρνουν προμήθεια από κάθε εισιτήριο και κρατούν τα δεδομένα των πελατών σας. **Το Hi.Events είναι μια
+εναλλακτική ανοιχτού κώδικα στα Eventbrite, Tickettailor, Dice.fm και άλλες πλατφόρμες εισιτηρίων**, που σας δίνει πλήρη έλεγχο στο
+branding, το checkout και τα δεδομένα σας.
 
-Σχεδιασμένο για προωθητές νυχτερινής ζωής, διοργανωτές φεστιβάλ, χώρους εκδηλώσεων, κοινοτικές ομάδες και οικοδεσπότες συνεδρίων.
+Το εμπιστεύονται χιλιάδες διοργανωτές εκδηλώσεων σε όλο τον κόσμο — από promoters νυχτερινής διασκέδασης και φεστιβάλ έως χώρους, κοινότητες
+και διοργανωτές συνεδρίων. Τρέξτε το μόνοι σας ή αφήστε μας να το τρέχουμε για εσάς στο Hi.Events Cloud.
 
 <br>
 
-<img alt="Hi.Events Dashboard" src="https://hievents-public.s3.us-west-1.amazonaws.com/website/github-screenshot.png"/>
+## Λειτουργίες
 
-<br>
+**📅 Εκδηλώσεις**
+- Μεμονωμένες και επαναλαμβανόμενες εκδηλώσεις, με τιμές, χωρητικότητα και ώρες ανά ημερομηνία
+- Αντιγραφή εκδήλωσης με ένα κλικ
+- Αποθηκευμένοι χώροι και online εκδηλώσεις
+- Σχεδιαστής αρχικής σελίδας εκδήλωσης και επώνυμες σελίδες διοργανωτή
+- Σελίδες line-up και προγράμματος
 
-## Δυνατότητες
+**🎟️ Εισιτήρια & προϊόντα**
+- Επί πληρωμή, δωρεάν, δωρεές και κλιμακωτά εισιτήρια
+- Θέσεις με κράτηση <sup>Enterprise</sup>
+- Πρόσθετα και merchandise
+- Κρυφά εισιτήρια που ξεκλειδώνουν με κωδικούς έκπτωσης
+- Όρια ανά παραγγελία και προγραμματισμένες περίοδοι πώλησης
+- Κοινή χωρητικότητα και αυτόματες λίστες αναμονής
 
-<table>
-<tr>
-<td width="50%" valign="top">
+**🛒 Πωλήσεις**
+- Προσαρμόσιμα embeds για τον ιστότοπό σας: widgets εισιτηρίων, κουμπιά, λίστες εκδηλώσεων, line-up και προγράμματα
+- Κωδικοί έκπτωσης και εκπτώσεις
+- Σύνδεσμοι παρακολούθησης για promoters και συνεργάτες
+- Προσαρμοσμένες ερωτήσεις εγγραφής
+- Συγκατάθεση για marketing στο checkout
+- Παρακολούθηση με Meta, TikTok, Google Analytics και Tag Manager
 
-### 🎟️ Έκδοση Εισιτηρίων & Πωλήσεις
-
-- Ευέλικτοι τύποι εισιτηρίων (δωρεάν, επί πληρωμή, δωρεά, κλιμακωτά)
-- Κρυφά και κλειδωμένα εισιτήρια πίσω από κωδικούς προώθησης
-- Κωδικοί προώθησης και πρόωρη πρόσβαση
-- Πρόσθετα προϊόντα (εμπορεύματα, αναβαθμίσεις, extras)
-- Κατηγορίες προϊόντων για οργάνωση
-- Πλήρης υποστήριξη φόρων και χρεώσεων (ΦΠΑ, χρεώσεις υπηρεσιών)
-- Διαχείριση χωρητικότητας και κοινά όρια
-
-</td>
-<td width="50%" valign="top">
-
-### 🎨 Branding & Προσαρμογή
-
-- Όμορφο, βελτιστοποιημένο checkout για μετατροπές
-- Προσαρμόσιμα σχέδια εισιτηρίων PDF
-- Branded αρχική σελίδα διοργανωτή
-- Drag-and-drop δημιουργός σελίδας εκδήλωσης
-- Ενσωματώσιμο widget εισιτηρίων
-- Εργαλεία SEO (meta tags, Open Graph)
-
-</td>
-</tr>
-<tr>
-<td width="50%" valign="top">
-
-### 👥 Διαχείριση Συμμετεχόντων
-
-- Προσαρμοσμένες ερωτήσεις κατά το checkout
-- Σύνθετη αναζήτηση, φιλτράρισμα και εξαγωγή (CSV/XLSX)
+**💳 Πληρωμές**
+- Εκκαθαρίσεις στον δικό σας λογαριασμό Stripe
+- Φόροι και χρεώσεις, ενσωματωμένοι ή προστιθέμενοι στο checkout
+- Τιμολόγηση και πληρωμές εκτός σύνδεσης
 - Πλήρεις και μερικές επιστροφές χρημάτων
-- Μαζικά μηνύματα ανά τύπο εισιτηρίου
-- Check-in με QR code και αρχεία σάρωσης
-- Λίστες check-in με έλεγχο πρόσβασης
 
-</td>
-<td width="50%" valign="top">
-
-### 📊 Αναλυτικά & Ανάπτυξη
-
-- Πίνακας πωλήσεων σε πραγματικό χρόνο
-- Παρακολούθηση συνεργατών και παραπομπών
-- Σύνθετες αναφορές (πωλήσεις, φόροι, promos)
-- Webhooks (Zapier, Make, CRMs)
-
-</td>
-</tr>
-<tr>
-<td colspan="2" valign="top">
-
-### ⚙️ Λειτουργίες
-
-Ρόλοι και δικαιώματα πολλαπλών χρηστών · Άμεσες πληρωμές Stripe Connect · Μέθοδοι εκτός σύνδεσης πληρωμής · Υποστήριξη εκδηλώσεων εκτός σύνδεσης ·
-Αυτόματη τιμολόγηση · Αρχείο εκδηλώσεων · Υποστήριξη πολλαπλών γλωσσών · Πλήρες REST API
-
-</td>
-</tr>
-</table>
+**🚪 Συμμετέχοντες & είσοδος**
+- Ταμείο για πωλήσεις στην είσοδο <sup>Enterprise</sup>
+- Check-in με την κάμερα του κινητού ή σαρωτή USB
+- Κοινοποιήσιμες λίστες check-in με ζωντανή καταμέτρηση
+- Μηνύματα σε συμμετέχοντες και προσαρμοσμένα πρότυπα email
+- Επώνυμα εισιτήρια PDF
+- Χειροκίνητη προσθήκη συμμετεχόντων
+- Αναφορές πωλήσεων, φόρων και κωδικών έκπτωσης
 
 <br>
 
-## Σύγκριση
+## Φτιαγμένο για οργανισμούς
 
-| Χαρακτηριστικό                   | Hi.Events | Eventbrite | Tickettailor | Dice        |
-|:---------------------------------|:----------|:-----------|:-------------|:------------|
-| Επιλογή self-hosted              | ✅         | ❌          | ❌            | ❌           |
-| Ανοιχτός κώδικας                 | ✅         | ❌          | ❌            | ❌           |
-| Χωρίς χρεώσεις ανά εισιτήριο (self-hosted) | ✅ | ❌       | ❌            | ❌           |
-| Πλήρες custom branding           | ✅         | Περιορισμένο | ✅          | Περιορισμένο |
-| Παρακολούθηση συνεργατών         | ✅         | ✅          | ❌            | ❌           |
-| Πρόσβαση API                     | ✅         | ✅          | ✅            | Περιορισμένο |
-| Δικά σας δεδομένα                | ✅         | ❌          | ❌            | ❌           |
+**🔐 Ασφάλεια & πρόσβαση**
+- Single sign-on
+- Έλεγχος ταυτότητας δύο παραγόντων
+- Ρόλοι και δικαιώματα ομάδας
+- Πολλοί διοργανωτές σε έναν λογαριασμό
+
+**🔌 Ενσωματώσεις**
+- REST API και κλειδιά API
+- Webhooks
+- Εξαγωγές CSV και XLSX
+
+**🗄️ Τα δεδομένα σας**
+- Self-hosting με Docker
+- Διαγραφή και ανωνυμοποίηση λογαριασμού
+- Διαθέσιμο σε 21 γλώσσες
+
+**✅ Δοκιμασμένο**
+- Ένα εκτενές σύνολο δοκιμών εκτελείται σε κάθε αλλαγή
 
 <br>
 
-## Γρήγορη Εκκίνηση
+## Γρήγορη εκκίνηση
 
-### One-Click Deploy
+Φτιαγμένο με **Laravel 13** (PHP >=8.3) · **React 19** με SSR · **TypeScript** · **PostgreSQL** · **Redis** · **Docker**.
+
+### Ανάπτυξη με ένα κλικ
 
 [![Deploy on DigitalOcean](https://www.deploytodo.com/do-btn-blue.svg)](https://github.com/HiEventsDev/hi.events-digitalocean)
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://github.com/HiEventsDev/hi.events-render.com)
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/8CGKmu?referralCode=KvSr11)
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/8CGKmu?referralCode=KvSr11)
 [![Deploy on Zeabur](https://zeabur.com/button.svg)](https://zeabur.com/templates/8DIRY6)
 
 ### Docker
 
 ```bash
-git clone git@github.com:HiEventsDev/hi.events.git
+git clone https://github.com/HiEventsDev/hi.events.git
 cd hi.events/docker/all-in-one
 
-# Δημιουργία κλειδιών (Linux/macOS)
+cp .env.example .env
+
+# Generate keys (Linux/macOS)
 echo "APP_KEY=base64:$(openssl rand -base64 32)" >> .env
 echo "JWT_SECRET=$(openssl rand -base64 32)" >> .env
 
@@ -151,45 +148,82 @@ docker compose up -d
 
 📖 [Πλήρης οδηγός εγκατάστασης](https://hi.events/docs/getting-started?utm_source=gh-readme)
 
+> [!IMPORTANT]
+> **Αναβαθμίζετε από την 1.x;** Διαβάστε τις [σημειώσεις έκδοσης](https://github.com/HiEventsDev/hi.events/releases) πριν από την αναβάθμιση.
+
+### REST API
+
+Δημιουργήστε κλειδιά API από **Ρυθμίσεις → Κλειδιά API**, όπου θα βρείτε επίσης την Τεκμηρίωση API.
+
+<br>
+
+## Γλώσσες
+
+English, Deutsch, Français, Italiano, Nederlands, Español, Português, Português (Brasil),
+Polski, Čeština, Slovenčina, Magyar, Svenska, Suomi, Ελληνικά, Türkçe, Tiếng Việt, 简体中文, 繁體中文, 日本語 και 한국어.
+
+Διορθώσεις και νέες γλώσσες είναι ευπρόσδεκτες — δείτε τον [οδηγό συνεισφοράς](CONTRIBUTING.md).
+
 <br>
 
 ## Hi.Events Cloud
 
-Προτιμάτε να μην το φιλοξενείτε μόνοι σας; Το **[Hi.Events Cloud](https://app.hi.events/auth/register?utm_source=gh-readme)** είναι μια πλήρως διαχειριζόμενη επιλογή χωρίς ρύθμιση, με αυτόματες ενημερώσεις και διαχειριζόμενη υποδομή.
+Προτιμάτε να μην το φιλοξενήσετε μόνοι σας; Το **[Hi.Events Cloud](https://app.hi.events/auth/register?utm_source=gh-readme)** είναι η πλήρως
+διαχειριζόμενη έκδοση, από την ομάδα που αναπτύσσει το Hi.Events.
 
 [Ξεκινήστε →](https://app.hi.events/auth/register?utm_source=gh-readme)
 
 <br>
 
+## Άδεια χρήσης
+
+Το Hi.Events διατίθεται με άδεια **AGPL-3.0 με πρόσθετους όρους**. Οι πρόσθετοι όροι απαιτούν να διατηρείται η αναφορά "Powered by Hi.Events"
+στις σελίδες και τα email που παράγει το λογισμικό — δείτε το [LICENCE](LICENCE) για την ακριβή διατύπωση.
+
+Οι θέσεις με κράτηση και το ταμείο καλύπτονται από την [Hi.Events Enterprise Licence](backend/ee/LICENCE) και απαιτούν
+άδεια για χρήση σε παραγωγή.
+
+**Διατίθενται εμπορικές άδειες** αν θέλετε να αφαιρέσετε την αναφορά ή χρειάζεστε όρους κατάλληλους για white-label
+εγκατάσταση. [Επιλογές αδειών](https://hi.events/licensing?utm_source=gh-readme) ·
+[hello@hi.events](mailto:hello@hi.events)
+
+<br>
+
 ## Συνεισφορά
 
-Καλωσορίζουμε συνεισφορές. Δείτε τον [οδηγό συνεισφοράς](CONTRIBUTING.md) για λεπτομέρειες.
+Οι συνεισφορές είναι ευπρόσδεκτες — δείτε τον [οδηγό συνεισφοράς](CONTRIBUTING.md) για να ξεκινήσετε. Ανοίξτε ένα issue ή
+μια συζήτηση πριν ξεκινήσετε σημαντική δουλειά, ώστε να συμφωνήσουμε στην προσέγγιση. Οι συνεισφέροντες υπογράφουν
+ένα [CLA](CLA.md).
+
+<a href="https://github.com/HiEventsDev/hi.events/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=HiEventsDev/hi.events" alt="Hi.Events contributors" />
+</a>
+
+<br>
+
+## Ασφάλεια
+
+Βρήκατε κάποια ευπάθεια; Αναφέρετέ τη ιδιωτικά στο [security@hi.events](mailto:security@hi.events) αντί να ανοίξετε
+δημόσιο issue. Δείτε την [πολιτική ασφαλείας](SECURITY.md) μας.
 
 <br>
 
 ## Υποστήριξη
 
-📖 [Τεκμηρίωση](https://hi.events/docs?utm_source=gh-readme) · 📧 [hello@hi.events](mailto:hello@hi.events) ·
-🐛 [GitHub Issues](https://github.com/HiEventsDev/hi.events/issues)
+📖 [Τεκμηρίωση](https://hi.events/docs?utm_source=gh-readme) ·
+🐛 [GitHub Issues](https://github.com/HiEventsDev/hi.events/issues) ·
+💬 [Συζητήσεις](https://github.com/HiEventsDev/hi.events/discussions) ·
+📧 [hello@hi.events](mailto:hello@hi.events)
 
-<br>
-
-## Changelog
-
-Μείνετε ενημερωμένοι με νέες δυνατότητες και βελτιώσεις στη [σελίδα εκδόσεων](https://github.com/HiEventsDev/hi.events/releases).
-
-<br>
-
-## Άδεια Χρήσης
-
-Το Hi.Events διαθέτει άδεια χρήσης **AGPL-3.0 με πρόσθετους όρους**. Διαθέσιμη εμπορική αδειοδότηση. [Μάθετε περισσότερα](https://hi.events/licensing).
+Οι νέες λειτουργίες και βελτιώσεις παρουσιάζονται στη
+[σελίδα εκδόσεων](https://github.com/HiEventsDev/hi.events/releases).
 
 <br>
 
 <div align="center">
 
-**[Ιστοσελίδα](https://hi.events)** · **[Τεκμηρίωση](https://hi.events/docs)** · **[Twitter/X](https://x.com/HiEventsTickets)**
+**[Ιστότοπος](https://hi.events)** · **[Τεκμηρίωση](https://hi.events/docs)** · **[Cloud](https://app.hi.events/auth/register?utm_source=gh-readme)** · **[Άδειες χρήσης](https://hi.events/licensing)**
 
-Made with ☘️ in Ireland
+Φτιαγμένο με ☘️ στην Ιρλανδία
 
 </div>

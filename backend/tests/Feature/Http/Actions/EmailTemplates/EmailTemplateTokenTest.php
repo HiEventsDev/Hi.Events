@@ -116,7 +116,7 @@ class EmailTemplateTokenTest extends TestCase
     {
         $response = $this->getJson('/email-templates/tokens/order_confirmation');
 
-        $response->assertStatus(ResponseCodes::HTTP_INTERNAL_SERVER_ERROR);
+        $response->assertStatus(ResponseCodes::HTTP_UNAUTHORIZED);
     }
 
     public function test_tokens_include_order_specific_tokens(): void

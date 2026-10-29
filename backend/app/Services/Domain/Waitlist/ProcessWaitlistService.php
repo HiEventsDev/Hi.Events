@@ -11,6 +11,7 @@ use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\Status\WaitlistEntryStatus;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\DomainObjects\WaitlistEntryDomainObject;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatedProductLookupService;
 use HiEvents\Exceptions\NoCapacityAvailableException;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Exceptions\ResourceNotFoundException;
@@ -22,10 +23,12 @@ use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Repository\Interfaces\WaitlistEntryRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\ProductOrderDetailsDTO;
 use HiEvents\Services\Domain\EventOccurrence\OccurrencePurchaseEligibilityService;
+use HiEvents\Services\Domain\Order\DTO\ProcessedOrderItemDTO;
 use HiEvents\Services\Domain\Order\OrderItemProcessingService;
 use HiEvents\Services\Domain\Order\OrderManagementService;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\DTO\OrderProductPriceDTO;
+use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -33,7 +36,7 @@ use Illuminate\Validation\ValidationException;
 
 class ProcessWaitlistService
 {
-    private const DEFAULT_OFFER_TIMEOUT_MINUTES = 60 * 12; // 12 hours
+    private const DEFAULT_OFFER_TIMEOUT_MINUTES = 60 * 12;
 
     public function __construct(
         private readonly WaitlistEntryRepositoryInterface $waitlistEntryRepository,
@@ -45,6 +48,8 @@ class ProcessWaitlistService
         private readonly ProductPriceRepositoryInterface $productPriceRepository,
         private readonly EventOccurrenceRepositoryInterface $eventOccurrenceRepository,
         private readonly OccurrencePurchaseEligibilityService $eligibilityService,
+        private readonly SeatedProductLookupService $seatedProductLookup,
+        private readonly TransactionLockService $transactionLockService,
     ) {}
 
     /**
@@ -64,7 +69,7 @@ class ProcessWaitlistService
         }
 
         return $this->databaseManager->transaction(function () use ($productPriceId, $quantity, $event, $eventSettings, $eventOccurrenceId) {
-            $this->databaseManager->statement('SELECT pg_advisory_xact_lock(?)', [$event->getId()]);
+            $this->transactionLockService->lockEvent($event->getId());
             $this->waitlistEntryRepository->lockForProductPrice($productPriceId, $eventOccurrenceId);
 
             $entries = $eventOccurrenceId !== null
@@ -74,6 +79,12 @@ class ProcessWaitlistService
             if ($entries->isEmpty()) {
                 throw new NoCapacityAvailableException(
                     __('There are no waiting entries for this product')
+                );
+            }
+
+            if ($this->isSeatedPrice($productPriceId)) {
+                throw new NoCapacityAvailableException(
+                    __('The waitlist is not available for reserved seating tickets')
                 );
             }
 
@@ -138,7 +149,7 @@ class ProcessWaitlistService
         EventSettingDomainObject $eventSettings,
     ): Collection {
         return $this->databaseManager->transaction(function () use ($entryId, $eventId, $event, $eventSettings) {
-            $this->databaseManager->statement('SELECT pg_advisory_xact_lock(?)', [$event->getId()]);
+            $this->transactionLockService->lockEvent($event->getId());
 
             /** @var WaitlistEntryDomainObject|null $entry */
             $entry = $this->waitlistEntryRepository->findFirstWhere([
@@ -154,6 +165,12 @@ class ProcessWaitlistService
             if (! in_array($entry->getStatus(), $validStatuses, true)) {
                 throw new ResourceConflictException(
                     __('This waitlist entry cannot be offered in its current status')
+                );
+            }
+
+            if ($this->isSeatedPrice($entry->getProductPriceId())) {
+                throw new ResourceConflictException(
+                    __('The waitlist is not available for reserved seating tickets')
                 );
             }
 
@@ -292,7 +309,10 @@ class ProcessWaitlistService
             promoCode: null,
         );
 
-        return $this->orderManagementService->updateOrderTotals($order, $orderItems);
+        return $this->orderManagementService->updateOrderTotals(
+            $order,
+            $orderItems->map(fn (ProcessedOrderItemDTO $item) => $item->order_item),
+        );
     }
 
     private function resolveEventOccurrenceId(EventDomainObject $event, WaitlistEntryDomainObject $entry): ?int
@@ -337,6 +357,11 @@ class ProcessWaitlistService
         }
 
         return 0;
+    }
+
+    private function isSeatedPrice(int $productPriceId): bool
+    {
+        return $this->seatedProductLookup->isSeated($this->productPriceRepository->findById($productPriceId)->getProductId());
     }
 
     private function hasCapacityForEntry(WaitlistEntryDomainObject $entry, EventDomainObject $event): bool

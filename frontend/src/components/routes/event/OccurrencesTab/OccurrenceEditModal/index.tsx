@@ -1,4 +1,5 @@
 import {t, Trans} from "@lingui/macro";
+import {useAccess} from "../../../../../hooks/useAccess.ts";
 import {Anchor, Button, Checkbox, NumberInput, Radio, SegmentedControl, Tabs, Text, TextInput, UnstyledButton} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {modals} from "@mantine/modals";
@@ -17,7 +18,7 @@ import {
     IconUsers,
     IconX,
 } from "@tabler/icons-react";
-import {Modal} from "../../../../common/Modal";
+import {Modal, ModalFooter} from "../../../../common/Modal";
 import {InputGroup} from "../../../../common/InputGroup";
 import {Callout} from "../../../../common/Callout";
 import {
@@ -43,15 +44,21 @@ import {showSuccess, showError} from "../../../../../utilites/notifications.tsx"
 import {isEmptyHtml} from "../../../../../utilites/helpers.ts";
 import {useFormErrorResponseHandler} from "../../../../../hooks/useFormErrorResponseHandler.tsx";
 import {OccurrenceProductSettings} from "../PriceOverrideForm";
+import {BookingSummary} from "../BookingSummary";
+import {CapacityHelpLink} from "../../../../common/CapacityHelp";
 import {SendMessageModal} from "../../../../modals/SendMessageModal";
 import {MessageType} from "../../../../../types.ts";
 import {buildSingleRescheduleTemplate} from "../rescheduleMessageTemplate";
 import classes from './OccurrenceEditModal.module.scss';
+import {DateTimeField} from "../../../../common/DateTimeField";
+
+export type OccurrenceEditTab = 'details' | 'products';
 
 interface OccurrenceEditModalProps extends GenericModalProps {
     occurrenceId?: IdParam;
     duplicateFrom?: EventOccurrence;
     defaultDate?: string;
+    initialTab?: OccurrenceEditTab;
 }
 
 type CapacityVisibility = 'inherit' | 'show' | 'hide';
@@ -62,7 +69,7 @@ const capacityVisibilityToForm = (value?: boolean | null): CapacityVisibility =>
 const capacityVisibilityToPayload = (value: CapacityVisibility): boolean | null =>
     value === 'show' ? true : value === 'hide' ? false : null;
 
-export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defaultDate}: OccurrenceEditModalProps) => {
+export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defaultDate, initialTab = 'details'}: OccurrenceEditModalProps) => {
     const {eventId} = useParams();
     const isEditing = !!occurrenceId;
     const errorHandler = useFormErrorResponseHandler();
@@ -313,6 +320,7 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
     };
 
     const refundRef = useRef(false);
+    const canIssueRefunds = useAccess().can('ISSUE_REFUNDS');
 
     const handleCancel = () => {
         refundRef.current = false;
@@ -330,10 +338,12 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
                             {t`This date has ${orderCount} order(s) that will be affected.`}
                         </Text>
                     )}
-                    <Checkbox
-                        label={t`Refund all orders for this date`}
-                        onChange={(e) => { refundRef.current = e.currentTarget.checked; }}
-                    />
+                    {canIssueRefunds && (
+                        <Checkbox
+                            label={t`Refund all orders for this date`}
+                            onChange={(e) => { refundRef.current = e.currentTarget.checked; }}
+                        />
+                    )}
                 </>
             ),
             labels: {confirm: t`Cancel Date`, cancel: t`Go Back`},
@@ -401,7 +411,7 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
             heading={isEditing ? t`Edit Date` : duplicateFrom ? t`Duplicate Date` : t`Add Date`}
             size="lg"
         >
-            <Tabs defaultValue="details">
+            <Tabs defaultValue={initialTab}>
                 <Tabs.List>
                     <Tabs.Tab value="details" leftSection={<IconEdit size={14}/>}>
                         {t`Details`}
@@ -433,16 +443,15 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
                                     <span className={classes.sectionTitle}>{t`Date & Time`}</span>
                                 </div>
                                 <InputGroup>
-                                    <TextInput
-                                        type="datetime-local"
+                                    <DateTimeField
                                         {...form.getInputProps('start_date')}
                                         label={t`Start Date`}
                                         required
                                     />
-                                    <TextInput
-                                        type="datetime-local"
+                                    <DateTimeField
                                         {...form.getInputProps('end_date')}
                                         label={t`End Date`}
+                                        defaultTime="23:59"
                                     />
                                     <TextInput
                                         {...form.getInputProps('label')}
@@ -501,6 +510,7 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
                                 <div className={classes.sectionHeader}>
                                     <div className={classes.sectionIcon}><IconUsers size={16}/></div>
                                     <span className={classes.sectionTitle}>{t`Capacity`}</span>
+                                    <span className={classes.sectionAction}><CapacityHelpLink/></span>
                                 </div>
                                 <NumberInput
                                     {...form.getInputProps('capacity')}
@@ -508,6 +518,17 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
                                     min={0}
                                     allowNegative={false}
                                 />
+                                {isEditing && occurrence?.booking_limits && (
+                                    <div className={classes.capacityStats}>
+                                        <BookingSummary
+                                            capacity={form.values.capacity === null || form.values.capacity === undefined || (form.values.capacity as unknown) === ''
+                                                ? null
+                                                : Number(form.values.capacity)}
+                                            booked={occurrence.used_capacity ?? 0}
+                                            allocations={occurrence.booking_limits.allocations}
+                                        />
+                                    </div>
+                                )}
                                 <Callout
                                     variant="info"
                                     title={t`Only tickets count toward capacity`}
@@ -536,16 +557,13 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
                                     onChange={(value) => form.setFieldValue('show_available_capacity', value as CapacityVisibility)}
                                 />
                             </div>
-
-                            <Button
-                                type="submit"
-                                fullWidth
-                                size="md"
-                                loading={isPending}
-                            >
+                        </fieldset>
+                        <ModalFooter inline={isEditing}>
+                            <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                            <Button type="submit" loading={isPending} disabled={isCancelled}>
                                 {isEditing ? t`Save Changes` : t`Create Date`}
                             </Button>
-                        </fieldset>
+                        </ModalFooter>
                     </form>
 
                     {isEditing && (

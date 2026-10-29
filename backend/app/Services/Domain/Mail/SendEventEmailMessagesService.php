@@ -64,6 +64,13 @@ class SendEventEmailMessagesService
             throw new UnableToSendMessageException($message);
         }
 
+        if ($messageData->is_test) {
+            $this->sendEmailToMessageSender($messageData, $event);
+            $this->updateMessageStatus($messageData, MessageStatus::SENT);
+
+            return;
+        }
+
         switch ($messageData->type) {
             case MessageTypeEnum::INDIVIDUAL_ATTENDEES:
                 $this->sendAttendeeMessages($messageData, $event);
@@ -92,6 +99,7 @@ class SendEventEmailMessagesService
             values: $messageData->attendee_ids,
             additionalWhere: [
                 'event_id' => $messageData->event_id,
+                ['email', 'not null', null],
             ],
             columns: ['first_name', 'last_name', 'email']
         );
@@ -104,6 +112,7 @@ class SendEventEmailMessagesService
         $additionalWhere = array_merge([
             'event_id' => $messageData->event_id,
             'status' => AttendeeStatus::ACTIVE->name,
+            ['email', 'not null', null],
         ], $this->occurrenceWhere($messageData));
 
         $attendees = $this->attendeeRepository->findWhereIn(
@@ -123,6 +132,10 @@ class SendEventEmailMessagesService
     ): void {
         $this->sendEmailToMessageSender($messageData, $event);
 
+        if ($order->getEmail() === null) {
+            return;
+        }
+
         $this->sendMessage(
             emailAddress: $order->getEmail(),
             fullName: $order->getFullName(),
@@ -138,13 +151,9 @@ class SendEventEmailMessagesService
     ): void {
         $this->sendEmailToMessageSender($messageData, $event);
 
-        if ($messageData->is_test) {
-            return;
-        }
-
         $sentEmails = [];
         $attendees->each(function (AttendeeDomainObject $attendee) use (&$sentEmails, $event, $messageData) {
-            if (in_array($attendee->getEmail(), $sentEmails, true)) {
+            if ($attendee->getEmail() === null || in_array($attendee->getEmail(), $sentEmails, true)) {
                 return;
             }
 
@@ -200,7 +209,7 @@ class SendEventEmailMessagesService
         if (! empty($messageData->event_occurrence_ids)) {
             return [['event_occurrence_id', 'in', $messageData->event_occurrence_ids]];
         }
-        if ($messageData->event_occurrence_id) {
+        if ($messageData->event_occurrence_id ?? null) {
             return ['event_occurrence_id' => $messageData->event_occurrence_id];
         }
 
@@ -229,8 +238,8 @@ class SendEventEmailMessagesService
             eventId: $messageData->event_id,
             productIds: $messageData->product_ids,
             orderStatuses: $messageData->order_statuses,
-            eventOccurrenceId: $messageData->event_occurrence_id,
-            eventOccurrenceIds: $messageData->event_occurrence_ids,
+            eventOccurrenceId: $messageData->event_occurrence_id ?? null,
+            eventOccurrenceIds: $messageData->event_occurrence_ids ?? null,
         );
 
         if ($orders->isEmpty()) {
@@ -240,6 +249,10 @@ class SendEventEmailMessagesService
         $this->sendEmailToMessageSender($messageData, $event);
 
         $orders->each(function (OrderDomainObject $order) use ($messageData, $event) {
+            if ($order->getEmail() === null) {
+                return;
+            }
+
             $this->sendMessage(
                 emailAddress: $order->getEmail(),
                 fullName: $order->getFullName(),

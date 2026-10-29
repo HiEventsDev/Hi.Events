@@ -56,11 +56,13 @@ export const OccurrenceAttendeesAndOrders = ({occurrenceId, perPage = 10, onNavi
             <Tabs value={activeTab} onChange={setActiveTab}>
                 <Tabs.List>
                     <Tabs.Tab value="attendees" leftSection={<IconUsers size={14}/>}>
-                        {t`Recent Attendees`}
+                        <span className={classes.tabLabelFull}>{t`Recent Attendees`}</span>
+                        <span className={classes.tabLabelShort}>{t`Attendees`}</span>
                         {attendeeCount > 0 && <span className={classes.tabCount}>{attendeeCount}</span>}
                     </Tabs.Tab>
                     <Tabs.Tab value="orders" leftSection={<IconReceipt size={14}/>}>
-                        {t`Recent Orders`}
+                        <span className={classes.tabLabelFull}>{t`Recent Orders`}</span>
+                        <span className={classes.tabLabelShort}>{t`Orders`}</span>
                         {orderCount > 0 && <span className={classes.tabCount}>{orderCount}</span>}
                     </Tabs.Tab>
                     <div className={classes.viewAllLink}>

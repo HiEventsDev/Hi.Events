@@ -61,6 +61,11 @@ class Event extends BaseModel
         return $this->hasMany(CheckInList::class);
     }
 
+    public function box_offices(): HasMany
+    {
+        return $this->hasMany(BoxOffice::class);
+    }
+
     public function capacity_assignments(): HasMany
     {
         return $this->hasMany(CapacityAssignment::class);
@@ -81,6 +86,21 @@ class Event extends BaseModel
         return $this->hasMany(Affiliate::class);
     }
 
+    public function event_lineup_entries(): HasMany
+    {
+        return $this->hasMany(EventLineupEntry::class);
+    }
+
+    public function event_spaces(): HasMany
+    {
+        return $this->hasMany(EventSpace::class);
+    }
+
+    public function event_schedule_items(): HasMany
+    {
+        return $this->hasMany(EventScheduleItem::class);
+    }
+
     public function event_occurrences(): HasMany
     {
         return $this->hasMany(EventOccurrence::class);
@@ -95,7 +115,6 @@ class Event extends BaseModel
     {
         parent::boot();
 
-        // todo - move into a domain service
         static::creating(
             static function (Event $event) {
                 $event->user_id = auth()->user()->id;

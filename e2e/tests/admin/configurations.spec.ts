@@ -64,3 +64,26 @@ test.describe('admin configurations', () => {
     await expect(card).toHaveCount(0);
   });
 });
+
+test.describe('currency default configurations', () => {
+  test(
+    'currency defaults show a badge and cannot be deleted',
+    { tag: '@admin' },
+    async ({ superAdminPage, adminApi }, testInfo) => {
+      const configurations = await adminApi.listConfigurations();
+      const usdDefault = configurations.find((config) => config.default_for_currency === 'USD');
+
+      testInfo.skip(
+        !usdDefault,
+        'No currency default configurations seeded — re-run `php artisan dev:bootstrap` against this stack.',
+      );
+
+      await gotoConfigurations(superAdminPage);
+
+      const card = configCard(superAdminPage, usdDefault!.name);
+      await expect(card).toBeVisible();
+      await expect(card.getByText('USD Default')).toBeVisible();
+      await expect(card.getByRole('button').last()).toBeDisabled();
+    },
+  );
+});

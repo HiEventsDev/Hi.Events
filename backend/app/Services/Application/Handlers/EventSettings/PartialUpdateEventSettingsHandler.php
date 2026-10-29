@@ -46,6 +46,9 @@ class PartialUpdateEventSettingsHandler
                 'continue_button_text' => array_key_exists('continue_button_text', $eventSettingsDTO->settings)
                     ? $eventSettingsDTO->settings['continue_button_text']
                     : $existingSettings->getContinueButtonText(),
+                'get_tickets_button_text' => array_key_exists('get_tickets_button_text', $eventSettingsDTO->settings)
+                    ? $eventSettingsDTO->settings['get_tickets_button_text']
+                    : $existingSettings->getGetTicketsButtonText(),
 
                 'homepage_background_color' => $eventSettingsDTO->settings['homepage_background_color'] ?? $existingSettings->getHomepageBackgroundColor(),
                 'homepage_primary_color' => $eventSettingsDTO->settings['homepage_primary_color'] ?? $existingSettings->getHomepagePrimaryColor(),
@@ -76,6 +79,14 @@ class PartialUpdateEventSettingsHandler
                     : $existingSettings->getOfflinePaymentInstructions(),
                 'allow_orders_awaiting_offline_payment_to_check_in' => $eventSettingsDTO->settings['allow_orders_awaiting_offline_payment_to_check_in']
                     ?? $existingSettings->getAllowOrdersAwaitingOfflinePaymentToCheckIn(),
+                'offline_payment_reporting_enabled' => $eventSettingsDTO->settings['offline_payment_reporting_enabled']
+                    ?? $existingSettings->getOfflinePaymentReportingEnabled(),
+                'offline_payment_order_reference_enabled' => $eventSettingsDTO->settings['offline_payment_order_reference_enabled']
+                    ?? $existingSettings->getOfflinePaymentOrderReferenceEnabled(),
+                'payment_links_enabled' => $eventSettingsDTO->settings['payment_links_enabled']
+                    ?? $existingSettings->getPaymentLinksEnabled(),
+                'payment_link_expiry_hours' => $eventSettingsDTO->settings['payment_link_expiry_hours']
+                    ?? $existingSettings->getPaymentLinkExpiryHours(),
 
                 // Invoice settings
                 'enable_invoicing' => $eventSettingsDTO->settings['enable_invoicing'] ?? $existingSettings->getEnableInvoicing(),
@@ -121,6 +132,9 @@ class PartialUpdateEventSettingsHandler
                 'homepage_theme_settings' => array_key_exists('homepage_theme_settings', $eventSettingsDTO->settings)
                     ? $eventSettingsDTO->settings['homepage_theme_settings']
                     : $existingSettings->getHomepageThemeSettings(),
+                'homepage_sections' => array_key_exists('homepage_sections', $eventSettingsDTO->settings)
+                    ? $eventSettingsDTO->settings['homepage_sections']
+                    : $existingSettings->getHomepageSections(),
 
                 // Self-service settings
                 'allow_attendee_self_edit' => $eventSettingsDTO->settings['allow_attendee_self_edit'] ?? $existingSettings->getAllowAttendeeSelfEdit(),

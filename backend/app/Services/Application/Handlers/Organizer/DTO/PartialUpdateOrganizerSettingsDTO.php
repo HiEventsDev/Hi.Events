@@ -32,6 +32,7 @@ class PartialUpdateOrganizerSettingsDTO extends BaseDataObject
         public readonly string|Optional|null $linkedinHandle,
         public readonly string|Optional|null $discordHandle,
         public readonly string|Optional|null $tiktokHandle,
+        public readonly string|Optional|null $blueskyHandle,
         public readonly string|Optional|null $youtubeHandle,
         public readonly string|Optional|null $snapchatHandle,
         public readonly string|Optional|null $twitchHandle,
@@ -56,6 +57,7 @@ class PartialUpdateOrganizerSettingsDTO extends BaseDataObject
 
         // Simplified homepage theme settings
         public readonly array|Optional|null $homepageThemeSettings,
+        public readonly array|Optional|null $homepageSections,
 
         // SEO
         public readonly string|Optional|null $seoKeywords,
@@ -69,5 +71,7 @@ class PartialUpdateOrganizerSettingsDTO extends BaseDataObject
         // Tracking pixels
         public readonly array|Optional|null $trackingPixels,
         public readonly bool|Optional|null $trackingConsentAcknowledged,
+
+        public readonly int|Optional $firstDayOfWeek,
     ) {}
 }

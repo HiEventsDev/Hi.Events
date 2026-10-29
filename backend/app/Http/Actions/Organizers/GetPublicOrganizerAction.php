@@ -7,6 +7,7 @@ use HiEvents\DomainObjects\Status\OrganizerStatus;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\Organizer\OrganizerResourcePublic;
 use HiEvents\Services\Application\Handlers\Organizer\GetPublicOrganizerHandler;
+use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Psr\Log\LoggerInterface;
@@ -33,7 +34,7 @@ class GetPublicOrganizerAction extends BaseAction
 
         return $this->resourceResponse(
             resource: OrganizerResourcePublic::class,
-            data: $this->handler->handle($organizerId),
+            data: $organizer,
         );
     }
 
@@ -43,10 +44,6 @@ class GetPublicOrganizerAction extends BaseAction
             return true;
         }
 
-        if ($this->isUserAuthenticated() && $organizer->getAccountId() === $this->getAuthenticatedAccountId()) {
-            return true;
-        }
-
-        return false;
+        return app(AccountUserAccessService::class)->currentMemberCanReadOrganizer($organizer);
     }
 }

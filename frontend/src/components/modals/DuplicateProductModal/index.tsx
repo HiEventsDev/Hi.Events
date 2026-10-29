@@ -1,15 +1,17 @@
-import {Button} from "@mantine/core";
-import {GenericModalProps, IdParam, Product, ProductPriceType, ProductType, TaxAndFee} from "../../../types.ts";
+import {GenericModalProps, IdParam, Product, ProductPriceType, ProductQuantityAppliesTo,
+    ProductType, TaxAndFee} from "../../../types.ts";
 import {useForm} from "@mantine/form";
 import {useParams} from "react-router";
-import {Modal} from "../../common/Modal";
 import {ProductForm} from "../../forms/ProductForm";
+import {ProductDrawer} from "../../forms/ProductForm/ProductDrawer.tsx";
 import {useEffect} from "react";
 import {useGetTaxesAndFees} from "../../../queries/useGetTaxesAndFees.ts";
+import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {t} from "@lingui/macro";
 import {useCreateProduct} from "../../../mutations/useCreateProduct.ts";
 import {useGetProduct} from "../../../queries/useGetProduct.ts";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
+import {utcToTz} from "../../../utilites/dates.ts";
 
 interface DuplicateProductModalProps extends GenericModalProps {
     originalProductId: IdParam;
@@ -17,6 +19,7 @@ interface DuplicateProductModalProps extends GenericModalProps {
 
 export const DuplicateProductModal = ({onClose, originalProductId}: DuplicateProductModalProps) => {
     const {eventId} = useParams();
+    const {data: event} = useGetEvent(eventId);
     const {data: taxesAndFees, isFetched: taxesAndFeesLoaded} = useGetTaxesAndFees();
     const {data: originalProduct} = useGetProduct(eventId, originalProductId);
     const createProductMutation = useCreateProduct();
@@ -34,12 +37,15 @@ export const DuplicateProductModal = ({onClose, originalProductId}: DuplicatePro
             hide_after_sale_end_date: false,
             show_quantity_remaining: false,
             hide_when_sold_out: false,
+            sequential_tier_release_enabled: false,
             is_hidden_without_promo_code: false,
             is_highlighted: false,
             highlight_message: undefined,
             type: ProductPriceType.Paid,
             product_type: ProductType.Ticket,
             tax_and_fee_ids: undefined,
+            addon_product_ids: [],
+            is_addon_only: false,
             product_category_id: undefined,
             prices: [{
                 price: 0,
@@ -47,12 +53,13 @@ export const DuplicateProductModal = ({onClose, originalProductId}: DuplicatePro
                 sale_end_date: undefined,
                 sale_start_date: undefined,
                 initial_quantity_available: undefined,
+                quantity_applies_to: ProductQuantityAppliesTo.Occurrence,
             }],
         },
     });
 
     useEffect(() => {
-        if (!originalProduct || !taxesAndFeesLoaded) {
+        if (!originalProduct || !event) {
             return;
         }
 
@@ -61,35 +68,42 @@ export const DuplicateProductModal = ({onClose, originalProductId}: DuplicatePro
             description: originalProduct.description,
             max_per_order: originalProduct.max_per_order,
             min_per_order: originalProduct.min_per_order,
-            sale_start_date: originalProduct.sale_start_date,
-            sale_end_date: originalProduct.sale_end_date,
+            sale_start_date: utcToTz(originalProduct.sale_start_date, event.timezone),
+            sale_end_date: utcToTz(originalProduct.sale_end_date, event.timezone),
             start_collapsed: originalProduct.start_collapsed,
             hide_before_sale_start_date: originalProduct.hide_before_sale_start_date,
             hide_after_sale_end_date: originalProduct.hide_after_sale_end_date,
             show_quantity_remaining: originalProduct.show_quantity_remaining,
             hide_when_sold_out: originalProduct.hide_when_sold_out,
+            sequential_tier_release_enabled: originalProduct.sequential_tier_release_enabled,
             is_hidden_without_promo_code: originalProduct.is_hidden_without_promo_code,
             is_hidden: originalProduct.is_hidden,
             is_highlighted: originalProduct.is_highlighted,
             highlight_message: originalProduct.highlight_message,
             type: originalProduct.type,
             tax_and_fee_ids: originalProduct.taxes_and_fees?.map(t => String(t.id)) ?? [],
+            addon_product_ids: originalProduct.addon_product_ids?.map(String) ?? [],
+            is_addon_only: originalProduct.is_addon_only ?? false,
             product_type: originalProduct.product_type,
             product_category_id: originalProduct.product_category_id,
+            price: originalProduct.type === ProductPriceType.Free ? 0.00 : undefined,
             prices: originalProduct.prices?.map(price => ({
                 price: price.price,
                 label: price.label,
-                sale_start_date: price.sale_start_date,
-                sale_end_date: price.sale_end_date,
+                sale_start_date: utcToTz(price.sale_start_date, event.timezone),
+                sale_end_date: utcToTz(price.sale_end_date, event.timezone),
                 initial_quantity_available: price.initial_quantity_available,
+                quantity_applies_to: price.quantity_applies_to,
                 is_hidden: price.is_hidden,
             })),
         });
-    }, [originalProduct]);
+        form.resetDirty();
+    }, [originalProduct, event]);
 
     useEffect(() => {
         if (taxesAndFeesLoaded) {
             form.setFieldValue("tax_and_fee_ids", taxesAndFees?.data?.filter(item => item.is_default).map((item: TaxAndFee) => String(item.id)) || []);
+            form.resetDirty();
         }
     }, [taxesAndFeesLoaded]);
 
@@ -110,13 +124,18 @@ export const DuplicateProductModal = ({onClose, originalProductId}: DuplicatePro
     };
 
     return (
-        <Modal onClose={onClose} heading={t`Duplicate Product`} opened size={"lg"} withCloseButton>
-            <form onSubmit={form.onSubmit(handleDuplicateProduct)}>
-                <ProductForm form={form}/>
-                <Button type="submit" fullWidth disabled={createProductMutation.isPending}>
-                    {createProductMutation.isPending ? t`Working...` : t`Duplicate Product`}
-                </Button>
-            </form>
-        </Modal>
+        <ProductDrawer
+            onClose={onClose}
+            title={t`Duplicate Product`}
+            event={event}
+            form={form}
+            loading={!originalProduct}
+            submitLabel={t`Duplicate Product`}
+            submitLoading={createProductMutation.isPending}
+            submitTestId="product-duplicate-submit-button"
+            onSubmit={handleDuplicateProduct}
+        >
+            <ProductForm form={form}/>
+        </ProductDrawer>
     );
 };

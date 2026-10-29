@@ -1,4 +1,5 @@
 import {useState} from "react";
+import {useAccess} from "./useAccess.ts";
 import {t} from "@lingui/macro";
 import {useClipboard, useDisclosure} from "@mantine/hooks";
 import {
@@ -24,6 +25,7 @@ import {downloadBinary} from "../utilites/download.ts";
 import {withLoadingNotification} from "../utilites/withLoadingNotification.tsx";
 import {showError, showSuccess} from "../utilites/notifications.tsx";
 import {eventCheckoutUrl} from "../utilites/urlHelper.ts";
+import {isOrderRefundable} from "../utilites/orderHelper.ts";
 
 interface UseOrderActionsOptions {
     eventId: IdParam;
@@ -38,6 +40,9 @@ export const useOrderActions = ({eventId, onManage, onEdit}: UseOrderActionsOpti
     const [selectedOrderId, setSelectedOrderId] = useState<IdParam>();
     const resendConfirmationMutation = useResendOrderConfirmation();
     const markAsPaidMutation = useMarkOrderAsPaid();
+    const {can} = useAccess();
+    const canEdit = can('EDIT');
+    const canIssueRefunds = can('ISSUE_REFUNDS');
     const clipboard = useClipboard({timeout: 2000});
 
     const openModal = (order: Order, modal: { open: () => void }) => {
@@ -88,10 +93,7 @@ export const useOrderActions = ({eventId, onManage, onEdit}: UseOrderActionsOpti
     };
 
     const getOrderActions = (order: Order): EntityAction[] => {
-        const isRefundable = !order.is_free_order
-            && order.status !== 'AWAITING_OFFLINE_PAYMENT'
-            && order.payment_provider === 'STRIPE'
-            && order.refund_status !== 'REFUNDED';
+        const isRefundable = isOrderRefundable(order);
 
         const actions: (EntityAction | false)[] = [
             !!onManage && {
@@ -101,7 +103,7 @@ export const useOrderActions = ({eventId, onManage, onEdit}: UseOrderActionsOpti
                 onClick: () => onManage(order),
                 group: 'primary',
             },
-            !!onEdit && {
+            !!onEdit && canEdit && {
                 key: 'edit',
                 label: t`Edit`,
                 icon: <IconPencil size={14}/>,
@@ -109,49 +111,49 @@ export const useOrderActions = ({eventId, onManage, onEdit}: UseOrderActionsOpti
                 group: 'primary',
                 dataTestId: 'order-edit-button',
             },
-            {
+            !!order.email && canEdit && {
                 key: 'message',
                 label: t`Message buyer`,
                 icon: <IconSend size={14}/>,
                 onClick: () => openModal(order, messageModal),
                 group: 'primary',
             },
-            order.status === 'COMPLETED' && {
+            order.status === 'COMPLETED' && !!order.email && canEdit && {
                 key: 'resend',
                 label: t`Resend order email`,
                 icon: <IconRepeat size={14}/>,
                 onClick: () => handleResendConfirmation(order),
                 group: 'primary',
             },
-            order.status === 'AWAITING_OFFLINE_PAYMENT' && {
+            order.status === 'AWAITING_OFFLINE_PAYMENT' && canIssueRefunds && {
                 key: 'mark-as-paid',
                 label: t`Mark as paid`,
                 icon: <IconReceiptDollar size={14}/>,
                 onClick: () => handleMarkAsPaid(order),
                 group: 'primary',
             },
-            isRefundable && {
+            isRefundable && canIssueRefunds && {
                 key: 'refund',
                 label: t`Refund order`,
                 icon: <IconReceiptRefund size={14}/>,
                 onClick: () => openModal(order, refundModal),
                 group: 'secondary',
             },
-            {
+            !!order.short_id && {
                 key: 'copy-link',
                 label: t`Copy customer link`,
                 icon: <IconCopy size={14}/>,
                 onClick: () => handleCopyCustomerLink(order),
                 group: 'secondary',
             },
-            !!order.latest_invoice && {
+            !!order.latest_invoice && can('VIEW_FINANCIALS') && {
                 key: 'invoice',
                 label: t`Download invoice`,
                 icon: <IconReceipt2 size={14}/>,
                 onClick: () => handleInvoiceDownload(order.latest_invoice as Invoice),
                 group: 'secondary',
             },
-            order.status !== 'CANCELLED' && {
+            order.status !== 'CANCELLED' && canEdit && {
                 key: 'cancel',
                 label: t`Cancel order`,
                 icon: <IconTrash size={14}/>,

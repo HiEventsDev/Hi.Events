@@ -1,6 +1,7 @@
 import {Event, EventOccurrence, LocationType} from "../types.ts";
 import {resolveEventLocation} from "./effectiveLocation.ts";
 import {formatAddress} from "./addressUtilities.ts";
+import {htmlToText} from "./helpers.ts";
 
 const getEventLocation = (event: Event, occurrence?: EventOccurrence | null): string => {
     const effective = resolveEventLocation(event, occurrence ?? null);
@@ -21,13 +22,6 @@ const getEventLocation = (event: Event, occurrence?: EventOccurrence | null): st
 
 const formatICSDate = (date: string): string => {
     return new Date(date).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
-};
-
-const stripHtml = (html: string): string => {
-    if (typeof document === 'undefined') return html?.replace(/<[^>]*>/g, '') || '';
-    const tmp = document.createElement('div');
-    tmp.innerHTML = html || '';
-    return tmp.textContent || tmp.innerText || '';
 };
 
 const escapeICSText = (value: string): string => {
@@ -65,32 +59,43 @@ const foldICSLine = (line: string): string => {
     return chunks.join('\r\n ');
 };
 
-const getCalendarEntryDetails = (event: Event, occurrence?: EventOccurrence) => {
+export interface CalendarEntry {
+    title: string;
+    startDate: string;
+    endDate: string;
+    description: string;
+    location: string;
+    filename: string;
+}
+
+export const calendarEntryForEvent = (event: Event, occurrence?: EventOccurrence): CalendarEntry => {
     const startDate = occurrence?.start_date || event.start_date;
     const endDate = occurrence
         ? (occurrence.end_date || occurrence.start_date)
         : (event.end_date || startDate);
-    const title = occurrence?.label
-        ? `${event.title} - ${occurrence.label}`
-        : event.title;
 
-    return {startDate, endDate, title};
+    return {
+        title: occurrence?.label ? `${event.title} - ${occurrence.label}` : event.title,
+        startDate,
+        endDate,
+        description: htmlToText(event.description_preview),
+        location: getEventLocation(event, occurrence),
+        filename: event.title,
+    };
 };
 
-export const createICSContent = (event: Event, occurrence?: EventOccurrence): string => {
-    const {startDate, endDate, title} = getCalendarEntryDetails(event, occurrence);
-
+export const createICSContent = (entry: CalendarEntry): string => {
     return [
         'BEGIN:VCALENDAR',
         'VERSION:2.0',
         'PRODID:-//Hi.Events//NONSGML Event Calendar//EN',
         'CALSCALE:GREGORIAN',
         'BEGIN:VEVENT',
-        `DTSTART:${formatICSDate(startDate)}`,
-        `DTEND:${formatICSDate(endDate)}`,
-        foldICSLine(`SUMMARY:${escapeICSText(title)}`),
-        foldICSLine(`DESCRIPTION:${escapeICSText(stripHtml(event.description_preview || ''))}`),
-        foldICSLine(`LOCATION:${escapeICSText(getEventLocation(event, occurrence))}`),
+        `DTSTART:${formatICSDate(entry.startDate)}`,
+        `DTEND:${formatICSDate(entry.endDate)}`,
+        foldICSLine(`SUMMARY:${escapeICSText(entry.title)}`),
+        foldICSLine(`DESCRIPTION:${escapeICSText(entry.description)}`),
+        foldICSLine(`LOCATION:${escapeICSText(entry.location)}`),
         `DTSTAMP:${formatICSDate(new Date().toISOString())}`,
         `UID:${crypto.randomUUID()}@hi.events`,
         'END:VEVENT',
@@ -98,30 +103,28 @@ export const createICSContent = (event: Event, occurrence?: EventOccurrence): st
     ].join('\r\n');
 };
 
-export const downloadICSFile = (event: Event, occurrence?: EventOccurrence): void => {
-    const content = createICSContent(event, occurrence);
+export const downloadICSFile = (entry: CalendarEntry): void => {
+    const content = createICSContent(entry);
     const blob = new Blob([content], {type: 'text/calendar;charset=utf-8'});
     const link = document.createElement('a');
     link.href = window.URL.createObjectURL(blob);
-    link.setAttribute('download', `${event.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.ics`);
+    link.setAttribute('download', `${entry.filename.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.ics`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
 };
 
-export const createGoogleCalendarUrl = (event: Event, occurrence?: EventOccurrence): string => {
+export const createGoogleCalendarUrl = (entry: CalendarEntry): string => {
     const formatGoogleDate = (date: string): string => {
         return new Date(date).toISOString().replace(/-|:|\.\d{3}/g, '');
     };
 
-    const {startDate, endDate, title} = getCalendarEntryDetails(event, occurrence);
-
     const params = new URLSearchParams({
         action: 'TEMPLATE',
-        text: title,
-        details: event.description_preview || '',
-        location: getEventLocation(event, occurrence),
-        dates: `${formatGoogleDate(startDate)}/${formatGoogleDate(endDate)}`
+        text: entry.title,
+        details: entry.description,
+        location: entry.location,
+        dates: `${formatGoogleDate(entry.startDate)}/${formatGoogleDate(entry.endDate)}`
     });
 
     return `https://calendar.google.com/calendar/render?${params.toString()}`;

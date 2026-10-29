@@ -2,9 +2,12 @@
 
 namespace HiEvents\Http\Actions\Auth;
 
+use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Helper\AuthCookieSameSite;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\Auth\AuthenticatedResponseResource;
 use HiEvents\Services\Application\Handlers\Auth\DTO\AuthenticatedResponseDTO;
+use HiEvents\Services\Domain\Auth\TwoFactor\TrustedDeviceService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
@@ -19,7 +22,7 @@ abstract class BaseAuthAction extends BaseAction
             name: 'token',
             value: $token,
             secure: true,
-            sameSite: 'None',
+            sameSite: AuthCookieSameSite::forRequest(request()),
         );
     }
 
@@ -36,9 +39,51 @@ abstract class BaseAuthAction extends BaseAction
         return $response;
     }
 
-    protected function respondWithToken(?string $token, Collection $accounts): JsonResponse
+    protected function addTrustedDeviceCookie(JsonResponse $response, ?string $trustedDeviceToken): void
     {
-        $user = $this->getAuthenticatedUser();
+        if (! $trustedDeviceToken) {
+            return;
+        }
+
+        $response->withCookie(Cookie::make(
+            name: TrustedDeviceService::COOKIE_NAME,
+            value: $trustedDeviceToken,
+            minutes: TrustedDeviceService::TRUST_DAYS * 24 * 60,
+            secure: true,
+            httpOnly: true,
+            sameSite: AuthCookieSameSite::forRequest(request()),
+        ));
+    }
+
+    protected function issueFreshTokenForCurrentSession(): string
+    {
+        $payload = auth()->payload();
+        $guard = auth();
+        $defaultTtl = $guard->factory()->getTTL();
+
+        if ($payload->get('sso_connection_id') !== null) {
+            $guard->setTTL(max(1, (int) ceil(((int) $payload->get('exp') - now()->getTimestamp()) / 60)));
+        }
+
+        try {
+            return $guard->claims(array_filter([
+                'account_id' => $payload->get('account_id'),
+                'role' => $payload->get('role'),
+                'auth_method' => $payload->get('auth_method'),
+                'sso_connection_id' => $payload->get('sso_connection_id'),
+            ], static fn ($value) => $value !== null))->tokenById(auth()->id());
+        } finally {
+            $guard->setTTL($defaultTtl);
+        }
+    }
+
+    protected function respondWithToken(
+        ?string $token,
+        Collection $accounts,
+        ?UserDomainObject $user = null,
+        ?int $recoveryCodesRemaining = null,
+    ): JsonResponse {
+        $user ??= $this->getAuthenticatedUser();
 
         return $this->addTokenToResponse(
             response: $this->jsonResponse(new AuthenticatedResponseResource(new AuthenticatedResponseDTO(
@@ -46,6 +91,7 @@ abstract class BaseAuthAction extends BaseAction
                 expiresIn: auth()->factory()->getTTL() * 60,
                 accounts: $accounts,
                 user: $user,
+                recoveryCodesRemaining: $recoveryCodesRemaining,
             ))),
             token: $token
         );

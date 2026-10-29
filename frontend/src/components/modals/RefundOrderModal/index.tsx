@@ -14,6 +14,7 @@ import {showSuccess} from "../../../utilites/notifications.tsx";
 import {Modal} from "../../common/Modal";
 import classes from './RefundOrderModal.module.scss';
 import {t} from "@lingui/macro";
+import {isOfflineOrder} from "../../../utilites/orderHelper.ts";
 
 interface RefundOrderModalProps extends GenericModalProps {
     orderId: IdParam;
@@ -56,7 +57,7 @@ export const RefundOrderModal = ({onClose, orderId}: RefundOrderModalProps) => {
         },
         {
             onSuccess: () => {
-                showSuccess(t`Your refund is processing.`)
+                showSuccess(isOfflineOrder(order) ? t`Refund recorded successfully.` : t`Your refund is processing.`)
                 form.reset();
                 onClose();
             },
@@ -69,10 +70,16 @@ export const RefundOrderModal = ({onClose, orderId}: RefundOrderModalProps) => {
     const modalForm = ({order, form}: { order: Order, form: UseFormReturnType<RefundOrderPayload> }) => {
         const remainingAmount = order.total_gross - order.total_refunded;
         const isPartialRefund = form.values.amount < remainingAmount;
+        const isOffline = isOfflineOrder(order);
 
         return (
             <form onSubmit={form.onSubmit(handleSubmit)}>
                 <Stack gap="md">
+                    {isOffline && (
+                        <Callout variant="warning">
+                            {t`This order was paid offline. Refunding it will only update your reporting — you will need to return the payment to the customer yourself.`}
+                        </Callout>
+                    )}
                     <Paper radius="md" p="md" withBorder>
                         <Stack gap="sm">
                             <Group justify="space-between">
@@ -120,11 +127,13 @@ export const RefundOrderModal = ({onClose, orderId}: RefundOrderModalProps) => {
                         }}
                     />
                     <Stack gap="xs">
-                        <Checkbox
-                            {...form.getInputProps('notify_buyer', {type: 'checkbox'})}
-                            label={t`Send refund notification email`}
-                            description={t`Customer will receive an email confirming the refund`}
-                        />
+                        {order.email && (
+                            <Checkbox
+                                {...form.getInputProps('notify_buyer', {type: 'checkbox'})}
+                                label={t`Send refund notification email`}
+                                description={t`Customer will receive an email confirming the refund`}
+                            />
+                        )}
 
                         {order.status !== 'CANCELLED' && (
                             <Checkbox
@@ -146,9 +155,9 @@ export const RefundOrderModal = ({onClose, orderId}: RefundOrderModalProps) => {
                         fullWidth
                         size="md"
                         type={'submit'}
-                        leftSection={<IconCreditCard size={20}/>}
+                        leftSection={isOffline ? <IconCash size={20}/> : <IconCreditCard size={20}/>}
                     >
-                        {t`Process Refund`}
+                        {isOffline ? t`Record Refund` : t`Process Refund`}
                     </Button>
                 </Stack>
             </form>);
@@ -166,10 +175,6 @@ export const RefundOrderModal = ({onClose, orderId}: RefundOrderModalProps) => {
     }
 
     const getModalBody = () => {
-        if (order.is_manually_created) {
-            return <CannotRefund message={t`You cannot refund a manually created order.`}/>
-        }
-
         if (isRefundPending) {
             return <CannotRefund
                 message={t`There is a refund pending. Please wait for it to complete before requesting another refund.`}/>

@@ -1,7 +1,13 @@
 import {LoaderFunctionArgs, redirect} from "react-router";
-import {promoCodeClientPublic} from "../api/promo-code.client.ts";
+import {validatePromoCode} from "./validatePromoCode.ts";
 import {getEventPublicQuery} from "../queries/useGetEventPublic.ts";
+import {getEventLineupPublicQuery} from "../queries/useGetEventLineupPublic.ts";
+import {getOrganizerPublicEventsQuery, UPCOMING_EVENTS_PREVIEW_FILTERS} from "../queries/useGetOrganizerEventsPublic.ts";
 import {getQueryClient} from "../utilites/ssrQueryClient.ts";
+import {resolveHomepageSections} from "../utilites/homepageSections.ts";
+import {OrganizerStatus} from "../types.ts";
+import {defaultOccurrence} from "../utilites/occurrenceDefaults.ts";
+import {loggableError} from "../ssr/loggableError.js";
 
 export const publicEventRouteLoader = async ({params, request}: LoaderFunctionArgs) => {
     try {
@@ -11,32 +17,41 @@ export const publicEventRouteLoader = async ({params, request}: LoaderFunctionAr
         const occurrenceIdParam = queryParams.get("occurrence_id");
         const occurrenceId = occurrenceIdParam ? Number(occurrenceIdParam) : null;
 
-        let promoCodeValid: boolean | undefined = undefined;
+        const promoCodeValid = promoCode ? await validatePromoCode(params.eventId, promoCode) : undefined;
 
-        if (promoCode) {
-            const {valid} = await promoCodeClientPublic.validateCode(params.eventId, promoCode);
-            promoCodeValid = valid;
-        }
-
-        const eventQuery = getEventPublicQuery(
+        const eventQueryFor = (scopedOccurrenceId: number | null) => getEventPublicQuery(
             params.eventId,
-            promoCode,
+            promoCodeValid === undefined ? null : promoCode,
             promoCodeValid ?? false,
-            occurrenceId,
+            scopedOccurrenceId,
         );
 
-        const event = await getQueryClient().fetchQuery(eventQuery);
-
-        if (event && event.slug && params.eventSlug !== event.slug) {
+        const [requestedEvent] = await Promise.all([
+            getQueryClient().fetchQuery(eventQueryFor(occurrenceId)),
+            getQueryClient().prefetchQuery(getEventLineupPublicQuery(params.eventId)),
+        ]);
+        if (requestedEvent && requestedEvent.slug && params.eventSlug !== requestedEvent.slug) {
             const searchString = queryParams.toString();
             throw redirect(
-                `/event/${event.id}/${event.slug}${searchString ? `?${searchString}` : ''}`
+                `/event/${requestedEvent.id}/${requestedEvent.slug}${searchString ? `?${searchString}` : ''}`
             );
         }
 
-        return {event, promoCodeValid, promoCode, occurrenceId};
+        const defaultDate = occurrenceId === null && requestedEvent ? defaultOccurrence(requestedEvent) : undefined;
+        const event = defaultDate
+            ? await getQueryClient().fetchQuery(eventQueryFor(Number(defaultDate.id)))
+            : requestedEvent;
+
+        const showsMoreEvents = event?.organizer?.id
+            && event.organizer.status === OrganizerStatus.LIVE
+            && resolveHomepageSections(event.settings?.homepage_sections)
+                .some(section => section.type === 'MORE_EVENTS' && section.enabled);
+        if (showsMoreEvents) {
+            await getQueryClient().prefetchQuery(getOrganizerPublicEventsQuery(event.organizer!.id!, UPCOMING_EVENTS_PREVIEW_FILTERS));
+        }
+
+        return {event, promoCodeValid, promoCode, occurrenceId: defaultDate ? Number(defaultDate.id) : occurrenceId};
     } catch (error: any) {
-        // Re-throw redirect responses so React Router can handle them
         if (error instanceof Response) {
             throw error;
         }
@@ -45,7 +60,7 @@ export const publicEventRouteLoader = async ({params, request}: LoaderFunctionAr
             return {event: null, promoCodeValid: undefined, promoCode: null};
         }
 
-        console.error(error);
+        console.error(loggableError(error));
         throw error;
     }
 };

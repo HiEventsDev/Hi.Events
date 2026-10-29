@@ -1,0 +1,155 @@
+@use "../../../styles/mixins";
+
+.content {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  padding: 0;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-md);
+  padding: 18px var(--mantine-spacing-lg);
+  border-bottom: 1px solid var(--hi-color-gray-2);
+  background-color: var(--mantine-color-body);
+  flex-shrink: 0;
+}
+
+.headerText {
+  display: flex;
+  align-items: baseline;
+  gap: var(--mantine-spacing-sm);
+  min-width: 0;
+}
+
+.headerTitle {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.headerSubtitle {
+  font-size: var(--mantine-font-size-xs);
+  color: var(--hi-color-gray-dark);
+  @include mixins.ellipsis();
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-sm);
+  margin-inline-start: auto;
+  flex-shrink: 0;
+}
+
+.escHint {
+  font-size: var(--mantine-font-size-xs);
+  color: var(--hi-color-text-tertiary);
+
+  @include mixins.respond-below(md) {
+    display: none;
+  }
+}
+
+.main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  flex: 1;
+  min-height: 0;
+}
+
+.formColumn {
+  overflow-y: auto;
+  padding: var(--mantine-spacing-lg);
+  outline: none;
+}
+
+.previewColumn {
+  overflow-y: auto;
+  padding: var(--mantine-spacing-lg);
+  background-color: var(--hi-color-gray);
+  border-left: 1px solid var(--hi-color-gray-2);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-md);
+  padding: var(--mantine-spacing-md) var(--mantine-spacing-lg);
+  border-top: 1px solid var(--hi-color-gray-2);
+  background-color: var(--mantine-color-body);
+  flex-shrink: 0;
+}
+
+.footerHint {
+  font-size: var(--mantine-font-size-xs);
+  color: var(--hi-color-gray-dark);
+  min-width: 0;
+}
+
+.footerActions {
+  display: flex;
+  gap: var(--mantine-spacing-sm);
+  margin-inline-start: auto;
+  flex-shrink: 0;
+}
+
+.placeholder {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mantine-spacing-lg);
+}
+
+.statusBelowForm {
+  display: none;
+}
+
+@include mixins.respond-below(xl) {
+  .main {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .previewColumn {
+    display: none;
+  }
+
+  .statusBelowForm {
+    display: block;
+    margin-top: var(--mantine-spacing-md);
+  }
+}
+
+@include mixins.respond-below(sm) {
+  .header,
+  .footer {
+    padding-left: var(--mantine-spacing-md);
+    padding-right: var(--mantine-spacing-md);
+  }
+
+  .formColumn {
+    padding: var(--mantine-spacing-md);
+  }
+
+  .footerHint {
+    display: none;
+  }
+
+  .footerActions {
+    flex: 1;
+
+    button {
+      flex: 1;
+    }
+  }
+}

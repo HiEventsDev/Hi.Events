@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Domain\Product\DTO;
 
 use HiEvents\DataTransferObjects\BaseDTO;
+use HiEvents\DomainObjects\Enums\ProductQuantityAppliesTo;
 use HiEvents\DomainObjects\Status\ProductStatus;
 
 class ProductPriceDTO extends BaseDTO
@@ -16,5 +17,6 @@ class ProductPriceDTO extends BaseDTO
         public readonly ?bool $is_hidden = false,
         public readonly ?int $id = null,
         public readonly ProductStatus $status = ProductStatus::ACTIVE,
+        public readonly ?ProductQuantityAppliesTo $quantity_applies_to = null,
     ) {}
 }

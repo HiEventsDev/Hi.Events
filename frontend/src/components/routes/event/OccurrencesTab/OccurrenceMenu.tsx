@@ -13,15 +13,18 @@ import {
     IconReceipt,
     IconSend,
     IconShare,
+    IconTicket,
     IconTrash,
     IconUsers,
     IconX,
 } from "@tabler/icons-react";
 import {EventOccurrence, EventOccurrenceStatus, IdParam} from "../../../../types.ts";
+import {useAccess} from "../../../../hooks/useAccess.ts";
 
 export interface OccurrenceMenuActions {
     eventId: IdParam;
     onEdit: (occurrenceId: number) => void;
+    onProducts?: (occurrenceId: number) => void;
     onCancel: (occurrenceId: number) => void;
     onDelete: (occurrenceId: number) => void;
     onNavigate: (path: string) => void;
@@ -43,13 +46,16 @@ interface OccurrenceAction {
     color?: string;
 }
 
-const buildActions = (occ: EventOccurrence, actions: OccurrenceMenuActions): OccurrenceAction[] => {
+const READ_ONLY_KEYS = ['dashboard', 'attendees', 'orders', 'share'];
+
+const buildActions = (occ: EventOccurrence, actions: OccurrenceMenuActions, isReadOnly: boolean): OccurrenceAction[] => {
     const isActive = occ.status === EventOccurrenceStatus.ACTIVE;
     const isCancelled = occ.status === EventOccurrenceStatus.CANCELLED;
     const id = occ.id as number;
 
     const items: (OccurrenceAction | false)[] = [
         {key: 'edit', icon: <IconPencil size={14}/>, label: t`Edit`, onClick: () => actions.onEdit(id), group: 'primary'},
+        !!actions.onProducts && !isCancelled && {key: 'products', icon: <IconTicket size={14}/>, label: t`Products`, onClick: () => actions.onProducts!(id), group: 'primary'},
         !!actions.onDuplicate && {key: 'duplicate', icon: <IconCopy size={14}/>, label: t`Duplicate`, onClick: () => actions.onDuplicate!(occ), group: 'secondary'},
         {key: 'dashboard', icon: <IconChartBar size={14}/>, label: t`Dashboard`, onClick: () => actions.onNavigate(`/manage/event/${actions.eventId}/occurrences/${occ.id}`), group: 'primary'},
         {key: 'attendees', icon: <IconUsers size={14}/>, label: t`Attendees`, onClick: () => actions.onNavigate(`/manage/event/${actions.eventId}/attendees?filterFields[event_occurrence_id][eq]=${occ.id}`), group: 'secondary'},
@@ -62,7 +68,8 @@ const buildActions = (occ: EventOccurrence, actions: OccurrenceMenuActions): Occ
         {key: 'delete', icon: <IconTrash size={14}/>, label: t`Delete`, onClick: () => actions.onDelete(id), group: 'danger', color: 'red'},
     ];
 
-    return items.filter(Boolean) as OccurrenceAction[];
+    return (items.filter(Boolean) as OccurrenceAction[])
+        .filter(action => !isReadOnly || READ_ONLY_KEYS.includes(action.key));
 };
 
 interface OccurrenceMenuItemsProps {
@@ -71,7 +78,8 @@ interface OccurrenceMenuItemsProps {
 }
 
 export const OccurrenceMenuItems = ({occurrence, actions}: OccurrenceMenuItemsProps) => {
-    const allActions = buildActions(occurrence, actions);
+    const {isReadOnly} = useAccess();
+    const allActions = buildActions(occurrence, actions, isReadOnly);
     const primary = allActions.filter(a => a.group === 'primary');
     const secondary = allActions.filter(a => a.group === 'secondary');
     const danger = allActions.filter(a => a.group === 'danger');
@@ -133,7 +141,8 @@ const actionButtonStyle = {
 };
 
 export const OccurrenceActionBar = ({occurrence, actions, hiddenKeys}: OccurrenceActionBarProps) => {
-    const allActions = buildActions(occurrence, actions)
+    const {isReadOnly} = useAccess();
+    const allActions = buildActions(occurrence, actions, isReadOnly)
         .filter(a => !hiddenKeys?.includes(a.key));
     const primary = allActions.filter(a => a.group === 'primary');
     const overflow = allActions.filter(a => a.group === 'secondary' || a.group === 'danger');

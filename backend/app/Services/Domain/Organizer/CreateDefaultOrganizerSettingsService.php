@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Domain\Organizer;
 
+use HiEvents\DomainObjects\Enums\AttendeeDetailsCollectionMethod;
 use HiEvents\DomainObjects\Enums\ColorTheme;
 use HiEvents\DomainObjects\Enums\OrganizerHomepageVisibility;
 use HiEvents\DomainObjects\OrganizerDomainObject;
@@ -21,12 +22,9 @@ class CreateDefaultOrganizerSettingsService
         $this->organizerSettingsRepository->create([
             'organizer_id' => $organizer->getId(),
             'homepage_visibility' => OrganizerHomepageVisibility::PUBLIC->name,
-
-            // Use the "Modern" theme as default
             'homepage_theme_settings' => $defaultTheme->getThemeData(),
-
-            // Platform fee pass-through default from config
-            'default_pass_platform_fee_to_buyer' => config('app.saas_default_pass_platform_fee_to_buyer', false),
+            'default_attendee_details_collection_method' => AttendeeDetailsCollectionMethod::PER_ORDER->name,
+            'default_pass_platform_fee_to_buyer' => config('app.saas_default_pass_platform_fee_to_buyer', true),
         ]);
     }
 }

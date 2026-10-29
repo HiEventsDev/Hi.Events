@@ -1,4 +1,5 @@
 import {Button} from "@mantine/core";
+import {useAccess} from "../../../hooks/useAccess.ts";
 import {t, Trans} from "@lingui/macro";
 import {IconTrash} from "@tabler/icons-react";
 import {useNavigate} from "react-router";
@@ -9,6 +10,7 @@ import classes from "./PendingDeletionBanner.module.scss";
 const PendingDeletionBanner = () => {
     const {data: account} = useGetAccount();
     const navigate = useNavigate();
+    const canManageAccount = useAccess().can('MANAGE_ACCOUNT');
 
     if (!account?.deletion_request) {
         return null;
@@ -26,16 +28,16 @@ const PendingDeletionBanner = () => {
                     </Trans>
                 </span>
             </div>
-            <Button
+            {canManageAccount && <Button
                 variant="white"
                 color="red"
                 size="sm"
-                onClick={() => navigate('/account/danger-zone')}
+                onClick={() => navigate('/settings/account#delete-account')}
                 className={classes.button}
                 data-testid="pending-deletion-banner-button"
             >
                 {t`Cancel deletion`}
-            </Button>
+            </Button>}
         </div>
     );
 };

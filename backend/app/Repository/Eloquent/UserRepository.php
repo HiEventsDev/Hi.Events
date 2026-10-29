@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace HiEvents\Repository\Eloquent;
 
 use HiEvents\DomainObjects\AccountUserDomainObject;
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Models\AccountUser;
 use HiEvents\Models\User;
@@ -53,13 +54,26 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
     public function findUsersByAccountId(int $accountId): ?Collection
     {
-        $users = $this->model->whereHas('accounts', function ($query) use ($accountId) {
-            $query->where('account_id', $accountId);
-        })->get();
+        return $this->runQuery(fn () => $this->handleResults(
+            $this->model->whereHas('accounts', function ($query) use ($accountId) {
+                $query->where('account_id', $accountId)->whereNull('account_users.deleted_at');
+            })->get()
+        ))->sortByDesc(fn (UserDomainObject $user) => $user->getUpdatedAt());
+    }
 
-        $users = $this->handleResults($users);
+    public function findByEmailIgnoringCase(string $email): Collection
+    {
+        return $this->runQuery(fn () => $this->handleResults(
+            $this->model->whereRaw('lower(email) = ?', [strtolower(trim($email))])->get()
+        ));
+    }
 
-        return $users->sortByDesc(fn (UserDomainObject $user) => $user->getUpdatedAt());
+    public function countWithoutSingleSignOnExcludingSuperAdmins(): int
+    {
+        return $this->runQuery(fn () => $this->model
+            ->whereDoesntHave('identities')
+            ->whereDoesntHave('accounts', fn ($query) => $query->where('account_users.role', Role::SUPERADMIN->name))
+            ->count());
     }
 
     public function getAllUsersWithAccounts(?string $search, int $perPage): LengthAwarePaginator

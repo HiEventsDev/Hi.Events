@@ -97,6 +97,7 @@ docker-compose -f docker-compose.dev.yml exec frontend cp .env.example .env
 
 ```bash
 docker-compose -f docker-compose.dev.yml exec backend php artisan key:generate
+docker-compose -f docker-compose.dev.yml exec backend php artisan jwt:secret --force
 docker-compose -f docker-compose.dev.yml exec backend php artisan migrate
 docker-compose -f docker-compose.dev.yml exec backend chmod -R 775 /var/www/html/vendor/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/Serializer
 docker-compose -f docker-compose.dev.yml exec backend php artisan storage:link
@@ -120,3 +121,7 @@ Hi.Events uses environment variables for configuration. You’ll find `.env` fil
 You can modify these to customize your setup.
 
 For a full list of environment variables, see the [Environment Variables Documentation](https://hi.events/docs/getting-started/deploying#environment-variables).
+
+### Reserved seating and the box office
+
+These are Hi.Events Enterprise features and stay off by default, even in development. To work on them, add `APP_LICENCE_KEY=development` to `backend/.env`. That unlocks them for development and testing, and shows a "Development licence" notice once they're in use. Remove the line to switch them off again.

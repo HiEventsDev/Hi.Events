@@ -6,15 +6,15 @@ namespace HiEvents\Services\Domain\EventOccurrence;
 
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
-use HiEvents\Repository\Interfaces\OrderItemRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductOccurrenceVisibilityRepositoryInterface;
+use HiEvents\Services\Domain\Product\SoldAndReservedQuantitiesService;
 use Illuminate\Validation\ValidationException;
 
 class OccurrencePurchaseEligibilityService
 {
     public function __construct(
         private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
-        private readonly OrderItemRepositoryInterface $orderItemRepository,
+        private readonly SoldAndReservedQuantitiesService $soldAndReservedQuantities,
         private readonly ProductOccurrenceVisibilityRepositoryInterface $productOccurrenceVisibilityRepository,
     ) {}
 
@@ -28,6 +28,7 @@ class OccurrencePurchaseEligibilityService
         bool $overrideCapacity = false,
         ?EventOccurrenceDomainObject $occurrence = null,
         ?int $reservedQuantity = null,
+        bool $allowPastOccurrence = false,
     ): EventOccurrenceDomainObject {
         $occurrence ??= $this->occurrenceRepository->findFirstWhere([
             'id' => $occurrenceId,
@@ -50,7 +51,7 @@ class OccurrencePurchaseEligibilityService
             ]);
         }
 
-        if ($occurrence->isPast()) {
+        if ($occurrence->isPast() && ! $allowPastOccurrence) {
             throw ValidationException::withMessages([
                 'event_occurrence_id' => $this->purchasabilityMessage(
                     $eventId,
@@ -76,7 +77,7 @@ class OccurrencePurchaseEligibilityService
 
         if ($occurrence->getCapacity() !== null) {
             $reservedForOccurrence = $reservedQuantity
-                ?? $this->orderItemRepository->getReservedQuantityForOccurrence($occurrenceId);
+                ?? $this->soldAndReservedQuantities->getReservedTicketsForOccurrence($occurrenceId);
 
             $available = $occurrence->getCapacity() - $occurrence->getUsedCapacity() - $reservedForOccurrence;
             if ($additionalQuantity > $available) {

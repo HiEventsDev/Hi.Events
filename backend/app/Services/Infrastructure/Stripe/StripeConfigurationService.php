@@ -37,9 +37,9 @@ class StripeConfigurationService
             'default' => config('services.stripe.webhook_secret'),
             StripePlatform::CANADA->value => config('services.stripe.ca_webhook_secret'),
             StripePlatform::IRELAND->value => config('services.stripe.ie_webhook_secret'),
+            'billing' => config('services.stripe.billing_webhook_secret'),
         ]);
 
-        // order by primary platform first
         $primary = $this->getPrimaryPlatform()?->value;
 
         if ($primary && isset($secrets[$primary])) {

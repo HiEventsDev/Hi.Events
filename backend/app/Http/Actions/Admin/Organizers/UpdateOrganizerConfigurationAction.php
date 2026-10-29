@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace HiEvents\Http\Actions\Admin\Organizers;
 
 use HiEvents\DataTransferObjects\UpdateOrganizerConfigurationDTO;
-use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\Organizer\OrganizerConfigurationResource;
 use HiEvents\Services\Application\Handlers\Admin\Organizer\UpdateOrganizerConfigurationHandler;
@@ -20,7 +19,7 @@ class UpdateOrganizerConfigurationAction extends BaseAction
 
     public function __invoke(Request $request, int $organizerId): JsonResponse
     {
-        $this->minimumAllowedRole(Role::SUPERADMIN);
+        $this->requireSuperAdmin();
 
         $validated = $request->validate([
             'application_fees' => 'required|array',

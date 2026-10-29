@@ -59,6 +59,7 @@ class GenerateOccurrencesRequest extends BaseRequest
             'recurrence_rule.days_of_month' => ['nullable', 'array'],
             'recurrence_rule.days_of_month.*' => ['integer', 'min:1', 'max:31'],
             'recurrence_rule.day_of_week' => ['nullable', 'string', 'in:monday,tuesday,wednesday,thursday,friday,saturday,sunday'],
+            /** @var -1|1|2|3|4|null */
             'recurrence_rule.week_position' => ['nullable', 'integer', 'in:-1,1,2,3,4'],
             'recurrence_rule.month' => ['nullable', 'integer', 'min:1', 'max:12'],
         ];

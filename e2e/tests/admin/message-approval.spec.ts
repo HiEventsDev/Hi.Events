@@ -6,6 +6,7 @@ import { uniqueName } from '../../utils/unique';
 test.describe('admin message approval', () => {
   test('an untrusted account message is held for review, approved by an admin, then delivered', { tag: '@admin' }, async ({ freshAccount, adminApi, superAdminPage, mailpit }) => {
     const { id: accountId } = await freshAccount.api.getAccount();
+    await adminApi.setAccountVerification(accountId, true);
     await adminApi.setMessagingTier(accountId, 1);
     const event = await createEventWithAttendee(freshAccount.api, freshAccount.organizerId);
     const subject = uniqueName('Venue update');

@@ -88,12 +88,14 @@ class SelfServiceEditOrderService
                 $this->sendConfirmationToNewEmail($order->getId(), $event);
             }
 
-            $this->sendChangeNotificationToOldEmail(
-                oldEmail: $oldEmail,
-                event: $event,
-                oldValues: $oldValues,
-                newValues: $newValues
-            );
+            if ($oldEmail !== null) {
+                $this->sendChangeNotificationToOldEmail(
+                    oldEmail: $oldEmail,
+                    event: $event,
+                    oldValues: $oldValues,
+                    newValues: $newValues
+                );
+            }
 
             $this->orderAuditLogService->logOrderUpdate(
                 order: $order,

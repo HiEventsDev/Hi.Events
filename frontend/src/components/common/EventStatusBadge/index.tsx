@@ -25,10 +25,10 @@ export const EventStatusBadge = ({event, showLifecycleStatus = true}: EventLifec
         <>
             <Badge
                 variant={'outline'}
-                color={event?.status === 'LIVE' ? 'green' : event?.status === 'DRAFT' ? 'orange' : 'gray'}
+                color={event?.status === 'LIVE' ? 'green' : (event?.status === 'DRAFT' || event?.status === 'PENDING_MANUAL_REVIEW') ? 'orange' : 'gray'}
                 size="sm"
             >
-                {event.status} {showLifecycleStatus && (
+                {event.status === 'PENDING_MANUAL_REVIEW' ? t`PENDING REVIEW` : event.status} {showLifecycleStatus && (
                 <>
                     &bull; {getLifecycleStatus}
                 </>

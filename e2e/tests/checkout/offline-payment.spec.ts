@@ -21,11 +21,19 @@ test.describe('offline payment checkout', () => {
     await checkout.fillOrderDetails(buyer);
     await checkout.fillFirstAttendee(buyer);
     await checkout.continueToPayment();
+
+    await expect(page.getByTestId('pay-later-steps')).toBeVisible();
+    await expect(page.getByText(OFFLINE_PAYMENT_INSTRUCTIONS)).toBeHidden();
+    await expect(page.getByTestId('offline-payment-button')).toHaveText('Place order');
+    await expect(page.getByTestId('pay-later-amount')).toContainText('due after you place your order');
     await checkout.chooseOfflinePayment();
 
     await expect(page.getByText('Your order is awaiting payment')).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Payment Instructions' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'How to pay' })).toBeVisible();
+    await expect(page.getByTestId('payment-amount-due')).toBeVisible();
+    await expect(page.getByTestId('payment-reference')).toBeVisible();
     await expect(page.getByText(OFFLINE_PAYMENT_INSTRUCTIONS)).toBeVisible();
+    await mailpit.waitForMessage(buyerEmail, { subjectContains: 'Order placed: payment needed' });
 
     const emailsBeforePayment = (await mailpit.search(buyerEmail)).length;
     const orderShortId = page.url().match(/\/checkout\/\d+\/([^/?]+)\/summary/)![1];

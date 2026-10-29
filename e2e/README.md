@@ -21,6 +21,9 @@ e2e/
     ├── auth/                registration
     ├── events/              event creation
     ├── checkout/            free + Stripe checkout
+    ├── box-office/          door sales: management + PIN, cash/comp/other/free
+                             tenders, discounts and price overrides, questions,
+                             sessions, orders tab, scan tab, card (Stripe-gated)
     └── management/          promo codes, questions, messages,
                              check-in lists, webhooks, editing a ticket
 ```
@@ -98,6 +101,11 @@ docker compose -f docker-compose.dev.yml exec backend php artisan dev:bootstrap 
   --email=superadmin@e2e.test --password='SuperAdminPass123!'
 ```
 
+Public order creation and promo-code lookup are rate limited per IP (`APP_PUBLIC_ORDER_RATE_LIMIT_PER_MINUTE`, default 60;
+`APP_PUBLIC_PROMO_CODE_RATE_LIMIT_PER_MINUTE`, default 10); the suite runs from one IP, so set both high (e.g. `100000`) in `backend/.env` first.
+
+Seating and box office specs need `APP_LICENCE_KEY=development` in `backend/.env`. Add it yourself: no install gets it by default, and without it there are no Enterprise features, even on `APP_ENV=local`. The dev stack ignores the `X-Hi-Licence-Simulation` header, so specs that simulate a licence state — including the Hi.Events Cloud feature-flag specs — only really run on the hermetic stack and skip or fail here.
+
 Then run specs directly (from `e2e/`), or the whole suite via the script (from the repo root):
 
 ```bash
@@ -115,6 +123,7 @@ npm test              # run everything
 npm run test:ui       # Playwright UI mode (great for authoring)
 npm run test:headed   # headed browser
 npm run test:smoke    # only @smoke-tagged specs
+npx playwright test --config tests '\.unit\.spec\.ts$'   # pure-logic unit specs, no stack needed
 npm run report        # open the last HTML report
 npm run typecheck     # tsc --noEmit
 ```
@@ -129,6 +138,21 @@ Copy `.env.example` to `.env` to override defaults. All are optional.
 | `MAILPIT_URL`       | `http://localhost:8225`  | Mailpit HTTP API, for email assertions (8225 so it coexists with the dev stack's 8025) |
 | `E2E_SAAS_MODE`     | `false`                  | Must match the backend's `APP_SAAS_MODE_ENABLED`     |
 | `STRIPE_PUBLIC_KEY` | _(unset)_                | Stripe test-mode key; when unset the `@stripe` specs skip |
+| `E2E_STRIPE_CONNECT_ACCOUNT_ID` | _(unset)_    | An enabled Stripe Connect test account (`acct_…`) linked to each organizer by the seated card specs on a SaaS stack; they skip without it |
+| `E2E_COMPOSE_FILE`  | _(per stack)_            | Compose file whose `pgsql` service `utils/db.ts` runs SQL in |
+| `E2E_DB_USER`       | _(per stack)_            | Postgres user for `utils/db.ts`                       |
+| `E2E_DB_NAME`       | _(per stack)_            | Postgres database for `utils/db.ts`                   |
+
+### Direct database helpers
+
+A few states can't be reached through the API in test time (e.g. a checkout reservation
+running out). `utils/db.ts` covers these by running SQL through
+`docker compose exec -T pgsql psql` — `expireOrder(shortId)` moves an order's
+`reserved_until` an hour into the past. It targets the hermetic stack
+(`docker/e2e/docker-compose.e2e.yml`, `hievents`/`hievents_e2e`) by default and the dev stack
+(`docker/development/docker-compose.dev.yml`, `username`/`backend`) when `E2E_BASE_URL` is on
+port `8443`; override with the three variables above. Specs using it need the Docker CLI on the
+machine running Playwright.
 
 ### Stripe specs
 
@@ -205,7 +229,7 @@ widgets with no accessible label (e.g. `CustomSelect`, whose `dataTestId` prop l
 on its target and auto-derives `<id>-option-<value>` on each option). Convention:
 kebab-case `<feature>-<element>`. Don't add IDs to text inputs with a unique label —
 use `getByLabel(/^Label/)` (anchored regex dodges Mantine's required `*`). See the
-"Test IDs (E2E)" note in the repo `CLAUDE.md`.
+test ID rules in `.claude/rules/frontend/ui.md`.
 
 Watch for two things when asserting on list content: Mantine's `Truncate` hides the
 full text in a tooltip past its length limit (assert a short value, or target the
@@ -219,9 +243,13 @@ To run against a SaaS stack, bring the stack up with `E2E_SAAS_MODE=true` (sets 
 backend's `APP_SAAS_MODE_ENABLED`) and run with `E2E_SAAS_MODE=true`. The account
 fixture then pulls the verification PIN from Mailpit and confirms the email before use.
 
-Known gap: SaaS-mode Stripe checkout requires a connected Stripe account
-(`organizer_stripe_platforms`), which cannot be onboarded headlessly. The Stripe spec
-targets non-SaaS platform-account charges until a seeded-connected-account helper exists.
+SaaS-mode Stripe specs need `E2E_STRIPE_CONNECT_ACCOUNT_ID`: an enabled Stripe Connect test
+account (`acct_…`) belonging to the platform whose `STRIPE_SECRET_KEY` the stack uses. The specs
+link it to each organizer in the database (`enableStripePayments`) and skip without it.
+
+Known gap: in SaaS mode the message composer hides its form behind "Connect Stripe to
+enable messaging" until the account is manually verified, so composer-driven specs only
+run on a non-SaaS stack.
 
 ## CI
 
@@ -231,13 +259,27 @@ The HTML report, traces, and stack logs are uploaded as artifacts on every run.
 
 Lanes:
 
-- **Pull requests** run the `@smoke` lane only (`--grep @smoke`) — one fast,
-  load-bearing check per feature area. Tag discipline matters: exactly one `@smoke`
-  test per area.
-- **Pushes to `main`/`develop`/release branches** and a **nightly cron** run the full
-  suite, sharded across two parallel jobs (each with its own hermetic stack).
-- Adding the **`full-e2e` label** to a PR forces the full sharded lane on that PR.
+- **Pull requests** run the `@smoke` lane only (`--grep @smoke`) against a self-hosted
+  stack: one fast, load-bearing check per feature area. Tag discipline matters: exactly
+  one `@smoke` test per area.
+- **Pushes to `main`/`develop`**, a **nightly cron** (03:00 UTC) and **manual runs**
+  (`workflow_dispatch`) run the full suite twice, against a self-hosted stack
+  (`E2E_SAAS_MODE=false`) and a SaaS stack (`E2E_SAAS_MODE=true`), each sharded across two
+  parallel jobs with their own hermetic stack.
+- Adding the **`full-e2e` label** to a PR forces the full lane on that PR.
+- **Every run**, pull requests included, also runs all `*.unit.spec.ts` files in a
+  stack-less `e2e unit specs` job (`npx playwright test --config tests '\.unit\.spec\.ts$'`),
+  so pure-logic specs don't need an `@smoke` tag.
 
-The Stripe checkout spec runs only when the repository secrets `STRIPE_TEST_PUBLIC_KEY`
-and `STRIPE_TEST_SECRET_KEY` (Stripe **test-mode** keys) are set; otherwise it skips,
-keeping fork PRs green.
+A final `summary` job merges every shard's `results.json` (via `scripts/github-summary.mjs`)
+into one report on the run's summary page (and as a PR comment): a pass/fail table per
+mode, each failure with its error, the tests that only passed on retry, jobs that never
+produced a report, and why tests were skipped.
+
+Repository secrets (all optional; the specs that need them skip without them, keeping fork
+PRs green):
+
+| Secret | Used for |
+| --- | --- |
+| `STRIPE_TEST_PUBLIC_KEY`, `STRIPE_TEST_SECRET_KEY` | Stripe **test-mode** keys for the `@stripe` specs |
+| `E2E_STRIPE_CONNECT_ACCOUNT_ID` | `@stripe` specs on the SaaS stack (see [SaaS mode](#saas-mode)) |

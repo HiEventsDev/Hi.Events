@@ -3,7 +3,9 @@
 namespace HiEvents\Http\Actions\Users;
 
 use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Exceptions\EmailConfirmationTokenMismatchException;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\AllowedForReadOnlyUsers;
 use HiEvents\Services\Application\Handlers\User\ConfirmEmailAddressHandler;
 use HiEvents\Services\Application\Handlers\User\DTO\ConfirmEmailChangeDTO;
 use HiEvents\Services\Infrastructure\Encryption\Exception\DecryptionFailedException;
@@ -12,6 +14,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Throwable;
 
+#[AllowedForReadOnlyUsers]
 class ConfirmEmailAddressAction extends BaseAction
 {
     public function __construct(
@@ -32,7 +35,7 @@ class ConfirmEmailAddressAction extends BaseAction
             ));
         } catch (EncryptedPayloadExpiredException) {
             return $this->errorResponse(__('The email confirmation link has expired. Please request a new one.'));
-        } catch (DecryptionFailedException) {
+        } catch (DecryptionFailedException|EmailConfirmationTokenMismatchException) {
             return $this->errorResponse(__('The email confirmation link is invalid.'));
         }
 

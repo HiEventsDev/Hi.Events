@@ -1,4 +1,4 @@
-import {Modal} from "../../common/Modal";
+import {Modal, ModalFooter} from "../../common/Modal";
 import {EventOccurrenceStatus, EventType, GenericModalProps, ProductCategory, ProductType, QueryFilters} from "../../../types.ts";
 import {Button} from "../../common/Button";
 import {useNavigate, useParams} from "react-router";
@@ -14,10 +14,10 @@ import {t, Trans} from "@lingui/macro";
 import {useEffect, useMemo} from "react";
 import {InputGroup} from "../../common/InputGroup";
 import {
+    availableLocales,
     getClientLocale,
     getLocaleName,
     localeToFlagEmojiMap,
-    localeToNameMap,
     SupportedLocales
 } from "../../../locales.ts";
 import {ProductSelector} from "../../common/ProductSelector";
@@ -26,6 +26,7 @@ import {useGetEventOccurrences} from "../../../queries/useGetEventOccurrences.ts
 import {useGetPriceOverrides} from "../../../queries/useGetPriceOverrides.ts";
 import {prettyDate} from "../../../utilites/dates.ts";
 import {BouncingEmoji} from "../../common/BouncingEmoji";
+import {ManualSeatField} from "../../../ee/seating/components/ManualSeatField";
 import {Stack, Text} from "@mantine/core";
 
 export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
@@ -86,6 +87,10 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
             form.setFieldValue('override_capacity', false);
         }
     }, [occurrenceIsFull]);
+
+    useEffect(() => {
+        form.setFieldValue('seat_uid', undefined);
+    }, [form.values.product_id, form.values.event_occurrence_id]);
 
     const {data: priceOverrides} = useGetPriceOverrides(
         eventId,
@@ -227,7 +232,7 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
 
                 <Select
                     required
-                    data={Object.keys(localeToNameMap).map(locale => ({
+                    data={availableLocales.map(locale => ({
                         value: locale,
                         label: localeToFlagEmojiMap[locale as SupportedLocales] + ' ' + getLocaleName(locale as SupportedLocales),
                     }))}
@@ -259,6 +264,16 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
                         {...(form.errors.event_occurrence_id ? {error: form.errors.event_occurrence_id} : {})}
                     />
                 )}
+
+                <ManualSeatField
+                    eventId={eventId}
+                    hasSeatMap={!!event?.has_seat_map}
+                    productId={form.values.product_id}
+                    occurrenceId={isRecurring ? form.values.event_occurrence_id ?? undefined : occurrencesData?.data?.[0]?.id}
+                    value={form.values.seat_uid}
+                    error={form.errors.seat_uid}
+                    onChange={seatUid => form.setFieldValue('seat_uid', seatUid)}
+                />
 
                 {occurrenceIsFull && (
                     <Callout
@@ -316,9 +331,12 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
                     label={t`Send order confirmation and ticket email`}
                     {...form.getInputProps('send_confirmation_email', {type: 'checkbox'})}
                 />
-                <Button type="submit" fullWidth mt="xl" disabled={mutation.isPending}>
-                    {mutation.isPending ? t`Working` + '...' : t`Create Attendee`}
-                </Button>
+                <ModalFooter>
+                    <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                    <Button type="submit" disabled={mutation.isPending}>
+                        {mutation.isPending ? t`Working` + '...' : t`Create Attendee`}
+                    </Button>
+                </ModalFooter>
             </form>
         </Modal>
     );

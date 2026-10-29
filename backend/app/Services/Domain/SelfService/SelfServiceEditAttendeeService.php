@@ -86,13 +86,15 @@ class SelfServiceEditAttendeeService
                 $this->sendTicketToNewEmail($attendee->getId(), $event);
             }
 
-            $this->sendChangeNotificationToOldEmail(
-                oldEmail: $oldEmail,
-                attendeeId: $attendee->getId(),
-                event: $event,
-                oldValues: $oldValues,
-                newValues: $newValues
-            );
+            if ($oldEmail !== null) {
+                $this->sendChangeNotificationToOldEmail(
+                    oldEmail: $oldEmail,
+                    attendeeId: $attendee->getId(),
+                    event: $event,
+                    oldValues: $oldValues,
+                    newValues: $newValues
+                );
+            }
 
             $this->orderAuditLogService->logAttendeeUpdate(
                 attendee: $attendee,

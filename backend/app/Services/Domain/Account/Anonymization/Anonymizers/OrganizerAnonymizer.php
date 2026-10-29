@@ -33,6 +33,31 @@ class OrganizerAnonymizer implements AccountAnonymizerInterface
                 ],
                 context: $context,
             ),
+            $this->executor->scrub(
+                query: $this->databaseManager->table('organizer_settings')->whereIn('organizer_id', $context->organizerIds),
+                entity: 'organizer_settings',
+                columnStrategies: [
+                    'homepage_sections' => AnonymizationStrategy::NULLIFY,
+                    'website_url' => AnonymizationStrategy::NULLIFY,
+                    'location_details' => AnonymizationStrategy::NULLIFY,
+                    'social_media_handles' => AnonymizationStrategy::NULLIFY,
+                    'seo_title' => AnonymizationStrategy::NULLIFY,
+                    'seo_description' => AnonymizationStrategy::NULLIFY,
+                    'seo_keywords' => AnonymizationStrategy::NULLIFY,
+                ],
+                context: $context,
+            ),
+            $this->executor->scrub(
+                query: $this->databaseManager->table('profiles')->whereIn('organizer_id', $context->organizerIds),
+                entity: 'profiles',
+                columnStrategies: [
+                    'name' => AnonymizationStrategy::SCRUB_TEXT,
+                    'tagline' => AnonymizationStrategy::NULLIFY,
+                    'bio' => AnonymizationStrategy::NULLIFY,
+                    'links' => AnonymizationStrategy::NULLIFY,
+                ],
+                context: $context,
+            ),
             $this->executor->delete(
                 query: $this->databaseManager->table('organizer_stripe_platforms')->whereIn('organizer_id', $context->organizerIds),
                 entity: 'organizer_stripe_platforms',

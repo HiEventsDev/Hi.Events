@@ -4,6 +4,7 @@ import { createDraftEvent, createFreshOrganizer } from '../../api/factory';
 import { uniqueName } from '../../utils/unique';
 
 test.describe('email templates', () => {
+
   test('an organizer creates an event-level order confirmation template', async ({ authedPage, api, account }) => {
     const event = await createDraftEvent(api, account.organizerId);
     const subject = uniqueName('Event Subject');
@@ -41,7 +42,7 @@ test.describe('email templates', () => {
     await templates.openPreviewTab();
 
     await expect(templates.editorDialog().getByText(subject, { exact: true })).toBeVisible();
-    await expect(templates.editorDialog().getByText(bodyText)).toBeVisible();
+    await expect(templates.previewBody()).toContainText(bodyText);
   });
 
   test('an organizer deletes an event-level template and the card resets', async ({ authedPage, api, account }) => {

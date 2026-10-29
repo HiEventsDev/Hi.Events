@@ -13,6 +13,7 @@ use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
+use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -60,6 +61,12 @@ class SelfServiceResendEmailService
                 'order_id' => $orderId,
                 'event_id' => $eventId,
             ]);
+
+        if ($attendee->getEmail() === null) {
+            throw new ResourceConflictException(
+                __('This ticket has no email address associated with it.')
+            );
+        }
 
         $event = $this->eventRepository
             ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
@@ -127,6 +134,12 @@ class SelfServiceResendEmailService
                 'id' => $orderId,
                 'event_id' => $eventId,
             ]);
+
+        if ($order->getEmail() === null) {
+            throw new ResourceConflictException(
+                __('This order has no email address associated with it.')
+            );
+        }
 
         $event = $this->eventRepository
             ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))

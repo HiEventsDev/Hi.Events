@@ -1,0 +1,17 @@
+@use "../../../../styles/mixins";
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+
+  @include mixins.respond-below(sm) {
+    > * {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+  }
+}

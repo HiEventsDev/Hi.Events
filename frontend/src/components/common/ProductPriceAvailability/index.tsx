@@ -4,6 +4,7 @@ import {Tooltip} from "@mantine/core";
 import {prettyDate, relativeDate} from "../../../utilites/dates.ts";
 import {IconInfoCircle} from "@tabler/icons-react";
 import {JoinWaitlistButton} from "../JoinWaitlistButton";
+import {canJoinWaitlist} from "../../../utilites/waitlist.ts";
 
 interface ProductPriceSaleDateMessageProps {
     price: ProductPrice;
@@ -14,7 +15,7 @@ interface ProductPriceSaleDateMessageProps {
 
 const ProductPriceSaleDateMessage = ({price, event, product, eventOccurrenceId}: ProductPriceSaleDateMessageProps) => {
     if (price.is_sold_out) {
-        if (product.waitlist_enabled && (event.type !== EventType.RECURRING || eventOccurrenceId)) {
+        if (canJoinWaitlist(product, price) && (event.type !== EventType.RECURRING || eventOccurrenceId)) {
             return <JoinWaitlistButton product={product} event={event} productPriceId={price.id} priceLabel={price.label} eventOccurrenceId={eventOccurrenceId}/>;
         }
         return t`Sold out`;
@@ -35,6 +36,14 @@ const ProductPriceSaleDateMessage = ({price, event, product, eventOccurrenceId}:
         );
     }
 
+    if (product.is_sold_out || product.is_after_sale_end_date || product.is_before_sale_start_date) {
+        return <ProductAvailabilityMessage product={product} event={event} eventOccurrenceId={eventOccurrenceId}/>;
+    }
+
+    if (price.is_locked_behind_earlier_tier) {
+        return t`Not yet on sale`;
+    }
+
     return t`Not available`;
 }
 
@@ -46,7 +55,7 @@ interface ProductAvailabilityMessageProps {
 
 export const ProductAvailabilityMessage = ({product, event, eventOccurrenceId}: ProductAvailabilityMessageProps) => {
     if (product.is_sold_out) {
-        if (product.waitlist_enabled && (event.type !== EventType.RECURRING || eventOccurrenceId) && product.type !== 'TIERED') {
+        if (canJoinWaitlist(product, product.prices?.[0]) && (event.type !== EventType.RECURRING || eventOccurrenceId) && product.type !== 'TIERED') {
             return <JoinWaitlistButton product={product} event={event} productPriceId={product.prices?.[0]?.id} eventOccurrenceId={eventOccurrenceId}/>;
         }
         return t`Sold out`;

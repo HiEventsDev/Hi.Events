@@ -9,6 +9,7 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EventOccurrence\DTO\GenerateOccurrencesDTO;
 use HiEvents\Services\Application\Handlers\EventOccurrence\GenerateOccurrencesFromRuleHandler;
 use HiEvents\Services\Domain\Event\EventOccurrenceGeneratorService;
+use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use Illuminate\Database\DatabaseManager;
 use Mockery;
 use Tests\TestCase;
@@ -34,13 +35,14 @@ class GenerateOccurrencesFromRuleHandlerTest extends TestCase
         $this->databaseManager->shouldReceive('transaction')
             ->andReturnUsing(fn ($callback) => $callback());
         $this->databaseManager->shouldReceive('statement')
-            ->with('SELECT pg_advisory_xact_lock(?)', [1])
+            ->with('SELECT pg_advisory_xact_lock(?, ?)', [TransactionLockService::EVENT_LOCK_KEYSPACE, 1])
             ->byDefault();
 
         $this->handler = new GenerateOccurrencesFromRuleHandler(
             $this->generatorService,
             $this->eventRepository,
             $this->databaseManager,
+            new TransactionLockService($this->databaseManager),
         );
     }
 
@@ -82,7 +84,7 @@ class GenerateOccurrencesFromRuleHandlerTest extends TestCase
 
         $this->databaseManager->shouldReceive('statement')
             ->once()
-            ->with('SELECT pg_advisory_xact_lock(?)', [1]);
+            ->with('SELECT pg_advisory_xact_lock(?, ?)', [TransactionLockService::EVENT_LOCK_KEYSPACE, 1]);
 
         $this->eventRepository->shouldReceive('findByIdLocked')->once()->andReturn($event);
         $this->eventRepository->shouldReceive('updateFromArray')->once();

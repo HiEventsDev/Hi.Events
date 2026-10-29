@@ -16,6 +16,14 @@ export class EventSettingsPage {
     return this.section('event-details').getByLabel(/^Name/);
   }
 
+  get detailsStartDate(): Locator {
+    return this.section('event-details').getByLabel(/^Start Date/);
+  }
+
+  get detailsEndDate(): Locator {
+    return this.section('event-details').getByLabel(/^End Date/);
+  }
+
   get detailsDescriptionEditor(): Locator {
     return this.section('event-details').locator('[contenteditable="true"]');
   }
@@ -32,12 +40,41 @@ export class EventSettingsPage {
     return this.section('payment-settings').getByLabel('Offline Payments', { exact: true });
   }
 
+  get offlinePaymentOrderReferenceSwitch(): Locator {
+    return this.section('payment-settings').getByTestId('offline-payment-order-reference-switch');
+  }
+
+  get paymentReferencePreview(): Locator {
+    return this.section('payment-settings').getByTestId('payment-reference-preview');
+  }
+
+  get offlinePaymentReportingSwitch(): Locator {
+    return this.section('payment-settings').getByTestId('offline-payment-reporting-switch');
+  }
+
+  get paymentLinksSwitch(): Locator {
+    return this.section('payment-settings').getByTestId('payment-links-switch');
+  }
+
+  get paymentLinkHoldHoursInput(): Locator {
+    return this.section('payment-settings').getByLabel('Hold places for');
+  }
+
   get offlineInstructionsEditor(): Locator {
     return this.section('payment-settings').locator('[contenteditable="true"]');
   }
 
   get deleteConfirmationInput(): Locator {
     return this.section('danger-zone').getByPlaceholder('delete');
+  }
+
+  get eventTypeChangeButton(): Locator {
+    return this.page.getByTestId('event-type-change-button');
+  }
+
+  async changeEventType(confirmLabel: string): Promise<void> {
+    await this.eventTypeChangeButton.click();
+    await this.page.getByRole('dialog').getByRole('button', { name: confirmLabel }).click();
   }
 
   get deleteButton(): Locator {

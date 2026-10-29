@@ -1,4 +1,5 @@
 import {useState} from "react";
+import {useAccess} from "./useAccess.ts";
 import {t, Trans} from "@lingui/macro";
 import {useDisclosure} from "@mantine/hooks";
 import {notifications} from "@mantine/notifications";
@@ -28,6 +29,8 @@ export const useAttendeeActions = ({eventId, onManage, onEdit}: UseAttendeeActio
         messageModal.open();
     };
 
+    const canEdit = useAccess().can('EDIT');
+
     const handleResendTicket = (attendee: Attendee) => {
         resendTicketMutation.mutate({
             attendeeId: attendee.id,
@@ -39,29 +42,38 @@ export const useAttendeeActions = ({eventId, onManage, onEdit}: UseAttendeeActio
     };
 
     const handleCancel = (attendee: Attendee) => {
-        const message = attendee.status === 'CANCELLED'
-            ? t`Are you sure you want to activate this attendee?`
+        const isReactivating = attendee.status === 'CANCELLED';
+        const seatLabel = attendee.seat_label;
+        const cancelMessage = seatLabel
+            ? t`Are you sure you want to cancel this attendee? This will void their ticket and release seat ${seatLabel}, which may then be taken by someone else.`
             : t`Are you sure you want to cancel this attendee? This will void their ticket`;
+        const message = isReactivating
+            ? t`Are you sure you want to activate this attendee?`
+            : cancelMessage;
 
         confirmationDialog(message, () => {
             modifyMutation.mutate({
                 attendeeId: attendee.id,
                 eventId: eventId,
                 attendeeData: {
-                    status: attendee.status === 'CANCELLED' ? 'ACTIVE' : 'CANCELLED'
+                    status: isReactivating ? 'ACTIVE' : 'CANCELLED'
                 }
             }, {
                 onSuccess: () => {
                     notifications.show({
                         message: (
                             <Trans>
-                                Successfully {attendee.status === 'CANCELLED' ? 'activated' : 'cancelled'} attendee
+                                Successfully {isReactivating ? 'activated' : 'cancelled'} attendee
                             </Trans>
                         ),
                         color: 'green',
                     });
                 },
-                onError: () => showError(t`Failed to cancel attendee`),
+                onError: (error: any) => showError(
+                    error?.response?.data?.errors?.status?.[0]
+                    ?? error?.response?.data?.message
+                    ?? (isReactivating ? t`Failed to activate attendee` : t`Failed to cancel attendee`),
+                ),
             });
         });
     };
@@ -77,7 +89,7 @@ export const useAttendeeActions = ({eventId, onManage, onEdit}: UseAttendeeActio
                 onClick: () => onManage(attendee),
                 group: 'primary',
             },
-            !!onEdit && {
+            !!onEdit && canEdit && {
                 key: 'edit',
                 label: t`Edit`,
                 icon: <IconPencil size={14}/>,
@@ -85,21 +97,21 @@ export const useAttendeeActions = ({eventId, onManage, onEdit}: UseAttendeeActio
                 group: 'primary',
                 dataTestId: 'attendee-edit-button',
             },
-            {
+            !!attendee.email && canEdit && {
                 key: 'message',
                 label: t`Message attendee`,
                 icon: <IconSend size={14}/>,
                 onClick: () => handleMessage(attendee),
                 group: 'primary',
             },
-            attendee.status === 'ACTIVE' && {
+            attendee.status === 'ACTIVE' && !!attendee.email && canEdit && {
                 key: 'resend',
                 label: t`Resend ticket email`,
                 icon: <IconMailForward size={14}/>,
                 onClick: () => handleResendTicket(attendee),
                 group: 'primary',
             },
-            {
+            canEdit && {
                 key: 'cancel',
                 label: isCancelled ? t`Activate` : t`Cancel` + ` ` + t`ticket`,
                 icon: <IconTrash size={14}/>,

@@ -17,12 +17,15 @@ class ForgotPassword extends BaseMail
 
     private string $token;
 
-    public function __construct(UserDomainObject $user, string $token)
+    private ?string $signInProviders = null;
+
+    public function __construct(UserDomainObject $user, string $token, ?string $signInProviders = null)
     {
         parent::__construct();
 
         $this->userDomainObject = $user;
         $this->token = $token;
+        $this->signInProviders = $signInProviders;
     }
 
     public function envelope(): Envelope
@@ -39,6 +42,7 @@ class ForgotPassword extends BaseMail
             with: [
                 'user' => $this->userDomainObject,
                 'link' => sprintf(Url::getFrontEndUrlFromConfig(Url::RESET_PASSWORD), $this->token),
+                'signInProviders' => $this->signInProviders,
             ]
         );
     }

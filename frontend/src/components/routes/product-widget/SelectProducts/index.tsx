@@ -1,18 +1,21 @@
 import {t, Trans} from "@lingui/macro";
 import {
     ActionIcon,
+    Alert,
     Anchor,
     Button,
     Collapse,
     Group,
     Input,
     Modal,
+    Skeleton,
     Spoiler,
     TextInput,
     UnstyledButton
 } from "@mantine/core";
 import {useNavigate, useParams} from "react-router";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {AxiosError} from "axios";
 import {
     orderClientPublic,
     ProductFormPayload,
@@ -20,9 +23,13 @@ import {
     ProductPriceQuantityFormValue
 } from "../../../../api/order.client.ts";
 import {useForm} from "@mantine/form";
-import {range, useInputState, useResizeObserver} from "@mantine/hooks";
+import {useInputState, useResizeObserver} from "@mantine/hooks";
 import React, {useEffect, useMemo, useRef, useState} from "react";
+import {flushSync} from "react-dom";
 import {showError, showInfo, showSuccess} from "../../../../utilites/notifications.tsx";
+import {useGetEventSeatMapPublic} from "../../../../ee/seating/queries/useGetEventSeatMapPublic.ts";
+import {choicesTotal, SeatChoice, seatedProductIds, ticketOptionsByBand} from "../../../../ee/seating/components/SeatPicker/ticketOptions.ts";
+import {preloadSeatedProducts, SeatedProducts} from "../../../../ee/seating/components/routes/product-widget/SelectProducts";
 import {
     addQueryStringToUrl,
     isObjectEmpty,
@@ -42,24 +49,51 @@ import {
     EventOccurrenceStatus,
     EventType,
     Product,
+    ProductQuantityAppliesTo,
     ProductType,
     PromoCodeDiscountAppliesTo,
     PromoCodeDiscountType,
     PromoCodeValidationResponse
 } from "../../../../types.ts";
 import {formatCurrency} from "../../../../utilites/currency.ts";
+import {getDisplayPrice} from "../../../common/Currency";
+import {getLineTotal} from "./priceTotals.ts";
 import {eventsClientPublic} from "../../../../api/event.client.ts";
 import {promoCodeClientPublic} from "../../../../api/promo-code.client.ts";
-import {IconChevronRight, IconX} from "@tabler/icons-react"
+import {IconCheck, IconChevronDown, IconTicketOff, IconX} from "@tabler/icons-react"
 import {getSessionIdentifier} from "../../../../utilites/sessionIdentifier.ts";
 import {setCheckoutSessionIdentifier} from "../../../../utilites/checkoutSession.ts";
 import {getEmbedParentUrl, getParentOrigin, sendHeightToParent} from "../../../../utilites/iframeResize.ts";
 import {Constants} from "../../../../constants.ts";
 import {clearWaitlistJoinedForEvent} from "../../../../hooks/useWaitlistJoined.ts";
 import {OccurrenceSelector} from "../OccurrenceSelector";
+import {WidgetLineupStrip} from "./WidgetLineupStrip.tsx";
 import {CHECKOUT_PREFILL_PARAM_KEYS} from "../../../../hooks/useCheckoutPrefill.ts";
+import {UserGeneratedContent} from "../../../common/UserGeneratedContent";
+import {firstApiError} from "../../../../utilites/apiErrors.ts";
+import {WIDGET_COLOR_PARAMS} from "../../../../utilites/widgetColors.ts";
+import {ProductSelection, WIDGET_PARAM} from "../../../../utilites/widgetConfig.ts";
+import {getActiveOccurrences} from "../../../../utilites/occurrenceDefaults.ts";
 
 const AFFILIATE_EXPIRY_DAYS = 30;
+
+const seatLinesForPrice = <T extends {price_id: number}>(line: T, seatChoices: SeatChoice[]): (T & {seat_uids: string[]; band_key: string | null})[] => {
+    const choicesForPrice = seatChoices.filter(choice => choice.price_id === line.price_id);
+
+    if (choicesForPrice.length === 0) {
+        return [{...line, seat_uids: [], band_key: null}];
+    }
+
+    const byBand = new Map<string | null, string[]>();
+    choicesForPrice.forEach(choice => byBand.set(choice.band_key, [...(byBand.get(choice.band_key) ?? []), choice.seat_uid]));
+
+    return [...byBand.entries()].map(([band_key, seat_uids]) => ({
+        ...line,
+        quantity: seat_uids.length,
+        seat_uids,
+        band_key,
+    }));
+};
 
 const buildCheckoutPath = (
     eventId: string | undefined,
@@ -100,9 +134,19 @@ interface SelectProductsProps {
     continueButtonText?: string;
     widgetMode?: 'preview' | 'normal' | 'embedded';
     checkoutMode?: 'modal' | 'new-tab';
+    isSeatPickerPage?: boolean;
     showPoweredBy?: boolean;
+    showLineup?: boolean;
     initialOccurrenceId?: number | null;
     onSelectedOccurrenceChange?: (occurrence?: EventOccurrence) => void;
+    onCartChange?: (cart: {quantity: number; total: number}) => void;
+    continueButtonRef?: React.Ref<HTMLButtonElement>;
+    reportsHeight?: boolean;
+    hidePromoCode?: boolean;
+    hideCategoryTitles?: boolean;
+    productSelection?: ProductSelection;
+    widgetId?: string | null;
+    checkoutParams?: Record<string, string>;
 }
 
 const SelectProducts = (props: SelectProductsProps) => {
@@ -111,18 +155,24 @@ const SelectProducts = (props: SelectProductsProps) => {
     const navigate = useNavigate();
 
     const promoRef = useRef<HTMLInputElement>(null);
+    const promoTriggerRef = useRef<HTMLButtonElement>(null);
     const [showPromoCodeInput, setShowPromoCodeInput] = useInputState<boolean>(false);
     const [event, setEvent] = useState(props.event);
     const [orderInProcessOverlayVisible, setOrderInProcessOverlayVisible] = useState(false);
     const [resizeRef, resizeObserverRect] = useResizeObserver();
     const [collapsedProducts, setCollapsedProducts] = useState<{ [key: number]: boolean }>({});
+    const [expandedDetails, setExpandedDetails] = useState<{ [key: number]: boolean }>({});
     const [affiliateCode, setAffiliateCode] = useState<string | null>(null);
     const [appliedPromoDetails, setAppliedPromoDetails] = useState<{
         code: string;
         response: PromoCodeValidationResponse;
     } | null>(null);
 
-    useEffect(() => sendHeightToIframeWidgets(), [resizeObserverRect.height]);
+    useEffect(() => {
+        if (props.reportsHeight !== false) {
+            sendHeightToIframeWidgets();
+        }
+    }, [resizeObserverRect.height, props.reportsHeight]);
 
     useEffect(() => {
         const storageKey = 'affiliate_code_' + eventId;
@@ -166,9 +216,13 @@ const SelectProducts = (props: SelectProductsProps) => {
         form.setFieldValue('affiliate_code', affiliateCode || null);
     }, [affiliateCode]);
 
-    const [selectedOccurrenceId, setSelectedOccurrenceId] = useState<number | undefined>(undefined);
-    const selectedOccurrenceIdRef = useRef<number | undefined>(undefined);
-    const lastSelectedOccurrenceRef = useRef<EventOccurrence | undefined>(undefined);
+    const scopedOccurrence = props.initialOccurrenceId
+        ? getActiveOccurrences(props.event?.occurrences ?? []).find(occurrence => Number(occurrence.id) === Number(props.initialOccurrenceId))
+        : undefined;
+    const scopedOccurrenceId = scopedOccurrence ? Number(scopedOccurrence.id) : undefined;
+    const [selectedOccurrenceId, setSelectedOccurrenceId] = useState<number | undefined>(scopedOccurrenceId);
+    const selectedOccurrenceIdRef = useRef<number | undefined>(scopedOccurrenceId);
+    const lastSelectedOccurrenceRef = useRef<EventOccurrence | undefined>(scopedOccurrence);
     const [pendingInitialOccurrenceId, setPendingInitialOccurrenceId] = useState<number | undefined>(() => {
         if (props.initialOccurrenceId) {
             return props.initialOccurrenceId;
@@ -194,16 +248,30 @@ const SelectProducts = (props: SelectProductsProps) => {
             products: undefined,
             promo_code: props.promoCodeValid ? props.promoCode || null : null,
             affiliate_code: affiliateCode || null,
+            widget_id: props.widgetId || null,
             session_identifier: undefined,
         },
     });
 
+    const [seatChoices, setSeatChoices] = useState<SeatChoice[]>([]);
+    const [lostSeatUids, setLostSeatUids] = useState<string[]>([]);
+    const [isSeatSelectionBlocked, setIsSeatSelectionBlocked] = useState(false);
+    const [seatPickerOpened, setSeatPickerOpened] = useState(props.isSeatPickerPage === true);
+    const [seatAreaId, setSeatAreaId] = useState<string | undefined>(undefined);
+    const seatMapQuery = useGetEventSeatMapPublic(eventId, !!event?.has_seat_map);
+    useEffect(() => {
+        if (event?.has_seat_map) {
+            preloadSeatedProducts();
+        }
+    }, [event?.has_seat_map]);
+    const seatMap = seatMapQuery.data;
+    const seatMapFailed = seatMapQuery.isError && (seatMapQuery.error as AxiosError)?.response?.status !== 404;
+
     const isRecurring = event?.type === EventType.RECURRING;
-    const activeOccurrences = useMemo(() => {
-        return (event?.occurrences || []).filter(
-            occ => (occ.status === EventOccurrenceStatus.ACTIVE || occ.status === EventOccurrenceStatus.SOLD_OUT) && !occ.is_past
-        );
-    }, [event?.occurrences]);
+    const hasPerDateQuantities = (product: Product): boolean =>
+        (product.prices?.length ?? 0) > 0
+        && product.prices!.every(price => price.quantity_applies_to === ProductQuantityAppliesTo.Occurrence);
+    const activeOccurrences = useMemo(() => getActiveOccurrences(event?.occurrences || []), [event?.occurrences]);
     const needsOccurrenceSelection = isRecurring && activeOccurrences.length >= 1;
     const occurrenceSelected = !!selectedOccurrenceId;
     const eventHasEnded = useMemo(() => {
@@ -216,10 +284,9 @@ const SelectProducts = (props: SelectProductsProps) => {
 
         onSuccess: (data) => queryClient.invalidateQueries()
             .then(() => {
+                setSeatPickerOpened(false);
                 const sessionId = data.data.session_identifier;
 
-                // Forward checkout-prefill params (name/email/lock) from the event page
-                // to the details step, since this navigation would otherwise drop them.
                 const sourceParams = new URLSearchParams(window.location.search);
                 const prefillParams: Record<string, string> = {};
                 CHECKOUT_PREFILL_PARAM_KEYS.forEach((key) => {
@@ -229,7 +296,8 @@ const SelectProducts = (props: SelectProductsProps) => {
                     }
                 });
 
-                const pathWithSession = buildCheckoutPath(eventId, data.data.short_id, sessionId, prefillParams);
+                const checkoutParams = {...prefillParams, ...(props.checkoutParams ?? {})};
+                const pathWithSession = buildCheckoutPath(eventId, data.data.short_id, sessionId, checkoutParams);
 
                 if (sessionId) {
                     setCheckoutSessionIdentifier(String(data.data.short_id), sessionId);
@@ -240,7 +308,7 @@ const SelectProducts = (props: SelectProductsProps) => {
 
                     if (!parentSupportsModal) {
                         window.open(
-                            buildCheckoutPath(eventId, data.data.short_id, sessionId, {...prefillParams, utm_source: 'embedded_widget'}),
+                            buildCheckoutPath(eventId, data.data.short_id, sessionId, {utm_source: 'embedded_widget', ...checkoutParams}),
                             '_blank',
                             'noopener,noreferrer'
                         );
@@ -260,19 +328,21 @@ const SelectProducts = (props: SelectProductsProps) => {
 
         onError: (error: any) => {
             const errors = error?.response?.data?.errors;
+            const unavailableSeatUids: string[] | undefined = errors?.unavailable_seat_uids;
+            if (unavailableSeatUids) {
+                setLostSeatUids(unavailableSeatUids);
+                applySeatChoices(seatChoices.filter(choice => !unavailableSeatUids.includes(choice.seat_uid)));
+                if (!selectsSeatsInline()) {
+                    setSeatPickerOpened(true);
+                }
+                return;
+            }
+
             if (errors) {
                 form.setErrors(errors);
             }
 
-            const firstError = errors
-                ? Object.values(errors).flat().find((message) => typeof message === 'string')
-                : undefined;
-
-            showError(
-                (firstError as string)
-                || error?.response?.data?.message
-                || t`Unable to create product. Please check your details`
-            );
+            showError(firstApiError(error, t`Unable to create product. Please check your details`));
         }
     });
 
@@ -296,6 +366,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                 eventId,
                 promoCode,
                 selectedOccurrenceId,
+                props.productSelection,
             );
 
             setEvent(eventWithPromoCodeApplied.data);
@@ -308,6 +379,9 @@ const SelectProducts = (props: SelectProductsProps) => {
                 removeQueryStringFromUrl('promo_code');
             }
         },
+        onError: (error) => {
+            showError(firstApiError(error, t`Something went wrong. Please try again.`));
+        },
     });
 
     const occurrenceEventRefetchMutation = useMutation({
@@ -316,6 +390,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                 eventId,
                 form.values.promo_code,
                 occurrenceId,
+                props.productSelection,
             );
             if (selectedOccurrenceIdRef.current === occurrenceId) {
                 setEvent(eventWithOccurrenceApplied.data);
@@ -379,8 +454,165 @@ const SelectProducts = (props: SelectProductsProps) => {
 
     const productCategories = event?.product_categories || [];
     const productAreAvailable = productCategories && productCategories.some(category => !!category?.products?.length);
-    const products: Product[] = productCategories.reduce((acc: Product[], category) => acc.concat(category.products ?? []), []);
-    const waitlistAvailable = products.some(product => product.waitlist_enabled);
+    const products: Product[] = useMemo(
+        () => productCategories.reduce((acc: Product[], category) => acc.concat(category.products ?? []), []),
+        [productCategories],
+    );
+    const seatedIds = useMemo(() => new Set([
+        ...seatedProductIds(seatMap?.band_products ?? []),
+        ...products
+            .filter(product => product.prices?.some(price => price.band_prices))
+            .map(product => Number(product.id)),
+    ]), [seatMap, products]);
+    const topLevelProducts = products.filter(product => !product.is_addon_only);
+    const waitlistAvailable = products.some(product => product.waitlist_enabled && !seatedIds.has(Number(product.id)));
+
+    const productsById = useMemo(
+        () => new Map(products.map(product => [Number(product.id), product])),
+        [products],
+    );
+
+    const getProductFormIndex = (productId: number): number =>
+        form.values.products?.findIndex(product => product.product_id === productId) ?? -1;
+
+    const getProductQuantity = (productId: number): number => form.values.products
+        ?.find(product => product.product_id === productId)
+        ?.quantities?.reduce((acc, {quantity}) => acc + Number(quantity), 0) || 0;
+
+    const seatingOccurrenceId = selectedOccurrenceId ?? (isRecurring ? undefined : event?.occurrences?.[0]?.id);
+
+    const applySeatChoices = (choices: SeatChoice[]) => {
+        setSeatChoices(choices);
+        form.setFieldValue('products', form.values.products?.map(product => seatedIds.has(product.product_id)
+            ? {
+                ...product,
+                quantities: product.quantities.map(line => ({
+                    ...line,
+                    quantity: choices.filter(choice => choice.price_id === line.price_id).length,
+                })),
+            }
+            : product));
+    };
+
+    useEffect(() => {
+        if (seatChoices.length > 0) {
+            applySeatChoices([]);
+        }
+        setLostSeatUids([]);
+    }, [selectedOccurrenceId]);
+
+    const getResolvableAddonIds = (product: Product): number[] =>
+        (product.addon_product_ids || [])
+            .map(Number)
+            .filter(addonId => addonId !== Number(product.id) && productsById.has(addonId));
+
+    const seatedAddonParents = topLevelProducts.filter(product =>
+        seatedIds.has(Number(product.id)) && getResolvableAddonIds(product).length > 0);
+
+    const renderAddons = (product: Product) => {
+        const addonIds = getResolvableAddonIds(product);
+        const parentQuantity = getProductQuantity(Number(product.id));
+
+        return (
+            <div className={'hi-product-addons'}
+                 data-inactive={parentQuantity === 0 || undefined}>
+                <div className={'hi-product-addons-heading'}>
+                    <Trans>Add-ons</Trans>
+                    {parentQuantity === 0 && (
+                        <span className={'hi-product-addons-note'}>
+                            <Trans>Add {product.title} first</Trans>
+                        </span>
+                    )}
+                </div>
+                {addonIds.map((addonId) => {
+                    const addon = productsById.get(addonId);
+                    if (!addon) {
+                        return null;
+                    }
+                    const addonFormIndex = getProductFormIndex(addonId);
+
+                    return (
+                        <div key={addonId}
+                             className={classNames('hi-product-addon', addon.is_highlighted && 'hi-product-addon-highlighted')}>
+                            {addon.is_highlighted && addon.highlight_message && (
+                                <div className={'hi-product-addon-highlight-message'}>
+                                    {addon.highlight_message}
+                                </div>
+                            )}
+                            <div className={'hi-product-addon-title'}>
+                                {addon.title}
+                            </div>
+                            <TieredPricing
+                                productIndex={addonFormIndex}
+                                event={event}
+                                product={addon}
+                                form={form}
+                                eventOccurrenceId={selectedOccurrenceId}
+                            />
+                            {form.errors[`products.${addonFormIndex}`] && (
+                                <div className={'hi-product-quantity-error'}>
+                                    {form.errors[`products.${addonFormIndex}`]}
+                                </div>
+                            )}
+                            {addon.description && renderProductDetails(
+                                addonId,
+                                addon.description,
+                                'hi-product-addon-description',
+                            )}
+                        </div>
+                    );
+                })}
+            </div>
+        );
+    };
+
+    const renderProductDetails = (productId: number, description: string, className: string) => {
+        const isExpanded = expandedDetails[productId] ?? false;
+
+        return (
+            <div className={className}>
+                <button type={'button'}
+                        className={classNames('hi-details-toggle', isExpanded && 'open')}
+                        aria-expanded={isExpanded}
+                        onClick={() => setExpandedDetails(prev => ({...prev, [productId]: !isExpanded}))}>
+                    {t`Details`}
+                    <IconChevronDown size={14} stroke={2} className={isExpanded ? 'open' : ''}/>
+                </button>
+                <Collapse expanded={isExpanded} transitionDuration={250}>
+                    <UserGeneratedContent className={'hi-product-description'}
+                         html={description}/>
+                </Collapse>
+            </div>
+        );
+    };
+
+    useEffect(() => {
+        const formProducts = form.values.products;
+        if (!formProducts) {
+            return;
+        }
+
+        products
+            .filter(product => product.is_addon_only)
+            .forEach(addon => {
+                const addonId = Number(addon.id);
+                const formIndex = formProducts.findIndex(formProduct => formProduct.product_id === addonId);
+                if (formIndex === -1 || getProductQuantity(addonId) === 0) {
+                    return;
+                }
+
+                const hasSelectedParent = topLevelProducts.some(parent =>
+                    getProductQuantity(Number(parent.id)) > 0
+                    && getResolvableAddonIds(parent).includes(addonId));
+
+                if (!hasSelectedParent) {
+                    form.setFieldValue(
+                        `products.${formIndex}.quantities`,
+                        formProducts[formIndex].quantities.map(quantity => ({...quantity, quantity: 0})),
+                    );
+                }
+            });
+    }, [form.values.products]);
 
     const selectedProductQuantitySum = useMemo(() => {
         let total = 0;
@@ -392,6 +624,42 @@ const SelectProducts = (props: SelectProductsProps) => {
 
         return total;
     }, [form.values.products]);
+
+    const seatsTotal = useMemo(
+        () => choicesTotal(seatChoices, ticketOptionsByBand(seatMap?.band_products ?? [], products)),
+        [seatChoices, seatMap, products],
+    );
+
+    const selectedProductsTotal = useMemo(() => {
+        let total = seatsTotal;
+        form.values.products?.forEach(({product_id, quantities}) => {
+            const product = productsById.get(product_id);
+            if (!product || seatedIds.has(product_id)) {
+                return;
+            }
+            quantities?.forEach(({quantity, price_id, price}) => {
+                const selectedQuantity = Number(quantity);
+                if (!selectedQuantity) {
+                    return;
+                }
+                if (product.type === 'DONATION') {
+                    total += selectedQuantity * Number(price || 0);
+                    return;
+                }
+                const productPrice = product.prices?.find(p => Number(p.id) === price_id);
+                if (productPrice) {
+                    total += getLineTotal(product, productPrice, selectedQuantity, event?.settings?.price_display_mode);
+                }
+            });
+        });
+
+        return total;
+    }, [form.values.products, productsById, event?.settings?.price_display_mode, seatsTotal, seatedIds]);
+
+    const {onCartChange} = props;
+    useEffect(() => {
+        onCartChange?.({quantity: selectedProductQuantitySum, total: selectedProductsTotal});
+    }, [selectedProductQuantitySum, selectedProductsTotal, onCartChange]);
 
     useEffect(() => {
         if (form.values.promo_code) {
@@ -430,6 +698,12 @@ const SelectProducts = (props: SelectProductsProps) => {
             cancelled = true;
         };
     }, [form.values.promo_code])
+
+    useEffect(() => {
+        if (props.promoCode && typeof props.promoCodeValid === 'undefined') {
+            promoCodeEventRefetchMutation.mutate(props.promoCode);
+        }
+    }, []);
 
     useEffect(() => {
         if (typeof props.promoCodeValid !== 'undefined') {
@@ -498,6 +772,9 @@ const SelectProducts = (props: SelectProductsProps) => {
             const productsWithOccurrence = values.products?.map(product => ({
                 ...product,
                 event_occurrence_id: selectedOccurrenceId,
+                quantities: seatedIds.has(product.product_id)
+                    ? product.quantities.flatMap(line => seatLinesForPrice(line, seatChoices))
+                    : product.quantities,
             }));
             productMutation.mutate({
                 ...values,
@@ -507,6 +784,11 @@ const SelectProducts = (props: SelectProductsProps) => {
         } else {
             showInfo(t`Please select at least one product`);
         }
+    };
+
+    const closePromoCodeInput = () => {
+        flushSync(() => setShowPromoCodeInput(false));
+        promoTriggerRef.current?.focus();
     };
 
     const handleApplyPromoCode = () => {
@@ -522,8 +804,9 @@ const SelectProducts = (props: SelectProductsProps) => {
         || !productAreAvailable
         || selectedProductQuantitySum === 0
         || props.widgetMode === 'preview'
-        || products?.every(product => product.is_sold_out)
-        || (needsOccurrenceSelection && !occurrenceSelected);
+        || topLevelProducts.every(product => product.is_sold_out)
+        || (needsOccurrenceSelection && !occurrenceSelected)
+        || isSeatSelectionBlocked;
 
     const unavailableMessage = (() => {
         if (eventHasEnded) {
@@ -540,166 +823,380 @@ const SelectProducts = (props: SelectProductsProps) => {
         return null;
     })();
 
-    let productIndex = 0;
+    const opensSeatPickerInParentModal = props.widgetMode === 'embedded' && props.checkoutMode !== 'new-tab' && !!getEmbedParentUrl();
 
-    const productFormSection = (
-        <>
-            <div className={'hi-product-category-rows'}>
-                {productCategories && productCategories.map((category) => {
-                    return (
-                        <div className={'hi-product-category-row'} key={category.id}>
+    const selectsSeatsInline = () => !opensSeatPickerInParentModal
+        && !props.isSeatPickerPage
+        && typeof window !== 'undefined'
+        && window.matchMedia('(min-width: 769px)').matches;
+
+    const openSeatPicker = () => {
+        if (opensSeatPickerInParentModal) {
+            const params = new URLSearchParams({occurrence_id: String(seatingOccurrenceId)});
+            const widgetParams = new URLSearchParams(window.location.search);
+            const resolvedColors: Record<string, string | undefined> = {
+                BackgroundColor: props.colors?.background,
+                PrimaryColor: props.colors?.primary,
+                PrimaryTextColor: props.colors?.primaryText,
+                SecondaryColor: props.colors?.secondary,
+                SecondaryTextColor: props.colors?.secondaryText,
+            };
+            WIDGET_COLOR_PARAMS.forEach(name => {
+                const value = resolvedColors[name] ?? widgetParams.get(name);
+                if (value) {
+                    params.set(name, value);
+                }
+            });
+            if (form.values.promo_code) {
+                params.set('promo_code', form.values.promo_code);
+            }
+            Object.entries(props.checkoutParams ?? {}).forEach(([key, value]) => params.set(key, value));
+            if (props.widgetId) {
+                params.set(WIDGET_PARAM.widget, props.widgetId);
+            }
+            window.parent.postMessage(
+                {type: 'hievents:open-checkout', path: `/checkout/${eventId}/seats?${params.toString()}`},
+                getParentOrigin() || '*',
+            );
+            return;
+        }
+        setSeatPickerOpened(true);
+    };
+
+    const submitSelection = () => form.onSubmit(handleProductSelection as any)();
+
+    const closeSeatPicker = () => {
+        if (props.isSeatPickerPage) {
+            window.parent.postMessage({type: 'hievents:close-checkout'}, getParentOrigin() || '*');
+            return;
+        }
+        setSeatPickerOpened(false);
+    };
+
+    const productCategoryRows = (
+        <div className={'hi-product-category-rows'}>
+            {productCategories && productCategories.map((category) => {
+                const visibleProducts = (category.products || [])
+                    .filter(product => !product.is_addon_only && !seatedIds.has(Number(product.id)));
+
+                if ((category.products?.length ?? 0) > 0 && visibleProducts.length === 0) {
+                    return null;
+                }
+
+                return (
+                    <div className={'hi-product-category-row'} key={category.id}>
+                        {!props.hideCategoryTitles && (
                             <h2 className={'hi-product-category-title'} style={category.description ? {
                                 marginBottom: '0px'
                             } : {}}>
                                 {category.name}
                             </h2>
-                            {category.description && (
-                                <div className={'hi-product-category-description'}>
-                                    <Spoiler maxHeight={500} showLabel={t`Show more`} hideLabel={t`Hide`}>
-                                        <div dangerouslySetInnerHTML={{__html: category.description}}/>
-                                    </Spoiler>
+                        )}
+                        {category.description && (
+                            <div className={'hi-product-category-description'}>
+                                <Spoiler maxHeight={500} showLabel={t`Show more`} hideLabel={t`Hide`}>
+                                    <UserGeneratedContent html={category.description}/>
+                                </Spoiler>
+                            </div>
+                        )}
+                        <div className={'hi-product-rows'}>
+                            {category.products?.length === 0 && (
+                                <div className={'hi-no-products'}>
+                                    <p className={'hi-no-products-message'}>
+                                        {category.no_products_message || t`There are no products available in this category`}
+                                    </p>
                                 </div>
                             )}
-                            <div className={'hi-product-rows'}>
-                                {category.products?.length === 0 && (
-                                    <div className={'hi-no-products'}>
-                                        <p className={'hi-no-products-message'}>
-                                            {category.no_products_message || t`There are no products available in this category`}
-                                        </p>
-                                    </div>
-                                )}
 
-                                {(category.products) && category.products.map((product) => {
-                                    const currentProductIndex = productIndex;
-                                    const quantityRange = range(product.min_per_order || 1, product.max_per_order || 25)
-                                        .map((n) => n.toString());
-                                    quantityRange.unshift("0");
+                            {visibleProducts.map((product) => {
+                                const currentProductIndex = getProductFormIndex(Number(product.id));
+                                const addonIds = getResolvableAddonIds(product);
 
-                                    const isProductCollapsed = collapsedProducts[Number(product.id)] ?? product.start_collapsed;
-                                    const toggleCollapse = () => {
-                                        setCollapsedProducts(prev => ({
-                                            ...prev,
-                                            [Number(product.id)]: !isProductCollapsed
-                                        }));
-                                    };
+                                const isProductCollapsed = collapsedProducts[Number(product.id)] ?? product.start_collapsed;
+                                const toggleCollapse = () => {
+                                    setCollapsedProducts(prev => ({
+                                        ...prev,
+                                        [Number(product.id)]: !isProductCollapsed
+                                    }));
+                                };
 
-                                    return (
-                                        <div key={product.id} className={`hi-product-row ${product.is_highlighted ? 'hi-product-highlighted' : ''}`}>
-                                            {product.is_highlighted && product.highlight_message && (
-                                                <div className={'hi-product-highlight-message'}>
-                                                    {product.highlight_message}
-                                                </div>
-                                            )}
-                                            <div className={'hi-title-row'}>
-                                                <UnstyledButton variant={'transparent'}
-                                                                className={'hi-product-title'}
-                                                                onClick={toggleCollapse}
-                                                >
-                                                    <h3>
-                                                        {product.title}
-                                                    </h3>
-                                                    <div className={'hi-product-title-metadata'}>
-                                                        {(product.is_available && !!product.quantity_available && !(isRecurring && product.product_type === ProductType.Ticket)) && (
-                                                            <>
-                                                                {product.quantity_available === Constants.INFINITE_TICKETS && (
+                                const isSimpleProduct = product.type !== 'TIERED'
+                                    && product.type !== 'DONATION'
+                                    && (product.prices?.length ?? 0) === 1;
+
+                                const availabilityState = product.is_sold_out
+                                    ? 'sold-out'
+                                    : product.is_before_sale_start_date
+                                        ? 'upcoming'
+                                        : product.is_after_sale_end_date
+                                            ? 'ended'
+                                            : undefined;
+
+                                const quantityErrors = (
+                                    <>
+                                        {product.max_per_order && form.values.products && isObjectEmpty(form.errors) && (form.values.products[currentProductIndex]?.quantities.reduce((acc, {quantity}) => acc + Number(quantity), 0) > product.max_per_order) && (
+                                            <div className={'hi-product-quantity-error'}>
+                                                <Trans>The maximum number of products
+                                                    for {product.title}
+                                                    is {product.max_per_order}</Trans>
+                                            </div>
+                                        )}
+
+                                        {form.errors[`products.${currentProductIndex}`] && (
+                                            <div className={'hi-product-quantity-error'}>
+                                                {form.errors[`products.${currentProductIndex}`]}
+                                            </div>
+                                        )}
+                                    </>
+                                );
+
+                                const collapsedFromPrice = (() => {
+                                    if (!isProductCollapsed || product.type !== 'TIERED') {
+                                        return null;
+                                    }
+                                    const availablePrices = (product.prices || []).filter(price => price.is_available);
+                                    if (availablePrices.length === 0) {
+                                        return null;
+                                    }
+                                    return Math.min(...availablePrices.map(price =>
+                                        getDisplayPrice(price, event?.settings?.price_display_mode)));
+                                })();
+
+                                return (
+                                    <div key={product.id}
+                                         className={`hi-product-row ${product.is_highlighted ? 'hi-product-highlighted' : ''}`}
+                                         data-availability={availabilityState}>
+                                        {product.is_highlighted && product.highlight_message && (
+                                            <div className={'hi-product-highlight-message'}>
+                                                {product.highlight_message}
+                                            </div>
+                                        )}
+                                        <div className={'hi-title-row'}>
+                                            <UnstyledButton className={'hi-product-title'}
+                                                            onClick={toggleCollapse}
+                                            >
+                                                <h3>
+                                                    {product.title}
+                                                </h3>
+                                                <div className={'hi-product-title-metadata'}>
+                                                    {(product.is_available && !!product.quantity_available && (!isRecurring || product.product_type !== ProductType.Ticket || hasPerDateQuantities(product))) && (
+                                                        <>
+                                                            {product.quantity_available === Constants.INFINITE_TICKETS && (
+                                                                <span className={'hi-quantity-remaining-note'}>
                                                                     <Trans>
                                                                         Unlimited available
                                                                     </Trans>
-                                                                )}
-                                                                {product.quantity_available !== Constants.INFINITE_TICKETS && (
+                                                                </span>
+                                                            )}
+                                                            {product.quantity_available !== Constants.INFINITE_TICKETS && (
+                                                                <span className={'hi-scarcity-pill'}>
                                                                     <Trans>
                                                                         {product.quantity_available} available
                                                                     </Trans>
-                                                                )}
-                                                            </>
-                                                        )}
+                                                                </span>
+                                                            )}
+                                                        </>
+                                                    )}
 
-                                                        {(!product.is_available && product.type === 'TIERED') && (
+                                                    {(!product.is_available && product.type === 'TIERED' && isProductCollapsed) && (
+                                                        <span className={'hi-product-availability'}
+                                                              data-reason={availabilityState}>
                                                             <ProductAvailabilityMessage product={product}
                                                                                         event={event}
                                                                                         eventOccurrenceId={selectedOccurrenceId}/>
-                                                        )}
-
-                                                        <span className={`hi-product-collapse-arrow`}>
-                                                        <IconChevronRight
-                                                            className={isProductCollapsed ? "" : "open"}/>
                                                         </span>
-                                                    </div>
-                                                </UnstyledButton>
+                                                    )}
+
+                                                    <span className={`hi-product-collapse-arrow`}>
+                                                    <IconChevronDown
+                                                        className={isProductCollapsed ? "" : "open"}/>
+                                                    </span>
+                                                </div>
+                                            </UnstyledButton>
+                                        </div>
+                                        {isSimpleProduct && (
+                                            <div className={'hi-product-header-body'}>
+                                                <TieredPricing
+                                                    productIndex={currentProductIndex}
+                                                    event={event}
+                                                    product={product}
+                                                    form={form}
+                                                    eventOccurrenceId={selectedOccurrenceId}
+                                                    displayMode={'header'}
+                                                />
                                             </div>
-                                            <Collapse transitionDuration={100} expanded={!isProductCollapsed}
-                                                      className={'hi-product-content'} hidden={isProductCollapsed}>
+                                        )}
+                                        {collapsedFromPrice !== null && (
+                                            <div className={'hi-price-from-summary'}>
+                                                {t`From ${formatCurrency(collapsedFromPrice, event?.currency)}`}
+                                            </div>
+                                        )}
+                                        {isProductCollapsed && quantityErrors}
+                                        {isProductCollapsed && addonIds.length > 0 && getProductQuantity(Number(product.id)) > 0 && renderAddons(product)}
+                                        <Collapse transitionDuration={100} expanded={!isProductCollapsed}
+                                                  className={'hi-product-content'} hidden={isProductCollapsed}>
+                                            {!isSimpleProduct && (
                                                 <div className={'hi-price-tiers-rows'}>
                                                     <TieredPricing
-                                                        productIndex={productIndex++}
+                                                        productIndex={currentProductIndex}
                                                         event={event}
                                                         product={product}
                                                         form={form}
                                                         eventOccurrenceId={selectedOccurrenceId}
                                                     />
                                                 </div>
+                                            )}
 
-                                                {product.max_per_order && form.values.products && isObjectEmpty(form.errors) && (form.values.products[currentProductIndex]?.quantities.reduce((acc, {quantity}) => acc + Number(quantity), 0) > product.max_per_order) && (
-                                                    <div className={'hi-product-quantity-error'}>
-                                                        <Trans>The maximum number of products
-                                                            for {product.title}
-                                                            is {product.max_per_order}</Trans>
-                                                    </div>
-                                                )}
+                                            {!isProductCollapsed && quantityErrors}
 
-                                                {form.errors[`products.${currentProductIndex}`] && (
-                                                    <div className={'hi-product-quantity-error'}>
-                                                        {form.errors[`products.${currentProductIndex}`]}
-                                                    </div>
-                                                )}
+                                            {product.description && renderProductDetails(
+                                                Number(product.id),
+                                                product.description,
+                                                'hi-product-description-row',
+                                            )}
 
-                                                {product.description && (
-                                                    <div
-                                                        className={'hi-product-description-row'}>
-                                                        <Spoiler maxHeight={87} showLabel={t`Show more`}
-                                                                 hideLabel={t`Hide`}>
-                                                            <div dangerouslySetInnerHTML={{
-                                                                __html: product.description
-                                                            }}/>
-                                                        </Spoiler>
-                                                    </div>
-                                                )}
-                                            </Collapse>
-                                        </div>
-                                    )
-                                })}
-                            </div>
+                                            {!isProductCollapsed && addonIds.length > 0 && renderAddons(product)}
+                                        </Collapse>
+                                    </div>
+                                )
+                            })}
                         </div>
-                    )
-                })}
-            </div>
+                    </div>
+                )
+            })}
+        </div>
+    );
+
+    const widgetStyleVars = {
+        '--widget-background-color': props.colors?.background,
+        '--widget-primary-color': props.colors?.primary,
+        '--widget-primary-text-color': props.colors?.primaryText,
+        '--widget-secondary-color': props.colors?.secondary,
+        '--widget-secondary-text-color': props.colors?.secondaryText,
+        '--widget-padding': props?.padding,
+    } as React.CSSProperties;
+
+    const chosenSeatedAddonParents = seatedAddonParents
+        .filter(parent => seatChoices.some(choice => choice.product_id === Number(parent.id)));
+
+    const seatedAddonRows = chosenSeatedAddonParents.length > 0 ? (
+        <div className={'hi-product-rows'} data-testid="seated-product-addons">
+            {chosenSeatedAddonParents.map(product => (
+                <div key={product.id} className={'hi-product-row'}>
+                    <div className={'hi-title-row'}>
+                        <div className={'hi-product-title'}>
+                            <h3>{product.title}</h3>
+                        </div>
+                    </div>
+                    {renderAddons(product)}
+                </div>
+            ))}
+        </div>
+    ) : null;
+
+    const hasUnseatedExtras = topLevelProducts.some(product => !seatedIds.has(Number(product.id))
+        && !product.is_sold_out
+        && !product.is_after_sale_end_date);
+
+    const seatPickerExtras = hasUnseatedExtras || seatedAddonRows ? (
+        <div className={'hi-product-widget-container'} style={widgetStyleVars}>
+            {seatedAddonRows}
+            {hasUnseatedExtras && productCategoryRows}
+        </div>
+    ) : null;
+
+    const seatedOnlyCategories = productCategories.filter(category => {
+        const topLevel = (category.products ?? []).filter(product => !product.is_addon_only);
+        return topLevel.length > 0 && topLevel.every(product => seatedIds.has(Number(product.id)));
+    });
+
+    const productFormSection = (
+        <>
+            {seatMapFailed && (
+                <Alert color="red" variant="light" mb="md" data-testid="seat-map-load-error">
+                    <Group justify="space-between" gap="sm">
+                        {t`We couldn't load the seating map. Please try again.`}
+                        <Button size="xs" variant="light" color="red" loading={seatMapQuery.isFetching}
+                                onClick={() => seatMapQuery.refetch()} data-testid="seat-map-retry-button">
+                            {t`Try again`}
+                        </Button>
+                    </Group>
+                </Alert>
+            )}
+            {seatMapQuery.isLoading && (
+                <Skeleton height={420} radius={16} mb="md" data-testid="seat-map-loading"/>
+            )}
+            {seatMap && seatedOnlyCategories.map(category => (
+                <div className={'hi-product-category-row'} key={category.id} data-testid="seated-category-heading">
+                    <h2 className={'hi-product-category-title'} style={category.description ? {marginBottom: '0px'} : {}}>
+                        {category.name}
+                    </h2>
+                    {category.description && (
+                        <div className={'hi-product-category-description'}>
+                            <Spoiler maxHeight={500} showLabel={t`Show more`} hideLabel={t`Hide`}>
+                                <UserGeneratedContent html={category.description}/>
+                            </Spoiler>
+                        </div>
+                    )}
+                </div>
+            ))}
+            {seatMap && (
+                <SeatedProducts eventId={eventId} occurrenceId={seatingOccurrenceId}
+                                currency={event?.currency ?? 'USD'} seatMap={seatMap} products={products}
+                                choices={seatChoices} lostSeatUids={lostSeatUids} areaId={seatAreaId}
+                                pickerOpened={seatPickerOpened} isContinuing={productMutation.isPending}
+                                disabled={props.widgetMode === 'preview' || seatingOccurrenceId === undefined}
+                                disabledMessage={seatingOccurrenceId === undefined && props.widgetMode !== 'preview'
+                                    ? t`Choose a date to see the seats`
+                                    : null}
+                                selectsInline={!opensSeatPickerInParentModal && !props.isSeatPickerPage}
+                                isHostedInParentModal={props.isSeatPickerPage === true}
+                                extrasCount={selectedProductQuantitySum - seatChoices.length}
+                                extrasTotal={selectedProductsTotal - seatsTotal}
+                                addons={seatedAddonRows}
+                                extras={seatPickerExtras}
+                                onChange={choices => {
+                                    setLostSeatUids([]);
+                                    applySeatChoices(choices);
+                                }}
+                                onSelectionBlockedChange={setIsSeatSelectionBlocked}
+                                onAreaChange={setSeatAreaId}
+                                onOpenPicker={openSeatPicker}
+                                onClosePicker={closeSeatPicker}
+                                onContinue={submitSelection}/>
+            )}
+            {productCategoryRows}
 
             <div className={'hi-footer-row'}>
                 {event?.settings?.product_page_message && (
-                    <div dangerouslySetInnerHTML={{
-                        __html: event.settings.product_page_message.replace(/\n/g, '<br/>')
-                    }} className={'hi-product-page-message'}/>
+                    <UserGeneratedContent
+                        html={event.settings.product_page_message.replace(/\n/g, '<br/>')}
+                        className={'hi-product-page-message'}/>
                 )}
                 <Button disabled={isButtonDisabled} fullWidth className={'hi-continue-button'}
+                        ref={props.continueButtonRef}
                         type={"submit"}
                         data-testid="checkout-continue-button"
                         loading={productMutation.isPending}>
                     {props.continueButtonText || event?.settings?.continue_button_text || t`Continue`}
+                    {seatMap && selectedProductsTotal > 0 && ` · ${formatCurrency(selectedProductsTotal, event?.currency)}`}
                 </Button>
             </div>
         </>
     );
 
-    const promoSection = (
+    const promoSection = props.hidePromoCode && !form.values.promo_code ? null : (
         <div className={'hi-promo-code-row'}>
             {(!showPromoCodeInput && !form.values.promo_code) && (
-                <Anchor className={'hi-have-a-promo-code-link'} underline={'always'}
+                <Anchor component={'button'} type={'button'} ref={promoTriggerRef}
+                        className={'hi-have-a-promo-code-link'} underline={'always'}
                         onClick={() => setShowPromoCodeInput(true)}>
                     {t`Have a promo code?`}
                 </Anchor>
             )}
             {form.values.promo_code && (
                 <div className={'hi-promo-code-applied'}>
+                    <IconCheck size={16} stroke={2.5} className={'hi-promo-code-applied-check'}/>
                     <span>
                         <b>{form.values.promo_code}</b>{' '}
                         {(appliedPromoDetails?.response.discount_type === PromoCodeDiscountType.Fixed
@@ -725,7 +1222,7 @@ const SelectProducts = (props: SelectProductsProps) => {
             )}
 
             {(showPromoCodeInput && !form.values.promo_code) && (
-                <Group className={'hi-promo-code-input-wrapper'} wrap={'nowrap'} gap={'20px'}>
+                <Group className={'hi-promo-code-input-wrapper'} wrap={'nowrap'} gap={'10px'}>
                     {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                     {/*@ts-ignore*/}
                     <TextInput autoFocus classNames={{input: 'hi-promo-code-input'}} onKeyDown={(event) => {
@@ -733,12 +1230,12 @@ const SelectProducts = (props: SelectProductsProps) => {
                             event.preventDefault();
                             handleApplyPromoCode();
                         }
-                    }} mb={0} ref={promoRef}/>
+                    }} mb={0} ref={promoRef} aria-label={t`Promo code`}/>
                     <Button type="button" disabled={promoCodeEventRefetchMutation.isPending}
                             className={'hi-apply-promo-code-button'} variant={'outline'}
                             data-testid="promo-code-apply-button"
                             onClick={handleApplyPromoCode}>
-                        {t`Apply Promo Code`}
+                        {t`Apply`}
                     </Button>
                     <ActionIcon
                         type="button"
@@ -746,7 +1243,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                         variant="transparent"
                         aria-label={t`close`}
                         title={t`Close`}
-                        onClick={() => setShowPromoCodeInput(false)}
+                        onClick={closePromoCodeInput}
                     >
                         <IconX stroke={1.5} size={20}/>
                     </ActionIcon>
@@ -760,9 +1257,6 @@ const SelectProducts = (props: SelectProductsProps) => {
             <p className={'hi-no-products-message'}>
                 {t`There are no products available for this date. Please choose another date.`}
             </p>
-            <Button type={'button'} variant={'outline'} onClick={clearSelectedOccurrence}>
-                {t`Choose another date`}
-            </Button>
         </div>
     );
 
@@ -771,16 +1265,12 @@ const SelectProducts = (props: SelectProductsProps) => {
     return (
         <div className={'hi-product-widget-container'}
              ref={resizeRef}
-             style={{
-                 '--widget-background-color': props.colors?.background,
-                 '--widget-primary-color': props.colors?.primary,
-                 '--widget-primary-text-color': props.colors?.primaryText,
-                 '--widget-secondary-color': props.colors?.secondary,
-                 '--widget-secondary-text-color': props.colors?.secondaryText,
-                 '--widget-padding': props?.padding,
-             } as React.CSSProperties}>
+             style={widgetStyleVars}>
             {unavailableMessage && (
-                <div className={classNames(['hi-no-products'])}>
+                <div className={classNames(['hi-no-products', 'hi-unavailable'])}>
+                    <span className={'hi-unavailable-icon'} aria-hidden="true">
+                        <IconTicketOff stroke={1.75}/>
+                    </span>
                     <p className={classNames(['hi-no-products-message'])}>
                         {unavailableMessage}
                     </p>
@@ -876,6 +1366,12 @@ const SelectProducts = (props: SelectProductsProps) => {
                     </div>
                 </Modal>
             )}
+            {props.showLineup && event && !eventHasEnded && (
+                <WidgetLineupStrip
+                    event={event}
+                    occurrence={isRecurring ? event.occurrences?.find(occurrence => occurrence.id === selectedOccurrenceId) : undefined}
+                />
+            )}
             {(event && !eventHasEnded && (showRecurringSelector || (!isRecurring && productAreAvailable))) && (
                 <form target={'__blank'} onSubmit={form.onSubmit(handleProductSelection as any)}>
                     <Input type={'hidden'} {...form.getInputProps('promo_code')} />
@@ -887,6 +1383,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                             selectedOccurrenceId={selectedOccurrenceId}
                             pendingInitialOccurrenceId={pendingInitialOccurrenceId}
                             onSelect={(id, occurrence) => selectOccurrence(Number(id), occurrence)}
+                            onClearSelection={clearSelectedOccurrence}
                             colors={props.colors}
                             isProductsLoading={occurrenceEventRefetchMutation.isPending}
                             productSlot={productAreAvailable
@@ -903,23 +1400,35 @@ const SelectProducts = (props: SelectProductsProps) => {
 
             {
                 /**
-                 * (c) Hi.Events Ltd 2025
-                 *
-                 * PLEASE NOTE:
+                 * (c) Hi.Events Ltd 2024-present
                  *
                  * Hi.Events is licensed under the GNU Affero General Public License (AGPL) version 3.
+                 * The full licence text is in the LICENCE file in the repository root.
                  *
-                 * You can find the full license text at: https://github.com/HiEventsDev/hi.events/blob/main/LICENCE
+                 * Under Section 7(b) of the AGPL, the "Powered by Hi.Events" notice must stay on all web pages
+                 * and emails. If you modify Hi.Events you may rephrase it, for example "Powered by [Your Company]
+                 * based on Hi.Events", but it must still link to https://hi.events.
                  *
-                 * In accordance with Section 7(b) of the AGPL, we ask that you retain the "Powered by Hi.Events" notice.
+                 * The notice must stay clearly visible and legible. Do not hide or obscure it, for example by
+                 * shrinking its font size, lowering its contrast, matching its colour to the background, covering
+                 * it or moving it off-screen.
                  *
-                 * If you wish to remove this notice, a commercial license is available at: https://hi.events/licensing
+                 * To remove the notice you need a commercial licence: https://hi.events/licensing
+                 * With a licence, hide it through your licence key or configuration rather than by editing this code.
+                 *
+                 * Commercial licences help keep Hi.Events free and open source. To keep that fair for everyone who
+                 * pays, we may work with a third-party compliance partner to find installations that remove or
+                 * obscure this notice without a licence. If you hear from us or them, it will start as a friendly
+                 * conversation, and you'll have 30 days to get a licence or restore the notice.
                  */
             }
             {(props.showPoweredBy ?? true) && (
-                <PoweredByFooter style={{
-                    'color': props.colors?.primaryText || '#000',
-                }}/>
+                <PoweredByFooter
+                    brandingRemoved={props.event.organizer?.branding_removed}
+                    style={{
+                        'color': props.colors?.primaryText || '#000',
+                    }}
+                />
             )}
         </div>
     );

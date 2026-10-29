@@ -3,6 +3,7 @@ import {IdParam} from "../types.ts";
 import {GET_EVENT_OCCURRENCES_QUERY_KEY} from "../queries/useGetEventOccurrences.ts";
 import {GET_EVENT_OCCURRENCE_QUERY_KEY} from "../queries/useGetEventOccurrence.ts";
 import {eventOccurrenceClient} from "../api/event-occurrence.client.ts";
+import {GET_EVENT_QUERY_KEY} from "../queries/useGetEvent.ts";
 
 export const useReactivateOccurrence = () => {
     const queryClient = useQueryClient();
@@ -17,7 +18,10 @@ export const useReactivateOccurrence = () => {
             queryClient.invalidateQueries({
                 queryKey: [GET_EVENT_OCCURRENCE_QUERY_KEY, variables.eventId, variables.occurrenceId]
             });
-            return queryClient.invalidateQueries({queryKey: [GET_EVENT_OCCURRENCES_QUERY_KEY]});
+            return Promise.all([
+                queryClient.invalidateQueries({queryKey: [GET_EVENT_OCCURRENCES_QUERY_KEY]}),
+                queryClient.invalidateQueries({queryKey: [GET_EVENT_QUERY_KEY]}),
+            ]);
         }
     });
 };

@@ -1,0 +1,15 @@
+diff --git a/node_modules/pofile/lib/po.js b/node_modules/pofile/lib/po.js
+index 0e2e35d..ef067b2 100644
+--- a/node_modules/pofile/lib/po.js
++++ b/node_modules/pofile/lib/po.js
+@@ -182,8 +182,8 @@ PO.parse = function (data) {
+         return string;
+     }
+ 
+-    while (lines.length > 0) {
+-        var line = trim(lines.shift());
++    for (var lineIndex = 0; lineIndex < lines.length; lineIndex++) {
++        var line = trim(lines[lineIndex]);
+         var lineObsolete = false;
+         var add = false;
+ 

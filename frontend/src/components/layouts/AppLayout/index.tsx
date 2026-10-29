@@ -14,7 +14,7 @@ import AnnouncementDisplay from "../../common/AnnouncementDisplay";
 interface AppLayoutProps {
     navItems: NavItem[];
     breadcrumbItems: BreadcrumbItem[];
-    entityType: 'event' | 'organizer';
+    entityType: 'event' | 'organizer' | 'settings';
     topBarContent?: React.ReactNode;
     breadcrumbContentRight?: React.ReactNode;
     actionGroupContent?: React.ReactNode;
@@ -50,10 +50,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                                                  actionGroupContent = null,
                                                  sidebarFooter = null,
                                              }) => {
-    const [sidebarOpen, setSidebarOpen] = useState<boolean>(() => {
-        if (typeof window === 'undefined') return true; // SSR default
-        return window.innerWidth >= 768; // Desktop open, mobile closed
-    });
+    const [sidebarOpen, setSidebarOpen] = useState<boolean | null>(null);
     const [topBarShadow, setTopBarShadow] = useState<boolean>(false);
 
     useEffect(() => {
@@ -68,27 +65,31 @@ const AppLayout: React.FC<AppLayoutProps> = ({
     }, []);
 
     useEffect(() => {
-        const handleResize = () => {
-            if (window.innerWidth >= 768) {
-                setSidebarOpen(true);
-            } else {
-                setSidebarOpen(false);
-            }
-        };
+        const handleResize = () => setSidebarOpen(null);
 
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    const sidebarStateClass = sidebarOpen === null ? '' : (sidebarOpen ? classes.open : classes.closed);
+
+    const focusMainContent = (event: React.MouseEvent<HTMLAnchorElement>) => {
+        event.preventDefault();
+        document.getElementById('app-manage-main')?.focus();
+    };
+
     return (
         <>
+            <a href="#app-manage-main" className={classes.skipLink} onClick={focusMainContent}>
+                {t`Skip to main content`}
+            </a>
             <ImpersonationBanner />
             <PendingDeletionBanner />
             <AnnouncementDisplay />
             <div id={`${entityType}-manage-container`}
-                 className={`${classes.container} ${sidebarOpen ? classes.open : classes.closed}`}>
+                 className={`${classes.container} ${sidebarStateClass}`}>
                 <Topbar
-                    sidebarOpen={sidebarOpen}
+                    sidebarOpen={sidebarOpen === true}
                     setSidebarOpen={setSidebarOpen}
                     topBarShadow={topBarShadow}
                     breadcrumbItems={breadcrumbItems}
@@ -97,16 +98,16 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                     actionGroupContent={actionGroupContent}
                 />
 
-            <div className={classes.main} id={'app-manage-main'}>
-                <Outlet/>
-            </div>
-
             <Sidebar
                 sidebarOpen={sidebarOpen}
                 setSidebarOpen={setSidebarOpen}
                 navItems={navItems}
                 sidebarFooter={sidebarFooter}
             />
+
+            <main className={classes.main} id={'app-manage-main'} tabIndex={-1}>
+                <Outlet/>
+            </main>
 
             {sidebarOpen && (
                 <div
@@ -115,7 +116,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                 />
             )}
 
-            {!sidebarOpen && (
+            {sidebarOpen === false && (
                 <SidebarToggleButton
                     open={false}
                     onClick={() => setSidebarOpen(true)}

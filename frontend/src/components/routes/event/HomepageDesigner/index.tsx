@@ -1,97 +1,114 @@
-import {useEffect, useRef, useState} from "react";
-import classes from './HomepageDesigner.module.scss';
+import {useEffect, useMemo} from "react";
 import {useParams} from "react-router";
 import {useGetEventSettings} from "../../../../queries/useGetEventSettings.ts";
 import {useUpdateEventSettings} from "../../../../mutations/useUpdateEventSettings.ts";
 import {useFormErrorResponseHandler} from "../../../../hooks/useFormErrorResponseHandler.tsx";
-import {EventSettings, HomepageThemeSettings, IdParam} from "../../../../types.ts";
+import {EventSettings, HomepageSection, HomepageThemeSettings} from "../../../../types.ts";
+import {cleanHomepageSections, resolveHomepageSections} from "../../../../utilites/homepageSections.ts";
+import {SectionsEditor} from "./SectionsEditor";
+import {SectionEmptyState, sectionEmptyState} from "./SectionsEditor/sectionEmptyState.ts";
+import {useGetEventLineupPublic} from "../../../../queries/useGetEventLineupPublic.ts";
 import {showSuccess} from "../../../../utilites/notifications.tsx";
 import {t} from "@lingui/macro";
 import {useForm} from "@mantine/form";
-import {Button, Group, TextInput, Accordion, Stack, Text} from "@mantine/core";
-import {IconColorPicker, IconHelp, IconPhoto, IconPalette, IconTypography} from "@tabler/icons-react";
+import {Group, Stack, Text, TextInput} from "@mantine/core";
+import {IconClick, IconHelp, IconLayout, IconLayoutList, IconPalette, IconPhoto, IconTypography} from "@tabler/icons-react";
 import {Tooltip} from "../../../common/Tooltip";
-import {CustomSelect} from "../../../common/CustomSelect";
 import {GET_EVENT_IMAGES_QUERY_KEY, useGetEventImages} from "../../../../queries/useGetEventImages.ts";
 import {eventPreviewPath} from "../../../../utilites/urlHelper.ts";
-import {LoadingMask} from "../../../common/LoadingMask";
 import {ImageUploadDropzone} from "../../../common/ImageUploadDropzone";
 import {queryClient} from "../../../../utilites/queryClient.ts";
-import {GET_EVENT_PUBLIC_QUERY_KEY} from "../../../../queries/useGetEventPublic.ts";
+import {GET_EVENT_PUBLIC_QUERY_KEY, useGetEventPublic} from "../../../../queries/useGetEventPublic.ts";
 import {ThemeColorControls} from "../../../common/ThemeColorControls";
 import {ThemeFontControl} from "../../../common/ThemeFontControl";
-import {validateThemeSettings} from "../../../../utilites/themeUtils.ts";
-import {DEFAULT_HOMEPAGE_FONT} from "../../../../constants/homepageFonts.ts";
+import {getDefaultThemeSettings, validateThemeSettings} from "../../../../utilites/themeUtils.ts";
+import {firstHomepageSectionsError, HomepageDesigner as HomepageDesignerShell, useHomepagePreview} from "../../../common/HomepageDesigner";
+import {DesignerSection} from "../../../common/DesignerShell";
+import {BrandingDesignerSection} from "../../../common/BrandingUpsell";
+import {resolveEventLayout} from "../../../../constants/eventLayouts.ts";
+import {LayoutPicker} from "./LayoutPicker";
 
 interface FormValues {
     homepage_theme_settings: Partial<HomepageThemeSettings>;
+    homepage_sections: HomepageSection[];
     continue_button_text: string;
+    get_tickets_button_text: string;
 }
+
+const formValuesFromSettings = (settings: EventSettings): FormValues => ({
+    homepage_theme_settings: validateThemeSettings(settings.homepage_theme_settings),
+    homepage_sections: resolveHomepageSections(settings.homepage_sections),
+    continue_button_text: settings.continue_button_text || '',
+    get_tickets_button_text: settings.get_tickets_button_text || '',
+});
 
 const HomepageDesigner = () => {
     const {eventId} = useParams();
     const eventSettingsQuery = useGetEventSettings(eventId);
     const eventImagesQuery = useGetEventImages(eventId);
     const updateMutation = useUpdateEventSettings();
-
-    const iframeRef = useRef<HTMLIFrameElement>(null);
-    const lastSentSettings = useRef<string | null>(null);
-
-    const [iframeSrc, setIframeSrc] = useState<string | null>(null);
-    const [iframeLoaded, setIframeLoaded] = useState(false);
-    const [lastCoverId, setLastCoverId] = useState<IdParam | null>(null);
-    const [accordionValue, setAccordionValue] = useState<string[]>(['images', 'colors', 'typography', 'button']);
+    const publicEventQuery = useGetEventPublic(eventId);
+    const lineupQuery = useGetEventLineupPublic(eventId);
+    const formErrorHandle = useFormErrorResponseHandler();
 
     const existingCover = eventImagesQuery.data?.find((image) => image.type === 'EVENT_COVER');
+    const sectionImageIds = (eventImagesQuery.data ?? [])
+        .filter(image => image.type === 'EVENT_GALLERY' || image.type === 'EVENT_SPONSOR_LOGO')
+        .map(image => image.id)
+        .join('.');
 
     const form = useForm<FormValues>({
         initialValues: {
-            homepage_theme_settings: {
-                accent: '#8b5cf6',
-                background: '#f5f3ff',
-                mode: 'light',
-                background_type: 'COLOR',
-                font_family: DEFAULT_HOMEPAGE_FONT,
-            },
+            homepage_theme_settings: getDefaultThemeSettings(),
+            homepage_sections: resolveHomepageSections(),
             continue_button_text: '',
+            get_tickets_button_text: '',
         }
     });
 
-    const formErrorHandle = useFormErrorResponseHandler();
-
     useEffect(() => {
-        if (eventSettingsQuery?.isFetched && eventSettingsQuery?.data) {
-            const settings = eventSettingsQuery.data;
-            const themeSettings = validateThemeSettings(settings.homepage_theme_settings);
-
-            form.setValues({
-                homepage_theme_settings: themeSettings,
-                continue_button_text: settings.continue_button_text,
-            });
+        if (eventSettingsQuery.data && !form.isDirty()) {
+            const values = formValuesFromSettings(eventSettingsQuery.data);
+            form.setValues(values);
+            form.resetDirty(values);
         }
-    }, [eventSettingsQuery.isFetched]);
+    }, [eventSettingsQuery.data]);
 
-    useEffect(() => {
-        if (eventSettingsQuery.isFetched && eventImagesQuery.isFetched && !iframeSrc) {
-            setIframeSrc(eventPreviewPath(eventId));
-        }
-    }, [eventSettingsQuery.isFetched, eventImagesQuery.isFetched]);
+    const isDisabled = eventSettingsQuery.isLoading || updateMutation.isPending;
 
-    useEffect(() => {
-        if (existingCover?.id !== lastCoverId && iframeSrc) {
-            setLastCoverId(existingCover?.id);
-            setIframeSrc(eventPreviewPath(eventId) + `?cover_image_id=${existingCover?.id}`);
-            setIframeLoaded(false);
-        }
-    }, [existingCover?.id]);
+    const emptyStates = useMemo(() => {
+        const imageIds = new Set((eventImagesQuery.data ?? []).map(image => Number(image.id)));
+        const states = new Map<string, SectionEmptyState>();
+        form.values.homepage_sections.forEach(section => {
+            const state = sectionEmptyState(section, publicEventQuery.data, lineupQuery.data, imageIds);
+            if (state) {
+                states.set(section.id, state);
+            }
+        });
+        return states;
+    }, [form.values.homepage_sections, publicEventQuery.data, lineupQuery.data, eventImagesQuery.data]);
+
+    const preview = useHomepagePreview({
+        path: eventPreviewPath(eventId),
+        ready: eventSettingsQuery.isFetched && eventImagesQuery.isFetched,
+        imageVersion: `cover_image_id=${existingCover?.id}&section_images=${sectionImageIds}`,
+        messageType: 'UPDATE_SETTINGS',
+        settings: {
+            homepage_theme_settings: validateThemeSettings(form.values.homepage_theme_settings),
+            homepage_sections: cleanHomepageSections(form.values.homepage_sections),
+            continue_button_text: form.values.continue_button_text,
+            get_tickets_button_text: form.values.get_tickets_button_text,
+        },
+    });
 
     const handleSubmit = (values: FormValues) => {
         const validatedTheme = validateThemeSettings(values.homepage_theme_settings);
 
         const eventSettings: Partial<EventSettings> = {
             homepage_theme_settings: validatedTheme,
+            homepage_sections: cleanHomepageSections(values.homepage_sections),
             continue_button_text: values.continue_button_text,
-            // Also update legacy fields for backward compatibility during transition
+            get_tickets_button_text: values.get_tickets_button_text,
             homepage_primary_color: validatedTheme.accent,
             homepage_body_background_color: validatedTheme.background,
             homepage_background_type: validatedTheme.background_type,
@@ -101,10 +118,11 @@ const HomepageDesigner = () => {
             {eventSettings, eventId: eventId},
             {
                 onSuccess: () => {
+                    form.resetDirty(values);
                     showSuccess(t`Successfully Updated Homepage Design`);
                 },
                 onError: (error) => {
-                    formErrorHandle(form, error);
+                    formErrorHandle(form, error, firstHomepageSectionsError(error));
                 },
             }
         );
@@ -119,198 +137,106 @@ const HomepageDesigner = () => {
         });
     };
 
-    const sendSettingsToIframe = () => {
-        if (iframeRef.current?.contentWindow && iframeLoaded) {
-            const themeSettings = validateThemeSettings(form.values.homepage_theme_settings);
-
-            const settingsToSend = {
-                homepage_theme_settings: themeSettings,
-                continue_button_text: form.values.continue_button_text,
-            };
-
-            const settingsJson = JSON.stringify(settingsToSend);
-            if (settingsJson !== lastSentSettings.current) {
-                iframeRef.current.contentWindow.postMessage(
-                    {type: "UPDATE_SETTINGS", settings: settingsToSend},
-                    "*"
-                );
-                lastSentSettings.current = settingsJson;
-            }
-        }
-    };
-
-    useEffect(() => {
-        sendSettingsToIframe();
-    }, [iframeLoaded, form.values]);
-
-    const handleThemeChange = (themeSettings: Partial<HomepageThemeSettings>) => {
-        form.setFieldValue('homepage_theme_settings', themeSettings);
-    };
-
-    const handleBackgroundTypeChange = (backgroundType: string | string[]) => {
-        const value = Array.isArray(backgroundType) ? backgroundType[0] : backgroundType;
-        form.setFieldValue('homepage_theme_settings', {
-            ...form.values.homepage_theme_settings,
-            background_type: value as 'COLOR' | 'MIRROR_COVER_IMAGE',
-        });
-    };
-
     return (
-        <div className={classes.container}>
-            <div className={classes.sidebar}>
-                <div className={classes.sticky}>
-                    <div className={classes.header}>
-                        <h2>{t`Homepage Design`}</h2>
-                        <Text c="dimmed" size="sm">{t`Customize the layout, colors, and branding of your event homepage.`}</Text>
-                    </div>
+        <HomepageDesignerShell
+            title={t`Homepage Design`}
+            preview={preview}
+            previewTitle={t`Event Preview`}
+            hasUnsavedChanges={form.isDirty()}
+            isSaving={updateMutation.isPending}
+            onSave={() => form.onSubmit(handleSubmit)()}
+            onDiscard={() => form.reset()}
+        >
+            <DesignerSection icon={<IconLayout/>} title={t`Layout`}>
+                <LayoutPicker
+                    theme={validateThemeSettings(form.values.homepage_theme_settings)}
+                    coverIsLandscape={!!existingCover?.width && !!existingCover?.height && existingCover.width > existingCover.height * 1.25}
+                    disabled={isDisabled}
+                    onChange={layout => form.setFieldValue('homepage_theme_settings', {
+                        ...form.values.homepage_theme_settings,
+                        layout,
+                    })}
+                />
+            </DesignerSection>
 
-                    <Accordion
-                        multiple
-                        value={accordionValue}
-                        onChange={setAccordionValue}
-                        variant="contained"
-                        className={classes.accordion}
-                    >
-                        <Accordion.Item value="images" className={classes.accordionItem}>
-                            <Accordion.Control icon={<IconPhoto size={20} />}>
-                                <Text fw={500}>{t`Images`}</Text>
-                            </Accordion.Control>
-                            <Accordion.Panel>
-                                <Stack gap="lg">
-                                    <div>
-                                        <Group justify={'space-between'} mb="xs">
-                                            <Text fw={500} size="sm">{t`Cover Image`}</Text>
-                                            <Tooltip
-                                                label={t`We recommend dimensions of 1950px by 650px, a ratio of 3:1, and a maximum file size of 5MB`}>
-                                                <IconHelp size={16} style={{ color: 'var(--mantine-color-gray-6)' }}/>
-                                            </Tooltip>
-                                        </Group>
-                                        <ImageUploadDropzone
-                                            imageType="EVENT_COVER"
-                                            entityId={eventId}
-                                            onUploadSuccess={handleImageChange}
-                                            onDeleteSuccess={handleImageChange}
-                                            existingImageData={{
-                                                url: existingCover?.url,
-                                                id: existingCover?.id,
-                                            }}
-                                            helpText={t`Cover image will be displayed at the top of your event page`}
-                                            displayMode="compact"
-                                        />
-                                    </div>
-                                </Stack>
-                            </Accordion.Panel>
-                        </Accordion.Item>
+            <DesignerSection icon={<IconLayoutList/>} title={t`Sections`}>
+                <SectionsEditor
+                    variant="event"
+                    ticketsBesideContent={resolveEventLayout(form.values.homepage_theme_settings.layout).ticketRail}
+                    entityId={eventId!}
+                    sections={form.values.homepage_sections}
+                    images={eventImagesQuery.data ?? []}
+                    emptyStates={emptyStates}
+                    disabled={isDisabled}
+                    onChange={update => form.setFieldValue('homepage_sections', update)}
+                    onImagesChanged={handleImageChange}
+                />
+            </DesignerSection>
 
-                        <Accordion.Item value="colors" className={classes.accordionItem}>
-                            <Accordion.Control icon={<IconPalette size={20} />}>
-                                <Text fw={500}>{t`Theme & Colors`}</Text>
-                            </Accordion.Control>
-                            <Accordion.Panel>
-                                <form onSubmit={form.onSubmit(handleSubmit)}>
-                                    <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending} className={classes.fieldset}>
-                                        <Stack gap="md">
-                                            <CustomSelect
-                                                optionList={[
-                                                    {
-                                                        icon: <IconColorPicker/>,
-                                                        label: t`Color`,
-                                                        value: 'COLOR',
-                                                        description: t`Choose a color for your background`,
-                                                    },
-                                                    {
-                                                        icon: <IconPhoto/>,
-                                                        label: t`Use cover image`,
-                                                        value: 'MIRROR_COVER_IMAGE',
-                                                        description: t`Use a blurred version of the cover image as the background`,
-                                                        disabled: !existingCover,
-                                                    },
-                                                ]}
-                                                label={t`Background Type`}
-                                                name={'homepage_theme_settings.background_type'}
-                                                value={form.values.homepage_theme_settings.background_type || 'COLOR'}
-                                                onChange={handleBackgroundTypeChange}
-                                            />
+            <DesignerSection icon={<IconPhoto/>} title={t`Images`}>
+                <Group justify="space-between" mb="xs">
+                    <Text fw={500} size="sm">{t`Cover Image`}</Text>
+                    <Tooltip label={t`We recommend dimensions of 1950px by 650px, a ratio of 3:1, and a maximum file size of 5MB`}>
+                        <IconHelp size={16} style={{color: 'var(--mantine-color-gray-6)'}}/>
+                    </Tooltip>
+                </Group>
+                <ImageUploadDropzone
+                    imageType="EVENT_COVER"
+                    entityId={eventId}
+                    onUploadSuccess={handleImageChange}
+                    onDeleteSuccess={handleImageChange}
+                    existingImageData={{
+                        url: existingCover?.url,
+                        id: existingCover?.id,
+                    }}
+                    helpText={t`Cover image will be displayed at the top of your event page`}
+                    displayMode="compact"
+                />
+            </DesignerSection>
 
-                                            <ThemeColorControls
-                                                values={form.values.homepage_theme_settings}
-                                                onChange={handleThemeChange}
-                                                disabled={eventSettingsQuery.isLoading || updateMutation.isPending}
-                                            />
-                                        </Stack>
-                                    </fieldset>
-                                </form>
-                            </Accordion.Panel>
-                        </Accordion.Item>
+            <DesignerSection icon={<IconPalette/>} title={t`Theme & Colors`}>
+                <ThemeColorControls
+                    values={form.values.homepage_theme_settings}
+                    onChange={(themeSettings) => form.setFieldValue('homepage_theme_settings', themeSettings)}
+                    hasCoverImage={!!existingCover}
+                    disabled={isDisabled}
+                />
+            </DesignerSection>
 
-                        <Accordion.Item value="typography" className={classes.accordionItem}>
-                            <Accordion.Control icon={<IconTypography size={20} />}>
-                                <Text fw={500}>{t`Typography`}</Text>
-                            </Accordion.Control>
-                            <Accordion.Panel>
-                                <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending} className={classes.fieldset}>
-                                    <ThemeFontControl
-                                        value={form.values.homepage_theme_settings.font_family}
-                                        onChange={(fontFamily) => form.setFieldValue('homepage_theme_settings', {
-                                            ...form.values.homepage_theme_settings,
-                                            font_family: fontFamily,
-                                        })}
-                                        disabled={eventSettingsQuery.isLoading || updateMutation.isPending}
-                                    />
-                                </fieldset>
-                            </Accordion.Panel>
-                        </Accordion.Item>
+            <DesignerSection icon={<IconTypography/>} title={t`Typography`}>
+                <ThemeFontControl
+                    value={form.values.homepage_theme_settings.font_family}
+                    onChange={(fontFamily) => form.setFieldValue('homepage_theme_settings', {
+                        ...form.values.homepage_theme_settings,
+                        font_family: fontFamily,
+                    })}
+                    disabled={isDisabled}
+                />
+            </DesignerSection>
 
-                        <Accordion.Item value="button" className={classes.accordionItem}>
-                            <Accordion.Control icon={<IconTypography size={20} />}>
-                                <Text fw={500}>{t`Button Text`}</Text>
-                            </Accordion.Control>
-                            <Accordion.Panel>
-                                <form onSubmit={form.onSubmit(handleSubmit)}>
-                                    <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending} className={classes.fieldset}>
-                                        <Stack gap="md">
-                                            <TextInput
-                                                label={t`Continue Button Text`}
-                                                description={t`Customize the text shown on the continue button`}
-                                                placeholder={t`e.g., Get Tickets, Register Now`}
-                                                size="sm"
-                                                {...form.getInputProps('continue_button_text')}
-                                            />
-                                        </Stack>
-                                    </fieldset>
-                                </form>
-                            </Accordion.Panel>
-                        </Accordion.Item>
-                    </Accordion>
+            <DesignerSection icon={<IconClick/>} title={t`Button Text`}>
+                <Stack gap="md">
+                    <TextInput
+                        label={t`Continue Button`}
+                        description={t`Shown below the ticket list`}
+                        placeholder={t`Continue`}
+                        size="sm"
+                        disabled={isDisabled}
+                        {...form.getInputProps('continue_button_text')}
+                    />
+                    <TextInput
+                        label={t`Floating Button`}
+                        description={t`Shown on scroll and jumps to the tickets section`}
+                        placeholder={t`Get Tickets`}
+                        size="sm"
+                        disabled={isDisabled}
+                        {...form.getInputProps('get_tickets_button_text')}
+                    />
+                </Stack>
+            </DesignerSection>
 
-                    <Button
-                        loading={updateMutation.isPending}
-                        type="submit"
-                        fullWidth
-                        mt="md"
-                        onClick={() => form.onSubmit(handleSubmit)()}
-                    >
-                        {t`Save Changes`}
-                    </Button>
-                </div>
-            </div>
-
-            <div className={classes.previewContainer}>
-                <h2>{t`Homepage Preview`}</h2>
-                <div className={classes.iframeContainer}>
-                    {iframeSrc ? (
-                        <iframe
-                            ref={iframeRef}
-                            src={iframeSrc}
-                            title="Event Preview"
-                            onLoad={() => setIframeLoaded(true)}
-                        />
-                    ) : (
-                        <LoadingMask/>
-                    )}
-                </div>
-            </div>
-        </div>
+            <BrandingDesignerSection/>
+        </HomepageDesignerShell>
     );
 };
 

@@ -13,6 +13,7 @@ use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerStripePlatformRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Organizer\Payment\Stripe\CopyStripeConnectAccountHandler;
 use HiEvents\Services\Application\Handlers\Organizer\Payment\Stripe\DTO\CopyStripeConnectAccountDTO;
+use HiEvents\Services\Domain\Organizer\AssignCurrencyDefaultOrganizerConfigurationService;
 use HiEvents\Services\Domain\Payment\Stripe\StripeAccountSyncService;
 use Illuminate\Config\Repository;
 use Illuminate\Database\DatabaseManager;
@@ -28,6 +29,8 @@ class CopyStripeConnectAccountHandlerTest extends TestCase
 
     private StripeAccountSyncService $stripeAccountSyncService;
 
+    private AssignCurrencyDefaultOrganizerConfigurationService $assignCurrencyDefaultOrganizerConfigurationService;
+
     private DatabaseManager $databaseManager;
 
     private Repository $config;
@@ -40,6 +43,8 @@ class CopyStripeConnectAccountHandlerTest extends TestCase
         $this->organizerStripePlatformRepository = m::mock(OrganizerStripePlatformRepositoryInterface::class);
         $this->stripeAccountSyncService = m::mock(StripeAccountSyncService::class);
         $this->stripeAccountSyncService->shouldReceive('seedVatSettingForOrganizerIfMissing')->byDefault();
+        $this->assignCurrencyDefaultOrganizerConfigurationService = m::mock(AssignCurrencyDefaultOrganizerConfigurationService::class);
+        $this->assignCurrencyDefaultOrganizerConfigurationService->shouldReceive('assignForCountry')->byDefault();
         $this->databaseManager = m::mock(DatabaseManager::class);
         $this->config = m::mock(Repository::class);
     }
@@ -98,6 +103,11 @@ class CopyStripeConnectAccountHandlerTest extends TestCase
                     && $attrs[OrganizerStripePlatformDomainObjectAbstract::STRIPE_CONNECT_PLATFORM] === 'ca';
             }))
             ->andReturn(m::mock(OrganizerStripePlatformDomainObject::class));
+
+        $this->assignCurrencyDefaultOrganizerConfigurationService
+            ->shouldReceive('assignForCountry')
+            ->once()
+            ->with(1, 'CA');
 
         $handler = $this->makeHandler();
 
@@ -186,6 +196,7 @@ class CopyStripeConnectAccountHandlerTest extends TestCase
             $this->organizerRepository,
             $this->organizerStripePlatformRepository,
             $this->stripeAccountSyncService,
+            $this->assignCurrencyDefaultOrganizerConfigurationService,
             $this->databaseManager,
             $this->config,
         );

@@ -18,6 +18,9 @@ class CheckInAttendeeAction extends BaseAction
         private readonly CheckInAttendeeHandler $checkInAttendeeHandler
     ) {}
 
+    /**
+     * @deprecated This endpoint only sets a legacy flag on the attendee. The check-in isn't recorded on a check-in list, so it doesn't appear in the dashboard, check-in counts or exports, and no `checkin.created` or `checkin.deleted` webhook is sent. Use a check-in list instead: get the list's `short_id` from `GET /events/{eventId}/check-in-lists` (every event has a default list), then check attendees in with `POST /public/check-in-lists/{checkInListShortId}/check-ins` and out with `DELETE /public/check-in-lists/{checkInListShortId}/check-ins/{checkInShortId}`.
+     */
     public function __invoke(CheckInAttendeeRequest $request, int $eventId, string $attendeePublicId): JsonResponse
     {
         $this->isActionAuthorized($eventId, EventDomainObject::class);

@@ -1,4 +1,4 @@
-import {Anchor, Tooltip} from "@mantine/core";
+import {Anchor, Text, Tooltip} from "@mantine/core";
 import {formatDateWithLocale, prettyDate, relativeDate} from "../../../utilites/dates.ts";
 import {OrderStatusBadge} from "../OrderStatusBadge";
 import {Currency} from "../Currency";
@@ -34,7 +34,9 @@ export const OrderDetails = ({order, event, cardVariant = 'lightGray'}: {
                     {t`Email`}
                 </div>
                 <div className={classes.value}>
-                    <Anchor href={'mailto:' + order.email} target={'_blank'}>{order.email}</Anchor>
+                    {order.email
+                        ? <Anchor href={'mailto:' + order.email} target={'_blank'}>{order.email}</Anchor>
+                        : <Text c="dimmed">{t`No email provided`}</Text>}
                 </div>
             </div>
             <div className={classes.block}>
@@ -74,22 +76,26 @@ export const OrderDetails = ({order, event, cardVariant = 'lightGray'}: {
                     <OrderStatusBadge order={order} variant={'outline'}/>
                 </div>
             </div>
-            <div className={classes.block}>
-                <div className={classes.title}>
-                    {t`Total order amount`}
-                </div>
-                <div className={classes.amount}>
-                    <Currency currency={order.currency} price={order.total_gross}/>
-                </div>
-            </div>
-            <div className={classes.block}>
-                <div className={classes.title}>
-                    {t`Total refunded`}
-                </div>
-                <div className={classes.amount}>
-                    <Currency currency={order.currency} price={order.total_refunded}/>
-                </div>
-            </div>
+            {order.total_gross !== undefined && (
+                <>
+                    <div className={classes.block}>
+                        <div className={classes.title}>
+                            {t`Total order amount`}
+                        </div>
+                        <div className={classes.amount}>
+                            <Currency currency={order.currency} price={order.total_gross}/>
+                        </div>
+                    </div>
+                    <div className={classes.block}>
+                        <div className={classes.title}>
+                            {t`Total refunded`}
+                        </div>
+                        <div className={classes.amount}>
+                            <Currency currency={order.currency} price={order.total_refunded}/>
+                        </div>
+                    </div>
+                </>
+            )}
             {order.payment_provider && (
                 <div className={classes.block}>
                     <div className={classes.title}>

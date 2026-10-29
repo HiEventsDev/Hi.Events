@@ -1,6 +1,7 @@
+import {getClientLocale, toIntlLocale} from "../locales.ts";
+
 export const formatCurrency = (value: number | string, currency = 'USD') => {
-    const locale = typeof window !== 'undefined' ? navigator.language : 'en-US';
-    const formatter = new Intl.NumberFormat(locale, {
+    const formatter = new Intl.NumberFormat(toIntlLocale(getClientLocale()), {
         style: 'currency',
         currency: currency,
         minimumFractionDigits: 2,
@@ -8,6 +9,16 @@ export const formatCurrency = (value: number | string, currency = 'USD') => {
 
     return formatter.format(value as number);
 }
+
+const ZERO_DECIMAL_CURRENCIES = [
+    'BIF', 'CLP', 'DJF', 'GNF', 'JPY', 'KMF', 'KRW', 'MGA', 'PYG', 'RWF', 'UGX', 'VND', 'VUV', 'XAF', 'XOF', 'XPF',
+];
+
+export const isZeroDecimalCurrency = (currency: string): boolean => ZERO_DECIMAL_CURRENCIES.includes(currency.toUpperCase());
+
+export const plainAmount = (value: number | string, currency: string): string => Number(value).toFixed(isZeroDecimalCurrency(currency) ? 0 : 2);
+
+export const minorUnitFactor = (currency: string): number => isZeroDecimalCurrency(currency) ? 1 : 100;
 
 export const getCurrencySymbol = (currencyCode: string): string => {
     const currencySymbols: { [key: string]: string } = {

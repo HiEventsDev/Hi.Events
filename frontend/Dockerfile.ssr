@@ -5,6 +5,7 @@ FROM node:22-alpine AS deps
 WORKDIR /app
 
 COPY package.json yarn.lock ./
+COPY patches ./patches
 
 RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,sharing=locked \
     yarn install --frozen-lockfile
@@ -17,8 +18,7 @@ COPY --from=deps /app/node_modules ./node_modules
 
 COPY . .
 
-RUN yarn messages:compile \
- && yarn build:ssr:client \
+RUN yarn build:ssr:client \
  && yarn build:ssr:server
 
 FROM node:22-alpine AS prod-deps
@@ -28,7 +28,8 @@ WORKDIR /app
 COPY package.json yarn.lock ./
 
 RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,sharing=locked \
-    yarn install --frozen-lockfile --production
+    npm pkg delete scripts.postinstall \
+ && yarn install --frozen-lockfile --production
 
 FROM node:22-alpine AS runtime
 
@@ -38,7 +39,7 @@ WORKDIR /app
 
 COPY --from=prod-deps /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
-COPY package.json yarn.lock server.js ./
+COPY package.json yarn.lock server.js instrument.mjs ./
 COPY src ./src
 COPY public ./public
 

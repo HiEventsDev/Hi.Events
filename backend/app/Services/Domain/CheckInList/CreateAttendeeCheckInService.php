@@ -49,7 +49,7 @@ class CreateAttendeeCheckInService
         $checkInList = $this->checkInListDataService->getCheckInList($checkInListUuid);
         $this->checkInListActivityValidator->assertActive($checkInList);
 
-        $attendees = $this->fetchAttendees($attendeesAndActions);
+        $attendees = $this->fetchAttendees($checkInList, $attendeesAndActions);
         $eventSettings = $this->fetchEventSettings($checkInList->getEventId());
         $existingCheckIns = $this->fetchExistingCheckIns($attendees, $checkInList);
 
@@ -69,13 +69,13 @@ class CreateAttendeeCheckInService
      *
      * @throws CannotCheckInException
      */
-    private function fetchAttendees(Collection $attendeesAndActions): Collection
+    private function fetchAttendees(CheckInListDomainObject $checkInList, Collection $attendeesAndActions): Collection
     {
         $publicIds = $attendeesAndActions->map(
             fn (AttendeeAndActionDTO $attendeeAndAction) => $attendeeAndAction->public_id
         );
 
-        return $this->checkInListDataService->getAttendees($publicIds);
+        return $this->checkInListDataService->getAttendees($checkInList, $publicIds);
     }
 
     private function fetchEventSettings(int $eventId): EventSettingDomainObject

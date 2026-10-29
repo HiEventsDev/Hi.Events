@@ -15,4 +15,14 @@ test.describe('editing a ticket', () => {
     await expect(authedPage.getByRole('heading', { name: newName })).toBeVisible();
     await expect(authedPage.getByRole('heading', { name: 'General Admission' })).toBeHidden();
   });
+
+  test('an organizer opens a ticket for editing by clicking its row', async ({ authedPage, api, account }) => {
+    const event = await createDraftEventWithTicket(api, account.organizerId, { productTitle: 'Early Bird' });
+
+    const products = new ProductEditPage(authedPage);
+    await products.goto(event.eventId);
+    await products.openProductByTitle('Early Bird');
+
+    await expect(authedPage.getByLabel(/^Name/)).toHaveValue('Early Bird');
+  });
 });

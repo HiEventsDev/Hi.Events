@@ -5,6 +5,7 @@ namespace HiEvents\Services\Domain\Account;
 use HiEvents\DomainObjects\AccountDeletionRequestDomainObject;
 use HiEvents\DomainObjects\Enums\AccountDeletionInitiator;
 use HiEvents\DomainObjects\Enums\AccountDeletionOutcome;
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Generated\AccountDeletionRequestDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
@@ -12,14 +13,18 @@ use HiEvents\DomainObjects\Status\AccountDeletionRequestStatus;
 use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Exceptions\AccountDeletionRequestNotFoundException;
 use HiEvents\Exceptions\CannotDeleteEntityException;
+use HiEvents\Jobs\Account\ExecuteAccountDeletionJob;
 use HiEvents\Mail\Account\AccountDeletionCancelledEmail;
 use HiEvents\Mail\Account\AccountDeletionCompletedEmail;
 use HiEvents\Mail\Account\AccountDeletionRequestedEmail;
 use HiEvents\Repository\Interfaces\AccountDeletionRequestRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
+use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Services\Domain\Subscription\AccountSubscriptionCancellationService;
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 use Psr\Log\LoggerInterface;
@@ -38,8 +43,10 @@ class AccountDeletionService
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly AccountAnonymizationService $anonymizationService,
         private readonly AccountHardDeletionService $hardDeletionService,
+        private readonly AccountUserRepositoryInterface $accountUserRepository,
         private readonly DatabaseManager $databaseManager,
         private readonly LoggerInterface $logger,
+        private readonly AccountSubscriptionCancellationService $subscriptionCancellationService,
     ) {}
 
     public function findActiveRequest(int $accountId): ?AccountDeletionRequestDomainObject
@@ -61,11 +68,22 @@ class AccountDeletionService
 
     public function getCannotDeleteReason(int $accountId): ?string
     {
-        if ($this->findActiveRequest($accountId) !== null) {
+        $activeRequest = $this->findActiveRequest($accountId);
+
+        return $this->describeCannotDeleteReason(
+            hasActiveRequest: $activeRequest !== null,
+            blockingEvents: $activeRequest === null ? $this->getBlockingEvents($accountId) : collect(),
+        );
+    }
+
+    /**
+     * @param  Collection<int, EventDomainObject>  $blockingEvents
+     */
+    public function describeCannotDeleteReason(bool $hasActiveRequest, Collection $blockingEvents): ?string
+    {
+        if ($hasActiveRequest) {
             return __('Account deletion has already been requested.');
         }
-
-        $blockingEvents = $this->eventRepository->getUpcomingEventsWithCompletedOrders($accountId);
 
         if ($blockingEvents->isNotEmpty()) {
             return __('The following upcoming events have completed orders: :events. Please cancel and refund these orders before deleting your account.', [
@@ -76,6 +94,14 @@ class AccountDeletionService
         }
 
         return null;
+    }
+
+    /**
+     * @return Collection<int, EventDomainObject>
+     */
+    public function getBlockingEvents(int $accountId): Collection
+    {
+        return $this->eventRepository->getUpcomingEventsWithCompletedOrders($accountId);
     }
 
     public function determineOutcome(int $accountId): AccountDeletionOutcome
@@ -94,12 +120,17 @@ class AccountDeletionService
         int $requestedByUserId,
         AccountDeletionInitiator $initiator,
         ?string $reason = null,
+        bool $executeImmediately = false,
     ): AccountDeletionRequestDomainObject {
-        $deletionRequest = $this->databaseManager->transaction(function () use ($accountId, $requestedByUserId, $initiator, $reason) {
+        $deletionRequest = $this->databaseManager->transaction(function () use ($accountId, $requestedByUserId, $initiator, $reason, $executeImmediately) {
             $cannotDeleteReason = $this->getCannotDeleteReason($accountId);
 
             if ($cannotDeleteReason !== null) {
                 throw new CannotDeleteEntityException($cannotDeleteReason);
+            }
+
+            if ($initiator === AccountDeletionInitiator::ADMIN && $this->accountHasSuperadminMember($accountId)) {
+                throw new CannotDeleteEntityException(__('Accounts with a superadmin member cannot be deleted by an admin.'));
             }
 
             /** @var AccountDeletionRequestDomainObject $deletionRequest */
@@ -110,25 +141,38 @@ class AccountDeletionService
                 AccountDeletionRequestDomainObjectAbstract::REASON => $reason,
                 AccountDeletionRequestDomainObjectAbstract::STATUS => AccountDeletionRequestStatus::REQUESTED->name,
                 AccountDeletionRequestDomainObjectAbstract::EXPECTED_OUTCOME => $this->determineOutcome($accountId)->name,
-                AccountDeletionRequestDomainObjectAbstract::SCHEDULED_DELETION_AT => now()->addDays(self::GRACE_PERIOD_DAYS),
+                AccountDeletionRequestDomainObjectAbstract::SCHEDULED_DELETION_AT => $executeImmediately
+                    ? now()
+                    : now()->addDays(self::GRACE_PERIOD_DAYS),
             ]);
 
             $this->eventRepository->updateWhere(
                 attributes: [EventDomainObjectAbstract::STATUS => EventStatus::DRAFT->name],
                 where: [
                     EventDomainObjectAbstract::ACCOUNT_ID => $accountId,
-                    EventDomainObjectAbstract::STATUS => EventStatus::LIVE->name,
+                    [EventDomainObjectAbstract::STATUS, 'in', [
+                        EventStatus::LIVE->name,
+                        EventStatus::PENDING_MANUAL_REVIEW->name,
+                    ]],
                 ],
             );
 
-            $account = $this->accountRepository->findById($accountId);
+            if ($executeImmediately) {
+                ExecuteAccountDeletionJob::dispatch($deletionRequest->getId())->afterCommit();
+            } else {
+                $account = $this->accountRepository->findById($accountId);
 
-            Mail::to($account->getEmail())->queue(new AccountDeletionRequestedEmail($account, $deletionRequest));
+                Mail::to($account->getEmail())->queue(new AccountDeletionRequestedEmail($account, $deletionRequest));
+            }
 
             return $deletionRequest;
         });
 
         Cache::forget($this->getPendingDeletionCacheKey($accountId));
+
+        if (! $executeImmediately) {
+            $this->subscriptionCancellationService->tryCancelAtPeriodEnd($accountId);
+        }
 
         $this->logger->info('Account deletion requested', [
             'account_id' => $accountId,
@@ -199,9 +243,10 @@ class AccountDeletionService
         $accountId = $deletionRequest->getAccountId();
         $account = $this->accountRepository->findById($accountId);
         $recipientEmail = $account->getEmail();
-        $recipientName = $account->getName();
 
         $outcome = $this->determineOutcome($accountId);
+
+        $this->subscriptionCancellationService->cancelImmediately($accountId);
 
         $manifest = $outcome === AccountDeletionOutcome::HARD_DELETE
             ? $this->hardDeletionService->deleteAccount($accountId)
@@ -217,7 +262,6 @@ class AccountDeletionService
         Cache::forget($this->getPendingDeletionCacheKey($accountId));
 
         Mail::to($recipientEmail)->queue(new AccountDeletionCompletedEmail(
-            accountName: $recipientName,
             wasAnonymized: $outcome === AccountDeletionOutcome::ANONYMIZE,
         ));
 
@@ -226,6 +270,14 @@ class AccountDeletionService
             'deletion_request_id' => $deletionRequestId,
             'outcome' => $outcome->name,
         ]);
+    }
+
+    private function accountHasSuperadminMember(int $accountId): bool
+    {
+        return $this->accountUserRepository->countWhere([
+            'account_id' => $accountId,
+            'role' => Role::SUPERADMIN->name,
+        ]) > 0;
     }
 
     private function getPendingDeletionCacheKey(int $accountId): string

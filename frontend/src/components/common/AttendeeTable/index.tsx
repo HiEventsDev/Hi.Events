@@ -1,4 +1,5 @@
-import {ActionIcon, Anchor, Avatar, Button, Group, Popover, Tooltip} from '@mantine/core';
+import {ActionIcon, Anchor, Avatar, Button, Group, Popover, Text, Tooltip} from '@mantine/core';
+import {CreateButton} from "../CreateButton";
 import {Attendee, IdParam} from "../../../types.ts";
 import {
     IconCalendarEvent,
@@ -32,6 +33,7 @@ import {TanStackTable, TanStackTableColumn} from "../TanStackTable";
 import {ColumnVisibilityToggle} from "../ColumnVisibilityToggle";
 import {CellContext} from "@tanstack/react-table";
 import classes from './AttendeeTable.module.scss';
+import {WriteAccess} from "../WriteAccess";
 
 interface AttendeeTableProps {
     attendees: Attendee[];
@@ -79,7 +81,10 @@ export const AttendeeTable = ({attendees, openCreateModal, compact, occurrenceId
         return getCheckInCount(attendee) > 0;
     };
 
-    const handleCopyEmail = (email: string) => {
+    const handleCopyEmail = (email: string | null) => {
+        if (!email) {
+            return;
+        }
         clipboard.copy(email);
         showSuccess(t`Email address copied to clipboard`);
         setEmailPopoverId(null);
@@ -124,7 +129,11 @@ export const AttendeeTable = ({attendees, openCreateModal, compact, occurrenceId
                                     </div>
                                 </div>
                                 <div className={classes.emailRow}>
-                                    <Popover
+                                    {!info.row.original.email && (
+                                        <Text className={classes.attendeeEmail}
+                                              c="dimmed">{t`No email provided`}</Text>
+                                    )}
+                                    {info.row.original.email && <Popover
                                         opened={emailPopoverId === info.row.original.id}
                                         onChange={(opened) => {
                                             if (!opened) setEmailPopoverId(null);
@@ -145,14 +154,16 @@ export const AttendeeTable = ({attendees, openCreateModal, compact, occurrenceId
                                         </Popover.Target>
                                         <Popover.Dropdown>
                                             <Group gap="xs" style={{flexDirection: 'column', width: '100%'}}>
-                                                <Button
-                                                    fullWidth
-                                                    variant="light"
-                                                    leftSection={<IconSend size={16}/>}
-                                                    onClick={() => handleMessageFromEmail(info.row.original)}
-                                                >
-                                                    {t`Message`}
-                                                </Button>
+                                                <WriteAccess>
+                                                    <Button
+                                                        fullWidth
+                                                        variant="light"
+                                                        leftSection={<IconSend size={16}/>}
+                                                        onClick={() => handleMessageFromEmail(info.row.original)}
+                                                    >
+                                                        {t`Message`}
+                                                    </Button>
+                                                </WriteAccess>
                                                 <Button
                                                     fullWidth
                                                     variant="light"
@@ -164,7 +175,7 @@ export const AttendeeTable = ({attendees, openCreateModal, compact, occurrenceId
                                                 </Button>
                                             </Group>
                                         </Popover.Dropdown>
-                                    </Popover>
+                                    </Popover>}
                                     <div className={classes.emailActions}>
                                         {info.row.original.notes && (
                                             <Tooltip
@@ -217,6 +228,9 @@ export const AttendeeTable = ({attendees, openCreateModal, compact, occurrenceId
                                         length={25}
                                     />
                                 </div>
+                                {attendee.seat_label && (
+                                    <div className={classes.seatLabel}>{attendee.seat_label}</div>
+                                )}
                                 {occurrence && event?.timezone && (
                                     <span className={classes.occurrenceChip}>
                                         <IconCalendarEvent size={12}/>
@@ -351,12 +365,12 @@ export const AttendeeTable = ({attendees, openCreateModal, compact, occurrenceId
                         {t`Your attendees will appear here once they have registered for your event. You can also manually add attendees.`}
                     </p>
                     {openCreateModal && (
-                        <Button
+                        <CreateButton
                             size={'xs'}
                             leftSection={<IconPlus/>}
                             color={'green'}
                             onClick={() => openCreateModal()}>{t`Manually add an Attendee`}
-                        </Button>
+                        </CreateButton>
                     )}
                 </>
             )}

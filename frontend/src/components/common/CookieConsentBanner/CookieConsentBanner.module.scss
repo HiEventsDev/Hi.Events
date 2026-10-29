@@ -2,12 +2,13 @@
     position: fixed;
     bottom: 20px;
     right: 20px;
-    z-index: 900;
-    max-width: 340px;
+    z-index: 199;
+    width: calc(100vw - 40px);
+    max-width: 360px;
     padding: 16px;
     border-radius: 12px;
-    background: var(--event-content-bg-color, var(--organizer-content-bg-color, rgba(255, 255, 255, 0.97)));
-    border: 1px solid var(--event-border-color, var(--organizer-border-color, rgba(0, 0, 0, 0.08)));
+    background: var(--event-content-bg-color, rgba(255, 255, 255, 0.97));
+    border: 1px solid var(--event-border-color, rgba(0, 0, 0, 0.08));
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
     backdrop-filter: blur(12px);
     animation: slideUp 0.3s ease-out;
@@ -16,8 +17,13 @@
         bottom: 12px;
         right: 12px;
         left: 12px;
+        width: auto;
         max-width: none;
     }
+}
+
+.expanded {
+    max-width: 440px;
 }
 
 @keyframes slideUp {
@@ -31,39 +37,16 @@
     }
 }
 
-.closeButton {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    padding: 0;
-    border: none;
-    border-radius: 6px;
-    background: transparent;
-    color: var(--event-secondary-color, var(--organizer-secondary-color, #6b7280));
-    cursor: pointer;
-    transition: background 0.15s;
-
-    &:hover {
-        background: var(--event-accent-soft, var(--organizer-accent-soft, rgba(0, 0, 0, 0.05)));
-    }
-}
-
 .content {
     display: flex;
     align-items: flex-start;
     gap: 10px;
     margin-bottom: 12px;
-    padding-right: 16px;
 }
 
 .iconWrapper {
     flex-shrink: 0;
-    color: var(--event-primary-color, var(--organizer-primary-color, #8b5cf6));
+    color: var(--event-primary-color, #7c3aed);
     margin-top: 1px;
 }
 
@@ -71,11 +54,11 @@
     margin: 0;
     font-size: 13px;
     line-height: 1.45;
-    color: var(--event-primary-text-color, var(--organizer-primary-text-color, #374151));
+    color: var(--event-primary-text-color, #374151);
 }
 
 .privacyLink {
-    color: var(--event-primary-color, var(--organizer-primary-color, #8b5cf6));
+    color: var(--event-primary-color, #7c3aed);
     text-decoration: underline;
 
     &:hover {
@@ -83,15 +66,50 @@
     }
 }
 
+.categories {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+    border-top: 1px solid var(--event-border-color, rgba(0, 0, 0, 0.08));
+}
+
+.category {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--event-border-color, rgba(0, 0, 0, 0.08));
+}
+
+.categoryText {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.categoryLabel {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--event-primary-text-color, #111827);
+}
+
+.categoryDescription {
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--event-secondary-color, #6b7280);
+}
+
 .actions {
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
     justify-content: flex-end;
 }
 
-.acceptButton,
-.declineButton {
-    padding: 6px 14px;
+.primaryButton,
+.ghostButton {
+    padding: 7px 14px;
     border-radius: 8px;
     font-size: 13px;
     font-weight: 500;
@@ -104,17 +122,17 @@
     }
 }
 
-.acceptButton {
-    background: var(--event-primary-color, var(--organizer-primary-color, #8b5cf6));
-    color: var(--event-accent-contrast, var(--organizer-accent-contrast, #ffffff));
+.primaryButton {
+    background: var(--event-primary-color, #7c3aed);
+    color: var(--event-accent-contrast, #ffffff);
 }
 
-.declineButton {
+.ghostButton {
     background: transparent;
-    color: var(--event-secondary-color, var(--organizer-secondary-color, #6b7280));
-    border: 1px solid var(--event-border-color, var(--organizer-border-color, rgba(0, 0, 0, 0.1)));
+    color: var(--event-secondary-color, #6b7280);
+    border: 1px solid var(--event-border-color, rgba(0, 0, 0, 0.1));
 
     &:hover {
-        background: var(--event-accent-soft, var(--organizer-accent-soft, rgba(0, 0, 0, 0.03)));
+        background: var(--event-accent-soft, rgba(0, 0, 0, 0.03));
     }
 }

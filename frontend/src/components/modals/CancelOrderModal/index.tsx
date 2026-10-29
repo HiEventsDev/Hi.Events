@@ -1,4 +1,5 @@
 import {GenericModalProps, IdParam,} from "../../../types.ts";
+import {useAccess} from "../../../hooks/useAccess.ts";
 import {useParams} from "react-router";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useGetOrder} from "../../../queries/useGetOrder.ts";
@@ -12,6 +13,7 @@ import {t} from "@lingui/macro";
 import {useCancelOrder} from "../../../mutations/useCancelOrder.ts";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {useState} from "react";
+import {isOfflineOrder, isOrderRefundable} from "../../../utilites/orderHelper.ts";
 
 interface RefundOrderModalProps extends GenericModalProps {
     orderId: IdParam,
@@ -24,10 +26,8 @@ export const CancelOrderModal = ({onClose, orderId}: RefundOrderModalProps) => {
     const cancelOrderMutation = useCancelOrder();
     const [shouldRefund, setShouldRefund] = useState(true);
 
-    const isRefundable = order && !order.is_free_order
-        && order.status !== 'AWAITING_OFFLINE_PAYMENT'
-        && order.payment_provider === 'STRIPE'
-        && order.refund_status !== 'REFUNDED';
+    const canIssueRefunds = useAccess().can('ISSUE_REFUNDS');
+    const isRefundable = order && canIssueRefunds && isOrderRefundable(order);
 
     const handleCancelOrder = () => {
         cancelOrderMutation.mutate({
@@ -73,7 +73,9 @@ export const CancelOrderModal = ({onClose, orderId}: RefundOrderModalProps) => {
                     checked={shouldRefund}
                     onChange={(event) => setShouldRefund(event.currentTarget.checked)}
                     label={t`Also refund this order`}
-                    description={t`The full order amount will be refunded to the customer's original payment method.`}
+                    description={isOfflineOrder(order)
+                        ? t`The order will be marked as refunded. You will need to return the payment to the customer yourself.`
+                        : t`The full order amount will be refunded to the customer's original payment method.`}
                 />
             )}
 

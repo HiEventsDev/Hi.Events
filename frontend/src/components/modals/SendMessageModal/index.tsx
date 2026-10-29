@@ -36,18 +36,19 @@ import {t} from "@lingui/macro";
 import {Editor} from "../../common/Editor";
 import {useSendEventMessage} from "../../../mutations/useSendEventMessage.ts";
 import {ProductSelector} from "../../common/ProductSelector";
-import {useEffect, useMemo, useState} from "react";
+import {useMemo, useState} from "react";
 import {useGetAccount} from "../../../queries/useGetAccount.ts";
 import {getConfig} from "../../../utilites/config";
 import {utcToTz, prettyDate} from "../../../utilites/dates.ts";
 import {useGetEventOccurrences} from "../../../queries/useGetEventOccurrences.ts";
 import dayjs from "dayjs";
 import classes from "./SendMessageModal.module.scss";
+import {DateTimeField} from "../../common/DateTimeField";
 
 interface EventMessageModalProps extends GenericModalProps {
     orderId?: IdParam,
     productId?: IdParam,
-    messageType: MessageType,
+    messageType?: MessageType,
     attendeeId?: IdParam,
     eventOccurrenceId?: IdParam,
     eventOccurrenceIds?: IdParam[],
@@ -66,7 +67,9 @@ const OrderField = ({orderId, eventId}: { orderId: IdParam, eventId: IdParam }) 
         <TextInput
             label={t`Recipient`}
             disabled
-            placeholder={`${order.first_name} ${order.last_name} <${order.email}>`}
+            placeholder={order.email
+                ? `${order.first_name} ${order.last_name} <${order.email}>`
+                : `${order.first_name} ${order.last_name}`}
         />
     )
 }
@@ -185,7 +188,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
         initialValues: {
             subject: initialSubject ?? '',
             message: initialMessage ?? '',
-            message_type: messageType,
+            message_type: (messageType ?? null) as MessageType | null,
             attendee_ids: attendeeId ? [String(attendeeId)] : [],
             product_ids: productId ? [String(productId)] : [],
             order_id: orderId,
@@ -202,8 +205,9 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
         },
         validate: {
             acknowledgement: (value) => value === true ? null : t`You must acknowledge that this email is not promotional`,
-            scheduled_at: (value) => {
-                if (!isScheduled) return null;
+            message_type: (value) => value ? null : t`Choose who should receive this message`,
+            scheduled_at: (value, values) => {
+                if (!isScheduled || values.is_test) return null;
                 if (selectedPreset && selectedPreset !== CUSTOM_PRESET) return null;
                 if (!value) return t`The scheduled time is required`;
                 if (event && dayjs.tz(value, event.timezone).isBefore(dayjs())) return t`The scheduled time must be in the future`;
@@ -224,10 +228,12 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
         return presets.find(p => p.value === selectedPreset) ?? null;
     }, [selectedPreset, presets]);
 
+    const willSchedule = isScheduled && !form.values.is_test;
+
     const handleSend = (values: any) => {
         setTierLimitError(null);
         const submitData = {...values};
-        if (isScheduled) {
+        if (willSchedule) {
             if (selectedPreset && selectedPreset !== CUSTOM_PRESET && resolvedPreset && event) {
                 submitData.scheduled_at = resolvedPreset.utcDate.tz(event.timezone).format('YYYY-MM-DDTHH:mm');
             }
@@ -239,7 +245,11 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
             messageData: submitData,
         }, {
             onSuccess: () => {
-                showSuccess(isScheduled ? t`Message Scheduled` : t`Message Sent`);
+                if (values.is_test) {
+                    showSuccess(t`Test email sent to your inbox`);
+                } else {
+                    showSuccess(willSchedule ? t`Message Scheduled` : t`Message Sent`);
+                }
                 form.reset();
                 onClose();
             },
@@ -253,10 +263,6 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
             }
         });
     }
-
-    useEffect(() => {
-        form.setFieldValue('product_ids', []);
-    }, [form.values.message_type]);
 
     if (!event || !me || !product_categories) {
         return <LoadingOverlay visible/>;
@@ -388,7 +394,12 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                                     label={t`Recipients`}
                                     description={t`Select which attendees should receive this message`}
                                     placeholder={t`Select attendee group`}
+                                    withAsterisk
                                     {...form.getInputProps('message_type')}
+                                    onChange={(value) => {
+                                        form.setFieldValue('message_type', value as MessageType | null);
+                                        form.setFieldValue('product_ids', []);
+                                    }}
                                 />
                             )}
 
@@ -497,11 +508,10 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                                             </button>
                                         </div>
                                         {selectedPreset === CUSTOM_PRESET && (
-                                            <TextInput
-                                                type="datetime-local"
+                                            <DateTimeField
                                                 label={t`Scheduled time`}
                                                 description={event.timezone}
-                                                min={utcToTz(dayjs.utc().toISOString(), event.timezone)}
+                                                minDate={utcToTz(dayjs.utc().toISOString(), event.timezone)}
                                                 {...form.getInputProps('scheduled_at')}
                                             />
                                         )}
@@ -535,11 +545,11 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                                     className={classes.sendButton}
                                     loading={sendMessageMutation.isPending}
                                     type={'submit'}
-                                    leftSection={isScheduled ? <IconClock size={16}/> : <IconSend size={16}/>}
+                                    leftSection={willSchedule ? <IconClock size={16}/> : <IconSend size={16}/>}
                                     disabled={!form.values.acknowledgement || !isAccountVerified || accountRequiresManualVerification}
                                     data-testid="message-send-button"
                                 >
-                                    {isScheduled ? t`Schedule Message` : (form.values.is_test ? t`Send Test` : t`Send Message`)}
+                                    {form.values.is_test ? t`Send Test` : (willSchedule ? t`Schedule Message` : t`Send Message`)}
                                 </Button>
                                 <Menu shadow="md" width={220} position="bottom-end">
                                     <Menu.Target>
@@ -547,6 +557,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                                             type="button"
                                             className={classes.menuButton}
                                             disabled={!form.values.acknowledgement || !isAccountVerified || accountRequiresManualVerification}
+                                            data-testid="message-send-options-button"
                                         >
                                             <IconChevronDown size={16}/>
                                         </Button>

@@ -1,11 +1,12 @@
-import {Button} from "@mantine/core";
-import {GenericModalProps, IdParam, Product, ProductPriceType, ProductType, TaxAndFee} from "../../../types.ts";
+import {GenericModalProps, IdParam, Product, ProductPriceType, ProductQuantityAppliesTo,
+    ProductType, TaxAndFee} from "../../../types.ts";
 import {useForm} from "@mantine/form";
 import {useParams} from "react-router";
-import {Modal} from "../../common/Modal";
 import {ProductForm} from "../../forms/ProductForm";
+import {ProductDrawer} from "../../forms/ProductForm/ProductDrawer.tsx";
 import {useEffect} from "react";
 import {useGetTaxesAndFees} from "../../../queries/useGetTaxesAndFees.ts";
+import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {t} from "@lingui/macro";
 import {useCreateProduct} from "../../../mutations/useCreateProduct.ts";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
@@ -16,6 +17,7 @@ interface CreateProductModalProps extends GenericModalProps {
 
 export const CreateProductModal = ({onClose, selectedCategoryId = undefined}: CreateProductModalProps) => {
     const {eventId} = useParams();
+    const {data: event} = useGetEvent(eventId);
     const {data: taxesAndFees, isFetched: taxesAndFeesLoaded} = useGetTaxesAndFees();
     const createProductMutation = useCreateProduct();
     const form = useForm<Product>({
@@ -31,6 +33,7 @@ export const CreateProductModal = ({onClose, selectedCategoryId = undefined}: Cr
             hide_after_sale_end_date: false,
             show_quantity_remaining: false,
             hide_when_sold_out: false,
+            sequential_tier_release_enabled: false,
             is_hidden_without_promo_code: false,
             is_highlighted: false,
             highlight_message: undefined,
@@ -38,6 +41,8 @@ export const CreateProductModal = ({onClose, selectedCategoryId = undefined}: Cr
             type: ProductPriceType.Paid,
             product_type: ProductType.Ticket,
             tax_and_fee_ids: undefined,
+            addon_product_ids: [],
+            is_addon_only: false,
             product_category_id: selectedCategoryId ? String(selectedCategoryId) : undefined,
             prices: [{
                 price: 0,
@@ -45,6 +50,7 @@ export const CreateProductModal = ({onClose, selectedCategoryId = undefined}: Cr
                 sale_end_date: undefined,
                 sale_start_date: undefined,
                 initial_quantity_available: undefined,
+                quantity_applies_to: ProductQuantityAppliesTo.Occurrence,
             }],
         },
     });
@@ -73,22 +79,21 @@ export const CreateProductModal = ({onClose, selectedCategoryId = undefined}: Cr
             .map((item: TaxAndFee) => {
                 return String(item.id);
             }) || []);
+        form.resetDirty();
     }, [taxesAndFeesLoaded]);
 
     return (
-        <Modal
+        <ProductDrawer
             onClose={onClose}
-            heading={t`Create Ticket or Product`}
-            opened
-            size={'lg'}
-            withCloseButton
+            title={t`Create Ticket or Product`}
+            event={event}
+            form={form}
+            submitLabel={t`Create Product`}
+            submitLoading={createProductMutation.isPending}
+            submitTestId="product-create-submit-button"
+            onSubmit={handleCreateProduct}
         >
-            <form onSubmit={form.onSubmit((values) => handleCreateProduct(values))}>
-                <ProductForm form={form}/>
-                <Button type="submit" fullWidth disabled={createProductMutation.isPending}>
-                    {createProductMutation.isPending ? t`Working...` : t`Create Product`}
-                </Button>
-            </form>
-        </Modal>
+            <ProductForm form={form}/>
+        </ProductDrawer>
     )
 };

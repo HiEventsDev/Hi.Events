@@ -4,6 +4,7 @@ namespace HiEvents\Http\Actions\Events;
 
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\AccountNotVerifiedException;
+use HiEvents\Exceptions\EventPendingReviewException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Event\UpdateEventStatusRequest;
 use HiEvents\Http\ResponseCodes;
@@ -28,7 +29,7 @@ class UpdateEventStatusAction extends BaseAction
                 'eventId' => $eventId,
                 'accountId' => $this->getAuthenticatedAccountId(),
             ]));
-        } catch (AccountNotVerifiedException $e) {
+        } catch (AccountNotVerifiedException|EventPendingReviewException $e) {
             return $this->errorResponse($e->getMessage(), ResponseCodes::HTTP_UNPROCESSABLE_ENTITY);
         }
 

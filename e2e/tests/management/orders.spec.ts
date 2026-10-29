@@ -2,7 +2,8 @@ import fs from 'node:fs';
 import { test, expect } from '../../fixtures';
 import { OrderPage } from '../../pages/order.page';
 import { createCompletedOrder, createLiveEventWithFreeTicket } from '../../api/factory';
-import { uniqueEmail, uniqueName } from '../../utils/unique';
+import { uniqueEmail, uniqueName, uniqueShort } from '../../utils/unique';
+import { saasOnly } from '../../utils/mode';
 
 const CONFIRMATION_SUBJECT = 'Your Order is Confirmed';
 
@@ -61,6 +62,25 @@ test.describe('orders management', () => {
     expect(message.Subject).toContain(subject);
   });
 
+  test.describe('messaging the buyer from an unverified account', () => {
+    saasOnly();
+
+    test('an unverified organizer is prompted to connect Stripe instead of the message form', async ({ freshAccount, publicApi }) => {
+      const event = await createLiveEventWithFreeTicket(freshAccount.api, freshAccount.organizerId);
+      const order = await createCompletedOrder(publicApi, event, { buyerEmail: uniqueEmail() });
+
+      const page = await freshAccount.newAuthedPage();
+      const orders = new OrderPage(page);
+      await orders.goto(event.eventId);
+
+      await orders.chooseRowAction(order.buyerEmail, 'Message buyer');
+
+      await expect(page.getByRole('heading', { name: 'Send a message' })).toBeVisible();
+      await expect(page.getByText('Connect Stripe to enable messaging')).toBeVisible();
+      await expect(page.getByLabel(/^Subject/)).toHaveCount(0);
+    });
+  });
+
   test('an organizer cancels an order', async ({ authedPage, api, account, publicApi, mailpit }) => {
     const event = await createLiveEventWithFreeTicket(api, account.organizerId);
     const order = await createCompletedOrder(publicApi, event, { buyerEmail: uniqueEmail() });
@@ -74,6 +94,34 @@ test.describe('orders management', () => {
     await expect(orders.rowByEmail(order.buyerEmail).getByText('Cancelled')).toBeVisible();
     const cancellation = await mailpit.waitForMessage(order.buyerEmail, { subjectContains: 'cancelled' });
     expect(cancellation.Subject).toContain('cancelled');
+  });
+
+  test('an organizer filters orders by product', async ({ authedPage, api, account, publicApi }) => {
+    const event = await createLiveEventWithFreeTicket(api, account.organizerId);
+    const [category] = await api.listProductCategories(event.eventId);
+    const created = await api.createProduct(event.eventId, {
+      title: uniqueShort('Balcony'),
+      product_type: 'TICKET',
+      type: 'FREE',
+      product_category_id: category.id,
+      prices: [{ price: 0 }],
+    });
+    const balcony = await api.getProduct(event.eventId, created.id);
+    const stallsOrder = await createCompletedOrder(publicApi, event, { buyerEmail: uniqueEmail() });
+    const balconyOrder = await createCompletedOrder(
+      publicApi,
+      { eventId: event.eventId, productId: balcony.id, priceId: balcony.prices![0].id! },
+      { buyerEmail: uniqueEmail() },
+    );
+
+    const orders = new OrderPage(authedPage);
+    await orders.goto(event.eventId);
+    await expect(orders.rowByEmail(stallsOrder.buyerEmail)).toBeVisible();
+
+    await orders.filterByProduct(balcony.title);
+
+    await expect(orders.rowByEmail(balconyOrder.buyerEmail)).toBeVisible();
+    await expect(orders.rowByEmail(stallsOrder.buyerEmail)).toHaveCount(0);
   });
 
   test('an organizer exports orders to a spreadsheet', async ({ authedPage, api, account, publicApi }) => {

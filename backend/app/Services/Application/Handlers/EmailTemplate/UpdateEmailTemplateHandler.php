@@ -27,7 +27,7 @@ class UpdateEmailTemplateHandler
     public function handle(UpsertEmailTemplateDTO $dto): EmailTemplateDomainObject
     {
         if (! $dto->id) {
-            throw new InvalidEmailTemplateException('Template ID is required for update');
+            throw new InvalidEmailTemplateException(__('Template ID is required for update'));
         }
 
         $validation = $this->emailTemplateService->validateTemplate($dto->subject, $dto->body);
@@ -40,10 +40,12 @@ class UpdateEmailTemplateHandler
         $template = $this->emailTemplateRepository->findFirstWhere([
             'id' => $dto->id,
             'account_id' => $dto->account_id,
+            'event_id' => $dto->event_id,
+            'organizer_id' => $dto->organizer_id,
         ]);
 
         if (! $template) {
-            throw new EmailTemplateNotFoundException('Email template not found');
+            throw new EmailTemplateNotFoundException(__('Email template not found'));
         }
 
         return $this->emailTemplateRepository->updateFromArray($template->getId(), [

@@ -37,6 +37,13 @@ class Product extends BaseModel
         return $this->belongsToMany(TaxAndFee::class, 'product_taxes_and_fees');
     }
 
+    public function addons(): BelongsToMany
+    {
+        return $this->belongsToMany(self::class, 'product_addons', 'product_id', 'addon_product_id')
+            ->withPivot('order')
+            ->orderByPivot('order');
+    }
+
     public function capacity_assignments(): BelongsToMany
     {
         return $this->belongsToMany(CapacityAssignment::class, 'product_capacity_assignments');
@@ -45,6 +52,11 @@ class Product extends BaseModel
     public function check_in_lists(): BelongsToMany
     {
         return $this->belongsToMany(CheckInList::class, 'product_check_in_lists');
+    }
+
+    public function box_offices(): BelongsToMany
+    {
+        return $this->belongsToMany(BoxOffice::class, 'product_box_offices');
     }
 
     public function product_category(): BelongsTo

@@ -277,6 +277,61 @@ class ProductPriceServiceTest extends TestCase
         $this->assertEquals(0.00, $result->price);
     }
 
+    public function test_a_band_adjustment_is_added_to_the_base_price(): void
+    {
+        $product = $this->createProduct(ProductPriceType::PAID->name, 30.00);
+
+        $price = $this->service->getPrice(
+            $product,
+            new OrderProductPriceDTO(quantity: 1, price_id: 100, band_key: 'b_stalls'),
+            null,
+            bandPriceAdjustment: 15.00,
+        );
+
+        $this->assertSame(45.00, $price->price);
+    }
+
+    public function test_a_zero_band_adjustment_leaves_the_price_untouched(): void
+    {
+        $product = $this->createProduct(ProductPriceType::PAID->name, 30.00);
+        $orderDetail = new OrderProductPriceDTO(quantity: 1, price_id: 100);
+
+        $this->assertSame(
+            $this->service->getPrice($product, $orderDetail, null)->price,
+            $this->service->getPrice($product, $orderDetail, null, bandPriceAdjustment: 0.0)->price,
+        );
+    }
+
+    public function test_a_negative_band_adjustment_never_produces_a_price_below_zero(): void
+    {
+        $product = $this->createProduct(ProductPriceType::PAID->name, 10.00);
+
+        $price = $this->service->getPrice(
+            $product,
+            new OrderProductPriceDTO(quantity: 1, price_id: 100, band_key: 'b_balcony'),
+            null,
+            bandPriceAdjustment: -25.00,
+        );
+
+        $this->assertSame(0.0, $price->price);
+    }
+
+    public function test_a_box_office_price_override_wins_outright_over_the_band_adjustment(): void
+    {
+        $product = $this->createProduct(ProductPriceType::PAID->name, 30.00);
+        $product->shouldReceive('isDonationType')->andReturnFalse();
+
+        $price = $this->service->getPrice(
+            $product,
+            new OrderProductPriceDTO(quantity: 1, price_id: 100, price: 20.00, band_key: 'b_stalls'),
+            null,
+            allowClientPrice: true,
+            bandPriceAdjustment: 15.00,
+        );
+
+        $this->assertSame(20.00, $price->price);
+    }
+
     private function createProduct(string $type, float $price): ProductDomainObject
     {
         $productPrice = Mockery::mock(ProductPriceDomainObject::class);

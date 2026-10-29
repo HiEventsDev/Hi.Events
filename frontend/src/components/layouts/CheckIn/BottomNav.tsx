@@ -1,24 +1,22 @@
 import {ReactNode} from "react";
-import {t} from "@lingui/macro";
-import {IconChartBar, IconQrcode, IconSearch} from "@tabler/icons-react";
 import classes from "./BottomNav.module.scss";
 
-export type CheckInTab = "scan" | "search" | "stats";
-
-interface BottomNavProps {
-    active: CheckInTab;
-    onChange: (tab: CheckInTab) => void;
+export interface BottomNavTab<T extends string> {
+    id: T;
+    label: string;
+    icon: ReactNode;
 }
 
-export const BottomNav = ({active, onChange}: BottomNavProps) => {
-    const tabs: { id: CheckInTab; label: string; icon: ReactNode }[] = [
-        {id: "scan", label: t`Scan`, icon: <IconQrcode size={22} stroke={1.7}/>},
-        {id: "search", label: t`Search`, icon: <IconSearch size={20} stroke={1.8}/>},
-        {id: "stats", label: t`Stats`, icon: <IconChartBar size={20} stroke={1.8}/>},
-    ];
+interface BottomNavProps<T extends string> {
+    tabs: BottomNavTab<T>[];
+    active: T;
+    onChange: (tab: T) => void;
+    ariaLabel: string;
+}
 
+export const BottomNav = <T extends string>({tabs, active, onChange, ariaLabel}: BottomNavProps<T>) => {
     return (
-        <nav className={classes.nav} aria-label={t`Check-in navigation`}>
+        <nav className={classes.nav} aria-label={ariaLabel}>
             <div className={classes.pill}>
                 {tabs.map(tab => (
                     <button

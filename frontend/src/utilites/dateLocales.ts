@@ -1,27 +1,11 @@
 import { SupportedLocales } from '../locales.ts';
 
-import 'dayjs/locale/en';
-import 'dayjs/locale/de';
-import 'dayjs/locale/fr';
-import 'dayjs/locale/it';
-import 'dayjs/locale/nl';
-import 'dayjs/locale/pt';
-import 'dayjs/locale/es';
-import 'dayjs/locale/zh-cn';
-import 'dayjs/locale/pt-br';
-import 'dayjs/locale/vi';
-import 'dayjs/locale/zh-hk';
-import 'dayjs/locale/tr';
-import 'dayjs/locale/hu';
-import 'dayjs/locale/sk';
-import 'dayjs/locale/el';
-import 'dayjs/locale/cs';
-
 export const localeFormats: Record<SupportedLocales, {
     fullDateTime: string;
     shortDateTime: string;
     shortDate: string;
     chartDate: string;
+    weekdayDate: string;
     dayMonthTime: string;
     monthShort: string;
     dayOfMonth: string;
@@ -35,6 +19,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: 'MMM D, YYYY h:mma',
         shortDate: 'MMM D, YYYY',
         chartDate: 'MMM D',
+        weekdayDate: 'ddd, MMM D',
         dayMonthTime: 'MMM D, h:mm A',
         monthShort: 'MMM',
         dayOfMonth: 'D',
@@ -48,6 +33,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: 'D. MMM YYYY HH:mm',
         shortDate: 'D. MMM YYYY',
         chartDate: 'D. MMM',
+        weekdayDate: 'ddd, D. MMM',
         dayMonthTime: 'D. MMM HH:mm',
         monthShort: 'MMM',
         dayOfMonth: 'D',
@@ -56,11 +42,26 @@ export const localeFormats: Record<SupportedLocales, {
         timezone: 'z',
         dateTimePicker: 'MMM DD, YYYY [at] h:mm A'
     },
+    'fi': {
+        fullDateTime: 'ddd D. MMM YYYY HH.mm',
+        shortDateTime: 'D. MMM YYYY HH.mm',
+        shortDate: 'D. MMM YYYY',
+        chartDate: 'D. MMM',
+        weekdayDate: 'ddd D. MMM',
+        dayMonthTime: 'D. MMM HH.mm',
+        monthShort: 'MMM',
+        dayOfMonth: 'D.',
+        dayName: 'dddd D. MMMM',
+        timeOnly: 'HH.mm',
+        timezone: 'z',
+        dateTimePicker: 'D. MMM YYYY [klo] HH.mm'
+    },
     'fr': {
         fullDateTime: 'ddd D MMM YYYY HH:mm',
         shortDateTime: 'D MMM YYYY HH:mm',
         shortDate: 'D MMM YYYY',
         chartDate: 'D MMM',
+        weekdayDate: 'ddd D MMM',
         dayMonthTime: 'D MMM HH:mm',
         monthShort: 'MMM',
         dayOfMonth: 'D',
@@ -74,6 +75,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: 'D MMM YYYY HH:mm',
         shortDate: 'D MMM YYYY',
         chartDate: 'D MMM',
+        weekdayDate: 'ddd D MMM',
         dayMonthTime: 'D MMM HH:mm',
         monthShort: 'MMM',
         dayOfMonth: 'D',
@@ -87,6 +89,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: 'D MMM YYYY HH:mm',
         shortDate: 'D MMM YYYY',
         chartDate: 'D MMM',
+        weekdayDate: 'ddd D MMM',
         dayMonthTime: 'D MMM HH:mm',
         monthShort: 'MMM',
         dayOfMonth: 'D',
@@ -100,6 +103,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: 'D [de] MMM [de] YYYY HH:mm',
         shortDate: 'D [de] MMM [de] YYYY',
         chartDate: 'D [de] MMM',
+        weekdayDate: 'ddd, D [de] MMM',
         dayMonthTime: 'D [de] MMM HH:mm',
         monthShort: 'MMM',
         dayOfMonth: 'D',
@@ -113,6 +117,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: 'D [de] MMM [de] YYYY HH:mm',
         shortDate: 'D [de] MMM [de] YYYY',
         chartDate: 'D [de] MMM',
+        weekdayDate: 'ddd, D [de] MMM',
         dayMonthTime: 'D [de] MMM HH:mm',
         monthShort: 'MMM',
         dayOfMonth: 'D',
@@ -126,6 +131,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: 'YYYY年M月D日 HH:mm',
         shortDate: 'YYYY年M月D日',
         chartDate: 'M月D日',
+        weekdayDate: 'M月D日 ddd',
         dayMonthTime: 'M月D日 HH:mm',
         monthShort: 'M月',
         dayOfMonth: 'D日',
@@ -139,6 +145,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: 'D [de] MMM [de] YYYY HH:mm',
         shortDate: 'D [de] MMM [de] YYYY',
         chartDate: 'D [de] MMM',
+        weekdayDate: 'ddd, D [de] MMM',
         dayMonthTime: 'D [de] MMM HH:mm',
         monthShort: 'MMM',
         dayOfMonth: 'D',
@@ -152,6 +159,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: '[ngày] D [tháng] M [năm] YYYY HH:mm',
         shortDate: 'D [tháng] M, YYYY',
         chartDate: 'D [tháng] M',
+        weekdayDate: 'ddd, [ngày] D [tháng] M',
         dayMonthTime: 'D [tháng] M HH:mm',
         monthShort: '[Th]M',
         dayOfMonth: 'D',
@@ -165,6 +173,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: 'YYYY年M月D日 HH:mm',
         shortDate: 'YYYY年M月D日',
         chartDate: 'M月D日',
+        weekdayDate: 'M月D日 ddd',
         dayMonthTime: 'M月D日 HH:mm',
         monthShort: 'M月',
         dayOfMonth: 'D日',
@@ -178,6 +187,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: 'D MMM YYYY HH:mm',
         shortDate: 'D MMM YYYY',
         chartDate: 'D MMM',
+        weekdayDate: 'ddd, D MMM',
         dayMonthTime: 'D MMM HH:mm',
         monthShort: 'MMM',
         dayOfMonth: 'D',
@@ -191,6 +201,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: 'YYYY. MMM D. HH:mm',
         shortDate: 'YYYY. MMM D.',
         chartDate: 'MMM D.',
+        weekdayDate: 'MMM D., ddd',
         dayMonthTime: 'MMM D. HH:mm',
         monthShort: 'MMM',
         dayOfMonth: 'D.',
@@ -200,23 +211,25 @@ export const localeFormats: Record<SupportedLocales, {
         dateTimePicker: 'MMM DD, YYYY [at] h:mm A'
     },
     'pl': {
-        fullDateTime: 'ddd, D MMM YYYY HH:mm',
-        shortDateTime: 'D MMM YYYY HH:mm',
-        shortDate: 'D MMM YYYY',
-        chartDate: 'D MMM',
-        dayMonthTime: 'D MMM HH:mm',
+        fullDateTime: 'ddd D. MMM YYYY HH:mm',
+        shortDateTime: 'D. MMM YYYY HH:mm',
+        shortDate: 'D. MMM YYYY',
+        chartDate: 'D. MMM',
+        weekdayDate: 'ddd D. MMM',
+        dayMonthTime: 'D. MMM HH:mm',
         monthShort: 'MMM',
-        dayOfMonth: 'D',
-        dayName: 'dddd, D MMMM',
+        dayOfMonth: 'D.',
+        dayName: 'dddd D. MMMM',
         timeOnly: 'HH:mm',
         timezone: 'z',
-        dateTimePicker: 'MMM DD, YYYY [at] h:mm A'
+        dateTimePicker: 'D. MMM YYYY HH:mm'
     },
     'se': {
         fullDateTime: 'ddd D MMM YYYY HH:mm',
         shortDateTime: 'D MMM YYYY HH:mm',
         shortDate: 'D MMM YYYY',
         chartDate: 'D MMM',
+        weekdayDate: 'ddd D MMM',
         dayMonthTime: 'D MMM HH:mm',
         monthShort: 'MMM',
         dayOfMonth: 'D',
@@ -230,6 +243,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: 'D. MMM YYYY HH:mm',
         shortDate: 'D. MMM YYYY',
         chartDate: 'D. MMM',
+        weekdayDate: 'ddd D. MMM',
         dayMonthTime: 'D. MMM HH:mm',
         monthShort: 'MMM',
         dayOfMonth: 'D.',
@@ -243,6 +257,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: 'D MMM YYYY HH:mm',
         shortDate: 'D MMM YYYY',
         chartDate: 'D MMM',
+        weekdayDate: 'ddd, D MMM',
         dayMonthTime: 'D MMM HH:mm',
         monthShort: 'MMM',
         dayOfMonth: 'D',
@@ -251,11 +266,41 @@ export const localeFormats: Record<SupportedLocales, {
         timezone: 'z',
         dateTimePicker: 'D MMM YYYY HH:mm'
     },
+    'ko': {
+        fullDateTime: 'YYYY년 M월 D일 (ddd) A h:mm',
+        shortDateTime: 'YYYY년 M월 D일 A h:mm',
+        shortDate: 'YYYY년 M월 D일',
+        chartDate: 'M월 D일',
+        weekdayDate: 'M월 D일 (ddd)',
+        dayMonthTime: 'M월 D일 A h:mm',
+        monthShort: 'M월',
+        dayOfMonth: 'D일',
+        dayName: 'M월 D일 dddd',
+        timeOnly: 'A h:mm',
+        timezone: 'z',
+        dateTimePicker: 'YYYY년 M월 D일 A h:mm'
+    },
+    'ja': {
+        fullDateTime: 'YYYY年M月D日 (ddd) HH:mm',
+        shortDateTime: 'YYYY/MM/DD HH:mm',
+        shortDate: 'YYYY/MM/DD',
+        chartDate: 'M/D',
+        weekdayDate: 'M月D日 (ddd)',
+        dayMonthTime: 'M月D日 HH:mm',
+        monthShort: 'M月',
+        dayOfMonth: 'D',
+        dayName: 'M月D日 dddd',
+        timeOnly: 'HH:mm',
+        timezone: 'z',
+        dateTimePicker: 'YYYY年MM月DD日 HH:mm'
+    },
     'cs': {
         fullDateTime: 'ddd D. MMM YYYY HH:mm',
         shortDateTime: 'D. MMM YYYY HH:mm',
         shortDate: 'D. MMM YYYY',
         chartDate: 'D. MMM',
+        weekdayDate: 'ddd D. MMM',
+        dayMonthTime: 'D. MMM HH:mm',
         monthShort: 'MMM',
         dayOfMonth: 'D.',
         dayName: 'dddd D. MMMM',

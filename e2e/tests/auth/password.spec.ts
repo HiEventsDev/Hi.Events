@@ -5,24 +5,26 @@ test.describe('password management', () => {
     const newPassword = 'ChangedPass456!';
     const page = await freshAccount.newAuthedPage();
 
-    await page.goto('/manage/profile');
+    await page.goto('/settings/security');
     await page.waitForLoadState('networkidle');
-    await expect(page.getByRole('heading', { name: 'Manage Profile' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Security', level: 1 })).toBeVisible();
 
-    await page.getByRole('tab', { name: 'Password' }).click();
-    await page.getByLabel(/^Current Password/).fill(freshAccount.password);
-    await page.getByLabel(/^New Password/).fill(newPassword);
-    await page.getByLabel(/^Confirm New Password/).fill(newPassword);
-    await page.getByRole('button', { name: 'Change password' }).click();
-    await expect(page.getByText('Profile updated successfully')).toBeVisible();
+    await page.getByTestId('change-password-button').click();
+    const dialog = page.getByRole('dialog');
+    await dialog.getByLabel(/^Current password/).fill(freshAccount.password);
+    await dialog.getByLabel(/^New password/).fill(newPassword);
+    await dialog.getByLabel(/^Confirm new password/).fill(newPassword);
+    await dialog.getByRole('button', { name: 'Change password' }).click();
+    await expect(page.getByText('Password changed')).toBeVisible();
 
-    await page.getByRole('button', { name: 'EO', exact: true }).click();
+    await page.getByTestId('account-menu-button').click();
     await page.getByRole('menuitem', { name: 'Logout' }).click();
     await expect(page).toHaveURL(/\/auth\/login/);
+    await page.waitForLoadState('networkidle');
 
     await page.getByLabel(/^Email/).fill(freshAccount.email);
     await page.getByLabel(/^Password/).fill(newPassword);
-    await page.getByRole('button', { name: 'Log in' }).click();
+    await page.getByRole('button', { name: 'Sign in', exact: true }).click();
 
     await expect(page).toHaveURL(/\/manage\/organizer\/\d+/);
     await expect(page.getByRole('heading', { level: 1, name: /Dashboard/ })).toBeVisible();
@@ -45,10 +47,11 @@ test.describe('password management', () => {
     await page.getByLabel(/^Confirm Password/).fill(newPassword);
     await page.getByRole('button', { name: 'Reset password' }).click();
     await expect(page).toHaveURL(/\/auth\/login/);
+    await page.waitForLoadState('networkidle');
 
     await page.getByLabel(/^Email/).fill(freshAccount.email);
     await page.getByLabel(/^Password/).fill(newPassword);
-    await page.getByRole('button', { name: 'Log in' }).click();
+    await page.getByRole('button', { name: 'Sign in', exact: true }).click();
 
     await expect(page).toHaveURL(/\/manage\/organizer\/\d+/);
     await expect(page.getByRole('heading', { level: 1, name: /Dashboard/ })).toBeVisible();

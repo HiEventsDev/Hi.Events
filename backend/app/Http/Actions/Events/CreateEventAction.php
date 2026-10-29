@@ -2,6 +2,7 @@
 
 namespace HiEvents\Http\Actions\Events;
 
+use HiEvents\Exceptions\AccessRestrictedException;
 use HiEvents\Exceptions\OrganizerNotFoundException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Event\CreateEventRequest;
@@ -27,6 +28,11 @@ class CreateEventAction extends BaseAction
         $authorisedUser = $this->getAuthenticatedUser();
 
         $validated = $request->validated();
+
+        if (! $this->getAuthenticatedAccess()->canAccessOrganizer((int) $validated['organizer_id'])) {
+            throw new AccessRestrictedException;
+        }
+
         $eventLocationPayload = $validated['event_location'] ?? null;
         unset($validated['event_location']);
 

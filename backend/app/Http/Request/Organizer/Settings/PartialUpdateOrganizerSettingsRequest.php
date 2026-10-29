@@ -5,9 +5,15 @@ namespace HiEvents\Http\Request\Organizer\Settings;
 use HiEvents\DomainObjects\Enums\AttendeeDetailsCollectionMethod;
 use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
 use HiEvents\DomainObjects\Enums\HomepageFontFamily;
+use HiEvents\DomainObjects\Enums\HomepageSectionType;
 use HiEvents\DomainObjects\Enums\OrganizerHomepageVisibility;
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\Enums\TrackingPixelProvider;
 use HiEvents\Http\Request\BaseRequest;
+use HiEvents\Repository\Interfaces\OrganizerSettingsRepositoryInterface;
+use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
+use HiEvents\Services\Domain\Auth\AuthUserService;
+use HiEvents\Validators\Rules\HomepageSectionRules;
 use HiEvents\Validators\Rules\RulesHelper;
 use Illuminate\Validation\Rule;
 
@@ -33,6 +39,30 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
                         $validator->errors()->add(
                             "tracking_pixels.{$index}.provider",
                             __('Google Tag Manager is not available on hosted plans for security reasons.')
+                        );
+
+                        continue;
+                    }
+
+                    if ($provider === TrackingPixelProvider::GOOGLE_TAG_MANAGER
+                        && app(AuthUserService::class)->isApiKeyRequest()
+                        && ! in_array($pixelId, $this->existingTagManagerIds(), true)
+                    ) {
+                        $validator->errors()->add(
+                            "tracking_pixels.{$index}.provider",
+                            __('Google Tag Manager containers can only be added from the dashboard, not with an API key.')
+                        );
+
+                        continue;
+                    }
+
+                    if ($provider === TrackingPixelProvider::GOOGLE_TAG_MANAGER
+                        && app(AccountUserAccessService::class)->isWithheldFromCurrentUser(Permission::MANAGE_ACCOUNT)
+                        && ! in_array($pixelId, $this->existingTagManagerIds(), true)
+                    ) {
+                        $validator->errors()->add(
+                            "tracking_pixels.{$index}.provider",
+                            __('Only account admins can add a Google Tag Manager container.')
                         );
 
                         continue;
@@ -75,6 +105,7 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
             'linkedin_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
             'discord_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
             'tiktok_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'bluesky_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
             'youtube_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
             'snapchat_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
             'twitch_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
@@ -103,6 +134,7 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
             'homepage_theme_settings.mode' => ['nullable', 'string', Rule::in(['light', 'dark'])],
             'homepage_theme_settings.background_type' => ['nullable', 'string', Rule::in(HomepageBackgroundType::valuesArray())],
             'homepage_theme_settings.font_family' => ['nullable', 'string', Rule::in(HomepageFontFamily::valuesArray())],
+            ...HomepageSectionRules::rules(HomepageSectionType::organizerValues()),
 
             // SEO
             'seo_keywords' => ['sometimes', 'nullable', 'string', 'max:255'],
@@ -119,6 +151,29 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
             'tracking_pixels.*.pixel_id' => ['required', 'string', 'max:50', 'regex:/^[a-zA-Z0-9\-_]+$/'],
             'tracking_pixels.*.enabled' => ['required', 'boolean'],
             'tracking_consent_acknowledged' => ['sometimes', 'nullable', 'boolean'],
+
+            'first_day_of_week' => ['sometimes', 'integer', 'between:0,6'],
         ];
+    }
+
+    public function messages(): array
+    {
+        return HomepageSectionRules::messages();
+    }
+
+    /**
+     * @return string[]
+     */
+    private function existingTagManagerIds(): array
+    {
+        $pixels = app(OrganizerSettingsRepositoryInterface::class)
+            ->findFirstWhere(['organizer_id' => (int) $this->route('organizer_id')])
+            ?->getTrackingPixels();
+
+        return collect(is_string($pixels) ? json_decode($pixels, true) : $pixels)
+            ->filter(fn ($pixel) => is_array($pixel) && ($pixel['provider'] ?? null) === TrackingPixelProvider::GOOGLE_TAG_MANAGER->value)
+            ->map(fn (array $pixel) => (string) ($pixel['pixel_id'] ?? ''))
+            ->values()
+            ->all();
     }
 }

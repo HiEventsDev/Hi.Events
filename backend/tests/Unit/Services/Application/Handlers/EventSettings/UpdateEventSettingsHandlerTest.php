@@ -8,6 +8,8 @@ use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EventSettings\DTO\UpdateEventSettingsDTO;
 use HiEvents\Services\Application\Handlers\EventSettings\UpdateEventSettingsHandler;
+use HiEvents\Services\Domain\Event\EventSpamCheckDispatchService;
+use HiEvents\Services\Domain\Event\HomepageSectionsSanitizer;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Facades\Event;
@@ -45,6 +47,8 @@ class UpdateEventSettingsHandlerTest extends TestCase
             eventSettingsRepository: $this->eventSettingsRepository,
             purifier: $this->purifier,
             databaseManager: $this->databaseManager,
+            eventSpamCheckDispatchService: Mockery::mock(EventSpamCheckDispatchService::class)->shouldIgnoreMissing(),
+            homepageSectionsSanitizer: Mockery::mock(HomepageSectionsSanitizer::class),
         );
     }
 
@@ -155,9 +159,72 @@ class UpdateEventSettingsHandlerTest extends TestCase
         );
     }
 
+    public function test_persists_trimmed_get_tickets_button_text(): void
+    {
+        Event::fake();
+
+        $existingSettings = new EventSettingDomainObject;
+
+        $this->eventSettingsRepository
+            ->shouldReceive('findFirstWhere')
+            ->with(['event_id' => 1])
+            ->twice()
+            ->andReturn($existingSettings);
+
+        $captured = ['missing'];
+        $this->eventSettingsRepository
+            ->shouldReceive('updateWhere')
+            ->once()
+            ->andReturnUsing(function (...$args) use (&$captured) {
+                foreach ($args as $arg) {
+                    if (is_array($arg) && array_key_exists('get_tickets_button_text', $arg)) {
+                        $captured = [$arg['get_tickets_button_text']];
+                    }
+                }
+
+                return 1;
+            });
+
+        $this->handler->handle($this->createDTO(get_tickets_button_text: '  Grab a spot  '));
+
+        $this->assertSame(['Grab a spot'], $captured);
+    }
+
+    public function test_persists_null_get_tickets_button_text(): void
+    {
+        Event::fake();
+
+        $existingSettings = new EventSettingDomainObject;
+
+        $this->eventSettingsRepository
+            ->shouldReceive('findFirstWhere')
+            ->with(['event_id' => 1])
+            ->twice()
+            ->andReturn($existingSettings);
+
+        $captured = ['missing'];
+        $this->eventSettingsRepository
+            ->shouldReceive('updateWhere')
+            ->once()
+            ->andReturnUsing(function (...$args) use (&$captured) {
+                foreach ($args as $arg) {
+                    if (is_array($arg) && array_key_exists('get_tickets_button_text', $arg)) {
+                        $captured = [$arg['get_tickets_button_text']];
+                    }
+                }
+
+                return 1;
+            });
+
+        $this->handler->handle($this->createDTO());
+
+        $this->assertSame([null], $captured);
+    }
+
     private function createDTO(
         ?bool $waitlist_auto_process = null,
         bool $allow_copy_details_to_all_attendees = true,
+        ?string $get_tickets_button_text = null,
     ): UpdateEventSettingsDTO {
         return UpdateEventSettingsDTO::fromArray([
             'account_id' => 1,
@@ -166,6 +233,7 @@ class UpdateEventSettingsHandlerTest extends TestCase
             'pre_checkout_message' => null,
             'email_footer_message' => null,
             'continue_button_text' => 'Continue',
+            'get_tickets_button_text' => $get_tickets_button_text,
             'support_email' => 'test@test.com',
             'homepage_background_color' => '#ffffff',
             'homepage_primary_color' => '#000000',

@@ -23,6 +23,8 @@ class ProductPriceResourcePublic extends BaseResource
             'sale_end_date' => $this->getSaleEndDate(),
             'price_including_taxes_and_fees' => $this->getPriceIncludingTaxAndServiceFee(),
             'price_before_discount' => $this->getPriceBeforeDiscount(),
+            /** @var float|null */
+            'price_before_discount_including_taxes_and_fees' => $this->getPriceBeforeDiscountIncludingTaxesAndFees(),
             'is_discounted' => (bool) $this->getPriceBeforeDiscount(),
             'tax_total' => $this->getTaxTotal(),
             'fee_total' => $this->getFeeTotal(),
@@ -30,6 +32,11 @@ class ProductPriceResourcePublic extends BaseResource
             'is_after_sale_end_date' => $this->isAfterSaleEndDate(),
             'is_available' => $this->isAvailable(),
             'is_sold_out' => $this->isSoldOut(),
+            /** @var 'OCCURRENCE'|'EVENT' */
+            'quantity_applies_to' => $this->getQuantityAppliesTo(),
+            'is_locked_behind_earlier_tier' => $this->isLockedBehindEarlierTier(),
+            /** @var array<string, float>|null */
+            'band_prices' => $this->getBandPrices() === null ? null : (object) $this->getBandPrices(),
             $this->mergeWhen($this->getAdditionalDataByKey(self::SHOW_QUANTITY_AVAILABLE), fn () => [
                 'quantity_remaining' => $this->getQuantityAvailable(),
             ]),

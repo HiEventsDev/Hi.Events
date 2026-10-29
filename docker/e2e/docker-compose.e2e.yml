@@ -10,9 +10,16 @@ services:
             - .env
         environment:
             APP_SAAS_MODE_ENABLED: '${E2E_SAAS_MODE:-false}'
+            APP_ENFORCE_EMAIL_CONFIRMATION_DURING_REGISTRATION: '${E2E_SAAS_MODE:-false}'
             STRIPE_PUBLIC_KEY: '${STRIPE_PUBLIC_KEY:-}'
             STRIPE_SECRET_KEY: '${STRIPE_SECRET_KEY:-}'
             STRIPE_WEBHOOK_SECRET: '${STRIPE_WEBHOOK_SECRET:-whsec_e2e_local_secret}'
+            SSO_OIDC_ISSUER: 'http://mock-oidc:${E2E_OIDC_PORT:-8124}/default'
+            SSO_OIDC_CLIENT_ID: 'hievents-e2e'
+            SSO_OIDC_CLIENT_SECRET: 'e2e-secret'
+            SSO_OIDC_NAME: 'Mock SSO'
+            SSO_OIDC_TRUST_EMAIL: 'true'
+            SSO_ALLOW_PRIVATE_ISSUERS: 'true'
         depends_on:
             pgsql:
                 condition: service_healthy
@@ -35,11 +42,13 @@ services:
             dockerfile: Dockerfile.ssr
         environment:
             NODE_ENV: production
+            WIDGET_TEST_PAGE_ENABLED: 'true'
             VITE_API_URL_CLIENT: 'http://localhost:8123/api'
             VITE_API_URL_SERVER: 'http://backend:8080'
             VITE_FRONTEND_URL: 'http://localhost:8123'
             VITE_STRIPE_PUBLISHABLE_KEY: '${STRIPE_PUBLIC_KEY:-}'
             VITE_APP_NAME: 'Hi.Events'
+            VITE_COOKIE_CONSENT_ENABLED: 'true'
         depends_on:
             backend:
                 condition: service_healthy
@@ -88,6 +97,15 @@ services:
             interval: 5s
             timeout: 5s
             retries: 20
+
+    mock-oidc:
+        image: 'ghcr.io/navikt/mock-oauth2-server:2.1.10'
+        environment:
+            SERVER_PORT: '${E2E_OIDC_PORT:-8124}'
+        ports:
+            - "${E2E_OIDC_PORT:-8124}:${E2E_OIDC_PORT:-8124}"
+        networks:
+            - app
 
     mailpit:
         image: 'axllent/mailpit:latest'

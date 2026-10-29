@@ -42,6 +42,22 @@ export interface EventRecord {
   title: string;
   slug: string;
   status: EventStatus;
+  type?: EventType;
+  start_date?: string | null;
+  end_date?: string | null;
+  timezone?: string;
+  currency?: string;
+  category?: string;
+  description?: string | null;
+  organizer_id?: number;
+}
+
+export type EventImageType = 'EVENT_COVER' | 'TICKET_LOGO';
+
+export interface ImageRecord {
+  id: number;
+  url: string;
+  type: EventImageType;
 }
 
 export interface ProductCategory {
@@ -53,6 +69,7 @@ export interface ProductPrice {
   id: number;
   price: number;
   label?: string | null;
+  quantity_sold?: number;
 }
 
 export interface ProductRecord {
@@ -70,6 +87,7 @@ export interface CreateEventPayload {
   organizer_id: number;
   start_date: string;
   end_date?: string;
+  description?: string;
   category: string;
   currency?: string;
   timezone?: string;
@@ -79,21 +97,30 @@ export interface CreateProductPricePayload {
   price: number;
   label?: string;
   initial_quantity_available?: number;
+  quantity_applies_to?: 'OCCURRENCE' | 'EVENT';
 }
 
 export interface CreateProductPayload {
   title: string;
+  description?: string;
   product_type: ProductKind;
   type: ProductPriceType;
   product_category_id: number;
   prices: CreateProductPricePayload[];
   tax_and_fee_ids?: number[];
+  addon_product_ids?: number[];
+  is_addon_only?: boolean;
   max_per_order?: number;
   min_per_order?: number;
   is_hidden?: boolean;
   is_hidden_without_promo_code?: boolean;
+  show_quantity_remaining?: boolean;
+  waitlist_enabled?: boolean;
+  hide_when_sold_out?: boolean;
+  start_collapsed?: boolean;
   sale_start_date?: string;
   sale_end_date?: string;
+  sequential_tier_release_enabled?: boolean;
 }
 
 export interface CreateProductCategoryPayload {
@@ -122,10 +149,15 @@ export interface PublicOrder {
 export interface OrderRecord {
   id: number;
   short_id: string;
+  public_id: string;
   status: string;
   payment_status?: string | null;
   email: string;
   total_gross: number;
+  box_office_id?: number | null;
+  box_office_tender?: string | null;
+  box_office_reference?: string | null;
+  order_items?: { event_occurrence_id?: number | null; band_key?: string | null; price?: number | string; product_price_id?: number; item_name?: string }[];
 }
 
 export interface AttendeeRecord {
@@ -136,6 +168,9 @@ export interface AttendeeRecord {
   last_name: string;
   email: string;
   status: string;
+  order_id: number;
+  product_id: number;
+  seat_label?: string | null;
 }
 
 export interface PromoCode {
@@ -172,6 +207,7 @@ export interface UpdateOccurrencePayload {
   start_date: string;
   end_date?: string | null;
   label?: string;
+  capacity?: number | null;
   event_location?:
     | { type: 'IN_PERSON'; location_id: number }
     | { type: 'ONLINE'; online_event_connection_details: string };
@@ -179,7 +215,8 @@ export interface UpdateOccurrencePayload {
 
 export interface OccurrencePriceOverridePayload {
   product_price_id: number;
-  price: number;
+  price?: number | null;
+  quantity_available?: number | null;
 }
 
 export interface QuestionRecord {
@@ -212,10 +249,13 @@ export interface EmailTemplate {
   subject: string;
 }
 
+export type AttendeeDetailsCollection = 'PER_TICKET' | 'PER_ORDER';
+
 export interface EventSettings {
   payment_providers?: string[];
   offline_payment_instructions?: string | null;
   waitlist_enabled?: boolean;
+  attendee_details_collection_method?: AttendeeDetailsCollection;
   [key: string]: unknown;
 }
 
@@ -250,6 +290,27 @@ export interface CreateTaxOrFeePayload {
   description?: string;
 }
 
+export interface BoxOffice {
+  id: number;
+  short_id: string;
+  name: string;
+  is_system_default: boolean;
+  has_pin: boolean;
+}
+
+export interface CreateBoxOfficePayload {
+  name: string;
+  description?: string;
+  product_ids?: number[];
+  event_occurrence_id?: number | null;
+  check_in_list_id?: number | null;
+  allow_price_override?: boolean;
+  allow_discounts?: boolean;
+  collect_order_questions?: boolean;
+  expires_at?: string;
+  activates_at?: string;
+}
+
 export interface CreateCheckInListPayload {
   name: string;
   description?: string;
@@ -269,6 +330,7 @@ export interface CreateAttendeePayload {
   amount_paid: number;
   send_confirmation_email: boolean;
   locale: string;
+  seat_uid?: string;
 }
 
 export interface CreateCapacityAssignmentPayload {
@@ -303,7 +365,11 @@ export interface InviteUserPayload {
   first_name: string;
   last_name?: string;
   email: string;
-  role: 'ADMIN' | 'ORGANIZER';
+  role: 'ADMIN' | 'ORGANIZER' | 'VIEWER';
+  access_scope?: 'ACCOUNT' | 'RESTRICTED';
+  organizer_ids?: number[];
+  event_ids?: number[];
+  permissions?: Partial<Record<'VIEW_FINANCIALS' | 'ISSUE_REFUNDS', boolean>>;
 }
 
 export interface RecurrenceRule {

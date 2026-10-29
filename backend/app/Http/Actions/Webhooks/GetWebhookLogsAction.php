@@ -2,13 +2,15 @@
 
 namespace HiEvents\Http\Actions\Webhooks;
 
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\EventDomainObject;
-use HiEvents\DomainObjects\WebhookLogDomainObject;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\RequiresPermission;
 use HiEvents\Resources\Webhook\WebhookLogResource;
 use HiEvents\Services\Application\Handlers\Webhook\GetWebhookLogsHandler;
 use Illuminate\Http\JsonResponse;
 
+#[RequiresPermission(Permission::VIEW_FINANCIALS)]
 class GetWebhookLogsAction extends BaseAction
 {
     public function __construct(
@@ -24,10 +26,6 @@ class GetWebhookLogsAction extends BaseAction
             accountId: $this->getAuthenticatedAccountId(),
             eventId: $eventId,
         );
-
-        $webhookLogs = $webhookLogs->sortBy(function (WebhookLogDomainObject $webhookLog) {
-            return $webhookLog->getId();
-        }, SORT_REGULAR, true);
 
         return $this->resourceResponse(
             resource: WebhookLogResource::class,

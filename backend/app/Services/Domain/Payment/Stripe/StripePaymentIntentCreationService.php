@@ -13,6 +13,7 @@ use Illuminate\Config\Repository;
 use Illuminate\Database\DatabaseManager;
 use Psr\Log\LoggerInterface;
 use Stripe\Exception\ApiErrorException;
+use Stripe\PaymentIntent;
 use Stripe\StripeClient;
 use Throwable;
 
@@ -35,10 +36,10 @@ class StripePaymentIntentCreationService
         ?string $accountId = null,
     ): string {
         try {
-            return $stripeClient->paymentIntents->retrieve(
+            $paymentIntent = $stripeClient->paymentIntents->retrieve(
                 id: $paymentIntentId,
                 opts: $accountId ? ['stripe_account' => $accountId] : []
-            )->client_secret;
+            );
         } catch (ApiErrorException $exception) {
             $this->logger->error("Stripe payment intent retrieval failed: {$exception->getMessage()}", [
                 'exception' => $exception,
@@ -49,6 +50,14 @@ class StripePaymentIntentCreationService
                 __('There was an error communicating with the payment provider. Please try again later.')
             );
         }
+
+        if ($paymentIntent->status === PaymentIntent::STATUS_CANCELED) {
+            throw new CreatePaymentIntentFailedException(
+                __('This payment was cancelled after too many failed attempts. Please start a new order.')
+            );
+        }
+
+        return $paymentIntent->client_secret;
     }
 
     /**
@@ -58,6 +67,55 @@ class StripePaymentIntentCreationService
     public function createPaymentIntentWithClient(
         StripeClient $stripeClient,
         CreatePaymentIntentRequestDTO $paymentIntentDTO
+    ): CreatePaymentIntentResponseDTO {
+        return $this->createWithPaymentMethodParams(
+            stripeClient: $stripeClient,
+            paymentIntentDTO: $paymentIntentDTO,
+            paymentMethodParams: ['automatic_payment_methods' => ['enabled' => true]],
+            attachCustomer: true,
+        );
+    }
+
+    /**
+     * @throws CreatePaymentIntentFailedException
+     * @throws ApiErrorException|Throwable
+     */
+    public function createTerminalPaymentIntentWithClient(
+        StripeClient $stripeClient,
+        CreatePaymentIntentRequestDTO $paymentIntentDTO
+    ): CreatePaymentIntentResponseDTO {
+        try {
+            return $this->createWithPaymentMethodParams(
+                stripeClient: $stripeClient,
+                paymentIntentDTO: $paymentIntentDTO,
+                paymentMethodParams: [
+                    'payment_method_types' => ['card_present'],
+                    'capture_method' => 'automatic',
+                ],
+                attachCustomer: $paymentIntentDTO->order->getEmail() !== null,
+            );
+        } catch (CreatePaymentIntentFailedException $exception) {
+            $stripeError = $exception->getPrevious();
+            if (! $stripeError instanceof ApiErrorException) {
+                throw $exception;
+            }
+
+            throw new CreatePaymentIntentFailedException(
+                __('Stripe could not start this card payment: :message', ['message' => $stripeError->getMessage()]),
+                previous: $stripeError,
+            );
+        }
+    }
+
+    /**
+     * @throws CreatePaymentIntentFailedException
+     * @throws ApiErrorException|Throwable
+     */
+    private function createWithPaymentMethodParams(
+        StripeClient $stripeClient,
+        CreatePaymentIntentRequestDTO $paymentIntentDTO,
+        array $paymentMethodParams,
+        bool $attachCustomer,
     ): CreatePaymentIntentResponseDTO {
         try {
             $this->databaseManager->beginTransaction();
@@ -76,11 +134,9 @@ class StripePaymentIntentCreationService
             $paymentIntent = $stripeClient->paymentIntents->create([
                 'amount' => $paymentIntentDTO->amount->toMinorUnit(),
                 'currency' => $paymentIntentDTO->currencyCode,
-                'customer' => $this->upsertStripeCustomerWithClient($stripeClient, $paymentIntentDTO)->getStripeCustomerId(),
+                ...($attachCustomer ? ['customer' => $this->upsertStripeCustomerWithClient($stripeClient, $paymentIntentDTO)->getStripeCustomerId()] : []),
                 'metadata' => $this->getPaymentIntentMetadata($paymentIntentDTO, $applicationFee),
-                'automatic_payment_methods' => [
-                    'enabled' => true,
-                ],
+                ...$paymentMethodParams,
                 ...($paymentIntentDTO->description ? ['description' => $paymentIntentDTO->description] : []),
                 ...($applicationFee && ! $bypassApplicationFees ? ['application_fee_amount' => $applicationFee->grossApplicationFee->toMinorUnit()] : []),
             ], $this->getStripeAccountData($paymentIntentDTO));
@@ -107,7 +163,8 @@ class StripePaymentIntentCreationService
             $this->databaseManager->rollBack();
 
             throw new CreatePaymentIntentFailedException(
-                __('There was an error communicating with the payment provider. Please try again later.')
+                __('There was an error communicating with the payment provider. Please try again later.'),
+                previous: $exception,
             );
         } catch (Throwable $exception) {
             $this->databaseManager->rollBack();
@@ -212,7 +269,7 @@ class StripePaymentIntentCreationService
             'event_id' => $paymentIntentDTO->order->getEventId(),
             'order_short_id' => $paymentIntentDTO->order->getShortId(),
             'account_id' => $paymentIntentDTO->account->getId(),
-
+            ...($paymentIntentDTO->order->isBoxOfficeOrder() ? ['box_office_id' => $paymentIntentDTO->order->getBoxOfficeId()] : []),
         ];
 
         if ($applicationFee) {

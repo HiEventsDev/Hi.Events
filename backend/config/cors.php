@@ -1,5 +1,7 @@
 <?php
 
+use HiEvents\Helper\CorsAllowedOrigins;
+
 return [
 
     /*
@@ -19,7 +21,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => explode(',', env('CORS_ALLOWED_ORIGINS', '*')),
+    'allowed_origins' => CorsAllowedOrigins::resolve(env('CORS_ALLOWED_ORIGINS'), env('APP_FRONTEND_URL')),
 
     'allowed_origins_patterns' => [],
 

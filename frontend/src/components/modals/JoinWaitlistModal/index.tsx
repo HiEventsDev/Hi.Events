@@ -12,7 +12,7 @@ import {BouncingEmoji} from "../../common/BouncingEmoji";
 import {formatDateWithLocale, getSafeLocale} from "../../../utilites/dates.ts";
 import {getClientLocale} from "../../../locales.ts";
 
-const DEFAULT_ACCENT = '#8b5cf6';
+const DEFAULT_ACCENT = '#7c3aed';
 
 interface JoinWaitlistModalProps extends GenericModalProps {
     product: Product;
@@ -67,6 +67,7 @@ export const JoinWaitlistModal = ({onClose, product, event, productPriceId, even
                 ...values,
                 product_price_id: Number(productPriceId),
                 event_occurrence_id: eventOccurrenceId ? Number(eventOccurrenceId) : undefined,
+                promo_code: new URLSearchParams(window.location.search).get('promo_code') || undefined,
             },
         }, {
             onSuccess: () => {

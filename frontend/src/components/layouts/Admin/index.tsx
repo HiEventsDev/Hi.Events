@@ -1,12 +1,16 @@
-import {IconUsers, IconBuildingBank, IconLayoutDashboard, IconCalendar, IconReceipt, IconSettings, IconChartBar, IconAlertTriangle, IconMail, IconSpeakerphone, IconTrash} from "@tabler/icons-react";
+import {IconUsers, IconBuildingBank, IconLayoutDashboard, IconCalendar, IconReceipt, IconSettings, IconChartBar, IconAlertTriangle, IconFlag, IconMail, IconSpeakerphone, IconTrash, IconToggleRight, IconLicense, IconMailCheck, IconMailForward} from "@tabler/icons-react";
 import {t} from "@lingui/macro";
 import {NavItem, BreadcrumbItem} from "../AppLayout/types";
 import AppLayout from "../AppLayout";
-import {useIsCurrentUserSuperAdmin} from "../../../hooks/useIsCurrentUserAdmin.ts";
+import {useIsCurrentUserSuperAdmin} from "../../../hooks/useIsCurrentUserSuperAdmin.ts";
+import {useGetAdminFeatureFlags} from "../../../queries/useGetAdminFeatureFlags.ts";
+import {useGetAdminLifecycleEmails} from "../../../queries/useGetAdminLifecycleEmails.ts";
 import {useNavigate} from "react-router";
 
 const AdminLayout = () => {
     const isSuperAdmin = useIsCurrentUserSuperAdmin();
+    const {data: featureFlags} = useGetAdminFeatureFlags(isSuperAdmin);
+    const {isSuccess: lifecycleEmailsAvailable} = useGetAdminLifecycleEmails(isSuperAdmin);
     const navigate = useNavigate();
     const navItems: NavItem[] = [
         {label: t`Admin`},
@@ -16,11 +20,16 @@ const AdminLayout = () => {
         {link: 'events', label: t`Events`, icon: IconCalendar},
         {link: 'orders', label: t`Orders`, icon: IconReceipt},
         {link: 'messages', label: t`Messages`, icon: IconMail},
+        {link: 'spam-events', label: t`Flagged Events`, icon: IconFlag},
         {link: 'announcements', label: t`Announcements`, icon: IconSpeakerphone},
+        {link: 'lifecycle-emails', label: t`Lifecycle Emails`, icon: IconMailForward, showWhen: () => lifecycleEmailsAvailable},
         {link: 'attribution', label: t`UTM Analytics`, icon: IconChartBar},
         {link: 'deletion-requests', label: t`Deletion Requests`, icon: IconTrash},
+        {link: 'email-delivery', label: t`Email Delivery`, icon: IconMailCheck},
         {link: 'failed-jobs', label: t`Failed Jobs`, icon: IconAlertTriangle},
         {link: 'configurations', label: t`Configurations`, icon: IconSettings},
+        {link: 'feature-flags', label: t`Feature Flags`, icon: IconToggleRight, showWhen: () => !!featureFlags?.data?.length},
+        {link: 'licence', label: t`Licence`, icon: IconLicense},
     ];
 
     const breadcrumbItems: BreadcrumbItem[] = [

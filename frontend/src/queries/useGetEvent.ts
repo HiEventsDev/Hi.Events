@@ -14,6 +14,6 @@ export const useGetEvent = (eventId: IdParam) => {
             return data;
         },
 
-        staleTime: 5
+        enabled: !!eventId,
     });
 };

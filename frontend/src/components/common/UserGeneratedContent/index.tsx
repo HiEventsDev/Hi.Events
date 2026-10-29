@@ -1,20 +1,17 @@
-import React, {useEffect, useRef} from 'react';
+import React from 'react';
+import {applyUserGeneratedLinkSafety} from "../../../utilites/userGeneratedHtml";
 
 interface UserGeneratedContentProps extends React.HTMLAttributes<HTMLDivElement> {
+    html?: string | null;
 }
 
-export const UserGeneratedContent = (props: UserGeneratedContentProps) => {
-    const contentRef = useRef<HTMLDivElement>(null);
+export const UserGeneratedContent = ({html, dangerouslySetInnerHTML, ...props}: UserGeneratedContentProps) => {
+    const source = html ?? dangerouslySetInnerHTML?.__html ?? '';
 
-    useEffect(() => {
-        if (contentRef.current) {
-            const anchors = contentRef.current.querySelectorAll<HTMLAnchorElement>('a');
-            anchors.forEach(anchor => {
-                anchor.setAttribute('rel', 'nofollow noopener noreferrer ugc');
-                anchor.setAttribute('target', '_blank');
-            });
-        }
-    }, [props.children]);
-
-    return <div ref={contentRef} {...props} />;
+    return (
+        <div
+            {...props}
+            dangerouslySetInnerHTML={{__html: applyUserGeneratedLinkSafety(String(source))}}
+        />
+    );
 };

@@ -46,6 +46,7 @@ export default function StripeCheckoutForm({setSubmitHandler}: {
     const elements = useElements();
     const navigate = useNavigate();
     const [message, setMessage] = useState<string | undefined>('');
+    const [isPaymentElementReady, setIsPaymentElementReady] = useState(false);
     const {data: order, isFetched: isOrderFetched} = useGetOrderPublic(eventId, orderShortId, ['event']);
     const event = order?.event;
 
@@ -154,14 +155,16 @@ export default function StripeCheckoutForm({setSubmitHandler}: {
             radios: false,
             spacedAccordionItems: false,
         },
+        defaultValues: {
+            billingDetails: {
+                name: [order.first_name, order.last_name].filter(Boolean).join(' ') || undefined,
+            },
+        },
     };
 
     return (
         <form id="payment-form">
             <>
-                <h2>
-                    {t`Payment`}
-                </h2>
                 {(order?.payment_status === 'PAYMENT_FAILED' || window?.location.search.includes('payment_failed')) && (
                     <Alert mb={20} color={'red'}>{t`Your payment was unsuccessful. Please try again.`}</Alert>
                 )}
@@ -169,9 +172,10 @@ export default function StripeCheckoutForm({setSubmitHandler}: {
                 {message !== '' && <Alert mb={20}>{message}</Alert>}
                 <LoadingMask/>
                 <PaymentElement
-                    className={classes.stripeForElement}
+                    className={isPaymentElementReady ? undefined : classes.stripeForElement}
                     id="payment-element"
                     options={paymentElementOptions}
+                    onReady={() => setIsPaymentElementReady(true)}
                 />
             </>
         </form>

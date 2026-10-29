@@ -10,6 +10,7 @@ import {Button, Collapse, Group, Text, TextInput, UnstyledButton} from "@mantine
 import {useGetOrganizerSettings} from "../../../../../../queries/useGetOrganizerSettings.ts";
 import {useUpdateOrganizerSettings} from "../../../../../../mutations/useUpdateOrganizerSettings.ts";
 import {
+    IconBrandBluesky,
     IconBrandDiscord,
     IconBrandFacebook,
     IconBrandGithub,
@@ -40,8 +41,7 @@ interface SocialPlatform {
     priority?: 'primary' | 'secondary';
 }
 
-const socialPlatforms: SocialPlatform[] = [
-    // Primary platforms (always visible)
+const getSocialPlatforms = (): SocialPlatform[] => [
     {
         name: t`Facebook`,
         field: 'facebook_handle',
@@ -66,8 +66,8 @@ const socialPlatforms: SocialPlatform[] = [
     },
     {name: t`YouTube`, field: 'youtube_handle', icon: IconBrandYoutube, placeholder: 'channel', priority: 'primary'},
 
-    // Secondary platforms (collapsible)
     {name: t`TikTok`, field: 'tiktok_handle', icon: IconBrandTiktok, placeholder: 'username', priority: 'primary'},
+    {name: t`Bluesky`, field: 'bluesky_handle', icon: IconBrandBluesky, placeholder: 'name.bsky.social', priority: 'primary'},
     {name: t`Discord`, field: 'discord_handle', icon: IconBrandDiscord, placeholder: 'user_id', priority: 'secondary'},
     {
         name: t`Snapchat`,
@@ -110,6 +110,7 @@ export const SocialLinks = () => {
     const organizerSettingsQuery = useGetOrganizerSettings(organizerId);
     const updateMutation = useUpdateOrganizerSettings();
     const [showMore, setShowMore] = useState(false);
+    const socialPlatforms = getSocialPlatforms();
 
     const initialValues = socialPlatforms.reduce((acc, platform) => {
         acc[platform.field] = '';
@@ -126,18 +127,17 @@ export const SocialLinks = () => {
         if (organizerSettingsQuery?.isFetched && organizerSettingsQuery?.data) {
             const formValues: Record<string, string> = {};
 
-            // Handle website URL
             if (organizerSettingsQuery.data.website_url) {
                 formValues.website_url = organizerSettingsQuery.data.website_url;
             }
 
-            // Handle social media handles
-            if (organizerSettingsQuery.data.social_media_handles) {
+            const handles: Record<string, string | undefined> | undefined = organizerSettingsQuery.data.social_media_handles;
+            if (handles) {
                 socialPlatforms.forEach(platform => {
                     if (platform.field !== 'website_url') {
-                        const handle = platform.field.replace('_handle', '');
-                        if (organizerSettingsQuery.data.social_media_handles[handle]) {
-                            formValues[platform.field] = organizerSettingsQuery.data.social_media_handles[handle];
+                        const handle = handles[platform.field.replace('_handle', '')];
+                        if (handle) {
+                            formValues[platform.field] = handle;
                         }
                     }
                 });
@@ -147,14 +147,12 @@ export const SocialLinks = () => {
         }
     }, [organizerSettingsQuery.isFetched]);
 
-    // Check if any secondary platforms have values
     const hasSecondaryValues = useMemo(() => {
         return socialPlatforms
             .filter(p => p.priority === 'secondary')
             .some(platform => form.values[platform.field] && form.values[platform.field].trim() !== '');
     }, [form.values]);
 
-    // Auto-expand if secondary platforms have values
     useEffect(() => {
         if (hasSecondaryValues) {
             setShowMore(true);
@@ -186,7 +184,6 @@ export const SocialLinks = () => {
             />
             <form onSubmit={form.onSubmit(handleSubmit)}>
                 <fieldset disabled={organizerSettingsQuery.isLoading || updateMutation.isPending}>
-                    {/* Primary platforms - always visible */}
                     <InputGroup>
                         {primaryPlatforms.map((platform) => {
                             const Icon = platform.icon;
@@ -203,7 +200,6 @@ export const SocialLinks = () => {
                         })}
                     </InputGroup>
 
-                    {/* Toggle button for secondary platforms */}
                     <UnstyledButton
                         onClick={() => setShowMore(!showMore)}
                         style={{
@@ -236,7 +232,6 @@ export const SocialLinks = () => {
                         </Group>
                     </UnstyledButton>
 
-                    {/* Secondary platforms - collapsible */}
                     <Collapse expanded={showMore}>
                         <InputGroup>
                             {secondaryPlatforms.map((platform) => {

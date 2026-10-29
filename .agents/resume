@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! grep -Eq '^127\.0\.0\.1[[:space:]].*\bpgsql\b' /etc/hosts; then
+  echo "127.0.0.1 pgsql" | sudo tee -a /etc/hosts >/dev/null
+fi
+
+if ! pg_isready -q -h 127.0.0.1; then
+  sudo systemctl start postgresql@15-main
+fi

@@ -1,5 +1,5 @@
 import { test, expect } from '../../fixtures';
-import { CheckoutPage } from '../../pages/checkout.page';
+import { CheckoutPage, setWidgetQuantity } from '../../pages/checkout.page';
 import { createLiveEventWithProduct, enableOfflinePayments } from '../../api/factory';
 import { uniqueEmail } from '../../utils/unique';
 
@@ -26,7 +26,7 @@ test.describe('donation and tiered checkout', () => {
     await expect(vipRow.locator('.hi-price-tier-label')).toHaveText('VIP');
     await expect(vipRow.getByText('$20.00')).toBeVisible();
 
-    await standardRow.locator('.hi-product-quantity-selector input').fill('1');
+    await setWidgetQuantity(standardRow, 1);
     await checkout.continueToCheckout();
     await checkout.fillOrderDetails(buyer);
     await checkout.fillFirstAttendee(buyer);

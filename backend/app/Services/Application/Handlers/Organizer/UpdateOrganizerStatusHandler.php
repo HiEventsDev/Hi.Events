@@ -76,6 +76,7 @@ class UpdateOrganizerStatusHandler
                 where: [
                     'organizer_id' => $updateOrganizerStatusDTO->organizerId,
                     'account_id' => $updateOrganizerStatusDTO->accountId,
+                    ['status', '!=', EventStatus::PENDING_MANUAL_REVIEW->name],
                 ]
             );
 

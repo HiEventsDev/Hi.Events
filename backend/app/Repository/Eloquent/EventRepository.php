@@ -11,6 +11,7 @@ use HiEvents\DomainObjects\EventStatisticDomainObject;
 use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\EventSettingDomainObjectAbstract;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Http\DTO\QueryParamsDTO;
@@ -27,6 +28,8 @@ use Illuminate\Support\Facades\DB;
  */
 class EventRepository extends BaseRepository implements EventRepositoryInterface
 {
+    private const SITEMAP_ENDED_EVENT_RETENTION_DAYS = 120;
+
     protected function getModel(): string
     {
         return Event::class;
@@ -44,6 +47,7 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
                 ->whereIn(EventDomainObjectAbstract::STATUS, [
                     EventStatus::LIVE->name,
                     EventStatus::DRAFT->name,
+                    EventStatus::PENDING_MANUAL_REVIEW->name,
                 ])
                 ->where(EventDomainObjectAbstract::ORGANIZER_ID, $organizerId)
                 ->where(EventDomainObjectAbstract::ACCOUNT_ID, $accountId);
@@ -52,8 +56,20 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
         return $this->findEvents($where, $params);
     }
 
-    public function findEvents(array $where, QueryParamsDTO $params): LengthAwarePaginator
-    {
+    public function findEvents(
+        array $where,
+        QueryParamsDTO $params,
+        ?array $restrictToOrganizerIds = null,
+        ?array $restrictToEventIds = null,
+    ): LengthAwarePaginator {
+        if ($restrictToOrganizerIds !== null || $restrictToEventIds !== null) {
+            $where[] = static function (Builder $builder) use ($restrictToOrganizerIds, $restrictToEventIds) {
+                $builder
+                    ->whereIn(EventDomainObjectAbstract::ORGANIZER_ID, $restrictToOrganizerIds ?? [])
+                    ->orWhereIn(EventDomainObjectAbstract::ID, $restrictToEventIds ?? []);
+            };
+        }
+
         if (! empty($params->query)) {
             $where[] = static function (Builder $builder) use ($params) {
                 $builder
@@ -111,10 +127,14 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
             };
         }
 
-        $this->model = $this->model->orderBy(
-            $this->validateSortColumn($params->sort_by, EventDomainObject::class),
-            $this->validateSortDirection($params->sort_direction, EventDomainObject::class),
-        );
+        $sortColumn = $this->validateSortColumn($params->sort_by, EventDomainObject::class);
+        $sortDirection = $this->validateSortDirection($params->sort_direction, EventDomainObject::class);
+
+        if ($sortColumn === EventDomainObjectAbstract::START_DATE) {
+            $this->applyOccurrenceStartDateSort($sortDirection, $upcomingEventsFilter, $endedEventsFilter);
+        } else {
+            $this->model = $this->model->orderBy($sortColumn, $sortDirection);
+        }
 
         return $this->paginateWhere(
             where: $where,
@@ -123,32 +143,23 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
         );
     }
 
-    public function getUpcomingEventsForAdmin(int $perPage): LengthAwarePaginator
+    private function applyOccurrenceStartDateSort(string $direction, bool $upcomingOnly, bool $endedOnly): void
     {
-        $now = now();
-        $next24Hours = now()->addDay();
+        $liveOccurrences = 'FROM event_occurrences eo WHERE eo.event_id = events.id AND eo.deleted_at IS NULL';
+        $bindings = [];
+
+        if ($upcomingOnly) {
+            $sortDateSql = "SELECT MIN(eo.start_date) {$liveOccurrences} AND COALESCE(eo.end_date, eo.start_date) >= ?";
+            $bindings[] = now();
+        } elseif ($endedOnly) {
+            $sortDateSql = "SELECT MAX(eo.start_date) {$liveOccurrences}";
+        } else {
+            $sortDateSql = "SELECT MIN(eo.start_date) {$liveOccurrences}";
+        }
 
         $this->model = $this->model
-            ->select('events.*')
-            ->whereExists(function ($query) use ($now, $next24Hours) {
-                $query->select(DB::raw(1))
-                    ->from('event_occurrences')
-                    ->whereColumn('event_occurrences.event_id', 'events.id')
-                    ->whereNull('event_occurrences.deleted_at')
-                    ->where('event_occurrences.start_date', '>=', $now)
-                    ->where('event_occurrences.start_date', '<=', $next24Hours)
-                    ->where('event_occurrences.status', 'ACTIVE');
-            })
-            ->whereIn(EventDomainObjectAbstract::STATUS, [
-                EventStatus::LIVE->name,
-            ])
-            ->orderBy(EventDomainObjectAbstract::CREATED_AT, 'desc');
-
-        $this->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'));
-        $this->loadRelation(new Relationship(AccountDomainObject::class, name: 'account'));
-        $this->loadRelation(new Relationship(EventOccurrenceDomainObject::class));
-
-        return $this->paginate($perPage);
+            ->orderByRaw("({$sortDateSql}) {$direction} NULLS LAST", $bindings)
+            ->orderBy(EventDomainObjectAbstract::ID);
     }
 
     public function getAllEventsForAdmin(
@@ -196,16 +207,12 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
 
     public function getSitemapEvents(int $page, int $perPage): LengthAwarePaginator
     {
-        return $this->handleResults($this->model
+        return $this->handleResults($this->sitemapEventsQuery()
             ->select([
                 'events.'.EventDomainObjectAbstract::ID,
                 'events.'.EventDomainObjectAbstract::TITLE,
                 'events.'.EventDomainObjectAbstract::UPDATED_AT,
             ])
-            ->join('event_settings', 'events.id', '=', 'event_settings.event_id')
-            ->where('events.'.EventDomainObjectAbstract::STATUS, EventStatus::LIVE->name)
-            ->where('event_settings.'.EventSettingDomainObjectAbstract::ALLOW_SEARCH_ENGINE_INDEXING, true)
-            ->whereNull('events.'.EventDomainObjectAbstract::DELETED_AT)
             ->orderBy('events.'.EventDomainObjectAbstract::ID)
             ->paginate($perPage, ['*'], 'page', $page));
     }
@@ -222,13 +229,28 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
 
     public function getSitemapEventCount(): int
     {
+        return $this->sitemapEventsQuery()->count();
+    }
+
+    private function sitemapEventsQuery(): Builder
+    {
         return $this->model
             ->newQuery()
             ->join('event_settings', 'events.id', '=', 'event_settings.event_id')
             ->where('events.'.EventDomainObjectAbstract::STATUS, EventStatus::LIVE->name)
             ->where('event_settings.'.EventSettingDomainObjectAbstract::ALLOW_SEARCH_ENGINE_INDEXING, true)
             ->whereNull('events.'.EventDomainObjectAbstract::DELETED_AT)
-            ->count();
+            ->whereExists(function ($query) {
+                $query->select(DB::raw(1))
+                    ->from('event_occurrences')
+                    ->whereColumn('event_occurrences.event_id', 'events.id')
+                    ->whereNull('event_occurrences.deleted_at')
+                    ->where('event_occurrences.status', '!=', EventOccurrenceStatus::CANCELLED->name)
+                    ->whereRaw(
+                        'COALESCE(event_occurrences.end_date, event_occurrences.start_date) >= ?',
+                        [now()->subDays(self::SITEMAP_ENDED_EVENT_RETENTION_DAYS)]
+                    );
+            });
     }
 
     public function getUpcomingEventsWithCompletedOrders(int $accountId): Collection
@@ -250,6 +272,7 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
                         ->whereNull('orders.deleted_at')
                         ->where('orders.status', OrderStatus::COMPLETED->name);
                 })
+                ->orderBy('events.id')
                 ->get();
 
             return $this->handleResults($events);

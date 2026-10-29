@@ -6,7 +6,7 @@ use HiEvents\DomainObjects\Enums\OrderAuditAction;
 use HiEvents\Jobs\Occurrence\RefundOccurrenceOrdersJob;
 use HiEvents\Repository\Interfaces\OrderAuditLogRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\RefundOrderDTO;
-use HiEvents\Services\Application\Handlers\Order\Payment\Stripe\RefundOrderHandler;
+use HiEvents\Services\Application\Handlers\Order\RefundOrderHandler;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Mockery;

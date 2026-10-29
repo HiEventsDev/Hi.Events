@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Domain\Order;
 
 use Exception;
+use HiEvents\Constants;
 use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
 use HiEvents\DomainObjects\Enums\ProductPriceType;
 use HiEvents\DomainObjects\Enums\ProductType;
@@ -13,6 +14,8 @@ use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
+use HiEvents\Enterprise\Seating\Exceptions\SeatSelectionInvalidException;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatSelectionValidationService;
 use HiEvents\Helper\Currency;
 use HiEvents\Repository\Eloquent\Value\OrderAndDirection;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
@@ -41,6 +44,7 @@ class OrderCreateRequestValidationService
         private readonly AvailableProductQuantitiesFetchService $fetchAvailableProductQuantitiesService,
         private readonly OccurrencePurchaseEligibilityService $occurrenceEligibilityService,
         private readonly ProductPriceService $productPriceService,
+        private readonly SeatSelectionValidationService $seatSelectionValidationService,
     ) {}
 
     /**
@@ -55,6 +59,7 @@ class OrderCreateRequestValidationService
         $this->validateTypes($data);
         $promoCode = $this->validatePromoCode($eventId, $data);
         $this->validateProductSelection($data);
+        $this->validateAddonProducts($data);
         $this->validateOccurrence($eventId, $data);
 
         $this->availableProductQuantities = $this->fetchAvailableProductQuantitiesService
@@ -66,6 +71,7 @@ class OrderCreateRequestValidationService
         $this->validateOverallCapacity($event, $data);
 
         $this->validateProductDetailsPerOccurrence($event, $data, $promoCode);
+        $this->validateSeatSelection($eventId, $data);
 
         return $data;
     }
@@ -232,6 +238,18 @@ class OrderCreateRequestValidationService
     /**
      * @throws ValidationException
      */
+    private function validateSeatSelection(int $eventId, array $data): void
+    {
+        try {
+            $this->seatSelectionValidationService->validate($eventId, $data['products']);
+        } catch (SeatSelectionInvalidException $exception) {
+            throw ValidationException::withMessages(['products' => $exception->getMessage()]);
+        }
+    }
+
+    /**
+     * @throws ValidationException
+     */
     private function validateTypes(array $data): void
     {
         $validator = Validator::make($data, [
@@ -242,6 +260,9 @@ class OrderCreateRequestValidationService
             'products.*.quantities.*.quantity' => 'required|integer|min:0',
             'products.*.quantities.*.price_id' => 'required|integer',
             'products.*.quantities.*.price' => 'numeric|min:0',
+            'products.*.quantities.*.seat_uids' => 'array|max:100',
+            'products.*.quantities.*.seat_uids.*' => 'string|max:24',
+            'widget_id' => 'nullable|string|max:50',
         ]);
 
         if ($validator->fails()) {
@@ -259,6 +280,46 @@ class OrderCreateRequestValidationService
             throw ValidationException::withMessages([
                 'products' => __('You haven\'t selected any products'),
             ]);
+        }
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    private function validateAddonProducts(array $data): void
+    {
+        $productLines = collect($data['products']);
+
+        $requestedQuantities = $productLines
+            ->groupBy(fn ($line) => (int) $line['product_id'])
+            ->map(fn ($lines) => $lines->sum(fn ($line) => collect($line['quantities'])->sum('quantity')));
+
+        $selectedProductIds = $requestedQuantities->filter(fn ($quantity) => $quantity > 0)->keys();
+
+        $selectedAddonOnlyProducts = $this->getProducts($data)
+            ->filter(fn (ProductDomainObject $product) => $product->getIsAddonOnly()
+                && $selectedProductIds->contains($product->getId()));
+
+        if ($selectedAddonOnlyProducts->isEmpty()) {
+            return;
+        }
+
+        $parentIdsByAddon = $this->productRepository->findParentProductIds(
+            $selectedAddonOnlyProducts->map(fn (ProductDomainObject $product) => $product->getId())->values()->all(),
+        );
+
+        foreach ($selectedAddonOnlyProducts as $addon) {
+            $hasSelectedParent = collect($parentIdsByAddon->get($addon->getId(), []))
+                ->contains(fn ($parentId) => $selectedProductIds->contains($parentId));
+
+            if (! $hasSelectedParent) {
+                $productIndex = $productLines->search(fn ($line) => (int) $line['product_id'] === $addon->getId());
+                throw ValidationException::withMessages([
+                    'products.'.(is_int($productIndex) ? $productIndex : 0) => __(':product is an add-on and can only be purchased with the product it belongs to', [
+                        'product' => $addon->getTitle(),
+                    ]),
+                ]);
+            }
         }
     }
 
@@ -337,6 +398,8 @@ class OrderCreateRequestValidationService
             throw new NotFoundHttpException(sprintf('Product ID %d not found', $productId));
         }
 
+        $this->hydrateReservedQuantitiesAndMarkLockedTiers($product);
+
         $this->validateProductEvent(
             event: $event,
             productId: $productId,
@@ -346,6 +409,11 @@ class OrderCreateRequestValidationService
         $this->validateProductVisibility(
             product: $product,
             promoCode: $promoCode
+        );
+
+        $this->validateProductSaleWindow(
+            productIndex: $productIndex,
+            product: $product
         );
 
         $this->validateProductQuantity(
@@ -373,6 +441,27 @@ class OrderCreateRequestValidationService
             productAndQuantities: $productAndQuantities,
             product: $product
         );
+    }
+
+    private function hydrateReservedQuantitiesAndMarkLockedTiers(ProductDomainObject $product): void
+    {
+        $quantitiesByPriceId = $this->availableProductQuantities
+            ->productQuantities
+            ->keyBy('price_id');
+
+        $product->getProductPrices()?->each(function (ProductPriceDomainObject $price) use ($quantitiesByPriceId) {
+            /** @var AvailableProductQuantitiesDTO|null $quantities */
+            $quantities = $quantitiesByPriceId->get($price->getId());
+            $price->setQuantityReserved($quantities?->quantity_reserved ?? 0);
+
+            if ($quantities !== null && $price->isQuantityPerOccurrence()) {
+                $price->setQuantityAvailable(
+                    $quantities->quantity_available === Constants::INFINITE ? null : $quantities->quantity_available
+                );
+            }
+        });
+
+        $product->markLockedTiers();
     }
 
     /**
@@ -427,7 +516,7 @@ class OrderCreateRequestValidationService
             throw ValidationException::withMessages([
                 "products.$productIndex" => __('The maximum number of products available for :products is :max', [
                     'max' => $maxPerOrder,
-                    'product' => $product->getTitle(),
+                    'products' => $product->getTitle(),
                 ]),
             ]);
         }
@@ -446,6 +535,28 @@ class OrderCreateRequestValidationService
     {
         if ($product->getEventId() !== $event->getId()) {
             throw new NotFoundHttpException(sprintf('Product ID %d not found for event ID %d', $productId, $event->getId()));
+        }
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    private function validateProductSaleWindow(int $productIndex, ProductDomainObject $product): void
+    {
+        if ($product->isBeforeSaleStartDate()) {
+            throw ValidationException::withMessages([
+                "products.$productIndex" => __(':product is not yet on sale', [
+                    'product' => $product->getTitle(),
+                ]),
+            ]);
+        }
+
+        if ($product->isAfterSaleEndDate()) {
+            throw ValidationException::withMessages([
+                "products.$productIndex" => __('Sales for :product have ended', [
+                    'product' => $product->getTitle(),
+                ]),
+            ]);
         }
     }
 
@@ -517,7 +628,13 @@ class OrderCreateRequestValidationService
             }
 
             $selectedPrice = $productPrices?->first(fn (ProductPriceDomainObject $price) => $price->getId() === $priceId);
-            if ((int) $quantity > 0 && $selectedPrice?->getIsHidden()) {
+            if ((int) $quantity > 0 && $selectedPrice?->isLockedBehindEarlierTier()) {
+                $errors["products.$productIndex.quantities.$quantityIndex.price_id"] = __('This price is not on sale yet');
+
+                continue;
+            }
+
+            if ((int) $quantity > 0 && $this->isPriceUnavailable($selectedPrice)) {
                 $errors["products.$productIndex.quantities.$quantityIndex.price_id"] = __('Invalid price ID');
             }
         }
@@ -525,6 +642,11 @@ class OrderCreateRequestValidationService
         if (! empty($errors)) {
             throw ValidationException::withMessages($errors);
         }
+    }
+
+    private function isPriceUnavailable(?ProductPriceDomainObject $price): bool
+    {
+        return $price === null || ! $price->isOnSale();
     }
 
     /**

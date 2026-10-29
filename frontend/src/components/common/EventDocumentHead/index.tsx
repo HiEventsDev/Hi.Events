@@ -2,20 +2,23 @@
 import {Helmet} from "react-helmet-async";
 import {Event, LocationType} from "../../../types";
 import {eventCoverImageUrl, eventHomepageUrl} from "../../../utilites/urlHelper.ts";
-import {utcToTz} from "../../../utilites/dates.ts";
+import {formatDateWithLocale, utcToTz} from "../../../utilites/dates.ts";
 import {summariseEventLocations} from "../../../utilites/effectiveLocation.ts";
 import {formatAddress} from "../../../utilites/addressUtilities.ts";
 import {htmlSafeJsonStringify} from "../../../utilites/safeScriptJson.js";
+import {useGetEventLineupPublic} from "../../../queries/useGetEventLineupPublic.ts";
+import {lineupStructuredData} from "../../../utilites/lineupStructuredData.ts";
 
 interface EventDocumentHeadProps {
     event: Event;
 }
 
 export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
+    const {data: lineup} = useGetEventLineupPublic(event.id);
     const eventSettings = event.settings;
     const products = event.product_categories?.flatMap(category => category.products) ?? [];
     const title = (eventSettings?.seo_title ?? event.title) + ' | ' + event.organizer?.name;
-    const description = eventSettings?.seo_description ?? event.description_preview;
+    const providedDescription = eventSettings?.seo_description ?? event.description_preview;
     const keywords = eventSettings?.seo_keywords;
     const image = eventCoverImageUrl(event);
     const url = eventHomepageUrl(event);
@@ -56,6 +59,12 @@ export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
         : null;
     const placeName = venueName
         ?? (effective?.type === LocationType.InPerson && structuredAddress ? formatAddress(structuredAddress) : null);
+
+    const description = providedDescription || [
+        seriesStartDate ? formatDateWithLocale(seriesStartDate, 'fullDateTime', event.timezone) : null,
+        placeName,
+        event.organizer?.name,
+    ].filter(Boolean).join(' · ');
 
     const includePlace = effective?.type === LocationType.InPerson && address && Object.keys(address).length > 1;
     const location = includePlace ? {
@@ -105,6 +114,7 @@ export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
             validFrom: startDate,
             availability: product?.is_available ? "http://schema.org/InStock" : "http://schema.org/SoldOut",
         })),
+        ...lineupStructuredData(event, lineup, url, includePlace ? {name: placeName, address, geo} : undefined),
     };
 
     return (
@@ -124,7 +134,7 @@ export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
             {image && <meta name="twitter:image" content={image}/>}
             <meta name="twitter:card" content="summary_large_image"/>
 
-            <meta name="robots" content="index, follow"/>
+            <meta name="robots" content={eventSettings?.allow_search_engine_indexing === false ? "noindex, nofollow" : "index, follow"}/>
 
             <link rel="canonical" href={url}/>
 

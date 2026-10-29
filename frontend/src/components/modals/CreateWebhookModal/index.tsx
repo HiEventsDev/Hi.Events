@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {GenericModalProps, IdParam} from "../../../types";
-import {Modal} from "../../common/Modal";
+import {Modal, ModalFooter} from "../../common/Modal";
 import {t, Trans} from "@lingui/macro";
 import {WebhookForm} from "../../forms/WebhookForm";
 import {useForm} from "@mantine/form";
@@ -66,11 +66,13 @@ export const CreateWebhookModal = ({onClose}: GenericModalProps) => {
                 <TextInput
                     value={secret}
                     readOnly
-                    rightSection={<CopyButton value={secret}/>}
+                    rightSection={<CopyButton value={secret} label={t`Copy signing secret`}/>}
                 />
-                <Button fullWidth mt="xl" onClick={onClose}>
-                    {t`Done`}
-                </Button>
+                <ModalFooter>
+                    <Button onClick={onClose}>
+                        {t`Done`}
+                    </Button>
+                </ModalFooter>
             </Modal>
         );
     }
@@ -83,14 +85,15 @@ export const CreateWebhookModal = ({onClose}: GenericModalProps) => {
         >
             <form onSubmit={form.onSubmit(handleSubmit)}>
                 <WebhookForm form={form} isEventContext/>
-                <Button
-                    type="submit"
-                    fullWidth
-                    mt="xl"
-                    loading={createMutation.isPending}
-                >
-                    {t`Create Webhook`}
-                </Button>
+                <ModalFooter>
+                    <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                    <Button
+                        type="submit"
+                        loading={createMutation.isPending}
+                    >
+                        {t`Create Webhook`}
+                    </Button>
+                </ModalFooter>
             </form>
         </Modal>
     );

@@ -17,6 +17,7 @@ class EventSettingsResource extends JsonResource
             'post_checkout_message' => $this->getPostCheckoutMessage(),
             'product_page_message' => $this->getProductPageMessage(),
             'continue_button_text' => $this->getContinueButtonText(),
+            'get_tickets_button_text' => $this->getGetTicketsButtonText(),
             'required_attendee_details' => $this->getRequireAttendeeDetails(),
             'attendee_details_collection_method' => $this->getAttendeeDetailsCollectionMethod(),
             'email_footer_message' => $this->getEmailFooterMessage(),
@@ -50,6 +51,10 @@ class EventSettingsResource extends JsonResource
             'payment_providers' => $this->getPaymentProviders(),
             'offline_payment_instructions' => $this->getOfflinePaymentInstructions(),
             'allow_orders_awaiting_offline_payment_to_check_in' => $this->getAllowOrdersAwaitingOfflinePaymentToCheckIn(),
+            'offline_payment_reporting_enabled' => $this->getOfflinePaymentReportingEnabled(),
+            'offline_payment_order_reference_enabled' => $this->getOfflinePaymentOrderReferenceEnabled(),
+            'payment_links_enabled' => $this->getPaymentLinksEnabled(),
+            'payment_link_expiry_hours' => $this->getPaymentLinkExpiryHours(),
 
             // Invoice settings
             'enable_invoicing' => $this->getEnableInvoicing(),
@@ -74,6 +79,7 @@ class EventSettingsResource extends JsonResource
 
             // Homepage theme settings
             'homepage_theme_settings' => $this->getHomepageThemeSettings(),
+            'homepage_sections' => $this->getHomepageSections(),
 
             // Self-service settings
             'allow_attendee_self_edit' => $this->getAllowAttendeeSelfEdit(),

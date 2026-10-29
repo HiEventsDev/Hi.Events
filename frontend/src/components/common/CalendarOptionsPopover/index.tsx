@@ -1,45 +1,36 @@
 import {t} from "@lingui/macro";
-import {Button, Popover, Stack, Text} from "@mantine/core";
+import {Menu} from "@mantine/core";
 import {IconBrandGoogle, IconDownload} from "@tabler/icons-react";
 import {Event, EventOccurrence} from "../../../types.ts";
-import {createGoogleCalendarUrl, downloadICSFile} from "../../../utilites/calendar.ts";
-import {ReactNode} from "react";
+import {CalendarEntry, calendarEntryForEvent, createGoogleCalendarUrl, downloadICSFile} from "../../../utilites/calendar.ts";
+import {ReactElement} from "react";
 
-interface CalendarOptionsPopoverProps {
-    event: Event;
-    occurrence?: EventOccurrence;
-    children: ReactNode;
-}
+type CalendarOptionsPopoverProps = { children: ReactElement }
+    & ({ event: Event; occurrence?: EventOccurrence } | { entry: CalendarEntry });
 
-export const CalendarOptionsPopover = ({event, occurrence, children}: CalendarOptionsPopoverProps) => {
+export const CalendarOptionsPopover = (props: CalendarOptionsPopoverProps) => {
+    const entry = 'entry' in props ? props.entry : calendarEntryForEvent(props.event, props.occurrence);
+
     return (
-        <Popover width={200} position="bottom" withArrow shadow="md">
-            <Popover.Target>
-                {children}
-            </Popover.Target>
-            <Popover.Dropdown>
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>{t`Choose calendar`}</Text>
-                    <Button
-                        variant="light"
-                        size="xs"
-                        leftSection={<IconBrandGoogle size={16}/>}
-                        onClick={() => window?.open(createGoogleCalendarUrl(event, occurrence), '_blank')}
-                        fullWidth
-                    >
-                        {t`Google Calendar`}
-                    </Button>
-                    <Button
-                        variant="light"
-                        size="xs"
-                        leftSection={<IconDownload size={16}/>}
-                        onClick={() => downloadICSFile(event, occurrence)}
-                        fullWidth
-                    >
-                        {t`Download .ics`}
-                    </Button>
-                </Stack>
-            </Popover.Dropdown>
-        </Popover>
+        <Menu width={200} position="bottom" withArrow shadow="md" withInitialFocusPlaceholder={false}>
+            <Menu.Target>
+                {props.children}
+            </Menu.Target>
+            <Menu.Dropdown>
+                <Menu.Label>{t`Choose calendar`}</Menu.Label>
+                <Menu.Item
+                    leftSection={<IconBrandGoogle size={16}/>}
+                    onClick={() => window?.open(createGoogleCalendarUrl(entry), '_blank')}
+                >
+                    {t`Google Calendar`}
+                </Menu.Item>
+                <Menu.Item
+                    leftSection={<IconDownload size={16}/>}
+                    onClick={() => downloadICSFile(entry)}
+                >
+                    {t`Download .ics`}
+                </Menu.Item>
+            </Menu.Dropdown>
+        </Menu>
     );
 };
