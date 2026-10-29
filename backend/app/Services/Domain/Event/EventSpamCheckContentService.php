@@ -2,6 +2,8 @@
 
 namespace HiEvents\Services\Domain\Event;
 
+use HiEvents\DomainObjects\EmailTemplateDomainObject;
+use HiEvents\DomainObjects\Enums\EmailTemplateType;
 use HiEvents\DomainObjects\Enums\LineupBillingTier;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventLineupEntryDomainObject;
@@ -16,10 +18,13 @@ use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProfileDomainObject;
 use HiEvents\DomainObjects\QuestionDomainObject;
 use HiEvents\Repository\Eloquent\Value\Relationship;
+use HiEvents\Repository\Interfaces\EmailTemplateRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Services\Domain\Email\EmailTemplateService;
 use HiEvents\Services\Domain\Event\DTO\EventSpamCheckContentDTO;
 use HiEvents\Services\Domain\Lineup\LineupHighlightSelector;
 use Illuminate\Support\Collection;
+use RuntimeException;
 
 class EventSpamCheckContentService
 {
@@ -34,6 +39,8 @@ class EventSpamCheckContentService
     public function __construct(
         private readonly EventRepositoryInterface $eventRepository,
         private readonly LineupHighlightSelector $lineupHighlightSelector,
+        private readonly EmailTemplateRepositoryInterface $emailTemplateRepository,
+        private readonly EmailTemplateService $emailTemplateService,
     ) {}
 
     public function loadEvent(int $eventId): ?EventDomainObject
@@ -64,6 +71,7 @@ class EventSpamCheckContentService
         $lineupEntries = $this->lineupEntriesInEmailOrder($event);
         $scheduleItems = $this->scheduleItemsInTimeOrder($event);
         $ticketEmailLineup = $this->ticketEmailLineupContent($event, $lineupEntries, $scheduleItems);
+        $emailTemplates = $this->activeEmailTemplates($event);
 
         return new EventSpamCheckContentDTO(
             title: $event->getTitle(),
@@ -79,7 +87,84 @@ class EventSpamCheckContentService
                 ...$this->lineupContent($lineupEntries),
                 ...$this->scheduleContent($scheduleItems),
             ], static fn (?string $value): bool => $value !== null && trim($value) !== ''),
+            emailTemplates: $this->emailTemplateSourceContent($emailTemplates),
+            renderedEmailTemplates: $this->renderedEmailTemplateContent($emailTemplates),
         );
+    }
+
+    /**
+     * @return Collection<string, EmailTemplateDomainObject>
+     */
+    private function activeEmailTemplates(EventDomainObject $event): Collection
+    {
+        $templatesByScope = [
+            'event' => $this->emailTemplateRepository->findByEvent($event->getId()),
+            'organizer' => $event->getOrganizerId() === null
+                ? collect()
+                : $this->emailTemplateRepository->findByOrganizer($event->getOrganizerId()),
+        ];
+
+        $labelled = [];
+
+        foreach ($templatesByScope as $scope => $templates) {
+            $ordered = $templates
+                ->sortBy(static fn (EmailTemplateDomainObject $template): array => [$template->getTemplateType(), $template->getId()])
+                ->values();
+
+            foreach ($ordered as $index => $template) {
+                $label = sprintf('%s email template %d (%s)', $scope, $index + 1, str_replace('_', ' ', $template->getTemplateType()));
+                $labelled[$label] = $template;
+            }
+        }
+
+        return collect($labelled);
+    }
+
+    /**
+     * @param  Collection<string, EmailTemplateDomainObject>  $templates
+     * @return array<string, string>
+     */
+    private function emailTemplateSourceContent(Collection $templates): array
+    {
+        $content = [];
+
+        foreach ($templates as $label => $template) {
+            $cta = $template->getCta();
+
+            $content[$label.' subject'] = $template->getSubject();
+            $content[$label.' button'] = is_array($cta) ? ($cta['label'] ?? null) : null;
+            $content[$label.' body'] = $template->getBody();
+        }
+
+        return array_filter($content, static fn (?string $value): bool => $value !== null && trim($value) !== '');
+    }
+
+    /**
+     * @param  Collection<string, EmailTemplateDomainObject>  $templates
+     * @return array<string, string>
+     */
+    private function renderedEmailTemplateContent(Collection $templates): array
+    {
+        $content = [];
+
+        foreach ($templates as $label => $template) {
+            $type = EmailTemplateType::tryFrom($template->getTemplateType());
+
+            if ($type === null) {
+                continue;
+            }
+
+            try {
+                $preview = $this->emailTemplateService->previewTemplate($template->getSubject(), $template->getBody(), $type);
+            } catch (RuntimeException) {
+                continue;
+            }
+
+            $content[$label.' subject rendered with sample data'] = $preview['subject'];
+            $content[$label.' body rendered with sample data'] = $preview['body'];
+        }
+
+        return array_filter($content, static fn (?string $value): bool => $value !== null && trim($value) !== '');
     }
 
     /**

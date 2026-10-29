@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Services\Domain\Event;
 
+use HiEvents\DomainObjects\EmailTemplateDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Jobs\Event\EventSpamCheckJob;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -57,12 +58,12 @@ class EventSpamCheckDispatchServiceTest extends TestCase
         Bus::assertNotDispatched(EventSpamCheckJob::class);
     }
 
-    public function test_dispatches_for_every_live_event_of_an_organizer(): void
+    public function test_dispatches_for_every_live_and_archived_event_of_an_organizer(): void
     {
         $this->eventSpamCheckService->shouldReceive('isEnabled')->andReturnTrue();
         $this->eventRepository->shouldReceive('findWhere')->once()->with([
             'organizer_id' => 3,
-            'status' => 'LIVE',
+            ['status', 'in', ['LIVE', 'ARCHIVED']],
         ])->andReturn(collect([
             (new EventDomainObject)->setId(11),
             (new EventDomainObject)->setId(12),
@@ -71,6 +72,29 @@ class EventSpamCheckDispatchServiceTest extends TestCase
         $this->service->dispatchForOrganizer(3);
 
         Bus::assertDispatchedTimes(EventSpamCheckJob::class, 2);
+    }
+
+    public function test_dispatches_for_the_event_an_email_template_belongs_to(): void
+    {
+        $this->eventSpamCheckService->shouldReceive('isEnabled')->andReturnTrue();
+        $this->eventRepository->shouldNotReceive('findWhere');
+
+        $this->service->dispatchForEmailTemplate((new EmailTemplateDomainObject)->setEventId(5)->setOrganizerId(null));
+
+        Bus::assertDispatchedTimes(EventSpamCheckJob::class, 1);
+    }
+
+    public function test_dispatches_for_the_organizer_events_an_email_template_applies_to(): void
+    {
+        $this->eventSpamCheckService->shouldReceive('isEnabled')->andReturnTrue();
+        $this->eventRepository->shouldReceive('findWhere')->once()->with([
+            'organizer_id' => 3,
+            ['status', 'in', ['LIVE', 'ARCHIVED']],
+        ])->andReturn(collect([(new EventDomainObject)->setId(11)]));
+
+        $this->service->dispatchForEmailTemplate((new EmailTemplateDomainObject)->setEventId(null)->setOrganizerId(3));
+
+        Bus::assertDispatchedTimes(EventSpamCheckJob::class, 1);
     }
 
     public function test_does_not_look_up_organizer_events_when_disabled(): void

@@ -9,7 +9,6 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventLocationDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\LocationDomainObject;
-use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Events\Dispatcher;
 use HiEvents\Events\EventUpdateEvent;
 use HiEvents\Exceptions\CannotChangeCurrencyException;
@@ -22,6 +21,7 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\UpdateEventDTO;
 use HiEvents\Services\Domain\Event\EventSpamCheckDispatchService;
+use HiEvents\Services\Domain\Event\EventSpamCheckService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
@@ -112,7 +112,7 @@ readonly class UpdateEventHandler
 
     private function dispatchSpamCheckIfContentChanged(EventDomainObject $existingEvent, array $attributes): void
     {
-        if ($existingEvent->getStatus() !== EventStatus::LIVE->name) {
+        if (! in_array($existingEvent->getStatus(), EventSpamCheckService::CHECKED_EVENT_STATUSES, true)) {
             return;
         }
 

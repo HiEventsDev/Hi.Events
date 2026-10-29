@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Services\Domain\Event;
 
+use HiEvents\DomainObjects\EmailTemplateDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventLineupEntryDomainObject;
 use HiEvents\DomainObjects\EventScheduleItemDomainObject;
@@ -14,14 +15,22 @@ use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\OrganizerSettingDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProfileDomainObject;
+use HiEvents\Repository\Interfaces\EmailTemplateRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Services\Domain\Email\EmailContextHtmlEscaper;
+use HiEvents\Services\Domain\Email\EmailTemplateService;
+use HiEvents\Services\Domain\Email\EmailTokenContextBuilder;
 use HiEvents\Services\Domain\Event\EventSpamCheckContentService;
 use HiEvents\Services\Domain\Event\EventSpamCheckService;
 use HiEvents\Services\Domain\Lineup\LineupHighlightSelector;
 use HiEvents\Services\Infrastructure\Ai\Agents\EventSpamDetectionAgent;
+use HiEvents\Services\Infrastructure\Email\LiquidTemplateRenderer;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
+use HTMLPurifier;
 use Illuminate\Config\Repository;
 use Illuminate\Support\Collection;
 use Mockery;
+use Mockery\MockInterface;
 use Tests\TestCase;
 
 class EventSpamCheckPromptBudgetTest extends TestCase
@@ -32,11 +41,28 @@ class EventSpamCheckPromptBudgetTest extends TestCase
 
     private EventSpamCheckService $checkService;
 
+    private EmailTemplateRepositoryInterface|MockInterface $emailTemplateRepository;
+
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->contentService = new EventSpamCheckContentService(Mockery::mock(EventRepositoryInterface::class), new LineupHighlightSelector);
+        $this->emailTemplateRepository = Mockery::mock(EmailTemplateRepositoryInterface::class);
+        $this->emailTemplateRepository->shouldReceive('findByEvent')->andReturn(collect())->byDefault();
+        $this->emailTemplateRepository->shouldReceive('findByOrganizer')->andReturn(collect())->byDefault();
+
+        $this->contentService = new EventSpamCheckContentService(
+            Mockery::mock(EventRepositoryInterface::class),
+            new LineupHighlightSelector,
+            $this->emailTemplateRepository,
+            new EmailTemplateService(
+                Mockery::mock(EmailTemplateRepositoryInterface::class),
+                new LiquidTemplateRenderer,
+                new EmailTokenContextBuilder(new LiquidTemplateRenderer, new HtmlPurifierService(new HTMLPurifier), new EmailContextHtmlEscaper),
+                new EmailContextHtmlEscaper,
+                new HtmlPurifierService(new HTMLPurifier),
+            ),
+        );
         $this->checkService = new EventSpamCheckService(new Repository([
             'app' => ['event_spam_check_confidence_threshold' => 0.7],
         ]));
@@ -202,6 +228,32 @@ class EventSpamCheckPromptBudgetTest extends TestCase
             'product 1 description: Entry',
             'lineup 1 role: Nova role',
         ])));
+    }
+
+    public function test_email_template_reaches_the_prompt_behind_padded_content_and_a_long_preamble(): void
+    {
+        $this->emailTemplateRepository->shouldReceive('findByEvent')->with(1)->andReturn(collect([
+            (new EmailTemplateDomainObject)
+                ->setId(1)
+                ->setTemplateType('attendee_ticket')
+                ->setSubject('Your ticket')
+                ->setBody(str_repeat('<p>Thanks for booking, see you there.</p>', 25).'<p>'.self::PHISHING.'</p>')
+                ->setCta(['label' => 'View ticket', 'url_token' => 'ticket.url']),
+        ]));
+
+        $products = array_map(
+            fn (int $index) => (new ProductDomainObject)->setTitle("Ticket $index")->setDescription($this->padding()),
+            range(1, 12),
+        );
+
+        $this->check($this->event()
+            ->setOrganizer($this->organizerWithPaddedHomepage())
+            ->setProducts(new Collection($products)));
+
+        EventSpamDetectionAgent::assertPrompted(fn ($prompt) => str_contains($prompt->prompt, '<email_templates>')
+            && str_contains($prompt->prompt, 'event email template 1 (attendee ticket) subject: Your ticket')
+            && str_contains($prompt->prompt, 'event email template 1 (attendee ticket) body rendered with sample data: ')
+            && substr_count($prompt->prompt, self::PHISHING) === 2);
     }
 
     private function check(EventDomainObject $event): void
