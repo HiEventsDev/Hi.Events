@@ -49,7 +49,7 @@ test.describe('taxes and fees', () => {
     await checkout.continueToPayment();
     await Promise.all([
       page.waitForResponse((r) => r.url().includes('await-offline-payment') && r.ok()),
-      page.getByRole('button', { name: /^Pay\b/ }).click(),
+      page.getByTestId('offline-payment-button').click(),
     ]);
     await page.waitForURL(/\/checkout\/\d+\/[^/]+\/summary/);
     await page.reload();
