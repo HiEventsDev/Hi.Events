@@ -32,7 +32,9 @@ class UpdateCheckInlistHandler
 
         return $this->updateCheckInlistService->updateCheckInlist(
             checkInList: $checkInList,
-            productIds: $data->productIds
+            productIds: $data->productIds,
+            badgePrintingEnabled: $data->badgePrintingEnabled,
+            kioskMode: $data->kioskMode,
         );
     }
 }

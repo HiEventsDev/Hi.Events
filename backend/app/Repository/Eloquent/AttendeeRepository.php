@@ -6,14 +6,18 @@ use HiEvents\DomainObjects\AttendeeCheckInDomainObject;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
+use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Models\Attendee;
+use HiEvents\Repository\DTO\BadgeAttendeeQueryDTO;
+use HiEvents\Repository\DTO\BadgeStatsDTO;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -172,6 +176,100 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
             where: $where,
             limit: min($params->per_page, 250),
         );
+    }
+
+    public function findForBadges(BadgeAttendeeQueryDTO $query): LengthAwarePaginator
+    {
+        $this->model = $this->badgeEligibleQuery($this->model, $query->event_id, $query->include_awaiting_payment)
+            ->select('attendees.*');
+
+        if ($query->attendee_ids !== null) {
+            $this->model = $this->model->whereIn('attendees.id', $query->attendee_ids);
+        }
+
+        if ($query->order_id !== null) {
+            $this->model = $this->model->where('attendees.order_id', $query->order_id);
+        }
+
+        if ($query->product_ids !== null && $query->product_ids !== []) {
+            $this->model = $this->model->whereIn('attendees.product_id', $query->product_ids);
+        }
+
+        if ($query->event_occurrence_id !== null) {
+            $this->model = $this->model->where('attendees.event_occurrence_id', $query->event_occurrence_id);
+        }
+
+        if ($query->only_unprinted) {
+            $this->model = $this->model->whereNull('attendees.badge_printed_at');
+        }
+
+        $this->model = match ($query->sort_by) {
+            BadgeAttendeeQueryDTO::SORT_FIRST_NAME => $this->model
+                ->orderByRaw('lower(attendees.first_name) asc nulls last, lower(attendees.last_name) asc nulls last'),
+            BadgeAttendeeQueryDTO::SORT_PRODUCT => $this->model
+                ->leftJoin('products', 'products.id', '=', 'attendees.product_id')
+                ->orderBy('products.title')
+                ->orderByRaw('lower(attendees.last_name) asc nulls last, lower(attendees.first_name) asc nulls last'),
+            BadgeAttendeeQueryDTO::SORT_CREATED_AT => $this->model,
+            default => $this->model
+                ->orderByRaw('lower(attendees.last_name) asc nulls last, lower(attendees.first_name) asc nulls last'),
+        };
+
+        $this->model = $this->model->orderBy('attendees.id');
+
+        $this->loadRelation(new Relationship(ProductDomainObject::class, name: 'product'));
+        $this->loadRelation(new Relationship(EventOccurrenceDomainObject::class, name: 'event_occurrence'));
+        $this->setMaxPerPage(BadgeAttendeeQueryDTO::MAX_PER_PAGE);
+
+        return $this->paginateWhere(
+            where: [],
+            limit: $query->per_page,
+            page: $query->page,
+        );
+    }
+
+    public function getBadgeStats(int $eventId, bool $includeAwaitingPayment, ?int $eventOccurrenceId = null): BadgeStatsDTO
+    {
+        return $this->runQuery(function () use ($eventId, $includeAwaitingPayment, $eventOccurrenceId) {
+            $query = $this->badgeEligibleQuery(Attendee::query(), $eventId, $includeAwaitingPayment);
+
+            if ($eventOccurrenceId !== null) {
+                $query->where('attendees.event_occurrence_id', $eventOccurrenceId);
+            }
+
+            $row = $query->selectRaw('
+                COUNT(*) AS total,
+                COUNT(*) FILTER (WHERE attendees.badge_printed_at IS NOT NULL) AS printed,
+                COUNT(*) FILTER (WHERE attendees.badge_print_count = 0) AS not_printed,
+                COUNT(*) FILTER (WHERE attendees.badge_print_count > 0 AND attendees.badge_printed_at IS NULL) AS needs_reprint
+            ')->first();
+
+            return new BadgeStatsDTO(
+                total: (int) $row->total,
+                printed: (int) $row->printed,
+                not_printed: (int) $row->not_printed,
+                needs_reprint: (int) $row->needs_reprint,
+            );
+        });
+    }
+
+    private function badgeEligibleQuery(Builder|Model $query, int $eventId, bool $includeAwaitingPayment): Builder
+    {
+        $attendeeStatuses = [AttendeeStatus::ACTIVE->name];
+        $orderStatuses = [OrderStatus::COMPLETED->name];
+
+        if ($includeAwaitingPayment) {
+            $attendeeStatuses[] = AttendeeStatus::AWAITING_PAYMENT->name;
+            $orderStatuses[] = OrderStatus::AWAITING_OFFLINE_PAYMENT->name;
+        }
+
+        return $query
+            ->join('orders', 'orders.id', '=', 'attendees.order_id')
+            ->where('attendees.event_id', $eventId)
+            ->whereNull('attendees.deleted_at')
+            ->whereNull('orders.deleted_at')
+            ->whereIn('attendees.status', $attendeeStatuses)
+            ->whereIn('orders.status', $orderStatuses);
     }
 
     public function getSoldQuantitiesByPriceForOccurrence(int $occurrenceId): array

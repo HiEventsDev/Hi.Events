@@ -2,6 +2,7 @@ import {Attendee, EventType} from "../../../types.ts";
 import {CheckInController} from "../../../hooks/useCheckInController.tsx";
 import {CheckInOptionsModal} from "../../common/CheckIn/CheckInOptionsModal";
 import {AttendeeDetailSheet} from "./AttendeeDetailSheet.tsx";
+import {BadgePrintPortal} from "../../common/NameBadge/BadgePrintPortal.tsx";
 
 interface CheckInModalsProps {
     controller: CheckInController;
@@ -27,6 +28,9 @@ export const CheckInModals = ({controller, checkInListShortId, eventType, timezo
                 timezone={timezone}
                 onClose={() => controller.setDetailAttendeePublicId(null)}
                 isActionPending={controller.isCheckInPending || controller.isDeletePending}
+                canPrintBadge={controller.badgePrinter.isEnabled}
+                isPrintingBadge={!!controller.detailAttendeePublicId && controller.badgePrinter.isPrinting(controller.detailAttendeePublicId)}
+                onPrintBadge={(detail) => controller.badgePrinter.printBadge(detail.public_id)}
                 onCheckInToggle={(detail) => {
                     const attendee: Attendee = {
                         id: detail.id,
@@ -53,6 +57,7 @@ export const CheckInModals = ({controller, checkInListShortId, eventType, timezo
                     controller.handleCheckInToggle(attendee);
                 }}
             />
+            {controller.badgePrinter.isEnabled && <BadgePrintPortal printer={controller.badgePrinter}/>}
             <audio ref={controller.scanSuccessAudioRef} src="/sounds/scan-success.wav"/>
             <audio ref={controller.scanErrorAudioRef} src="/sounds/scan-error.wav"/>
         </>

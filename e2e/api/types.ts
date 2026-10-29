@@ -171,6 +171,8 @@ export interface AttendeeRecord {
   order_id: number;
   product_id: number;
   seat_label?: string | null;
+  badge_print_count?: number;
+  badge_print_status?: 'NOT_PRINTED' | 'PRINTED' | 'NEEDS_REPRINT';
 }
 
 export interface PromoCode {
@@ -182,6 +184,33 @@ export interface CheckInList {
   id: number;
   short_id: string;
   name: string;
+  badge_printing_enabled?: boolean;
+  kiosk_mode?: boolean;
+}
+
+export interface BadgeDesignLine {
+  source: 'FIRST_NAME' | 'LAST_NAME' | 'FULL_NAME' | 'TICKET_TYPE' | 'QUESTION' | 'OCCURRENCE_DATE' | 'CUSTOM_TEXT';
+  size: 'XL' | 'L' | 'M' | 'S';
+  question_id?: number | null;
+  text?: string | null;
+}
+
+export interface BadgeDesign {
+  template: string;
+  size: string;
+  sheet: string;
+  accent_color: string;
+  lines: BadgeDesignLine[];
+  ribbons: { product_id: number; label: string | null; color: string }[];
+  is_customized: boolean;
+  [key: string]: unknown;
+}
+
+export interface BadgeStats {
+  total: number;
+  printed: number;
+  not_printed: number;
+  needs_reprint: number;
 }
 
 export interface Occurrence {
@@ -253,6 +282,7 @@ export type AttendeeDetailsCollection = 'PER_TICKET' | 'PER_ORDER';
 
 export interface EventSettings {
   payment_providers?: string[];
+  enabled_features?: string[];
   offline_payment_instructions?: string | null;
   waitlist_enabled?: boolean;
   attendee_details_collection_method?: AttendeeDetailsCollection;
@@ -318,6 +348,8 @@ export interface CreateCheckInListPayload {
   activates_at?: string;
   product_ids?: number[];
   event_occurrence_id?: number;
+  badge_printing_enabled?: boolean;
+  kiosk_mode?: boolean;
 }
 
 export interface CreateAttendeePayload {

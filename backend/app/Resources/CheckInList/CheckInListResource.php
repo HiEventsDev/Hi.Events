@@ -28,6 +28,8 @@ class CheckInListResource extends JsonResource
             'public_show_attendee_notes' => $this->getPublicShowAttendeeNotes(),
             'public_show_question_answers' => $this->getPublicShowQuestionAnswers(),
             'public_show_order_details' => $this->getPublicShowOrderDetails(),
+            'badge_printing_enabled' => $this->getBadgePrintingEnabled(),
+            'kiosk_mode' => $this->getKioskMode(),
             $this->mergeWhen($this->getEvent() !== null, fn () => [
                 'is_expired' => $this->isExpired($this->getEvent()->getTimezone()),
                 'is_active' => $this->isActivated($this->getEvent()->getTimezone()),

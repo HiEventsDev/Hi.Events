@@ -128,3 +128,18 @@
   justify-content: flex-start;
   flex-shrink: 0;
 }
+
+.printerSettings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hi-spacing-md);
+
+  :global(.mantine-InputWrapper-root),
+  :global(.mantine-Switch-root) {
+    margin-bottom: 0;
+  }
+}
+
+.printerBtnActive {
+  color: var(--mantine-color-teal-7);
+}

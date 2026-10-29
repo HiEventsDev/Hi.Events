@@ -18,5 +18,7 @@ class UpsertCheckInListDTO extends BaseDTO
         public bool $publicShowAttendeeNotes = false,
         public bool $publicShowQuestionAnswers = false,
         public bool $publicShowOrderDetails = false,
+        public ?bool $badgePrintingEnabled = null,
+        public ?bool $kioskMode = null,
     ) {}
 }

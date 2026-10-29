@@ -113,6 +113,7 @@ Feature rules live in `.claude/rules/`; Claude Code loads each file automaticall
 | Enterprise SSO | `.claude/rules/ee/enterprise-sso.md` |
 | Reserved seating | `.claude/rules/ee/seating.md` |
 | Lineup & schedule | `.claude/rules/features/lineup.md` |
+| Name badges | `.claude/rules/features/badges.md` |
 | Homepage sections | `.claude/rules/features/homepage-sections.md` |
 | Embeddable widget | `.claude/rules/features/widget.md` |
 | Frontend UI patterns | `.claude/rules/frontend/ui.md` |

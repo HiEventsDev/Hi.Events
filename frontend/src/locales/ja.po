@@ -13,12 +13,12 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/components/layouts/Event/index.tsx:260
+#: src/components/layouts/Event/index.tsx:264
 #: src/components/layouts/OrganizerLayout/index.tsx:248
 msgid "- Click to Publish"
 msgstr "- クリックして公開"
 
-#: src/components/layouts/Event/index.tsx:262
+#: src/components/layouts/Event/index.tsx:266
 #: src/components/layouts/OrganizerLayout/index.tsx:250
 msgid "- Click to Unpublish"
 msgstr "- クリックして非公開"
@@ -35,9 +35,22 @@ msgstr "(空)"
 msgid "(none)"
 msgstr "(なし)"
 
+#: src/components/modals/PrintBadgesModal/index.tsx:174
+#: src/components/routes/event/Badges/BadgePrint.tsx:161
+msgid "{0, plural, one {# badge} other {# badges}}"
+msgstr "{0, plural, other {名札#枚}}"
+
+#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:309
+msgid "{0, plural, one {Badge printed once} other {Badge printed # times}}"
+msgstr "{0, plural, other {名札を#回印刷済み}}"
+
 #: src/components/common/ReportTable/index.tsx:336
 msgid "{0}"
 msgstr "{0}"
+
+#: src/components/routes/event/Badges/BadgePrint.tsx:160
+msgid "{0} · {1} · {2}"
+msgstr "{0} · {1} · {2}"
 
 #: src/components/routes/admin/Announcements/index.tsx:287
 msgid "{0} (copy)"
@@ -51,23 +64,23 @@ msgstr "{0}（デフォルト）"
 msgid "{0} {1}"
 msgstr "{0} {1}"
 
-#: src/hooks/useCheckInController.tsx:311
+#: src/hooks/useCheckInController.tsx:333
 msgid "{0} {1} is already checked in"
 msgstr "{0} {1}はすでにチェックイン済みです"
 
-#: src/hooks/useCheckInController.tsx:310
+#: src/hooks/useCheckInController.tsx:332
 msgid "{0} {1} is already checked in · {seatLabel}"
 msgstr "{0} {1}はすでにチェックイン済みです · {seatLabel}"
 
-#: src/hooks/useCheckInController.tsx:195
+#: src/hooks/useCheckInController.tsx:217
 msgid "{0} <0>checked in</0>"
 msgstr "{0} <0>チェックイン済み</0>"
 
-#: src/hooks/useCheckInController.tsx:194
+#: src/hooks/useCheckInController.tsx:216
 msgid "{0} <0>checked in</0> · {seatLabel}"
 msgstr "{0} <0>チェックイン済み</0> · {seatLabel}"
 
-#: src/hooks/useCheckInController.tsx:230
+#: src/hooks/useCheckInController.tsx:249
 msgid "{0} <0>checked out</0> successfully"
 msgstr "{0}の<0>チェックアウト</0>が完了しました"
 
@@ -88,6 +101,10 @@ msgstr "{0} API"
 msgid "{0} available"
 msgstr "{0}件利用可能"
 
+#: src/components/routes/event/Badges/index.tsx:387
+msgid "{0} badges per sheet ({1} × {2}). Use matching badge inserts or cut along the guides."
+msgstr "1シートに名札{0}枚（{1} × {2}）。対応する名札用紙を使うか、ガイドに沿って切り取ってください。"
+
 #: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:83
 msgid "{0} can sign in with their password"
 msgstr "{0}はパスワードでサインインできます"
@@ -107,6 +124,10 @@ msgstr "配信 {0} · 開封 {1} · クリック {2} · バウンス {3}"
 #: src/components/routes/product-widget/Payment/index.tsx:186
 msgid "{0} due after you place your order"
 msgstr "注文後に {0} のお支払いが必要です"
+
+#: src/components/routes/event/Badges/index.tsx:384
+msgid "{0} fold-over badges per sheet ({1} × {2}). Cut along the guides, then fold each one in half."
+msgstr "1枚あたり{0}枚の二つ折り名札（{1} × {2}）。ガイドに沿って切り、それぞれ半分に折ってください。"
 
 #: src/components/routes/admin/FeatureFlags/index.tsx:91
 msgid "{0} forced off"
@@ -152,6 +173,14 @@ msgstr "{0}のロゴ"
 #: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:82
 msgid "{0} must now sign in with {providerName}"
 msgstr "{0}は今後{providerName}でサインインする必要があります"
+
+#: src/components/routes/event/Badges/index.tsx:272
+msgid "{0} need reprinting"
+msgstr "{0}枚は再印刷が必要"
+
+#: src/components/routes/event/Badges/index.tsx:271
+msgid "{0} of {1} badges printed"
+msgstr "名札{1}枚中{0}枚を印刷済み"
 
 #: src/components/routes/settings/Security/index.tsx:144
 msgid "{0} of {1} remaining"
@@ -344,7 +373,7 @@ msgid "{count, plural, one {# slot} other {# slots}}"
 msgstr "{count, plural, other {# 枠}}"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:59
-#: src/components/forms/ProductForm/ledgerSummaries.ts:127
+#: src/components/forms/ProductForm/ledgerSummaries.ts:134
 msgid "{count} add-ons"
 msgstr "{count}件のアドオン"
 
@@ -398,7 +427,15 @@ msgstr "{eventCount, plural, other {今後のイベント #件}}"
 msgid "{eventCount} events"
 msgstr "{eventCount}件のイベント"
 
-#: src/components/forms/ProductForm/ledgerSummaries.ts:103
+#: src/components/routes/event/Settings/Sections/FeatureSettings/index.tsx:43
+msgid "{featureName} turned off"
+msgstr "{featureName}をオフにしました"
+
+#: src/components/routes/event/Settings/Sections/FeatureSettings/index.tsx:43
+msgid "{featureName} turned on"
+msgstr "{featureName}をオンにしました"
+
+#: src/components/forms/ProductForm/ledgerSummaries.ts:110
 msgid "{first} + {additionalCount} more"
 msgstr "{first} 他{additionalCount}件"
 
@@ -470,7 +507,7 @@ msgstr "{listed} 他{remaining}件"
 msgid "{loadedAffectedAttendees} attendees are registered across the affected sessions."
 msgstr "影響を受けるセッション全体で{loadedAffectedAttendees}名の参加者が登録されています。"
 
-#: src/components/forms/ProductForm/ledgerSummaries.ts:112
+#: src/components/forms/ProductForm/ledgerSummaries.ts:119
 msgid "{min}–{max} per order"
 msgstr "1注文あたり{min}～{max}"
 
@@ -538,6 +575,14 @@ msgstr "{outsideDomainCount, plural, other {確認済みドメイン外の#人�
 #: src/components/routes/settings/ApiKeys/index.tsx:165
 msgid "{ownActiveCount} of {0} active keys"
 msgstr "有効なキー {ownActiveCount} / {0} 件"
+
+#: src/components/routes/event/Badges/BadgePrint.tsx:161
+msgid "{pageCount, plural, one {# page} other {# pages}}"
+msgstr "{pageCount, plural, other {#ページ}}"
+
+#: src/components/modals/PrintBadgesModal/index.tsx:174
+msgid "{pages, plural, one {# page} other {# pages}}"
+msgstr "{pages, plural, other {#ページ}}"
 
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:158
 msgid "{people}, {slots}"
@@ -696,6 +741,10 @@ msgstr "+1日"
 msgid "+Tax/Fees"
 msgstr "+税金/手数料"
 
+#: src/components/modals/PrintBadgesModal/index.tsx:173
+msgid "<0>{0}</0> on {1}"
+msgstr "<0>{0}</0>（{1}）"
+
 #: src/components/routes/auth/RequiredTwoFactorSetup/index.tsx:46
 msgid "<0>{accountName}</0> requires two-factor authentication for everyone on the team. Set it up now to continue. It takes about a minute."
 msgstr "<0>{accountName}</0>では、チーム全員に二要素認証が必須です。続行するには今すぐ設定してください。所要時間は約1分です。"
@@ -712,7 +761,7 @@ msgstr "<0>APP_LICENCE_KEY=development</0>を設定すると、開発および�
 msgid "<0>Check-in lists help you manage event entry by day, area, or ticket type. You can link tickets to specific lists such as VIP zones or Day 1 passes and share a secure check-in link with staff. No account is required. Check-in works on mobile, desktop, or tablet, using a device camera or HID USB scanner.                                </0>"
 msgstr "<0>チェックインリストを使うと、日別、エリア別、チケットタイプ別にイベントの入場を管理できます。チケットをVIPエリアや1日目パスなどの特定のリストに紐付け、安全なチェックインリンクをスタッフと共有できます。アカウントは不要です。チェックインは、デバイスのカメラまたはHID USBスキャナーを使って、モバイル、デスクトップ、タブレットで利用できます。                                </0>"
 
-#: src/components/forms/ProductForm/index.tsx:321
+#: src/components/forms/ProductForm/index.tsx:322
 msgid "<0>Please enter the price excluding taxes and fees.</0><1>Taxes and fees can be added below.</1>"
 msgstr "<0>税金・手数料を除いた価格を入力してください。</0><1>税金と手数料は下で追加できます。</1>"
 
@@ -743,7 +792,7 @@ msgid "1 Active Webhook"
 msgstr "1件のアクティブなWebhook"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:59
-#: src/components/forms/ProductForm/ledgerSummaries.ts:127
+#: src/components/forms/ProductForm/ledgerSummaries.ts:134
 msgid "1 add-on"
 msgstr "1件のアドオン"
 
@@ -871,6 +920,10 @@ msgstr "1日程あたり25席、全公演を通じてTシャツ30枚。"
 msgid "2FA on"
 msgstr "2FAオン"
 
+#: src/utilites/badges.ts:73
+msgid "3 × 4 in portrait"
+msgstr "3 × 4 in 縦向き"
+
 #: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:20
 msgid "3 days after a draft event is created, if nothing on the account is live."
 msgstr "下書きイベントの作成から 3 日後、アカウントに公開中のイベントがない場合。"
@@ -879,9 +932,21 @@ msgstr "下書きイベントの作成から 3 日後、アカウントに公開
 msgid "3 days after signup, if the account owner has confirmed their email but hasn't created an event."
 msgstr "登録から 3 日後、アカウント所有者がメールを確認済みでイベントを作成していない場合。"
 
+#: src/utilites/badges.ts:72
+msgid "4 × 3 in landscape"
+msgstr "4 × 3 in 横向き"
+
+#: src/utilites/badges.ts:74
+msgid "4 × 6 in portrait"
+msgstr "4 × 6 in 縦向き"
+
 #: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:32
 msgid "60 days after the last date the account sold paid tickets for, if nothing new has been created and nothing is upcoming. Unlike the other emails, this also reaches accounts that went quiet before it was enabled, back to 18 months."
 msgstr "アカウントが有料チケットを販売した最後の日程から60日後に送信されます（新しい作成がなく、予定もない場合）。他のメールと異なり、有効化前に活動が止まったアカウントにも最大18か月前まで遡って届きます。"
+
+#: src/utilites/badges.ts:77
+msgid "62 mm label roll (62 × 100 mm)"
+msgstr "62 mm ラベルロール (62 × 100 mm)"
 
 #: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:26
 msgid "7 days after a live upcoming paid event was last edited or its organizer connected Stripe, whichever is later, if the account has never had an order."
@@ -907,9 +972,13 @@ msgstr "キャンセル通知を送信しました："
 msgid "a change in duration"
 msgstr "所要時間の変更"
 
-#: src/components/common/CheckInListTable/index.tsx:287
+#: src/components/common/CheckInListTable/index.tsx:295
 msgid "A check-in list lets staff scan tickets at the door on a phone, tablet, or USB scanner. Share the link with your team, no account needed."
 msgstr "チェックインリストを使うと、スタッフが会場の入口でスマートフォン、タブレット、またはUSBスキャナーでチケットをスキャンできます。リンクをチームと共有してください。アカウントは不要です。"
+
+#: src/utilites/badges.ts:62
+msgid "A coloured or photo header with your event name"
+msgstr "イベント名入りのカラーまたは写真のヘッダー"
 
 #: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:31
 msgid "A compact, centred card"
@@ -930,6 +999,10 @@ msgstr "いくつかの簡単な手順で、販売を開始できます。"
 #: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:26
 msgid "A focused reading column. Tickets appear wherever you place them in Sections."
 msgstr "読みやすい1カラム構成。チケットはセクションで配置した場所に表示されます。"
+
+#: src/components/forms/CheckInListForm/index.tsx:289
+msgid "A full-screen scanner where attendees check themselves in. Attendee lists and search are hidden."
+msgstr "参加者が自分でチェックインする全画面スキャナーです。参加者リストと検索は表示されません。"
 
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:238
 msgid "A gallery can have up to {MAX_GALLERY_PHOTOS} photos."
@@ -1016,13 +1089,33 @@ msgstr "1 つの時間枠には最大 50 人まで登録できます"
 msgid "A URL is required when a button label is set"
 msgstr "ボタンのラベルを設定する場合は、URLが必要です"
 
+#: src/utilites/badges.ts:65
+msgid "A vertical ticket-colour strip down the side"
+msgstr "側面にチケットカラーの縦帯"
+
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:941
 msgid "A weekday pattern"
 msgstr "曜日パターン"
 
+#: src/components/routes/event/Badges/index.tsx:488
+msgid "A wide image of sponsor logos, printed near the bottom of every badge."
+msgstr "スポンサーロゴを並べた横長の画像。すべての名札の下部に印刷されます。"
+
 #: src/utilites/homepageSections.ts:60
 msgid "A YouTube or Vimeo video, loaded when someone presses play."
 msgstr "YouTube または Vimeo の動画。再生時に読み込まれます。"
+
+#: src/utilites/badges.ts:82
+msgid "A4 sheets"
+msgstr "A4用紙"
+
+#: src/utilites/badges.ts:70
+msgid "A6 portrait (105 × 148 mm)"
+msgstr "A6 縦向き (105 × 148 mm)"
+
+#: src/utilites/badges.ts:71
+msgid "A7 portrait (74 × 105 mm)"
+msgstr "A7 縦向き (74 × 105 mm)"
 
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/OrdersTab.tsx:130
 msgid "Abandon sale"
@@ -1079,7 +1172,7 @@ msgstr "Stripeでクレジットカード決済を受け付ける"
 #: src/components/common/TeamAccessFields/index.tsx:205
 #: src/components/common/TeamAccessFields/index.tsx:207
 #: src/components/common/TeamAccessPanel/index.tsx:137
-#: src/components/forms/ProductForm/index.tsx:605
+#: src/components/forms/ProductForm/index.tsx:614
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:237
 #: src/components/routes/settings/Team/index.tsx:218
 #: src/components/routes/settings/Team/MemberRow.tsx:141
@@ -1248,25 +1341,25 @@ msgstr "{0} の操作"
 msgid "Actions for {name}"
 msgstr "{name} の操作"
 
-#: src/hooks/useAttendeeActions.tsx:116
+#: src/hooks/useAttendeeActions.tsx:127
 msgid "Activate"
 msgstr "有効化"
 
-#: src/components/forms/CheckInListForm/index.tsx:154
+#: src/components/forms/CheckInListForm/index.tsx:213
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:177
 msgid "Activation date"
 msgstr "有効化日"
 
 #: src/components/common/AffiliateTable/index.tsx:132
 #: src/components/common/AttendeeStatusBadge/index.tsx:27
-#: src/components/common/AttendeeTable/index.tsx:274
+#: src/components/common/AttendeeTable/index.tsx:278
 #: src/components/common/CheckInListList/index.tsx:115
-#: src/components/common/CheckInListTable/index.tsx:177
+#: src/components/common/CheckInListTable/index.tsx:185
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:280
 #: src/components/forms/AffiliateForm/index.tsx:21
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:19
 #: src/components/modals/ProductPurchasesModal/index.tsx:246
-#: src/components/routes/event/attendees.tsx:30
+#: src/components/routes/event/attendees.tsx:33
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:217
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:20
 #: src/components/routes/organizer/Payments/CapabilityList.tsx:57
@@ -1295,6 +1388,7 @@ msgid "Activity"
 msgstr "アクティビティ"
 
 #: src/components/common/TeamAccessPanel/index.tsx:119
+#: src/components/routes/event/Badges/BadgeLinesEditor.tsx:193
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:123
 #: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:98
 msgid "Add"
@@ -1337,7 +1431,7 @@ msgstr "参加者が内容を把握できるよう、説明と会場を追加し
 msgid "Add a description for this box office"
 msgstr "このボックスオフィスの説明を追加"
 
-#: src/components/forms/CheckInListForm/index.tsx:145
+#: src/components/forms/CheckInListForm/index.tsx:237
 msgid "Add a description for this check-in list"
 msgstr "このチェックインリストの説明を追加"
 
@@ -1466,6 +1560,10 @@ msgstr "ドメインを追加"
 msgid "Add event details"
 msgstr "イベントの詳細を追加"
 
+#: src/components/routes/event/Badges/BadgeLinesEditor.tsx:174
+msgid "Add line"
+msgstr "行を追加"
+
 #: src/components/routes/event/Lineup/ProfileLinksField.tsx:63
 msgid "Add link"
 msgstr "リンクを追加"
@@ -1591,7 +1689,7 @@ msgstr "このTXTレコードをDNSプロバイダーに追加してから、確
 msgid "Add tickets"
 msgstr "チケットを追加"
 
-#: src/components/forms/ProductForm/index.tsx:380
+#: src/components/forms/ProductForm/index.tsx:381
 msgid "Add tier"
 msgstr "ティアを追加"
 
@@ -1639,16 +1737,16 @@ msgid "Add your social media handles and website URL. These will be displayed on
 msgstr "ソーシャルメディアのアカウントとウェブサイトのURLを追加します。公開される主催者ページに表示されます。"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:484
-#: src/components/forms/ProductForm/ledgerSummaries.ts:128
+#: src/components/forms/ProductForm/ledgerSummaries.ts:135
 #: src/ee/box-office/components/layouts/BoxOffice/ProductTile.tsx:25
 msgid "Add-on only"
 msgstr "アドオン専用"
 
-#: src/components/forms/ProductForm/index.tsx:561
+#: src/components/forms/ProductForm/index.tsx:568
 msgid "Add-on products"
 msgstr "アドオン商品"
 
-#: src/components/forms/ProductForm/index.tsx:542
+#: src/components/forms/ProductForm/index.tsx:549
 #: src/components/routes/product-widget/SelectProducts/index.tsx:520
 msgid "Add-ons"
 msgstr "アドオン"
@@ -1716,6 +1814,10 @@ msgstr "ページを追加し、参加者名を記載します"
 msgid "Adds an \"I've paid\" button to unpaid orders. You and your team get an email when a buyer uses it. You still mark the order as paid yourself."
 msgstr "未払いの注文に「支払い済み」ボタンを追加します。購入者が使うと、あなたとチームにメールが届きます。注文を支払い済みにするのは引き続きあなたです。"
 
+#: src/components/routes/event/Badges/BadgeLinesEditor.tsx:188
+msgid "Adds optional questions to checkout for every ticket, then puts the answers on the badge."
+msgstr "すべてのチケットのチェックアウトに任意の質問を追加し、回答を名札に表示します。"
+
 #: src/components/common/TeamAccessFields/index.tsx:32
 #: src/components/common/TeamAccessFields/index.tsx:90
 #: src/components/layouts/Admin/index.tsx:16
@@ -1738,7 +1840,7 @@ msgstr "管理ダッシュボード"
 msgid "Admins"
 msgstr "管理者"
 
-#: src/components/forms/ProductForm/index.tsx:228
+#: src/components/forms/ProductForm/index.tsx:229
 msgid "Admits attendees to your event"
 msgstr "参加者のイベント入場を許可します"
 
@@ -1778,7 +1880,7 @@ msgstr "アフィリエイト経由の売上は追跡されません。これに
 msgid "Affiliate updated successfully"
 msgstr "アフィリエイトを更新しました"
 
-#: src/components/layouts/Event/index.tsx:146
+#: src/components/layouts/Event/index.tsx:150
 #: src/components/modals/DuplicateEventModal/index.tsx:126
 #: src/components/routes/event/Affiliates/index.tsx:67
 msgid "Affiliates"
@@ -1800,9 +1902,18 @@ msgstr "イベントの作成後、ダッシュボードから繰り返しの頻
 msgid "Agenda"
 msgstr "アジェンダ"
 
+#: src/components/routes/event/Badges/index.tsx:586
+msgid "Agenda: devconf.example/agenda"
+msgstr "プログラム: devconf.example/agenda"
+
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:45
 msgid "Aisles after seats"
 msgstr "座席後の通路"
+
+#: src/hooks/useBadgePrinter.ts:118
+#: src/hooks/useBadgePrinter.ts:121
+msgid "Alex"
+msgstr "Alex"
 
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:159
 msgid "Align bottom"
@@ -1827,6 +1938,10 @@ msgstr "右揃え"
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:157
 msgid "Align top"
 msgstr "上揃え"
+
+#: src/components/routes/event/Badges/index.tsx:433
+msgid "Alignment"
+msgstr "文字揃え"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:292
 msgid "all"
@@ -1868,7 +1983,7 @@ msgstr "この開催回のすべての参加者"
 msgid "All categories"
 msgstr "すべてのカテゴリ"
 
-#: src/components/common/DesignerShell/index.tsx:149
+#: src/components/common/DesignerShell/index.tsx:150
 msgid "All changes saved"
 msgstr "すべての変更を保存しました"
 
@@ -1885,12 +2000,13 @@ msgstr "すべての日付"
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:68
 #: src/components/layouts/CheckIn/OccurrenceFilterPill.tsx:48
 #: src/components/layouts/CheckIn/OccurrenceFilterPill.tsx:101
+#: src/components/modals/PrintBadgesModal/index.tsx:137
 msgid "All dates"
 msgstr "すべての日付"
 
-#: src/components/common/CheckInListTable/index.tsx:116
+#: src/components/common/CheckInListTable/index.tsx:124
 #: src/components/modals/ProductPurchasesModal/index.tsx:276
-#: src/components/routes/event/attendees.tsx:236
+#: src/components/routes/event/attendees.tsx:242
 #: src/components/routes/event/orders.tsx:226
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:104
 msgid "All Dates"
@@ -1933,7 +2049,7 @@ msgstr "公開中のすべてのイベントと主催者ページは下書きに
 msgid "All matching dates"
 msgstr "一致するすべての日付"
 
-#: src/components/forms/CheckInListForm/index.tsx:133
+#: src/components/forms/CheckInListForm/index.tsx:191
 #: src/components/modals/SendMessageModal/index.tsx:365
 msgid "All occurrences"
 msgstr "すべての開催回"
@@ -1968,6 +2084,7 @@ msgstr "すべてのステータス"
 
 #: src/components/common/WidgetEditor/ContentFields.tsx:116
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:97
+#: src/components/modals/PrintBadgesModal/index.tsx:122
 msgid "All tickets"
 msgstr "すべてのチケット"
 
@@ -2013,11 +2130,11 @@ msgstr "注文確認メールで送信される安全なリンクから、参加
 msgid "Allow buyers to copy their details to all attendees"
 msgstr "購入者が自分の情報をすべての参加者にコピーできるようにする"
 
-#: src/components/forms/ProductForm/index.tsx:474
+#: src/components/forms/ProductForm/index.tsx:478
 msgid "Allow customers to join a waitlist when this product is sold out"
 msgstr "この商品が完売した場合に、お客様がキャンセル待ちリストに登録できるようにする"
 
-#: src/components/forms/ProductForm/index.tsx:473
+#: src/components/forms/ProductForm/index.tsx:477
 msgid "Allow customers to join a waitlist when this product is sold out. Customers join the waitlist for a specific date."
 msgstr "この商品が完売した場合に、お客様がキャンセル待ちリストに登録できるようにします。お客様は特定の日付に対してキャンセル待ちに登録します。"
 
@@ -2084,9 +2201,13 @@ msgstr "この注文も返金する"
 msgid "Always available"
 msgstr "常に利用可能"
 
-#: src/components/forms/ProductForm/ledgerSummaries.ts:53
+#: src/components/forms/ProductForm/ledgerSummaries.ts:60
 msgid "Always on sale"
 msgstr "常に販売中"
+
+#: src/components/forms/CheckInListForm/index.tsx:57
+msgid "Always open"
+msgstr "常に受付中"
 
 #: src/components/common/WidgetEditor/SectionsPicker.tsx:82
 msgid "Always shown"
@@ -2168,7 +2289,7 @@ msgstr "{0}内の項目に名前がありません"
 msgid "An optional description of this category to display on the event page."
 msgstr "イベントページに表示するこのカテゴリーの任意の説明。"
 
-#: src/components/forms/ProductForm/index.tsx:595
+#: src/components/forms/ProductForm/index.tsx:603
 msgid "An optional message to display on the highlighted product, e.g. \"Selling fast 🔥\" or \"Best value\""
 msgstr "ハイライトされた商品に表示する任意のメッセージ。例：\"もうすぐ完売 🔥\" や \"一番お得\""
 
@@ -2241,11 +2362,11 @@ msgstr "販売を続行するには、必須の質問に回答してください
 msgid "Answer updated successfully."
 msgstr "回答を更新しました。"
 
-#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:246
+#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:253
 msgid "Answers"
 msgstr "回答"
 
-#: src/components/forms/CheckInListForm/index.tsx:207
+#: src/components/forms/CheckInListForm/index.tsx:267
 msgid "Answers provided at checkout (e.g. meal choice)"
 msgstr "チェックアウト時に入力された回答（例：食事の選択）"
 
@@ -2345,7 +2466,7 @@ msgstr "このページに現在読み込まれている、キャンセルされ
 msgid "Applies to 1 product"
 msgstr "1件の商品に適用されます"
 
-#: src/components/forms/CheckInListForm/index.tsx:175
+#: src/components/forms/CheckInListForm/index.tsx:254
 msgid "Applies to anyone opening the shared check-in link without being signed in. Logged-in team members always see everything."
 msgstr "サインインせずに共有チェックインリンクを開いた人全員に適用されます。ログイン済みのチームメンバーには、常にすべてが表示されます。"
 
@@ -2392,7 +2513,7 @@ msgstr "変更を適用"
 msgid "Apply to"
 msgstr "適用先"
 
-#: src/components/forms/CheckInListForm/index.tsx:106
+#: src/components/forms/CheckInListForm/index.tsx:164
 msgid "Apply to all tickets"
 msgstr "すべてのチケットに適用"
 
@@ -2450,7 +2571,7 @@ msgstr "アーカイブ済みの主催者"
 msgid "Are you sure this event is not spam? It will be published immediately."
 msgstr "このイベントは本当にスパムではありませんか？すぐに公開されます。"
 
-#: src/hooks/useAttendeeActions.tsx:51
+#: src/hooks/useAttendeeActions.tsx:54
 msgid "Are you sure you want to activate this attendee?"
 msgstr "この参加者を有効化してもよろしいですか？"
 
@@ -2470,11 +2591,11 @@ msgstr "この主催者をアーカイブしてもよろしいですか？この
 msgid "Are you sure you want to cancel {count} date(s)? Affected attendees will be notified by email."
 msgstr "{count}件の日付をキャンセルしてもよろしいですか？影響を受ける参加者にはメールで通知されます。"
 
-#: src/hooks/useAttendeeActions.tsx:49
+#: src/hooks/useAttendeeActions.tsx:52
 msgid "Are you sure you want to cancel this attendee? This will void their ticket"
 msgstr "この参加者をキャンセルしてもよろしいですか？チケットは無効になります"
 
-#: src/hooks/useAttendeeActions.tsx:48
+#: src/hooks/useAttendeeActions.tsx:51
 msgid "Are you sure you want to cancel this attendee? This will void their ticket and release seat {seatLabel}, which may then be taken by someone else."
 msgstr "この参加者をキャンセルしてもよろしいですか？チケットは無効になり、座席{seatLabel}が解放されるため、他の人が取得する可能性があります。"
 
@@ -2543,7 +2664,7 @@ msgstr "このWebhookを削除してもよろしいですか？"
 msgid "Are you sure you want to leave?"
 msgstr "本当に離れますか？"
 
-#: src/components/layouts/Event/index.tsx:210
+#: src/components/layouts/Event/index.tsx:214
 msgid "Are you sure you want to make this event draft? This will make the event invisible to the public"
 msgstr "このイベントを下書きにしてもよろしいですか？一般には表示されなくなります"
 
@@ -2616,7 +2737,7 @@ msgid "Are you sure you would like to delete this Capacity Assignment?"
 msgstr "この定員割り当てを削除してもよろしいですか？"
 
 #: src/components/common/CheckInListList/index.tsx:184
-#: src/components/common/CheckInListTable/index.tsx:233
+#: src/components/common/CheckInListTable/index.tsx:241
 msgid "Are you sure you would like to delete this Check-In List?"
 msgstr "このチェックインリストを削除してもよろしいですか？"
 
@@ -2649,11 +2770,16 @@ msgstr "エリア"
 msgid "Art"
 msgstr "アート"
 
+#: src/components/routes/event/Badges/index.tsx:472
+#: src/utilites/badges.ts:57
+msgid "Artwork"
+msgstr "アートワーク"
+
 #: src/components/routes/organizer/Payments/Vat/VatSettings.tsx:28
 msgid "As your business is based in Ireland, Irish VAT at 23% applies automatically to all platform fees."
 msgstr "御社の事業所在地がアイルランドであるため、すべてのプラットフォーム手数料にアイルランドVAT（23%）が自動的に適用されます。"
 
-#: src/components/layouts/Event/index.tsx:231
+#: src/components/layouts/Event/index.tsx:235
 #: src/components/layouts/OrganizerLayout/index.tsx:221
 msgid "Ask an account admin to give you access, or open one of your own events."
 msgstr "アカウント管理者にアクセス権の付与を依頼するか、ご自身のイベントを開いてください。"
@@ -2746,6 +2872,7 @@ msgstr "参加者"
 
 #: src/components/common/AttendeeTicket/index.tsx:101
 #: src/components/common/QuestionsTable/index.tsx:473
+#: src/components/routes/event/Badges/BadgeLinesEditor.tsx:35
 #: src/components/routes/product-widget/CollectInformation/index.tsx:670
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:365
 msgid "Attendee"
@@ -2767,7 +2894,7 @@ msgstr "参加者がキャンセルされました"
 msgid "Attendee Created"
 msgstr "参加者が作成されました"
 
-#: src/components/common/AttendeeTable/index.tsx:108
+#: src/components/common/AttendeeTable/index.tsx:112
 msgid "Attendee Details"
 msgstr "参加者の詳細"
 
@@ -2795,15 +2922,15 @@ msgstr "参加者を移動しました"
 msgid "Attendee names appear on the printout. Handle it accordingly."
 msgstr "参加者名が印刷物に表示されます。取り扱いにご注意ください。"
 
-#: src/hooks/useCheckInController.tsx:299
+#: src/hooks/useCheckInController.tsx:319
 msgid "Attendee not found"
 msgstr "参加者が見つかりません"
 
-#: src/components/forms/CheckInListForm/index.tsx:188
+#: src/components/forms/CheckInListForm/index.tsx:261
 msgid "Attendee notes"
 msgstr "参加者のメモ"
 
-#: src/components/routes/event/attendees.tsx:82
+#: src/components/routes/event/attendees.tsx:88
 msgid "Attendee Status"
 msgstr "参加者のステータス"
 
@@ -2824,7 +2951,7 @@ msgstr "参加者を更新しました"
 msgid "Attendee's ticket not included in this list"
 msgstr "参加者のチケットはこのリストに含まれていません"
 
-#: src/components/routes/event/attendees.tsx:251
+#: src/components/routes/event/attendees.tsx:257
 #: src/components/routes/event/EventDashboard/NextOccurrenceHero/index.tsx:194
 msgid "attendees"
 msgstr "参加者"
@@ -2835,13 +2962,14 @@ msgstr "参加者"
 #: src/components/common/ProductsTable/index.tsx:96
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:530
 #: src/components/common/StatBoxes/index.tsx:75
-#: src/components/layouts/Event/index.tsx:150
+#: src/components/layouts/Event/index.tsx:154
 #: src/components/modals/ManageOccurrenceModal/index.tsx:179
 #: src/components/modals/ManageOrderModal/index.tsx:336
+#: src/components/modals/PrintBadgesModal/index.tsx:83
 #: src/components/routes/admin/Dashboard/index.tsx:367
 #: src/components/routes/admin/Messages/index.tsx:90
 #: src/components/routes/admin/Messages/index.tsx:139
-#: src/components/routes/event/attendees.tsx:206
+#: src/components/routes/event/attendees.tsx:212
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:61
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:61
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:122
@@ -2854,7 +2982,7 @@ msgstr "参加者"
 msgid "attendees checked in"
 msgstr "チェックイン済みの参加者"
 
-#: src/components/routes/event/attendees.tsx:164
+#: src/components/routes/event/attendees.tsx:170
 msgid "Attendees Exported"
 msgstr "参加者をエクスポートしました"
 
@@ -2911,6 +3039,11 @@ msgstr "自動オファーが有効です"
 msgid "Auto-Process Waitlist"
 msgstr "キャンセル待ちを自動処理"
 
+#: src/components/routes/event/Badges/index.tsx:409
+#: src/components/routes/event/Badges/index.tsx:418
+msgid "Automatic"
+msgstr "自動"
+
 #: src/components/routes/admin/LifecycleEmails/index.tsx:41
 msgid "Automatic emails that help organizers who get stuck. The sweep runs hourly and only reaches activity that happens after an email is turned on."
 msgstr "つまずいている主催者を手助けする自動メールです。処理は 1 時間ごとに実行され、メールを有効にした後のアクティビティのみが対象になります。"
@@ -2961,7 +3094,7 @@ msgstr "オフライン決済の入金待ち"
 msgid "Awaiting pay"
 msgstr "支払い待ち"
 
-#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:117
+#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:124
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:225
 #: src/components/layouts/Checkout/index.tsx:376
 #: src/components/modals/ProductPurchasesModal/index.tsx:79
@@ -2972,10 +3105,10 @@ msgid "Awaiting payment"
 msgstr "支払い待ち"
 
 #: src/components/common/AttendeeStatusBadge/index.tsx:29
-#: src/components/common/AttendeeTable/index.tsx:280
+#: src/components/common/AttendeeTable/index.tsx:284
 #: src/components/common/OrdersTable/index.tsx:366
 #: src/components/common/OrderStatusBadge/index.tsx:10
-#: src/components/routes/event/attendees.tsx:32
+#: src/components/routes/event/attendees.tsx:35
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:69
 msgid "Awaiting Payment"
 msgstr "支払い待ち"
@@ -2993,6 +3126,7 @@ msgstr "Awesome Organizer Ltd."
 #: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:82
 #: src/components/layouts/SettingsLayout/index.tsx:60
 #: src/components/modals/CreateEventModal/index.tsx:251
+#: src/components/routes/event/Badges/index.tsx:212
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:151
 #: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:87
 #: src/ee/box-office/components/layouts/BoxOffice/TenderStage.tsx:55
@@ -3000,6 +3134,16 @@ msgstr "Awesome Organizer Ltd."
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:288
 msgid "Back"
 msgstr "戻る"
+
+#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:48
+#: src/components/routes/event/Badges/index.tsx:548
+#: src/components/routes/event/Badges/index.tsx:556
+msgid "Back of the badge"
+msgstr "名札の裏面"
+
+#: src/components/routes/event/Badges/index.tsx:583
+msgid "Back text"
+msgstr "裏面のテキスト"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:148
 msgid "Back to Accounts"
@@ -3059,12 +3203,56 @@ msgstr "サインインに戻る"
 
 #: src/components/common/ThemeColorControls/index.tsx:89
 #: src/components/common/WidgetEditor/AppearancePanel.tsx:82
+#: src/components/routes/event/Badges/index.tsx:406
 msgid "Background"
 msgstr "背景"
 
 #: src/components/common/ThemeColorControls/index.tsx:110
 msgid "Background Color"
 msgstr "背景色"
+
+#: src/components/common/AttendeeTable/index.tsx:335
+msgid "Badge"
+msgstr "名札"
+
+#: src/components/routes/event/Badges/index.tsx:200
+msgid "Badge Design"
+msgstr "名札デザイン"
+
+#: src/components/routes/event/Badges/index.tsx:146
+msgid "Badge design saved"
+msgstr "名札デザインを保存しました"
+
+#: src/components/routes/event/Badges/BadgeRibbonsEditor.tsx:57
+msgid "Badge label for {0}"
+msgstr "{0}の名札ラベル"
+
+#: src/components/forms/CheckInListForm/index.tsx:299
+#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:20
+#: src/components/layouts/CheckIn/index.tsx:226
+msgid "Badge printing"
+msgstr "名札印刷"
+
+#: src/components/routes/event/Badges/index.tsx:337
+msgid "Badge size"
+msgstr "名札のサイズ"
+
+#: src/components/layouts/Event/index.tsx:141
+#: src/components/routes/event/attendees.tsx:280
+msgid "Badges"
+msgstr "名札"
+
+#: src/components/routes/event/Badges/BadgeLinesEditor.tsx:177
+msgid "Badges fit up to 5 lines"
+msgstr "名札には最大5行まで入ります"
+
+#: src/components/routes/event/Badges/BadgePrint.tsx:136
+msgid "Badges marked as printed"
+msgstr "名札を印刷済みにしました"
+
+#: src/components/routes/event/Badges/index.tsx:577
+msgid "Badges on a lanyard often flip around. Print both sides so names always face out."
+msgstr "ストラップに付けた名札は裏返りがちです。両面に印刷すれば、いつでも名前が見えます。"
 
 #: src/components/common/CapacityHelp/index.tsx:54
 #: src/ee/seating/components/lib/templates.ts:106
@@ -3101,6 +3289,7 @@ msgstr "銀行口座を接続済み"
 
 #: src/components/routes/admin/Announcements/index.tsx:178
 #: src/components/routes/admin/Announcements/index.tsx:374
+#: src/utilites/badges.ts:53
 msgid "Banner"
 msgstr "バナー"
 
@@ -3137,8 +3326,8 @@ msgstr "基本価格"
 msgid "Based on {0}. This event keeps its own copy."
 msgstr "{0}に基づいています。このイベントは独自のコピーを保持します。"
 
-#: src/components/forms/ProductForm/index.tsx:438
-#: src/components/forms/ProductForm/index.tsx:441
+#: src/components/forms/ProductForm/index.tsx:440
+#: src/components/forms/ProductForm/index.tsx:443
 msgid "Based on the global sale period above, not per date"
 msgstr "日付ごとではなく、上記の全体の販売期間に基づきます"
 
@@ -3146,6 +3335,10 @@ msgstr "日付ごとではなく、上記の全体の販売期間に基づきま
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:84
 msgid "Basic Information"
 msgstr "基本情報"
+
+#: src/components/routes/event/Badges/BadgePrint.tsx:202
+msgid "Batch {page} of {batchCount}"
+msgstr "バッチ {page}/{batchCount}"
 
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:26
 msgid "Before taxes and fees"
@@ -3225,6 +3418,10 @@ msgstr "本文"
 msgid "Body is required"
 msgstr "本文は必須です"
 
+#: src/utilites/badges.ts:55
+msgid "Bold"
+msgstr "ボールド"
+
 #: src/components/routes/event/OccurrencesTab/BookingSummary/index.tsx:81
 #: src/components/routes/event/OccurrencesTab/index.tsx:394
 msgid "Booked"
@@ -3267,7 +3464,7 @@ msgstr "ボックスオフィス"
 msgid "Box office"
 msgstr "ボックスオフィス"
 
-#: src/components/layouts/Event/index.tsx:152
+#: src/components/layouts/Event/index.tsx:156
 #: src/components/routes/event/orders.tsx:86
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:74
 #: src/ee/box-office/components/routes/event/BoxOffices/index.tsx:50
@@ -3321,6 +3518,10 @@ msgstr "ボックスオフィスでの販売"
 #: src/ee/box-office/components/modals/EditBoxOfficeModal/index.tsx:50
 msgid "Box office updated"
 msgstr "ボックスオフィスを更新しました"
+
+#: src/components/routes/event/Badges/index.tsx:395
+msgid "Brand colour"
+msgstr "ブランドカラー"
 
 #: src/components/common/BrandingUpsell/BrandingDesignerSection.tsx:34
 msgid "Branding"
@@ -3412,7 +3613,7 @@ msgstr "購入者情報"
 msgid "Buyer pays"
 msgstr "購入者が負担"
 
-#: src/components/forms/ProductForm/index.tsx:571
+#: src/components/forms/ProductForm/index.tsx:578
 msgid "Buyers can add these to their order when they select this product at checkout."
 msgstr "購入者は、チェックアウト時にこの商品を選択する際、これらを注文に追加できます。"
 
@@ -3546,7 +3747,7 @@ msgstr "認証アプリまたはリカバリーコードを使用できません
 #: src/components/modals/CreateAffiliateModal/index.tsx:88
 #: src/components/modals/CreateAttendeeModal/index.tsx:335
 #: src/components/modals/CreateCapacityAssignmentModal/index.tsx:75
-#: src/components/modals/CreateCheckInListModal/index.tsx:104
+#: src/components/modals/CreateCheckInListModal/index.tsx:106
 #: src/components/modals/CreateEventModal/index.tsx:478
 #: src/components/modals/CreateOrganizerModal/index.tsx:66
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:89
@@ -3558,7 +3759,7 @@ msgstr "認証アプリまたはリカバリーコードを使用できません
 #: src/components/modals/DuplicateEventModal/index.tsx:309
 #: src/components/modals/EditAffiliateModal/index.tsx:104
 #: src/components/modals/EditCapacityAssignmentModal/index.tsx:70
-#: src/components/modals/EditCheckInListModal/index.tsx:102
+#: src/components/modals/EditCheckInListModal/index.tsx:106
 #: src/components/modals/EditOrganizerWebhookModal/index.tsx:82
 #: src/components/modals/EditProductCategoryModal/index.tsx:71
 #: src/components/modals/EditPromoCodeModal/index.tsx:85
@@ -3570,6 +3771,7 @@ msgstr "認証アプリまたはリカバリーコードを使用できません
 #: src/components/modals/LocationEditModal/index.tsx:162
 #: src/components/modals/ManageAttendeeModal/index.tsx:208
 #: src/components/modals/ManageOrderModal/index.tsx:260
+#: src/components/modals/PrintBadgesModal/index.tsx:186
 #: src/components/modals/PublishEventModal/index.tsx:212
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:80
 #: src/components/routes/admin/Accounts/AccountDetail/SuspendAccountModal.tsx:65
@@ -3606,7 +3808,7 @@ msgstr "認証アプリまたはリカバリーコードを使用できません
 #: src/ee/seating/components/SeatPicker/SeatSheet.tsx:88
 #: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:213
 #: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:180
-#: src/hooks/useAttendeeActions.tsx:116
+#: src/hooks/useAttendeeActions.tsx:127
 #: src/utilites/confirmationDialog.tsx:20
 #: src/utilites/confirmationDialog.tsx:57
 msgid "Cancel"
@@ -3654,7 +3856,7 @@ msgstr "削除リクエストをキャンセル"
 msgid "Cancel email change"
 msgstr "メールアドレスの変更をキャンセル"
 
-#: src/hooks/useOrderActions.tsx:158
+#: src/hooks/useOrderActions.tsx:170
 msgid "Cancel order"
 msgstr "注文をキャンセル"
 
@@ -3675,12 +3877,12 @@ msgid "Canceling will cancel all attendees associated with this order, and relea
 msgstr "キャンセルすると、この注文に関連するすべての参加者がキャンセルされ、チケットは在庫に戻されます。"
 
 #: src/components/common/AttendeeStatusBadge/index.tsx:28
-#: src/components/common/AttendeeTable/index.tsx:286
+#: src/components/common/AttendeeTable/index.tsx:290
 #: src/components/common/AttendeeTicket/index.tsx:92
 #: src/components/common/OrdersTable/index.tsx:378
 #: src/components/common/OrderStatusBadge/index.tsx:9
 #: src/components/common/WaitlistTable/index.tsx:29
-#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:114
+#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:121
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:80
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:226
 #: src/components/modals/ProductPurchasesModal/index.tsx:75
@@ -3688,7 +3890,7 @@ msgstr "キャンセルすると、この注文に関連するすべての参加
 #: src/components/modals/ProductPurchasesModal/index.tsx:249
 #: src/components/routes/admin/DeletionRequests/index.tsx:87
 #: src/components/routes/admin/Messages/index.tsx:126
-#: src/components/routes/event/attendees.tsx:31
+#: src/components/routes/event/attendees.tsx:34
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:219
 #: src/components/routes/event/orders.tsx:32
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:21
@@ -3736,7 +3938,7 @@ msgstr "定員割り当て"
 msgid "Capacity management"
 msgstr "定員管理"
 
-#: src/components/layouts/Event/index.tsx:157
+#: src/components/layouts/Event/index.tsx:161
 msgid "Capacity Management"
 msgstr "定員管理"
 
@@ -3805,7 +4007,7 @@ msgstr "預かり現金"
 msgid "Categories allow you to group products together. For example, you might have a category for \"Tickets\" and another for \"Merchandise\"."
 msgstr "カテゴリーを使うと、商品をグループ化できます。たとえば、\"チケット\"用と\"グッズ\"用のカテゴリーを作成できます。"
 
-#: src/components/forms/ProductForm/index.tsx:274
+#: src/components/forms/ProductForm/index.tsx:275
 msgid "Categories help you organize your products. This title will be displayed on the public event page."
 msgstr "カテゴリーは商品の整理に役立ちます。このタイトルは公開イベントページに表示されます。"
 
@@ -3827,6 +4029,10 @@ msgstr "カテゴリーを作成しました"
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:58
 msgid "Category deleted successfully"
 msgstr "カテゴリーを削除しました"
+
+#: src/components/routes/event/Badges/index.tsx:442
+msgid "Centre"
+msgstr "中央"
 
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:79
 msgid "Chairs"
@@ -3962,7 +4168,7 @@ msgstr "後ほど最新情報をご確認ください。"
 msgid "Check back soon for new dates."
 msgstr "新しい日程は近日公開予定です。"
 
-#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:307
+#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:338
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:82
 msgid "Check in"
 msgstr "チェックイン"
@@ -3987,7 +4193,7 @@ msgstr "チェックインのみ"
 msgid "Check key"
 msgstr "キーを確認"
 
-#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:307
+#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:338
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:81
 msgid "Check out"
 msgstr "チェックアウト"
@@ -4025,7 +4231,7 @@ msgstr "受信トレイをご確認ください！このメールアドレスに
 msgid "Check your name and we'll create your account."
 msgstr "お名前を確認してください。アカウントを作成します。"
 
-#: src/components/layouts/CheckIn/index.tsx:167
+#: src/components/layouts/CheckIn/index.tsx:191
 msgid "Check-in"
 msgstr "チェックイン"
 
@@ -4042,11 +4248,11 @@ msgstr "チェックインを作成しました"
 msgid "Check-in Deleted"
 msgstr "チェックインを削除しました"
 
-#: src/hooks/useCheckInController.tsx:158
+#: src/hooks/useCheckInController.tsx:170
 msgid "Check-in for {0} was undone"
 msgstr "{0}のチェックインを取り消しました"
 
-#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:223
+#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:230
 msgid "Check-in history"
 msgstr "チェックイン履歴"
 
@@ -4058,7 +4264,7 @@ msgstr "チェックインは利用できません"
 msgid "Check-in list"
 msgstr "チェックインリスト"
 
-#: src/components/common/CheckInListTable/index.tsx:69
+#: src/components/common/CheckInListTable/index.tsx:71
 msgid "Check-In List"
 msgstr "チェックインリスト"
 
@@ -4067,23 +4273,23 @@ msgid "Check-In List Created"
 msgstr "チェックインリストを作成しました"
 
 #: src/components/common/CheckInListList/index.tsx:34
-#: src/components/common/CheckInListTable/index.tsx:56
+#: src/components/common/CheckInListTable/index.tsx:58
 msgid "Check-In List deleted successfully"
 msgstr "チェックインリストを削除しました"
 
-#: src/components/layouts/CheckIn/index.tsx:99
+#: src/components/layouts/CheckIn/index.tsx:104
 msgid "Check-in list has expired"
 msgstr "チェックインリストの有効期限が切れています"
 
-#: src/components/layouts/CheckIn/index.tsx:201
+#: src/components/layouts/CheckIn/index.tsx:238
 msgid "Check-in list info"
 msgstr "チェックインリスト情報"
 
-#: src/components/layouts/CheckIn/index.tsx:138
+#: src/components/layouts/CheckIn/index.tsx:143
 msgid "Check-in list is not active"
 msgstr "チェックインリストは有効ではありません"
 
-#: src/components/layouts/CheckIn/index.tsx:84
+#: src/components/layouts/CheckIn/index.tsx:89
 msgid "Check-in list not found"
 msgstr "チェックインリストが見つかりません"
 
@@ -4095,16 +4301,16 @@ msgstr "チェックインリスト"
 msgid "Check-in Lists"
 msgstr "チェックインリスト"
 
-#: src/components/layouts/Event/index.tsx:151
+#: src/components/layouts/Event/index.tsx:155
 #: src/components/routes/event/CheckInLists/index.tsx:38
 msgid "Check-In Lists"
 msgstr "チェックインリスト"
 
-#: src/components/layouts/CheckIn/index.tsx:260
+#: src/components/layouts/CheckIn/index.tsx:297
 msgid "Check-in navigation"
 msgstr "チェックインのナビゲーション"
 
-#: src/components/layouts/CheckIn/index.tsx:185
+#: src/components/layouts/CheckIn/index.tsx:209
 msgid "Check-in progress"
 msgstr "チェックインの進捗"
 
@@ -4116,7 +4322,7 @@ msgstr "チェックイン率"
 msgid "Check-in staff are told the order is unpaid and can mark it as paid at the door. When this is off, guests from unpaid orders can't be checked in."
 msgstr "チェックイン担当者には注文が未払いであることが表示され、入口で支払い済みにできます。オフの場合、未払い注文のゲストはチェックインできません。"
 
-#: src/components/common/AttendeeTable/index.tsx:298
+#: src/components/common/AttendeeTable/index.tsx:302
 #: src/components/common/CheckInStatusModal/index.tsx:36
 #: src/components/common/CheckInStatusModal/index.tsx:140
 msgid "Check-In Status"
@@ -4128,11 +4334,11 @@ msgid "Check-in Summary"
 msgstr "チェックインの概要"
 
 #: src/components/common/CheckInListList/index.tsx:162
-#: src/components/common/CheckInListTable/index.tsx:41
+#: src/components/common/CheckInListTable/index.tsx:42
 msgid "Check-In URL copied to clipboard"
 msgstr "チェックインURLをクリップボードにコピーしました"
 
-#: src/components/common/CheckInListTable/index.tsx:139
+#: src/components/common/CheckInListTable/index.tsx:147
 #: src/components/modals/ManageAttendeeModal/index.tsx:184
 msgid "Check-Ins"
 msgstr "チェックイン"
@@ -4149,14 +4355,14 @@ msgstr "チェックボックス"
 msgid "Checked"
 msgstr "チェック済み"
 
-#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:120
+#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:127
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:111
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:151
 #: src/components/layouts/CheckIn/tabs/StatsTab.tsx:89
 msgid "Checked in"
 msgstr "チェックイン済み"
 
-#: src/components/common/AttendeeTable/index.tsx:313
+#: src/components/common/AttendeeTable/index.tsx:317
 #: src/components/common/CheckInStatusModal/index.tsx:116
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:95
 #: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:40
@@ -4176,7 +4382,7 @@ msgstr "保存済みのプロフィールを確認しています…"
 msgid "Checking…"
 msgstr "確認中…"
 
-#: src/components/routes/event/Settings/index.tsx:70
+#: src/components/routes/event/Settings/index.tsx:78
 msgid "Checkout"
 msgstr "チェックアウト"
 
@@ -4399,6 +4605,10 @@ msgstr "市区町村"
 msgid "Class with a T-shirt add-on"
 msgstr "Tシャツのアドオン付きクラス"
 
+#: src/utilites/badges.ts:52
+msgid "Classic"
+msgstr "クラシック"
+
 #: src/components/common/DateField/index.tsx:23
 #: src/components/common/OccurrenceSelect/index.tsx:136
 #: src/components/modals/CreateEventModal/ChipSelect.tsx:95
@@ -4469,7 +4679,7 @@ msgstr "クリックしてテーブルを配置します。椅子の数と形は
 msgid "Click to reopen for new sales"
 msgstr "クリックして新規販売を再開"
 
-#: src/components/common/AttendeeTable/index.tsx:184
+#: src/components/common/AttendeeTable/index.tsx:188
 msgid "Click to view notes"
 msgstr "クリックしてメモを表示"
 
@@ -4496,7 +4706,7 @@ msgstr "閉じる"
 #: src/components/common/SideDrawer/index.tsx:117
 #: src/components/common/WidgetEditor/WidgetPreview.tsx:128
 #: src/components/forms/ProductForm/ProductDrawer.tsx:100
-#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:208
+#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:215
 #: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:56
 #: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:86
 #: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:122
@@ -4566,7 +4776,7 @@ msgstr "貼り付けるコード"
 msgid "Collaborate with your team to create amazing events together."
 msgstr "チームと協力して、素晴らしいイベントを一緒に作りましょう。"
 
-#: src/components/forms/ProductForm/index.tsx:458
+#: src/components/forms/ProductForm/index.tsx:461
 msgid "Collapse this product when the event page is initially loaded"
 msgstr "イベントページの初回読み込み時に、この商品を折りたたむ"
 
@@ -4579,6 +4789,14 @@ msgstr "購入したチケットごとに参加者情報を収集します。"
 msgid "Collect checkout questions"
 msgstr "チェックアウト時の質問を収集"
 
+#: src/components/routes/event/Badges/index.tsx:300
+msgid "Collect company and job title"
+msgstr "会社名と役職を収集"
+
+#: src/components/routes/event/Badges/index.tsx:301
+msgid "Collect company name"
+msgstr "会社名を収集"
+
 #: src/components/common/QuestionsTable/index.tsx:399
 msgid "Collect details per order"
 msgstr "注文ごとに情報を収集"
@@ -4586,6 +4804,10 @@ msgstr "注文ごとに情報を収集"
 #: src/components/common/QuestionsTable/index.tsx:393
 msgid "Collect details per ticket"
 msgstr "チケットごとに情報を収集"
+
+#: src/components/routes/event/Badges/index.tsx:301
+msgid "Collect job title"
+msgstr "役職を収集"
 
 #: src/components/routes/event/TicketDesigner/index.tsx:152
 msgid "Color"
@@ -4595,6 +4817,7 @@ msgstr "色"
 msgid "Color Mode"
 msgstr "カラーモード"
 
+#: src/components/routes/event/Badges/BadgeRibbonsEditor.tsx:46
 #: src/ee/seating/components/SeatMapDesigner/BandsPanel.tsx:29
 msgid "Colour for {0}"
 msgstr "{0}の色"
@@ -4602,6 +4825,10 @@ msgstr "{0}の色"
 #: src/components/common/WidgetEditor/AppearancePanel.tsx:58
 msgid "Colours and font"
 msgstr "色とフォント"
+
+#: src/components/routes/event/Badges/index.tsx:392
+msgid "Colours and type"
+msgstr "カラーと文字"
 
 #: src/components/common/ColumnVisibilityToggle/index.tsx:21
 msgid "Columns"
@@ -4657,6 +4884,10 @@ msgstr "付き添い席（車椅子スペース付き）"
 #: src/ee/seating/components/SeatPicker/Basket.tsx:180
 msgid "Companion seats can only be booked together with a wheelchair space. Add a wheelchair space or remove the companion seat."
 msgstr "付き添い席は、車椅子スペースと一緒にのみ予約できます。車椅子スペースを追加するか、付き添い席を削除してください。"
+
+#: src/components/routes/event/Badges/index.tsx:157
+msgid "Company"
+msgstr "会社名"
 
 #: src/components/layouts/CheckIn/tabs/StatsTab.tsx:82
 msgid "complete"
@@ -4754,7 +4985,7 @@ msgstr "設定を更新しました"
 msgid "Configurations"
 msgstr "設定"
 
-#: src/components/routes/event/Settings/index.tsx:182
+#: src/components/routes/event/Settings/index.tsx:190
 msgid "Configure event details, location, checkout options, and email notifications."
 msgstr "イベントの詳細、場所、チェックアウトオプション、メール通知を設定します。"
 
@@ -4836,7 +5067,7 @@ msgstr "メールアドレスを確認"
 msgid "Confirm your email address"
 msgstr "メールアドレスを確認してください"
 
-#: src/components/layouts/Event/index.tsx:337
+#: src/components/layouts/Event/index.tsx:341
 msgid "Confirm your email to access all features."
 msgstr "すべての機能を利用するには、メールアドレスを確認してください。"
 
@@ -5065,11 +5296,11 @@ msgstr "イベントページでの日付と時間の表示方法を設定しま
 msgid "Control how platform fees are handled for this event"
 msgstr "このイベントでのプラットフォーム手数料の扱いを設定します"
 
-#: src/components/forms/CheckInListForm/index.tsx:84
+#: src/components/forms/CheckInListForm/index.tsx:142
 msgid "Control who gets in for this date"
 msgstr "この日付の入場者を管理します"
 
-#: src/components/forms/CheckInListForm/index.tsx:85
+#: src/components/forms/CheckInListForm/index.tsx:143
 msgid "Control who gets in, and when"
 msgstr "入場できる人と時間を管理します"
 
@@ -5167,7 +5398,7 @@ msgid "Copy check-in link"
 msgstr "チェックインリンクをコピー"
 
 #: src/components/common/CheckInListList/index.tsx:156
-#: src/components/common/CheckInListTable/index.tsx:209
+#: src/components/common/CheckInListTable/index.tsx:217
 msgid "Copy Check-In URL"
 msgstr "チェックインURLをコピー"
 
@@ -5183,7 +5414,7 @@ msgstr "コードをコピー"
 msgid "Copy command"
 msgstr "コマンドをコピー"
 
-#: src/hooks/useOrderActions.tsx:144
+#: src/hooks/useOrderActions.tsx:156
 msgid "Copy customer link"
 msgstr "お客様向けリンクをコピー"
 
@@ -5191,7 +5422,7 @@ msgstr "お客様向けリンクをコピー"
 msgid "Copy details to first attendee"
 msgstr "詳細を最初の参加者にコピー"
 
-#: src/components/common/AttendeeTable/index.tsx:174
+#: src/components/common/AttendeeTable/index.tsx:178
 #: src/components/common/OrdersTable/index.tsx:178
 msgid "Copy Email"
 msgstr "メールアドレスをコピー"
@@ -5457,11 +5688,11 @@ msgstr "カバー画像は、主催者ページの上部に表示されます"
 msgid "Covers"
 msgstr "対象範囲"
 
-#: src/components/common/CheckInListTable/index.tsx:92
+#: src/components/common/CheckInListTable/index.tsx:100
 msgid "Covers every ticket"
 msgstr "すべてのチケットが対象"
 
-#: src/components/routes/event/attendees.tsx:254
+#: src/components/routes/event/attendees.tsx:260
 #: src/components/routes/event/products.tsx:124
 msgid "Create"
 msgstr "作成"
@@ -5482,7 +5713,7 @@ msgstr "キーを作成して、Zapier、CRM、独自のスクリプトなどの
 msgid "Create a list for this date"
 msgstr "この日付のリストを作成"
 
-#: src/components/layouts/CheckIn/index.tsx:126
+#: src/components/layouts/CheckIn/index.tsx:131
 msgid "Create a new check-in list for an active session, or contact the organizer if you think this is a mistake."
 msgstr "アクティブなセッションの新しいチェックインリストを作成してください。誤りだと思われる場合は、主催者にお問い合わせください。"
 
@@ -5507,10 +5738,14 @@ msgstr "座席マップを作成"
 msgid "Create a ticket"
 msgstr "チケットを作成"
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:70
+#: src/components/modals/CreateCheckInListModal/index.tsx:72
 #: src/ee/box-office/components/modals/CreateBoxOfficeModal/index.tsx:79
 msgid "Create a Ticket"
 msgstr "チケットを作成"
+
+#: src/components/routes/event/Badges/BadgeRibbonsEditor.tsx:17
+msgid "Create a ticket to give it a badge colour."
+msgstr "チケットを作成すると、名札の色を設定できます。"
 
 #: src/ee/seating/components/routes/event/Seating/BandProductsCard.tsx:72
 msgid "Create a ticket, then link it to a band so buyers can pick a seat. Donation tickets and other product types can't be seated."
@@ -5583,9 +5818,9 @@ msgid "Create Category"
 msgstr "カテゴリーを作成"
 
 #: src/components/common/CheckInListList/index.tsx:60
-#: src/components/common/CheckInListTable/index.tsx:295
-#: src/components/modals/CreateCheckInListModal/index.tsx:89
-#: src/components/modals/CreateCheckInListModal/index.tsx:110
+#: src/components/common/CheckInListTable/index.tsx:303
+#: src/components/modals/CreateCheckInListModal/index.tsx:91
+#: src/components/modals/CreateCheckInListModal/index.tsx:112
 #: src/components/routes/event/CheckInLists/index.tsx:76
 msgid "Create Check-In List"
 msgstr "チェックインリストを作成"
@@ -5631,7 +5866,7 @@ msgstr "手数料を作成"
 msgid "Create key"
 msgstr "キーを作成"
 
-#: src/components/forms/ProductForm/index.tsx:568
+#: src/components/forms/ProductForm/index.tsx:575
 msgid "Create more tickets or products to offer them as add-ons"
 msgstr "アドオンとして提供するチケットや商品をさらに作成します"
 
@@ -5689,7 +5924,7 @@ msgstr "座席マップを作成"
 msgid "Create tax"
 msgstr "税金を作成"
 
-#: src/components/forms/ProductForm/index.tsx:509
+#: src/components/forms/ProductForm/index.tsx:514
 msgid "Create Tax or Fee"
 msgstr "税金または手数料を作成"
 
@@ -5849,9 +6084,18 @@ msgstr "カスタム質問"
 msgid "Custom Range"
 msgstr "カスタム範囲"
 
+#: src/utilites/badges.ts:78
+msgid "Custom size"
+msgstr "カスタムサイズ"
+
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:236
 msgid "Custom template"
 msgstr "カスタムテンプレート"
+
+#: src/components/routes/event/Badges/BadgeLinesEditor.tsx:127
+#: src/utilites/badges.ts:94
+msgid "Custom text"
+msgstr "カスタムテキスト"
 
 #: src/components/common/AdminOrdersTable/index.tsx:71
 #: src/components/common/OrdersTable/index.tsx:117
@@ -5859,7 +6103,7 @@ msgstr "カスタムテンプレート"
 msgid "Customer"
 msgstr "お客様"
 
-#: src/hooks/useOrderActions.tsx:69
+#: src/hooks/useOrderActions.tsx:73
 msgid "Customer link copied to clipboard"
 msgstr "お客様向けリンクをクリップボードにコピーしました"
 
@@ -5912,6 +6156,10 @@ msgstr "Liquidテンプレートを使って、メールテンプレートをカ
 msgid "Customize your event page"
 msgstr "イベントページをカスタマイズ"
 
+#: src/components/routes/event/Badges/BadgePrint.tsx:178
+msgid "Cutting guides"
+msgstr "カットガイド"
+
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:63
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:34
 msgid "Daily"
@@ -5941,7 +6189,7 @@ msgstr "ダンスフロア"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:155
 #: src/components/common/CheckInListList/index.tsx:176
-#: src/components/common/CheckInListTable/index.tsx:225
+#: src/components/common/CheckInListTable/index.tsx:233
 #: src/components/common/EntityActions/index.tsx:58
 #: src/components/common/LocationsTable/index.tsx:71
 #: src/components/common/OrganizerWebhookTable/index.tsx:121
@@ -5958,7 +6206,7 @@ msgstr "危険な操作"
 #: src/components/common/DangerZone/index.tsx:30
 #: src/components/common/EntityActions/index.tsx:32
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:573
-#: src/components/routes/event/Settings/index.tsx:112
+#: src/components/routes/event/Settings/index.tsx:120
 #: src/components/routes/organizer/Settings/index.tsx:81
 msgid "Danger Zone"
 msgstr "危険な操作"
@@ -5968,7 +6216,7 @@ msgid "Dark"
 msgstr "ダーク"
 
 #: src/components/layouts/Admin/index.tsx:17
-#: src/components/layouts/Event/index.tsx:117
+#: src/components/layouts/Event/index.tsx:120
 #: src/components/routes/admin/Dashboard/index.tsx:179
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:60
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:158
@@ -5976,12 +6224,13 @@ msgid "Dashboard"
 msgstr "ダッシュボード"
 
 #: src/components/common/AdminOrdersTable/index.tsx:94
-#: src/components/common/CheckInListTable/index.tsx:107
+#: src/components/common/CheckInListTable/index.tsx:115
 #: src/components/common/OrderDetails/index.tsx:44
 #: src/components/common/WaitlistTable/index.tsx:187
 #: src/components/common/WidgetEditor/ContentFields.tsx:77
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:117
 #: src/components/forms/QuestionForm/index.tsx:136
+#: src/components/modals/PrintBadgesModal/index.tsx:132
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:175
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:39
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:56
@@ -6132,7 +6381,7 @@ msgstr "減らす"
 msgid "Decrease quantity"
 msgstr "数量を減らす"
 
-#: src/components/common/CheckInListTable/index.tsx:87
+#: src/components/common/CheckInListTable/index.tsx:89
 #: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:117
 #: src/components/routes/event/OccurrencesTab/PriceOverrideForm/index.tsx:292
 #: src/components/routes/settings/TaxesAndFees/index.tsx:51
@@ -6172,7 +6421,7 @@ msgstr "デフォルトのテンプレートが使用されます"
 msgid "Default updated"
 msgstr "デフォルトを更新しました"
 
-#: src/components/forms/ProductForm/ledgerSummaries.ts:66
+#: src/components/forms/ProductForm/ledgerSummaries.ts:73
 msgid "Defaults"
 msgstr "デフォルト"
 
@@ -6261,7 +6510,7 @@ msgid "Delete category"
 msgstr "カテゴリーを削除"
 
 #: src/components/common/CheckInListList/index.tsx:179
-#: src/components/common/CheckInListTable/index.tsx:228
+#: src/components/common/CheckInListTable/index.tsx:236
 msgid "Delete Check-In List"
 msgstr "チェックインリストを削除"
 
@@ -6416,8 +6665,8 @@ msgstr "奥行き"
 
 #: src/components/common/WidgetEditor/SectionsPicker.tsx:32
 #: src/components/forms/ProductCategoryForm/index.tsx:29
-#: src/components/forms/ProductForm/index.tsx:401
-#: src/components/forms/ProductForm/index.tsx:407
+#: src/components/forms/ProductForm/index.tsx:402
+#: src/components/forms/ProductForm/index.tsx:408
 #: src/components/forms/TaxAndFeeForm/index.tsx:106
 #: src/components/modals/CreateEventModal/index.tsx:351
 #: src/components/modals/DuplicateEventModal/index.tsx:252
@@ -6438,7 +6687,7 @@ msgstr "説明"
 msgid "Description and venue added"
 msgstr "説明と会場を追加しました"
 
-#: src/components/forms/CheckInListForm/index.tsx:144
+#: src/components/forms/CheckInListForm/index.tsx:236
 msgid "Description for check-in staff"
 msgstr "チェックインスタッフ向けの説明"
 
@@ -6446,8 +6695,12 @@ msgstr "チェックインスタッフ向けの説明"
 msgid "Description for staff"
 msgstr "スタッフ向けの説明"
 
-#: src/components/common/DesignerShell/index.tsx:46
-#: src/components/common/DesignerShell/index.tsx:49
+#: src/components/routes/event/Settings/Sections/FeatureSettings/index.tsx:32
+msgid "Design name badges, print them in batches, and print them at check-in."
+msgstr "名札をデザインし、まとめて印刷したりチェックイン時に印刷したりできます。"
+
+#: src/components/common/DesignerShell/index.tsx:47
+#: src/components/common/DesignerShell/index.tsx:50
 msgid "Desktop"
 msgstr "デスクトップ"
 
@@ -6457,12 +6710,17 @@ msgstr "デスクトップ"
 #: src/components/modals/InviteUserModal/index.tsx:52
 #: src/components/modals/ManageAttendeeModal/index.tsx:266
 #: src/components/modals/ManageOrderModal/index.tsx:319
+#: src/components/routes/event/Badges/index.tsx:502
 #: src/components/routes/event/OccurrencesTab/BookingSummary/index.tsx:103
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:417
 #: src/components/routes/product-widget/CollectInformation/index.tsx:441
 #: src/components/routes/product-widget/SelectProducts/index.tsx:578
 msgid "Details"
 msgstr "詳細"
+
+#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:308
+msgid "Details changed since the badge was printed"
+msgstr "名札の印刷後に情報が変更されました"
 
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:37
 #: src/ee/licensing/licenceNotice.ts:74
@@ -6484,6 +6742,10 @@ msgstr "デバイスを削除しました"
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:82
 msgid "Diameter"
 msgstr "直径"
+
+#: src/components/routes/event/Badges/BadgePrint.tsx:228
+msgid "Did all {0} badges print correctly?"
+msgstr "{0}枚の名札はすべて正しく印刷されましたか？"
 
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:144
 msgid "Didn't get it?"
@@ -6514,7 +6776,7 @@ msgstr "無効"
 msgid "Disabling this capacity will track sales but not stop them when the limit is reached"
 msgstr "この定員を無効にすると、販売は追跡されますが、上限に達しても販売は停止されません"
 
-#: src/components/common/DesignerShell/index.tsx:160
+#: src/components/common/DesignerShell/index.tsx:162
 #: src/components/common/SettingsPage/index.tsx:131
 #: src/components/common/WidgetEditor/index.tsx:94
 #: src/components/forms/ProductForm/ProductDrawer.tsx:60
@@ -6638,12 +6900,14 @@ msgid "Don't let buyers leave a single empty seat"
 msgstr "購入者が1席だけ空席を残さないようにする"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:469
-#: src/components/forms/ProductForm/index.tsx:297
+#: src/components/forms/ProductForm/index.tsx:298
 #: src/utilites/eventListingLabels.ts:22
 msgid "Donation"
 msgstr "寄付"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:264
+#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:70
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:125
 #: src/components/modals/CheckInListSuccessModal/index.tsx:59
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:73
 #: src/components/modals/CreateWebhookModal/index.tsx:73
@@ -6672,6 +6936,10 @@ msgstr "入口スタッフは、ボックスオフィスのリンクとPINでサ
 msgid "Doors"
 msgstr "ドア"
 
+#: src/components/routes/event/Badges/BadgePrint.tsx:214
+msgid "Double-sided: turn on two-sided printing and flip on the long edge."
+msgstr "両面：両面印刷をオンにし、長辺とじを選択してください。"
+
 #: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:87
 msgid "Download"
 msgstr "ダウンロード"
@@ -6688,7 +6956,7 @@ msgstr "現在のラインナップ入りのテンプレートをダウンロー
 msgid "Download CSV"
 msgstr "CSVをダウンロード"
 
-#: src/hooks/useOrderActions.tsx:151
+#: src/hooks/useOrderActions.tsx:163
 msgid "Download invoice"
 msgstr "請求書をダウンロード"
 
@@ -6709,12 +6977,12 @@ msgid "Download spreadsheet (.xlsx)"
 msgstr "スプレッドシートをダウンロード (.xlsx)"
 
 #: src/components/layouts/Checkout/index.tsx:240
-#: src/hooks/useOrderActions.tsx:80
+#: src/hooks/useOrderActions.tsx:84
 msgid "Downloading Invoice"
 msgstr "請求書をダウンロード中"
 
 #: src/components/common/EventCard/index.tsx:99
-#: src/components/layouts/Event/index.tsx:259
+#: src/components/layouts/Event/index.tsx:263
 #: src/components/layouts/OrganizerLayout/index.tsx:247
 #: src/components/routes/admin/Announcements/index.tsx:183
 #: src/components/routes/admin/Announcements/index.tsx:472
@@ -6911,9 +7179,17 @@ msgstr "例：スタンダード、プレミアム、エンタープライズ"
 msgid "Each account receives this email at most once."
 msgstr "各アカウントがこのメールを受け取るのは最大 1 回です。"
 
+#: src/components/routes/event/Badges/index.tsx:386
+msgid "Each badge prints on its own page, for card and label printers."
+msgstr "名札を1枚ずつ別ページに印刷します。カードプリンターやラベルプリンター向けです。"
+
 #: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:24
 msgid "Each code can be used once to sign in if you lose access to your authenticator app."
 msgstr "各コードは、認証アプリにアクセスできなくなった場合に、1回だけサインインに使用できます。"
+
+#: src/components/routes/event/Badges/index.tsx:383
+msgid "Each fold-over badge prints on its own {foldWidth} × {foldHeight} mm page."
+msgstr "二つ折り名札は1枚ずつ{foldWidth} × {foldHeight} mmのページに印刷されます。"
 
 #: src/components/routes/settings/Organizers/index.tsx:82
 msgid "Each organizer has its own public page, branding, payouts and event defaults."
@@ -6931,7 +7207,7 @@ msgstr "各商品"
 msgid "Each ticket keeps the price set on the ticket itself — only change it here if a band should cost more or less."
 msgstr "各チケットには、チケット自体に設定された価格が維持されます。バンドの価格を上げ下げしたい場合のみ、ここで変更してください。"
 
-#: src/components/forms/ProductForm/index.tsx:387
+#: src/components/forms/ProductForm/index.tsx:388
 msgid "Each tier goes on sale only after the tiers above it sell out or end. Every tier except the last needs a quantity."
 msgstr "各ティアは、上位のティアが完売または終了した後にのみ販売開始されます。最後のティア以外は、数量の設定が必要です。"
 
@@ -6944,7 +7220,7 @@ msgstr "以前"
 msgid "Early bird"
 msgstr "早割"
 
-#: src/components/common/DesignerShell/index.tsx:90
+#: src/components/common/DesignerShell/index.tsx:91
 #: src/components/common/LocationPicker/index.tsx:197
 #: src/components/common/QuestionsTable/index.tsx:150
 #: src/components/routes/admin/Announcements/index.tsx:211
@@ -6954,8 +7230,8 @@ msgstr "早割"
 #: src/components/routes/settings/Team/MemberRow.tsx:177
 #: src/ee/box-office/components/layouts/BoxOffice/CartPanel.tsx:147
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:195
-#: src/hooks/useAttendeeActions.tsx:94
-#: src/hooks/useOrderActions.tsx:108
+#: src/hooks/useAttendeeActions.tsx:97
+#: src/hooks/useOrderActions.tsx:112
 msgid "Edit"
 msgstr "編集"
 
@@ -7018,8 +7294,8 @@ msgid "Edit category"
 msgstr "カテゴリーを編集"
 
 #: src/components/common/CheckInListList/index.tsx:147
-#: src/components/common/CheckInListTable/index.tsx:200
-#: src/components/modals/EditCheckInListModal/index.tsx:77
+#: src/components/common/CheckInListTable/index.tsx:208
+#: src/components/modals/EditCheckInListModal/index.tsx:81
 msgid "Edit Check-In List"
 msgstr "チェックインリストを編集"
 
@@ -7197,7 +7473,7 @@ msgstr "メールと通知の設定"
 msgid "Email & scheduled messages"
 msgstr "メールと予約メッセージ"
 
-#: src/components/routes/event/Settings/index.tsx:88
+#: src/components/routes/event/Settings/index.tsx:96
 msgid "Email & Templates"
 msgstr "メールとテンプレート"
 
@@ -7214,7 +7490,7 @@ msgstr "メールアドレス"
 msgid "Email Address"
 msgstr "メールアドレス"
 
-#: src/components/common/AttendeeTable/index.tsx:89
+#: src/components/common/AttendeeTable/index.tsx:90
 #: src/components/common/OrdersTable/index.tsx:74
 msgid "Email address copied to clipboard"
 msgstr "メールアドレスをクリップボードにコピーしました"
@@ -7236,7 +7512,7 @@ msgstr "メールアドレスの変更をキャンセルしました"
 msgid "Email change pending"
 msgstr "メールアドレスの変更を保留中"
 
-#: src/components/layouts/Event/index.tsx:98
+#: src/components/layouts/Event/index.tsx:101
 #: src/components/layouts/OrganizerLayout/index.tsx:142
 #: src/components/routes/settings/Profile/index.tsx:136
 msgid "Email confirmation resent successfully"
@@ -7340,6 +7616,10 @@ msgstr "埋め込み可能なウィジェット"
 msgid "Embedded code only runs on the published site, not in the Designer."
 msgstr "埋め込みコードは公開サイトでのみ動作し、Designer内では動作しません。"
 
+#: src/components/routes/event/Badges/index.tsx:587
+msgid "Emergency: +353 1 234 5678"
+msgstr "緊急連絡先: +353 1 234 5678"
+
 #: src/components/routes/admin/Announcements/index.tsx:409
 msgid "Emoji"
 msgstr "絵文字"
@@ -7373,7 +7653,7 @@ msgstr "この定員を有効にすると、上限に達した時点で商品の
 msgid "Enable this template for sending emails"
 msgstr "このテンプレートをメール送信に有効にする"
 
-#: src/components/forms/ProductForm/index.tsx:476
+#: src/components/forms/ProductForm/index.tsx:480
 msgid "Enable Waitlist"
 msgstr "キャンセル待ちを有効にする"
 
@@ -7648,7 +7928,7 @@ msgstr "完売した商品にお客様がキャンセル待ち登録をすると
 
 #: src/components/common/OrganizerWebhookTable/index.tsx:155
 #: src/components/layouts/Checkout/index.tsx:248
-#: src/hooks/useOrderActions.tsx:88
+#: src/hooks/useOrderActions.tsx:92
 msgid "Error"
 msgstr "エラー"
 
@@ -7750,6 +8030,10 @@ msgstr "イベント専用のカスタムテンプレート"
 msgid "Event dashboard"
 msgstr "イベントダッシュボード"
 
+#: src/utilites/badges.ts:93
+msgid "Event date"
+msgstr "開催日"
+
 #: src/components/routes/event/TicketDesigner/index.tsx:165
 #: src/components/routes/my-tickets/index.tsx:79
 #: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:29
@@ -7778,7 +8062,7 @@ msgstr "イベントを削除し、アカウントの削除をキューに追加
 msgid "Event deleted successfully"
 msgstr "イベントを削除しました"
 
-#: src/components/routes/event/Settings/index.tsx:52
+#: src/components/routes/event/Settings/index.tsx:54
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:72
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:702
 msgid "Event Details"
@@ -7792,6 +8076,10 @@ msgstr "イベントを複製しました"
 msgid "Event ID: {0}"
 msgstr "イベント ID: {0}"
 
+#: src/utilites/badges.ts:107
+msgid "Event info on the back"
+msgstr "裏面にイベント情報"
+
 #: src/components/common/PeriodSelector/index.tsx:124
 msgid "Event lifetime"
 msgstr "イベントの有効期間"
@@ -7802,6 +8090,7 @@ msgstr "イベントの場所と会場の詳細"
 
 #: src/components/modals/CreateEventModal/index.tsx:329
 #: src/components/modals/CreateEventModal/index.tsx:330
+#: src/components/routes/event/Badges/index.tsx:512
 #: src/components/routes/welcome/index.tsx:376
 msgid "Event name"
 msgstr "イベント名"
@@ -7823,7 +8112,7 @@ msgstr "イベントは利用できません"
 msgid "Event not live"
 msgstr "イベントは公開されていません"
 
-#: src/components/layouts/Event/index.tsx:326
+#: src/components/layouts/Event/index.tsx:330
 msgid "Event Page"
 msgstr "イベントページ"
 
@@ -7835,8 +8124,8 @@ msgstr "イベントのプレビュー"
 msgid "Event restored successfully"
 msgstr "イベントを復元しました"
 
-#: src/components/layouts/Event/index.tsx:134
-#: src/components/routes/event/Settings/index.tsx:183
+#: src/components/layouts/Event/index.tsx:137
+#: src/components/routes/event/Settings/index.tsx:191
 msgid "Event Settings"
 msgstr "イベント設定"
 
@@ -7846,14 +8135,14 @@ msgstr "イベントの設定"
 
 #: src/components/common/EventCard/index.tsx:82
 #: src/components/common/StatusToggle/index.tsx:62
-#: src/components/layouts/Event/index.tsx:221
+#: src/components/layouts/Event/index.tsx:225
 #: src/components/modals/PublishEventModal/index.tsx:129
 msgid "Event status update failed. Please try again later"
 msgstr "イベントのステータスの更新に失敗しました。しばらくしてからもう一度お試しください"
 
 #: src/components/common/EventCard/index.tsx:79
 #: src/components/common/StatusToggle/index.tsx:54
-#: src/components/layouts/Event/index.tsx:218
+#: src/components/layouts/Event/index.tsx:222
 msgid "Event status updated"
 msgstr "イベントのステータスを更新しました"
 
@@ -7873,7 +8162,7 @@ msgstr "イベントが新しすぎます"
 msgid "Event totals"
 msgstr "イベント合計"
 
-#: src/components/routes/event/Settings/index.tsx:58
+#: src/components/routes/event/Settings/index.tsx:60
 #: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:64
 msgid "Event Type"
 msgstr "イベントの種類"
@@ -7982,6 +8271,10 @@ msgstr "新しいものも含む、すべての主催者とイベント。"
 msgid "Every trusted device will need a code at its next sign-in. Continue?"
 msgstr "信頼済みのすべてのデバイスで、次回のサインイン時にコードが必要になります。続行しますか？"
 
+#: src/components/modals/PrintBadgesModal/index.tsx:110
+msgid "Everyone"
+msgstr "全員"
+
 #: src/components/routes/settings/ApiKeys/index.tsx:158
 msgid "Everyone ({0})"
 msgstr "全員（{0}）"
@@ -7998,6 +8291,10 @@ msgstr "その他の出演者"
 msgid "Everyone has a time"
 msgstr "全員の時間が設定済み"
 
+#: src/components/routes/event/Badges/BadgePrint.tsx:264
+msgid "Everyone matching these options already has a printed badge, or there are no attendees yet."
+msgstr "この条件に該当する全員の名札が印刷済みか、まだ参加者がいません。"
+
 #: src/components/routes/settings/Team/TwoFactorPolicy.tsx:62
 msgid "Everyone on this account must use an authenticator app to sign in. Members without it are asked to set it up before they can continue."
 msgstr "このアカウントのすべてのユーザーは、サインインに認証アプリを使用する必要があります。使用していないメンバーは、続行する前に設定するよう求められます。"
@@ -8010,6 +8307,11 @@ msgstr "この主催者とそのすべてのイベントを管理できるメン
 msgid "Everyone who can see or manage this event."
 msgstr "このイベントを閲覧または管理できるメンバー。"
 
+#: src/components/forms/CheckInListForm/index.tsx:73
+msgid "Everything"
+msgstr "すべて"
+
+#: src/components/forms/CheckInListForm/index.tsx:200
 #: src/components/forms/ProductForm/index.tsx:396
 msgid "Everything else — tap to edit"
 msgstr "その他すべて — タップして編集"
@@ -8075,7 +8377,7 @@ msgstr "SSOの対象外"
 msgid "Expiration"
 msgstr "有効期限"
 
-#: src/components/forms/CheckInListForm/index.tsx:159
+#: src/components/forms/CheckInListForm/index.tsx:218
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:182
 msgid "Expiration date"
 msgstr "有効期限"
@@ -8110,7 +8412,7 @@ msgstr "有効期限"
 
 #: src/components/modals/ProductPurchasesModal/index.tsx:203
 #: src/components/routes/event/Affiliates/index.tsx:97
-#: src/components/routes/event/attendees.tsx:263
+#: src/components/routes/event/attendees.tsx:269
 #: src/components/routes/event/Lineup/index.tsx:140
 #: src/components/routes/event/orders.tsx:250
 msgid "Export"
@@ -8144,7 +8446,7 @@ msgstr "エクスポートが完了しました"
 msgid "Exporting Affiliates"
 msgstr "アフィリエイトをエクスポート中"
 
-#: src/components/routes/event/attendees.tsx:160
+#: src/components/routes/event/attendees.tsx:166
 msgid "Exporting Attendees"
 msgstr "参加者をエクスポート中"
 
@@ -8189,7 +8491,7 @@ msgstr "失敗したジョブ"
 msgid "Failed to abandon order. Please try again."
 msgstr "注文の中止に失敗しました。もう一度お試しください。"
 
-#: src/hooks/useAttendeeActions.tsx:75
+#: src/hooks/useAttendeeActions.tsx:78
 msgid "Failed to activate attendee"
 msgstr "参加者の有効化に失敗しました"
 
@@ -8205,7 +8507,7 @@ msgstr "設定の割り当てに失敗しました"
 msgid "Failed to cancel account deletion"
 msgstr "アカウント削除のキャンセルに失敗しました"
 
-#: src/hooks/useAttendeeActions.tsx:75
+#: src/hooks/useAttendeeActions.tsx:78
 msgid "Failed to cancel attendee"
 msgstr "参加者のキャンセルに失敗しました"
 
@@ -8315,7 +8617,7 @@ msgid "Failed to delete template"
 msgstr "テンプレートの削除に失敗しました"
 
 #: src/components/layouts/Checkout/index.tsx:249
-#: src/hooks/useOrderActions.tsx:89
+#: src/hooks/useOrderActions.tsx:93
 msgid "Failed to download invoice. Please try again."
 msgstr "請求書のダウンロードに失敗しました。もう一度お試しください。"
 
@@ -8323,7 +8625,7 @@ msgstr "請求書のダウンロードに失敗しました。もう一度お試
 msgid "Failed to export affiliates"
 msgstr "アフィリエイトのエクスポートに失敗しました"
 
-#: src/components/routes/event/attendees.tsx:169
+#: src/components/routes/event/attendees.tsx:175
 msgid "Failed to export attendees"
 msgstr "参加者のエクスポートに失敗しました"
 
@@ -8344,7 +8646,7 @@ msgstr "レポートのエクスポートに失敗しました。もう一度お
 msgid "Failed to load box office"
 msgstr "ボックスオフィスの読み込みに失敗しました"
 
-#: src/components/modals/EditCheckInListModal/index.tsx:87
+#: src/components/modals/EditCheckInListModal/index.tsx:91
 msgid "Failed to load Check-In List"
 msgstr "チェックインリストの読み込みに失敗しました"
 
@@ -8395,7 +8697,7 @@ msgstr "注文確認メールの再送信に失敗しました"
 msgid "Failed to resend ticket"
 msgstr "チケットの再送信に失敗しました"
 
-#: src/hooks/useAttendeeActions.tsx:40
+#: src/hooks/useAttendeeActions.tsx:43
 msgid "Failed to resend ticket email"
 msgstr "チケットメールの再送信に失敗しました"
 
@@ -8558,6 +8860,8 @@ msgstr "フィーチャーフラグ"
 msgid "Featured"
 msgstr "注目"
 
+#: src/components/routes/event/Settings/index.tsx:66
+#: src/components/routes/event/Settings/Sections/FeatureSettings/index.tsx:51
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:103
 msgid "Features"
 msgstr "機能"
@@ -8596,7 +8900,7 @@ msgstr "手数料を更新しました"
 
 #: src/components/common/InlineOrderSummary/index.tsx:164
 #: src/components/common/OrdersTable/index.tsx:292
-#: src/components/forms/ProductForm/index.tsx:497
+#: src/components/forms/ProductForm/index.tsx:502
 #: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:54
 #: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:88
 #: src/components/routes/settings/TaxesAndFees/index.tsx:126
@@ -8630,6 +8934,10 @@ msgstr "ファイルが大きすぎます。最大サイズは5MBです。"
 msgid "Fill in your details above first"
 msgstr "先に上記のご自身の情報を入力してください"
 
+#: src/components/routes/event/Badges/index.tsx:474
+msgid "Fills the header on the Banner template and the background on Artwork."
+msgstr "「バナー」テンプレートではヘッダーに、「アートワーク」では背景に使われます。"
+
 #: src/constants/eventCategories.ts:12
 msgid "Film"
 msgstr "映画"
@@ -8638,7 +8946,7 @@ msgstr "映画"
 msgid "Filter attendees"
 msgstr "参加者を絞り込む"
 
-#: src/components/routes/event/attendees.tsx:246
+#: src/components/routes/event/attendees.tsx:252
 msgid "Filter Attendees"
 msgstr "参加者を絞り込む"
 
@@ -8741,6 +9049,7 @@ msgstr "最初の請求書番号"
 #: src/components/routes/settings/Profile/index.tsx:200
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:182
 #: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:70
+#: src/utilites/badges.ts:88
 msgid "First name"
 msgstr "名"
 
@@ -8756,6 +9065,10 @@ msgstr "名"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:55
 msgid "First Name"
 msgstr "名"
+
+#: src/components/modals/PrintBadgesModal/index.tsx:150
+msgid "First name (A–Z)"
+msgstr "名（昇順）"
 
 #: src/components/modals/JoinWaitlistModal/index.tsx:56
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:31
@@ -8850,6 +9163,27 @@ msgstr "フローティングボタン"
 msgid "Flyer"
 msgstr "フライヤー"
 
+#: src/components/routes/event/Badges/BadgePrint.tsx:178
+msgid "Fold and cutting guides"
+msgstr "折り線とカットガイド"
+
+#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:56
+#: src/components/routes/event/Badges/index.tsx:570
+msgid "Fold-over"
+msgstr "二つ折り"
+
+#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:49
+msgid "Fold-over prints the front and back side by side on one page, to fold in half. It works on any printer."
+msgstr "二つ折りでは、表面と裏面を1ページに並べて印刷し、半分に折ります。どのプリンターでも使えます。"
+
+#: src/components/routes/event/Badges/BadgePrint.tsx:220
+msgid "Fold-over: print single-sided at 100% scale, then fold each badge in half with the front facing out."
+msgstr "二つ折り：片面・100%の倍率で印刷し、表面が外側になるように各名札を半分に折ってください。"
+
+#: src/components/routes/event/Badges/index.tsx:425
+msgid "Font"
+msgstr "フォント"
+
 #: src/components/common/ThemeFontControl/index.tsx:64
 msgid "Font Family"
 msgstr "フォントファミリー"
@@ -8861,6 +9195,10 @@ msgstr "飲食"
 #: src/components/routes/event/TicketDesigner/index.tsx:180
 msgid "Footer"
 msgstr "フッター"
+
+#: src/components/routes/event/Badges/index.tsx:537
+msgid "Footer text"
+msgstr "フッターテキスト"
 
 #: src/components/routes/event/TicketDesigner/index.tsx:182
 msgid "Footer Text"
@@ -8877,6 +9215,18 @@ msgstr "日付の数を指定"
 #: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:81
 msgid "For events across more than one venue"
 msgstr "複数の会場にまたがるイベント向け"
+
+#: src/components/routes/event/Badges/index.tsx:540
+msgid "For example: #DevConf2027"
+msgstr "例：#DevConf2027"
+
+#: src/components/routes/event/Badges/BadgeLinesEditor.tsx:123
+msgid "For example: Ask me about volunteering"
+msgstr "例：ボランティアについてお気軽に"
+
+#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:62
+msgid "For one-tap printing on a laptop, set the label printer as the default printer and open this page in Chrome started with the --kiosk-printing option."
+msgstr "ノートPCでワンタップ印刷するには、ラベルプリンターを既定のプリンターに設定し、--kiosk-printing オプション付きで起動した Chrome でこのページを開いてください。"
 
 #: src/components/common/ConfirmIdentity/index.tsx:109
 msgid "For your security, sign in again to confirm it's you."
@@ -8909,7 +9259,7 @@ msgstr "ロビー"
 #: src/components/common/OrderSummary/index.tsx:111
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:160
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:170
-#: src/components/forms/ProductForm/index.tsx:296
+#: src/components/forms/ProductForm/index.tsx:297
 #: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:157
 #: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:229
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:37
@@ -8959,7 +9309,11 @@ msgstr "{amount}から"
 msgid "From {from}"
 msgstr "{from}から"
 
-#: src/components/forms/ProductForm/ledgerSummaries.ts:46
+#: src/components/forms/CheckInListForm/index.tsx:52
+msgid "From {opens}"
+msgstr "{opens}から"
+
+#: src/components/forms/ProductForm/ledgerSummaries.ts:53
 msgid "From {start}"
 msgstr "{start}から"
 
@@ -8975,6 +9329,7 @@ msgstr "{start}から、{count}日程"
 msgid "From free"
 msgstr "無料から"
 
+#: src/components/routes/event/Badges/index.tsx:212
 #: src/ee/seating/components/lib/templates.ts:186
 msgid "Front"
 msgstr "前方"
@@ -8986,6 +9341,10 @@ msgstr "正面入口のリーダー"
 #: src/ee/seating/components/lib/templates.ts:171
 msgid "Front left"
 msgstr "前方左"
+
+#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:54
+msgid "Front only"
+msgstr "表面のみ"
 
 #: src/ee/seating/components/lib/templates.ts:144
 msgid "Front pit"
@@ -9006,6 +9365,10 @@ msgstr "データの完全な所有権"
 #: src/components/common/PeriodSelector/index.tsx:46
 msgid "Full event"
 msgstr "イベント全体"
+
+#: src/utilites/badges.ts:90
+msgid "Full name"
+msgstr "氏名"
 
 #: src/components/modals/RefundOrderModal/index.tsx:117
 msgid "Full refund"
@@ -9028,6 +9391,7 @@ msgstr "一般"
 msgid "General admission"
 msgstr "自由席"
 
+#: src/components/routes/event/Badges/sampleBadge.ts:48
 #: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:40
 #: src/components/routes/event/TicketDesigner/TicketPreview.tsx:42
 msgid "General Admission"
@@ -9124,6 +9488,10 @@ msgstr "既存のメンバーにアクセス権を付与"
 msgid "Give everyone a time"
 msgstr "全員に時間を設定"
 
+#: src/components/routes/event/Badges/index.tsx:321
+msgid "Give speakers, sponsors, staff and attendees their own colour and label so they're easy to spot."
+msgstr "登壇者、スポンサー、スタッフ、参加者にそれぞれ色とラベルを付けて、ひと目で見分けられるようにします。"
+
 #: src/components/common/WidgetEditor/installGuides.ts:93
 msgid "Give the embed enough height for the widget, or set Checkout opens in to New tab."
 msgstr "埋め込みにウィジェットが収まる高さを設定するか、「チェックアウトの開き方」を「新しいタブ」に設定してください。"
@@ -9178,7 +9546,7 @@ msgstr "スケジュールへ"
 msgid "Go to seating settings"
 msgstr "座席設定へ"
 
-#: src/components/layouts/Event/index.tsx:232
+#: src/components/layouts/Event/index.tsx:236
 #: src/components/layouts/OrganizerLayout/index.tsx:222
 msgid "Go to your events"
 msgstr "自分のイベントへ"
@@ -9259,7 +9627,7 @@ msgstr "グループ"
 msgid "Guest"
 msgstr "ゲスト"
 
-#: src/components/layouts/Event/index.tsx:149
+#: src/components/layouts/Event/index.tsx:153
 msgid "Guest Management"
 msgstr "ゲスト管理"
 
@@ -9294,6 +9662,10 @@ msgstr "プロモーションコードをお持ちですか？"
 msgid "Head"
 msgstr "ヘッド"
 
+#: src/components/routes/event/Badges/sampleBadge.ts:26
+msgid "Head of Partnerships"
+msgstr "パートナーシップ責任者"
+
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:351
 msgid "Heading"
 msgstr "見出し"
@@ -9309,6 +9681,10 @@ msgstr "ヘッドライナー"
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:97
 msgid "Height"
 msgstr "高さ"
+
+#: src/components/routes/event/Badges/index.tsx:363
+msgid "Height (mm)"
+msgstr "高さ (mm)"
 
 #: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:60
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:152
@@ -9410,7 +9786,7 @@ msgstr "参加者には非表示 - 主催者のみ表示されます"
 msgid "Hidden from event page: {hiddenNames}"
 msgstr "イベントページでは非表示: {hiddenNames}"
 
-#: src/components/forms/ProductForm/ledgerSummaries.ts:151
+#: src/components/forms/ProductForm/ledgerSummaries.ts:158
 msgid "Hidden from everyone"
 msgstr "全員に非表示"
 
@@ -9487,19 +9863,19 @@ msgstr "Hi.Eventsのブランド表示を非表示"
 msgid "Hide Preview"
 msgstr "プレビューを非表示"
 
-#: src/components/forms/ProductForm/index.tsx:440
+#: src/components/forms/ProductForm/index.tsx:442
 msgid "Hide product after sale end date"
 msgstr "販売終了日以降は商品を非表示にする"
 
-#: src/components/forms/ProductForm/index.tsx:437
+#: src/components/forms/ProductForm/index.tsx:439
 msgid "Hide product before sale start date"
 msgstr "販売開始日より前は商品を非表示にする"
 
-#: src/components/forms/ProductForm/index.tsx:617
+#: src/components/forms/ProductForm/index.tsx:626
 msgid "Hide product unless user has applicable promo code"
 msgstr "該当するプロモーションコードがない限り商品を非表示にする"
 
-#: src/components/forms/ProductForm/index.tsx:456
+#: src/components/forms/ProductForm/index.tsx:459
 msgid "Hide product when sold out"
 msgstr "完売時は商品を非表示にする"
 
@@ -9519,7 +9895,7 @@ msgstr "日付を非表示にする"
 msgid "Hide this category?"
 msgstr "このカテゴリーを非表示にしますか？"
 
-#: src/components/forms/ProductForm/index.tsx:622
+#: src/components/forms/ProductForm/index.tsx:631
 msgid "Hide this product from customers"
 msgstr "この商品をお客様に非表示にする"
 
@@ -9531,7 +9907,7 @@ msgstr "この質問を非表示にする"
 msgid "Hide this tier from users"
 msgstr "このティアをユーザーに非表示にする"
 
-#: src/components/forms/ProductForm/ledgerSummaries.ts:61
+#: src/components/forms/ProductForm/ledgerSummaries.ts:68
 msgid "Hides sold out"
 msgstr "完売分を非表示"
 
@@ -9539,24 +9915,24 @@ msgstr "完売分を非表示"
 msgid "Hiding a product will prevent users from seeing it on the event page."
 msgstr "商品を非表示にすると、イベントページにユーザーに表示されなくなります。"
 
-#: src/components/forms/ProductForm/index.tsx:580
+#: src/components/forms/ProductForm/index.tsx:588
 msgid "Highlight"
 msgstr "ハイライト"
 
-#: src/components/forms/ProductForm/index.tsx:594
+#: src/components/forms/ProductForm/index.tsx:602
 msgid "Highlight Message"
 msgstr "ハイライトメッセージ"
 
-#: src/components/forms/ProductForm/index.tsx:587
+#: src/components/forms/ProductForm/index.tsx:595
 msgid "Highlight this product"
 msgstr "この商品をハイライトする"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:460
-#: src/components/forms/ProductForm/ledgerSummaries.ts:144
+#: src/components/forms/ProductForm/ledgerSummaries.ts:151
 msgid "Highlighted"
 msgstr "ハイライト表示中"
 
-#: src/components/forms/ProductForm/index.tsx:588
+#: src/components/forms/ProductForm/index.tsx:596
 msgid "Highlighted products will have a different background color to make them stand out on the event page."
 msgstr "ハイライトされた商品は、イベントページで目立つように、背景色が変わります。"
 
@@ -9576,12 +9952,20 @@ msgstr "{dateCount}件の日付で{0}席を保留にする"
 msgid "Hold places for"
 msgstr "席を確保する時間"
 
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:150
+msgid "Hold up the QR code from your ticket email and your badge will print."
+msgstr "チケットメールのQRコードをかざすと、名札が印刷されます。"
+
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:151
+msgid "Hold up the QR code from your ticket email."
+msgstr "チケットメールのQRコードをかざしてください。"
+
 #: src/components/routes/event/HomepageDesigner/index.tsx:142
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:126
 msgid "Homepage Design"
 msgstr "ホームページデザイン"
 
-#: src/components/layouts/Event/index.tsx:136
+#: src/components/layouts/Event/index.tsx:139
 #: src/components/layouts/OrganizerLayout/index.tsx:122
 msgid "Homepage Designer"
 msgstr "ホームページデザイナー"
@@ -9661,6 +10045,10 @@ msgstr "何件ですか？"
 msgid "How paying later works"
 msgstr "後払いの流れ"
 
+#: src/components/routes/event/Badges/index.tsx:561
+msgid "How the back is printed"
+msgstr "裏面の印刷方法"
+
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:459
 msgid "How to pay"
 msgstr "お支払い方法"
@@ -9693,6 +10081,10 @@ msgstr "https://example-maps-service.com/..."
 msgid "https://webhook-domain.com/webhook"
 msgstr "https://webhook-domain.com/webhook"
 
+#: src/utilites/badges.ts:98
+msgid "Huge"
+msgstr "特大"
+
 #: src/locales.ts:80
 msgid "Hungarian"
 msgstr "ハンガリー語"
@@ -9724,6 +10116,14 @@ msgstr "追加しました。続行"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/ReportOfflinePayment/index.tsx:70
 msgid "I've made the payment"
 msgstr "支払いを完了しました"
+
+#: src/utilites/badges.ts:76
+msgid "ID card landscape (CR80)"
+msgstr "IDカード 横向き (CR80)"
+
+#: src/utilites/badges.ts:75
+msgid "ID card portrait (CR80)"
+msgstr "IDカード 縦向き (CR80)"
 
 #: src/components/routes/settings/ApiKeys/index.tsx:224
 msgid "If a key leaks, revoke it straight away and create a new one."
@@ -9781,6 +10181,7 @@ msgstr "画像をアップロードしました"
 msgid "Image URL"
 msgstr "画像URL"
 
+#: src/components/routes/event/Badges/index.tsx:455
 #: src/components/routes/event/HomepageDesigner/index.tsx:176
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:147
 msgid "Images"
@@ -9872,7 +10273,7 @@ msgstr "IDプロバイダーで、認可コードフローを使用するコン�
 
 #: src/components/common/AffiliateTable/index.tsx:132
 #: src/components/common/CheckInListList/index.tsx:115
-#: src/components/common/CheckInListTable/index.tsx:182
+#: src/components/common/CheckInListTable/index.tsx:190
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:280
 #: src/components/forms/AffiliateForm/index.tsx:27
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:25
@@ -9930,14 +10331,18 @@ msgid "Included in your plan. Hi.Events branding is hidden on your event pages, 
 msgstr "プランに含まれています。イベントページ、ウィジェット、チケット、メールでHi.Eventsのブランド表示が非表示になります。"
 
 #: src/components/common/CheckInListList/index.tsx:102
-#: src/components/common/CheckInListTable/index.tsx:95
+#: src/components/common/CheckInListTable/index.tsx:103
 msgid "Includes {0} products"
 msgstr "{0}件の商品を含む"
 
 #: src/components/common/CheckInListList/index.tsx:103
-#: src/components/common/CheckInListTable/index.tsx:94
+#: src/components/common/CheckInListTable/index.tsx:102
 msgid "Includes 1 product"
 msgstr "1件の商品を含む"
+
+#: src/components/modals/PrintBadgesModal/index.tsx:115
+msgid "Includes anyone whose name or badge details changed since their badge was printed."
+msgstr "名札の印刷後に名前や名札の情報が変更された人も含みます。"
 
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:82
 msgid "Incorrect PIN"
@@ -9993,13 +10398,13 @@ msgstr "Stripeによる即時入金"
 msgid "Instructions"
 msgstr "案内"
 
-#: src/components/layouts/Event/index.tsx:163
+#: src/components/layouts/Event/index.tsx:167
 #: src/components/layouts/OrganizerLayout/index.tsx:130
 #: src/components/modals/DuplicateEventModal/index.tsx:165
 msgid "Integrations"
 msgstr "連携"
 
-#: src/components/forms/CheckInListForm/index.tsx:190
+#: src/components/forms/CheckInListForm/index.tsx:262
 msgid "Internal notes on the attendee's ticket"
 msgstr "参加者のチケットに関する社内メモ"
 
@@ -10074,7 +10479,7 @@ msgid "Invoice"
 msgstr "請求書"
 
 #: src/components/layouts/Checkout/index.tsx:245
-#: src/hooks/useOrderActions.tsx:85
+#: src/hooks/useOrderActions.tsx:89
 msgid "Invoice downloaded successfully"
 msgstr "請求書をダウンロードしました"
 
@@ -10167,6 +10572,10 @@ msgstr "ジョブ名"
 #: src/components/routes/admin/FailedJobs/index.tsx:53
 msgid "Job queued for retry"
 msgstr "ジョブを再試行キューに追加しました"
+
+#: src/components/routes/event/Badges/index.tsx:158
+msgid "Job title"
+msgstr "役職"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:227
 #: src/components/routes/auth/Register/index.tsx:140
@@ -10281,6 +10690,10 @@ msgstr "キーではサインインや、チーム、入金、プロフィール
 msgid "Keys that never expire stay valid until you revoke them. Only use this for servers you control."
 msgstr "有効期限のないキーは、無効化するまで有効なままです。自分で管理しているサーバーでのみ使用してください。"
 
+#: src/components/common/CheckInListTable/index.tsx:95
+msgid "Kiosk"
+msgstr "キオスク"
+
 #: src/locales.ts:90
 msgid "Korean"
 msgstr "韓国語"
@@ -10298,6 +10711,10 @@ msgstr "ラベル"
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1046
 msgid "Label — e.g. Morning session"
 msgstr "ラベル — 例：午前の部"
+
+#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:33
+msgid "Label size on this device"
+msgstr "この端末のラベルサイズ"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:302
 msgid "label updates"
@@ -10317,6 +10734,10 @@ msgstr "言語"
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:154
 msgid "Language & sizing"
 msgstr "言語とサイズ"
+
+#: src/utilites/badges.ts:99
+msgid "Large"
+msgstr "大"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:74
 msgid "Last"
@@ -10387,6 +10808,7 @@ msgstr "最終アクティブ"
 #: src/components/routes/settings/Profile/index.tsx:207
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:189
 #: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:71
+#: src/utilites/badges.ts:89
 msgid "Last name"
 msgstr "姓"
 
@@ -10404,6 +10826,10 @@ msgstr "姓"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:62
 msgid "Last Name"
 msgstr "姓"
+
+#: src/components/modals/PrintBadgesModal/index.tsx:149
+msgid "Last name (A–Z)"
+msgstr "姓（昇順）"
 
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:32
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:32
@@ -10473,7 +10899,7 @@ msgstr "両方を空欄にすると、販売中のものがすべて表示され
 msgid "Leave empty for unlimited"
 msgstr "無制限の場合は空欄のままにしてください"
 
-#: src/components/forms/CheckInListForm/index.tsx:132
+#: src/components/forms/CheckInListForm/index.tsx:190
 msgid "Leave empty to apply this check-in list to all occurrences"
 msgstr "このチェックインリストをすべての開催回に適用する場合は空欄のままにしてください"
 
@@ -10489,7 +10915,7 @@ msgstr "価格バンド内のすべての座席を販売する場合は空欄の
 msgid "Leave empty to use the automatic label"
 msgstr "自動ラベルを使用する場合は空欄のままにしてください"
 
-#: src/components/forms/CheckInListForm/index.tsx:107
+#: src/components/forms/CheckInListForm/index.tsx:165
 msgid "Leave on to cover every ticket on the event. Turn off to pick specific tickets."
 msgstr "オンのままにすると、イベントのすべてのチケットが対象になります。オフにすると、特定のチケットを選択できます。"
 
@@ -10501,7 +10927,7 @@ msgstr "オンのままにすると、イベントのすべてのチケットと
 msgid "Leave without saving? Your changes to this seat map will be lost."
 msgstr "保存せずに離れますか？この座席マップへの変更は失われます。"
 
-#: src/components/common/DesignerShell/index.tsx:141
+#: src/components/common/DesignerShell/index.tsx:142
 msgid "Leave without saving? Your design changes will be lost."
 msgstr "保存せずに離れますか？デザインの変更は失われます。"
 
@@ -10509,6 +10935,7 @@ msgstr "保存せずに離れますか？デザインの変更は失われます
 msgid "Leave without saving? Your widget changes will be lost."
 msgstr "保存せずに移動しますか？ウィジェットの変更は失われます。"
 
+#: src/components/routes/event/Badges/index.tsx:441
 #: src/ee/seating/components/lib/templates.ts:99
 #: src/ee/seating/components/lib/templates.ts:187
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:55
@@ -10627,6 +11054,10 @@ msgstr "座席数により制限"
 msgid "Limited by ticket allocation"
 msgstr "チケット割り当てにより制限"
 
+#: src/components/routes/event/Badges/BadgeLinesEditor.tsx:140
+msgid "Line options"
+msgstr "行のオプション"
+
 #: src/components/common/WidgetEditor/SectionsPicker.tsx:38
 #: src/components/common/WidgetEditor/TypePicker.tsx:9
 #: src/components/routes/event/Lineup/LineupPreview.tsx:119
@@ -10640,7 +11071,7 @@ msgstr "ラインナップ"
 msgid "Lineup & schedule"
 msgstr "ラインナップとスケジュール"
 
-#: src/components/layouts/Event/index.tsx:135
+#: src/components/layouts/Event/index.tsx:138
 #: src/components/routes/event/Lineup/index.tsx:58
 msgid "Lineup & Schedule"
 msgstr "ラインナップとスケジュール"
@@ -10717,7 +11148,7 @@ msgid "List your upcoming events on your own website. Visitors can buy tickets w
 msgstr "今後のイベントを自分のウェブサイトに掲載しましょう。訪問者はページを離れずにチケットを購入できます。"
 
 #: src/components/common/EventCard/index.tsx:102
-#: src/components/layouts/Event/index.tsx:261
+#: src/components/layouts/Event/index.tsx:265
 #: src/components/layouts/OrganizerLayout/index.tsx:249
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:115
 #: src/components/routes/event/Lineup/EventStatusBadge.tsx:8
@@ -10760,6 +11191,10 @@ msgstr "最新バージョンを読み込む"
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:346
 msgid "Loaded dates"
 msgstr "読み込み済みの日付"
+
+#: src/components/routes/event/Badges/BadgePrint.tsx:158
+msgid "Loading badges…"
+msgstr "名札を読み込み中…"
 
 #: src/components/routes/event/TicketDesigner/TicketPreview.tsx:35
 msgid "Loading preview..."
@@ -10806,7 +11241,7 @@ msgstr "{service} からコンテンツを読み込みます"
 #: src/components/common/WidgetEditor/SectionsPicker.tsx:34
 #: src/components/layouts/EventHomepage/index.tsx:215
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:474
-#: src/components/routes/event/Settings/index.tsx:64
+#: src/components/routes/event/Settings/index.tsx:72
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:150
 #: src/components/routes/my-tickets/index.tsx:90
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:379
@@ -10840,6 +11275,8 @@ msgstr "場所"
 msgid "Locations"
 msgstr "場所"
 
+#: src/components/routes/event/Badges/index.tsx:458
+#: src/components/routes/event/Badges/index.tsx:518
 #: src/components/routes/event/TicketDesigner/index.tsx:134
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:172
 #: src/components/routes/organizer/Settings/Sections/ImageAssetSettings/index.tsx:26
@@ -10853,6 +11290,10 @@ msgstr "ロゴとカバー"
 #: src/components/routes/organizer/Settings/Sections/ImageAssetSettings/index.tsx:24
 msgid "Logo and cover image for your organizer"
 msgstr "主催者のロゴとカバー画像"
+
+#: src/utilites/badges.ts:61
+msgid "Logo up top, big name, ticket colour along the bottom"
+msgstr "上にロゴ、大きな名前、下にチケットカラー"
 
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:186
 msgid "Logo will be displayed in the header"
@@ -10933,7 +11374,7 @@ msgstr "イベントページ、ウィジェット、チケット、メールを
 
 #: src/components/common/CapacityAssignmentList/index.tsx:141
 #: src/components/common/CheckInListList/index.tsx:144
-#: src/components/common/CheckInListTable/index.tsx:221
+#: src/components/common/CheckInListTable/index.tsx:229
 #: src/components/common/EntityActions/index.tsx:44
 #: src/components/common/LocationsTable/index.tsx:60
 #: src/components/common/OrganizerWebhookTable/index.tsx:98
@@ -10949,7 +11390,7 @@ msgstr "管理"
 msgid "Manage {0}"
 msgstr "{0}を管理"
 
-#: src/hooks/useAttendeeActions.tsx:87
+#: src/hooks/useAttendeeActions.tsx:90
 msgid "Manage attendee"
 msgstr "参加者を管理"
 
@@ -10957,6 +11398,10 @@ msgstr "参加者を管理"
 #: src/components/routes/settings/Billing/index.tsx:146
 msgid "Manage billing"
 msgstr "請求を管理"
+
+#: src/components/routes/event/Badges/index.tsx:610
+msgid "Manage check-in lists"
+msgstr "チェックインリストを管理"
 
 #: src/components/routes/event/OccurrencesTab/index.tsx:498
 msgid "Manage dates and times for your recurring event"
@@ -10978,7 +11423,7 @@ msgstr "ラインナップとスケジュールを管理"
 msgid "Manage on Stripe"
 msgstr "Stripeで管理"
 
-#: src/hooks/useOrderActions.tsx:101
+#: src/hooks/useOrderActions.tsx:105
 msgid "Manage order"
 msgstr "注文を管理"
 
@@ -11023,7 +11468,7 @@ msgstr "必須の質問には、お客様がチェックアウトする前に回
 msgid "Manual offer"
 msgstr "手動オファー"
 
-#: src/components/common/AttendeeTable/index.tsx:372
+#: src/components/common/AttendeeTable/index.tsx:403
 msgid "Manually add an Attendee"
 msgstr "参加者を手動で追加"
 
@@ -11045,13 +11490,25 @@ msgstr "マップ表示"
 msgid "March"
 msgstr "3月"
 
-#: src/hooks/useOrderActions.tsx:130
+#: src/hooks/useOrderActions.tsx:134
 msgid "Mark as paid"
 msgstr "支払い済みにする"
+
+#: src/components/routes/event/Badges/BadgePrint.tsx:241
+msgid "Mark as printed"
+msgstr "印刷済みにする"
 
 #: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:184
 msgid "Mark as validated (admin override)"
 msgstr "検証済みにする（管理者による上書き）"
+
+#: src/components/routes/event/Badges/BadgePrint.tsx:252
+msgid "Marked as printed. The next batch is ready to print."
+msgstr "印刷済みにしました。次のバッチを印刷できます。"
+
+#: src/components/routes/event/Badges/BadgePrint.tsx:253
+msgid "Marked as printed. You can close this tab."
+msgstr "印刷済みにしました。このタブは閉じてかまいません。"
 
 #: src/components/modals/MessageRecipientsModal/index.tsx:21
 msgid "Marked as spam"
@@ -11089,7 +11546,7 @@ msgstr "メッセージあたりの最大受信者数"
 msgid "Maximum {cap} per order"
 msgstr "1注文あたり最大{cap}"
 
-#: src/components/forms/ProductForm/index.tsx:534
+#: src/components/forms/ProductForm/index.tsx:540
 msgid "Maximum Per Order"
 msgstr "1注文あたりの最大数"
 
@@ -11102,6 +11559,7 @@ msgid "May"
 msgstr "5月"
 
 #: src/components/routes/admin/Attribution/index.tsx:166
+#: src/utilites/badges.ts:100
 msgid "Medium"
 msgstr "中"
 
@@ -11129,7 +11587,7 @@ msgstr "確認済みドメインのメンバー"
 msgid "Members with an email on a verified domain must sign in with {providerName}. Their other sessions end."
 msgstr "確認済みドメインのメールアドレスを持つメンバーは、{providerName}でサインインする必要があります。他のセッションは終了します。"
 
-#: src/components/common/AttendeeTable/index.tsx:164
+#: src/components/common/AttendeeTable/index.tsx:168
 #: src/components/common/ContactOrganizerModal/index.tsx:91
 #: src/components/common/OrdersTable/index.tsx:168
 #: src/components/modals/SendMessageModal/index.tsx:455
@@ -11141,7 +11599,7 @@ msgstr "メッセージ"
 msgid "Message approved successfully"
 msgstr "メッセージを承認しました"
 
-#: src/hooks/useAttendeeActions.tsx:102
+#: src/hooks/useAttendeeActions.tsx:105
 msgid "Message attendee"
 msgstr "参加者にメッセージを送信"
 
@@ -11153,7 +11611,7 @@ msgstr "参加者にメッセージを送信"
 msgid "Message attendees with specific tickets"
 msgstr "特定のチケットを持つ参加者にメッセージを送信"
 
-#: src/hooks/useOrderActions.tsx:116
+#: src/hooks/useOrderActions.tsx:120
 msgid "Message buyer"
 msgstr "購入者にメッセージを送信"
 
@@ -11194,7 +11652,7 @@ msgid "Message Sent"
 msgstr "メッセージを送信しました"
 
 #: src/components/layouts/Admin/index.tsx:22
-#: src/components/layouts/Event/index.tsx:153
+#: src/components/layouts/Event/index.tsx:157
 #: src/components/routes/event/messages.tsx:228
 msgid "Messages"
 msgstr "メッセージ"
@@ -11224,15 +11682,19 @@ msgstr "中二階バー"
 msgid "Mezzanine standing"
 msgstr "中二階立ち見"
 
-#: src/components/forms/ProductForm/ledgerSummaries.ts:115
+#: src/components/forms/ProductForm/ledgerSummaries.ts:122
 msgid "Min {min} per order"
 msgstr "1注文あたり最小{min}"
 
-#: src/components/forms/ProductForm/index.tsx:532
+#: src/utilites/badges.ts:54
+msgid "Minimal"
+msgstr "ミニマル"
+
+#: src/components/forms/ProductForm/index.tsx:538
 msgid "Minimum Per Order"
 msgstr "1注文あたりの最小数"
 
-#: src/components/forms/ProductForm/index.tsx:319
+#: src/components/forms/ProductForm/index.tsx:320
 msgid "Minimum Price"
 msgstr "最低価格"
 
@@ -11247,7 +11709,7 @@ msgstr "分"
 msgid "Minutes"
 msgstr "分"
 
-#: src/components/routes/event/Settings/index.tsx:94
+#: src/components/routes/event/Settings/index.tsx:102
 msgid "Miscellaneous"
 msgstr "その他"
 
@@ -11271,8 +11733,8 @@ msgstr "混在"
 msgid "Mixed"
 msgstr "混在"
 
-#: src/components/common/DesignerShell/index.tsx:57
-#: src/components/common/DesignerShell/index.tsx:60
+#: src/components/common/DesignerShell/index.tsx:58
+#: src/components/common/DesignerShell/index.tsx:61
 msgid "Mobile"
 msgstr "モバイル"
 
@@ -11367,6 +11829,11 @@ msgstr "その他の席"
 msgid "More seats"
 msgstr "その他の座席"
 
+#: src/hooks/useBadgePrinter.ts:119
+#: src/hooks/useBadgePrinter.ts:122
+msgid "Morgan"
+msgstr "Morgan"
+
 #: src/components/routes/admin/Dashboard/index.tsx:280
 msgid "Most viewed events"
 msgstr "閲覧数の多いイベント"
@@ -11393,6 +11860,7 @@ msgstr "移動をキャンセルしました。{label}は元の位置に戻り�
 
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:202
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:603
+#: src/components/routes/event/Badges/BadgeLinesEditor.tsx:150
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:143
 msgid "Move down"
 msgstr "下に移動"
@@ -11415,6 +11883,7 @@ msgstr "エリアに移動"
 
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:195
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:595
+#: src/components/routes/event/Badges/BadgeLinesEditor.tsx:147
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:140
 msgid "Move up"
 msgstr "上に移動"
@@ -11470,10 +11939,10 @@ msgstr "マイチケット"
 #: src/components/common/WidgetEditor/NameModal.tsx:34
 #: src/components/forms/AffiliateForm/index.tsx:81
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:37
-#: src/components/forms/CheckInListForm/index.tsx:100
+#: src/components/forms/CheckInListForm/index.tsx:158
 #: src/components/forms/ProductCategoryForm/index.tsx:15
 #: src/components/forms/ProductCategoryForm/index.tsx:16
-#: src/components/forms/ProductForm/index.tsx:203
+#: src/components/forms/ProductForm/index.tsx:204
 #: src/components/forms/TaxAndFeeForm/index.tsx:62
 #: src/components/modals/DuplicateEventModal/index.tsx:223
 #: src/components/routes/admin/Configurations/index.tsx:224
@@ -11499,6 +11968,10 @@ msgctxt "Lineup spreadsheet column"
 msgid "Name"
 msgstr "名前"
 
+#: src/components/routes/event/Settings/Sections/FeatureSettings/index.tsx:31
+msgid "Name badges"
+msgstr "名札"
+
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:98
 msgid "Name is missing"
 msgstr "名前がありません"
@@ -11516,9 +11989,25 @@ msgstr "名前は必須です"
 msgid "Name must be less than 255 characters"
 msgstr "名前は255文字未満にしてください"
 
+#: src/components/forms/CheckInListForm/index.tsx:76
+msgid "Names and tickets only"
+msgstr "名前とチケットのみ"
+
+#: src/components/routes/event/Badges/index.tsx:447
+msgid "Names in capitals"
+msgstr "名前を大文字で表示"
+
 #: src/components/common/QuestionAndAnswerList/index.tsx:205
 msgid "Navigate to Attendee"
 msgstr "参加者へ移動"
+
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:73
+msgid "Need a new badge? Please see the registration desk."
+msgstr "新しい名札が必要な方は、受付までお越しください。"
+
+#: src/components/modals/PrintBadgesModal/index.tsx:97
+msgid "Need reprinting"
+msgstr "要再印刷"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:455
 msgid "Need to switch Stripe accounts? Disconnect this one."
@@ -11531,6 +12020,10 @@ msgstr "タイトルまたは1人以上の出演者が必要です"
 #: src/components/modals/DuplicateEventModal/index.tsx:299
 msgid "Needs products"
 msgstr "商品が必要です"
+
+#: src/components/common/AttendeeTable/index.tsx:344
+msgid "Needs reprint"
+msgstr "要再印刷"
 
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:85
 #: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:36
@@ -11658,6 +12151,14 @@ msgstr "次へ"
 msgid "Next attendee"
 msgstr "次の参加者"
 
+#: src/components/routes/event/Badges/BadgePrint.tsx:207
+msgid "Next batch"
+msgstr "次のバッチ"
+
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:125
+msgid "Next check-in"
+msgstr "次のチェックイン"
+
 #: src/components/routes/event/Lineup/ScheduleBuilder/index.tsx:130
 msgid "Next day"
 msgstr "翌日"
@@ -11762,7 +12263,7 @@ msgstr "この注文の参加者が見つかりません。"
 msgid "No attendees to show"
 msgstr "表示する参加者がいません"
 
-#: src/components/common/AttendeeTable/index.tsx:360
+#: src/components/common/AttendeeTable/index.tsx:391
 msgid "No Attendees to show"
 msgstr "表示する参加者がいません"
 
@@ -11773,6 +12274,14 @@ msgstr "この日付の参加者はまだいません。"
 #: src/components/routes/admin/Attribution/index.tsx:183
 msgid "No attribution data found"
 msgstr "アトリビューションデータが見つかりません"
+
+#: src/components/modals/PrintBadgesModal/index.tsx:170
+msgid "No badges match these options."
+msgstr "条件に一致する名札はありません。"
+
+#: src/components/routes/event/Badges/BadgePrint.tsx:262
+msgid "No badges to print"
+msgstr "印刷する名札はありません"
 
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:301
 msgid "No Box Offices"
@@ -11820,7 +12329,7 @@ msgid "No changes"
 msgstr "変更なし"
 
 #: src/components/common/CheckInListList/index.tsx:45
-#: src/components/common/CheckInListTable/index.tsx:282
+#: src/components/common/CheckInListTable/index.tsx:290
 msgid "No Check-In Lists"
 msgstr "チェックインリストがありません"
 
@@ -11907,7 +12416,7 @@ msgid "No email"
 msgstr "メールなし"
 
 #: src/components/common/AdminOrdersTable/index.tsx:111
-#: src/components/common/AttendeeTable/index.tsx:134
+#: src/components/common/AttendeeTable/index.tsx:138
 #: src/components/common/OrderDetails/index.tsx:39
 #: src/components/common/OrdersTable/index.tsx:138
 #: src/components/modals/ManageAttendeeModal/index.tsx:177
@@ -12011,7 +12520,7 @@ msgstr "このアカウントにはライフサイクルメールが送信され
 msgid "No limit"
 msgstr "制限なし"
 
-#: src/components/forms/ProductForm/ledgerSummaries.ts:121
+#: src/components/forms/ProductForm/ledgerSummaries.ts:128
 msgid "No limits"
 msgstr "制限なし"
 
@@ -12349,8 +12858,8 @@ msgstr "未編集"
 
 #: src/components/common/PromoCodeTable/index.tsx:85
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:108
-#: src/components/forms/ProductForm/ledgerSummaries.ts:92
-#: src/components/forms/ProductForm/ledgerSummaries.ts:132
+#: src/components/forms/ProductForm/ledgerSummaries.ts:99
+#: src/components/forms/ProductForm/ledgerSummaries.ts:139
 #: src/components/routes/product-widget/CollectInformation/index.tsx:547
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:50
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:293
@@ -12365,7 +12874,8 @@ msgstr "なし（現金のみ）"
 msgid "None shared"
 msgstr "共有なし"
 
-#: src/components/forms/ProductForm/ledgerSummaries.ts:29
+#: src/components/forms/CheckInListForm/index.tsx:62
+#: src/components/forms/ProductForm/ledgerSummaries.ts:36
 #: src/components/routes/event/Lineup/LineupStats.tsx:51
 msgid "None yet"
 msgstr "まだありません"
@@ -12373,6 +12883,10 @@ msgstr "まだありません"
 #: src/ee/seating/components/routes/event/Seating/BandProductsCard.tsx:136
 msgid "Normally {0}"
 msgstr "通常{0}"
+
+#: src/components/routes/event/Badges/sampleBadge.ts:23
+msgid "Northwind Labs"
+msgstr "Northwind Labs"
 
 #: src/components/common/ProductPriceAvailability/index.tsx:47
 #: src/components/common/ProductPriceAvailability/index.tsx:77
@@ -12383,12 +12897,12 @@ msgstr "利用できません"
 msgid "Not available: you have view-only access."
 msgstr "利用できません: 閲覧のみのアクセス権です。"
 
-#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:122
+#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:129
 #: src/components/modals/ManageAttendeeModal/index.tsx:156
 msgid "Not checked in"
 msgstr "未チェックイン"
 
-#: src/components/common/AttendeeTable/index.tsx:318
+#: src/components/common/AttendeeTable/index.tsx:322
 #: src/components/common/CheckInStatusModal/index.tsx:116
 msgid "Not Checked In"
 msgstr "未チェックイン"
@@ -12450,6 +12964,15 @@ msgstr "どのイベントにも未登録"
 msgid "Not on sale yet"
 msgstr "まだ販売していません"
 
+#: src/components/common/AttendeeTable/index.tsx:341
+#: src/components/modals/PrintBadgesModal/index.tsx:91
+msgid "Not printed"
+msgstr "未印刷"
+
+#: src/components/modals/PrintBadgesModal/index.tsx:109
+msgid "Not printed yet ({unprinted})"
+msgstr "未印刷 ({unprinted})"
+
 #: src/components/routes/event/Lineup/PeopleRail.tsx:174
 msgid "Not scheduled"
 msgstr "未スケジュール"
@@ -12486,6 +13009,10 @@ msgstr "まだテストされていません"
 msgid "Not using reserved seating, the box office or enterprise single sign-on? Remove <0>APP_LICENCE_KEY</0> and redeploy."
 msgstr "指定席、ボックスオフィス、エンタープライズシングルサインオンを使用しない場合は、<0>APP_LICENCE_KEY</0>を削除して再デプロイしてください。"
 
+#: src/components/routes/event/Badges/BadgePrint.tsx:232
+msgid "Not yet"
+msgstr "まだ"
+
 #: src/components/common/ProductPriceAvailability/index.tsx:44
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:31
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:53
@@ -12495,6 +13022,10 @@ msgstr "まだ販売開始前です"
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:172
 msgid "Not you?"
 msgstr "別のユーザーですか？"
+
+#: src/components/forms/CheckInListForm/index.tsx:229
+msgid "Note for staff"
+msgstr "スタッフへのメモ"
 
 #: src/components/routes/product-widget/OrderSummaryAndProducts/ReportOfflinePayment/index.tsx:57
 msgid "Note for the organizer (optional)"
@@ -12508,7 +13039,7 @@ msgstr "購入者に表示されるメモ"
 msgid "Note: {0}"
 msgstr "メモ: {0}"
 
-#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:238
+#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:245
 #: src/components/modals/ManageAttendeeModal/index.tsx:249
 #: src/components/modals/ManageAttendeeModal/index.tsx:271
 #: src/components/modals/ManageOrderModal/index.tsx:300
@@ -12583,7 +13114,7 @@ msgid "Numbers"
 msgstr "数字"
 
 #: src/components/common/OrderDetails/index.tsx:57
-#: src/components/forms/CheckInListForm/index.tsx:131
+#: src/components/forms/CheckInListForm/index.tsx:189
 #: src/components/modals/CreateAttendeeModal/index.tsx:258
 #: src/components/modals/ManageOrderModal/index.tsx:147
 #: src/components/modals/SendMessageModal/index.tsx:363
@@ -12595,7 +13126,7 @@ msgstr "開催回"
 msgid "Occurrence Cancelled"
 msgstr "開催回がキャンセルされました"
 
-#: src/components/layouts/Event/index.tsx:130
+#: src/components/layouts/Event/index.tsx:133
 #: src/components/routes/event/OccurrencesTab/index.tsx:499
 msgid "Occurrence Schedule"
 msgstr "開催スケジュール"
@@ -12630,8 +13161,9 @@ msgstr "/"
 msgid "of every month"
 msgstr "毎月"
 
-#: src/components/forms/ProductForm/ledgerSummaries.ts:77
-#: src/components/forms/ProductForm/ledgerSummaries.ts:140
+#: src/components/forms/CheckInListForm/index.tsx:42
+#: src/components/forms/ProductForm/ledgerSummaries.ts:84
+#: src/components/forms/ProductForm/ledgerSummaries.ts:147
 #: src/components/routes/admin/Accounts/AccountDetail/AccountFeatureFlags.tsx:79
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
 #: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:124
@@ -12673,8 +13205,8 @@ msgid "Offers expire after {timeoutHours} hours."
 msgstr "オファーは{timeoutHours}時間後に失効します。"
 
 #: src/components/common/OrdersTable/index.tsx:328
-#: src/components/layouts/CheckIn/index.tsx:191
-#: src/components/layouts/CheckIn/index.tsx:193
+#: src/components/layouts/CheckIn/index.tsx:215
+#: src/components/layouts/CheckIn/index.tsx:217
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:196
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:198
 #: src/ee/box-office/components/layouts/BoxOffice/ReaderPicker.tsx:16
@@ -12704,7 +13236,8 @@ msgstr "Okta Workforce Identity"
 msgid "on"
 msgstr "オン"
 
-#: src/components/forms/ProductForm/ledgerSummaries.ts:74
+#: src/components/forms/CheckInListForm/index.tsx:42
+#: src/components/forms/ProductForm/ledgerSummaries.ts:81
 #: src/components/routes/admin/Accounts/AccountDetail/AccountFeatureFlags.tsx:78
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
 #: src/components/routes/settings/Security/index.tsx:115
@@ -12753,7 +13286,7 @@ msgstr "{0}に販売"
 msgid "on the {position} {day}"
 msgstr "{position}{day}"
 
-#: src/components/forms/ProductForm/index.tsx:447
+#: src/components/forms/ProductForm/index.tsx:450
 msgid "On the event page"
 msgstr "イベントページ上"
 
@@ -12788,6 +13321,10 @@ msgstr "データの収集を開始すると、ここに表示されます。"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/ReportOfflinePayment/index.tsx:53
 msgid "Once you've sent the payment, let the organizer know so they can look out for it. Your order stays unpaid until they confirm it."
 msgstr "支払いを送金したら、主催者が確認できるように知らせてください。主催者が確認するまで、注文は未払いのままです。"
+
+#: src/utilites/badges.ts:84
+msgid "One badge per page"
+msgstr "1ページに名札1枚"
 
 #: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:25
 msgid "One column, top to bottom"
@@ -12890,7 +13427,7 @@ msgstr "これらの設定を変更できるのはアカウント管理者のみ
 msgid "Only admins can manage team access."
 msgstr "チームのアクセス権を管理できるのは管理者のみです。"
 
-#: src/components/forms/ProductForm/index.tsx:555
+#: src/components/forms/ProductForm/index.tsx:562
 msgid "Only available as an add-on"
 msgstr "アドオンとしてのみ利用可能"
 
@@ -12925,6 +13462,10 @@ msgstr "紐付けられた商品のアドオンとしてのみ表示されます
 #: src/components/forms/ProductForm/visibilityStatus.ts:25
 msgid "Only shown as an add-on to the products it's attached to."
 msgstr "紐付けられた商品のアドオンとしてのみ表示されます。"
+
+#: src/components/routes/event/Badges/index.tsx:531
+msgid "Only shown for attendees with a seat"
+msgstr "座席がある参加者にのみ表示"
 
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:115
 msgid "Only the account owner can request account deletion."
@@ -12985,13 +13526,13 @@ msgstr "ボックスオフィスを開く"
 msgid "Open check-in"
 msgstr "チェックインを開く"
 
-#: src/components/common/CheckInListTable/index.tsx:256
+#: src/components/common/CheckInListTable/index.tsx:264
 #: src/components/routes/event/CheckInLists/index.tsx:58
 msgid "Open Check-In"
 msgstr "チェックインを開く"
 
 #: src/components/common/CheckInListList/index.tsx:167
-#: src/components/common/CheckInListTable/index.tsx:214
+#: src/components/common/CheckInListTable/index.tsx:222
 #: src/components/modals/CheckInListSuccessModal/index.tsx:56
 msgid "Open Check-In Page"
 msgstr "チェックインページを開く"
@@ -13015,6 +13556,10 @@ msgstr "開催回を開く"
 #: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:44
 msgid "Open photo {photoNumber}"
 msgstr "写真 {photoNumber} を開く"
+
+#: src/components/modals/PrintBadgesModal/index.tsx:193
+msgid "Open print preview"
+msgstr "印刷プレビューを開く"
 
 #: src/components/routes/settings/Organizers/index.tsx:72
 msgid "Open settings"
@@ -13123,8 +13668,9 @@ msgstr "注文"
 
 #: src/components/common/QuestionsTable/index.tsx:305
 #: src/components/common/QuestionsTable/index.tsx:459
-#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:261
+#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:268
 #: src/components/modals/ManageAttendeeModal/index.tsx:159
+#: src/components/modals/PrintBadgesModal/index.tsx:144
 #: src/components/routes/my-tickets/index.tsx:70
 msgid "Order"
 msgstr "注文"
@@ -13133,11 +13679,11 @@ msgstr "注文"
 msgid "Order {0}"
 msgstr "注文{0}"
 
-#: src/components/common/AttendeeTable/index.tsx:217
+#: src/components/common/AttendeeTable/index.tsx:221
 msgid "Order & Ticket"
 msgstr "注文とチケット"
 
-#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:265
+#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:272
 msgid "Order #"
 msgstr "注文番号"
 
@@ -13185,7 +13731,7 @@ msgstr "注文が作成されました"
 msgid "Order Date"
 msgstr "注文日"
 
-#: src/components/forms/CheckInListForm/index.tsx:222
+#: src/components/forms/CheckInListForm/index.tsx:271
 msgid "Order details"
 msgstr "注文の詳細"
 
@@ -13211,11 +13757,11 @@ msgstr "注文者"
 msgid "Order ID"
 msgstr "注文ID"
 
-#: src/components/forms/ProductForm/index.tsx:526
+#: src/components/forms/ProductForm/index.tsx:532
 msgid "Order limits"
 msgstr "注文の制限"
 
-#: src/hooks/useOrderActions.tsx:55
+#: src/hooks/useOrderActions.tsx:59
 msgid "Order marked as paid"
 msgstr "注文を支払い済みにしました"
 
@@ -13231,7 +13777,7 @@ msgstr "注文が見つかりません"
 msgid "Order Not Found"
 msgstr "注文が見つかりません"
 
-#: src/components/forms/CheckInListForm/index.tsx:224
+#: src/components/forms/CheckInListForm/index.tsx:272
 msgid "Order number, purchase date, purchaser email"
 msgstr "注文番号、購入日、購入者のメールアドレス"
 
@@ -13312,7 +13858,7 @@ msgstr "注文"
 #: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:65
 #: src/components/common/WidgetEditor/WidgetStats.tsx:16
 #: src/components/layouts/Admin/index.tsx:21
-#: src/components/layouts/Event/index.tsx:144
+#: src/components/layouts/Event/index.tsx:148
 #: src/components/modals/ManageOccurrenceModal/index.tsx:183
 #: src/components/routes/admin/Attribution/index.tsx:200
 #: src/components/routes/admin/Dashboard/index.tsx:236
@@ -13382,7 +13928,7 @@ msgstr "主催者"
 msgid "Organizer archived successfully"
 msgstr "主催者をアーカイブしました"
 
-#: src/components/layouts/Event/index.tsx:110
+#: src/components/layouts/Event/index.tsx:113
 #: src/components/layouts/OrganizerLayout/index.tsx:106
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:158
 msgid "Organizer Dashboard"
@@ -13460,6 +14006,7 @@ msgstr "主催者とイベント"
 
 #: src/components/common/OrdersTable/index.tsx:333
 #: src/components/routes/admin/EmailDelivery/index.tsx:31
+#: src/components/routes/event/Badges/BadgeLinesEditor.tsx:46
 #: src/constants/eventCategories.ts:31
 msgid "Other"
 msgstr "その他"
@@ -13505,7 +14052,7 @@ msgstr "上書きを削除しました"
 msgid "Override the global default for this account."
 msgstr "このアカウントのグローバルデフォルトを上書きします。"
 
-#: src/components/layouts/Event/index.tsx:116
+#: src/components/layouts/Event/index.tsx:119
 msgid "Overview"
 msgstr "概要"
 
@@ -13566,7 +14113,7 @@ msgstr "ページ数：{pageCount}"
 msgid "paid"
 msgstr "支払い済み"
 
-#: src/components/forms/ProductForm/index.tsx:295
+#: src/components/forms/ProductForm/index.tsx:296
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:439
 msgid "Paid"
 msgstr "支払い済み"
@@ -13600,9 +14147,15 @@ msgstr "ペアリングコード"
 msgid "Pan"
 msgstr "パン"
 
+#: src/components/modals/PrintBadgesModal/index.tsx:156
+#: src/components/routes/event/Badges/BadgePrint.tsx:174
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:247
 msgid "Paper"
 msgstr "用紙"
+
+#: src/components/routes/event/Badges/index.tsx:373
+msgid "Paper for batch printing"
+msgstr "一括印刷用の用紙"
 
 #: src/components/modals/RefundOrderModal/index.tsx:117
 msgid "Partial refund"
@@ -13780,7 +14333,7 @@ msgstr "ペイロード"
 msgid "Payment"
 msgstr "お支払い"
 
-#: src/components/routes/event/Settings/index.tsx:106
+#: src/components/routes/event/Settings/index.tsx:114
 msgid "Payment & Invoicing"
 msgstr "お支払いと請求書"
 
@@ -13919,7 +14472,7 @@ msgid "Pending review"
 msgstr "レビュー待ち"
 
 #: src/components/common/EventCard/index.tsx:96
-#: src/components/layouts/Event/index.tsx:257
+#: src/components/layouts/Event/index.tsx:261
 #: src/components/routes/admin/Messages/index.tsx:124
 msgid "Pending Review"
 msgstr "レビュー待ち"
@@ -14168,7 +14721,7 @@ msgstr "テーブルを配置"
 msgid "Place your order. Your places are held and your tickets are issued, marked as unpaid."
 msgstr "注文を確定します。席は確保され、チケットは未払いとして発行されます。"
 
-#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:269
+#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:276
 #: src/components/modals/ManageOrderModal/index.tsx:129
 msgid "Placed"
 msgstr "注文日時"
@@ -14198,7 +14751,7 @@ msgstr "プラットフォーム手数料"
 msgid "Platform fee of {0} deducted from your payout"
 msgstr "プラットフォーム手数料{0}がお支払い額から差し引かれます"
 
-#: src/components/routes/event/Settings/index.tsx:122
+#: src/components/routes/event/Settings/index.tsx:130
 #: src/components/routes/event/Settings/Sections/PlatformFeesSettings/index.tsx:48
 #: src/components/routes/organizer/Reports/index.tsx:45
 #: src/components/routes/organizer/Settings/index.tsx:106
@@ -14251,7 +14804,7 @@ msgstr "新しいタブで続行してください"
 msgid "Please create a product"
 msgstr "商品を作成してください"
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:58
+#: src/components/modals/CreateCheckInListModal/index.tsx:60
 #: src/ee/box-office/components/modals/CreateBoxOfficeModal/index.tsx:67
 msgid "Please create a ticket"
 msgstr "チケットを作成してください"
@@ -14305,6 +14858,10 @@ msgstr "チェックアウトをやり直してください。"
 msgid "Please return to the event page to start over."
 msgstr "イベントページに戻って、最初からやり直してください。"
 
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:74
+msgid "Please see the registration desk and we'll sort it out."
+msgstr "受付までお越しください。スタッフが対応いたします。"
+
 #: src/components/routes/product-widget/SelectProducts/index.tsx:757
 msgid "Please select a date and time"
 msgstr "日付と時間を選択してください"
@@ -14322,7 +14879,7 @@ msgid "Please select at least one product"
 msgstr "商品を1つ以上選択してください"
 
 #: src/components/routes/event/Affiliates/index.tsx:56
-#: src/components/routes/event/attendees.tsx:170
+#: src/components/routes/event/attendees.tsx:176
 #: src/components/routes/event/orders.tsx:175
 msgid "Please try again."
 msgstr "もう一度お試しください。"
@@ -14335,12 +14892,12 @@ msgstr "別のコードをリクエストする前に、しばらくお待ちく
 msgid "Please wait while we prepare your affiliates for export..."
 msgstr "アフィリエイトのエクスポートを準備しています。しばらくお待ちください..."
 
-#: src/components/routes/event/attendees.tsx:161
+#: src/components/routes/event/attendees.tsx:167
 msgid "Please wait while we prepare your attendees for export..."
 msgstr "参加者のエクスポートを準備しています。しばらくお待ちください..."
 
 #: src/components/layouts/Checkout/index.tsx:241
-#: src/hooks/useOrderActions.tsx:81
+#: src/hooks/useOrderActions.tsx:85
 msgid "Please wait while we prepare your invoice..."
 msgstr "請求書を準備しています。しばらくお待ちください..."
 
@@ -14397,6 +14954,10 @@ msgstr "主催者を作成する際に自動入力されます。"
 msgid "Premium"
 msgstr "プレミアム"
 
+#: src/components/routes/event/Badges/BadgePrint.tsx:189
+msgid "Preparing…"
+msgstr "準備中…"
+
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:174
 msgid "Present card on reader"
 msgstr "リーダーにカードをかざしてください"
@@ -14413,8 +14974,8 @@ msgstr "最初の座席を置く位置を押してドラッグします。横に
 msgid "Prevent overselling by sharing inventory across multiple ticket types."
 msgstr "複数のチケットタイプで在庫を共有して、売りすぎを防ぎます。"
 
-#: src/components/common/DesignerShell/index.tsx:91
-#: src/components/common/DesignerShell/index.tsx:110
+#: src/components/common/DesignerShell/index.tsx:92
+#: src/components/common/DesignerShell/index.tsx:111
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:143
 #: src/components/routes/admin/Announcements/index.tsx:496
 #: src/components/routes/event/Lineup/index.tsx:223
@@ -14425,14 +14986,22 @@ msgstr "プレビュー"
 msgid "Preview checkout form"
 msgstr "チェックアウトフォームをプレビュー"
 
-#: src/components/layouts/Event/index.tsx:319
 #: src/components/layouts/Event/index.tsx:323
+#: src/components/layouts/Event/index.tsx:327
 msgid "Preview Event page"
 msgstr "イベントページをプレビュー"
+
+#: src/components/routes/event/Badges/index.tsx:223
+msgid "Preview ticket type"
+msgstr "プレビューするチケットタイプ"
 
 #: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:165
 msgid "Preview with sample data"
 msgstr "サンプルデータでプレビュー"
+
+#: src/components/routes/event/Badges/BadgePrint.tsx:204
+msgid "Previous batch"
+msgstr "前のバッチ"
 
 #: src/components/routes/event/Lineup/ScheduleBuilder/index.tsx:94
 msgid "Previous day"
@@ -14448,7 +15017,7 @@ msgstr "前の写真"
 
 #: src/components/common/AttendeeTicket/index.tsx:137
 #: src/components/common/ProductsTable/index.tsx:93
-#: src/components/forms/ProductForm/index.tsx:319
+#: src/components/forms/ProductForm/index.tsx:320
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:173
 msgid "Price"
 msgstr "価格"
@@ -14485,23 +15054,52 @@ msgstr "この日付の価格"
 msgid "Price Tier"
 msgstr "価格ティア"
 
-#: src/components/forms/ProductForm/index.tsx:352
+#: src/components/forms/ProductForm/index.tsx:353
 msgid "Price Tiers"
 msgstr "価格ティア"
 
-#: src/components/forms/ProductForm/index.tsx:287
+#: src/components/forms/ProductForm/index.tsx:288
 msgid "Pricing"
 msgstr "料金"
 
 #: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:90
+#: src/components/routes/event/Badges/BadgePrint.tsx:189
 #: src/components/routes/event/Lineup/RunSheetPrint.tsx:88
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:228
 msgid "Print"
 msgstr "印刷"
 
+#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:25
+msgid "Print a badge when someone checks in"
+msgstr "チェックイン時に名札を印刷"
+
+#: src/components/routes/event/Badges/index.tsx:238
+msgid "Print a sample badge"
+msgstr "サンプルの名札を印刷"
+
+#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:67
+msgid "Print a test badge"
+msgstr "テスト用の名札を印刷"
+
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:722
 msgid "Print All Tickets"
 msgstr "すべてのチケットを印刷"
+
+#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:326
+#: src/hooks/useAttendeeActions.tsx:119
+msgid "Print badge"
+msgstr "名札を印刷"
+
+#: src/components/modals/PrintBadgesModal/index.tsx:79
+#: src/components/routes/event/Badges/BadgePrint.tsx:155
+#: src/components/routes/event/Badges/index.tsx:253
+#: src/hooks/useOrderActions.tsx:148
+msgid "Print badges"
+msgstr "名札を印刷"
+
+#: src/components/forms/CheckInListForm/index.tsx:306
+msgid "Print badges from this list"
+msgstr "このリストから名札を印刷"
 
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:134
 msgid "Print map"
@@ -14532,9 +15130,38 @@ msgstr "PDFに印刷"
 msgid "Printable run sheet"
 msgstr "印刷用の進行表"
 
+#: src/components/common/AttendeeTable/index.tsx:349
+#: src/components/modals/PrintBadgesModal/index.tsx:87
+msgid "Printed"
+msgstr "印刷済み"
+
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:206
 msgid "Printed {0}"
 msgstr "{0}に印刷"
+
+#: src/components/common/AttendeeTable/index.tsx:349
+msgid "Printed ×{count}"
+msgstr "印刷済み ×{count}"
+
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:167
+msgid "Printer"
+msgstr "プリンター"
+
+#: src/components/routes/event/Badges/index.tsx:600
+msgid "Printing at the door"
+msgstr "当日受付での印刷"
+
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:47
+msgid "Printing your badge…"
+msgstr "名札を印刷しています…"
+
+#: src/components/common/CheckInListTable/index.tsx:92
+msgid "Prints badges"
+msgstr "名札印刷あり"
+
+#: src/components/modals/PrintBadgesModal/index.tsx:180
+msgid "Prints the first 1,000. Mark them as printed, then print the next batch."
+msgstr "最初の1,000枚を印刷します。印刷済みにしてから、次の分を印刷してください。"
 
 #: src/components/common/CookieConsentBanner/index.tsx:82
 #: src/components/layouts/HomepageFrame/index.tsx:65
@@ -14553,7 +15180,7 @@ msgstr "注文を処理中"
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:442
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:580
 #: src/components/common/WaitlistTable/index.tsx:176
-#: src/components/forms/ProductForm/index.tsx:234
+#: src/components/forms/ProductForm/index.tsx:235
 #: src/components/modals/ManageAttendeeModal/index.tsx:237
 #: src/components/modals/OfferWaitlistModal/index.tsx:167
 #: src/components/routes/event/orders.tsx:68
@@ -14564,7 +15191,7 @@ msgstr "商品"
 msgid "Product answers"
 msgstr "商品への回答"
 
-#: src/components/forms/ProductForm/index.tsx:273
+#: src/components/forms/ProductForm/index.tsx:274
 msgid "Product Category"
 msgstr "商品カテゴリー"
 
@@ -14584,7 +15211,7 @@ msgstr "商品を削除しました"
 msgid "Product deleted successfully"
 msgstr "商品を削除しました"
 
-#: src/components/forms/ProductForm/index.tsx:304
+#: src/components/forms/ProductForm/index.tsx:305
 msgid "Product Price Type"
 msgstr "商品の価格タイプ"
 
@@ -14609,8 +15236,8 @@ msgstr "商品設定を保存しました"
 msgid "Product Tier"
 msgstr "商品ティア"
 
-#: src/components/forms/ProductForm/index.tsx:219
-#: src/components/forms/ProductForm/index.tsx:262
+#: src/components/forms/ProductForm/index.tsx:220
+#: src/components/forms/ProductForm/index.tsx:263
 msgid "Product Type"
 msgstr "商品タイプ"
 
@@ -14698,11 +15325,11 @@ msgstr "プロモーションコード"
 msgid "Promo code only"
 msgstr "プロモーションコード限定"
 
-#: src/components/forms/ProductForm/index.tsx:615
+#: src/components/forms/ProductForm/index.tsx:624
 msgid "Promo Code page"
 msgstr "プロモーションコードページ"
 
-#: src/components/forms/ProductForm/ledgerSummaries.ts:154
+#: src/components/forms/ProductForm/ledgerSummaries.ts:161
 msgid "Promo code required"
 msgstr "プロモーションコードが必要です"
 
@@ -14719,7 +15346,7 @@ msgstr "プロモーションコード"
 msgid "Promo codes"
 msgstr "プロモーションコード"
 
-#: src/components/layouts/Event/index.tsx:145
+#: src/components/layouts/Event/index.tsx:149
 #: src/components/routes/event/promo-codes.tsx:34
 msgid "Promo Codes"
 msgstr "プロモーションコード"
@@ -14761,7 +15388,7 @@ msgstr "住所フィールドを1つ以上入力してください（会場、�
 msgid "Provide the following before Stripe's next review to keep payouts flowing."
 msgstr "入金を継続するため、Stripeの次回審査までに以下を提供してください。"
 
-#: src/components/forms/ProductForm/ledgerSummaries.ts:157
+#: src/components/forms/ProductForm/ledgerSummaries.ts:164
 msgid "Public"
 msgstr "公開"
 
@@ -14798,11 +15425,11 @@ msgstr "公開すると、イベントページが一般に公開され、登録
 msgid "Purchased"
 msgstr "購入済み"
 
-#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:275
+#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:282
 msgid "Purchaser"
 msgstr "購入者"
 
-#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:283
+#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:290
 msgid "Purchaser email"
 msgstr "購入者のメールアドレス"
 
@@ -14816,6 +15443,10 @@ msgstr "購入履歴"
 #: src/ee/licensing/components/LicenceModal/index.tsx:138
 msgid "Put the new key in <0>APP_LICENCE_KEY</0> and redeploy the backend."
 msgstr "新しいキーを<0>APP_LICENCE_KEY</0>に設定して、バックエンドを再デプロイしてください。"
+
+#: src/components/routes/event/Badges/index.tsx:505
+msgid "QR code"
+msgstr "QRコード"
 
 #: src/components/modals/ShareModal/index.tsx:168
 msgid "QR Code"
@@ -14847,7 +15478,7 @@ msgstr "この日付の数量"
 msgid "Question {number}"
 msgstr "質問 {number}"
 
-#: src/components/forms/CheckInListForm/index.tsx:205
+#: src/components/forms/CheckInListForm/index.tsx:266
 msgid "Question answers"
 msgstr "質問への回答"
 
@@ -14873,6 +15504,14 @@ msgstr "質問"
 msgid "Questions & Answers"
 msgstr "質問と回答"
 
+#: src/components/routes/event/Badges/index.tsx:182
+msgid "Questions added to checkout and to the badge"
+msgstr "チェックアウトと名札に質問を追加しました"
+
+#: src/components/routes/event/Badges/index.tsx:183
+msgid "Questions added to checkout. Remove a line from the badge to show them."
+msgstr "質問をチェックアウトに追加しました。表示するには名札から行を1つ削除してください。"
+
 #: src/utilites/homepageSections.ts:58
 msgid "Questions and answers people can expand."
 msgstr "展開して読める質問と回答。"
@@ -14889,6 +15528,10 @@ msgstr "キュー"
 #: src/components/forms/PromoCodeForm/index.tsx:146
 msgid "Quick Tip"
 msgstr "ワンポイントアドバイス"
+
+#: src/utilites/badges.ts:63
+msgid "Quiet and typographic, lots of white space"
+msgstr "文字中心の落ち着いたデザイン、余白たっぷり"
 
 #: src/components/forms/QuestionForm/index.tsx:118
 msgid "Radio Option"
@@ -15071,7 +15714,7 @@ msgstr "長方形"
 msgid "Recurring"
 msgstr "繰り返し"
 
-#: src/components/routes/event/Settings/index.tsx:76
+#: src/components/routes/event/Settings/index.tsx:84
 msgid "Recurring Event"
 msgstr "定期イベント"
 
@@ -15146,7 +15789,7 @@ msgstr "返金に失敗しました"
 msgid "Refund Failed"
 msgstr "返金に失敗しました"
 
-#: src/hooks/useOrderActions.tsx:137
+#: src/hooks/useOrderActions.tsx:141
 msgid "Refund order"
 msgstr "注文を返金"
 
@@ -15203,8 +15846,20 @@ msgstr "返金"
 msgid "Register"
 msgstr "登録"
 
+#: src/components/modals/PrintBadgesModal/index.tsx:152
+msgid "Registration order"
+msgstr "登録順"
+
+#: src/utilites/badges.ts:92
+msgid "Registration question"
+msgstr "登録時の質問"
+
+#: src/components/routes/event/Badges/BadgeLinesEditor.tsx:39
+msgid "Registration questions"
+msgstr "登録時の質問"
+
 #: src/components/common/QuestionsTable/index.tsx:424
-#: src/components/layouts/Event/index.tsx:139
+#: src/components/layouts/Event/index.tsx:143
 msgid "Registration Questions"
 msgstr "登録時の質問"
 
@@ -15220,7 +15875,7 @@ msgstr "{0}席を解放"
 msgid "Release {0} seats on {dateCount} dates"
 msgstr "{dateCount}件の日付で{0}席を解放"
 
-#: src/components/forms/ProductForm/index.tsx:386
+#: src/components/forms/ProductForm/index.tsx:387
 msgid "Release tiers in order"
 msgstr "ティアを順番に解放"
 
@@ -15337,6 +15992,10 @@ msgstr "キーを削除"
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:461
 msgid "Remove label from all dates"
 msgstr "すべての日付からラベルを削除"
+
+#: src/components/routes/event/Badges/BadgeLinesEditor.tsx:158
+msgid "Remove line"
+msgstr "行を削除"
 
 #: src/components/routes/event/Lineup/ProfileLinksField.tsx:46
 msgid "Remove link {linkNumber}"
@@ -15470,12 +16129,17 @@ msgstr "繰り返し"
 msgid "Report not found"
 msgstr "レポートが見つかりません"
 
-#: src/components/layouts/Event/index.tsx:120
+#: src/components/layouts/Event/index.tsx:123
 #: src/components/layouts/OrganizerLayout/index.tsx:112
 #: src/components/routes/event/Reports/index.tsx:54
 #: src/components/routes/organizer/Reports/index.tsx:55
 msgid "Reports"
 msgstr "レポート"
+
+#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:326
+#: src/hooks/useAttendeeActions.tsx:119
+msgid "Reprint badge"
+msgstr "名札を再印刷"
 
 #: src/components/routes/my-tickets/index.tsx:186
 msgid "Request a new link"
@@ -15551,7 +16215,7 @@ msgstr "確認メールを再送信"
 msgid "Resend Confirmation Email"
 msgstr "確認メールを再送信"
 
-#: src/components/layouts/Event/index.tsx:339
+#: src/components/layouts/Event/index.tsx:343
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:162
 msgid "Resend email"
 msgstr "メールを再送信"
@@ -15576,7 +16240,7 @@ msgstr "招待を再送信"
 msgid "Resend invitation to {displayName}"
 msgstr "{displayName}に招待を再送信"
 
-#: src/hooks/useOrderActions.tsx:123
+#: src/hooks/useOrderActions.tsx:127
 msgid "Resend order email"
 msgstr "注文メールを再送信"
 
@@ -15584,13 +16248,17 @@ msgstr "注文メールを再送信"
 msgid "Resend Ticket"
 msgstr "チケットを再送信"
 
-#: src/hooks/useAttendeeActions.tsx:109
+#: src/hooks/useAttendeeActions.tsx:112
 msgid "Resend ticket email"
 msgstr "チケットメールを再送信"
 
 #: src/components/common/OrdersTable/index.tsx:360
 msgid "Reserved"
 msgstr "予約済み"
+
+#: src/components/routes/event/Badges/index.tsx:530
+msgid "Reserved seat"
+msgstr "指定席"
 
 #: src/ee/licensing/licenceNotice.ts:24
 msgid "reserved seating"
@@ -15841,6 +16509,10 @@ msgstr "円形"
 msgid "Round tables for dinners."
 msgstr "ディナー用の円卓。"
 
+#: src/components/routes/event/Badges/index.tsx:130
+msgid "Row C · 14"
+msgstr "C列 · 14番"
+
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:285
 msgid "Row label"
 msgstr "列ラベル"
@@ -15898,7 +16570,7 @@ msgstr "販売"
 msgid "Sale complete"
 msgstr "販売が完了しました"
 
-#: src/components/forms/ProductForm/index.tsx:433
+#: src/components/forms/ProductForm/index.tsx:435
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:196
 msgid "Sale End Date"
 msgstr "販売終了日"
@@ -15924,11 +16596,11 @@ msgstr "販売期間が終了しました"
 msgid "Sale Period"
 msgstr "販売期間"
 
-#: src/components/forms/ProductForm/index.tsx:424
+#: src/components/forms/ProductForm/index.tsx:426
 msgid "Sale period dates apply across all dates in your schedule. To adjust prices, per-date quantities or availability for individual dates, use the overrides on the <0>Occurrence Schedule page</0>."
 msgstr "販売期間の日付は、スケジュール内のすべての日付に適用されます。個別の日付の価格、日付ごとの数量、利用可否を調整するには、<0>開催スケジュールページ</0>の上書き設定を使用してください。"
 
-#: src/components/forms/ProductForm/index.tsx:431
+#: src/components/forms/ProductForm/index.tsx:433
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:192
 msgid "Sale Start Date"
 msgstr "販売開始日"
@@ -15937,7 +16609,7 @@ msgstr "販売開始日"
 msgid "Sale starts {0}"
 msgstr "販売開始：{0}"
 
-#: src/components/forms/ProductForm/index.tsx:417
+#: src/components/forms/ProductForm/index.tsx:419
 msgid "Sale window"
 msgstr "販売期間"
 
@@ -16013,6 +16685,10 @@ msgstr "売上："
 msgid "Same as event"
 msgstr "イベントと同じ"
 
+#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:39
+msgid "Same as the badge design ({designSize})"
+msgstr "名札デザインと同じ ({designSize})"
+
 #: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:82
 msgid "Same as the event"
 msgstr "イベントと同じ"
@@ -16020,6 +16696,10 @@ msgstr "イベントと同じ"
 #: src/components/modals/DuplicateEventModal/index.tsx:167
 msgid "Same endpoints and signing secrets"
 msgstr "同じエンドポイントと署名シークレット"
+
+#: src/utilites/badges.ts:106
+msgid "Same on both sides"
+msgstr "両面同じ"
 
 #: src/components/common/PlatformFeesSettings/index.tsx:178
 msgid "Sample ticket price"
@@ -16084,10 +16764,10 @@ msgstr "月払いより{saving}%お得"
 msgid "Save changes"
 msgstr "変更を保存"
 
-#: src/components/common/DesignerShell/index.tsx:170
+#: src/components/common/DesignerShell/index.tsx:172
 #: src/components/modals/EditAffiliateModal/index.tsx:109
 #: src/components/modals/EditCapacityAssignmentModal/index.tsx:75
-#: src/components/modals/EditCheckInListModal/index.tsx:107
+#: src/components/modals/EditCheckInListModal/index.tsx:111
 #: src/components/modals/EditOrganizerWebhookModal/index.tsx:87
 #: src/components/modals/EditProductCategoryModal/index.tsx:73
 #: src/components/modals/EditPromoCodeModal/index.tsx:87
@@ -16189,6 +16869,10 @@ msgstr "保存済みの場所"
 msgid "Saved locations"
 msgstr "保存済みの場所"
 
+#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:26
+msgid "Saved on this device only"
+msgstr "この端末にのみ保存されます"
+
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:125
 msgid "Saved profile"
 msgstr "保存済みプロフィール"
@@ -16210,7 +16894,7 @@ msgid "Saving an override creates a dedicated configuration for this organizer i
 msgstr "現在システムのデフォルトを使用している場合、上書きを保存すると、この主催者専用の設定が作成されます。"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:96
-#: src/components/layouts/CheckIn/index.tsx:76
+#: src/components/layouts/CheckIn/index.tsx:81
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:66
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/ScanTab.tsx:42
 msgid "Scan"
@@ -16224,6 +16908,10 @@ msgstr "チケットをスキャンして参加者をチェックイン"
 msgid "Scan tickets at the door with a phone, tablet, or USB scanner."
 msgstr "スマートフォン、タブレット、またはUSBスキャナーで、入口でチケットをスキャンします。"
 
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:147
+msgid "Scan your ticket to check in"
+msgstr "チケットをスキャンしてチェックイン"
+
 #: src/components/layouts/CheckIn/tabs/ScanTab.tsx:109
 msgid "Scanned tickets will appear here"
 msgstr "スキャンしたチケットがここに表示されます"
@@ -16231,6 +16919,10 @@ msgstr "スキャンしたチケットがここに表示されます"
 #: src/components/layouts/CheckIn/tabs/ScanTab.tsx:71
 msgid "Scanner mode"
 msgstr "スキャナーモード"
+
+#: src/components/routes/event/Badges/index.tsx:506
+msgid "Scans at any check-in list, the same as the ticket"
+msgstr "チケットと同様に、どのチェックインリストでもスキャンできます"
 
 #: src/components/common/CapacityHelp/index.tsx:143
 msgid "Scenarios"
@@ -16310,7 +17002,7 @@ msgstr "削除予定"
 msgid "Scheduled time"
 msgstr "予約日時"
 
-#: src/components/layouts/CheckIn/index.tsx:77
+#: src/components/layouts/CheckIn/index.tsx:82
 #: src/components/modals/CreateEventModal/ChipSelect.tsx:128
 #: src/components/modals/CreateEventModal/ChipSelect.tsx:129
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/ScanTab.tsx:42
@@ -16330,7 +17022,7 @@ msgstr "参加者を検索"
 msgid "Search by account name or email..."
 msgstr "アカウント名またはメールアドレスで検索..."
 
-#: src/components/routes/event/attendees.tsx:212
+#: src/components/routes/event/attendees.tsx:218
 msgid "Search by attendee name, email or order #..."
 msgstr "参加者名、メールアドレス、注文番号で検索..."
 
@@ -16469,6 +17161,7 @@ msgid "Seasonal"
 msgstr "季節限定"
 
 #: src/components/common/AttendeeTicket/index.tsx:133
+#: src/components/common/NameBadge/index.tsx:82
 #: src/components/modals/ManageAttendeeModal/index.tsx:170
 #: src/ee/seating/components/ManualSeatField/index.tsx:42
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:339
@@ -16554,7 +17247,7 @@ msgstr "座席の間隔"
 msgid "Seated"
 msgstr "着席"
 
-#: src/components/layouts/Event/index.tsx:138
+#: src/components/layouts/Event/index.tsx:142
 #: src/ee/seating/components/routes/event/Seating/AttachSeatMap.tsx:40
 #: src/ee/seating/components/routes/event/Seating/index.tsx:62
 #: src/ee/seating/components/routes/event/Seating/index.tsx:67
@@ -16721,7 +17414,7 @@ msgstr "参加者グループを選択"
 msgid "Select camera"
 msgstr "カメラを選択"
 
-#: src/components/forms/ProductForm/index.tsx:276
+#: src/components/forms/ProductForm/index.tsx:277
 msgid "Select category..."
 msgstr "カテゴリーを選択..."
 
@@ -16766,7 +17459,7 @@ msgstr "商品ティアを選択"
 msgid "Select products"
 msgstr "商品を選択"
 
-#: src/components/forms/ProductForm/index.tsx:562
+#: src/components/forms/ProductForm/index.tsx:569
 msgid "Select products..."
 msgstr "商品を選択..."
 
@@ -16782,7 +17475,7 @@ msgstr "このアカウントのメッセージ送信ティアを選択します
 msgid "Select Ticket"
 msgstr "チケットを選択"
 
-#: src/components/forms/CheckInListForm/index.tsx:121
+#: src/components/forms/CheckInListForm/index.tsx:179
 #: src/components/modals/SendMessageModal/index.tsx:413
 msgid "Select tickets"
 msgstr "チケットを選択"
@@ -16806,7 +17499,7 @@ msgstr "このメッセージを受信する参加者を選択"
 msgid "Select which events will trigger this webhook"
 msgstr "このWebhookをトリガーするイベントを選択"
 
-#: src/components/forms/ProductForm/index.tsx:492
+#: src/components/forms/ProductForm/index.tsx:497
 msgid "Select..."
 msgstr "選択..."
 
@@ -16830,6 +17523,10 @@ msgstr "選択したチケット"
 #: src/ee/seating/components/routes/event/Seating/SeatingRulesCard.tsx:37
 msgid "Selection rules"
 msgstr "選択ルール"
+
+#: src/components/forms/CheckInListForm/index.tsx:281
+msgid "Self check-in kiosk"
+msgstr "セルフチェックイン端末"
 
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:64
 msgid "Sell"
@@ -16883,7 +17580,7 @@ msgstr "販売担当者"
 msgid "Selling as {signedInName}"
 msgstr "{signedInName}として販売中"
 
-#: src/components/forms/ProductForm/index.tsx:596
+#: src/components/forms/ProductForm/index.tsx:604
 msgid "Selling fast 🔥"
 msgstr "もうすぐ完売 🔥"
 
@@ -17029,7 +17726,7 @@ msgstr "お客様が注文したときに送信されます"
 msgid "Sent to each attendee with their ticket details"
 msgstr "チケットの詳細とともに、各参加者に送信されます"
 
-#: src/components/routes/event/Settings/index.tsx:82
+#: src/components/routes/event/Settings/index.tsx:90
 #: src/components/routes/organizer/Settings/index.tsx:63
 msgid "SEO"
 msgstr "SEO"
@@ -17062,7 +17759,7 @@ msgstr "9月"
 msgid "Service fee"
 msgstr "サービス料"
 
-#: src/components/layouts/CheckIn/index.tsx:116
+#: src/components/layouts/CheckIn/index.tsx:121
 msgid "Session cancelled"
 msgstr "セッションがキャンセルされました"
 
@@ -17200,7 +17897,7 @@ msgstr "設定を更新しました"
 msgid "Settings"
 msgstr "設定"
 
-#: src/components/layouts/Event/index.tsx:127
+#: src/components/layouts/Event/index.tsx:130
 msgid "Setup & Design"
 msgstr "設定とデザイン"
 
@@ -17247,8 +17944,8 @@ msgstr "共有"
 msgid "Share Affiliate Link"
 msgstr "アフィリエイトリンクを共有"
 
-#: src/components/layouts/Event/index.tsx:277
-#: src/components/layouts/Event/index.tsx:283
+#: src/components/layouts/Event/index.tsx:281
+#: src/components/layouts/Event/index.tsx:287
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:102
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:131
 msgid "Share Event"
@@ -17279,6 +17976,10 @@ msgstr "支払い情報を共有"
 msgid "Shared Capacity Management"
 msgstr "共有定員の管理"
 
+#: src/components/routes/event/Badges/sampleBadge.ts:29
+msgid "she/her"
+msgstr "彼女"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:34
 msgid "Shift times"
 msgstr "時間をずらす"
@@ -17296,6 +17997,10 @@ msgstr "表示"
 msgid "Show {label}"
 msgstr "{label}を表示"
 
+#: src/components/routes/event/Badges/index.tsx:227
+msgid "Show a typical name"
+msgstr "一般的な長さの名前を表示"
+
 #: src/components/common/AdvancedOptions/index.tsx:28
 msgid "Show advanced options"
 msgstr "詳細オプションを表示"
@@ -17304,11 +18009,7 @@ msgstr "詳細オプションを表示"
 msgid "Show all platforms ({0} more with values)"
 msgstr "すべてのプラットフォームを表示（値のあるもの他{0}件）"
 
-#: src/components/forms/CheckInListForm/index.tsx:196
-msgid "Show attendee notes to non-logged-in staff"
-msgstr "ログインしていないスタッフに参加者メモを表示する"
-
-#: src/components/forms/ProductForm/index.tsx:454
+#: src/components/forms/ProductForm/index.tsx:457
 msgid "Show available product quantity"
 msgstr "購入可能な商品数量を表示する"
 
@@ -17362,14 +18063,6 @@ msgstr "その他のプラットフォームを表示"
 msgid "Show on event page"
 msgstr "イベントページに表示"
 
-#: src/components/forms/CheckInListForm/index.tsx:230
-msgid "Show order details to non-logged-in staff"
-msgstr "ログインしていないスタッフに注文詳細を表示する"
-
-#: src/components/forms/CheckInListForm/index.tsx:213
-msgid "Show question answers to non-logged-in staff"
-msgstr "ログインしていないスタッフに質問への回答を表示する"
-
 #: src/components/modals/ProductPurchasesModal/index.tsx:234
 msgid "Show refunded orders"
 msgstr "返金済みの注文を表示"
@@ -17389,6 +18082,10 @@ msgstr "セクションを表示"
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:61
 msgid "Show tax and fees separately"
 msgstr "税金と手数料を別々に表示する"
+
+#: src/components/routes/event/Badges/index.tsx:316
+msgid "Show ticket colour band"
+msgstr "チケットカラーの帯を表示"
 
 #: src/components/common/WidgetEditor/ContentFields.tsx:204
 msgid "Show tickets"
@@ -17415,6 +18112,10 @@ msgstr "公開イベントページに表示中"
 msgid "Showing the first {0} — the remaining {1} session(s) will still be targeted when the message is sent."
 msgstr "最初の{0}件を表示しています。残りの{1}件のセッションも、メッセージ送信時には対象になります。"
 
+#: src/components/routes/event/Badges/BadgePrint.tsx:196
+msgid "Showing the first 1,000 of {total} badges. Mark these as printed, then print the next batch."
+msgstr "名札{total}枚のうち最初の1,000枚を表示しています。印刷済みにしてから、次の分を印刷してください。"
+
 #: src/components/routes/event/HomepageDesigner/index.tsx:221
 msgid "Shown below the ticket list"
 msgstr "チケットリストの下に表示されます"
@@ -17435,7 +18136,7 @@ msgstr "販売する注文に表示されます"
 msgid "Shown on your public page, tickets and emails."
 msgstr "公開ページ、チケット、メールに表示されます。"
 
-#: src/components/forms/CheckInListForm/index.tsx:146
+#: src/components/forms/CheckInListForm/index.tsx:238
 msgid "Shown to staff the first time they open the check-in page."
 msgstr "スタッフが初めてチェックインページを開いたときに表示されます。"
 
@@ -17455,7 +18156,7 @@ msgstr "チェックアウト前にお客様に表示されます"
 msgid "Shows common address fields, including country"
 msgstr "国を含む一般的な住所フィールドを表示します"
 
-#: src/components/forms/ProductForm/ledgerSummaries.ts:60
+#: src/components/forms/ProductForm/ledgerSummaries.ts:67
 msgid "Shows remaining"
 msgstr "残りを表示"
 
@@ -17486,6 +18187,10 @@ msgstr "お問い合わせボタン付きで主催者プロフィールを表示
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:80
 msgid "Shows your social links and a contact button. Placed above every other section, it appears in your profile card."
 msgstr "SNSリンクとお問い合わせボタンを表示します。他のすべてのセクションより上に配置すると、プロフィールカードに表示されます。"
+
+#: src/utilites/badges.ts:56
+msgid "Sidebar"
+msgstr "サイドバー"
 
 #: src/components/routes/auth/Login/index.tsx:206
 #: src/components/routes/auth/Register/index.tsx:103
@@ -17689,9 +18394,17 @@ msgstr "このメールアドレスにはシングルサインオンが設定さ
 msgid "Single sign-on settings updated"
 msgstr "シングルサインオンの設定を更新しました"
 
+#: src/utilites/badges.ts:105
+msgid "Single-sided"
+msgstr "片面"
+
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:99
 msgid "Size"
 msgstr "サイズ"
+
+#: src/components/routes/event/Badges/index.tsx:334
+msgid "Size and paper"
+msgstr "サイズと用紙"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:358
 msgid "Skip manually edited dates"
@@ -17716,6 +18429,10 @@ msgstr "認識できる列がないシートをスキップしました："
 #: src/locales.ts:86
 msgid "Slovak"
 msgstr "スロバキア語"
+
+#: src/utilites/badges.ts:101
+msgid "Small"
+msgstr "小"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:233
 #: src/components/routes/auth/Register/index.tsx:146
@@ -17811,9 +18528,13 @@ msgstr "販売経路"
 msgid "Solid color"
 msgstr "単色"
 
-#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:293
+#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:300
 msgid "Some details are hidden from public access. Log in to view everything."
 msgstr "一部の詳細は一般には非表示です。すべてを表示するにはログインしてください。"
+
+#: src/components/forms/CheckInListForm/index.tsx:78
+msgid "Some details hidden"
+msgstr "一部の詳細を非表示"
 
 #: src/components/routes/settings/Billing/index.tsx:140
 msgid "Some payment methods take a little while to confirm. Your branding is removed as soon as Stripe confirms it."
@@ -17884,7 +18605,7 @@ msgid "Something went wrong. Please try again later."
 msgstr "問題が発生しました。しばらくしてからもう一度お試しください。"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:30
-#: src/components/layouts/Event/index.tsx:102
+#: src/components/layouts/Event/index.tsx:105
 #: src/components/layouts/OrganizerLayout/index.tsx:146
 #: src/components/routes/admin/DeletionRequests/index.tsx:64
 #: src/components/routes/admin/Users/index.tsx:33
@@ -17966,7 +18687,7 @@ msgstr "特定のユーザー"
 msgid "Spirituality"
 msgstr "スピリチュアリティ"
 
-#: src/components/forms/CheckInListForm/index.tsx:91
+#: src/components/forms/CheckInListForm/index.tsx:149
 msgid "Split check-in across days, areas, or ticket types. Share the link with staff — no account needed on their end."
 msgstr "日付、エリア、チケットタイプ別にチェックインを分けます。リンクをスタッフと共有してください。スタッフ側のアカウントは不要です。"
 
@@ -17977,6 +18698,11 @@ msgstr "入口、日付、チケットタイプ別に入口での販売を分け
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:317
 msgid "Sponsor name"
 msgstr "スポンサー名"
+
+#: src/components/routes/event/Badges/index.tsx:486
+#: src/components/routes/event/Badges/index.tsx:524
+msgid "Sponsor strip"
+msgstr "スポンサー帯"
 
 #: src/components/layouts/EventHomepage/Sections/SponsorsSection.tsx:22
 #: src/utilites/homepageSections.ts:47
@@ -18012,6 +18738,10 @@ msgstr "スタッフが販売時に手動で割引を適用できる"
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:153
 msgid "Staff can change the price of an item during a sale"
 msgstr "スタッフが販売中に商品の価格を変更できる"
+
+#: src/components/forms/CheckInListForm/index.tsx:307
+msgid "Staff can print or reprint badges from this list, or print them automatically on check-in"
+msgstr "スタッフはこのリストから名札を印刷・再印刷したり、チェックイン時に自動で印刷したりできます"
 
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:99
 msgid "Staff can't sign in until a PIN is set"
@@ -18186,7 +18916,7 @@ msgstr "会場名または住所の入力を開始..."
 msgid "Starts"
 msgstr "開始"
 
-#: src/components/forms/ProductForm/ledgerSummaries.ts:62
+#: src/components/forms/ProductForm/ledgerSummaries.ts:69
 msgid "Starts collapsed"
 msgstr "折りたたんだ状態で開始"
 
@@ -18226,15 +18956,15 @@ msgstr "統計"
 msgid "Statistics are based on account creation date"
 msgstr "統計は、アカウントの作成日に基づいています"
 
-#: src/components/layouts/CheckIn/index.tsx:78
+#: src/components/layouts/CheckIn/index.tsx:83
 msgid "Stats"
 msgstr "統計"
 
 #: src/components/common/AdminEventsTable/index.tsx:113
 #: src/components/common/AdminOrdersTable/index.tsx:85
 #: src/components/common/AffiliateTable/index.tsx:84
-#: src/components/common/AttendeeTable/index.tsx:265
-#: src/components/common/CheckInListTable/index.tsx:167
+#: src/components/common/AttendeeTable/index.tsx:269
+#: src/components/common/CheckInListTable/index.tsx:175
 #: src/components/common/OrderDetails/index.tsx:73
 #: src/components/common/OrdersTable/index.tsx:342
 #: src/components/common/OrganizerWebhookTable/index.tsx:244
@@ -18438,7 +19168,7 @@ msgstr "小計"
 
 #: src/components/common/OrganizerWebhookTable/index.tsx:155
 #: src/components/layouts/Checkout/index.tsx:244
-#: src/hooks/useOrderActions.tsx:84
+#: src/hooks/useOrderActions.tsx:88
 msgid "Success"
 msgstr "成功"
 
@@ -18446,7 +19176,7 @@ msgstr "成功"
 msgid "Success! {0} will receive an email shortly."
 msgstr "完了しました！{0}にまもなくメールが届きます。"
 
-#: src/hooks/useAttendeeActions.tsx:65
+#: src/hooks/useAttendeeActions.tsx:68
 msgid "Successfully {0} attendee"
 msgstr "参加者を正常に{0}しました"
 
@@ -18507,7 +19237,7 @@ msgstr "参加者を更新しました"
 msgid "Successfully updated Capacity Assignment"
 msgstr "定員割り当てを更新しました"
 
-#: src/components/modals/EditCheckInListModal/index.tsx:53
+#: src/components/modals/EditCheckInListModal/index.tsx:55
 msgid "Successfully updated Check-In List"
 msgstr "チェックインリストを更新しました"
 
@@ -18675,11 +19405,11 @@ msgid "System Default"
 msgstr "システムのデフォルト"
 
 #: src/components/common/CapacityHelp/index.tsx:65
-#: src/components/forms/ProductForm/index.tsx:204
+#: src/components/forms/ProductForm/index.tsx:205
 msgid "T-shirt"
 msgstr "Tシャツ"
 
-#: src/components/forms/ProductForm/index.tsx:235
+#: src/components/forms/ProductForm/index.tsx:236
 msgid "T-shirts, mugs and more"
 msgstr "Tシャツ、マグカップなど"
 
@@ -18774,13 +19504,13 @@ msgid "Tax updated"
 msgstr "税金を更新しました"
 
 #: src/components/common/InlineOrderSummary/index.tsx:195
-#: src/components/forms/ProductForm/index.tsx:494
+#: src/components/forms/ProductForm/index.tsx:499
 #: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:48
 #: src/components/routes/settings/TaxesAndFees/index.tsx:123
 msgid "Taxes"
 msgstr "税金"
 
-#: src/components/forms/ProductForm/index.tsx:484
+#: src/components/forms/ProductForm/index.tsx:489
 msgid "Taxes & fees"
 msgstr "税金と手数料"
 
@@ -18793,11 +19523,11 @@ msgstr "適用された税金と手数料"
 msgid "Taxes and fees"
 msgstr "税金と手数料"
 
-#: src/components/forms/ProductForm/index.tsx:491
+#: src/components/forms/ProductForm/index.tsx:496
 msgid "Taxes and Fees"
 msgstr "税金と手数料"
 
-#: src/components/layouts/Event/index.tsx:166
+#: src/components/layouts/Event/index.tsx:170
 #: src/components/layouts/OrganizerLayout/index.tsx:133
 #: src/components/layouts/SettingsLayout/index.tsx:67
 #: src/components/routes/event/Team/index.tsx:13
@@ -18806,7 +19536,7 @@ msgstr "税金と手数料"
 msgid "Team"
 msgstr "チーム"
 
-#: src/components/layouts/Event/index.tsx:167
+#: src/components/layouts/Event/index.tsx:171
 #: src/components/layouts/OrganizerLayout/index.tsx:134
 msgid "Team Access"
 msgstr "チームのアクセス権"
@@ -18844,6 +19574,11 @@ msgstr "イベントの繰り返し頻度を入力すると、すべての日付
 msgid "Tell us your VAT registration status so we apply the correct VAT treatment to platform fees."
 msgstr "プラットフォーム手数料に正しいVATを適用するため、VATの登録状況を教えてください。"
 
+#: src/components/routes/event/Badges/index.tsx:278
+#: src/components/routes/event/Badges/TemplatePicker.tsx:31
+msgid "Template"
+msgstr "テンプレート"
+
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:194
 msgid "Template Active"
 msgstr "テンプレート有効"
@@ -18851,6 +19586,10 @@ msgstr "テンプレート有効"
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:175
 msgid "Template created successfully"
 msgstr "テンプレートを作成しました"
+
+#: src/components/routes/event/Badges/index.tsx:440
+msgid "Template default"
+msgstr "テンプレート標準"
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:123
 msgid "Template deleted successfully"
@@ -18876,10 +19615,24 @@ msgstr "期間"
 msgid "Terms of Service"
 msgstr "利用規約"
 
+#: src/hooks/useBadgePrinter.ts:123
+msgid "Test badge"
+msgstr "テスト名札"
+
 #: src/components/modals/SendMessageModal/index.tsx:249
 #: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:110
 msgid "Test email sent to your inbox"
 msgstr "テストメールを受信トレイに送信しました"
+
+#: src/components/routes/event/Badges/BadgePrint.tsx:155
+#: src/components/routes/event/Badges/index.tsx:244
+#: src/hooks/useBadgePrinter.ts:125
+msgid "Test print"
+msgstr "テスト印刷"
+
+#: src/components/routes/event/Badges/index.tsx:238
+msgid "Test print uses your last saved design"
+msgstr "テスト印刷には最後に保存したデザインが使われます"
 
 #: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:137
 #: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:105
@@ -18887,11 +19640,16 @@ msgid "Test sign-in"
 msgstr "テストサインイン"
 
 #: src/components/common/WidgetEditor/AppearancePanel.tsx:83
+#: src/components/routes/event/Badges/index.tsx:415
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:55
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:99
 #: src/utilites/homepageSections.ts:39
 msgid "Text"
 msgstr "テキスト"
+
+#: src/components/routes/event/Badges/BadgeLinesEditor.tsx:115
+msgid "Text size"
+msgstr "文字サイズ"
 
 #: src/components/routes/event/TicketDesigner/index.tsx:184
 msgid "Thank you for attending!"
@@ -18988,7 +19746,7 @@ msgstr "カードリーダーがオフラインになりました。電源とWi-
 msgid "The card was declined"
 msgstr "カードが拒否されました"
 
-#: src/components/layouts/CheckIn/index.tsx:89
+#: src/components/layouts/CheckIn/index.tsx:94
 msgid "The check-in list you are looking for does not exist."
 msgstr "お探しのチェックインリストは存在しません。"
 
@@ -19052,6 +19810,10 @@ msgstr "お探しのイベントは現在利用できません。削除された
 #: src/components/routes/event/Lineup/ProfileImagesField.tsx:152
 msgid "The first photo is used on the lineup. Square or portrait photos at least 600px wide look best."
 msgstr "最初の写真がラインナップで使用されます。幅 600px 以上の正方形または縦長の写真がおすすめです。"
+
+#: src/components/routes/event/Badges/index.tsx:579
+msgid "The front and back print side by side on one side of the paper. Fold in half and both sides face out. No two-sided printer needed."
+msgstr "表面と裏面を用紙の片面に並べて印刷します。半分に折ると両面が外側に来ます。両面プリンターは不要です。"
 
 #: src/components/modals/CancelOrderModal/index.tsx:78
 msgid "The full order amount will be refunded to the customer's original payment method."
@@ -19324,7 +20086,7 @@ msgstr "このイベントの今後の日付はありません"
 msgid "There is a refund pending. Please wait for it to complete before requesting another refund."
 msgstr "返金が保留中です。別の返金をリクエストする前に、完了するまでお待ちください。"
 
-#: src/hooks/useOrderActions.tsx:56
+#: src/hooks/useOrderActions.tsx:60
 msgid "There was an error marking the order as paid"
 msgstr "注文を支払い済みにする際にエラーが発生しました"
 
@@ -19332,7 +20094,7 @@ msgstr "注文を支払い済みにする際にエラーが発生しました"
 msgid "There was an error processing your request. Please try again."
 msgstr "リクエストの処理中にエラーが発生しました。もう一度お試しください。"
 
-#: src/hooks/useOrderActions.tsx:63
+#: src/hooks/useOrderActions.tsx:67
 msgid "There was an error sending your message"
 msgstr "メッセージの送信中にエラーが発生しました"
 
@@ -19360,7 +20122,7 @@ msgstr "これらの詳細は、対象の日付にある既存の場所を置き
 msgid "These events are not available"
 msgstr "これらのイベントはご利用いただけません"
 
-#: src/components/forms/ProductForm/index.tsx:355
+#: src/components/forms/ProductForm/index.tsx:356
 msgid "These prices apply across all dates in your schedule, and each tier's quantity can be per date or a total across all dates. Sale dates on tiers apply globally. You can override prices and per-date quantities for individual dates on the <0>Occurrence Schedule page</0>."
 msgstr "これらの価格はスケジュール内のすべての日付に適用され、各ティアの数量は日付ごと、またはすべての日付の合計のどちらにも設定できます。ティアの販売日は全体に適用されます。個別の日付の価格や日付ごとの数量は、<0>開催スケジュールページ</0>で上書きできます。"
 
@@ -19461,7 +20223,7 @@ msgstr "このカテゴリーは一般には非表示です"
 msgid "This check-in list has expired"
 msgstr "このチェックインリストは期限切れです"
 
-#: src/components/layouts/CheckIn/index.tsx:104
+#: src/components/layouts/CheckIn/index.tsx:109
 msgid "This check-in list has expired and is no longer available for check-ins."
 msgstr "このチェックインリストは期限切れで、チェックインには利用できません。"
 
@@ -19473,11 +20235,11 @@ msgstr "このチェックインリストは有効です"
 msgid "This check-in list is not active yet"
 msgstr "このチェックインリストはまだ有効ではありません"
 
-#: src/components/layouts/CheckIn/index.tsx:143
+#: src/components/layouts/CheckIn/index.tsx:148
 msgid "This check-in list is not yet active and is not available for check-ins."
 msgstr "このチェックインリストはまだ有効ではなく、チェックインには利用できません。"
 
-#: src/components/layouts/CheckIn/index.tsx:121
+#: src/components/layouts/CheckIn/index.tsx:126
 msgid "This check-in list is scoped to a session that has been cancelled, so it can no longer be used for check-ins."
 msgstr "このチェックインリストは、キャンセルされたセッションに限定されているため、チェックインには使用できなくなりました。"
 
@@ -19561,7 +20323,7 @@ msgstr "このイベントはまだ公開されていません"
 msgid "This event is not published. Sales are still recorded."
 msgstr "このイベントは公開されていません。販売は引き続き記録されます。"
 
-#: src/components/layouts/Event/index.tsx:201
+#: src/components/layouts/Event/index.tsx:205
 msgid "This event is pending manual review and cannot be published until the review is complete."
 msgstr "このイベントは手動レビュー待ちのため、レビューが完了するまで公開できません。"
 
@@ -19711,6 +20473,10 @@ msgstr "この注文はキャンセルされました。"
 msgid "This order has expired. Please start again."
 msgstr "この注文は期限切れです。最初からやり直してください。"
 
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:58
+msgid "This order hasn't been paid yet"
+msgstr "この注文はまだお支払いが完了していません"
+
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:440
 msgid "This order is being processed."
 msgstr "この注文は処理中です。"
@@ -19743,7 +20509,7 @@ msgstr "この主催者"
 msgid "This organizer profile is not published yet"
 msgstr "この主催者プロフィールはまだ公開されていません"
 
-#: src/components/forms/ProductForm/index.tsx:620
+#: src/components/forms/ProductForm/index.tsx:629
 msgid "This overrides all visibility settings and will hide the product from all customers."
 msgstr "すべての表示設定を上書きし、すべてのお客様に対してこの商品を非表示にします。"
 
@@ -19767,7 +20533,7 @@ msgstr "この商品はイベントページでハイライトされています
 msgid "This product is sold out"
 msgstr "この商品は完売しました"
 
-#: src/components/forms/ProductForm/index.tsx:556
+#: src/components/forms/ProductForm/index.tsx:563
 msgid "This product won't appear on the event page on its own — buyers only see it as an add-on to the products it's attached to."
 msgstr "この商品はイベントページに単独では表示されません。購入者には、紐付けられた商品のアドオンとしてのみ表示されます。"
 
@@ -19824,7 +20590,7 @@ msgstr "このスペースは、車椅子利用者や配慮が必要なゲスト
 msgid "This ticket is no longer valid"
 msgstr "このチケットは無効になりました"
 
-#: src/hooks/useCheckInController.tsx:276
+#: src/hooks/useCheckInController.tsx:295
 msgid "This ticket was just scanned. Please wait before scanning again."
 msgstr "このチケットはたった今スキャンされました。再度スキャンする前に、しばらくお待ちください。"
 
@@ -19883,14 +20649,14 @@ msgid "Tick \"Trust this device\" when you sign in to skip the code on that brow
 msgstr "サインイン時に\"このデバイスを信頼する\"にチェックを入れると、そのブラウザでは30日間コードの入力が不要になります。"
 
 #: src/components/routes/my-tickets/index.tsx:102
-#: src/hooks/useAttendeeActions.tsx:116
+#: src/hooks/useAttendeeActions.tsx:127
 msgid "ticket"
 msgstr "チケット"
 
 #: src/components/common/AttendeeTicket/index.tsx:130
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:442
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:580
-#: src/components/forms/ProductForm/index.tsx:227
+#: src/components/forms/ProductForm/index.tsx:228
 #: src/components/modals/CreateAttendeeModal/index.tsx:247
 #: src/components/modals/ManageAttendeeModal/index.tsx:147
 #: src/components/modals/ManageAttendeeModal/index.tsx:277
@@ -19902,6 +20668,10 @@ msgstr "チケット"
 msgid "Ticket allocation"
 msgstr "チケットの割り当て"
 
+#: src/components/routes/event/Badges/index.tsx:310
+msgid "Ticket colours"
+msgstr "チケットカラー"
+
 #: src/components/routes/event/TicketDesigner/index.tsx:104
 msgid "Ticket Design"
 msgstr "チケットデザイン"
@@ -19910,11 +20680,11 @@ msgstr "チケットデザイン"
 msgid "Ticket design saved successfully"
 msgstr "チケットデザインを保存しました"
 
-#: src/components/layouts/Event/index.tsx:137
+#: src/components/layouts/Event/index.tsx:140
 msgid "Ticket Designer"
 msgstr "チケットデザイナー"
 
-#: src/hooks/useAttendeeActions.tsx:39
+#: src/hooks/useAttendeeActions.tsx:42
 msgid "Ticket email has been resent to attendee"
 msgstr "チケットメールを参加者に再送信しました"
 
@@ -19967,16 +20737,18 @@ msgstr "このイベントのチケット販売は終了しました"
 msgid "Ticket titles come from your product categories."
 msgstr "チケットのタイトルは商品カテゴリから表示されます。"
 
+#: src/components/modals/PrintBadgesModal/index.tsx:151
 #: src/ee/seating/components/SeatPicker/Basket.tsx:62
 #: src/ee/seating/components/SeatPicker/Basket.tsx:128
+#: src/utilites/badges.ts:91
 msgid "Ticket type"
 msgstr "チケットタイプ"
 
-#: src/components/routes/event/attendees.tsx:76
+#: src/components/routes/event/attendees.tsx:82
 msgid "Ticket Type"
 msgstr "チケットタイプ"
 
-#: src/components/layouts/Event/index.tsx:142
+#: src/components/layouts/Event/index.tsx:146
 msgid "Ticketing & Sales"
 msgstr "チケット販売"
 
@@ -19989,6 +20761,7 @@ msgstr "チケット"
 #: src/components/common/WidgetEditor/TypePicker.tsx:7
 #: src/components/forms/ProductForm/buildPreviewEvent.ts:139
 #: src/components/layouts/EventHomepage/index.tsx:173
+#: src/components/modals/PrintBadgesModal/index.tsx:121
 #: src/components/routes/admin/Dashboard/index.tsx:263
 #: src/components/routes/my-tickets/index.tsx:101
 #: src/ee/box-office/components/layouts/BoxOffice/SaleComplete.tsx:111
@@ -19996,7 +20769,7 @@ msgstr "チケット"
 msgid "Tickets"
 msgstr "チケット"
 
-#: src/components/layouts/Event/index.tsx:143
+#: src/components/layouts/Event/index.tsx:147
 #: src/components/routes/event/products.tsx:68
 msgid "Tickets & Products"
 msgstr "チケットと商品"
@@ -20059,11 +20832,11 @@ msgstr "チケット、価格、税金と手数料、アドオン、座席表"
 msgid "Tier {0}"
 msgstr "ティア{0}"
 
-#: src/components/forms/ProductForm/index.tsx:346
+#: src/components/forms/ProductForm/index.tsx:347
 msgid "Tiered products allow you to offer multiple price options for the same product. This is perfect for early bird products, or offering different price options for different groups of people."
 msgstr "ティア制商品を使うと、同じ商品に複数の価格オプションを設定できます。早割商品や、グループごとに異なる価格を提供する場合に最適です。"
 
-#: src/components/forms/ProductForm/index.tsx:298
+#: src/components/forms/ProductForm/index.tsx:299
 msgid "Tiers"
 msgstr "ティア"
 
@@ -20335,6 +21108,10 @@ msgstr "独自のアナリティクスで売上を計測"
 msgid "Tracking & Analytics"
 msgstr "トラッキングと分析"
 
+#: src/components/routes/event/Badges/index.tsx:460
+msgid "Transparent PNG works best. Your ticket logo is used if you leave this empty."
+msgstr "背景が透明なPNGがおすすめです。空欄の場合はチケットのロゴが使われます。"
+
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:709
 msgid "Treated as one person. Separate several people with a semicolon."
 msgstr "1人として扱われます。複数人はセミコロンで区切ってください。"
@@ -20359,6 +21136,11 @@ msgstr "もっと濃い、または薄いアクセントカラーをお試しく
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:176
 msgid "Try a different search term or filter"
 msgstr "別の検索語またはフィルターをお試しください"
+
+#: src/components/routes/event/Badges/index.tsx:227
+#: src/components/routes/event/Badges/index.tsx:232
+msgid "Try a very long name"
+msgstr "とても長い名前を試す"
 
 #: src/components/routes/event/OccurrencesTab/index.tsx:638
 msgid "Try adjusting your filters to see more dates."
@@ -20435,9 +21217,17 @@ msgstr "{0}の二要素認証をオフにしますか？本人であることを
 msgid "Turn on"
 msgstr "オンにする"
 
+#: src/components/routes/event/Badges/index.tsx:602
+msgid "Turn on badge printing for a check-in list and door staff can print or reprint badges as people arrive. A laptop with a label printer works as a self check-in kiosk."
+msgstr "チェックインリストで名札印刷をオンにすると、受付スタッフが来場者の到着に合わせて名札を印刷・再印刷できます。ラベルプリンターをつないだノートPCは、セルフチェックイン端末としても使えます。"
+
 #: src/components/common/TeamAccessFields/index.tsx:265
 msgid "Turn on Can see financials to allow refunds."
 msgstr "返金を許可するには「財務情報を閲覧できる」をオンにしてください。"
+
+#: src/components/routes/event/Badges/index.tsx:578
+msgid "Turn on double-sided printing (flip on long edge) in the print dialog."
+msgstr "印刷ダイアログで両面印刷（長辺とじ）をオンにしてください。"
 
 #: src/components/common/WidgetEditor/ContentFields.tsx:43
 msgid "Turn on extra sections and drag to reorder."
@@ -20446,6 +21236,10 @@ msgstr "追加のセクションをオンにし、ドラッグして並べ替え
 #: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:106
 msgid "Turn on sign-in with {providerName} and verify a domain first."
 msgstr "先に{providerName}でのサインインをオンにして、ドメインを確認してください。"
+
+#: src/components/routes/event/Settings/Sections/FeatureSettings/index.tsx:52
+msgid "Turn on the extra tools this event needs. Features that are off are hidden from the menu and pages."
+msgstr "このイベントに必要な追加ツールをオンにします。オフの機能はメニューやページに表示されません。"
 
 #: src/components/routes/settings/Team/TwoFactorPolicy.tsx:66
 msgid "Turn on two-factor authentication for your own profile first."
@@ -20514,6 +21308,11 @@ msgstr "二要素認証をリセットしました"
 msgid "Two-factor on"
 msgstr "2段階認証オン"
 
+#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:55
+#: src/components/routes/event/Badges/index.tsx:569
+msgid "Two-sided printer"
+msgstr "両面プリンター"
+
 #: src/components/forms/TaxAndFeeForm/index.tsx:39
 #: src/components/routes/admin/Announcements/index.tsx:158
 #: src/components/routes/admin/Attribution/index.tsx:171
@@ -20575,12 +21374,12 @@ msgstr "リーダーを変更できません"
 msgid "Unable to check in"
 msgstr "チェックインできません"
 
-#: src/hooks/useCheckInController.tsx:217
+#: src/hooks/useCheckInController.tsx:235
 msgid "Unable to check in attendee"
 msgstr "参加者をチェックインできません"
 
-#: src/hooks/useCheckInController.tsx:243
-#: src/hooks/useCheckInController.tsx:245
+#: src/hooks/useCheckInController.tsx:262
+#: src/hooks/useCheckInController.tsx:264
 msgid "Unable to check out attendee"
 msgstr "参加者をチェックアウトできません"
 
@@ -20609,7 +21408,7 @@ msgstr "ウィジェットを削除できませんでした"
 msgid "Unable to duplicate product. Please check the your details"
 msgstr "商品を複製できません。入力内容を確認してください"
 
-#: src/hooks/useCheckInController.tsx:291
+#: src/hooks/useCheckInController.tsx:310
 msgid "Unable to fetch attendee"
 msgstr "参加者を取得できません"
 
@@ -20621,13 +21420,17 @@ msgstr "座席を見つけられません。接続を確認して、もう一度
 msgid "Unable to join waitlist"
 msgstr "キャンセル待ちに登録できません"
 
-#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:164
+#: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:171
 msgid "Unable to load attendee details."
 msgstr "参加者の詳細を読み込めません。"
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:401
 msgid "Unable to load products for this date. Please try again."
 msgstr "この日付の商品を読み込めません。もう一度お試しください。"
+
+#: src/hooks/useBadgePrinter.ts:100
+msgid "Unable to load this badge"
+msgstr "この名札を読み込めません"
 
 #: src/ee/box-office/components/routes/organizer/Payments/TerminalReaders/index.tsx:59
 msgid "Unable to remove the card reader"
@@ -20663,7 +21466,7 @@ msgstr "販売を開始できません。もう一度お試しください。"
 msgid "Unable to switch date"
 msgstr "日付を切り替えられません"
 
-#: src/hooks/useCheckInController.tsx:163
+#: src/hooks/useCheckInController.tsx:175
 msgid "Unable to undo check-in"
 msgstr "チェックインを取り消せません"
 
@@ -20701,7 +21504,7 @@ msgstr "「Token configuration」で、オプションのクレームemailとxms
 
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:299
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:300
-#: src/hooks/useCheckInController.tsx:201
+#: src/hooks/useCheckInController.tsx:223
 msgid "Undo"
 msgstr "元に戻す"
 
@@ -20797,7 +21600,7 @@ msgstr "すべてのイベントを非公開にし、このアカウントとそ
 msgid "Unpublishes your events and disables access straight away. Deletion becomes permanent after 30 days unless you cancel."
 msgstr "イベントを非公開にし、すぐにアクセスを無効にします。キャンセルしない限り、30日後に削除が確定します。"
 
-#: src/components/common/DesignerShell/index.tsx:149
+#: src/components/common/DesignerShell/index.tsx:150
 #: src/components/common/SettingsPage/index.tsx:128
 #: src/components/common/WidgetEditor/index.tsx:182
 msgid "Unsaved changes"
@@ -20827,7 +21630,11 @@ msgstr "このアカウントの停止を解除しますか？メンバーは再
 msgid "until"
 msgstr "まで"
 
-#: src/components/forms/ProductForm/ledgerSummaries.ts:49
+#: src/components/forms/CheckInListForm/index.tsx:55
+msgid "Until {closes}"
+msgstr "{closes}まで"
+
+#: src/components/forms/ProductForm/ledgerSummaries.ts:56
 msgid "Until {end}"
 msgstr "{end}まで"
 
@@ -20856,7 +21663,7 @@ msgstr "未信頼"
 msgid "Unverified"
 msgstr "未確認"
 
-#: src/components/forms/ProductForm/ledgerSummaries.ts:118
+#: src/components/forms/ProductForm/ledgerSummaries.ts:125
 msgid "Up to {max} per order"
 msgstr "1注文あたり最大{max}まで"
 
@@ -21014,6 +21821,10 @@ msgstr "URLは必須です"
 msgid "URL must start with http:// or https://"
 msgstr "URLはhttp://またはhttps://で始めてください"
 
+#: src/utilites/badges.ts:83
+msgid "US Letter sheets"
+msgstr "USレター用紙"
+
 #: src/components/modals/DuplicateEventModal/index.tsx:124
 msgid "Usage counts start at zero"
 msgstr "使用回数はゼロから始まります"
@@ -21043,6 +21854,10 @@ msgstr "<0>Liquidテンプレート</0>を使って、メールをパーソナ�
 msgid "Use a different account"
 msgstr "別のアカウントを使用"
 
+#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:34
+msgid "Use a different size here if this printer takes labels rather than badge inserts"
+msgstr "このプリンターが名札用紙ではなくラベルを使う場合は、ここで別のサイズを指定してください"
+
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:278
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:337
 #: src/components/routes/event/Lineup/ProfileImagesField.tsx:136
@@ -21070,6 +21885,10 @@ msgstr "代わりにリカバリーコードを使用"
 msgid "Use a separate organizer for each brand or venue you sell tickets under."
 msgstr "チケットを販売するブランドや会場ごとに、別々の主催者を使用してください。"
 
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:176
+msgid "Use a USB scanner"
+msgstr "USBスキャナーを使う"
+
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:449
 msgid "Use areas for separate parts of the venue, such as stalls and balcony. Best available seats are chosen nearest the stage."
 msgstr "エリアを使って、1階席とバルコニー席など、会場の別々の部分を設定します。最適な座席は、ステージに最も近いものが選ばれます。"
@@ -21087,6 +21906,10 @@ msgstr "すべての参加者に注文の詳細を使用します。参加者の
 msgid "Use the buyer's details for all attendees"
 msgstr "すべての参加者に購入者の情報を使用"
 
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:177
+msgid "Use the camera"
+msgstr "カメラを使う"
+
 #: src/components/common/LocationPicker/index.tsx:285
 msgid "Use this address"
 msgstr "この住所を使用"
@@ -21094,6 +21917,10 @@ msgstr "この住所を使用"
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:206
 msgid "Use this if someone else, such as your finance team, is paying for your order."
 msgstr "経理部門など、他の人があなたの注文を支払う場合に使用してください。"
+
+#: src/components/forms/CheckInListForm/index.tsx:288
+msgid "Use this list as a self check-in kiosk"
+msgstr "このリストをセルフチェックイン端末として使う"
 
 #: src/ee/box-office/components/layouts/BoxOffice/ReaderSwitchSheet.tsx:64
 msgid "Use this reader"
@@ -21341,7 +22168,7 @@ msgstr "メールアドレスを確認"
 msgid "Verify recovery code"
 msgstr "リカバリーコードを確認"
 
-#: src/components/layouts/Event/index.tsx:336
+#: src/components/layouts/Event/index.tsx:340
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:156
 msgid "Verify your email"
 msgstr "メールアドレスを確認してください"
@@ -21479,7 +22306,7 @@ msgstr "メッセージを表示"
 msgid "View on event page"
 msgstr "イベントページで表示"
 
-#: src/components/layouts/Event/index.tsx:247
+#: src/components/layouts/Event/index.tsx:251
 #: src/components/layouts/OrganizerLayout/index.tsx:237
 msgid "View only"
 msgstr "閲覧のみ"
@@ -21528,7 +22355,7 @@ msgstr "販売を表示"
 msgid "View Ticket"
 msgstr "チケットを表示"
 
-#: src/components/routes/event/attendees.tsx:204
+#: src/components/routes/event/attendees.tsx:210
 msgid "View, edit, and export your registered attendees."
 msgstr "登録済みの参加者を表示、編集、エクスポートします。"
 
@@ -21551,11 +22378,11 @@ msgstr "閲覧数"
 msgid "Vimeo"
 msgstr "Vimeo"
 
-#: src/components/forms/CheckInListForm/index.tsx:101
+#: src/components/forms/CheckInListForm/index.tsx:159
 msgid "VIP check-in list"
 msgstr "VIPチェックインリスト"
 
-#: src/components/forms/ProductForm/index.tsx:204
+#: src/components/forms/ProductForm/index.tsx:205
 msgid "VIP Ticket"
 msgstr "VIPチケット"
 
@@ -21612,10 +22439,10 @@ msgstr "スキャン待機中…"
 msgid "Waiting for Stripe to confirm your payment…"
 msgstr "Stripeによる支払い確認を待っています…"
 
-#: src/components/forms/ProductForm/index.tsx:466
+#: src/components/forms/ProductForm/index.tsx:470
 #: src/components/layouts/AuthLayout/AuthShell.tsx:16
-#: src/components/layouts/Event/index.tsx:154
-#: src/components/routes/event/Settings/index.tsx:100
+#: src/components/layouts/Event/index.tsx:158
+#: src/components/routes/event/Settings/index.tsx:108
 #: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:55
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:73
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:92
@@ -21646,6 +22473,14 @@ msgstr "警告：これはシステムのデフォルト設定です。変更は
 #: src/components/routes/product-widget/PaymentReturn/index.tsx:89
 msgid "We could not process your payment. Please try again or contact support."
 msgstr "お支払いを処理できませんでした。もう一度お試しいただくか、サポートにお問い合わせください。"
+
+#: src/components/routes/event/Badges/index.tsx:185
+msgid "We couldn't add the questions. Please try again."
+msgstr "質問を追加できませんでした。もう一度お試しください。"
+
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:59
+msgid "We couldn't check you in"
+msgstr "チェックインできませんでした"
 
 #: src/components/routes/sso/Callback/SsoErrorState.tsx:135
 msgid "We couldn't confirm it's you"
@@ -21687,6 +22522,11 @@ msgstr "現在、座席を見つけられませんでした。もう一度お試
 #: src/ee/seating/components/SeatPicker/useSeatSelection.ts:269
 msgid "We couldn't find that many seats together. Try fewer seats or pick them on the map."
 msgstr "その数の座席をまとめて見つけられませんでした。座席数を減らすか、マップ上で選択してください。"
+
+#: src/hooks/useCheckInController.tsx:313
+#: src/hooks/useCheckInController.tsx:322
+msgid "We couldn't find that ticket"
+msgstr "チケットが見つかりませんでした"
 
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:621
 msgid "We couldn't find the order you're looking for. The link may have expired or the order details may have changed."
@@ -21733,6 +22573,14 @@ msgstr "この進行表を読み込めませんでした。このイベントへ
 msgid "We couldn't load your billing details. Please refresh the page to try again."
 msgstr "請求情報を読み込めませんでした。ページを更新してもう一度お試しください。"
 
+#: src/components/routes/event/Badges/BadgePrint.tsx:138
+msgid "We couldn't mark these badges as printed. Please try again."
+msgstr "名札を印刷済みにできませんでした。もう一度お試しください。"
+
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:49
+msgid "We couldn't print your badge. Please see the registration desk."
+msgstr "名札を印刷できませんでした。受付カウンターにお越しください。"
+
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:97
 msgid "We couldn't reach Stripe just now. Please try again in a moment."
 msgstr "現在、Stripeに接続できませんでした。しばらくしてからもう一度お試しください。"
@@ -21760,6 +22608,10 @@ msgstr "サインインできませんでした"
 #: src/components/routes/sso/Callback/SsoErrorState.tsx:46
 msgid "We couldn't sign you in with {providerName}"
 msgstr "{providerName} でサインインできませんでした"
+
+#: src/components/routes/event/Settings/Sections/FeatureSettings/index.tsx:44
+msgid "We couldn't update this feature. Please try again."
+msgstr "この機能を更新できませんでした。もう一度お試しください。"
 
 #: src/components/routes/product-widget/CollectInformation/index.tsx:424
 msgid "We hit a snag loading this page. Please try again."
@@ -21883,7 +22735,7 @@ msgstr "Webhookは通知を送信しません"
 msgid "Webhook will send notifications"
 msgstr "Webhookは通知を送信します"
 
-#: src/components/layouts/Event/index.tsx:165
+#: src/components/layouts/Event/index.tsx:169
 #: src/components/layouts/OrganizerLayout/index.tsx:131
 #: src/components/modals/DuplicateEventModal/index.tsx:167
 #: src/components/routes/event/Webhooks/index.tsx:67
@@ -21948,6 +22800,10 @@ msgstr "{0}へようこそ、{1}さん 👋"
 msgid "Welcome to {0}, here's a listing of all your events"
 msgstr "{0}へようこそ。すべてのイベントの一覧です"
 
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:43
+msgid "Welcome, {0}!"
+msgstr "ようこそ、{0}さん！"
+
 #: src/constants/eventCategories.ts:20
 msgid "Wellness"
 msgstr "ウェルネス"
@@ -21956,7 +22812,7 @@ msgstr "ウェルネス"
 msgid "What"
 msgstr "内容"
 
-#: src/components/forms/ProductForm/index.tsx:345
+#: src/components/forms/ProductForm/index.tsx:346
 msgid "What are Tiered Products?"
 msgstr "ティア制商品とは？"
 
@@ -21984,6 +22840,14 @@ msgstr "この定員はどの商品に適用しますか？"
 msgid "What should people expect?"
 msgstr "参加者に何を期待してもらいますか？"
 
+#: src/components/forms/CheckInListForm/index.tsx:248
+msgid "What staff can see"
+msgstr "スタッフが見られる情報"
+
+#: src/components/routes/event/Badges/BadgeLinesEditor.tsx:103
+msgid "What this line shows"
+msgstr "この行に表示する内容"
+
 #: src/components/forms/QuestionForm/index.tsx:179
 msgid "What time will you be arriving?"
 msgstr "何時にご到着の予定ですか？"
@@ -22007,9 +22871,9 @@ msgstr "どのような種類のイベントですか？"
 msgid "What type of question is this?"
 msgstr "これはどのような種類の質問ですか？"
 
-#: src/components/forms/CheckInListForm/index.tsx:172
-msgid "What unauthenticated staff can see"
-msgstr "認証されていないスタッフに表示される内容"
+#: src/components/routes/event/Badges/index.tsx:292
+msgid "What's on the badge"
+msgstr "名札に載せる内容"
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:89
 #: src/constants/socialMediaConfig.ts:39
@@ -22101,11 +22965,15 @@ msgstr "注文が返金されたとき"
 msgid "When an order is updated"
 msgstr "注文が更新されたとき"
 
-#: src/components/forms/CheckInListForm/index.tsx:160
+#: src/components/forms/CheckInListForm/index.tsx:219
 msgid "When check-in closes"
 msgstr "チェックインが終了するとき"
 
-#: src/components/forms/CheckInListForm/index.tsx:155
+#: src/components/forms/CheckInListForm/index.tsx:205
+msgid "When check-in is open"
+msgstr "チェックインの受付時間"
+
+#: src/components/forms/CheckInListForm/index.tsx:214
 msgid "When check-in opens"
 msgstr "チェックインが開始するとき"
 
@@ -22169,7 +23037,7 @@ msgstr "このボックスオフィスで販売できる商品はどれですか
 msgid "Which ticket for {0}?"
 msgstr "{0}のどのチケットですか？"
 
-#: src/components/forms/CheckInListForm/index.tsx:120
+#: src/components/forms/CheckInListForm/index.tsx:178
 msgid "Which tickets should be associated with this check-in list?"
 msgstr "このチェックインリストに紐付けるチケットはどれですか？"
 
@@ -22181,6 +23049,10 @@ msgstr "ホワイトラベル"
 msgid "Who should be asked this question?"
 msgstr "この質問は誰に尋ねますか？"
 
+#: src/components/modals/PrintBadgesModal/index.tsx:103
+msgid "Who to print"
+msgstr "印刷対象"
+
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:148
 msgid "Who's on?"
 msgstr "出演者"
@@ -22190,6 +23062,10 @@ msgstr "出演者"
 #: src/components/routes/settings/Team/MemberRow.tsx:45
 msgid "Whole account"
 msgstr "アカウント全体"
+
+#: src/components/routes/event/Badges/index.tsx:585
+msgid "Wi-Fi: DevConf / password"
+msgstr "Wi-Fi: DevConf / password"
 
 #: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:13
 msgid "Wide cover, tickets alongside"
@@ -22207,7 +23083,7 @@ msgstr "ウィジェットを作成しました"
 msgid "Widget deleted"
 msgstr "ウィジェットを削除しました"
 
-#: src/components/layouts/Event/index.tsx:164
+#: src/components/layouts/Event/index.tsx:168
 #: src/components/layouts/OrganizerLayout/index.tsx:123
 msgid "Widget Embed"
 msgstr "ウィジェットの埋め込み"
@@ -22233,6 +23109,10 @@ msgstr "ウィジェットの種類"
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:97
 msgid "Width"
 msgstr "幅"
+
+#: src/components/routes/event/Badges/index.tsx:355
+msgid "Width (mm)"
+msgstr "幅 (mm)"
 
 #: src/components/common/WidgetEditor/installGuides.ts:73
 msgid "Wix shows embedded code inside a fixed-size box. Set Checkout opens in to New tab for the best experience."
@@ -22315,7 +23195,7 @@ msgstr "はい - 有効なEU VAT登録番号を持っています"
 msgid "Yes, cancel my order"
 msgstr "はい、注文をキャンセルします"
 
-#: src/components/forms/ProductForm/index.tsx:518
+#: src/components/forms/ProductForm/index.tsx:523
 msgid "Yes, remove them"
 msgstr "はい、削除します"
 
@@ -22356,8 +23236,8 @@ msgstr "<0>{0}</0>（{1}）になりすましています"
 msgid "You are issuing a partial refund. The customer will be refunded {0} {1}."
 msgstr "一部返金を行います。お客様には{0} {1}が返金されます。"
 
-#: src/hooks/useCheckInController.tsx:212
-#: src/hooks/useCheckInController.tsx:238
+#: src/hooks/useCheckInController.tsx:234
+#: src/hooks/useCheckInController.tsx:257
 msgid "You are offline"
 msgstr "オフラインです"
 
@@ -22397,7 +23277,7 @@ msgstr "1注文につき、最大{max}席まで選択できます"
 msgid "You can configure additional service fees and taxes in your account settings."
 msgstr "追加のサービス手数料や税金は、アカウント設定で設定できます。"
 
-#: src/components/forms/ProductForm/index.tsx:612
+#: src/components/forms/ProductForm/index.tsx:621
 msgid "You can create a promo code which targets this product on the"
 msgstr "この商品を対象とするプロモーションコードを作成できます："
 
@@ -22421,12 +23301,12 @@ msgstr "どの商品からでも引き続き削除できます。"
 msgid "You cannot archive the last active organizer on your account."
 msgstr "アカウント内の最後のアクティブな主催者はアーカイブできません。"
 
-#: src/components/forms/ProductForm/index.tsx:213
+#: src/components/forms/ProductForm/index.tsx:214
 msgid "You cannot change the product type as there are attendees associated with this product."
 msgstr "この商品に関連付けられた参加者がいるため、商品タイプは変更できません。"
 
-#: src/hooks/useCheckInController.tsx:261
-#: src/hooks/useCheckInController.tsx:330
+#: src/hooks/useCheckInController.tsx:280
+#: src/hooks/useCheckInController.tsx:360
 msgid "You cannot check in attendees with unpaid orders. This setting can be changed in the event settings."
 msgstr "未払いの注文の参加者はチェックインできません。この設定は、イベント設定で変更できます。"
 
@@ -22446,7 +23326,7 @@ msgstr "プロバイダーの詳細を変更したため、クライアントシ
 msgid "You confirmed it's you. Continue within a few minutes."
 msgstr "本人確認が完了しました。数分以内に続行してください。"
 
-#: src/components/layouts/Event/index.tsx:230
+#: src/components/layouts/Event/index.tsx:234
 msgid "You don't have access to this event"
 msgstr "このイベントへのアクセス権がありません"
 
@@ -22478,7 +23358,7 @@ msgstr "メッセージの送信上限に達しました。"
 msgid "You have run out of time to complete your order."
 msgstr "注文を完了するための時間が過ぎました。"
 
-#: src/components/forms/ProductForm/index.tsx:516
+#: src/components/forms/ProductForm/index.tsx:521
 msgid "You have taxes and fees added to a Free Product. Would you like to remove them?"
 msgstr "無料商品に税金と手数料が追加されています。削除しますか？"
 
@@ -22571,7 +23451,7 @@ msgstr "今後これらのメールは届きません。注文やアカウント
 msgid "You'll be signed out and will need to sign in again with {providerName}."
 msgstr "サインアウトされるため、{providerName}で再度サインインする必要があります。"
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:62
+#: src/components/modals/CreateCheckInListModal/index.tsx:64
 msgid "You'll need a ticket before you can create a check-in list."
 msgstr "チェックインリストを作成するには、チケットが必要です。"
 
@@ -22603,9 +23483,17 @@ msgstr "次の画面でお支払い方法と金額が表示されます。"
 msgid "You'll set the dates and schedule after the event is created."
 msgstr "日付とスケジュールは、イベントの作成後に設定します。"
 
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:57
+msgid "You're already checked in, {0}"
+msgstr "{0}さんはすでにチェックイン済みです"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:255
 msgid "You're changing session times"
 msgstr "セッション時間を変更しています"
+
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:44
+msgid "You're checked in. Enjoy the event."
+msgstr "チェックインが完了しました。イベントをお楽しみください。"
 
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:196
 msgid "You're going to {0}!"
@@ -22711,13 +23599,25 @@ msgstr "アフィリエイトを正常にエクスポートしました。"
 msgid "Your artwork as a poster"
 msgstr "アートワークをポスターとして表示"
 
-#: src/components/routes/event/attendees.tsx:165
+#: src/utilites/badges.ts:66
+msgid "Your artwork full bleed behind a name card"
+msgstr "全面に敷いたアートワークの上にネームカード"
+
+#: src/components/routes/event/attendees.tsx:171
 msgid "Your attendees have been exported successfully."
 msgstr "参加者を正常にエクスポートしました。"
 
-#: src/components/common/AttendeeTable/index.tsx:365
+#: src/components/common/AttendeeTable/index.tsx:396
 msgid "Your attendees will appear here once they have registered for your event. You can also manually add attendees."
 msgstr "イベントに登録した参加者がここに表示されます。参加者を手動で追加することもできます。"
+
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:48
+msgid "Your badge is ready. Collect it from the printer."
+msgstr "名札の準備ができました。プリンターから受け取ってください。"
+
+#: src/utilites/badges.ts:64
+msgid "Your brand colour edge to edge, with a huge name"
+msgstr "全面ブランドカラーに大きな名前"
 
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:193
 msgid "Your browser blocked copying. Select the key and copy it yourself."
@@ -22808,7 +23708,7 @@ msgstr "ライセンスの有効期限が切れました"
 msgid "Your lineup is hidden on your event page, so this widget will be empty."
 msgstr "ラインナップがイベントページで非表示になっているため、このウィジェットは空になります。"
 
-#: src/hooks/useOrderActions.tsx:62
+#: src/hooks/useOrderActions.tsx:66
 msgid "Your message has been sent"
 msgstr "メッセージを送信しました"
 
@@ -22960,7 +23860,7 @@ msgstr "リカバリーコードと信頼済みデバイスは削除されます
 msgid "Your refund is processing."
 msgstr "返金を処理中です。"
 
-#: src/hooks/useCheckInController.tsx:78
+#: src/hooks/useCheckInController.tsx:90
 msgid "Your saved date filter is no longer available — showing all dates."
 msgstr "保存していた日付フィルターは利用できなくなったため、すべての日付を表示しています。"
 

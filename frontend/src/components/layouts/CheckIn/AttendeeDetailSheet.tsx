@@ -1,11 +1,12 @@
 import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {Badge, Button, Drawer, Loader} from "@mantine/core";
-import {t, Trans} from "@lingui/macro";
+import {plural, t, Trans} from "@lingui/macro";
 import {
     IconAlertTriangle,
     IconCalendarEvent,
     IconCheck,
     IconClipboardText,
+    IconIdBadge2,
     IconMail,
     IconReceipt2,
     IconTicket,
@@ -26,6 +27,9 @@ interface Props {
     onClose: () => void;
     onCheckInToggle: (detail: AttendeeDetailPublic) => void;
     isActionPending: boolean;
+    canPrintBadge?: boolean;
+    isPrintingBadge?: boolean;
+    onPrintBadge?: (detail: AttendeeDetailPublic) => void;
 }
 
 const formatDateTime = (iso: string | undefined | null) => {
@@ -52,6 +56,9 @@ export const AttendeeDetailSheet = ({
                                         onClose,
                                         onCheckInToggle,
                                         isActionPending,
+                                        canPrintBadge,
+                                        isPrintingBadge,
+                                        onPrintBadge,
                                     }: Props) => {
     const open = attendeePublicId !== null;
     const detailQuery = useGetCheckInListAttendeeDetailPublic(checkInListShortId, attendeePublicId);
@@ -295,17 +302,42 @@ export const AttendeeDetailSheet = ({
                     )}
 
                     <div className={classes.footer}>
-                        <Button
-                            fullWidth
-                            size="lg"
-                            color={isCheckedIn ? "red" : "teal"}
-                            disabled={!canToggle}
-                            loading={isActionPending}
-                            onClick={() => detail && onCheckInToggle(detail)}
-                            leftSection={isCheckedIn ? <IconX size={18}/> : <IconCheck size={18}/>}
-                        >
-                            {isCheckedIn ? t`Check out` : t`Check in`}
-                        </Button>
+                        {canPrintBadge && !!detail.badge_print_count && (
+                            <div className={classes.badgePrintedNote} data-testid="check-in-badge-print-note">
+                                {detail.badge_print_status === 'NEEDS_REPRINT'
+                                    ? t`Details changed since the badge was printed`
+                                    : plural(detail.badge_print_count, {
+                                        one: 'Badge printed once',
+                                        other: 'Badge printed # times',
+                                    })}
+                            </div>
+                        )}
+                        <div className={classes.footerActions}>
+                            {canPrintBadge && detail.status !== "CANCELLED" && (
+                                <Button
+                                    size="lg"
+                                    variant="default"
+                                    className={classes.badgeButton}
+                                    loading={isPrintingBadge}
+                                    onClick={() => onPrintBadge?.(detail)}
+                                    leftSection={<IconIdBadge2 size={18}/>}
+                                    data-testid="check-in-print-badge-button"
+                                >
+                                    {detail.badge_print_count ? t`Reprint badge` : t`Print badge`}
+                                </Button>
+                            )}
+                            <Button
+                                fullWidth
+                                size="lg"
+                                color={isCheckedIn ? "red" : "teal"}
+                                disabled={!canToggle}
+                                loading={isActionPending}
+                                onClick={() => detail && onCheckInToggle(detail)}
+                                leftSection={isCheckedIn ? <IconX size={18}/> : <IconCheck size={18}/>}
+                            >
+                                {isCheckedIn ? t`Check out` : t`Check in`}
+                            </Button>
+                        </div>
                     </div>
                 </>
             )}

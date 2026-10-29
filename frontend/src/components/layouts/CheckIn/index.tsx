@@ -6,7 +6,7 @@ import {EventOccurrenceStatus, EventType} from "../../../types.ts";
 import {t, Trans} from "@lingui/macro";
 import classes from "./CheckIn.module.scss";
 import {ActionIcon} from "@mantine/core";
-import {IconCalendarEvent, IconChartBar, IconInfoCircle, IconQrcode, IconSearch, IconWifiOff} from "@tabler/icons-react";
+import {IconCalendarEvent, IconChartBar, IconInfoCircle, IconPrinter, IconQrcode, IconSearch, IconWifiOff} from "@tabler/icons-react";
 import {formatDateWithLocale} from "../../../utilites/dates.ts";
 import {useGetCheckInListStatsPublic} from "../../../queries/useGetCheckInListStatsPublic.ts";
 import {NoResultsSplash} from "../../common/NoResultsSplash";
@@ -21,7 +21,9 @@ import {SearchTab} from "./tabs/SearchTab.tsx";
 import {StatsTab} from "./tabs/StatsTab.tsx";
 import {OccurrenceFilterPill} from "./OccurrenceFilterPill.tsx";
 import {CheckInModals} from "./CheckInModals.tsx";
-import {useCheckInController} from "../../../hooks/useCheckInController.tsx";
+import {KioskScanResult, useCheckInController} from "../../../hooks/useCheckInController.tsx";
+import {BadgePrinterSettings} from "./BadgePrinterSettings.tsx";
+import {KioskCheckIn} from "./KioskCheckIn.tsx";
 import {useHashTab} from "../../../hooks/useHashTab.ts";
 
 type CheckInTab = "scan" | "search" | "stats";
@@ -37,6 +39,8 @@ const CheckIn = () => {
 
     const [activeTab, setActiveTab] = useHashTab(CHECK_IN_TABS, "scan");
     const [descriptionModalOpen, setDescriptionModalOpen] = useState(false);
+    const [printerSettingsOpen, printerSettingsHandlers] = useDisclosure(false);
+    const [kioskResult, setKioskResult] = useState<KioskScanResult | null>(null);
     const [infoModalOpen, infoModalHandlers] = useDisclosure(false, {
         onOpen: () => {
             CheckInListQuery.refetch();
@@ -46,7 +50,8 @@ const CheckIn = () => {
     const controller = useCheckInController({
         checkInListShortId,
         checkInList,
-        hidListeningEnabled: activeTab === "scan",
+        hidListeningEnabled: !!checkInList?.kiosk_mode || activeTab === "scan",
+        onKioskResult: setKioskResult,
     });
 
     const progressStatsQuery = useGetCheckInListStatsPublic(
@@ -156,6 +161,25 @@ const CheckIn = () => {
             />);
     }
 
+    if (checkInList?.kiosk_mode) {
+        return (
+            <>
+                <KioskCheckIn
+                    checkInList={checkInList}
+                    controller={controller}
+                    result={kioskResult}
+                    onReset={() => setKioskResult(null)}
+                />
+                <CheckInModals
+                    controller={controller}
+                    checkInListShortId={checkInListShortId}
+                    eventType={event?.type}
+                    timezone={event?.timezone}
+                />
+            </>
+        );
+    }
+
     const filteredStats = progressStatsQuery.data?.data;
     const totalAttendees = filteredStats?.total_attendees ?? checkInList?.total_attendees ?? 0;
     const checkedInCount = filteredStats?.checked_in_attendees ?? checkInList?.checked_in_attendees ?? 0;
@@ -192,6 +216,19 @@ const CheckIn = () => {
                             <IconWifiOff size={14}/>
                             <span>{t`Offline`}</span>
                         </div>
+                    )}
+                    {controller.badgePrinter.isEnabled && (
+                        <ActionIcon
+                            variant="subtle"
+                            color="gray"
+                            radius="xl"
+                            onClick={printerSettingsHandlers.open}
+                            aria-label={t`Badge printing`}
+                            className={controller.badgePrinter.settings.autoPrint ? classes.printerBtnActive : classes.infoBtn}
+                            data-testid="check-in-badge-printer-button"
+                        >
+                            <IconPrinter size={20}/>
+                        </ActionIcon>
                     )}
                     <ActionIcon
                         variant="subtle"
@@ -264,6 +301,13 @@ const CheckIn = () => {
                 checkInList={checkInList}
                 onClose={infoModalHandlers.close}
             />
+            {controller.badgePrinter.isEnabled && (
+                <BadgePrinterSettings
+                    printer={controller.badgePrinter}
+                    opened={printerSettingsOpen}
+                    onClose={printerSettingsHandlers.close}
+                />
+            )}
             <CheckInDescriptionModal
                 isOpen={descriptionModalOpen}
                 description={checkInList?.description}

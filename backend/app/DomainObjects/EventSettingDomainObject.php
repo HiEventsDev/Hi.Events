@@ -2,8 +2,17 @@
 
 namespace HiEvents\DomainObjects;
 
+use HiEvents\DomainObjects\Enums\EventFeature;
+
 class EventSettingDomainObject extends Generated\EventSettingDomainObjectAbstract
 {
+    public function isFeatureEnabled(EventFeature $feature): bool
+    {
+        $features = $this->getEnabledFeatures();
+
+        return is_array($features) && in_array($feature->value, $features, true);
+    }
+
     /**
      * @todo This should not be here.
      */

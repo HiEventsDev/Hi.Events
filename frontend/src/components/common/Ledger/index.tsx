@@ -2,41 +2,42 @@ import {ReactNode} from "react";
 import {Collapse} from "@mantine/core";
 import {IconChevronDown} from "@tabler/icons-react";
 import classNames from "classnames";
-import {RowSummary} from "./ledgerSummaries.ts";
-import classes from "./ProductForm.module.scss";
+import classes from "./Ledger.module.scss";
 
-export type LedgerRowId =
-    | 'description'
-    | 'sale-window'
-    | 'event-page'
-    | 'waitlist'
-    | 'taxes'
-    | 'order-limits'
-    | 'addons'
-    | 'highlight'
-    | 'access';
+export interface RowSummary {
+    text: string;
+    emphasized: boolean;
+}
 
-interface LedgerRowProps {
-    id: LedgerRowId;
+export const Ledger = ({heading, children}: { heading: string; children: ReactNode }) => (
+    <div className={classes.ledger}>
+        <div className={classes.ledgerHeading}>{heading}</div>
+        {children}
+    </div>
+);
+
+interface LedgerRowProps<T extends string> {
+    idPrefix: string;
+    id: T;
     icon: ReactNode;
     label: string;
     summary: RowSummary;
     opened: boolean;
-    onToggle: (id: LedgerRowId) => void;
+    onToggle: (id: T) => void;
     children: ReactNode;
 }
 
-export const LedgerRow = ({id, icon, label, summary, opened, onToggle, children}: LedgerRowProps) => {
-    const contentId = `product-ledger-content-${id}`;
+export const LedgerRow = <T extends string>({idPrefix, id, icon, label, summary, opened, onToggle, children}: LedgerRowProps<T>) => {
+    const contentId = `${idPrefix}-content-${id}`;
 
     return (
-        <div className={classes.ledgerRow} id={`product-ledger-row-${id}`}>
+        <div className={classes.ledgerRow} id={`${idPrefix}-row-${id}`}>
             <button
                 type="button"
                 className={classes.ledgerRowButton}
                 aria-expanded={opened}
                 aria-controls={contentId}
-                data-testid={`product-ledger-${id}`}
+                data-testid={`${idPrefix}-${id}`}
                 onClick={() => onToggle(id)}
             >
                 <span className={classes.ledgerRowIcon}>{icon}</span>

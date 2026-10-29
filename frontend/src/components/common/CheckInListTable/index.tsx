@@ -15,6 +15,7 @@ import {
 import {useMemo, useState} from "react";
 import {useDisclosure, useMediaQuery} from "@mantine/hooks";
 import {useParams} from "react-router";
+import {useEventFeature} from "../../../hooks/useEventFeature.ts";
 import {t, Trans} from "@lingui/macro";
 import {NoResultsSplash} from "../NoResultsSplash";
 import {EditCheckInListModal} from "../../modals/EditCheckInListModal";
@@ -47,6 +48,7 @@ export const CheckInListTable = ({checkInLists, openCreateModal, event}: CheckIn
     const [selectedCheckInListId, setSelectedCheckInListId] = useState<IdParam>();
     const deleteMutation = useDeleteCheckInList();
     const {eventId} = useParams();
+    const badgesEnabled = useEventFeature(eventId, 'BADGES');
     const isRecurring = event?.type === EventType.RECURRING;
     const isMobile = useMediaQuery('(max-width: 768px)');
 
@@ -85,6 +87,12 @@ export const CheckInListTable = ({checkInLists, openCreateModal, event}: CheckIn
                                     </Anchor>
                                     {list.is_system_default && (
                                         <Badge size="xs" color="gray" variant="light">{t`Default`}</Badge>
+                                    )}
+                                    {badgesEnabled && list.badge_printing_enabled && (
+                                        <Badge size="xs" color="gray" variant="light">{t`Prints badges`}</Badge>
+                                    )}
+                                    {list.kiosk_mode && (
+                                        <Badge size="xs" color="gray" variant="light">{t`Kiosk`}</Badge>
                                     )}
                                 </div>
                                 <div className={classes.productsText}>

@@ -4,6 +4,7 @@ namespace HiEvents\Resources\CheckInList;
 
 use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
+use HiEvents\Resources\Badge\BadgeDesignLayoutResource;
 use HiEvents\Resources\Event\EventResourcePublic;
 use HiEvents\Resources\EventOccurrence\EventOccurrenceResourcePublic;
 use HiEvents\Resources\Product\ProductMinimalResourcePublic;
@@ -33,6 +34,11 @@ class CheckInListResourcePublic extends JsonResource
             'public_show_attendee_notes' => $this->getPublicShowAttendeeNotes(),
             'public_show_question_answers' => $this->getPublicShowQuestionAnswers(),
             'public_show_order_details' => $this->getPublicShowOrderDetails(),
+            'badge_printing_enabled' => $this->getBadgeDesign() !== null,
+            'kiosk_mode' => $this->getKioskMode(),
+            $this->mergeWhen($this->getBadgeDesign() !== null, fn () => [
+                'badge_design' => (new BadgeDesignLayoutResource($this->getBadgeDesign()))->toArray($request),
+            ]),
             $this->mergeWhen($this->getEvent() !== null, fn () => [
                 'is_expired' => $this->isExpired($this->getEvent()->getTimezone()),
                 'is_active' => $this->isActivated($this->getEvent()->getTimezone()),

@@ -13,14 +13,22 @@ import {useDeleteCheckInPublic} from "../mutations/useDeleteCheckInPublic.ts";
 import {publicCheckInClient} from "../api/check-in.client.ts";
 import {ScanMode} from "../components/layouts/CheckIn/tabs/ScanTab.tsx";
 import {RecentScan, RecentScanStatus} from "../components/layouts/CheckIn/types.ts";
+import {useBadgePrinter} from "./useBadgePrinter.ts";
 
 const MAX_RECENT_SCANS = 20;
+
+export type KioskScanResult =
+    | { status: 'success'; attendee: Attendee }
+    | { status: 'duplicate'; attendee: Attendee }
+    | { status: 'unpaid'; attendee: Attendee }
+    | { status: 'error'; message: string };
 
 interface UseCheckInControllerOptions {
     checkInListShortId: string | undefined;
     checkInList: CheckInList | undefined;
     hidListeningEnabled: boolean;
     occurrenceOverride?: number | null;
+    onKioskResult?: (result: KioskScanResult) => void;
 }
 
 export const useCheckInController = ({
@@ -28,10 +36,14 @@ export const useCheckInController = ({
                                          checkInList,
                                          hidListeningEnabled,
                                          occurrenceOverride,
+                                         onKioskResult,
                                      }: UseCheckInControllerOptions) => {
     const networkStatus = useNetwork();
     const event = checkInList?.event;
     const eventSettings = event?.settings;
+    const isKiosk = !!checkInList?.kiosk_mode;
+    const badgePrinter = useBadgePrinter(checkInListShortId, checkInList);
+    const notifyError: typeof showError = (message) => isKiosk ? undefined : showError(message);
 
     const [scanMode, setScanMode] = useState<ScanMode>(() => {
         if (isSsr()) return "usb";
@@ -98,7 +110,7 @@ export const useCheckInController = ({
     const attendeesQuery = useGetCheckInListAttendees(
         checkInListShortId,
         queryFilters,
-        checkInList?.is_active && !checkInList?.is_expired,
+        checkInList?.is_active && !checkInList?.is_expired && !isKiosk,
     );
     const attendees = attendeesQuery?.data?.data;
     const checkInMutation = useCreateCheckInPublic(queryFilters);
@@ -176,10 +188,11 @@ export const useCheckInController = ({
             onSuccess: (response) => {
                 const {errors, data} = response;
                 if (errors && errors[attendee.public_id]) {
-                    showError(errors[attendee.public_id]);
+                    notifyError(errors[attendee.public_id]);
                     playErrorSound();
                     haptic("error");
                     recordScan(attendee, attendee.public_id, "error");
+                    onKioskResult?.({status: 'error', message: errors[attendee.public_id]});
                     return;
                 }
                 playSuccessSound();
@@ -187,6 +200,15 @@ export const useCheckInController = ({
                 recordScan(attendee, attendee.public_id, "success");
                 checkInModalHandlers.close();
                 setSelectedAttendee(null);
+
+                if (badgePrinter.isEnabled && (isKiosk || badgePrinter.settings.autoPrint)) {
+                    badgePrinter.printBadge(attendee.public_id);
+                }
+
+                if (isKiosk) {
+                    onKioskResult?.({status: 'success', attendee});
+                    return;
+                }
 
                 const createdCheckIn = data?.find((c: any) => c.attendee_id === attendee.id);
                 const seatLabel = attendee.seat_label;
@@ -208,14 +230,11 @@ export const useCheckInController = ({
                 playErrorSound();
                 haptic("error");
                 recordScan(attendee, attendee.public_id, "error");
-                if (!networkStatus.online) {
-                    showError(t`You are offline`);
-                    return;
-                }
-
-                if (error instanceof AxiosError) {
-                    showError(error?.response?.data?.message || t`Unable to check in attendee`);
-                }
+                const message = !networkStatus.online
+                    ? t`You are offline`
+                    : (error instanceof AxiosError && error?.response?.data?.message) || t`Unable to check in attendee`;
+                onKioskResult?.({status: 'error', message});
+                notifyError(message);
             },
         });
     };
@@ -273,7 +292,7 @@ export const useCheckInController = ({
         const now = Date.now();
         if (processedBarcodesRef.current.has(attendeePublicId) &&
             now - lastScanTimeRef.current < 3000) {
-            showError(t`This ticket was just scanned. Please wait before scanning again.`);
+            notifyError(t`This ticket was just scanned. Please wait before scanning again.`);
             playErrorSound();
             return;
         }
@@ -288,17 +307,19 @@ export const useCheckInController = ({
                 const {data} = await publicCheckInClient.getCheckInListAttendee(checkInListShortId, attendeePublicId);
                 attendee = data;
             } catch (error) {
-                showError(t`Unable to fetch attendee`);
+                notifyError(t`Unable to fetch attendee`);
                 playErrorSound();
                 recordScan(null, attendeePublicId, "error");
+                onKioskResult?.({status: 'error', message: t`We couldn't find that ticket`});
                 isProcessingRef.current = false;
                 return;
             }
 
             if (!attendee) {
-                showError(t`Attendee not found`);
+                notifyError(t`Attendee not found`);
                 playErrorSound();
                 recordScan(null, attendeePublicId, "error");
+                onKioskResult?.({status: 'error', message: t`We couldn't find that ticket`});
                 isProcessingRef.current = false;
                 return;
             }
@@ -306,7 +327,8 @@ export const useCheckInController = ({
 
         if (attendee.check_in) {
             const seatLabel = attendee.seat_label;
-            showError(seatLabel
+            onKioskResult?.({status: 'duplicate', attendee});
+            notifyError(seatLabel
                 ? <Trans>{attendee.first_name} {attendee.last_name} is already checked in · {seatLabel}</Trans>
                 : <Trans>{attendee.first_name} {attendee.last_name} is already checked in</Trans>);
             playErrorSound();
@@ -318,6 +340,14 @@ export const useCheckInController = ({
         }
 
         const isAttendeeAwaitingPayment = attendee.status === "AWAITING_PAYMENT";
+
+        if (isKiosk && isAttendeeAwaitingPayment) {
+            playErrorSound();
+            recordScan(attendee, attendeePublicId, "error");
+            onKioskResult?.({status: 'unpaid', attendee});
+            isProcessingRef.current = false;
+            return;
+        }
 
         if (allowOrdersAwaitingOfflinePaymentToCheckIn && isAttendeeAwaitingPayment) {
             setSelectedAttendee(attendee);
@@ -341,7 +371,7 @@ export const useCheckInController = ({
 
         await handleCheckInAction(attendee, "check-in");
         isProcessingRef.current = false;
-    }, [attendees, checkInListShortId, allowOrdersAwaitingOfflinePaymentToCheckIn, checkInModalHandlers, handleCheckInAction, playErrorSound, recordScan]);
+    }, [attendees, checkInListShortId, allowOrdersAwaitingOfflinePaymentToCheckIn, checkInModalHandlers, handleCheckInAction, playErrorSound, recordScan, isKiosk, onKioskResult]);
 
     const processBarcode = useCallback((barcode: string) => {
         if (barcode.startsWith("A-") && barcode.length > 3) {
@@ -445,6 +475,8 @@ export const useCheckInController = ({
         allowOrdersAwaitingOfflinePaymentToCheckIn,
         scanSuccessAudioRef,
         scanErrorAudioRef,
+        badgePrinter,
+        isKiosk,
     };
 };
 

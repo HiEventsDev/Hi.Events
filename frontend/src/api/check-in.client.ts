@@ -2,6 +2,7 @@ import {publicApi} from "./public-client";
 import {
     Attendee,
     AttendeeDetailPublic,
+    Badge,
     CheckInList,
     CheckInListStats,
     GenericDataResponse,
@@ -42,6 +43,14 @@ export const publicCheckInClient = {
                 }
             ]
         });
+        return response.data;
+    },
+    getAttendeeBadge: async (checkInListShortId: IdParam, attendeePublicId: IdParam) => {
+        const response = await publicApi.get<GenericDataResponse<Badge>>(`/check-in-lists/${checkInListShortId}/attendees/${attendeePublicId}/badge`);
+        return response.data;
+    },
+    markAttendeeBadgePrinted: async (checkInListShortId: IdParam, attendeePublicId: IdParam) => {
+        const response = await publicApi.post<GenericDataResponse<Badge>>(`/check-in-lists/${checkInListShortId}/attendees/${attendeePublicId}/badge/printed`);
         return response.data;
     },
     deleteCheckIn: async (checkInListShortId: IdParam, checkInShortId: IdParam) => {

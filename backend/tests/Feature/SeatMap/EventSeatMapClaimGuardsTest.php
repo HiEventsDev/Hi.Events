@@ -51,6 +51,8 @@ class EventSeatMapClaimGuardsTest extends TestCase
         $pastClaim = DB::table('seat_claims')->where('event_occurrence_id', $pastOccurrenceId)->first();
         $upcomingAttendeeId = $this->insertAttendeeFor($upcomingClaim);
         $pastAttendeeId = $this->insertAttendeeFor($pastClaim);
+        DB::table('attendees')->whereIn('id', [$upcomingAttendeeId, $pastAttendeeId])
+            ->update(['badge_printed_at' => now(), 'badge_print_count' => 1]);
 
         $renamed = $layout;
         $renamed['areas'][0]['name'] = 'Floor';
@@ -63,6 +65,8 @@ class EventSeatMapClaimGuardsTest extends TestCase
         $this->assertSame(0, DB::table('seat_claims')->where('event_occurrence_id', '!=', $pastOccurrenceId)->where('seat_label', 'like', 'Stalls%')->count());
         $this->assertStringStartsWith('Floor · ', DB::table('attendees')->where('id', $upcomingAttendeeId)->value('seat_label'));
         $this->assertStringStartsWith('Stalls · ', DB::table('attendees')->where('id', $pastAttendeeId)->value('seat_label'));
+        $this->assertNull(DB::table('attendees')->where('id', $upcomingAttendeeId)->value('badge_printed_at'));
+        $this->assertNotNull(DB::table('attendees')->where('id', $pastAttendeeId)->value('badge_printed_at'));
     }
 
     public function test_a_zone_cannot_shrink_below_the_busiest_upcoming_date(): void

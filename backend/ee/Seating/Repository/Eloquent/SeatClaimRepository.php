@@ -260,13 +260,13 @@ class SeatClaimRepository extends BaseRepository implements SeatClaimRepositoryI
         ));
     }
 
-    public function relabel(int $eventId, array $labelsBySeatUid): void
+    public function relabel(int $eventId, array $labelsBySeatUid): array
     {
         if ($labelsBySeatUid === []) {
-            return;
+            return [];
         }
 
-        $this->runQuery(function () use ($eventId, $labelsBySeatUid) {
+        return $this->runQuery(function () use ($eventId, $labelsBySeatUid) {
             $incoming = json_encode(
                 array_map(
                     static fn (string $seatUid, string $label) => ['seat_uid' => $seatUid, 'seat_label' => $label],
@@ -286,15 +286,18 @@ class SeatClaimRepository extends BaseRepository implements SeatClaimRepositoryI
                 [now(), $incoming, ...$scope],
             );
 
-            DB::update(
+            $relabelled = DB::select(
                 'UPDATE attendees SET seat_label = seat_claims.seat_label, updated_at = ?
                  FROM seat_claims, jsonb_to_recordset(?::jsonb) AS incoming(seat_uid varchar, seat_label varchar)
                  WHERE attendees.id = seat_claims.attendee_id
                    AND seat_claims.seat_uid = incoming.seat_uid
                    AND seat_claims.event_id = ?
-                   AND seat_claims.event_occurrence_id = ANY(?::bigint[])',
+                   AND seat_claims.event_occurrence_id = ANY(?::bigint[])
+                 RETURNING attendees.id',
                 [now(), $incoming, ...$scope],
             );
+
+            return array_map(static fn (object $row) => (int) $row->id, $relabelled);
         });
     }
 

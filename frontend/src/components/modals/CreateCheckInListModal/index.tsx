@@ -34,6 +34,8 @@ export const CreateCheckInListModal = ({onClose, initialOccurrenceId}: CreateChe
             public_show_attendee_notes: true,
             public_show_question_answers: true,
             public_show_order_details: true,
+            badge_printing_enabled: false,
+            kiosk_mode: false,
         }
     });
     const createMutation = useCreateCheckInList();
