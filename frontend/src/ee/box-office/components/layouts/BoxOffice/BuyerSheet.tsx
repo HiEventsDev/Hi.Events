@@ -6,6 +6,12 @@ import {Question} from "../../../../../types.ts";
 import {CartBuyer} from "../../../hooks/useBoxOfficeCart.ts";
 import {CheckoutOrderQuestions} from "../../../../../components/common/CheckoutQuestion";
 import {isQuestionAnswered} from "../../../utilites/boxOfficeQuestions.ts";
+import {
+    answersByQuestionId,
+    findDisqualifyingQuestion,
+    indexQuestions,
+    isQuestionShown,
+} from "../../../../../utilites/questionLogic.ts";
 import {Sheet} from "./Sheet.tsx";
 
 interface BuyerSheetProps {
@@ -36,9 +42,13 @@ export const BuyerSheet = ({opened, onClose, buyer, questions, questionAnswers, 
         },
         validate: (values) => {
             const errors: Record<string, string> = {};
+            const questionsById = indexQuestions(questions);
+            const orderAnswers = answersByQuestionId(values.order.questions);
             values.order.questions.forEach((answer, index) => {
                 const question = questions.find(q => q.id === answer.question_id);
-                if (question?.required && !isQuestionAnswered(question, [answer])) {
+                if (question?.required
+                    && isQuestionShown(question, questionsById, orderAnswers)
+                    && !isQuestionAnswered(question, [answer])) {
                     errors[`order.questions.${index}.response.answer`] = t`This field is required`;
                 }
             });
@@ -63,10 +73,15 @@ export const BuyerSheet = ({opened, onClose, buyer, questions, questionAnswers, 
 
     return (
         <Sheet opened={opened} onClose={onClose} title={t`Buyer details`}>
-            <form onSubmit={form.onSubmit((values) => onSave(
-                {first_name: values.first_name, last_name: values.last_name, email: values.email},
-                values.order.questions,
-            ))}>
+            <form onSubmit={form.onSubmit((values) => {
+                if (findDisqualifyingQuestion(questions, indexQuestions(questions), answersByQuestionId(values.order.questions))) {
+                    return;
+                }
+                onSave(
+                    {first_name: values.first_name, last_name: values.last_name, email: values.email},
+                    values.order.questions,
+                );
+            })}>
                 <TextInput {...form.getInputProps('first_name')} label={t`First name`} autoComplete="off" size="md"/>
                 <TextInput {...form.getInputProps('last_name')} label={t`Last name`} autoComplete="off" size="md" mt="sm"/>
                 <TextInput

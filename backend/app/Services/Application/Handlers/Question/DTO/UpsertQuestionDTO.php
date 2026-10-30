@@ -18,5 +18,13 @@ class UpsertQuestionDTO extends BaseDTO
         public bool $is_hidden,
         public QuestionBelongsTo $belongs_to,
         public ?string $description = null,
+        public bool $applies_to_all_tickets = false,
+        public ?int $condition_question_id = null,
+        public ?array $condition_values = null,
+        public bool $condition_provided = false,
+        public ?array $disqualifying_options = null,
+        public ?string $disqualification_message = null,
+        public bool $disqualification_provided = false,
+        public array $option_renames = [],
     ) {}
 }

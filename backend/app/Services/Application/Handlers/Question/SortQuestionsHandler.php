@@ -3,12 +3,14 @@
 namespace HiEvents\Services\Application\Handlers\Question;
 
 use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
+use HiEvents\Services\Domain\Question\QuestionOrderService;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 readonly class SortQuestionsHandler
 {
     public function __construct(
         private QuestionRepositoryInterface $questionRepository,
+        private QuestionOrderService $questionOrderService,
     ) {}
 
     public function handle(int $eventId, array $data): void
@@ -30,5 +32,6 @@ readonly class SortQuestionsHandler
         }
 
         $this->questionRepository->sortQuestions($eventId, $orderedQuestionIds);
+        $this->questionOrderService->placeFollowUpsAfterParents($eventId);
     }
 }

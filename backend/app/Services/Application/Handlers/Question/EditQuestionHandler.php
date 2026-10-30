@@ -31,11 +31,19 @@ class EditQuestionHandler
             ->setRequired($createQuestionDTO->required)
             ->setOptions($createQuestionDTO->options)
             ->setIsHidden($createQuestionDTO->is_hidden)
+            ->setAppliesToAllTickets($createQuestionDTO->applies_to_all_tickets)
+            ->setConditionQuestionId($createQuestionDTO->condition_question_id)
+            ->setConditionValues($createQuestionDTO->condition_values)
+            ->setDisqualifyingOptions($createQuestionDTO->disqualifying_options)
+            ->setDisqualificationMessage($createQuestionDTO->disqualification_message)
             ->setDescription($this->purifier->purify($createQuestionDTO->description));
 
         $editedQuestion = $this->editQuestionService->editQuestion(
             question: $question,
             productIds: $createQuestionDTO->product_ids,
+            optionRenames: $createQuestionDTO->option_renames,
+            keepExistingCondition: ! $createQuestionDTO->condition_provided,
+            keepExistingDisqualification: ! $createQuestionDTO->disqualification_provided,
         );
 
         $this->eventSpamCheckDispatchService->dispatchForEvent($createQuestionDTO->event_id);

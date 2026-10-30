@@ -14,6 +14,8 @@ class Question extends BaseModel
     {
         return [
             QuestionDomainObjectAbstract::OPTIONS => 'array',
+            QuestionDomainObjectAbstract::CONDITION_VALUES => 'array',
+            QuestionDomainObjectAbstract::DISQUALIFYING_OPTIONS => 'array',
         ];
     }
 

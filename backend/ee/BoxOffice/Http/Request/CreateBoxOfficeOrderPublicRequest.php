@@ -5,12 +5,10 @@ namespace HiEvents\Enterprise\BoxOffice\Http\Request;
 use HiEvents\DomainObjects\BoxOfficeDomainObject;
 use HiEvents\DomainObjects\Enums\AttendeeDetailsCollectionMethod;
 use HiEvents\DomainObjects\Enums\PromoCodeDiscountTypeEnum;
-use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\QuestionDomainObjectAbstract;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
-use HiEvents\DomainObjects\QuestionDomainObject;
 use HiEvents\Enterprise\BoxOffice\Http\Middleware\AuthenticateBoxOfficeSession;
 use HiEvents\Http\Request\BaseRequest;
 use HiEvents\Repository\Eloquent\Value\Relationship;
@@ -71,11 +69,7 @@ class CreateBoxOfficeOrderPublicRequest extends BaseRequest
             return ['nullable', 'array'];
         }
 
-        $orderQuestions = $questions->filter(
-            fn (QuestionDomainObject $question) => $question->getBelongsTo() === QuestionBelongsTo::ORDER->name
-        );
-
-        return ['present', 'array', new OrderQuestionRule($orderQuestions, collect())];
+        return ['present', 'array', new OrderQuestionRule($questions, collect())];
     }
 
     private function attendeeRules(?Collection $questions, ?BoxOfficeDomainObject $boxOffice, ProductRepositoryInterface $productRepository): array
@@ -84,10 +78,6 @@ class CreateBoxOfficeOrderPublicRequest extends BaseRequest
             return ['nullable', 'array'];
         }
 
-        $productQuestions = $questions->filter(
-            fn (QuestionDomainObject $question) => $question->getBelongsTo() === QuestionBelongsTo::PRODUCT->name
-        );
-
         $products = $productRepository
             ->loadRelation(ProductPriceDomainObject::class)
             ->findWhere([ProductDomainObjectAbstract::EVENT_ID => $boxOffice->getEventId()]);
@@ -95,7 +85,7 @@ class CreateBoxOfficeOrderPublicRequest extends BaseRequest
         return [
             'present',
             'array',
-            new ProductQuestionRule($productQuestions, $products, AttendeeDetailsCollectionMethod::PER_ORDER->name),
+            new ProductQuestionRule($questions, $products, AttendeeDetailsCollectionMethod::PER_ORDER->name, 'questions'),
         ];
     }
 

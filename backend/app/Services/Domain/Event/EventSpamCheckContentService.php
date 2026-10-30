@@ -292,6 +292,7 @@ class EventSpamCheckContentService
             /** @var QuestionDomainObject $question */
             $content['question '.($index + 1).' title'] = $question->getTitle();
             $content['question '.($index + 1).' description'] = $question->getDescription();
+            $content['question '.($index + 1).' ineligible message'] = $question->getDisqualificationMessage();
         }
 
         return $content;

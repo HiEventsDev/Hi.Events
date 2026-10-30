@@ -27,6 +27,7 @@ use HiEvents\Services\Domain\Event\EventSpamCheckDispatchService;
 use HiEvents\Services\Domain\Product\ProductAddonAssociationService;
 use HiEvents\Services\Domain\Product\ProductPriceUpdateService;
 use HiEvents\Services\Domain\ProductCategory\GetProductCategoryService;
+use HiEvents\Services\Domain\Question\QuestionTicketScopeService;
 use HiEvents\Services\Domain\Tax\DTO\TaxAndProductAssociateParams;
 use HiEvents\Services\Domain\Tax\TaxAndProductAssociationService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
@@ -55,6 +56,7 @@ class EditProductHandler
         private readonly SeatedProductLookupService $seatedProductLookup,
         private readonly EventSeatMapBandProductRepositoryInterface $bandProductRepository,
         private readonly EventSpamCheckDispatchService $eventSpamCheckDispatchService,
+        private readonly QuestionTicketScopeService $questionTicketScopeService,
     ) {}
 
     /**
@@ -90,6 +92,8 @@ class EditProductHandler
                 eventId: $productsData->event_id,
                 addonProductIds: $productsData->is_addon_only ? [] : ($productsData->addon_product_ids ?? []),
             );
+
+            $this->questionTicketScopeService->syncProduct($product);
 
             $this->priceUpdateService->updatePrices(
                 $product,

@@ -40,6 +40,7 @@ msgid "{0}"
 msgstr "{0}"
 
 #: src/components/routes/admin/Announcements/index.tsx:287
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:111
 msgid "{0} (copy)"
 msgstr "{0} (αντίγραφο)"
 
@@ -266,7 +267,7 @@ msgstr "{0} πωλημένες"
 msgid "{0} standing"
 msgstr "{0} όρθιες θέσεις"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:641
+#: src/components/routes/product-widget/CollectInformation/index.tsx:681
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/OrdersTab.tsx:93
 msgid "{0} tickets"
 msgstr "{0} εισιτήρια"
@@ -462,6 +463,10 @@ msgstr "Το στοιχείο {label} μετακινήθηκε στη θέση {
 msgid "{linkCount, plural, one {# link} other {# links}}"
 msgstr "{linkCount, plural, one {# σύνδεσμος} other {# σύνδεσμοι}}"
 
+#: src/components/routes/event/Questions/QuestionRow.tsx:73
+msgid "{listed} +{remaining} more"
+msgstr "{listed} +{remaining} ακόμη"
+
 #: src/ee/seating/components/routes/event/SeatMapDesigner/index.tsx:19
 msgid "{listed} and {remaining} more"
 msgstr "{listed} και {remaining} ακόμη"
@@ -519,9 +524,13 @@ msgstr "{onLineup} ήδη στο line-up"
 msgid "{open} seats to choose"
 msgstr "{open} θέσεις για επιλογή"
 
-#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:407
+#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:409
 msgid "{open} to seat"
 msgstr "{open} χωρίς θέση"
+
+#: src/components/routes/event/Questions/QuestionRow.tsx:98
+msgid "{optionCount, plural, one {# option} other {# options}}"
+msgstr "{optionCount, plural, one {# επιλογή} other {# επιλογές}}"
 
 #: src/components/routes/settings/Team/MemberRow.tsx:51
 msgid "{organizerCount, plural, one {# organizer} other {# organizers}}"
@@ -809,7 +818,7 @@ msgstr "1 θέση για επιλογή"
 msgid "1 slot"
 msgstr "1 χρονοθυρίδα"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:640
+#: src/components/routes/product-widget/CollectInformation/index.tsx:680
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/OrdersTab.tsx:92
 msgid "1 ticket"
 msgstr "1 εισιτήριο"
@@ -826,7 +835,7 @@ msgstr "1 τύπος εισιτηρίου έχει ρυθμιστεί"
 msgid "1 time available"
 msgstr "1 διαθέσιμη ώρα"
 
-#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:407
+#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:409
 msgid "1 to seat"
 msgstr "1 χωρίς θέση"
 
@@ -915,14 +924,6 @@ msgstr "Η λίστα check-in επιτρέπει στο προσωπικό να
 msgid "A compact, centred card"
 msgstr "Μια συμπαγής, κεντραρισμένη κάρτα"
 
-#: src/components/forms/QuestionForm/index.tsx:138
-msgid "A date input. Perfect for asking for a date of birth etc."
-msgstr "Πεδίο ημερομηνίας. Ιδανικό για ερώτηση ημερομηνίας γέννησης κ.λπ."
-
-#: src/components/forms/QuestionForm/index.tsx:126
-msgid "A Dropdown input allows only one selection"
-msgstr "Ένα αναπτυσσόμενο μενού επιτρέπει μόνο μία επιλογή"
-
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:199
 msgid "A few quick steps and you're ready to start selling."
 msgstr "Λίγα γρήγορα βήματα και είστε έτοιμοι να ξεκινήσετε τις πωλήσεις."
@@ -947,10 +948,6 @@ msgstr "Επικεφαλίδα και μορφοποιημένο κείμενο.
 msgid "A message to display when there are no products in this category."
 msgstr "Ένα μήνυμα που εμφανίζεται όταν δεν υπάρχουν προϊόντα σε αυτήν την κατηγορία."
 
-#: src/components/forms/QuestionForm/index.tsx:108
-msgid "A multi line text input"
-msgstr "Πεδίο κειμένου πολλαπλών γραμμών"
-
 #: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:32
 msgid "A narrow card with the details centred. Suits smaller and private events."
 msgstr "Μια στενή κάρτα με κεντραρισμένες λεπτομέρειες. Ιδανική για μικρότερες και ιδιωτικές εκδηλώσεις."
@@ -966,10 +963,6 @@ msgstr "Ένα προφίλ μπορεί να έχει έως {MAX_IMAGES} φω�
 #: src/components/forms/PromoCodeForm/index.tsx:148
 msgid "A promo code with no discount can be used to reveal hidden products."
 msgstr "Ένας κωδικός προσφοράς χωρίς έκπτωση μπορεί να χρησιμοποιηθεί για να αποκαλύψει κρυφά προϊόντα."
-
-#: src/components/forms/QuestionForm/index.tsx:120
-msgid "A Radio option has multiple options but only one can be selected."
-msgstr "Μια επιλογή τύπου Radio έχει πολλαπλές επιλογές αλλά μόνο μία μπορεί να επιλεγεί."
 
 #: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:72
 msgid "A recurring event can become a single event when it has exactly one active date and no orders. The date's own prices, product visibility, capacity and label are removed; its time and location are kept."
@@ -991,18 +984,6 @@ msgstr "Μια σύντομη περιγραφή της εκδήλωσης πο�
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:110
 msgid "A short description of your organizer that will be displayed to your users."
 msgstr "Μια σύντομη περιγραφή του διοργανωτή που θα εμφανίζεται στους χρήστες."
-
-#: src/components/forms/QuestionForm/index.tsx:102
-msgid "A single line text input"
-msgstr "Πεδίο κειμένου μίας γραμμής"
-
-#: src/components/forms/QuestionForm/index.tsx:87
-msgid "A single question per order. E.g, What is your shipping address?"
-msgstr "Μία ερώτηση ανά παραγγελία. Π.χ., Ποια είναι η διεύθυνση αποστολής σας;"
-
-#: src/components/forms/QuestionForm/index.tsx:93
-msgid "A single question per product. E.g, What is your t-shirt size?"
-msgstr "Μία ερώτηση ανά προϊόν. Π.χ., Ποιο είναι το μέγεθος μπλούζας σας;"
 
 #: src/ee/seating/components/routes/event/Seating/SeatingRulesCard.tsx:41
 msgid "A single seat is still allowed when there is no other way to seat the party."
@@ -1097,6 +1078,10 @@ msgstr "Η πρόσβαση αφαιρέθηκε"
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:290
 msgid "Accessibility"
 msgstr "Προσβασιμότητα"
+
+#: src/components/routes/event/Questions/questionTemplates.ts:46
+msgid "Accessibility needs"
+msgstr "Ανάγκες προσβασιμότητας"
 
 #: src/ee/seating/components/SeatPicker/SeatListView.tsx:53
 msgid "accessible"
@@ -1341,6 +1326,10 @@ msgstr "Προσθέστε περιγραφή για αυτό το ταμείο"
 msgid "Add a description for this check-in list"
 msgstr "Προσθήκη περιγραφής για αυτή τη λίστα ελέγχου"
 
+#: src/components/forms/QuestionForm/ConditionFields.tsx:50
+msgid "Add a question with options above this one to show it only for certain answers."
+msgstr "Προσθέστε από πάνω μια ερώτηση με επιλογές για να εμφανίζεται αυτή μόνο για συγκεκριμένες απαντήσεις."
+
 #: src/components/routes/event/OccurrencesTab/index.tsx:594
 msgid "Add a Single Date"
 msgstr "Προσθήκη μίας ημερομηνίας"
@@ -1370,7 +1359,7 @@ msgstr "Προσθήκη μετά τον κώδικα ενσωμάτωσης"
 msgid "Add an area"
 msgstr "Προσθήκη περιοχής"
 
-#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:75
+#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:90
 msgid "Add an email to send the tickets"
 msgstr "Προσθέστε email για αποστολή των εισιτηρίων"
 
@@ -1402,6 +1391,10 @@ msgstr "Προσθήκη σημειώσεων για την παραγγελία
 msgid "Add any notes about the order..."
 msgstr "Προσθήκη σημειώσεων για την παραγγελία..."
 
+#: src/components/forms/QuestionForm/questionFormValues.ts:88
+msgid "Add at least one option"
+msgstr "Προσθέστε τουλάχιστον μία επιλογή"
+
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:80
 msgid "Add at least one question below."
 msgstr "Προσθέστε τουλάχιστον μία ερώτηση παρακάτω."
@@ -1426,10 +1419,6 @@ msgstr "Προσθήκη αναγνώστη καρτών"
 msgid "Add connection details for the online event."
 msgstr "Προσθέστε τα στοιχεία σύνδεσης για τη διαδικτυακή εκδήλωση."
 
-#: src/components/common/QuestionsTable/index.tsx:445
-msgid "Add custom questions to collect additional information during checkout"
-msgstr "Προσθήκη προσαρμοσμένων ερωτήσεων για συλλογή πρόσθετων πληροφοριών κατά το checkout"
-
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:411
 msgid "Add Date"
 msgstr "Προσθήκη ημερομηνίας"
@@ -1446,7 +1435,7 @@ msgstr "Προσθήκη ημερομηνιών"
 msgid "Add dates and times for your recurring event"
 msgstr "Προσθέστε ημερομηνίες και ώρες για την επαναλαμβανόμενη εκδήλωσή σας"
 
-#: src/components/forms/QuestionForm/index.tsx:202
+#: src/components/forms/QuestionForm/index.tsx:121
 msgid "Add description"
 msgstr "Προσθήκη περιγραφής"
 
@@ -1465,6 +1454,11 @@ msgstr "Προσθήκη τομέα"
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:136
 msgid "Add event details"
 msgstr "Προσθήκη στοιχείων εκδήλωσης"
+
+#: src/components/routes/event/Questions/QuestionRow.tsx:171
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:125
+msgid "Add follow-up question"
+msgstr "Προσθήκη επακόλουθης ερώτησης"
 
 #: src/components/routes/event/Lineup/ProfileLinksField.tsx:63
 msgid "Add link"
@@ -1490,9 +1484,13 @@ msgstr "Αυτόματη προσθήκη νέων ατόμων"
 msgid "Add one"
 msgstr "Προσθήκη ενός"
 
-#: src/components/forms/QuestionForm/index.tsx:68
-msgid "Add Option"
-msgstr "Προσθήκη Επιλογής"
+#: src/components/forms/QuestionForm/OptionsEditor.tsx:267
+msgid "Add option"
+msgstr "Προσθήκη επιλογής"
+
+#: src/components/forms/QuestionForm/index.tsx:149
+msgid "Add options above, then choose which answers block registration."
+msgstr "Προσθέστε επιλογές παραπάνω και μετά επιλέξτε ποιες απαντήσεις μπλοκάρουν την εγγραφή."
 
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:38
 #: src/components/routes/event/Lineup/index.tsx:337
@@ -1513,13 +1511,9 @@ msgid "Add Product to Category"
 msgstr "Προσθήκη Προϊόντος σε Κατηγορία"
 
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:177
+#: src/components/routes/event/Questions/AddQuestionMenu.tsx:31
 msgid "Add question"
 msgstr "Προσθήκη ερώτησης"
-
-#: src/components/common/QuestionsTable/index.tsx:235
-#: src/components/common/QuestionsTable/index.tsx:491
-msgid "Add Question"
-msgstr "Προσθήκη Ερώτησης"
 
 #: src/ee/box-office/components/modals/AddTerminalReaderModal/index.tsx:66
 #: src/ee/box-office/components/routes/organizer/Payments/TerminalReaders/index.tsx:114
@@ -1675,32 +1669,32 @@ msgstr "Πρόσθετες Πληροφορίες"
 
 #: src/components/common/LocationsTable/index.tsx:113
 #: src/components/common/OrderDetails/index.tsx:122
-#: src/components/forms/QuestionForm/index.tsx:130
+#: src/components/forms/QuestionForm/questionTypes.ts:31
 #: src/components/modals/ManageOrderModal/index.tsx:210
 #: src/components/routes/organizer/Settings/index.tsx:51
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:103
 msgid "Address"
 msgstr "Διεύθυνση"
 
-#: src/components/common/CheckoutQuestion/index.tsx:156
+#: src/components/common/CheckoutQuestion/index.tsx:199
 msgid "Address line 1"
 msgstr "Διεύθυνση γραμμή 1"
 
 #: src/components/common/LocationPicker/index.tsx:237
 #: src/components/modals/LocationEditModal/index.tsx:144
-#: src/components/routes/product-widget/CollectInformation/index.tsx:567
-#: src/components/routes/product-widget/CollectInformation/index.tsx:568
+#: src/components/routes/product-widget/CollectInformation/index.tsx:605
+#: src/components/routes/product-widget/CollectInformation/index.tsx:606
 msgid "Address Line 1"
 msgstr "Διεύθυνση Γραμμή 1"
 
-#: src/components/common/CheckoutQuestion/index.tsx:159
+#: src/components/common/CheckoutQuestion/index.tsx:202
 msgid "Address line 2"
 msgstr "Διεύθυνση γραμμή 2"
 
 #: src/components/common/LocationPicker/index.tsx:242
 #: src/components/modals/LocationEditModal/index.tsx:145
-#: src/components/routes/product-widget/CollectInformation/index.tsx:572
-#: src/components/routes/product-widget/CollectInformation/index.tsx:573
+#: src/components/routes/product-widget/CollectInformation/index.tsx:610
+#: src/components/routes/product-widget/CollectInformation/index.tsx:611
 msgid "Address Line 2"
 msgstr "Διεύθυνση Γραμμή 2"
 
@@ -1796,6 +1790,10 @@ msgstr "Οι συνεργάτες σας βοηθούν να παρακολου�
 msgid "After your event is created, you can choose how often it repeats from the dashboard."
 msgstr "Αφού δημιουργηθεί η εκδήλωσή σας, μπορείτε να επιλέξετε από τον πίνακα ελέγχου πόσο συχνά επαναλαμβάνεται."
 
+#: src/components/routes/event/Questions/questionTemplates.ts:60
+msgid "Age check (18+)"
+msgstr "Έλεγχος ηλικίας (18+)"
+
 #: src/utilites/lineup.ts:28
 msgid "Agenda"
 msgstr "Ατζέντα"
@@ -1848,7 +1846,7 @@ msgid "All areas"
 msgstr "Όλες οι περιοχές"
 
 #: src/components/common/MessageList/index.tsx:29
-#: src/components/routes/product-widget/CollectInformation/index.tsx:549
+#: src/components/routes/product-widget/CollectInformation/index.tsx:587
 msgid "All attendees"
 msgstr "Όλοι οι συμμετέχοντες"
 
@@ -1968,6 +1966,8 @@ msgstr "Όλες οι Καταστάσεις"
 
 #: src/components/common/WidgetEditor/ContentFields.tsx:116
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:97
+#: src/components/forms/QuestionForm/index.tsx:214
+#: src/components/routes/event/Questions/QuestionRow.tsx:59
 msgid "All tickets"
 msgstr "Όλα τα εισιτήρια"
 
@@ -2079,6 +2079,10 @@ msgstr "Επίσης ακύρωση αυτής της παραγγελίας"
 #: src/components/modals/CancelOrderModal/index.tsx:75
 msgid "Also refund this order"
 msgstr "Επίσης επιστροφή αυτής της παραγγελίας"
+
+#: src/components/forms/QuestionForm/ConditionFields.tsx:65
+msgid "Always"
+msgstr "Πάντα"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:342
 msgid "Always available"
@@ -2233,13 +2237,26 @@ msgstr "Απάντηση {number}"
 msgid "Answer questions"
 msgstr "Απάντηση ερωτήσεων"
 
-#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:83
+#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:98
 msgid "Answer the required questions to continue the sale."
 msgstr "Απαντήστε στις υποχρεωτικές ερωτήσεις για να συνεχίσετε την πώληση."
+
+#: src/components/forms/QuestionForm/index.tsx:84
+#: src/components/routes/event/Questions/AddQuestionMenu.tsx:36
+msgid "Answer type"
+msgstr "Τύπος απάντησης"
 
 #: src/components/common/QuestionAndAnswerList/index.tsx:77
 msgid "Answer updated successfully."
 msgstr "Η απάντηση ενημερώθηκε επιτυχώς."
+
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:189
+msgid "Answered by the person placing the order."
+msgstr "Απαντάται από το άτομο που κάνει την παραγγελία."
+
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:216
+msgid "Answered once for every ticket in the order."
+msgstr "Απαντάται μία φορά για κάθε εισιτήριο της παραγγελίας."
 
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:246
 msgid "Answers"
@@ -2248,6 +2265,10 @@ msgstr "Απαντήσεις"
 #: src/components/forms/CheckInListForm/index.tsx:207
 msgid "Answers provided at checkout (e.g. meal choice)"
 msgstr "Απαντήσεις που δόθηκαν κατά την ολοκλήρωση παραγγελίας (π.χ. επιλογή γεύματος)"
+
+#: src/components/forms/QuestionForm/index.tsx:153
+msgid "Answers that block registration"
+msgstr "Απαντήσεις που μπλοκάρουν την εγγραφή"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:160
 msgid "Any app that supports time-based codes (TOTP) will work. Already have one? Skip ahead."
@@ -2445,6 +2466,10 @@ msgstr "Αρχειοθετημένο"
 #: src/components/modals/SwitchOrganizerModal/index.tsx:111
 msgid "Archived Organizers"
 msgstr "Αρχειοθετημένοι Διοργανωτές"
+
+#: src/components/routes/event/Questions/questionTemplates.ts:63
+msgid "Are you 18 or older?"
+msgstr "Είστε 18 ετών ή μεγαλύτεροι;"
 
 #: src/components/routes/admin/SpamEvents/index.tsx:76
 msgid "Are you sure this event is not spam? It will be published immediately."
@@ -2666,17 +2691,13 @@ msgstr "Ζητήστε από έναν διαχειριστή του λογαρ�
 msgid "Ask buyers to use their order reference when paying"
 msgstr "Ζητήστε από τους αγοραστές να χρησιμοποιούν τον κωδικό παραγγελίας τους κατά την πληρωμή"
 
-#: src/components/common/QuestionsTable/index.tsx:395
-msgid "Ask for name and email for each ticket purchased"
-msgstr "Ζήτηση ονόματος και email για κάθε εισιτήριο που αγοράζεται"
+#: src/components/forms/QuestionForm/index.tsx:209
+msgid "Ask for"
+msgstr "Ερώτηση για"
 
-#: src/components/forms/QuestionForm/index.tsx:85
-msgid "Ask once per order"
-msgstr "Μία φορά ανά παραγγελία"
-
-#: src/components/forms/QuestionForm/index.tsx:91
-msgid "Ask once per product"
-msgstr "Μία φορά ανά προϊόν"
+#: src/components/routes/event/Questions/AttendeeDetailsSetting.tsx:17
+msgid "Ask for each attendee's name and email"
+msgstr "Ζητήστε το όνομα και το email κάθε συμμετέχοντα"
 
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:160
 msgid "Ask order and attendee questions at the door. Every ticket gets its own step, which can greatly slow down sales. Leave off for busy doors."
@@ -2694,6 +2715,24 @@ msgstr "Ζητήστε από το άτομο που σας προσκάλεσε
 msgid "Ask your administrator to invite you."
 msgstr "Ζητήστε από τον διαχειριστή σας να σας προσκαλέσει."
 
+#: src/components/forms/QuestionForm/QuestionDrawer.tsx:69
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:215
+msgid "Asked for each attendee"
+msgstr "Ερωτάται κάθε συμμετέχων"
+
+#: src/components/forms/QuestionForm/index.tsx:202
+msgid "Asked once of the person placing the order, e.g. how they heard about the event."
+msgstr "Ερωτάται μία φορά το άτομο που κάνει την παραγγελία, π.χ. πώς έμαθε για την εκδήλωση."
+
+#: src/components/forms/QuestionForm/QuestionDrawer.tsx:70
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:188
+msgid "Asked once per order"
+msgstr "Ερωτάται μία φορά ανά παραγγελία"
+
+#: src/components/forms/QuestionForm/index.tsx:201
+msgid "Asked separately for every ticket in the order, e.g. t-shirt size or dietary needs."
+msgstr "Ερωτάται ξεχωριστά για κάθε εισιτήριο της παραγγελίας, π.χ. μέγεθος μπλουζάκι ή διατροφικές ανάγκες."
+
 #: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:123
 msgid "Assign a different plan"
 msgstr "Ανάθεση άλλου πλάνου"
@@ -2709,6 +2748,10 @@ msgstr "Ανατεθειμένη Βαθμίδα"
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:48
 msgid "At least 8 characters."
 msgstr "Τουλάχιστον 8 χαρακτήρες."
+
+#: src/components/forms/QuestionForm/questionFormValues.ts:110
+msgid "At least one answer must let people register"
+msgstr "Τουλάχιστον μία απάντηση πρέπει να επιτρέπει την εγγραφή"
 
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:37
 #: src/components/modals/CreateWebhookModal/index.tsx:37
@@ -2745,13 +2788,13 @@ msgid "attendee"
 msgstr "συμμετέχων"
 
 #: src/components/common/AttendeeTicket/index.tsx:101
-#: src/components/common/QuestionsTable/index.tsx:473
-#: src/components/routes/product-widget/CollectInformation/index.tsx:670
+#: src/components/routes/event/Questions/CheckoutPreview.tsx:97
+#: src/components/routes/product-widget/CollectInformation/index.tsx:711
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:365
 msgid "Attendee"
 msgstr "Συμμετέχων"
 
-#: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:73
+#: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:102
 msgid "Attendee {current} of {total}"
 msgstr "Συμμετέχων {current} από {total}"
 
@@ -2771,18 +2814,6 @@ msgstr "Δημιουργία Συμμετέχοντα"
 msgid "Attendee Details"
 msgstr "Στοιχεία Συμμετέχοντα"
 
-#: src/components/common/QuestionsTable/index.tsx:435
-msgid "Attendee details collection"
-msgstr "Συλλογή στοιχείων συμμετέχοντα"
-
-#: src/components/common/QuestionsTable/index.tsx:342
-msgid "Attendee details copied from order"
-msgstr "Τα στοιχεία συμμετέχοντα αντιγράφηκαν από την παραγγελία"
-
-#: src/components/common/QuestionsTable/index.tsx:428
-msgid "Attendee Information"
-msgstr "Πληροφορίες Συμμετέχοντα"
-
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:116
 msgid "Attendee information collection"
 msgstr "Συλλογή πληροφοριών συμμετέχοντα"
@@ -2790,6 +2821,10 @@ msgstr "Συλλογή πληροφοριών συμμετέχοντα"
 #: src/ee/seating/components/AttendeeSeatField/index.tsx:45
 msgid "Attendee moved"
 msgstr "Ο συμμετέχων μετακινήθηκε"
+
+#: src/components/routes/event/Questions/AttendeeDetailsSetting.tsx:32
+msgid "Attendee name and email"
+msgstr "Όνομα και email συμμετεχόντων"
 
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:276
 msgid "Attendee names appear on the printout. Handle it accordingly."
@@ -2802,6 +2837,10 @@ msgstr "Ο συμμετέχων δεν βρέθηκε"
 #: src/components/forms/CheckInListForm/index.tsx:188
 msgid "Attendee notes"
 msgstr "Σημειώσεις συμμετέχοντα"
+
+#: src/components/routes/event/Questions/CheckoutPreview.tsx:133
+msgid "Attendee questions can differ by ticket."
+msgstr "Οι ερωτήσεις συμμετεχόντων μπορεί να διαφέρουν ανά εισιτήριο."
 
 #: src/components/routes/event/attendees.tsx:82
 msgid "Attendee Status"
@@ -2994,7 +3033,7 @@ msgstr "Διοργανωτής Α.Ε."
 #: src/components/layouts/SettingsLayout/index.tsx:60
 #: src/components/modals/CreateEventModal/index.tsx:251
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:151
-#: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:87
+#: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:118
 #: src/ee/box-office/components/layouts/BoxOffice/TenderStage.tsx:55
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:287
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:288
@@ -3006,9 +3045,9 @@ msgid "Back to Accounts"
 msgstr "Επιστροφή στους Λογαριασμούς"
 
 #: src/components/forms/StripeCheckoutForm/index.tsx:145
-#: src/components/routes/product-widget/CollectInformation/index.tsx:367
-#: src/components/routes/product-widget/CollectInformation/index.tsx:397
-#: src/components/routes/product-widget/CollectInformation/index.tsx:426
+#: src/components/routes/product-widget/CollectInformation/index.tsx:401
+#: src/components/routes/product-widget/CollectInformation/index.tsx:431
+#: src/components/routes/product-widget/CollectInformation/index.tsx:460
 msgid "Back to Event"
 msgstr "Επιστροφή στην Εκδήλωση"
 
@@ -3029,7 +3068,7 @@ msgstr "Πίσω στον κωδικό QR"
 msgid "Back to Reports"
 msgstr "Επιστροφή στις Αναφορές"
 
-#: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:87
+#: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:118
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:241
 #: src/ee/box-office/components/layouts/BoxOffice/TenderStage.tsx:55
 msgid "Back to sale"
@@ -3183,7 +3222,7 @@ msgstr "Κατάταξη"
 msgid "Billing"
 msgstr "Προβολή"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:561
+#: src/components/routes/product-widget/CollectInformation/index.tsx:599
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:336
 msgid "Billing Address"
 msgstr "Διεύθυνση Χρέωσης"
@@ -3206,6 +3245,10 @@ msgstr "Βιογραφικό"
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:297
 msgid "Bio"
 msgstr "Βιογραφικό"
+
+#: src/components/forms/QuestionForm/index.tsx:140
+msgid "Block registration for some answers"
+msgstr "Μπλοκάρισμα εγγραφής για ορισμένες απαντήσεις"
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:70
 #: src/constants/socialMediaConfig.ts:33
@@ -3404,7 +3447,7 @@ msgstr "URL κουμπιού"
 msgid "Buttons"
 msgstr "Κουμπιά"
 
-#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:65
+#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:75
 msgid "Buyer details"
 msgstr "Στοιχεία αγοραστή"
 
@@ -3423,6 +3466,10 @@ msgstr "Οι αγοραστές μπορούν να μετακινηθούν σ�
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:233
 msgid "Buyers can send a payment link to whoever is paying, such as their finance team. The person paying can use any payment method you accept."
 msgstr "Οι αγοραστές μπορούν να στείλουν σύνδεσμο πληρωμής σε όποιον πληρώνει, όπως το λογιστήριό τους. Ο πληρωτής μπορεί να χρησιμοποιήσει οποιονδήποτε τρόπο πληρωμής δέχεστε."
+
+#: src/components/forms/QuestionForm/index.tsx:255
+msgid "Buyers can't continue until they answer."
+msgstr "Οι αγοραστές δεν μπορούν να συνεχίσουν μέχρι να απαντήσουν."
 
 #: src/ee/seating/components/routes/event/Seating/BandProductsCard.tsx:87
 msgid "Buyers choosing a seat in a band can buy any ticket linked to it. Linked tickets are sold by seat, so their own quantity is ignored."
@@ -3449,7 +3496,7 @@ msgstr "Συνεχίζοντας, αποδέχεστε τους <0>Όρους Χ
 msgid "By continuing you agree to the <0>Terms of Service</0> and <1>Privacy Policy</1>."
 msgstr "Συνεχίζοντας, αποδέχεστε τους <0>Όρους Χρήσης</0> και την <1>Πολιτική Απορρήτου</1>."
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:764
+#: src/components/routes/product-widget/CollectInformation/index.tsx:826
 #: src/components/routes/product-widget/Payment/index.tsx:192
 msgid "By continuing, you agree to the <0>{0} Terms of Service</0>"
 msgstr "Συνεχίζοντας, αποδέχεστε τους <0>Όρους Χρήσης {0}</0>"
@@ -3543,6 +3590,7 @@ msgstr "Δεν μπορείτε να χρησιμοποιήσετε την εφ�
 #: src/components/common/WaitlistTable/index.tsx:138
 #: src/components/common/WidgetEditor/NameModal.tsx:43
 #: src/components/forms/ProductForm/ProductDrawer.tsx:134
+#: src/components/forms/QuestionForm/QuestionDrawer.tsx:76
 #: src/components/modals/CreateAffiliateModal/index.tsx:88
 #: src/components/modals/CreateAttendeeModal/index.tsx:335
 #: src/components/modals/CreateCapacityAssignmentModal/index.tsx:75
@@ -3552,7 +3600,6 @@ msgstr "Δεν μπορείτε να χρησιμοποιήσετε την εφ�
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:89
 #: src/components/modals/CreateProductCategoryModal/index.tsx:56
 #: src/components/modals/CreatePromoCodeModal/index.tsx:57
-#: src/components/modals/CreateQuestionModal/index.tsx:75
 #: src/components/modals/CreateTaxOrFeeModal/index.tsx:52
 #: src/components/modals/CreateWebhookModal/index.tsx:89
 #: src/components/modals/DuplicateEventModal/index.tsx:309
@@ -3562,7 +3609,6 @@ msgstr "Δεν μπορείτε να χρησιμοποιήσετε την εφ�
 #: src/components/modals/EditOrganizerWebhookModal/index.tsx:82
 #: src/components/modals/EditProductCategoryModal/index.tsx:71
 #: src/components/modals/EditPromoCodeModal/index.tsx:85
-#: src/components/modals/EditQuestionModal/index.tsx:101
 #: src/components/modals/EditTaxOrFeeModal/index.tsx:43
 #: src/components/modals/EditUserModal/index.tsx:99
 #: src/components/modals/EditWebhookModal/index.tsx:83
@@ -4137,11 +4183,7 @@ msgstr "Το URL Check-In αντιγράφηκε στο πρόχειρο"
 msgid "Check-Ins"
 msgstr "Check-Ins"
 
-#: src/components/forms/QuestionForm/index.tsx:114
-msgid "Checkbox options allow multiple selections"
-msgstr "Οι επιλογές τύπου Checkbox επιτρέπουν πολλαπλές επιλογές"
-
-#: src/components/forms/QuestionForm/index.tsx:112
+#: src/components/forms/QuestionForm/questionTypes.ts:26
 msgid "Checkboxes"
 msgstr "Πλαίσια Ελέγχου"
 
@@ -4196,6 +4238,11 @@ msgstr "Ολοκλήρωση αγοράς και γλώσσα"
 #: src/components/common/WidgetEditor/BehaviourPanel.tsx:23
 msgid "Checkout opens in"
 msgstr "Η ολοκλήρωση αγοράς ανοίγει σε"
+
+#: src/components/routes/event/Questions/CheckoutPreview.tsx:118
+#: src/components/routes/event/Questions/CheckoutPreview.tsx:122
+msgid "Checkout preview"
+msgstr "Προεπισκόπηση ολοκλήρωσης αγοράς"
 
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:84
 msgid "Checkout Settings"
@@ -4322,6 +4369,18 @@ msgstr "Επιλέξτε άλλον τρόπο σύνδεσης."
 msgid "Choose at least {min} {title} tickets"
 msgstr "Επιλέξτε τουλάχιστον {min} εισιτήρια {title}"
 
+#: src/components/forms/QuestionForm/questionFormValues.ts:96
+msgid "Choose at least one answer"
+msgstr "Επιλέξτε τουλάχιστον μία απάντηση"
+
+#: src/components/forms/QuestionForm/questionFormValues.ts:107
+msgid "Choose at least one answer that blocks registration"
+msgstr "Επιλέξτε τουλάχιστον μία απάντηση που μπλοκάρει την εγγραφή"
+
+#: src/components/forms/QuestionForm/questionFormValues.ts:93
+msgid "Choose at least one ticket or product"
+msgstr "Επιλέξτε τουλάχιστον ένα εισιτήριο ή προϊόν"
+
 #: src/components/common/CalendarOptionsPopover/index.tsx:20
 msgid "Choose calendar"
 msgstr "Επιλογή ημερολογίου"
@@ -4353,6 +4412,14 @@ msgstr "Επιλογή αυτής της θέσης"
 #: src/ee/seating/components/routes/event/Seating/BandProductsCard.tsx:99
 msgid "Choose tickets"
 msgstr "Επιλέξτε εισιτήρια"
+
+#: src/components/forms/QuestionForm/index.tsx:228
+msgid "Choose tickets or products"
+msgstr "Επιλέξτε εισιτήρια ή προϊόντα"
+
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:178
+msgid "Choose what buyers and attendees are asked at checkout."
+msgstr "Επιλέξτε τι ερωτώνται οι αγοραστές και οι συμμετέχοντες κατά την ολοκλήρωση της αγοράς."
 
 #: src/components/modals/CreateEventModal/index.tsx:122
 msgid "Choose when your event starts"
@@ -4387,11 +4454,11 @@ msgstr "Επιλέξτε τις θέσεις σας"
 msgid "Circle"
 msgstr "Κύκλος"
 
-#: src/components/common/CheckoutQuestion/index.tsx:162
+#: src/components/common/CheckoutQuestion/index.tsx:205
 #: src/components/common/LocationPicker/index.tsx:249
 #: src/components/modals/LocationEditModal/index.tsx:148
-#: src/components/routes/product-widget/CollectInformation/index.tsx:581
-#: src/components/routes/product-widget/CollectInformation/index.tsx:582
+#: src/components/routes/product-widget/CollectInformation/index.tsx:619
+#: src/components/routes/product-widget/CollectInformation/index.tsx:620
 msgid "City"
 msgstr "Πόλη"
 
@@ -4558,6 +4625,11 @@ msgstr "Ο κωδικός πρέπει να έχει μεταξύ 3 και 50 χ
 msgid "Code must be no more than 20 characters"
 msgstr "Ο κωδικός δεν μπορεί να υπερβαίνει τους 20 χαρακτήρες"
 
+#: src/components/routes/event/Questions/questionTemplates.ts:72
+#: src/components/routes/event/Questions/questionTemplates.ts:75
+msgid "Code of conduct"
+msgstr "Κώδικας δεοντολογίας"
+
 #: src/components/common/WidgetEditor/InstallPanel.tsx:81
 msgid "Code to paste"
 msgstr "Κώδικας για επικόλληση"
@@ -4578,14 +4650,6 @@ msgstr "Συλλογή στοιχείων συμμετέχοντα για κάθ
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:159
 msgid "Collect checkout questions"
 msgstr "Συλλογή ερωτήσεων ολοκλήρωσης αγοράς"
-
-#: src/components/common/QuestionsTable/index.tsx:399
-msgid "Collect details per order"
-msgstr "Συλλογή στοιχείων ανά παραγγελία"
-
-#: src/components/common/QuestionsTable/index.tsx:393
-msgid "Collect details per ticket"
-msgstr "Συλλογή στοιχείων ανά εισιτήριο"
 
 #: src/components/routes/event/TicketDesigner/index.tsx:152
 msgid "Color"
@@ -4658,15 +4722,20 @@ msgstr "Θέση συνοδού (μαζί με θέση αναπηρικού α�
 msgid "Companion seats can only be booked together with a wheelchair space. Add a wheelchair space or remove the companion seat."
 msgstr "Οι θέσεις συνοδού μπορούν να κρατηθούν μόνο μαζί με θέση αναπηρικού αμαξιδίου. Προσθέστε μια θέση αναπηρικού αμαξιδίου ή αφαιρέστε τη θέση συνοδού."
 
+#: src/components/routes/event/Questions/questionTemplates.ts:31
+#: src/components/routes/event/Questions/questionTemplates.ts:32
+msgid "Company"
+msgstr "Εταιρεία"
+
 #: src/components/layouts/CheckIn/tabs/StatsTab.tsx:82
 msgid "complete"
 msgstr "ολοκληρώθηκε"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:760
+#: src/components/routes/product-widget/CollectInformation/index.tsx:804
 msgid "Complete Order"
 msgstr "Ολοκλήρωση Παραγγελίας"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:377
+#: src/components/routes/product-widget/CollectInformation/index.tsx:411
 #: src/components/routes/product-widget/Payment/index.tsx:182
 msgid "Complete Payment"
 msgstr "Ολοκλήρωση Πληρωμής"
@@ -4681,11 +4750,11 @@ msgstr "Ολοκλήρωση πώλησης"
 msgid "Complete Stripe setup"
 msgstr "Ολοκλήρωση ρύθμισης Stripe"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:457
+#: src/components/routes/product-widget/CollectInformation/index.tsx:495
 msgid "Complete your order to secure your tickets. This offer is time-limited, so don't wait too long."
 msgstr "Ολοκληρώστε την παραγγελία σας για να εξασφαλίσετε τα εισιτήριά σας. Αυτή η προσφορά είναι χρονικά περιορισμένη, μην αναβάλλετε."
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:375
+#: src/components/routes/product-widget/CollectInformation/index.tsx:409
 msgid "Complete your payment to secure your tickets."
 msgstr "Ολοκληρώστε την πληρωμή σας για να εξασφαλίσετε τα εισιτήριά σας."
 
@@ -4758,10 +4827,6 @@ msgstr "Ρυθμίσεις"
 msgid "Configure event details, location, checkout options, and email notifications."
 msgstr "Ρύθμιση λεπτομερειών εκδήλωσης, τοποθεσίας, επιλογών ολοκλήρωσης αγοράς και ειδοποιήσεων email."
 
-#: src/components/common/QuestionsTable/index.tsx:429
-msgid "Configure how attendee details are collected during checkout"
-msgstr "Ρύθμιση τρόπου συλλογής στοιχείων συμμετεχόντων κατά το checkout"
-
 #: src/components/common/PlatformFeesSettings/index.tsx:268
 msgid "Configure Taxes & Fees"
 msgstr "Ρύθμιση Φόρων & Τελών"
@@ -4787,10 +4852,10 @@ msgstr "Επιβεβαίωση"
 msgid "Confirm comp"
 msgstr "Επιβεβαίωση δωρεάν"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:505
-#: src/components/routes/product-widget/CollectInformation/index.tsx:506
-#: src/components/routes/product-widget/CollectInformation/index.tsx:718
-#: src/components/routes/product-widget/CollectInformation/index.tsx:719
+#: src/components/routes/product-widget/CollectInformation/index.tsx:543
+#: src/components/routes/product-widget/CollectInformation/index.tsx:544
+#: src/components/routes/product-widget/CollectInformation/index.tsx:759
+#: src/components/routes/product-widget/CollectInformation/index.tsx:760
 msgid "Confirm Email Address"
 msgstr "Επιβεβαίωση Διεύθυνσης Email"
 
@@ -5037,11 +5102,11 @@ msgstr "Συνέχεια στο επόμενο βήμα"
 
 #: src/components/common/BrandingUpsell/BrandingUpgradeModal.tsx:45
 #: src/components/routes/settings/Billing/index.tsx:189
-#: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:83
+#: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:114
 msgid "Continue to payment"
 msgstr "Συνέχεια στην πληρωμή"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:760
+#: src/components/routes/product-widget/CollectInformation/index.tsx:804
 msgid "Continue to Payment"
 msgstr "Συνέχεια στην Πληρωμή"
 
@@ -5102,7 +5167,7 @@ msgstr "Ρυθμίσεις cookies"
 msgid "Copied"
 msgstr "Αντιγράφηκε"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:680
+#: src/components/routes/product-widget/CollectInformation/index.tsx:721
 msgid "Copied from above"
 msgstr "Αντιγράφηκε από παραπάνω"
 
@@ -5187,7 +5252,7 @@ msgstr "Αντιγραφή εντολής"
 msgid "Copy customer link"
 msgstr "Αντιγραφή συνδέσμου πελάτη"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:525
+#: src/components/routes/product-widget/CollectInformation/index.tsx:563
 msgid "Copy details to first attendee"
 msgstr "Αντιγραφή στοιχείων στον πρώτο συμμετέχοντα"
 
@@ -5215,7 +5280,7 @@ msgstr "Αντιγραφή συνδέσμου"
 msgid "Copy Link"
 msgstr "Αντιγραφή Συνδέσμου"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:535
+#: src/components/routes/product-widget/CollectInformation/index.tsx:573
 msgid "Copy my details to:"
 msgstr "Αντιγραφή στοιχείων μου σε:"
 
@@ -5416,10 +5481,10 @@ msgstr "Δεν ήταν δυνατή η ανανέωση της διαθεσιμ
 msgid "Couldn't send verification email. Please try again."
 msgstr "Δεν ήταν δυνατή η αποστολή του email επαλήθευσης. Δοκιμάστε ξανά."
 
-#: src/components/common/CheckoutQuestion/index.tsx:174
+#: src/components/common/CheckoutQuestion/index.tsx:217
 #: src/components/common/LocationPicker/index.tsx:268
 #: src/components/modals/LocationEditModal/index.tsx:157
-#: src/components/routes/product-widget/CollectInformation/index.tsx:601
+#: src/components/routes/product-widget/CollectInformation/index.tsx:639
 msgid "Country"
 msgstr "Χώρα"
 
@@ -5671,8 +5736,8 @@ msgstr "Δημιουργία προφίλ"
 msgid "Create Promo Code"
 msgstr "Δημιουργία Κωδικού Προσφοράς"
 
-#: src/components/modals/CreateQuestionModal/index.tsx:70
-#: src/components/modals/CreateQuestionModal/index.tsx:77
+#: src/components/modals/CreateQuestionModal/index.tsx:43
+#: src/components/modals/CreateQuestionModal/index.tsx:45
 msgid "Create Question"
 msgstr "Δημιουργία Ερώτησης"
 
@@ -5839,10 +5904,6 @@ msgstr "Προσαρμοσμένα email παραγγελίας και εισι�
 msgid "Custom questions"
 msgstr "Προσαρμοσμένες ερωτήσεις"
 
-#: src/components/common/QuestionsTable/index.tsx:444
-msgid "Custom Questions"
-msgstr "Προσαρμοσμένες Ερωτήσεις"
-
 #: src/components/common/OrganizerReportTable/index.tsx:61
 #: src/components/common/ReportTable/index.tsx:56
 #: src/components/routes/admin/Attribution/index.tsx:82
@@ -5895,10 +5956,6 @@ msgstr "Προσαρμογή της αρχικής σελίδας εκδήλωσ
 msgid "Customize the miscellaneous settings for this event"
 msgstr "Προσαρμογή διαφόρων ρυθμίσεων για αυτή την εκδήλωση"
 
-#: src/components/common/QuestionsTable/index.tsx:423
-msgid "Customize the questions asked during checkout to gather important information from your attendees."
-msgstr "Προσαρμογή των ερωτήσεων κατά το checkout για συλλογή σημαντικών πληροφοριών από τους συμμετέχοντες."
-
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:57
 #: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:57
 msgid "Customize the SEO settings for this event"
@@ -5950,6 +6007,7 @@ msgstr "Πίστα χορού"
 #: src/components/common/WebhookTable/index.tsx:121
 #: src/components/routes/event/Lineup/LineupPreview.tsx:132
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:103
+#: src/components/routes/event/Questions/QuestionRow.tsx:193
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:167
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:253
 msgid "Danger zone"
@@ -5981,7 +6039,7 @@ msgstr "Πίνακας Ελέγχου"
 #: src/components/common/WaitlistTable/index.tsx:187
 #: src/components/common/WidgetEditor/ContentFields.tsx:77
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:117
-#: src/components/forms/QuestionForm/index.tsx:136
+#: src/components/forms/QuestionForm/questionTypes.ts:29
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:175
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:39
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:56
@@ -6184,7 +6242,6 @@ msgstr "διαγραφή"
 #: src/components/common/LocationsTable/index.tsx:45
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:613
 #: src/components/common/PromoCodeTable/index.tsx:43
-#: src/components/common/QuestionsTable/index.tsx:158
 #: src/components/common/WidgetEditor/index.tsx:150
 #: src/components/common/WidgetEditor/index.tsx:262
 #: src/components/routes/admin/Announcements/index.tsx:226
@@ -6193,6 +6250,7 @@ msgstr "διαγραφή"
 #: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:93
 #: src/components/routes/event/OccurrencesTab/index.tsx:548
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:68
+#: src/components/routes/event/Questions/QuestionRow.tsx:197
 #: src/components/routes/settings/TaxesAndFees/index.tsx:71
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:245
 msgid "Delete"
@@ -6363,7 +6421,11 @@ msgstr "Να διαγραφεί αυτή η εκδήλωση; Θα επισημ�
 msgid "Delete this product? This cannot be undone."
 msgstr "Διαγραφή αυτού του προϊόντος; Η ενέργεια δεν αναιρείται."
 
-#: src/components/common/QuestionsTable/index.tsx:207
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:143
+msgid "Delete this question and its follow-up questions? This cannot be undone."
+msgstr "Διαγραφή αυτής της ερώτησης και των επακόλουθων ερωτήσεών της; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
+
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:144
 msgid "Delete this question? This cannot be undone."
 msgstr "Διαγραφή αυτής της ερώτησης; Δεν μπορεί να αναιρεθεί."
 
@@ -6418,6 +6480,7 @@ msgstr "Βάθος"
 #: src/components/forms/ProductCategoryForm/index.tsx:29
 #: src/components/forms/ProductForm/index.tsx:401
 #: src/components/forms/ProductForm/index.tsx:407
+#: src/components/forms/QuestionForm/index.tsx:108
 #: src/components/forms/TaxAndFeeForm/index.tsx:106
 #: src/components/modals/CreateEventModal/index.tsx:351
 #: src/components/modals/DuplicateEventModal/index.tsx:252
@@ -6459,7 +6522,7 @@ msgstr "Υπολογιστής"
 #: src/components/modals/ManageOrderModal/index.tsx:319
 #: src/components/routes/event/OccurrencesTab/BookingSummary/index.tsx:103
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:417
-#: src/components/routes/product-widget/CollectInformation/index.tsx:441
+#: src/components/routes/product-widget/CollectInformation/index.tsx:479
 #: src/components/routes/product-widget/SelectProducts/index.tsx:578
 msgid "Details"
 msgstr "Λεπτομέρειες"
@@ -6493,6 +6556,11 @@ msgstr "Δεν το λάβατε;"
 msgid "Didn't receive the code?"
 msgstr "Δεν λάβατε τον κωδικό;"
 
+#: src/components/routes/event/Questions/questionTemplates.ts:13
+#: src/components/routes/event/Questions/questionTemplates.ts:16
+msgid "Dietary requirements"
+msgstr "Διατροφικές απαιτήσεις"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:481
 msgid "Different location"
 msgstr "Διαφορετική τοποθεσία"
@@ -6518,11 +6586,13 @@ msgstr "Απενεργοποίηση αυτής της χωρητικότητα�
 #: src/components/common/SettingsPage/index.tsx:131
 #: src/components/common/WidgetEditor/index.tsx:94
 #: src/components/forms/ProductForm/ProductDrawer.tsx:60
+#: src/components/forms/QuestionForm/QuestionDrawer.tsx:46
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:751
 msgid "Discard"
 msgstr "Απόρριψη"
 
 #: src/components/forms/ProductForm/ProductDrawer.tsx:54
+#: src/components/forms/QuestionForm/QuestionDrawer.tsx:40
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:745
 msgid "Discard changes?"
 msgstr "Απόρριψη αλλαγών;"
@@ -6607,6 +6677,10 @@ msgstr "Εμφανίζει πόσες θέσεις απομένουν για κ�
 #: src/components/modals/LocationEditModal/index.tsx:134
 msgid "Display name"
 msgstr "Εμφανιζόμενο όνομα"
+
+#: src/components/routes/event/Questions/questionTemplates.ts:47
+msgid "Do you have any accessibility needs?"
+msgstr "Έχετε ανάγκες προσβασιμότητας;"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:282
 msgid "Document Label"
@@ -6784,9 +6858,9 @@ msgstr "Σύρετε εδώ ένα υπολογιστικό φύλλο ή κάν
 msgid "Drop-in"
 msgstr "Μεμονωμένη συμμετοχή"
 
-#: src/components/forms/QuestionForm/index.tsx:124
-msgid "Dropdown selection"
-msgstr "Αναπτυσσόμενη επιλογή"
+#: src/components/forms/QuestionForm/questionTypes.ts:27
+msgid "Dropdown"
+msgstr "Αναπτυσσόμενη λίστα"
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:362
 msgid "Due to the high risk of spam, you must connect a Stripe account before you can modify email templates. This is to ensure that all event organizers are verified and accountable."
@@ -6803,6 +6877,7 @@ msgstr ""
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:586
 #: src/components/routes/admin/Announcements/index.tsx:218
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:59
+#: src/components/routes/event/Questions/QuestionRow.tsx:179
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:241
 msgid "Duplicate"
 msgstr "Αντιγραφή"
@@ -6828,6 +6903,10 @@ msgstr "Αντιγραφή Εκδήλωσης"
 #: src/components/modals/DuplicateProductModal/index.tsx:133
 msgid "Duplicate Product"
 msgstr "Αντιγραφή Προϊόντος"
+
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:112
+msgid "Duplicate Question"
+msgstr "Αντιγραφή ερώτησης"
 
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:88
 msgctxt "Lineup spreadsheet column"
@@ -6911,6 +6990,10 @@ msgstr "π.χ., Βασικό, Premium, Enterprise"
 msgid "Each account receives this email at most once."
 msgstr "Κάθε λογαριασμός λαμβάνει αυτό το email το πολύ μία φορά."
 
+#: src/components/forms/QuestionForm/index.tsx:195
+msgid "Each attendee"
+msgstr "Κάθε συμμετέχων"
+
 #: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:24
 msgid "Each code can be used once to sign in if you lose access to your authenticator app."
 msgstr "Κάθε κωδικός μπορεί να χρησιμοποιηθεί μία φορά για σύνδεση αν χάσετε την πρόσβαση στην εφαρμογή ελέγχου ταυτότητας."
@@ -6926,6 +7009,10 @@ msgstr "Κάθε άτομο θα λάβει email με μια δεσμευμέν
 #: src/components/forms/PromoCodeForm/index.tsx:134
 msgid "Each product"
 msgstr "Κάθε προϊόν"
+
+#: src/components/routes/event/Questions/AttendeeDetailsSetting.tsx:18
+msgid "Each ticket is issued to its own attendee, so it reaches the right person and can be checked in individually."
+msgstr "Κάθε εισιτήριο εκδίδεται στον δικό του συμμετέχοντα, ώστε να φτάνει στο σωστό άτομο και να γίνεται check-in ξεχωριστά."
 
 #: src/ee/seating/components/routes/event/Seating/BandProductsCard.tsx:89
 msgid "Each ticket keeps the price set on the ticket itself — only change it here if a band should cost more or less."
@@ -6946,9 +7033,9 @@ msgstr "Πρώιμη αγορά"
 
 #: src/components/common/DesignerShell/index.tsx:90
 #: src/components/common/LocationPicker/index.tsx:197
-#: src/components/common/QuestionsTable/index.tsx:150
 #: src/components/routes/admin/Announcements/index.tsx:211
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:57
+#: src/components/routes/event/Questions/QuestionRow.tsx:165
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:282
 #: src/components/routes/settings/TaxesAndFees/index.tsx:68
 #: src/components/routes/settings/Team/MemberRow.tsx:177
@@ -7097,7 +7184,7 @@ msgstr "Επεξεργασία Κατηγορίας Προϊόντος"
 msgid "Edit Promo Code"
 msgstr "Επεξεργασία Κωδικού Προσφοράς"
 
-#: src/components/modals/EditQuestionModal/index.tsx:95
+#: src/components/modals/EditQuestionModal/index.tsx:64
 msgid "Edit Question"
 msgstr "Επεξεργασία Ερώτησης"
 
@@ -7159,6 +7246,10 @@ msgstr "Επεξεργαστής"
 msgid "Education"
 msgstr "Εκπαίδευση"
 
+#: src/components/forms/QuestionForm/index.tsx:135
+msgid "Eligibility"
+msgstr "Επιλεξιμότητα"
+
 #: src/components/routes/admin/Messages/index.tsx:325
 msgid "Eligibility Failures"
 msgstr "Αποτυχίες Επιλεξιμότητας"
@@ -7168,7 +7259,6 @@ msgid "Eligible Check-In Lists"
 msgstr "Επιλέξιμες Λίστες Check-In"
 
 #: src/components/common/OrderDetails/index.tsx:34
-#: src/components/common/QuestionsTable/index.tsx:264
 #: src/components/forms/AffiliateForm/index.tsx:89
 #: src/components/modals/InviteUserModal/index.tsx:61
 #: src/components/modals/JoinWaitlistModal/index.tsx:190
@@ -7179,12 +7269,13 @@ msgstr "Επιλέξιμες Λίστες Check-In"
 #: src/components/routes/auth/ForgotPassword/index.tsx:69
 #: src/components/routes/auth/Login/index.tsx:187
 #: src/components/routes/auth/Register/index.tsx:153
+#: src/components/routes/event/Questions/CheckoutPreview.tsx:36
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:99
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:299
 #: src/components/routes/settings/Profile/index.tsx:215
-#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:74
+#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:89
 #: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:127
 msgid "Email"
 msgstr "Email"
@@ -7207,10 +7298,10 @@ msgstr "Email & Πρότυπα"
 msgid "Email address"
 msgstr "Διεύθυνση email"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:496
-#: src/components/routes/product-widget/CollectInformation/index.tsx:497
-#: src/components/routes/product-widget/CollectInformation/index.tsx:708
-#: src/components/routes/product-widget/CollectInformation/index.tsx:709
+#: src/components/routes/product-widget/CollectInformation/index.tsx:534
+#: src/components/routes/product-widget/CollectInformation/index.tsx:535
+#: src/components/routes/product-widget/CollectInformation/index.tsx:749
+#: src/components/routes/product-widget/CollectInformation/index.tsx:750
 msgid "Email Address"
 msgstr "Διεύθυνση Email"
 
@@ -7219,8 +7310,8 @@ msgstr "Διεύθυνση Email"
 msgid "Email address copied to clipboard"
 msgstr "Η διεύθυνση email αντιγράφηκε στο πρόχειρο"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:122
-#: src/components/routes/product-widget/CollectInformation/index.tsx:129
+#: src/components/routes/product-widget/CollectInformation/index.tsx:128
+#: src/components/routes/product-widget/CollectInformation/index.tsx:135
 msgid "Email addresses do not match"
 msgstr "Οι διευθύνσεις email δεν ταιριάζουν"
 
@@ -7272,6 +7363,10 @@ msgstr "Στείλτε μου σύνδεσμο για ορισμό κωδικο�
 #: src/components/routes/settings/Profile/index.tsx:264
 msgid "Email me about new orders on the events I can access"
 msgstr "Στείλτε μου email για νέες παραγγελίες στις εκδηλώσεις στις οποίες έχω πρόσβαση"
+
+#: src/components/routes/event/Questions/questionTemplates.ts:55
+msgid "Email newsletter"
+msgstr "Ενημερωτικό δελτίο email"
 
 #: src/components/routes/settings/Profile/index.tsx:154
 msgid "Email not verified"
@@ -7479,6 +7574,14 @@ msgstr "Εισαγάγετε ένα χρώμα σε μορφή hex, όπως #ff
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:142
 msgid "Enter a label or choose to remove it."
 msgstr "Εισαγάγετε ετικέτα ή επιλέξτε να την αφαιρέσετε."
+
+#: src/components/forms/QuestionForm/questionFormValues.ts:114
+msgid "Enter a message for people who aren't eligible"
+msgstr "Εισαγάγετε ένα μήνυμα για όσους δεν πληρούν τις προϋποθέσεις"
+
+#: src/components/forms/QuestionForm/questionFormValues.ts:86
+msgid "Enter a question"
+msgstr "Εισαγάγετε μια ερώτηση"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplatePreviewPane.tsx:59
 msgid "Enter a subject and body to see the preview"
@@ -8026,11 +8129,11 @@ msgstr "Παντού"
 msgid "Exact"
 msgstr "Ακριβώς"
 
-#: src/components/common/QuestionsTable/index.tsx:507
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:205
 msgid "Examples: \"How did you hear about us?\", \"Company name for invoice\""
 msgstr "Παραδείγματα: \"Πώς μάθατε για εμάς;\", \"Επωνυμία εταιρείας για τιμολόγιο\""
 
-#: src/components/common/QuestionsTable/index.tsx:508
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:233
 msgid "Examples: \"T-shirt size\", \"Meal preference\", \"Job title\""
 msgstr "Παραδείγματα: \"Μέγεθος μπλούζας\", \"Προτίμηση γεύματος\", \"Επαγγελματικός τίτλος\""
 
@@ -8116,9 +8219,9 @@ msgstr "Ημερομηνία Λήξης"
 msgid "Export"
 msgstr "Εξαγωγή"
 
-#: src/components/common/QuestionsTable/index.tsx:415
-msgid "Export Answers"
-msgstr "Εξαγωγή Απαντήσεων"
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:61
+msgid "Export answers"
+msgstr "Εξαγωγή απαντήσεων"
 
 #: src/components/common/OrganizerReportTable/index.tsx:358
 msgid "Export CSV"
@@ -8305,7 +8408,7 @@ msgstr "Αποτυχία διαγραφής διοργανωτή"
 msgid "Failed to delete product. Please try again."
 msgstr "Αποτυχία διαγραφής του προϊόντος. Δοκιμάστε ξανά."
 
-#: src/components/common/QuestionsTable/index.tsx:213
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:149
 msgid "Failed to delete question"
 msgstr "Αποτυχία διαγραφής ερώτησης"
 
@@ -8383,7 +8486,7 @@ msgstr "Αποτυχία αφαίρεσης της παράκαμψης"
 msgid "Failed to reopen date"
 msgstr "Αποτυχία επανέναρξης της ημερομηνίας"
 
-#: src/components/common/QuestionsTable/index.tsx:193
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:105
 msgid "Failed to reorder questions"
 msgstr "Αποτυχία αναδιάταξης ερωτήσεων"
 
@@ -8508,7 +8611,11 @@ msgstr "Αποτυχία ενημέρωσης παραγγελίας"
 msgid "Failed to update organizer status"
 msgstr "Αποτυχία ενημέρωσης κατάστασης διοργανωτή"
 
-#: src/components/common/QuestionsTable/index.tsx:386
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:136
+msgid "Failed to update question"
+msgstr "Αποτυχία ενημέρωσης ερώτησης"
+
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:160
 msgid "Failed to update setting"
 msgstr "Αποτυχία ενημέρωσης ρύθμισης"
 
@@ -8625,8 +8732,8 @@ msgstr "Λιγότερες θέσεις"
 msgid "File is too large. Maximum size is 5MB."
 msgstr "Το αρχείο είναι πολύ μεγάλο. Μέγιστο μέγεθος 5MB."
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:517
-#: src/components/routes/product-widget/CollectInformation/index.tsx:537
+#: src/components/routes/product-widget/CollectInformation/index.tsx:555
+#: src/components/routes/product-widget/CollectInformation/index.tsx:575
 msgid "Fill in your details above first"
 msgstr "Συμπληρώστε πρώτα τα στοιχεία σας παραπάνω"
 
@@ -8720,7 +8827,7 @@ msgstr "Πρώτες 7 ημέρες"
 msgid "First 90 days"
 msgstr "Πρώτες 90 ημέρες"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:548
+#: src/components/routes/product-widget/CollectInformation/index.tsx:586
 msgid "First attendee"
 msgstr "Πρώτος συμμετέχων"
 
@@ -8735,23 +8842,23 @@ msgstr "Πρώτος Αριθμός Τιμολογίου"
 #: src/components/modals/CreateAttendeeModal/index.tsx:214
 #: src/components/modals/ManageAttendeeModal/index.tsx:226
 #: src/components/modals/ManageOrderModal/index.tsx:280
-#: src/components/routes/product-widget/CollectInformation/index.tsx:479
-#: src/components/routes/product-widget/CollectInformation/index.tsx:691
+#: src/components/routes/event/Questions/CheckoutPreview.tsx:34
+#: src/components/routes/product-widget/CollectInformation/index.tsx:517
+#: src/components/routes/product-widget/CollectInformation/index.tsx:732
 #: src/components/routes/settings/Profile/index.tsx:199
 #: src/components/routes/settings/Profile/index.tsx:200
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:182
-#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:70
+#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:85
 msgid "First name"
 msgstr "Όνομα"
 
-#: src/components/common/QuestionsTable/index.tsx:262
 #: src/components/modals/EditUserModal/index.tsx:87
 #: src/components/modals/InviteUserModal/index.tsx:54
 #: src/components/modals/JoinWaitlistModal/index.tsx:180
 #: src/components/routes/auth/AcceptInvitation/index.tsx:226
 #: src/components/routes/auth/Register/index.tsx:139
-#: src/components/routes/product-widget/CollectInformation/index.tsx:478
-#: src/components/routes/product-widget/CollectInformation/index.tsx:690
+#: src/components/routes/product-widget/CollectInformation/index.tsx:516
+#: src/components/routes/product-widget/CollectInformation/index.tsx:731
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:55
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:55
 msgid "First Name"
@@ -8942,6 +9049,10 @@ msgstr "Παρ"
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:29
 msgid "Friday"
 msgstr "Παρασκευή"
+
+#: src/components/routes/event/Questions/questionTemplates.ts:55
+msgid "Friend or colleague"
+msgstr "Φίλος ή συνάδελφος"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1086
 msgid "From"
@@ -9140,6 +9251,10 @@ msgstr "Δώστε ένα όνομα σε αυτό το κλειδί"
 msgid "Give your event a name"
 msgstr "Δώστε όνομα στην εκδήλωσή σας"
 
+#: src/components/routes/event/Questions/questionTemplates.ts:17
+msgid "Gluten-free"
+msgstr "Χωρίς γλουτένη"
+
 #: src/components/routes/admin/DeletionRequests/index.tsx:224
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:157
 msgid "Go back"
@@ -9158,7 +9273,7 @@ msgstr "Πίσω"
 msgid "Go back to profile"
 msgstr "Επιστροφή στο προφίλ"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:414
+#: src/components/routes/product-widget/CollectInformation/index.tsx:448
 msgid "Go to Event Page"
 msgstr "Μετάβαση στη Σελίδα Εκδήλωσης"
 
@@ -9266,6 +9381,10 @@ msgstr "Διαχείριση Επισκεπτών"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:713
 msgid "Guests"
 msgstr "Επισκέπτες"
+
+#: src/components/routes/event/Questions/questionTemplates.ts:17
+msgid "Halal"
+msgstr "Χαλάλ"
 
 #: src/components/layouts/EventHomepage/index.tsx:134
 #: src/components/layouts/OrganizerHomepage/EventList/index.tsx:86
@@ -9398,13 +9517,17 @@ msgstr "Κρυφό"
 msgid "Hidden — sales ended {end}."
 msgstr "Κρυφό — οι πωλήσεις έληξαν στις {end}."
 
+#: src/components/routes/event/Questions/QuestionRow.tsx:131
+msgid "Hidden at checkout"
+msgstr "Κρυφή στην ολοκλήρωση αγοράς"
+
+#: src/components/routes/event/Questions/QuestionRow.tsx:130
+msgid "Hidden at checkout. Only your team can see and fill in this question."
+msgstr "Κρυφή στην ολοκλήρωση αγοράς. Μόνο η ομάδα σας μπορεί να δει και να συμπληρώσει αυτή την ερώτηση."
+
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:87
 msgid "Hidden automatically when empty."
 msgstr "Κρύβεται αυτόματα όταν είναι κενό."
-
-#: src/components/common/QuestionsTable/index.tsx:119
-msgid "Hidden from attendees - only visible to organizers"
-msgstr "Κρυφό από συμμετέχοντες - ορατό μόνο στους διοργανωτές"
 
 #: src/components/routes/event/Lineup/RunSheetPrint.tsx:164
 msgid "Hidden from event page: {hiddenNames}"
@@ -9432,10 +9555,6 @@ msgstr "Κρυφό από τη σελίδα της εκδήλωσης"
 msgid "Hidden online"
 msgstr "Κρυφό online"
 
-#: src/components/forms/QuestionForm/index.tsx:218
-msgid "Hidden questions are only visible to the event organizer and not to the customer."
-msgstr "Οι κρυφές ερωτήσεις είναι ορατές μόνο στον διοργανωτή εκδήλωσης και όχι στον πελάτη."
-
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:554
 #: src/components/routes/product-widget/SelectProducts/index.tsx:897
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1136
@@ -9461,6 +9580,11 @@ msgstr "Απόκρυψη όλων των τιμών"
 #: src/components/common/AttendeeList/index.tsx:85
 msgid "Hide Answers"
 msgstr "Απόκρυψη Απαντήσεων"
+
+#: src/components/forms/QuestionForm/index.tsx:259
+#: src/components/routes/event/Questions/QuestionRow.tsx:185
+msgid "Hide at checkout"
+msgstr "Απόκρυψη στην ολοκλήρωση αγοράς"
 
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:277
 msgid "Hide calendar"
@@ -9522,10 +9646,6 @@ msgstr "Απόκρυψη αυτής της κατηγορίας;"
 #: src/components/forms/ProductForm/index.tsx:622
 msgid "Hide this product from customers"
 msgstr "Απόκρυψη αυτού του προϊόντος από τους πελάτες"
-
-#: src/components/forms/QuestionForm/index.tsx:219
-msgid "Hide this question"
-msgstr "Απόκρυψη αυτής της ερώτησης"
 
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:205
 msgid "Hide this tier from users"
@@ -9628,6 +9748,11 @@ msgstr "Πώς πληρώνουν οι αγοραστές"
 msgid "How capacity works"
 msgstr "Πώς λειτουργεί η χωρητικότητα"
 
+#: src/components/routes/event/Questions/questionTemplates.ts:51
+#: src/components/routes/event/Questions/questionTemplates.ts:54
+msgid "How did you hear about us?"
+msgstr "Πώς μάθατε για εμάς;"
+
 #: src/components/forms/PromoCodeForm/index.tsx:117
 msgid "How is the discount applied?"
 msgstr "Πώς εφαρμόζεται η έκπτωση;"
@@ -9700,6 +9825,10 @@ msgstr "Ουγγρικά"
 #: src/components/routes/organizer/Settings/Sections/TrackingPixelSettings/index.tsx:250
 msgid "I acknowledge my responsibilities as a data controller"
 msgstr "Αναγνωρίζω τις ευθύνες μου ως υπεύθυνος επεξεργασίας δεδομένων"
+
+#: src/components/routes/event/Questions/questionTemplates.ts:76
+msgid "I agree to follow the event code of conduct"
+msgstr "Συμφωνώ να τηρώ τον κώδικα δεοντολογίας της εκδήλωσης"
 
 #: src/components/modals/JoinWaitlistModal/index.tsx:196
 msgid "I agree to receive email notifications related to this event"
@@ -9939,6 +10068,10 @@ msgstr "Περιλαμβάνει {0} προϊόντα"
 msgid "Includes 1 product"
 msgstr "Περιλαμβάνει 1 προϊόν"
 
+#: src/components/forms/QuestionForm/index.tsx:215
+msgid "Includes tickets you add later."
+msgstr "Περιλαμβάνει εισιτήρια που θα προσθέσετε αργότερα."
+
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:82
 msgid "Incorrect PIN"
 msgstr "Λάθος PIN"
@@ -9954,6 +10087,10 @@ msgstr "Αύξηση ποσότητας"
 #: src/components/common/MessageList/index.tsx:28
 msgid "Individual attendees"
 msgstr "Μεμονωμένοι συμμετέχοντες"
+
+#: src/components/routes/event/Questions/QuestionRow.tsx:145
+msgid "Ineligible: {ineligibleValues}"
+msgstr "Μη επιλέξιμο: {ineligibleValues}"
 
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:258
 msgid "Ink saver"
@@ -10090,6 +10227,10 @@ msgstr "Αρίθμηση Τιμολογίων"
 msgid "Invoice Settings"
 msgstr "Ρυθμίσεις Τιμολογίων"
 
+#: src/components/forms/QuestionForm/ConditionFields.tsx:86
+msgid "is any of"
+msgstr "είναι κάποιο από"
+
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:175
 msgid "Issued"
 msgstr "Εκδόθηκε"
@@ -10127,7 +10268,7 @@ msgstr "Εμφανίζεται πάνω από τις οδηγίες σας ώσ
 msgid "Italian"
 msgstr "Ιταλικά"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:670
+#: src/components/routes/product-widget/CollectInformation/index.tsx:711
 msgid "Item"
 msgstr "Στοιχείο"
 
@@ -10167,6 +10308,11 @@ msgstr "Όνομα Εργασίας"
 #: src/components/routes/admin/FailedJobs/index.tsx:53
 msgid "Job queued for retry"
 msgstr "Η εργασία τέθηκε σε ουρά για επανάληψη"
+
+#: src/components/routes/event/Questions/questionTemplates.ts:36
+#: src/components/routes/event/Questions/questionTemplates.ts:37
+msgid "Job title"
+msgstr "Θέση εργασίας"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:227
 #: src/components/routes/auth/Register/index.tsx:140
@@ -10229,6 +10375,7 @@ msgid "Keep connection"
 msgstr "Διατήρηση σύνδεσης"
 
 #: src/components/forms/ProductForm/ProductDrawer.tsx:60
+#: src/components/forms/QuestionForm/QuestionDrawer.tsx:46
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:751
 msgid "Keep editing"
 msgstr "Συνέχεια επεξεργασίας"
@@ -10237,7 +10384,7 @@ msgstr "Συνέχεια επεξεργασίας"
 msgid "Keep it short — banners show a single line. {0}/200"
 msgstr "Να είστε σύντομοι — τα banner εμφανίζουν μία μόνο γραμμή. {0}/200"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:614
+#: src/components/routes/product-widget/CollectInformation/index.tsx:653
 msgid "Keep me updated on news and events from {0}"
 msgstr "Ενημερώστε με για νέα και εκδηλώσεις από {0}"
 
@@ -10284,6 +10431,10 @@ msgstr "Τα κλειδιά που δεν λήγουν ποτέ παραμένο
 #: src/locales.ts:90
 msgid "Korean"
 msgstr "Κορεατικά"
+
+#: src/components/routes/event/Questions/questionTemplates.ts:17
+msgid "Kosher"
+msgstr "Κόσερ"
 
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:177
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:458
@@ -10383,23 +10534,23 @@ msgstr "Τελευταία δραστηριότητα"
 #: src/components/modals/CreateAttendeeModal/index.tsx:221
 #: src/components/modals/ManageAttendeeModal/index.tsx:228
 #: src/components/modals/ManageOrderModal/index.tsx:286
+#: src/components/routes/event/Questions/CheckoutPreview.tsx:35
 #: src/components/routes/settings/Profile/index.tsx:206
 #: src/components/routes/settings/Profile/index.tsx:207
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:189
-#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:71
+#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:86
 msgid "Last name"
 msgstr "Επώνυμο"
 
-#: src/components/common/QuestionsTable/index.tsx:263
 #: src/components/modals/EditUserModal/index.tsx:88
 #: src/components/modals/InviteUserModal/index.tsx:55
 #: src/components/modals/JoinWaitlistModal/index.tsx:185
 #: src/components/routes/auth/AcceptInvitation/index.tsx:232
 #: src/components/routes/auth/Register/index.tsx:145
-#: src/components/routes/product-widget/CollectInformation/index.tsx:485
-#: src/components/routes/product-widget/CollectInformation/index.tsx:486
-#: src/components/routes/product-widget/CollectInformation/index.tsx:697
-#: src/components/routes/product-widget/CollectInformation/index.tsx:698
+#: src/components/routes/product-widget/CollectInformation/index.tsx:523
+#: src/components/routes/product-widget/CollectInformation/index.tsx:524
+#: src/components/routes/product-widget/CollectInformation/index.tsx:738
+#: src/components/routes/product-widget/CollectInformation/index.tsx:739
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:62
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:62
 msgid "Last Name"
@@ -10468,6 +10619,10 @@ msgstr "Αφήστε κενό για χρήση της προεπιλεγμέν�
 #: src/components/common/WidgetEditor/ContentFields.tsx:115
 msgid "Leave both empty to show everything that's on sale."
 msgstr "Αφήστε και τα δύο κενά για να εμφανίζονται όλα όσα πωλούνται."
+
+#: src/components/routes/product-widget/CollectInformation/index.tsx:818
+msgid "Leave checkout"
+msgstr "Έξοδος από την ολοκλήρωση αγοράς"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:517
 msgid "Leave empty for unlimited"
@@ -10923,10 +11078,6 @@ msgstr "Κάντε την ορατή ώστε ο κόσμος να μπορεί 
 msgid "Make sure ID tokens include the email and email_verified claims."
 msgstr "Βεβαιωθείτε ότι τα ID token περιλαμβάνουν τα claims email και email_verified."
 
-#: src/components/forms/QuestionForm/index.tsx:212
-msgid "Make this question mandatory"
-msgstr "Υποχρεωτική η απάντηση σε αυτή την ερώτηση"
-
 #: src/components/common/BrandingUpsell/BrandingUpgradeModal.tsx:28
 msgid "Make your event pages, widgets, tickets and emails look like they're entirely yours. Applies to every organizer and event in this account."
 msgstr "Κάντε τις σελίδες εκδηλώσεων, τα widgets, τα εισιτήρια και τα email σας να μοιάζουν εξ ολοκλήρου δικά σας. Ισχύει για κάθε διοργανωτή και εκδήλωση σε αυτόν τον λογαριασμό."
@@ -10941,6 +11092,7 @@ msgstr "Κάντε τις σελίδες εκδηλώσεων, τα widgets, τ�
 #: src/components/layouts/OrganizerLayout/index.tsx:117
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:320
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:89
+#: src/components/routes/event/Questions/QuestionRow.tsx:162
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:249
 msgid "Manage"
 msgstr "Διαχείριση"
@@ -11014,10 +11166,6 @@ msgstr "Διαχείριση εισιτηρίων"
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:72
 msgid "Manage your event's waitlist, view stats, and offer tickets to attendees."
 msgstr "Διαχείριση λίστας αναμονής εκδήλωσης, προβολή στατιστικών και προσφορά εισιτηρίων σε συμμετέχοντες."
-
-#: src/components/forms/QuestionForm/index.tsx:211
-msgid "Mandatory questions must be answered before the customer can checkout."
-msgstr "Οι υποχρεωτικές ερωτήσεις πρέπει να απαντηθούν πριν ο πελάτης ολοκληρώσει την αγορά."
 
 #: src/components/modals/OfferWaitlistModal/index.tsx:108
 msgid "Manual offer"
@@ -11172,6 +11320,10 @@ msgstr "Περιεχόμενο Μηνύματος"
 #: src/components/routes/admin/Messages/index.tsx:267
 msgid "Message Details"
 msgstr "Λεπτομέρειες Μηνύματος"
+
+#: src/components/forms/QuestionForm/index.tsx:172
+msgid "Message for people who aren't eligible"
+msgstr "Μήνυμα για όσους δεν πληρούν τις προϋποθέσεις"
 
 #: src/components/modals/SendMessageModal/index.tsx:104
 msgid "Message individual attendees"
@@ -11419,9 +11571,9 @@ msgstr "Μετακίνηση σε περιοχή"
 msgid "Move up"
 msgstr "Μετακίνηση πάνω"
 
-#: src/components/forms/QuestionForm/index.tsx:106
-msgid "Multi line text box"
-msgstr "Πεδίο κειμένου πολλαπλών γραμμών"
+#: src/components/forms/QuestionForm/questionTypes.ts:28
+msgid "Multi-select dropdown"
+msgstr "Αναπτυσσόμενη λίστα πολλαπλής επιλογής"
 
 #: src/components/layouts/EventHomepage/EventIntro.tsx:118
 msgid "Multiple dates until {lastOccurrenceDate}"
@@ -11499,6 +11651,10 @@ msgctxt "Lineup spreadsheet column"
 msgid "Name"
 msgstr "Όνομα"
 
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:200
+msgid "Name and email are always collected."
+msgstr "Το όνομα και το email συλλέγονται πάντα."
+
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:98
 msgid "Name is missing"
 msgstr "Λείπει το όνομα"
@@ -11515,6 +11671,10 @@ msgstr "Το όνομα είναι υποχρεωτικό"
 #: src/components/routes/admin/Configurations/index.tsx:168
 msgid "Name must be less than 255 characters"
 msgstr "Το όνομα πρέπει να έχει λιγότερους από 255 χαρακτήρες"
+
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:199
+msgid "Name, email and billing address are always collected."
+msgstr "Το όνομα, το email και η διεύθυνση χρέωσης συλλέγονται πάντα."
 
 #: src/components/common/QuestionAndAnswerList/index.tsx:205
 msgid "Navigate to Attendee"
@@ -11654,7 +11814,7 @@ msgstr "Νέο widget"
 msgid "Next"
 msgstr "Επόμενο"
 
-#: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:83
+#: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:114
 msgid "Next attendee"
 msgstr "Επόμενος συμμετέχων"
 
@@ -11686,11 +11846,11 @@ msgstr "Επόμενη: {nextFormatted}"
 msgid "Next: how to pay"
 msgstr "Επόμενο: πώς να πληρώσετε"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:443
+#: src/components/routes/product-widget/CollectInformation/index.tsx:481
 msgid "Next: payment"
 msgstr "Επόμενο: πληρωμή"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:444
+#: src/components/routes/product-widget/CollectInformation/index.tsx:482
 #: src/components/routes/product-widget/Payment/index.tsx:119
 msgid "Next: review your order"
 msgstr "Επόμενο: έλεγχος παραγγελίας"
@@ -11701,6 +11861,8 @@ msgstr "Νυχτερινή Ζωή"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:271
 #: src/components/routes/admin/Dashboard/index.tsx:409
+#: src/components/routes/event/Questions/questionTemplates.ts:64
+#: src/components/routes/event/Questions/questionTemplates.ts:66
 #: src/ee/sso/components/SingleSignOn/index.tsx:70
 msgid "No"
 msgstr "Όχι"
@@ -11750,7 +11912,7 @@ msgstr "Δεν υπάρχουν ανακοινώσεις ακόμη"
 msgid "No archived events to show."
 msgstr "Δεν υπάρχουν αρχειοθετημένες εκδηλώσεις για εμφάνιση."
 
-#: src/components/common/QuestionsTable/index.tsx:503
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:232
 msgid "No attendee questions yet"
 msgstr "Δεν υπάρχουν ακόμα ερωτήσεις συμμετέχοντα"
 
@@ -12064,7 +12226,7 @@ msgstr "Δεν υπάρχουν ημερομηνίες αυτή την ημέρ�
 msgid "No one has bought this yet."
 msgstr "Κανείς δεν το έχει αγοράσει ακόμα."
 
-#: src/components/common/QuestionsTable/index.tsx:502
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:204
 msgid "No order questions yet"
 msgstr "Δεν υπάρχουν ερωτήσεις παραγγελίας ακόμα"
 
@@ -12261,6 +12423,10 @@ msgstr "Δεν Βρέθηκαν Εισιτήρια"
 msgid "No tickets in this order"
 msgstr "Δεν υπάρχουν εισιτήρια σε αυτή την παραγγελία"
 
+#: src/components/routes/event/Questions/QuestionRow.tsx:67
+msgid "No tickets selected"
+msgstr "Δεν έχουν επιλεγεί εισιτήρια"
+
 #: src/ee/seating/components/routes/event/Seating/BandProductsCard.tsx:70
 msgid "No tickets to link yet"
 msgstr "Δεν υπάρχουν ακόμη εισιτήρια για σύνδεση"
@@ -12351,7 +12517,8 @@ msgstr "χωρίς επεξεργασία"
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:108
 #: src/components/forms/ProductForm/ledgerSummaries.ts:92
 #: src/components/forms/ProductForm/ledgerSummaries.ts:132
-#: src/components/routes/product-widget/CollectInformation/index.tsx:547
+#: src/components/routes/event/Questions/questionTemplates.ts:17
+#: src/components/routes/product-widget/CollectInformation/index.tsx:585
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:50
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:293
 msgid "None"
@@ -12517,6 +12684,10 @@ msgstr "Σημείωση: {0}"
 msgid "Notes"
 msgstr "Σημειώσεις"
 
+#: src/components/routes/event/Questions/CheckoutPreview.tsx:102
+msgid "Nothing extra is asked for this ticket."
+msgstr "Δεν ζητείται τίποτα επιπλέον για αυτό το εισιτήριο."
+
 #: src/components/routes/event/Lineup/RunSheetPrint.tsx:98
 msgid "Nothing has been scheduled yet."
 msgstr "Δεν έχει προγραμματιστεί τίποτα ακόμη."
@@ -12533,7 +12704,7 @@ msgstr "Τίποτα νέο για εισαγωγή"
 msgid "Nothing to print yet"
 msgstr "Δεν υπάρχει ακόμη τίποτα για εκτύπωση"
 
-#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:466
+#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:468
 msgid "Nothing to sell here yet. Add products to this box office."
 msgstr "Δεν υπάρχει τίποτα προς πώληση ακόμα. Προσθέστε προϊόντα σε αυτό το ταμείο."
 
@@ -12777,6 +12948,10 @@ msgstr "Στη λίστα αναμονής"
 msgid "On your phone? Open in authenticator app"
 msgstr "Στο τηλέφωνό σας; Άνοιγμα στην εφαρμογή ελέγχου ταυτότητας"
 
+#: src/components/forms/QuestionForm/index.tsx:194
+msgid "Once per order"
+msgstr "Μία φορά ανά παραγγελία"
+
 #: src/components/common/NoEventsBlankSlate/index.tsx:19
 msgid "Once you create an event, you'll see it here."
 msgstr "Μόλις δημιουργήσετε εκδήλωση, θα εμφανιστεί εδώ."
@@ -12906,6 +13081,10 @@ msgstr "Μόνο άτομα με email σε επαληθευμένο τομέα 
 msgid "Only published announcements are shown to users"
 msgstr "Μόνο οι δημοσιευμένες ανακοινώσεις εμφανίζονται στους χρήστες"
 
+#: src/components/forms/QuestionForm/index.tsx:254
+msgid "Only required when the question is shown."
+msgstr "Υποχρεωτική μόνο όταν εμφανίζεται η ερώτηση."
+
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:621
 msgid "Only rows to fix"
 msgstr "Μόνο γραμμές προς διόρθωση"
@@ -12961,6 +13140,14 @@ msgstr "Ορατό μόνο με κωδικό προσφοράς"
 #: src/components/common/TeamAccessFields/index.tsx:119
 msgid "Only what you pick below."
 msgstr "Μόνο ό,τι επιλέξετε παρακάτω."
+
+#: src/components/forms/QuestionForm/ConditionFields.tsx:66
+msgid "Only when an earlier answer matches"
+msgstr "Μόνο όταν ταιριάζει μια προηγούμενη απάντηση"
+
+#: src/components/forms/QuestionForm/index.tsx:260
+msgid "Only your team can see and fill in this question."
+msgstr "Μόνο η ομάδα σας μπορεί να δει και να συμπληρώσει αυτή την ερώτηση."
 
 #: src/components/common/WidgetEditor/NameModal.tsx:35
 msgid "Only your team sees this. Use it to tell widgets apart, like \"Homepage\" or \"Newsletter\"."
@@ -13049,9 +13236,10 @@ msgstr "Ανοίχτηκαν"
 msgid "Opens event page"
 msgstr "Ανοίγει τη σελίδα της εκδήλωσης"
 
-#: src/components/forms/QuestionForm/index.tsx:45
-msgid "Option {i}"
-msgstr "Επιλογή {i}"
+#: src/components/forms/QuestionForm/OptionsEditor.tsx:77
+#: src/components/forms/QuestionForm/OptionsEditor.tsx:78
+msgid "Option {position}"
+msgstr "Επιλογή {position}"
 
 #: src/components/routes/event/Lineup/LineupStats.tsx:57
 msgid "Optional"
@@ -13089,11 +13277,7 @@ msgstr "Προαιρετικό, εμφανίζεται στους διαχειρ
 msgid "Optional. Useful when things happen in more than one place at the same time."
 msgstr "Προαιρετικό. Χρήσιμο όταν γίνονται πράγματα σε περισσότερα από ένα σημεία ταυτόχρονα."
 
-#: src/components/common/QuestionsTable/index.tsx:132
-msgid "options"
-msgstr "επιλογές"
-
-#: src/components/forms/QuestionForm/index.tsx:28
+#: src/components/forms/QuestionForm/index.tsx:129
 msgid "Options"
 msgstr "Επιλογές"
 
@@ -13121,8 +13305,6 @@ msgstr "Ή ξεκινήστε από έναν χώρο σαν τον δικό σ
 msgid "order"
 msgstr "παραγγελία"
 
-#: src/components/common/QuestionsTable/index.tsx:305
-#: src/components/common/QuestionsTable/index.tsx:459
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:261
 #: src/components/modals/ManageAttendeeModal/index.tsx:159
 #: src/components/routes/my-tickets/index.tsx:70
@@ -13153,7 +13335,7 @@ msgstr "Τα αρχεία παραγγελιών και τιμολογίων δ�
 msgid "Order answers"
 msgstr "Απαντήσεις παραγγελίας"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:394
+#: src/components/routes/product-widget/CollectInformation/index.tsx:428
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:420
 msgid "Order cancelled"
 msgstr "Παραγγελία ακυρώθηκε"
@@ -13163,7 +13345,7 @@ msgid "Order Cancelled"
 msgstr "Παραγγελία Ακυρώθηκε"
 
 #: src/components/layouts/Checkout/index.tsx:376
-#: src/components/routes/product-widget/CollectInformation/index.tsx:384
+#: src/components/routes/product-widget/CollectInformation/index.tsx:418
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:430
 msgid "Order complete"
 msgstr "Παραγγελία ολοκληρώθηκε"
@@ -13223,7 +13405,7 @@ msgstr "Η παραγγελία επισημάνθηκε ως πληρωμένη
 msgid "Order Marked as Paid"
 msgstr "Παραγγελία Επισημάνθηκε ως Πληρωμένη"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:409
+#: src/components/routes/product-widget/CollectInformation/index.tsx:443
 msgid "Order not found"
 msgstr "Η παραγγελία δεν βρέθηκε"
 
@@ -13300,7 +13482,7 @@ msgstr "Παραγγελία Ενημερώθηκε"
 msgid "Order updated successfully"
 msgstr "Η παραγγελία ενημερώθηκε επιτυχώς"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:364
+#: src/components/routes/product-widget/CollectInformation/index.tsx:398
 msgid "Order was cancelled"
 msgstr "Η παραγγελία ακυρώθηκε"
 
@@ -13460,6 +13642,8 @@ msgstr "Διοργανωτές και εκδηλώσεις"
 
 #: src/components/common/OrdersTable/index.tsx:333
 #: src/components/routes/admin/EmailDelivery/index.tsx:31
+#: src/components/routes/event/Questions/questionTemplates.ts:17
+#: src/components/routes/event/Questions/questionTemplates.ts:55
 #: src/constants/eventCategories.ts:31
 msgid "Other"
 msgstr "Άλλο"
@@ -13603,6 +13787,10 @@ msgstr "Μετατόπιση"
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:247
 msgid "Paper"
 msgstr "Χαρτί"
+
+#: src/components/forms/QuestionForm/questionTypes.ts:24
+msgid "Paragraph"
+msgstr "Παράγραφος"
 
 #: src/components/modals/RefundOrderModal/index.tsx:117
 msgid "Partial refund"
@@ -13962,9 +14150,9 @@ msgstr "Φύλλο ατόμων"
 msgid "people to add"
 msgstr "άτομα προς προσθήκη"
 
-#: src/components/common/QuestionsTable/index.tsx:326
-msgid "Per Attendee"
-msgstr "Ανά Συμμετέχοντα"
+#: src/components/forms/QuestionForm/index.tsx:141
+msgid "People who pick one of these answers can't complete their order. Useful for age limits or member-only events."
+msgstr "Όσοι επιλέγουν μία από αυτές τις απαντήσεις δεν μπορούν να ολοκληρώσουν την παραγγελία τους. Χρήσιμο για όρια ηλικίας ή εκδηλώσεις μόνο για μέλη."
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:212
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:77
@@ -14074,6 +14262,12 @@ msgstr "Προσωπικά"
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:118
 msgid "Phone"
 msgstr "Τηλέφωνο"
+
+#: src/components/forms/QuestionForm/questionTypes.ts:30
+#: src/components/routes/event/Questions/questionTemplates.ts:41
+#: src/components/routes/event/Questions/questionTemplates.ts:42
+msgid "Phone number"
+msgstr "Αριθμός τηλεφώνου"
 
 #: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:75
 msgid "Photo {photoNumber}"
@@ -14217,10 +14411,6 @@ msgstr "Αναπαραγωγή στο {service}"
 #: src/components/layouts/EventHomepage/Sections/VideoSection.tsx:73
 msgid "Plays from {provider}"
 msgstr "Αναπαραγωγή από {provider}"
-
-#: src/components/forms/QuestionForm/index.tsx:31
-msgid "Please add at least one option"
-msgstr "Παρακαλώ προσθέστε τουλάχιστον μία επιλογή"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:729
 #: src/hooks/useFormErrorResponseHandler.tsx:19
@@ -14405,6 +14595,10 @@ msgstr "Παρουσιάστε την κάρτα στον αναγνώστη"
 msgid "Press"
 msgstr "Τύπος"
 
+#: src/components/forms/QuestionForm/OptionsEditor.tsx:270
+msgid "Press Enter for the next option, or paste a list."
+msgstr "Πατήστε Enter για την επόμενη επιλογή ή επικολλήστε μια λίστα."
+
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:64
 msgid "Press where the first seat goes and drag. Drag sideways for seats, down for more rows."
 msgstr "Πατήστε εκεί όπου θα βρίσκεται η πρώτη θέση και σύρετε. Σύρετε πλευρικά για θέσεις, προς τα κάτω για περισσότερες σειρές."
@@ -14416,14 +14610,15 @@ msgstr "Αποτροπή υπερπώλησης με κοινό απόθεμα �
 #: src/components/common/DesignerShell/index.tsx:91
 #: src/components/common/DesignerShell/index.tsx:110
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:143
+#: src/components/forms/QuestionForm/index.tsx:265
 #: src/components/routes/admin/Announcements/index.tsx:496
 #: src/components/routes/event/Lineup/index.tsx:223
 msgid "Preview"
 msgstr "Προεπισκόπηση"
 
-#: src/components/common/QuestionsTable/index.tsx:296
-msgid "Preview checkout form"
-msgstr "Προεπισκόπηση φόρμας checkout"
+#: src/components/routes/event/Questions/CheckoutPreview.tsx:132
+msgid "Preview a checkout for"
+msgstr "Προεπισκόπηση αγοράς για"
 
 #: src/components/layouts/Event/index.tsx:319
 #: src/components/layouts/Event/index.tsx:323
@@ -14745,14 +14940,6 @@ msgstr "Τα προωθητικά email ενδέχεται να οδηγήσου
 msgid "Protect your account with a second step at sign-in. Even if someone learns your password, they can't get in without the code from your phone."
 msgstr "Προστατέψτε τον λογαριασμό σας με δεύτερο βήμα κατά τη σύνδεση. Ακόμη κι αν κάποιος μάθει τον κωδικό σας, δεν μπορεί να μπει χωρίς τον κωδικό από το τηλέφωνό σας."
 
-#: src/components/forms/QuestionForm/index.tsx:189
-msgid ""
-"Provide additional context or instructions for this question. Use this field to add terms\n"
-"and conditions, guidelines, or any important information that attendees need to know before answering."
-msgstr ""
-"Provide additional context or instructions for this question. Use this field to add terms\n"
-"and conditions, guidelines, or any important information that attendees need to know before answering."
-
 #: src/components/modals/LocationEditModal/index.tsx:61
 msgid "Provide at least one address field (venue, street, city, or country)."
 msgstr "Συμπληρώστε τουλάχιστον ένα πεδίο διεύθυνσης (χώρος, οδός, πόλη ή χώρα)."
@@ -14842,26 +15029,43 @@ msgstr "Διαθέσιμη Ποσότητα"
 msgid "Quantity this date"
 msgstr "Ποσότητα αυτής της ημερομηνίας"
 
+#: src/components/forms/QuestionForm/index.tsx:73
+#: src/components/forms/QuestionForm/index.tsx:77
+msgid "Question"
+msgstr "Ερώτηση"
+
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:139
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:156
 msgid "Question {number}"
 msgstr "Ερώτηση {number}"
 
+#: src/components/routes/event/Questions/QuestionRow.tsx:155
+msgid "Question actions"
+msgstr "Ενέργειες ερώτησης"
+
 #: src/components/forms/CheckInListForm/index.tsx:205
 msgid "Question answers"
 msgstr "Απαντήσεις σε ερωτήσεις"
 
-#: src/components/common/QuestionsTable/index.tsx:211
+#: src/components/modals/CreateQuestionModal/index.tsx:34
+msgid "Question created"
+msgstr "Η ερώτηση δημιουργήθηκε"
+
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:148
 msgid "Question deleted"
 msgstr "Η ερώτηση διαγράφηκε"
 
-#: src/components/forms/QuestionForm/index.tsx:188
-msgid "Question Description"
-msgstr "Περιγραφή Ερώτησης"
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:135
+msgid "Question hidden at checkout"
+msgstr "Η ερώτηση αποκρύφθηκε στην ολοκλήρωση αγοράς"
 
-#: src/components/forms/QuestionForm/index.tsx:178
-msgid "Question Title"
-msgstr "Τίτλος Ερώτησης"
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:135
+msgid "Question shown at checkout"
+msgstr "Η ερώτηση εμφανίζεται στην ολοκλήρωση αγοράς"
+
+#: src/components/modals/EditQuestionModal/index.tsx:55
+msgid "Question updated"
+msgstr "Η ερώτηση ενημερώθηκε"
 
 #: src/components/layouts/EventHomepage/Sections/FaqSection.tsx:17
 #: src/components/modals/DuplicateEventModal/index.tsx:134
@@ -14877,9 +15081,13 @@ msgstr "Ερωτήσεις & Απαντήσεις"
 msgid "Questions and answers people can expand."
 msgstr "Ερωτήσεις και απαντήσεις που αναπτύσσονται."
 
-#: src/components/common/QuestionsTable/index.tsx:192
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:104
 msgid "Questions reordered"
 msgstr "Οι ερωτήσεις αναδιατάχθηκαν"
+
+#: src/components/forms/QuestionForm/index.tsx:252
+msgid "Questions with ineligible answers are always required."
+msgstr "Οι ερωτήσεις με μη επιλέξιμες απαντήσεις είναι πάντα υποχρεωτικές."
 
 #: src/components/routes/admin/FailedJobs/index.tsx:164
 #: src/components/routes/admin/FailedJobs/index.tsx:257
@@ -14890,9 +15098,9 @@ msgstr "Ουρά"
 msgid "Quick Tip"
 msgstr "Γρήγορη συμβουλή"
 
-#: src/components/forms/QuestionForm/index.tsx:118
-msgid "Radio Option"
-msgstr "Επιλογή Τύπου Radio"
+#: src/components/routes/event/Questions/AttendeeDetailsSetting.tsx:23
+msgid "Quicker checkout, but every ticket is issued in the buyer's name."
+msgstr "Ταχύτερη ολοκλήρωση αγοράς, αλλά όλα τα εισιτήρια εκδίδονται στο όνομα του αγοραστή."
 
 #: src/components/forms/TaxAndFeeForm/index.tsx:73
 #: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:43
@@ -15203,8 +15411,8 @@ msgstr "Επιστροφές"
 msgid "Register"
 msgstr "Εγγραφή"
 
-#: src/components/common/QuestionsTable/index.tsx:424
 #: src/components/layouts/Event/index.tsx:139
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:180
 msgid "Registration Questions"
 msgstr "Ερωτήσεις Εγγραφής"
 
@@ -15346,6 +15554,10 @@ msgstr "Αφαίρεση συνδέσμου {linkNumber}"
 msgid "Remove one"
 msgstr "Αφαίρεση ενός"
 
+#: src/components/forms/QuestionForm/OptionsEditor.tsx:89
+msgid "Remove option {position}"
+msgstr "Αφαίρεση επιλογής {position}"
+
 #: src/components/routes/admin/FeatureFlags/index.tsx:51
 msgid "Remove override"
 msgstr "Αφαίρεση παράκαμψης"
@@ -15449,9 +15661,17 @@ msgstr "Επανέναρξη πωλήσεων"
 msgid "Reopen this date for new sales? Previously cancelled tickets will not be restored — affected attendees stay cancelled and any refunds already issued are not reversed."
 msgstr "Επανέναρξη πωλήσεων για αυτή την ημερομηνία; Τα εισιτήρια που ακυρώθηκαν προηγουμένως δεν θα επαναφερθούν — οι συμμετέχοντες παραμένουν ακυρωμένοι και οι επιστροφές χρημάτων που έχουν ήδη γίνει δεν αντιστρέφονται."
 
+#: src/components/routes/event/Questions/QuestionRow.tsx:245
+msgid "Reorder {0}"
+msgstr "Αναδιάταξη {0}"
+
 #: src/components/common/WidgetEditor/SectionsPicker.tsx:70
 msgid "Reorder {label}"
 msgstr "Αναδιάταξη: {label}"
+
+#: src/components/forms/QuestionForm/OptionsEditor.tsx:66
+msgid "Reorder option {position}"
+msgstr "Αναδιάταξη επιλογής {position}"
 
 #: src/components/modals/CreateEventModal/index.tsx:419
 msgid "Repeat"
@@ -15516,7 +15736,8 @@ msgstr "Απαίτηση δύο παραγόντων"
 msgid "Require two-factor authentication"
 msgstr "Απαίτηση ελέγχου ταυτότητας δύο παραγόντων"
 
-#: src/components/common/QuestionsTable/index.tsx:125
+#: src/components/forms/QuestionForm/index.tsx:250
+#: src/components/routes/event/Questions/QuestionRow.tsx:127
 #: src/ee/sso/components/SingleSignOn/index.tsx:69
 msgid "Required"
 msgstr "Υποχρεωτικό"
@@ -15890,7 +16111,7 @@ msgid "Runs events: products, orders, attendees, messages and check-in."
 msgstr "Διαχειρίζεται εκδηλώσεις: προϊόντα, παραγγελίες, συμμετέχοντες, μηνύματα και check-in."
 
 #: src/ee/box-office/components/layouts/BoxOffice/CartPanel.tsx:52
-#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:504
+#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:506
 msgid "Sale"
 msgstr "Πώληση"
 
@@ -16062,7 +16283,7 @@ msgstr "Σάββατο"
 #: src/components/routes/organizer/Settings/Sections/TrackingPixelSettings/index.tsx:262
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:88
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:88
-#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:90
+#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:105
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:312
 msgid "Save"
 msgstr "Αποθήκευση"
@@ -16091,7 +16312,7 @@ msgstr "Αποθήκευση αλλαγών"
 #: src/components/modals/EditOrganizerWebhookModal/index.tsx:87
 #: src/components/modals/EditProductCategoryModal/index.tsx:73
 #: src/components/modals/EditPromoCodeModal/index.tsx:87
-#: src/components/modals/EditQuestionModal/index.tsx:103
+#: src/components/modals/EditQuestionModal/index.tsx:67
 #: src/components/modals/EditWebhookModal/index.tsx:88
 #: src/components/modals/LocationEditModal/index.tsx:164
 #: src/components/modals/ManageAttendeeModal/index.tsx:211
@@ -16415,6 +16636,10 @@ msgstr "Αναζήτηση ημερομηνιών..."
 #: src/components/layouts/CheckIn/OccurrenceFilterPill.tsx:88
 msgid "Search dates…"
 msgstr "Αναζήτηση ημερομηνιών…"
+
+#: src/components/routes/event/Questions/questionTemplates.ts:55
+msgid "Search engine"
+msgstr "Μηχανή αναζήτησης"
 
 #: src/components/common/AddressAutocomplete/index.tsx:86
 msgid "Search for an address"
@@ -17189,10 +17414,11 @@ msgstr "Θα ρυθμίσετε το πρόγραμμά σας στα επόμε
 msgid "Set, change, or remove the date's location or online details"
 msgstr "Ορισμός, αλλαγή ή αφαίρεση της τοποθεσίας ή των διαδικτυακών στοιχείων της ημερομηνίας"
 
-#: src/components/common/QuestionsTable/index.tsx:385
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:159
 msgid "Setting updated"
 msgstr "Η ρύθμιση ενημερώθηκε"
 
+#: src/components/forms/QuestionForm/index.tsx:244
 #: src/components/layouts/OrganizerLayout/index.tsx:119
 #: src/components/layouts/SettingsLayout/index.tsx:83
 #: src/components/layouts/SettingsLayout/index.tsx:90
@@ -17287,6 +17513,10 @@ msgstr "Μετατόπιση ωρών"
 msgid "Shifted times for {count} date(s)"
 msgstr "Οι ώρες μετατοπίστηκαν για {count} ημερομηνία/ες"
 
+#: src/components/forms/QuestionForm/questionTypes.ts:23
+msgid "Short answer"
+msgstr "Σύντομη απάντηση"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:553
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:233
 msgid "Show"
@@ -17303,6 +17533,10 @@ msgstr "Εμφάνιση σύνθετων επιλογών"
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:228
 msgid "Show all platforms ({0} more with values)"
 msgstr "Εμφάνιση όλων των πλατφορμών ({0} περισσότερες με τιμές)"
+
+#: src/components/routes/event/Questions/QuestionRow.tsx:185
+msgid "Show at checkout"
+msgstr "Εμφάνιση στην ολοκλήρωση αγοράς"
 
 #: src/components/forms/CheckInListForm/index.tsx:196
 msgid "Show attendee notes to non-logged-in staff"
@@ -17390,6 +17624,10 @@ msgstr "Εμφάνιση ενότητας"
 msgid "Show tax and fees separately"
 msgstr "Εμφάνιση φόρου και τελών ξεχωριστά"
 
+#: src/components/forms/QuestionForm/index.tsx:239
+msgid "Show this question"
+msgstr "Εμφάνιση αυτής της ερώτησης"
+
 #: src/components/common/WidgetEditor/ContentFields.tsx:204
 msgid "Show tickets"
 msgstr "Εμφάνιση εισιτηρίων"
@@ -17451,9 +17689,13 @@ msgstr "Εμφανίζεται στον πελάτη μετά το checkout, σ�
 msgid "Shown to the customer before they checkout"
 msgstr "Εμφανίζεται στον πελάτη πριν το checkout"
 
-#: src/components/forms/QuestionForm/index.tsx:132
-msgid "Shows common address fields, including country"
-msgstr "Εμφανίζει κοινά πεδία διεύθυνσης, συμπεριλαμβανομένης της χώρας"
+#: src/components/forms/QuestionForm/index.tsx:173
+msgid "Shown under the question when someone picks one of these answers."
+msgstr "Εμφανίζεται κάτω από την ερώτηση όταν κάποιος επιλέγει μία από αυτές τις απαντήσεις."
+
+#: src/components/forms/QuestionForm/index.tsx:109
+msgid "Shown under the question. Use it for instructions, terms or extra context."
+msgstr "Εμφανίζεται κάτω από την ερώτηση. Χρησιμοποιήστε το για οδηγίες, όρους ή επιπλέον πληροφορίες."
 
 #: src/components/forms/ProductForm/ledgerSummaries.ts:60
 msgid "Shows remaining"
@@ -17659,9 +17901,9 @@ msgstr "Σίμψον"
 msgid "Since {0} (UTC)"
 msgstr "Από {0} (UTC)"
 
-#: src/components/forms/QuestionForm/index.tsx:100
-msgid "Single line text box"
-msgstr "Πεδίο κειμένου μίας γραμμής"
+#: src/components/forms/QuestionForm/questionTypes.ts:25
+msgid "Single choice"
+msgstr "Μονή επιλογή"
 
 #: src/components/routes/settings/Team/index.tsx:203
 #: src/ee/sso/components/SingleSignOn/index.tsx:50
@@ -17738,6 +17980,10 @@ msgstr "Κοινωνικοί Σύνδεσμοι"
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:182
 msgid "Social Links & Website"
 msgstr "Κοινωνικοί Σύνδεσμοι & Ιστοσελίδα"
+
+#: src/components/routes/event/Questions/questionTemplates.ts:55
+msgid "Social media"
+msgstr "Μέσα κοινωνικής δικτύωσης"
 
 #: src/components/routes/admin/EmailDelivery/index.tsx:99
 msgid "Soft bounces"
@@ -17857,7 +18103,7 @@ msgstr "Κάτι που σας δείχνει πού χρησιμοποιείτ�
 
 #: src/components/common/ErrorDisplay/index.tsx:15
 #: src/components/routes/auth/AcceptInvitation/index.tsx:61
-#: src/components/routes/product-widget/CollectInformation/index.tsx:423
+#: src/components/routes/product-widget/CollectInformation/index.tsx:457
 #: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:64
 msgid "Something went wrong"
 msgstr "Κάτι πήγε στραβά"
@@ -17957,6 +18203,10 @@ msgstr "Συγκεκριμένοι λογαριασμοί"
 #: src/components/common/TeamAccessFields/index.tsx:118
 msgid "Specific organizers and events"
 msgstr "Συγκεκριμένοι διοργανωτές και εκδηλώσεις"
+
+#: src/components/forms/QuestionForm/index.tsx:219
+msgid "Specific tickets and products"
+msgstr "Συγκεκριμένα εισιτήρια και προϊόντα"
 
 #: src/components/routes/admin/Announcements/index.tsx:427
 msgid "Specific users"
@@ -18210,11 +18460,11 @@ msgstr "Ξεκινά σε {seconds} δευτ."
 msgid "Starts tomorrow"
 msgstr "Ξεκινά αύριο"
 
-#: src/components/common/CheckoutQuestion/index.tsx:165
+#: src/components/common/CheckoutQuestion/index.tsx:208
 #: src/components/common/LocationPicker/index.tsx:254
 #: src/components/modals/LocationEditModal/index.tsx:149
-#: src/components/routes/product-widget/CollectInformation/index.tsx:587
-#: src/components/routes/product-widget/CollectInformation/index.tsx:588
+#: src/components/routes/product-widget/CollectInformation/index.tsx:625
+#: src/components/routes/product-widget/CollectInformation/index.tsx:626
 msgid "State or Region"
 msgstr "Νομός ή Περιοχή"
 
@@ -18470,11 +18720,6 @@ msgstr "Επιτυχής Δημιουργία Προϊόντος"
 msgid "Successfully Created Promo Code"
 msgstr "Επιτυχής Δημιουργία Κωδικού Προσφοράς"
 
-#: src/components/modals/CreateQuestionModal/index.tsx:46
-#: src/components/modals/EditQuestionModal/index.tsx:66
-msgid "Successfully Created Question"
-msgstr "Επιτυχής Δημιουργία Ερώτησης"
-
 #: src/components/modals/DuplicateProductModal/index.tsx:113
 msgid "Successfully Duplicated Product"
 msgstr "Επιτυχής Αντιγραφή Προϊόντος"
@@ -18679,6 +18924,11 @@ msgstr "Προεπιλογή Συστήματος"
 msgid "T-shirt"
 msgstr "Μπλούζα"
 
+#: src/components/routes/event/Questions/questionTemplates.ts:22
+#: src/components/routes/event/Questions/questionTemplates.ts:25
+msgid "T-shirt size"
+msgstr "Μέγεθος μπλουζάκι"
+
 #: src/components/forms/ProductForm/index.tsx:235
 msgid "T-shirts, mugs and more"
 msgstr "Μπλουζάκια, κούπες και άλλα"
@@ -18859,6 +19109,10 @@ msgstr "Το πρότυπο διαγράφηκε επιτυχώς"
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:144
 msgid "Template saved successfully"
 msgstr "Το πρότυπο αποθηκεύτηκε επιτυχώς"
+
+#: src/components/routes/event/Questions/AddQuestionMenu.tsx:49
+msgid "Templates"
+msgstr "Πρότυπα"
 
 #: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:119
 msgid "Tenant ID"
@@ -19159,6 +19413,10 @@ msgstr "Η τιμή που εμφανίζεται στον πελάτη θα π�
 msgid "The price displayed to the customer will not include taxes and fees. They will be shown separately"
 msgstr "Η τιμή που εμφανίζεται στον πελάτη δεν θα περιλαμβάνει φόρους και τέλη. Θα εμφανίζονται ξεχωριστά"
 
+#: src/components/routes/event/Questions/AttendeeDetailsSetting.tsx:56
+msgid "The questions below are still asked once for every ticket."
+msgstr "Οι παρακάτω ερωτήσεις εξακολουθούν να τίθενται μία φορά για κάθε εισιτήριο."
+
 #: src/components/common/CapacityHelp/index.tsx:38
 msgid "The room holds 20. Early bird is limited to 5 per date, Standard to 15."
 msgstr "Η αίθουσα χωράει 20. Το Early bird περιορίζεται σε 5 ανά ημερομηνία, το Κανονικό σε 15."
@@ -19413,6 +19671,12 @@ msgstr "Αυτός ο λογαριασμός έχει προγραμματιστ
 msgid "This answer is too long. Shorten it before saving."
 msgstr "Αυτή η απάντηση είναι πολύ μεγάλη. Συντομεύστε την πριν από την αποθήκευση."
 
+#: src/components/common/CheckoutQuestion/index.tsx:285
+#: src/components/forms/QuestionForm/index.tsx:44
+#: src/components/routes/product-widget/CollectInformation/index.tsx:811
+msgid "This answer means you can't register for this event."
+msgstr "Με αυτή την απάντηση δεν μπορείτε να εγγραφείτε σε αυτή την εκδήλωση."
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:260
 msgid "This applies to every matching date in the event, including dates not currently visible. Attendees registered on any of those dates will be reachable via the message composer once the update finishes."
 msgstr "Ισχύει για κάθε ημερομηνία της εκδήλωσης που ταιριάζει, ακόμη και για όσες δεν φαίνονται τώρα. Οι συμμετέχοντες που είναι εγγεγραμμένοι σε οποιαδήποτε από αυτές θα είναι προσβάσιμοι από τον συντάκτη μηνυμάτων μόλις ολοκληρωθεί η ενημέρωση."
@@ -19561,6 +19825,10 @@ msgstr "Αυτή η εκδήλωση δεν έχει δημοσιευτεί ακ
 msgid "This event is not published. Sales are still recorded."
 msgstr "Αυτή η εκδήλωση δεν έχει δημοσιευτεί. Οι πωλήσεις καταγράφονται κανονικά."
 
+#: src/components/forms/QuestionForm/index.tsx:174
+msgid "This event is open to healthcare professionals only."
+msgstr "Αυτή η εκδήλωση απευθύνεται μόνο σε επαγγελματίες υγείας."
+
 #: src/components/layouts/Event/index.tsx:201
 msgid "This event is pending manual review and cannot be published until the review is complete."
 msgstr "Αυτή η εκδήλωση βρίσκεται σε αναμονή χειροκίνητου ελέγχου και δεν μπορεί να δημοσιευτεί μέχρι να ολοκληρωθεί ο έλεγχος."
@@ -19597,8 +19865,8 @@ msgstr "Οι ημερομηνίες και οι ώρες αυτής της εκ�
 msgid "This feature needs a Hi.Events Enterprise licence. Until a licence key is added, nothing new can be set up and existing setup can't be changed, but what is already set up can still be viewed, switched off or removed."
 msgstr "Αυτή η λειτουργία απαιτεί άδεια Hi.Events Enterprise. Μέχρι να προστεθεί κλειδί άδειας, δεν μπορεί να ρυθμιστεί τίποτα νέο και οι υπάρχουσες ρυθμίσεις δεν μπορούν να αλλάξουν, αλλά ό,τι έχει ήδη ρυθμιστεί μπορεί ακόμη να προβληθεί, να απενεργοποιηθεί ή να αφαιρεθεί."
 
-#: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:54
-#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:42
+#: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:80
+#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:52
 msgid "This field is required"
 msgstr "Αυτό το πεδίο είναι υποχρεωτικό"
 
@@ -19707,7 +19975,7 @@ msgstr "Αυτή η παραγγελία έχει ήδη επιστραφεί."
 msgid "This order has been cancelled."
 msgstr "Αυτή η παραγγελία έχει ακυρωθεί."
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:352
+#: src/components/routes/product-widget/CollectInformation/index.tsx:386
 msgid "This order has expired. Please start again."
 msgstr "Αυτή η παραγγελία έχει λήξει. Παρακαλώ ξεκινήστε από την αρχή."
 
@@ -19723,11 +19991,11 @@ msgstr "Αυτή η παραγγελία έχει ολοκληρωθεί."
 msgid "This order page is no longer available."
 msgstr "Αυτή η σελίδα παραγγελίας δεν είναι πλέον διαθέσιμη."
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:365
+#: src/components/routes/product-widget/CollectInformation/index.tsx:399
 msgid "This order was abandoned. You can start a new order anytime."
 msgstr "Αυτή η παραγγελία εγκαταλείφθηκε. Μπορείτε να ξεκινήσετε νέα παραγγελία ανά πάσα στιγμή."
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:395
+#: src/components/routes/product-widget/CollectInformation/index.tsx:429
 msgid "This order was cancelled. You can start a new order anytime."
 msgstr "Αυτή η παραγγελία ακυρώθηκε. Μπορείτε να ξεκινήσετε νέα παραγγελία ανά πάσα στιγμή."
 
@@ -20008,6 +20276,10 @@ msgstr "Εισιτήρια & πωλήσεις"
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:84
 msgid "Tickets and {extraSections} more"
 msgstr "Εισιτήρια και {extraSections} ακόμη"
+
+#: src/components/forms/QuestionForm/index.tsx:227
+msgid "Tickets and products"
+msgstr "Εισιτήρια και προϊόντα"
 
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:306
 msgid "Tickets are always shown"
@@ -20377,8 +20649,8 @@ msgstr "Προσαρμόστε τα φίλτρα για να δείτε περι
 #: src/components/routes/sso/Callback/index.tsx:257
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:206
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:88
-#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:449
-#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:460
+#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:451
+#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:462
 msgid "Try again"
 msgstr "Δοκιμάστε ξανά"
 
@@ -20394,6 +20666,10 @@ msgstr "Δοκιμάστε το Hi.Events Δωρεάν"
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:199
 msgid "Try it"
 msgstr "Δοκιμάστε το"
+
+#: src/components/routes/event/Questions/CheckoutPreview.tsx:125
+msgid "Try some answers to see follow-up questions. Nothing is saved."
+msgstr "Δοκιμάστε απαντήσεις για να δείτε τις επακόλουθες ερωτήσεις. Δεν αποθηκεύεται τίποτα."
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:47
 msgid "Tue"
@@ -20597,10 +20873,6 @@ msgstr "Αδύνατη δημιουργία προϊόντος. Ελέγξτε �
 msgid "Unable to create product. Please check your details"
 msgstr "Αδύνατη δημιουργία προϊόντος. Ελέγξτε τα στοιχεία σας"
 
-#: src/components/modals/CreateQuestionModal/index.tsx:61
-msgid "Unable to create question. Please check the your details"
-msgstr "Αδύνατη δημιουργία ερώτησης. Ελέγξτε τα στοιχεία σας"
-
 #: src/components/common/WidgetEditor/index.tsx:161
 msgid "Unable to delete the widget"
 msgstr "Δεν ήταν δυνατή η διαγραφή του widget"
@@ -20666,10 +20938,6 @@ msgstr "Αδυναμία αλλαγής ημερομηνίας"
 #: src/hooks/useCheckInController.tsx:163
 msgid "Unable to undo check-in"
 msgstr "Δεν είναι δυνατή η αναίρεση του check-in"
-
-#: src/components/modals/EditQuestionModal/index.tsx:84
-msgid "Unable to update question. Please check the your details"
-msgstr "Αδύνατη ενημέρωση ερώτησης. Ελέγξτε τα στοιχεία σας"
 
 #: src/ee/box-office/components/layouts/BoxOffice/SaleComplete.tsx:81
 msgid "Unable to void sale"
@@ -21083,9 +21351,9 @@ msgstr "Χρήση προεπιλογής εκδήλωσης"
 msgid "Use order details for all attendees. Attendee names and emails will match the buyer's information."
 msgstr "Χρήση στοιχείων παραγγελίας για όλους τους συμμετέχοντες. Τα ονόματα και email θα αντιστοιχούν στον αγοραστή."
 
-#: src/components/common/QuestionsTable/index.tsx:401
-msgid "Use the buyer's details for all attendees"
-msgstr "Χρήση στοιχείων αγοραστή για όλους τους συμμετέχοντες"
+#: src/components/routes/event/Questions/AttendeeDetailsSetting.tsx:22
+msgid "Use the buyer's name and email for every ticket"
+msgstr "Χρήση του ονόματος και του email του αγοραστή για όλα τα εισιτήρια"
 
 #: src/components/common/LocationPicker/index.tsx:285
 msgid "Use this address"
@@ -21282,6 +21550,14 @@ msgstr "ΦΠΑ: {0}"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:310
 msgid "VAT: not registered"
 msgstr "ΦΠΑ: μη εγγεγραμμένος"
+
+#: src/components/routes/event/Questions/questionTemplates.ts:17
+msgid "Vegan"
+msgstr "Vegan"
+
+#: src/components/routes/event/Questions/questionTemplates.ts:17
+msgid "Vegetarian"
+msgstr "Χορτοφαγικό"
 
 #: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:80
 msgid "Venue"
@@ -21493,7 +21769,7 @@ msgid "View Order"
 msgstr "Προβολή Παραγγελίας"
 
 #: src/components/forms/StripeCheckoutForm/index.tsx:133
-#: src/components/routes/product-widget/CollectInformation/index.tsx:387
+#: src/components/routes/product-widget/CollectInformation/index.tsx:421
 msgid "View Order Details"
 msgstr "Προβολή Λεπτομερειών Παραγγελίας"
 
@@ -21600,7 +21876,7 @@ msgstr "Ακυρώθηκε"
 msgid "Waiting"
 msgstr "Αναμονή"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:374
+#: src/components/routes/product-widget/CollectInformation/index.tsx:408
 msgid "Waiting for payment"
 msgstr "Αναμονή πληρωμής"
 
@@ -21627,7 +21903,7 @@ msgstr "Λίστα Αναμονής"
 msgid "Waitlist Enabled"
 msgstr "Λίστα Αναμονής Ενεργή"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:409
+#: src/components/routes/product-widget/CollectInformation/index.tsx:443
 msgid "Waitlist offer expired"
 msgstr "Η προσφορά λίστας αναμονής έληξε"
 
@@ -21696,7 +21972,7 @@ msgstr "Δεν βρέθηκε η παραγγελία. Ο σύνδεσμος μ�
 msgid "We couldn't find the ticket you're looking for. The link may have expired or the ticket details may have changed."
 msgstr "Δεν βρέθηκε το εισιτήριο. Ο σύνδεσμος μπορεί να έχει λήξει ή τα στοιχεία να άλλαξαν."
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:412
+#: src/components/routes/product-widget/CollectInformation/index.tsx:446
 msgid "We couldn't find this order. It may have been removed."
 msgstr "Δεν βρέθηκε αυτή η παραγγελία. Μπορεί να έχει αφαιρεθεί."
 
@@ -21712,12 +21988,12 @@ msgstr "Δεν μπορέσαμε να φορτώσουμε τις λίστες 
 msgid "We couldn't load the data. Please try again."
 msgstr "Δεν μπορέσαμε να φορτώσουμε τα δεδομένα. Παρακαλώ δοκιμάστε ξανά."
 
-#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:446
+#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:448
 msgid "We couldn't load the products. Please try again."
 msgstr "Δεν ήταν δυνατή η φόρτωση των προϊόντων. Δοκιμάστε ξανά."
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1118
-#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:457
+#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:459
 msgid "We couldn't load the seating map. Please try again."
 msgstr "Δεν ήταν δυνατή η φόρτωση του χάρτη θέσεων. Δοκιμάστε ξανά."
 
@@ -21761,7 +22037,7 @@ msgstr "Δεν μπορέσαμε να σας συνδέσουμε"
 msgid "We couldn't sign you in with {providerName}"
 msgstr "Δεν μπορέσαμε να σας συνδέσουμε με {providerName}"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:424
+#: src/components/routes/product-widget/CollectInformation/index.tsx:458
 msgid "We hit a snag loading this page. Please try again."
 msgstr "Παρουσιάστηκε πρόβλημα κατά τη φόρτωση αυτής της σελίδας. Παρακαλώ δοκιμάστε ξανά."
 
@@ -21823,7 +22099,7 @@ msgstr "Θα σας ειδοποιήσουμε μέσω email εάν διατε�
 msgid "We'll open a message composer with a pre-filled template after saving. You review and send it — nothing is sent automatically."
 msgstr "Μετά την αποθήκευση θα ανοίξουμε έναν συντάκτη μηνυμάτων με έτοιμο πρότυπο. Εσείς το ελέγχετε και το στέλνετε — τίποτα δεν αποστέλλεται αυτόματα."
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:471
+#: src/components/routes/product-widget/CollectInformation/index.tsx:509
 msgid "We'll send your tickets to this email"
 msgstr "Θα σας στείλουμε τα εισιτήρια σε αυτό το email"
 
@@ -21968,10 +22244,6 @@ msgstr "Τι βλέπουν οι αγοραστές"
 msgid "What is a Category?"
 msgstr "Τι είναι μια Κατηγορία;"
 
-#: src/components/forms/QuestionForm/index.tsx:159
-msgid "What products does this code apply to?"
-msgstr "Σε ποια προϊόντα ισχύει αυτός ο κωδικός;"
-
 #: src/components/forms/PromoCodeForm/index.tsx:158
 msgid "What products does this code apply to? (Applies to all by default)"
 msgstr "Σε ποια προϊόντα ισχύει; (Ισχύει σε όλα ως προεπιλογή)"
@@ -21983,10 +22255,6 @@ msgstr "Σε ποια προϊόντα πρέπει να ισχύει αυτή �
 #: src/components/modals/CreateEventModal/index.tsx:350
 msgid "What should people expect?"
 msgstr "Τι μπορούν να περιμένουν οι συμμετέχοντες;"
-
-#: src/components/forms/QuestionForm/index.tsx:179
-msgid "What time will you be arriving?"
-msgstr "Τι ώρα θα φτάσετε;"
 
 #: src/components/modals/DuplicateEventModal/index.tsx:270
 msgid "What to copy"
@@ -22003,13 +22271,13 @@ msgstr "Τι να κάνετε"
 msgid "What type of event?"
 msgstr "Τι τύπος εκδήλωσης;"
 
-#: src/components/forms/QuestionForm/index.tsx:170
-msgid "What type of question is this?"
-msgstr "Τι τύπος ερώτησης είναι αυτή;"
-
 #: src/components/forms/CheckInListForm/index.tsx:172
 msgid "What unauthenticated staff can see"
 msgstr "Τι μπορεί να δει το μη συνδεδεμένο προσωπικό"
+
+#: src/components/forms/QuestionForm/index.tsx:78
+msgid "What's your job title?"
+msgstr "Ποια είναι η θέση εργασίας σας;"
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:89
 #: src/constants/socialMediaConfig.ts:39
@@ -22020,6 +22288,10 @@ msgstr "WhatsApp"
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:294
 msgid "Wheelchair space"
 msgstr "Θέση αναπηρικού αμαξιδίου"
+
+#: src/components/routes/event/Questions/QuestionRow.tsx:140
+msgid "When “{0}”: {conditionValues}"
+msgstr "Όταν «{0}»: {conditionValues}"
 
 #: src/components/forms/WebhookForm/index.tsx:129
 msgid "When a check-in is deleted"
@@ -22145,6 +22417,14 @@ msgstr "Πότε ανοίγουν οι πωλήσεις"
 msgid "When someone picks an event"
 msgstr "Όταν κάποιος επιλέγει μια εκδήλωση"
 
+#: src/components/forms/QuestionForm/ConditionFields.tsx:73
+msgid "When the answer to"
+msgstr "Όταν η απάντηση στην"
+
+#: src/components/routes/event/Questions/QuestionRow.tsx:139
+msgid "When: {conditionValues}"
+msgstr "Όταν: {conditionValues}"
+
 #: src/components/common/WidgetEditor/InstallPanel.tsx:60
 msgid "Where is your website?"
 msgstr "Πού βρίσκεται ο ιστότοπός σας;"
@@ -22177,9 +22457,9 @@ msgstr "Ποια εισιτήρια πρέπει να σχετίζονται μ�
 msgid "White-label"
 msgstr "White label"
 
-#: src/components/forms/QuestionForm/index.tsx:151
-msgid "Who should be asked this question?"
-msgstr "Σε ποιον πρέπει να τεθεί αυτή η ερώτηση;"
+#: src/components/forms/QuestionForm/index.tsx:187
+msgid "Who answers"
+msgstr "Ποιος απαντά"
 
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:148
 msgid "Who's on?"
@@ -22247,12 +22527,11 @@ msgid "Working"
 msgstr "Εργασία"
 
 #: src/components/forms/ProductForm/ProductDrawer.tsx:142
+#: src/components/forms/QuestionForm/QuestionDrawer.tsx:84
 #: src/components/modals/CreateProductCategoryModal/index.tsx:58
 #: src/components/modals/CreatePromoCodeModal/index.tsx:59
-#: src/components/modals/CreateQuestionModal/index.tsx:77
 #: src/components/modals/EditProductCategoryModal/index.tsx:73
 #: src/components/modals/EditPromoCodeModal/index.tsx:87
-#: src/components/modals/EditQuestionModal/index.tsx:103
 #: src/components/modals/JoinWaitlistModal/index.tsx:207
 #: src/components/routes/auth/Register/index.tsx:188
 msgid "Working..."
@@ -22303,6 +22582,7 @@ msgstr "έτη"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:271
 #: src/components/routes/admin/Dashboard/index.tsx:409
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:221
+#: src/components/routes/event/Questions/questionTemplates.ts:64
 #: src/ee/sso/components/SingleSignOn/index.tsx:70
 msgid "Yes"
 msgstr "Ναι"
@@ -22417,6 +22697,10 @@ msgstr "Μπορείτε ακόμα να προσφέρετε εισιτήρια
 msgid "You can still remove it from any product."
 msgstr "Μπορείτε ακόμη να το αφαιρέσετε από οποιοδήποτε προϊόν."
 
+#: src/components/common/CheckoutQuestion/index.tsx:283
+msgid "You can't register for this event"
+msgstr "Δεν μπορείτε να εγγραφείτε σε αυτή την εκδήλωση"
+
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:135
 msgid "You cannot archive the last active organizer on your account."
 msgstr "Δεν μπορείτε να αρχειοθετήσετε τον τελευταίο ενεργό διοργανωτή στον λογαριασμό σας."
@@ -22483,6 +22767,7 @@ msgid "You have taxes and fees added to a Free Product. Would you like to remove
 msgstr "Έχετε φόρους και τέλη σε Δωρεάν Προϊόν. Θέλετε να τα αφαιρέσετε;"
 
 #: src/components/forms/ProductForm/ProductDrawer.tsx:57
+#: src/components/forms/QuestionForm/QuestionDrawer.tsx:43
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:748
 msgid "You have unsaved changes. Are you sure you want to discard them?"
 msgstr "Έχετε μη αποθηκευμένες αλλαγές. Σίγουρα θέλετε να τις απορρίψετε;"
@@ -22506,6 +22791,10 @@ msgstr "Πρέπει να συμφωνήσετε να λαμβάνετε μην�
 #: src/components/routes/auth/AcceptInvitation/index.tsx:44
 msgid "You must agree to the terms and conditions"
 msgstr "Πρέπει να συμφωνήσετε με τους όρους και προϋποθέσεις"
+
+#: src/components/routes/event/Questions/questionTemplates.ts:67
+msgid "You must be 18 or older to attend this event."
+msgstr "Πρέπει να είστε 18 ετών ή μεγαλύτεροι για να παρακολουθήσετε αυτή την εκδήλωση."
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:168
 msgid "You must create a ticket before you can manually add an attendee."
@@ -22651,7 +22940,7 @@ msgstr "Έχετε προσκληθεί"
 msgid "You've been invited to join a team. Open the invitation email we sent you to finish joining. If the link has expired, ask the person who invited you to send a new one."
 msgstr "Έχετε προσκληθεί να συμμετάσχετε σε μια ομάδα. Ανοίξτε το email πρόσκλησης που σας στείλαμε για να ολοκληρώσετε τη συμμετοχή. Αν ο σύνδεσμος έχει λήξει, ζητήστε από το άτομο που σας προσκάλεσε να σας στείλει νέο."
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:454
+#: src/components/routes/product-widget/CollectInformation/index.tsx:492
 msgid "You've been offered a spot!"
 msgstr "Σας προσφέρθηκε μια θέση!"
 
@@ -22743,7 +23032,11 @@ msgstr "Η τρέχουσα παραγγελία σας θα χαθεί."
 msgid "Your current recovery codes will stop working straight away. Enter a code from your authenticator app to confirm."
 msgstr "Οι τρέχοντες κωδικοί ανάκτησης θα πάψουν να λειτουργούν άμεσα. Εισαγάγετε έναν κωδικό από την εφαρμογή ελέγχου ταυτότητας για επιβεβαίωση."
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:468
+#: src/components/routes/event/Questions/CheckoutPreview.tsx:88
+msgid "Your details"
+msgstr "Τα στοιχεία σας"
+
+#: src/components/routes/product-widget/CollectInformation/index.tsx:506
 msgid "Your Details"
 msgstr "Τα Στοιχεία σας"
 
@@ -22952,6 +23245,10 @@ msgstr "Οι θέσεις σας είναι δεσμευμένες. Ο διορ�
 msgid "Your Plan"
 msgstr "Το Πλάνο σας"
 
+#: src/components/forms/QuestionForm/index.tsx:33
+msgid "Your question"
+msgstr "Η ερώτησή σας"
+
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:58
 msgid "Your recovery codes and trusted devices will be removed."
 msgstr "Οι κωδικοί ανάκτησης και οι αξιόπιστες συσκευές σας θα αφαιρεθούν."
@@ -23000,7 +23297,7 @@ msgstr "Το εισιτήριό σας για"
 msgid "Your ticket is still valid — no action is needed unless the new time doesn't work for you. Please reply to this email if you have any questions."
 msgstr "Το εισιτήριό σας παραμένει έγκυρο — δεν χρειάζεται να κάνετε κάτι, εκτός αν η νέα ώρα δεν σας βολεύει. Απαντήστε σε αυτό το email αν έχετε απορίες."
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:385
+#: src/components/routes/product-widget/CollectInformation/index.tsx:419
 msgid "Your tickets have been confirmed."
 msgstr "Τα εισιτήριά σας επιβεβαιώθηκαν."
 
@@ -23016,7 +23313,7 @@ msgstr "Ο αριθμός ΦΠΑ σας είναι σε ουρά για επαλ
 msgid "Your VAT number will be validated when you save"
 msgstr "Ο αριθμός ΦΠΑ σας θα επαληθευτεί όταν αποθηκεύσετε"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:411
+#: src/components/routes/product-widget/CollectInformation/index.tsx:445
 msgid "Your waitlist offer has expired and we were unable to complete your order. Please rejoin the waitlist to be notified when more spots become available."
 msgstr "Η προσφορά λίστας αναμονής έληξε. Παρακαλώ εγγραφείτε ξανά για να ειδοποιηθείτε."
 
@@ -23029,17 +23326,17 @@ msgstr "your-website.com"
 msgid "YouTube"
 msgstr "YouTube"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:595
+#: src/components/routes/product-widget/CollectInformation/index.tsx:633
 msgid "ZIP / Postal Code"
 msgstr "ΤΚ / Ταχυδρομικός Κωδικός"
 
-#: src/components/common/CheckoutQuestion/index.tsx:170
+#: src/components/common/CheckoutQuestion/index.tsx:213
 #: src/components/common/LocationPicker/index.tsx:261
 #: src/components/modals/LocationEditModal/index.tsx:152
 msgid "Zip or Postal Code"
 msgstr "ΤΚ ή Ταχυδρομικός Κωδικός"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:596
+#: src/components/routes/product-widget/CollectInformation/index.tsx:634
 msgid "ZIP or Postal Code"
 msgstr "ΤΚ ή Ταχυδρομικός Κωδικός"
 

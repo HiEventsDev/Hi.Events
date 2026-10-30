@@ -12,6 +12,7 @@ use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\QuestionAnswerDomainObject;
+use HiEvents\DomainObjects\QuestionDomainObject;
 use HiEvents\DomainObjects\SeatClaimDomainObject;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
@@ -26,6 +27,7 @@ use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionAnswerRepositoryInterface;
+use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\CompleteOrderHandler;
 use HiEvents\Services\Application\Handlers\Order\DTO\CompleteOrderDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\CompleteOrderOrderDTO;
@@ -33,6 +35,7 @@ use HiEvents\Services\Application\Handlers\Order\DTO\CompleteOrderProductDataDTO
 use HiEvents\Services\Application\Handlers\Order\DTO\OrderQuestionsDTO;
 use HiEvents\Services\Domain\Order\OccurrenceStatusValidator;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
+use HiEvents\Services\Domain\Question\QuestionVisibilityService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
@@ -82,6 +85,8 @@ class CompleteOrderHandlerTest extends TestCase
 
     private EventOccurrenceRepositoryInterface|MockInterface $occurrenceRepository;
 
+    private QuestionRepositoryInterface|MockInterface $questionRepository;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -126,6 +131,10 @@ class CompleteOrderHandlerTest extends TestCase
         $this->eventSeatMapLookup = Mockery::mock(EventSeatMapLookupService::class);
         $this->eventSeatMapLookup->shouldReceive('existsForEvent')->andReturnFalse()->byDefault();
 
+        $this->questionRepository = Mockery::mock(QuestionRepositoryInterface::class);
+        $this->questionRepository->shouldReceive('loadRelation')->andReturnSelf()->byDefault();
+        $this->questionRepository->shouldReceive('findWhere')->andReturn(collect())->byDefault();
+
         $this->completeOrderHandler = new CompleteOrderHandler(
             $this->orderRepository,
             $this->affiliateRepository,
@@ -141,6 +150,8 @@ class CompleteOrderHandlerTest extends TestCase
             $this->seatedOrderCompletionGuard,
             $this->eventSeatMapLookup,
             new TransactionLockService(DB::getFacadeRoot()),
+            $this->questionRepository,
+            new QuestionVisibilityService,
         );
     }
 
@@ -258,6 +269,58 @@ class CompleteOrderHandlerTest extends TestCase
 
         $this->assertSame([
             ['question_id' => 12, 'answer' => 'Band 5', 'order_id' => 1],
+        ], $createdAnswers);
+    }
+
+    public function test_handle_skips_answers_to_follow_up_questions_whose_condition_is_not_met(): void
+    {
+        $orderShortId = 'ABC123';
+        $orderData = new CompleteOrderDTO(
+            order: new CompleteOrderOrderDTO(
+                first_name: 'John',
+                last_name: 'Doe',
+                email: 'john@example.com',
+                questions: new Collection([
+                    new OrderQuestionsDTO(question_id: 20, response: ['answer' => 'No']),
+                    new OrderQuestionsDTO(question_id: 21, response: ['answer' => 'Nut allergy']),
+                ]),
+            ),
+            products: new Collection([
+                new CompleteOrderProductDataDTO(
+                    product_price_id: 1,
+                    first_name: 'John',
+                    last_name: 'Doe',
+                    email: 'john@example.com'
+                ),
+            ]),
+            event_id: 1,
+        );
+
+        $this->questionRepository->shouldReceive('findWhere')->andReturn(collect([
+            (new QuestionDomainObject)->setId(20)->setBelongsTo('ORDER')->setType('RADIO')->setOptions(['Yes', 'No']),
+            (new QuestionDomainObject)->setId(21)->setBelongsTo('ORDER')->setType('SINGLE_LINE_TEXT')
+                ->setConditionQuestionId(20)->setConditionValues(['Yes']),
+        ]));
+        $this->orderRepository->shouldReceive('findByShortId')->with($orderShortId)->andReturn($this->createMockOrder());
+        $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->orderRepository->shouldReceive('updateFromArray')->andReturn($this->createMockOrder());
+        $this->productPriceRepository->shouldReceive('findWhereIn')->andReturn(new Collection([$this->createMockProductPrice()]));
+        $this->attendeeRepository->shouldReceive('insert')->andReturn(true);
+        $this->attendeeRepository->shouldReceive('findWhereIn')->andReturn(new Collection([$this->createMockAttendee()]));
+        $this->productQuantityUpdateService->shouldReceive('updateQuantitiesFromOrder');
+        $this->eventSettingsRepository->shouldReceive('findFirstWhere')->andReturn($this->createMockEventSetting());
+
+        $createdAnswers = [];
+        $this->questionAnswersRepository->shouldReceive('create')->andReturnUsing(function (array $data) use (&$createdAnswers) {
+            $createdAnswers[] = $data;
+
+            return new QuestionAnswerDomainObject;
+        });
+
+        $this->completeOrderHandler->handle($orderShortId, $orderData);
+
+        $this->assertSame([
+            ['question_id' => 20, 'answer' => 'No', 'order_id' => 1],
         ], $createdAnswers);
     }
 

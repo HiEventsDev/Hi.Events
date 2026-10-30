@@ -11,6 +11,7 @@ use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\QuestionDomainObject;
 use HiEvents\DomainObjects\SeatClaimDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
@@ -29,6 +30,7 @@ use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
 use HiEvents\Services\Domain\Order\DTO\ProcessedOrderItemDTO;
 use HiEvents\Services\Domain\Order\OrderItemProcessingService;
 use HiEvents\Services\Domain\Order\OrderManagementService;
+use HiEvents\Services\Domain\Question\QuestionVisibilityService;
 use HiEvents\Services\Domain\SelfService\OrderAuditLogService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
@@ -52,6 +54,7 @@ class BoxOfficeOrderCreationService
         private readonly OrderAuditLogService $orderAuditLogService,
         private readonly SeatClaimService $seatClaimService,
         private readonly SeatingEventLockService $seatingEventLock,
+        private readonly QuestionVisibilityService $questionVisibilityService,
     ) {}
 
     /**
@@ -103,8 +106,17 @@ class BoxOfficeOrderCreationService
 
             $attendees = $this->createAttendees($order, $data);
             $this->seatClaimService->pairWithAttendees($order->getId());
-            $this->createOrderQuestionAnswers($order, $data);
-            $this->createAttendeeQuestionAnswers($order, $data, $attendees);
+            if ($data->box_office->getCollectOrderQuestions()) {
+                $questionsById = $this->questionVisibilityService->keyById(
+                    $this->questionRepository
+                        ->loadRelation(ProductDomainObject::class)
+                        ->findWhere(['event_id' => $order->getEventId()])
+                );
+                $orderAnswers = $this->questionVisibilityService->answersByQuestionId($data->questions);
+
+                $this->createOrderQuestionAnswers($order, $data, $questionsById, $orderAnswers);
+                $this->createAttendeeQuestionAnswers($order, $data, $attendees, $questionsById, $orderAnswers);
+            }
             $this->logPriceAdjustments($order, $data);
 
             return $this->orderRepository
@@ -167,18 +179,20 @@ class BoxOfficeOrderCreationService
     /**
      * @param  Collection<AttendeeDomainObject>  $attendees
      */
-    private function createAttendeeQuestionAnswers(OrderDomainObject $order, CreateBoxOfficeOrderDTO $data, Collection $attendees): void
-    {
-        if (! $data->box_office->getCollectOrderQuestions() || $data->attendees === []) {
+    private function createAttendeeQuestionAnswers(
+        OrderDomainObject $order,
+        CreateBoxOfficeOrderDTO $data,
+        Collection $attendees,
+        Collection $questionsById,
+        array $orderAnswers,
+    ): void {
+        if ($data->attendees === []) {
             return;
         }
 
-        $productQuestionIds = $this->questionRepository
-            ->findWhere([
-                'event_id' => $order->getEventId(),
-                'belongs_to' => QuestionBelongsTo::PRODUCT->name,
-            ])
-            ->map(fn (QuestionDomainObject $question) => $question->getId())
+        $productQuestionIds = $questionsById
+            ->filter(fn (QuestionDomainObject $question) => $question->getBelongsTo() === QuestionBelongsTo::PRODUCT->name)
+            ->keys()
             ->all();
 
         $unassigned = $attendees->groupBy(fn (AttendeeDomainObject $attendee) => $attendee->getProductPriceId())
@@ -191,11 +205,17 @@ class BoxOfficeOrderCreationService
                 $entry = $data->attendees[$slot++] ?? null;
                 $attendee = empty($unassigned[$item->product_price_id]) ? null : array_shift($unassigned[$item->product_price_id]);
 
+                $attendeeAnswers = $this->questionVisibilityService->answersByQuestionId($entry['questions'] ?? []);
+
                 foreach ($entry['questions'] ?? [] as $question) {
                     $questionId = (int) ($question['question_id'] ?? 0);
                     $answer = $this->extractAnswer($question['response'] ?? null);
 
                     if ($answer === null || ! in_array($questionId, $productQuestionIds, true)) {
+                        continue;
+                    }
+
+                    if (! $this->questionVisibilityService->shouldKeepAnswer($questionId, $questionsById, $orderAnswers, $attendeeAnswers, $item->product_id)) {
                         continue;
                     }
 
@@ -211,18 +231,19 @@ class BoxOfficeOrderCreationService
         }
     }
 
-    private function createOrderQuestionAnswers(OrderDomainObject $order, CreateBoxOfficeOrderDTO $data): void
-    {
-        if (! $data->box_office->getCollectOrderQuestions() || $data->questions === []) {
+    private function createOrderQuestionAnswers(
+        OrderDomainObject $order,
+        CreateBoxOfficeOrderDTO $data,
+        Collection $questionsById,
+        array $orderAnswers,
+    ): void {
+        if ($data->questions === []) {
             return;
         }
 
-        $orderQuestionIds = $this->questionRepository
-            ->findWhere([
-                'event_id' => $order->getEventId(),
-                'belongs_to' => QuestionBelongsTo::ORDER->name,
-            ])
-            ->map(fn (QuestionDomainObject $question) => $question->getId())
+        $orderQuestionIds = $questionsById
+            ->filter(fn (QuestionDomainObject $question) => $question->getBelongsTo() === QuestionBelongsTo::ORDER->name)
+            ->keys()
             ->all();
 
         foreach ($data->questions as $question) {
@@ -230,6 +251,10 @@ class BoxOfficeOrderCreationService
             $answer = $this->extractAnswer($question['response'] ?? null);
 
             if ($answer === null || ! in_array($questionId, $orderQuestionIds, true)) {
+                continue;
+            }
+
+            if (! $this->questionVisibilityService->shouldKeepAnswer($questionId, $questionsById, $orderAnswers)) {
                 continue;
             }
 
