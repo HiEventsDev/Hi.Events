@@ -14606,7 +14606,7 @@
     "/public/events/{eventId}/order/{orderShortId}": {
       "put": {
         "operationId": "public.completeOrderActionPublic",
-        "description": "`order.questions` and `products.*.questions` are validated against the questions configured\nfor the event. The `order.address` fields become required when the event's settings require\na billing address.",
+        "description": "`order.questions` and `products.*.questions` are validated against the questions configured\nfor the event. Every required question that is shown must be answered, so leaving out\n`order.questions` fails when the event has required order questions. The `order.address`\nfields become required when the event's settings require a billing address.",
         "summary": "Complete Order (public)",
         "tags": [
           "Orders / Public"
@@ -35472,6 +35472,33 @@
           "is_hidden": {
             "type": "boolean"
           },
+          "applies_to_all_tickets": {
+            "type": "boolean"
+          },
+          "condition_question_id": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "condition_values": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "disqualifying_options": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "disqualification_message": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
           "product_ids": {
             "type": "array",
             "items": {
@@ -35488,7 +35515,12 @@
           "required",
           "event_id",
           "belongs_to",
-          "is_hidden"
+          "is_hidden",
+          "applies_to_all_tickets",
+          "condition_question_id",
+          "condition_values",
+          "disqualifying_options",
+          "disqualification_message"
         ],
         "title": "QuestionResource"
       },
@@ -35542,6 +35574,30 @@
           "order": {
             "type": "integer"
           },
+          "condition_question_id": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "condition_values": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "disqualifying_options": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "disqualification_message": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
           "product_ids": {
             "type": "array",
             "items": {
@@ -35558,7 +35614,11 @@
           "required",
           "event_id",
           "belongs_to",
-          "order"
+          "order",
+          "condition_question_id",
+          "condition_values",
+          "disqualifying_options",
+          "disqualification_message"
         ],
         "title": "QuestionResourcePublic"
       },
@@ -38721,6 +38781,66 @@
             "items": {
               "type": "string"
             }
+          },
+          "applies_to_all_tickets": {
+            "type": "boolean"
+          },
+          "condition_question_id": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "condition_values": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string",
+              "maxLength": 2000
+            }
+          },
+          "disqualifying_options": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string",
+              "maxLength": 2000
+            }
+          },
+          "disqualification_message": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 500
+          },
+          "option_renames": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "object",
+              "properties": {
+                "from": {
+                  "type": "string",
+                  "maxLength": 2000
+                },
+                "to": {
+                  "type": "string",
+                  "maxLength": 2000
+                }
+              },
+              "required": [
+                "from",
+                "to"
+              ]
+            },
+            "maxItems": 200
           },
           "belongs_to": {
             "type": "string",

@@ -115,6 +115,7 @@ Feature rules live in `.claude/rules/`; Claude Code loads each file automaticall
 | Lineup & schedule | `.claude/rules/features/lineup.md` |
 | Homepage sections | `.claude/rules/features/homepage-sections.md` |
 | Embeddable widget | `.claude/rules/features/widget.md` |
+| Registration questions | `.claude/rules/features/questions.md` |
 | Frontend UI patterns | `.claude/rules/frontend/ui.md` |
 | E2E specs | `.claude/rules/e2e.md` |
 

@@ -3,10 +3,12 @@
 namespace HiEvents\Validators\Rules;
 
 use Closure;
+use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
 use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\QuestionDomainObject;
+use HiEvents\Services\Domain\Question\QuestionVisibilityService;
 use Illuminate\Contracts\Validation\DataAwareRule;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\ValidatorAwareRule;
@@ -35,6 +37,10 @@ abstract class BaseQuestionRule implements ValidationRule, DataAwareRule, Valida
 
     protected Collection $questions;
 
+    protected Collection $questionsById;
+
+    protected QuestionVisibilityService $visibility;
+
     private Collection $products;
 
     protected Validator $validator;
@@ -45,14 +51,22 @@ abstract class BaseQuestionRule implements ValidationRule, DataAwareRule, Valida
 
     abstract protected function validateQuestions(mixed $data): array;
 
+    abstract protected function belongsTo(): QuestionBelongsTo;
+
     public function __construct(Collection $questions, Collection $products)
     {
-        $this->questions = $questions;
+        $this->visibility = new QuestionVisibilityService;
+        $this->questionsById = $this->visibility->keyById($questions);
+        $this->questions = $questions->filter(
+            fn (QuestionDomainObject $question) => $question->getBelongsTo() === $this->belongsTo()->name
+        );
         $this->products = $products;
     }
 
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
+        $value ??= [];
+
         $this->validateRequiredQuestionArePresent(collect($value));
 
         $questionValidationMessages = $this->validateQuestions($value);
@@ -144,6 +158,20 @@ abstract class BaseQuestionRule implements ValidationRule, DataAwareRule, Valida
 
         if (isset($response['answer']) && ! is_array($response['answer']) && strlen($response['answer']) > 255) {
             $validationMessages[$key.'.answer'][] = __('This field must be less than 255 characters.');
+        }
+
+        return $validationMessages;
+    }
+
+    protected function validateEligibility(
+        QuestionDomainObject $questionDomainObject,
+        mixed $answer,
+        string $key,
+        array $validationMessages
+    ): array {
+        if ($questionDomainObject->isDisqualifyingAnswer($answer)) {
+            $validationMessages[$key.'.answer'][] = $questionDomainObject->getDisqualificationMessage()
+                ?: __('This answer means you are not eligible to register for this event.');
         }
 
         return $validationMessages;

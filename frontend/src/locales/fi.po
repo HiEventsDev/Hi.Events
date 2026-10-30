@@ -40,6 +40,7 @@ msgid "{0}"
 msgstr "{0}"
 
 #: src/components/routes/admin/Announcements/index.tsx:287
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:111
 msgid "{0} (copy)"
 msgstr "{0} (kopio)"
 
@@ -266,7 +267,7 @@ msgstr "{0} myyty"
 msgid "{0} standing"
 msgstr "{0} seisomapaikkaa"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:641
+#: src/components/routes/product-widget/CollectInformation/index.tsx:681
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/OrdersTab.tsx:93
 msgid "{0} tickets"
 msgstr "{0} lippua"
@@ -462,6 +463,10 @@ msgstr "{label} siirretty kohtaan {target}/{total}."
 msgid "{linkCount, plural, one {# link} other {# links}}"
 msgstr "{linkCount, plural, one {# linkki} other {# linkkiä}}"
 
+#: src/components/routes/event/Questions/QuestionRow.tsx:73
+msgid "{listed} +{remaining} more"
+msgstr "{listed} +{remaining} muuta"
+
 #: src/ee/seating/components/routes/event/SeatMapDesigner/index.tsx:19
 msgid "{listed} and {remaining} more"
 msgstr "{listed} ja {remaining} muuta"
@@ -519,9 +524,13 @@ msgstr "{onLineup} jo esiintyjälistalla"
 msgid "{open} seats to choose"
 msgstr "{open} paikkaa valittavana"
 
-#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:407
+#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:409
 msgid "{open} to seat"
 msgstr "{open} ilman paikkaa"
+
+#: src/components/routes/event/Questions/QuestionRow.tsx:98
+msgid "{optionCount, plural, one {# option} other {# options}}"
+msgstr "{optionCount, plural, one {# vaihtoehto} other {# vaihtoehtoa}}"
 
 #: src/components/routes/settings/Team/MemberRow.tsx:51
 msgid "{organizerCount, plural, one {# organizer} other {# organizers}}"
@@ -809,7 +818,7 @@ msgstr "1 paikka valittavana"
 msgid "1 slot"
 msgstr "1 aikaväli"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:640
+#: src/components/routes/product-widget/CollectInformation/index.tsx:680
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/OrdersTab.tsx:92
 msgid "1 ticket"
 msgstr "1 lippu"
@@ -826,7 +835,7 @@ msgstr "1 lipputyyppi määritetty"
 msgid "1 time available"
 msgstr "1 aika saatavilla"
 
-#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:407
+#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:409
 msgid "1 to seat"
 msgstr "1 ilman paikkaa"
 
@@ -915,14 +924,6 @@ msgstr "Sisäänkirjauslistan avulla henkilökunta voi skannata lippuja ovella p
 msgid "A compact, centred card"
 msgstr "Kompakti, keskitetty kortti"
 
-#: src/components/forms/QuestionForm/index.tsx:138
-msgid "A date input. Perfect for asking for a date of birth etc."
-msgstr "Päivämäärän syöttökenttä. Sopii esimerkiksi syntymäajan kysymiseen."
-
-#: src/components/forms/QuestionForm/index.tsx:126
-msgid "A Dropdown input allows only one selection"
-msgstr "Avattava valikko sallii vain yhden valinnan"
-
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:199
 msgid "A few quick steps and you're ready to start selling."
 msgstr "Muutama nopea vaihe ja olet valmis myymään."
@@ -947,10 +948,6 @@ msgstr "Otsikko ja muotoiltua tekstiä. Saapumisohjeet, säännöt, mitä vain."
 msgid "A message to display when there are no products in this category."
 msgstr "Viesti, joka näytetään, kun kategoriassa ei ole tuotteita."
 
-#: src/components/forms/QuestionForm/index.tsx:108
-msgid "A multi line text input"
-msgstr "Monirivinen tekstikenttä"
-
 #: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:32
 msgid "A narrow card with the details centred. Suits smaller and private events."
 msgstr "Kapea kortti, jossa tiedot on keskitetty. Sopii pienempiin ja yksityisiin tapahtumiin."
@@ -966,10 +963,6 @@ msgstr "Profiilissa voi olla enintään {MAX_IMAGES} kuvaa."
 #: src/components/forms/PromoCodeForm/index.tsx:148
 msgid "A promo code with no discount can be used to reveal hidden products."
 msgstr "Kampanjakoodia ilman alennusta voidaan käyttää piilotettujen tuotteiden paljastamiseen."
-
-#: src/components/forms/QuestionForm/index.tsx:120
-msgid "A Radio option has multiple options but only one can be selected."
-msgstr "Valintapainike sisältää useita vaihtoehtoja, mutta vain yksi voidaan valita."
 
 #: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:72
 msgid "A recurring event can become a single event when it has exactly one active date and no orders. The date's own prices, product visibility, capacity and label are removed; its time and location are kept."
@@ -991,18 +984,6 @@ msgstr "Lyhyt kuvaus tapahtumasta, joka näytetään hakukoneiden tuloksissa ja 
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:110
 msgid "A short description of your organizer that will be displayed to your users."
 msgstr "Lyhyt kuvaus järjestäjästäsi, joka näytetään käyttäjillesi."
-
-#: src/components/forms/QuestionForm/index.tsx:102
-msgid "A single line text input"
-msgstr "Yksirivisinen tekstikenttä"
-
-#: src/components/forms/QuestionForm/index.tsx:87
-msgid "A single question per order. E.g, What is your shipping address?"
-msgstr "Yksi kysymys tilausta kohti. Esim. Mikä on toimitusosoitteesi?"
-
-#: src/components/forms/QuestionForm/index.tsx:93
-msgid "A single question per product. E.g, What is your t-shirt size?"
-msgstr "Yksi kysymys tuotetta kohti. Esim. Mikä on t-paitasi koko?"
 
 #: src/ee/seating/components/routes/event/Seating/SeatingRulesCard.tsx:41
 msgid "A single seat is still allowed when there is no other way to seat the party."
@@ -1097,6 +1078,10 @@ msgstr "Pääsy poistettu"
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:290
 msgid "Accessibility"
 msgstr "Esteettömyys"
+
+#: src/components/routes/event/Questions/questionTemplates.ts:46
+msgid "Accessibility needs"
+msgstr "Saavutettavuustarpeet"
 
 #: src/ee/seating/components/SeatPicker/SeatListView.tsx:53
 msgid "accessible"
@@ -1341,6 +1326,10 @@ msgstr "Lisää kuvaus tälle lippukassalle"
 msgid "Add a description for this check-in list"
 msgstr "Lisää kuvaus tälle sisäänkirjautumislistalle"
 
+#: src/components/forms/QuestionForm/ConditionFields.tsx:50
+msgid "Add a question with options above this one to show it only for certain answers."
+msgstr "Lisää tämän yläpuolelle vaihtoehtoja sisältävä kysymys, jotta tämä näytetään vain tietyillä vastauksilla."
+
 #: src/components/routes/event/OccurrencesTab/index.tsx:594
 msgid "Add a Single Date"
 msgstr "Lisää yksittäinen päivämäärä"
@@ -1370,7 +1359,7 @@ msgstr "Lisää upotuskoodin jälkeen"
 msgid "Add an area"
 msgstr "Lisää alue"
 
-#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:75
+#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:90
 msgid "Add an email to send the tickets"
 msgstr "Lisää sähköpostiosoite lippujen lähettämistä varten"
 
@@ -1402,6 +1391,10 @@ msgstr "Lisää muistiinpanoja tilauksesta. Nämä eivät näy asiakkaalle."
 msgid "Add any notes about the order..."
 msgstr "Lisää muistiinpanoja tilauksesta..."
 
+#: src/components/forms/QuestionForm/questionFormValues.ts:88
+msgid "Add at least one option"
+msgstr "Lisää vähintään yksi vaihtoehto"
+
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:80
 msgid "Add at least one question below."
 msgstr "Lisää alle vähintään yksi kysymys."
@@ -1426,10 +1419,6 @@ msgstr "Lisää kortinlukija"
 msgid "Add connection details for the online event."
 msgstr "Lisää verkkoyhteystiedot online-tapahtumalle."
 
-#: src/components/common/QuestionsTable/index.tsx:445
-msgid "Add custom questions to collect additional information during checkout"
-msgstr "Lisää mukautettuja kysymyksiä lisätietojen keräämiseksi kassalla"
-
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:411
 msgid "Add Date"
 msgstr "Lisää päivämäärä"
@@ -1446,7 +1435,7 @@ msgstr "Lisää päivämääriä"
 msgid "Add dates and times for your recurring event"
 msgstr "Lisää päivämäärät ja ajat toistuvalle tapahtumallesi"
 
-#: src/components/forms/QuestionForm/index.tsx:202
+#: src/components/forms/QuestionForm/index.tsx:121
 msgid "Add description"
 msgstr "Lisää kuvaus"
 
@@ -1465,6 +1454,11 @@ msgstr "Lisää verkkotunnus"
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:136
 msgid "Add event details"
 msgstr "Lisää tapahtuman tiedot"
+
+#: src/components/routes/event/Questions/QuestionRow.tsx:171
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:125
+msgid "Add follow-up question"
+msgstr "Lisää jatkokysymys"
 
 #: src/components/routes/event/Lineup/ProfileLinksField.tsx:63
 msgid "Add link"
@@ -1490,9 +1484,13 @@ msgstr "Lisää uudet henkilöt automaattisesti"
 msgid "Add one"
 msgstr "Lisää yksi"
 
-#: src/components/forms/QuestionForm/index.tsx:68
-msgid "Add Option"
+#: src/components/forms/QuestionForm/OptionsEditor.tsx:267
+msgid "Add option"
 msgstr "Lisää vaihtoehto"
+
+#: src/components/forms/QuestionForm/index.tsx:149
+msgid "Add options above, then choose which answers block registration."
+msgstr "Lisää vaihtoehdot yllä ja valitse sitten, mitkä vastaukset estävät rekisteröitymisen."
 
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:38
 #: src/components/routes/event/Lineup/index.tsx:337
@@ -1513,12 +1511,8 @@ msgid "Add Product to Category"
 msgstr "Lisää tuote kategoriaan"
 
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:177
+#: src/components/routes/event/Questions/AddQuestionMenu.tsx:31
 msgid "Add question"
-msgstr "Lisää kysymys"
-
-#: src/components/common/QuestionsTable/index.tsx:235
-#: src/components/common/QuestionsTable/index.tsx:491
-msgid "Add Question"
 msgstr "Lisää kysymys"
 
 #: src/ee/box-office/components/modals/AddTerminalReaderModal/index.tsx:66
@@ -1675,32 +1669,32 @@ msgstr "Lisätiedot"
 
 #: src/components/common/LocationsTable/index.tsx:113
 #: src/components/common/OrderDetails/index.tsx:122
-#: src/components/forms/QuestionForm/index.tsx:130
+#: src/components/forms/QuestionForm/questionTypes.ts:31
 #: src/components/modals/ManageOrderModal/index.tsx:210
 #: src/components/routes/organizer/Settings/index.tsx:51
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:103
 msgid "Address"
 msgstr "Osoite"
 
-#: src/components/common/CheckoutQuestion/index.tsx:156
+#: src/components/common/CheckoutQuestion/index.tsx:199
 msgid "Address line 1"
 msgstr "Osoiterivi 1"
 
 #: src/components/common/LocationPicker/index.tsx:237
 #: src/components/modals/LocationEditModal/index.tsx:144
-#: src/components/routes/product-widget/CollectInformation/index.tsx:567
-#: src/components/routes/product-widget/CollectInformation/index.tsx:568
+#: src/components/routes/product-widget/CollectInformation/index.tsx:605
+#: src/components/routes/product-widget/CollectInformation/index.tsx:606
 msgid "Address Line 1"
 msgstr "Osoiterivi 1"
 
-#: src/components/common/CheckoutQuestion/index.tsx:159
+#: src/components/common/CheckoutQuestion/index.tsx:202
 msgid "Address line 2"
 msgstr "Osoiterivi 2"
 
 #: src/components/common/LocationPicker/index.tsx:242
 #: src/components/modals/LocationEditModal/index.tsx:145
-#: src/components/routes/product-widget/CollectInformation/index.tsx:572
-#: src/components/routes/product-widget/CollectInformation/index.tsx:573
+#: src/components/routes/product-widget/CollectInformation/index.tsx:610
+#: src/components/routes/product-widget/CollectInformation/index.tsx:611
 msgid "Address Line 2"
 msgstr "Osoiterivi 2"
 
@@ -1796,6 +1790,10 @@ msgstr "Kumppanit auttavat seuraamaan kumppaneiden ja vaikuttajien tuottamaa myy
 msgid "After your event is created, you can choose how often it repeats from the dashboard."
 msgstr "Kun tapahtumasi on luotu, voit valita hallintapaneelista kuinka usein se toistuu."
 
+#: src/components/routes/event/Questions/questionTemplates.ts:60
+msgid "Age check (18+)"
+msgstr "Iän tarkistus (18+)"
+
 #: src/utilites/lineup.ts:28
 msgid "Agenda"
 msgstr "Ohjelma"
@@ -1848,7 +1846,7 @@ msgid "All areas"
 msgstr "Kaikki alueet"
 
 #: src/components/common/MessageList/index.tsx:29
-#: src/components/routes/product-widget/CollectInformation/index.tsx:549
+#: src/components/routes/product-widget/CollectInformation/index.tsx:587
 msgid "All attendees"
 msgstr "Kaikki osallistujat"
 
@@ -1968,6 +1966,8 @@ msgstr "Kaikki tilat"
 
 #: src/components/common/WidgetEditor/ContentFields.tsx:116
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:97
+#: src/components/forms/QuestionForm/index.tsx:214
+#: src/components/routes/event/Questions/QuestionRow.tsx:59
 msgid "All tickets"
 msgstr "Kaikki liput"
 
@@ -2079,6 +2079,10 @@ msgstr "Peru myös tämä tilaus"
 #: src/components/modals/CancelOrderModal/index.tsx:75
 msgid "Also refund this order"
 msgstr "Hyvitä myös tämä tilaus"
+
+#: src/components/forms/QuestionForm/ConditionFields.tsx:65
+msgid "Always"
+msgstr "Aina"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:342
 msgid "Always available"
@@ -2233,13 +2237,26 @@ msgstr "Vastaus {number}"
 msgid "Answer questions"
 msgstr "Vastaa kysymyksiin"
 
-#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:83
+#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:98
 msgid "Answer the required questions to continue the sale."
 msgstr "Vastaa pakollisiin kysymyksiin jatkaaksesi myyntiä."
+
+#: src/components/forms/QuestionForm/index.tsx:84
+#: src/components/routes/event/Questions/AddQuestionMenu.tsx:36
+msgid "Answer type"
+msgstr "Vastaustyyppi"
 
 #: src/components/common/QuestionAndAnswerList/index.tsx:77
 msgid "Answer updated successfully."
 msgstr "Vastaus päivitetty onnistuneesti."
+
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:189
+msgid "Answered by the person placing the order."
+msgstr "Tilauksen tekijä vastaa."
+
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:216
+msgid "Answered once for every ticket in the order."
+msgstr "Vastataan kerran jokaista tilauksen lippua kohden."
 
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:246
 msgid "Answers"
@@ -2248,6 +2265,10 @@ msgstr "Vastaukset"
 #: src/components/forms/CheckInListForm/index.tsx:207
 msgid "Answers provided at checkout (e.g. meal choice)"
 msgstr "Kassalla annetut vastaukset (esim. ateriavalinta)"
+
+#: src/components/forms/QuestionForm/index.tsx:153
+msgid "Answers that block registration"
+msgstr "Rekisteröitymisen estävät vastaukset"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:160
 msgid "Any app that supports time-based codes (TOTP) will work. Already have one? Skip ahead."
@@ -2445,6 +2466,10 @@ msgstr "Arkistoitu"
 #: src/components/modals/SwitchOrganizerModal/index.tsx:111
 msgid "Archived Organizers"
 msgstr "Arkistoidut järjestäjät"
+
+#: src/components/routes/event/Questions/questionTemplates.ts:63
+msgid "Are you 18 or older?"
+msgstr "Oletko vähintään 18-vuotias?"
 
 #: src/components/routes/admin/SpamEvents/index.tsx:76
 msgid "Are you sure this event is not spam? It will be published immediately."
@@ -2666,17 +2691,13 @@ msgstr "Pyydä tilin ylläpitäjää päivittämään käyttöoikeutesi."
 msgid "Ask buyers to use their order reference when paying"
 msgstr "Pyydä ostajia käyttämään tilausviitettään maksaessaan"
 
-#: src/components/common/QuestionsTable/index.tsx:395
-msgid "Ask for name and email for each ticket purchased"
-msgstr "Pyydä nimi ja sähköposti jokaista ostettua lippua kohti"
+#: src/components/forms/QuestionForm/index.tsx:209
+msgid "Ask for"
+msgstr "Kysy koskien"
 
-#: src/components/forms/QuestionForm/index.tsx:85
-msgid "Ask once per order"
-msgstr "Kysy kerran tilausta kohti"
-
-#: src/components/forms/QuestionForm/index.tsx:91
-msgid "Ask once per product"
-msgstr "Kysy kerran tuotetta kohti"
+#: src/components/routes/event/Questions/AttendeeDetailsSetting.tsx:17
+msgid "Ask for each attendee's name and email"
+msgstr "Kysy jokaisen osallistujan nimi ja sähköposti"
 
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:160
 msgid "Ask order and attendee questions at the door. Every ticket gets its own step, which can greatly slow down sales. Leave off for busy doors."
@@ -2694,6 +2715,24 @@ msgstr "Pyydä sinut kutsunutta henkilöä lähettämään uusi kutsu."
 msgid "Ask your administrator to invite you."
 msgstr "Pyydä ylläpitäjää kutsumaan sinut."
 
+#: src/components/forms/QuestionForm/QuestionDrawer.tsx:69
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:215
+msgid "Asked for each attendee"
+msgstr "Kysytään jokaiselta osallistujalta"
+
+#: src/components/forms/QuestionForm/index.tsx:202
+msgid "Asked once of the person placing the order, e.g. how they heard about the event."
+msgstr "Kysytään kerran tilauksen tekijältä, esim. mistä hän kuuli tapahtumasta."
+
+#: src/components/forms/QuestionForm/QuestionDrawer.tsx:70
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:188
+msgid "Asked once per order"
+msgstr "Kysytään kerran tilausta kohden"
+
+#: src/components/forms/QuestionForm/index.tsx:201
+msgid "Asked separately for every ticket in the order, e.g. t-shirt size or dietary needs."
+msgstr "Kysytään erikseen jokaista tilauksen lippua kohden, esim. T-paidan koko tai ruokavalio."
+
 #: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:123
 msgid "Assign a different plan"
 msgstr "Määritä eri suunnitelma"
@@ -2709,6 +2748,10 @@ msgstr "Määritetty taso"
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:48
 msgid "At least 8 characters."
 msgstr "Vähintään 8 merkkiä."
+
+#: src/components/forms/QuestionForm/questionFormValues.ts:110
+msgid "At least one answer must let people register"
+msgstr "Vähintään yhden vastauksen on sallittava rekisteröityminen"
 
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:37
 #: src/components/modals/CreateWebhookModal/index.tsx:37
@@ -2745,13 +2788,13 @@ msgid "attendee"
 msgstr "osallistuja"
 
 #: src/components/common/AttendeeTicket/index.tsx:101
-#: src/components/common/QuestionsTable/index.tsx:473
-#: src/components/routes/product-widget/CollectInformation/index.tsx:670
+#: src/components/routes/event/Questions/CheckoutPreview.tsx:97
+#: src/components/routes/product-widget/CollectInformation/index.tsx:711
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:365
 msgid "Attendee"
 msgstr "Osallistuja"
 
-#: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:73
+#: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:102
 msgid "Attendee {current} of {total}"
 msgstr "Osallistuja {current}/{total}"
 
@@ -2771,18 +2814,6 @@ msgstr "Osallistuja luotu"
 msgid "Attendee Details"
 msgstr "Osallistujan tiedot"
 
-#: src/components/common/QuestionsTable/index.tsx:435
-msgid "Attendee details collection"
-msgstr "Osallistujatietojen keruu"
-
-#: src/components/common/QuestionsTable/index.tsx:342
-msgid "Attendee details copied from order"
-msgstr "Osallistujatiedot kopioitu tilauksesta"
-
-#: src/components/common/QuestionsTable/index.tsx:428
-msgid "Attendee Information"
-msgstr "Osallistujan tiedot"
-
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:116
 msgid "Attendee information collection"
 msgstr "Osallistujatietojen keruu"
@@ -2790,6 +2821,10 @@ msgstr "Osallistujatietojen keruu"
 #: src/ee/seating/components/AttendeeSeatField/index.tsx:45
 msgid "Attendee moved"
 msgstr "Osallistuja siirretty"
+
+#: src/components/routes/event/Questions/AttendeeDetailsSetting.tsx:32
+msgid "Attendee name and email"
+msgstr "Osallistujien nimi ja sähköposti"
 
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:276
 msgid "Attendee names appear on the printout. Handle it accordingly."
@@ -2802,6 +2837,10 @@ msgstr "Osallistujaa ei löydy"
 #: src/components/forms/CheckInListForm/index.tsx:188
 msgid "Attendee notes"
 msgstr "Osallistujamuistiinpanot"
+
+#: src/components/routes/event/Questions/CheckoutPreview.tsx:133
+msgid "Attendee questions can differ by ticket."
+msgstr "Osallistujien kysymykset voivat vaihdella lipun mukaan."
 
 #: src/components/routes/event/attendees.tsx:82
 msgid "Attendee Status"
@@ -2994,7 +3033,7 @@ msgstr "Awesome Organizer Ltd."
 #: src/components/layouts/SettingsLayout/index.tsx:60
 #: src/components/modals/CreateEventModal/index.tsx:251
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:151
-#: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:87
+#: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:118
 #: src/ee/box-office/components/layouts/BoxOffice/TenderStage.tsx:55
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:287
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:288
@@ -3006,9 +3045,9 @@ msgid "Back to Accounts"
 msgstr "Takaisin tileihin"
 
 #: src/components/forms/StripeCheckoutForm/index.tsx:145
-#: src/components/routes/product-widget/CollectInformation/index.tsx:367
-#: src/components/routes/product-widget/CollectInformation/index.tsx:397
-#: src/components/routes/product-widget/CollectInformation/index.tsx:426
+#: src/components/routes/product-widget/CollectInformation/index.tsx:401
+#: src/components/routes/product-widget/CollectInformation/index.tsx:431
+#: src/components/routes/product-widget/CollectInformation/index.tsx:460
 msgid "Back to Event"
 msgstr "Takaisin tapahtumaan"
 
@@ -3029,7 +3068,7 @@ msgstr "Takaisin QR-koodiin"
 msgid "Back to Reports"
 msgstr "Takaisin raportteihin"
 
-#: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:87
+#: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:118
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:241
 #: src/ee/box-office/components/layouts/BoxOffice/TenderStage.tsx:55
 msgid "Back to sale"
@@ -3183,7 +3222,7 @@ msgstr "Sijoitus"
 msgid "Billing"
 msgstr "Näkyvyystaso"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:561
+#: src/components/routes/product-widget/CollectInformation/index.tsx:599
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:336
 msgid "Billing Address"
 msgstr "Laskutusosoite"
@@ -3206,6 +3245,10 @@ msgstr "Esittely"
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:297
 msgid "Bio"
 msgstr "Esittely"
+
+#: src/components/forms/QuestionForm/index.tsx:140
+msgid "Block registration for some answers"
+msgstr "Estä rekisteröityminen tietyillä vastauksilla"
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:70
 #: src/constants/socialMediaConfig.ts:33
@@ -3404,7 +3447,7 @@ msgstr "Painikkeen URL"
 msgid "Buttons"
 msgstr "Painikkeet"
 
-#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:65
+#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:75
 msgid "Buyer details"
 msgstr "Ostajan tiedot"
 
@@ -3423,6 +3466,10 @@ msgstr "Ostajat voivat vaihtaa saman hintaryhmän vapaaseen paikkaan lippusivult
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:233
 msgid "Buyers can send a payment link to whoever is paying, such as their finance team. The person paying can use any payment method you accept."
 msgstr "Ostajat voivat lähettää maksulinkin maksajalle, esimerkiksi taloushallinnolleen. Maksaja voi käyttää mitä tahansa hyväksymääsi maksutapaa."
+
+#: src/components/forms/QuestionForm/index.tsx:255
+msgid "Buyers can't continue until they answer."
+msgstr "Ostajat eivät voi jatkaa ennen kuin vastaavat."
 
 #: src/ee/seating/components/routes/event/Seating/BandProductsCard.tsx:87
 msgid "Buyers choosing a seat in a band can buy any ticket linked to it. Linked tickets are sold by seat, so their own quantity is ignored."
@@ -3449,7 +3496,7 @@ msgstr "Jatkamalla hyväksyt <0>käyttöehtomme</0> ja <1>tietosuojaselosteemme<
 msgid "By continuing you agree to the <0>Terms of Service</0> and <1>Privacy Policy</1>."
 msgstr "Jatkamalla hyväksyt <0>käyttöehdot</0> ja <1>tietosuojaselosteen</1>."
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:764
+#: src/components/routes/product-widget/CollectInformation/index.tsx:826
 #: src/components/routes/product-widget/Payment/index.tsx:192
 msgid "By continuing, you agree to the <0>{0} Terms of Service</0>"
 msgstr "Jatkamalla hyväksyt <0>{0}:n käyttöehdot</0>"
@@ -3543,6 +3590,7 @@ msgstr "Etkö voi käyttää todennussovellusta tai palautuskoodeja?"
 #: src/components/common/WaitlistTable/index.tsx:138
 #: src/components/common/WidgetEditor/NameModal.tsx:43
 #: src/components/forms/ProductForm/ProductDrawer.tsx:134
+#: src/components/forms/QuestionForm/QuestionDrawer.tsx:76
 #: src/components/modals/CreateAffiliateModal/index.tsx:88
 #: src/components/modals/CreateAttendeeModal/index.tsx:335
 #: src/components/modals/CreateCapacityAssignmentModal/index.tsx:75
@@ -3552,7 +3600,6 @@ msgstr "Etkö voi käyttää todennussovellusta tai palautuskoodeja?"
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:89
 #: src/components/modals/CreateProductCategoryModal/index.tsx:56
 #: src/components/modals/CreatePromoCodeModal/index.tsx:57
-#: src/components/modals/CreateQuestionModal/index.tsx:75
 #: src/components/modals/CreateTaxOrFeeModal/index.tsx:52
 #: src/components/modals/CreateWebhookModal/index.tsx:89
 #: src/components/modals/DuplicateEventModal/index.tsx:309
@@ -3562,7 +3609,6 @@ msgstr "Etkö voi käyttää todennussovellusta tai palautuskoodeja?"
 #: src/components/modals/EditOrganizerWebhookModal/index.tsx:82
 #: src/components/modals/EditProductCategoryModal/index.tsx:71
 #: src/components/modals/EditPromoCodeModal/index.tsx:85
-#: src/components/modals/EditQuestionModal/index.tsx:101
 #: src/components/modals/EditTaxOrFeeModal/index.tsx:43
 #: src/components/modals/EditUserModal/index.tsx:99
 #: src/components/modals/EditWebhookModal/index.tsx:83
@@ -4137,11 +4183,7 @@ msgstr "Sisäänkirjautumislinkki kopioitiin leikepöydälle"
 msgid "Check-Ins"
 msgstr "Sisäänkirjaukset"
 
-#: src/components/forms/QuestionForm/index.tsx:114
-msgid "Checkbox options allow multiple selections"
-msgstr "Valintaruudut sallivat usean valinnan"
-
-#: src/components/forms/QuestionForm/index.tsx:112
+#: src/components/forms/QuestionForm/questionTypes.ts:26
 msgid "Checkboxes"
 msgstr "Valintaruudut"
 
@@ -4196,6 +4238,11 @@ msgstr "Kassa ja kieli"
 #: src/components/common/WidgetEditor/BehaviourPanel.tsx:23
 msgid "Checkout opens in"
 msgstr "Kassa avautuu"
+
+#: src/components/routes/event/Questions/CheckoutPreview.tsx:118
+#: src/components/routes/event/Questions/CheckoutPreview.tsx:122
+msgid "Checkout preview"
+msgstr "Kassan esikatselu"
 
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:84
 msgid "Checkout Settings"
@@ -4322,6 +4369,18 @@ msgstr "Valitse toinen kirjautumistapa."
 msgid "Choose at least {min} {title} tickets"
 msgstr "Valitse vähintään {min} {title}-lippua"
 
+#: src/components/forms/QuestionForm/questionFormValues.ts:96
+msgid "Choose at least one answer"
+msgstr "Valitse vähintään yksi vastaus"
+
+#: src/components/forms/QuestionForm/questionFormValues.ts:107
+msgid "Choose at least one answer that blocks registration"
+msgstr "Valitse vähintään yksi rekisteröitymisen estävä vastaus"
+
+#: src/components/forms/QuestionForm/questionFormValues.ts:93
+msgid "Choose at least one ticket or product"
+msgstr "Valitse vähintään yksi lippu tai tuote"
+
 #: src/components/common/CalendarOptionsPopover/index.tsx:20
 msgid "Choose calendar"
 msgstr "Valitse kalenteri"
@@ -4353,6 +4412,14 @@ msgstr "Valitse tämä paikka"
 #: src/ee/seating/components/routes/event/Seating/BandProductsCard.tsx:99
 msgid "Choose tickets"
 msgstr "Valitse liput"
+
+#: src/components/forms/QuestionForm/index.tsx:228
+msgid "Choose tickets or products"
+msgstr "Valitse liput tai tuotteet"
+
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:178
+msgid "Choose what buyers and attendees are asked at checkout."
+msgstr "Valitse, mitä ostajilta ja osallistujilta kysytään kassalla."
 
 #: src/components/modals/CreateEventModal/index.tsx:122
 msgid "Choose when your event starts"
@@ -4387,11 +4454,11 @@ msgstr "Valitse paikkasi"
 msgid "Circle"
 msgstr "Keskikerros"
 
-#: src/components/common/CheckoutQuestion/index.tsx:162
+#: src/components/common/CheckoutQuestion/index.tsx:205
 #: src/components/common/LocationPicker/index.tsx:249
 #: src/components/modals/LocationEditModal/index.tsx:148
-#: src/components/routes/product-widget/CollectInformation/index.tsx:581
-#: src/components/routes/product-widget/CollectInformation/index.tsx:582
+#: src/components/routes/product-widget/CollectInformation/index.tsx:619
+#: src/components/routes/product-widget/CollectInformation/index.tsx:620
 msgid "City"
 msgstr "Kaupunki"
 
@@ -4558,6 +4625,11 @@ msgstr "Koodin on oltava 3–50 merkkiä pitkä"
 msgid "Code must be no more than 20 characters"
 msgstr "Koodin on oltava enintään 20 merkkiä pitkä"
 
+#: src/components/routes/event/Questions/questionTemplates.ts:72
+#: src/components/routes/event/Questions/questionTemplates.ts:75
+msgid "Code of conduct"
+msgstr "Käytössäännöt"
+
 #: src/components/common/WidgetEditor/InstallPanel.tsx:81
 msgid "Code to paste"
 msgstr "Liitettävä koodi"
@@ -4578,14 +4650,6 @@ msgstr "Kerää osallistujatiedot jokaisesta ostetusta lipusta."
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:159
 msgid "Collect checkout questions"
 msgstr "Kerää kassakysymykset"
-
-#: src/components/common/QuestionsTable/index.tsx:399
-msgid "Collect details per order"
-msgstr "Kerää tiedot tilauskohtaisesti"
-
-#: src/components/common/QuestionsTable/index.tsx:393
-msgid "Collect details per ticket"
-msgstr "Kerää tiedot lippukohtaisesti"
 
 #: src/components/routes/event/TicketDesigner/index.tsx:152
 msgid "Color"
@@ -4658,15 +4722,20 @@ msgstr "Saattajan paikka (pyörätuolipaikan kanssa)"
 msgid "Companion seats can only be booked together with a wheelchair space. Add a wheelchair space or remove the companion seat."
 msgstr "Saattajan paikan voi varata vain yhdessä pyörätuolipaikan kanssa. Lisää pyörätuolipaikka tai poista saattajan paikka."
 
+#: src/components/routes/event/Questions/questionTemplates.ts:31
+#: src/components/routes/event/Questions/questionTemplates.ts:32
+msgid "Company"
+msgstr "Yritys"
+
 #: src/components/layouts/CheckIn/tabs/StatsTab.tsx:82
 msgid "complete"
 msgstr "valmis"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:760
+#: src/components/routes/product-widget/CollectInformation/index.tsx:804
 msgid "Complete Order"
 msgstr "Viimeistele tilaus"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:377
+#: src/components/routes/product-widget/CollectInformation/index.tsx:411
 #: src/components/routes/product-widget/Payment/index.tsx:182
 msgid "Complete Payment"
 msgstr "Suorita maksu"
@@ -4681,11 +4750,11 @@ msgstr "Viimeistele myynti"
 msgid "Complete Stripe setup"
 msgstr "Viimeistele Stripe-asetukset"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:457
+#: src/components/routes/product-widget/CollectInformation/index.tsx:495
 msgid "Complete your order to secure your tickets. This offer is time-limited, so don't wait too long."
 msgstr "Viimeistele tilauksesi varmistaaksesi liput. Tarjous on voimassa vain rajoitetun ajan, joten toimi pian."
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:375
+#: src/components/routes/product-widget/CollectInformation/index.tsx:409
 msgid "Complete your payment to secure your tickets."
 msgstr "Suorita maksusi varmistaaksesi liput."
 
@@ -4758,10 +4827,6 @@ msgstr "Konfiguraatiot"
 msgid "Configure event details, location, checkout options, and email notifications."
 msgstr "Määritä tapahtuman tiedot, sijainti, kassavaihtoehdot ja sähköposti-ilmoitukset."
 
-#: src/components/common/QuestionsTable/index.tsx:429
-msgid "Configure how attendee details are collected during checkout"
-msgstr "Määritä, miten osallistujatiedot kerätään kassalla."
-
 #: src/components/common/PlatformFeesSettings/index.tsx:268
 msgid "Configure Taxes & Fees"
 msgstr "Määritä verot ja maksut"
@@ -4787,10 +4852,10 @@ msgstr "Vahvista"
 msgid "Confirm comp"
 msgstr "Vahvista vapaalippu"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:505
-#: src/components/routes/product-widget/CollectInformation/index.tsx:506
-#: src/components/routes/product-widget/CollectInformation/index.tsx:718
-#: src/components/routes/product-widget/CollectInformation/index.tsx:719
+#: src/components/routes/product-widget/CollectInformation/index.tsx:543
+#: src/components/routes/product-widget/CollectInformation/index.tsx:544
+#: src/components/routes/product-widget/CollectInformation/index.tsx:759
+#: src/components/routes/product-widget/CollectInformation/index.tsx:760
 msgid "Confirm Email Address"
 msgstr "Vahvista sähköpostiosoite"
 
@@ -5037,11 +5102,11 @@ msgstr "Siirry seuraavaan vaiheeseen"
 
 #: src/components/common/BrandingUpsell/BrandingUpgradeModal.tsx:45
 #: src/components/routes/settings/Billing/index.tsx:189
-#: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:83
+#: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:114
 msgid "Continue to payment"
 msgstr "Jatka maksuun"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:760
+#: src/components/routes/product-widget/CollectInformation/index.tsx:804
 msgid "Continue to Payment"
 msgstr "Siirry maksuvaiheeseen"
 
@@ -5102,7 +5167,7 @@ msgstr "Evästeasetukset"
 msgid "Copied"
 msgstr "Kopioitu"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:680
+#: src/components/routes/product-widget/CollectInformation/index.tsx:721
 msgid "Copied from above"
 msgstr "Kopioitu yllä olevasta"
 
@@ -5187,7 +5252,7 @@ msgstr "Kopioi komento"
 msgid "Copy customer link"
 msgstr "Kopioi asiakkaan linkki"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:525
+#: src/components/routes/product-widget/CollectInformation/index.tsx:563
 msgid "Copy details to first attendee"
 msgstr "Kopioi tiedot ensimmäiselle osallistujalle"
 
@@ -5215,7 +5280,7 @@ msgstr "Kopioi linkki"
 msgid "Copy Link"
 msgstr "Kopioi linkki"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:535
+#: src/components/routes/product-widget/CollectInformation/index.tsx:573
 msgid "Copy my details to:"
 msgstr "Kopioi tiedot kohteeseen:"
 
@@ -5416,10 +5481,10 @@ msgstr "Paikkojen saatavuutta ei voitu päivittää. Yritetään uudelleen…"
 msgid "Couldn't send verification email. Please try again."
 msgstr "Vahvistussähköpostia ei voitu lähettää. Yritä uudelleen."
 
-#: src/components/common/CheckoutQuestion/index.tsx:174
+#: src/components/common/CheckoutQuestion/index.tsx:217
 #: src/components/common/LocationPicker/index.tsx:268
 #: src/components/modals/LocationEditModal/index.tsx:157
-#: src/components/routes/product-widget/CollectInformation/index.tsx:601
+#: src/components/routes/product-widget/CollectInformation/index.tsx:639
 msgid "Country"
 msgstr "Maa"
 
@@ -5671,8 +5736,8 @@ msgstr "Luo profiili"
 msgid "Create Promo Code"
 msgstr "Luo kampanjakoodi"
 
-#: src/components/modals/CreateQuestionModal/index.tsx:70
-#: src/components/modals/CreateQuestionModal/index.tsx:77
+#: src/components/modals/CreateQuestionModal/index.tsx:43
+#: src/components/modals/CreateQuestionModal/index.tsx:45
 msgid "Create Question"
 msgstr "Luo kysymys"
 
@@ -5839,10 +5904,6 @@ msgstr "Tämän tapahtuman mukautetut tilaus- ja lippusähköpostit"
 msgid "Custom questions"
 msgstr "Mukautetut kysymykset"
 
-#: src/components/common/QuestionsTable/index.tsx:444
-msgid "Custom Questions"
-msgstr "Mukautetut kysymykset"
-
 #: src/components/common/OrganizerReportTable/index.tsx:61
 #: src/components/common/ReportTable/index.tsx:56
 #: src/components/routes/admin/Attribution/index.tsx:82
@@ -5895,10 +5956,6 @@ msgstr "Mukauta tapahtuman kotisivua ja maksuvaiheen viestintää"
 msgid "Customize the miscellaneous settings for this event"
 msgstr "Mukauta tämän tapahtuman muita asetuksia"
 
-#: src/components/common/QuestionsTable/index.tsx:423
-msgid "Customize the questions asked during checkout to gather important information from your attendees."
-msgstr "Mukauta kassalla esitettyjä kysymyksiä kerätäksesi osallistujilta tärkeitä tietoja."
-
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:57
 #: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:57
 msgid "Customize the SEO settings for this event"
@@ -5950,6 +6007,7 @@ msgstr "Tanssilattia"
 #: src/components/common/WebhookTable/index.tsx:121
 #: src/components/routes/event/Lineup/LineupPreview.tsx:132
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:103
+#: src/components/routes/event/Questions/QuestionRow.tsx:193
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:167
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:253
 msgid "Danger zone"
@@ -5981,7 +6039,7 @@ msgstr "Hallintapaneeli"
 #: src/components/common/WaitlistTable/index.tsx:187
 #: src/components/common/WidgetEditor/ContentFields.tsx:77
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:117
-#: src/components/forms/QuestionForm/index.tsx:136
+#: src/components/forms/QuestionForm/questionTypes.ts:29
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:175
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:39
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:56
@@ -6184,7 +6242,6 @@ msgstr "poista"
 #: src/components/common/LocationsTable/index.tsx:45
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:613
 #: src/components/common/PromoCodeTable/index.tsx:43
-#: src/components/common/QuestionsTable/index.tsx:158
 #: src/components/common/WidgetEditor/index.tsx:150
 #: src/components/common/WidgetEditor/index.tsx:262
 #: src/components/routes/admin/Announcements/index.tsx:226
@@ -6193,6 +6250,7 @@ msgstr "poista"
 #: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:93
 #: src/components/routes/event/OccurrencesTab/index.tsx:548
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:68
+#: src/components/routes/event/Questions/QuestionRow.tsx:197
 #: src/components/routes/settings/TaxesAndFees/index.tsx:71
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:245
 msgid "Delete"
@@ -6363,7 +6421,11 @@ msgstr "Poistetaanko tämä tapahtuma? Se merkitään roskapostiksi ja poistetaa
 msgid "Delete this product? This cannot be undone."
 msgstr "Poistetaanko tämä tuote? Tätä ei voi peruuttaa."
 
-#: src/components/common/QuestionsTable/index.tsx:207
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:143
+msgid "Delete this question and its follow-up questions? This cannot be undone."
+msgstr "Poistetaanko tämä kysymys ja sen jatkokysymykset? Toimintoa ei voi kumota."
+
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:144
 msgid "Delete this question? This cannot be undone."
 msgstr "Poistetaanko tämä kysymys? Tätä ei voi peruuttaa."
 
@@ -6418,6 +6480,7 @@ msgstr "Syvyys"
 #: src/components/forms/ProductCategoryForm/index.tsx:29
 #: src/components/forms/ProductForm/index.tsx:401
 #: src/components/forms/ProductForm/index.tsx:407
+#: src/components/forms/QuestionForm/index.tsx:108
 #: src/components/forms/TaxAndFeeForm/index.tsx:106
 #: src/components/modals/CreateEventModal/index.tsx:351
 #: src/components/modals/DuplicateEventModal/index.tsx:252
@@ -6459,7 +6522,7 @@ msgstr "Työpöytä"
 #: src/components/modals/ManageOrderModal/index.tsx:319
 #: src/components/routes/event/OccurrencesTab/BookingSummary/index.tsx:103
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:417
-#: src/components/routes/product-widget/CollectInformation/index.tsx:441
+#: src/components/routes/product-widget/CollectInformation/index.tsx:479
 #: src/components/routes/product-widget/SelectProducts/index.tsx:578
 msgid "Details"
 msgstr "Yksityiskohdat"
@@ -6493,6 +6556,11 @@ msgstr "Etkö saanut sitä?"
 msgid "Didn't receive the code?"
 msgstr "Etkö saanut koodia?"
 
+#: src/components/routes/event/Questions/questionTemplates.ts:13
+#: src/components/routes/event/Questions/questionTemplates.ts:16
+msgid "Dietary requirements"
+msgstr "Ruokavalio"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:481
 msgid "Different location"
 msgstr "Eri sijainti"
@@ -6518,11 +6586,13 @@ msgstr "Tämän kapasiteetin poistaminen käytöstä seuraa myyntiä, mutta ei p
 #: src/components/common/SettingsPage/index.tsx:131
 #: src/components/common/WidgetEditor/index.tsx:94
 #: src/components/forms/ProductForm/ProductDrawer.tsx:60
+#: src/components/forms/QuestionForm/QuestionDrawer.tsx:46
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:751
 msgid "Discard"
 msgstr "Hylkää"
 
 #: src/components/forms/ProductForm/ProductDrawer.tsx:54
+#: src/components/forms/QuestionForm/QuestionDrawer.tsx:40
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:745
 msgid "Discard changes?"
 msgstr "Hylätäänkö muutokset?"
@@ -6607,6 +6677,10 @@ msgstr "Näytä, kuinka monta paikkaa on jäljellä kussakin päivässä lippuwi
 #: src/components/modals/LocationEditModal/index.tsx:134
 msgid "Display name"
 msgstr "Näyttönimi"
+
+#: src/components/routes/event/Questions/questionTemplates.ts:47
+msgid "Do you have any accessibility needs?"
+msgstr "Onko sinulla saavutettavuuteen liittyviä tarpeita?"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:282
 msgid "Document Label"
@@ -6784,9 +6858,9 @@ msgstr "Pudota taulukko tähän tai valitse napsauttamalla"
 msgid "Drop-in"
 msgstr "Drop-in"
 
-#: src/components/forms/QuestionForm/index.tsx:124
-msgid "Dropdown selection"
-msgstr "Pudotusvalikkovalinta"
+#: src/components/forms/QuestionForm/questionTypes.ts:27
+msgid "Dropdown"
+msgstr "Pudotusvalikko"
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:362
 msgid "Due to the high risk of spam, you must connect a Stripe account before you can modify email templates. This is to ensure that all event organizers are verified and accountable."
@@ -6803,6 +6877,7 @@ msgstr ""
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:586
 #: src/components/routes/admin/Announcements/index.tsx:218
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:59
+#: src/components/routes/event/Questions/QuestionRow.tsx:179
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:241
 msgid "Duplicate"
 msgstr "Monista"
@@ -6828,6 +6903,10 @@ msgstr "Monista tapahtuma"
 #: src/components/modals/DuplicateProductModal/index.tsx:133
 msgid "Duplicate Product"
 msgstr "Monista tuote"
+
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:112
+msgid "Duplicate Question"
+msgstr "Monista kysymys"
 
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:88
 msgctxt "Lineup spreadsheet column"
@@ -6911,6 +6990,10 @@ msgstr "esim. Perus, Premium, Enterprise"
 msgid "Each account receives this email at most once."
 msgstr "Kukin tili saa tämän sähköpostin enintään kerran."
 
+#: src/components/forms/QuestionForm/index.tsx:195
+msgid "Each attendee"
+msgstr "Jokainen osallistuja"
+
 #: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:24
 msgid "Each code can be used once to sign in if you lose access to your authenticator app."
 msgstr "Jokaisen koodin voi käyttää kerran kirjautumiseen, jos menetät pääsyn todennussovellukseesi."
@@ -6926,6 +7009,10 @@ msgstr "Jokainen henkilö saa sähköpostin, jossa on varattu paikka ostoksen vi
 #: src/components/forms/PromoCodeForm/index.tsx:134
 msgid "Each product"
 msgstr "Jokainen tuote"
+
+#: src/components/routes/event/Questions/AttendeeDetailsSetting.tsx:18
+msgid "Each ticket is issued to its own attendee, so it reaches the right person and can be checked in individually."
+msgstr "Jokainen lippu myönnetään omalle osallistujalleen, joten se päätyy oikealle henkilölle ja voidaan kirjata sisään erikseen."
 
 #: src/ee/seating/components/routes/event/Seating/BandProductsCard.tsx:89
 msgid "Each ticket keeps the price set on the ticket itself — only change it here if a band should cost more or less."
@@ -6946,9 +7033,9 @@ msgstr "Varhaisen oston etu"
 
 #: src/components/common/DesignerShell/index.tsx:90
 #: src/components/common/LocationPicker/index.tsx:197
-#: src/components/common/QuestionsTable/index.tsx:150
 #: src/components/routes/admin/Announcements/index.tsx:211
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:57
+#: src/components/routes/event/Questions/QuestionRow.tsx:165
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:282
 #: src/components/routes/settings/TaxesAndFees/index.tsx:68
 #: src/components/routes/settings/Team/MemberRow.tsx:177
@@ -7097,7 +7184,7 @@ msgstr "Muokkaa tuoteryhmää"
 msgid "Edit Promo Code"
 msgstr "Muokkaa kampanjakoodia"
 
-#: src/components/modals/EditQuestionModal/index.tsx:95
+#: src/components/modals/EditQuestionModal/index.tsx:64
 msgid "Edit Question"
 msgstr "Muokkaa kysymystä"
 
@@ -7159,6 +7246,10 @@ msgstr "Muokkausohjelma"
 msgid "Education"
 msgstr "Koulutus"
 
+#: src/components/forms/QuestionForm/index.tsx:135
+msgid "Eligibility"
+msgstr "Osallistumisoikeus"
+
 #: src/components/routes/admin/Messages/index.tsx:325
 msgid "Eligibility Failures"
 msgstr "Kelpoisuusvirheet"
@@ -7168,7 +7259,6 @@ msgid "Eligible Check-In Lists"
 msgstr "Kelpoiset sisäänkirjautumislistat"
 
 #: src/components/common/OrderDetails/index.tsx:34
-#: src/components/common/QuestionsTable/index.tsx:264
 #: src/components/forms/AffiliateForm/index.tsx:89
 #: src/components/modals/InviteUserModal/index.tsx:61
 #: src/components/modals/JoinWaitlistModal/index.tsx:190
@@ -7179,12 +7269,13 @@ msgstr "Kelpoiset sisäänkirjautumislistat"
 #: src/components/routes/auth/ForgotPassword/index.tsx:69
 #: src/components/routes/auth/Login/index.tsx:187
 #: src/components/routes/auth/Register/index.tsx:153
+#: src/components/routes/event/Questions/CheckoutPreview.tsx:36
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:99
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:299
 #: src/components/routes/settings/Profile/index.tsx:215
-#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:74
+#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:89
 #: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:127
 msgid "Email"
 msgstr "Sähköposti"
@@ -7207,10 +7298,10 @@ msgstr "Sähköposti ja mallit"
 msgid "Email address"
 msgstr "Sähköpostiosoite"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:496
-#: src/components/routes/product-widget/CollectInformation/index.tsx:497
-#: src/components/routes/product-widget/CollectInformation/index.tsx:708
-#: src/components/routes/product-widget/CollectInformation/index.tsx:709
+#: src/components/routes/product-widget/CollectInformation/index.tsx:534
+#: src/components/routes/product-widget/CollectInformation/index.tsx:535
+#: src/components/routes/product-widget/CollectInformation/index.tsx:749
+#: src/components/routes/product-widget/CollectInformation/index.tsx:750
 msgid "Email Address"
 msgstr "Sähköpostiosoite"
 
@@ -7219,8 +7310,8 @@ msgstr "Sähköpostiosoite"
 msgid "Email address copied to clipboard"
 msgstr "Sähköpostiosoite kopioitu leikepöydälle"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:122
-#: src/components/routes/product-widget/CollectInformation/index.tsx:129
+#: src/components/routes/product-widget/CollectInformation/index.tsx:128
+#: src/components/routes/product-widget/CollectInformation/index.tsx:135
 msgid "Email addresses do not match"
 msgstr "Sähköpostiosoitteet eivät täsmää"
 
@@ -7272,6 +7363,10 @@ msgstr "Lähetä minulle linkki salasanan asettamiseen"
 #: src/components/routes/settings/Profile/index.tsx:264
 msgid "Email me about new orders on the events I can access"
 msgstr "Lähetä minulle sähköpostia uusista tilauksista tapahtumissa, joihin minulla on pääsy"
+
+#: src/components/routes/event/Questions/questionTemplates.ts:55
+msgid "Email newsletter"
+msgstr "Sähköpostiuutiskirje"
 
 #: src/components/routes/settings/Profile/index.tsx:154
 msgid "Email not verified"
@@ -7479,6 +7574,14 @@ msgstr "Anna heksaväri, esim. #ffffff"
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:142
 msgid "Enter a label or choose to remove it."
 msgstr "Anna tunniste tai valitse poista."
+
+#: src/components/forms/QuestionForm/questionFormValues.ts:114
+msgid "Enter a message for people who aren't eligible"
+msgstr "Kirjoita viesti henkilöille, jotka eivät ole oikeutettuja"
+
+#: src/components/forms/QuestionForm/questionFormValues.ts:86
+msgid "Enter a question"
+msgstr "Kirjoita kysymys"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplatePreviewPane.tsx:59
 msgid "Enter a subject and body to see the preview"
@@ -8026,11 +8129,11 @@ msgstr "Kaikkialla"
 msgid "Exact"
 msgstr "Tasaraha"
 
-#: src/components/common/QuestionsTable/index.tsx:507
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:205
 msgid "Examples: \"How did you hear about us?\", \"Company name for invoice\""
 msgstr "Esimerkkejä: \"Miten kuulit meistä?\", \"Yrityksen nimi laskua varten\""
 
-#: src/components/common/QuestionsTable/index.tsx:508
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:233
 msgid "Examples: \"T-shirt size\", \"Meal preference\", \"Job title\""
 msgstr "Esimerkkejä: \"T-paidan koko\", \"Ruokavalio\", \"Työnimike\""
 
@@ -8116,8 +8219,8 @@ msgstr "Vanhentumispäivä"
 msgid "Export"
 msgstr "Vie"
 
-#: src/components/common/QuestionsTable/index.tsx:415
-msgid "Export Answers"
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:61
+msgid "Export answers"
 msgstr "Vie vastaukset"
 
 #: src/components/common/OrganizerReportTable/index.tsx:358
@@ -8305,7 +8408,7 @@ msgstr "Järjestäjän poisto epäonnistui"
 msgid "Failed to delete product. Please try again."
 msgstr "Tuotteen poisto epäonnistui. Yritä uudelleen."
 
-#: src/components/common/QuestionsTable/index.tsx:213
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:149
 msgid "Failed to delete question"
 msgstr "Kysymyksen poisto epäonnistui"
 
@@ -8383,7 +8486,7 @@ msgstr "Ylikirjoituksen poisto epäonnistui"
 msgid "Failed to reopen date"
 msgstr "Päivän avaaminen uudelleen epäonnistui"
 
-#: src/components/common/QuestionsTable/index.tsx:193
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:105
 msgid "Failed to reorder questions"
 msgstr "Kysymysten uudelleenjärjestely epäonnistui"
 
@@ -8508,7 +8611,11 @@ msgstr "Tilauksen päivitys epäonnistui"
 msgid "Failed to update organizer status"
 msgstr "Järjestäjän tilan päivitys epäonnistui"
 
-#: src/components/common/QuestionsTable/index.tsx:386
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:136
+msgid "Failed to update question"
+msgstr "Kysymyksen päivittäminen epäonnistui"
+
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:160
 msgid "Failed to update setting"
 msgstr "Asetuksen päivitys epäonnistui"
 
@@ -8625,8 +8732,8 @@ msgstr "Vähemmän paikkoja"
 msgid "File is too large. Maximum size is 5MB."
 msgstr "Tiedosto on liian suuri. Maksimikoko on 5 Mt."
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:517
-#: src/components/routes/product-widget/CollectInformation/index.tsx:537
+#: src/components/routes/product-widget/CollectInformation/index.tsx:555
+#: src/components/routes/product-widget/CollectInformation/index.tsx:575
 msgid "Fill in your details above first"
 msgstr "Täytä ensin tietosi yläpuolelta"
 
@@ -8720,7 +8827,7 @@ msgstr "Ensimmäiset 7 päivää"
 msgid "First 90 days"
 msgstr "Ensimmäiset 90 päivää"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:548
+#: src/components/routes/product-widget/CollectInformation/index.tsx:586
 msgid "First attendee"
 msgstr "Ensimmäinen osallistuja"
 
@@ -8735,23 +8842,23 @@ msgstr "Ensimmäinen laskun numero"
 #: src/components/modals/CreateAttendeeModal/index.tsx:214
 #: src/components/modals/ManageAttendeeModal/index.tsx:226
 #: src/components/modals/ManageOrderModal/index.tsx:280
-#: src/components/routes/product-widget/CollectInformation/index.tsx:479
-#: src/components/routes/product-widget/CollectInformation/index.tsx:691
+#: src/components/routes/event/Questions/CheckoutPreview.tsx:34
+#: src/components/routes/product-widget/CollectInformation/index.tsx:517
+#: src/components/routes/product-widget/CollectInformation/index.tsx:732
 #: src/components/routes/settings/Profile/index.tsx:199
 #: src/components/routes/settings/Profile/index.tsx:200
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:182
-#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:70
+#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:85
 msgid "First name"
 msgstr "Etunimi"
 
-#: src/components/common/QuestionsTable/index.tsx:262
 #: src/components/modals/EditUserModal/index.tsx:87
 #: src/components/modals/InviteUserModal/index.tsx:54
 #: src/components/modals/JoinWaitlistModal/index.tsx:180
 #: src/components/routes/auth/AcceptInvitation/index.tsx:226
 #: src/components/routes/auth/Register/index.tsx:139
-#: src/components/routes/product-widget/CollectInformation/index.tsx:478
-#: src/components/routes/product-widget/CollectInformation/index.tsx:690
+#: src/components/routes/product-widget/CollectInformation/index.tsx:516
+#: src/components/routes/product-widget/CollectInformation/index.tsx:731
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:55
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:55
 msgid "First Name"
@@ -8942,6 +9049,10 @@ msgstr "Pe"
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:29
 msgid "Friday"
 msgstr "Perjantai"
+
+#: src/components/routes/event/Questions/questionTemplates.ts:55
+msgid "Friend or colleague"
+msgstr "Ystävä tai kollega"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1086
 msgid "From"
@@ -9140,6 +9251,10 @@ msgstr "Anna avaimelle nimi"
 msgid "Give your event a name"
 msgstr "Anna tapahtumallesi nimi"
 
+#: src/components/routes/event/Questions/questionTemplates.ts:17
+msgid "Gluten-free"
+msgstr "Gluteeniton"
+
 #: src/components/routes/admin/DeletionRequests/index.tsx:224
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:157
 msgid "Go back"
@@ -9158,7 +9273,7 @@ msgstr "Palaa takaisin"
 msgid "Go back to profile"
 msgstr "Palaa profiiliin"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:414
+#: src/components/routes/product-widget/CollectInformation/index.tsx:448
 msgid "Go to Event Page"
 msgstr "Siirry tapahtumasivulle"
 
@@ -9266,6 +9381,10 @@ msgstr "Vierashallinta"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:713
 msgid "Guests"
 msgstr "Vieraat"
+
+#: src/components/routes/event/Questions/questionTemplates.ts:17
+msgid "Halal"
+msgstr "Halal"
 
 #: src/components/layouts/EventHomepage/index.tsx:134
 #: src/components/layouts/OrganizerHomepage/EventList/index.tsx:86
@@ -9398,13 +9517,17 @@ msgstr "Piilotettu"
 msgid "Hidden — sales ended {end}."
 msgstr "Piilotettu — myynti päättyi {end}."
 
+#: src/components/routes/event/Questions/QuestionRow.tsx:131
+msgid "Hidden at checkout"
+msgstr "Piilotettu kassalla"
+
+#: src/components/routes/event/Questions/QuestionRow.tsx:130
+msgid "Hidden at checkout. Only your team can see and fill in this question."
+msgstr "Piilotettu kassalla. Vain tiimisi voi nähdä ja täyttää tämän kysymyksen."
+
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:87
 msgid "Hidden automatically when empty."
 msgstr "Piilotetaan automaattisesti, kun tyhjä."
-
-#: src/components/common/QuestionsTable/index.tsx:119
-msgid "Hidden from attendees - only visible to organizers"
-msgstr "Osallistujilta piilotettu — näkyy vain järjestäjille"
 
 #: src/components/routes/event/Lineup/RunSheetPrint.tsx:164
 msgid "Hidden from event page: {hiddenNames}"
@@ -9432,10 +9555,6 @@ msgstr "Piilotettu tapahtumasivulta"
 msgid "Hidden online"
 msgstr "Piilotettu verkossa"
 
-#: src/components/forms/QuestionForm/index.tsx:218
-msgid "Hidden questions are only visible to the event organizer and not to the customer."
-msgstr "Piilotut kysymykset näkyvät vain tapahtuman järjestäjälle, eivät asiakkaalle."
-
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:554
 #: src/components/routes/product-widget/SelectProducts/index.tsx:897
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1136
@@ -9461,6 +9580,11 @@ msgstr "Piilota kaikki hinnat"
 #: src/components/common/AttendeeList/index.tsx:85
 msgid "Hide Answers"
 msgstr "Piilota vastaukset"
+
+#: src/components/forms/QuestionForm/index.tsx:259
+#: src/components/routes/event/Questions/QuestionRow.tsx:185
+msgid "Hide at checkout"
+msgstr "Piilota kassalla"
 
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:277
 msgid "Hide calendar"
@@ -9522,10 +9646,6 @@ msgstr "Piilotetaanko tämä kategoria?"
 #: src/components/forms/ProductForm/index.tsx:622
 msgid "Hide this product from customers"
 msgstr "Piilota tämä tuote asiakkailta"
-
-#: src/components/forms/QuestionForm/index.tsx:219
-msgid "Hide this question"
-msgstr "Piilota tämä kysymys"
 
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:205
 msgid "Hide this tier from users"
@@ -9628,6 +9748,11 @@ msgstr "Miten ostajat maksavat"
 msgid "How capacity works"
 msgstr "Näin kapasiteetti toimii"
 
+#: src/components/routes/event/Questions/questionTemplates.ts:51
+#: src/components/routes/event/Questions/questionTemplates.ts:54
+msgid "How did you hear about us?"
+msgstr "Mistä kuulit meistä?"
+
 #: src/components/forms/PromoCodeForm/index.tsx:117
 msgid "How is the discount applied?"
 msgstr "Miten alennus sovelletaan?"
@@ -9700,6 +9825,10 @@ msgstr "Unkari"
 #: src/components/routes/organizer/Settings/Sections/TrackingPixelSettings/index.tsx:250
 msgid "I acknowledge my responsibilities as a data controller"
 msgstr "Vahvistan vastuuni rekisterinpitäjänä"
+
+#: src/components/routes/event/Questions/questionTemplates.ts:76
+msgid "I agree to follow the event code of conduct"
+msgstr "Sitoudun noudattamaan tapahtuman käytössääntöjä"
 
 #: src/components/modals/JoinWaitlistModal/index.tsx:196
 msgid "I agree to receive email notifications related to this event"
@@ -9939,6 +10068,10 @@ msgstr "Sisältää {0} tuotetta"
 msgid "Includes 1 product"
 msgstr "Sisältää 1 tuotteen"
 
+#: src/components/forms/QuestionForm/index.tsx:215
+msgid "Includes tickets you add later."
+msgstr "Sisältää myöhemmin lisäämäsi liput."
+
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:82
 msgid "Incorrect PIN"
 msgstr "Väärä PIN-koodi"
@@ -9954,6 +10087,10 @@ msgstr "Lisää määrää"
 #: src/components/common/MessageList/index.tsx:28
 msgid "Individual attendees"
 msgstr "Yksittäiset osallistujat"
+
+#: src/components/routes/event/Questions/QuestionRow.tsx:145
+msgid "Ineligible: {ineligibleValues}"
+msgstr "Ei oikeuta: {ineligibleValues}"
 
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:258
 msgid "Ink saver"
@@ -10090,6 +10227,10 @@ msgstr "Laskun numerointi"
 msgid "Invoice Settings"
 msgstr "Laskuasetukset"
 
+#: src/components/forms/QuestionForm/ConditionFields.tsx:86
+msgid "is any of"
+msgstr "on jokin seuraavista"
+
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:175
 msgid "Issued"
 msgstr "Myönnetty"
@@ -10127,7 +10268,7 @@ msgstr "Se näytetään ohjeidesi yläpuolella, jotta voit yhdistää jokaisen m
 msgid "Italian"
 msgstr "Italia"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:670
+#: src/components/routes/product-widget/CollectInformation/index.tsx:711
 msgid "Item"
 msgstr "Tuote"
 
@@ -10167,6 +10308,11 @@ msgstr "Tehtävän nimi"
 #: src/components/routes/admin/FailedJobs/index.tsx:53
 msgid "Job queued for retry"
 msgstr "Tehtävä lisätty uudelleenkäsittelyjonoon"
+
+#: src/components/routes/event/Questions/questionTemplates.ts:36
+#: src/components/routes/event/Questions/questionTemplates.ts:37
+msgid "Job title"
+msgstr "Tehtävänimike"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:227
 #: src/components/routes/auth/Register/index.tsx:140
@@ -10229,6 +10375,7 @@ msgid "Keep connection"
 msgstr "Säilytä yhteys"
 
 #: src/components/forms/ProductForm/ProductDrawer.tsx:60
+#: src/components/forms/QuestionForm/QuestionDrawer.tsx:46
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:751
 msgid "Keep editing"
 msgstr "Jatka muokkaamista"
@@ -10237,7 +10384,7 @@ msgstr "Jatka muokkaamista"
 msgid "Keep it short — banners show a single line. {0}/200"
 msgstr "Pidä se lyhyenä — bannerit näyttävät yhden rivin. {0}/200"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:614
+#: src/components/routes/product-widget/CollectInformation/index.tsx:653
 msgid "Keep me updated on news and events from {0}"
 msgstr "Pidä minut ajan tasalla uutisista ja tapahtumista kohteessa {0}"
 
@@ -10284,6 +10431,10 @@ msgstr "Avaimet, jotka eivät vanhene, ovat voimassa, kunnes mitätöit ne. Käy
 #: src/locales.ts:90
 msgid "Korean"
 msgstr "Korea"
+
+#: src/components/routes/event/Questions/questionTemplates.ts:17
+msgid "Kosher"
+msgstr "Kosher"
 
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:177
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:458
@@ -10383,23 +10534,23 @@ msgstr "Viimeksi aktiivinen"
 #: src/components/modals/CreateAttendeeModal/index.tsx:221
 #: src/components/modals/ManageAttendeeModal/index.tsx:228
 #: src/components/modals/ManageOrderModal/index.tsx:286
+#: src/components/routes/event/Questions/CheckoutPreview.tsx:35
 #: src/components/routes/settings/Profile/index.tsx:206
 #: src/components/routes/settings/Profile/index.tsx:207
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:189
-#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:71
+#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:86
 msgid "Last name"
 msgstr "Sukunimi"
 
-#: src/components/common/QuestionsTable/index.tsx:263
 #: src/components/modals/EditUserModal/index.tsx:88
 #: src/components/modals/InviteUserModal/index.tsx:55
 #: src/components/modals/JoinWaitlistModal/index.tsx:185
 #: src/components/routes/auth/AcceptInvitation/index.tsx:232
 #: src/components/routes/auth/Register/index.tsx:145
-#: src/components/routes/product-widget/CollectInformation/index.tsx:485
-#: src/components/routes/product-widget/CollectInformation/index.tsx:486
-#: src/components/routes/product-widget/CollectInformation/index.tsx:697
-#: src/components/routes/product-widget/CollectInformation/index.tsx:698
+#: src/components/routes/product-widget/CollectInformation/index.tsx:523
+#: src/components/routes/product-widget/CollectInformation/index.tsx:524
+#: src/components/routes/product-widget/CollectInformation/index.tsx:738
+#: src/components/routes/product-widget/CollectInformation/index.tsx:739
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:62
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:62
 msgid "Last Name"
@@ -10468,6 +10619,10 @@ msgstr "Jätä tyhjäksi käyttääksesi oletussanaa \"Invoice\""
 #: src/components/common/WidgetEditor/ContentFields.tsx:115
 msgid "Leave both empty to show everything that's on sale."
 msgstr "Jätä molemmat tyhjiksi näyttääksesi kaiken myynnissä olevan."
+
+#: src/components/routes/product-widget/CollectInformation/index.tsx:818
+msgid "Leave checkout"
+msgstr "Poistu kassalta"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:517
 msgid "Leave empty for unlimited"
@@ -10923,10 +11078,6 @@ msgstr "Tee se näkyväksi, jotta ihmiset voivat ostaa lippuja"
 msgid "Make sure ID tokens include the email and email_verified claims."
 msgstr "Varmista, että ID token sisältää email- ja email_verified-väitteet (claims)."
 
-#: src/components/forms/QuestionForm/index.tsx:212
-msgid "Make this question mandatory"
-msgstr "Tee tästä kysymyksestä pakollinen"
-
 #: src/components/common/BrandingUpsell/BrandingUpgradeModal.tsx:28
 msgid "Make your event pages, widgets, tickets and emails look like they're entirely yours. Applies to every organizer and event in this account."
 msgstr "Tee tapahtumasivuistasi, widgeteistäsi, lipuistasi ja sähköposteistasi täysin omannäköisiäsi. Koskee kaikkia tämän tilin järjestäjiä ja tapahtumia."
@@ -10941,6 +11092,7 @@ msgstr "Tee tapahtumasivuistasi, widgeteistäsi, lipuistasi ja sähköposteistas
 #: src/components/layouts/OrganizerLayout/index.tsx:117
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:320
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:89
+#: src/components/routes/event/Questions/QuestionRow.tsx:162
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:249
 msgid "Manage"
 msgstr "Hallinnoi"
@@ -11014,10 +11166,6 @@ msgstr "Hallinnoi lippuja"
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:72
 msgid "Manage your event's waitlist, view stats, and offer tickets to attendees."
 msgstr "Hallinnoi tapahtumasi jonotuslistaa, katso tilastoja ja tarjoa lippuja osallistujille."
-
-#: src/components/forms/QuestionForm/index.tsx:211
-msgid "Mandatory questions must be answered before the customer can checkout."
-msgstr "Pakollisiin kysymyksiin on vastattava ennen kassalle siirtymistä."
 
 #: src/components/modals/OfferWaitlistModal/index.tsx:108
 msgid "Manual offer"
@@ -11172,6 +11320,10 @@ msgstr "Viestin sisältö"
 #: src/components/routes/admin/Messages/index.tsx:267
 msgid "Message Details"
 msgstr "Viestin tiedot"
+
+#: src/components/forms/QuestionForm/index.tsx:172
+msgid "Message for people who aren't eligible"
+msgstr "Viesti henkilöille, jotka eivät ole oikeutettuja"
 
 #: src/components/modals/SendMessageModal/index.tsx:104
 msgid "Message individual attendees"
@@ -11419,9 +11571,9 @@ msgstr "Siirrä alueelle"
 msgid "Move up"
 msgstr "Siirrä ylös"
 
-#: src/components/forms/QuestionForm/index.tsx:106
-msgid "Multi line text box"
-msgstr "Monirivinen tekstikenttä"
+#: src/components/forms/QuestionForm/questionTypes.ts:28
+msgid "Multi-select dropdown"
+msgstr "Monivalintapudotusvalikko"
 
 #: src/components/layouts/EventHomepage/EventIntro.tsx:118
 msgid "Multiple dates until {lastOccurrenceDate}"
@@ -11499,6 +11651,10 @@ msgctxt "Lineup spreadsheet column"
 msgid "Name"
 msgstr "Nimi"
 
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:200
+msgid "Name and email are always collected."
+msgstr "Nimi ja sähköposti kerätään aina."
+
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:98
 msgid "Name is missing"
 msgstr "Nimi puuttuu"
@@ -11515,6 +11671,10 @@ msgstr "Nimi on pakollinen"
 #: src/components/routes/admin/Configurations/index.tsx:168
 msgid "Name must be less than 255 characters"
 msgstr "Nimen on oltava alle 255 merkkiä"
+
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:199
+msgid "Name, email and billing address are always collected."
+msgstr "Nimi, sähköposti ja laskutusosoite kerätään aina."
 
 #: src/components/common/QuestionAndAnswerList/index.tsx:205
 msgid "Navigate to Attendee"
@@ -11654,7 +11814,7 @@ msgstr "Uusi widget"
 msgid "Next"
 msgstr "Seuraava"
 
-#: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:83
+#: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:114
 msgid "Next attendee"
 msgstr "Seuraava osallistuja"
 
@@ -11686,11 +11846,11 @@ msgstr "Seuraava: {nextFormatted}"
 msgid "Next: how to pay"
 msgstr "Seuraavaksi: näin maksat"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:443
+#: src/components/routes/product-widget/CollectInformation/index.tsx:481
 msgid "Next: payment"
 msgstr "Seuraavaksi: maksu"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:444
+#: src/components/routes/product-widget/CollectInformation/index.tsx:482
 #: src/components/routes/product-widget/Payment/index.tsx:119
 msgid "Next: review your order"
 msgstr "Seuraavaksi: tarkastele tilaustasi"
@@ -11701,6 +11861,8 @@ msgstr "Yöelämä"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:271
 #: src/components/routes/admin/Dashboard/index.tsx:409
+#: src/components/routes/event/Questions/questionTemplates.ts:64
+#: src/components/routes/event/Questions/questionTemplates.ts:66
 #: src/ee/sso/components/SingleSignOn/index.tsx:70
 msgid "No"
 msgstr "Ei"
@@ -11750,7 +11912,7 @@ msgstr "Ei ilmoituksia vielä"
 msgid "No archived events to show."
 msgstr "Ei näytettäviä arkistoituja tapahtumia."
 
-#: src/components/common/QuestionsTable/index.tsx:503
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:232
 msgid "No attendee questions yet"
 msgstr "Ei osallistujakysymyksiä vielä"
 
@@ -12064,7 +12226,7 @@ msgstr "Tälle päivämäärälle ei ole tapahtumia"
 msgid "No one has bought this yet."
 msgstr "Kukaan ei ole vielä ostanut tätä."
 
-#: src/components/common/QuestionsTable/index.tsx:502
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:204
 msgid "No order questions yet"
 msgstr "Ei tilauskysymyksiä vielä"
 
@@ -12261,6 +12423,10 @@ msgstr "Lippuja ei löytynyt"
 msgid "No tickets in this order"
 msgstr "Tässä tilauksessa ei ole lippuja"
 
+#: src/components/routes/event/Questions/QuestionRow.tsx:67
+msgid "No tickets selected"
+msgstr "Lippuja ei ole valittu"
+
 #: src/ee/seating/components/routes/event/Seating/BandProductsCard.tsx:70
 msgid "No tickets to link yet"
 msgstr "Ei vielä linkitettäviä lippuja"
@@ -12351,7 +12517,8 @@ msgstr "ei muokattu"
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:108
 #: src/components/forms/ProductForm/ledgerSummaries.ts:92
 #: src/components/forms/ProductForm/ledgerSummaries.ts:132
-#: src/components/routes/product-widget/CollectInformation/index.tsx:547
+#: src/components/routes/event/Questions/questionTemplates.ts:17
+#: src/components/routes/product-widget/CollectInformation/index.tsx:585
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:50
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:293
 msgid "None"
@@ -12517,6 +12684,10 @@ msgstr "Viesti: {0}"
 msgid "Notes"
 msgstr "Muistiinpanot"
 
+#: src/components/routes/event/Questions/CheckoutPreview.tsx:102
+msgid "Nothing extra is asked for this ticket."
+msgstr "Tästä lipusta ei kysytä muuta."
+
 #: src/components/routes/event/Lineup/RunSheetPrint.tsx:98
 msgid "Nothing has been scheduled yet."
 msgstr "Mitään ei ole vielä aikataulutettu."
@@ -12533,7 +12704,7 @@ msgstr "Ei tuotavaa uutta"
 msgid "Nothing to print yet"
 msgstr "Ei vielä tulostettavaa"
 
-#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:466
+#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:468
 msgid "Nothing to sell here yet. Add products to this box office."
 msgstr "Täällä ei ole vielä mitään myytävää. Lisää tuotteita tähän lippukassaan."
 
@@ -12777,6 +12948,10 @@ msgstr "Jonossa"
 msgid "On your phone? Open in authenticator app"
 msgstr "Puhelimellasi? Avaa todennussovelluksessa"
 
+#: src/components/forms/QuestionForm/index.tsx:194
+msgid "Once per order"
+msgstr "Kerran tilausta kohden"
+
 #: src/components/common/NoEventsBlankSlate/index.tsx:19
 msgid "Once you create an event, you'll see it here."
 msgstr "Kun luot tapahtuman, näet sen täällä."
@@ -12906,6 +13081,10 @@ msgstr "Vain henkilöt, joilla on vahvistetun verkkotunnuksen sähköpostiosoite
 msgid "Only published announcements are shown to users"
 msgstr "Käyttäjille näytetään vain julkaistut ilmoitukset"
 
+#: src/components/forms/QuestionForm/index.tsx:254
+msgid "Only required when the question is shown."
+msgstr "Pakollinen vain, kun kysymys näytetään."
+
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:621
 msgid "Only rows to fix"
 msgstr "Vain korjattavat rivit"
@@ -12961,6 +13140,14 @@ msgstr "Näkyy vain alennuskoodilla"
 #: src/components/common/TeamAccessFields/index.tsx:119
 msgid "Only what you pick below."
 msgstr "Vain se, mitä valitset alta."
+
+#: src/components/forms/QuestionForm/ConditionFields.tsx:66
+msgid "Only when an earlier answer matches"
+msgstr "Vain kun aiempi vastaus täsmää"
+
+#: src/components/forms/QuestionForm/index.tsx:260
+msgid "Only your team can see and fill in this question."
+msgstr "Vain tiimisi voi nähdä ja täyttää tämän kysymyksen."
 
 #: src/components/common/WidgetEditor/NameModal.tsx:35
 msgid "Only your team sees this. Use it to tell widgets apart, like \"Homepage\" or \"Newsletter\"."
@@ -13049,9 +13236,10 @@ msgstr "Avattu"
 msgid "Opens event page"
 msgstr "Avaa tapahtumasivun"
 
-#: src/components/forms/QuestionForm/index.tsx:45
-msgid "Option {i}"
-msgstr "Vaihtoehto {i}"
+#: src/components/forms/QuestionForm/OptionsEditor.tsx:77
+#: src/components/forms/QuestionForm/OptionsEditor.tsx:78
+msgid "Option {position}"
+msgstr "Vaihtoehto {position}"
 
 #: src/components/routes/event/Lineup/LineupStats.tsx:57
 msgid "Optional"
@@ -13089,11 +13277,7 @@ msgstr "Valinnainen, näkyy ylläpitäjille tällä sivulla."
 msgid "Optional. Useful when things happen in more than one place at the same time."
 msgstr "Valinnainen. Hyödyllinen, kun ohjelmaa on useassa paikassa samaan aikaan."
 
-#: src/components/common/QuestionsTable/index.tsx:132
-msgid "options"
-msgstr "vaihtoehdot"
-
-#: src/components/forms/QuestionForm/index.tsx:28
+#: src/components/forms/QuestionForm/index.tsx:129
 msgid "Options"
 msgstr "Vaihtoehdot"
 
@@ -13121,8 +13305,6 @@ msgstr "Tai aloita omaasi muistuttavasta tilasta"
 msgid "order"
 msgstr "tilaus"
 
-#: src/components/common/QuestionsTable/index.tsx:305
-#: src/components/common/QuestionsTable/index.tsx:459
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:261
 #: src/components/modals/ManageAttendeeModal/index.tsx:159
 #: src/components/routes/my-tickets/index.tsx:70
@@ -13153,7 +13335,7 @@ msgstr "Tilaus- ja laskutiedot säilytetään anonymisoituina verotusta varten. 
 msgid "Order answers"
 msgstr "Tilauksen vastaukset"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:394
+#: src/components/routes/product-widget/CollectInformation/index.tsx:428
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:420
 msgid "Order cancelled"
 msgstr "Tilaus peruutettu"
@@ -13163,7 +13345,7 @@ msgid "Order Cancelled"
 msgstr "Tilaus peruutettu"
 
 #: src/components/layouts/Checkout/index.tsx:376
-#: src/components/routes/product-widget/CollectInformation/index.tsx:384
+#: src/components/routes/product-widget/CollectInformation/index.tsx:418
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:430
 msgid "Order complete"
 msgstr "Tila valmis"
@@ -13223,7 +13405,7 @@ msgstr "Tilaus merkitty maksetuksi"
 msgid "Order Marked as Paid"
 msgstr "Tilaus merkitty maksetuksi"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:409
+#: src/components/routes/product-widget/CollectInformation/index.tsx:443
 msgid "Order not found"
 msgstr "Tilausta ei löytynyt"
 
@@ -13300,7 +13482,7 @@ msgstr "Tilaus päivitetty"
 msgid "Order updated successfully"
 msgstr "Tilaus päivitettiin onnistuneesti."
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:364
+#: src/components/routes/product-widget/CollectInformation/index.tsx:398
 msgid "Order was cancelled"
 msgstr "Tilaus peruttiin"
 
@@ -13460,6 +13642,8 @@ msgstr "Järjestäjät ja tapahtumat"
 
 #: src/components/common/OrdersTable/index.tsx:333
 #: src/components/routes/admin/EmailDelivery/index.tsx:31
+#: src/components/routes/event/Questions/questionTemplates.ts:17
+#: src/components/routes/event/Questions/questionTemplates.ts:55
 #: src/constants/eventCategories.ts:31
 msgid "Other"
 msgstr "Muut"
@@ -13603,6 +13787,10 @@ msgstr "Panorointi"
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:247
 msgid "Paper"
 msgstr "Paperi"
+
+#: src/components/forms/QuestionForm/questionTypes.ts:24
+msgid "Paragraph"
+msgstr "Kappale"
 
 #: src/components/modals/RefundOrderModal/index.tsx:117
 msgid "Partial refund"
@@ -13962,9 +14150,9 @@ msgstr "Henkilöt-taulukko"
 msgid "people to add"
 msgstr "lisättävää henkilöä"
 
-#: src/components/common/QuestionsTable/index.tsx:326
-msgid "Per Attendee"
-msgstr "Per osallistuja"
+#: src/components/forms/QuestionForm/index.tsx:141
+msgid "People who pick one of these answers can't complete their order. Useful for age limits or member-only events."
+msgstr "Jos joku valitsee jonkin näistä vastauksista, hän ei voi viimeistellä tilaustaan. Hyödyllinen ikärajoissa tai vain jäsenille tarkoitetuissa tapahtumissa."
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:212
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:77
@@ -14074,6 +14262,12 @@ msgstr "Henkilökohtaiset"
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:118
 msgid "Phone"
 msgstr "Puhelin"
+
+#: src/components/forms/QuestionForm/questionTypes.ts:30
+#: src/components/routes/event/Questions/questionTemplates.ts:41
+#: src/components/routes/event/Questions/questionTemplates.ts:42
+msgid "Phone number"
+msgstr "Puhelinnumero"
 
 #: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:75
 msgid "Photo {photoNumber}"
@@ -14217,10 +14411,6 @@ msgstr "Toista palvelussa {service}"
 #: src/components/layouts/EventHomepage/Sections/VideoSection.tsx:73
 msgid "Plays from {provider}"
 msgstr "Toistetaan palvelusta {provider}"
-
-#: src/components/forms/QuestionForm/index.tsx:31
-msgid "Please add at least one option"
-msgstr "Lisää vähintään yksi vaihtoehto"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:729
 #: src/hooks/useFormErrorResponseHandler.tsx:19
@@ -14405,6 +14595,10 @@ msgstr "Esitä kortti lukijalle"
 msgid "Press"
 msgstr "Lehdistö"
 
+#: src/components/forms/QuestionForm/OptionsEditor.tsx:270
+msgid "Press Enter for the next option, or paste a list."
+msgstr "Paina Enter lisätäksesi seuraavan vaihtoehdon tai liitä luettelo."
+
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:64
 msgid "Press where the first seat goes and drag. Drag sideways for seats, down for more rows."
 msgstr "Paina kohtaa, johon ensimmäinen paikka tulee, ja vedä. Vedä sivusuunnassa lisätäksesi paikkoja, alaspäin lisätäksesi rivejä."
@@ -14416,14 +14610,15 @@ msgstr "Estä ylivaraus jakamalla kapasiteetti useiden lipputyyppien kesken."
 #: src/components/common/DesignerShell/index.tsx:91
 #: src/components/common/DesignerShell/index.tsx:110
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:143
+#: src/components/forms/QuestionForm/index.tsx:265
 #: src/components/routes/admin/Announcements/index.tsx:496
 #: src/components/routes/event/Lineup/index.tsx:223
 msgid "Preview"
 msgstr "Esikatselu"
 
-#: src/components/common/QuestionsTable/index.tsx:296
-msgid "Preview checkout form"
-msgstr "Esikatsele kassalomaketta"
+#: src/components/routes/event/Questions/CheckoutPreview.tsx:132
+msgid "Preview a checkout for"
+msgstr "Kassan esikatselu lipulle"
 
 #: src/components/layouts/Event/index.tsx:319
 #: src/components/layouts/Event/index.tsx:323
@@ -14745,14 +14940,6 @@ msgstr "Mainossähköpostit voivat johtaa tilin jäädyttämiseen"
 msgid "Protect your account with a second step at sign-in. Even if someone learns your password, they can't get in without the code from your phone."
 msgstr "Suojaa tilisi kirjautumisen lisävaiheella. Vaikka joku saisi selville salasanasi, hän ei pääse sisään ilman puhelimesi koodia."
 
-#: src/components/forms/QuestionForm/index.tsx:189
-msgid ""
-"Provide additional context or instructions for this question. Use this field to add terms\n"
-"and conditions, guidelines, or any important information that attendees need to know before answering."
-msgstr ""
-"Anna tähän kysymykseen liittyvää lisäkontekstia tai ohjeita. Lisää tähän kenttään ehdot,\n"
-"ohjeet tai muut tärkeät tiedot, jotka osallistujien on tiedettävä ennen vastaamista."
-
 #: src/components/modals/LocationEditModal/index.tsx:61
 msgid "Provide at least one address field (venue, street, city, or country)."
 msgstr "Anna vähintään yksi osoitekenttä (paikka, katu, kaupunki tai maa)."
@@ -14842,26 +15029,43 @@ msgstr "Saatavilla oleva määrä"
 msgid "Quantity this date"
 msgstr "Määrä tänä päivämääränä"
 
+#: src/components/forms/QuestionForm/index.tsx:73
+#: src/components/forms/QuestionForm/index.tsx:77
+msgid "Question"
+msgstr "Kysymys"
+
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:139
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:156
 msgid "Question {number}"
 msgstr "Kysymys {number}"
 
+#: src/components/routes/event/Questions/QuestionRow.tsx:155
+msgid "Question actions"
+msgstr "Kysymyksen toiminnot"
+
 #: src/components/forms/CheckInListForm/index.tsx:205
 msgid "Question answers"
 msgstr "Kysymyksen vastaukset"
 
-#: src/components/common/QuestionsTable/index.tsx:211
+#: src/components/modals/CreateQuestionModal/index.tsx:34
+msgid "Question created"
+msgstr "Kysymys luotu"
+
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:148
 msgid "Question deleted"
 msgstr "Kysymys poistettu"
 
-#: src/components/forms/QuestionForm/index.tsx:188
-msgid "Question Description"
-msgstr "Kysymyksen kuvaus"
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:135
+msgid "Question hidden at checkout"
+msgstr "Kysymys piilotettu kassalla"
 
-#: src/components/forms/QuestionForm/index.tsx:178
-msgid "Question Title"
-msgstr "Kysymyksen otsikko"
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:135
+msgid "Question shown at checkout"
+msgstr "Kysymys näytetään kassalla"
+
+#: src/components/modals/EditQuestionModal/index.tsx:55
+msgid "Question updated"
+msgstr "Kysymys päivitetty"
 
 #: src/components/layouts/EventHomepage/Sections/FaqSection.tsx:17
 #: src/components/modals/DuplicateEventModal/index.tsx:134
@@ -14877,9 +15081,13 @@ msgstr "Kysymykset ja vastaukset"
 msgid "Questions and answers people can expand."
 msgstr "Avattavia kysymyksiä ja vastauksia."
 
-#: src/components/common/QuestionsTable/index.tsx:192
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:104
 msgid "Questions reordered"
 msgstr "Kysymykset järjestetty uudelleen"
+
+#: src/components/forms/QuestionForm/index.tsx:252
+msgid "Questions with ineligible answers are always required."
+msgstr "Kysymykset, joissa on ei-oikeuttavia vastauksia, ovat aina pakollisia."
 
 #: src/components/routes/admin/FailedJobs/index.tsx:164
 #: src/components/routes/admin/FailedJobs/index.tsx:257
@@ -14890,9 +15098,9 @@ msgstr "Jono"
 msgid "Quick Tip"
 msgstr "Pikavinkki"
 
-#: src/components/forms/QuestionForm/index.tsx:118
-msgid "Radio Option"
-msgstr "Valintanappivaihtoehto"
+#: src/components/routes/event/Questions/AttendeeDetailsSetting.tsx:23
+msgid "Quicker checkout, but every ticket is issued in the buyer's name."
+msgstr "Nopeampi kassa, mutta kaikki liput myönnetään ostajan nimiin."
 
 #: src/components/forms/TaxAndFeeForm/index.tsx:73
 #: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:43
@@ -15203,8 +15411,8 @@ msgstr "Hyvitykset"
 msgid "Register"
 msgstr "Rekisteröidy"
 
-#: src/components/common/QuestionsTable/index.tsx:424
 #: src/components/layouts/Event/index.tsx:139
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:180
 msgid "Registration Questions"
 msgstr "Rekisteröitymiskysymykset"
 
@@ -15346,6 +15554,10 @@ msgstr "Poista linkki {linkNumber}"
 msgid "Remove one"
 msgstr "Poista yksi"
 
+#: src/components/forms/QuestionForm/OptionsEditor.tsx:89
+msgid "Remove option {position}"
+msgstr "Poista vaihtoehto {position}"
+
 #: src/components/routes/admin/FeatureFlags/index.tsx:51
 msgid "Remove override"
 msgstr "Poista ohitus"
@@ -15449,9 +15661,17 @@ msgstr "Avaa uudelleen uusille myynneille"
 msgid "Reopen this date for new sales? Previously cancelled tickets will not be restored — affected attendees stay cancelled and any refunds already issued are not reversed."
 msgstr "Avaa tämä päivä uudelleen uusille myynneille? Aiemmin perutut liput eivät palautu — vaikutuksen alaiset osallistujat pysyvät peruttuina, eikä jo myönnettyjä hyvityksiä peruta."
 
+#: src/components/routes/event/Questions/QuestionRow.tsx:245
+msgid "Reorder {0}"
+msgstr "Järjestä uudelleen: {0}"
+
 #: src/components/common/WidgetEditor/SectionsPicker.tsx:70
 msgid "Reorder {label}"
 msgstr "Järjestä uudelleen: {label}"
+
+#: src/components/forms/QuestionForm/OptionsEditor.tsx:66
+msgid "Reorder option {position}"
+msgstr "Järjestä vaihtoehto {position} uudelleen"
 
 #: src/components/modals/CreateEventModal/index.tsx:419
 msgid "Repeat"
@@ -15516,7 +15736,8 @@ msgstr "Vaadi kaksivaiheinen"
 msgid "Require two-factor authentication"
 msgstr "Vaadi kaksivaiheinen tunnistautuminen"
 
-#: src/components/common/QuestionsTable/index.tsx:125
+#: src/components/forms/QuestionForm/index.tsx:250
+#: src/components/routes/event/Questions/QuestionRow.tsx:127
 #: src/ee/sso/components/SingleSignOn/index.tsx:69
 msgid "Required"
 msgstr "Pakollinen"
@@ -15890,7 +16111,7 @@ msgid "Runs events: products, orders, attendees, messages and check-in."
 msgstr "Hoitaa tapahtumia: tuotteet, tilaukset, osallistujat, viestit ja sisäänkirjautuminen."
 
 #: src/ee/box-office/components/layouts/BoxOffice/CartPanel.tsx:52
-#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:504
+#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:506
 msgid "Sale"
 msgstr "Myynti"
 
@@ -16062,7 +16283,7 @@ msgstr "Lauantai"
 #: src/components/routes/organizer/Settings/Sections/TrackingPixelSettings/index.tsx:262
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:88
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:88
-#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:90
+#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:105
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:312
 msgid "Save"
 msgstr "Tallenna"
@@ -16091,7 +16312,7 @@ msgstr "Tallenna muutokset"
 #: src/components/modals/EditOrganizerWebhookModal/index.tsx:87
 #: src/components/modals/EditProductCategoryModal/index.tsx:73
 #: src/components/modals/EditPromoCodeModal/index.tsx:87
-#: src/components/modals/EditQuestionModal/index.tsx:103
+#: src/components/modals/EditQuestionModal/index.tsx:67
 #: src/components/modals/EditWebhookModal/index.tsx:88
 #: src/components/modals/LocationEditModal/index.tsx:164
 #: src/components/modals/ManageAttendeeModal/index.tsx:211
@@ -16415,6 +16636,10 @@ msgstr "Hae päivämääriä..."
 #: src/components/layouts/CheckIn/OccurrenceFilterPill.tsx:88
 msgid "Search dates…"
 msgstr "Hae päivämääriä…"
+
+#: src/components/routes/event/Questions/questionTemplates.ts:55
+msgid "Search engine"
+msgstr "Hakukone"
 
 #: src/components/common/AddressAutocomplete/index.tsx:86
 msgid "Search for an address"
@@ -17189,10 +17414,11 @@ msgstr "Aseta aikataulusi seuraavissa vaiheissa"
 msgid "Set, change, or remove the date's location or online details"
 msgstr "Aseta, muuta tai poista päivämäärän sijainti tai verkkotiedot"
 
-#: src/components/common/QuestionsTable/index.tsx:385
+#: src/components/routes/event/Questions/QuestionsBuilder.tsx:159
 msgid "Setting updated"
 msgstr "Asetus päivitetty"
 
+#: src/components/forms/QuestionForm/index.tsx:244
 #: src/components/layouts/OrganizerLayout/index.tsx:119
 #: src/components/layouts/SettingsLayout/index.tsx:83
 #: src/components/layouts/SettingsLayout/index.tsx:90
@@ -17287,6 +17513,10 @@ msgstr "Siirrä aikoja"
 msgid "Shifted times for {count} date(s)"
 msgstr "Aikoja siirretty {count} päivälle"
 
+#: src/components/forms/QuestionForm/questionTypes.ts:23
+msgid "Short answer"
+msgstr "Lyhyt vastaus"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:553
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:233
 msgid "Show"
@@ -17303,6 +17533,10 @@ msgstr "Näytä lisäasetukset"
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:228
 msgid "Show all platforms ({0} more with values)"
 msgstr "Näytä kaikki alustat ({0} lisää, joilla on arvot)"
+
+#: src/components/routes/event/Questions/QuestionRow.tsx:185
+msgid "Show at checkout"
+msgstr "Näytä kassalla"
 
 #: src/components/forms/CheckInListForm/index.tsx:196
 msgid "Show attendee notes to non-logged-in staff"
@@ -17390,6 +17624,10 @@ msgstr "Näytä osio"
 msgid "Show tax and fees separately"
 msgstr "Näytä verot ja maksut erikseen"
 
+#: src/components/forms/QuestionForm/index.tsx:239
+msgid "Show this question"
+msgstr "Näytä tämä kysymys"
+
 #: src/components/common/WidgetEditor/ContentFields.tsx:204
 msgid "Show tickets"
 msgstr "Näytä liput"
@@ -17451,9 +17689,13 @@ msgstr "Näytetään asiakkaalle kassauksen jälkeen tilauksen yhteenvedon sivul
 msgid "Shown to the customer before they checkout"
 msgstr "Näytetään asiakkaalle ennen kassalle siirtymistä"
 
-#: src/components/forms/QuestionForm/index.tsx:132
-msgid "Shows common address fields, including country"
-msgstr "Näyttää yleiset osoitekentät, mukaan lukien maa"
+#: src/components/forms/QuestionForm/index.tsx:173
+msgid "Shown under the question when someone picks one of these answers."
+msgstr "Näytetään kysymyksen alla, kun joku valitsee jonkin näistä vastauksista."
+
+#: src/components/forms/QuestionForm/index.tsx:109
+msgid "Shown under the question. Use it for instructions, terms or extra context."
+msgstr "Näytetään kysymyksen alla. Käytä ohjeisiin, ehtoihin tai lisätietoihin."
 
 #: src/components/forms/ProductForm/ledgerSummaries.ts:60
 msgid "Shows remaining"
@@ -17659,9 +17901,9 @@ msgstr "Simpson"
 msgid "Since {0} (UTC)"
 msgstr "{0} alkaen (UTC)"
 
-#: src/components/forms/QuestionForm/index.tsx:100
-msgid "Single line text box"
-msgstr "Yksirivinen tekstikenttä"
+#: src/components/forms/QuestionForm/questionTypes.ts:25
+msgid "Single choice"
+msgstr "Yksi vaihtoehto"
 
 #: src/components/routes/settings/Team/index.tsx:203
 #: src/ee/sso/components/SingleSignOn/index.tsx:50
@@ -17738,6 +17980,10 @@ msgstr "Sosiaalisen median linkit"
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:182
 msgid "Social Links & Website"
 msgstr "Sosiaalisen median linkit ja verkkosivu"
+
+#: src/components/routes/event/Questions/questionTemplates.ts:55
+msgid "Social media"
+msgstr "Sosiaalinen media"
 
 #: src/components/routes/admin/EmailDelivery/index.tsx:99
 msgid "Soft bounces"
@@ -17857,7 +18103,7 @@ msgstr "Jotain, mistä näet, missä sitä käytetään, kuten ”Zapier” tai 
 
 #: src/components/common/ErrorDisplay/index.tsx:15
 #: src/components/routes/auth/AcceptInvitation/index.tsx:61
-#: src/components/routes/product-widget/CollectInformation/index.tsx:423
+#: src/components/routes/product-widget/CollectInformation/index.tsx:457
 #: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:64
 msgid "Something went wrong"
 msgstr "Jotain meni pieleen"
@@ -17957,6 +18203,10 @@ msgstr "Tietyt tilit"
 #: src/components/common/TeamAccessFields/index.tsx:118
 msgid "Specific organizers and events"
 msgstr "Tietyt järjestäjät ja tapahtumat"
+
+#: src/components/forms/QuestionForm/index.tsx:219
+msgid "Specific tickets and products"
+msgstr "Tietyt liput ja tuotteet"
 
 #: src/components/routes/admin/Announcements/index.tsx:427
 msgid "Specific users"
@@ -18210,11 +18460,11 @@ msgstr "Alkaa {seconds}s"
 msgid "Starts tomorrow"
 msgstr "Alkaa huomenna"
 
-#: src/components/common/CheckoutQuestion/index.tsx:165
+#: src/components/common/CheckoutQuestion/index.tsx:208
 #: src/components/common/LocationPicker/index.tsx:254
 #: src/components/modals/LocationEditModal/index.tsx:149
-#: src/components/routes/product-widget/CollectInformation/index.tsx:587
-#: src/components/routes/product-widget/CollectInformation/index.tsx:588
+#: src/components/routes/product-widget/CollectInformation/index.tsx:625
+#: src/components/routes/product-widget/CollectInformation/index.tsx:626
 msgid "State or Region"
 msgstr "Osavaltio tai alue"
 
@@ -18470,11 +18720,6 @@ msgstr "Tuote luotu onnistuneesti"
 msgid "Successfully Created Promo Code"
 msgstr "Kampanjakoodi luotu onnistuneesti"
 
-#: src/components/modals/CreateQuestionModal/index.tsx:46
-#: src/components/modals/EditQuestionModal/index.tsx:66
-msgid "Successfully Created Question"
-msgstr "Kysymys luotu onnistuneesti"
-
 #: src/components/modals/DuplicateProductModal/index.tsx:113
 msgid "Successfully Duplicated Product"
 msgstr "Tuote monistettu onnistuneesti"
@@ -18679,6 +18924,11 @@ msgstr "Järjestelmän oletus"
 msgid "T-shirt"
 msgstr "T-paita"
 
+#: src/components/routes/event/Questions/questionTemplates.ts:22
+#: src/components/routes/event/Questions/questionTemplates.ts:25
+msgid "T-shirt size"
+msgstr "T-paidan koko"
+
 #: src/components/forms/ProductForm/index.tsx:235
 msgid "T-shirts, mugs and more"
 msgstr "T-paitoja, mukit ja muuta"
@@ -18859,6 +19109,10 @@ msgstr "Malli poistettu onnistuneesti"
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:144
 msgid "Template saved successfully"
 msgstr "Malli tallennettu onnistuneesti"
+
+#: src/components/routes/event/Questions/AddQuestionMenu.tsx:49
+msgid "Templates"
+msgstr "Mallit"
 
 #: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:119
 msgid "Tenant ID"
@@ -19159,6 +19413,10 @@ msgstr "Asiakkaalle näytettävä hinta sisältää verot ja maksut."
 msgid "The price displayed to the customer will not include taxes and fees. They will be shown separately"
 msgstr "Asiakkaalle näytettävä hinta ei sisällä veroja ja maksuja. Ne näytetään erikseen"
 
+#: src/components/routes/event/Questions/AttendeeDetailsSetting.tsx:56
+msgid "The questions below are still asked once for every ticket."
+msgstr "Alla olevat kysymykset kysytään silti jokaisesta lipusta."
+
 #: src/components/common/CapacityHelp/index.tsx:38
 msgid "The room holds 20. Early bird is limited to 5 per date, Standard to 15."
 msgstr "Tilaan mahtuu 20. Early bird on rajattu 5:een per päivämäärä, Standard 15:een."
@@ -19413,6 +19671,12 @@ msgstr "Tili on ajastettu poistettavaksi <0>{scheduledDate}</0>"
 msgid "This answer is too long. Shorten it before saving."
 msgstr "Tämä vastaus on liian pitkä. Lyhennä sitä ennen tallentamista."
 
+#: src/components/common/CheckoutQuestion/index.tsx:285
+#: src/components/forms/QuestionForm/index.tsx:44
+#: src/components/routes/product-widget/CollectInformation/index.tsx:811
+msgid "This answer means you can't register for this event."
+msgstr "Tällä vastauksella et voi rekisteröityä tähän tapahtumaan."
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:260
 msgid "This applies to every matching date in the event, including dates not currently visible. Attendees registered on any of those dates will be reachable via the message composer once the update finishes."
 msgstr "Tämä koskee kaikkia tapahtuman vastaavia ajankohtia, myös ajankohtia, jotka eivät tällä hetkellä ole näkyvissä. Mille tahansa näistä ajankohdista ilmoittautuneisiin osallistujiin voi ottaa yhteyttä viestieditorilla, kun päivitys on valmis."
@@ -19561,6 +19825,10 @@ msgstr "Tätä tapahtumaa ei ole vielä julkaistu"
 msgid "This event is not published. Sales are still recorded."
 msgstr "Tätä tapahtumaa ei ole julkaistu. Myynnit kirjataan silti."
 
+#: src/components/forms/QuestionForm/index.tsx:174
+msgid "This event is open to healthcare professionals only."
+msgstr "Tämä tapahtuma on tarkoitettu vain terveydenhuollon ammattilaisille."
+
 #: src/components/layouts/Event/index.tsx:201
 msgid "This event is pending manual review and cannot be published until the review is complete."
 msgstr "Tämä tapahtuma odottaa manuaalista tarkistusta, eikä sitä voi julkaista ennen kuin tarkistus on valmis."
@@ -19597,8 +19865,8 @@ msgstr "Tapahtuman päivämäärät ja kellonajat määritetään tapahtumakerto
 msgid "This feature needs a Hi.Events Enterprise licence. Until a licence key is added, nothing new can be set up and existing setup can't be changed, but what is already set up can still be viewed, switched off or removed."
 msgstr "Tämä ominaisuus vaatii Hi.Events Enterprise -lisenssin. Ennen kuin lisenssiavain lisätään, mitään uutta ei voi määrittää eikä nykyisiä asetuksia voi muuttaa, mutta jo määritettyä voi edelleen tarkastella, kytkeä pois päältä tai poistaa."
 
-#: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:54
-#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:42
+#: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:80
+#: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:52
 msgid "This field is required"
 msgstr "Tämä kenttä on pakollinen"
 
@@ -19707,7 +19975,7 @@ msgstr "Tilauksesta on jo tehty hyvitys."
 msgid "This order has been cancelled."
 msgstr "Tilaus on peruttu."
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:352
+#: src/components/routes/product-widget/CollectInformation/index.tsx:386
 msgid "This order has expired. Please start again."
 msgstr "Tilaus on vanhentunut. Aloita uudelleen."
 
@@ -19723,11 +19991,11 @@ msgstr "Tilaus on valmis."
 msgid "This order page is no longer available."
 msgstr "Tilaussivu ei ole enää saatavilla."
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:365
+#: src/components/routes/product-widget/CollectInformation/index.tsx:399
 msgid "This order was abandoned. You can start a new order anytime."
 msgstr "Tilaus jäi kesken. Voit aloittaa uuden tilauksen milloin tahansa."
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:395
+#: src/components/routes/product-widget/CollectInformation/index.tsx:429
 msgid "This order was cancelled. You can start a new order anytime."
 msgstr "Tilaus peruttiin. Voit aloittaa uuden tilauksen milloin tahansa."
 
@@ -20008,6 +20276,10 @@ msgstr "Liput ja myynti"
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:84
 msgid "Tickets and {extraSections} more"
 msgstr "Liput ja {extraSections} muuta"
+
+#: src/components/forms/QuestionForm/index.tsx:227
+msgid "Tickets and products"
+msgstr "Liput ja tuotteet"
 
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:306
 msgid "Tickets are always shown"
@@ -20377,8 +20649,8 @@ msgstr "Kokeile muuttaa suodattimia nähdäksesi lisää ajankohtia."
 #: src/components/routes/sso/Callback/index.tsx:257
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:206
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:88
-#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:449
-#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:460
+#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:451
+#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:462
 msgid "Try again"
 msgstr "Yritä uudelleen"
 
@@ -20394,6 +20666,10 @@ msgstr "Kokeile Hi.Events-palvelua ilmaiseksi"
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:199
 msgid "Try it"
 msgstr "Kokeile"
+
+#: src/components/routes/event/Questions/CheckoutPreview.tsx:125
+msgid "Try some answers to see follow-up questions. Nothing is saved."
+msgstr "Kokeile vastauksia nähdäksesi jatkokysymykset. Mitään ei tallenneta."
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:47
 msgid "Tue"
@@ -20597,10 +20873,6 @@ msgstr "Tuotteen luominen ei onnistu. Tarkista tietosi"
 msgid "Unable to create product. Please check your details"
 msgstr "Tuotteen luominen ei onnistu. Tarkista tietosi"
 
-#: src/components/modals/CreateQuestionModal/index.tsx:61
-msgid "Unable to create question. Please check the your details"
-msgstr "Kysymyksen luominen ei onnistu. Tarkista tietosi"
-
 #: src/components/common/WidgetEditor/index.tsx:161
 msgid "Unable to delete the widget"
 msgstr "Widgetin poistaminen epäonnistui"
@@ -20666,10 +20938,6 @@ msgstr "Päivämäärän vaihtaminen epäonnistui"
 #: src/hooks/useCheckInController.tsx:163
 msgid "Unable to undo check-in"
 msgstr "Sisäänkirjautumisen kumoaminen ei onnistu"
-
-#: src/components/modals/EditQuestionModal/index.tsx:84
-msgid "Unable to update question. Please check the your details"
-msgstr "Kysymyksen päivittäminen ei onnistu. Tarkista tietosi"
 
 #: src/ee/box-office/components/layouts/BoxOffice/SaleComplete.tsx:81
 msgid "Unable to void sale"
@@ -21083,9 +21351,9 @@ msgstr "Käytä tapahtuman oletusta"
 msgid "Use order details for all attendees. Attendee names and emails will match the buyer's information."
 msgstr "Käytä tilauksen tietoja kaikille osallistujille. Osallistujien nimet ja sähköpostiosoitteet vastaavat ostajan tietoja."
 
-#: src/components/common/QuestionsTable/index.tsx:401
-msgid "Use the buyer's details for all attendees"
-msgstr "Käytä ostajan tietoja kaikille osallistujille"
+#: src/components/routes/event/Questions/AttendeeDetailsSetting.tsx:22
+msgid "Use the buyer's name and email for every ticket"
+msgstr "Käytä ostajan nimeä ja sähköpostia kaikissa lipuissa"
 
 #: src/components/common/LocationPicker/index.tsx:285
 msgid "Use this address"
@@ -21282,6 +21550,14 @@ msgstr "ALV: {0}"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:310
 msgid "VAT: not registered"
 msgstr "ALV: ei rekisteröity"
+
+#: src/components/routes/event/Questions/questionTemplates.ts:17
+msgid "Vegan"
+msgstr "Vegaaninen"
+
+#: src/components/routes/event/Questions/questionTemplates.ts:17
+msgid "Vegetarian"
+msgstr "Kasvissyöjä"
 
 #: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:80
 msgid "Venue"
@@ -21493,7 +21769,7 @@ msgid "View Order"
 msgstr "Näytä tilaus"
 
 #: src/components/forms/StripeCheckoutForm/index.tsx:133
-#: src/components/routes/product-widget/CollectInformation/index.tsx:387
+#: src/components/routes/product-widget/CollectInformation/index.tsx:421
 msgid "View Order Details"
 msgstr "Näytä tilauksen tiedot"
 
@@ -21600,7 +21876,7 @@ msgstr "Mitätöity"
 msgid "Waiting"
 msgstr "Odottaa"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:374
+#: src/components/routes/product-widget/CollectInformation/index.tsx:408
 msgid "Waiting for payment"
 msgstr "Odottaa maksua"
 
@@ -21627,7 +21903,7 @@ msgstr "Jonotuslista"
 msgid "Waitlist Enabled"
 msgstr "Jonotuslista käytössä"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:409
+#: src/components/routes/product-widget/CollectInformation/index.tsx:443
 msgid "Waitlist offer expired"
 msgstr "Jonotuslistatarjous on vanhentunut"
 
@@ -21696,7 +21972,7 @@ msgstr "Etsimääsi tilausta ei löytynyt. Linkki on ehkä vanhentunut tai tilau
 msgid "We couldn't find the ticket you're looking for. The link may have expired or the ticket details may have changed."
 msgstr "Etsimääsi lippua ei löytynyt. Linkki on ehkä vanhentunut tai lipun tiedot ovat saattaneet muuttua."
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:412
+#: src/components/routes/product-widget/CollectInformation/index.tsx:446
 msgid "We couldn't find this order. It may have been removed."
 msgstr "Tätä tilausta ei löytynyt. Se on ehkä poistettu."
 
@@ -21712,12 +21988,12 @@ msgstr "Sisäänkirjautumislistojen lataaminen ei onnistunut. Yritä uudelleen."
 msgid "We couldn't load the data. Please try again."
 msgstr "Tietojen lataaminen ei onnistunut. Yritä uudelleen."
 
-#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:446
+#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:448
 msgid "We couldn't load the products. Please try again."
 msgstr "Tuotteita ei voitu ladata. Yritä uudelleen."
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1118
-#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:457
+#: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:459
 msgid "We couldn't load the seating map. Please try again."
 msgstr "Istumakarttaa ei voitu ladata. Yritä uudelleen."
 
@@ -21761,7 +22037,7 @@ msgstr "Emme voineet kirjata sinua sisään"
 msgid "We couldn't sign you in with {providerName}"
 msgstr "Emme voineet kirjata sinua sisään palvelulla {providerName}"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:424
+#: src/components/routes/product-widget/CollectInformation/index.tsx:458
 msgid "We hit a snag loading this page. Please try again."
 msgstr "Tämän sivun lataamisessa ilmeni ongelma. Yritä uudelleen."
 
@@ -21823,7 +22099,7 @@ msgstr "Ilmoitamme sinulle sähköpostitse, jos tuotteelle {productDisplayName} 
 msgid "We'll open a message composer with a pre-filled template after saving. You review and send it — nothing is sent automatically."
 msgstr "Tallennuksen jälkeen avaamme viestieditorin, jossa on valmiiksi täytetty mallipohja. Tarkistat ja lähetät viestin itse — mitään ei lähetetä automaattisesti."
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:471
+#: src/components/routes/product-widget/CollectInformation/index.tsx:509
 msgid "We'll send your tickets to this email"
 msgstr "Lähetämme liput tähän sähköpostiosoitteeseen"
 
@@ -21968,10 +22244,6 @@ msgstr "Mitä ostajat näkevät"
 msgid "What is a Category?"
 msgstr "Mikä on kategoria?"
 
-#: src/components/forms/QuestionForm/index.tsx:159
-msgid "What products does this code apply to?"
-msgstr "Mitä tuotteita tämä koodi koskee?"
-
 #: src/components/forms/PromoCodeForm/index.tsx:158
 msgid "What products does this code apply to? (Applies to all by default)"
 msgstr "Mitä tuotteita tämä koodi koskee? (Oletusarvoisesti koskee kaikkia tuotteita)"
@@ -21983,10 +22255,6 @@ msgstr "Mitä tuotteita tämän kapasiteetin tulee koskea?"
 #: src/components/modals/CreateEventModal/index.tsx:350
 msgid "What should people expect?"
 msgstr "Mitä osallistujat voivat odottaa?"
-
-#: src/components/forms/QuestionForm/index.tsx:179
-msgid "What time will you be arriving?"
-msgstr "Mihin aikaan saavut?"
 
 #: src/components/modals/DuplicateEventModal/index.tsx:270
 msgid "What to copy"
@@ -22003,13 +22271,13 @@ msgstr "Mitä tehdä"
 msgid "What type of event?"
 msgstr "Millainen tapahtuma?"
 
-#: src/components/forms/QuestionForm/index.tsx:170
-msgid "What type of question is this?"
-msgstr "Millainen kysymys tämä on?"
-
 #: src/components/forms/CheckInListForm/index.tsx:172
 msgid "What unauthenticated staff can see"
 msgstr "Mitä tunnistautumattomat työntekijät voivat nähdä"
+
+#: src/components/forms/QuestionForm/index.tsx:78
+msgid "What's your job title?"
+msgstr "Mikä on tehtävänimikkeesi?"
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:89
 #: src/constants/socialMediaConfig.ts:39
@@ -22020,6 +22288,10 @@ msgstr "WhatsApp"
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:294
 msgid "Wheelchair space"
 msgstr "Pyörätuolipaikka"
+
+#: src/components/routes/event/Questions/QuestionRow.tsx:140
+msgid "When “{0}”: {conditionValues}"
+msgstr "Kun ”{0}”: {conditionValues}"
 
 #: src/components/forms/WebhookForm/index.tsx:129
 msgid "When a check-in is deleted"
@@ -22145,6 +22417,14 @@ msgstr "Kun myynti avautuu"
 msgid "When someone picks an event"
 msgstr "Kun joku valitsee tapahtuman"
 
+#: src/components/forms/QuestionForm/ConditionFields.tsx:73
+msgid "When the answer to"
+msgstr "Kun vastaus kysymykseen"
+
+#: src/components/routes/event/Questions/QuestionRow.tsx:139
+msgid "When: {conditionValues}"
+msgstr "Kun: {conditionValues}"
+
 #: src/components/common/WidgetEditor/InstallPanel.tsx:60
 msgid "Where is your website?"
 msgstr "Missä sivustosi on?"
@@ -22177,9 +22457,9 @@ msgstr "Mitkä liput yhdistetään tähän sisäänkirjautumislistaan?"
 msgid "White-label"
 msgstr "White label"
 
-#: src/components/forms/QuestionForm/index.tsx:151
-msgid "Who should be asked this question?"
-msgstr "Keneltä tämä kysymys kysytään?"
+#: src/components/forms/QuestionForm/index.tsx:187
+msgid "Who answers"
+msgstr "Kuka vastaa"
 
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:148
 msgid "Who's on?"
@@ -22247,12 +22527,11 @@ msgid "Working"
 msgstr "Käsitellään"
 
 #: src/components/forms/ProductForm/ProductDrawer.tsx:142
+#: src/components/forms/QuestionForm/QuestionDrawer.tsx:84
 #: src/components/modals/CreateProductCategoryModal/index.tsx:58
 #: src/components/modals/CreatePromoCodeModal/index.tsx:59
-#: src/components/modals/CreateQuestionModal/index.tsx:77
 #: src/components/modals/EditProductCategoryModal/index.tsx:73
 #: src/components/modals/EditPromoCodeModal/index.tsx:87
-#: src/components/modals/EditQuestionModal/index.tsx:103
 #: src/components/modals/JoinWaitlistModal/index.tsx:207
 #: src/components/routes/auth/Register/index.tsx:188
 msgid "Working..."
@@ -22303,6 +22582,7 @@ msgstr "vuotta"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:271
 #: src/components/routes/admin/Dashboard/index.tsx:409
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:221
+#: src/components/routes/event/Questions/questionTemplates.ts:64
 #: src/ee/sso/components/SingleSignOn/index.tsx:70
 msgid "Yes"
 msgstr "Kyllä"
@@ -22417,6 +22697,10 @@ msgstr "Voit tarvittaessa tarjota lippuja edelleen manuaalisesti."
 msgid "You can still remove it from any product."
 msgstr "Voit silti poistaa sen mistä tahansa tuotteesta."
 
+#: src/components/common/CheckoutQuestion/index.tsx:283
+msgid "You can't register for this event"
+msgstr "Et voi rekisteröityä tähän tapahtumaan"
+
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:135
 msgid "You cannot archive the last active organizer on your account."
 msgstr "Et voi arkistoida tilisi viimeistä aktiivista järjestäjää."
@@ -22483,6 +22767,7 @@ msgid "You have taxes and fees added to a Free Product. Would you like to remove
 msgstr "Maksuttomaan tuotteeseen on lisätty veroja ja maksuja. Haluatko poistaa ne?"
 
 #: src/components/forms/ProductForm/ProductDrawer.tsx:57
+#: src/components/forms/QuestionForm/QuestionDrawer.tsx:43
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:748
 msgid "You have unsaved changes. Are you sure you want to discard them?"
 msgstr "Sinulla on tallentamattomia muutoksia. Haluatko varmasti hylätä ne?"
@@ -22506,6 +22791,10 @@ msgstr "Sinun on hyväksyttävä viestien vastaanottaminen"
 #: src/components/routes/auth/AcceptInvitation/index.tsx:44
 msgid "You must agree to the terms and conditions"
 msgstr "Sinun on hyväksyttävä käyttöehdot"
+
+#: src/components/routes/event/Questions/questionTemplates.ts:67
+msgid "You must be 18 or older to attend this event."
+msgstr "Sinun on oltava vähintään 18-vuotias osallistuaksesi tähän tapahtumaan."
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:168
 msgid "You must create a ticket before you can manually add an attendee."
@@ -22651,7 +22940,7 @@ msgstr "Sinut on kutsuttu"
 msgid "You've been invited to join a team. Open the invitation email we sent you to finish joining. If the link has expired, ask the person who invited you to send a new one."
 msgstr "Sinut on kutsuttu liittymään tiimiin. Avaa lähettämämme kutsusähköposti viimeistelläksesi liittymisen. Jos linkki on vanhentunut, pyydä sinut kutsunutta henkilöä lähettämään uusi kutsu."
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:454
+#: src/components/routes/product-widget/CollectInformation/index.tsx:492
 msgid "You've been offered a spot!"
 msgstr "Sinulle on tarjottu paikkaa!"
 
@@ -22743,7 +23032,11 @@ msgstr "Nykyinen tilauksesi menetetään."
 msgid "Your current recovery codes will stop working straight away. Enter a code from your authenticator app to confirm."
 msgstr "Nykyiset palautuskoodisi lakkaavat toimimasta heti. Vahvista syöttämällä todennussovelluksesi koodi."
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:468
+#: src/components/routes/event/Questions/CheckoutPreview.tsx:88
+msgid "Your details"
+msgstr "Tietosi"
+
+#: src/components/routes/product-widget/CollectInformation/index.tsx:506
 msgid "Your Details"
 msgstr "Tietosi"
 
@@ -22952,6 +23245,10 @@ msgstr "Paikkasi on varattu. Järjestäjä vahvistaa tilauksesi, kun maksusi on 
 msgid "Your Plan"
 msgstr "Pakettisi"
 
+#: src/components/forms/QuestionForm/index.tsx:33
+msgid "Your question"
+msgstr "Kysymyksesi"
+
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:58
 msgid "Your recovery codes and trusted devices will be removed."
 msgstr "Palautuskoodisi ja luotetut laitteesi poistetaan."
@@ -23000,7 +23297,7 @@ msgstr "Lippusi tapahtumaan"
 msgid "Your ticket is still valid — no action is needed unless the new time doesn't work for you. Please reply to this email if you have any questions."
 msgstr "Lippusi on edelleen voimassa — sinun ei tarvitse tehdä mitään, ellei uusi aika sovi sinulle. Vastaa tähän sähköpostiin, jos sinulla on kysyttävää."
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:385
+#: src/components/routes/product-widget/CollectInformation/index.tsx:419
 msgid "Your tickets have been confirmed."
 msgstr "Lippusi on vahvistettu."
 
@@ -23016,7 +23313,7 @@ msgstr "ALV-tunnisteesi odottaa vahvistamista"
 msgid "Your VAT number will be validated when you save"
 msgstr "ALV-tunnisteesi vahvistetaan tallennuksen yhteydessä"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:411
+#: src/components/routes/product-widget/CollectInformation/index.tsx:445
 msgid "Your waitlist offer has expired and we were unable to complete your order. Please rejoin the waitlist to be notified when more spots become available."
 msgstr "Jonotuslistatarjouksesi on vanhentunut emmekä voineet viimeistellä tilaustasi. Liity uudelleen jonotuslistalle, jotta saat ilmoituksen uusien paikkojen vapautuessa."
 
@@ -23029,17 +23326,17 @@ msgstr "oma-sivusto.fi"
 msgid "YouTube"
 msgstr "YouTube"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:595
+#: src/components/routes/product-widget/CollectInformation/index.tsx:633
 msgid "ZIP / Postal Code"
 msgstr "Postinumero"
 
-#: src/components/common/CheckoutQuestion/index.tsx:170
+#: src/components/common/CheckoutQuestion/index.tsx:213
 #: src/components/common/LocationPicker/index.tsx:261
 #: src/components/modals/LocationEditModal/index.tsx:152
 msgid "Zip or Postal Code"
 msgstr "Postinumero"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:596
+#: src/components/routes/product-widget/CollectInformation/index.tsx:634
 msgid "ZIP or Postal Code"
 msgstr "Postinumero"
 

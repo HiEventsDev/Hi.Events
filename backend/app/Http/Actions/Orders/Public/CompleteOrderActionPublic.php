@@ -22,8 +22,9 @@ class CompleteOrderActionPublic extends BaseAction
      * Complete Order
      *
      * `order.questions` and `products.*.questions` are validated against the questions configured
-     * for the event. The `order.address` fields become required when the event's settings require
-     * a billing address.
+     * for the event. Every required question that is shown must be answered, so leaving out
+     * `order.questions` fails when the event has required order questions. The `order.address`
+     * fields become required when the event's settings require a billing address.
      */
     public function __invoke(CompleteOrderRequest $request, int $eventId, string $orderShortId): JsonResponse
     {

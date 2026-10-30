@@ -69,6 +69,15 @@ export class CheckoutPage {
     await this.surface.getByLabel(new RegExp(`^${title}`)).fill(value);
   }
 
+  async chooseMultiSelectOptions(title: string, options: string[]): Promise<void> {
+    const input = this.surface.getByRole('combobox', { name: title });
+    await input.locator('xpath=../..').click();
+    for (const option of options) {
+      await this.surface.getByRole('option', { name: option }).click();
+    }
+    await input.press('Escape');
+  }
+
   async chooseRadioOption(option: string): Promise<void> {
     await this.surface.getByRole('radio', { name: option }).check();
   }
