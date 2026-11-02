@@ -6,6 +6,7 @@ namespace HiEvents\Enterprise\Licensing;
 
 enum Plan: string
 {
+    case ADD_ONS = 'add_ons';
     case OWN_EVENTS = 'own_events';
     case PLATFORM = 'platform';
     case CLOUD = 'cloud';
@@ -16,6 +17,7 @@ enum Plan: string
     public function features(): array
     {
         return match ($this) {
+            self::ADD_ONS => [],
             self::OWN_EVENTS => [
                 LicensedFeature::WHITE_LABEL,
             ],

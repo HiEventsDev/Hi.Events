@@ -48,6 +48,23 @@ class IssueLicenceKeyCommandTest extends TestCase
         );
     }
 
+    public function test_an_add_ons_key_unlocks_only_the_features_it_adds(): void
+    {
+        $this->assertSame(0, $this->issue(['--plan' => 'add_ons', '--covers' => '20000', '--add' => ['seating']]));
+
+        $licence = $this->codec->decode(trim(Artisan::output()));
+
+        $this->assertSame(Plan::ADD_ONS, $licence->plan);
+        $this->assertSame(20000, $licence->covered_sales);
+        $this->assertSame([LicensedFeature::SEATING], $licence->features);
+    }
+
+    public function test_an_add_ons_key_needs_at_least_one_feature(): void
+    {
+        $this->assertSame(1, $this->issue(['--plan' => 'add_ons', '--covers' => '20000']));
+        $this->assertStringContainsString('The add_ons plan needs at least one --add feature', Artisan::output());
+    }
+
     public function test_a_cloud_key_needs_no_covered_sales(): void
     {
         $this->assertSame(0, $this->issue(['--plan' => 'cloud']));
@@ -60,8 +77,8 @@ class IssueLicenceKeyCommandTest extends TestCase
 
     public function test_self_hosted_plans_require_covered_sales(): void
     {
-        foreach (['own_events', 'platform'] as $plan) {
-            $this->assertSame(1, $this->issue(['--plan' => $plan]));
+        foreach (['add_ons', 'own_events', 'platform'] as $plan) {
+            $this->assertSame(1, $this->issue(['--plan' => $plan, '--add' => ['seating']]));
             $this->assertStringContainsString("--covers is required for the $plan plan", Artisan::output());
         }
     }
@@ -77,13 +94,13 @@ class IssueLicenceKeyCommandTest extends TestCase
     public function test_a_cloud_key_cannot_cover_sales(): void
     {
         $this->assertSame(1, $this->issue(['--plan' => 'cloud', '--covers' => '20000']));
-        $this->assertStringContainsString('--covers can only be used with the own_events and platform plans', Artisan::output());
+        $this->assertStringContainsString('--covers cannot be used with the cloud plan', Artisan::output());
     }
 
     public function test_the_retired_enterprise_plan_cannot_be_issued(): void
     {
         $this->assertSame(1, $this->issue(['--plan' => 'enterprise', '--covers' => '20000']));
-        $this->assertStringContainsString('Unknown plan. Valid plans: own_events, platform, cloud', Artisan::output());
+        $this->assertStringContainsString('Unknown plan. Valid plans: add_ons, own_events, platform, cloud', Artisan::output());
     }
 
     private function issue(array $options): int
