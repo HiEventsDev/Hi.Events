@@ -29,7 +29,8 @@ class CreateCheckInListHandler
             ->setPublicShowQuestionAnswers($listData->publicShowQuestionAnswers)
             ->setPublicShowOrderDetails($listData->publicShowOrderDetails)
             ->setBadgePrintingEnabled($listData->badgePrintingEnabled ?? false)
-            ->setKioskMode($listData->kioskMode ?? false);
+            ->setKioskMode($listData->kioskMode ?? false)
+            ->setKioskLookupEnabled($listData->kioskLookupEnabled ?? true);
 
         return $this->createCheckInListService->createCheckInList(
             checkInList: $checkInList,

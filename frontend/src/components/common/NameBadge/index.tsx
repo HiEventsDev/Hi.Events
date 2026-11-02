@@ -17,9 +17,13 @@ export interface NameBadgeProps {
     timezone?: string;
     side?: 'front' | 'back';
     showCutGuide?: boolean;
+    blackInkOnly?: boolean;
 }
 
 const NAME_SOURCES = ['FIRST_NAME', 'LAST_NAME', 'FULL_NAME'];
+
+const BLACK = '#000000';
+const WHITE = '#ffffff';
 
 const TEMPLATE_DEFAULT_ALIGN: Record<BadgeLayout['template'], 'LEFT' | 'CENTER'> = {
     CLASSIC: 'LEFT',
@@ -265,24 +269,26 @@ const renderInfoBack = (props: NameBadgeProps): ReactNode => {
 };
 
 export const NameBadge = (props: NameBadgeProps) => {
-    const {layout, badge, side = 'front', showCutGuide} = props;
+    const {layout, badge, side = 'front', showCutGuide, blackInkOnly} = props;
     const {width, height} = getBadgeDimensions(layout);
-    const ribbonColor = badge.ribbon?.color ?? layout.accent_color;
+    const accent = blackInkOnly ? BLACK : layout.accent_color;
+    const ribbonColor = blackInkOnly ? BLACK : (badge.ribbon?.color ?? layout.accent_color);
     const isBold = layout.template === 'BOLD';
-    const background = isBold ? layout.accent_color : (layout.background_color ?? '#ffffff');
-    const ink = layout.text_color ?? readableTextOn(background);
+    const background = isBold ? accent : (blackInkOnly ? WHITE : (layout.background_color ?? WHITE));
+    const monochromeInk = isBold ? WHITE : BLACK;
+    const ink = blackInkOnly ? monochromeInk : (layout.text_color ?? readableTextOn(background));
     const align = layout.text_align ?? TEMPLATE_DEFAULT_ALIGN[layout.template];
 
     const style = {
         width: `${width}mm`,
         height: `${height}mm`,
         '--badge-font': buildHomepageFontStack(layout.font_family),
-        '--badge-accent': layout.accent_color,
-        '--badge-accent-ink': readableTextOn(layout.accent_color),
+        '--badge-accent': accent,
+        '--badge-accent-ink': readableTextOn(accent),
         '--badge-bg': background,
         '--badge-ink': ink,
-        '--ribbon-bg': isBold ? '#ffffff' : ribbonColor,
-        '--ribbon-ink': isBold ? layout.accent_color : readableTextOn(ribbonColor),
+        '--ribbon-bg': isBold ? WHITE : ribbonColor,
+        '--ribbon-ink': isBold ? accent : readableTextOn(ribbonColor),
         '--badge-align': align === 'CENTER' ? 'center' : 'left',
         '--badge-justify': align === 'CENTER' ? 'center' : 'flex-start',
         '--badge-origin': align === 'CENTER' ? 'center' : 'left',
@@ -296,6 +302,7 @@ export const NameBadge = (props: NameBadgeProps) => {
             data-template={isInfoBack ? 'INFO' : layout.template}
             data-orientation={width > height ? 'landscape' : 'portrait'}
             data-cut-guide={showCutGuide ? 'true' : undefined}
+            data-ink={blackInkOnly ? 'black' : undefined}
             data-testid="badge"
             style={style}
         >

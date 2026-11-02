@@ -5,33 +5,71 @@ const MIN_SINGLE_LINE_RATIO = 0.62;
 const MIN_WRAPPED_RATIO = 0.42;
 const STEP = 0.94;
 
-const fitElement = (element: HTMLElement, maxLines: 1 | 2) => {
-    element.style.fontSize = '';
-    element.style.whiteSpace = 'nowrap';
+type MaxLines = 1 | 2;
 
-    const baseSize = parseFloat(window.getComputedStyle(element).fontSize);
-    if (!baseSize || element.clientWidth === 0) {
-        return;
+interface FitState {
+    element: HTMLElement;
+    maxLines: MaxLines;
+    base: number;
+    size: number;
+}
+
+const pending = new Map<HTMLElement, MaxLines>();
+let isFlushScheduled = false;
+
+const overflowsWidth = (state: FitState) => state.element.scrollWidth > state.element.clientWidth + 0.5;
+
+const exceedsTwoLines = (state: FitState) => {
+    const lineHeight = parseFloat(window.getComputedStyle(state.element).lineHeight) || state.size * 1.15;
+    return state.element.scrollHeight > lineHeight * 2.05 || overflowsWidth(state);
+};
+
+const shrinkWhile = (states: FitState[], overflows: (state: FitState) => boolean, minRatio: number) => {
+    let active = states.filter((state) => overflows(state) && state.size > state.base * minRatio);
+    while (active.length > 0) {
+        active.forEach((state) => {
+            state.size *= STEP;
+            state.element.style.fontSize = `${state.size}px`;
+        });
+        active = active.filter((state) => overflows(state) && state.size > state.base * minRatio);
     }
+};
 
-    let size = baseSize;
-    while (element.scrollWidth > element.clientWidth + 0.5 && size > baseSize * MIN_SINGLE_LINE_RATIO) {
-        size *= STEP;
-        element.style.fontSize = `${size}px`;
+const flushFits = () => {
+    isFlushScheduled = false;
+    const entries = Array.from(pending).filter(([element]) => element.isConnected);
+    pending.clear();
+
+    entries.forEach(([element]) => {
+        element.style.fontSize = '';
+        element.style.whiteSpace = 'nowrap';
+    });
+
+    const states: FitState[] = entries
+        .map(([element, maxLines]) => {
+            const base = parseFloat(window.getComputedStyle(element).fontSize);
+            return {element, maxLines, base, size: base};
+        })
+        .filter((state) => state.base > 0 && state.element.clientWidth > 0);
+
+    shrinkWhile(states, overflowsWidth, MIN_SINGLE_LINE_RATIO);
+
+    const wrapping = states.filter((state) => state.maxLines === 2 && overflowsWidth(state));
+    wrapping.forEach((state) => {
+        state.element.style.whiteSpace = 'normal';
+    });
+    shrinkWhile(wrapping, exceedsTwoLines, MIN_WRAPPED_RATIO);
+
+    if (document.fonts?.status === 'loading') {
+        document.fonts.ready.then(() => entries.forEach(([element, maxLines]) => scheduleFit(element, maxLines)));
     }
+};
 
-    if (element.scrollWidth <= element.clientWidth + 0.5 || maxLines === 1) {
-        return;
-    }
-
-    element.style.whiteSpace = 'normal';
-    const exceedsTwoLines = () => {
-        const lineHeight = parseFloat(window.getComputedStyle(element).lineHeight) || size * 1.15;
-        return element.scrollHeight > lineHeight * 2.05 || element.scrollWidth > element.clientWidth + 0.5;
-    };
-    while (exceedsTwoLines() && size > baseSize * MIN_WRAPPED_RATIO) {
-        size *= STEP;
-        element.style.fontSize = `${size}px`;
+const scheduleFit = (element: HTMLElement, maxLines: MaxLines) => {
+    pending.set(element, maxLines);
+    if (!isFlushScheduled) {
+        isFlushScheduled = true;
+        queueMicrotask(flushFits);
     }
 };
 
@@ -41,7 +79,7 @@ interface FitTextProps {
     style?: CSSProperties;
     fitKey: string;
     dataSize?: string;
-    maxLines?: 1 | 2;
+    maxLines?: MaxLines;
 }
 
 export const FitText = ({children, className, style, fitKey, dataSize, maxLines = 2}: FitTextProps) => {
@@ -53,21 +91,21 @@ export const FitText = ({children, className, style, fitKey, dataSize, maxLines 
         }
 
         const element = ref.current;
-        fitElement(element, maxLines);
+        const container = element.parentElement ?? element;
+        let fittedWidth = container.clientWidth;
+        scheduleFit(element, maxLines);
 
-        const observer = new ResizeObserver(() => fitElement(element, maxLines));
-        observer.observe(element.parentElement ?? element);
-
-        let cancelled = false;
-        document.fonts?.ready.then(() => {
-            if (!cancelled) {
-                fitElement(element, maxLines);
+        const observer = new ResizeObserver(() => {
+            if (container.clientWidth !== fittedWidth) {
+                fittedWidth = container.clientWidth;
+                scheduleFit(element, maxLines);
             }
         });
+        observer.observe(container);
 
         return () => {
-            cancelled = true;
             observer.disconnect();
+            pending.delete(element);
         };
     }, [fitKey, maxLines]);
 

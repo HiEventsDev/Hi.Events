@@ -27,6 +27,10 @@ export class CheckInListPage {
     await this.openRowAndToggle(dialog, 'kiosk', 'check-in-list-kiosk-switch');
   }
 
+  async toggleKioskLookup(dialog: Locator): Promise<void> {
+    await this.openRowAndToggle(dialog, 'kiosk', 'check-in-list-kiosk-lookup-switch');
+  }
+
   private async openRowAndToggle(dialog: Locator, row: string, switchTestId: string): Promise<void> {
     await dialog.getByTestId(`check-in-list-ledger-${row}`).click();
     const toggle = dialog.getByTestId(switchTestId);

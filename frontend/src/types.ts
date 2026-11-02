@@ -1544,7 +1544,14 @@ export interface CheckInList {
     public_show_order_details?: boolean;
     badge_printing_enabled?: boolean;
     kiosk_mode?: boolean;
+    kiosk_lookup_enabled?: boolean;
     badge_design?: BadgeLayout;
+}
+
+export interface KioskTicket {
+    public_id: string;
+    first_name: string;
+    product_title: string | null;
 }
 
 export type BadgeTemplate = 'CLASSIC' | 'BANNER' | 'MINIMAL' | 'BOLD' | 'SIDEBAR' | 'ARTWORK';

@@ -64,23 +64,23 @@ msgstr "{0} (oletus)"
 msgid "{0} {1}"
 msgstr "{0} {1}"
 
-#: src/hooks/useCheckInController.tsx:333
+#: src/hooks/useCheckInController.tsx:341
 msgid "{0} {1} is already checked in"
 msgstr "{0} {1} on jo kirjautunut sisään"
 
-#: src/hooks/useCheckInController.tsx:332
+#: src/hooks/useCheckInController.tsx:340
 msgid "{0} {1} is already checked in · {seatLabel}"
 msgstr "{0} {1} on jo kirjautunut sisään · {seatLabel}"
 
-#: src/hooks/useCheckInController.tsx:217
+#: src/hooks/useCheckInController.tsx:225
 msgid "{0} <0>checked in</0>"
 msgstr "{0} <0>kirjautunut sisään</0>"
 
-#: src/hooks/useCheckInController.tsx:216
+#: src/hooks/useCheckInController.tsx:224
 msgid "{0} <0>checked in</0> · {seatLabel}"
 msgstr "{0} <0>kirjautunut sisään</0> · {seatLabel}"
 
-#: src/hooks/useCheckInController.tsx:249
+#: src/hooks/useCheckInController.tsx:257
 msgid "{0} <0>checked out</0> successfully"
 msgstr "{0} <0>kirjautunut ulos</0> onnistuneesti"
 
@@ -1000,9 +1000,9 @@ msgstr "Muutama nopea vaihe ja olet valmis myymään."
 msgid "A focused reading column. Tickets appear wherever you place them in Sections."
 msgstr "Keskittynyt lukusarake. Liput näkyvät siellä, mihin sijoitat ne Osiot-kohdassa."
 
-#: src/components/forms/CheckInListForm/index.tsx:289
-msgid "A full-screen scanner where attendees check themselves in. Attendee lists and search are hidden."
-msgstr "Koko näytön skanneri, jolla osallistujat kirjautuvat itse sisään. Osallistujalistat ja haku on piilotettu."
+#: src/components/forms/CheckInListForm/index.tsx:290
+msgid "A full-screen scanner where attendees check themselves in. Attendee lists and search are hidden. Staff can press and hold the list name at the bottom of the kiosk to change its scanner or printer."
+msgstr "Koko näytön skanneri, jolla osallistujat kirjautuvat itse sisään. Osallistujalistat ja haku on piilotettu. Henkilökunta voi painaa pitkään listan nimeä kioskin alareunassa vaihtaakseen skannerin tai tulostimen."
 
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:238
 msgid "A gallery can have up to {MAX_GALLERY_PHOTOS} photos."
@@ -1910,8 +1910,8 @@ msgstr "Ohjelma: devconf.example/agenda"
 msgid "Aisles after seats"
 msgstr "Käytävät paikkojen jälkeen"
 
-#: src/hooks/useBadgePrinter.ts:118
-#: src/hooks/useBadgePrinter.ts:121
+#: src/hooks/useBadgePrinter.ts:107
+#: src/hooks/useBadgePrinter.ts:110
 msgid "Alex"
 msgstr "Alex"
 
@@ -2922,7 +2922,7 @@ msgstr "Osallistuja siirretty"
 msgid "Attendee names appear on the printout. Handle it accordingly."
 msgstr "Tulosteessa näkyvät osallistujien nimet. Käsittele sitä sen mukaisesti."
 
-#: src/hooks/useCheckInController.tsx:319
+#: src/hooks/useCheckInController.tsx:327
 msgid "Attendee not found"
 msgstr "Osallistujaa ei löydy"
 
@@ -2981,6 +2981,10 @@ msgstr "Osallistujat"
 #: src/components/layouts/CheckIn/tabs/StatsTab.tsx:72
 msgid "attendees checked in"
 msgstr "osallistujaa kirjautunut sisään"
+
+#: src/components/forms/CheckInListForm/index.tsx:297
+msgid "Attendees enter the email address and last name on their ticket. The kiosk only shows their first name and ticket type."
+msgstr "Osallistujat syöttävät lippunsa sähköpostiosoitteen ja sukunimen. Kioski näyttää vain heidän etunimensä ja lipputyypin."
 
 #: src/components/routes/event/attendees.tsx:170
 msgid "Attendees Exported"
@@ -3122,6 +3126,8 @@ msgstr "Awesome Events Ltd."
 msgid "Awesome Organizer Ltd."
 msgstr "Awesome Organizer Ltd."
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:82
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:125
 #: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:52
 #: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:82
 #: src/components/layouts/SettingsLayout/index.tsx:60
@@ -3135,7 +3141,7 @@ msgstr "Awesome Organizer Ltd."
 msgid "Back"
 msgstr "Takaisin"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:48
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:72
 #: src/components/routes/event/Badges/index.tsx:548
 #: src/components/routes/event/Badges/index.tsx:556
 msgid "Back of the badge"
@@ -3227,8 +3233,8 @@ msgstr "Nimikyltin ulkoasu tallennettu"
 msgid "Badge label for {0}"
 msgstr "Nimikyltin merkintä lipulle {0}"
 
-#: src/components/forms/CheckInListForm/index.tsx:299
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:20
+#: src/components/forms/CheckInListForm/index.tsx:309
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:33
 #: src/components/layouts/CheckIn/index.tsx:226
 msgid "Badge printing"
 msgstr "Nimikylttien tulostus"
@@ -3253,6 +3259,10 @@ msgstr "Nimikyltit merkitty tulostetuiksi"
 #: src/components/routes/event/Badges/index.tsx:577
 msgid "Badges on a lanyard often flip around. Print both sides so names always face out."
 msgstr "Kaulanauhassa roikkuva nimikyltti kääntyy usein. Tulosta molemmat puolet, niin nimi näkyy aina."
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:88
+msgid "Badges saved as PDF files instead? Chrome's last printer was Save as PDF. Repeat the first step and choose the badge printer."
+msgstr "Tallentuvatko nimikyltit PDF-tiedostoiksi? Chromen viimeisin tulostin oli Tallenna PDF-tiedostona. Toista ensimmäinen vaihe ja valitse nimikylttitulostin."
 
 #: src/components/common/CapacityHelp/index.tsx:54
 #: src/ee/seating/components/lib/templates.ts:106
@@ -3721,6 +3731,10 @@ msgstr "Voi nähdä taloustiedot"
 msgid "Can't check in"
 msgstr "Ei voi kirjautua sisään"
 
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:295
+msgid "Can't find your QR code?"
+msgstr "Etkö löydä QR-koodiasi?"
+
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:133
 msgid "Can't import"
 msgstr "Ei voi tuoda"
@@ -3747,7 +3761,7 @@ msgstr "Etkö voi käyttää todennussovellusta tai palautuskoodeja?"
 #: src/components/modals/CreateAffiliateModal/index.tsx:88
 #: src/components/modals/CreateAttendeeModal/index.tsx:335
 #: src/components/modals/CreateCapacityAssignmentModal/index.tsx:75
-#: src/components/modals/CreateCheckInListModal/index.tsx:106
+#: src/components/modals/CreateCheckInListModal/index.tsx:107
 #: src/components/modals/CreateEventModal/index.tsx:478
 #: src/components/modals/CreateOrganizerModal/index.tsx:66
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:89
@@ -3759,7 +3773,7 @@ msgstr "Etkö voi käyttää todennussovellusta tai palautuskoodeja?"
 #: src/components/modals/DuplicateEventModal/index.tsx:309
 #: src/components/modals/EditAffiliateModal/index.tsx:104
 #: src/components/modals/EditCapacityAssignmentModal/index.tsx:70
-#: src/components/modals/EditCheckInListModal/index.tsx:106
+#: src/components/modals/EditCheckInListModal/index.tsx:108
 #: src/components/modals/EditOrganizerWebhookModal/index.tsx:82
 #: src/components/modals/EditProductCategoryModal/index.tsx:71
 #: src/components/modals/EditPromoCodeModal/index.tsx:85
@@ -4248,7 +4262,7 @@ msgstr "Sisäänkirjaus luotu"
 msgid "Check-in Deleted"
 msgstr "Sisäänkirjaus poistettu"
 
-#: src/hooks/useCheckInController.tsx:170
+#: src/hooks/useCheckInController.tsx:178
 msgid "Check-in for {0} was undone"
 msgstr "Sisäänkirjaus {0}:lta peruttiin"
 
@@ -4721,6 +4735,10 @@ msgstr "sulje"
 #: src/utilites/notifications.tsx:6
 msgid "Close"
 msgstr "Sulje"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:31
+msgid "Close every Chrome window, and quit Chrome from the system tray if it's still running there."
+msgstr "Sulje kaikki Chrome-ikkunat ja lopeta Chrome ilmaisinalueelta, jos se on vielä käynnissä siellä."
 
 #: src/components/layouts/AppLayout/Sidebar/index.tsx:117
 #: src/components/layouts/AppLayout/Topbar/index.tsx:38
@@ -5410,6 +5428,7 @@ msgstr "Kopioi koodi"
 msgid "Copy Code"
 msgstr "Kopioi koodi"
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:17
 #: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:25
 msgid "Copy command"
 msgstr "Kopioi komento"
@@ -5738,7 +5757,7 @@ msgstr "Luo istumakartta"
 msgid "Create a ticket"
 msgstr "Luo lippu"
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:72
+#: src/components/modals/CreateCheckInListModal/index.tsx:73
 #: src/ee/box-office/components/modals/CreateBoxOfficeModal/index.tsx:79
 msgid "Create a Ticket"
 msgstr "Luo lippu"
@@ -5819,8 +5838,8 @@ msgstr "Luo kategoria"
 
 #: src/components/common/CheckInListList/index.tsx:60
 #: src/components/common/CheckInListTable/index.tsx:303
-#: src/components/modals/CreateCheckInListModal/index.tsx:91
-#: src/components/modals/CreateCheckInListModal/index.tsx:112
+#: src/components/modals/CreateCheckInListModal/index.tsx:92
+#: src/components/modals/CreateCheckInListModal/index.tsx:113
 #: src/components/routes/event/CheckInLists/index.tsx:76
 msgid "Create Check-In List"
 msgstr "Luo sisäänkirjauslista"
@@ -6906,8 +6925,8 @@ msgid "Donation"
 msgstr "Lahjoitus"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:264
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:70
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:125
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:99
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:250
 #: src/components/modals/CheckInListSuccessModal/index.tsx:59
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:73
 #: src/components/modals/CreateWebhookModal/index.tsx:73
@@ -7183,6 +7202,10 @@ msgstr "Kukin tili saa tämän sähköpostin enintään kerran."
 msgid "Each badge prints on its own page, for card and label printers."
 msgstr "Jokainen nimikyltti tulostuu omalle sivulleen kortti- ja tarratulostimia varten."
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:46
+msgid "Each badge then takes two taps: Print badge, then Print. Safari adds margins of its own, so badges print a little smaller than from a computer."
+msgstr "Jokainen nimikyltti vaatii sen jälkeen kaksi napautusta: Tulosta nimikyltti ja sitten Tulosta. Safari lisää omat marginaalinsa, joten nimikyltit tulostuvat hieman pienempinä kuin tietokoneelta."
+
 #: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:24
 msgid "Each code can be used once to sign in if you lose access to your authenticator app."
 msgstr "Jokaisen koodin voi käyttää kerran kirjautumiseen, jos menetät pääsyn todennussovellukseesi."
@@ -7295,7 +7318,7 @@ msgstr "Muokkaa kategoriaa"
 
 #: src/components/common/CheckInListList/index.tsx:147
 #: src/components/common/CheckInListTable/index.tsx:208
-#: src/components/modals/EditCheckInListModal/index.tsx:81
+#: src/components/modals/EditCheckInListModal/index.tsx:83
 msgid "Edit Check-In List"
 msgstr "Muokkaa sisäänkirjautumislistaa"
 
@@ -7477,6 +7500,7 @@ msgstr "Sähköposti- ja ajoitetut viestit"
 msgid "Email & Templates"
 msgstr "Sähköposti ja mallit"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:97
 #: src/components/modals/CreateAttendeeModal/index.tsx:228
 #: src/components/modals/ManageAttendeeModal/index.tsx:232
 #: src/components/modals/ManageOrderModal/index.tsx:293
@@ -7854,6 +7878,10 @@ msgstr "Anna asiakassalaisuus."
 #: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:74
 msgid "Enter the directory (tenant) ID. It looks like 00000000-0000-0000-0000-000000000000."
 msgstr "Anna hakemiston (tenant) tunnus. Se on muotoa 00000000-0000-0000-0000-000000000000."
+
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:90
+msgid "Enter the email address and last name on your ticket."
+msgstr "Syötä lippusi sähköpostiosoite ja sukunimi."
 
 #: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:73
 msgid "Enter the issuer URL, starting with https://."
@@ -8646,7 +8674,7 @@ msgstr "Raportin vienti epäonnistui. Yritä uudelleen."
 msgid "Failed to load box office"
 msgstr "Lippukassan lataaminen epäonnistui"
 
-#: src/components/modals/EditCheckInListModal/index.tsx:91
+#: src/components/modals/EditCheckInListModal/index.tsx:93
 msgid "Failed to load Check-In List"
 msgstr "Sisäänkirjautumislistan lataus epäonnistui"
 
@@ -8988,6 +9016,14 @@ msgstr "Etsi {bestAvailableQuantity} paikkaa"
 msgid "Find 1 seat"
 msgstr "Etsi 1 paikka"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:123
+msgid "Find my ticket"
+msgstr "Etsi lippuni"
+
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:89
+msgid "Find your ticket"
+msgstr "Etsi lippusi"
+
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:143
 msgid "Finish or cancel the current sale first"
 msgstr "Viimeistele tai peruuta nykyinen myynti ensin"
@@ -9167,12 +9203,12 @@ msgstr "Flaijeri"
 msgid "Fold and cutting guides"
 msgstr "Taitto- ja leikkausviivat"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:56
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:80
 #: src/components/routes/event/Badges/index.tsx:570
 msgid "Fold-over"
 msgstr "Taitettava"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:49
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:73
 msgid "Fold-over prints the front and back side by side on one page, to fold in half. It works on any printer."
 msgstr "Taitettavassa nimikyltissä etu- ja kääntöpuoli tulostetaan vierekkäin yhdelle sivulle, joka taitetaan kahtia. Toimii millä tahansa tulostimella."
 
@@ -9224,9 +9260,9 @@ msgstr "Esimerkiksi: #DevConf2027"
 msgid "For example: Ask me about volunteering"
 msgstr "Esimerkiksi: Kysy minulta vapaaehtoistyöstä"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:62
-msgid "For one-tap printing on a laptop, set the label printer as the default printer and open this page in Chrome started with the --kiosk-printing option."
-msgstr "Jos haluat tulostaa kannettavalla yhdellä napautuksella, aseta tarratulostin oletustulostimeksi ja avaa tämä sivu Chromessa, joka on käynnistetty valitsimella --kiosk-printing."
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:65
+msgid "For thermal label printers such as Brother QL and Zebra. Colours print as solid black so ribbons and names stay sharp."
+msgstr "Lämpötarratulostimille, kuten Brother QL ja Zebra. Värit tulostetaan täytenä mustana, jotta nauhat ja nimet pysyvät terävinä."
 
 #: src/components/common/ConfirmIdentity/index.tsx:109
 msgid "For your security, sign in again to confirm it's you."
@@ -9342,7 +9378,7 @@ msgstr "Pääoven lukija"
 msgid "Front left"
 msgstr "Edessä vasemmalla"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:54
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:78
 msgid "Front only"
 msgstr "Vain etupuoli"
 
@@ -9952,11 +9988,11 @@ msgstr "Pidätä {0} paikkaa {dateCount} päivämääränä"
 msgid "Hold places for"
 msgstr "Pidä paikat varattuna"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:150
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:283
 msgid "Hold up the QR code from your ticket email and your badge will print."
 msgstr "Näytä lippusähköpostisi QR-koodi, niin nimikylttisi tulostuu."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:151
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:284
 msgid "Hold up the QR code from your ticket email."
 msgstr "Näytä lippusähköpostisi QR-koodi."
 
@@ -10495,6 +10531,10 @@ msgstr "Laskun numerointi"
 msgid "Invoice Settings"
 msgstr "Laskuasetukset"
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:74
+msgid "iPad"
+msgstr "iPad"
+
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:175
 msgid "Issued"
 msgstr "Myönnetty"
@@ -10712,7 +10752,7 @@ msgstr "Tunniste"
 msgid "Label — e.g. Morning session"
 msgstr "Tunniste — esim. Aamun istunto"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:33
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:49
 msgid "Label size on this device"
 msgstr "Tarran koko tällä laitteella"
 
@@ -10801,6 +10841,7 @@ msgstr "Viimeiset 90 päivää"
 msgid "Last active"
 msgstr "Viimeksi aktiivinen"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:103
 #: src/components/modals/CreateAttendeeModal/index.tsx:221
 #: src/components/modals/ManageAttendeeModal/index.tsx:228
 #: src/components/modals/ManageOrderModal/index.tsx:286
@@ -10831,6 +10872,7 @@ msgstr "Sukunimi"
 msgid "Last name (A–Z)"
 msgstr "Sukunimi (A–Ö)"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:24
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:32
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:32
 msgid "Last name is required"
@@ -10949,6 +10991,10 @@ msgstr "Vasen siipi"
 #: src/components/routes/event/Lineup/RunSheetPrint.tsx:138
 msgid "Length"
 msgstr "Pituus"
+
+#: src/components/forms/CheckInListForm/index.tsx:296
+msgid "Let attendees find their ticket without the QR code"
+msgstr "Anna osallistujien löytää lippunsa ilman QR-koodia"
 
 #: src/ee/seating/components/routes/event/Seating/SeatingRulesCard.tsx:46
 msgid "Let buyers change their seat after booking"
@@ -11322,6 +11368,10 @@ msgstr "Pääsy menetetty?"
 #: src/components/routes/settings/Security/index.tsx:200
 msgid "Lost your phone or switching apps? Turn it off, then on again to connect a new authenticator."
 msgstr "Kadotitko puhelimesi tai vaihdatko sovellusta? Poista se käytöstä ja ota se uudelleen käyttöön yhdistääksesi uuden todennussovelluksen."
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:72
+msgid "Mac"
+msgstr "Mac"
 
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:66
 msgid "Main auditorium"
@@ -11829,8 +11879,8 @@ msgstr "Enemmän paikkoja"
 msgid "More seats"
 msgstr "Enemmän paikkoja"
 
-#: src/hooks/useBadgePrinter.ts:119
-#: src/hooks/useBadgePrinter.ts:122
+#: src/hooks/useBadgePrinter.ts:108
+#: src/hooks/useBadgePrinter.ts:111
 msgid "Morgan"
 msgstr "Morgan"
 
@@ -12001,7 +12051,7 @@ msgstr "Nimet isoilla kirjaimilla"
 msgid "Navigate to Attendee"
 msgstr "Siirry osallistujalle"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:73
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:79
 msgid "Need a new badge? Please see the registration desk."
 msgstr "Tarvitsetko uuden nimikyltin? Käänny ilmoittautumispisteen puoleen."
 
@@ -12155,7 +12205,7 @@ msgstr "Seuraava osallistuja"
 msgid "Next batch"
 msgstr "Seuraava erä"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:125
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:250
 msgid "Next check-in"
 msgstr "Seuraava sisäänkirjautuminen"
 
@@ -13260,6 +13310,10 @@ msgstr "ajankohtana {day}. {month}"
 msgid "On a product priced at 50.00, this adds {exampleAmount}."
 msgstr "Tuotteeseen, jonka hinta on 50.00, tämä lisää {exampleAmount}."
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:91
+msgid "On computers your IT team manages, Chrome's SilentPrintingEnabled policy does the same without the command."
+msgstr "IT-tiimin hallinnoimilla tietokoneilla Chromen SilentPrintingEnabled-käytäntö tekee saman ilman komentoa."
+
 #: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:14
 msgid "On large screens tickets stay beside your content as people scroll. Suits conferences and long lineups."
 msgstr "Suurilla näytöillä liput pysyvät sisällön vieressä vierityksen aikana. Sopii konferensseihin ja laajoihin esiintyjäkattauksiin."
@@ -13569,6 +13623,10 @@ msgstr "Avaa asetukset"
 #: src/components/layouts/AppLayout/Topbar/index.tsx:38
 msgid "Open sidebar"
 msgstr "Avaa sivupalkki"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:34
+msgid "Open Terminal and run this command:"
+msgstr "Avaa Pääte ja suorita tämä komento:"
 
 #: src/components/routes/sso/Callback/SsoErrorState.tsx:64
 msgid "Open the invitation email we sent you to finish joining the team."
@@ -14804,7 +14862,7 @@ msgstr "Jatka uudessa välilehdessä"
 msgid "Please create a product"
 msgstr "Luo ensin tuote"
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:60
+#: src/components/modals/CreateCheckInListModal/index.tsx:61
 #: src/ee/box-office/components/modals/CreateBoxOfficeModal/index.tsx:67
 msgid "Please create a ticket"
 msgstr "Luo ensin lippu"
@@ -14813,6 +14871,7 @@ msgstr "Luo ensin lippu"
 msgid "Please don't leave a single empty seat: {0}"
 msgstr "Älä jätä yksittäistä tyhjää paikkaa: {0}"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:23
 #: src/components/modals/JoinWaitlistModal/index.tsx:57
 msgid "Please enter a valid email address"
 msgstr "Anna kelvollinen sähköpostiosoite"
@@ -14858,7 +14917,7 @@ msgstr "Käynnistä kassaprosessi uudelleen."
 msgid "Please return to the event page to start over."
 msgstr "Palaa tapahtumasivulle aloittaaksesi alusta."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:74
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:80
 msgid "Please see the registration desk and we'll sort it out."
 msgstr "Käänny ilmoittautumispisteen puoleen, niin selvitämme asian."
 
@@ -14970,6 +15029,10 @@ msgstr "Lehdistö"
 msgid "Press where the first seat goes and drag. Drag sideways for seats, down for more rows."
 msgstr "Paina kohtaa, johon ensimmäinen paikka tulee, ja vedä. Vedä sivusuunnassa lisätäksesi paikkoja, alaspäin lisätäksesi rivejä."
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:35
+msgid "Press Windows+R, paste this command and press Enter:"
+msgstr "Paina Windows+R, liitä tämä komento ja paina Enter:"
+
 #: src/components/routes/event/CapacityAssignments/index.tsx:33
 msgid "Prevent overselling by sharing inventory across multiple ticket types."
 msgstr "Estä ylivaraus jakamalla kapasiteetti useiden lipputyyppien kesken."
@@ -15069,7 +15132,7 @@ msgstr "Hinnoittelu"
 msgid "Print"
 msgstr "Tulosta"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:25
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:41
 msgid "Print a badge when someone checks in"
 msgstr "Tulosta nimikyltti, kun joku kirjautuu sisään"
 
@@ -15077,13 +15140,25 @@ msgstr "Tulosta nimikyltti, kun joku kirjautuu sisään"
 msgid "Print a sample badge"
 msgstr "Tulosta mallinimikyltti"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:67
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:96
 msgid "Print a test badge"
 msgstr "Tulosta testinimikyltti"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:28
+msgid "Print a test badge from this page. In Chrome's print window, choose the badge printer and check the paper size matches your labels, then print. Chrome reuses these choices for every badge."
+msgstr "Tulosta testinimikyltti tältä sivulta. Valitse Chromen tulostusikkunassa nimikylttitulostin, tarkista että paperikoko vastaa tarroja, ja tulosta. Chrome käyttää samoja valintoja jokaiselle nimikyltille."
+
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:238
+msgid "Print again"
+msgstr "Tulosta uudelleen"
 
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:722
 msgid "Print All Tickets"
 msgstr "Tulosta kaikki liput"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:41
+msgid "Print another test badge. It should print straight away, without a print window."
+msgstr "Tulosta uusi testinimikyltti. Sen pitäisi tulostua heti ilman tulostusikkunaa."
 
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:326
 #: src/hooks/useAttendeeActions.tsx:119
@@ -15097,13 +15172,17 @@ msgstr "Tulosta nimikyltti"
 msgid "Print badges"
 msgstr "Tulosta nimikyltit"
 
-#: src/components/forms/CheckInListForm/index.tsx:306
+#: src/components/forms/CheckInListForm/index.tsx:316
 msgid "Print badges from this list"
 msgstr "Tulosta nimikylttejä tästä listasta"
 
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:134
 msgid "Print map"
 msgstr "Tulosta kartta"
+
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:225
+msgid "Print my badge"
+msgstr "Tulosta nimikylttini"
 
 #: src/components/routes/event/TicketDesigner/index.tsx:122
 msgid "Print Preview"
@@ -15126,6 +15205,10 @@ msgstr "Tulosta liput"
 msgid "Print to PDF"
 msgstr "Tulosta PDF:ksi"
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:85
+msgid "Print window still showing? Chrome was already running when the command ran. Quit it and run the command again."
+msgstr "Näkyykö tulostusikkuna yhä? Chrome oli jo käynnissä, kun komento suoritettiin. Lopeta Chrome ja suorita komento uudelleen."
+
 #: src/components/routes/event/Lineup/index.tsx:154
 msgid "Printable run sheet"
 msgstr "Tulostettava ohjelmarunko"
@@ -15143,15 +15226,11 @@ msgstr "Tulostettu {0}"
 msgid "Printed ×{count}"
 msgstr "Tulostettu ×{count}"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:167
-msgid "Printer"
-msgstr "Tulostin"
-
 #: src/components/routes/event/Badges/index.tsx:600
 msgid "Printing at the door"
 msgstr "Tulostus ovella"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:47
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:52
 msgid "Printing your badge…"
 msgstr "Nimikylttiäsi tulostetaan…"
 
@@ -15532,6 +15611,10 @@ msgstr "Pikavinkki"
 #: src/utilites/badges.ts:63
 msgid "Quiet and typographic, lots of white space"
 msgstr "Hillitty ja typografinen, paljon tyhjää tilaa"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:30
+msgid "Quit Chrome completely with ⌘Q."
+msgstr "Lopeta Chrome kokonaan näppäimillä ⌘Q."
 
 #: src/components/forms/QuestionForm/index.tsx:118
 msgid "Radio Option"
@@ -16685,7 +16768,7 @@ msgstr "Myynti:"
 msgid "Same as event"
 msgstr "Sama kuin tapahtumassa"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:39
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:55
 msgid "Same as the badge design ({designSize})"
 msgstr "Sama kuin nimikyltin ulkoasussa ({designSize})"
 
@@ -16767,7 +16850,7 @@ msgstr "Tallenna muutokset"
 #: src/components/common/DesignerShell/index.tsx:172
 #: src/components/modals/EditAffiliateModal/index.tsx:109
 #: src/components/modals/EditCapacityAssignmentModal/index.tsx:75
-#: src/components/modals/EditCheckInListModal/index.tsx:111
+#: src/components/modals/EditCheckInListModal/index.tsx:113
 #: src/components/modals/EditOrganizerWebhookModal/index.tsx:87
 #: src/components/modals/EditProductCategoryModal/index.tsx:73
 #: src/components/modals/EditPromoCodeModal/index.tsx:87
@@ -16869,7 +16952,7 @@ msgstr "Tallennettu sijainti"
 msgid "Saved locations"
 msgstr "Tallennetut sijainnit"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:26
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:42
 msgid "Saved on this device only"
 msgstr "Tallennettu vain tälle laitteelle"
 
@@ -16908,7 +16991,7 @@ msgstr "Skannaa lippu kirjauttaaksesi osallistujan sisään"
 msgid "Scan tickets at the door with a phone, tablet, or USB scanner."
 msgstr "Skannaa liput ovella puhelimella, tabletilla tai USB-skannerilla."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:147
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:280
 msgid "Scan your ticket to check in"
 msgstr "Skannaa lippusi kirjautuaksesi sisään"
 
@@ -17161,7 +17244,7 @@ msgid "Seasonal"
 msgstr "Sesonkiaikainen"
 
 #: src/components/common/AttendeeTicket/index.tsx:133
-#: src/components/common/NameBadge/index.tsx:82
+#: src/components/common/NameBadge/index.tsx:86
 #: src/components/modals/ManageAttendeeModal/index.tsx:170
 #: src/ee/seating/components/ManualSeatField/index.tsx:42
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:339
@@ -17835,6 +17918,10 @@ msgstr "Aseta laskujen numeroinnin lähtönumero. Tätä ei voi muuttaa sen jäl
 msgid "Set to unlimited (remove limit)"
 msgstr "Aseta rajattomaksi (poista raja)"
 
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:318
+msgid "Set up"
+msgstr "Määritä"
+
 #: src/components/routes/event/OccurrencesTab/index.tsx:639
 msgid "Set up a recurring schedule to automatically create dates, or add them one at a time."
 msgstr "Aseta toistuva aikataulu päivämäärien automaattista luontia varten, tai lisää ne yksitellen."
@@ -17860,6 +17947,14 @@ msgstr "Määritä SSO"
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:92
 msgid "Set up the tickets you'll sell and their prices"
 msgstr "Aseta myytävät liput ja niiden hinnat"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:66
+msgid "Set up this device"
+msgstr "Määritä tämä laite"
+
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:33
+msgid "Set up this kiosk"
+msgstr "Määritä tämä kioski"
 
 #: src/components/routes/settings/Security/EnableTwoFactorModal.tsx:15
 msgid "Set up two-factor authentication"
@@ -18600,6 +18695,10 @@ msgstr "Jotain meni pieleen! Yritä uudelleen"
 msgid "Something went wrong."
 msgstr "Jotain meni pieleen."
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:57
+msgid "Something went wrong. Please see the registration desk."
+msgstr "Jokin meni pieleen. Käänny ilmoittautumispisteen puoleen."
+
 #: src/components/modals/JoinWaitlistModal/index.tsx:141
 msgid "Something went wrong. Please try again later."
 msgstr "Jotain meni pieleen. Yritä myöhemmin uudelleen."
@@ -18739,7 +18838,7 @@ msgstr "Henkilökunta voi antaa myynnille manuaalisen alennuksen"
 msgid "Staff can change the price of an item during a sale"
 msgstr "Henkilökunta voi muuttaa tuotteen hintaa myynnin aikana"
 
-#: src/components/forms/CheckInListForm/index.tsx:307
+#: src/components/forms/CheckInListForm/index.tsx:317
 msgid "Staff can print or reprint badges from this list, or print them automatically on check-in"
 msgstr "Henkilökunta voi tulostaa nimikyltit tai tulostaa ne uudelleen tästä listasta, tai ne voidaan tulostaa automaattisesti sisäänkirjauksessa"
 
@@ -19237,7 +19336,7 @@ msgstr "Osallistuja päivitetty onnistuneesti"
 msgid "Successfully updated Capacity Assignment"
 msgstr "Kapasiteetin kohdistus päivitetty onnistuneesti"
 
-#: src/components/modals/EditCheckInListModal/index.tsx:55
+#: src/components/modals/EditCheckInListModal/index.tsx:56
 msgid "Successfully updated Check-In List"
 msgstr "Sisäänkirjautumislista päivitetty onnistuneesti"
 
@@ -19442,6 +19541,14 @@ msgstr "Lisää paikka napauttamalla sitä tai aseta ensin määrät"
 msgid "Tap dates like a calendar."
 msgstr "Napauta päivämääriä kuten kalenterissa."
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:45
+msgid "Tap Print a test badge, choose the badge printer and paper size, then tap Print. The iPad remembers both for the next badge."
+msgstr "Napauta Tulosta testinimikyltti, valitse nimikylttitulostin ja paperikoko ja napauta Tulosta. iPad muistaa molemmat seuraavaa nimikylttiä varten."
+
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:53
+msgid "Tap Print my badge, then Print."
+msgstr "Napauta Tulosta nimikylttini ja sitten Tulosta."
+
 #: src/components/layouts/CheckIn/tabs/ScanTab.tsx:59
 msgid "Tap this screen to resume scanning"
 msgstr "Napauta tätä näyttöä jatkaaksesi skannausta"
@@ -19615,7 +19722,7 @@ msgstr "Termi"
 msgid "Terms of Service"
 msgstr "Käyttöehdot"
 
-#: src/hooks/useBadgePrinter.ts:123
+#: src/hooks/useBadgePrinter.ts:112
 msgid "Test badge"
 msgstr "Testinimikyltti"
 
@@ -19626,7 +19733,7 @@ msgstr "Testisähköposti lähetetty postilaatikkoosi"
 
 #: src/components/routes/event/Badges/BadgePrint.tsx:155
 #: src/components/routes/event/Badges/index.tsx:244
-#: src/hooks/useBadgePrinter.ts:125
+#: src/hooks/useBadgePrinter.ts:114
 msgid "Test print"
 msgstr "Testitulostus"
 
@@ -19892,6 +19999,14 @@ msgstr "Ohitus kirjataan tilauksen tarkastuslokiin."
 #: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:169
 msgid "The owner can connect {providerName} in their security settings to sign in with it day to day."
 msgstr "Omistaja voi yhdistää palvelun {providerName} suojausasetuksissaan ja käyttää sitä päivittäiseen kirjautumiseen."
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:39
+msgid "The page opens full screen without Chrome's controls. Press ⌘Q to close it."
+msgstr "Sivu avautuu koko näytölle ilman Chromen säätimiä. Sulje se näppäimillä ⌘Q."
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:40
+msgid "The page opens full screen without Chrome's controls. Press Alt+F4 to close it."
+msgstr "Sivu avautuu koko näytölle ilman Chromen säätimiä. Sulje se näppäimillä Alt+F4."
 
 #: src/components/common/ErrorDisplay/index.tsx:18
 msgid "The page you are looking for does not exist"
@@ -20473,7 +20588,7 @@ msgstr "Tilaus on peruttu."
 msgid "This order has expired. Please start again."
 msgstr "Tilaus on vanhentunut. Aloita uudelleen."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:58
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:64
 msgid "This order hasn't been paid yet"
 msgstr "Tätä tilausta ei ole vielä maksettu"
 
@@ -20520,6 +20635,10 @@ msgstr "Tämä maksulinkki on vanhentunut"
 #: src/components/common/EmailTemplateEditor/EmailTemplatePreviewPane.tsx:70
 msgid "This preview shows how your email will look with sample data. Actual emails will use real values."
 msgstr "Tässä esikatselussa näet, miltä sähköpostisi näyttää esimerkkitietojen avulla. Todellisissa sähköposteissa käytetään oikeita arvoja."
+
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:64
+msgid "This printer only prints black"
+msgstr "Tämä tulostin tulostaa vain mustaa"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:117
 msgid "This product cannot be deleted because it is associated with an order. You can hide it instead."
@@ -20590,7 +20709,7 @@ msgstr "Tämä paikka on varattu pyörätuolin käyttäjille ja esteettömyyttä
 msgid "This ticket is no longer valid"
 msgstr "Tämä lippu ei ole enää voimassa"
 
-#: src/hooks/useCheckInController.tsx:295
+#: src/hooks/useCheckInController.tsx:303
 msgid "This ticket was just scanned. Please wait before scanning again."
 msgstr "Tämä lippu skannattiin juuri. Odota ennen uutta skannausta."
 
@@ -20961,6 +21080,10 @@ msgstr "Vahvista henkilöllisyytesi vaihtaaksesi kirjautumiseen käyttämäsi s�
 msgid "To increase your limits, contact us at"
 msgstr "Jos haluat nostaa rajojasi, ota meihin yhteyttä osoitteessa"
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:47
+msgid "To keep attendees on this page, turn on Settings › Accessibility › Guided Access, come back here and triple-click the top button."
+msgstr "Jotta osallistujat pysyvät tällä sivulla, laita päälle Asetukset › Käyttöapu › Ohjattu käyttö, palaa tänne ja paina yläpainiketta kolme kertaa."
+
 #: src/hooks/useSortableAccessibility.ts:42
 msgid "To move this item, press space or enter. Use the arrow keys to change its position, then press space or enter again to drop it, or escape to cancel."
 msgstr "Siirrä tätä kohdetta painamalla välilyöntiä tai Enteriä. Muuta sen paikkaa nuolinäppäimillä ja pudota se painamalla uudelleen välilyöntiä tai Enteriä, tai peruuta painamalla Esc."
@@ -20990,6 +21113,10 @@ msgstr "Huomenna"
 #: src/utilites/ssoErrors.ts:13
 msgid "Too many attempts. Please wait a minute and try again."
 msgstr "Liian monta yritystä. Odota hetki ja yritä uudelleen."
+
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:56
+msgid "Too many attempts. Please wait a minute or see the registration desk."
+msgstr "Liian monta yritystä. Odota hetki tai käänny ilmoittautumispisteen puoleen."
 
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:116
 msgid "Too many rows in one import"
@@ -21308,7 +21435,7 @@ msgstr "Kaksivaiheinen tunnistautuminen nollattu"
 msgid "Two-factor on"
 msgstr "Kaksivaiheinen käytössä"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:55
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:79
 #: src/components/routes/event/Badges/index.tsx:569
 msgid "Two-sided printer"
 msgstr "Kaksipuolinen tulostin"
@@ -21374,12 +21501,12 @@ msgstr "Lukijan vaihtaminen epäonnistui"
 msgid "Unable to check in"
 msgstr "Sisäänkirjaus epäonnistui"
 
-#: src/hooks/useCheckInController.tsx:235
+#: src/hooks/useCheckInController.tsx:243
 msgid "Unable to check in attendee"
 msgstr "Osallistujan sisäänkirjautuminen ei onnistu"
 
-#: src/hooks/useCheckInController.tsx:262
-#: src/hooks/useCheckInController.tsx:264
+#: src/hooks/useCheckInController.tsx:270
+#: src/hooks/useCheckInController.tsx:272
 msgid "Unable to check out attendee"
 msgstr "Osallistujan uloskirjaus ei onnistu"
 
@@ -21408,7 +21535,7 @@ msgstr "Widgetin poistaminen epäonnistui"
 msgid "Unable to duplicate product. Please check the your details"
 msgstr "Tuotteen monistaminen ei onnistu. Tarkista tietosi"
 
-#: src/hooks/useCheckInController.tsx:310
+#: src/hooks/useCheckInController.tsx:318
 msgid "Unable to fetch attendee"
 msgstr "Osallistujan tietojen hakeminen ei onnistu"
 
@@ -21428,7 +21555,7 @@ msgstr "Osallistujan tietojen lataaminen ei onnistu."
 msgid "Unable to load products for this date. Please try again."
 msgstr "Tuotteiden lataaminen tälle päivälle ei onnistu. Yritä uudelleen."
 
-#: src/hooks/useBadgePrinter.ts:100
+#: src/hooks/useBadgePrinter.ts:138
 msgid "Unable to load this badge"
 msgstr "Nimikyltin lataaminen epäonnistui"
 
@@ -21466,7 +21593,7 @@ msgstr "Myyntiä ei voitu aloittaa. Yritä uudelleen."
 msgid "Unable to switch date"
 msgstr "Päivämäärän vaihtaminen epäonnistui"
 
-#: src/hooks/useCheckInController.tsx:175
+#: src/hooks/useCheckInController.tsx:183
 msgid "Unable to undo check-in"
 msgstr "Sisäänkirjautumisen kumoaminen ei onnistu"
 
@@ -21504,7 +21631,7 @@ msgstr "Lisää kohdassa Token configuration valinnaiset väitteet email ja xms_
 
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:299
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:300
-#: src/hooks/useCheckInController.tsx:223
+#: src/hooks/useCheckInController.tsx:231
 msgid "Undo"
 msgstr "Kumoa"
 
@@ -21854,7 +21981,7 @@ msgstr "Käytä <0>Liquid-mallinnusta</0> personoidaksesi sähköpostisi"
 msgid "Use a different account"
 msgstr "Käytä toista tiliä"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:34
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:50
 msgid "Use a different size here if this printer takes labels rather than badge inserts"
 msgstr "Valitse tähän eri koko, jos tämä tulostin käyttää tarroja eikä nimikylttipohjia"
 
@@ -21885,7 +22012,7 @@ msgstr "Käytä sen sijaan palautuskoodia"
 msgid "Use a separate organizer for each brand or venue you sell tickets under."
 msgstr "Käytä erillistä järjestäjää jokaiselle brändille tai tapahtumapaikalle, jonka nimissä myyt lippuja."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:176
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:327
 msgid "Use a USB scanner"
 msgstr "Käytä USB-skanneria"
 
@@ -21906,7 +22033,7 @@ msgstr "Käytä tilauksen tietoja kaikille osallistujille. Osallistujien nimet j
 msgid "Use the buyer's details for all attendees"
 msgstr "Käytä ostajan tietoja kaikille osallistujille"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:177
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:328
 msgid "Use the camera"
 msgstr "Käytä kameraa"
 
@@ -21918,7 +22045,7 @@ msgstr "Käytä tätä osoitetta"
 msgid "Use this if someone else, such as your finance team, is paying for your order."
 msgstr "Käytä tätä, jos joku muu, kuten talousosastosi, maksaa tilauksesi."
 
-#: src/components/forms/CheckInListForm/index.tsx:288
+#: src/components/forms/CheckInListForm/index.tsx:289
 msgid "Use this list as a self check-in kiosk"
 msgstr "Käytä tätä listaa itsepalvelukioskina"
 
@@ -22478,7 +22605,7 @@ msgstr "Maksuasi ei voitu käsitellä. Yritä uudelleen tai ota yhteyttä tukeen
 msgid "We couldn't add the questions. Please try again."
 msgstr "Kysymysten lisääminen epäonnistui. Yritä uudelleen."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:59
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:65
 msgid "We couldn't check you in"
 msgstr "Sisäänkirjautuminen epäonnistui"
 
@@ -22503,6 +22630,10 @@ msgstr "Kategorian poistaminen ei onnistunut. Yritä uudelleen."
 msgid "We couldn't disconnect this Stripe account. Please try again."
 msgstr "Tämän Stripe-tilin yhteyden katkaiseminen ei onnistunut. Yritä uudelleen."
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:109
+msgid "We couldn't find a ticket with those details. Check the spelling, or see the registration desk."
+msgstr "Emme löytäneet lippua näillä tiedoilla. Tarkista kirjoitusasu tai käänny ilmoittautumispisteen puoleen."
+
 #: src/components/routes/my-tickets/index.tsx:239
 msgid "We couldn't find any orders associated with this email address."
 msgstr "Tähän sähköpostiosoitteeseen liittyviä tilauksia ei löytynyt."
@@ -22523,8 +22654,8 @@ msgstr "Emme löytäneet paikkoja juuri nyt. Yritä uudelleen."
 msgid "We couldn't find that many seats together. Try fewer seats or pick them on the map."
 msgstr "Emme löytäneet noin montaa paikkaa vierekkäin. Kokeile pienempää määrää tai valitse paikat kartalta."
 
-#: src/hooks/useCheckInController.tsx:313
-#: src/hooks/useCheckInController.tsx:322
+#: src/hooks/useCheckInController.tsx:321
+#: src/hooks/useCheckInController.tsx:330
 msgid "We couldn't find that ticket"
 msgstr "Lippua ei löytynyt"
 
@@ -22577,7 +22708,7 @@ msgstr "Laskutustietoja ei voitu ladata. Päivitä sivu ja yritä uudelleen."
 msgid "We couldn't mark these badges as printed. Please try again."
 msgstr "Nimikylttien merkitseminen tulostetuiksi epäonnistui. Yritä uudelleen."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:49
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:55
 msgid "We couldn't print your badge. Please see the registration desk."
 msgstr "Nimikylttiäsi ei voitu tulostaa. Käänny rekisteröintitiskin puoleen."
 
@@ -22800,7 +22931,7 @@ msgstr "Tervetuloa palveluun {0}, {1} 👋"
 msgid "Welcome to {0}, here's a listing of all your events"
 msgstr "Tervetuloa palveluun {0}. Tässä ovat kaikki tapahtumasi"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:43
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:48
 msgid "Welcome, {0}!"
 msgstr "Tervetuloa, {0}!"
 
@@ -23037,6 +23168,10 @@ msgstr "Mitä tuotteita tässä lippukassassa voi myydä?"
 msgid "Which ticket for {0}?"
 msgstr "Mikä lippu paikoille {0}?"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:65
+msgid "Which ticket is yours?"
+msgstr "Mikä lippu on sinun?"
+
 #: src/components/forms/CheckInListForm/index.tsx:178
 msgid "Which tickets should be associated with this check-in list?"
 msgstr "Mitkä liput yhdistetään tähän sisäänkirjautumislistaan?"
@@ -23113,6 +23248,10 @@ msgstr "Leveys"
 #: src/components/routes/event/Badges/index.tsx:355
 msgid "Width (mm)"
 msgstr "Leveys (mm)"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:73
+msgid "Windows"
+msgstr "Windows"
 
 #: src/components/common/WidgetEditor/installGuides.ts:73
 msgid "Wix shows embedded code inside a fixed-size box. Set Checkout opens in to New tab for the best experience."
@@ -23236,8 +23375,8 @@ msgstr "Esiinnyt käyttäjänä <0>{0}</0> ({1})"
 msgid "You are issuing a partial refund. The customer will be refunded {0} {1}."
 msgstr "Olet tekemässä osittaista hyvitystä. Asiakkaalle hyvitetään {0} {1}."
 
-#: src/hooks/useCheckInController.tsx:234
-#: src/hooks/useCheckInController.tsx:257
+#: src/hooks/useCheckInController.tsx:242
+#: src/hooks/useCheckInController.tsx:265
 msgid "You are offline"
 msgstr "Olet offline-tilassa"
 
@@ -23305,8 +23444,8 @@ msgstr "Et voi arkistoida tilisi viimeistä aktiivista järjestäjää."
 msgid "You cannot change the product type as there are attendees associated with this product."
 msgstr "Et voi vaihtaa tuotetyyppiä, koska tähän tuotteeseen liittyy osallistujia."
 
-#: src/hooks/useCheckInController.tsx:280
-#: src/hooks/useCheckInController.tsx:360
+#: src/hooks/useCheckInController.tsx:288
+#: src/hooks/useCheckInController.tsx:368
 msgid "You cannot check in attendees with unpaid orders. This setting can be changed in the event settings."
 msgstr "Et voi kirjata sisään osallistujia, joiden tilaus on maksamatta. Voit muuttaa tätä asetusta tapahtuman asetuksissa."
 
@@ -23451,7 +23590,7 @@ msgstr "Et saa enää näitä sähköposteja. Tilauksiisi ja tiliisi liittyviä 
 msgid "You'll be signed out and will need to sign in again with {providerName}."
 msgstr "Sinut kirjataan ulos ja sinun on kirjauduttava uudelleen sisään palvelun {providerName} kautta."
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:64
+#: src/components/modals/CreateCheckInListModal/index.tsx:65
 msgid "You'll need a ticket before you can create a check-in list."
 msgstr "Tarvitset lipun ennen kuin voit luoda sisäänkirjautumislistan."
 
@@ -23483,7 +23622,7 @@ msgstr "Näet seuraavalla näytöllä, miten maksat ja paljonko maksettavaa on."
 msgid "You'll set the dates and schedule after the event is created."
 msgstr "Määrität päivämäärät ja aikataulun, kun tapahtuma on luotu."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:57
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:63
 msgid "You're already checked in, {0}"
 msgstr "Olet jo kirjautunut sisään, {0}"
 
@@ -23491,7 +23630,7 @@ msgstr "Olet jo kirjautunut sisään, {0}"
 msgid "You're changing session times"
 msgstr "Olet muuttamassa istuntojen aikoja"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:44
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:49
 msgid "You're checked in. Enjoy the event."
 msgstr "Olet kirjautunut sisään. Nauti tapahtumasta."
 
@@ -23611,7 +23750,7 @@ msgstr "Osallistujasi vietiin onnistuneesti."
 msgid "Your attendees will appear here once they have registered for your event. You can also manually add attendees."
 msgstr "Osallistujasi näkyvät täällä, kun he ovat ilmoittautuneet tapahtumaasi. Voit myös lisätä osallistujia manuaalisesti."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:48
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:54
 msgid "Your badge is ready. Collect it from the printer."
 msgstr "Nimikylttisi on valmis. Nouda se tulostimelta."
 
@@ -23860,7 +23999,7 @@ msgstr "Palautuskoodisi ja luotetut laitteesi poistetaan."
 msgid "Your refund is processing."
 msgstr "Hyvitystäsi käsitellään."
 
-#: src/hooks/useCheckInController.tsx:90
+#: src/hooks/useCheckInController.tsx:92
 msgid "Your saved date filter is no longer available — showing all dates."
 msgstr "Tallennettu päivämääräsuodattimesi ei ole enää käytettävissä — näytetään kaikki päivämäärät."
 

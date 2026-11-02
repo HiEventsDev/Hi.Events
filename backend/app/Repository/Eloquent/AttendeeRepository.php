@@ -13,6 +13,7 @@ use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Models\Attendee;
 use HiEvents\Repository\DTO\BadgeAttendeeQueryDTO;
 use HiEvents\Repository\DTO\BadgeStatsDTO;
+use HiEvents\Repository\Eloquent\Value\OrderAndDirection;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use Illuminate\Contracts\Pagination\Paginator;
@@ -27,6 +28,8 @@ use Illuminate\Support\Facades\DB;
  */
 class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInterface
 {
+    private const KIOSK_TICKET_MATCH_LIMIT = 10;
+
     protected function getModel(): string
     {
         return Attendee::class;
@@ -226,6 +229,38 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
             limit: $query->per_page,
             page: $query->page,
         );
+    }
+
+    public function findKioskTicketMatches(
+        int $eventId,
+        string $email,
+        string $lastName,
+        array $productIds,
+        ?int $eventOccurrenceId,
+    ): Collection {
+        $where = [
+            AttendeeDomainObjectAbstract::EVENT_ID => $eventId,
+            [AttendeeDomainObjectAbstract::STATUS, 'in', [AttendeeStatus::ACTIVE->name, AttendeeStatus::AWAITING_PAYMENT->name]],
+            static fn (Builder $query) => $query
+                ->whereRaw('lower(trim(email)) = ?', [mb_strtolower(trim($email))])
+                ->whereRaw('lower(trim(last_name)) = ?', [mb_strtolower(trim($lastName))]),
+        ];
+
+        if ($productIds !== []) {
+            $where[] = [AttendeeDomainObjectAbstract::PRODUCT_ID, 'in', $productIds];
+        }
+
+        if ($eventOccurrenceId !== null) {
+            $where[AttendeeDomainObjectAbstract::EVENT_OCCURRENCE_ID] = $eventOccurrenceId;
+        }
+
+        return $this
+            ->loadRelation(new Relationship(ProductDomainObject::class, name: 'product'))
+            ->findWhere(
+                where: $where,
+                orderAndDirections: [new OrderAndDirection(AttendeeDomainObjectAbstract::ID)],
+                limit: self::KIOSK_TICKET_MATCH_LIMIT,
+            );
     }
 
     public function getBadgeStats(int $eventId, bool $includeAwaitingPayment, ?int $eventOccurrenceId = null): BadgeStatsDTO

@@ -64,23 +64,23 @@ msgstr "{0}（預設）"
 msgid "{0} {1}"
 msgstr "{0} {1}"
 
-#: src/hooks/useCheckInController.tsx:333
+#: src/hooks/useCheckInController.tsx:341
 msgid "{0} {1} is already checked in"
 msgstr "{0} {1} 已簽到"
 
-#: src/hooks/useCheckInController.tsx:332
+#: src/hooks/useCheckInController.tsx:340
 msgid "{0} {1} is already checked in · {seatLabel}"
 msgstr "{0} {1} 已簽到 · {seatLabel}"
 
-#: src/hooks/useCheckInController.tsx:217
+#: src/hooks/useCheckInController.tsx:225
 msgid "{0} <0>checked in</0>"
 msgstr "{0} 位<0>已簽到</0>"
 
-#: src/hooks/useCheckInController.tsx:216
+#: src/hooks/useCheckInController.tsx:224
 msgid "{0} <0>checked in</0> · {seatLabel}"
 msgstr "{0} <0>已簽到</0> · {seatLabel}"
 
-#: src/hooks/useCheckInController.tsx:249
+#: src/hooks/useCheckInController.tsx:257
 msgid "{0} <0>checked out</0> successfully"
 msgstr "{0} <0>簽退</0>成功"
 
@@ -1000,9 +1000,9 @@ msgstr "只需幾個簡單步驟，你就可以開始售票。"
 msgid "A focused reading column. Tickets appear wherever you place them in Sections."
 msgstr "專注的單欄閱讀版面。門票會顯示在你於區塊中放置的位置。"
 
-#: src/components/forms/CheckInListForm/index.tsx:289
-msgid "A full-screen scanner where attendees check themselves in. Attendee lists and search are hidden."
-msgstr "全螢幕掃描介面，讓參加者自助簽到。參加者名單及搜尋會被隱藏。"
+#: src/components/forms/CheckInListForm/index.tsx:290
+msgid "A full-screen scanner where attendees check themselves in. Attendee lists and search are hidden. Staff can press and hold the list name at the bottom of the kiosk to change its scanner or printer."
+msgstr "全螢幕掃描介面，讓參加者自助簽到。參加者名單及搜尋會被隱藏。工作人員可長按自助機底部的名單名稱來更換掃描器或打印機。"
 
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:238
 msgid "A gallery can have up to {MAX_GALLERY_PHOTOS} photos."
@@ -1910,8 +1910,8 @@ msgstr "議程：devconf.example/agenda"
 msgid "Aisles after seats"
 msgstr "在座位後設置走道"
 
-#: src/hooks/useBadgePrinter.ts:118
-#: src/hooks/useBadgePrinter.ts:121
+#: src/hooks/useBadgePrinter.ts:107
+#: src/hooks/useBadgePrinter.ts:110
 msgid "Alex"
 msgstr "Alex"
 
@@ -2922,7 +2922,7 @@ msgstr "與會者已移動"
 msgid "Attendee names appear on the printout. Handle it accordingly."
 msgstr "列印件上會顯示參加者姓名，請妥善保管。"
 
-#: src/hooks/useCheckInController.tsx:319
+#: src/hooks/useCheckInController.tsx:327
 msgid "Attendee not found"
 msgstr "未找到參與者"
 
@@ -2981,6 +2981,10 @@ msgstr "參與者"
 #: src/components/layouts/CheckIn/tabs/StatsTab.tsx:72
 msgid "attendees checked in"
 msgstr "位參加者已簽到"
+
+#: src/components/forms/CheckInListForm/index.tsx:297
+msgid "Attendees enter the email address and last name on their ticket. The kiosk only shows their first name and ticket type."
+msgstr "參加者輸入門票上的電郵地址及姓氏。自助機只會顯示其名字及門票類型。"
 
 #: src/components/routes/event/attendees.tsx:170
 msgid "Attendees Exported"
@@ -3122,6 +3126,8 @@ msgstr "Awesome Events 有限公司"
 msgid "Awesome Organizer Ltd."
 msgstr "Awesome Organizer Ltd."
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:82
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:125
 #: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:52
 #: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:82
 #: src/components/layouts/SettingsLayout/index.tsx:60
@@ -3135,7 +3141,7 @@ msgstr "Awesome Organizer Ltd."
 msgid "Back"
 msgstr "返回"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:48
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:72
 #: src/components/routes/event/Badges/index.tsx:548
 #: src/components/routes/event/Badges/index.tsx:556
 msgid "Back of the badge"
@@ -3227,8 +3233,8 @@ msgstr "名牌設計已儲存"
 msgid "Badge label for {0}"
 msgstr "{0} 的名牌標籤"
 
-#: src/components/forms/CheckInListForm/index.tsx:299
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:20
+#: src/components/forms/CheckInListForm/index.tsx:309
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:33
 #: src/components/layouts/CheckIn/index.tsx:226
 msgid "Badge printing"
 msgstr "名牌列印"
@@ -3253,6 +3259,10 @@ msgstr "名牌已標記為已列印"
 #: src/components/routes/event/Badges/index.tsx:577
 msgid "Badges on a lanyard often flip around. Print both sides so names always face out."
 msgstr "掛繩上的名牌經常會翻轉。雙面列印，名字就會一直朝外。"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:88
+msgid "Badges saved as PDF files instead? Chrome's last printer was Save as PDF. Repeat the first step and choose the badge printer."
+msgstr "名牌被儲存成 PDF 檔案？Chrome 上次使用的打印機是「另存為 PDF」。請重做第一步並選擇名牌打印機。"
 
 #: src/components/common/CapacityHelp/index.tsx:54
 #: src/ee/seating/components/lib/templates.ts:106
@@ -3721,6 +3731,10 @@ msgstr "可以查看財務資料"
 msgid "Can't check in"
 msgstr "無法簽到"
 
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:295
+msgid "Can't find your QR code?"
+msgstr "找不到 QR code？"
+
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:133
 msgid "Can't import"
 msgstr "無法匯入"
@@ -3747,7 +3761,7 @@ msgstr "無法使用驗證器應用程式或復原碼?"
 #: src/components/modals/CreateAffiliateModal/index.tsx:88
 #: src/components/modals/CreateAttendeeModal/index.tsx:335
 #: src/components/modals/CreateCapacityAssignmentModal/index.tsx:75
-#: src/components/modals/CreateCheckInListModal/index.tsx:106
+#: src/components/modals/CreateCheckInListModal/index.tsx:107
 #: src/components/modals/CreateEventModal/index.tsx:478
 #: src/components/modals/CreateOrganizerModal/index.tsx:66
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:89
@@ -3759,7 +3773,7 @@ msgstr "無法使用驗證器應用程式或復原碼?"
 #: src/components/modals/DuplicateEventModal/index.tsx:309
 #: src/components/modals/EditAffiliateModal/index.tsx:104
 #: src/components/modals/EditCapacityAssignmentModal/index.tsx:70
-#: src/components/modals/EditCheckInListModal/index.tsx:106
+#: src/components/modals/EditCheckInListModal/index.tsx:108
 #: src/components/modals/EditOrganizerWebhookModal/index.tsx:82
 #: src/components/modals/EditProductCategoryModal/index.tsx:71
 #: src/components/modals/EditPromoCodeModal/index.tsx:85
@@ -4248,7 +4262,7 @@ msgstr "簽到已創建"
 msgid "Check-in Deleted"
 msgstr "簽到已刪除"
 
-#: src/hooks/useCheckInController.tsx:170
+#: src/hooks/useCheckInController.tsx:178
 msgid "Check-in for {0} was undone"
 msgstr "已撤銷 {0} 的簽到"
 
@@ -4721,6 +4735,10 @@ msgstr "關閉"
 #: src/utilites/notifications.tsx:6
 msgid "Close"
 msgstr "關閉"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:31
+msgid "Close every Chrome window, and quit Chrome from the system tray if it's still running there."
+msgstr "關閉所有 Chrome 視窗；如 Chrome 仍在系統匣中執行，亦請將其結束。"
 
 #: src/components/layouts/AppLayout/Sidebar/index.tsx:117
 #: src/components/layouts/AppLayout/Topbar/index.tsx:38
@@ -5410,6 +5428,7 @@ msgstr "複製代碼"
 msgid "Copy Code"
 msgstr "複製代碼"
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:17
 #: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:25
 msgid "Copy command"
 msgstr "複製指令"
@@ -5738,7 +5757,7 @@ msgstr "創建座位圖"
 msgid "Create a ticket"
 msgstr "建立票種"
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:72
+#: src/components/modals/CreateCheckInListModal/index.tsx:73
 #: src/ee/box-office/components/modals/CreateBoxOfficeModal/index.tsx:79
 msgid "Create a Ticket"
 msgstr "創建票單"
@@ -5819,8 +5838,8 @@ msgstr "創建類別"
 
 #: src/components/common/CheckInListList/index.tsx:60
 #: src/components/common/CheckInListTable/index.tsx:303
-#: src/components/modals/CreateCheckInListModal/index.tsx:91
-#: src/components/modals/CreateCheckInListModal/index.tsx:112
+#: src/components/modals/CreateCheckInListModal/index.tsx:92
+#: src/components/modals/CreateCheckInListModal/index.tsx:113
 #: src/components/routes/event/CheckInLists/index.tsx:76
 msgid "Create Check-In List"
 msgstr "創建簽到列表"
@@ -6906,8 +6925,8 @@ msgid "Donation"
 msgstr "捐款"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:264
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:70
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:125
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:99
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:250
 #: src/components/modals/CheckInListSuccessModal/index.tsx:59
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:73
 #: src/components/modals/CreateWebhookModal/index.tsx:73
@@ -7183,6 +7202,10 @@ msgstr "每個帳戶最多收到一次此電郵。"
 msgid "Each badge prints on its own page, for card and label printers."
 msgstr "每個名牌獨立列印一頁，適用於卡片及標籤打印機。"
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:46
+msgid "Each badge then takes two taps: Print badge, then Print. Safari adds margins of its own, so badges print a little smaller than from a computer."
+msgstr "之後每個名牌只需輕按兩次：「列印名牌」，然後「列印」。Safari 會加上自己的邊界，所以名牌會比從電腦列印時略小。"
+
 #: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:24
 msgid "Each code can be used once to sign in if you lose access to your authenticator app."
 msgstr "如果你無法存取驗證器應用程式,每個復原碼可用於登錄一次。"
@@ -7295,7 +7318,7 @@ msgstr "編輯類別"
 
 #: src/components/common/CheckInListList/index.tsx:147
 #: src/components/common/CheckInListTable/index.tsx:208
-#: src/components/modals/EditCheckInListModal/index.tsx:81
+#: src/components/modals/EditCheckInListModal/index.tsx:83
 msgid "Edit Check-In List"
 msgstr "編輯簽到列表"
 
@@ -7477,6 +7500,7 @@ msgstr "電郵與排程訊息"
 msgid "Email & Templates"
 msgstr "電子郵件和模板"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:97
 #: src/components/modals/CreateAttendeeModal/index.tsx:228
 #: src/components/modals/ManageAttendeeModal/index.tsx:232
 #: src/components/modals/ManageOrderModal/index.tsx:293
@@ -7854,6 +7878,10 @@ msgstr "請輸入客戶端密鑰。"
 #: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:74
 msgid "Enter the directory (tenant) ID. It looks like 00000000-0000-0000-0000-000000000000."
 msgstr "請輸入目錄（租戶）ID，格式類似 00000000-0000-0000-0000-000000000000。"
+
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:90
+msgid "Enter the email address and last name on your ticket."
+msgstr "請輸入門票上的電郵地址及姓氏。"
 
 #: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:73
 msgid "Enter the issuer URL, starting with https://."
@@ -8646,7 +8674,7 @@ msgstr "匯出報告失敗。請重試。"
 msgid "Failed to load box office"
 msgstr "載入售票處失敗"
 
-#: src/components/modals/EditCheckInListModal/index.tsx:91
+#: src/components/modals/EditCheckInListModal/index.tsx:93
 msgid "Failed to load Check-In List"
 msgstr "加載簽到列表失敗"
 
@@ -8988,6 +9016,14 @@ msgstr "尋找 {bestAvailableQuantity} 個座位"
 msgid "Find 1 seat"
 msgstr "尋找 1 個座位"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:123
+msgid "Find my ticket"
+msgstr "查找我的門票"
+
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:89
+msgid "Find your ticket"
+msgstr "查找你的門票"
+
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:143
 msgid "Finish or cancel the current sale first"
 msgstr "請先完成或取消目前的銷售"
@@ -9167,12 +9203,12 @@ msgstr "海報風"
 msgid "Fold and cutting guides"
 msgstr "摺疊線及裁切線"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:56
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:80
 #: src/components/routes/event/Badges/index.tsx:570
 msgid "Fold-over"
 msgstr "摺疊式"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:49
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:73
 msgid "Fold-over prints the front and back side by side on one page, to fold in half. It works on any printer."
 msgstr "摺疊式會將正面和背面並排列印在同一頁上，對摺即可。適用於任何打印機。"
 
@@ -9224,9 +9260,9 @@ msgstr "例如：#DevConf2027"
 msgid "For example: Ask me about volunteering"
 msgstr "例如：歡迎查詢義工事宜"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:62
-msgid "For one-tap printing on a laptop, set the label printer as the default printer and open this page in Chrome started with the --kiosk-printing option."
-msgstr "如要在手提電腦上一按即印，請將標籤打印機設為預設打印機，並在以 --kiosk-printing 參數啟動的 Chrome 中開啟此頁面。"
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:65
+msgid "For thermal label printers such as Brother QL and Zebra. Colours print as solid black so ribbons and names stay sharp."
+msgstr "適用於 Brother QL、Zebra 等熱感標籤打印機。所有顏色都會以純黑色列印，讓絲帶及姓名保持清晰。"
 
 #: src/components/common/ConfirmIdentity/index.tsx:109
 msgid "For your security, sign in again to confirm it's you."
@@ -9342,7 +9378,7 @@ msgstr "正門讀卡機"
 msgid "Front left"
 msgstr "前區左側"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:54
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:78
 msgid "Front only"
 msgstr "只印正面"
 
@@ -9952,11 +9988,11 @@ msgstr "在 {dateCount} 個日期保留 {0} 個座位"
 msgid "Hold places for"
 msgstr "保留名額時長"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:150
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:283
 msgid "Hold up the QR code from your ticket email and your badge will print."
 msgstr "出示門票電郵中的 QR code，即可列印名牌。"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:151
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:284
 msgid "Hold up the QR code from your ticket email."
 msgstr "請出示門票電郵中的 QR code。"
 
@@ -10495,6 +10531,10 @@ msgstr "發票編號"
 msgid "Invoice Settings"
 msgstr "發票設置"
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:74
+msgid "iPad"
+msgstr "iPad"
+
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:175
 msgid "Issued"
 msgstr "簽發日期"
@@ -10712,7 +10752,7 @@ msgstr "標籤"
 msgid "Label — e.g. Morning session"
 msgstr "標籤 — 例如：上午場"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:33
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:49
 msgid "Label size on this device"
 msgstr "此裝置的標籤尺寸"
 
@@ -10801,6 +10841,7 @@ msgstr "過去 90 天"
 msgid "Last active"
 msgstr "最近活躍"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:103
 #: src/components/modals/CreateAttendeeModal/index.tsx:221
 #: src/components/modals/ManageAttendeeModal/index.tsx:228
 #: src/components/modals/ManageOrderModal/index.tsx:286
@@ -10831,6 +10872,7 @@ msgstr "姓氏"
 msgid "Last name (A–Z)"
 msgstr "姓氏（A 至 Z）"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:24
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:32
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:32
 msgid "Last name is required"
@@ -10949,6 +10991,10 @@ msgstr "左翼"
 #: src/components/routes/event/Lineup/RunSheetPrint.tsx:138
 msgid "Length"
 msgstr "時長"
+
+#: src/components/forms/CheckInListForm/index.tsx:296
+msgid "Let attendees find their ticket without the QR code"
+msgstr "允許參加者毋須 QR code 查找門票"
 
 #: src/ee/seating/components/routes/event/Seating/SeatingRulesCard.tsx:46
 msgid "Let buyers change their seat after booking"
@@ -11322,6 +11368,10 @@ msgstr "無法存取?"
 #: src/components/routes/settings/Security/index.tsx:200
 msgid "Lost your phone or switching apps? Turn it off, then on again to connect a new authenticator."
 msgstr "遺失手機或更換應用程式?請先關閉再重新開啟,以連接新的驗證器。"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:72
+msgid "Mac"
+msgstr "Mac"
 
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:66
 msgid "Main auditorium"
@@ -11829,8 +11879,8 @@ msgstr "增加位置"
 msgid "More seats"
 msgstr "增加座位"
 
-#: src/hooks/useBadgePrinter.ts:119
-#: src/hooks/useBadgePrinter.ts:122
+#: src/hooks/useBadgePrinter.ts:108
+#: src/hooks/useBadgePrinter.ts:111
 msgid "Morgan"
 msgstr "Morgan"
 
@@ -12001,7 +12051,7 @@ msgstr "姓名全部大寫"
 msgid "Navigate to Attendee"
 msgstr "導航至與會者"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:73
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:79
 msgid "Need a new badge? Please see the registration desk."
 msgstr "需要新名牌？請前往登記處。"
 
@@ -12155,7 +12205,7 @@ msgstr "下一位參加者"
 msgid "Next batch"
 msgstr "下一批"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:125
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:250
 msgid "Next check-in"
 msgstr "下一位簽到"
 
@@ -13260,6 +13310,10 @@ msgstr "於{month}{day}日"
 msgid "On a product priced at 50.00, this adds {exampleAmount}."
 msgstr "價格為 50.00 的產品將會加收 {exampleAmount}。"
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:91
+msgid "On computers your IT team manages, Chrome's SilentPrintingEnabled policy does the same without the command."
+msgstr "在由 IT 團隊管理的電腦上，Chrome 的 SilentPrintingEnabled 政策毋須指令即可達到相同效果。"
+
 #: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:14
 msgid "On large screens tickets stay beside your content as people scroll. Suits conferences and long lineups."
 msgstr "在大螢幕上，捲動時門票會一直顯示在內容旁邊。適合會議及陣容豐富的活動。"
@@ -13569,6 +13623,10 @@ msgstr "開啟設定"
 #: src/components/layouts/AppLayout/Topbar/index.tsx:38
 msgid "Open sidebar"
 msgstr "打開側邊欄"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:34
+msgid "Open Terminal and run this command:"
+msgstr "開啟「終端機」並執行以下指令："
 
 #: src/components/routes/sso/Callback/SsoErrorState.tsx:64
 msgid "Open the invitation email we sent you to finish joining the team."
@@ -14804,7 +14862,7 @@ msgstr "請在新標籤頁中繼續"
 msgid "Please create a product"
 msgstr "請創建一個產品"
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:60
+#: src/components/modals/CreateCheckInListModal/index.tsx:61
 #: src/ee/box-office/components/modals/CreateBoxOfficeModal/index.tsx:67
 msgid "Please create a ticket"
 msgstr "請創建一張票"
@@ -14813,6 +14871,7 @@ msgstr "請創建一張票"
 msgid "Please don't leave a single empty seat: {0}"
 msgstr "請勿留下單個空座位:{0}"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:23
 #: src/components/modals/JoinWaitlistModal/index.tsx:57
 msgid "Please enter a valid email address"
 msgstr "請輸入有效的電子郵件地址"
@@ -14858,7 +14917,7 @@ msgstr "請重新開始結賬流程。"
 msgid "Please return to the event page to start over."
 msgstr "請返回活動頁面重新開始。"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:74
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:80
 msgid "Please see the registration desk and we'll sort it out."
 msgstr "請前往登記處，我們會為你處理。"
 
@@ -14970,6 +15029,10 @@ msgstr "傳媒"
 msgid "Press where the first seat goes and drag. Drag sideways for seats, down for more rows."
 msgstr "按住第一個座位的位置並拖曳。橫向拖曳新增座位，向下拖曳新增更多排。"
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:35
+msgid "Press Windows+R, paste this command and press Enter:"
+msgstr "按 Windows+R，貼上以下指令並按 Enter："
+
 #: src/components/routes/event/CapacityAssignments/index.tsx:33
 msgid "Prevent overselling by sharing inventory across multiple ticket types."
 msgstr "透過在多種門票類型之間共享庫存來防止超賣。"
@@ -15069,7 +15132,7 @@ msgstr "定價"
 msgid "Print"
 msgstr "列印"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:25
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:41
 msgid "Print a badge when someone checks in"
 msgstr "簽到時列印名牌"
 
@@ -15077,13 +15140,25 @@ msgstr "簽到時列印名牌"
 msgid "Print a sample badge"
 msgstr "列印示例名牌"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:67
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:96
 msgid "Print a test badge"
 msgstr "列印測試名牌"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:28
+msgid "Print a test badge from this page. In Chrome's print window, choose the badge printer and check the paper size matches your labels, then print. Chrome reuses these choices for every badge."
+msgstr "從此頁面列印一個測試名牌。在 Chrome 的列印視窗中選擇名牌打印機，確認紙張尺寸與標籤相符，然後列印。Chrome 會為每個名牌沿用這些設定。"
+
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:238
+msgid "Print again"
+msgstr "再次列印"
 
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:722
 msgid "Print All Tickets"
 msgstr "打印所有門票"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:41
+msgid "Print another test badge. It should print straight away, without a print window."
+msgstr "再列印一個測試名牌。它應直接列印，不再彈出列印視窗。"
 
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:326
 #: src/hooks/useAttendeeActions.tsx:119
@@ -15097,13 +15172,17 @@ msgstr "列印名牌"
 msgid "Print badges"
 msgstr "列印名牌"
 
-#: src/components/forms/CheckInListForm/index.tsx:306
+#: src/components/forms/CheckInListForm/index.tsx:316
 msgid "Print badges from this list"
 msgstr "從此列表列印名牌"
 
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:134
 msgid "Print map"
 msgstr "列印座位圖"
+
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:225
+msgid "Print my badge"
+msgstr "列印我的名牌"
 
 #: src/components/routes/event/TicketDesigner/index.tsx:122
 msgid "Print Preview"
@@ -15126,6 +15205,10 @@ msgstr "打印票"
 msgid "Print to PDF"
 msgstr "列印為PDF"
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:85
+msgid "Print window still showing? Chrome was already running when the command ran. Quit it and run the command again."
+msgstr "仍然出現列印視窗？執行指令時 Chrome 已在執行。請結束 Chrome 後重新執行指令。"
+
 #: src/components/routes/event/Lineup/index.tsx:154
 msgid "Printable run sheet"
 msgstr "可列印的流程表"
@@ -15143,15 +15226,11 @@ msgstr "列印於 {0}"
 msgid "Printed ×{count}"
 msgstr "已列印 ×{count}"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:167
-msgid "Printer"
-msgstr "打印機"
-
 #: src/components/routes/event/Badges/index.tsx:600
 msgid "Printing at the door"
 msgstr "現場列印"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:47
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:52
 msgid "Printing your badge…"
 msgstr "正在列印你的名牌…"
 
@@ -15532,6 +15611,10 @@ msgstr "小貼士"
 #: src/utilites/badges.ts:63
 msgid "Quiet and typographic, lots of white space"
 msgstr "以文字為主，簡潔留白"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:30
+msgid "Quit Chrome completely with ⌘Q."
+msgstr "按 ⌘Q 完全結束 Chrome。"
 
 #: src/components/forms/QuestionForm/index.tsx:118
 msgid "Radio Option"
@@ -16685,7 +16768,7 @@ msgstr "銷售額："
 msgid "Same as event"
 msgstr "與活動相同"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:39
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:55
 msgid "Same as the badge design ({designSize})"
 msgstr "與名牌設計相同（{designSize}）"
 
@@ -16767,7 +16850,7 @@ msgstr "儲存變更"
 #: src/components/common/DesignerShell/index.tsx:172
 #: src/components/modals/EditAffiliateModal/index.tsx:109
 #: src/components/modals/EditCapacityAssignmentModal/index.tsx:75
-#: src/components/modals/EditCheckInListModal/index.tsx:111
+#: src/components/modals/EditCheckInListModal/index.tsx:113
 #: src/components/modals/EditOrganizerWebhookModal/index.tsx:87
 #: src/components/modals/EditProductCategoryModal/index.tsx:73
 #: src/components/modals/EditPromoCodeModal/index.tsx:87
@@ -16869,7 +16952,7 @@ msgstr "已儲存的地點"
 msgid "Saved locations"
 msgstr "已儲存的地點"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:26
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:42
 msgid "Saved on this device only"
 msgstr "只會儲存在此裝置"
 
@@ -16908,7 +16991,7 @@ msgstr "掃描門票即可為參加者簽到"
 msgid "Scan tickets at the door with a phone, tablet, or USB scanner."
 msgstr "在現場以手機、平板或 USB 掃描器掃描門票。"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:147
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:280
 msgid "Scan your ticket to check in"
 msgstr "掃描門票簽到"
 
@@ -17161,7 +17244,7 @@ msgid "Seasonal"
 msgstr "季節性"
 
 #: src/components/common/AttendeeTicket/index.tsx:133
-#: src/components/common/NameBadge/index.tsx:82
+#: src/components/common/NameBadge/index.tsx:86
 #: src/components/modals/ManageAttendeeModal/index.tsx:170
 #: src/ee/seating/components/ManualSeatField/index.tsx:42
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:339
@@ -17835,6 +17918,10 @@ msgstr "設置發票編號的起始編號。一旦發票生成，就無法更改
 msgid "Set to unlimited (remove limit)"
 msgstr "設為不限（移除限制）"
 
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:318
+msgid "Set up"
+msgstr "設定"
+
 #: src/components/routes/event/OccurrencesTab/index.tsx:639
 msgid "Set up a recurring schedule to automatically create dates, or add them one at a time."
 msgstr "設定重複排程以自動建立日期，或逐個新增。"
@@ -17860,6 +17947,14 @@ msgstr "設定 SSO"
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:92
 msgid "Set up the tickets you'll sell and their prices"
 msgstr "設定你要售賣的門票及其價格"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:66
+msgid "Set up this device"
+msgstr "設定此裝置"
+
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:33
+msgid "Set up this kiosk"
+msgstr "設定此自助機"
 
 #: src/components/routes/settings/Security/EnableTwoFactorModal.tsx:15
 msgid "Set up two-factor authentication"
@@ -18600,6 +18695,10 @@ msgstr "出錯了！請重試"
 msgid "Something went wrong."
 msgstr "出問題了"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:57
+msgid "Something went wrong. Please see the registration desk."
+msgstr "出現問題。請前往登記處。"
+
 #: src/components/modals/JoinWaitlistModal/index.tsx:141
 msgid "Something went wrong. Please try again later."
 msgstr "出了點問題。請稍後再試。"
@@ -18739,7 +18838,7 @@ msgstr "工作人員可手動為銷售套用折扣"
 msgid "Staff can change the price of an item during a sale"
 msgstr "工作人員可在銷售時修改商品價格"
 
-#: src/components/forms/CheckInListForm/index.tsx:307
+#: src/components/forms/CheckInListForm/index.tsx:317
 msgid "Staff can print or reprint badges from this list, or print them automatically on check-in"
 msgstr "工作人員可從此列表列印或重新列印名牌，亦可在簽到時自動列印"
 
@@ -19237,7 +19336,7 @@ msgstr "成功更新與會者"
 msgid "Successfully updated Capacity Assignment"
 msgstr "容量分配更新成功"
 
-#: src/components/modals/EditCheckInListModal/index.tsx:55
+#: src/components/modals/EditCheckInListModal/index.tsx:56
 msgid "Successfully updated Check-In List"
 msgstr "簽到列表更新成功"
 
@@ -19442,6 +19541,14 @@ msgstr "點擊座位即可加入，或先設定數量"
 msgid "Tap dates like a calendar."
 msgstr "像日曆一樣點選日期。"
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:45
+msgid "Tap Print a test badge, choose the badge printer and paper size, then tap Print. The iPad remembers both for the next badge."
+msgstr "輕按「列印測試名牌」，選擇名牌打印機及紙張尺寸，然後輕按「列印」。iPad 會為下一個名牌記住這兩項。"
+
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:53
+msgid "Tap Print my badge, then Print."
+msgstr "輕按「列印我的名牌」，然後輕按「列印」。"
+
 #: src/components/layouts/CheckIn/tabs/ScanTab.tsx:59
 msgid "Tap this screen to resume scanning"
 msgstr "輕觸螢幕即可繼續掃描"
@@ -19615,7 +19722,7 @@ msgstr "關鍵字"
 msgid "Terms of Service"
 msgstr "服務條款"
 
-#: src/hooks/useBadgePrinter.ts:123
+#: src/hooks/useBadgePrinter.ts:112
 msgid "Test badge"
 msgstr "測試名牌"
 
@@ -19626,7 +19733,7 @@ msgstr "測試電郵已發送到您的收件匣"
 
 #: src/components/routes/event/Badges/BadgePrint.tsx:155
 #: src/components/routes/event/Badges/index.tsx:244
-#: src/hooks/useBadgePrinter.ts:125
+#: src/hooks/useBadgePrinter.ts:114
 msgid "Test print"
 msgstr "測試列印"
 
@@ -19892,6 +19999,14 @@ msgstr "此特批會記錄在訂單審計日誌中。"
 #: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:169
 msgid "The owner can connect {providerName} in their security settings to sign in with it day to day."
 msgstr "擁有者可以在保安設定中連接 {providerName}，日常使用它登入。"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:39
+msgid "The page opens full screen without Chrome's controls. Press ⌘Q to close it."
+msgstr "頁面會以全螢幕開啟，不顯示 Chrome 的控制項。按 ⌘Q 關閉。"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:40
+msgid "The page opens full screen without Chrome's controls. Press Alt+F4 to close it."
+msgstr "頁面會以全螢幕開啟，不顯示 Chrome 的控制項。按 Alt+F4 關閉。"
 
 #: src/components/common/ErrorDisplay/index.tsx:18
 msgid "The page you are looking for does not exist"
@@ -20473,7 +20588,7 @@ msgstr "此訂單已取消。"
 msgid "This order has expired. Please start again."
 msgstr "此訂單已過期。請重新開始。"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:58
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:64
 msgid "This order hasn't been paid yet"
 msgstr "此訂單尚未付款"
 
@@ -20520,6 +20635,10 @@ msgstr "此付款連結已過期"
 #: src/components/common/EmailTemplateEditor/EmailTemplatePreviewPane.tsx:70
 msgid "This preview shows how your email will look with sample data. Actual emails will use real values."
 msgstr "此預覽顯示您的郵件使用示例資料的外觀。實際郵件將使用真實值。"
+
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:64
+msgid "This printer only prints black"
+msgstr "此打印機只能列印黑色"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:117
 msgid "This product cannot be deleted because it is associated with an order. You can hide it instead."
@@ -20590,7 +20709,7 @@ msgstr "此空間為輪椅使用者及有無障礙需求的賓客保留。"
 msgid "This ticket is no longer valid"
 msgstr "此門票已失效"
 
-#: src/hooks/useCheckInController.tsx:295
+#: src/hooks/useCheckInController.tsx:303
 msgid "This ticket was just scanned. Please wait before scanning again."
 msgstr "此門票剛剛被掃描。請等待後再次掃描。"
 
@@ -20961,6 +21080,10 @@ msgstr "如要更改您用於登入的電郵，請先確認是您本人。我們
 msgid "To increase your limits, contact us at"
 msgstr "要提高您的限制，請聯繫我們"
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:47
+msgid "To keep attendees on this page, turn on Settings › Accessibility › Guided Access, come back here and triple-click the top button."
+msgstr "如要讓參加者留在此頁面，請開啟「設定」›「輔助使用」›「引導使用模式」，返回這裏並連按三下頂部按鈕。"
+
 #: src/hooks/useSortableAccessibility.ts:42
 msgid "To move this item, press space or enter. Use the arrow keys to change its position, then press space or enter again to drop it, or escape to cancel."
 msgstr "如要移動此項目，請按空白鍵或 Enter 鍵。使用方向鍵更改其位置，然後再按空白鍵或 Enter 鍵放下，或按 Esc 鍵取消。"
@@ -20990,6 +21113,10 @@ msgstr "明天"
 #: src/utilites/ssoErrors.ts:13
 msgid "Too many attempts. Please wait a minute and try again."
 msgstr "嘗試次數過多。請稍等一分鐘後重試。"
+
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:56
+msgid "Too many attempts. Please wait a minute or see the registration desk."
+msgstr "嘗試次數過多。請稍等一分鐘或前往登記處。"
 
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:116
 msgid "Too many rows in one import"
@@ -21308,7 +21435,7 @@ msgstr "雙重驗證已重設"
 msgid "Two-factor on"
 msgstr "已開啟雙重驗證"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:55
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:79
 #: src/components/routes/event/Badges/index.tsx:569
 msgid "Two-sided printer"
 msgstr "雙面打印機"
@@ -21374,12 +21501,12 @@ msgstr "無法更換讀卡機"
 msgid "Unable to check in"
 msgstr "無法報到"
 
-#: src/hooks/useCheckInController.tsx:235
+#: src/hooks/useCheckInController.tsx:243
 msgid "Unable to check in attendee"
 msgstr "無法簽到參與者"
 
-#: src/hooks/useCheckInController.tsx:262
-#: src/hooks/useCheckInController.tsx:264
+#: src/hooks/useCheckInController.tsx:270
+#: src/hooks/useCheckInController.tsx:272
 msgid "Unable to check out attendee"
 msgstr "無法簽退參與者"
 
@@ -21408,7 +21535,7 @@ msgstr "無法刪除小工具"
 msgid "Unable to duplicate product. Please check the your details"
 msgstr "無法複製產品。請檢查您的詳細信息"
 
-#: src/hooks/useCheckInController.tsx:310
+#: src/hooks/useCheckInController.tsx:318
 msgid "Unable to fetch attendee"
 msgstr "無法擷取參與者資料"
 
@@ -21428,7 +21555,7 @@ msgstr "無法載入參加者詳情。"
 msgid "Unable to load products for this date. Please try again."
 msgstr "無法載入此日期的產品，請再試一次。"
 
-#: src/hooks/useBadgePrinter.ts:100
+#: src/hooks/useBadgePrinter.ts:138
 msgid "Unable to load this badge"
 msgstr "無法載入此名牌"
 
@@ -21466,7 +21593,7 @@ msgstr "無法開始銷售，請重試。"
 msgid "Unable to switch date"
 msgstr "無法切換日期"
 
-#: src/hooks/useCheckInController.tsx:175
+#: src/hooks/useCheckInController.tsx:183
 msgid "Unable to undo check-in"
 msgstr "無法撤銷簽到"
 
@@ -21504,7 +21631,7 @@ msgstr "在 \"Token configuration\" 下，將可選聲明 email 和 xms_edov 新
 
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:299
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:300
-#: src/hooks/useCheckInController.tsx:223
+#: src/hooks/useCheckInController.tsx:231
 msgid "Undo"
 msgstr "復原"
 
@@ -21854,7 +21981,7 @@ msgstr "使用 <0>Liquid 模板</0> 個性化您的郵件"
 msgid "Use a different account"
 msgstr "使用其他帳戶"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:34
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:50
 msgid "Use a different size here if this printer takes labels rather than badge inserts"
 msgstr "如這部打印機使用標籤而非名牌卡紙，可在此選擇其他尺寸"
 
@@ -21885,7 +22012,7 @@ msgstr "改用復原碼"
 msgid "Use a separate organizer for each brand or venue you sell tickets under."
 msgstr "為您售票的每個品牌或場地使用獨立的主辦方。"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:176
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:327
 msgid "Use a USB scanner"
 msgstr "使用 USB 掃描器"
 
@@ -21906,7 +22033,7 @@ msgstr "為所有參加者使用訂單詳情。參加者姓名和電郵將與買
 msgid "Use the buyer's details for all attendees"
 msgstr "為所有參與者使用購買者的資料"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:177
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:328
 msgid "Use the camera"
 msgstr "使用相機"
 
@@ -21918,7 +22045,7 @@ msgstr "使用此地址"
 msgid "Use this if someone else, such as your finance team, is paying for your order."
 msgstr "如果由他人（例如你的財務團隊）為你的訂單付款，請使用此選項。"
 
-#: src/components/forms/CheckInListForm/index.tsx:288
+#: src/components/forms/CheckInListForm/index.tsx:289
 msgid "Use this list as a self check-in kiosk"
 msgstr "將此列表用作自助簽到機"
 
@@ -22478,7 +22605,7 @@ msgstr "我們無法處理您的付款。請重試或聯繫技術支持。"
 msgid "We couldn't add the questions. Please try again."
 msgstr "無法新增問題，請重試。"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:59
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:65
 msgid "We couldn't check you in"
 msgstr "未能為你辦理簽到"
 
@@ -22503,6 +22630,10 @@ msgstr "我們無法刪除該類別。請再試一次。"
 msgid "We couldn't disconnect this Stripe account. Please try again."
 msgstr "無法中斷此 Stripe 帳戶的連接。請重試。"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:109
+msgid "We couldn't find a ticket with those details. Check the spelling, or see the registration desk."
+msgstr "找不到與這些資料相符的門票。請檢查拼寫，或前往登記處。"
+
 #: src/components/routes/my-tickets/index.tsx:239
 msgid "We couldn't find any orders associated with this email address."
 msgstr "我們找不到與此郵箱關聯的訂單。"
@@ -22523,8 +22654,8 @@ msgstr "暫時無法找到座位,請重試。"
 msgid "We couldn't find that many seats together. Try fewer seats or pick them on the map."
 msgstr "找不到這麼多連在一起的座位。請減少座位數量,或在地圖上自行選擇。"
 
-#: src/hooks/useCheckInController.tsx:313
-#: src/hooks/useCheckInController.tsx:322
+#: src/hooks/useCheckInController.tsx:321
+#: src/hooks/useCheckInController.tsx:330
 msgid "We couldn't find that ticket"
 msgstr "找不到該門票"
 
@@ -22577,7 +22708,7 @@ msgstr "無法載入您的帳單資料。請重新整理頁面再試。"
 msgid "We couldn't mark these badges as printed. Please try again."
 msgstr "無法將這些名牌標記為已列印，請重試。"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:49
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:55
 msgid "We couldn't print your badge. Please see the registration desk."
 msgstr "未能列印你的名牌。請前往登記處。"
 
@@ -22800,7 +22931,7 @@ msgstr "歡迎嚟到 {0}，{1} 👋"
 msgid "Welcome to {0}, here's a listing of all your events"
 msgstr "歡迎嚟到 {0}，呢度係你所有活動嘅列表"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:43
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:48
 msgid "Welcome, {0}!"
 msgstr "歡迎，{0}！"
 
@@ -23037,6 +23168,10 @@ msgstr "此售票處可銷售哪些商品？"
 msgid "Which ticket for {0}?"
 msgstr "{0} 使用哪種門票？"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:65
+msgid "Which ticket is yours?"
+msgstr "哪張門票是你的？"
+
 #: src/components/forms/CheckInListForm/index.tsx:178
 msgid "Which tickets should be associated with this check-in list?"
 msgstr "哪些票應與此簽到列表關聯？"
@@ -23113,6 +23248,10 @@ msgstr "寬度"
 #: src/components/routes/event/Badges/index.tsx:355
 msgid "Width (mm)"
 msgstr "寬度 (mm)"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:73
+msgid "Windows"
+msgstr "Windows"
 
 #: src/components/common/WidgetEditor/installGuides.ts:73
 msgid "Wix shows embedded code inside a fixed-size box. Set Checkout opens in to New tab for the best experience."
@@ -23236,8 +23375,8 @@ msgstr "您正在模擬 <0>{0}</0> ({1})"
 msgid "You are issuing a partial refund. The customer will be refunded {0} {1}."
 msgstr "您正在發出部分退款。客戶將獲得 {0} {1} 的退款。"
 
-#: src/hooks/useCheckInController.tsx:234
-#: src/hooks/useCheckInController.tsx:257
+#: src/hooks/useCheckInController.tsx:242
+#: src/hooks/useCheckInController.tsx:265
 msgid "You are offline"
 msgstr "您處於離線狀態"
 
@@ -23305,8 +23444,8 @@ msgstr "您無法封存帳戶中最後一個活躍的主辦方。"
 msgid "You cannot change the product type as there are attendees associated with this product."
 msgstr "您無法更改產品類型，因為有與該產品關聯的參會者。"
 
-#: src/hooks/useCheckInController.tsx:280
-#: src/hooks/useCheckInController.tsx:360
+#: src/hooks/useCheckInController.tsx:288
+#: src/hooks/useCheckInController.tsx:368
 msgid "You cannot check in attendees with unpaid orders. This setting can be changed in the event settings."
 msgstr "您無法為未支付訂單的與會者簽到。此設置可在活動設置中更改。"
 
@@ -23451,7 +23590,7 @@ msgstr "你將不會再收到此類電郵。有關訂單及帳戶的電郵仍會
 msgid "You'll be signed out and will need to sign in again with {providerName}."
 msgstr "你將會被登出，需要使用 {providerName} 重新登入。"
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:64
+#: src/components/modals/CreateCheckInListModal/index.tsx:65
 msgid "You'll need a ticket before you can create a check-in list."
 msgstr "在創建簽到列表之前，您需要先獲得票。"
 
@@ -23483,7 +23622,7 @@ msgstr "下一個畫面會顯示付款方式和應付金額。"
 msgid "You'll set the dates and schedule after the event is created."
 msgstr "建立活動後，您將設定日期及時間表。"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:57
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:63
 msgid "You're already checked in, {0}"
 msgstr "{0}，你已經簽到了"
 
@@ -23491,7 +23630,7 @@ msgstr "{0}，你已經簽到了"
 msgid "You're changing session times"
 msgstr "你正在更改場次時間"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:44
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:49
 msgid "You're checked in. Enjoy the event."
 msgstr "簽到成功，祝你活動愉快。"
 
@@ -23611,7 +23750,7 @@ msgstr "您的與會者已成功導出。"
 msgid "Your attendees will appear here once they have registered for your event. You can also manually add attendees."
 msgstr "與會者註冊參加活動後，就會出現在這裏。您也可以手動添加與會者。"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:48
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:54
 msgid "Your badge is ready. Collect it from the printer."
 msgstr "你的名牌已準備好。請到打印機領取。"
 
@@ -23860,7 +23999,7 @@ msgstr "您的復原碼和信任的裝置將會被移除。"
 msgid "Your refund is processing."
 msgstr "您的退款正在處理中。"
 
-#: src/hooks/useCheckInController.tsx:90
+#: src/hooks/useCheckInController.tsx:92
 msgid "Your saved date filter is no longer available — showing all dates."
 msgstr "你儲存的日期篩選條件已失效 — 現正顯示所有日期。"
 

@@ -36,6 +36,7 @@ class CheckInListResourcePublic extends JsonResource
             'public_show_order_details' => $this->getPublicShowOrderDetails(),
             'badge_printing_enabled' => $this->getBadgeDesign() !== null,
             'kiosk_mode' => $this->getKioskMode(),
+            'kiosk_lookup_enabled' => $this->getKioskMode() && $this->getKioskLookupEnabled(),
             $this->mergeWhen($this->getBadgeDesign() !== null, fn () => [
                 'badge_design' => (new BadgeDesignLayoutResource($this->getBadgeDesign()))->toArray($request),
             ]),

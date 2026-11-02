@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useRef, useState} from "react";
-import {useDebouncedValue, useDisclosure, useNetwork} from "@mantine/hooks";
+import {useDebouncedValue, useDisclosure, useMediaQuery, useNetwork} from "@mantine/hooks";
 import {AxiosError} from "axios";
 import {t, Trans} from "@lingui/macro";
 import {Attendee, CheckInList, EventType, QueryFilterOperator, QueryFilters} from "../types.ts";
@@ -50,6 +50,8 @@ export const useCheckInController = ({
         const stored = localStorage.getItem("checkInScanMode");
         return stored === "camera" ? "camera" : "usb";
     });
+    const [hasChosenScanMode] = useState(() => !isSsr() && localStorage.getItem("checkInScanMode") !== null);
+    const isTouchScreen = useMediaQuery('(pointer: coarse)');
     const [recentScans, setRecentScans] = useState<RecentScan[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [searchQueryDebounced] = useDebouncedValue(searchQuery, 200);
@@ -131,6 +133,12 @@ export const useCheckInController = ({
         }
     }, [scanMode]);
 
+    useEffect(() => {
+        if (isKiosk && !hasChosenScanMode && isTouchScreen) {
+            setScanMode("camera");
+        }
+    }, [isKiosk, hasChosenScanMode, isTouchScreen]);
+
     const playSuccessSound = useCallback(() => {
         if (isSoundOn && scanSuccessAudioRef.current) {
             scanSuccessAudioRef.current.currentTime = 0;
@@ -201,7 +209,7 @@ export const useCheckInController = ({
                 checkInModalHandlers.close();
                 setSelectedAttendee(null);
 
-                if (badgePrinter.isEnabled && (isKiosk || badgePrinter.settings.autoPrint)) {
+                if (badgePrinter.isEnabled && (isKiosk || badgePrinter.autoPrint)) {
                     badgePrinter.printBadge(attendee.public_id);
                 }
 

@@ -1,3 +1,4 @@
+import {CSSProperties} from "react";
 import {Badge as BadgeData, BadgeLayout} from "../../../types.ts";
 import {
     BadgeBackPrinting,
@@ -7,6 +8,7 @@ import {
     getBadgeDimensions,
     getPrintUnitSize,
 } from "../../../utilites/badges.ts";
+import {getIosPrintScale} from "../../../utilites/badgePrinting.ts";
 import {NameBadge} from "./index.tsx";
 import {FoldOverBadge} from "./FoldOverBadge.tsx";
 import classes from "./BadgePrintSheets.module.scss";
@@ -21,6 +23,8 @@ export interface BadgePrintSheetsProps {
     backPrinting: BadgeBackPrinting;
     showCutGuides?: boolean;
     pageSizeOverride?: { width: number; height: number };
+    fitInsideIosPrintMargins?: boolean;
+    blackInkOnly?: boolean;
 }
 
 export const BadgePrintSheets = ({
@@ -33,6 +37,8 @@ export const BadgePrintSheets = ({
                                      backPrinting,
                                      showCutGuides,
                                      pageSizeOverride,
+                                     fitInsideIosPrintMargins,
+                                     blackInkOnly,
                                  }: BadgePrintSheetsProps) => {
     const badgeSize = pageSizeOverride ?? getBadgeDimensions(layout);
     const unitSize = getPrintUnitSize(badgeSize, backPrinting);
@@ -44,9 +50,17 @@ export const BadgePrintSheets = ({
     const isFoldOver = backPrinting === 'FOLD_OVER';
 
     const pageCss = `@page { size: ${grid.pageWidth}mm ${grid.pageHeight}mm; margin: 0; }`;
+    const printScale = fitInsideIosPrintMargins
+        ? getIosPrintScale({width: grid.pageWidth, height: grid.pageHeight})
+        : 1;
 
     return (
-        <div className={classes.sheets} data-testid="badge-print-sheets">
+        <div
+            className={classes.sheets}
+            style={{'--badge-print-scale': printScale} as CSSProperties}
+            data-print-scale={printScale}
+            data-testid="badge-print-sheets"
+        >
             <style>{pageCss}</style>
             {pages.map((page) => (
                 <div
@@ -79,6 +93,7 @@ export const BadgePrintSheets = ({
                                     timezone={timezone}
                                     showCutGuide={showCutGuides && grid.perPage > 1}
                                     showFoldLine={showCutGuides}
+                                    blackInkOnly={blackInkOnly}
                                 />
                             )
                             : (
@@ -91,6 +106,7 @@ export const BadgePrintSheets = ({
                                     timezone={timezone}
                                     side={page.side === 'back' ? 'back' : 'front'}
                                     showCutGuide={showCutGuides && grid.perPage > 1}
+                                    blackInkOnly={blackInkOnly}
                                 />
                             );
                     })}

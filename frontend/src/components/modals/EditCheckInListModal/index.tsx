@@ -41,6 +41,7 @@ export const EditCheckInListModal = ({
             public_show_order_details: true,
             badge_printing_enabled: false,
             kiosk_mode: false,
+            kiosk_lookup_enabled: true,
         }
     });
     const editMutation = useEditCheckInList();
@@ -73,6 +74,7 @@ export const EditCheckInListModal = ({
                 public_show_order_details: checkInList.public_show_order_details ?? true,
                 badge_printing_enabled: checkInList.badge_printing_enabled ?? false,
                 kiosk_mode: checkInList.kiosk_mode ?? false,
+                kiosk_lookup_enabled: checkInList.kiosk_lookup_enabled ?? true,
             });
         }
     }, [checkInList]);

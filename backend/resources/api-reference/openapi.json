@@ -4507,6 +4507,24 @@
                 }
               }
             }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
           }
         },
         "security": []
@@ -4595,6 +4613,24 @@
                 }
               }
             }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
           }
         },
         "security": []
@@ -4664,6 +4700,24 @@
           },
           "404": {
             "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4768,6 +4822,24 @@
                 }
               }
             }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
           }
         },
         "security": []
@@ -4842,6 +4914,24 @@
           },
           "404": {
             "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4954,6 +5044,24 @@
                 }
               }
             }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
           }
         },
         "security": []
@@ -5013,6 +5121,139 @@
           },
           "404": {
             "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/public/check-in-lists/{checkInListShortId}/kiosk/ticket-lookup": {
+      "post": {
+        "operationId": "public.lookupKioskTicketsPublicAction",
+        "summary": "Lookup Kiosk Tickets (public)",
+        "tags": [
+          "Check In Lists / Public"
+        ],
+        "parameters": [
+          {
+            "name": "checkInListShortId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LookupKioskTicketsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Array of `KioskTicketPublicResource`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/KioskTicketPublicResource"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
             "content": {
               "application/json": {
                 "schema": {
@@ -27023,6 +27264,9 @@
               "kiosk_mode": {
                 "type": "boolean"
               },
+              "kiosk_lookup_enabled": {
+                "type": "boolean"
+              },
               "is_expired": {
                 "type": "boolean"
               },
@@ -27064,7 +27308,8 @@
               "public_show_question_answers",
               "public_show_order_details",
               "badge_printing_enabled",
-              "kiosk_mode"
+              "kiosk_mode",
+              "kiosk_lookup_enabled"
             ]
           },
           "attendee": {
@@ -28900,6 +29145,9 @@
           "kiosk_mode": {
             "type": "boolean"
           },
+          "kiosk_lookup_enabled": {
+            "type": "boolean"
+          },
           "is_expired": {
             "type": "boolean"
           },
@@ -28941,7 +29189,8 @@
           "public_show_question_answers",
           "public_show_order_details",
           "badge_printing_enabled",
-          "kiosk_mode"
+          "kiosk_mode",
+          "kiosk_lookup_enabled"
         ],
         "title": "CheckInListResource"
       },
@@ -29084,6 +29333,9 @@
           },
           "kiosk_mode": {
             "type": "boolean"
+          },
+          "kiosk_lookup_enabled": {
+            "type": "string"
           },
           "badge_design": {
             "type": "object",
@@ -29289,7 +29541,8 @@
           "public_show_question_answers",
           "public_show_order_details",
           "badge_printing_enabled",
-          "kiosk_mode"
+          "kiosk_mode",
+          "kiosk_lookup_enabled"
         ],
         "title": "CheckInListResourcePublic"
       },
@@ -32737,6 +32990,29 @@
         "type": "string",
         "title": "JsonResource"
       },
+      "KioskTicketPublicResource": {
+        "type": "object",
+        "properties": {
+          "public_id": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "product_title": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "public_id",
+          "first_name",
+          "product_title"
+        ],
+        "title": "KioskTicketPublicResource"
+      },
       "LineupBillingTier": {
         "type": "string",
         "enum": [
@@ -32971,6 +33247,25 @@
           "updated_at"
         ],
         "title": "LocationResource"
+      },
+      "LookupKioskTicketsRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 255
+          },
+          "last_name": {
+            "type": "string",
+            "maxLength": 100
+          }
+        },
+        "required": [
+          "email",
+          "last_name"
+        ],
+        "title": "LookupKioskTicketsRequest"
       },
       "MarkBadgesPrintedRequest": {
         "type": "object",
@@ -39082,6 +39377,12 @@
             ]
           },
           "kiosk_mode": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "kiosk_lookup_enabled": {
             "type": [
               "boolean",
               "null"

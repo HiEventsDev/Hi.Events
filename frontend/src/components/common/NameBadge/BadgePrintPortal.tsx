@@ -2,16 +2,16 @@ import {useEffect, useRef} from "react";
 import {createPortal} from "react-dom";
 import {BadgePrinter} from "../../../hooks/useBadgePrinter.ts";
 import {BADGE_SIZE_DIMENSIONS, getBadgeImages} from "../../../utilites/badges.ts";
-import {waitForBadgesToRender} from "../../../utilites/badgePrinting.ts";
+import {printBadgeSheets, showOnlyBadgeSheetsInPrint, waitForBadgesToRender} from "../../../utilites/badgePrinting.ts";
 import {isSsr} from "../../../utilites/helpers.ts";
 import {BadgePrintSheets} from "./BadgePrintSheets.tsx";
 import classes from "./BadgePrintPortal.module.scss";
 
-const PRINTING_BODY_CLASS = 'hi-badge-printing';
-
 export const BadgePrintPortal = ({printer}: { printer: BadgePrinter }) => {
     const rootRef = useRef<HTMLDivElement>(null);
-    const {job, layout, finishJob} = printer;
+    const {job, prepared, layout, finishJob, markPreparedRendered} = printer;
+    const badge = job?.badge ?? prepared?.badge;
+    const fontFamily = layout?.font_family;
 
     useEffect(() => {
         if (!job || !layout) {
@@ -19,30 +19,41 @@ export const BadgePrintPortal = ({printer}: { printer: BadgePrinter }) => {
         }
 
         let cancelled = false;
-        const handleAfterPrint = () => {
-            document.body.classList.remove(PRINTING_BODY_CLASS);
-            if (!cancelled) {
-                finishJob(job, true);
-            }
-        };
+        let cancelPrint: (() => void) | null = null;
 
         waitForBadgesToRender(rootRef.current, layout.font_family).then(() => {
-            if (cancelled) {
-                return;
+            if (!cancelled) {
+                cancelPrint = printBadgeSheets(() => finishJob(job, true));
             }
-            document.body.classList.add(PRINTING_BODY_CLASS);
-            window.addEventListener('afterprint', handleAfterPrint, {once: true});
-            window.print();
         });
 
         return () => {
             cancelled = true;
-            window.removeEventListener('afterprint', handleAfterPrint);
-            document.body.classList.remove(PRINTING_BODY_CLASS);
+            cancelPrint?.();
         };
     }, [job?.id]);
 
-    if (isSsr() || !job || !layout) {
+    useEffect(() => {
+        if (!prepared || !fontFamily) {
+            return;
+        }
+
+        let cancelled = false;
+        let showAllOfPage: (() => void) | null = null;
+        waitForBadgesToRender(rootRef.current, fontFamily).then(() => {
+            if (!cancelled) {
+                showAllOfPage = showOnlyBadgeSheetsInPrint();
+                markPreparedRendered(prepared.id);
+            }
+        });
+
+        return () => {
+            cancelled = true;
+            showAllOfPage?.();
+        };
+    }, [prepared, fontFamily, markPreparedRendered]);
+
+    if (isSsr() || !badge || !layout) {
         return null;
     }
 
@@ -55,13 +66,15 @@ export const BadgePrintPortal = ({printer}: { printer: BadgePrinter }) => {
         <div ref={rootRef} className={classes.root} data-badge-print-root="" data-testid="badge-print-portal">
             <BadgePrintSheets
                 layout={layout}
-                badges={[job.badge]}
+                badges={[badge]}
                 eventName={printer.eventName}
                 images={getBadgeImages(printer.images)}
                 timezone={printer.timezone}
                 sheet="NONE"
                 backPrinting={printer.backPrinting}
                 pageSizeOverride={pageSizeOverride}
+                fitInsideIosPrintMargins={printer.printsFromATap}
+                blackInkOnly={printer.settings.blackInkOnly}
             />
         </div>,
         document.body,

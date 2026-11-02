@@ -64,23 +64,23 @@ msgstr "{0} (기본값)"
 msgid "{0} {1}"
 msgstr "{0} {1}"
 
-#: src/hooks/useCheckInController.tsx:333
+#: src/hooks/useCheckInController.tsx:341
 msgid "{0} {1} is already checked in"
 msgstr "{0} {1}은(는) 이미 체크인되었습니다"
 
-#: src/hooks/useCheckInController.tsx:332
+#: src/hooks/useCheckInController.tsx:340
 msgid "{0} {1} is already checked in · {seatLabel}"
 msgstr "{0} {1}은(는) 이미 체크인되었습니다 · {seatLabel}"
 
-#: src/hooks/useCheckInController.tsx:217
+#: src/hooks/useCheckInController.tsx:225
 msgid "{0} <0>checked in</0>"
 msgstr "{0} <0>체크인됨</0>"
 
-#: src/hooks/useCheckInController.tsx:216
+#: src/hooks/useCheckInController.tsx:224
 msgid "{0} <0>checked in</0> · {seatLabel}"
 msgstr "{0} <0>체크인됨</0> · {seatLabel}"
 
-#: src/hooks/useCheckInController.tsx:249
+#: src/hooks/useCheckInController.tsx:257
 msgid "{0} <0>checked out</0> successfully"
 msgstr "{0}이(가) <0>체크아웃</0>되었습니다"
 
@@ -1000,9 +1000,9 @@ msgstr "몇 가지 간단한 단계만 거치면 판매를 시작할 수 있습�
 msgid "A focused reading column. Tickets appear wherever you place them in Sections."
 msgstr "읽기 좋은 단일 열 구성입니다. 티켓은 섹션에서 배치한 위치에 표시됩니다."
 
-#: src/components/forms/CheckInListForm/index.tsx:289
-msgid "A full-screen scanner where attendees check themselves in. Attendee lists and search are hidden."
-msgstr "참가자가 직접 체크인하는 전체 화면 스캐너입니다. 참가자 목록과 검색은 숨겨집니다."
+#: src/components/forms/CheckInListForm/index.tsx:290
+msgid "A full-screen scanner where attendees check themselves in. Attendee lists and search are hidden. Staff can press and hold the list name at the bottom of the kiosk to change its scanner or printer."
+msgstr "참가자가 직접 체크인하는 전체 화면 스캐너입니다. 참가자 목록과 검색은 숨겨집니다. 직원은 키오스크 하단의 목록 이름을 길게 눌러 스캐너나 프린터를 바꿀 수 있습니다."
 
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:238
 msgid "A gallery can have up to {MAX_GALLERY_PHOTOS} photos."
@@ -1910,8 +1910,8 @@ msgstr "일정: devconf.example/agenda"
 msgid "Aisles after seats"
 msgstr "좌석 뒤 통로"
 
-#: src/hooks/useBadgePrinter.ts:118
-#: src/hooks/useBadgePrinter.ts:121
+#: src/hooks/useBadgePrinter.ts:107
+#: src/hooks/useBadgePrinter.ts:110
 msgid "Alex"
 msgstr "Alex"
 
@@ -2922,7 +2922,7 @@ msgstr "참석자를 이동했습니다"
 msgid "Attendee names appear on the printout. Handle it accordingly."
 msgstr "인쇄물에 참석자 이름이 표시됩니다. 취급에 유의하세요."
 
-#: src/hooks/useCheckInController.tsx:319
+#: src/hooks/useCheckInController.tsx:327
 msgid "Attendee not found"
 msgstr "참가자를 찾을 수 없습니다"
 
@@ -2981,6 +2981,10 @@ msgstr "참가자"
 #: src/components/layouts/CheckIn/tabs/StatsTab.tsx:72
 msgid "attendees checked in"
 msgstr "명의 참가자 체크인됨"
+
+#: src/components/forms/CheckInListForm/index.tsx:297
+msgid "Attendees enter the email address and last name on their ticket. The kiosk only shows their first name and ticket type."
+msgstr "참가자가 티켓에 있는 이메일 주소와 성을 입력합니다. 키오스크에는 이름과 티켓 종류만 표시됩니다."
 
 #: src/components/routes/event/attendees.tsx:170
 msgid "Attendees Exported"
@@ -3122,6 +3126,8 @@ msgstr "Awesome Events Ltd."
 msgid "Awesome Organizer Ltd."
 msgstr "Awesome Organizer Ltd."
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:82
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:125
 #: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:52
 #: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:82
 #: src/components/layouts/SettingsLayout/index.tsx:60
@@ -3135,7 +3141,7 @@ msgstr "Awesome Organizer Ltd."
 msgid "Back"
 msgstr "뒤로"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:48
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:72
 #: src/components/routes/event/Badges/index.tsx:548
 #: src/components/routes/event/Badges/index.tsx:556
 msgid "Back of the badge"
@@ -3227,8 +3233,8 @@ msgstr "명찰 디자인이 저장되었습니다"
 msgid "Badge label for {0}"
 msgstr "{0} 명찰 라벨"
 
-#: src/components/forms/CheckInListForm/index.tsx:299
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:20
+#: src/components/forms/CheckInListForm/index.tsx:309
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:33
 #: src/components/layouts/CheckIn/index.tsx:226
 msgid "Badge printing"
 msgstr "명찰 인쇄"
@@ -3253,6 +3259,10 @@ msgstr "명찰을 인쇄됨으로 표시했습니다"
 #: src/components/routes/event/Badges/index.tsx:577
 msgid "Badges on a lanyard often flip around. Print both sides so names always face out."
 msgstr "목걸이 명찰은 자주 뒤집힙니다. 양면에 인쇄하면 이름이 항상 앞을 향합니다."
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:88
+msgid "Badges saved as PDF files instead? Chrome's last printer was Save as PDF. Repeat the first step and choose the badge printer."
+msgstr "명찰이 PDF 파일로 저장되나요? Chrome에서 마지막으로 사용한 프린터가 'PDF로 저장'이었습니다. 첫 단계를 다시 하고 명찰 프린터를 선택하세요."
 
 #: src/components/common/CapacityHelp/index.tsx:54
 #: src/ee/seating/components/lib/templates.ts:106
@@ -3721,6 +3731,10 @@ msgstr "재무 정보 열람 가능"
 msgid "Can't check in"
 msgstr "체크인할 수 없음"
 
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:295
+msgid "Can't find your QR code?"
+msgstr "QR 코드를 찾을 수 없나요?"
+
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:133
 msgid "Can't import"
 msgstr "가져올 수 없음"
@@ -3747,7 +3761,7 @@ msgstr "인증 앱이나 복구 코드를 사용할 수 없나요?"
 #: src/components/modals/CreateAffiliateModal/index.tsx:88
 #: src/components/modals/CreateAttendeeModal/index.tsx:335
 #: src/components/modals/CreateCapacityAssignmentModal/index.tsx:75
-#: src/components/modals/CreateCheckInListModal/index.tsx:106
+#: src/components/modals/CreateCheckInListModal/index.tsx:107
 #: src/components/modals/CreateEventModal/index.tsx:478
 #: src/components/modals/CreateOrganizerModal/index.tsx:66
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:89
@@ -3759,7 +3773,7 @@ msgstr "인증 앱이나 복구 코드를 사용할 수 없나요?"
 #: src/components/modals/DuplicateEventModal/index.tsx:309
 #: src/components/modals/EditAffiliateModal/index.tsx:104
 #: src/components/modals/EditCapacityAssignmentModal/index.tsx:70
-#: src/components/modals/EditCheckInListModal/index.tsx:106
+#: src/components/modals/EditCheckInListModal/index.tsx:108
 #: src/components/modals/EditOrganizerWebhookModal/index.tsx:82
 #: src/components/modals/EditProductCategoryModal/index.tsx:71
 #: src/components/modals/EditPromoCodeModal/index.tsx:85
@@ -4248,7 +4262,7 @@ msgstr "체크인 생성됨"
 msgid "Check-in Deleted"
 msgstr "체크인 삭제됨"
 
-#: src/hooks/useCheckInController.tsx:170
+#: src/hooks/useCheckInController.tsx:178
 msgid "Check-in for {0} was undone"
 msgstr "{0}의 체크인이 취소되었습니다"
 
@@ -4721,6 +4735,10 @@ msgstr "닫기"
 #: src/utilites/notifications.tsx:6
 msgid "Close"
 msgstr "닫기"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:31
+msgid "Close every Chrome window, and quit Chrome from the system tray if it's still running there."
+msgstr "Chrome 창을 모두 닫고, 시스템 트레이에서 Chrome이 아직 실행 중이면 종료하세요."
 
 #: src/components/layouts/AppLayout/Sidebar/index.tsx:117
 #: src/components/layouts/AppLayout/Topbar/index.tsx:38
@@ -5410,6 +5428,7 @@ msgstr "코드 복사"
 msgid "Copy Code"
 msgstr "코드 복사"
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:17
 #: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:25
 msgid "Copy command"
 msgstr "명령어 복사"
@@ -5738,7 +5757,7 @@ msgstr "좌석 배치도 만들기"
 msgid "Create a ticket"
 msgstr "티켓 만들기"
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:72
+#: src/components/modals/CreateCheckInListModal/index.tsx:73
 #: src/ee/box-office/components/modals/CreateBoxOfficeModal/index.tsx:79
 msgid "Create a Ticket"
 msgstr "티켓 생성"
@@ -5819,8 +5838,8 @@ msgstr "카테고리 생성"
 
 #: src/components/common/CheckInListList/index.tsx:60
 #: src/components/common/CheckInListTable/index.tsx:303
-#: src/components/modals/CreateCheckInListModal/index.tsx:91
-#: src/components/modals/CreateCheckInListModal/index.tsx:112
+#: src/components/modals/CreateCheckInListModal/index.tsx:92
+#: src/components/modals/CreateCheckInListModal/index.tsx:113
 #: src/components/routes/event/CheckInLists/index.tsx:76
 msgid "Create Check-In List"
 msgstr "체크인 목록 생성"
@@ -6906,8 +6925,8 @@ msgid "Donation"
 msgstr "기부"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:264
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:70
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:125
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:99
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:250
 #: src/components/modals/CheckInListSuccessModal/index.tsx:59
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:73
 #: src/components/modals/CreateWebhookModal/index.tsx:73
@@ -7183,6 +7202,10 @@ msgstr "각 계정은 이 이메일을 최대 한 번 받습니다."
 msgid "Each badge prints on its own page, for card and label printers."
 msgstr "명찰을 한 페이지에 하나씩 인쇄합니다. 카드 및 라벨 프린터용입니다."
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:46
+msgid "Each badge then takes two taps: Print badge, then Print. Safari adds margins of its own, so badges print a little smaller than from a computer."
+msgstr "이후 명찰마다 '명찰 인쇄', '프린트' 두 번만 탭하면 됩니다. Safari가 자체 여백을 추가하므로 명찰이 컴퓨터에서 인쇄할 때보다 조금 작게 인쇄됩니다."
+
 #: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:24
 msgid "Each code can be used once to sign in if you lose access to your authenticator app."
 msgstr "인증 앱에 접근할 수 없을 때 각 코드를 한 번씩 로그인에 사용할 수 있습니다."
@@ -7295,7 +7318,7 @@ msgstr "카테고리 수정"
 
 #: src/components/common/CheckInListList/index.tsx:147
 #: src/components/common/CheckInListTable/index.tsx:208
-#: src/components/modals/EditCheckInListModal/index.tsx:81
+#: src/components/modals/EditCheckInListModal/index.tsx:83
 msgid "Edit Check-In List"
 msgstr "체크인 목록 수정"
 
@@ -7477,6 +7500,7 @@ msgstr "이메일 및 예약 메시지"
 msgid "Email & Templates"
 msgstr "이메일 및 템플릿"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:97
 #: src/components/modals/CreateAttendeeModal/index.tsx:228
 #: src/components/modals/ManageAttendeeModal/index.tsx:232
 #: src/components/modals/ManageOrderModal/index.tsx:293
@@ -7854,6 +7878,10 @@ msgstr "클라이언트 시크릿을 입력하세요."
 #: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:74
 msgid "Enter the directory (tenant) ID. It looks like 00000000-0000-0000-0000-000000000000."
 msgstr "디렉터리(테넌트) ID를 입력하세요. 00000000-0000-0000-0000-000000000000 형식입니다."
+
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:90
+msgid "Enter the email address and last name on your ticket."
+msgstr "티켓에 있는 이메일 주소와 성을 입력하세요."
 
 #: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:73
 msgid "Enter the issuer URL, starting with https://."
@@ -8646,7 +8674,7 @@ msgstr "보고서 내보내기에 실패했습니다. 다시 시도해 주세요
 msgid "Failed to load box office"
 msgstr "매표소를 불러오지 못했습니다"
 
-#: src/components/modals/EditCheckInListModal/index.tsx:91
+#: src/components/modals/EditCheckInListModal/index.tsx:93
 msgid "Failed to load Check-In List"
 msgstr "체크인 목록을 불러오는 데 실패했습니다"
 
@@ -8988,6 +9016,14 @@ msgstr "좌석 {bestAvailableQuantity}개 찾기"
 msgid "Find 1 seat"
 msgstr "좌석 1개 찾기"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:123
+msgid "Find my ticket"
+msgstr "내 티켓 찾기"
+
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:89
+msgid "Find your ticket"
+msgstr "티켓 찾기"
+
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:143
 msgid "Finish or cancel the current sale first"
 msgstr "먼저 현재 판매를 완료하거나 취소하세요"
@@ -9167,12 +9203,12 @@ msgstr "플라이어"
 msgid "Fold and cutting guides"
 msgstr "접는 선과 재단선"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:56
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:80
 #: src/components/routes/event/Badges/index.tsx:570
 msgid "Fold-over"
 msgstr "접이식"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:49
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:73
 msgid "Fold-over prints the front and back side by side on one page, to fold in half. It works on any printer."
 msgstr "접이식은 앞면과 뒷면을 한 페이지에 나란히 인쇄한 뒤 반으로 접습니다. 어떤 프린터에서도 사용할 수 있습니다."
 
@@ -9224,9 +9260,9 @@ msgstr "예: #DevConf2027"
 msgid "For example: Ask me about volunteering"
 msgstr "예: 자원봉사에 대해 물어보세요"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:62
-msgid "For one-tap printing on a laptop, set the label printer as the default printer and open this page in Chrome started with the --kiosk-printing option."
-msgstr "노트북에서 한 번에 인쇄하려면 라벨 프린터를 기본 프린터로 설정하고 --kiosk-printing 옵션으로 실행한 Chrome에서 이 페이지를 여세요."
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:65
+msgid "For thermal label printers such as Brother QL and Zebra. Colours print as solid black so ribbons and names stay sharp."
+msgstr "Brother QL, Zebra 같은 감열식 라벨 프린터용입니다. 색상이 모두 검정으로 인쇄되어 리본과 이름이 선명하게 유지됩니다."
 
 #: src/components/common/ConfirmIdentity/index.tsx:109
 msgid "For your security, sign in again to confirm it's you."
@@ -9342,7 +9378,7 @@ msgstr "정문 리더기"
 msgid "Front left"
 msgstr "앞쪽 왼쪽"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:54
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:78
 msgid "Front only"
 msgstr "앞면만"
 
@@ -9952,11 +9988,11 @@ msgstr "{dateCount}개 날짜에서 좌석 {0}개 보류"
 msgid "Hold places for"
 msgstr "좌석 보류 시간"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:150
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:283
 msgid "Hold up the QR code from your ticket email and your badge will print."
 msgstr "티켓 이메일의 QR 코드를 비추면 명찰이 인쇄됩니다."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:151
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:284
 msgid "Hold up the QR code from your ticket email."
 msgstr "티켓 이메일의 QR 코드를 비춰 주세요."
 
@@ -10495,6 +10531,10 @@ msgstr "인보이스 번호 매기기"
 msgid "Invoice Settings"
 msgstr "인보이스 설정"
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:74
+msgid "iPad"
+msgstr "iPad"
+
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:175
 msgid "Issued"
 msgstr "발급일"
@@ -10712,7 +10752,7 @@ msgstr "레이블"
 msgid "Label — e.g. Morning session"
 msgstr "라벨 — 예: 오전 세션"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:33
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:49
 msgid "Label size on this device"
 msgstr "이 기기의 라벨 크기"
 
@@ -10801,6 +10841,7 @@ msgstr "최근 90일"
 msgid "Last active"
 msgstr "최근 활동"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:103
 #: src/components/modals/CreateAttendeeModal/index.tsx:221
 #: src/components/modals/ManageAttendeeModal/index.tsx:228
 #: src/components/modals/ManageOrderModal/index.tsx:286
@@ -10831,6 +10872,7 @@ msgstr "성"
 msgid "Last name (A–Z)"
 msgstr "성 (가나다순)"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:24
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:32
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:32
 msgid "Last name is required"
@@ -10949,6 +10991,10 @@ msgstr "왼쪽 윙"
 #: src/components/routes/event/Lineup/RunSheetPrint.tsx:138
 msgid "Length"
 msgstr "길이"
+
+#: src/components/forms/CheckInListForm/index.tsx:296
+msgid "Let attendees find their ticket without the QR code"
+msgstr "참가자가 QR 코드 없이 티켓을 찾을 수 있도록 허용"
 
 #: src/ee/seating/components/routes/event/Seating/SeatingRulesCard.tsx:46
 msgid "Let buyers change their seat after booking"
@@ -11322,6 +11368,10 @@ msgstr "접근할 수 없나요?"
 #: src/components/routes/settings/Security/index.tsx:200
 msgid "Lost your phone or switching apps? Turn it off, then on again to connect a new authenticator."
 msgstr "휴대폰을 잃어버렸거나 앱을 바꾸시나요? 껐다가 다시 켜서 새 인증 앱을 연결하세요."
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:72
+msgid "Mac"
+msgstr "Mac"
 
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:66
 msgid "Main auditorium"
@@ -11829,8 +11879,8 @@ msgstr "자리 늘리기"
 msgid "More seats"
 msgstr "좌석 늘리기"
 
-#: src/hooks/useBadgePrinter.ts:119
-#: src/hooks/useBadgePrinter.ts:122
+#: src/hooks/useBadgePrinter.ts:108
+#: src/hooks/useBadgePrinter.ts:111
 msgid "Morgan"
 msgstr "Morgan"
 
@@ -12001,7 +12051,7 @@ msgstr "이름을 대문자로 표시"
 msgid "Navigate to Attendee"
 msgstr "참가자로 이동"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:73
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:79
 msgid "Need a new badge? Please see the registration desk."
 msgstr "새 명찰이 필요하신가요? 등록 데스크로 와 주세요."
 
@@ -12155,7 +12205,7 @@ msgstr "다음 참가자"
 msgid "Next batch"
 msgstr "다음 묶음"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:125
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:250
 msgid "Next check-in"
 msgstr "다음 체크인"
 
@@ -13260,6 +13310,10 @@ msgstr "{month} {day}일"
 msgid "On a product priced at 50.00, this adds {exampleAmount}."
 msgstr "50.00 가격의 상품에 {exampleAmount}이(가) 추가됩니다."
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:91
+msgid "On computers your IT team manages, Chrome's SilentPrintingEnabled policy does the same without the command."
+msgstr "IT 팀이 관리하는 컴퓨터에서는 Chrome의 SilentPrintingEnabled 정책으로 명령 없이 같은 설정을 할 수 있습니다."
+
 #: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:14
 msgid "On large screens tickets stay beside your content as people scroll. Suits conferences and long lineups."
 msgstr "큰 화면에서는 스크롤하는 동안 티켓이 콘텐츠 옆에 계속 표시됩니다. 컨퍼런스와 긴 라인업에 적합합니다."
@@ -13569,6 +13623,10 @@ msgstr "설정 열기"
 #: src/components/layouts/AppLayout/Topbar/index.tsx:38
 msgid "Open sidebar"
 msgstr "사이드바 열기"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:34
+msgid "Open Terminal and run this command:"
+msgstr "터미널을 열고 다음 명령을 실행하세요:"
 
 #: src/components/routes/sso/Callback/SsoErrorState.tsx:64
 msgid "Open the invitation email we sent you to finish joining the team."
@@ -14804,7 +14862,7 @@ msgstr "새 탭에서 계속 진행해 주세요"
 msgid "Please create a product"
 msgstr "상품을 생성해 주세요"
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:60
+#: src/components/modals/CreateCheckInListModal/index.tsx:61
 #: src/ee/box-office/components/modals/CreateBoxOfficeModal/index.tsx:67
 msgid "Please create a ticket"
 msgstr "티켓을 생성해 주세요"
@@ -14813,6 +14871,7 @@ msgstr "티켓을 생성해 주세요"
 msgid "Please don't leave a single empty seat: {0}"
 msgstr "좌석 하나만 비워두지 마세요: {0}"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:23
 #: src/components/modals/JoinWaitlistModal/index.tsx:57
 msgid "Please enter a valid email address"
 msgstr "유효한 이메일 주소를 입력해 주세요"
@@ -14858,7 +14917,7 @@ msgstr "결제 절차를 다시 시작해 주세요."
 msgid "Please return to the event page to start over."
 msgstr "처음부터 다시 시작하려면 이벤트 페이지로 돌아가세요."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:74
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:80
 msgid "Please see the registration desk and we'll sort it out."
 msgstr "등록 데스크로 와 주시면 도와드리겠습니다."
 
@@ -14970,6 +15029,10 @@ msgstr "취재석"
 msgid "Press where the first seat goes and drag. Drag sideways for seats, down for more rows."
 msgstr "첫 번째 좌석이 놓일 위치를 누르고 드래그하세요. 좌석을 추가하려면 옆으로, 줄을 추가하려면 아래로 드래그하세요."
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:35
+msgid "Press Windows+R, paste this command and press Enter:"
+msgstr "Windows+R을 누르고 다음 명령을 붙여 넣은 뒤 Enter를 누르세요:"
+
 #: src/components/routes/event/CapacityAssignments/index.tsx:33
 msgid "Prevent overselling by sharing inventory across multiple ticket types."
 msgstr "여러 티켓 유형 간에 재고를 공유하여 초과 판매를 방지하세요."
@@ -15069,7 +15132,7 @@ msgstr "가격 책정"
 msgid "Print"
 msgstr "인쇄"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:25
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:41
 msgid "Print a badge when someone checks in"
 msgstr "체크인 시 명찰 인쇄"
 
@@ -15077,13 +15140,25 @@ msgstr "체크인 시 명찰 인쇄"
 msgid "Print a sample badge"
 msgstr "샘플 명찰 인쇄"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:67
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:96
 msgid "Print a test badge"
 msgstr "테스트 명찰 인쇄"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:28
+msgid "Print a test badge from this page. In Chrome's print window, choose the badge printer and check the paper size matches your labels, then print. Chrome reuses these choices for every badge."
+msgstr "이 페이지에서 테스트 명찰을 인쇄하세요. Chrome 인쇄 창에서 명찰 프린터를 선택하고 용지 크기가 라벨과 맞는지 확인한 뒤 인쇄하세요. Chrome은 이 선택을 모든 명찰에 다시 사용합니다."
+
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:238
+msgid "Print again"
+msgstr "다시 인쇄"
 
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:722
 msgid "Print All Tickets"
 msgstr "모든 티켓 인쇄"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:41
+msgid "Print another test badge. It should print straight away, without a print window."
+msgstr "테스트 명찰을 한 번 더 인쇄하세요. 인쇄 창 없이 바로 인쇄되어야 합니다."
 
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:326
 #: src/hooks/useAttendeeActions.tsx:119
@@ -15097,13 +15172,17 @@ msgstr "명찰 인쇄"
 msgid "Print badges"
 msgstr "명찰 인쇄"
 
-#: src/components/forms/CheckInListForm/index.tsx:306
+#: src/components/forms/CheckInListForm/index.tsx:316
 msgid "Print badges from this list"
 msgstr "이 목록에서 명찰 인쇄"
 
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:134
 msgid "Print map"
 msgstr "배치도 인쇄"
+
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:225
+msgid "Print my badge"
+msgstr "내 명찰 인쇄"
 
 #: src/components/routes/event/TicketDesigner/index.tsx:122
 msgid "Print Preview"
@@ -15126,6 +15205,10 @@ msgstr "티켓 인쇄"
 msgid "Print to PDF"
 msgstr "PDF로 인쇄"
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:85
+msgid "Print window still showing? Chrome was already running when the command ran. Quit it and run the command again."
+msgstr "인쇄 창이 계속 보이나요? 명령을 실행할 때 Chrome이 이미 실행 중이었습니다. Chrome을 종료하고 명령을 다시 실행하세요."
+
 #: src/components/routes/event/Lineup/index.tsx:154
 msgid "Printable run sheet"
 msgstr "인쇄용 진행표"
@@ -15143,15 +15226,11 @@ msgstr "{0} 인쇄"
 msgid "Printed ×{count}"
 msgstr "인쇄됨 ×{count}"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:167
-msgid "Printer"
-msgstr "프린터"
-
 #: src/components/routes/event/Badges/index.tsx:600
 msgid "Printing at the door"
 msgstr "현장 인쇄"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:47
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:52
 msgid "Printing your badge…"
 msgstr "명찰을 인쇄하는 중…"
 
@@ -15532,6 +15611,10 @@ msgstr "빠른 팁"
 #: src/utilites/badges.ts:63
 msgid "Quiet and typographic, lots of white space"
 msgstr "타이포그래피 중심의 차분한 디자인, 넉넉한 여백"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:30
+msgid "Quit Chrome completely with ⌘Q."
+msgstr "⌘Q로 Chrome을 완전히 종료하세요."
 
 #: src/components/forms/QuestionForm/index.tsx:118
 msgid "Radio Option"
@@ -16685,7 +16768,7 @@ msgstr "판매:"
 msgid "Same as event"
 msgstr "이벤트와 동일"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:39
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:55
 msgid "Same as the badge design ({designSize})"
 msgstr "명찰 디자인과 동일 ({designSize})"
 
@@ -16767,7 +16850,7 @@ msgstr "변경 사항 저장"
 #: src/components/common/DesignerShell/index.tsx:172
 #: src/components/modals/EditAffiliateModal/index.tsx:109
 #: src/components/modals/EditCapacityAssignmentModal/index.tsx:75
-#: src/components/modals/EditCheckInListModal/index.tsx:111
+#: src/components/modals/EditCheckInListModal/index.tsx:113
 #: src/components/modals/EditOrganizerWebhookModal/index.tsx:87
 #: src/components/modals/EditProductCategoryModal/index.tsx:73
 #: src/components/modals/EditPromoCodeModal/index.tsx:87
@@ -16869,7 +16952,7 @@ msgstr "저장된 위치"
 msgid "Saved locations"
 msgstr "저장된 위치"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:26
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:42
 msgid "Saved on this device only"
 msgstr "이 기기에만 저장됩니다"
 
@@ -16908,7 +16991,7 @@ msgstr "티켓을 스캔하여 참가자를 체크인하세요"
 msgid "Scan tickets at the door with a phone, tablet, or USB scanner."
 msgstr "현장에서 휴대폰, 태블릿 또는 USB 스캐너로 티켓을 스캔하세요."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:147
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:280
 msgid "Scan your ticket to check in"
 msgstr "티켓을 스캔해 체크인하세요"
 
@@ -17161,7 +17244,7 @@ msgid "Seasonal"
 msgstr "시즌"
 
 #: src/components/common/AttendeeTicket/index.tsx:133
-#: src/components/common/NameBadge/index.tsx:82
+#: src/components/common/NameBadge/index.tsx:86
 #: src/components/modals/ManageAttendeeModal/index.tsx:170
 #: src/ee/seating/components/ManualSeatField/index.tsx:42
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:339
@@ -17835,6 +17918,10 @@ msgstr "인보이스 번호의 시작 번호를 설정하세요. 인보이스가
 msgid "Set to unlimited (remove limit)"
 msgstr "무제한으로 설정 (제한 제거)"
 
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:318
+msgid "Set up"
+msgstr "설정"
+
 #: src/components/routes/event/OccurrencesTab/index.tsx:639
 msgid "Set up a recurring schedule to automatically create dates, or add them one at a time."
 msgstr "반복 일정을 설정하여 날짜를 자동으로 생성하거나, 하나씩 추가하세요."
@@ -17860,6 +17947,14 @@ msgstr "SSO 설정"
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:92
 msgid "Set up the tickets you'll sell and their prices"
 msgstr "판매할 티켓과 가격을 설정하세요"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:66
+msgid "Set up this device"
+msgstr "이 기기 설정"
+
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:33
+msgid "Set up this kiosk"
+msgstr "이 키오스크 설정"
 
 #: src/components/routes/settings/Security/EnableTwoFactorModal.tsx:15
 msgid "Set up two-factor authentication"
@@ -18600,6 +18695,10 @@ msgstr "문제가 발생했습니다! 다시 시도해 주세요"
 msgid "Something went wrong."
 msgstr "문제가 발생했습니다."
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:57
+msgid "Something went wrong. Please see the registration desk."
+msgstr "문제가 발생했습니다. 등록 데스크로 와 주세요."
+
 #: src/components/modals/JoinWaitlistModal/index.tsx:141
 msgid "Something went wrong. Please try again later."
 msgstr "문제가 발생했습니다. 나중에 다시 시도해 주세요."
@@ -18739,7 +18838,7 @@ msgstr "스태프가 판매에 수동 할인을 적용할 수 있습니다"
 msgid "Staff can change the price of an item during a sale"
 msgstr "스태프가 판매 중 항목의 가격을 변경할 수 있습니다"
 
-#: src/components/forms/CheckInListForm/index.tsx:307
+#: src/components/forms/CheckInListForm/index.tsx:317
 msgid "Staff can print or reprint badges from this list, or print them automatically on check-in"
 msgstr "스태프가 이 목록에서 명찰을 인쇄하거나 재인쇄할 수 있고, 체크인 시 자동으로 인쇄할 수도 있습니다"
 
@@ -19237,7 +19336,7 @@ msgstr "참가자가 성공적으로 수정되었습니다"
 msgid "Successfully updated Capacity Assignment"
 msgstr "정원 할당이 성공적으로 수정되었습니다"
 
-#: src/components/modals/EditCheckInListModal/index.tsx:55
+#: src/components/modals/EditCheckInListModal/index.tsx:56
 msgid "Successfully updated Check-In List"
 msgstr "체크인 목록이 성공적으로 수정되었습니다"
 
@@ -19442,6 +19541,14 @@ msgstr "좌석을 탭하여 추가하거나 먼저 수량을 설정하세요"
 msgid "Tap dates like a calendar."
 msgstr "달력처럼 날짜를 탭하세요."
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:45
+msgid "Tap Print a test badge, choose the badge printer and paper size, then tap Print. The iPad remembers both for the next badge."
+msgstr "'테스트 명찰 인쇄'를 탭하고 명찰 프린터와 용지 크기를 선택한 뒤 '프린트'를 탭하세요. iPad가 다음 명찰을 위해 둘 다 기억합니다."
+
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:53
+msgid "Tap Print my badge, then Print."
+msgstr "'내 명찰 인쇄'를 탭한 다음 '프린트'를 탭하세요."
+
 #: src/components/layouts/CheckIn/tabs/ScanTab.tsx:59
 msgid "Tap this screen to resume scanning"
 msgstr "스캔을 재개하려면 화면을 탭하세요"
@@ -19615,7 +19722,7 @@ msgstr "기간"
 msgid "Terms of Service"
 msgstr "서비스 약관"
 
-#: src/hooks/useBadgePrinter.ts:123
+#: src/hooks/useBadgePrinter.ts:112
 msgid "Test badge"
 msgstr "테스트 명찰"
 
@@ -19626,7 +19733,7 @@ msgstr "테스트 이메일을 받은편지함으로 보냈습니다"
 
 #: src/components/routes/event/Badges/BadgePrint.tsx:155
 #: src/components/routes/event/Badges/index.tsx:244
-#: src/hooks/useBadgePrinter.ts:125
+#: src/hooks/useBadgePrinter.ts:114
 msgid "Test print"
 msgstr "테스트 인쇄"
 
@@ -19892,6 +19999,14 @@ msgstr "재정의는 주문 감사 로그에 기록됩니다."
 #: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:169
 msgid "The owner can connect {providerName} in their security settings to sign in with it day to day."
 msgstr "소유자는 보안 설정에서 {providerName}을(를) 연결하면 평소에 이를 사용해 로그인할 수 있습니다."
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:39
+msgid "The page opens full screen without Chrome's controls. Press ⌘Q to close it."
+msgstr "페이지가 Chrome 컨트롤 없이 전체 화면으로 열립니다. 닫으려면 ⌘Q를 누르세요."
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:40
+msgid "The page opens full screen without Chrome's controls. Press Alt+F4 to close it."
+msgstr "페이지가 Chrome 컨트롤 없이 전체 화면으로 열립니다. 닫으려면 Alt+F4를 누르세요."
 
 #: src/components/common/ErrorDisplay/index.tsx:18
 msgid "The page you are looking for does not exist"
@@ -20473,7 +20588,7 @@ msgstr "이 주문은 취소되었습니다."
 msgid "This order has expired. Please start again."
 msgstr "이 주문은 만료되었습니다. 다시 시작해 주세요."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:58
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:64
 msgid "This order hasn't been paid yet"
 msgstr "이 주문은 아직 결제되지 않았습니다"
 
@@ -20520,6 +20635,10 @@ msgstr "이 결제 링크는 만료되었습니다"
 #: src/components/common/EmailTemplateEditor/EmailTemplatePreviewPane.tsx:70
 msgid "This preview shows how your email will look with sample data. Actual emails will use real values."
 msgstr "이 미리보기는 샘플 데이터로 이메일이 어떻게 보이는지 보여줍니다. 실제 이메일에는 실제 값이 사용됩니다."
+
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:64
+msgid "This printer only prints black"
+msgstr "이 프린터는 검정만 인쇄"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:117
 msgid "This product cannot be deleted because it is associated with an order. You can hide it instead."
@@ -20590,7 +20709,7 @@ msgstr "이 공간은 휠체어 이용자와 접근성이 필요한 손님을 �
 msgid "This ticket is no longer valid"
 msgstr "이 티켓은 더 이상 유효하지 않습니다"
 
-#: src/hooks/useCheckInController.tsx:295
+#: src/hooks/useCheckInController.tsx:303
 msgid "This ticket was just scanned. Please wait before scanning again."
 msgstr "이 티켓은 방금 스캔되었습니다. 다시 스캔하기 전에 잠시 기다려 주세요."
 
@@ -20961,6 +21080,10 @@ msgstr "로그인에 사용하는 이메일을 변경하려면 본인 확인이 
 msgid "To increase your limits, contact us at"
 msgstr "한도를 늘리려면 다음으로 문의해 주세요:"
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:47
+msgid "To keep attendees on this page, turn on Settings › Accessibility › Guided Access, come back here and triple-click the top button."
+msgstr "참가자가 이 페이지에 머물도록 하려면 설정 › 손쉬운 사용 › 사용법 유도를 켜고 이 페이지로 돌아와 상단 버튼을 세 번 누르세요."
+
 #: src/hooks/useSortableAccessibility.ts:42
 msgid "To move this item, press space or enter. Use the arrow keys to change its position, then press space or enter again to drop it, or escape to cancel."
 msgstr "이 항목을 이동하려면 Space 또는 Enter 키를 누르세요. 화살표 키로 위치를 변경한 다음 Space 또는 Enter 키를 다시 눌러 놓거나, Esc 키를 눌러 취소하세요."
@@ -20990,6 +21113,10 @@ msgstr "내일"
 #: src/utilites/ssoErrors.ts:13
 msgid "Too many attempts. Please wait a minute and try again."
 msgstr "시도 횟수가 너무 많습니다. 1분 후에 다시 시도해 주세요."
+
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:56
+msgid "Too many attempts. Please wait a minute or see the registration desk."
+msgstr "시도 횟수가 너무 많습니다. 잠시 기다리거나 등록 데스크로 와 주세요."
 
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:116
 msgid "Too many rows in one import"
@@ -21308,7 +21435,7 @@ msgstr "2단계 인증이 초기화되었습니다"
 msgid "Two-factor on"
 msgstr "2단계 인증 켜짐"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:55
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:79
 #: src/components/routes/event/Badges/index.tsx:569
 msgid "Two-sided printer"
 msgstr "양면 프린터"
@@ -21374,12 +21501,12 @@ msgstr "리더기를 변경할 수 없습니다"
 msgid "Unable to check in"
 msgstr "체크인할 수 없습니다"
 
-#: src/hooks/useCheckInController.tsx:235
+#: src/hooks/useCheckInController.tsx:243
 msgid "Unable to check in attendee"
 msgstr "참가자를 체크인할 수 없습니다"
 
-#: src/hooks/useCheckInController.tsx:262
-#: src/hooks/useCheckInController.tsx:264
+#: src/hooks/useCheckInController.tsx:270
+#: src/hooks/useCheckInController.tsx:272
 msgid "Unable to check out attendee"
 msgstr "참가자를 체크아웃할 수 없습니다"
 
@@ -21408,7 +21535,7 @@ msgstr "위젯을 삭제할 수 없습니다"
 msgid "Unable to duplicate product. Please check the your details"
 msgstr "상품을 복제할 수 없습니다. 입력 정보를 확인해 주세요"
 
-#: src/hooks/useCheckInController.tsx:310
+#: src/hooks/useCheckInController.tsx:318
 msgid "Unable to fetch attendee"
 msgstr "참가자 정보를 가져올 수 없습니다"
 
@@ -21428,7 +21555,7 @@ msgstr "참가자 정보를 불러올 수 없습니다."
 msgid "Unable to load products for this date. Please try again."
 msgstr "이 날짜의 상품을 불러올 수 없습니다. 다시 시도해 주세요."
 
-#: src/hooks/useBadgePrinter.ts:100
+#: src/hooks/useBadgePrinter.ts:138
 msgid "Unable to load this badge"
 msgstr "이 명찰을 불러올 수 없습니다"
 
@@ -21466,7 +21593,7 @@ msgstr "판매를 시작할 수 없습니다. 다시 시도해 주세요."
 msgid "Unable to switch date"
 msgstr "날짜를 전환할 수 없습니다"
 
-#: src/hooks/useCheckInController.tsx:175
+#: src/hooks/useCheckInController.tsx:183
 msgid "Unable to undo check-in"
 msgstr "체크인을 취소할 수 없습니다"
 
@@ -21504,7 +21631,7 @@ msgstr "\"Token configuration\"에서 선택적 클레임 email과 xms_edov를 I
 
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:299
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:300
-#: src/hooks/useCheckInController.tsx:223
+#: src/hooks/useCheckInController.tsx:231
 msgid "Undo"
 msgstr "실행 취소"
 
@@ -21854,7 +21981,7 @@ msgstr "<0>Liquid 템플릿</0>을 사용해 이메일을 개인화하세요"
 msgid "Use a different account"
 msgstr "다른 계정 사용"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:34
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:50
 msgid "Use a different size here if this printer takes labels rather than badge inserts"
 msgstr "이 프린터가 명찰 용지 대신 라벨을 사용한다면 여기서 다른 크기를 선택하세요"
 
@@ -21885,7 +22012,7 @@ msgstr "대신 복구 코드 사용"
 msgid "Use a separate organizer for each brand or venue you sell tickets under."
 msgstr "티켓을 판매하는 브랜드나 장소마다 별도의 주최자를 사용하세요."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:176
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:327
 msgid "Use a USB scanner"
 msgstr "USB 스캐너 사용"
 
@@ -21906,7 +22033,7 @@ msgstr "모든 참가자에게 주문 정보를 사용합니다. 참가자 이�
 msgid "Use the buyer's details for all attendees"
 msgstr "모든 참가자에게 구매자 정보 사용"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:177
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:328
 msgid "Use the camera"
 msgstr "카메라 사용"
 
@@ -21918,7 +22045,7 @@ msgstr "이 주소 사용"
 msgid "Use this if someone else, such as your finance team, is paying for your order."
 msgstr "재무팀 등 다른 사람이 주문을 결제하는 경우 사용하세요."
 
-#: src/components/forms/CheckInListForm/index.tsx:288
+#: src/components/forms/CheckInListForm/index.tsx:289
 msgid "Use this list as a self check-in kiosk"
 msgstr "이 목록을 셀프 체크인 키오스크로 사용"
 
@@ -22478,7 +22605,7 @@ msgstr "결제를 처리할 수 없습니다. 다시 시도하시거나 지원�
 msgid "We couldn't add the questions. Please try again."
 msgstr "질문을 추가하지 못했습니다. 다시 시도해 주세요."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:59
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:65
 msgid "We couldn't check you in"
 msgstr "체크인하지 못했습니다"
 
@@ -22503,6 +22630,10 @@ msgstr "카테고리를 삭제할 수 없습니다. 다시 시도해 주세요."
 msgid "We couldn't disconnect this Stripe account. Please try again."
 msgstr "이 Stripe 계정의 연결을 해제하지 못했습니다. 다시 시도해 주세요."
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:109
+msgid "We couldn't find a ticket with those details. Check the spelling, or see the registration desk."
+msgstr "입력한 정보와 일치하는 티켓을 찾을 수 없습니다. 철자를 확인하거나 등록 데스크로 와 주세요."
+
 #: src/components/routes/my-tickets/index.tsx:239
 msgid "We couldn't find any orders associated with this email address."
 msgstr "이 이메일 주소와 연결된 주문을 찾을 수 없습니다."
@@ -22523,8 +22654,8 @@ msgstr "지금은 좌석을 찾을 수 없습니다. 다시 시도해 주세요.
 msgid "We couldn't find that many seats together. Try fewer seats or pick them on the map."
 msgstr "그만큼 많은 좌석을 함께 찾을 수 없습니다. 좌석 수를 줄이거나 배치도에서 직접 선택해 보세요."
 
-#: src/hooks/useCheckInController.tsx:313
-#: src/hooks/useCheckInController.tsx:322
+#: src/hooks/useCheckInController.tsx:321
+#: src/hooks/useCheckInController.tsx:330
 msgid "We couldn't find that ticket"
 msgstr "티켓을 찾을 수 없습니다"
 
@@ -22577,7 +22708,7 @@ msgstr "결제 정보를 불러오지 못했습니다. 페이지를 새로고침
 msgid "We couldn't mark these badges as printed. Please try again."
 msgstr "명찰을 인쇄됨으로 표시하지 못했습니다. 다시 시도해 주세요."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:49
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:55
 msgid "We couldn't print your badge. Please see the registration desk."
 msgstr "명찰을 인쇄하지 못했습니다. 등록 데스크로 와 주세요."
 
@@ -22800,7 +22931,7 @@ msgstr "{0}에 오신 것을 환영합니다, {1}님 👋"
 msgid "Welcome to {0}, here's a listing of all your events"
 msgstr "{0}에 오신 것을 환영합니다. 모든 이벤트 목록입니다"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:43
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:48
 msgid "Welcome, {0}!"
 msgstr "환영합니다, {0}님!"
 
@@ -23037,6 +23168,10 @@ msgstr "이 매표소에서 판매할 수 있는 상품은 무엇인가요?"
 msgid "Which ticket for {0}?"
 msgstr "{0}에 어떤 티켓을 적용할까요?"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:65
+msgid "Which ticket is yours?"
+msgstr "어느 티켓이 본인의 것인가요?"
+
 #: src/components/forms/CheckInListForm/index.tsx:178
 msgid "Which tickets should be associated with this check-in list?"
 msgstr "어떤 티켓이 이 체크인 목록과 연결되어야 하나요?"
@@ -23113,6 +23248,10 @@ msgstr "너비"
 #: src/components/routes/event/Badges/index.tsx:355
 msgid "Width (mm)"
 msgstr "너비 (mm)"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:73
+msgid "Windows"
+msgstr "Windows"
 
 #: src/components/common/WidgetEditor/installGuides.ts:73
 msgid "Wix shows embedded code inside a fixed-size box. Set Checkout opens in to New tab for the best experience."
@@ -23236,8 +23375,8 @@ msgstr "<0>{0}</0>({1})님으로 대리 로그인 중입니다"
 msgid "You are issuing a partial refund. The customer will be refunded {0} {1}."
 msgstr "부분 환불을 진행하고 있습니다. 고객에게 {0} {1}이(가) 환불됩니다."
 
-#: src/hooks/useCheckInController.tsx:234
-#: src/hooks/useCheckInController.tsx:257
+#: src/hooks/useCheckInController.tsx:242
+#: src/hooks/useCheckInController.tsx:265
 msgid "You are offline"
 msgstr "오프라인 상태입니다"
 
@@ -23305,8 +23444,8 @@ msgstr "계정의 마지막 활성 주최자는 보관할 수 없습니다."
 msgid "You cannot change the product type as there are attendees associated with this product."
 msgstr "이 상품에 연결된 참가자가 있어 상품 유형을 변경할 수 없습니다."
 
-#: src/hooks/useCheckInController.tsx:280
-#: src/hooks/useCheckInController.tsx:360
+#: src/hooks/useCheckInController.tsx:288
+#: src/hooks/useCheckInController.tsx:368
 msgid "You cannot check in attendees with unpaid orders. This setting can be changed in the event settings."
 msgstr "미결제 주문의 참가자는 체크인할 수 없습니다. 이 설정은 이벤트 설정에서 변경할 수 있습니다."
 
@@ -23451,7 +23590,7 @@ msgstr "더 이상 이러한 이메일을 받지 않습니다. 주문 및 계정
 msgid "You'll be signed out and will need to sign in again with {providerName}."
 msgstr "로그아웃되며, {providerName}(으)로 다시 로그인해야 합니다."
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:64
+#: src/components/modals/CreateCheckInListModal/index.tsx:65
 msgid "You'll need a ticket before you can create a check-in list."
 msgstr "체크인 목록을 생성하려면 먼저 티켓이 필요합니다."
 
@@ -23483,7 +23622,7 @@ msgstr "다음 화면에서 결제 방법과 금액을 확인할 수 있습니�
 msgid "You'll set the dates and schedule after the event is created."
 msgstr "이벤트를 만든 후 날짜와 일정을 설정합니다."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:57
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:63
 msgid "You're already checked in, {0}"
 msgstr "{0}님은 이미 체크인되었습니다"
 
@@ -23491,7 +23630,7 @@ msgstr "{0}님은 이미 체크인되었습니다"
 msgid "You're changing session times"
 msgstr "세션 시간을 변경하고 있습니다"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:44
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:49
 msgid "You're checked in. Enjoy the event."
 msgstr "체크인되었습니다. 즐거운 시간 보내세요."
 
@@ -23611,7 +23750,7 @@ msgstr "참가자가 성공적으로 내보내기되었습니다."
 msgid "Your attendees will appear here once they have registered for your event. You can also manually add attendees."
 msgstr "참가자가 이벤트에 등록하면 여기에 표시됩니다. 참가자를 수동으로 추가할 수도 있습니다."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:48
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:54
 msgid "Your badge is ready. Collect it from the printer."
 msgstr "명찰이 준비되었습니다. 프린터에서 가져가세요."
 
@@ -23860,7 +23999,7 @@ msgstr "복구 코드와 신뢰하는 기기가 제거됩니다."
 msgid "Your refund is processing."
 msgstr "환불이 처리 중입니다."
 
-#: src/hooks/useCheckInController.tsx:90
+#: src/hooks/useCheckInController.tsx:92
 msgid "Your saved date filter is no longer available — showing all dates."
 msgstr "저장된 날짜 필터를 더 이상 사용할 수 없어 모든 날짜를 표시합니다."
 

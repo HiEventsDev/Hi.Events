@@ -7,8 +7,11 @@ import {GET_CHECK_IN_LIST_ATTENDEE_DETAIL_PUBLIC_QUERY_KEY} from "../queries/use
 import {showError} from "../utilites/notifications.tsx";
 import {isSsr} from "../utilites/helpers.ts";
 import {BadgeBackPrinting, getDesignBackPrinting} from "../utilites/badges.ts";
+import {printsOnlyFromATap, printWithoutPageAddress} from "../utilites/badgePrinting.ts";
 
 export const GET_CHECK_IN_BADGE_QUERY_KEY = 'getCheckInListAttendeeBadgePublic';
+
+const TEST_BADGE_KEY = 'test';
 
 export type BadgeLabelSize = BadgeSize | 'DESIGN';
 
@@ -16,6 +19,7 @@ export interface BadgePrinterSettings {
     autoPrint: boolean;
     labelSize: BadgeLabelSize;
     backPrinting: BadgeBackPrinting | null;
+    blackInkOnly: boolean;
 }
 
 export interface BadgePrintJob {
@@ -24,7 +28,11 @@ export interface BadgePrintJob {
     isTest: boolean;
 }
 
-const DEFAULT_SETTINGS: BadgePrinterSettings = {autoPrint: false, labelSize: 'DESIGN', backPrinting: null};
+interface PreparedBadge extends BadgePrintJob {
+    key: string;
+}
+
+const DEFAULT_SETTINGS: BadgePrinterSettings = {autoPrint: false, labelSize: 'DESIGN', backPrinting: null, blackInkOnly: false};
 
 const readSettings = (key: string): BadgePrinterSettings => {
     if (isSsr()) {
@@ -43,7 +51,10 @@ export const useBadgePrinter = (checkInListShortId: string | undefined, checkInL
     const storageKey = `badgePrinter:${checkInListShortId}`;
     const isEnabled = !!checkInList?.badge_printing_enabled && !!checkInList?.badge_design;
     const [settings, setSettings] = useState<BadgePrinterSettings>(() => readSettings(storageKey));
+    const [printsFromATap, setPrintsFromATap] = useState(false);
     const [queue, setQueue] = useState<BadgePrintJob[]>([]);
+    const [prepared, setPrepared] = useState<PreparedBadge | null>(null);
+    const [renderedPreparedId, setRenderedPreparedId] = useState<number | null>(null);
     const [loadingPublicIds, setLoadingPublicIds] = useState<string[]>([]);
     const [failedPublicIds, setFailedPublicIds] = useState<string[]>([]);
     const nextJobIdRef = useRef(1);
@@ -56,6 +67,10 @@ export const useBadgePrinter = (checkInListShortId: string | undefined, checkInL
     useEffect(() => {
         setSettings(readSettings(storageKey));
     }, [storageKey]);
+
+    useEffect(() => {
+        setPrintsFromATap(printsOnlyFromATap());
+    }, []);
 
     const updateSettings = useCallback((patch: Partial<BadgePrinterSettings>) => {
         setSettings((current) => {
@@ -76,39 +91,13 @@ export const useBadgePrinter = (checkInListShortId: string | undefined, checkInL
         }),
     });
 
-    const enqueue = useCallback((badge: Badge, isTest: boolean) => {
-        const id = nextJobIdRef.current++;
-        setQueue((current) => [...current, {badge, id, isTest}]);
-    }, []);
+    const nextJobId = () => nextJobIdRef.current++;
 
-    const printBadge = useCallback(async (attendeePublicId: string) => {
-        if (!isEnabled || !checkInListShortId) {
-            return;
-        }
-        setLoadingPublicIds((current) => [...current, attendeePublicId]);
-        setFailedPublicIds((current) => current.filter((id) => id !== attendeePublicId));
-        try {
-            const {data} = await queryClient.fetchQuery({
-                queryKey: [GET_CHECK_IN_BADGE_QUERY_KEY, checkInListShortId, attendeePublicId],
-                queryFn: () => publicCheckInClient.getAttendeeBadge(checkInListShortId, attendeePublicId),
-                staleTime: 0,
-            });
-            enqueue(data, false);
-        } catch {
-            setFailedPublicIds((current) => [...current, attendeePublicId]);
-            if (!isKiosk) {
-                showError(t`Unable to load this badge`);
-            }
-        } finally {
-            setLoadingPublicIds((current) => current.filter((id) => id !== attendeePublicId));
-        }
-    }, [isEnabled, isKiosk, checkInListShortId, queryClient, enqueue]);
-
-    const printTestBadge = useCallback(() => {
+    const buildTestBadge = useCallback((): Badge | null => {
         if (!checkInList?.badge_design) {
-            return;
+            return null;
         }
-        enqueue({
+        return {
             attendee_id: 0,
             attendee_public_id: 'A-TEST0001',
             order_id: 0,
@@ -127,8 +116,92 @@ export const useBadgePrinter = (checkInListShortId: string | undefined, checkInL
             badge_printed_at: null,
             badge_print_count: 0,
             print_status: 'NOT_PRINTED',
-        }, true);
-    }, [checkInList?.badge_design, enqueue]);
+        };
+    }, [checkInList?.badge_design]);
+
+    const fetchBadge = useCallback(async (attendeePublicId: string): Promise<Badge | null> => {
+        if (!isEnabled || !checkInListShortId) {
+            return null;
+        }
+        setLoadingPublicIds((current) => [...current, attendeePublicId]);
+        setFailedPublicIds((current) => current.filter((id) => id !== attendeePublicId));
+        try {
+            const {data} = await queryClient.fetchQuery({
+                queryKey: [GET_CHECK_IN_BADGE_QUERY_KEY, checkInListShortId, attendeePublicId],
+                queryFn: () => publicCheckInClient.getAttendeeBadge(checkInListShortId, attendeePublicId),
+                staleTime: 0,
+            });
+            return data;
+        } catch {
+            setFailedPublicIds((current) => [...current, attendeePublicId]);
+            if (!isKiosk) {
+                showError(t`Unable to load this badge`);
+            }
+            return null;
+        } finally {
+            setLoadingPublicIds((current) => current.filter((id) => id !== attendeePublicId));
+        }
+    }, [isEnabled, isKiosk, checkInListShortId, queryClient]);
+
+    const isPrepared = (key: string) => prepared?.key === key && renderedPreparedId === prepared.id;
+
+    const printPrepared = () => {
+        if (!prepared) {
+            return;
+        }
+        printWithoutPageAddress();
+        if (!prepared.isTest) {
+            markPrintedMutation.mutate(prepared.badge.attendee_public_id);
+        }
+    };
+
+    const prepareBadge = useCallback(async (attendeePublicId: string) => {
+        if (!printsFromATap) {
+            return;
+        }
+        const badge = await fetchBadge(attendeePublicId);
+        if (badge) {
+            setPrepared({key: attendeePublicId, badge, id: nextJobId(), isTest: false});
+        }
+    }, [printsFromATap, fetchBadge]);
+
+    const prepareTestBadge = useCallback(() => {
+        const badge = buildTestBadge();
+        if (printsFromATap && badge) {
+            setPrepared({key: TEST_BADGE_KEY, badge, id: nextJobId(), isTest: true});
+        }
+    }, [printsFromATap, buildTestBadge]);
+
+    const printBadge = (attendeePublicId: string) => {
+        if (!printsFromATap) {
+            fetchBadge(attendeePublicId).then((badge) => {
+                if (badge) {
+                    setQueue((current) => [...current, {badge, id: nextJobId(), isTest: false}]);
+                }
+            });
+            return;
+        }
+        if (isPrepared(attendeePublicId)) {
+            printPrepared();
+            return;
+        }
+        prepareBadge(attendeePublicId);
+    };
+
+    const printTestBadge = () => {
+        if (!printsFromATap) {
+            const badge = buildTestBadge();
+            if (badge) {
+                setQueue((current) => [...current, {badge, id: nextJobId(), isTest: true}]);
+            }
+            return;
+        }
+        if (isPrepared(TEST_BADGE_KEY)) {
+            printPrepared();
+            return;
+        }
+        prepareTestBadge();
+    };
 
     const finishJob = useCallback((finished: BadgePrintJob, printed: boolean) => {
         if (printed && !finished.isTest) {
@@ -137,24 +210,35 @@ export const useBadgePrinter = (checkInListShortId: string | undefined, checkInL
         setQueue((current) => current.filter((queued) => queued.id !== finished.id));
     }, [markPrintedMutation]);
 
-    const isPrinting = useCallback((attendeePublicId: string) => (
+    const isPreparing = (key: string) => prepared?.key === key && renderedPreparedId !== prepared.id;
+
+    const isPrinting = (attendeePublicId: string) => (
         loadingPublicIds.includes(attendeePublicId)
         || queue.some((queued) => queued.badge.attendee_public_id === attendeePublicId)
-    ), [loadingPublicIds, queue]);
+        || isPreparing(attendeePublicId)
+    );
 
     return {
         isEnabled,
         isKiosk,
+        printsFromATap,
         settings,
+        autoPrint: settings.autoPrint && !printsFromATap,
         setAutoPrint: (autoPrint: boolean) => updateSettings({autoPrint}),
         setLabelSize: (labelSize: BadgeLabelSize) => updateSettings({labelSize}),
         hasBack: designBackPrinting !== 'NONE',
         backPrinting,
         setBackPrinting: (value: BadgeBackPrinting) => updateSettings({backPrinting: value}),
+        setBlackInkOnly: (blackInkOnly: boolean) => updateSettings({blackInkOnly}),
         printBadge,
+        prepareBadge,
         printTestBadge,
+        prepareTestBadge,
+        isTestBadgePreparing: isPreparing(TEST_BADGE_KEY),
         job: queue[0] ?? null,
         finishJob,
+        prepared,
+        markPreparedRendered: setRenderedPreparedId,
         isPrinting,
         hasFailed: (attendeePublicId: string) => failedPublicIds.includes(attendeePublicId),
         layout: checkInList?.badge_design,

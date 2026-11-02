@@ -3,6 +3,83 @@ import {isSsr} from "./helpers.ts";
 
 const ASSET_TIMEOUT_MS = 5000;
 
+const PRINTING_BODY_CLASS = 'hi-badge-printing';
+
+const IOS_PRINT_INSETS_MM = {top: 12.7, right: 12.7, bottom: 21, left: 12.7};
+
+export const printsOnlyFromATap = (): boolean => {
+    if (isSsr()) {
+        return false;
+    }
+    const {userAgent, maxTouchPoints} = window.navigator;
+    return /iPad|iPhone|iPod/.test(userAgent) || (/Macintosh/.test(userAgent) && maxTouchPoints > 1);
+};
+
+export type DevicePlatform = 'mac' | 'windows' | 'ipad';
+
+export const detectDevicePlatform = (): DevicePlatform => {
+    if (isSsr()) {
+        return 'mac';
+    }
+    if (printsOnlyFromATap()) {
+        return 'ipad';
+    }
+    return /Windows/.test(window.navigator.userAgent) ? 'windows' : 'mac';
+};
+
+export const buildChromeLaunchCommand = (
+    platform: Exclude<DevicePlatform, 'ipad'>,
+    pageUrl: string,
+    options: { silentPrinting: boolean; kiosk: boolean },
+): string => {
+    const switches = [
+        options.silentPrinting ? '--kiosk-printing' : null,
+        options.kiosk ? '--kiosk' : null,
+    ].filter(Boolean).join(' ');
+
+    return platform === 'windows'
+        // eslint-disable-next-line lingui/no-unlocalized-strings
+        ? `chrome ${switches} "${pageUrl}"`
+        // eslint-disable-next-line lingui/no-unlocalized-strings
+        : `open -a "Google Chrome" --args ${switches} '${pageUrl}'`;
+};
+
+export const getIosPrintScale = (page: { width: number; height: number }): number => Math.min(
+    1,
+    (page.width - IOS_PRINT_INSETS_MM.left - IOS_PRINT_INSETS_MM.right) / page.width,
+    (page.height - IOS_PRINT_INSETS_MM.top - IOS_PRINT_INSETS_MM.bottom) / page.height,
+);
+
+export const showOnlyBadgeSheetsInPrint = (): () => void => {
+    document.body.classList.add(PRINTING_BODY_CLASS);
+    return () => document.body.classList.remove(PRINTING_BODY_CLASS);
+};
+
+export const printWithoutPageAddress = () => {
+    const pageAddress = window.location.href;
+    window.history.replaceState(window.history.state, '', '/');
+    try {
+        window.print();
+    } finally {
+        window.history.replaceState(window.history.state, '', pageAddress);
+    }
+};
+
+export const printBadgeSheets = (onAfterPrint?: () => void): () => void => {
+    const hideRestOfPage = showOnlyBadgeSheetsInPrint();
+    const handleAfterPrint = () => {
+        hideRestOfPage();
+        onAfterPrint?.();
+    };
+    window.addEventListener('afterprint', handleAfterPrint, {once: true});
+    printWithoutPageAddress();
+
+    return () => {
+        window.removeEventListener('afterprint', handleAfterPrint);
+        hideRestOfPage();
+    };
+};
+
 const waitForImage = (image: HTMLImageElement): Promise<void> => {
     if (image.complete) {
         return image.naturalWidth > 0 && image.decode ? image.decode().catch(() => undefined) : Promise.resolve();

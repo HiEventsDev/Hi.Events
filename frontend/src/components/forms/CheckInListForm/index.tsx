@@ -283,12 +283,22 @@ export const CheckInListForm = ({
                         opened={openRows.has('kiosk')}
                         onToggle={toggleRow}
                     >
-                        <Switch
-                            {...form.getInputProps('kiosk_mode', {type: 'checkbox'})}
-                            label={t`Use this list as a self check-in kiosk`}
-                            description={t`A full-screen scanner where attendees check themselves in. Attendee lists and search are hidden.`}
-                            data-testid="check-in-list-kiosk-switch"
-                        />
+                        <div className={classes.switchStack}>
+                            <Switch
+                                {...form.getInputProps('kiosk_mode', {type: 'checkbox'})}
+                                label={t`Use this list as a self check-in kiosk`}
+                                description={t`A full-screen scanner where attendees check themselves in. Attendee lists and search are hidden. Staff can press and hold the list name at the bottom of the kiosk to change its scanner or printer.`}
+                                data-testid="check-in-list-kiosk-switch"
+                            />
+                            {form.values.kiosk_mode && (
+                                <Switch
+                                    {...form.getInputProps('kiosk_lookup_enabled', {type: 'checkbox'})}
+                                    label={t`Let attendees find their ticket without the QR code`}
+                                    description={t`Attendees enter the email address and last name on their ticket. The kiosk only shows their first name and ticket type.`}
+                                    data-testid="check-in-list-kiosk-lookup-switch"
+                                />
+                            )}
+                        </div>
                     </LedgerRow>
 
                     {badgesEnabled && (

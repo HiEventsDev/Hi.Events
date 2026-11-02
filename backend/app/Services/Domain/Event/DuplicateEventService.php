@@ -560,6 +560,7 @@ class DuplicateEventService
                     ->setPublicShowOrderDetails($checkInList->getPublicShowOrderDetails())
                     ->setBadgePrintingEnabled($checkInList->getBadgePrintingEnabled())
                     ->setKioskMode($checkInList->getKioskMode())
+                    ->setKioskLookupEnabled($checkInList->getKioskLookupEnabled())
                     ->setEventId($newEventId),
                 productIds: $checkInList->getProducts()
                     ?->map(fn ($product) => $oldProductToNewProductMap[$product->getId()])?->toArray() ?? [],

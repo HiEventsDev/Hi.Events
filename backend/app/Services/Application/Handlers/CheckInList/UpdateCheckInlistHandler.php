@@ -35,6 +35,7 @@ class UpdateCheckInlistHandler
             productIds: $data->productIds,
             badgePrintingEnabled: $data->badgePrintingEnabled,
             kioskMode: $data->kioskMode,
+            kioskLookupEnabled: $data->kioskLookupEnabled,
         );
     }
 }

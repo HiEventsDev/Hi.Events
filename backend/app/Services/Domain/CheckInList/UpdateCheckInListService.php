@@ -31,8 +31,9 @@ class UpdateCheckInListService
         array $productIds,
         ?bool $badgePrintingEnabled = null,
         ?bool $kioskMode = null,
+        ?bool $kioskLookupEnabled = null,
     ): CheckInListDomainObject {
-        return $this->databaseManager->transaction(function () use ($checkInList, $productIds, $badgePrintingEnabled, $kioskMode) {
+        return $this->databaseManager->transaction(function () use ($checkInList, $productIds, $badgePrintingEnabled, $kioskMode, $kioskLookupEnabled) {
             $existingCheckInList = $this->checkInListRepository->findFirstWhere([
                 CheckInListDomainObjectAbstract::ID => $checkInList->getId(),
                 CheckInListDomainObjectAbstract::EVENT_ID => $checkInList->getEventId(),
@@ -62,6 +63,7 @@ class UpdateCheckInListService
                     CheckInListDomainObjectAbstract::PUBLIC_SHOW_ORDER_DETAILS => $checkInList->getPublicShowOrderDetails(),
                     CheckInListDomainObjectAbstract::BADGE_PRINTING_ENABLED => $badgePrintingEnabled ?? $existingCheckInList->getBadgePrintingEnabled(),
                     CheckInListDomainObjectAbstract::KIOSK_MODE => $kioskMode ?? $existingCheckInList->getKioskMode(),
+                    CheckInListDomainObjectAbstract::KIOSK_LOOKUP_ENABLED => $kioskLookupEnabled ?? $existingCheckInList->getKioskLookupEnabled(),
                 ],
                 where: [
                     CheckInListDomainObjectAbstract::ID => $checkInList->getId(),

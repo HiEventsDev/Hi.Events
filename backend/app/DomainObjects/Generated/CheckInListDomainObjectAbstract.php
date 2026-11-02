@@ -27,6 +27,7 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
     final public const IS_SYSTEM_DEFAULT = 'is_system_default';
     final public const BADGE_PRINTING_ENABLED = 'badge_printing_enabled';
     final public const KIOSK_MODE = 'kiosk_mode';
+    final public const KIOSK_LOOKUP_ENABLED = 'kiosk_lookup_enabled';
 
     protected int $id;
     protected int $event_id;
@@ -45,6 +46,7 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
     protected bool $is_system_default = false;
     protected bool $badge_printing_enabled = false;
     protected bool $kiosk_mode = false;
+    protected bool $kiosk_lookup_enabled = true;
 
     public function toArray(): array
     {
@@ -66,6 +68,7 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
                     'is_system_default' => $this->is_system_default ?? null,
                     'badge_printing_enabled' => $this->badge_printing_enabled ?? null,
                     'kiosk_mode' => $this->kiosk_mode ?? null,
+                    'kiosk_lookup_enabled' => $this->kiosk_lookup_enabled ?? null,
                 ];
     }
 
@@ -254,5 +257,16 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
     public function getKioskMode(): bool
     {
         return $this->kiosk_mode;
+    }
+
+    public function setKioskLookupEnabled(bool $kiosk_lookup_enabled): self
+    {
+        $this->kiosk_lookup_enabled = $kiosk_lookup_enabled;
+        return $this;
+    }
+
+    public function getKioskLookupEnabled(): bool
+    {
+        return $this->kiosk_lookup_enabled;
     }
 }

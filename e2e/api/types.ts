@@ -186,6 +186,7 @@ export interface CheckInList {
   name: string;
   badge_printing_enabled?: boolean;
   kiosk_mode?: boolean;
+  kiosk_lookup_enabled?: boolean;
 }
 
 export interface BadgeDesignLine {

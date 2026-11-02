@@ -1,9 +1,17 @@
 import type { BrowserContext, Locator, Page } from '@playwright/test';
 
+export interface BadgePrintContext {
+  path: string;
+  trigger: string | null;
+  scale: number;
+  ink: string | null;
+}
+
 declare global {
   interface Window {
     __badgePrintCalls?: number;
     __badgePrintedPageSides?: string[][];
+    __badgePrintContexts?: BadgePrintContext[];
   }
 }
 
@@ -11,10 +19,17 @@ export async function stubBrowserPrinting(context: BrowserContext): Promise<void
   await context.addInitScript(() => {
     window.__badgePrintCalls = 0;
     window.__badgePrintedPageSides = [];
+    window.__badgePrintContexts = [];
     window.print = () => {
       window.__badgePrintCalls = (window.__badgePrintCalls ?? 0) + 1;
       const pages = Array.from(document.querySelectorAll<HTMLElement>('[data-testid="badge-print-page"]'));
       window.__badgePrintedPageSides?.push(pages.map((page) => page.dataset.side ?? ''));
+      window.__badgePrintContexts?.push({
+        path: window.location.pathname,
+        trigger: window.event?.type ?? null,
+        scale: Number(document.querySelector('[data-testid="badge-print-sheets"]')?.getAttribute('data-print-scale') ?? 1),
+        ink: document.querySelector('[data-badge-print-root] [data-testid="badge"]')?.getAttribute('data-ink') ?? null,
+      });
       setTimeout(() => window.dispatchEvent(new Event('afterprint')), 50);
     };
   });
@@ -24,6 +39,10 @@ export const printCalls = (page: Page): Promise<number> => page.evaluate(() => w
 
 export const lastPrintedPageSides = (page: Page): Promise<string[]> => page.evaluate(
   () => window.__badgePrintedPageSides?.at(-1) ?? [],
+);
+
+export const lastPrintContext = (page: Page): Promise<BadgePrintContext | null> => page.evaluate(
+  () => window.__badgePrintContexts?.at(-1) ?? null,
 );
 
 export class BadgeDesignerPage {

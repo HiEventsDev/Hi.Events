@@ -65,23 +65,23 @@ msgstr "{0} (standaard)"
 msgid "{0} {1}"
 msgstr "{0} {1}"
 
-#: src/hooks/useCheckInController.tsx:333
+#: src/hooks/useCheckInController.tsx:341
 msgid "{0} {1} is already checked in"
 msgstr "{0} {1} is al ingecheckt"
 
-#: src/hooks/useCheckInController.tsx:332
+#: src/hooks/useCheckInController.tsx:340
 msgid "{0} {1} is already checked in · {seatLabel}"
 msgstr "{0} {1} is al ingecheckt · {seatLabel}"
 
-#: src/hooks/useCheckInController.tsx:217
+#: src/hooks/useCheckInController.tsx:225
 msgid "{0} <0>checked in</0>"
 msgstr "{0} <0>ingecheckt</0>"
 
-#: src/hooks/useCheckInController.tsx:216
+#: src/hooks/useCheckInController.tsx:224
 msgid "{0} <0>checked in</0> · {seatLabel}"
 msgstr "{0} <0>ingecheckt</0> · {seatLabel}"
 
-#: src/hooks/useCheckInController.tsx:249
+#: src/hooks/useCheckInController.tsx:257
 msgid "{0} <0>checked out</0> successfully"
 msgstr "{0} <0>uitgevinkt</0> succesvol"
 
@@ -1001,9 +1001,9 @@ msgstr "Nog een paar stappen en je kunt beginnen met verkopen."
 msgid "A focused reading column. Tickets appear wherever you place them in Sections."
 msgstr "Een gerichte leeskolom. Tickets verschijnen waar je ze in Secties plaatst."
 
-#: src/components/forms/CheckInListForm/index.tsx:289
-msgid "A full-screen scanner where attendees check themselves in. Attendee lists and search are hidden."
-msgstr "Een schermvullende scanner waarmee deelnemers zelf inchecken. Deelnemerslijsten en zoeken zijn verborgen."
+#: src/components/forms/CheckInListForm/index.tsx:290
+msgid "A full-screen scanner where attendees check themselves in. Attendee lists and search are hidden. Staff can press and hold the list name at the bottom of the kiosk to change its scanner or printer."
+msgstr "Een schermvullende scanner waarmee deelnemers zelf inchecken. Deelnemerslijsten en zoeken zijn verborgen. Medewerkers kunnen de lijstnaam onderaan de kiosk ingedrukt houden om de scanner of printer te wijzigen."
 
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:238
 msgid "A gallery can have up to {MAX_GALLERY_PHOTOS} photos."
@@ -1911,8 +1911,8 @@ msgstr "Programma: devconf.example/agenda"
 msgid "Aisles after seats"
 msgstr "Gangpaden na stoelen"
 
-#: src/hooks/useBadgePrinter.ts:118
-#: src/hooks/useBadgePrinter.ts:121
+#: src/hooks/useBadgePrinter.ts:107
+#: src/hooks/useBadgePrinter.ts:110
 msgid "Alex"
 msgstr "Alex"
 
@@ -2923,7 +2923,7 @@ msgstr "Deelnemer verplaatst"
 msgid "Attendee names appear on the printout. Handle it accordingly."
 msgstr "Namen van deelnemers staan op de afdruk. Ga er zorgvuldig mee om."
 
-#: src/hooks/useCheckInController.tsx:319
+#: src/hooks/useCheckInController.tsx:327
 msgid "Attendee not found"
 msgstr "Deelnemer niet gevonden"
 
@@ -2982,6 +2982,10 @@ msgstr "Deelnemers"
 #: src/components/layouts/CheckIn/tabs/StatsTab.tsx:72
 msgid "attendees checked in"
 msgstr "deelnemers ingecheckt"
+
+#: src/components/forms/CheckInListForm/index.tsx:297
+msgid "Attendees enter the email address and last name on their ticket. The kiosk only shows their first name and ticket type."
+msgstr "Deelnemers vullen het e-mailadres en de achternaam van hun ticket in. De kiosk toont alleen hun voornaam en tickettype."
 
 #: src/components/routes/event/attendees.tsx:170
 msgid "Attendees Exported"
@@ -3123,6 +3127,8 @@ msgstr "Awesome Events B.V."
 msgid "Awesome Organizer Ltd."
 msgstr "Awesome Organizer Ltd."
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:82
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:125
 #: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:52
 #: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:82
 #: src/components/layouts/SettingsLayout/index.tsx:60
@@ -3136,7 +3142,7 @@ msgstr "Awesome Organizer Ltd."
 msgid "Back"
 msgstr "Terug"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:48
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:72
 #: src/components/routes/event/Badges/index.tsx:548
 #: src/components/routes/event/Badges/index.tsx:556
 msgid "Back of the badge"
@@ -3228,8 +3234,8 @@ msgstr "Badge-ontwerp opgeslagen"
 msgid "Badge label for {0}"
 msgstr "Badgelabel voor {0}"
 
-#: src/components/forms/CheckInListForm/index.tsx:299
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:20
+#: src/components/forms/CheckInListForm/index.tsx:309
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:33
 #: src/components/layouts/CheckIn/index.tsx:226
 msgid "Badge printing"
 msgstr "Badges afdrukken"
@@ -3254,6 +3260,10 @@ msgstr "Badges gemarkeerd als afgedrukt"
 #: src/components/routes/event/Badges/index.tsx:577
 msgid "Badges on a lanyard often flip around. Print both sides so names always face out."
 msgstr "Badges aan een keycord draaien vaak om. Druk beide kanten af, zodat de naam altijd zichtbaar is."
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:88
+msgid "Badges saved as PDF files instead? Chrome's last printer was Save as PDF. Repeat the first step and choose the badge printer."
+msgstr "Worden badges als pdf opgeslagen? De laatste printer in Chrome was Opslaan als pdf. Herhaal de eerste stap en kies de badgeprinter."
 
 #: src/components/common/CapacityHelp/index.tsx:54
 #: src/ee/seating/components/lib/templates.ts:106
@@ -3722,6 +3732,10 @@ msgstr "Mag financiële gegevens zien"
 msgid "Can't check in"
 msgstr "Inchecken niet mogelijk"
 
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:295
+msgid "Can't find your QR code?"
+msgstr "Kun je je QR-code niet vinden?"
+
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:133
 msgid "Can't import"
 msgstr "Kan niet importeren"
@@ -3748,7 +3762,7 @@ msgstr "Kun je je authenticator-app of herstelcodes niet gebruiken?"
 #: src/components/modals/CreateAffiliateModal/index.tsx:88
 #: src/components/modals/CreateAttendeeModal/index.tsx:335
 #: src/components/modals/CreateCapacityAssignmentModal/index.tsx:75
-#: src/components/modals/CreateCheckInListModal/index.tsx:106
+#: src/components/modals/CreateCheckInListModal/index.tsx:107
 #: src/components/modals/CreateEventModal/index.tsx:478
 #: src/components/modals/CreateOrganizerModal/index.tsx:66
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:89
@@ -3760,7 +3774,7 @@ msgstr "Kun je je authenticator-app of herstelcodes niet gebruiken?"
 #: src/components/modals/DuplicateEventModal/index.tsx:309
 #: src/components/modals/EditAffiliateModal/index.tsx:104
 #: src/components/modals/EditCapacityAssignmentModal/index.tsx:70
-#: src/components/modals/EditCheckInListModal/index.tsx:106
+#: src/components/modals/EditCheckInListModal/index.tsx:108
 #: src/components/modals/EditOrganizerWebhookModal/index.tsx:82
 #: src/components/modals/EditProductCategoryModal/index.tsx:71
 #: src/components/modals/EditPromoCodeModal/index.tsx:85
@@ -4249,7 +4263,7 @@ msgstr "Gecreëerd inchecken"
 msgid "Check-in Deleted"
 msgstr "Check-in verwijderd"
 
-#: src/hooks/useCheckInController.tsx:170
+#: src/hooks/useCheckInController.tsx:178
 msgid "Check-in for {0} was undone"
 msgstr "De check-in van {0} is ongedaan gemaakt"
 
@@ -4722,6 +4736,10 @@ msgstr "sluiten"
 #: src/utilites/notifications.tsx:6
 msgid "Close"
 msgstr "Sluit"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:31
+msgid "Close every Chrome window, and quit Chrome from the system tray if it's still running there."
+msgstr "Sluit alle Chrome-vensters en sluit Chrome af via het systeemvak als het daar nog draait."
 
 #: src/components/layouts/AppLayout/Sidebar/index.tsx:117
 #: src/components/layouts/AppLayout/Topbar/index.tsx:38
@@ -5411,6 +5429,7 @@ msgstr "Code kopiëren"
 msgid "Copy Code"
 msgstr "Kopieer code"
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:17
 #: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:25
 msgid "Copy command"
 msgstr "Opdracht kopiëren"
@@ -5739,7 +5758,7 @@ msgstr "Zaalplan maken"
 msgid "Create a ticket"
 msgstr "Ticket aanmaken"
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:72
+#: src/components/modals/CreateCheckInListModal/index.tsx:73
 #: src/ee/box-office/components/modals/CreateBoxOfficeModal/index.tsx:79
 msgid "Create a Ticket"
 msgstr "Een ticket maken"
@@ -5820,8 +5839,8 @@ msgstr "Categorie maken"
 
 #: src/components/common/CheckInListList/index.tsx:60
 #: src/components/common/CheckInListTable/index.tsx:303
-#: src/components/modals/CreateCheckInListModal/index.tsx:91
-#: src/components/modals/CreateCheckInListModal/index.tsx:112
+#: src/components/modals/CreateCheckInListModal/index.tsx:92
+#: src/components/modals/CreateCheckInListModal/index.tsx:113
 #: src/components/routes/event/CheckInLists/index.tsx:76
 msgid "Create Check-In List"
 msgstr "Check-in lijst maken"
@@ -6907,8 +6926,8 @@ msgid "Donation"
 msgstr "Donatie"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:264
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:70
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:125
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:99
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:250
 #: src/components/modals/CheckInListSuccessModal/index.tsx:59
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:73
 #: src/components/modals/CreateWebhookModal/index.tsx:73
@@ -7184,6 +7203,10 @@ msgstr "Elk account ontvangt deze e-mail maximaal één keer."
 msgid "Each badge prints on its own page, for card and label printers."
 msgstr "Elke badge komt op een eigen pagina, voor kaart- en labelprinters."
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:46
+msgid "Each badge then takes two taps: Print badge, then Print. Safari adds margins of its own, so badges print a little smaller than from a computer."
+msgstr "Daarna kost elke badge twee tikken: Badge afdrukken, dan Druk af. Safari voegt eigen marges toe, dus badges worden iets kleiner afgedrukt dan vanaf een computer."
+
 #: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:24
 msgid "Each code can be used once to sign in if you lose access to your authenticator app."
 msgstr "Elke code kan één keer worden gebruikt om in te loggen als je geen toegang meer hebt tot je authenticator-app."
@@ -7296,7 +7319,7 @@ msgstr "Categorie bewerken"
 
 #: src/components/common/CheckInListList/index.tsx:147
 #: src/components/common/CheckInListTable/index.tsx:208
-#: src/components/modals/EditCheckInListModal/index.tsx:81
+#: src/components/modals/EditCheckInListModal/index.tsx:83
 msgid "Edit Check-In List"
 msgstr "Check-in lijst bewerken"
 
@@ -7478,6 +7501,7 @@ msgstr "E-mail en geplande berichten"
 msgid "Email & Templates"
 msgstr "E-mail & Sjablonen"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:97
 #: src/components/modals/CreateAttendeeModal/index.tsx:228
 #: src/components/modals/ManageAttendeeModal/index.tsx:232
 #: src/components/modals/ManageOrderModal/index.tsx:293
@@ -7855,6 +7879,10 @@ msgstr "Voer het client secret in."
 #: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:74
 msgid "Enter the directory (tenant) ID. It looks like 00000000-0000-0000-0000-000000000000."
 msgstr "Voer de directory (tenant) ID in. Die ziet eruit als 00000000-0000-0000-0000-000000000000."
+
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:90
+msgid "Enter the email address and last name on your ticket."
+msgstr "Vul het e-mailadres en de achternaam van je ticket in."
 
 #: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:73
 msgid "Enter the issuer URL, starting with https://."
@@ -8647,7 +8675,7 @@ msgstr "Export van rapport mislukt. Probeer het opnieuw."
 msgid "Failed to load box office"
 msgstr "Kassa laden mislukt"
 
-#: src/components/modals/EditCheckInListModal/index.tsx:91
+#: src/components/modals/EditCheckInListModal/index.tsx:93
 msgid "Failed to load Check-In List"
 msgstr "Inchecklijst niet geladen"
 
@@ -8989,6 +9017,14 @@ msgstr "{bestAvailableQuantity} stoelen zoeken"
 msgid "Find 1 seat"
 msgstr "1 stoel zoeken"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:123
+msgid "Find my ticket"
+msgstr "Mijn ticket zoeken"
+
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:89
+msgid "Find your ticket"
+msgstr "Zoek je ticket"
+
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:143
 msgid "Finish or cancel the current sale first"
 msgstr "Rond eerst de huidige verkoop af of annuleer deze"
@@ -9168,12 +9204,12 @@ msgstr "Flyer"
 msgid "Fold and cutting guides"
 msgstr "Vouw- en snijlijnen"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:56
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:80
 #: src/components/routes/event/Badges/index.tsx:570
 msgid "Fold-over"
 msgstr "Vouwbadge"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:49
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:73
 msgid "Fold-over prints the front and back side by side on one page, to fold in half. It works on any printer."
 msgstr "Een vouwbadge drukt voor- en achterkant naast elkaar af op één pagina, die je dubbelvouwt. Werkt met elke printer."
 
@@ -9225,9 +9261,9 @@ msgstr "Bijvoorbeeld: #DevConf2027"
 msgid "For example: Ask me about volunteering"
 msgstr "Bijvoorbeeld: Vraag me naar vrijwilligerswerk"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:62
-msgid "For one-tap printing on a laptop, set the label printer as the default printer and open this page in Chrome started with the --kiosk-printing option."
-msgstr "Om met één tik af te drukken op een laptop stel je de labelprinter in als standaardprinter en open je deze pagina in Chrome, gestart met de optie --kiosk-printing."
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:65
+msgid "For thermal label printers such as Brother QL and Zebra. Colours print as solid black so ribbons and names stay sharp."
+msgstr "Voor thermische labelprinters zoals Brother QL en Zebra. Kleuren worden in effen zwart afgedrukt, zodat linten en namen scherp blijven."
 
 #: src/components/common/ConfirmIdentity/index.tsx:109
 msgid "For your security, sign in again to confirm it's you."
@@ -9343,7 +9379,7 @@ msgstr "Lezer hoofdingang"
 msgid "Front left"
 msgstr "Linksvoor"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:54
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:78
 msgid "Front only"
 msgstr "Alleen voorkant"
 
@@ -9953,11 +9989,11 @@ msgstr "{0} stoelen achterhouden op {dateCount} datums"
 msgid "Hold places for"
 msgstr "Plaatsen vasthouden voor"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:150
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:283
 msgid "Hold up the QR code from your ticket email and your badge will print."
 msgstr "Houd de QR-code uit je ticketmail voor de scanner en je badge wordt afgedrukt."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:151
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:284
 msgid "Hold up the QR code from your ticket email."
 msgstr "Houd de QR-code uit je ticketmail voor de scanner."
 
@@ -10496,6 +10532,10 @@ msgstr "Factuurnummering"
 msgid "Invoice Settings"
 msgstr "Factuur Instellingen"
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:74
+msgid "iPad"
+msgstr "iPad"
+
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:175
 msgid "Issued"
 msgstr "Uitgegeven"
@@ -10713,7 +10753,7 @@ msgstr "Label"
 msgid "Label — e.g. Morning session"
 msgstr "Label — bijv. Ochtendsessie"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:33
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:49
 msgid "Label size on this device"
 msgstr "Labelformaat op dit apparaat"
 
@@ -10802,6 +10842,7 @@ msgstr "Laatste 90 dagen"
 msgid "Last active"
 msgstr "Laatst actief"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:103
 #: src/components/modals/CreateAttendeeModal/index.tsx:221
 #: src/components/modals/ManageAttendeeModal/index.tsx:228
 #: src/components/modals/ManageOrderModal/index.tsx:286
@@ -10832,6 +10873,7 @@ msgstr "Achternaam"
 msgid "Last name (A–Z)"
 msgstr "Achternaam (A–Z)"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:24
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:32
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:32
 msgid "Last name is required"
@@ -10950,6 +10992,10 @@ msgstr "Linkervleugel"
 #: src/components/routes/event/Lineup/RunSheetPrint.tsx:138
 msgid "Length"
 msgstr "Lengte"
+
+#: src/components/forms/CheckInListForm/index.tsx:296
+msgid "Let attendees find their ticket without the QR code"
+msgstr "Laat deelnemers hun ticket vinden zonder QR-code"
 
 #: src/ee/seating/components/routes/event/Seating/SeatingRulesCard.tsx:46
 msgid "Let buyers change their seat after booking"
@@ -11323,6 +11369,10 @@ msgstr "Toegang kwijt?"
 #: src/components/routes/settings/Security/index.tsx:200
 msgid "Lost your phone or switching apps? Turn it off, then on again to connect a new authenticator."
 msgstr "Telefoon kwijt of van app gewisseld? Schakel het uit en weer in om een nieuwe authenticator te koppelen."
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:72
+msgid "Mac"
+msgstr "Mac"
 
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:66
 msgid "Main auditorium"
@@ -11830,8 +11880,8 @@ msgstr "Meer plaatsen"
 msgid "More seats"
 msgstr "Meer stoelen"
 
-#: src/hooks/useBadgePrinter.ts:119
-#: src/hooks/useBadgePrinter.ts:122
+#: src/hooks/useBadgePrinter.ts:108
+#: src/hooks/useBadgePrinter.ts:111
 msgid "Morgan"
 msgstr "Morgan"
 
@@ -12002,7 +12052,7 @@ msgstr "Namen in hoofdletters"
 msgid "Navigate to Attendee"
 msgstr "Navigeer naar deelnemer"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:73
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:79
 msgid "Need a new badge? Please see the registration desk."
 msgstr "Nieuwe badge nodig? Ga naar de registratiebalie."
 
@@ -12156,7 +12206,7 @@ msgstr "Volgende deelnemer"
 msgid "Next batch"
 msgstr "Volgende batch"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:125
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:250
 msgid "Next check-in"
 msgstr "Volgende check-in"
 
@@ -13261,6 +13311,10 @@ msgstr "op {day} {month}"
 msgid "On a product priced at 50.00, this adds {exampleAmount}."
 msgstr "Bij een product van 50.00 komt hier {exampleAmount} bij."
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:91
+msgid "On computers your IT team manages, Chrome's SilentPrintingEnabled policy does the same without the command."
+msgstr "Op computers die je IT-team beheert, doet het Chrome-beleid SilentPrintingEnabled hetzelfde zonder de opdracht."
+
 #: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:14
 msgid "On large screens tickets stay beside your content as people scroll. Suits conferences and long lineups."
 msgstr "Op grote schermen blijven tickets naast je inhoud staan tijdens het scrollen. Geschikt voor conferenties en grote line-ups."
@@ -13570,6 +13624,10 @@ msgstr "Instellingen openen"
 #: src/components/layouts/AppLayout/Topbar/index.tsx:38
 msgid "Open sidebar"
 msgstr "Zijbalk openen"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:34
+msgid "Open Terminal and run this command:"
+msgstr "Open Terminal en voer deze opdracht uit:"
 
 #: src/components/routes/sso/Callback/SsoErrorState.tsx:64
 msgid "Open the invitation email we sent you to finish joining the team."
@@ -14805,7 +14863,7 @@ msgstr "Ga verder in het nieuwe tabblad"
 msgid "Please create a product"
 msgstr "Maak een product"
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:60
+#: src/components/modals/CreateCheckInListModal/index.tsx:61
 #: src/ee/box-office/components/modals/CreateBoxOfficeModal/index.tsx:67
 msgid "Please create a ticket"
 msgstr "Maak een ticket aan"
@@ -14814,6 +14872,7 @@ msgstr "Maak een ticket aan"
 msgid "Please don't leave a single empty seat: {0}"
 msgstr "Laat geen losse lege stoel achter: {0}"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:23
 #: src/components/modals/JoinWaitlistModal/index.tsx:57
 msgid "Please enter a valid email address"
 msgstr "Voer een geldig e-mailadres in"
@@ -14859,7 +14918,7 @@ msgstr "Start het bestelproces opnieuw."
 msgid "Please return to the event page to start over."
 msgstr "Ga terug naar de evenementpagina om opnieuw te beginnen."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:74
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:80
 msgid "Please see the registration desk and we'll sort it out."
 msgstr "Ga naar de registratiebalie, dan lossen we het op."
 
@@ -14971,6 +15030,10 @@ msgstr "Pers"
 msgid "Press where the first seat goes and drag. Drag sideways for seats, down for more rows."
 msgstr "Klik waar de eerste stoel moet komen en sleep. Sleep zijwaarts voor stoelen, omlaag voor meer rijen."
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:35
+msgid "Press Windows+R, paste this command and press Enter:"
+msgstr "Druk op Windows+R, plak deze opdracht en druk op Enter:"
+
 #: src/components/routes/event/CapacityAssignments/index.tsx:33
 msgid "Prevent overselling by sharing inventory across multiple ticket types."
 msgstr "Voorkom oververkoop door voorraad te delen over meerdere tickettypes."
@@ -15070,7 +15133,7 @@ msgstr "Prijzen"
 msgid "Print"
 msgstr "Afdrukken"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:25
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:41
 msgid "Print a badge when someone checks in"
 msgstr "Badge afdrukken bij inchecken"
 
@@ -15078,13 +15141,25 @@ msgstr "Badge afdrukken bij inchecken"
 msgid "Print a sample badge"
 msgstr "Voorbeeldbadge afdrukken"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:67
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:96
 msgid "Print a test badge"
 msgstr "Testbadge afdrukken"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:28
+msgid "Print a test badge from this page. In Chrome's print window, choose the badge printer and check the paper size matches your labels, then print. Chrome reuses these choices for every badge."
+msgstr "Druk vanaf deze pagina een testbadge af. Kies in het afdrukvenster van Chrome de badgeprinter, controleer of het papierformaat bij je labels past en druk af. Chrome gebruikt deze keuzes voor elke badge opnieuw."
+
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:238
+msgid "Print again"
+msgstr "Opnieuw afdrukken"
 
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:722
 msgid "Print All Tickets"
 msgstr "Alle tickets afdrukken"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:41
+msgid "Print another test badge. It should print straight away, without a print window."
+msgstr "Druk nog een testbadge af. Die hoort meteen af te drukken, zonder afdrukvenster."
 
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:326
 #: src/hooks/useAttendeeActions.tsx:119
@@ -15098,13 +15173,17 @@ msgstr "Badge afdrukken"
 msgid "Print badges"
 msgstr "Badges afdrukken"
 
-#: src/components/forms/CheckInListForm/index.tsx:306
+#: src/components/forms/CheckInListForm/index.tsx:316
 msgid "Print badges from this list"
 msgstr "Badges afdrukken vanuit deze lijst"
 
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:134
 msgid "Print map"
 msgstr "Plattegrond afdrukken"
+
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:225
+msgid "Print my badge"
+msgstr "Mijn badge afdrukken"
 
 #: src/components/routes/event/TicketDesigner/index.tsx:122
 msgid "Print Preview"
@@ -15127,6 +15206,10 @@ msgstr "Tickets afdrukken"
 msgid "Print to PDF"
 msgstr "Afdrukken naar PDF"
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:85
+msgid "Print window still showing? Chrome was already running when the command ran. Quit it and run the command again."
+msgstr "Zie je het afdrukvenster nog? Chrome draaide al toen de opdracht werd uitgevoerd. Sluit Chrome af en voer de opdracht opnieuw uit."
+
 #: src/components/routes/event/Lineup/index.tsx:154
 msgid "Printable run sheet"
 msgstr "Afdrukbaar draaiboek"
@@ -15144,15 +15227,11 @@ msgstr "Afgedrukt {0}"
 msgid "Printed ×{count}"
 msgstr "Afgedrukt ×{count}"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:167
-msgid "Printer"
-msgstr "Printer"
-
 #: src/components/routes/event/Badges/index.tsx:600
 msgid "Printing at the door"
 msgstr "Afdrukken aan de deur"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:47
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:52
 msgid "Printing your badge…"
 msgstr "Je badge wordt afgedrukt…"
 
@@ -15533,6 +15612,10 @@ msgstr "Snelle tip"
 #: src/utilites/badges.ts:63
 msgid "Quiet and typographic, lots of white space"
 msgstr "Rustig en typografisch, met veel witruimte"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:30
+msgid "Quit Chrome completely with ⌘Q."
+msgstr "Sluit Chrome volledig af met ⌘Q."
 
 #: src/components/forms/QuestionForm/index.tsx:118
 msgid "Radio Option"
@@ -16686,7 +16769,7 @@ msgstr "Verkoop:"
 msgid "Same as event"
 msgstr "Zelfde als evenement"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:39
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:55
 msgid "Same as the badge design ({designSize})"
 msgstr "Zelfde als het badge-ontwerp ({designSize})"
 
@@ -16768,7 +16851,7 @@ msgstr "Wijzigingen opslaan"
 #: src/components/common/DesignerShell/index.tsx:172
 #: src/components/modals/EditAffiliateModal/index.tsx:109
 #: src/components/modals/EditCapacityAssignmentModal/index.tsx:75
-#: src/components/modals/EditCheckInListModal/index.tsx:111
+#: src/components/modals/EditCheckInListModal/index.tsx:113
 #: src/components/modals/EditOrganizerWebhookModal/index.tsx:87
 #: src/components/modals/EditProductCategoryModal/index.tsx:73
 #: src/components/modals/EditPromoCodeModal/index.tsx:87
@@ -16870,7 +16953,7 @@ msgstr "Opgeslagen locatie"
 msgid "Saved locations"
 msgstr "Opgeslagen locaties"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:26
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:42
 msgid "Saved on this device only"
 msgstr "Alleen op dit apparaat opgeslagen"
 
@@ -16909,7 +16992,7 @@ msgstr "Scan een ticket om een deelnemer in te checken"
 msgid "Scan tickets at the door with a phone, tablet, or USB scanner."
 msgstr "Scan tickets aan de deur met een telefoon, tablet of USB-scanner."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:147
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:280
 msgid "Scan your ticket to check in"
 msgstr "Scan je ticket om in te checken"
 
@@ -17162,7 +17245,7 @@ msgid "Seasonal"
 msgstr "Seizoensgebonden"
 
 #: src/components/common/AttendeeTicket/index.tsx:133
-#: src/components/common/NameBadge/index.tsx:82
+#: src/components/common/NameBadge/index.tsx:86
 #: src/components/modals/ManageAttendeeModal/index.tsx:170
 #: src/ee/seating/components/ManualSeatField/index.tsx:42
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:339
@@ -17836,6 +17919,10 @@ msgstr "Stel het startnummer voor factuurnummering in. Dit kan niet worden gewij
 msgid "Set to unlimited (remove limit)"
 msgstr "Op onbeperkt zetten (limiet verwijderen)"
 
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:318
+msgid "Set up"
+msgstr "Instellen"
+
 #: src/components/routes/event/OccurrencesTab/index.tsx:639
 msgid "Set up a recurring schedule to automatically create dates, or add them one at a time."
 msgstr "Stel een terugkerende planning in om datums automatisch aan te maken, of voeg ze één voor één toe."
@@ -17861,6 +17948,14 @@ msgstr "SSO instellen"
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:92
 msgid "Set up the tickets you'll sell and their prices"
 msgstr "Stel de tickets in die je gaat verkopen en hun prijzen"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:66
+msgid "Set up this device"
+msgstr "Dit apparaat instellen"
+
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:33
+msgid "Set up this kiosk"
+msgstr "Deze kiosk instellen"
 
 #: src/components/routes/settings/Security/EnableTwoFactorModal.tsx:15
 msgid "Set up two-factor authentication"
@@ -18601,6 +18696,10 @@ msgstr "Er ging iets mis! Probeer het opnieuw"
 msgid "Something went wrong."
 msgstr "Er ging iets mis."
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:57
+msgid "Something went wrong. Please see the registration desk."
+msgstr "Er ging iets mis. Ga naar de registratiebalie."
+
 #: src/components/modals/JoinWaitlistModal/index.tsx:141
 msgid "Something went wrong. Please try again later."
 msgstr "Er is iets misgegaan. Probeer het later opnieuw."
@@ -18740,7 +18839,7 @@ msgstr "Medewerkers kunnen een handmatige korting toepassen"
 msgid "Staff can change the price of an item during a sale"
 msgstr "Medewerkers kunnen de prijs van een item wijzigen tijdens de verkoop"
 
-#: src/components/forms/CheckInListForm/index.tsx:307
+#: src/components/forms/CheckInListForm/index.tsx:317
 msgid "Staff can print or reprint badges from this list, or print them automatically on check-in"
 msgstr "Medewerkers kunnen vanuit deze lijst badges (opnieuw) afdrukken, of ze automatisch laten afdrukken bij het inchecken"
 
@@ -19238,7 +19337,7 @@ msgstr "Deelnemer succesvol bijgewerkt"
 msgid "Successfully updated Capacity Assignment"
 msgstr "Capaciteitstoewijzing succesvol bijgewerkt"
 
-#: src/components/modals/EditCheckInListModal/index.tsx:55
+#: src/components/modals/EditCheckInListModal/index.tsx:56
 msgid "Successfully updated Check-In List"
 msgstr "Check-in lijst succesvol bijgewerkt"
 
@@ -19443,6 +19542,14 @@ msgstr "Tik op een stoel om hem toe te voegen, of stel eerst de aantallen in"
 msgid "Tap dates like a calendar."
 msgstr "Tik op datums zoals in een kalender."
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:45
+msgid "Tap Print a test badge, choose the badge printer and paper size, then tap Print. The iPad remembers both for the next badge."
+msgstr "Tik op Testbadge afdrukken, kies de badgeprinter en het papierformaat en tik op Druk af. De iPad onthoudt beide voor de volgende badge."
+
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:53
+msgid "Tap Print my badge, then Print."
+msgstr "Tik op Mijn badge afdrukken en daarna op Druk af."
+
 #: src/components/layouts/CheckIn/tabs/ScanTab.tsx:59
 msgid "Tap this screen to resume scanning"
 msgstr "Tik op dit scherm om het scannen te hervatten"
@@ -19616,7 +19723,7 @@ msgstr "Zoekterm"
 msgid "Terms of Service"
 msgstr "Servicevoorwaarden"
 
-#: src/hooks/useBadgePrinter.ts:123
+#: src/hooks/useBadgePrinter.ts:112
 msgid "Test badge"
 msgstr "Testbadge"
 
@@ -19627,7 +19734,7 @@ msgstr "Testmail verzonden naar je inbox"
 
 #: src/components/routes/event/Badges/BadgePrint.tsx:155
 #: src/components/routes/event/Badges/index.tsx:244
-#: src/hooks/useBadgePrinter.ts:125
+#: src/hooks/useBadgePrinter.ts:114
 msgid "Test print"
 msgstr "Testafdruk"
 
@@ -19893,6 +20000,14 @@ msgstr "De overschrijving wordt vastgelegd in het auditlogboek van de bestelling
 #: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:169
 msgid "The owner can connect {providerName} in their security settings to sign in with it day to day."
 msgstr "De eigenaar kan {providerName} koppelen in de eigen beveiligingsinstellingen om er dagelijks mee in te loggen."
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:39
+msgid "The page opens full screen without Chrome's controls. Press ⌘Q to close it."
+msgstr "De pagina opent schermvullend zonder de bedieningselementen van Chrome. Druk op ⌘Q om haar te sluiten."
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:40
+msgid "The page opens full screen without Chrome's controls. Press Alt+F4 to close it."
+msgstr "De pagina opent schermvullend zonder de bedieningselementen van Chrome. Druk op Alt+F4 om haar te sluiten."
 
 #: src/components/common/ErrorDisplay/index.tsx:18
 msgid "The page you are looking for does not exist"
@@ -20474,7 +20589,7 @@ msgstr "Deze bestelling is geannuleerd."
 msgid "This order has expired. Please start again."
 msgstr "Deze bestelling is verlopen. Begin opnieuw."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:58
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:64
 msgid "This order hasn't been paid yet"
 msgstr "Deze bestelling is nog niet betaald"
 
@@ -20521,6 +20636,10 @@ msgstr "Deze betaallink is verlopen"
 #: src/components/common/EmailTemplateEditor/EmailTemplatePreviewPane.tsx:70
 msgid "This preview shows how your email will look with sample data. Actual emails will use real values."
 msgstr "Dit voorbeeld toont hoe uw e-mail eruit ziet met voorbeeldgegevens. Werkelijke e-mails gebruiken echte waarden."
+
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:64
+msgid "This printer only prints black"
+msgstr "Deze printer drukt alleen zwart af"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:117
 msgid "This product cannot be deleted because it is associated with an order. You can hide it instead."
@@ -20591,7 +20710,7 @@ msgstr "Deze plek is gereserveerd voor rolstoelgebruikers en gasten met een toeg
 msgid "This ticket is no longer valid"
 msgstr "Dit ticket is niet langer geldig"
 
-#: src/hooks/useCheckInController.tsx:295
+#: src/hooks/useCheckInController.tsx:303
 msgid "This ticket was just scanned. Please wait before scanning again."
 msgstr "Dit ticket is net gescand. Wacht even voordat u opnieuw scant."
 
@@ -20962,6 +21081,10 @@ msgstr "Bevestig dat jij het bent om het e-mailadres te wijzigen waarmee je inlo
 msgid "To increase your limits, contact us at"
 msgstr "Om uw limieten te verhogen, neem contact met ons op via"
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:47
+msgid "To keep attendees on this page, turn on Settings › Accessibility › Guided Access, come back here and triple-click the top button."
+msgstr "Om deelnemers op deze pagina te houden, zet je Instellingen › Toegankelijkheid › Begeleide toegang aan, ga je hierheen terug en druk je drie keer op de bovenste knop."
+
 #: src/hooks/useSortableAccessibility.ts:42
 msgid "To move this item, press space or enter. Use the arrow keys to change its position, then press space or enter again to drop it, or escape to cancel."
 msgstr "Druk op spatie of Enter om dit item te verplaatsen. Gebruik de pijltjestoetsen om de positie te wijzigen en druk daarna nogmaals op spatie of Enter om het neer te zetten, of op Escape om te annuleren."
@@ -20991,6 +21114,10 @@ msgstr "Morgen"
 #: src/utilites/ssoErrors.ts:13
 msgid "Too many attempts. Please wait a minute and try again."
 msgstr "Te veel pogingen. Wacht een minuut en probeer het opnieuw."
+
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:56
+msgid "Too many attempts. Please wait a minute or see the registration desk."
+msgstr "Te veel pogingen. Wacht een minuut of ga naar de registratiebalie."
 
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:116
 msgid "Too many rows in one import"
@@ -21309,7 +21436,7 @@ msgstr "Tweestapsverificatie gereset"
 msgid "Two-factor on"
 msgstr "Tweestaps actief"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:55
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:79
 #: src/components/routes/event/Badges/index.tsx:569
 msgid "Two-sided printer"
 msgstr "Dubbelzijdige printer"
@@ -21375,12 +21502,12 @@ msgstr "Lezer wijzigen mislukt"
 msgid "Unable to check in"
 msgstr "Inchecken mislukt"
 
-#: src/hooks/useCheckInController.tsx:235
+#: src/hooks/useCheckInController.tsx:243
 msgid "Unable to check in attendee"
 msgstr "Deelnemer kan niet worden ingecheckt"
 
-#: src/hooks/useCheckInController.tsx:262
-#: src/hooks/useCheckInController.tsx:264
+#: src/hooks/useCheckInController.tsx:270
+#: src/hooks/useCheckInController.tsx:272
 msgid "Unable to check out attendee"
 msgstr "Deelnemer kan niet worden uitgecheckt"
 
@@ -21409,7 +21536,7 @@ msgstr "Kan de widget niet verwijderen"
 msgid "Unable to duplicate product. Please check the your details"
 msgstr "Kan product niet dupliceren. Controleer uw gegevens"
 
-#: src/hooks/useCheckInController.tsx:310
+#: src/hooks/useCheckInController.tsx:318
 msgid "Unable to fetch attendee"
 msgstr "Kan deelnemer niet ophalen"
 
@@ -21429,7 +21556,7 @@ msgstr "Deelnemergegevens konden niet worden geladen."
 msgid "Unable to load products for this date. Please try again."
 msgstr "Producten voor deze datum konden niet worden geladen. Probeer het opnieuw."
 
-#: src/hooks/useBadgePrinter.ts:100
+#: src/hooks/useBadgePrinter.ts:138
 msgid "Unable to load this badge"
 msgstr "Kan deze badge niet laden"
 
@@ -21467,7 +21594,7 @@ msgstr "Kan de verkoop niet starten. Probeer het opnieuw."
 msgid "Unable to switch date"
 msgstr "Datum wisselen mislukt"
 
-#: src/hooks/useCheckInController.tsx:175
+#: src/hooks/useCheckInController.tsx:183
 msgid "Unable to undo check-in"
 msgstr "Check-in kan niet ongedaan worden gemaakt"
 
@@ -21505,7 +21632,7 @@ msgstr "Voeg onder \"Token configuration\" de optionele claims email en xms_edov
 
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:299
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:300
-#: src/hooks/useCheckInController.tsx:223
+#: src/hooks/useCheckInController.tsx:231
 msgid "Undo"
 msgstr "Ongedaan maken"
 
@@ -21855,7 +21982,7 @@ msgstr "Gebruik <0>Liquid-templating</0> om uw e-mails te personaliseren"
 msgid "Use a different account"
 msgstr "Een ander account gebruiken"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:34
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:50
 msgid "Use a different size here if this printer takes labels rather than badge inserts"
 msgstr "Kies hier een ander formaat als deze printer labels gebruikt in plaats van insteekkaartjes"
 
@@ -21886,7 +22013,7 @@ msgstr "In plaats daarvan een herstelcode gebruiken"
 msgid "Use a separate organizer for each brand or venue you sell tickets under."
 msgstr "Gebruik een aparte organisator voor elk merk of elke locatie waaronder je tickets verkoopt."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:176
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:327
 msgid "Use a USB scanner"
 msgstr "USB-scanner gebruiken"
 
@@ -21907,7 +22034,7 @@ msgstr "Gebruik bestelgegevens voor alle deelnemers. Namen en e-mailadressen van
 msgid "Use the buyer's details for all attendees"
 msgstr "Gebruik de gegevens van de koper voor alle deelnemers"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:177
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:328
 msgid "Use the camera"
 msgstr "Camera gebruiken"
 
@@ -21919,7 +22046,7 @@ msgstr "Dit adres gebruiken"
 msgid "Use this if someone else, such as your finance team, is paying for your order."
 msgstr "Gebruik dit als iemand anders, zoals je financiële afdeling, je bestelling betaalt."
 
-#: src/components/forms/CheckInListForm/index.tsx:288
+#: src/components/forms/CheckInListForm/index.tsx:289
 msgid "Use this list as a self check-in kiosk"
 msgstr "Deze lijst gebruiken als zelfincheckkiosk"
 
@@ -22479,7 +22606,7 @@ msgstr "We konden je betaling niet verwerken. Probeer het opnieuw of neem contac
 msgid "We couldn't add the questions. Please try again."
 msgstr "We konden de vragen niet toevoegen. Probeer het opnieuw."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:59
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:65
 msgid "We couldn't check you in"
 msgstr "We konden je niet inchecken"
 
@@ -22504,6 +22631,10 @@ msgstr "We konden de categorie niet verwijderen. Probeer het opnieuw."
 msgid "We couldn't disconnect this Stripe account. Please try again."
 msgstr "We konden dit Stripe-account niet ontkoppelen. Probeer het opnieuw."
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:109
+msgid "We couldn't find a ticket with those details. Check the spelling, or see the registration desk."
+msgstr "We hebben geen ticket met deze gegevens gevonden. Controleer de spelling of ga naar de registratiebalie."
+
 #: src/components/routes/my-tickets/index.tsx:239
 msgid "We couldn't find any orders associated with this email address."
 msgstr "We konden geen bestellingen vinden die gekoppeld zijn aan dit e-mailadres."
@@ -22524,8 +22655,8 @@ msgstr "We konden nu geen stoelen vinden. Probeer het opnieuw."
 msgid "We couldn't find that many seats together. Try fewer seats or pick them on the map."
 msgstr "We konden niet zoveel stoelen bij elkaar vinden. Probeer minder stoelen of kies ze op de kaart."
 
-#: src/hooks/useCheckInController.tsx:313
-#: src/hooks/useCheckInController.tsx:322
+#: src/hooks/useCheckInController.tsx:321
+#: src/hooks/useCheckInController.tsx:330
 msgid "We couldn't find that ticket"
 msgstr "We konden dat ticket niet vinden"
 
@@ -22578,7 +22709,7 @@ msgstr "We konden je factureringsgegevens niet laden. Vernieuw de pagina om het 
 msgid "We couldn't mark these badges as printed. Please try again."
 msgstr "We konden deze badges niet als afgedrukt markeren. Probeer het opnieuw."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:49
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:55
 msgid "We couldn't print your badge. Please see the registration desk."
 msgstr "We konden je badge niet afdrukken. Ga naar de registratiebalie."
 
@@ -22801,7 +22932,7 @@ msgstr "Welkom bij {0}, {1} 👋"
 msgid "Welcome to {0}, here's a listing of all your events"
 msgstr "Welkom bij {0}, hier is een overzicht van al je evenementen"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:43
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:48
 msgid "Welcome, {0}!"
 msgstr "Welkom, {0}!"
 
@@ -23038,6 +23169,10 @@ msgstr "Welke producten kunnen bij deze kassa worden verkocht?"
 msgid "Which ticket for {0}?"
 msgstr "Welk ticket voor {0}?"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:65
+msgid "Which ticket is yours?"
+msgstr "Welk ticket is van jou?"
+
 #: src/components/forms/CheckInListForm/index.tsx:178
 msgid "Which tickets should be associated with this check-in list?"
 msgstr "Welke tickets moeten aan deze inchecklijst worden gekoppeld?"
@@ -23114,6 +23249,10 @@ msgstr "Breedte"
 #: src/components/routes/event/Badges/index.tsx:355
 msgid "Width (mm)"
 msgstr "Breedte (mm)"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:73
+msgid "Windows"
+msgstr "Windows"
 
 #: src/components/common/WidgetEditor/installGuides.ts:73
 msgid "Wix shows embedded code inside a fixed-size box. Set Checkout opens in to New tab for the best experience."
@@ -23237,8 +23376,8 @@ msgstr "U imiteert <0>{0}</0> ({1})"
 msgid "You are issuing a partial refund. The customer will be refunded {0} {1}."
 msgstr "U geeft een gedeeltelijke terugbetaling uit. De klant krijgt {0} {1} terugbetaald."
 
-#: src/hooks/useCheckInController.tsx:234
-#: src/hooks/useCheckInController.tsx:257
+#: src/hooks/useCheckInController.tsx:242
+#: src/hooks/useCheckInController.tsx:265
 msgid "You are offline"
 msgstr "Je bent offline"
 
@@ -23306,8 +23445,8 @@ msgstr "U kunt de laatste actieve organisator van uw account niet archiveren."
 msgid "You cannot change the product type as there are attendees associated with this product."
 msgstr "Je kunt het producttype niet wijzigen omdat er deelnemers aan dit product zijn gekoppeld."
 
-#: src/hooks/useCheckInController.tsx:280
-#: src/hooks/useCheckInController.tsx:360
+#: src/hooks/useCheckInController.tsx:288
+#: src/hooks/useCheckInController.tsx:368
 msgid "You cannot check in attendees with unpaid orders. This setting can be changed in the event settings."
 msgstr "Je kunt deelnemers met onbetaalde bestellingen niet inchecken. Je kunt deze instelling wijzigen in de evenementinstellingen."
 
@@ -23452,7 +23591,7 @@ msgstr "Je ontvangt deze e-mails niet meer. E-mails over je bestellingen en acco
 msgid "You'll be signed out and will need to sign in again with {providerName}."
 msgstr "Je wordt uitgelogd en moet opnieuw inloggen met {providerName}."
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:64
+#: src/components/modals/CreateCheckInListModal/index.tsx:65
 msgid "You'll need a ticket before you can create a check-in list."
 msgstr "Je hebt een ticket nodig voordat je een inchecklijst kunt maken."
 
@@ -23484,7 +23623,7 @@ msgstr "Op het volgende scherm zie je hoe je betaalt en het te betalen bedrag."
 msgid "You'll set the dates and schedule after the event is created."
 msgstr "Je stelt de data en het schema in nadat het evenement is aangemaakt."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:57
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:63
 msgid "You're already checked in, {0}"
 msgstr "Je bent al ingecheckt, {0}"
 
@@ -23492,7 +23631,7 @@ msgstr "Je bent al ingecheckt, {0}"
 msgid "You're changing session times"
 msgstr "Je wijzigt sessietijden"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:44
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:49
 msgid "You're checked in. Enjoy the event."
 msgstr "Je bent ingecheckt. Veel plezier op het evenement."
 
@@ -23612,7 +23751,7 @@ msgstr "Je deelnemers zijn succesvol geëxporteerd."
 msgid "Your attendees will appear here once they have registered for your event. You can also manually add attendees."
 msgstr "Je bezoekers verschijnen hier zodra ze zich hebben geregistreerd voor je evenement. Je kunt deelnemers ook handmatig toevoegen."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:48
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:54
 msgid "Your badge is ready. Collect it from the printer."
 msgstr "Je badge is klaar. Haal hem op bij de printer."
 
@@ -23861,7 +24000,7 @@ msgstr "Je herstelcodes en vertrouwde apparaten worden verwijderd."
 msgid "Your refund is processing."
 msgstr "Je terugbetaling wordt verwerkt."
 
-#: src/hooks/useCheckInController.tsx:90
+#: src/hooks/useCheckInController.tsx:92
 msgid "Your saved date filter is no longer available — showing all dates."
 msgstr "Je opgeslagen datumfilter is niet meer beschikbaar — alle datums worden getoond."
 

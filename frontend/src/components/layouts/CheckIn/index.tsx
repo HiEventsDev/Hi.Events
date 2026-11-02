@@ -22,7 +22,7 @@ import {StatsTab} from "./tabs/StatsTab.tsx";
 import {OccurrenceFilterPill} from "./OccurrenceFilterPill.tsx";
 import {CheckInModals} from "./CheckInModals.tsx";
 import {KioskScanResult, useCheckInController} from "../../../hooks/useCheckInController.tsx";
-import {BadgePrinterSettings} from "./BadgePrinterSettings.tsx";
+import {DeviceSetupModal} from "./DeviceSetupModal.tsx";
 import {KioskCheckIn} from "./KioskCheckIn.tsx";
 import {useHashTab} from "../../../hooks/useHashTab.ts";
 
@@ -224,7 +224,7 @@ const CheckIn = () => {
                             radius="xl"
                             onClick={printerSettingsHandlers.open}
                             aria-label={t`Badge printing`}
-                            className={controller.badgePrinter.settings.autoPrint ? classes.printerBtnActive : classes.infoBtn}
+                            className={controller.badgePrinter.autoPrint ? classes.printerBtnActive : classes.infoBtn}
                             data-testid="check-in-badge-printer-button"
                         >
                             <IconPrinter size={20}/>
@@ -302,8 +302,9 @@ const CheckIn = () => {
                 onClose={infoModalHandlers.close}
             />
             {controller.badgePrinter.isEnabled && (
-                <BadgePrinterSettings
+                <DeviceSetupModal
                     printer={controller.badgePrinter}
+                    isKiosk={false}
                     opened={printerSettingsOpen}
                     onClose={printerSettingsHandlers.close}
                 />

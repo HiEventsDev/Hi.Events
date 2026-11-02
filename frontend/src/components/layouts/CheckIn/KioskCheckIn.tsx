@@ -1,4 +1,4 @@
-import {useEffect} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {useDisclosure} from "@mantine/hooks";
 import {Button, Loader} from "@mantine/core";
 import {t} from "@lingui/macro";
@@ -10,14 +10,19 @@ import {
     IconPrinter,
     IconQrcode,
     IconScan,
+    IconSettings,
 } from "@tabler/icons-react";
 import {CheckInController, KioskScanResult} from "../../../hooks/useCheckInController.tsx";
 import {CheckInList} from "../../../types.ts";
 import {InlineCameraScanner} from "./tabs/InlineCameraScanner.tsx";
-import {BadgePrinterSettings} from "./BadgePrinterSettings.tsx";
+import {DeviceSetupModal} from "./DeviceSetupModal.tsx";
+import {KioskTicketLookup} from "./KioskTicketLookup.tsx";
 import classes from "./KioskCheckIn.module.scss";
 
 const RESET_AFTER_MS = 8000;
+const TAP_TO_PRINT_RESET_AFTER_MS = 30000;
+const STAFF_CONTROLS_HOLD_MS = 800;
+const STAFF_CONTROLS_VISIBLE_MS = 30000;
 
 interface KioskCheckInProps {
     checkInList: CheckInList;
@@ -26,7 +31,7 @@ interface KioskCheckInProps {
     onReset: () => void;
 }
 
-type BadgeState = 'none' | 'printing' | 'ready' | 'failed';
+type BadgeState = 'none' | 'printing' | 'tap' | 'ready' | 'failed';
 
 interface ResultPanelProps {
     result: KioskScanResult;
@@ -45,6 +50,7 @@ const ResultPanel = ({result, badgeState}: ResultPanelProps) => {
                 {badgeState !== 'none' && (
                     <div className={classes.printStatus} data-status={badgeState} data-testid="kiosk-print-status">
                         {badgeState === 'printing' && <><Loader size={16} color="gray"/> {t`Printing your badge…`}</>}
+                        {badgeState === 'tap' && <><IconPrinter size={18}/> {t`Tap Print my badge, then Print.`}</>}
                         {badgeState === 'ready' && <><IconPrinter size={18}/> {t`Your badge is ready. Collect it from the printer.`}</>}
                         {badgeState === 'failed' && <><IconAlertTriangle size={18}/> {t`We couldn't print your badge. Please see the registration desk.`}</>}
                     </div>
@@ -77,22 +83,113 @@ const ResultPanel = ({result, badgeState}: ResultPanelProps) => {
     );
 };
 
+const useScreenWakeLock = () => {
+    useEffect(() => {
+        if (typeof navigator === 'undefined' || !navigator.wakeLock) {
+            return;
+        }
+        let sentinel: WakeLockSentinel | null = null;
+        const requestWakeLock = () => {
+            if (document.visibilityState !== 'visible') {
+                return;
+            }
+            navigator.wakeLock.request('screen')
+                .then((lock) => {
+                    sentinel = lock;
+                })
+                .catch(() => undefined);
+        };
+        requestWakeLock();
+        document.addEventListener('visibilitychange', requestWakeLock);
+        return () => {
+            document.removeEventListener('visibilitychange', requestWakeLock);
+            sentinel?.release().catch(() => undefined);
+        };
+    }, []);
+};
+
+const useStaffControls = () => {
+    const [isVisible, setIsVisible] = useState(false);
+    const holdTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    useEffect(() => {
+        if (!isVisible) {
+            return;
+        }
+        const timer = setTimeout(() => setIsVisible(false), STAFF_CONTROLS_VISIBLE_MS);
+        return () => clearTimeout(timer);
+    }, [isVisible]);
+
+    const cancelHold = () => {
+        if (holdTimerRef.current) {
+            clearTimeout(holdTimerRef.current);
+            holdTimerRef.current = null;
+        }
+    };
+
+    return {
+        isVisible,
+        hide: () => setIsVisible(false),
+        holdHandlers: {
+            onPointerDown: () => {
+                cancelHold();
+                holdTimerRef.current = setTimeout(() => setIsVisible(true), STAFF_CONTROLS_HOLD_MS);
+            },
+            onPointerUp: cancelHold,
+            onPointerLeave: cancelHold,
+            onPointerCancel: cancelHold,
+            onContextMenu: (event: { preventDefault: () => void }) => event.preventDefault(),
+        },
+    };
+};
+
 export const KioskCheckIn = ({checkInList, controller, result, onReset}: KioskCheckInProps) => {
     const printer = controller.badgePrinter;
     const [settingsOpen, settingsHandlers] = useDisclosure(false);
+    const [hasTappedPrint, setHasTappedPrint] = useState(false);
+    const staffControls = useStaffControls();
+    const [isFindingTicket, setIsFindingTicket] = useState(false);
+    const stopFindingTicket = useCallback(() => setIsFindingTicket(false), []);
+    useScreenWakeLock();
     const resultPublicId = result && result.status === 'success' ? result.attendee.public_id : null;
     const isPrinting = resultPublicId !== null && printer.isPrinting(resultPublicId);
-    const badgeState: BadgeState = !printer.isEnabled || resultPublicId === null
-        ? 'none'
-        : (isPrinting ? 'printing' : (printer.hasFailed(resultPublicId) ? 'failed' : 'ready'));
+    const badgeState: BadgeState = (() => {
+        if (!printer.isEnabled || resultPublicId === null) {
+            return 'none';
+        }
+        if (printer.hasFailed(resultPublicId)) {
+            return 'failed';
+        }
+        if (printer.printsFromATap) {
+            return hasTappedPrint ? 'ready' : 'tap';
+        }
+        return isPrinting ? 'printing' : 'ready';
+    })();
+    const resetAfterMs = badgeState === 'tap' ? TAP_TO_PRINT_RESET_AFTER_MS : RESET_AFTER_MS;
+    const isWaitingForPrinter = isPrinting && !printer.printsFromATap;
 
     useEffect(() => {
-        if (!result || isPrinting) {
+        setHasTappedPrint(false);
+        if (result) {
+            setIsFindingTicket(false);
+        }
+    }, [result]);
+
+    useEffect(() => {
+        if (!result || isWaitingForPrinter) {
             return;
         }
-        const timer = setTimeout(onReset, RESET_AFTER_MS);
+        const timer = setTimeout(onReset, resetAfterMs);
         return () => clearTimeout(timer);
-    }, [result, isPrinting]);
+    }, [result, isWaitingForPrinter, resetAfterMs]);
+
+    const handlePrintTap = () => {
+        if (resultPublicId === null) {
+            return;
+        }
+        printer.printBadge(resultPublicId);
+        setHasTappedPrint(true);
+    };
 
     const event = checkInList.event;
     const logo = event?.images?.find((image) => image.type === 'BADGE_LOGO' || image.type === 'TICKET_LOGO');
@@ -114,73 +211,127 @@ export const KioskCheckIn = ({checkInList, controller, result, onReset}: KioskCh
                         >
                             <ResultPanel result={result} badgeState={badgeState}/>
                             <div className={classes.actions}>
+                                {badgeState === 'tap' && (
+                                    <Button
+                                        size="xl"
+                                        radius="xl"
+                                        color="teal"
+                                        className={classes.nextButton}
+                                        leftSection={<IconPrinter size={22}/>}
+                                        loading={isPrinting}
+                                        onClick={handlePrintTap}
+                                        data-testid="kiosk-print-badge-button"
+                                    >
+                                        {t`Print my badge`}
+                                    </Button>
+                                )}
+                                {printer.printsFromATap && badgeState === 'ready' && (
+                                    <Button
+                                        size="md"
+                                        radius="xl"
+                                        variant="subtle"
+                                        color="gray"
+                                        leftSection={<IconPrinter size={18}/>}
+                                        onClick={handlePrintTap}
+                                        data-testid="kiosk-print-again-button"
+                                    >
+                                        {t`Print again`}
+                                    </Button>
+                                )}
                                 <Button
                                     size="xl"
                                     radius="xl"
                                     color={result.status === 'success' ? 'teal' : 'dark'}
+                                    variant={badgeState === 'tap' ? 'default' : 'filled'}
                                     className={classes.nextButton}
                                     onClick={onReset}
                                     data-testid="kiosk-next-button"
                                 >
                                     {result.status === 'success' ? t`Next check-in` : t`Done`}
                                 </Button>
-                                {!isPrinting && (
+                                {!isWaitingForPrinter && (
                                     <div className={classes.countdown} aria-hidden="true">
                                         <span
-                                            key={JSON.stringify(result)}
-                                            style={{animationDuration: `${RESET_AFTER_MS}ms`}}
+                                            key={`${JSON.stringify(result)}-${resetAfterMs}`}
+                                            style={{animationDuration: `${resetAfterMs}ms`}}
                                         />
                                     </div>
                                 )}
                             </div>
                         </div>
                     )
-                    : (
-                        <div className={classes.idle}>
-                            {controller.scanMode === 'camera'
-                                ? (
-                                    <div className={classes.camera}>
-                                        <InlineCameraScanner onAttendeeScanned={controller.handleQrCheckIn}/>
-                                    </div>
-                                )
-                                : <IconQrcode size={120} stroke={1.1} className={classes.idleIcon}/>}
-                            <h1 className={classes.idleTitle}>{t`Scan your ticket to check in`}</h1>
-                            <p className={classes.idleText}>
-                                {controller.badgePrinter.isEnabled
-                                    ? t`Hold up the QR code from your ticket email and your badge will print.`
-                                    : t`Hold up the QR code from your ticket email.`}
-                            </p>
-                        </div>
-                    )}
+                    : isFindingTicket
+                        ? (
+                            <KioskTicketLookup
+                                checkInListShortId={checkInList.short_id}
+                                onTicketChosen={controller.handleQrCheckIn}
+                                onCancel={stopFindingTicket}
+                            />
+                        )
+                        : (
+                            <div className={classes.idle}>
+                                {controller.scanMode === 'camera'
+                                    ? (
+                                        <div className={classes.camera}>
+                                            <InlineCameraScanner onAttendeeScanned={controller.handleQrCheckIn}/>
+                                        </div>
+                                    )
+                                    : <IconQrcode size={120} stroke={1.1} className={classes.idleIcon}/>}
+                                <h1 className={classes.idleTitle}>{t`Scan your ticket to check in`}</h1>
+                                <p className={classes.idleText}>
+                                    {controller.badgePrinter.isEnabled
+                                        ? t`Hold up the QR code from your ticket email and your badge will print.`
+                                        : t`Hold up the QR code from your ticket email.`}
+                                </p>
+                                {checkInList.kiosk_lookup_enabled && (
+                                    <Button
+                                        size="lg"
+                                        radius="xl"
+                                        variant="default"
+                                        className={classes.findTicketButton}
+                                        onClick={() => setIsFindingTicket(true)}
+                                        data-testid="kiosk-find-ticket-button"
+                                    >
+                                        {t`Can't find your QR code?`}
+                                    </Button>
+                                )}
+                            </div>
+                        )}
             </main>
 
             <footer className={classes.footer}>
-                <span>{checkInList.name}</span>
-                <div className={classes.footerActions}>
-                    {printer.isEnabled && (
-                        <button
-                            type="button"
-                            className={classes.modeButton}
-                            onClick={settingsHandlers.open}
-                            data-testid="kiosk-printer-settings-button"
-                        >
-                            <IconPrinter size={14}/> {t`Printer`}
-                        </button>
-                    )}
-                    <button
-                        type="button"
-                        className={classes.modeButton}
-                        onClick={() => controller.setScanMode(controller.scanMode === 'camera' ? 'usb' : 'camera')}
-                    >
-                        {controller.scanMode === 'camera'
-                            ? <><IconScan size={14}/> {t`Use a USB scanner`}</>
-                            : <><IconCamera size={14}/> {t`Use the camera`}</>}
-                    </button>
-                </div>
+                <span className={classes.listName} {...staffControls.holdHandlers} data-testid="kiosk-staff-controls-trigger">
+                    {checkInList.name}
+                </span>
+                {staffControls.isVisible && (
+                    <div className={classes.staffControls} data-testid="kiosk-staff-controls">
+                        <div className={classes.footerActions}>
+                            <button
+                                type="button"
+                                className={classes.modeButton}
+                                onClick={() => {
+                                    staffControls.hide();
+                                    settingsHandlers.open();
+                                }}
+                                data-testid="kiosk-setup-button"
+                            >
+                                <IconSettings size={14}/> {t`Set up`}
+                            </button>
+                            <button
+                                type="button"
+                                className={classes.modeButton}
+                                onClick={() => controller.setScanMode(controller.scanMode === 'camera' ? 'usb' : 'camera')}
+                                data-testid="kiosk-scan-mode-button"
+                            >
+                                {controller.scanMode === 'camera'
+                                    ? <><IconScan size={14}/> {t`Use a USB scanner`}</>
+                                    : <><IconCamera size={14}/> {t`Use the camera`}</>}
+                            </button>
+                        </div>
+                    </div>
+                )}
             </footer>
-            {printer.isEnabled && (
-                <BadgePrinterSettings printer={printer} opened={settingsOpen} onClose={settingsHandlers.close}/>
-            )}
+            <DeviceSetupModal printer={printer} isKiosk opened={settingsOpen} onClose={settingsHandlers.close}/>
         </div>
     );
 };

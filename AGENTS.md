@@ -119,7 +119,7 @@ Feature rules live in `.claude/rules/`; Claude Code loads each file automaticall
 | Frontend UI patterns | `.claude/rules/frontend/ui.md` |
 | E2E specs | `.claude/rules/e2e.md` |
 
-Procedures are skills in `.agents/skills/`: `translations`, `api-smoke-test`, `e2e-dev-stack`.
+Procedures are skills in `.agents/skills/`: `translations`, `api-smoke-test`, `e2e-dev-stack`, `badge-printer-emulator`.
 
 ## Maintaining these docs
 

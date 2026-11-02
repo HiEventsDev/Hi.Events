@@ -23,6 +23,18 @@ interface AttendeeRepositoryInterface extends RepositoryInterface
 
     public function findForBadges(BadgeAttendeeQueryDTO $query): LengthAwarePaginator;
 
+    /**
+     * @param  int[]  $productIds
+     * @return Collection<int, AttendeeDomainObject>
+     */
+    public function findKioskTicketMatches(
+        int $eventId,
+        string $email,
+        string $lastName,
+        array $productIds,
+        ?int $eventOccurrenceId,
+    ): Collection;
+
     public function getBadgeStats(int $eventId, bool $includeAwaitingPayment, ?int $eventOccurrenceId = null): BadgeStatsDTO;
 
     /**

@@ -64,23 +64,23 @@ msgstr "{0} (predvolený)"
 msgid "{0} {1}"
 msgstr "{0} {1}"
 
-#: src/hooks/useCheckInController.tsx:333
+#: src/hooks/useCheckInController.tsx:341
 msgid "{0} {1} is already checked in"
 msgstr "{0} {1} je už odbavený"
 
-#: src/hooks/useCheckInController.tsx:332
+#: src/hooks/useCheckInController.tsx:340
 msgid "{0} {1} is already checked in · {seatLabel}"
 msgstr "{0} {1} je už odbavený · {seatLabel}"
 
-#: src/hooks/useCheckInController.tsx:217
+#: src/hooks/useCheckInController.tsx:225
 msgid "{0} <0>checked in</0>"
 msgstr "{0} <0>prihlásených</0>"
 
-#: src/hooks/useCheckInController.tsx:216
+#: src/hooks/useCheckInController.tsx:224
 msgid "{0} <0>checked in</0> · {seatLabel}"
 msgstr "{0} <0>prihlásený</0> · {seatLabel}"
 
-#: src/hooks/useCheckInController.tsx:249
+#: src/hooks/useCheckInController.tsx:257
 msgid "{0} <0>checked out</0> successfully"
 msgstr "{0} úspešne <0>odhlásený</0>"
 
@@ -1000,9 +1000,9 @@ msgstr "Ešte pár krokov a môžete začať predávať."
 msgid "A focused reading column. Tickets appear wherever you place them in Sections."
 msgstr "Sústredený stĺpec na čítanie. Vstupenky sa zobrazia tam, kam ich umiestnite v sekciách."
 
-#: src/components/forms/CheckInListForm/index.tsx:289
-msgid "A full-screen scanner where attendees check themselves in. Attendee lists and search are hidden."
-msgstr "Celoobrazovkový skener, pri ktorom sa účastníci odbavia sami. Zoznamy účastníkov a vyhľadávanie sú skryté."
+#: src/components/forms/CheckInListForm/index.tsx:290
+msgid "A full-screen scanner where attendees check themselves in. Attendee lists and search are hidden. Staff can press and hold the list name at the bottom of the kiosk to change its scanner or printer."
+msgstr "Celoobrazovkový skener, pri ktorom sa účastníci odbavia sami. Zoznamy účastníkov a vyhľadávanie sú skryté. Personál môže podržať názov zoznamu v dolnej časti kiosku a zmeniť skener alebo tlačiareň."
 
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:238
 msgid "A gallery can have up to {MAX_GALLERY_PHOTOS} photos."
@@ -1910,8 +1910,8 @@ msgstr "Program: devconf.example/agenda"
 msgid "Aisles after seats"
 msgstr "Uličky za miestami"
 
-#: src/hooks/useBadgePrinter.ts:118
-#: src/hooks/useBadgePrinter.ts:121
+#: src/hooks/useBadgePrinter.ts:107
+#: src/hooks/useBadgePrinter.ts:110
 msgid "Alex"
 msgstr "Alex"
 
@@ -2922,7 +2922,7 @@ msgstr "Účastník presunutý"
 msgid "Attendee names appear on the printout. Handle it accordingly."
 msgstr "Na výtlačku sa zobrazujú mená účastníkov. Zaobchádzajte s ním primerane."
 
-#: src/hooks/useCheckInController.tsx:319
+#: src/hooks/useCheckInController.tsx:327
 msgid "Attendee not found"
 msgstr "Účastník nenájdený"
 
@@ -2981,6 +2981,10 @@ msgstr "Účastníci"
 #: src/components/layouts/CheckIn/tabs/StatsTab.tsx:72
 msgid "attendees checked in"
 msgstr "prihlásených účastníkov"
+
+#: src/components/forms/CheckInListForm/index.tsx:297
+msgid "Attendees enter the email address and last name on their ticket. The kiosk only shows their first name and ticket type."
+msgstr "Účastníci zadajú e-mailovú adresu a priezvisko zo svojho lístka. Kiosk zobrazí len ich krstné meno a typ lístka."
 
 #: src/components/routes/event/attendees.tsx:170
 msgid "Attendees Exported"
@@ -3122,6 +3126,8 @@ msgstr "Awesome Events Ltd."
 msgid "Awesome Organizer Ltd."
 msgstr "Awesome Organizer Ltd."
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:82
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:125
 #: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:52
 #: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:82
 #: src/components/layouts/SettingsLayout/index.tsx:60
@@ -3135,7 +3141,7 @@ msgstr "Awesome Organizer Ltd."
 msgid "Back"
 msgstr "Späť"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:48
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:72
 #: src/components/routes/event/Badges/index.tsx:548
 #: src/components/routes/event/Badges/index.tsx:556
 msgid "Back of the badge"
@@ -3227,8 +3233,8 @@ msgstr "Dizajn menovky bol uložený"
 msgid "Badge label for {0}"
 msgstr "Označenie na menovke pre {0}"
 
-#: src/components/forms/CheckInListForm/index.tsx:299
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:20
+#: src/components/forms/CheckInListForm/index.tsx:309
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:33
 #: src/components/layouts/CheckIn/index.tsx:226
 msgid "Badge printing"
 msgstr "Tlač menoviek"
@@ -3253,6 +3259,10 @@ msgstr "Menovky boli označené ako vytlačené"
 #: src/components/routes/event/Badges/index.tsx:577
 msgid "Badges on a lanyard often flip around. Print both sides so names always face out."
 msgstr "Menovky na šnúrke sa často pretočia. Vytlačte obe strany, aby bolo meno vždy vidieť."
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:88
+msgid "Badges saved as PDF files instead? Chrome's last printer was Save as PDF. Repeat the first step and choose the badge printer."
+msgstr "Menovky sa ukladajú ako PDF? Posledná tlačiareň v Chrome bola Uložiť ako PDF. Zopakujte prvý krok a vyberte tlačiareň menoviek."
 
 #: src/components/common/CapacityHelp/index.tsx:54
 #: src/ee/seating/components/lib/templates.ts:106
@@ -3721,6 +3731,10 @@ msgstr "Môže vidieť finančné údaje"
 msgid "Can't check in"
 msgstr "Check-in nie je možný"
 
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:295
+msgid "Can't find your QR code?"
+msgstr "Neviete nájsť svoj QR kód?"
+
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:133
 msgid "Can't import"
 msgstr "Nedá sa importovať"
@@ -3747,7 +3761,7 @@ msgstr "Nemôžete použiť overovaciu aplikáciu ani záložné kódy?"
 #: src/components/modals/CreateAffiliateModal/index.tsx:88
 #: src/components/modals/CreateAttendeeModal/index.tsx:335
 #: src/components/modals/CreateCapacityAssignmentModal/index.tsx:75
-#: src/components/modals/CreateCheckInListModal/index.tsx:106
+#: src/components/modals/CreateCheckInListModal/index.tsx:107
 #: src/components/modals/CreateEventModal/index.tsx:478
 #: src/components/modals/CreateOrganizerModal/index.tsx:66
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:89
@@ -3759,7 +3773,7 @@ msgstr "Nemôžete použiť overovaciu aplikáciu ani záložné kódy?"
 #: src/components/modals/DuplicateEventModal/index.tsx:309
 #: src/components/modals/EditAffiliateModal/index.tsx:104
 #: src/components/modals/EditCapacityAssignmentModal/index.tsx:70
-#: src/components/modals/EditCheckInListModal/index.tsx:106
+#: src/components/modals/EditCheckInListModal/index.tsx:108
 #: src/components/modals/EditOrganizerWebhookModal/index.tsx:82
 #: src/components/modals/EditProductCategoryModal/index.tsx:71
 #: src/components/modals/EditPromoCodeModal/index.tsx:85
@@ -4248,7 +4262,7 @@ msgstr "Odbavenie vytvorené"
 msgid "Check-in Deleted"
 msgstr "Odbavenie odstránené"
 
-#: src/hooks/useCheckInController.tsx:170
+#: src/hooks/useCheckInController.tsx:178
 msgid "Check-in for {0} was undone"
 msgstr "Check-in pre {0} bol vrátený späť"
 
@@ -4721,6 +4735,10 @@ msgstr "zavrieť"
 #: src/utilites/notifications.tsx:6
 msgid "Close"
 msgstr "Zavrieť"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:31
+msgid "Close every Chrome window, and quit Chrome from the system tray if it's still running there."
+msgstr "Zatvorte všetky okná Chrome a ukončite Chrome v oblasti oznámení, ak tam stále beží."
 
 #: src/components/layouts/AppLayout/Sidebar/index.tsx:117
 #: src/components/layouts/AppLayout/Topbar/index.tsx:38
@@ -5410,6 +5428,7 @@ msgstr "Kopírovať kód"
 msgid "Copy Code"
 msgstr "Kopírovať kód"
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:17
 #: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:25
 msgid "Copy command"
 msgstr "Kopírovať príkaz"
@@ -5738,7 +5757,7 @@ msgstr "Vytvoriť mapu sedadiel"
 msgid "Create a ticket"
 msgstr "Vytvoriť lístok"
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:72
+#: src/components/modals/CreateCheckInListModal/index.tsx:73
 #: src/ee/box-office/components/modals/CreateBoxOfficeModal/index.tsx:79
 msgid "Create a Ticket"
 msgstr "Vytvoriť lístok"
@@ -5819,8 +5838,8 @@ msgstr "Vytvoriť kategóriu"
 
 #: src/components/common/CheckInListList/index.tsx:60
 #: src/components/common/CheckInListTable/index.tsx:303
-#: src/components/modals/CreateCheckInListModal/index.tsx:91
-#: src/components/modals/CreateCheckInListModal/index.tsx:112
+#: src/components/modals/CreateCheckInListModal/index.tsx:92
+#: src/components/modals/CreateCheckInListModal/index.tsx:113
 #: src/components/routes/event/CheckInLists/index.tsx:76
 msgid "Create Check-In List"
 msgstr "Vytvoriť zoznam odbavení"
@@ -6906,8 +6925,8 @@ msgid "Donation"
 msgstr "Dar"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:264
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:70
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:125
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:99
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:250
 #: src/components/modals/CheckInListSuccessModal/index.tsx:59
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:73
 #: src/components/modals/CreateWebhookModal/index.tsx:73
@@ -7183,6 +7202,10 @@ msgstr "Každý účet dostane tento e-mail najviac raz."
 msgid "Each badge prints on its own page, for card and label printers."
 msgstr "Každá menovka sa vytlačí na samostatnú stranu – pre tlačiarne kariet a etikiet."
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:46
+msgid "Each badge then takes two taps: Print badge, then Print. Safari adds margins of its own, so badges print a little smaller than from a computer."
+msgstr "Potom každá menovka znamená dve ťuknutia: „Vytlačiť menovku“ a potom „Tlačiť“. Safari pridáva vlastné okraje, takže menovky sú o niečo menšie ako z počítača."
+
 #: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:24
 msgid "Each code can be used once to sign in if you lose access to your authenticator app."
 msgstr "Každý kód možno použiť raz na prihlásenie, ak stratíte prístup k overovacej aplikácii."
@@ -7295,7 +7318,7 @@ msgstr "Upraviť kategóriu"
 
 #: src/components/common/CheckInListList/index.tsx:147
 #: src/components/common/CheckInListTable/index.tsx:208
-#: src/components/modals/EditCheckInListModal/index.tsx:81
+#: src/components/modals/EditCheckInListModal/index.tsx:83
 msgid "Edit Check-In List"
 msgstr "Upraviť zoznam odbavení"
 
@@ -7477,6 +7500,7 @@ msgstr "E-maily a naplánované správy"
 msgid "Email & Templates"
 msgstr "E-mail a šablóny"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:97
 #: src/components/modals/CreateAttendeeModal/index.tsx:228
 #: src/components/modals/ManageAttendeeModal/index.tsx:232
 #: src/components/modals/ManageOrderModal/index.tsx:293
@@ -7854,6 +7878,10 @@ msgstr "Zadajte client secret."
 #: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:74
 msgid "Enter the directory (tenant) ID. It looks like 00000000-0000-0000-0000-000000000000."
 msgstr "Zadajte directory (tenant) ID. Vyzerá napríklad takto: 00000000-0000-0000-0000-000000000000."
+
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:90
+msgid "Enter the email address and last name on your ticket."
+msgstr "Zadajte e-mailovú adresu a priezvisko zo svojho lístka."
 
 #: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:73
 msgid "Enter the issuer URL, starting with https://."
@@ -8646,7 +8674,7 @@ msgstr "Nepodarilo sa exportovať správu. Skúste to znovu."
 msgid "Failed to load box office"
 msgstr "Nepodarilo sa načítať pokladňu"
 
-#: src/components/modals/EditCheckInListModal/index.tsx:91
+#: src/components/modals/EditCheckInListModal/index.tsx:93
 msgid "Failed to load Check-In List"
 msgstr "Nepodarilo sa načítať zoznam odbavení"
 
@@ -8988,6 +9016,14 @@ msgstr "Nájsť miesta: {bestAvailableQuantity}"
 msgid "Find 1 seat"
 msgstr "Nájsť 1 miesto"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:123
+msgid "Find my ticket"
+msgstr "Nájsť môj lístok"
+
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:89
+msgid "Find your ticket"
+msgstr "Nájdite svoj lístok"
+
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:143
 msgid "Finish or cancel the current sale first"
 msgstr "Najprv dokončite alebo zrušte aktuálny predaj"
@@ -9167,12 +9203,12 @@ msgstr "Leták"
 msgid "Fold and cutting guides"
 msgstr "Čiary na preloženie a strihanie"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:56
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:80
 #: src/components/routes/event/Badges/index.tsx:570
 msgid "Fold-over"
 msgstr "Skladacia"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:49
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:73
 msgid "Fold-over prints the front and back side by side on one page, to fold in half. It works on any printer."
 msgstr "Skladacia menovka má prednú a zadnú stranu vytlačenú vedľa seba na jednej strane, ktorá sa preloží na polovicu. Funguje s akoukoľvek tlačiarňou."
 
@@ -9224,9 +9260,9 @@ msgstr "Napríklad: #DevConf2027"
 msgid "For example: Ask me about volunteering"
 msgstr "Napríklad: Spýtaj sa ma na dobrovoľníctvo"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:62
-msgid "For one-tap printing on a laptop, set the label printer as the default printer and open this page in Chrome started with the --kiosk-printing option."
-msgstr "Na tlač jedným ťuknutím na notebooku nastavte tlačiareň etikiet ako predvolenú a otvorte túto stránku v Chrome spustenom s voľbou --kiosk-printing."
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:65
+msgid "For thermal label printers such as Brother QL and Zebra. Colours print as solid black so ribbons and names stay sharp."
+msgstr "Pre termálne tlačiarne etikiet, ako sú Brother QL a Zebra. Farby sa tlačia plnou čiernou, aby stuhy a mená zostali ostré."
 
 #: src/components/common/ConfirmIdentity/index.tsx:109
 msgid "For your security, sign in again to confirm it's you."
@@ -9342,7 +9378,7 @@ msgstr "Čítačka pri hlavnom vchode"
 msgid "Front left"
 msgstr "Vpredu vľavo"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:54
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:78
 msgid "Front only"
 msgstr "Iba predná strana"
 
@@ -9952,11 +9988,11 @@ msgstr "Pozdržať {0} sedadiel v {dateCount} dátumoch"
 msgid "Hold places for"
 msgstr "Držať miesta"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:150
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:283
 msgid "Hold up the QR code from your ticket email and your badge will print."
 msgstr "Ukážte QR kód z e-mailu s lístkom a vaša menovka sa vytlačí."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:151
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:284
 msgid "Hold up the QR code from your ticket email."
 msgstr "Ukážte QR kód z e-mailu s lístkom."
 
@@ -10495,6 +10531,10 @@ msgstr "Číslovanie faktúr"
 msgid "Invoice Settings"
 msgstr "Nastavenia faktúry"
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:74
+msgid "iPad"
+msgstr "iPad"
+
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:175
 msgid "Issued"
 msgstr "Vydaná"
@@ -10712,7 +10752,7 @@ msgstr "Popis"
 msgid "Label — e.g. Morning session"
 msgstr "Označenie — napr. Ranné sedenie"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:33
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:49
 msgid "Label size on this device"
 msgstr "Veľkosť etikety na tomto zariadení"
 
@@ -10801,6 +10841,7 @@ msgstr "Posledných 90 dní"
 msgid "Last active"
 msgstr "Naposledy aktívny"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:103
 #: src/components/modals/CreateAttendeeModal/index.tsx:221
 #: src/components/modals/ManageAttendeeModal/index.tsx:228
 #: src/components/modals/ManageOrderModal/index.tsx:286
@@ -10831,6 +10872,7 @@ msgstr "Priezvisko"
 msgid "Last name (A–Z)"
 msgstr "Priezvisko (A – Z)"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:24
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:32
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:32
 msgid "Last name is required"
@@ -10949,6 +10991,10 @@ msgstr "Ľavé krídlo"
 #: src/components/routes/event/Lineup/RunSheetPrint.tsx:138
 msgid "Length"
 msgstr "Dĺžka"
+
+#: src/components/forms/CheckInListForm/index.tsx:296
+msgid "Let attendees find their ticket without the QR code"
+msgstr "Umožniť účastníkom nájsť lístok bez QR kódu"
 
 #: src/ee/seating/components/routes/event/Seating/SeatingRulesCard.tsx:46
 msgid "Let buyers change their seat after booking"
@@ -11322,6 +11368,10 @@ msgstr "Stratili ste prístup?"
 #: src/components/routes/settings/Security/index.tsx:200
 msgid "Lost your phone or switching apps? Turn it off, then on again to connect a new authenticator."
 msgstr "Stratili ste telefón alebo meníte aplikáciu? Vypnite overenie a znova ho zapnite, aby ste pripojili novú overovaciu aplikáciu."
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:72
+msgid "Mac"
+msgstr "Mac"
 
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:66
 msgid "Main auditorium"
@@ -11829,8 +11879,8 @@ msgstr "Viac miest"
 msgid "More seats"
 msgstr "Viac miest"
 
-#: src/hooks/useBadgePrinter.ts:119
-#: src/hooks/useBadgePrinter.ts:122
+#: src/hooks/useBadgePrinter.ts:108
+#: src/hooks/useBadgePrinter.ts:111
 msgid "Morgan"
 msgstr "Morgan"
 
@@ -12001,7 +12051,7 @@ msgstr "Mená veľkými písmenami"
 msgid "Navigate to Attendee"
 msgstr "Prejsť na účastníka"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:73
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:79
 msgid "Need a new badge? Please see the registration desk."
 msgstr "Potrebujete novú menovku? Obráťte sa na registračný pult."
 
@@ -12155,7 +12205,7 @@ msgstr "Ďalší účastník"
 msgid "Next batch"
 msgstr "Ďalšia dávka"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:125
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:250
 msgid "Next check-in"
 msgstr "Ďalšia registrácia"
 
@@ -13260,6 +13310,10 @@ msgstr "{day}. {month}"
 msgid "On a product priced at 50.00, this adds {exampleAmount}."
 msgstr "Pri produkte s cenou 50.00 to pridá {exampleAmount}."
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:91
+msgid "On computers your IT team manages, Chrome's SilentPrintingEnabled policy does the same without the command."
+msgstr "Na počítačoch, ktoré spravuje váš IT tím, urobí to isté bez príkazu pravidlo Chrome SilentPrintingEnabled."
+
 #: src/components/routes/event/HomepageDesigner/LayoutPicker/index.tsx:14
 msgid "On large screens tickets stay beside your content as people scroll. Suits conferences and long lineups."
 msgstr "Na veľkých obrazovkách zostávajú vstupenky pri posúvaní vedľa obsahu. Vhodné pre konferencie a rozsiahle line-upy."
@@ -13569,6 +13623,10 @@ msgstr "Otvoriť nastavenia"
 #: src/components/layouts/AppLayout/Topbar/index.tsx:38
 msgid "Open sidebar"
 msgstr "Otvoriť bočný panel"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:34
+msgid "Open Terminal and run this command:"
+msgstr "Otvorte Terminál a spustite tento príkaz:"
 
 #: src/components/routes/sso/Callback/SsoErrorState.tsx:64
 msgid "Open the invitation email we sent you to finish joining the team."
@@ -14804,7 +14862,7 @@ msgstr "Pokračujte na novej karte"
 msgid "Please create a product"
 msgstr "Vytvorte produkt"
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:60
+#: src/components/modals/CreateCheckInListModal/index.tsx:61
 #: src/ee/box-office/components/modals/CreateBoxOfficeModal/index.tsx:67
 msgid "Please create a ticket"
 msgstr "Vytvorte lístok"
@@ -14813,6 +14871,7 @@ msgstr "Vytvorte lístok"
 msgid "Please don't leave a single empty seat: {0}"
 msgstr "Prosím, nenechávajte jedno osamotené voľné sedadlo: {0}"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:23
 #: src/components/modals/JoinWaitlistModal/index.tsx:57
 msgid "Please enter a valid email address"
 msgstr "Zadajte platnú e-mailovú adresu"
@@ -14858,7 +14917,7 @@ msgstr "Reštartujte proces pokladne."
 msgid "Please return to the event page to start over."
 msgstr "Vráťte sa na stránku udalosti a začnite odznova."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:74
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:80
 msgid "Please see the registration desk and we'll sort it out."
 msgstr "Obráťte sa na registračný pult a vyriešime to."
 
@@ -14970,6 +15029,10 @@ msgstr "Tlač"
 msgid "Press where the first seat goes and drag. Drag sideways for seats, down for more rows."
 msgstr "Stlačte tam, kde má byť prvé miesto, a potiahnite. Ťahajte do strán pre miesta, nadol pre ďalšie rady."
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:35
+msgid "Press Windows+R, paste this command and press Enter:"
+msgstr "Stlačte Windows+R, vložte tento príkaz a stlačte Enter:"
+
 #: src/components/routes/event/CapacityAssignments/index.tsx:33
 msgid "Prevent overselling by sharing inventory across multiple ticket types."
 msgstr "Predchádzajte predaju nad kapacitu zdieľaním zásob naprieč viacerými typmi lístkov."
@@ -15069,7 +15132,7 @@ msgstr "Ceny"
 msgid "Print"
 msgstr "Tlačiť"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:25
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:41
 msgid "Print a badge when someone checks in"
 msgstr "Vytlačiť menovku pri odbavení"
 
@@ -15077,13 +15140,25 @@ msgstr "Vytlačiť menovku pri odbavení"
 msgid "Print a sample badge"
 msgstr "Vytlačiť vzorovú menovku"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:67
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:96
 msgid "Print a test badge"
 msgstr "Vytlačiť testovaciu menovku"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:28
+msgid "Print a test badge from this page. In Chrome's print window, choose the badge printer and check the paper size matches your labels, then print. Chrome reuses these choices for every badge."
+msgstr "Vytlačte z tejto stránky testovaciu menovku. V okne tlače Chrome vyberte tlačiareň menoviek, skontrolujte, či veľkosť papiera zodpovedá etiketám, a vytlačte. Chrome tieto voľby použije pre každú menovku."
+
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:238
+msgid "Print again"
+msgstr "Vytlačiť znova"
 
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:722
 msgid "Print All Tickets"
 msgstr "Vytlačiť všetky lístky"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:41
+msgid "Print another test badge. It should print straight away, without a print window."
+msgstr "Vytlačte ďalšiu testovaciu menovku. Mala by sa vytlačiť hneď, bez okna tlače."
 
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:326
 #: src/hooks/useAttendeeActions.tsx:119
@@ -15097,13 +15172,17 @@ msgstr "Vytlačiť menovku"
 msgid "Print badges"
 msgstr "Vytlačiť menovky"
 
-#: src/components/forms/CheckInListForm/index.tsx:306
+#: src/components/forms/CheckInListForm/index.tsx:316
 msgid "Print badges from this list"
 msgstr "Tlačiť menovky z tohto zoznamu"
 
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:134
 msgid "Print map"
 msgstr "Tlačiť plán"
+
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:225
+msgid "Print my badge"
+msgstr "Vytlačiť moju menovku"
 
 #: src/components/routes/event/TicketDesigner/index.tsx:122
 msgid "Print Preview"
@@ -15126,6 +15205,10 @@ msgstr "Vytlačiť lístky"
 msgid "Print to PDF"
 msgstr "Tlačiť do PDF"
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:85
+msgid "Print window still showing? Chrome was already running when the command ran. Quit it and run the command again."
+msgstr "Okno tlače sa stále zobrazuje? Chrome už bežal, keď sa príkaz spustil. Ukončite ho a spustite príkaz znova."
+
 #: src/components/routes/event/Lineup/index.tsx:154
 msgid "Printable run sheet"
 msgstr "Tlačiteľný plán dňa"
@@ -15143,15 +15226,11 @@ msgstr "Vytlačené {0}"
 msgid "Printed ×{count}"
 msgstr "Vytlačené ×{count}"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:167
-msgid "Printer"
-msgstr "Tlačiareň"
-
 #: src/components/routes/event/Badges/index.tsx:600
 msgid "Printing at the door"
 msgstr "Tlač pri vstupe"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:47
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:52
 msgid "Printing your badge…"
 msgstr "Tlačíme vašu menovku…"
 
@@ -15532,6 +15611,10 @@ msgstr "Rýchly tip"
 #: src/utilites/badges.ts:63
 msgid "Quiet and typographic, lots of white space"
 msgstr "Decentná a typografická, veľa voľného priestoru"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:30
+msgid "Quit Chrome completely with ⌘Q."
+msgstr "Úplne ukončite Chrome klávesmi ⌘Q."
 
 #: src/components/forms/QuestionForm/index.tsx:118
 msgid "Radio Option"
@@ -16685,7 +16768,7 @@ msgstr "Predaje:"
 msgid "Same as event"
 msgstr "Rovnako ako podujatie"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:39
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:55
 msgid "Same as the badge design ({designSize})"
 msgstr "Rovnaká ako v dizajne menovky ({designSize})"
 
@@ -16767,7 +16850,7 @@ msgstr "Uložiť zmeny"
 #: src/components/common/DesignerShell/index.tsx:172
 #: src/components/modals/EditAffiliateModal/index.tsx:109
 #: src/components/modals/EditCapacityAssignmentModal/index.tsx:75
-#: src/components/modals/EditCheckInListModal/index.tsx:111
+#: src/components/modals/EditCheckInListModal/index.tsx:113
 #: src/components/modals/EditOrganizerWebhookModal/index.tsx:87
 #: src/components/modals/EditProductCategoryModal/index.tsx:73
 #: src/components/modals/EditPromoCodeModal/index.tsx:87
@@ -16869,7 +16952,7 @@ msgstr "Uložené miesto"
 msgid "Saved locations"
 msgstr "Uložené miesta"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:26
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:42
 msgid "Saved on this device only"
 msgstr "Uložené len na tomto zariadení"
 
@@ -16908,7 +16991,7 @@ msgstr "Naskenujte lístok a prihláste príchod účastníka"
 msgid "Scan tickets at the door with a phone, tablet, or USB scanner."
 msgstr "Skenujte lístky pri vstupe telefónom, tabletom alebo USB skenérom."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:147
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:280
 msgid "Scan your ticket to check in"
 msgstr "Naskenujte lístok a odbavte sa"
 
@@ -17161,7 +17244,7 @@ msgid "Seasonal"
 msgstr "Sezónne"
 
 #: src/components/common/AttendeeTicket/index.tsx:133
-#: src/components/common/NameBadge/index.tsx:82
+#: src/components/common/NameBadge/index.tsx:86
 #: src/components/modals/ManageAttendeeModal/index.tsx:170
 #: src/ee/seating/components/ManualSeatField/index.tsx:42
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:339
@@ -17835,6 +17918,10 @@ msgstr "Nastavte počiatočné číslo pre číslovanie faktúr. Toto nie je mo�
 msgid "Set to unlimited (remove limit)"
 msgstr "Nastaviť na neobmedzené (odstrániť limit)"
 
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:318
+msgid "Set up"
+msgstr "Nastaviť"
+
 #: src/components/routes/event/OccurrencesTab/index.tsx:639
 msgid "Set up a recurring schedule to automatically create dates, or add them one at a time."
 msgstr "Nastavte opakujúci sa rozvrh, aby sa termíny vytvárali automaticky, alebo ich pridávajte po jednom."
@@ -17860,6 +17947,14 @@ msgstr "Nastaviť SSO"
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:92
 msgid "Set up the tickets you'll sell and their prices"
 msgstr "Nastavte lístky, ktoré budete predávať, a ich ceny"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:66
+msgid "Set up this device"
+msgstr "Nastaviť toto zariadenie"
+
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:33
+msgid "Set up this kiosk"
+msgstr "Nastaviť tento kiosk"
 
 #: src/components/routes/settings/Security/EnableTwoFactorModal.tsx:15
 msgid "Set up two-factor authentication"
@@ -18600,6 +18695,10 @@ msgstr "Niečo sa pokazilo! Skúste to znovu"
 msgid "Something went wrong."
 msgstr "Niečo sa pokazilo."
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:57
+msgid "Something went wrong. Please see the registration desk."
+msgstr "Niečo sa pokazilo. Obráťte sa na registračný pult."
+
 #: src/components/modals/JoinWaitlistModal/index.tsx:141
 msgid "Something went wrong. Please try again later."
 msgstr "Niečo sa pokazilo. Skúste to neskôr."
@@ -18739,7 +18838,7 @@ msgstr "Personál môže ručne uplatniť zľavu"
 msgid "Staff can change the price of an item during a sale"
 msgstr "Personál môže počas predaja zmeniť cenu položky"
 
-#: src/components/forms/CheckInListForm/index.tsx:307
+#: src/components/forms/CheckInListForm/index.tsx:317
 msgid "Staff can print or reprint badges from this list, or print them automatically on check-in"
 msgstr "Personál môže z tohto zoznamu tlačiť menovky alebo ich tlačiť znova, prípadne ich tlačiť automaticky pri odbavení"
 
@@ -19237,7 +19336,7 @@ msgstr "Účastník bol úspešne aktualizovaný"
 msgid "Successfully updated Capacity Assignment"
 msgstr "Priradenie kapacity bolo úspešne aktualizované"
 
-#: src/components/modals/EditCheckInListModal/index.tsx:55
+#: src/components/modals/EditCheckInListModal/index.tsx:56
 msgid "Successfully updated Check-In List"
 msgstr "Zoznam odbavení bol úspešne aktualizovaný"
 
@@ -19442,6 +19541,14 @@ msgstr "Ťuknutím na sedadlo ho pridáte, alebo najprv nastavte počty"
 msgid "Tap dates like a calendar."
 msgstr "Klikajte na dátumy ako v kalendári."
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:45
+msgid "Tap Print a test badge, choose the badge printer and paper size, then tap Print. The iPad remembers both for the next badge."
+msgstr "Ťuknite na „Vytlačiť testovaciu menovku“, vyberte tlačiareň menoviek a veľkosť papiera a ťuknite na „Tlačiť“. iPad si oboje zapamätá pre ďalšiu menovku."
+
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:53
+msgid "Tap Print my badge, then Print."
+msgstr "Ťuknite na „Vytlačiť moju menovku“ a potom na „Tlačiť“."
+
 #: src/components/layouts/CheckIn/tabs/ScanTab.tsx:59
 msgid "Tap this screen to resume scanning"
 msgstr "Ťuknite na obrazovku a skenovanie bude pokračovať"
@@ -19615,7 +19722,7 @@ msgstr "Výraz"
 msgid "Terms of Service"
 msgstr "Podmienky služby"
 
-#: src/hooks/useBadgePrinter.ts:123
+#: src/hooks/useBadgePrinter.ts:112
 msgid "Test badge"
 msgstr "Testovacia menovka"
 
@@ -19626,7 +19733,7 @@ msgstr "Testovací e-mail bol odoslaný do vašej schránky"
 
 #: src/components/routes/event/Badges/BadgePrint.tsx:155
 #: src/components/routes/event/Badges/index.tsx:244
-#: src/hooks/useBadgePrinter.ts:125
+#: src/hooks/useBadgePrinter.ts:114
 msgid "Test print"
 msgstr "Skúšobná tlač"
 
@@ -19892,6 +19999,14 @@ msgstr "Toto rozhodnutie sa zaznamená do auditného denníka objednávky."
 #: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:169
 msgid "The owner can connect {providerName} in their security settings to sign in with it day to day."
 msgstr "Vlastník si môže v nastaveniach zabezpečenia pripojiť {providerName} a bežne sa cez neho prihlasovať."
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:39
+msgid "The page opens full screen without Chrome's controls. Press ⌘Q to close it."
+msgstr "Stránka sa otvorí na celú obrazovku bez ovládacích prvkov Chrome. Zatvoríte ju klávesmi ⌘Q."
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:40
+msgid "The page opens full screen without Chrome's controls. Press Alt+F4 to close it."
+msgstr "Stránka sa otvorí na celú obrazovku bez ovládacích prvkov Chrome. Zatvoríte ju klávesmi Alt+F4."
 
 #: src/components/common/ErrorDisplay/index.tsx:18
 msgid "The page you are looking for does not exist"
@@ -20473,7 +20588,7 @@ msgstr "Táto objednávka bola zrušená."
 msgid "This order has expired. Please start again."
 msgstr "Táto objednávka vypršala. Začnite znovu."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:58
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:64
 msgid "This order hasn't been paid yet"
 msgstr "Táto objednávka ešte nie je zaplatená"
 
@@ -20520,6 +20635,10 @@ msgstr "Platnosť tohto platobného odkazu vypršala"
 #: src/components/common/EmailTemplateEditor/EmailTemplatePreviewPane.tsx:70
 msgid "This preview shows how your email will look with sample data. Actual emails will use real values."
 msgstr "Tento náhľad ukazuje, ako bude váš e-mail vyzerať so vzorovými dátami. Skutočné e-maily budú používať reálne hodnoty."
+
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:64
+msgid "This printer only prints black"
+msgstr "Táto tlačiareň tlačí len čiernou"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:117
 msgid "This product cannot be deleted because it is associated with an order. You can hide it instead."
@@ -20590,7 +20709,7 @@ msgstr "Toto miesto je vyhradené pre používateľov invalidných vozíkov a ho
 msgid "This ticket is no longer valid"
 msgstr "Táto vstupenka už nie je platná"
 
-#: src/hooks/useCheckInController.tsx:295
+#: src/hooks/useCheckInController.tsx:303
 msgid "This ticket was just scanned. Please wait before scanning again."
 msgstr "Tento lístok bol práve naskenovaný. Pred ďalším skenovaním počkajte."
 
@@ -20961,6 +21080,10 @@ msgstr "Ak chcete zmeniť e-mail, ktorým sa prihlasujete, potvrďte, že ste to
 msgid "To increase your limits, contact us at"
 msgstr "Na zvýšenie limitov nás kontaktujte na"
 
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:47
+msgid "To keep attendees on this page, turn on Settings › Accessibility › Guided Access, come back here and triple-click the top button."
+msgstr "Aby účastníci zostali na tejto stránke, zapnite Nastavenia › Prístupnosť › Asistovaný prístup, vráťte sa sem a trikrát stlačte horné tlačidlo."
+
 #: src/hooks/useSortableAccessibility.ts:42
 msgid "To move this item, press space or enter. Use the arrow keys to change its position, then press space or enter again to drop it, or escape to cancel."
 msgstr "Ak chcete túto položku presunúť, stlačte medzerník alebo Enter. Šípkami zmeňte jej pozíciu a potom ju opätovným stlačením medzerníka alebo Enter pustite, prípadne presun zrušte klávesom Escape."
@@ -20990,6 +21113,10 @@ msgstr "Zajtra"
 #: src/utilites/ssoErrors.ts:13
 msgid "Too many attempts. Please wait a minute and try again."
 msgstr "Príliš veľa pokusov. Počkajte minútu a skúste znova."
+
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:56
+msgid "Too many attempts. Please wait a minute or see the registration desk."
+msgstr "Príliš veľa pokusov. Počkajte minútu alebo sa obráťte na registračný pult."
 
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:116
 msgid "Too many rows in one import"
@@ -21308,7 +21435,7 @@ msgstr "Dvojfaktorové overenie bolo resetované"
 msgid "Two-factor on"
 msgstr "Dvojfaktorové overenie zapnuté"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:55
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:79
 #: src/components/routes/event/Badges/index.tsx:569
 msgid "Two-sided printer"
 msgstr "Obojstranná tlačiareň"
@@ -21374,12 +21501,12 @@ msgstr "Nepodarilo sa zmeniť čítačku"
 msgid "Unable to check in"
 msgstr "Nepodarilo sa odbaviť"
 
-#: src/hooks/useCheckInController.tsx:235
+#: src/hooks/useCheckInController.tsx:243
 msgid "Unable to check in attendee"
 msgstr "Nie je možné odbavenie účastníka"
 
-#: src/hooks/useCheckInController.tsx:262
-#: src/hooks/useCheckInController.tsx:264
+#: src/hooks/useCheckInController.tsx:270
+#: src/hooks/useCheckInController.tsx:272
 msgid "Unable to check out attendee"
 msgstr "Nie je možné odhlásenie účastníka"
 
@@ -21408,7 +21535,7 @@ msgstr "Widget sa nepodarilo odstrániť"
 msgid "Unable to duplicate product. Please check the your details"
 msgstr "Nie je možné duplikovať produkt. Skontrolujte svoje údaje"
 
-#: src/hooks/useCheckInController.tsx:310
+#: src/hooks/useCheckInController.tsx:318
 msgid "Unable to fetch attendee"
 msgstr "Nie je možné načítať účastníka"
 
@@ -21428,7 +21555,7 @@ msgstr "Údaje o účastníkovi sa nepodarilo načítať."
 msgid "Unable to load products for this date. Please try again."
 msgstr "Produkty pre tento termín sa nepodarilo načítať. Skúste to znova."
 
-#: src/hooks/useBadgePrinter.ts:100
+#: src/hooks/useBadgePrinter.ts:138
 msgid "Unable to load this badge"
 msgstr "Túto menovku sa nepodarilo načítať"
 
@@ -21466,7 +21593,7 @@ msgstr "Predaj sa nepodarilo spustiť. Skúste to znova."
 msgid "Unable to switch date"
 msgstr "Nepodarilo sa prepnúť dátum"
 
-#: src/hooks/useCheckInController.tsx:175
+#: src/hooks/useCheckInController.tsx:183
 msgid "Unable to undo check-in"
 msgstr "Check-in sa nedá vrátiť späť"
 
@@ -21504,7 +21631,7 @@ msgstr "V časti \"Token configuration\" pridajte do ID tokenu voliteľné claim
 
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:299
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:300
-#: src/hooks/useCheckInController.tsx:223
+#: src/hooks/useCheckInController.tsx:231
 msgid "Undo"
 msgstr "Späť"
 
@@ -21854,7 +21981,7 @@ msgstr "Použite <0>Liquid šablonovanie</0> na personalizáciu e-mailov"
 msgid "Use a different account"
 msgstr "Použiť iný účet"
 
-#: src/components/layouts/CheckIn/BadgePrinterSettings.tsx:34
+#: src/components/layouts/CheckIn/DeviceSetupModal.tsx:50
 msgid "Use a different size here if this printer takes labels rather than badge inserts"
 msgstr "Ak táto tlačiareň používa etikety namiesto vložiek do menoviek, zvoľte tu inú veľkosť"
 
@@ -21885,7 +22012,7 @@ msgstr "Použiť namiesto toho záložný kód"
 msgid "Use a separate organizer for each brand or venue you sell tickets under."
 msgstr "Pre každú značku alebo miesto, pod ktorým predávate vstupenky, použite samostatného organizátora."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:176
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:327
 msgid "Use a USB scanner"
 msgstr "Použiť USB skener"
 
@@ -21906,7 +22033,7 @@ msgstr "Použiť údaje objednávky pre všetkých účastníkov. Mená a e-mail
 msgid "Use the buyer's details for all attendees"
 msgstr "Použiť údaje kupujúceho pre všetkých účastníkov"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:177
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:328
 msgid "Use the camera"
 msgstr "Použiť kameru"
 
@@ -21918,7 +22045,7 @@ msgstr "Použiť túto adresu"
 msgid "Use this if someone else, such as your finance team, is paying for your order."
 msgstr "Použite túto možnosť, ak vašu objednávku platí niekto iný, napríklad finančné oddelenie."
 
-#: src/components/forms/CheckInListForm/index.tsx:288
+#: src/components/forms/CheckInListForm/index.tsx:289
 msgid "Use this list as a self check-in kiosk"
 msgstr "Použiť tento zoznam ako samoobslužný registračný kiosk"
 
@@ -22478,7 +22605,7 @@ msgstr "Nepodarilo sa spracovať vašu platbu. Skúste to znovu alebo kontaktujt
 msgid "We couldn't add the questions. Please try again."
 msgstr "Otázky sa nepodarilo pridať. Skúste to znova."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:59
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:65
 msgid "We couldn't check you in"
 msgstr "Nepodarilo sa vás odbaviť"
 
@@ -22503,6 +22630,10 @@ msgstr "Nepodarilo sa odstrániť kategóriu. Skúste to znovu."
 msgid "We couldn't disconnect this Stripe account. Please try again."
 msgstr "Tento účet Stripe sa nepodarilo odpojiť. Skúste to znova."
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:109
+msgid "We couldn't find a ticket with those details. Check the spelling, or see the registration desk."
+msgstr "Nenašli sme lístok s týmito údajmi. Skontrolujte pravopis alebo sa obráťte na registračný pult."
+
 #: src/components/routes/my-tickets/index.tsx:239
 msgid "We couldn't find any orders associated with this email address."
 msgstr "Nenašli sa žiadne objednávky spojené s touto e-mailovou adresou."
@@ -22523,8 +22654,8 @@ msgstr "Momentálne sa nám nepodarilo nájsť sedadlá. Skúste to znova."
 msgid "We couldn't find that many seats together. Try fewer seats or pick them on the map."
 msgstr "Nepodarilo sa nám nájsť toľko sedadiel spolu. Skúste menej sedadiel alebo si ich vyberte na mape."
 
-#: src/hooks/useCheckInController.tsx:313
-#: src/hooks/useCheckInController.tsx:322
+#: src/hooks/useCheckInController.tsx:321
+#: src/hooks/useCheckInController.tsx:330
 msgid "We couldn't find that ticket"
 msgstr "Tento lístok sme nenašli"
 
@@ -22577,7 +22708,7 @@ msgstr "Fakturačné údaje sa nepodarilo načítať. Obnovte stránku a skúste
 msgid "We couldn't mark these badges as printed. Please try again."
 msgstr "Menovky sa nepodarilo označiť ako vytlačené. Skúste to znova."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:49
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:55
 msgid "We couldn't print your badge. Please see the registration desk."
 msgstr "Vašu menovku sa nepodarilo vytlačiť. Obráťte sa na registračný pult."
 
@@ -22800,7 +22931,7 @@ msgstr "Vitajte v {0}, {1} 👋"
 msgid "Welcome to {0}, here's a listing of all your events"
 msgstr "Vitajte v {0}, tu je zoznam všetkých vašich udalostí"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:43
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:48
 msgid "Welcome, {0}!"
 msgstr "Vitajte, {0}!"
 
@@ -23037,6 +23168,10 @@ msgstr "Ktoré produkty sa môžu predávať v tejto pokladni?"
 msgid "Which ticket for {0}?"
 msgstr "Ktorý lístok pre {0}?"
 
+#: src/components/layouts/CheckIn/KioskTicketLookup.tsx:65
+msgid "Which ticket is yours?"
+msgstr "Ktorý lístok je váš?"
+
 #: src/components/forms/CheckInListForm/index.tsx:178
 msgid "Which tickets should be associated with this check-in list?"
 msgstr "Ktoré lístky majú byť spojené s týmto zoznamom odbavení?"
@@ -23113,6 +23248,10 @@ msgstr "Šírka"
 #: src/components/routes/event/Badges/index.tsx:355
 msgid "Width (mm)"
 msgstr "Šírka (mm)"
+
+#: src/components/layouts/CheckIn/DeviceSetupGuide.tsx:73
+msgid "Windows"
+msgstr "Windows"
 
 #: src/components/common/WidgetEditor/installGuides.ts:73
 msgid "Wix shows embedded code inside a fixed-size box. Set Checkout opens in to New tab for the best experience."
@@ -23236,8 +23375,8 @@ msgstr "Zosobňujete <0>{0}</0> ({1})"
 msgid "You are issuing a partial refund. The customer will be refunded {0} {1}."
 msgstr "Vydávate čiastočné vrátenie. Zákazníkovi bude vrátené {0} {1}."
 
-#: src/hooks/useCheckInController.tsx:234
-#: src/hooks/useCheckInController.tsx:257
+#: src/hooks/useCheckInController.tsx:242
+#: src/hooks/useCheckInController.tsx:265
 msgid "You are offline"
 msgstr "Ste offline"
 
@@ -23305,8 +23444,8 @@ msgstr "Nemôžete archivovať posledného aktívneho organizátora na vašom ú
 msgid "You cannot change the product type as there are attendees associated with this product."
 msgstr "Nemôžete zmeniť typ produktu, pretože s týmto produktom sú spojení účastníci."
 
-#: src/hooks/useCheckInController.tsx:280
-#: src/hooks/useCheckInController.tsx:360
+#: src/hooks/useCheckInController.tsx:288
+#: src/hooks/useCheckInController.tsx:368
 msgid "You cannot check in attendees with unpaid orders. This setting can be changed in the event settings."
 msgstr "Nemôžete odbavovať účastníkov s nezaplatenými objednávkami. Toto nastavenie môžete zmeniť v nastaveniach udalosti."
 
@@ -23451,7 +23590,7 @@ msgstr "Tieto e-maily už nebudete dostávať. E-maily o vašich objednávkach a
 msgid "You'll be signed out and will need to sign in again with {providerName}."
 msgstr "Budete odhlásený(á) a budete sa musieť znova prihlásiť cez {providerName}."
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:64
+#: src/components/modals/CreateCheckInListModal/index.tsx:65
 msgid "You'll need a ticket before you can create a check-in list."
 msgstr "Pred vytvorením zoznamu odbavení potrebujete lístok."
 
@@ -23483,7 +23622,7 @@ msgstr "Na ďalšej obrazovke uvidíte, ako zaplatiť a akú sumu."
 msgid "You'll set the dates and schedule after the event is created."
 msgstr "Dátumy a harmonogram nastavíte po vytvorení podujatia."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:57
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:63
 msgid "You're already checked in, {0}"
 msgstr "Už ste sa odbavili, {0}"
 
@@ -23491,7 +23630,7 @@ msgstr "Už ste sa odbavili, {0}"
 msgid "You're changing session times"
 msgstr "Meníte časy termínov"
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:44
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:49
 msgid "You're checked in. Enjoy the event."
 msgstr "Ste odbavení. Užite si podujatie."
 
@@ -23611,7 +23750,7 @@ msgstr "Vaši účastníci boli úspešne exportovaní."
 msgid "Your attendees will appear here once they have registered for your event. You can also manually add attendees."
 msgstr "Vaši účastníci sa zobrazia tu po registrácii na udalosť. Môžete tiež manuálne pridávať účastníkov."
 
-#: src/components/layouts/CheckIn/KioskCheckIn.tsx:48
+#: src/components/layouts/CheckIn/KioskCheckIn.tsx:54
 msgid "Your badge is ready. Collect it from the printer."
 msgstr "Vaša menovka je pripravená. Vyzdvihnite si ju pri tlačiarni."
 
@@ -23860,7 +23999,7 @@ msgstr "Vaše záložné kódy a dôveryhodné zariadenia budú odstránené."
 msgid "Your refund is processing."
 msgstr "Vaše vrátenie sa spracováva."
 
-#: src/hooks/useCheckInController.tsx:90
+#: src/hooks/useCheckInController.tsx:92
 msgid "Your saved date filter is no longer available — showing all dates."
 msgstr "Váš uložený filter termínov už nie je dostupný — zobrazujeme všetky termíny."
 

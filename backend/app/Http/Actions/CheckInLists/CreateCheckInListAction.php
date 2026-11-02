@@ -37,6 +37,7 @@ class CreateCheckInListAction extends BaseAction
                     publicShowOrderDetails: $request->validated('public_show_order_details') ?? false,
                     badgePrintingEnabled: $request->validated('badge_printing_enabled') ?? false,
                     kioskMode: $request->validated('kiosk_mode') ?? false,
+                    kioskLookupEnabled: $request->validated('kiosk_lookup_enabled') ?? true,
                 )
             );
         } catch (UnrecognizedProductIdException $exception) {

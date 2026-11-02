@@ -62,6 +62,16 @@ export class CheckInPage {
     await this.page.getByRole('button', { name: 'Done' }).click();
   }
 
+  async enableBlackInkOnly(): Promise<void> {
+    await this.page.getByTestId('check-in-badge-printer-button').click();
+    await this.page.getByTestId('check-in-black-ink-switch').click({ force: true });
+    await this.page.getByRole('button', { name: 'Done' }).click();
+  }
+
+  async openPrinterSettings(): Promise<void> {
+    await this.page.getByTestId('check-in-badge-printer-button').click();
+  }
+
   async chooseBackPrinting(option: 'Front only' | 'Two-sided printer' | 'Fold-over'): Promise<void> {
     await this.page.getByTestId('check-in-badge-printer-button').click();
     await this.page.getByTestId('check-in-back-printing-select').click();
@@ -81,5 +91,20 @@ export class CheckInPage {
 
   kiosk(): Locator {
     return this.page.getByTestId('kiosk');
+  }
+
+  kioskStaffControls(): Locator {
+    return this.page.getByTestId('kiosk-staff-controls');
+  }
+
+  async holdKioskListName(): Promise<void> {
+    const box = await this.page.getByTestId('kiosk-staff-controls-trigger').boundingBox();
+    if (!box) {
+      throw new Error('Kiosk list name is not visible');
+    }
+    await this.page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await this.page.mouse.down();
+    await this.page.waitForTimeout(1_000);
+    await this.page.mouse.up();
   }
 }

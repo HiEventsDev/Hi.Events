@@ -7,7 +7,9 @@ import {
     CheckInListStats,
     GenericDataResponse,
     GenericPaginatedResponse,
-    IdParam, PublicCheckIn,
+    IdParam,
+    KioskTicket,
+    PublicCheckIn,
     QueryFilters,
 } from "../types";
 import {queryParamsHelper} from "../utilites/queryParamsHelper";
@@ -47,6 +49,10 @@ export const publicCheckInClient = {
     },
     getAttendeeBadge: async (checkInListShortId: IdParam, attendeePublicId: IdParam) => {
         const response = await publicApi.get<GenericDataResponse<Badge>>(`/check-in-lists/${checkInListShortId}/attendees/${attendeePublicId}/badge`);
+        return response.data;
+    },
+    findKioskTickets: async (checkInListShortId: IdParam, details: { email: string; last_name: string }) => {
+        const response = await publicApi.post<GenericDataResponse<KioskTicket[]>>(`/check-in-lists/${checkInListShortId}/kiosk/ticket-lookup`, details);
         return response.data;
     },
     markAttendeeBadgePrinted: async (checkInListShortId: IdParam, attendeePublicId: IdParam) => {

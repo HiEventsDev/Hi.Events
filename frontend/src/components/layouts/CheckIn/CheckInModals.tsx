@@ -1,3 +1,4 @@
+import {useEffect} from "react";
 import {Attendee, EventType} from "../../../types.ts";
 import {CheckInController} from "../../../hooks/useCheckInController.tsx";
 import {CheckInOptionsModal} from "../../common/CheckIn/CheckInOptionsModal";
@@ -12,6 +13,15 @@ interface CheckInModalsProps {
 }
 
 export const CheckInModals = ({controller, checkInListShortId, eventType, timezone}: CheckInModalsProps) => {
+    const {detailAttendeePublicId} = controller;
+    const {isEnabled: isBadgePrintingEnabled, prepareBadge} = controller.badgePrinter;
+
+    useEffect(() => {
+        if (isBadgePrintingEnabled && detailAttendeePublicId) {
+            prepareBadge(detailAttendeePublicId);
+        }
+    }, [detailAttendeePublicId, isBadgePrintingEnabled, prepareBadge]);
+
     return (
         <>
             <CheckInOptionsModal
