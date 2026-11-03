@@ -24,7 +24,7 @@ const config: LinguiConfig = {
         "ko", // Korean
         // "id", // Indonesian
         "zh-hk", // Cantonese Chinese (Hong Kong)
-        // "cs", // Czech
+        "cs", // Czech
         // "ga", // Irish
     ],
     catalogs: [

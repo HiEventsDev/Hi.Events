@@ -84,6 +84,18 @@ class SpamEventsTest extends TestCase
         $this->assertSame($this->currentContentHash(), $check->content_hash);
     }
 
+    public function test_approve_restores_the_status_the_event_was_demoted_from(): void
+    {
+        DB::table('event_spam_checks')
+            ->where('event_id', $this->eventId)
+            ->update(['previous_event_status' => 'ARCHIVED']);
+
+        $this->postJson("/admin/spam-events/{$this->eventId}/approve", [], $this->authHeaders())
+            ->assertStatus(200);
+
+        $this->assertSame('ARCHIVED', DB::table('events')->where('id', $this->eventId)->value('status'));
+    }
+
     public function test_approve_twice_returns_not_found(): void
     {
         $this->postJson("/admin/spam-events/{$this->eventId}/approve", [], $this->authHeaders())

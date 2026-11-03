@@ -5,11 +5,13 @@ namespace HiEvents\Services\Application\Handlers\EmailTemplate;
 use HiEvents\Exceptions\EmailTemplateNotFoundException;
 use HiEvents\Repository\Interfaces\EmailTemplateRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EmailTemplate\DTO\DeleteEmailTemplateDTO;
+use HiEvents\Services\Domain\Event\EventSpamCheckDispatchService;
 
 class DeleteEmailTemplateHandler
 {
     public function __construct(
-        private readonly EmailTemplateRepositoryInterface $emailTemplateRepository
+        private readonly EmailTemplateRepositoryInterface $emailTemplateRepository,
+        private readonly EventSpamCheckDispatchService $eventSpamCheckDispatchService,
     ) {}
 
     /**
@@ -28,6 +30,10 @@ class DeleteEmailTemplateHandler
             throw new EmailTemplateNotFoundException(__('Email template not found'));
         }
 
-        return $this->emailTemplateRepository->deleteById($template->getId());
+        $deleted = $this->emailTemplateRepository->deleteById($template->getId());
+
+        $this->eventSpamCheckDispatchService->dispatchForEmailTemplate($template);
+
+        return $deleted;
     }
 }
