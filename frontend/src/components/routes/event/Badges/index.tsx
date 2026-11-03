@@ -163,7 +163,7 @@ const BadgeDesigner = () => {
             for (const question of wanted) {
                 const response = await createQuestionMutation.mutateAsync({
                     eventId,
-                    question: {
+                    questionData: {
                         title: question.title,
                         type: 'SINGLE_LINE_TEXT',
                         required: false,

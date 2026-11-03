@@ -1,83 +1,57 @@
-import {Button} from "@mantine/core";
-import {GenericModalProps, Question, QuestionRequestData, QuestionType} from "../../../types.ts";
-import {useForm} from "@mantine/form";
-import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {notifications} from "@mantine/notifications";
-import {useParams} from "react-router";
-import {questionClient} from "../../../api/question.client.ts";
-import {useGetEvent} from "../../../queries/useGetEvent.ts";
-import {GET_EVENT_QUESTIONS_QUERY_KEY} from "../../../queries/useGetEventQuestions.ts";
-import {Modal, ModalFooter} from "../../common/Modal";
 import {t} from "@lingui/macro";
+import {useForm} from "@mantine/form";
+import {useParams} from "react-router";
+import {GenericModalProps} from "../../../types.ts";
+import {useGetEvent} from "../../../queries/useGetEvent.ts";
+import {useGetEventQuestions} from "../../../queries/useGetEventQuestions.ts";
+import {useCreateQuestion} from "../../../mutations/useCreateQuestion.ts";
+import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
+import {showSuccess} from "../../../utilites/notifications.tsx";
 import {QuestionForm} from "../../forms/QuestionForm";
-import {showError} from "../../../utilites/notifications.tsx";
+import {QuestionDrawer} from "../../forms/QuestionForm/QuestionDrawer.tsx";
+import {formValuesToRequest, QuestionFormValues, questionFormValidation} from "../../forms/QuestionForm/questionFormValues.ts";
 
 interface CreateQuestionModalProps extends GenericModalProps {
-    onCompleted: (question: Question) => void;
-    defaultBelongsTo?: 'ORDER' | 'PRODUCT';
+    initialValues: QuestionFormValues;
+    heading?: string;
 }
 
-export const CreateQuestionModal = ({onClose, onCompleted, defaultBelongsTo = 'ORDER'}: CreateQuestionModalProps) => {
+export const CreateQuestionModal = ({onClose, initialValues, heading}: CreateQuestionModalProps) => {
     const {eventId} = useParams();
-    const queryClient = useQueryClient();
-
     const eventQuery = useGetEvent(eventId);
-    const productCategories = eventQuery?.data?.product_categories;
+    const questionsQuery = useGetEventQuestions(eventId);
+    const mutation = useCreateQuestion();
+    const errorHandler = useFormErrorResponseHandler();
 
-    const form = useForm({
-        initialValues: {
-            title: "",
-            description: "",
-            type: QuestionType.SINGLE_LINE_TEXT.toString(),
-            required: false,
-            options: [],
-            product_ids: [],
-            apply_to_all_products: true,
-            belongs_to: defaultBelongsTo,
-            is_hidden: false,
-        },
+    const form = useForm<QuestionFormValues>({
+        initialValues,
+        validate: questionFormValidation,
     });
 
-    const mutation = useMutation({
-        mutationFn: (questionData: Question) => questionClient.create(eventId, questionData as QuestionRequestData),
-
-        onSuccess: ({data: question}) => {
-            notifications.show({
-                message: t`Successfully Created Question`,
-                color: 'green',
-                position: 'top-center',
-            });
-            queryClient.invalidateQueries({queryKey: [GET_EVENT_QUESTIONS_QUERY_KEY]}).then(() => {
-                onCompleted(question);
+    const handleSubmit = (values: QuestionFormValues) => {
+        mutation.mutate({eventId, questionData: formValuesToRequest(values)}, {
+            onSuccess: () => {
+                showSuccess(t`Question created`);
                 onClose();
-                form.reset();
-            });
-        },
-
-        onError: (error: any) => {
-            if (error?.response?.data?.errors) {
-                form.setErrors(error.response.data.errors);
-            } else {
-                showError(t`Unable to create question. Please check the your details`);
-            }
-        }
-    });
+            },
+            onError: (error) => errorHandler(form, error),
+        });
+    };
 
     return (
-        <Modal
-            opened
+        <QuestionDrawer
+            title={heading ?? t`Create Question`}
+            form={form}
+            submitLabel={t`Create Question`}
+            submitLoading={mutation.isPending}
+            onSubmit={handleSubmit}
             onClose={onClose}
-            heading={t`Create Question`}
         >
-            <form onSubmit={form.onSubmit((values) => mutation.mutate(values as any as Question))}>
-                <QuestionForm form={form} productCategories={productCategories}/>
-                <ModalFooter>
-                    <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
-                    <Button loading={mutation.isPending} type="submit" data-testid="question-submit-button">
-                        {mutation.isPending ? t`Working...` : t`Create Question`}
-                    </Button>
-                </ModalFooter>
-            </form>
-        </Modal>
-    )
+            <QuestionForm
+                form={form}
+                productCategories={eventQuery.data?.product_categories}
+                questions={questionsQuery.data ?? []}
+            />
+        </QuestionDrawer>
+    );
 };

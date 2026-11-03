@@ -3,6 +3,7 @@
 namespace HiEvents\Http\Actions\Questions;
 
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Exceptions\InvalidQuestionLogicException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Questions\UpsertQuestionRequest;
 use HiEvents\Http\ResponseCodes;
@@ -11,6 +12,7 @@ use HiEvents\Services\Application\Handlers\Question\CreateQuestionHandler;
 use HiEvents\Services\Application\Handlers\Question\DTO\UpsertQuestionDTO;
 use HiEvents\Services\Domain\Product\Exception\UnrecognizedProductIdException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 
 class CreateQuestionAction extends BaseAction
@@ -37,12 +39,22 @@ class CreateQuestionAction extends BaseAction
                 'belongs_to' => $request->input('belongs_to'),
                 'is_hidden' => $request->boolean('is_hidden'),
                 'description' => $request->input('description'),
+                'applies_to_all_tickets' => $request->boolean('applies_to_all_tickets'),
+                'condition_question_id' => $request->filled('condition_question_id') ? $request->integer('condition_question_id') : null,
+                'condition_values' => $request->input('condition_values'),
+                'condition_provided' => $request->exists('condition_question_id'),
+                'disqualifying_options' => $request->input('disqualifying_options'),
+                'disqualification_message' => $request->input('disqualification_message'),
+                'disqualification_provided' => $request->exists('disqualifying_options'),
+                'option_renames' => $request->input('option_renames', []),
             ]));
         } catch (UnrecognizedProductIdException $exception) {
             return $this->errorResponse(
                 message: $exception->getMessage(),
                 statusCode: Response::HTTP_UNPROCESSABLE_ENTITY,
             );
+        } catch (InvalidQuestionLogicException $exception) {
+            throw ValidationException::withMessages([$exception->getField() => $exception->getMessage()]);
         }
 
         return $this->resourceResponse(

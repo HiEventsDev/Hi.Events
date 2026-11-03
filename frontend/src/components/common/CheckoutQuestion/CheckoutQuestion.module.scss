@@ -6,3 +6,44 @@
     text-decoration: underline;
   }
 }
+
+.eligibilityNotice {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--checkout-border, var(--mantine-color-gray-3));
+  border-radius: 10px;
+  background: var(--checkout-background, var(--mantine-color-gray-0));
+}
+
+.eligibilityNoticeIcon {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--mantine-color-red-6);
+}
+
+.eligibilityNoticeTitle {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--checkout-text-primary, var(--mantine-color-text));
+}
+
+.eligibilityNoticeText {
+  margin: 2px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--checkout-text-secondary, var(--mantine-color-dimmed));
+  white-space: pre-line;
+}
+
+.lockedFields {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  opacity: 0.45;
+}

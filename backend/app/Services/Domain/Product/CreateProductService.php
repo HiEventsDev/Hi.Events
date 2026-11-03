@@ -7,6 +7,7 @@ use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\Helper\DateHelper;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
+use HiEvents\Services\Domain\Question\QuestionTicketScopeService;
 use HiEvents\Services\Domain\Tax\DTO\TaxAndProductAssociateParams;
 use HiEvents\Services\Domain\Tax\TaxAndProductAssociationService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
@@ -29,6 +30,7 @@ class CreateProductService
         private readonly EventRepositoryInterface $eventRepository,
         private readonly ProductOrderingService $productOrderingService,
         private readonly DomainEventDispatcherService $domainEventDispatcherService,
+        private readonly QuestionTicketScopeService $questionTicketScopeService,
     ) {}
 
     /**
@@ -56,6 +58,8 @@ class CreateProductService
             }
 
             $product = $this->createProductPrices($persistedProduct, $product);
+
+            $this->questionTicketScopeService->syncProduct($persistedProduct);
 
             $this->domainEventDispatcherService->dispatch(
                 new ProductEvent(

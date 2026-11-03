@@ -7,7 +7,13 @@ export const useCreateQuestion = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: ({eventId, question}: { eventId: IdParam, question: QuestionRequestData }) => questionClient.create(eventId, question),
-        onSuccess: (_, variables) => queryClient.invalidateQueries({queryKey: [GET_EVENT_QUESTIONS_QUERY_KEY, variables.eventId]}),
+        mutationFn: ({eventId, questionData}: {
+            eventId: IdParam,
+            questionData: QuestionRequestData,
+        }) => questionClient.create(eventId, questionData),
+
+        onSuccess: (_, variables) => queryClient.invalidateQueries({
+            queryKey: [GET_EVENT_QUESTIONS_QUERY_KEY, variables.eventId],
+        }),
     });
-};
+}
