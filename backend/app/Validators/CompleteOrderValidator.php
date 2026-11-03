@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace HiEvents\Validators;
 
-use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\QuestionDomainObjectAbstract;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
-use HiEvents\DomainObjects\QuestionDomainObject;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
@@ -41,14 +39,6 @@ class CompleteOrderValidator extends BaseValidator
                 [QuestionDomainObjectAbstract::EVENT_ID => $this->route->parameter('event_id')]
             );
 
-        $orderQuestions = $questions->filter(
-            fn (QuestionDomainObject $question) => $question->getBelongsTo() === QuestionBelongsTo::ORDER->name
-        );
-
-        $productQuestions = $questions->filter(
-            fn (QuestionDomainObject $question) => $question->getBelongsTo() === QuestionBelongsTo::PRODUCT->name
-        );
-
         $products = $this->productRepository
             ->loadRelation(ProductPriceDomainObject::class)
             ->findWhere(
@@ -73,11 +63,11 @@ class CompleteOrderValidator extends BaseValidator
         return [
             'order.first_name' => ['required', 'string', 'max:40', new PersonNameRule],
             'order.last_name' => ['required', 'string', 'max:40', new PersonNameRule],
-            'order.questions' => new OrderQuestionRule($orderQuestions, $products),
+            'order.questions' => new OrderQuestionRule($questions, $products),
             'order.email' => 'required|email',
             'order.email_confirmation' => 'required|email|same:order.email',
             'products' => new ProductQuestionRule(
-                $productQuestions,
+                $questions,
                 $products,
                 $eventSettings->getAttendeeDetailsCollectionMethod(),
             ),

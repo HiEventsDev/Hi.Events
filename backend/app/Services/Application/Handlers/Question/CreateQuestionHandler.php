@@ -30,6 +30,11 @@ class CreateQuestionHandler
             ->setRequired($createQuestionDTO->required)
             ->setOptions($createQuestionDTO->options)
             ->setIsHidden($createQuestionDTO->is_hidden)
+            ->setAppliesToAllTickets($createQuestionDTO->applies_to_all_tickets)
+            ->setConditionQuestionId($createQuestionDTO->condition_question_id)
+            ->setConditionValues($createQuestionDTO->condition_values)
+            ->setDisqualifyingOptions($createQuestionDTO->disqualifying_options)
+            ->setDisqualificationMessage($createQuestionDTO->disqualification_message)
             ->setDescription($this->purifier->purify($createQuestionDTO->description));
 
         $createdQuestion = $this->createQuestionService->createQuestion(

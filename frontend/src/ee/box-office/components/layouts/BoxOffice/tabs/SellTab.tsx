@@ -302,6 +302,8 @@ export const SellTab = ({boxOffice, boxOfficeShortId, session, onSaleStateChange
             <div className={classes.stage}>
                 <AttendeeQuestionsStage
                     slots={attendeeSlots}
+                    allQuestions={questions}
+                    orderAnswers={cart.state.questionAnswers}
                     initialAnswers={cart.state.attendeeAnswers}
                     serverErrors={attendeeErrors}
                     onBack={() => {
@@ -525,6 +527,7 @@ export const SellTab = ({boxOffice, boxOfficeShortId, session, onSaleStateChange
                 onSave={(buyer, answers) => {
                     cart.setBuyer(buyer);
                     cart.setQuestionAnswers(answers);
+                    setAttendeeQuestionsDone(false);
                     setBuyerOpen(false);
                     setBuyerErrors(undefined);
                     if (buyerRequired) {

@@ -1491,6 +1491,11 @@ export interface Question {
     event_id?: number;
     products?: Product[];
     product_ids?: number[];
+    applies_to_all_tickets?: boolean;
+    condition_question_id?: number | null;
+    condition_values?: string[];
+    disqualifying_options?: string[];
+    disqualification_message?: string | null;
     belongs_to: string;
     is_hidden: boolean;
 }
@@ -1807,6 +1812,12 @@ export interface QuestionRequestData {
     type: string;
     options: string[];
     product_ids?: string[];
+    applies_to_all_tickets?: boolean;
+    condition_question_id?: string | number | null;
+    condition_values?: string[];
+    disqualifying_options?: string[];
+    disqualification_message?: string;
+    option_renames?: { from: string; to: string }[];
     belongs_to: string;
 }
 
@@ -1847,7 +1858,9 @@ export enum QuestionType {
     CHECKBOX = 'CHECKBOX',
     RADIO = 'RADIO',
     DROPDOWN = 'DROPDOWN',
+    MULTI_SELECT_DROPDOWN = 'MULTI_SELECT_DROPDOWN',
     DATE = 'DATE',
+    PHONE = 'PHONE',
 }
 
 export enum QuestionBelongsToType {

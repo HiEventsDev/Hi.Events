@@ -1,26 +1,105 @@
-.optionsHeading {
-  margin-top: 0;
-  margin-bottom: 0px;
+.fields {
+  :global(.mantine-InputWrapper-root),
+  :global(.mantine-Switch-root) {
+    margin-bottom: 0;
+  }
 }
 
-.noOptionsMessage {
-  margin-bottom: 10px;
-  padding: 5px 5px 5px 0;
+.options {
+  display: flex;
+  flex-direction: column;
+}
+
+.optionList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .optionRow {
-  margin-bottom: 15px;
-  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--mantine-color-body);
+
+  &[data-dragging] {
+    position: relative;
+    z-index: 2;
+  }
+
+  :global(.mantine-InputWrapper-root) {
+    margin-bottom: 0;
+  }
 }
 
-.optionInputWrap {
-  width: 90%;
+.optionHandle {
+  display: flex;
+  align-items: center;
+  padding: 4px 2px;
+  border: 0;
+  background: none;
+  color: var(--mantine-color-gray-5);
+  cursor: grab;
+
+  &:hover {
+    color: var(--mantine-color-gray-7);
+  }
+
+  &:active {
+    cursor: grabbing;
+  }
 }
 
 .optionInput {
-  //min-width: 300px;
+  flex: 1;
+  min-width: 0;
 }
 
-.optionButton {
+.optionsFooter {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--mantine-spacing-sm);
+  margin-top: var(--mantine-spacing-xs);
 
+  > :first-child {
+    margin-left: -10px;
+  }
+}
+
+.preview {
+  padding: var(--mantine-spacing-sm) var(--mantine-spacing-md) var(--mantine-spacing-md);
+  border: 1px solid var(--mantine-color-gray-2);
+  border-radius: var(--mantine-radius-md);
+  background-color: var(--hi-color-gray);
+
+  > :first-child {
+    margin-top: 0;
+  }
+}
+
+.conditionBuilder {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mantine-spacing-sm);
+  padding: var(--mantine-spacing-sm) var(--mantine-spacing-md) var(--mantine-spacing-md);
+  border: 1px solid var(--mantine-color-gray-2);
+  border-radius: var(--mantine-radius-md);
+
+  :global(.mantine-InputWrapper-root) {
+    margin-bottom: 0;
+  }
+}
+
+.eligibilityPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mantine-spacing-md);
+  padding: var(--mantine-spacing-sm) var(--mantine-spacing-md) var(--mantine-spacing-md);
+  border: 1px solid var(--mantine-color-gray-2);
+  border-radius: var(--mantine-radius-md);
+
+  :global(.mantine-InputWrapper-root) {
+    margin-bottom: 0;
+  }
 }

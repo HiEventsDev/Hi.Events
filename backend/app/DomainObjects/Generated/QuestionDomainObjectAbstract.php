@@ -12,6 +12,7 @@ abstract class QuestionDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     final public const PLURAL_NAME = 'questions';
     final public const ID = 'id';
     final public const EVENT_ID = 'event_id';
+    final public const CONDITION_QUESTION_ID = 'condition_question_id';
     final public const TITLE = 'title';
     final public const REQUIRED = 'required';
     final public const TYPE = 'type';
@@ -23,9 +24,14 @@ abstract class QuestionDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     final public const ORDER = 'order';
     final public const IS_HIDDEN = 'is_hidden';
     final public const DESCRIPTION = 'description';
+    final public const APPLIES_TO_ALL_TICKETS = 'applies_to_all_tickets';
+    final public const CONDITION_VALUES = 'condition_values';
+    final public const DISQUALIFYING_OPTIONS = 'disqualifying_options';
+    final public const DISQUALIFICATION_MESSAGE = 'disqualification_message';
 
     protected int $id;
     protected int $event_id;
+    protected ?int $condition_question_id = null;
     protected string $title;
     protected bool $required = false;
     protected ?string $type = null;
@@ -37,12 +43,17 @@ abstract class QuestionDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     protected int $order = 1;
     protected bool $is_hidden = false;
     protected ?string $description = null;
+    protected bool $applies_to_all_tickets = false;
+    protected array|string|null $condition_values = null;
+    protected array|string|null $disqualifying_options = null;
+    protected ?string $disqualification_message = null;
 
     public function toArray(): array
     {
         return [
                     'id' => $this->id ?? null,
                     'event_id' => $this->event_id ?? null,
+                    'condition_question_id' => $this->condition_question_id ?? null,
                     'title' => $this->title ?? null,
                     'required' => $this->required ?? null,
                     'type' => $this->type ?? null,
@@ -54,6 +65,10 @@ abstract class QuestionDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
                     'order' => $this->order ?? null,
                     'is_hidden' => $this->is_hidden ?? null,
                     'description' => $this->description ?? null,
+                    'applies_to_all_tickets' => $this->applies_to_all_tickets ?? null,
+                    'condition_values' => $this->condition_values ?? null,
+                    'disqualifying_options' => $this->disqualifying_options ?? null,
+                    'disqualification_message' => $this->disqualification_message ?? null,
                 ];
     }
 
@@ -77,6 +92,17 @@ abstract class QuestionDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     public function getEventId(): int
     {
         return $this->event_id;
+    }
+
+    public function setConditionQuestionId(?int $condition_question_id): self
+    {
+        $this->condition_question_id = $condition_question_id;
+        return $this;
+    }
+
+    public function getConditionQuestionId(): ?int
+    {
+        return $this->condition_question_id;
     }
 
     public function setTitle(string $title): self
@@ -198,5 +224,49 @@ abstract class QuestionDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     public function getDescription(): ?string
     {
         return $this->description;
+    }
+
+    public function setAppliesToAllTickets(bool $applies_to_all_tickets): self
+    {
+        $this->applies_to_all_tickets = $applies_to_all_tickets;
+        return $this;
+    }
+
+    public function getAppliesToAllTickets(): bool
+    {
+        return $this->applies_to_all_tickets;
+    }
+
+    public function setConditionValues(array|string|null $condition_values): self
+    {
+        $this->condition_values = $condition_values;
+        return $this;
+    }
+
+    public function getConditionValues(): array|string|null
+    {
+        return $this->condition_values;
+    }
+
+    public function setDisqualifyingOptions(array|string|null $disqualifying_options): self
+    {
+        $this->disqualifying_options = $disqualifying_options;
+        return $this;
+    }
+
+    public function getDisqualifyingOptions(): array|string|null
+    {
+        return $this->disqualifying_options;
+    }
+
+    public function setDisqualificationMessage(?string $disqualification_message): self
+    {
+        $this->disqualification_message = $disqualification_message;
+        return $this;
+    }
+
+    public function getDisqualificationMessage(): ?string
+    {
+        return $this->disqualification_message;
     }
 }

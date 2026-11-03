@@ -18,6 +18,7 @@ use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\EmailTemplateDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\EventLocationDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\QuestionDomainObjectAbstract;
 use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\DomainObjects\ProductCategoryDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
@@ -170,6 +171,7 @@ class DuplicateEventService
 
             if ($oldToNewQuestionMap !== []) {
                 $this->restoreQuestionOrder($event, $newEvent->getId(), $oldToNewQuestionMap);
+                $this->restoreQuestionConditions($event, $oldToNewQuestionMap);
             }
 
             if ($duplicatePromoCodes) {
@@ -450,9 +452,28 @@ class DuplicateEventService
                 ->setType($question->getType())
                 ->setRequired($question->getRequired())
                 ->setOptions($question->getOptions())
-                ->setIsHidden($question->getIsHidden()),
+                ->setIsHidden($question->getIsHidden())
+                ->setAppliesToAllTickets($question->getAppliesToAllTickets())
+                ->setDisqualifyingOptions($question->getDisqualifyingOptions())
+                ->setDisqualificationMessage($question->getDisqualificationMessage()),
             $productIds,
         )->getId();
+    }
+
+    private function restoreQuestionConditions(EventDomainObject $event, array $oldToNewQuestionMap): void
+    {
+        foreach ($event->getQuestions() as $question) {
+            $parentId = $question->getConditionQuestionId();
+
+            if ($parentId === null || ! isset($oldToNewQuestionMap[$question->getId()], $oldToNewQuestionMap[$parentId])) {
+                continue;
+            }
+
+            $this->questionRepository->updateFromArray($oldToNewQuestionMap[$question->getId()], [
+                QuestionDomainObjectAbstract::CONDITION_QUESTION_ID => $oldToNewQuestionMap[$parentId],
+                QuestionDomainObjectAbstract::CONDITION_VALUES => $question->getConditionValues(),
+            ]);
+        }
     }
 
     private function restoreQuestionOrder(EventDomainObject $event, int $newEventId, array $oldToNewQuestionMap): void

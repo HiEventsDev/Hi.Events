@@ -3,6 +3,7 @@
 namespace Tests\Feature\Http\Actions\Questions;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Queue;
 use Tests\Concerns\ActsAsAccountUsers;
 use Tests\TestCase;
@@ -88,6 +89,114 @@ class UpsertQuestionActionTest extends TestCase
             ->assertJsonValidationErrors(['belongs_to']);
     }
 
+    public function test_new_questions_are_added_after_existing_questions(): void
+    {
+        $firstId = $this->postJson("/events/$this->eventId/questions", $this->payload(), $this->headers)
+            ->assertCreated()
+            ->json('data.id');
+        $secondId = $this->postJson("/events/$this->eventId/questions", $this->payload(['title' => 'Job title']), $this->headers)
+            ->assertCreated()
+            ->json('data.id');
+
+        $this->assertGreaterThan(
+            DB::table('questions')->where('id', $firstId)->value('order'),
+            DB::table('questions')->where('id', $secondId)->value('order'),
+        );
+    }
+
+    public function test_a_question_for_all_tickets_applies_to_every_ticket_but_not_other_products(): void
+    {
+        $categoryId = $this->createCategory();
+        $ticketId = $this->insertProduct($categoryId, 'TICKET');
+        $this->insertProduct($categoryId, 'GENERAL');
+
+        $this->postJson("/events/$this->eventId/questions", $this->payload([
+            'belongs_to' => 'PRODUCT',
+            'product_ids' => [],
+            'applies_to_all_tickets' => true,
+        ]), $this->headers)
+            ->assertCreated()
+            ->assertJsonPath('data.applies_to_all_tickets', true)
+            ->assertJsonPath('data.product_ids', [$ticketId]);
+    }
+
+    public function test_tickets_created_later_are_added_to_all_ticket_questions(): void
+    {
+        $categoryId = $this->createCategory();
+        $questionId = $this->postJson("/events/$this->eventId/questions", $this->payload([
+            'belongs_to' => 'PRODUCT',
+            'applies_to_all_tickets' => true,
+        ]), $this->headers)
+            ->assertCreated()
+            ->json('data.id');
+
+        $ticketId = $this->postJson("/events/$this->eventId/products", $this->productPayload($categoryId, 'TICKET'), $this->headers)
+            ->assertCreated()
+            ->json('data.id');
+        $this->postJson("/events/$this->eventId/products", $this->productPayload($categoryId, 'GENERAL'), $this->headers)
+            ->assertCreated();
+
+        $this->assertSame([$ticketId], $this->attachedProductIds($questionId));
+    }
+
+    public function test_a_ticket_changed_to_another_product_type_is_removed_from_all_ticket_questions(): void
+    {
+        $categoryId = $this->createCategory();
+        $questionId = $this->postJson("/events/$this->eventId/questions", $this->payload([
+            'belongs_to' => 'PRODUCT',
+            'applies_to_all_tickets' => true,
+        ]), $this->headers)
+            ->assertCreated()
+            ->json('data.id');
+        $ticketId = $this->postJson("/events/$this->eventId/products", $this->productPayload($categoryId, 'TICKET'), $this->headers)
+            ->assertCreated()
+            ->json('data.id');
+
+        $this->putJson("/events/$this->eventId/products/$ticketId", $this->productPayload($categoryId, 'GENERAL'), $this->headers)
+            ->assertOk();
+
+        $this->assertSame([], $this->attachedProductIds($questionId));
+    }
+
+    public function test_tickets_are_not_added_to_questions_for_specific_tickets(): void
+    {
+        $categoryId = $this->createCategory();
+        $existingTicketId = $this->insertProduct($categoryId, 'TICKET');
+        $questionId = $this->postJson("/events/$this->eventId/questions", $this->payload([
+            'belongs_to' => 'PRODUCT',
+            'product_ids' => [$existingTicketId],
+        ]), $this->headers)
+            ->assertCreated()
+            ->assertJsonPath('data.applies_to_all_tickets', false)
+            ->json('data.id');
+
+        $this->postJson("/events/$this->eventId/products", $this->productPayload($categoryId, 'TICKET'), $this->headers)
+            ->assertCreated();
+
+        $this->assertSame([$existingTicketId], $this->attachedProductIds($questionId));
+    }
+
+    public function test_editing_without_the_all_tickets_flag_keeps_the_given_products(): void
+    {
+        $categoryId = $this->createCategory();
+        $firstTicketId = $this->insertProduct($categoryId, 'TICKET');
+        $this->insertProduct($categoryId, 'TICKET');
+        $questionId = $this->postJson("/events/$this->eventId/questions", $this->payload([
+            'belongs_to' => 'PRODUCT',
+            'applies_to_all_tickets' => true,
+        ]), $this->headers)
+            ->assertCreated()
+            ->json('data.id');
+
+        $this->putJson("/events/$this->eventId/questions/$questionId", $this->payload([
+            'belongs_to' => 'PRODUCT',
+            'product_ids' => [$firstTicketId],
+        ]), $this->headers)
+            ->assertOk()
+            ->assertJsonPath('data.applies_to_all_tickets', false)
+            ->assertJsonPath('data.product_ids', [$firstTicketId]);
+    }
+
     private function payload(array $overrides = []): array
     {
         return array_merge([
@@ -98,5 +207,51 @@ class UpsertQuestionActionTest extends TestCase
             'required' => true,
             'is_hidden' => false,
         ], $overrides);
+    }
+
+    private function createCategory(): int
+    {
+        return DB::table('product_categories')->insertGetId([
+            'event_id' => $this->eventId,
+            'name' => 'Tickets',
+            'order' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+    }
+
+    private function insertProduct(int $categoryId, string $productType): int
+    {
+        return DB::table('products')->insertGetId([
+            'title' => $productType.' product',
+            'event_id' => $this->eventId,
+            'product_category_id' => $categoryId,
+            'type' => 'FREE',
+            'product_type' => $productType,
+            'order' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+    }
+
+    private function productPayload(int $categoryId, string $productType): array
+    {
+        return [
+            'title' => $productType.' product',
+            'type' => 'FREE',
+            'product_type' => $productType,
+            'product_category_id' => $categoryId,
+            'prices' => [['price' => 0]],
+        ];
+    }
+
+    private function attachedProductIds(int $questionId): array
+    {
+        return DB::table('product_questions')
+            ->where('question_id', $questionId)
+            ->whereNull('deleted_at')
+            ->orderBy('product_id')
+            ->pluck('product_id')
+            ->all();
     }
 }
