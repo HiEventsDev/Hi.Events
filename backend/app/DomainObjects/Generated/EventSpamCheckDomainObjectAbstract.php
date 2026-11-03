@@ -21,6 +21,7 @@ abstract class EventSpamCheckDomainObjectAbstract extends \HiEvents\DomainObject
     final public const CREATED_AT = 'created_at';
     final public const UPDATED_AT = 'updated_at';
     final public const DELETED_AT = 'deleted_at';
+    final public const PREVIOUS_EVENT_STATUS = 'previous_event_status';
 
     protected int $id;
     protected int $event_id;
@@ -33,6 +34,7 @@ abstract class EventSpamCheckDomainObjectAbstract extends \HiEvents\DomainObject
     protected ?string $created_at = null;
     protected ?string $updated_at = null;
     protected ?string $deleted_at = null;
+    protected ?string $previous_event_status = null;
 
     public function toArray(): array
     {
@@ -48,6 +50,7 @@ abstract class EventSpamCheckDomainObjectAbstract extends \HiEvents\DomainObject
                     'created_at' => $this->created_at ?? null,
                     'updated_at' => $this->updated_at ?? null,
                     'deleted_at' => $this->deleted_at ?? null,
+                    'previous_event_status' => $this->previous_event_status ?? null,
                 ];
     }
 
@@ -170,5 +173,16 @@ abstract class EventSpamCheckDomainObjectAbstract extends \HiEvents\DomainObject
     public function getDeletedAt(): ?string
     {
         return $this->deleted_at;
+    }
+
+    public function setPreviousEventStatus(?string $previous_event_status): self
+    {
+        $this->previous_event_status = $previous_event_status;
+        return $this;
+    }
+
+    public function getPreviousEventStatus(): ?string
+    {
+        return $this->previous_event_status;
     }
 }
