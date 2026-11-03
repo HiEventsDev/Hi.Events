@@ -42,6 +42,8 @@ const statusLabel = (status: LicenceStatus): string => {
 
 const planLabel = (plan: LicencePlan | null): string | null => {
     switch (plan) {
+        case 'add_ons':
+            return t`Add-ons only`;
         case 'own_events':
             return t`Own events`;
         case 'platform':

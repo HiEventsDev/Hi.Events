@@ -69,6 +69,15 @@ export class CheckoutPage {
     await this.surface.getByLabel(new RegExp(`^${title}`)).fill(value);
   }
 
+  async chooseMultiSelectOptions(title: string, options: string[]): Promise<void> {
+    const input = this.surface.getByRole('combobox', { name: title });
+    await input.locator('xpath=../..').click();
+    for (const option of options) {
+      await this.surface.getByRole('option', { name: option }).click();
+    }
+    await input.press('Escape');
+  }
+
   async chooseRadioOption(option: string): Promise<void> {
     await this.surface.getByRole('radio', { name: option }).check();
   }
@@ -158,10 +167,14 @@ export class CheckoutPage {
     }
   }
 
+  private payAmountButton(): Locator {
+    return this.page.getByRole('button', { name: /^Pay \D*\d/ });
+  }
+
   async clickPay(): Promise<void> {
     await this.page.getByRole('heading', { name: 'Payment' }).click();
     await this.waitForStripeFrameToSettle();
-    await this.page.getByRole('button', { name: /^Pay\b/ }).dispatchEvent('click');
+    await this.payAmountButton().dispatchEvent('click');
   }
 
   async payWithStripeTestCard(card = '4242424242424242'): Promise<void> {
@@ -170,7 +183,7 @@ export class CheckoutPage {
     try {
       await this.page.waitForURL(/\/checkout\/\d+\/[^/]+\/(payment_return|summary)/, { timeout: 15_000 });
     } catch {
-      await this.page.getByRole('button', { name: /^Pay\b/ }).dispatchEvent('click');
+      await this.payAmountButton().dispatchEvent('click');
       await this.page.waitForURL(/\/checkout\/\d+\/[^/]+\/(payment_return|summary)/, { timeout: 30_000 });
     }
   }

@@ -179,6 +179,42 @@ $transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
+.ineligibleHint {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.ineligibleHintIcon {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--mantine-color-red-6);
+}
+
+.ineligibleHintText {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--checkout-text-primary, #1a1a1a);
+}
+
+.ineligibleHintAction {
+  margin-left: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  color: var(--checkout-accent, var(--mantine-primary-color-filled));
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 .tosNotice {
   text-align: center;
   margin-top: 12px;

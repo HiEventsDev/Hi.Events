@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Domain\Event;
 
+use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Services\Domain\Event\DTO\EventSpamCheckContentDTO;
 use HiEvents\Services\Domain\Event\DTO\EventSpamCheckResultDTO;
 use HiEvents\Services\Infrastructure\Ai\Agents\EventSpamDetectionAgent;
@@ -9,6 +10,11 @@ use Illuminate\Config\Repository;
 
 class EventSpamCheckService
 {
+    public const CHECKED_EVENT_STATUSES = [
+        EventStatus::LIVE->name,
+        EventStatus::ARCHIVED->name,
+    ];
+
     private const TITLE_MAX_LENGTH = 500;
 
     private const DESCRIPTION_MAX_LENGTH = 4000;
@@ -18,6 +24,10 @@ class EventSpamCheckService
     private const SUPPLEMENTARY_ITEM_MAX_LENGTH = 500;
 
     private const LABEL_MAX_LENGTH = 100;
+
+    private const EMAIL_TEMPLATE_SOURCE_ITEM_MAX_LENGTH = 6000;
+
+    private const EMAIL_TEMPLATE_RENDERED_ITEM_MAX_LENGTH = 3000;
 
     private const LINK_MAX_LENGTH = 300;
 
@@ -67,6 +77,11 @@ class EventSpamCheckService
                 array_keys($content->supplementaryContent),
                 array_values($content->supplementaryContent),
             ),
+            ...array_map(
+                static fn (string $label, string $value): string => $label.':'.$value,
+                array_keys($content->emailTemplates),
+                array_values($content->emailTemplates),
+            ),
         ]));
     }
 
@@ -76,6 +91,7 @@ class EventSpamCheckService
         $title = $this->toPlainText($content->title, self::TITLE_MAX_LENGTH);
         $description = $this->toPlainText($content->description, self::DESCRIPTION_MAX_LENGTH);
         $supplementary = $this->buildSupplementary($content);
+        $emailTemplates = $this->buildEmailTemplates($content);
         $links = implode("\n", $this->extractLinks($content));
 
         return <<<PROMPT
@@ -85,6 +101,9 @@ class EventSpamCheckService
         <additional_content>
         {$supplementary}
         </additional_content>
+        <email_templates>
+        {$emailTemplates}
+        </email_templates>
         <links>
         {$links}
         </links>
@@ -106,6 +125,8 @@ class EventSpamCheckService
             title: $content->title,
             description: $content->description,
             supplementaryContent: array_merge([], ...$tiers),
+            emailTemplates: $content->emailTemplates,
+            renderedEmailTemplates: $content->renderedEmailTemplates,
         );
     }
 
@@ -141,6 +162,33 @@ class EventSpamCheckService
         }
 
         return implode("\n", $lines);
+    }
+
+    private function buildEmailTemplates(EventSpamCheckContentDTO $content): string
+    {
+        return implode("\n", [
+            ...$this->labelledLines($content->emailTemplates, self::EMAIL_TEMPLATE_SOURCE_ITEM_MAX_LENGTH),
+            ...$this->labelledLines($content->renderedEmailTemplates, self::EMAIL_TEMPLATE_RENDERED_ITEM_MAX_LENGTH),
+        ]);
+    }
+
+    /**
+     * @param  array<string, string>  $items
+     * @return string[]
+     */
+    private function labelledLines(array $items, int $maxLength): array
+    {
+        $lines = [];
+
+        foreach ($items as $label => $value) {
+            $text = $this->toPlainText($value, $maxLength);
+
+            if ($text !== '') {
+                $lines[] = $this->toPlainText($label, self::LABEL_MAX_LENGTH).': '.$text;
+            }
+        }
+
+        return $lines;
     }
 
     private function toPlainText(?string $html, int $maxLength): string
