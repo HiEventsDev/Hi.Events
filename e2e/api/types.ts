@@ -278,6 +278,10 @@ export interface CreateQuestionPayload {
   required: boolean;
   is_hidden: boolean;
   description?: string;
+  condition_question_id?: number;
+  condition_values?: string[];
+  disqualifying_options?: string[];
+  disqualification_message?: string;
 }
 
 export interface CreateTaxOrFeePayload {

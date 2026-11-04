@@ -4,7 +4,9 @@ namespace HiEvents\Validators\Rules;
 
 use HiEvents\DomainObjects\Enums\AttendeeDetailsCollectionMethod;
 use HiEvents\DomainObjects\Enums\ProductType;
+use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
 use HiEvents\DomainObjects\QuestionDomainObject;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -17,10 +19,30 @@ class ProductQuestionRule extends BaseQuestionRule
         Collection $questions,
         Collection $products,
         ?string $attendeeDetailsCollectionMethod = null,
+        private readonly string $orderQuestionsPath = 'order.questions',
     ) {
         parent::__construct($questions, $products);
 
         $this->skipBasicAttendeeValidation = $attendeeDetailsCollectionMethod === AttendeeDetailsCollectionMethod::PER_ORDER->name;
+    }
+
+    protected function belongsTo(): QuestionBelongsTo
+    {
+        return QuestionBelongsTo::PRODUCT;
+    }
+
+    private function orderAnswers(): array
+    {
+        $orderQuestions = Arr::get($this->data, $this->orderQuestionsPath, []);
+
+        return $this->visibility->answersByQuestionId(is_array($orderQuestions) ? $orderQuestions : []);
+    }
+
+    private function attendeeAnswers(mixed $productData): array
+    {
+        $questions = is_array($productData) ? ($productData['questions'] ?? []) : [];
+
+        return $this->visibility->answersByQuestionId(is_array($questions) ? $questions : []);
     }
 
     /**
@@ -28,6 +50,8 @@ class ProductQuestionRule extends BaseQuestionRule
      */
     protected function validateRequiredQuestionArePresent(Collection $orderProducts): void
     {
+        $orderAnswers = $this->orderAnswers();
+
         foreach ($orderProducts as $productData) {
             if (! isset($productData['product_price_id']) || ! is_numeric($productData['product_price_id'])) {
                 throw ValidationException::withMessages([
@@ -38,11 +62,14 @@ class ProductQuestionRule extends BaseQuestionRule
             $productId = $this->getProductIdFromProductPriceId((int) $productData['product_price_id']);
             $questions = $productData['questions'] ?? [];
 
+            $attendeeAnswers = $this->attendeeAnswers($productData);
+
             $requiredQuestionIds = $this->questions
-                ->filter(function (QuestionDomainObject $question) use ($productId) {
+                ->filter(function (QuestionDomainObject $question) use ($productId, $orderAnswers, $attendeeAnswers) {
                     return $question->getRequired()
                         && ! $question->getIsHidden()
-                        && $question->getProducts()?->map(fn ($product) => $product->getId())->contains($productId);
+                        && $question->getProducts()?->map(fn ($product) => $product->getId())->contains($productId)
+                        && $this->visibility->isConditionMet($question, $this->questionsById, $orderAnswers, $attendeeAnswers, $productId);
                 })
                 ->map(fn (QuestionDomainObject $question) => $question->getId());
 
@@ -57,6 +84,7 @@ class ProductQuestionRule extends BaseQuestionRule
     protected function validateQuestions(mixed $products): array
     {
         $validationMessages = [];
+        $orderAnswers = $this->orderAnswers();
 
         foreach ($products as $productIndex => $productRequestData) {
             if (! isset($productRequestData['product_id']) || ! is_numeric($productRequestData['product_id'])) {
@@ -65,13 +93,9 @@ class ProductQuestionRule extends BaseQuestionRule
                 ]);
             }
 
-            $productDomainObject = $this->getProductDomainObject((int) $productRequestData['product_id']);
-
-            if (! $productDomainObject) {
-                $validationMessages['products.'.$productIndex][] = __('This product is outdated. Please reload the page.');
-
-                continue;
-            }
+            $productDomainObject = $this->getProductDomainObject(
+                $this->getProductIdFromProductPriceId((int) $productRequestData['product_price_id'])
+            );
 
             if ($productDomainObject->getProductType() === ProductType::TICKET->name && ! $this->skipBasicAttendeeValidation) {
                 $validationMessages = [
@@ -81,6 +105,8 @@ class ProductQuestionRule extends BaseQuestionRule
             }
 
             $questions = $productRequestData['questions'] ?? [];
+            $attendeeAnswers = $this->attendeeAnswers($productRequestData);
+
             foreach ($questions as $questionIndex => $question) {
                 $questionDomainObject = $this->getQuestionDomainObject($question['question_id'] ?? null);
                 $key = 'products.'.$productIndex.'.questions.'.$questionIndex.'.response';
@@ -90,6 +116,16 @@ class ProductQuestionRule extends BaseQuestionRule
                 if (! $questionDomainObject) {
                     $validationMessages[$key.'.answer'][] = __('This question is outdated. Please reload the page.');
 
+                    continue;
+                }
+
+                if (! $this->visibility->isConditionMet(
+                    $questionDomainObject,
+                    $this->questionsById,
+                    $orderAnswers,
+                    $attendeeAnswers,
+                    $productDomainObject->getId(),
+                )) {
                     continue;
                 }
 
@@ -106,6 +142,7 @@ class ProductQuestionRule extends BaseQuestionRule
                 }
 
                 $validationMessages = $this->validateResponseLength($questionDomainObject, $response, $key, $validationMessages);
+                $validationMessages = $this->validateEligibility($questionDomainObject, $answer, $key, $validationMessages);
             }
         }
 

@@ -1,5 +1,6 @@
 import {BoxOfficeProduct, Question} from "../../../types.ts";
 import {CartLine} from "../hooks/useBoxOfficeCart.ts";
+import {answersByQuestionId, indexQuestions, isQuestionShown} from "../../../utilites/questionLogic.ts";
 
 export type QuestionAnswer = { question_id: number; response: any };
 
@@ -20,8 +21,14 @@ export const isQuestionAnswered = (question: Question, answers: QuestionAnswer[]
     return hasValue(response.answer);
 };
 
-export const unansweredRequiredQuestions = (questions: Question[], answers: QuestionAnswer[]): Question[] =>
-    questions.filter(question => question.required && !isQuestionAnswered(question, answers));
+export const unansweredRequiredQuestions = (questions: Question[], answers: QuestionAnswer[]): Question[] => {
+    const questionsById = indexQuestions(questions);
+    const orderAnswers = answersByQuestionId(answers);
+
+    return questions.filter(question => question.required
+        && isQuestionShown(question, questionsById, orderAnswers)
+        && !isQuestionAnswered(question, answers));
+};
 
 export interface AttendeeSlot {
     key: string;

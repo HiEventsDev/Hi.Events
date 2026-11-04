@@ -71,6 +71,28 @@ class QuestionRepository extends BaseRepository implements QuestionRepositoryInt
         }
     }
 
+    public function attachProductToQuestions(int $productId, array $questionIds): void
+    {
+        $attachedQuestionIds = ProductQuestion::where('product_id', $productId)
+            ->whereIn('question_id', $questionIds)
+            ->pluck('question_id')
+            ->all();
+
+        foreach (array_diff($questionIds, $attachedQuestionIds) as $questionId) {
+            ProductQuestion::create([
+                'product_id' => $productId,
+                'question_id' => $questionId,
+            ]);
+        }
+    }
+
+    public function detachProductFromQuestions(int $productId, array $questionIds): void
+    {
+        ProductQuestion::where('product_id', $productId)
+            ->whereIn('question_id', $questionIds)
+            ->delete();
+    }
+
     public function findByEventId(int $eventId): Collection
     {
         return $this

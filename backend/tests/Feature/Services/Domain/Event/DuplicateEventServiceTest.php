@@ -168,6 +168,49 @@ class DuplicateEventServiceTest extends TestCase
         $this->assertSame([1, 2, 3], $questions->pluck('order')->all());
     }
 
+    public function test_follow_up_questions_point_at_the_duplicated_parent(): void
+    {
+        $eventId = $this->insertEvent();
+        $categoryId = $this->insertCategory($eventId, 'Tickets', 1);
+        $productId = $this->insertProduct($eventId, $categoryId);
+        $this->insertPrice($productId);
+
+        $parentId = DB::table('questions')->insertGetId([
+            'event_id' => $eventId,
+            'title' => 'Healthcare professional?',
+            'type' => 'RADIO',
+            'options' => json_encode(['Yes', 'No']),
+            'belongs_to' => 'ORDER',
+            'required' => true,
+            'order' => 1,
+            'disqualifying_options' => json_encode(['No']),
+            'disqualification_message' => 'Healthcare professionals only.',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        DB::table('questions')->insert([
+            'event_id' => $eventId,
+            'title' => 'Registration number',
+            'type' => 'SINGLE_LINE_TEXT',
+            'belongs_to' => 'ORDER',
+            'order' => 2,
+            'condition_question_id' => $parentId,
+            'condition_values' => json_encode(['Yes']),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $newEvent = $this->duplicate($eventId, duplicateProducts: true, duplicateQuestions: true);
+
+        $questions = DB::table('questions')->where('event_id', $newEvent->getId())->orderBy('order')->get();
+        [$newParent, $newFollowUp] = $questions->all();
+
+        $this->assertSame($newParent->id, $newFollowUp->condition_question_id);
+        $this->assertSame(['Yes'], json_decode($newFollowUp->condition_values, true));
+        $this->assertSame(['No'], json_decode($newParent->disqualifying_options, true));
+        $this->assertSame('Healthcare professionals only.', $newParent->disqualification_message);
+    }
+
     public function test_event_email_templates_are_copied(): void
     {
         $eventId = $this->insertEvent();

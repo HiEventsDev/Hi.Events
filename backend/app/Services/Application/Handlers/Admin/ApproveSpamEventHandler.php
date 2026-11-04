@@ -52,7 +52,7 @@ class ApproveSpamEventHandler
         $event = $this->eventSpamCheckContentService->loadEvent($eventId);
 
         $updated = $this->eventRepository->updateWhere(
-            attributes: ['status' => EventStatus::LIVE->name],
+            attributes: ['status' => $flaggedCheck->getPreviousEventStatus() ?? EventStatus::LIVE->name],
             where: [
                 'id' => $eventId,
                 'status' => EventStatus::PENDING_MANUAL_REVIEW->name,

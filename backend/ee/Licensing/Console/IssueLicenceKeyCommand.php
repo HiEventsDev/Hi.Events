@@ -19,8 +19,8 @@ class IssueLicenceKeyCommand extends Command
         {--kid= : Key id of that private key}
         {--customer= : Customer name shown in the admin licence page}
         {--expires= : Expiry date (YYYY-MM-DD, UTC)}
-        {--plan=own_events : Plan whose features the key unlocks: own_events, platform, or cloud (only for Hi.Events Cloud: it rolls features out by feature flag)}
-        {--covers= : Yearly sales the licence covers, in euros (required for own_events and platform)}
+        {--plan=own_events : Plan whose features the key unlocks: add_ons (only the --add features), own_events, platform, or cloud (only for Hi.Events Cloud: it rolls features out by feature flag)}
+        {--covers= : Yearly sales the licence covers, in euros (required for every plan except cloud)}
         {--add=* : Add-on features on top of the plan, e.g. --add=seating --add=box_office --add=enterprise_sso}
         {--lid= : Licence id (generated when omitted)}';
 
@@ -64,7 +64,7 @@ class IssueLicenceKeyCommand extends Command
             return self::FAILURE;
         }
         if ($covers !== '' && $plan === Plan::CLOUD) {
-            $this->error('--covers can only be used with the own_events and platform plans.');
+            $this->error('--covers cannot be used with the cloud plan.');
 
             return self::FAILURE;
         }
@@ -73,6 +73,11 @@ class IssueLicenceKeyCommand extends Command
         $unknown = array_diff($addOns, array_column(LicensedFeature::cases(), 'value'));
         if ($unknown !== []) {
             $this->error('Unknown features: '.implode(', ', $unknown));
+
+            return self::FAILURE;
+        }
+        if ($addOns === [] && $plan === Plan::ADD_ONS) {
+            $this->error('The add_ons plan needs at least one --add feature.');
 
             return self::FAILURE;
         }

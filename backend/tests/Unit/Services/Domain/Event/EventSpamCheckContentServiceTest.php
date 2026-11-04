@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Services\Domain\Event;
 
+use HiEvents\DomainObjects\EmailTemplateDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventLineupEntryDomainObject;
 use HiEvents\DomainObjects\EventScheduleItemDomainObject;
@@ -16,25 +17,50 @@ use HiEvents\DomainObjects\ProductCategoryDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProfileDomainObject;
 use HiEvents\DomainObjects\QuestionDomainObject;
+use HiEvents\Repository\Interfaces\EmailTemplateRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Services\Domain\Email\EmailContextHtmlEscaper;
+use HiEvents\Services\Domain\Email\EmailTemplateService;
+use HiEvents\Services\Domain\Email\EmailTokenContextBuilder;
 use HiEvents\Services\Domain\Event\DTO\EventSpamCheckContentDTO;
 use HiEvents\Services\Domain\Event\EventSpamCheckContentService;
 use HiEvents\Services\Domain\Event\EventSpamCheckService;
 use HiEvents\Services\Domain\Lineup\LineupHighlightSelector;
+use HiEvents\Services\Infrastructure\Email\LiquidTemplateRenderer;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
+use HTMLPurifier;
 use Illuminate\Config\Repository;
 use Illuminate\Support\Collection;
 use Mockery;
+use Mockery\MockInterface;
 use Tests\TestCase;
 
 class EventSpamCheckContentServiceTest extends TestCase
 {
     private EventSpamCheckContentService $service;
 
+    private EmailTemplateRepositoryInterface|MockInterface $emailTemplateRepository;
+
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->service = new EventSpamCheckContentService(Mockery::mock(EventRepositoryInterface::class), new LineupHighlightSelector);
+        $this->emailTemplateRepository = Mockery::mock(EmailTemplateRepositoryInterface::class);
+        $this->emailTemplateRepository->shouldReceive('findByEvent')->andReturn(collect())->byDefault();
+        $this->emailTemplateRepository->shouldReceive('findByOrganizer')->andReturn(collect())->byDefault();
+
+        $this->service = new EventSpamCheckContentService(
+            Mockery::mock(EventRepositoryInterface::class),
+            new LineupHighlightSelector,
+            $this->emailTemplateRepository,
+            new EmailTemplateService(
+                Mockery::mock(EmailTemplateRepositoryInterface::class),
+                new LiquidTemplateRenderer,
+                new EmailTokenContextBuilder(new LiquidTemplateRenderer, new HtmlPurifierService(new HTMLPurifier), new EmailContextHtmlEscaper),
+                new EmailContextHtmlEscaper,
+                new HtmlPurifierService(new HTMLPurifier),
+            ),
+        );
     }
 
     protected function tearDown(): void
@@ -315,6 +341,74 @@ class EventSpamCheckContentServiceTest extends TestCase
         $this->assertContains('<p>Event description</p>', $this->service->buildForEvent($this->makeEvent())->allHtml());
     }
 
+    public function test_collects_the_source_of_every_active_event_and_organizer_template(): void
+    {
+        $this->emailTemplateRepository->shouldReceive('findByEvent')->with(1)->andReturn(collect([
+            $this->emailTemplate(2, 'order_confirmation', 'Order {{ order.number }} confirmed', '<p>Thanks {{ order.first_name }}!</p>', 'View order'),
+        ]));
+        $this->emailTemplateRepository->shouldReceive('findByOrganizer')->with(4)->andReturn(collect([
+            $this->emailTemplate(7, 'order_confirmation', 'Organizer order subject', '<p>Organizer order body</p>', 'Organizer button'),
+            $this->emailTemplate(5, 'attendee_ticket', 'Your ticket', '{% if ticket.url %}<p>Call +1 805 555 0100 to cancel</p>{% endif %}', 'Get ticket'),
+        ]));
+
+        $content = $this->service->buildForEvent($this->makeEvent()->setOrganizerId(4));
+
+        $this->assertSame([
+            'event email template 1 (order confirmation) subject' => 'Order {{ order.number }} confirmed',
+            'event email template 1 (order confirmation) button' => 'View order',
+            'event email template 1 (order confirmation) body' => '<p>Thanks {{ order.first_name }}!</p>',
+            'organizer email template 1 (attendee ticket) subject' => 'Your ticket',
+            'organizer email template 1 (attendee ticket) button' => 'Get ticket',
+            'organizer email template 1 (attendee ticket) body' => '{% if ticket.url %}<p>Call +1 805 555 0100 to cancel</p>{% endif %}',
+            'organizer email template 2 (order confirmation) subject' => 'Organizer order subject',
+            'organizer email template 2 (order confirmation) button' => 'Organizer button',
+            'organizer email template 2 (order confirmation) body' => '<p>Organizer order body</p>',
+        ], $content->emailTemplates);
+    }
+
+    public function test_renders_templates_so_text_in_string_literals_and_variables_reaches_the_check(): void
+    {
+        $this->emailTemplateRepository->shouldReceive('findByEvent')->with(1)->andReturn(collect([
+            $this->emailTemplate(
+                3,
+                'attendee_ticket',
+                '{% assign charge = "USD 364.99" %}Renewal of {{ charge }}',
+                '{% comment %}Harmless padding{% endcomment %}<p>{{ "Call +1 805 555 0100 to cancel" }}</p>',
+                'Open',
+            ),
+        ]));
+
+        $content = $this->service->buildForEvent($this->makeEvent());
+
+        $this->assertSame('Renewal of USD 364.99', $content->renderedEmailTemplates['event email template 1 (attendee ticket) subject rendered with sample data']);
+        $this->assertStringContainsString('Call +1 805 555 0100 to cancel', $content->renderedEmailTemplates['event email template 1 (attendee ticket) body rendered with sample data']);
+        $this->assertStringNotContainsString('Harmless padding', $content->renderedEmailTemplates['event email template 1 (attendee ticket) body rendered with sample data']);
+    }
+
+    public function test_keeps_the_source_of_a_template_that_fails_to_render(): void
+    {
+        $this->emailTemplateRepository->shouldReceive('findByEvent')->with(1)->andReturn(collect([
+            $this->emailTemplate(3, 'attendee_ticket', 'Ticket', '{% if %}<p>Broken</p>', 'Open'),
+        ]));
+
+        $content = $this->service->buildForEvent($this->makeEvent());
+
+        $this->assertSame('{% if %}<p>Broken</p>', $content->emailTemplates['event email template 1 (attendee ticket) body']);
+        $this->assertSame([], $content->renderedEmailTemplates);
+    }
+
+    public function test_adding_an_email_template_changes_the_content_hash(): void
+    {
+        $hashService = new EventSpamCheckService(new Repository([]));
+        $hashWithoutTemplates = $hashService->hashContent($this->service->buildForEvent($this->makeEvent()));
+
+        $this->emailTemplateRepository->shouldReceive('findByEvent')->with(1)->andReturn(collect([
+            $this->emailTemplate(3, 'attendee_ticket', 'Ticket', '<p>Call us</p>', 'Open'),
+        ]));
+
+        $this->assertNotSame($hashWithoutTemplates, $hashService->hashContent($this->service->buildForEvent($this->makeEvent())));
+    }
+
     public function test_omits_missing_relations_and_blank_values(): void
     {
         $event = (new EventDomainObject)
@@ -327,6 +421,16 @@ class EventSpamCheckContentServiceTest extends TestCase
 
         $this->assertSame([], $content->supplementaryContent);
         $this->assertSame([], $content->allHtml());
+    }
+
+    private function emailTemplate(int $id, string $type, string $subject, string $body, string $buttonLabel): EmailTemplateDomainObject
+    {
+        return (new EmailTemplateDomainObject)
+            ->setId($id)
+            ->setTemplateType($type)
+            ->setSubject($subject)
+            ->setBody($body)
+            ->setCta(['label' => $buttonLabel, 'url_token' => 'ticket.url']);
     }
 
     private function makeEvent(): EventDomainObject

@@ -13,6 +13,7 @@ use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\ProductPriceDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\QuestionDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
@@ -35,6 +36,7 @@ use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionAnswerRepositoryInterface;
+use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\CompleteOrderDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\CompleteOrderOrderDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\CompleteOrderProductDataDTO;
@@ -42,6 +44,7 @@ use HiEvents\Services\Application\Handlers\Order\DTO\CreatedProductDataDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\OrderQuestionsDTO;
 use HiEvents\Services\Domain\Order\OccurrenceStatusValidator;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
+use HiEvents\Services\Domain\Question\QuestionVisibilityService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
@@ -72,6 +75,8 @@ class CompleteOrderHandler
         private readonly SeatedOrderCompletionGuard $seatedOrderCompletionGuard,
         private readonly EventSeatMapLookupService $eventSeatMapLookup,
         private readonly TransactionLockService $transactionLockService,
+        private readonly QuestionRepositoryInterface $questionRepository,
+        private readonly QuestionVisibilityService $questionVisibilityService,
     ) {}
 
     /**
@@ -97,10 +102,17 @@ class CompleteOrderHandler
 
             $updatedOrder = $this->updateOrder($order, $orderDTO);
 
-            $this->createAttendees($orderData->products, $order, $orderDTO, $eventSettings);
+            $questionsById = $this->questionVisibilityService->keyById(
+                $this->questionRepository
+                    ->loadRelation(ProductDomainObject::class)
+                    ->findWhere([QuestionDomainObjectAbstract::EVENT_ID => $orderData->event_id])
+            );
+            $orderAnswers = $this->answersByQuestionId($orderDTO->questions);
+
+            $this->createAttendees($orderData->products, $order, $orderDTO, $eventSettings, $questionsById, $orderAnswers);
 
             if ($orderData->order->questions) {
-                $this->createOrderQuestions($orderDTO->questions, $order);
+                $this->createOrderQuestions($orderDTO->questions, $order, $questionsById, $orderAnswers);
             }
 
             if (! $order->isPaymentRequired()) {
@@ -138,6 +150,8 @@ class CompleteOrderHandler
         OrderDomainObject $order,
         CompleteOrderOrderDTO $orderDTO,
         EventSettingDomainObject $eventSettings,
+        Collection $questionsById,
+        array $orderAnswers,
     ): void {
         $inserts = [];
         $createdProductData = collect();
@@ -227,6 +241,8 @@ class CompleteOrderHandler
             createdAttendees: $createdProductData,
             order: $order,
             productPrices: $productsPrices,
+            questionsById: $questionsById,
+            orderAnswers: $orderAnswers,
         );
     }
 
@@ -270,11 +286,19 @@ class CompleteOrderHandler
         return $orderItem;
     }
 
-    private function createOrderQuestions(Collection $questions, OrderDomainObject $order): void
-    {
-        $questions->each(function (OrderQuestionsDTO $orderQuestionsDTO) use ($order) {
+    private function createOrderQuestions(
+        Collection $questions,
+        OrderDomainObject $order,
+        Collection $questionsById,
+        array $orderAnswers,
+    ): void {
+        $questions->each(function (OrderQuestionsDTO $orderQuestionsDTO) use ($order, $questionsById, $orderAnswers) {
             $answer = $this->extractAnswer($orderQuestionsDTO->response);
             if ($answer === null) {
+                return;
+            }
+
+            if (! $this->questionVisibilityService->shouldKeepAnswer((int) $orderQuestionsDTO->question_id, $questionsById, $orderAnswers)) {
                 return;
             }
             $this->questionAnswersRepository->create([
@@ -294,7 +318,9 @@ class CompleteOrderHandler
     private function createProductQuestions(
         Collection $createdAttendees,
         OrderDomainObject $order,
-        Collection $productPrices
+        Collection $productPrices,
+        Collection $questionsById,
+        array $orderAnswers,
     ): void {
         $newAttendees = $this->attendeeRepository->findWhereIn(
             field: AttendeeDomainObjectAbstract::SHORT_ID,
@@ -316,9 +342,21 @@ class CompleteOrderHandler
                 fn (AttendeeDomainObject $attendee) => $attendee->getShortId() === $createdAttendee->shortId,
             );
 
+            $attendeeAnswers = $this->answersByQuestionId($productRequestData->questions);
+
             foreach ($productRequestData->questions as $question) {
                 $answer = $this->extractAnswer($question->response);
                 if ($answer === null) {
+                    continue;
+                }
+
+                if (! $this->questionVisibilityService->shouldKeepAnswer(
+                    (int) $question->question_id,
+                    $questionsById,
+                    $orderAnswers,
+                    $attendeeAnswers,
+                    $productId,
+                )) {
                     continue;
                 }
 
@@ -331,6 +369,18 @@ class CompleteOrderHandler
                 ]);
             }
         }
+    }
+
+    private function answersByQuestionId(?Collection $questions): array
+    {
+        return $this->questionVisibilityService->answersByQuestionId(
+            ($questions ?? collect())
+                ->map(fn (OrderQuestionsDTO $question) => [
+                    'question_id' => $question->question_id,
+                    'response' => $question->response,
+                ])
+                ->all()
+        );
     }
 
     private function extractAnswer(array $response): mixed

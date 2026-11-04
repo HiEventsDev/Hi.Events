@@ -8,7 +8,7 @@ export interface InstanceInfo {
     dev_mode: boolean;
 }
 
-export type LicencePlan = 'own_events' | 'platform' | 'cloud';
+export type LicencePlan = 'add_ons' | 'own_events' | 'platform' | 'cloud';
 
 export interface AdminLicence {
     status: LicenceStatus;

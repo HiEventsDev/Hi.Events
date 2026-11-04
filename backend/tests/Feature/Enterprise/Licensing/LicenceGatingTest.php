@@ -107,6 +107,22 @@ class LicenceGatingTest extends TestCase
             ->assertJsonPath('data.licence.unlocked_features', ['white_label', 'seating', 'box_office', 'enterprise_sso']);
     }
 
+    public function test_an_add_ons_licence_unlocks_only_its_features_and_keeps_the_powered_by_notice(): void
+    {
+        $this->useLicence(expiresAt: '2099-01-01', addOns: ['seating'], plan: Plan::ADD_ONS);
+
+        $this->putJson("/events/{$this->eventId}/seat-map/rules", self::RULES, $this->authHeaders())
+            ->assertStatus(ResponseCodes::HTTP_OK);
+        $this->postJson("/events/{$this->eventId}/box-offices", ['name' => 'Front door'], $this->authHeaders())
+            ->assertStatus(ResponseCodes::HTTP_FORBIDDEN)
+            ->assertJsonPath('error_code', 'FEATURE_UNAVAILABLE');
+        $this->getJson('/users/me', $this->authHeaders())
+            ->assertJsonPath('data.licence.features', ['seating'])
+            ->assertJsonPath('data.licence.unlocked_features', ['seating']);
+        $this->getJson('/public/instance')
+            ->assertJsonPath('data.white_label', false);
+    }
+
     public function test_a_lapsed_licence_still_reports_the_features_renewing_would_unlock(): void
     {
         $this->useLicence(expiresAt: '2020-01-01', plan: Plan::OWN_EVENTS);

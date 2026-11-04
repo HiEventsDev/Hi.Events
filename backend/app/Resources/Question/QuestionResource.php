@@ -23,6 +23,13 @@ class QuestionResource extends BaseResource
             'event_id' => $this->getEventId(),
             'belongs_to' => $this->getBelongsTo(),
             'is_hidden' => $this->getIsHidden(),
+            'applies_to_all_tickets' => $this->getAppliesToAllTickets(),
+            'condition_question_id' => $this->getConditionQuestionId(),
+            /** @var string[] */
+            'condition_values' => $this->getConditionValuesList(),
+            /** @var string[] */
+            'disqualifying_options' => $this->getDisqualifyingOptionsList(),
+            'disqualification_message' => $this->getDisqualificationMessage(),
             'product_ids' => $this->when(
                 ! is_null($this->getProducts()),
                 fn () => $this->getProducts()->map(fn ($product) => $product->getId())

@@ -124,6 +124,16 @@ class LicenceServiceTest extends TestCase
         );
     }
 
+    public function test_an_add_ons_licence_unlocks_only_the_features_it_adds(): void
+    {
+        CarbonImmutable::setTestNow('2027-01-01');
+        $service = $this->service($this->issue(['box_office'], plan: 'add_ons'));
+
+        $this->assertSame([LicensedFeature::BOX_OFFICE], $service->unlockedFeatures());
+        $this->assertFalse($service->allows(LicensedFeature::WHITE_LABEL));
+        $this->assertFalse($service->allows(LicensedFeature::SEATING));
+    }
+
     public function test_a_lapsed_licence_unlocks_nothing(): void
     {
         CarbonImmutable::setTestNow('2030-01-01');
