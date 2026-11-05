@@ -19,6 +19,7 @@ use HiEvents\Enterprise\Seating\Services\Domain\SeatingEventLockService;
 use HiEvents\Exceptions\EventNotOpenForOrdersException;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Repository\Interfaces\WidgetRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\CreateOrderHandler;
@@ -109,6 +110,7 @@ class CreateOrderHandlerTest extends TestCase
                 Mockery::mock(SeatedProductLookupService::class)->shouldIgnoreMissing(),
             ),
             $this->widgetRepository,
+            Mockery::mock(ProductRepositoryInterface::class, fn (MockInterface $mock) => $mock->shouldReceive('findWhereIn')->andReturn(collect())),
         );
     }
 
