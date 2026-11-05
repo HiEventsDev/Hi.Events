@@ -9,8 +9,10 @@ use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\AffiliateDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\DomainObjects\Status\AffiliateStatus;
 use HiEvents\DomainObjects\Status\EventStatus;
@@ -18,8 +20,10 @@ use HiEvents\DomainObjects\WidgetDomainObject;
 use HiEvents\Enterprise\Seating\Services\Domain\SeatClaimService;
 use HiEvents\Enterprise\Seating\Services\Domain\SeatingEventLockService;
 use HiEvents\Exceptions\EventNotOpenForOrdersException;
+use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Repository\Interfaces\WidgetRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\CreateOrderPublicDTO;
@@ -51,6 +55,7 @@ class CreateOrderHandler
         private readonly SeatClaimService $seatClaimService,
         private readonly SeatingEventLockService $seatingEventLock,
         private readonly WidgetRepositoryInterface $widgetRepository,
+        private readonly ProductRepositoryInterface $productRepository,
     ) {}
 
     /**
@@ -75,6 +80,7 @@ class CreateOrderHandler
             }
 
             $promoCode = $this->getPromoCode($createOrderPublicDTO, $eventId);
+            $this->assertPromoCodeGatedProductsUnlocked($eventId, $createOrderPublicDTO, $promoCode);
             $affiliate = $this->getAffiliate($createOrderPublicDTO, $eventId);
             $widget = $this->getWidget($createOrderPublicDTO, $event);
 
@@ -123,6 +129,27 @@ class CreateOrderHandler
         }
 
         return $promoCode;
+    }
+
+    /**
+     * @throws ResourceNotFoundException
+     */
+    private function assertPromoCodeGatedProductsUnlocked(int $eventId, CreateOrderPublicDTO $createOrderPublicDTO, ?PromoCodeDomainObject $promoCode): void
+    {
+        $lockedProduct = $this->productRepository
+            ->findWhereIn(
+                field: ProductDomainObjectAbstract::ID,
+                values: $createOrderPublicDTO->products->pluck('product_id')->unique()->values()->all(),
+                additionalWhere: [ProductDomainObjectAbstract::EVENT_ID => $eventId],
+            )
+            ->first(fn (ProductDomainObject $product) => $product->getIsHiddenWithoutPromoCode()
+                && ! ($promoCode && $promoCode->appliesToProduct($product)));
+
+        if ($lockedProduct !== null) {
+            throw new ResourceNotFoundException(
+                __('Product with id :id not found', ['id' => $lockedProduct->getId()])
+            );
+        }
     }
 
     private function getAffiliate(CreateOrderPublicDTO $createOrderPublicDTO, int $eventId): ?AffiliateDomainObject
