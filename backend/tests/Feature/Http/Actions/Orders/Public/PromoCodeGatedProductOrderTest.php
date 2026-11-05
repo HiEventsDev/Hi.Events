@@ -75,7 +75,9 @@ class PromoCodeGatedProductOrderTest extends TestCase
     {
         $this->postOrder('first-session', self::CODE)->assertCreated();
 
-        $this->postOrder('second-session', self::CODE)->assertNotFound();
+        $this->postOrder('second-session', self::CODE)
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['promo_code' => 'This promo code is invalid']);
 
         $this->assertSame(1, DB::table('orders')->where('event_id', $this->eventId)->whereNull('deleted_at')->count());
     }

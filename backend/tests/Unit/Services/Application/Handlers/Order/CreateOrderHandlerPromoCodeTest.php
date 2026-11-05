@@ -29,6 +29,7 @@ use HiEvents\Services\Domain\PromoCode\PromoCodeUsageValidationService;
 use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
+use Illuminate\Validation\ValidationException;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Tests\TestCase;
@@ -58,9 +59,9 @@ class CreateOrderHandlerPromoCodeTest extends TestCase
         $this->assertSame(self::PROMO_CODE_ID, $captured->getId());
     }
 
-    public function test_a_product_hidden_without_a_code_is_refused_when_the_code_is_used_up(): void
+    public function test_a_product_hidden_without_a_code_is_refused_as_an_invalid_code_when_the_code_is_used_up(): void
     {
-        $this->expectException(ResourceNotFoundException::class);
+        $this->expectException(ValidationException::class);
 
         $this->runHandler(isUsable: false, products: collect([$this->gatedProduct()]));
     }

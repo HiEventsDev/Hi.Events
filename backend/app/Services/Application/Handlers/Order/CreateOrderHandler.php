@@ -133,6 +133,7 @@ class CreateOrderHandler
 
     /**
      * @throws ResourceNotFoundException
+     * @throws ValidationException
      */
     private function assertPromoCodeGatedProductsUnlocked(int $eventId, CreateOrderPublicDTO $createOrderPublicDTO, ?PromoCodeDomainObject $promoCode): void
     {
@@ -145,11 +146,19 @@ class CreateOrderHandler
             ->first(fn (ProductDomainObject $product) => $product->getIsHiddenWithoutPromoCode()
                 && ! ($promoCode && $promoCode->appliesToProduct($product)));
 
-        if ($lockedProduct !== null) {
-            throw new ResourceNotFoundException(
-                __('Product with id :id not found', ['id' => $lockedProduct->getId()])
-            );
+        if ($lockedProduct === null) {
+            return;
         }
+
+        if ($promoCode === null && $createOrderPublicDTO->promo_code !== null) {
+            throw ValidationException::withMessages([
+                'promo_code' => __('This promo code is invalid'),
+            ]);
+        }
+
+        throw new ResourceNotFoundException(
+            __('Product with id :id not found', ['id' => $lockedProduct->getId()])
+        );
     }
 
     private function getAffiliate(CreateOrderPublicDTO $createOrderPublicDTO, int $eventId): ?AffiliateDomainObject
