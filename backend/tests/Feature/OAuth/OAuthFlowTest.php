@@ -45,6 +45,7 @@ class OAuthFlowTest extends TestCase
 
         Mail::fake();
         config(['app.frontend_url' => 'https://app.example.test']);
+        URL::forceScheme('https');
         URL::forceRootUrl('https://api.example.test');
 
         $this->owner = User::factory()->password(self::PASSWORD)->withAccount()->create();
