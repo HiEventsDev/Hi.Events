@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Domain\Report;
 
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
+use HiEvents\Services\Domain\Report\Concerns\BindsReportFilters;
 use Illuminate\Cache\Repository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Carbon;
@@ -10,6 +11,8 @@ use Illuminate\Support\Collection;
 
 abstract class AbstractOrganizerReportService
 {
+    use BindsReportFilters;
+
     private const CACHE_TTL_SECONDS = 30;
 
     public function __construct(
@@ -41,6 +44,7 @@ abstract class AbstractOrganizerReportService
                 $this->getSqlQuery($startDate, $endDate, $currency),
                 [
                     'organizer_id' => $organizerId,
+                    ...$this->getAdditionalBindings($startDate, $endDate, $currency),
                 ]
             )
         );
@@ -50,14 +54,9 @@ abstract class AbstractOrganizerReportService
 
     abstract protected function getSqlQuery(Carbon $startDate, Carbon $endDate, ?string $currency = null): string;
 
-    protected function buildCurrencyFilter(string $column, ?string $currency): string
+    protected function getAdditionalBindings(Carbon $startDate, Carbon $endDate, ?string $currency): array
     {
-        if ($currency === null) {
-            return '';
-        }
-        $escapedCurrency = addslashes($currency);
-
-        return "AND $column = '$escapedCurrency'";
+        return [];
     }
 
     protected function getCacheKey(int $organizerId, ?string $currency, ?Carbon $startDate, ?Carbon $endDate): string

@@ -10,8 +10,6 @@ class PromoCodesReport extends AbstractReportService
 {
     protected function getSqlQuery(Carbon $startDate, Carbon $endDate, ?int $occurrenceId = null): string
     {
-        $startDateString = $startDate->format('Y-m-d H:i:s');
-        $endDateString = $endDate->format('Y-m-d H:i:s');
         $reservedString = OrderStatus::RESERVED->name;
         $completedStatus = OrderStatus::COMPLETED->name;
         $occurrenceFilter = $occurrenceId !== null
@@ -42,8 +40,8 @@ class PromoCodesReport extends AbstractReportService
                         o.deleted_at IS NULL
                       AND o.status IN ('$completedStatus')
                       AND o.event_id = :event_id
-                      AND o.created_at >= '$startDateString'
-                      AND o.created_at <= '$endDateString'
+                      AND o.created_at >= :start_at
+                      AND o.created_at <= :end_at
                       $occurrenceFilter
 
                     GROUP BY
@@ -112,5 +110,10 @@ class PromoCodesReport extends AbstractReportService
             total_gross_sales DESC,
             promo_code;
         SQL;
+    }
+
+    protected function getAdditionalBindings(Carbon $startDate, Carbon $endDate): array
+    {
+        return $this->utcRangeBindings($startDate, $endDate);
     }
 }

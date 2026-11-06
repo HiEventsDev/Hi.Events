@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class GetEventStatsAction extends BaseAction
@@ -32,14 +33,22 @@ class GetEventStatsAction extends BaseAction
 
         $validated = $this->validateDateRange($request);
 
-        $occurrenceIdQuery = $request->query('occurrence_id');
+        $occurrenceId = $request->validate([
+            'occurrence_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('event_occurrences', 'id')
+                    ->where('event_id', $eventId)
+                    ->whereNull('deleted_at'),
+            ],
+        ])['occurrence_id'] ?? null;
 
         $stats = $this->eventStatsHandler->handle(EventStatsRequestDTO::fromArray([
             'event_id' => $eventId,
             'date_range_preset' => $request->query('date_range', 'month'),
             'start_date' => $validated['start_date'] ?? null,
             'end_date' => $validated['end_date'] ?? null,
-            'occurrence_id' => $occurrenceIdQuery !== null ? (int) $occurrenceIdQuery : null,
+            'occurrence_id' => $occurrenceId !== null ? (int) $occurrenceId : null,
         ]));
 
         if ($this->isWithheldFromCurrentUser(Permission::VIEW_FINANCIALS)) {

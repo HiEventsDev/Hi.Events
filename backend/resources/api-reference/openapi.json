@@ -9904,7 +9904,10 @@
             "name": "occurrence_id",
             "in": "query",
             "schema": {
-              "type": "string"
+              "type": [
+                "integer",
+                "null"
+              ]
             }
           },
           {
@@ -20250,7 +20253,7 @@
     "/organizers/{organizerId}/reports/{reportType}": {
       "get": {
         "operationId": "reports.getOrganizerReportAction",
-        "description": "The response rows depend on the requested `reportType`. Paginated report types return\n`{data, meta, links}`; non-paginated report types return `{data}`.",
+        "description": "The response rows depend on the requested `reportType`. Paginated report types return\n`{data, meta, links}`; non-paginated report types return `{data}`.\n\n`start_date` and `end_date` are widened to whole days in the organizer's timezone. Rows of\n`revenue_summary` are grouped by the UTC date of each order.",
         "summary": "Get Organizer Report",
         "tags": [
           "Reports"
@@ -20688,6 +20691,7 @@
     "/events/{eventId}/reports/{reportType}": {
       "get": {
         "operationId": "reports.getReportAction",
+        "description": "`start_date` and `end_date` are widened to whole days in the event's timezone. Rows of\n`daily_sales_report` are grouped by the UTC date of each order.",
         "summary": "Get Report",
         "tags": [
           "Reports"
