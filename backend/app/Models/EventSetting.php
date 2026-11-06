@@ -15,6 +15,8 @@ class EventSetting extends BaseModel
             'ticket_design_settings' => 'array',
             'homepage_theme_settings' => 'array',
             'homepage_sections' => 'array',
+            'badge_design_settings' => 'array',
+            'enabled_features' => 'array',
         ];
     }
 }

@@ -1,0 +1,208 @@
+@use "../../../../styles/mixins.scss";
+
+.previewActions {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 2px 0;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  > * {
+    flex-shrink: 0;
+  }
+}
+
+.previewTicket {
+  width: 160px;
+  flex-shrink: 0;
+
+  &:global(.mantine-InputWrapper-root) {
+    margin-bottom: 0;
+  }
+}
+
+.previewStage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 32px;
+
+  @include mixins.respond-below(md) {
+    padding: 16px;
+  }
+}
+
+.previewBadge {
+  flex: 1;
+  min-height: 0;
+}
+
+.previewStats {
+  flex-shrink: 0;
+  margin-top: 16px;
+  text-align: center;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hi-spacing-md);
+
+  :global(.mantine-InputWrapper-root),
+  :global(.mantine-Switch-root) {
+    margin-bottom: 0;
+  }
+}
+
+.twoColumns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--hi-spacing-sm);
+}
+
+.templateGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.templateOption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 6px 6px;
+  border: 1px solid var(--mantine-color-gray-3);
+  border-radius: var(--mantine-radius-md);
+  background: var(--mantine-color-gray-0);
+  cursor: pointer;
+  transition: border-color 120ms ease, background-color 120ms ease;
+
+  &:hover {
+    border-color: var(--mantine-color-gray-5);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--mantine-color-primary-5);
+    outline-offset: 1px;
+  }
+
+  &[data-selected] {
+    border-color: var(--mantine-color-primary-6);
+    background: var(--mantine-color-primary-0);
+    box-shadow: inset 0 0 0 1px var(--mantine-color-primary-6);
+  }
+}
+
+.templateThumb {
+  width: 100%;
+  height: 112px;
+  pointer-events: none;
+}
+
+.templateLabel {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--mantine-color-gray-8);
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lineRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.lineIndex {
+  flex-shrink: 0;
+  width: 18px;
+  padding-top: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--mantine-color-gray-5);
+  text-align: right;
+}
+
+.lineFields {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  :global(.mantine-InputWrapper-root) {
+    margin-bottom: 0;
+  }
+}
+
+.lineControls {
+  width: 100%;
+}
+
+.lineSource {
+  flex: 1;
+  min-width: 0;
+}
+
+.lineSize {
+  width: 88px;
+  flex-shrink: 0;
+}
+
+.lineActions {
+  flex-shrink: 0;
+}
+
+.suggestion {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  padding: 10px 12px;
+  border: 1px solid var(--mantine-color-gray-2);
+  border-radius: var(--mantine-radius-md);
+  background: var(--mantine-color-gray-0);
+}
+
+.suggestionIcon {
+  flex-shrink: 0;
+  color: var(--mantine-color-gray-6);
+}
+
+.suggestionText {
+  flex: 1;
+  min-width: 0;
+}
+
+.ribbons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ribbonRow {
+  display: grid;
+  grid-template-columns: 112px 1fr;
+  gap: 8px;
+  align-items: center;
+
+  :global(.mantine-InputWrapper-root) {
+    margin-bottom: 0;
+  }
+}
+
+.ribbonColor,
+.ribbonLabel {
+  min-width: 0;
+}

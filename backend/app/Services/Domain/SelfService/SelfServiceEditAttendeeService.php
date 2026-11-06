@@ -16,6 +16,7 @@ use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Domain\Attendee\SendAttendeeTicketService;
+use HiEvents\Services\Domain\Badge\BadgeReprintService;
 use HiEvents\Services\Domain\SelfService\DTO\EditAttendeeResultDTO;
 use Illuminate\Support\Facades\Mail;
 
@@ -26,6 +27,7 @@ class SelfServiceEditAttendeeService
         private readonly EventRepositoryInterface $eventRepository,
         private readonly OrderAuditLogService $orderAuditLogService,
         private readonly SendAttendeeTicketService $sendAttendeeTicketService,
+        private readonly BadgeReprintService $badgeReprintService,
     ) {}
 
     public function editAttendee(
@@ -79,6 +81,10 @@ class SelfServiceEditAttendeeService
                 attributes: $updateData,
                 where: ['id' => $attendee->getId()]
             );
+
+            if (isset($updateData['first_name']) || isset($updateData['last_name'])) {
+                $this->badgeReprintService->flagForReprint([$attendee->getId()]);
+            }
 
             $event = $this->loadEventWithRelations($attendee->getEventId());
 

@@ -159,6 +159,7 @@ class GetCheckInListAttendeeDetailPublicHandlerTest extends TestCase
         $checkInList->shouldReceive('getEventId')->andReturn($eventId);
         $checkInList->shouldReceive('getEvent')->andReturn($event);
         $checkInList->shouldReceive('getExpiresAt')->andReturn(null);
+        $checkInList->shouldReceive('getKioskMode')->andReturn(false);
         $checkInList->shouldReceive('getActivatesAt')->andReturn(null);
         $checkInList->shouldReceive('getProducts')->andReturn(new Collection);
         $checkInList->shouldReceive('getEventOccurrenceId')->andReturn(null);

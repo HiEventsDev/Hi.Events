@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Application\Handlers\CheckInList\Public;
 
+use HiEvents\DomainObjects\AttendeeCheckInDomainObject;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
@@ -40,10 +41,12 @@ class GetCheckInListAttendeePublicHandler
 
         $this->checkInListActivityValidator->assertActive($checkInList);
 
-        $attendee = $this->attendeeRepository->findFirstWhere([
-            'public_id' => $attendeePublicId,
-            'event_id' => $checkInList->getEventId(),
-        ]);
+        $attendee = $this->attendeeRepository
+            ->loadRelation(new Relationship(AttendeeCheckInDomainObject::class, name: 'check_ins'))
+            ->findFirstWhere([
+                'public_id' => $attendeePublicId,
+                'event_id' => $checkInList->getEventId(),
+            ]);
 
         if (! $attendee) {
             throw new ResourceNotFoundException(__('Attendee not found'));
@@ -51,7 +54,9 @@ class GetCheckInListAttendeePublicHandler
 
         $this->verifyAttendeeBelongsToCheckInList($checkInList, $attendee);
 
-        return $attendee;
+        return $attendee->setCheckIn(
+            $attendee->getCheckIns()?->first(fn (AttendeeCheckInDomainObject $checkIn) => $checkIn->getCheckInListId() === $checkInList->getId()),
+        );
     }
 
     private function verifyAttendeeBelongsToCheckInList(

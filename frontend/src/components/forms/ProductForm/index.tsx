@@ -51,7 +51,8 @@ import classNames from "classnames";
 import {InputLabelWithHelp} from "../../common/InputLabelWithHelp";
 import {CreateTaxOrFeeModal} from "../../modals/CreateTaxOrFeeModal";
 import {defaultQuantityAppliesTo, ProductPriceTierForm, QuantityField} from "./ProductPriceTierForm.tsx";
-import {LedgerRow, LedgerRowId} from "./LedgerRow.tsx";
+import {Ledger, LedgerRow} from "../../common/Ledger";
+import {LedgerRowId} from "./ledgerSummaries.ts";
 import {ProductSelector} from "../../common/ProductSelector";
 import {
     accessSummary,
@@ -392,10 +393,10 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                 )}
             </div>
 
-            <div className={classes.ledger}>
-                <div className={classes.ledgerHeading}>{t`Everything else — tap to edit`}</div>
+            <Ledger heading={t`Everything else — tap to edit`}>
 
                 <LedgerRow
+                    idPrefix="product-ledger"
                     id="description"
                     icon={<IconAlignLeft size={16}/>}
                     label={t`Description`}
@@ -412,6 +413,7 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                 </LedgerRow>
 
                 <LedgerRow
+                    idPrefix="product-ledger"
                     id="sale-window"
                     icon={<IconCalendar size={16}/>}
                     label={t`Sale window`}
@@ -442,6 +444,7 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                 </LedgerRow>
 
                 <LedgerRow
+                    idPrefix="product-ledger"
                     id="event-page"
                     icon={<IconEye size={16}/>}
                     label={t`On the event page`}
@@ -461,6 +464,7 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
 
                 {!isSeated && (
                     <LedgerRow
+                        idPrefix="product-ledger"
                         id="waitlist"
                         icon={<IconUsers size={16}/>}
                         label={t`Waitlist`}
@@ -479,6 +483,7 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                 )}
 
                 <LedgerRow
+                    idPrefix="product-ledger"
                     id="taxes"
                     icon={<IconReceipt size={16}/>}
                     label={t`Taxes & fees`}
@@ -521,6 +526,7 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                 </LedgerRow>
 
                 <LedgerRow
+                    idPrefix="product-ledger"
                     id="order-limits"
                     icon={<IconShoppingCart size={16}/>}
                     label={t`Order limits`}
@@ -537,6 +543,7 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                 </LedgerRow>
 
                 <LedgerRow
+                    idPrefix="product-ledger"
                     id="addons"
                     icon={<IconPuzzle size={16}/>}
                     label={t`Add-ons`}
@@ -575,6 +582,7 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                 </LedgerRow>
 
                 <LedgerRow
+                    idPrefix="product-ledger"
                     id="highlight"
                     icon={<IconFlame size={16}/>}
                     label={t`Highlight`}
@@ -600,6 +608,7 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                 </LedgerRow>
 
                 <LedgerRow
+                    idPrefix="product-ledger"
                     id="access"
                     icon={<IconWorld size={16}/>}
                     label={t`Access`}
@@ -623,7 +632,7 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                         />
                     </div>
                 </LedgerRow>
-            </div>
+            </Ledger>
 
             {taxFeeModalOpen && (
                 <CreateTaxOrFeeModal

@@ -151,13 +151,19 @@ $narrow-gutter: max(var(--hi-spacing-lg), calc((100% - 560px) / 2));
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--hi-spacing-sm);
   padding: var(--hi-spacing-xs) var(--hi-spacing-md);
   border-bottom: 1px solid var(--mantine-color-gray-2);
   background: #ffffff;
 }
 
 .previewLabel {
+  flex-shrink: 0;
   letter-spacing: 0.04em;
+
+  @include mixins.respond-below(sm) {
+    display: none;
+  }
 }
 
 .previewStage {

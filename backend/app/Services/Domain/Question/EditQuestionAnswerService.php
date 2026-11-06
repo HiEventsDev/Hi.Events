@@ -6,6 +6,7 @@ use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\QuestionDomainObject;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\QuestionAnswerRepositoryInterface;
+use HiEvents\Services\Domain\Badge\BadgeReprintService;
 use HiEvents\Services\Domain\Question\Exception\InvalidAnswerException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -15,6 +16,7 @@ class EditQuestionAnswerService
     public function __construct(
         private readonly QuestionAnswerRepositoryInterface $questionAnswerRepository,
         private readonly LoggerInterface $logger,
+        private readonly BadgeReprintService $badgeReprintService,
     ) {}
 
     /**
@@ -59,6 +61,13 @@ class EditQuestionAnswerService
                 'id' => $questionAnswerId,
                 'order_id' => $order->getId(),
             ],
+        );
+
+        $this->badgeReprintService->flagForAnswerChange(
+            eventId: $eventId,
+            questionId: $question->getId(),
+            orderId: $order->getId(),
+            attendeeId: $questionAnswer->getAttendeeId(),
         );
     }
 }

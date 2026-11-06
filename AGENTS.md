@@ -113,13 +113,14 @@ Feature rules live in `.claude/rules/`; Claude Code loads each file automaticall
 | Enterprise SSO | `.claude/rules/ee/enterprise-sso.md` |
 | Reserved seating | `.claude/rules/ee/seating.md` |
 | Lineup & schedule | `.claude/rules/features/lineup.md` |
+| Name badges | `.claude/rules/features/badges.md` |
 | Homepage sections | `.claude/rules/features/homepage-sections.md` |
 | Embeddable widget | `.claude/rules/features/widget.md` |
 | Registration questions | `.claude/rules/features/questions.md` |
 | Frontend UI patterns | `.claude/rules/frontend/ui.md` |
 | E2E specs | `.claude/rules/e2e.md` |
 
-Procedures are skills in `.agents/skills/`: `translations`, `api-smoke-test`, `e2e-dev-stack`.
+Procedures are skills in `.agents/skills/`: `translations`, `api-smoke-test`, `e2e-dev-stack`, `badge-printer-emulator`.
 
 ## Maintaining these docs
 

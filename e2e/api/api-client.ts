@@ -1,5 +1,7 @@
 import type { APIRequestContext, APIResponse } from '@playwright/test';
 import type {
+  BadgeDesign,
+  BadgeStats,
   Affiliate,
   AttendeeRecord,
   BoxOffice,
@@ -265,6 +267,10 @@ export class ApiClient {
 
   updateEventSettings(eventId: number, settings: Partial<EventSettings>): Promise<void> {
     return check(this.request.patch(`events/${eventId}/settings`, { headers: jsonHeaders, data: settings }));
+  }
+
+  enableBadges(eventId: number): Promise<void> {
+    return this.updateEventSettings(eventId, { enabled_features: ['BADGES'] });
   }
 
   createPromoCode(eventId: number, payload: CreatePromoCodePayload): Promise<PromoCode> {
@@ -533,6 +539,33 @@ export class ApiClient {
       throw new Error(`Attendee ${publicId} not found among ${attendees.length} attendees for event ${eventId}`);
     }
     return attendee.id;
+  }
+
+  renameAttendee(eventId: number, attendeeId: number, firstName: string): Promise<void> {
+    return check(
+      this.request.patch(`events/${eventId}/attendees/${attendeeId}`, { headers: jsonHeaders, data: { first_name: firstName } }),
+    );
+  }
+
+  getBadgeDesign(eventId: number): Promise<BadgeDesign> {
+    return unwrap<BadgeDesign>(this.request.get(`events/${eventId}/badge-design`, { headers: jsonHeaders }));
+  }
+
+  async updateBadgeDesign(eventId: number, patch: Partial<BadgeDesign>): Promise<BadgeDesign> {
+    const { is_customized: _ignored, ...current } = await this.getBadgeDesign(eventId);
+    return unwrap<BadgeDesign>(
+      this.request.put(`events/${eventId}/badge-design`, { headers: jsonHeaders, data: { ...current, ...patch } }),
+    );
+  }
+
+  getBadgeStats(eventId: number): Promise<BadgeStats> {
+    return unwrap<BadgeStats>(this.request.get(`events/${eventId}/badges/stats`, { headers: jsonHeaders }));
+  }
+
+  markBadgesPrinted(eventId: number, attendeeIds: number[]): Promise<void> {
+    return check(
+      this.request.post(`events/${eventId}/badges/printed`, { headers: jsonHeaders, data: { attendee_ids: attendeeIds } }),
+    );
   }
 
   updateAttendeeStatus(eventId: number, attendeeId: number, status: 'ACTIVE' | 'CANCELLED'): Promise<void> {
