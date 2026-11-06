@@ -34,6 +34,7 @@ class PersonalAccessTokenRepository extends BaseRepository implements PersonalAc
 
             return $this->handleResults($this->model
                 ->whereNull(PersonalAccessTokenDomainObject::EXPIRY_REMINDER_SENT_AT)
+                ->whereNull(PersonalAccessTokenDomainObject::OAUTH_CONNECTION_ID)
                 ->where(PersonalAccessTokenDomainObject::EXPIRES_AT, '>', $now)
                 ->where(PersonalAccessTokenDomainObject::EXPIRES_AT, '<=', $now->addDays($windowDays))
                 ->whereRaw('created_at <= expires_at - make_interval(days => ?)', [$minimumLifetimeDays])

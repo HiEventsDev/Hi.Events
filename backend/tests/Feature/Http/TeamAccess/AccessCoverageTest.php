@@ -33,6 +33,11 @@ use HiEvents\Http\Actions\Events\CreateEventAction;
 use HiEvents\Http\Actions\Events\GetEventsAction;
 use HiEvents\Http\Actions\EventSettings\GetPlatformFeePreviewAction;
 use HiEvents\Http\Actions\Locations\GetGeoStatusAction;
+use HiEvents\Http\Actions\OAuth\ApproveOAuthAuthorizationRequestAction;
+use HiEvents\Http\Actions\OAuth\DeleteOAuthConnectionAction;
+use HiEvents\Http\Actions\OAuth\DenyOAuthAuthorizationRequestAction;
+use HiEvents\Http\Actions\OAuth\GetOAuthAuthorizationRequestAction;
+use HiEvents\Http\Actions\OAuth\GetOAuthConnectionsAction;
 use HiEvents\Http\Actions\Orders\DownloadOrderInvoiceAction;
 use HiEvents\Http\Actions\Orders\ExportOrdersAction;
 use HiEvents\Http\Actions\Orders\MarkOrderAsPaidAction;
@@ -117,6 +122,11 @@ class AccessCoverageTest extends TestCase
         GetApiKeysAction::class,
         CreateApiKeyAction::class,
         DeleteApiKeyAction::class,
+        GetOAuthAuthorizationRequestAction::class,
+        ApproveOAuthAuthorizationRequestAction::class,
+        DenyOAuthAuthorizationRequestAction::class,
+        GetOAuthConnectionsAction::class,
+        DeleteOAuthConnectionAction::class,
         GetApiReferenceAction::class,
     ];
 
@@ -145,6 +155,9 @@ class AccessCoverageTest extends TestCase
         BeginTwoFactorSetupAction::class,
         CreateApiKeyAction::class,
         DeleteApiKeyAction::class,
+        ApproveOAuthAuthorizationRequestAction::class,
+        DenyOAuthAuthorizationRequestAction::class,
+        DeleteOAuthConnectionAction::class,
         DeleteSsoIdentityAction::class,
         ExchangeAuthenticatedSsoCodeAction::class,
         GetSsoIdentitiesAction::class,

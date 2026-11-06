@@ -1,0 +1,27 @@
+---
+paths:
+  - "backend/app/Mcp/**"
+  - "backend/routes/ai.php"
+  - "backend/app/Http/Middleware/ValidateMcpOrigin.php"
+  - "backend/tests/Feature/Mcp/**"
+  - "backend/tests/Unit/Mcp/**"
+---
+
+# MCP server
+
+- `POST /mcp` (`routes/ai.php`, `laravel/mcp`) takes Sanctum tokens only (`auth:sanctum`): pasted API keys or OAuth access tokens (see `oauth.md`). It sits outside the `api` middleware group, so access checks run on each tool's inner request, not on `/mcp` itself. `ApiKeyRouteExposureTest` pins it as the only key-only route.
+- Tools never call handlers, services or repositories. They call the existing API route through `ApiRouteDispatcher`, naming it by Action class, so permissions, read-only blocking, `VIEW_FINANCIALS` redaction, validation, throttles and spam checks match the API exactly. A tool that needs data the API doesn't return needs an API change first.
+- Directory rules (Anthropic connectors): every tool has `#[Name]` (snake_case, at most 64 characters), `#[Title]`, `#[Description]`, and exactly one of `#[IsReadOnly]` or `#[IsDestructive]`. Reads and writes are separate tools. There is no catch-all request tool. Descriptions describe behaviour and never tell the model to call other tools.
+- Writes extend `WriteApiTool` and call `writeLimitResponse()` first. `WriteApiTool::shouldRegister` hides writes from read-only keys and members without EDIT; the inner request still enforces both.
+- A tool that makes several writes undoes the records it created when a later step fails (`AddLineupPerformerTool`, `SetEventVenueTool`, `CreateAddonTool`), so retries don't leave duplicates.
+- Add-ons live on the parent: a ticket's `addon_product_ids` lists what it offers, and the add-on carries `is_addon_only`. `CreateAddonTool` creates the add-on, then re-PUTs each parent with the id appended (full payload via `TicketPayload::fromExistingProduct`); on failure it only deletes the add-on, because `DeleteProductService` detaches its links, and reports when that delete fails. Multi-write tools pass their write count to `writeLimitResponse`. `GetProductAction` loads `addons`, so every ticket edit keeps the parent's add-on list.
+- No tool moves money or messages people: no refunds, payouts, payment-provider or invoicing settings, and no attendee messaging. Ask before adding one; it needs a directory policy check.
+- Date inputs are local wall-clock times in the event timezone (`McpPresenter::LOCAL_DATE_FORMAT`). Date outputs go through `McpPresenter::localDate` (ISO 8601 with the offset), never raw UTC. Return compact shapes through `McpPresenter`, not whole resources.
+- Most PUT endpoints replace the whole record: anything not sent falls back to defaults (products, questions, promo codes, widgets, schedule items). Edit tools rebuild the full payload from the current record (`TicketPayload`, `QuestionPayload`, `PromoCodePayload`) before applying changes. Tier edits merge onto the stored price (`TicketPayload::mergeTiers`) so `quantity_applies_to`, visibility and sale windows survive; question edits fill the paired condition/disqualification field (`QuestionPayload::completeLinkedFields`) because the API only applies them when the first field of the pair is present. The `ticket_design_settings` and `homepage_theme_settings` JSON settings are also replaced whole on PATCH, so read, merge and send the full object. The theme tool also writes the legacy `homepage_*_color` fields.
+- Stats tools take `from`/`to` as UTC calendar days, because daily statistics are bucketed by the UTC order date. Organizer page views come from all-time `event_statistics` and ignore the range, so `get_organizer_stats` returns them as `all_time_page_views`; per-date event stats have no views, so they are dropped. Organizer totals cover one currency and list the rest in `other_currencies`; never sum across currencies.
+- Report tools take `from`/`to` as days in the event or organizer timezone and send the API that day's UTC start and end (`ReportPeriod`), as the dashboard does; a bare `Y-m-d` would shift a day for timezones behind UTC. Some report SQL ignores the range (`occurrence_summary`, `seating_sales`, `events_performance`, `check_in_summary`): list those in the tool's `ALL_TIME_REPORTS` so the tool refuses a range and labels the period `all_time` rather than implying a window. Organizer money reports always send a currency, because `revenue_summary` sums every currency when none is given. Rows are capped at `MAX_ROWS` with `truncated`; report timestamps arrive as UTC without an offset and are localized per report in `UTC_COLUMNS`.
+- Images arrive as URLs: `RemoteImageFetcher` (https only, `SsrfGuard` pins public IPs and re-checks every redirect, 5 MB cap, JPEG/PNG/WebP sniffed from the bytes). `RemoteImageUploader` then sends the image through `POST /images`. Never fetch a user-supplied URL any other way.
+- Don't use `laravel/mcp`'s ToolSearch: its `execute_tools` runs any tool by name, a catch-all the directory rejects, and it hides each tool's hints.
+- Writes are capped at `WriteApiTool::MAX_WRITES_PER_MINUTE` per key, and each write also spends 2-4 hits of the `api` limiter. Setting up a full event takes about 35 writes.
+- Tool names, input schemas and output shapes are a public contract, like the API: add freely; renaming or removing is a breaking change.
+- `HiEventsServer::$defaultPaginationLength` must stay at or above the tool count, or `tools/list` pages and some clients miss tools. The feature test counts the tools.

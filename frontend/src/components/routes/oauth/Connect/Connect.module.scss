@@ -1,0 +1,69 @@
+@use "../../auth/auth-common" as auth;
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--hi-color-gray-2);
+  border-radius: 12px;
+}
+
+.detail {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.875rem;
+}
+
+.detailLabel {
+  color: var(--hi-color-text-muted);
+}
+
+.detailValue {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--hi-text);
+  word-break: break-all;
+}
+
+.access {
+  margin: 1rem 0;
+
+  :global(.mantine-Radio-root) {
+    margin-top: 0.75rem;
+  }
+}
+
+.error {
+  margin: 0.5rem 0 0;
+  font-size: 0.8125rem;
+  color: var(--mantine-color-red-6);
+}
+
+.actions {
+  margin-top: 1rem;
+  @include auth.auth-button;
+}
+
+.cancel {
+  margin-top: 0.5rem;
+}
+
+.footnote {
+  margin: 1rem 0 0;
+  font-size: 0.8125rem;
+  color: var(--hi-color-text-muted);
+}
+
+.leaving {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 12rem;
+  color: var(--hi-color-text-muted);
+}

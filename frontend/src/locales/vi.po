@@ -276,6 +276,10 @@ msgstr "{0} vé"
 msgid "{0} to {1}"
 msgstr "{0} đến {1}"
 
+#: src/components/routes/oauth/Connect/index.tsx:87
+msgid "{0} wants to use your Hi.Events account {1}. It will act as you, with the access you choose below."
+msgstr "{0} muốn sử dụng tài khoản Hi.Events {1} của bạn. Ứng dụng sẽ thay mặt bạn hành động với quyền truy cập bạn chọn bên dưới."
+
 #: src/components/routes/settings/Security/SignInMethods.tsx:139
 msgid "{0} was disconnected."
 msgstr "Đã ngắt kết nối {0}."
@@ -544,7 +548,7 @@ msgstr "Sự kiện đầu tiên của {organizerName}"
 msgid "{outsideDomainCount, plural, one {# member outside your verified domains keeps their current sign-in.} other {# members outside your verified domains keep their current sign-in.}}"
 msgstr "{outsideDomainCount, plural, other {# thành viên ngoài các miền đã xác minh của bạn vẫn giữ cách đăng nhập hiện tại.}}"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:165
+#: src/components/routes/settings/ApiKeys/index.tsx:166
 msgid "{ownActiveCount} of {0} active keys"
 msgstr "{ownActiveCount}/{0} khóa đang hoạt động"
 
@@ -1061,6 +1065,7 @@ msgstr "Chấp nhận thanh toán thẻ tín dụng với Stripe"
 #: src/components/common/TeamAccessFields/index.tsx:207
 #: src/components/common/TeamAccessPanel/index.tsx:137
 #: src/components/forms/ProductForm/index.tsx:605
+#: src/components/routes/oauth/Connect/index.tsx:115
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:237
 #: src/components/routes/settings/Team/index.tsx:218
 #: src/components/routes/settings/Team/MemberRow.tsx:141
@@ -1802,6 +1807,10 @@ msgstr "Kiểm tra độ tuổi (18+)"
 msgid "Agenda"
 msgstr "Chương trình"
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:43
+msgid "AI assistants such as Claude and ChatGPT connect by signing in, without a key. Add this MCP server URL to your assistant to connect it."
+msgstr "Các trợ lý AI như Claude và ChatGPT kết nối bằng cách đăng nhập, không cần khóa. Thêm URL máy chủ MCP này vào trợ lý của bạn để kết nối."
+
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:45
 msgid "Aisles after seats"
 msgstr "Lối đi sau ghế"
@@ -2152,6 +2161,10 @@ msgstr "Số tiền nhận"
 msgid "An account with this email already exists. Sign in instead."
 msgstr "Đã có tài khoản sử dụng email này. Vui lòng đăng nhập."
 
+#: src/components/routes/oauth/Connect/index.tsx:16
+msgid "an app on this computer"
+msgstr "một ứng dụng trên máy tính này"
+
 #: src/components/forms/AffiliateForm/index.tsx:90
 msgid "An email to associate with this affiliate. The affiliate will not be notified."
 msgstr "Email để liên kết với đối tác này. Đối tác sẽ không nhận được thông báo."
@@ -2319,19 +2332,27 @@ msgid "Anything else?"
 msgstr "Bạn cần thêm gì nữa không?"
 
 #: src/components/layouts/SettingsLayout/index.tsx:74
-#: src/components/routes/settings/ApiKeys/index.tsx:111
+#: src/components/routes/settings/ApiKeys/index.tsx:112
 msgid "API keys"
 msgstr "Khóa API"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:139
+#: src/components/routes/settings/ApiKeys/index.tsx:140
 msgid "API keys can't be created while you're impersonating someone."
 msgstr "Không thể tạo khóa API khi bạn đang đóng vai người khác."
 
 #: src/components/layouts/SettingsLayout/index.tsx:85
 #: src/components/layouts/SettingsLayout/index.tsx:89
-#: src/components/routes/settings/ApiKeys/index.tsx:122
+#: src/components/routes/settings/ApiKeys/index.tsx:123
 msgid "API reference"
 msgstr "Tài liệu tham khảo API"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:29
+msgid "App disconnected"
+msgstr "Đã ngắt kết nối ứng dụng"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:79
+msgid "App on your computer"
+msgstr "Ứng dụng trên máy tính của bạn"
 
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:136
 msgid "Appearance"
@@ -3381,7 +3402,7 @@ msgstr "Thương hiệu & email"
 msgid "Brazilian Portuguese"
 msgstr "Tiếng Bồ Đào Nha Brazil"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:227
+#: src/components/routes/settings/ApiKeys/index.tsx:230
 msgid "Browse every endpoint in the API reference"
 msgstr "Xem mọi endpoint trong tài liệu tham chiếu API"
 
@@ -3639,6 +3660,7 @@ msgstr "Không dùng được ứng dụng xác thực hoặc mã khôi phục?"
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:67
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1173
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:64
+#: src/components/routes/oauth/Connect/index.tsx:164
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:69
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:85
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:85
@@ -4901,7 +4923,7 @@ msgstr "Xác nhận spam"
 msgid "Confirm your email"
 msgstr "Xác nhận email của bạn"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:130
+#: src/components/routes/settings/ApiKeys/index.tsx:131
 msgid "Confirm your email address"
 msgstr "Xác nhận địa chỉ email của bạn"
 
@@ -4933,6 +4955,8 @@ msgstr "Chúc mừng! Sự kiện của bạn hiện đã hiển thị công kha
 msgid "Connect"
 msgstr "Kết nối"
 
+#: src/components/routes/oauth/Connect/index.tsx:86
+#: src/components/routes/oauth/Connect/index.tsx:151
 #: src/components/routes/settings/Security/SignInMethods.tsx:246
 msgid "Connect {0}"
 msgstr "Kết nối {0}"
@@ -4945,7 +4969,7 @@ msgstr "Kết nối tài khoản Stripe trong mục Thanh toán trước khi th�
 msgid "Connect bank"
 msgstr "Kết nối ngân hàng"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:112
+#: src/components/routes/settings/ApiKeys/index.tsx:113
 msgid "Connect other tools and your own code to this account. A key can do what you can do, so treat it like a password."
 msgstr "Kết nối các công cụ khác và mã của riêng bạn với tài khoản này. Khóa có thể làm mọi việc bạn làm được, vì vậy hãy bảo vệ nó như mật khẩu."
 
@@ -4988,8 +5012,13 @@ msgid "Connect your identity provider, verify your email domains, then choose wh
 msgstr "Kết nối nhà cung cấp danh tính, xác minh các miền email, sau đó chọn xem có bắt buộc mọi người sử dụng hay không."
 
 #: src/components/routes/admin/Dashboard/index.tsx:410
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:88
 msgid "Connected"
 msgstr "Đã kết nối"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:41
+msgid "Connected apps"
+msgstr "Ứng dụng đã kết nối"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:298
 msgid "Connected the wrong Stripe account? Disconnect and start over."
@@ -5456,9 +5485,13 @@ msgstr "Không thể tải tài liệu tham chiếu API."
 msgid "Couldn't load this report"
 msgstr "Không thể tải báo cáo này"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:187
+#: src/components/routes/settings/ApiKeys/index.tsx:188
 msgid "Couldn't load your API keys"
 msgstr "Không thể tải khóa API của bạn"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:53
+msgid "Couldn't load your connected apps"
+msgstr "Không thể tải các ứng dụng đã kết nối"
 
 #: src/components/routes/settings/Organizers/index.tsx:40
 msgid "Couldn't load your organizers"
@@ -5543,7 +5576,7 @@ msgstr "Tạo \"{query}\""
 msgid "Create {0} Template"
 msgstr "Tạo mẫu {0}"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:199
+#: src/components/routes/settings/ApiKeys/index.tsx:200
 msgid "Create a key to connect tools like Zapier, your CRM or your own scripts to your events, orders and attendees."
 msgstr "Tạo khóa để kết nối các công cụ như Zapier, CRM của bạn hoặc script của riêng bạn với sự kiện, đơn hàng và người tham dự."
 
@@ -5604,6 +5637,10 @@ msgstr "Tạo thông báo để hiển thị tin nhắn cho người dùng của
 msgid "Create and change events, orders, attendees and more."
 msgstr "Tạo và thay đổi sự kiện, đơn hàng, người tham dự và nhiều hơn nữa."
 
+#: src/components/routes/oauth/Connect/index.tsx:122
+msgid "Create and change events, tickets, questions and settings."
+msgstr "Tạo và thay đổi sự kiện, vé, câu hỏi và cài đặt."
+
 #: src/components/routes/event/products.tsx:67
 msgid "Create and configure tickets and merchandise for sale."
 msgstr "Tạo và cấu hình vé và hàng hóa để bán."
@@ -5619,7 +5656,7 @@ msgid "Create Announcement"
 msgstr "Tạo thông báo"
 
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:215
-#: src/components/routes/settings/ApiKeys/index.tsx:91
+#: src/components/routes/settings/ApiKeys/index.tsx:92
 msgid "Create API key"
 msgstr "Tạo khóa API"
 
@@ -5799,7 +5836,7 @@ msgstr "Tạo sự kiện của riêng bạn"
 #: src/components/routes/admin/Messages/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:310
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:69
-#: src/components/routes/settings/ApiKeys/index.tsx:174
+#: src/components/routes/settings/ApiKeys/index.tsx:175
 msgid "Created"
 msgstr "Đã tạo"
 
@@ -6618,14 +6655,21 @@ msgid "Disclaimers, contact info or a thank-you note, on a single line"
 msgstr "Tuyên bố miễn trừ, thông tin liên hệ hoặc lời cảm ơn, trên một dòng"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:120
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:32
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:99
 #: src/components/routes/settings/Security/SignInMethods.tsx:217
 #: src/components/routes/settings/Security/SignInMethods.tsx:251
 msgid "Disconnect"
 msgstr "Ngắt kết nối"
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:103
 #: src/components/routes/settings/Security/SignInMethods.tsx:247
 msgid "Disconnect {0}"
 msgstr "Ngắt kết nối {0}"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:27
+msgid "Disconnect {name}? It stops working with your account straight away."
+msgstr "Ngắt kết nối {name}? Ứng dụng sẽ ngừng hoạt động với tài khoản của bạn ngay lập tức."
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:109
 msgid "Disconnect Stripe account"
@@ -8093,7 +8137,7 @@ msgstr "Mọi nhà tổ chức và sự kiện, kể cả mục mới."
 msgid "Every trusted device will need a code at its next sign-in. Continue?"
 msgstr "Mỗi thiết bị tin cậy sẽ cần nhập mã ở lần đăng nhập tiếp theo. Tiếp tục?"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:158
+#: src/components/routes/settings/ApiKeys/index.tsx:159
 msgid "Everyone ({0})"
 msgstr "Mọi người ({0})"
 
@@ -8193,7 +8237,7 @@ msgstr "Ngày hết hạn"
 
 #: src/components/common/WaitlistTable/index.tsx:30
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:119
-#: src/components/routes/settings/ApiKeys/index.tsx:210
+#: src/components/routes/settings/ApiKeys/index.tsx:211
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:35
 #: src/ee/licensing/licenceNotice.ts:78
 msgid "Expired"
@@ -8206,7 +8250,7 @@ msgstr "Đã hết hạn {0}"
 #: src/components/common/PromoCodeTable/index.tsx:76
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:33
-#: src/components/routes/settings/ApiKeys/index.tsx:176
+#: src/components/routes/settings/ApiKeys/index.tsx:177
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:178
 msgid "Expires"
 msgstr "Hết hạn"
@@ -9281,6 +9325,10 @@ msgstr "Quay lại"
 msgid "Go back to profile"
 msgstr "Quay trở lại hồ sơ"
 
+#: src/components/routes/oauth/Connect/index.tsx:25
+msgid "Go back to the app you were connecting and start again."
+msgstr "Hãy quay lại ứng dụng bạn đang kết nối và bắt đầu lại."
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:448
 msgid "Go to Event Page"
 msgstr "Đến trang sự kiện"
@@ -9501,6 +9549,10 @@ msgstr "Hi.Events Cloud"
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:75
 msgid "Hi.Events Fee"
 msgstr "Phí Hi.Events"
+
+#: src/components/routes/oauth/Connect/index.tsx:108
+msgid "Hi.Events hasn't verified this app. Only continue if you started connecting it yourself and you trust it."
+msgstr "Hi.Events chưa xác minh ứng dụng này. Chỉ tiếp tục nếu bạn tự bắt đầu kết nối và tin tưởng ứng dụng."
 
 #: src/components/routes/organizer/Reports/index.tsx:46
 msgid "Hi.Events platform fees and VAT breakdown by transaction"
@@ -9862,7 +9914,7 @@ msgstr "Tôi đã thêm xong, tiếp tục"
 msgid "I've made the payment"
 msgstr "Tôi đã thanh toán"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:224
+#: src/components/routes/settings/ApiKeys/index.tsx:227
 msgid "If a key leaks, revoke it straight away and create a new one."
 msgstr "Nếu khóa bị lộ, hãy thu hồi ngay và tạo khóa mới."
 
@@ -10255,7 +10307,7 @@ msgstr "URL nhà phát hành"
 msgid "It happens on more than one date"
 msgstr "Diễn ra vào nhiều ngày"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:222
+#: src/components/routes/settings/ApiKeys/index.tsx:225
 msgid "It has your role and event access. Read-only keys can view and export, but can't change anything."
 msgstr "Khóa có vai trò và quyền truy cập sự kiện giống bạn. Khóa chỉ đọc có thể xem và xuất dữ liệu nhưng không thể thay đổi gì."
 
@@ -10408,7 +10460,7 @@ msgstr "Không hiển thị họ trên đội hình và lịch trình công khai
 msgid "Keeps signing in with a password. {providerName} can't be used to sign this member in."
 msgstr "Tiếp tục đăng nhập bằng mật khẩu. Không thể dùng {providerName} để đăng nhập cho thành viên này."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:173
+#: src/components/routes/settings/ApiKeys/index.tsx:174
 msgid "Key"
 msgstr "Khóa"
 
@@ -10416,11 +10468,11 @@ msgstr "Khóa"
 msgid "Key ending in {0}"
 msgstr "Khóa kết thúc bằng {0}"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:79
+#: src/components/routes/settings/ApiKeys/index.tsx:80
 msgid "Key removed"
 msgstr "Đã xóa khóa"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:79
+#: src/components/routes/settings/ApiKeys/index.tsx:80
 msgid "Key revoked"
 msgstr "Đã thu hồi khóa"
 
@@ -10428,7 +10480,7 @@ msgstr "Đã thu hồi khóa"
 msgid "Keycloak, Authentik, Zitadel, OneLogin and others"
 msgstr "Keycloak, Authentik, Zitadel, OneLogin và các dịch vụ khác"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:223
+#: src/components/routes/settings/ApiKeys/index.tsx:226
 msgid "Keys can't sign in or manage your team, payouts, profile or security settings."
 msgstr "Khóa không thể đăng nhập hoặc quản lý nhóm, khoản chi trả, hồ sơ hay cài đặt bảo mật của bạn."
 
@@ -10534,6 +10586,7 @@ msgstr "7 ngày qua"
 msgid "Last 90 days"
 msgstr "90 ngày qua"
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:92
 #: src/components/routes/settings/Team/index.tsx:220
 #: src/components/routes/settings/Team/MemberRow.tsx:165
 msgid "Last active"
@@ -10585,7 +10638,7 @@ msgstr "Trình kích hoạt cuối cùng"
 
 #: src/components/common/SsoButtons/index.tsx:126
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:73
-#: src/components/routes/settings/ApiKeys/index.tsx:175
+#: src/components/routes/settings/ApiKeys/index.tsx:176
 msgid "Last used"
 msgstr "Dùng lần trước"
 
@@ -11613,7 +11666,7 @@ msgstr "Mô tả sự kiện tuyệt vời của tôi ..."
 msgid "My amazing event title..."
 msgstr "Tiêu đề sự kiện tuyệt vời của tôi ..."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:157
+#: src/components/routes/settings/ApiKeys/index.tsx:158
 msgid "My keys"
 msgstr "Khóa của tôi"
 
@@ -11709,6 +11762,7 @@ msgstr "Doanh thu ròng"
 #: src/components/common/PromoCodeTable/index.tsx:169
 #: src/components/common/WebhookTable/index.tsx:272
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:93
 #: src/components/routes/settings/Team/MemberRow.tsx:166
 msgid "Never"
 msgstr "Không bao giờ"
@@ -12017,6 +12071,10 @@ msgstr "Không có đơn hàng hoàn tất trong khoảng thời gian này"
 #: src/components/routes/admin/Configurations/index.tsx:125
 msgid "No configurations found"
 msgstr "Không tìm thấy cấu hình"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:61
+msgid "No connected apps"
+msgstr "Không có ứng dụng nào được kết nối"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:207
 msgid "No connections available"
@@ -12487,7 +12545,7 @@ msgstr "Không, giữ tôi ở đây"
 msgid "Nobody has been added to this event's lineup yet."
 msgstr "Chưa có ai được thêm vào danh sách biểu diễn của sự kiện này."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:196
+#: src/components/routes/settings/ApiKeys/index.tsx:197
 msgid "Nobody has created an API key yet"
 msgstr "Chưa có ai tạo khóa API"
 
@@ -13076,6 +13134,10 @@ msgstr "Chỉ quản trị viên mới có thể quản lý quyền truy cập c
 #: src/components/forms/ProductForm/index.tsx:555
 msgid "Only available as an add-on"
 msgstr "Chỉ có sẵn dưới dạng bổ sung"
+
+#: src/components/routes/oauth/Connect/index.tsx:107
+msgid "Only continue if you just started connecting from an app on this computer, such as Claude Code or Cursor."
+msgstr "Chỉ tiếp tục nếu bạn vừa bắt đầu kết nối từ một ứng dụng trên máy tính này, chẳng hạn Claude Code hoặc Cursor."
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:181
 msgid "Only members who can manage payments can change these instructions."
@@ -15139,7 +15201,9 @@ msgstr "Kích hoạt lại"
 msgid "Reactivate this date? It will be reopened for future sales."
 msgstr "Kích hoạt lại ngày này? Ngày này sẽ được mở bán lại."
 
+#: src/components/routes/oauth/Connect/index.tsx:121
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:73
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:250
 msgid "Read and write"
 msgstr "Đọc và ghi"
@@ -15149,7 +15213,12 @@ msgstr "Đọc và ghi"
 msgid "Read more"
 msgstr "Xem thêm"
 
+#: src/components/routes/oauth/Connect/index.tsx:127
+msgid "Read only"
+msgstr "Chỉ đọc"
+
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:73
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:261
 msgid "Read-only"
 msgstr "Chỉ đọc"
@@ -15471,7 +15540,7 @@ msgstr "Loại bỏ"
 msgid "Remove"
 msgstr "Hủy bỏ"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:73
+#: src/components/routes/settings/ApiKeys/index.tsx:74
 msgid "Remove \"{0}\"? It has already expired."
 msgstr "Xóa \"{0}\"? Khóa này đã hết hạn."
 
@@ -15546,7 +15615,7 @@ msgstr "Gỡ thương hiệu Hi.Events"
 msgid "Remove Hi.Events branding from everything your attendees see, and put your own logo in their emails."
 msgstr "Gỡ thương hiệu Hi.Events khỏi mọi thứ người tham dự nhìn thấy và đặt logo của bạn vào email của họ."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:81
+#: src/components/routes/settings/ApiKeys/index.tsx:82
 msgid "Remove key"
 msgstr "Xóa khóa"
 
@@ -15949,6 +16018,14 @@ msgstr "Quay lại sự kiện"
 msgid "Return to Event Page"
 msgstr "Trở lại trang sự kiện"
 
+#: src/components/routes/oauth/Connect/index.tsx:77
+msgid "Returning you to {leavingTo}…"
+msgstr "Đang đưa bạn quay lại {leavingTo}…"
+
+#: src/components/routes/oauth/Connect/index.tsx:92
+msgid "Returns you to"
+msgstr "Đưa bạn quay lại"
+
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:144
 msgid "Reusable venue layouts. Attach one to an event to sell reserved seats."
 msgstr "Sơ đồ địa điểm có thể dùng lại. Gắn một sơ đồ vào sự kiện để bán vé chọn chỗ."
@@ -16007,11 +16084,11 @@ msgstr "Xem lại đơn hàng, sau đó chọn cách thanh toán"
 msgid "Revoke"
 msgstr "Thu hồi"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:75
+#: src/components/routes/settings/ApiKeys/index.tsx:76
 msgid "Revoke \"{0}\"? Anything using it stops working straight away, and {ownerName} will get an email about it."
 msgstr "Thu hồi \"{0}\"? Mọi thứ đang dùng khóa này sẽ ngừng hoạt động ngay lập tức và {ownerName} sẽ nhận được email thông báo."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:76
+#: src/components/routes/settings/ApiKeys/index.tsx:77
 msgid "Revoke \"{0}\"? Anything using it stops working straight away. This can't be undone."
 msgstr "Thu hồi \"{0}\"? Mọi thứ đang dùng khóa này sẽ ngừng hoạt động ngay lập tức. Không thể hoàn tác thao tác này."
 
@@ -16023,7 +16100,7 @@ msgstr "Thu hồi {0}"
 msgid "Revoke invitation"
 msgstr "Thu hồi lời mời"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:81
+#: src/components/routes/settings/ApiKeys/index.tsx:82
 msgid "Revoke key"
 msgstr "Thu hồi khóa"
 
@@ -17158,7 +17235,7 @@ msgstr "Gửi email cho người tham dự, chủ vé hoặc chủ đơn hàng. 
 msgid "Send invitation"
 msgstr "Gửi lời mời"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:221
+#: src/components/routes/settings/ApiKeys/index.tsx:224
 msgid "Send it in the Authorization header of every request."
 msgstr "Gửi khóa trong header Authorization của mọi yêu cầu."
 
@@ -17566,7 +17643,7 @@ msgstr "Hiển thị ít nền tảng hơn"
 msgid "Show initials instead"
 msgstr "Hiển thị chữ viết tắt thay thế"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:160
+#: src/components/routes/settings/ApiKeys/index.tsx:161
 msgid "Show keys"
 msgstr "Hiển thị khóa"
 
@@ -18147,10 +18224,13 @@ msgstr "Đã xảy ra lỗi. Vui lòng thử lại sau."
 #: src/components/routes/auth/Login/index.tsx:132
 #: src/components/routes/auth/Register/index.tsx:81
 #: src/components/routes/my-tickets/index.tsx:162
+#: src/components/routes/oauth/Connect/index.tsx:63
+#: src/components/routes/oauth/Connect/index.tsx:70
 #: src/components/routes/product-widget/SelectProducts/index.tsx:383
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:79
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:30
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:123
-#: src/components/routes/settings/ApiKeys/index.tsx:80
+#: src/components/routes/settings/ApiKeys/index.tsx:81
 #: src/components/routes/settings/Profile/index.tsx:129
 #: src/components/routes/settings/Profile/index.tsx:139
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:46
@@ -19685,6 +19765,10 @@ msgstr "Câu trả lời này quá dài. Hãy rút gọn trước khi lưu."
 msgid "This answer means you can't register for this event."
 msgstr "Với câu trả lời này, bạn không thể đăng ký sự kiện này."
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:24
+msgid "this app"
+msgstr "ứng dụng này"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:260
 msgid "This applies to every matching date in the event, including dates not currently visible. Attendees registered on any of those dates will be reachable via the message composer once the update finishes."
 msgstr "Điều này áp dụng cho mọi ngày phù hợp trong sự kiện, kể cả những ngày hiện chưa hiển thị. Người tham dự đã đăng ký ở bất kỳ ngày nào trong số đó sẽ có thể tiếp cận qua trình soạn tin nhắn khi cập nhật hoàn tất."
@@ -19756,6 +19840,14 @@ msgstr "Danh sách check-in này thuộc về một buổi đã bị hủy nên 
 #: src/components/forms/AffiliateForm/index.tsx:41
 msgid "This code will be used to track sales. Only letters, numbers, hyphens, and underscores allowed."
 msgstr "Mã này sẽ được dùng để theo dõi doanh số. Chỉ cho phép chữ cái, số, dấu gạch ngang và dấu gạch dưới."
+
+#: src/components/routes/oauth/Connect/index.tsx:24
+msgid "This connection link doesn't work"
+msgstr "Liên kết kết nối này không hoạt động"
+
+#: src/components/routes/oauth/Connect/index.tsx:24
+msgid "This connection request has expired"
+msgstr "Yêu cầu kết nối này đã hết hạn"
 
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:181
 msgid "This date"
@@ -20647,7 +20739,8 @@ msgstr "Hãy điều chỉnh bộ lọc để thấy thêm ngày."
 #: src/components/common/OrganizerReportTable/index.tsx:273
 #: src/components/common/ReportTable/index.tsx:254
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1121
-#: src/components/routes/settings/ApiKeys/index.tsx:188
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:54
+#: src/components/routes/settings/ApiKeys/index.tsx:189
 #: src/components/routes/settings/ApiReference/index.tsx:83
 #: src/components/routes/settings/Organizers/index.tsx:41
 #: src/components/routes/settings/Security/index.tsx:77
@@ -21042,6 +21135,10 @@ msgstr "Sử dụng không giới hạn"
 #: src/components/common/LocationsTable/index.tsx:32
 msgid "Unnamed"
 msgstr "Chưa đặt tên"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:71
+msgid "Unnamed app"
+msgstr "Ứng dụng không tên"
 
 #: src/components/common/LocationPicker/index.tsx:67
 msgid "Unnamed location"
@@ -21445,7 +21542,7 @@ msgstr "Dùng màu và phông chữ từ thiết kế trang chủ của bạn. N
 msgid "Using them for real events? Get an Enterprise licence and put its key in <0>APP_LICENCE_KEY</0>."
 msgstr "Dùng chúng cho sự kiện thật? Hãy lấy giấy phép Enterprise và đặt khóa của nó vào <0>APP_LICENCE_KEY</0>."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:219
+#: src/components/routes/settings/ApiKeys/index.tsx:222
 msgid "Using your key"
 msgstr "Sử dụng khóa của bạn"
 
@@ -21591,6 +21688,7 @@ msgstr "Đã gửi email xác minh. Hãy kiểm tra hộp thư đến."
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:216
 #: src/components/routes/admin/Attribution/index.tsx:198
 #: src/components/routes/admin/Dashboard/index.tsx:396
+#: src/components/routes/oauth/Connect/index.tsx:97
 #: src/ee/sso/components/SingleSignOn/DomainList.tsx:17
 msgid "Verified"
 msgstr "Đã xác minh"
@@ -21749,6 +21847,10 @@ msgstr "Xem trang sự kiện"
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:93
 msgid "View Event Page"
 msgstr "Xem trang sự kiện"
+
+#: src/components/routes/oauth/Connect/index.tsx:128
+msgid "View events, tickets and sales, without changing anything."
+msgstr "Xem sự kiện, vé và doanh số mà không thay đổi gì."
 
 #: src/components/common/OrganizerWebhookTable/index.tsx:117
 #: src/components/common/WebhookTable/index.tsx:117
@@ -22689,6 +22791,10 @@ msgstr "Bạn có thể cấu hình phí dịch vụ và thuế bổ sung trong 
 msgid "You can create a promo code which targets this product on the"
 msgstr "Bạn có thể tạo mã khuyến mãi nhắm mục tiêu sản phẩm này trên"
 
+#: src/components/routes/oauth/Connect/index.tsx:167
+msgid "You can disconnect it at any time from Settings → API keys."
+msgstr "Bạn có thể ngắt kết nối bất cứ lúc nào trong Cài đặt → Khóa API."
+
 #: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:31
 msgid "You can only change it back to a single event while it has exactly one date and no orders. Once someone places an order, this can't be undone."
 msgstr "Bạn chỉ có thể chuyển lại thành sự kiện đơn lẻ khi sự kiện có đúng một ngày và chưa có đơn hàng nào. Khi đã có người đặt hàng, thao tác này không thể hoàn tác."
@@ -22750,7 +22856,7 @@ msgstr "Bạn không có quyền truy cập nhà tổ chức này"
 msgid "You don't have access to this page"
 msgstr "Bạn không có quyền truy cập trang này"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:196
+#: src/components/routes/settings/ApiKeys/index.tsx:197
 msgid "You don't have any API keys"
 msgstr "Bạn chưa có khóa API nào"
 
@@ -22816,7 +22922,7 @@ msgstr "Bạn phải có ít nhất một cấp giá"
 msgid "You must verify your email address before you can update the organizer status."
 msgstr "Bạn phải xác minh địa chỉ email trước khi cập nhật trạng thái nhà tổ chức."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:131
+#: src/components/routes/settings/ApiKeys/index.tsx:132
 msgid "You need a confirmed email address to create API keys. Check your inbox, or resend the confirmation email from your <0>profile</0>."
 msgstr "Bạn cần địa chỉ email đã xác nhận để tạo khóa API. Hãy kiểm tra hộp thư đến hoặc gửi lại email xác nhận từ <0>hồ sơ</0> của bạn."
 
@@ -22956,7 +23062,7 @@ msgstr "Bạn đã được mời một suất!"
 msgid "You've changed the session time"
 msgstr "Bạn đã thay đổi giờ của buổi"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:145
+#: src/components/routes/settings/ApiKeys/index.tsx:146
 msgid "You've reached the limit of {0} active keys. Revoke one to create another."
 msgstr "Bạn đã đạt giới hạn {0} khóa đang hoạt động. Hãy thu hồi một khóa để tạo khóa khác."
 

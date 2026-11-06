@@ -22,6 +22,7 @@ use HiEvents\Services\Infrastructure\Authorization\IsAuthorizedService;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as LaravelResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -139,6 +140,11 @@ abstract class BaseAction extends Controller
         }
 
         return new JsonResponse($data, $statusCode);
+    }
+
+    protected function redirectResponse(string $url): RedirectResponse
+    {
+        return new RedirectResponse($url, ResponseCodes::HTTP_FOUND, ['Cache-Control' => 'no-store']);
     }
 
     protected function xmlResponse(

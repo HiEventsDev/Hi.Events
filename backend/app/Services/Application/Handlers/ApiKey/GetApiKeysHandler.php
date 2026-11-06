@@ -22,6 +22,7 @@ class GetApiKeysHandler
     {
         $where = [
             PersonalAccessTokenDomainObject::ACCOUNT_ID => $accountId,
+            [PersonalAccessTokenDomainObject::OAUTH_CONNECTION_ID, 'null', null],
         ];
 
         if (! $includeTeamKeys) {

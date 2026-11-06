@@ -276,6 +276,10 @@ msgstr "{0} billets"
 msgid "{0} to {1}"
 msgstr "Du {0} au {1}"
 
+#: src/components/routes/oauth/Connect/index.tsx:87
+msgid "{0} wants to use your Hi.Events account {1}. It will act as you, with the access you choose below."
+msgstr "{0} souhaite utiliser votre compte Hi.Events {1}. L'application agira en votre nom, avec l'accès que vous choisissez ci-dessous."
+
 #: src/components/routes/settings/Security/SignInMethods.tsx:139
 msgid "{0} was disconnected."
 msgstr "{0} a été déconnecté."
@@ -544,7 +548,7 @@ msgstr "Premier événement de {organizerName}"
 msgid "{outsideDomainCount, plural, one {# member outside your verified domains keeps their current sign-in.} other {# members outside your verified domains keep their current sign-in.}}"
 msgstr "{outsideDomainCount, plural, one {# membre hors de vos domaines vérifiés conserve son mode de connexion actuel.} other {# membres hors de vos domaines vérifiés conservent leur mode de connexion actuel.}}"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:165
+#: src/components/routes/settings/ApiKeys/index.tsx:166
 msgid "{ownActiveCount} of {0} active keys"
 msgstr "{ownActiveCount} clés actives sur {0}"
 
@@ -1061,6 +1065,7 @@ msgstr "Accepter les paiements par carte bancaire avec Stripe"
 #: src/components/common/TeamAccessFields/index.tsx:207
 #: src/components/common/TeamAccessPanel/index.tsx:137
 #: src/components/forms/ProductForm/index.tsx:605
+#: src/components/routes/oauth/Connect/index.tsx:115
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:237
 #: src/components/routes/settings/Team/index.tsx:218
 #: src/components/routes/settings/Team/MemberRow.tsx:141
@@ -1802,6 +1807,10 @@ msgstr "Vérification de l'âge (18+)"
 msgid "Agenda"
 msgstr "Agenda"
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:43
+msgid "AI assistants such as Claude and ChatGPT connect by signing in, without a key. Add this MCP server URL to your assistant to connect it."
+msgstr "Les assistants IA comme Claude et ChatGPT se connectent en vous connectant, sans clé. Ajoutez cette URL de serveur MCP à votre assistant pour le connecter."
+
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:45
 msgid "Aisles after seats"
 msgstr "Allées après les places"
@@ -2152,6 +2161,10 @@ msgstr "Montant reçu"
 msgid "An account with this email already exists. Sign in instead."
 msgstr "Un compte existe déjà avec cette adresse e-mail. Connectez-vous plutôt."
 
+#: src/components/routes/oauth/Connect/index.tsx:16
+msgid "an app on this computer"
+msgstr "une application sur cet ordinateur"
+
 #: src/components/forms/AffiliateForm/index.tsx:90
 msgid "An email to associate with this affiliate. The affiliate will not be notified."
 msgstr "Une adresse e-mail à associer à cet affilié. L'affilié ne sera pas notifié."
@@ -2319,19 +2332,27 @@ msgid "Anything else?"
 msgstr "Autre chose ?"
 
 #: src/components/layouts/SettingsLayout/index.tsx:74
-#: src/components/routes/settings/ApiKeys/index.tsx:111
+#: src/components/routes/settings/ApiKeys/index.tsx:112
 msgid "API keys"
 msgstr "Clés API"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:139
+#: src/components/routes/settings/ApiKeys/index.tsx:140
 msgid "API keys can't be created while you're impersonating someone."
 msgstr "Impossible de créer des clés API pendant que vous usurpez l'identité de quelqu'un."
 
 #: src/components/layouts/SettingsLayout/index.tsx:85
 #: src/components/layouts/SettingsLayout/index.tsx:89
-#: src/components/routes/settings/ApiKeys/index.tsx:122
+#: src/components/routes/settings/ApiKeys/index.tsx:123
 msgid "API reference"
 msgstr "Référence de l'API"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:29
+msgid "App disconnected"
+msgstr "Application déconnectée"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:79
+msgid "App on your computer"
+msgstr "Application sur votre ordinateur"
 
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:136
 msgid "Appearance"
@@ -3381,7 +3402,7 @@ msgstr "Image de marque et e-mails"
 msgid "Brazilian Portuguese"
 msgstr "Portugais brésilien"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:227
+#: src/components/routes/settings/ApiKeys/index.tsx:230
 msgid "Browse every endpoint in the API reference"
 msgstr "Parcourez tous les endpoints dans la référence de l'API"
 
@@ -3639,6 +3660,7 @@ msgstr "Vous ne pouvez pas utiliser votre application d'authentification ni vos 
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:67
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1173
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:64
+#: src/components/routes/oauth/Connect/index.tsx:164
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:69
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:85
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:85
@@ -4901,7 +4923,7 @@ msgstr "Confirmer le spam"
 msgid "Confirm your email"
 msgstr "Confirmez votre adresse e-mail"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:130
+#: src/components/routes/settings/ApiKeys/index.tsx:131
 msgid "Confirm your email address"
 msgstr "Confirmez votre adresse e-mail"
 
@@ -4933,6 +4955,8 @@ msgstr "Félicitations ! Votre événement est maintenant visible par le public.
 msgid "Connect"
 msgstr "Connecter"
 
+#: src/components/routes/oauth/Connect/index.tsx:86
+#: src/components/routes/oauth/Connect/index.tsx:151
 #: src/components/routes/settings/Security/SignInMethods.tsx:246
 msgid "Connect {0}"
 msgstr "Connecter {0}"
@@ -4945,7 +4969,7 @@ msgstr "Connectez un compte Stripe sous Versements avant d'ajouter des lecteurs 
 msgid "Connect bank"
 msgstr "Connecter la banque"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:112
+#: src/components/routes/settings/ApiKeys/index.tsx:113
 msgid "Connect other tools and your own code to this account. A key can do what you can do, so treat it like a password."
 msgstr "Connectez d'autres outils et votre propre code à ce compte. Une clé peut faire tout ce que vous pouvez faire : traitez-la comme un mot de passe."
 
@@ -4988,8 +5012,13 @@ msgid "Connect your identity provider, verify your email domains, then choose wh
 msgstr "Connectez votre fournisseur d'identité, vérifiez vos domaines e-mail, puis choisissez si tout le monde doit l'utiliser."
 
 #: src/components/routes/admin/Dashboard/index.tsx:410
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:88
 msgid "Connected"
 msgstr "Connecté"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:41
+msgid "Connected apps"
+msgstr "Applications connectées"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:298
 msgid "Connected the wrong Stripe account? Disconnect and start over."
@@ -5456,9 +5485,13 @@ msgstr "Impossible de charger la référence de l'API."
 msgid "Couldn't load this report"
 msgstr "Impossible de charger ce rapport"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:187
+#: src/components/routes/settings/ApiKeys/index.tsx:188
 msgid "Couldn't load your API keys"
 msgstr "Impossible de charger vos clés API"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:53
+msgid "Couldn't load your connected apps"
+msgstr "Impossible de charger vos applications connectées"
 
 #: src/components/routes/settings/Organizers/index.tsx:40
 msgid "Couldn't load your organizers"
@@ -5543,7 +5576,7 @@ msgstr "Créer « {query} »"
 msgid "Create {0} Template"
 msgstr "Créer le modèle {0}"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:199
+#: src/components/routes/settings/ApiKeys/index.tsx:200
 msgid "Create a key to connect tools like Zapier, your CRM or your own scripts to your events, orders and attendees."
 msgstr "Créez une clé pour connecter des outils comme Zapier, votre CRM ou vos propres scripts à vos événements, commandes et participants."
 
@@ -5604,6 +5637,10 @@ msgstr "Créez une annonce pour afficher un message à vos utilisateurs."
 msgid "Create and change events, orders, attendees and more."
 msgstr "Créer et modifier des événements, commandes, participants et plus encore."
 
+#: src/components/routes/oauth/Connect/index.tsx:122
+msgid "Create and change events, tickets, questions and settings."
+msgstr "Créer et modifier les événements, billets, questions et paramètres."
+
 #: src/components/routes/event/products.tsx:67
 msgid "Create and configure tickets and merchandise for sale."
 msgstr "Créez et configurez des billets et des marchandises à vendre."
@@ -5619,7 +5656,7 @@ msgid "Create Announcement"
 msgstr "Créer une annonce"
 
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:215
-#: src/components/routes/settings/ApiKeys/index.tsx:91
+#: src/components/routes/settings/ApiKeys/index.tsx:92
 msgid "Create API key"
 msgstr "Créer une clé API"
 
@@ -5799,7 +5836,7 @@ msgstr "Créez votre propre événement"
 #: src/components/routes/admin/Messages/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:310
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:69
-#: src/components/routes/settings/ApiKeys/index.tsx:174
+#: src/components/routes/settings/ApiKeys/index.tsx:175
 msgid "Created"
 msgstr "Créé"
 
@@ -6618,14 +6655,21 @@ msgid "Disclaimers, contact info or a thank-you note, on a single line"
 msgstr "Mentions légales, coordonnées ou un mot de remerciement, sur une seule ligne"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:120
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:32
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:99
 #: src/components/routes/settings/Security/SignInMethods.tsx:217
 #: src/components/routes/settings/Security/SignInMethods.tsx:251
 msgid "Disconnect"
 msgstr "Déconnecter"
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:103
 #: src/components/routes/settings/Security/SignInMethods.tsx:247
 msgid "Disconnect {0}"
 msgstr "Déconnecter {0}"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:27
+msgid "Disconnect {name}? It stops working with your account straight away."
+msgstr "Déconnecter {name} ? L'application cessera immédiatement de fonctionner avec votre compte."
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:109
 msgid "Disconnect Stripe account"
@@ -8093,7 +8137,7 @@ msgstr "Tous les organisateurs et événements, y compris les nouveaux."
 msgid "Every trusted device will need a code at its next sign-in. Continue?"
 msgstr "Chaque appareil de confiance devra saisir un code à sa prochaine connexion. Continuer ?"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:158
+#: src/components/routes/settings/ApiKeys/index.tsx:159
 msgid "Everyone ({0})"
 msgstr "Tout le monde ({0})"
 
@@ -8193,7 +8237,7 @@ msgstr "Date d'expiration"
 
 #: src/components/common/WaitlistTable/index.tsx:30
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:119
-#: src/components/routes/settings/ApiKeys/index.tsx:210
+#: src/components/routes/settings/ApiKeys/index.tsx:211
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:35
 #: src/ee/licensing/licenceNotice.ts:78
 msgid "Expired"
@@ -8206,7 +8250,7 @@ msgstr "Expirée {0}"
 #: src/components/common/PromoCodeTable/index.tsx:76
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:33
-#: src/components/routes/settings/ApiKeys/index.tsx:176
+#: src/components/routes/settings/ApiKeys/index.tsx:177
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:178
 msgid "Expires"
 msgstr "Expire"
@@ -9281,6 +9325,10 @@ msgstr "Retour"
 msgid "Go back to profile"
 msgstr "Revenir au profil"
 
+#: src/components/routes/oauth/Connect/index.tsx:25
+msgid "Go back to the app you were connecting and start again."
+msgstr "Revenez à l'application que vous connectiez et recommencez."
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:448
 msgid "Go to Event Page"
 msgstr "Aller à la page de l'événement"
@@ -9501,6 +9549,10 @@ msgstr "Hi.Events Cloud"
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:75
 msgid "Hi.Events Fee"
 msgstr "Frais Hi.Events"
+
+#: src/components/routes/oauth/Connect/index.tsx:108
+msgid "Hi.Events hasn't verified this app. Only continue if you started connecting it yourself and you trust it."
+msgstr "Hi.Events n'a pas vérifié cette application. Ne continuez que si vous avez lancé la connexion vous-même et que vous lui faites confiance."
 
 #: src/components/routes/organizer/Reports/index.tsx:46
 msgid "Hi.Events platform fees and VAT breakdown by transaction"
@@ -9862,7 +9914,7 @@ msgstr "Je l'ai ajouté, continuer"
 msgid "I've made the payment"
 msgstr "J'ai effectué le paiement"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:224
+#: src/components/routes/settings/ApiKeys/index.tsx:227
 msgid "If a key leaks, revoke it straight away and create a new one."
 msgstr "Si une clé est divulguée, révoquez-la immédiatement et créez-en une nouvelle."
 
@@ -10255,7 +10307,7 @@ msgstr "URL de l'émetteur"
 msgid "It happens on more than one date"
 msgstr "Il a lieu à plusieurs dates"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:222
+#: src/components/routes/settings/ApiKeys/index.tsx:225
 msgid "It has your role and event access. Read-only keys can view and export, but can't change anything."
 msgstr "Elle dispose de votre rôle et de vos accès aux événements. Les clés en lecture seule peuvent consulter et exporter, mais ne peuvent rien modifier."
 
@@ -10408,7 +10460,7 @@ msgstr "Les garder hors de la programmation et du planning publics jusqu'à ce q
 msgid "Keeps signing in with a password. {providerName} can't be used to sign this member in."
 msgstr "Continue de se connecter avec un mot de passe. {providerName} ne peut pas être utilisé pour connecter ce membre."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:173
+#: src/components/routes/settings/ApiKeys/index.tsx:174
 msgid "Key"
 msgstr "Clé"
 
@@ -10416,11 +10468,11 @@ msgstr "Clé"
 msgid "Key ending in {0}"
 msgstr "Clé se terminant par {0}"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:79
+#: src/components/routes/settings/ApiKeys/index.tsx:80
 msgid "Key removed"
 msgstr "Clé supprimée"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:79
+#: src/components/routes/settings/ApiKeys/index.tsx:80
 msgid "Key revoked"
 msgstr "Clé révoquée"
 
@@ -10428,7 +10480,7 @@ msgstr "Clé révoquée"
 msgid "Keycloak, Authentik, Zitadel, OneLogin and others"
 msgstr "Keycloak, Authentik, Zitadel, OneLogin et autres"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:223
+#: src/components/routes/settings/ApiKeys/index.tsx:226
 msgid "Keys can't sign in or manage your team, payouts, profile or security settings."
 msgstr "Les clés ne peuvent pas se connecter ni gérer votre équipe, vos versements, votre profil ou vos paramètres de sécurité."
 
@@ -10534,6 +10586,7 @@ msgstr "7 derniers jours"
 msgid "Last 90 days"
 msgstr "90 derniers jours"
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:92
 #: src/components/routes/settings/Team/index.tsx:220
 #: src/components/routes/settings/Team/MemberRow.tsx:165
 msgid "Last active"
@@ -10585,7 +10638,7 @@ msgstr "Dernier déclenchement"
 
 #: src/components/common/SsoButtons/index.tsx:126
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:73
-#: src/components/routes/settings/ApiKeys/index.tsx:175
+#: src/components/routes/settings/ApiKeys/index.tsx:176
 msgid "Last used"
 msgstr "Dernière utilisation"
 
@@ -11613,7 +11666,7 @@ msgstr "Mon incroyable description d'événement..."
 msgid "My amazing event title..."
 msgstr "Mon incroyable titre d'événement..."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:157
+#: src/components/routes/settings/ApiKeys/index.tsx:158
 msgid "My keys"
 msgstr "Mes clés"
 
@@ -11709,6 +11762,7 @@ msgstr "Revenu net"
 #: src/components/common/PromoCodeTable/index.tsx:169
 #: src/components/common/WebhookTable/index.tsx:272
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:93
 #: src/components/routes/settings/Team/MemberRow.tsx:166
 msgid "Never"
 msgstr "Jamais"
@@ -12017,6 +12071,10 @@ msgstr "Aucune commande terminée sur cette période"
 #: src/components/routes/admin/Configurations/index.tsx:125
 msgid "No configurations found"
 msgstr "Aucune configuration trouvée"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:61
+msgid "No connected apps"
+msgstr "Aucune application connectée"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:207
 msgid "No connections available"
@@ -12487,7 +12545,7 @@ msgstr "Non, rester ici"
 msgid "Nobody has been added to this event's lineup yet."
 msgstr "Personne n'a encore été ajouté à la programmation de cet événement."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:196
+#: src/components/routes/settings/ApiKeys/index.tsx:197
 msgid "Nobody has created an API key yet"
 msgstr "Personne n'a encore créé de clé API"
 
@@ -13076,6 +13134,10 @@ msgstr "Seuls les administrateurs peuvent gérer l'accès de l'équipe."
 #: src/components/forms/ProductForm/index.tsx:555
 msgid "Only available as an add-on"
 msgstr "Disponible uniquement en option"
+
+#: src/components/routes/oauth/Connect/index.tsx:107
+msgid "Only continue if you just started connecting from an app on this computer, such as Claude Code or Cursor."
+msgstr "Ne continuez que si vous venez de lancer la connexion depuis une application sur cet ordinateur, comme Claude Code ou Cursor."
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:181
 msgid "Only members who can manage payments can change these instructions."
@@ -15139,7 +15201,9 @@ msgstr "Réactiver"
 msgid "Reactivate this date? It will be reopened for future sales."
 msgstr "Réactiver cette date ? Elle sera de nouveau ouverte à la vente."
 
+#: src/components/routes/oauth/Connect/index.tsx:121
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:73
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:250
 msgid "Read and write"
 msgstr "Lecture et écriture"
@@ -15149,7 +15213,12 @@ msgstr "Lecture et écriture"
 msgid "Read more"
 msgstr "Lire la suite"
 
+#: src/components/routes/oauth/Connect/index.tsx:127
+msgid "Read only"
+msgstr "Lecture seule"
+
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:73
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:261
 msgid "Read-only"
 msgstr "Lecture seule"
@@ -15471,7 +15540,7 @@ msgstr "retirer"
 msgid "Remove"
 msgstr "Retirer"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:73
+#: src/components/routes/settings/ApiKeys/index.tsx:74
 msgid "Remove \"{0}\"? It has already expired."
 msgstr "Supprimer « {0} » ? Elle a déjà expiré."
 
@@ -15546,7 +15615,7 @@ msgstr "Retirer la marque Hi.Events"
 msgid "Remove Hi.Events branding from everything your attendees see, and put your own logo in their emails."
 msgstr "Retirez la marque Hi.Events de tout ce que voient vos participants et mettez votre propre logo dans leurs e-mails."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:81
+#: src/components/routes/settings/ApiKeys/index.tsx:82
 msgid "Remove key"
 msgstr "Supprimer la clé"
 
@@ -15949,6 +16018,14 @@ msgstr "Retour à l'événement"
 msgid "Return to Event Page"
 msgstr "Retourner à la page de l'événement"
 
+#: src/components/routes/oauth/Connect/index.tsx:77
+msgid "Returning you to {leavingTo}…"
+msgstr "Retour vers {leavingTo}…"
+
+#: src/components/routes/oauth/Connect/index.tsx:92
+msgid "Returns you to"
+msgstr "Vous renvoie vers"
+
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:144
 msgid "Reusable venue layouts. Attach one to an event to sell reserved seats."
 msgstr "Plans de salle réutilisables. Associez-en un à un événement pour vendre des places réservées."
@@ -16007,11 +16084,11 @@ msgstr "Vérifiez la commande, puis choisissez comment payer"
 msgid "Revoke"
 msgstr "Révoquer"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:75
+#: src/components/routes/settings/ApiKeys/index.tsx:76
 msgid "Revoke \"{0}\"? Anything using it stops working straight away, and {ownerName} will get an email about it."
 msgstr "Révoquer « {0} » ? Tout ce qui l'utilise cessera immédiatement de fonctionner, et {ownerName} recevra un e-mail à ce sujet."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:76
+#: src/components/routes/settings/ApiKeys/index.tsx:77
 msgid "Revoke \"{0}\"? Anything using it stops working straight away. This can't be undone."
 msgstr "Révoquer « {0} » ? Tout ce qui l'utilise cessera immédiatement de fonctionner. Cette action est irréversible."
 
@@ -16023,7 +16100,7 @@ msgstr "Révoquer {0}"
 msgid "Revoke invitation"
 msgstr "Révoquer l'invitation"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:81
+#: src/components/routes/settings/ApiKeys/index.tsx:82
 msgid "Revoke key"
 msgstr "Révoquer la clé"
 
@@ -17158,7 +17235,7 @@ msgstr "Envoyer des e-mails aux participants, détenteurs de billets ou proprié
 msgid "Send invitation"
 msgstr "Envoyer l'invitation"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:221
+#: src/components/routes/settings/ApiKeys/index.tsx:224
 msgid "Send it in the Authorization header of every request."
 msgstr "Envoyez-la dans l'en-tête Authorization de chaque requête."
 
@@ -17566,7 +17643,7 @@ msgstr "Afficher moins de plateformes"
 msgid "Show initials instead"
 msgstr "Afficher les initiales à la place"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:160
+#: src/components/routes/settings/ApiKeys/index.tsx:161
 msgid "Show keys"
 msgstr "Afficher les clés"
 
@@ -18147,10 +18224,13 @@ msgstr "Une erreur s'est produite. Veuillez réessayer plus tard."
 #: src/components/routes/auth/Login/index.tsx:132
 #: src/components/routes/auth/Register/index.tsx:81
 #: src/components/routes/my-tickets/index.tsx:162
+#: src/components/routes/oauth/Connect/index.tsx:63
+#: src/components/routes/oauth/Connect/index.tsx:70
 #: src/components/routes/product-widget/SelectProducts/index.tsx:383
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:79
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:30
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:123
-#: src/components/routes/settings/ApiKeys/index.tsx:80
+#: src/components/routes/settings/ApiKeys/index.tsx:81
 #: src/components/routes/settings/Profile/index.tsx:129
 #: src/components/routes/settings/Profile/index.tsx:139
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:46
@@ -19685,6 +19765,10 @@ msgstr "Cette réponse est trop longue. Raccourcissez-la avant d'enregistrer."
 msgid "This answer means you can't register for this event."
 msgstr "Cette réponse ne vous permet pas de vous inscrire à cet événement."
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:24
+msgid "this app"
+msgstr "cette application"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:260
 msgid "This applies to every matching date in the event, including dates not currently visible. Attendees registered on any of those dates will be reachable via the message composer once the update finishes."
 msgstr "Cela s'applique à chaque date correspondante de l'événement, y compris celles qui ne sont pas visibles actuellement. Les participants inscrits à ces dates seront joignables depuis l'éditeur de messages une fois la mise à jour terminée."
@@ -19756,6 +19840,14 @@ msgstr "Cette liste d'enregistrement est rattachée à une séance qui a été a
 #: src/components/forms/AffiliateForm/index.tsx:41
 msgid "This code will be used to track sales. Only letters, numbers, hyphens, and underscores allowed."
 msgstr "Ce code sera utilisé pour suivre les ventes. Seuls les lettres, chiffres, tirets et traits de soulignement sont autorisés."
+
+#: src/components/routes/oauth/Connect/index.tsx:24
+msgid "This connection link doesn't work"
+msgstr "Ce lien de connexion ne fonctionne pas"
+
+#: src/components/routes/oauth/Connect/index.tsx:24
+msgid "This connection request has expired"
+msgstr "Cette demande de connexion a expiré"
 
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:181
 msgid "This date"
@@ -20647,7 +20739,8 @@ msgstr "Ajustez vos filtres pour voir plus de dates."
 #: src/components/common/OrganizerReportTable/index.tsx:273
 #: src/components/common/ReportTable/index.tsx:254
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1121
-#: src/components/routes/settings/ApiKeys/index.tsx:188
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:54
+#: src/components/routes/settings/ApiKeys/index.tsx:189
 #: src/components/routes/settings/ApiReference/index.tsx:83
 #: src/components/routes/settings/Organizers/index.tsx:41
 #: src/components/routes/settings/Security/index.tsx:77
@@ -21042,6 +21135,10 @@ msgstr "Utilisations illimitées autorisées"
 #: src/components/common/LocationsTable/index.tsx:32
 msgid "Unnamed"
 msgstr "Sans nom"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:71
+msgid "Unnamed app"
+msgstr "Application sans nom"
 
 #: src/components/common/LocationPicker/index.tsx:67
 msgid "Unnamed location"
@@ -21445,7 +21542,7 @@ msgstr "Utilise les couleurs et la police de votre page d'accueil. Si vous modif
 msgid "Using them for real events? Get an Enterprise licence and put its key in <0>APP_LICENCE_KEY</0>."
 msgstr "Vous les utilisez pour de vrais événements ? Obtenez une licence Enterprise et mettez sa clé dans <0>APP_LICENCE_KEY</0>."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:219
+#: src/components/routes/settings/ApiKeys/index.tsx:222
 msgid "Using your key"
 msgstr "Utiliser votre clé"
 
@@ -21591,6 +21688,7 @@ msgstr "E-mail de vérification envoyé. Consultez votre boîte de réception."
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:216
 #: src/components/routes/admin/Attribution/index.tsx:198
 #: src/components/routes/admin/Dashboard/index.tsx:396
+#: src/components/routes/oauth/Connect/index.tsx:97
 #: src/ee/sso/components/SingleSignOn/DomainList.tsx:17
 msgid "Verified"
 msgstr "Vérifié"
@@ -21749,6 +21847,10 @@ msgstr "Voir la page de l'événement"
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:93
 msgid "View Event Page"
 msgstr "Voir la page de l'événement"
+
+#: src/components/routes/oauth/Connect/index.tsx:128
+msgid "View events, tickets and sales, without changing anything."
+msgstr "Consulter les événements, billets et ventes, sans rien modifier."
 
 #: src/components/common/OrganizerWebhookTable/index.tsx:117
 #: src/components/common/WebhookTable/index.tsx:117
@@ -22689,6 +22791,10 @@ msgstr "Vous pouvez configurer des frais de service supplémentaires et des taxe
 msgid "You can create a promo code which targets this product on the"
 msgstr "Vous pouvez créer un code promo qui cible ce produit sur le"
 
+#: src/components/routes/oauth/Connect/index.tsx:167
+msgid "You can disconnect it at any time from Settings → API keys."
+msgstr "Vous pouvez la déconnecter à tout moment depuis Paramètres → Clés API."
+
 #: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:31
 msgid "You can only change it back to a single event while it has exactly one date and no orders. Once someone places an order, this can't be undone."
 msgstr "Vous ne pourrez le repasser en événement unique que tant qu'il a exactement une date et aucune commande. Dès qu'une commande est passée, ce changement est définitif."
@@ -22750,7 +22856,7 @@ msgstr "Vous n'avez pas accès à cet organisateur"
 msgid "You don't have access to this page"
 msgstr "Vous n'avez pas accès à cette page"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:196
+#: src/components/routes/settings/ApiKeys/index.tsx:197
 msgid "You don't have any API keys"
 msgstr "Vous n'avez aucune clé API"
 
@@ -22816,7 +22922,7 @@ msgstr "Vous devez avoir au moins un niveau de prix"
 msgid "You must verify your email address before you can update the organizer status."
 msgstr "Vous devez vérifier votre adresse e-mail avant de pouvoir mettre à jour le statut de l'organisateur."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:131
+#: src/components/routes/settings/ApiKeys/index.tsx:132
 msgid "You need a confirmed email address to create API keys. Check your inbox, or resend the confirmation email from your <0>profile</0>."
 msgstr "Vous devez avoir une adresse e-mail confirmée pour créer des clés API. Consultez votre boîte de réception ou renvoyez l'e-mail de confirmation depuis votre <0>profil</0>."
 
@@ -22956,7 +23062,7 @@ msgstr "Une place vous a été proposée !"
 msgid "You've changed the session time"
 msgstr "Vous avez modifié l'horaire de la séance"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:145
+#: src/components/routes/settings/ApiKeys/index.tsx:146
 msgid "You've reached the limit of {0} active keys. Revoke one to create another."
 msgstr "Vous avez atteint la limite de {0} clés actives. Révoquez-en une pour en créer une autre."
 
