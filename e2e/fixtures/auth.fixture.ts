@@ -21,11 +21,16 @@ export function buildStorageState(token: string): BrowserContextOptions['storage
   };
 }
 
-export async function openAuthedPage(browser: Browser, token: string): Promise<Page> {
+export async function openAuthedPage(
+  browser: Browser,
+  token: string,
+  contextOptions: BrowserContextOptions = {},
+): Promise<Page> {
   const context = await browser.newContext({
     baseURL: BASE_URL,
     ignoreHTTPSErrors: true,
     storageState: buildStorageState(token),
+    ...contextOptions,
   });
   return context.newPage();
 }

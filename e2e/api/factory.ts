@@ -36,6 +36,7 @@ export interface SeededEvent {
 interface SeedOptions {
   organizerId: number;
   startDate?: string;
+  timezone?: string;
   price?: number;
   productType?: ProductPriceType;
   eventType?: EventType;
@@ -104,7 +105,7 @@ export async function createLiveEventWithProduct(api: ApiClient, opts: SeedOptio
     start_date: opts.startDate ?? futureStartDate(),
     category,
     currency: opts.currency ?? 'USD',
-    timezone: 'UTC',
+    timezone: opts.timezone ?? 'UTC',
   });
 
   if (eventType === 'SINGLE') {

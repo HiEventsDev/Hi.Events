@@ -170,6 +170,21 @@ export const utcToTz = (date: undefined | string | Date, tz: string): string | u
 
 export const nowInTimezone = (tz: string): string => toWallClock(new Date(), tz);
 
+type InstantRange = [Date | null, Date | null];
+type WallDateRange = [string | null, string | null];
+
+export const wallDateInTimezone = (date: Date, tz: string): string => dayjs(date).tz(tz).format('YYYY-MM-DD');
+
+export const wallDateRangeToInstants = ([start, end]: WallDateRange, tz: string): InstantRange => [
+    start ? dayjs.tz(start, tz).startOf('day').toDate() : null,
+    end ? dayjs.tz(end, tz).endOf('day').toDate() : null,
+];
+
+export const instantRangeToWallDates = ([start, end]: InstantRange, tz: string): WallDateRange => [
+    start ? wallDateInTimezone(start, tz) : null,
+    end ? wallDateInTimezone(end, tz) : null,
+];
+
 export const dateToBrowserTz = (date: string, fallbackTz: string, locale?: string): string => {
     const userTimezone = !isSsr()
         ? Intl.DateTimeFormat().resolvedOptions().timeZone
