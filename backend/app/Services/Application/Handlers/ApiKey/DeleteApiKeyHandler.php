@@ -32,6 +32,7 @@ class DeleteApiKeyHandler
             ->findFirstWhere([
                 PersonalAccessTokenDomainObject::ID => $dto->apiKeyId,
                 PersonalAccessTokenDomainObject::ACCOUNT_ID => $dto->accountId,
+                [PersonalAccessTokenDomainObject::OAUTH_CONNECTION_ID, 'null', null],
             ]);
 
         $isOwnKey = $apiKey?->getTokenableId() === $dto->userId;

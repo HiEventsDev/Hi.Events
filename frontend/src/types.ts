@@ -341,6 +341,34 @@ export interface CreateApiKeyRequest extends IdentityConfirmation {
     expires_in_days: number | null;
 }
 
+export interface OAuthConsent {
+    request_id: string;
+    client_name: string;
+    redirect_host: string;
+    is_verified: boolean;
+    is_local: boolean;
+    requested_access: ApiKeyAccess;
+    account_name: string;
+}
+
+export interface ApproveOAuthRequest extends IdentityConfirmation {
+    access: ApiKeyAccess;
+}
+
+export interface OAuthRedirect {
+    redirect_url: string;
+}
+
+export interface OAuthConnection {
+    id: IdParam;
+    app_name: string | null;
+    redirect_host: string | null;
+    is_verified: boolean;
+    access: ApiKeyAccess;
+    last_used_at: string | null;
+    created_at: string;
+}
+
 export interface TwoFactorStatus {
     enabled: boolean;
     confirmed_at: string | null;

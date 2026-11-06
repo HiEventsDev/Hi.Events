@@ -34,6 +34,11 @@ class UserAnonymizer implements AccountAnonymizerInterface
 
         if ($context->soleUserIds !== []) {
             $results[] = $this->executor->delete(
+                query: $this->databaseManager->table('oauth_connections')->whereIn('user_id', $context->soleUserIds),
+                entity: 'oauth_connections',
+            );
+
+            $results[] = $this->executor->delete(
                 query: $this->databaseManager->table('personal_access_tokens')
                     ->where('tokenable_type', User::class)
                     ->whereIn('tokenable_id', $context->soleUserIds),

@@ -59,6 +59,9 @@ use HiEvents\Repository\Eloquent\InvoiceRepository;
 use HiEvents\Repository\Eloquent\LifecycleEmailTemplateRepository;
 use HiEvents\Repository\Eloquent\LocationRepository;
 use HiEvents\Repository\Eloquent\MessageRepository;
+use HiEvents\Repository\Eloquent\OauthClientRepository;
+use HiEvents\Repository\Eloquent\OauthConnectionRepository;
+use HiEvents\Repository\Eloquent\OauthRefreshTokenRepository;
 use HiEvents\Repository\Eloquent\OrderApplicationFeeRepository;
 use HiEvents\Repository\Eloquent\OrderAuditLogRepository;
 use HiEvents\Repository\Eloquent\OrderItemRepository;
@@ -136,6 +139,9 @@ use HiEvents\Repository\Interfaces\InvoiceRepositoryInterface;
 use HiEvents\Repository\Interfaces\LifecycleEmailTemplateRepositoryInterface;
 use HiEvents\Repository\Interfaces\LocationRepositoryInterface;
 use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
+use HiEvents\Repository\Interfaces\OauthClientRepositoryInterface;
+use HiEvents\Repository\Interfaces\OauthConnectionRepositoryInterface;
+use HiEvents\Repository\Interfaces\OauthRefreshTokenRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderApplicationFeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderAuditLogRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderItemRepositoryInterface;
@@ -254,6 +260,9 @@ class RepositoryServiceProvider extends ServiceProvider
         WaitlistEntryRepositoryInterface::class => WaitlistEntryRepository::class,
         WidgetRepositoryInterface::class => WidgetRepository::class,
         UserIdentityRepositoryInterface::class => UserIdentityRepository::class,
+        OauthRefreshTokenRepositoryInterface::class => OauthRefreshTokenRepository::class,
+        OauthConnectionRepositoryInterface::class => OauthConnectionRepository::class,
+        OauthClientRepositoryInterface::class => OauthClientRepository::class,
         AccountSsoConnectionRepositoryInterface::class => AccountSsoConnectionRepository::class,
         AccountSsoDomainRepositoryInterface::class => AccountSsoDomainRepository::class,
         EventOccurrenceRepositoryInterface::class => EventOccurrenceRepository::class,

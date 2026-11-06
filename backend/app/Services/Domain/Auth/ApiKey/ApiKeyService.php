@@ -11,6 +11,7 @@ use HiEvents\Mail\User\ApiKeyCreatedMail;
 use HiEvents\Models\User;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
+use HiEvents\Repository\Interfaces\OauthConnectionRepositoryInterface;
 use HiEvents\Repository\Interfaces\PersonalAccessTokenRepositoryInterface;
 use HiEvents\Services\Domain\Auth\ApiKey\DTO\CreatedApiKeyDTO;
 use Illuminate\Contracts\Config\Repository as Config;
@@ -25,6 +26,7 @@ class ApiKeyService
 
     public function __construct(
         private readonly PersonalAccessTokenRepositoryInterface $apiKeyRepository,
+        private readonly OauthConnectionRepositoryInterface $oauthConnectionRepository,
         private readonly AccountUserRepositoryInterface $accountUserRepository,
         private readonly AccountRepositoryInterface $accountRepository,
         private readonly Mailer $mailer,
@@ -71,6 +73,7 @@ class ApiKeyService
         return $this->apiKeyRepository->countWhere([
             PersonalAccessTokenDomainObject::TOKENABLE_ID => $userId,
             PersonalAccessTokenDomainObject::ACCOUNT_ID => $accountId,
+            [PersonalAccessTokenDomainObject::OAUTH_CONNECTION_ID, 'null', null],
             static fn ($query) => $query
                 ->whereNull(PersonalAccessTokenDomainObject::EXPIRES_AT)
                 ->orWhere(PersonalAccessTokenDomainObject::EXPIRES_AT, '>', now()),
@@ -79,6 +82,11 @@ class ApiKeyService
 
     public function revokeAllForMember(int $userId, int $accountId): void
     {
+        $this->oauthConnectionRepository->deleteWhere([
+            'user_id' => $userId,
+            'account_id' => $accountId,
+        ]);
+
         $this->apiKeyRepository->deleteWhere([
             PersonalAccessTokenDomainObject::TOKENABLE_ID => $userId,
             PersonalAccessTokenDomainObject::ACCOUNT_ID => $accountId,
@@ -94,7 +102,7 @@ class ApiKeyService
         ]) !== null;
     }
 
-    private function generateKey(): string
+    public function generateKey(): string
     {
         $entropy = Str::random(40);
 

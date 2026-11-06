@@ -4,6 +4,7 @@ namespace HiEvents\Services\Domain\Auth;
 
 use Carbon\Carbon;
 use HiEvents\DomainObjects\PersonalAccessTokenDomainObject;
+use HiEvents\Repository\Interfaces\OauthConnectionRepositoryInterface;
 use HiEvents\Repository\Interfaces\PersonalAccessTokenRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 
@@ -12,6 +13,7 @@ class UserSessionRevocationService
     public function __construct(
         private readonly UserRepositoryInterface $userRepository,
         private readonly PersonalAccessTokenRepositoryInterface $apiKeyRepository,
+        private readonly OauthConnectionRepositoryInterface $oauthConnectionRepository,
     ) {}
 
     public function revokeAll(int $userId, ?int $apiKeyAccountId = null): void
@@ -34,6 +36,11 @@ class UserSessionRevocationService
             attributes: ['tokens_valid_after' => now()->toDateTimeString()],
             where: [['id', 'in', $userIds]],
         );
+
+        $this->oauthConnectionRepository->deleteWhere(array_filter([
+            ['user_id', 'in', $userIds],
+            $apiKeyAccountId === null ? null : ['account_id', '=', $apiKeyAccountId],
+        ]));
 
         $this->apiKeyRepository->deleteWhere(array_filter([
             [PersonalAccessTokenDomainObject::TOKENABLE_ID, 'in', $userIds],

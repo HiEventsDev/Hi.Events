@@ -276,6 +276,10 @@ msgstr "{0} bilet"
 msgid "{0} to {1}"
 msgstr "{0} - {1}"
 
+#: src/components/routes/oauth/Connect/index.tsx:87
+msgid "{0} wants to use your Hi.Events account {1}. It will act as you, with the access you choose below."
+msgstr "{0}, Hi.Events hesabınız {1} hesabını kullanmak istiyor. Aşağıda seçtiğiniz erişimle sizin adınıza işlem yapacak."
+
 #: src/components/routes/settings/Security/SignInMethods.tsx:139
 msgid "{0} was disconnected."
 msgstr "{0} bağlantısı kesildi."
@@ -544,7 +548,7 @@ msgstr "{organizerName}'ın ilk etkinliği"
 msgid "{outsideDomainCount, plural, one {# member outside your verified domains keeps their current sign-in.} other {# members outside your verified domains keep their current sign-in.}}"
 msgstr "{outsideDomainCount, plural, one {Doğrulanmış alan adlarınızın dışındaki # üye mevcut giriş yöntemini korur.} other {Doğrulanmış alan adlarınızın dışındaki # üye mevcut giriş yöntemini korur.}}"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:165
+#: src/components/routes/settings/ApiKeys/index.tsx:166
 msgid "{ownActiveCount} of {0} active keys"
 msgstr "{ownActiveCount}/{0} etkin anahtar"
 
@@ -1061,6 +1065,7 @@ msgstr "Stripe ile kredi kartı ödemelerini kabul et"
 #: src/components/common/TeamAccessFields/index.tsx:207
 #: src/components/common/TeamAccessPanel/index.tsx:137
 #: src/components/forms/ProductForm/index.tsx:605
+#: src/components/routes/oauth/Connect/index.tsx:115
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:237
 #: src/components/routes/settings/Team/index.tsx:218
 #: src/components/routes/settings/Team/MemberRow.tsx:141
@@ -1802,6 +1807,10 @@ msgstr "Yaş kontrolü (18+)"
 msgid "Agenda"
 msgstr "Gündem"
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:43
+msgid "AI assistants such as Claude and ChatGPT connect by signing in, without a key. Add this MCP server URL to your assistant to connect it."
+msgstr "Claude ve ChatGPT gibi yapay zekâ asistanları anahtar olmadan, oturum açarak bağlanır. Bağlamak için bu MCP sunucusu URL'sini asistanınıza ekleyin."
+
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:45
 msgid "Aisles after seats"
 msgstr "Koltuklardan sonra koridorlar"
@@ -2152,6 +2161,10 @@ msgstr "Alınan tutar"
 msgid "An account with this email already exists. Sign in instead."
 msgstr "Bu e-posta adresiyle bir hesap zaten var. Bunun yerine giriş yapın."
 
+#: src/components/routes/oauth/Connect/index.tsx:16
+msgid "an app on this computer"
+msgstr "bu bilgisayardaki bir uygulama"
+
 #: src/components/forms/AffiliateForm/index.tsx:90
 msgid "An email to associate with this affiliate. The affiliate will not be notified."
 msgstr "Bu bağlı kuruluşla ilişkilendirilecek bir e-posta. Bağlı kuruluşa bildirim gitmeyecektir."
@@ -2319,19 +2332,27 @@ msgid "Anything else?"
 msgstr "Başka bir şey?"
 
 #: src/components/layouts/SettingsLayout/index.tsx:74
-#: src/components/routes/settings/ApiKeys/index.tsx:111
+#: src/components/routes/settings/ApiKeys/index.tsx:112
 msgid "API keys"
 msgstr "API anahtarları"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:139
+#: src/components/routes/settings/ApiKeys/index.tsx:140
 msgid "API keys can't be created while you're impersonating someone."
 msgstr "Başka birinin kimliğine bürünmüşken API anahtarı oluşturamazsınız."
 
 #: src/components/layouts/SettingsLayout/index.tsx:85
 #: src/components/layouts/SettingsLayout/index.tsx:89
-#: src/components/routes/settings/ApiKeys/index.tsx:122
+#: src/components/routes/settings/ApiKeys/index.tsx:123
 msgid "API reference"
 msgstr "API referansı"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:29
+msgid "App disconnected"
+msgstr "Uygulamanın bağlantısı kesildi"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:79
+msgid "App on your computer"
+msgstr "Bilgisayarınızdaki uygulama"
 
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:136
 msgid "Appearance"
@@ -3381,7 +3402,7 @@ msgstr "Marka ve e-postalar"
 msgid "Brazilian Portuguese"
 msgstr "Brezilya Portekizcesi"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:227
+#: src/components/routes/settings/ApiKeys/index.tsx:230
 msgid "Browse every endpoint in the API reference"
 msgstr "API referansındaki tüm uç noktalara göz atın"
 
@@ -3639,6 +3660,7 @@ msgstr "Kimlik doğrulama uygulamanızı veya kurtarma kodlarınızı kullanamı
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:67
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1173
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:64
+#: src/components/routes/oauth/Connect/index.tsx:164
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:69
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:85
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:85
@@ -4901,7 +4923,7 @@ msgstr "Spam olarak onayla"
 msgid "Confirm your email"
 msgstr "E-postanızı onaylayın"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:130
+#: src/components/routes/settings/ApiKeys/index.tsx:131
 msgid "Confirm your email address"
 msgstr "E-posta adresinizi onaylayın"
 
@@ -4933,6 +4955,8 @@ msgstr "Tebrikler! Etkinliğiniz artık herkese açık."
 msgid "Connect"
 msgstr "Bağla"
 
+#: src/components/routes/oauth/Connect/index.tsx:86
+#: src/components/routes/oauth/Connect/index.tsx:151
 #: src/components/routes/settings/Security/SignInMethods.tsx:246
 msgid "Connect {0}"
 msgstr "{0} hesabını bağla"
@@ -4945,7 +4969,7 @@ msgstr "Kart okuyucu eklemeden önce Ödemeler altında bir Stripe hesabı bağl
 msgid "Connect bank"
 msgstr "Banka bağla"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:112
+#: src/components/routes/settings/ApiKeys/index.tsx:113
 msgid "Connect other tools and your own code to this account. A key can do what you can do, so treat it like a password."
 msgstr "Diğer araçları ve kendi kodunuzu bu hesaba bağlayın. Bir anahtar sizin yapabildiğiniz her şeyi yapabilir, bu yüzden onu bir parola gibi koruyun."
 
@@ -4988,8 +5012,13 @@ msgid "Connect your identity provider, verify your email domains, then choose wh
 msgstr "Kimlik sağlayıcınızı bağlayın, e-posta alan adlarınızı doğrulayın, ardından herkesin kullanıp kullanmayacağını seçin."
 
 #: src/components/routes/admin/Dashboard/index.tsx:410
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:88
 msgid "Connected"
 msgstr "Bağlı"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:41
+msgid "Connected apps"
+msgstr "Bağlı uygulamalar"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:298
 msgid "Connected the wrong Stripe account? Disconnect and start over."
@@ -5456,9 +5485,13 @@ msgstr "API referansı yüklenemedi."
 msgid "Couldn't load this report"
 msgstr "Bu rapor yüklenemedi"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:187
+#: src/components/routes/settings/ApiKeys/index.tsx:188
 msgid "Couldn't load your API keys"
 msgstr "API anahtarlarınız yüklenemedi"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:53
+msgid "Couldn't load your connected apps"
+msgstr "Bağlı uygulamalarınız yüklenemedi"
 
 #: src/components/routes/settings/Organizers/index.tsx:40
 msgid "Couldn't load your organizers"
@@ -5543,7 +5576,7 @@ msgstr "\"{query}\" oluştur"
 msgid "Create {0} Template"
 msgstr "{0} Şablonu Oluştur"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:199
+#: src/components/routes/settings/ApiKeys/index.tsx:200
 msgid "Create a key to connect tools like Zapier, your CRM or your own scripts to your events, orders and attendees."
 msgstr "Zapier, CRM'iniz veya kendi betikleriniz gibi araçları etkinliklerinize, siparişlerinize ve katılımcılarınıza bağlamak için bir anahtar oluşturun."
 
@@ -5604,6 +5637,10 @@ msgstr "Kullanıcılarınıza bir mesaj göstermek için duyuru oluşturun."
 msgid "Create and change events, orders, attendees and more."
 msgstr "Etkinlikleri, siparişleri, katılımcıları ve daha fazlasını oluşturun ve değiştirin."
 
+#: src/components/routes/oauth/Connect/index.tsx:122
+msgid "Create and change events, tickets, questions and settings."
+msgstr "Etkinlik, bilet, soru ve ayar oluşturma ve değiştirme."
+
 #: src/components/routes/event/products.tsx:67
 msgid "Create and configure tickets and merchandise for sale."
 msgstr "Satış için bilet ve ürünler oluşturup yapılandırın."
@@ -5619,7 +5656,7 @@ msgid "Create Announcement"
 msgstr "Duyuru oluştur"
 
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:215
-#: src/components/routes/settings/ApiKeys/index.tsx:91
+#: src/components/routes/settings/ApiKeys/index.tsx:92
 msgid "Create API key"
 msgstr "API anahtarı oluştur"
 
@@ -5799,7 +5836,7 @@ msgstr "Kendi etkinliğinizi oluşturun"
 #: src/components/routes/admin/Messages/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:310
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:69
-#: src/components/routes/settings/ApiKeys/index.tsx:174
+#: src/components/routes/settings/ApiKeys/index.tsx:175
 msgid "Created"
 msgstr "Oluşturuldu"
 
@@ -6618,14 +6655,21 @@ msgid "Disclaimers, contact info or a thank-you note, on a single line"
 msgstr "Yasal uyarılar, iletişim bilgileri veya bir teşekkür notu, tek satırda"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:120
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:32
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:99
 #: src/components/routes/settings/Security/SignInMethods.tsx:217
 #: src/components/routes/settings/Security/SignInMethods.tsx:251
 msgid "Disconnect"
 msgstr "Bağlantıyı kes"
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:103
 #: src/components/routes/settings/Security/SignInMethods.tsx:247
 msgid "Disconnect {0}"
 msgstr "{0} bağlantısını kes"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:27
+msgid "Disconnect {name}? It stops working with your account straight away."
+msgstr "{name} bağlantısı kesilsin mi? Hesabınızla hemen çalışmayı durdurur."
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:109
 msgid "Disconnect Stripe account"
@@ -8093,7 +8137,7 @@ msgstr "Yeniler dahil tüm organizatörler ve etkinlikler."
 msgid "Every trusted device will need a code at its next sign-in. Continue?"
 msgstr "Her güvenilen cihazın bir sonraki girişte kod girmesi gerekecek. Devam edilsin mi?"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:158
+#: src/components/routes/settings/ApiKeys/index.tsx:159
 msgid "Everyone ({0})"
 msgstr "Herkes ({0})"
 
@@ -8193,7 +8237,7 @@ msgstr "Son kullanım tarihi"
 
 #: src/components/common/WaitlistTable/index.tsx:30
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:119
-#: src/components/routes/settings/ApiKeys/index.tsx:210
+#: src/components/routes/settings/ApiKeys/index.tsx:211
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:35
 #: src/ee/licensing/licenceNotice.ts:78
 msgid "Expired"
@@ -8206,7 +8250,7 @@ msgstr "{0} sona erdi"
 #: src/components/common/PromoCodeTable/index.tsx:76
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:33
-#: src/components/routes/settings/ApiKeys/index.tsx:176
+#: src/components/routes/settings/ApiKeys/index.tsx:177
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:178
 msgid "Expires"
 msgstr "Süresi Doluyor"
@@ -9281,6 +9325,10 @@ msgstr "Geri dön"
 msgid "Go back to profile"
 msgstr "Profile geri dön"
 
+#: src/components/routes/oauth/Connect/index.tsx:25
+msgid "Go back to the app you were connecting and start again."
+msgstr "Bağladığınız uygulamaya dönün ve yeniden başlayın."
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:448
 msgid "Go to Event Page"
 msgstr "Etkinlik Sayfasına Git"
@@ -9501,6 +9549,10 @@ msgstr "Hi.Events Cloud"
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:75
 msgid "Hi.Events Fee"
 msgstr "Hi.Events Ücreti"
+
+#: src/components/routes/oauth/Connect/index.tsx:108
+msgid "Hi.Events hasn't verified this app. Only continue if you started connecting it yourself and you trust it."
+msgstr "Hi.Events bu uygulamayı doğrulamadı. Yalnızca bağlantıyı kendiniz başlattıysanız ve uygulamaya güveniyorsanız devam edin."
 
 #: src/components/routes/organizer/Reports/index.tsx:46
 msgid "Hi.Events platform fees and VAT breakdown by transaction"
@@ -9862,7 +9914,7 @@ msgstr "Ekledim, devam et"
 msgid "I've made the payment"
 msgstr "Ödemeyi yaptım"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:224
+#: src/components/routes/settings/ApiKeys/index.tsx:227
 msgid "If a key leaks, revoke it straight away and create a new one."
 msgstr "Bir anahtar sızarsa hemen iptal edin ve yeni bir tane oluşturun."
 
@@ -10255,7 +10307,7 @@ msgstr "Veren (issuer) URL'si"
 msgid "It happens on more than one date"
 msgstr "Birden fazla tarihte gerçekleşiyor"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:222
+#: src/components/routes/settings/ApiKeys/index.tsx:225
 msgid "It has your role and event access. Read-only keys can view and export, but can't change anything."
 msgstr "Sizin rolünüze ve etkinlik erişiminize sahiptir. Salt okunur anahtarlar görüntüleyebilir ve dışa aktarabilir, ancak hiçbir şeyi değiştiremez."
 
@@ -10408,7 +10460,7 @@ msgstr "Duyurmaya hazır olana kadar onları herkese açık kadrodan ve programd
 msgid "Keeps signing in with a password. {providerName} can't be used to sign this member in."
 msgstr "Parolasıyla giriş yapmaya devam eder. Bu üyenin girişi için {providerName} kullanılamaz."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:173
+#: src/components/routes/settings/ApiKeys/index.tsx:174
 msgid "Key"
 msgstr "Anahtar"
 
@@ -10416,11 +10468,11 @@ msgstr "Anahtar"
 msgid "Key ending in {0}"
 msgstr "{0} ile biten anahtar"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:79
+#: src/components/routes/settings/ApiKeys/index.tsx:80
 msgid "Key removed"
 msgstr "Anahtar kaldırıldı"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:79
+#: src/components/routes/settings/ApiKeys/index.tsx:80
 msgid "Key revoked"
 msgstr "Anahtar iptal edildi"
 
@@ -10428,7 +10480,7 @@ msgstr "Anahtar iptal edildi"
 msgid "Keycloak, Authentik, Zitadel, OneLogin and others"
 msgstr "Keycloak, Authentik, Zitadel, OneLogin ve diğerleri"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:223
+#: src/components/routes/settings/ApiKeys/index.tsx:226
 msgid "Keys can't sign in or manage your team, payouts, profile or security settings."
 msgstr "Anahtarlar oturum açamaz; ekibinizi, ödemelerinizi, profilinizi veya güvenlik ayarlarınızı yönetemez."
 
@@ -10534,6 +10586,7 @@ msgstr "Son 7 gün"
 msgid "Last 90 days"
 msgstr "Son 90 gün"
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:92
 #: src/components/routes/settings/Team/index.tsx:220
 #: src/components/routes/settings/Team/MemberRow.tsx:165
 msgid "Last active"
@@ -10585,7 +10638,7 @@ msgstr "Son Tetiklenme"
 
 #: src/components/common/SsoButtons/index.tsx:126
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:73
-#: src/components/routes/settings/ApiKeys/index.tsx:175
+#: src/components/routes/settings/ApiKeys/index.tsx:176
 msgid "Last used"
 msgstr "Son kullanılan"
 
@@ -11613,7 +11666,7 @@ msgstr "Harika etkinlik açıklamam..."
 msgid "My amazing event title..."
 msgstr "Harika etkinlik başlığım..."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:157
+#: src/components/routes/settings/ApiKeys/index.tsx:158
 msgid "My keys"
 msgstr "Anahtarlarım"
 
@@ -11709,6 +11762,7 @@ msgstr "Net Gelir"
 #: src/components/common/PromoCodeTable/index.tsx:169
 #: src/components/common/WebhookTable/index.tsx:272
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:93
 #: src/components/routes/settings/Team/MemberRow.tsx:166
 msgid "Never"
 msgstr "Asla"
@@ -12017,6 +12071,10 @@ msgstr "Bu dönemde tamamlanmış sipariş yok"
 #: src/components/routes/admin/Configurations/index.tsx:125
 msgid "No configurations found"
 msgstr "Yapılandırma bulunamadı"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:61
+msgid "No connected apps"
+msgstr "Bağlı uygulama yok"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:207
 msgid "No connections available"
@@ -12487,7 +12545,7 @@ msgstr "Hayır, beni burada tut"
 msgid "Nobody has been added to this event's lineup yet."
 msgstr "Bu etkinliğin kadrosuna henüz kimse eklenmedi."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:196
+#: src/components/routes/settings/ApiKeys/index.tsx:197
 msgid "Nobody has created an API key yet"
 msgstr "Henüz kimse API anahtarı oluşturmadı"
 
@@ -13076,6 +13134,10 @@ msgstr "Ekip erişimini yalnızca yöneticiler yönetebilir."
 #: src/components/forms/ProductForm/index.tsx:555
 msgid "Only available as an add-on"
 msgstr "Yalnızca ek ürün olarak sunulur"
+
+#: src/components/routes/oauth/Connect/index.tsx:107
+msgid "Only continue if you just started connecting from an app on this computer, such as Claude Code or Cursor."
+msgstr "Yalnızca bu bilgisayardaki bir uygulamadan (Claude Code veya Cursor gibi) bağlantıyı yeni başlattıysanız devam edin."
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:181
 msgid "Only members who can manage payments can change these instructions."
@@ -15139,7 +15201,9 @@ msgstr "Yeniden etkinleştir"
 msgid "Reactivate this date? It will be reopened for future sales."
 msgstr "Bu tarih yeniden etkinleştirilsin mi? Gelecekteki satışlara yeniden açılacak."
 
+#: src/components/routes/oauth/Connect/index.tsx:121
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:73
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:250
 msgid "Read and write"
 msgstr "Okuma ve yazma"
@@ -15149,7 +15213,12 @@ msgstr "Okuma ve yazma"
 msgid "Read more"
 msgstr "Devamını oku"
 
+#: src/components/routes/oauth/Connect/index.tsx:127
+msgid "Read only"
+msgstr "Salt okunur"
+
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:73
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:261
 msgid "Read-only"
 msgstr "Salt okunur"
@@ -15471,7 +15540,7 @@ msgstr "kaldır"
 msgid "Remove"
 msgstr "Kaldır"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:73
+#: src/components/routes/settings/ApiKeys/index.tsx:74
 msgid "Remove \"{0}\"? It has already expired."
 msgstr "\"{0}\" kaldırılsın mı? Süresi zaten doldu."
 
@@ -15546,7 +15615,7 @@ msgstr "Hi.Events markasını kaldır"
 msgid "Remove Hi.Events branding from everything your attendees see, and put your own logo in their emails."
 msgstr "Katılımcılarınızın gördüğü her yerden Hi.Events markasını kaldırın ve e-postalarına kendi logonuzu koyun."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:81
+#: src/components/routes/settings/ApiKeys/index.tsx:82
 msgid "Remove key"
 msgstr "Anahtarı kaldır"
 
@@ -15949,6 +16018,14 @@ msgstr "Etkinliğe Dön"
 msgid "Return to Event Page"
 msgstr "Etkinlik Sayfasına Dön"
 
+#: src/components/routes/oauth/Connect/index.tsx:77
+msgid "Returning you to {leavingTo}…"
+msgstr "{leavingTo} adresine geri dönülüyor…"
+
+#: src/components/routes/oauth/Connect/index.tsx:92
+msgid "Returns you to"
+msgstr "Sizi şuraya geri gönderir"
+
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:144
 msgid "Reusable venue layouts. Attach one to an event to sell reserved seats."
 msgstr "Yeniden kullanılabilir mekan düzenleri. Numaralı koltuk satmak için bir etkinliğe ekleyin."
@@ -16007,11 +16084,11 @@ msgstr "Siparişi inceleyin, ardından nasıl ödeyeceğinizi seçin"
 msgid "Revoke"
 msgstr "İptal et"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:75
+#: src/components/routes/settings/ApiKeys/index.tsx:76
 msgid "Revoke \"{0}\"? Anything using it stops working straight away, and {ownerName} will get an email about it."
 msgstr "\"{0}\" iptal edilsin mi? Onu kullanan her şey hemen çalışmayı durdurur ve {ownerName} bu konuda bir e-posta alır."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:76
+#: src/components/routes/settings/ApiKeys/index.tsx:77
 msgid "Revoke \"{0}\"? Anything using it stops working straight away. This can't be undone."
 msgstr "\"{0}\" iptal edilsin mi? Onu kullanan her şey hemen çalışmayı durdurur. Bu işlem geri alınamaz."
 
@@ -16023,7 +16100,7 @@ msgstr "İptal et: {0}"
 msgid "Revoke invitation"
 msgstr "Daveti iptal et"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:81
+#: src/components/routes/settings/ApiKeys/index.tsx:82
 msgid "Revoke key"
 msgstr "Anahtarı iptal et"
 
@@ -17158,7 +17235,7 @@ msgstr "Katılımcılara, bilet sahiplerine veya sipariş sahiplerine e-posta g�
 msgid "Send invitation"
 msgstr "Davet gönder"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:221
+#: src/components/routes/settings/ApiKeys/index.tsx:224
 msgid "Send it in the Authorization header of every request."
 msgstr "Her istekte Authorization başlığında gönderin."
 
@@ -17566,7 +17643,7 @@ msgstr "Daha az platform göster"
 msgid "Show initials instead"
 msgstr "Bunun yerine baş harfleri göster"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:160
+#: src/components/routes/settings/ApiKeys/index.tsx:161
 msgid "Show keys"
 msgstr "Anahtarları göster"
 
@@ -18147,10 +18224,13 @@ msgstr "Bir şeyler ters gitti. Lütfen daha sonra tekrar deneyin."
 #: src/components/routes/auth/Login/index.tsx:132
 #: src/components/routes/auth/Register/index.tsx:81
 #: src/components/routes/my-tickets/index.tsx:162
+#: src/components/routes/oauth/Connect/index.tsx:63
+#: src/components/routes/oauth/Connect/index.tsx:70
 #: src/components/routes/product-widget/SelectProducts/index.tsx:383
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:79
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:30
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:123
-#: src/components/routes/settings/ApiKeys/index.tsx:80
+#: src/components/routes/settings/ApiKeys/index.tsx:81
 #: src/components/routes/settings/Profile/index.tsx:129
 #: src/components/routes/settings/Profile/index.tsx:139
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:46
@@ -19685,6 +19765,10 @@ msgstr "Bu cevap çok uzun. Kaydetmeden önce kısaltın."
 msgid "This answer means you can't register for this event."
 msgstr "Bu yanıtla bu etkinliğe kaydolamazsınız."
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:24
+msgid "this app"
+msgstr "bu uygulama"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:260
 msgid "This applies to every matching date in the event, including dates not currently visible. Attendees registered on any of those dates will be reachable via the message composer once the update finishes."
 msgstr "Bu, etkinlikteki eşleşen her tarih için geçerlidir; şu anda görünmeyen tarihler dahil. Bu tarihlerden herhangi birine kayıtlı katılımcılara, güncelleme bittiğinde mesaj düzenleyiciden ulaşılabilir."
@@ -19756,6 +19840,14 @@ msgstr "Bu check-in listesi iptal edilmiş bir oturuma bağlı olduğu için art
 #: src/components/forms/AffiliateForm/index.tsx:41
 msgid "This code will be used to track sales. Only letters, numbers, hyphens, and underscores allowed."
 msgstr "Bu kod satışları izlemek için kullanılacaktır. Yalnızca harfler, sayılar, tireler ve alt çizgiler kullanılabilir."
+
+#: src/components/routes/oauth/Connect/index.tsx:24
+msgid "This connection link doesn't work"
+msgstr "Bu bağlantı linki çalışmıyor"
+
+#: src/components/routes/oauth/Connect/index.tsx:24
+msgid "This connection request has expired"
+msgstr "Bu bağlantı isteğinin süresi doldu"
 
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:181
 msgid "This date"
@@ -20647,7 +20739,8 @@ msgstr "Daha fazla tarih görmek için filtrelerinizi ayarlayın."
 #: src/components/common/OrganizerReportTable/index.tsx:273
 #: src/components/common/ReportTable/index.tsx:254
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1121
-#: src/components/routes/settings/ApiKeys/index.tsx:188
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:54
+#: src/components/routes/settings/ApiKeys/index.tsx:189
 #: src/components/routes/settings/ApiReference/index.tsx:83
 #: src/components/routes/settings/Organizers/index.tsx:41
 #: src/components/routes/settings/Security/index.tsx:77
@@ -21042,6 +21135,10 @@ msgstr "Sınırsız kullanıma izin verildi"
 #: src/components/common/LocationsTable/index.tsx:32
 msgid "Unnamed"
 msgstr "Adsız"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:71
+msgid "Unnamed app"
+msgstr "Adsız uygulama"
 
 #: src/components/common/LocationPicker/index.tsx:67
 msgid "Unnamed location"
@@ -21445,7 +21542,7 @@ msgstr "Ana sayfa tasarımınızın renklerini ve yazı tipini kullanır. Tasar�
 msgid "Using them for real events? Get an Enterprise licence and put its key in <0>APP_LICENCE_KEY</0>."
 msgstr "Bunları gerçek etkinliklerde mi kullanıyorsunuz? Bir Enterprise lisansı edinin ve anahtarını <0>APP_LICENCE_KEY</0> içine koyun."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:219
+#: src/components/routes/settings/ApiKeys/index.tsx:222
 msgid "Using your key"
 msgstr "Anahtarınızı kullanma"
 
@@ -21591,6 +21688,7 @@ msgstr "Doğrulama e-postası gönderildi. Gelen kutunuzu kontrol edin."
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:216
 #: src/components/routes/admin/Attribution/index.tsx:198
 #: src/components/routes/admin/Dashboard/index.tsx:396
+#: src/components/routes/oauth/Connect/index.tsx:97
 #: src/ee/sso/components/SingleSignOn/DomainList.tsx:17
 msgid "Verified"
 msgstr "Doğrulandı"
@@ -21749,6 +21847,10 @@ msgstr "Etkinlik sayfasını görüntüle"
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:93
 msgid "View Event Page"
 msgstr "Etkinlik sayfasını görüntüle"
+
+#: src/components/routes/oauth/Connect/index.tsx:128
+msgid "View events, tickets and sales, without changing anything."
+msgstr "Hiçbir şeyi değiştirmeden etkinlikleri, biletleri ve satışları görüntüleme."
 
 #: src/components/common/OrganizerWebhookTable/index.tsx:117
 #: src/components/common/WebhookTable/index.tsx:117
@@ -22689,6 +22791,10 @@ msgstr "Hesap ayarlarınızda ek hizmet ücretleri ve vergileri yapılandırabil
 msgid "You can create a promo code which targets this product on the"
 msgstr "Bu ürünü hedefleyen bir promosyon kodu oluşturabilirsiniz"
 
+#: src/components/routes/oauth/Connect/index.tsx:167
+msgid "You can disconnect it at any time from Settings → API keys."
+msgstr "Bağlantısını istediğiniz zaman Ayarlar → API anahtarları bölümünden kesebilirsiniz."
+
 #: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:31
 msgid "You can only change it back to a single event while it has exactly one date and no orders. Once someone places an order, this can't be undone."
 msgstr "Tekrar tek seferlik etkinliğe yalnızca tam olarak bir tarihi olduğu ve hiç siparişi olmadığı sürece dönüştürebilirsiniz. Biri sipariş verdiğinde bu işlem geri alınamaz."
@@ -22750,7 +22856,7 @@ msgstr "Bu organizatöre erişiminiz yok"
 msgid "You don't have access to this page"
 msgstr "Bu sayfaya erişiminiz yok"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:196
+#: src/components/routes/settings/ApiKeys/index.tsx:197
 msgid "You don't have any API keys"
 msgstr "Hiç API anahtarınız yok"
 
@@ -22816,7 +22922,7 @@ msgstr "En az bir fiyat seviyeniz olmalı"
 msgid "You must verify your email address before you can update the organizer status."
 msgstr "Organizatör durumunu güncelleyebilmek için e-posta adresinizi doğrulamanız gerekir."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:131
+#: src/components/routes/settings/ApiKeys/index.tsx:132
 msgid "You need a confirmed email address to create API keys. Check your inbox, or resend the confirmation email from your <0>profile</0>."
 msgstr "API anahtarı oluşturmak için onaylanmış bir e-posta adresine ihtiyacınız var. Gelen kutunuzu kontrol edin veya onay e-postasını <0>profilinizden</0> yeniden gönderin."
 
@@ -22956,7 +23062,7 @@ msgstr "Size bir yer teklif edildi!"
 msgid "You've changed the session time"
 msgstr "Oturum saatini değiştirdiniz"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:145
+#: src/components/routes/settings/ApiKeys/index.tsx:146
 msgid "You've reached the limit of {0} active keys. Revoke one to create another."
 msgstr "{0} etkin anahtar sınırına ulaştınız. Yeni bir tane oluşturmak için birini iptal edin."
 

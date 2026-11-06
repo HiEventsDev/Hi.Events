@@ -276,6 +276,10 @@ msgstr "{0} lippua"
 msgid "{0} to {1}"
 msgstr "{0}–{1}"
 
+#: src/components/routes/oauth/Connect/index.tsx:87
+msgid "{0} wants to use your Hi.Events account {1}. It will act as you, with the access you choose below."
+msgstr "{0} haluaa käyttää Hi.Events-tiliäsi {1}. Se toimii puolestasi alla valitsemillasi oikeuksilla."
+
 #: src/components/routes/settings/Security/SignInMethods.tsx:139
 msgid "{0} was disconnected."
 msgstr "Palvelun {0} yhteys katkaistiin."
@@ -544,7 +548,7 @@ msgstr "{organizerName}:n ensimmäinen tapahtuma"
 msgid "{outsideDomainCount, plural, one {# member outside your verified domains keeps their current sign-in.} other {# members outside your verified domains keep their current sign-in.}}"
 msgstr "{outsideDomainCount, plural, one {# jäsen vahvistettujen verkkotunnustesi ulkopuolelta säilyttää nykyisen kirjautumistapansa.} other {# jäsentä vahvistettujen verkkotunnustesi ulkopuolelta säilyttää nykyisen kirjautumistapansa.}}"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:165
+#: src/components/routes/settings/ApiKeys/index.tsx:166
 msgid "{ownActiveCount} of {0} active keys"
 msgstr "{ownActiveCount} / {0} aktiivista avainta"
 
@@ -1061,6 +1065,7 @@ msgstr "Hyväksy luottokorttimaksut Stripellä"
 #: src/components/common/TeamAccessFields/index.tsx:207
 #: src/components/common/TeamAccessPanel/index.tsx:137
 #: src/components/forms/ProductForm/index.tsx:605
+#: src/components/routes/oauth/Connect/index.tsx:115
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:237
 #: src/components/routes/settings/Team/index.tsx:218
 #: src/components/routes/settings/Team/MemberRow.tsx:141
@@ -1802,6 +1807,10 @@ msgstr "Iän tarkistus (18+)"
 msgid "Agenda"
 msgstr "Ohjelma"
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:43
+msgid "AI assistants such as Claude and ChatGPT connect by signing in, without a key. Add this MCP server URL to your assistant to connect it."
+msgstr "Tekoälyavustajat, kuten Claude ja ChatGPT, yhdistetään kirjautumalla ilman avainta. Lisää tämä MCP-palvelimen URL-osoite avustajaasi yhdistääksesi sen."
+
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:45
 msgid "Aisles after seats"
 msgstr "Käytävät paikkojen jälkeen"
@@ -2152,6 +2161,10 @@ msgstr "Vastaanotettu summa"
 msgid "An account with this email already exists. Sign in instead."
 msgstr "Tällä sähköpostiosoitteella on jo tili. Kirjaudu sen sijaan sisään."
 
+#: src/components/routes/oauth/Connect/index.tsx:16
+msgid "an app on this computer"
+msgstr "tämän tietokoneen sovellus"
+
 #: src/components/forms/AffiliateForm/index.tsx:90
 msgid "An email to associate with this affiliate. The affiliate will not be notified."
 msgstr "Sähköposti, joka liitetään tähän kumppaniin. Kumppanille ei lähetetä ilmoitusta."
@@ -2319,19 +2332,27 @@ msgid "Anything else?"
 msgstr "Jotain muuta?"
 
 #: src/components/layouts/SettingsLayout/index.tsx:74
-#: src/components/routes/settings/ApiKeys/index.tsx:111
+#: src/components/routes/settings/ApiKeys/index.tsx:112
 msgid "API keys"
 msgstr "API-avaimet"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:139
+#: src/components/routes/settings/ApiKeys/index.tsx:140
 msgid "API keys can't be created while you're impersonating someone."
 msgstr "API-avaimia ei voi luoda, kun toimit toisena käyttäjänä."
 
 #: src/components/layouts/SettingsLayout/index.tsx:85
 #: src/components/layouts/SettingsLayout/index.tsx:89
-#: src/components/routes/settings/ApiKeys/index.tsx:122
+#: src/components/routes/settings/ApiKeys/index.tsx:123
 msgid "API reference"
 msgstr "API-dokumentaatio"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:29
+msgid "App disconnected"
+msgstr "Sovelluksen yhteys katkaistu"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:79
+msgid "App on your computer"
+msgstr "Sovellus tietokoneellasi"
 
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:136
 msgid "Appearance"
@@ -3381,7 +3402,7 @@ msgstr "Brändi ja sähköpostit"
 msgid "Brazilian Portuguese"
 msgstr "Brasilianportugali"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:227
+#: src/components/routes/settings/ApiKeys/index.tsx:230
 msgid "Browse every endpoint in the API reference"
 msgstr "Selaa kaikkia päätepisteitä API-viitteessä"
 
@@ -3639,6 +3660,7 @@ msgstr "Etkö voi käyttää todennussovellusta tai palautuskoodeja?"
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:67
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1173
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:64
+#: src/components/routes/oauth/Connect/index.tsx:164
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:69
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:85
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:85
@@ -4901,7 +4923,7 @@ msgstr "Vahvista roskapostiksi"
 msgid "Confirm your email"
 msgstr "Vahvista sähköpostiosoitteesi"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:130
+#: src/components/routes/settings/ApiKeys/index.tsx:131
 msgid "Confirm your email address"
 msgstr "Vahvista sähköpostiosoitteesi"
 
@@ -4933,6 +4955,8 @@ msgstr "Onnittelut! Tapahtumasi on nyt julkisesti nähtävillä."
 msgid "Connect"
 msgstr "Yhdistä"
 
+#: src/components/routes/oauth/Connect/index.tsx:86
+#: src/components/routes/oauth/Connect/index.tsx:151
 #: src/components/routes/settings/Security/SignInMethods.tsx:246
 msgid "Connect {0}"
 msgstr "Yhdistä {0}"
@@ -4945,7 +4969,7 @@ msgstr "Yhdistä Stripe-tili Tilitykset-kohdassa ennen kortinlukijoiden lisääm
 msgid "Connect bank"
 msgstr "Yhdistä pankki"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:112
+#: src/components/routes/settings/ApiKeys/index.tsx:113
 msgid "Connect other tools and your own code to this account. A key can do what you can do, so treat it like a password."
 msgstr "Yhdistä muita työkaluja ja omaa koodiasi tähän tiliin. Avaimella voi tehdä kaiken, mitä sinäkin voit, joten käsittele sitä kuin salasanaa."
 
@@ -4988,8 +5012,13 @@ msgid "Connect your identity provider, verify your email domains, then choose wh
 msgstr "Yhdistä identiteetintarjoajasi, vahvista sähköpostin verkkotunnuksesi ja valitse sitten, onko sen käyttö pakollista kaikille."
 
 #: src/components/routes/admin/Dashboard/index.tsx:410
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:88
 msgid "Connected"
 msgstr "Yhdistetty"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:41
+msgid "Connected apps"
+msgstr "Yhdistetyt sovellukset"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:298
 msgid "Connected the wrong Stripe account? Disconnect and start over."
@@ -5456,9 +5485,13 @@ msgstr "API-viitettä ei voitu ladata."
 msgid "Couldn't load this report"
 msgstr "Tätä raporttia ei voitu ladata"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:187
+#: src/components/routes/settings/ApiKeys/index.tsx:188
 msgid "Couldn't load your API keys"
 msgstr "API-avaimiasi ei voitu ladata"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:53
+msgid "Couldn't load your connected apps"
+msgstr "Yhdistettyjä sovelluksia ei voitu ladata"
 
 #: src/components/routes/settings/Organizers/index.tsx:40
 msgid "Couldn't load your organizers"
@@ -5543,7 +5576,7 @@ msgstr "Luo \"{query}\""
 msgid "Create {0} Template"
 msgstr "Luo {0}-pohja"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:199
+#: src/components/routes/settings/ApiKeys/index.tsx:200
 msgid "Create a key to connect tools like Zapier, your CRM or your own scripts to your events, orders and attendees."
 msgstr "Luo avain, jolla voit yhdistää työkaluja, kuten Zapierin, CRM-järjestelmäsi tai omia skriptejäsi, tapahtumiisi, tilauksiisi ja osallistujiisi."
 
@@ -5604,6 +5637,10 @@ msgstr "Luo ilmoitus näyttämään viesti käyttäjillesi."
 msgid "Create and change events, orders, attendees and more."
 msgstr "Luo ja muokkaa tapahtumia, tilauksia, osallistujia ja muuta."
 
+#: src/components/routes/oauth/Connect/index.tsx:122
+msgid "Create and change events, tickets, questions and settings."
+msgstr "Luoda ja muuttaa tapahtumia, lippuja, kysymyksiä ja asetuksia."
+
 #: src/components/routes/event/products.tsx:67
 msgid "Create and configure tickets and merchandise for sale."
 msgstr "Luo ja määritä myytäviä lippuja ja tuotteita."
@@ -5619,7 +5656,7 @@ msgid "Create Announcement"
 msgstr "Luo ilmoitus"
 
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:215
-#: src/components/routes/settings/ApiKeys/index.tsx:91
+#: src/components/routes/settings/ApiKeys/index.tsx:92
 msgid "Create API key"
 msgstr "Luo API-avain"
 
@@ -5799,7 +5836,7 @@ msgstr "Luo oma tapahtumasi"
 #: src/components/routes/admin/Messages/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:310
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:69
-#: src/components/routes/settings/ApiKeys/index.tsx:174
+#: src/components/routes/settings/ApiKeys/index.tsx:175
 msgid "Created"
 msgstr "Luotu"
 
@@ -6618,14 +6655,21 @@ msgid "Disclaimers, contact info or a thank-you note, on a single line"
 msgstr "Vastuuvapauslausekkeet, yhteystiedot tai kiitos, yhdellä rivillä"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:120
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:32
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:99
 #: src/components/routes/settings/Security/SignInMethods.tsx:217
 #: src/components/routes/settings/Security/SignInMethods.tsx:251
 msgid "Disconnect"
 msgstr "Katkaise yhteys"
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:103
 #: src/components/routes/settings/Security/SignInMethods.tsx:247
 msgid "Disconnect {0}"
 msgstr "Katkaise yhteys: {0}"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:27
+msgid "Disconnect {name}? It stops working with your account straight away."
+msgstr "Katkaistaanko yhteys sovellukseen {name}? Se lakkaa toimimasta tilisi kanssa heti."
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:109
 msgid "Disconnect Stripe account"
@@ -8093,7 +8137,7 @@ msgstr "Kaikki järjestäjät ja tapahtumat, myös uudet."
 msgid "Every trusted device will need a code at its next sign-in. Continue?"
 msgstr "Jokainen luotettu laite tarvitsee koodin seuraavassa kirjautumisessa. Jatketaanko?"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:158
+#: src/components/routes/settings/ApiKeys/index.tsx:159
 msgid "Everyone ({0})"
 msgstr "Kaikki ({0})"
 
@@ -8193,7 +8237,7 @@ msgstr "Vanhentumispäivä"
 
 #: src/components/common/WaitlistTable/index.tsx:30
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:119
-#: src/components/routes/settings/ApiKeys/index.tsx:210
+#: src/components/routes/settings/ApiKeys/index.tsx:211
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:35
 #: src/ee/licensing/licenceNotice.ts:78
 msgid "Expired"
@@ -8206,7 +8250,7 @@ msgstr "Vanheni {0}"
 #: src/components/common/PromoCodeTable/index.tsx:76
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:33
-#: src/components/routes/settings/ApiKeys/index.tsx:176
+#: src/components/routes/settings/ApiKeys/index.tsx:177
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:178
 msgid "Expires"
 msgstr "Vanhenee"
@@ -9281,6 +9325,10 @@ msgstr "Palaa takaisin"
 msgid "Go back to profile"
 msgstr "Palaa profiiliin"
 
+#: src/components/routes/oauth/Connect/index.tsx:25
+msgid "Go back to the app you were connecting and start again."
+msgstr "Palaa sovellukseen, jota olit yhdistämässä, ja aloita alusta."
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:448
 msgid "Go to Event Page"
 msgstr "Siirry tapahtumasivulle"
@@ -9501,6 +9549,10 @@ msgstr "Hi.Events Cloud"
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:75
 msgid "Hi.Events Fee"
 msgstr "Hi.Events-maksu"
+
+#: src/components/routes/oauth/Connect/index.tsx:108
+msgid "Hi.Events hasn't verified this app. Only continue if you started connecting it yourself and you trust it."
+msgstr "Hi.Events ei ole vahvistanut tätä sovellusta. Jatka vain, jos aloitit yhdistämisen itse ja luotat sovellukseen."
 
 #: src/components/routes/organizer/Reports/index.tsx:46
 msgid "Hi.Events platform fees and VAT breakdown by transaction"
@@ -9862,7 +9914,7 @@ msgstr "Olen lisännyt sen, jatka"
 msgid "I've made the payment"
 msgstr "Olen maksanut"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:224
+#: src/components/routes/settings/ApiKeys/index.tsx:227
 msgid "If a key leaks, revoke it straight away and create a new one."
 msgstr "Jos avain vuotaa, mitätöi se heti ja luo uusi."
 
@@ -10255,7 +10307,7 @@ msgstr "Myöntäjän URL"
 msgid "It happens on more than one date"
 msgstr "Se tapahtuu useampana päivänä"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:222
+#: src/components/routes/settings/ApiKeys/index.tsx:225
 msgid "It has your role and event access. Read-only keys can view and export, but can't change anything."
 msgstr "Sillä on sinun roolisi ja pääsysi tapahtumiin. Vain luku -avaimet voivat tarkastella ja viedä tietoja, mutta eivät voi muuttaa mitään."
 
@@ -10408,7 +10460,7 @@ msgstr "Pidä heidät pois julkiselta esiintyjälistalta ja aikataulusta, kunnes
 msgid "Keeps signing in with a password. {providerName} can't be used to sign this member in."
 msgstr "Kirjautuu edelleen salasanalla. Palvelua {providerName} ei voi käyttää tämän jäsenen kirjautumiseen."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:173
+#: src/components/routes/settings/ApiKeys/index.tsx:174
 msgid "Key"
 msgstr "Avain"
 
@@ -10416,11 +10468,11 @@ msgstr "Avain"
 msgid "Key ending in {0}"
 msgstr "Avaimen loppuosa {0}"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:79
+#: src/components/routes/settings/ApiKeys/index.tsx:80
 msgid "Key removed"
 msgstr "Avain poistettu"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:79
+#: src/components/routes/settings/ApiKeys/index.tsx:80
 msgid "Key revoked"
 msgstr "Avain mitätöity"
 
@@ -10428,7 +10480,7 @@ msgstr "Avain mitätöity"
 msgid "Keycloak, Authentik, Zitadel, OneLogin and others"
 msgstr "Keycloak, Authentik, Zitadel, OneLogin ja muut"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:223
+#: src/components/routes/settings/ApiKeys/index.tsx:226
 msgid "Keys can't sign in or manage your team, payouts, profile or security settings."
 msgstr "Avaimilla ei voi kirjautua sisään eikä hallita tiimiäsi, tilityksiä, profiilia tai suojausasetuksia."
 
@@ -10534,6 +10586,7 @@ msgstr "Viimeiset 7 päivää"
 msgid "Last 90 days"
 msgstr "Viimeiset 90 päivää"
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:92
 #: src/components/routes/settings/Team/index.tsx:220
 #: src/components/routes/settings/Team/MemberRow.tsx:165
 msgid "Last active"
@@ -10585,7 +10638,7 @@ msgstr "Viimeisin käynnistys"
 
 #: src/components/common/SsoButtons/index.tsx:126
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:73
-#: src/components/routes/settings/ApiKeys/index.tsx:175
+#: src/components/routes/settings/ApiKeys/index.tsx:176
 msgid "Last used"
 msgstr "Viimeksi käytetty"
 
@@ -11613,7 +11666,7 @@ msgstr "Upean tapahtumani kuvaus..."
 msgid "My amazing event title..."
 msgstr "Upean tapahtumani otsikko..."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:157
+#: src/components/routes/settings/ApiKeys/index.tsx:158
 msgid "My keys"
 msgstr "Omat avaimet"
 
@@ -11709,6 +11762,7 @@ msgstr "Nettotuotot"
 #: src/components/common/PromoCodeTable/index.tsx:169
 #: src/components/common/WebhookTable/index.tsx:272
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:93
 #: src/components/routes/settings/Team/MemberRow.tsx:166
 msgid "Never"
 msgstr "Ei koskaan"
@@ -12017,6 +12071,10 @@ msgstr "Ei valmiita tilauksia tällä jaksolla"
 #: src/components/routes/admin/Configurations/index.tsx:125
 msgid "No configurations found"
 msgstr "Konfiguraatioita ei löytynyt"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:61
+msgid "No connected apps"
+msgstr "Ei yhdistettyjä sovelluksia"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:207
 msgid "No connections available"
@@ -12487,7 +12545,7 @@ msgstr "Ei, pidä minut täällä"
 msgid "Nobody has been added to this event's lineup yet."
 msgstr "Tämän tapahtuman esiintyjiin ei ole vielä lisätty ketään."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:196
+#: src/components/routes/settings/ApiKeys/index.tsx:197
 msgid "Nobody has created an API key yet"
 msgstr "Kukaan ei ole vielä luonut API-avainta"
 
@@ -13076,6 +13134,10 @@ msgstr "Vain järjestelmänvalvojat voivat hallita tiimin pääsyä."
 #: src/components/forms/ProductForm/index.tsx:555
 msgid "Only available as an add-on"
 msgstr "Saatavilla vain lisäosana"
+
+#: src/components/routes/oauth/Connect/index.tsx:107
+msgid "Only continue if you just started connecting from an app on this computer, such as Claude Code or Cursor."
+msgstr "Jatka vain, jos aloitit juuri yhdistämisen tämän tietokoneen sovelluksesta, kuten Claude Codesta tai Cursorista."
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:181
 msgid "Only members who can manage payments can change these instructions."
@@ -15139,7 +15201,9 @@ msgstr "Aktivoi uudelleen"
 msgid "Reactivate this date? It will be reopened for future sales."
 msgstr "Aktivoi tämä päivä uudelleen? Se avataan uudelleen tulevia myyntejä varten."
 
+#: src/components/routes/oauth/Connect/index.tsx:121
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:73
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:250
 msgid "Read and write"
 msgstr "Luku ja kirjoitus"
@@ -15149,7 +15213,12 @@ msgstr "Luku ja kirjoitus"
 msgid "Read more"
 msgstr "Lue lisää"
 
+#: src/components/routes/oauth/Connect/index.tsx:127
+msgid "Read only"
+msgstr "Vain luku"
+
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:73
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:261
 msgid "Read-only"
 msgstr "Vain luku"
@@ -15471,7 +15540,7 @@ msgstr "poista"
 msgid "Remove"
 msgstr "Poista"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:73
+#: src/components/routes/settings/ApiKeys/index.tsx:74
 msgid "Remove \"{0}\"? It has already expired."
 msgstr "Poistetaanko ”{0}”? Se on jo vanhentunut."
 
@@ -15546,7 +15615,7 @@ msgstr "Poista Hi.Events-brändäys"
 msgid "Remove Hi.Events branding from everything your attendees see, and put your own logo in their emails."
 msgstr "Poista Hi.Events-brändäys kaikesta, mitä osallistujasi näkevät, ja lisää oma logosi heidän sähköposteihinsa."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:81
+#: src/components/routes/settings/ApiKeys/index.tsx:82
 msgid "Remove key"
 msgstr "Poista avain"
 
@@ -15949,6 +16018,14 @@ msgstr "Palaa tapahtumaan"
 msgid "Return to Event Page"
 msgstr "Palaa tapahtumasivulle"
 
+#: src/components/routes/oauth/Connect/index.tsx:77
+msgid "Returning you to {leavingTo}…"
+msgstr "Palataan kohteeseen {leavingTo}…"
+
+#: src/components/routes/oauth/Connect/index.tsx:92
+msgid "Returns you to"
+msgstr "Palauttaa sinut kohteeseen"
+
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:144
 msgid "Reusable venue layouts. Attach one to an event to sell reserved seats."
 msgstr "Uudelleenkäytettäviä tapahtumapaikan pohjia. Liitä yksi tapahtumaan myydäksesi varattuja paikkoja."
@@ -16007,11 +16084,11 @@ msgstr "Tarkista tilaus ja valitse sitten maksutapa"
 msgid "Revoke"
 msgstr "Mitätöi"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:75
+#: src/components/routes/settings/ApiKeys/index.tsx:76
 msgid "Revoke \"{0}\"? Anything using it stops working straight away, and {ownerName} will get an email about it."
 msgstr "Mitätöidäänkö ”{0}”? Kaikki sitä käyttävä lakkaa toimimasta heti, ja {ownerName} saa siitä sähköpostin."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:76
+#: src/components/routes/settings/ApiKeys/index.tsx:77
 msgid "Revoke \"{0}\"? Anything using it stops working straight away. This can't be undone."
 msgstr "Mitätöidäänkö ”{0}”? Kaikki sitä käyttävä lakkaa toimimasta heti. Tätä ei voi perua."
 
@@ -16023,7 +16100,7 @@ msgstr "Mitätöi {0}"
 msgid "Revoke invitation"
 msgstr "Peruuta kutsu"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:81
+#: src/components/routes/settings/ApiKeys/index.tsx:82
 msgid "Revoke key"
 msgstr "Mitätöi avain"
 
@@ -17158,7 +17235,7 @@ msgstr "Lähetä sähköposteja osallistujille, lipun haltijoille tai tilauksen 
 msgid "Send invitation"
 msgstr "Lähetä kutsu"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:221
+#: src/components/routes/settings/ApiKeys/index.tsx:224
 msgid "Send it in the Authorization header of every request."
 msgstr "Lähetä se jokaisen pyynnön Authorization-otsakkeessa."
 
@@ -17566,7 +17643,7 @@ msgstr "Näytä vähemmän alustoja"
 msgid "Show initials instead"
 msgstr "Näytä nimikirjaimet"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:160
+#: src/components/routes/settings/ApiKeys/index.tsx:161
 msgid "Show keys"
 msgstr "Näytä avaimet"
 
@@ -18147,10 +18224,13 @@ msgstr "Jotain meni pieleen. Yritä myöhemmin uudelleen."
 #: src/components/routes/auth/Login/index.tsx:132
 #: src/components/routes/auth/Register/index.tsx:81
 #: src/components/routes/my-tickets/index.tsx:162
+#: src/components/routes/oauth/Connect/index.tsx:63
+#: src/components/routes/oauth/Connect/index.tsx:70
 #: src/components/routes/product-widget/SelectProducts/index.tsx:383
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:79
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:30
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:123
-#: src/components/routes/settings/ApiKeys/index.tsx:80
+#: src/components/routes/settings/ApiKeys/index.tsx:81
 #: src/components/routes/settings/Profile/index.tsx:129
 #: src/components/routes/settings/Profile/index.tsx:139
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:46
@@ -19685,6 +19765,10 @@ msgstr "Tämä vastaus on liian pitkä. Lyhennä sitä ennen tallentamista."
 msgid "This answer means you can't register for this event."
 msgstr "Tällä vastauksella et voi rekisteröityä tähän tapahtumaan."
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:24
+msgid "this app"
+msgstr "tämä sovellus"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:260
 msgid "This applies to every matching date in the event, including dates not currently visible. Attendees registered on any of those dates will be reachable via the message composer once the update finishes."
 msgstr "Tämä koskee kaikkia tapahtuman vastaavia ajankohtia, myös ajankohtia, jotka eivät tällä hetkellä ole näkyvissä. Mille tahansa näistä ajankohdista ilmoittautuneisiin osallistujiin voi ottaa yhteyttä viestieditorilla, kun päivitys on valmis."
@@ -19756,6 +19840,14 @@ msgstr "Tämä sisäänkirjautumislista koskee peruttua istuntoa, joten sitä ei
 #: src/components/forms/AffiliateForm/index.tsx:41
 msgid "This code will be used to track sales. Only letters, numbers, hyphens, and underscores allowed."
 msgstr "Tätä koodia käytetään myynnin seurantaan. Vain kirjaimet, numerot, yhdysmerkit ja alaviivat ovat sallittuja."
+
+#: src/components/routes/oauth/Connect/index.tsx:24
+msgid "This connection link doesn't work"
+msgstr "Tämä yhteyslinkki ei toimi"
+
+#: src/components/routes/oauth/Connect/index.tsx:24
+msgid "This connection request has expired"
+msgstr "Tämä yhteyspyyntö on vanhentunut"
 
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:181
 msgid "This date"
@@ -20647,7 +20739,8 @@ msgstr "Kokeile muuttaa suodattimia nähdäksesi lisää ajankohtia."
 #: src/components/common/OrganizerReportTable/index.tsx:273
 #: src/components/common/ReportTable/index.tsx:254
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1121
-#: src/components/routes/settings/ApiKeys/index.tsx:188
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:54
+#: src/components/routes/settings/ApiKeys/index.tsx:189
 #: src/components/routes/settings/ApiReference/index.tsx:83
 #: src/components/routes/settings/Organizers/index.tsx:41
 #: src/components/routes/settings/Security/index.tsx:77
@@ -21042,6 +21135,10 @@ msgstr "Rajaton käyttö sallittu"
 #: src/components/common/LocationsTable/index.tsx:32
 msgid "Unnamed"
 msgstr "Nimetön"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:71
+msgid "Unnamed app"
+msgstr "Nimetön sovellus"
 
 #: src/components/common/LocationPicker/index.tsx:67
 msgid "Unnamed location"
@@ -21445,7 +21542,7 @@ msgstr "Käyttää kotisivusi suunnittelun värejä ja fonttia. Jos muutat suunn
 msgid "Using them for real events? Get an Enterprise licence and put its key in <0>APP_LICENCE_KEY</0>."
 msgstr "Käytätkö niitä oikeissa tapahtumissa? Hanki Enterprise-lisenssi ja aseta sen avain muuttujaan <0>APP_LICENCE_KEY</0>."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:219
+#: src/components/routes/settings/ApiKeys/index.tsx:222
 msgid "Using your key"
 msgstr "Avaimen käyttö"
 
@@ -21591,6 +21688,7 @@ msgstr "Vahvistussähköposti lähetetty. Tarkista saapuneet viestisi."
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:216
 #: src/components/routes/admin/Attribution/index.tsx:198
 #: src/components/routes/admin/Dashboard/index.tsx:396
+#: src/components/routes/oauth/Connect/index.tsx:97
 #: src/ee/sso/components/SingleSignOn/DomainList.tsx:17
 msgid "Verified"
 msgstr "Vahvistettu"
@@ -21749,6 +21847,10 @@ msgstr "Näytä tapahtumasivu"
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:93
 msgid "View Event Page"
 msgstr "Näytä tapahtumasivu"
+
+#: src/components/routes/oauth/Connect/index.tsx:128
+msgid "View events, tickets and sales, without changing anything."
+msgstr "Tarkastella tapahtumia, lippuja ja myyntiä muuttamatta mitään."
 
 #: src/components/common/OrganizerWebhookTable/index.tsx:117
 #: src/components/common/WebhookTable/index.tsx:117
@@ -22689,6 +22791,10 @@ msgstr "Voit määrittää lisäpalvelumaksut ja verot tilisi asetuksissa."
 msgid "You can create a promo code which targets this product on the"
 msgstr "Voit luoda tähän tuotteeseen kohdistuvan kampanjakoodin täällä:"
 
+#: src/components/routes/oauth/Connect/index.tsx:167
+msgid "You can disconnect it at any time from Settings → API keys."
+msgstr "Voit katkaista yhteyden milloin tahansa kohdassa Asetukset → API-avaimet."
+
 #: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:31
 msgid "You can only change it back to a single event while it has exactly one date and no orders. Once someone places an order, this can't be undone."
 msgstr "Voit muuttaa sen takaisin kertaluonteiseksi tapahtumaksi vain, kun sillä on tasan yksi päivämäärä eikä tilauksia. Kun joku tekee tilauksen, muutosta ei voi enää perua."
@@ -22750,7 +22856,7 @@ msgstr "Sinulla ei ole pääsyä tähän järjestäjään"
 msgid "You don't have access to this page"
 msgstr "Sinulla ei ole pääsyä tälle sivulle"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:196
+#: src/components/routes/settings/ApiKeys/index.tsx:197
 msgid "You don't have any API keys"
 msgstr "Sinulla ei ole API-avaimia"
 
@@ -22816,7 +22922,7 @@ msgstr "Sinulla on oltava vähintään yksi hintaporras"
 msgid "You must verify your email address before you can update the organizer status."
 msgstr "Sinun on vahvistettava sähköpostiosoitteesi ennen kuin voit päivittää järjestäjän tilaa."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:131
+#: src/components/routes/settings/ApiKeys/index.tsx:132
 msgid "You need a confirmed email address to create API keys. Check your inbox, or resend the confirmation email from your <0>profile</0>."
 msgstr "Tarvitset vahvistetun sähköpostiosoitteen API-avainten luomiseen. Tarkista saapuneet viestisi tai lähetä vahvistusviesti uudelleen <0>profiilistasi</0>."
 
@@ -22956,7 +23062,7 @@ msgstr "Sinulle on tarjottu paikkaa!"
 msgid "You've changed the session time"
 msgstr "Olet muuttanut istunnon aikaa"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:145
+#: src/components/routes/settings/ApiKeys/index.tsx:146
 msgid "You've reached the limit of {0} active keys. Revoke one to create another."
 msgstr "Olet saavuttanut {0} aktiivisen avaimen rajan. Mitätöi yksi luodaksesi uuden."
 

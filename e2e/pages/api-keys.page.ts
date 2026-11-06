@@ -65,4 +65,17 @@ export class ApiKeysPage {
   async showEveryone(): Promise<void> {
     await this.page.getByTestId('api-key-scope').getByText(/^Everyone/).click();
   }
+
+  connectedApp(name: string): Locator {
+    return this.page.getByTestId('connected-app-row').filter({ hasText: name });
+  }
+
+  connectedAppsEmpty(): Locator {
+    return this.page.getByTestId('connected-apps-empty');
+  }
+
+  async disconnectApp(name: string): Promise<void> {
+    await this.connectedApp(name).getByTestId('connected-app-disconnect').click();
+    await this.page.getByRole('dialog').getByRole('button', { name: 'Disconnect', exact: true }).click();
+  }
 }
