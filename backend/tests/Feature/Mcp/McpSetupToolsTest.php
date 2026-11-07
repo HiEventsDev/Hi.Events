@@ -5,6 +5,8 @@ namespace Tests\Feature\Mcp;
 use HiEvents\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Symfony\Component\Mailer\SentMessage;
 use Tests\Concerns\ActsAsAccountUsers;
 use Tests\Concerns\CallsMcpTools;
 use Tests\Concerns\UsesApiKeys;
@@ -108,6 +110,90 @@ class McpSetupToolsTest extends TestCase
         $this->assertDatabaseMissing('products', ['event_id' => $this->eventId, 'title' => 'Parking']);
     }
 
+    public function test_a_guest_list_attendee_can_be_found_read_checked_in_and_resent_their_ticket(): void
+    {
+        $this->useRealMailer();
+        $ticketId = $this->callTool($this->apiKey, 'create_ticket', ['event_id' => $this->eventId, 'title' => 'GA', 'type' => 'PAID', 'price' => 25])
+            ->json('result.structuredContent.ticket.id');
+
+        $attendee = $this->callTool($this->apiKey, 'add_attendee', [
+            'event_id' => $this->eventId, 'ticket_id' => $ticketId, 'first_name' => 'Jane', 'last_name' => 'Doe', 'email' => 'jane@example.com',
+        ])->assertJsonPath('result.isError', false)->json('result.structuredContent.attendee');
+
+        $this->assertSame('0.00', DB::table('orders')->where('id', $attendee['order_id'])->value('total_gross'));
+        $mailsAfterAdding = $this->mailsTo('jane@example.com');
+        $this->assertGreaterThan(0, $mailsAfterAdding);
+
+        $questionId = $this->callTool($this->apiKey, 'create_question', [
+            'event_id' => $this->eventId, 'title' => 'Dietary needs?', 'type' => 'SINGLE_LINE_TEXT', 'belongs_to' => 'PRODUCT', 'product_ids' => [$ticketId],
+        ])->json('result.structuredContent.question.id');
+        DB::table('question_answers')->insert([
+            'question_id' => $questionId, 'order_id' => $attendee['order_id'], 'attendee_id' => $attendee['id'], 'product_id' => $ticketId,
+            'answer' => json_encode('Vegan'), 'created_at' => now(), 'updated_at' => now(),
+        ]);
+
+        $this->callTool($this->apiKey, 'list_attendees', ['event_id' => $this->eventId, 'search' => 'jane@'])
+            ->assertJsonPath('result.structuredContent.total', 1)
+            ->assertJsonPath('result.structuredContent.attendees.0.checked_in', false);
+
+        $this->callTool($this->apiKey, 'get_attendee', ['event_id' => $this->eventId, 'attendee_id' => $attendee['id']])
+            ->assertJsonPath('result.structuredContent.attendee.answers.0.question', 'Dietary needs?')
+            ->assertJsonPath('result.structuredContent.attendee.answers.0.answer', 'Vegan');
+
+        $this->callTool($this->apiKey, 'check_in_attendee', ['event_id' => $this->eventId, 'attendee_id' => $attendee['id']])
+            ->assertJsonPath('result.isError', false)
+            ->assertJsonPath('result.structuredContent.already_checked_in', false);
+        $this->callTool($this->apiKey, 'check_in_attendee', ['event_id' => $this->eventId, 'attendee_id' => $attendee['id']])
+            ->assertJsonPath('result.structuredContent.already_checked_in', true);
+        $this->assertSame(1, DB::table('attendee_check_ins')->where('attendee_id', $attendee['id'])->whereNull('deleted_at')->count());
+
+        $this->callTool($this->apiKey, 'resend_ticket', ['event_id' => $this->eventId, 'attendee_id' => $attendee['id']])
+            ->assertJsonPath('result.isError', false);
+        $this->callTool($this->apiKey, 'resend_ticket', ['event_id' => $this->eventId, 'attendee_id' => $attendee['id']])
+            ->assertJsonPath('result.isError', true);
+        $this->assertSame($mailsAfterAdding + 1, $this->mailsTo('jane@example.com'));
+
+        $this->callTool($this->apiKey, 'get_order', ['event_id' => $this->eventId, 'order_id' => $attendee['order_id']])
+            ->assertJsonPath('result.structuredContent.order.status', 'COMPLETED')
+            ->assertJsonPath('result.structuredContent.order.attendees.0.id', $attendee['id'])
+            ->assertJsonPath('result.structuredContent.order.answers.0.attendee_name', 'Jane Doe');
+
+        $this->callTool($this->apiKey, 'list_orders', ['organizer_id' => $this->organizerId, 'search' => 'jane@'])
+            ->assertJsonPath('result.structuredContent.orders.0.id', $attendee['order_id']);
+        $this->callTool($this->apiKey, 'list_orders', ['organizer_id' => $this->organizerId, 'status' => 'COMPLETED'])
+            ->assertJsonPath('result.isError', false)
+            ->assertJsonPath('result.structuredContent.orders.0.id', $attendee['order_id']);
+        $this->callTool($this->apiKey, 'list_orders', ['event_id' => $this->eventId, 'status' => 'CANCELLED'])
+            ->assertJsonPath('result.structuredContent.total', 0);
+
+        $this->callTool($this->apiKey, 'resend_order_confirmation', ['event_id' => $this->eventId, 'order_id' => $attendee['order_id']])
+            ->assertJsonPath('result.isError', false);
+        $this->assertSame($mailsAfterAdding + 2, $this->mailsTo('jane@example.com'));
+    }
+
+    public function test_attendees_and_orders_of_another_event_are_not_reachable(): void
+    {
+        $this->useRealMailer();
+        $otherEventId = $this->createEventWithTool($this->apiKey, $this->organizerId, 'Other event');
+        $ticketId = $this->callTool($this->apiKey, 'create_ticket', ['event_id' => $otherEventId, 'title' => 'GA', 'type' => 'FREE'])
+            ->json('result.structuredContent.ticket.id');
+        $attendee = $this->callTool($this->apiKey, 'add_attendee', [
+            'event_id' => $otherEventId, 'ticket_id' => $ticketId, 'first_name' => 'Jane', 'last_name' => 'Doe', 'email' => 'jane@example.com', 'send_ticket' => false,
+        ])->json('result.structuredContent.attendee');
+
+        foreach ([
+            ['get_attendee', ['attendee_id' => $attendee['id']]],
+            ['check_in_attendee', ['attendee_id' => $attendee['id']]],
+            ['resend_ticket', ['attendee_id' => $attendee['id']]],
+            ['get_order', ['order_id' => $attendee['order_id']]],
+            ['resend_order_confirmation', ['order_id' => $attendee['order_id']]],
+        ] as [$tool, $arguments]) {
+            $this->callTool($this->apiKey, $tool, ['event_id' => $this->eventId, ...$arguments])->assertJsonPath('result.isError', true);
+        }
+
+        $this->assertSame(0, DB::table('attendee_check_ins')->where('attendee_id', $attendee['id'])->count());
+    }
+
     public function test_ticket_design_updates_keep_earlier_choices(): void
     {
         $this->callTool($this->apiKey, 'update_ticket_design', ['event_id' => $this->eventId, 'enabled' => true, 'accent_color' => '#6D28D9'])
@@ -187,5 +273,19 @@ class McpSetupToolsTest extends TestCase
         $this->assertDatabaseMissing('promo_codes', ['code' => 'sneaky']);
         $this->assertDatabaseMissing('widgets', ['name' => 'Sneaky widget']);
         $this->assertSame(0, DB::table('event_lineup_entries')->where('event_id', $this->eventId)->count());
+    }
+
+    private function useRealMailer(): void
+    {
+        $this->app->forgetInstance('mail.manager');
+        $this->app->forgetInstance('mailer');
+        Mail::clearResolvedInstances();
+    }
+
+    private function mailsTo(string $email): int
+    {
+        return Mail::mailer()->getSymfonyTransport()->messages()
+            ->filter(static fn (SentMessage $message): bool => collect($message->getEnvelope()->getRecipients())->contains(fn ($address) => $address->getAddress() === $email))
+            ->count();
     }
 }

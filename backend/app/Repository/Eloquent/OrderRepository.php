@@ -123,7 +123,7 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
         }
 
         if (! empty($params->filter_fields)) {
-            $this->applyFilterFields($params, OrderDomainObject::getAllowedFilterFields());
+            $this->applyFilterFields($params, OrderDomainObject::getAllowedFilterFields(), 'orders');
         }
 
         $this->model = $this->model
