@@ -3,10 +3,12 @@
 namespace HiEvents\Mcp\Servers;
 
 use HiEvents\Mcp\Resources\ReferenceValuesResource;
+use HiEvents\Mcp\Tools\AddAttendeeTool;
 use HiEvents\Mcp\Tools\AddEventDateTool;
 use HiEvents\Mcp\Tools\AddLineupPerformerTool;
 use HiEvents\Mcp\Tools\AddLineupSpaceTool;
 use HiEvents\Mcp\Tools\AddScheduleItemTool;
+use HiEvents\Mcp\Tools\CheckInAttendeeTool;
 use HiEvents\Mcp\Tools\CreateAddonTool;
 use HiEvents\Mcp\Tools\CreateEventTool;
 use HiEvents\Mcp\Tools\CreateOrganizerTool;
@@ -18,15 +20,19 @@ use HiEvents\Mcp\Tools\CreateTicketTool;
 use HiEvents\Mcp\Tools\CreateWidgetTool;
 use HiEvents\Mcp\Tools\DeleteQuestionTool;
 use HiEvents\Mcp\Tools\GenerateEventDatesTool;
+use HiEvents\Mcp\Tools\GetAttendeeTool;
 use HiEvents\Mcp\Tools\GetDateGenerationStatusTool;
 use HiEvents\Mcp\Tools\GetEventReportTool;
 use HiEvents\Mcp\Tools\GetEventStatsTool;
 use HiEvents\Mcp\Tools\GetEventTool;
 use HiEvents\Mcp\Tools\GetLineupTool;
+use HiEvents\Mcp\Tools\GetOrderTool;
 use HiEvents\Mcp\Tools\GetOrganizerReportTool;
 use HiEvents\Mcp\Tools\GetOrganizerStatsTool;
+use HiEvents\Mcp\Tools\ListAttendeesTool;
 use HiEvents\Mcp\Tools\ListEventDatesTool;
 use HiEvents\Mcp\Tools\ListEventsTool;
+use HiEvents\Mcp\Tools\ListOrdersTool;
 use HiEvents\Mcp\Tools\ListOrganizersTool;
 use HiEvents\Mcp\Tools\ListPerformerProfilesTool;
 use HiEvents\Mcp\Tools\ListPromoCodesTool;
@@ -37,6 +43,8 @@ use HiEvents\Mcp\Tools\ListTicketsTool;
 use HiEvents\Mcp\Tools\ListVenuesTool;
 use HiEvents\Mcp\Tools\ListWidgetsTool;
 use HiEvents\Mcp\Tools\PublishEventTool;
+use HiEvents\Mcp\Tools\ResendOrderConfirmationTool;
+use HiEvents\Mcp\Tools\ResendTicketTool;
 use HiEvents\Mcp\Tools\SetEventCoverImageTool;
 use HiEvents\Mcp\Tools\SetEventVenueTool;
 use HiEvents\Mcp\Tools\UnpublishEventTool;
@@ -57,7 +65,9 @@ use Laravel\Mcp\Server\Attributes\Version;
 #[Instructions('Hi.Events is an event management and ticketing platform. An account has organizers; each organizer has events; an event has dates, tickets and an optional venue. New events are drafts until published. Dates you send are local to the event timezone (YYYY-MM-DD HH:MM); dates returned are ISO 8601 with the event timezone offset. Prices are decimal amounts in the event currency.')]
 class HiEventsServer extends Server
 {
-    public int $defaultPaginationLength = 50;
+    public int $maxPaginationLength = 100;
+
+    public int $defaultPaginationLength = 100;
 
     protected array $tools = [
         ListOrganizersTool::class,
@@ -98,6 +108,14 @@ class HiEventsServer extends Server
         UpdateEventPageThemeTool::class,
         ListWidgetsTool::class,
         CreateWidgetTool::class,
+        ListAttendeesTool::class,
+        GetAttendeeTool::class,
+        AddAttendeeTool::class,
+        CheckInAttendeeTool::class,
+        ResendTicketTool::class,
+        ListOrdersTool::class,
+        GetOrderTool::class,
+        ResendOrderConfirmationTool::class,
         GetEventStatsTool::class,
         GetOrganizerStatsTool::class,
         GetEventReportTool::class,
