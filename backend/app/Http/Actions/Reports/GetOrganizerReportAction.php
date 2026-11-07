@@ -25,6 +25,9 @@ class GetOrganizerReportAction extends BaseAction
      * The response rows depend on the requested `reportType`. Paginated report types return
      * `{data, meta, links}`; non-paginated report types return `{data}`.
      *
+     * `start_date` and `end_date` are widened to whole days in the organizer's timezone. Rows of
+     * `revenue_summary` are grouped by the UTC date of each order.
+     *
      * @throws ValidationException
      */
     public function __invoke(GetOrganizerReportRequest $request, int $organizerId, string $reportType): JsonResponse

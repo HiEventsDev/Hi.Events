@@ -18,6 +18,10 @@ class ApiKeyAnonymizer implements AccountAnonymizerInterface
     {
         return [
             $this->executor->delete(
+                query: $this->databaseManager->table('oauth_connections')->where('account_id', $context->accountId),
+                entity: 'oauth_connections',
+            ),
+            $this->executor->delete(
                 query: $this->databaseManager->table('personal_access_tokens')->where('account_id', $context->accountId),
                 entity: 'personal_access_tokens',
             ),

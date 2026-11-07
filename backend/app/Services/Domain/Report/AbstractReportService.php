@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Domain\Report;
 
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Services\Domain\Report\Concerns\BindsReportFilters;
 use Illuminate\Cache\Repository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Carbon;
@@ -10,6 +11,8 @@ use Illuminate\Support\Collection;
 
 abstract class AbstractReportService
 {
+    use BindsReportFilters;
+
     public function __construct(
         private readonly Repository $cache,
         private readonly DatabaseManager $queryBuilder,

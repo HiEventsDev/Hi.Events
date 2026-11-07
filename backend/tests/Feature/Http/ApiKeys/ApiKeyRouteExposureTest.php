@@ -15,11 +15,16 @@ class ApiKeyRouteExposureTest extends TestCase
 
     private const API_KEY_GUARDS = 'auth:api,sanctum';
 
+    private const API_KEY_ONLY_GUARD = 'auth:sanctum';
+
+    private const API_KEY_ONLY_ROUTES = ['POST mcp'];
+
     private const SESSION_ONLY_ROUTES = [
         'DELETE accounts/deletion-request',
         'DELETE accounts/{account_id}/sso/connection',
         'DELETE accounts/{account_id}/sso/domains/{domain_id}',
         'DELETE api-keys/{api_key_id}',
+        'DELETE oauth/connections/{connection_id}',
         'DELETE organizers/{organizerId}/stripe/connect_accounts/{stripeAccountId}',
         'DELETE organizers/{organizerId}/stripe/terminal/readers/{readerId}',
         'DELETE users/me/sso-identities/{identity_id}',
@@ -36,6 +41,8 @@ class ApiKeyRouteExposureTest extends TestCase
         'GET api-reference',
         'GET auth/logout',
         'GET events/{event_id}/team',
+        'GET oauth/authorization-requests/{request_id}',
+        'GET oauth/connections',
         'GET organizers/{organizerId}/stripe/connect_accounts',
         'GET organizers/{organizerId}/stripe/terminal/readers',
         'GET organizers/{organizer_id}/team',
@@ -55,6 +62,8 @@ class ApiKeyRouteExposureTest extends TestCase
         'POST api-keys',
         'POST auth/invitation/{invite_token}/join',
         'POST auth/refresh',
+        'POST oauth/authorization-requests/{request_id}/approve',
+        'POST oauth/authorization-requests/{request_id}/deny',
         'POST organizers/{organizerId}/stripe/connect',
         'POST organizers/{organizerId}/stripe/copy_from/{sourceOrganizerId}',
         'POST organizers/{organizerId}/stripe/terminal/readers',
@@ -114,8 +123,20 @@ class ApiKeyRouteExposureTest extends TestCase
     public function test_every_signed_in_route_uses_a_known_guard(): void
     {
         foreach ($this->authenticatedRoutes() as $route) {
-            $this->assertContains($this->authGuards($route), [self::SESSION_ONLY_GUARD, self::API_KEY_GUARDS], $this->describe($route));
+            $this->assertContains($this->authGuards($route), [self::SESSION_ONLY_GUARD, self::API_KEY_GUARDS, self::API_KEY_ONLY_GUARD], $this->describe($route));
         }
+    }
+
+    public function test_key_only_routes_are_a_deliberate_list(): void
+    {
+        $keyOnly = collect($this->authenticatedRoutes())
+            ->filter(fn (Route $route) => $this->authGuards($route) === self::API_KEY_ONLY_GUARD)
+            ->map(fn (Route $route) => $this->describe($route))
+            ->sort()
+            ->values()
+            ->all();
+
+        $this->assertSame(self::API_KEY_ONLY_ROUTES, $keyOnly);
     }
 
     public function test_team_account_and_payment_settings_are_never_reachable_with_a_key(): void

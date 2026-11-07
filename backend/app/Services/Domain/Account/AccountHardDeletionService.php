@@ -155,6 +155,10 @@ class AccountHardDeletionService
             ->where('account_id', $context->accountId)
             ->delete();
 
+        $manifest['oauth_connections'] = $connection->table('oauth_connections')
+            ->where('account_id', $context->accountId)
+            ->delete();
+
         $manifest['api_keys'] = $connection->table('personal_access_tokens')
             ->where('account_id', $context->accountId)
             ->delete();
@@ -184,6 +188,10 @@ class AccountHardDeletionService
         }
 
         if ($context->soleUserIds !== []) {
+            $manifest['user_oauth_connections'] = $connection->table('oauth_connections')
+                ->whereIn('user_id', $context->soleUserIds)
+                ->delete();
+
             $manifest['personal_access_tokens'] = $connection->table('personal_access_tokens')
                 ->where('tokenable_type', User::class)
                 ->whereIn('tokenable_id', $context->soleUserIds)

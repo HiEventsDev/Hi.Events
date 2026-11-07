@@ -276,6 +276,10 @@ msgstr "티켓 {0}장"
 msgid "{0} to {1}"
 msgstr "{0}~{1}"
 
+#: src/components/routes/oauth/Connect/index.tsx:87
+msgid "{0} wants to use your Hi.Events account {1}. It will act as you, with the access you choose below."
+msgstr "{0}에서 회원님의 Hi.Events 계정 {1}을(를) 사용하려고 합니다. 아래에서 선택한 권한으로 회원님을 대신해 작동합니다."
+
 #: src/components/routes/settings/Security/SignInMethods.tsx:139
 msgid "{0} was disconnected."
 msgstr "{0} 연결이 해제되었습니다."
@@ -544,7 +548,7 @@ msgstr "{organizerName}의 첫 번째 이벤트"
 msgid "{outsideDomainCount, plural, one {# member outside your verified domains keeps their current sign-in.} other {# members outside your verified domains keep their current sign-in.}}"
 msgstr "{outsideDomainCount, plural, other {인증된 도메인 외부의 구성원 #명은 현재 로그인 방식을 유지합니다.}}"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:165
+#: src/components/routes/settings/ApiKeys/index.tsx:166
 msgid "{ownActiveCount} of {0} active keys"
 msgstr "활성 키 {ownActiveCount}/{0}개"
 
@@ -1061,6 +1065,7 @@ msgstr "Stripe로 신용카드 결제를 받습니다"
 #: src/components/common/TeamAccessFields/index.tsx:207
 #: src/components/common/TeamAccessPanel/index.tsx:137
 #: src/components/forms/ProductForm/index.tsx:605
+#: src/components/routes/oauth/Connect/index.tsx:115
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:237
 #: src/components/routes/settings/Team/index.tsx:218
 #: src/components/routes/settings/Team/MemberRow.tsx:141
@@ -1802,6 +1807,10 @@ msgstr "연령 확인 (18+)"
 msgid "Agenda"
 msgstr "아젠다"
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:43
+msgid "AI assistants such as Claude and ChatGPT connect by signing in, without a key. Add this MCP server URL to your assistant to connect it."
+msgstr "Claude, ChatGPT 같은 AI 어시스턴트는 키 없이 로그인으로 연결됩니다. 연결하려면 이 MCP 서버 URL을 어시스턴트에 추가하세요."
+
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:45
 msgid "Aisles after seats"
 msgstr "좌석 뒤 통로"
@@ -2152,6 +2161,10 @@ msgstr "받은 금액"
 msgid "An account with this email already exists. Sign in instead."
 msgstr "이 이메일로 등록된 계정이 이미 있습니다. 대신 로그인해 주세요."
 
+#: src/components/routes/oauth/Connect/index.tsx:16
+msgid "an app on this computer"
+msgstr "이 컴퓨터의 앱"
+
 #: src/components/forms/AffiliateForm/index.tsx:90
 msgid "An email to associate with this affiliate. The affiliate will not be notified."
 msgstr "이 제휴사와 연결할 이메일입니다. 제휴사에게는 알림이 전송되지 않습니다."
@@ -2319,19 +2332,27 @@ msgid "Anything else?"
 msgstr "더 필요하신 것이 있나요?"
 
 #: src/components/layouts/SettingsLayout/index.tsx:74
-#: src/components/routes/settings/ApiKeys/index.tsx:111
+#: src/components/routes/settings/ApiKeys/index.tsx:112
 msgid "API keys"
 msgstr "API 키"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:139
+#: src/components/routes/settings/ApiKeys/index.tsx:140
 msgid "API keys can't be created while you're impersonating someone."
 msgstr "다른 사용자로 가장하는 동안에는 API 키를 만들 수 없습니다."
 
 #: src/components/layouts/SettingsLayout/index.tsx:85
 #: src/components/layouts/SettingsLayout/index.tsx:89
-#: src/components/routes/settings/ApiKeys/index.tsx:122
+#: src/components/routes/settings/ApiKeys/index.tsx:123
 msgid "API reference"
 msgstr "API 레퍼런스"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:29
+msgid "App disconnected"
+msgstr "앱 연결을 해제했습니다"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:79
+msgid "App on your computer"
+msgstr "컴퓨터의 앱"
 
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:136
 msgid "Appearance"
@@ -3381,7 +3402,7 @@ msgstr "브랜딩 및 이메일"
 msgid "Brazilian Portuguese"
 msgstr "브라질 포르투갈어"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:227
+#: src/components/routes/settings/ApiKeys/index.tsx:230
 msgid "Browse every endpoint in the API reference"
 msgstr "API 레퍼런스에서 모든 엔드포인트 보기"
 
@@ -3639,6 +3660,7 @@ msgstr "인증 앱이나 복구 코드를 사용할 수 없나요?"
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:67
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1173
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:64
+#: src/components/routes/oauth/Connect/index.tsx:164
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:69
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:85
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:85
@@ -4901,7 +4923,7 @@ msgstr "스팸 확정"
 msgid "Confirm your email"
 msgstr "이메일 확인"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:130
+#: src/components/routes/settings/ApiKeys/index.tsx:131
 msgid "Confirm your email address"
 msgstr "이메일 주소를 인증하세요"
 
@@ -4933,6 +4955,8 @@ msgstr "축하합니다! 이제 이벤트가 공개적으로 표시됩니다."
 msgid "Connect"
 msgstr "연결"
 
+#: src/components/routes/oauth/Connect/index.tsx:86
+#: src/components/routes/oauth/Connect/index.tsx:151
 #: src/components/routes/settings/Security/SignInMethods.tsx:246
 msgid "Connect {0}"
 msgstr "{0} 연결"
@@ -4945,7 +4969,7 @@ msgstr "카드 리더기를 추가하기 전에 정산에서 Stripe 계정을 �
 msgid "Connect bank"
 msgstr "은행 연결"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:112
+#: src/components/routes/settings/ApiKeys/index.tsx:113
 msgid "Connect other tools and your own code to this account. A key can do what you can do, so treat it like a password."
 msgstr "다른 도구와 직접 작성한 코드를 이 계정에 연결하세요. 키는 회원님이 할 수 있는 모든 작업을 할 수 있으므로 비밀번호처럼 다루세요."
 
@@ -4988,8 +5012,13 @@ msgid "Connect your identity provider, verify your email domains, then choose wh
 msgstr "ID 공급자를 연결하고 이메일 도메인을 인증한 다음, 모든 구성원에게 필수로 적용할지 선택하세요."
 
 #: src/components/routes/admin/Dashboard/index.tsx:410
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:88
 msgid "Connected"
 msgstr "연결됨"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:41
+msgid "Connected apps"
+msgstr "연결된 앱"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:298
 msgid "Connected the wrong Stripe account? Disconnect and start over."
@@ -5456,9 +5485,13 @@ msgstr "API 레퍼런스를 불러오지 못했습니다."
 msgid "Couldn't load this report"
 msgstr "이 보고서를 불러오지 못했습니다"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:187
+#: src/components/routes/settings/ApiKeys/index.tsx:188
 msgid "Couldn't load your API keys"
 msgstr "API 키를 불러오지 못했습니다"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:53
+msgid "Couldn't load your connected apps"
+msgstr "연결된 앱을 불러오지 못했습니다"
 
 #: src/components/routes/settings/Organizers/index.tsx:40
 msgid "Couldn't load your organizers"
@@ -5543,7 +5576,7 @@ msgstr "\"{query}\" 만들기"
 msgid "Create {0} Template"
 msgstr "{0} 템플릿 생성"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:199
+#: src/components/routes/settings/ApiKeys/index.tsx:200
 msgid "Create a key to connect tools like Zapier, your CRM or your own scripts to your events, orders and attendees."
 msgstr "키를 만들어 Zapier, CRM 또는 직접 작성한 스크립트 같은 도구를 이벤트, 주문, 참가자와 연결하세요."
 
@@ -5604,6 +5637,10 @@ msgstr "사용자에게 메시지를 표시할 공지를 생성하세요."
 msgid "Create and change events, orders, attendees and more."
 msgstr "이벤트, 주문, 참가자 등을 만들고 변경합니다."
 
+#: src/components/routes/oauth/Connect/index.tsx:122
+msgid "Create and change events, tickets, questions and settings."
+msgstr "이벤트, 티켓, 질문 및 설정 생성과 변경."
+
 #: src/components/routes/event/products.tsx:67
 msgid "Create and configure tickets and merchandise for sale."
 msgstr "판매할 티켓과 상품을 생성하고 설정하세요."
@@ -5619,7 +5656,7 @@ msgid "Create Announcement"
 msgstr "공지 생성"
 
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:215
-#: src/components/routes/settings/ApiKeys/index.tsx:91
+#: src/components/routes/settings/ApiKeys/index.tsx:92
 msgid "Create API key"
 msgstr "API 키 만들기"
 
@@ -5799,7 +5836,7 @@ msgstr "나만의 이벤트 만들기"
 #: src/components/routes/admin/Messages/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:310
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:69
-#: src/components/routes/settings/ApiKeys/index.tsx:174
+#: src/components/routes/settings/ApiKeys/index.tsx:175
 msgid "Created"
 msgstr "생성됨"
 
@@ -6618,14 +6655,21 @@ msgid "Disclaimers, contact info or a thank-you note, on a single line"
 msgstr "면책 조항, 연락처 또는 감사 메시지를 한 줄로 입력하세요"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:120
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:32
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:99
 #: src/components/routes/settings/Security/SignInMethods.tsx:217
 #: src/components/routes/settings/Security/SignInMethods.tsx:251
 msgid "Disconnect"
 msgstr "연결 해제"
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:103
 #: src/components/routes/settings/Security/SignInMethods.tsx:247
 msgid "Disconnect {0}"
 msgstr "{0} 연결 해제"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:27
+msgid "Disconnect {name}? It stops working with your account straight away."
+msgstr "{name}의 연결을 해제할까요? 즉시 계정에서 작동이 중지됩니다."
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:109
 msgid "Disconnect Stripe account"
@@ -8093,7 +8137,7 @@ msgstr "새로 추가되는 항목을 포함한 모든 주최자와 이벤트."
 msgid "Every trusted device will need a code at its next sign-in. Continue?"
 msgstr "신뢰하는 모든 기기는 다음 로그인 때 코드가 필요합니다. 계속할까요?"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:158
+#: src/components/routes/settings/ApiKeys/index.tsx:159
 msgid "Everyone ({0})"
 msgstr "전체 ({0})"
 
@@ -8193,7 +8237,7 @@ msgstr "만료일"
 
 #: src/components/common/WaitlistTable/index.tsx:30
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:119
-#: src/components/routes/settings/ApiKeys/index.tsx:210
+#: src/components/routes/settings/ApiKeys/index.tsx:211
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:35
 #: src/ee/licensing/licenceNotice.ts:78
 msgid "Expired"
@@ -8206,7 +8250,7 @@ msgstr "{0} 만료됨"
 #: src/components/common/PromoCodeTable/index.tsx:76
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:33
-#: src/components/routes/settings/ApiKeys/index.tsx:176
+#: src/components/routes/settings/ApiKeys/index.tsx:177
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:178
 msgid "Expires"
 msgstr "만료"
@@ -9281,6 +9325,10 @@ msgstr "뒤로 가기"
 msgid "Go back to profile"
 msgstr "프로필로 돌아가기"
 
+#: src/components/routes/oauth/Connect/index.tsx:25
+msgid "Go back to the app you were connecting and start again."
+msgstr "연결하던 앱으로 돌아가 다시 시작하세요."
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:448
 msgid "Go to Event Page"
 msgstr "이벤트 페이지로 이동"
@@ -9501,6 +9549,10 @@ msgstr "Hi.Events Cloud"
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:75
 msgid "Hi.Events Fee"
 msgstr "Hi.Events 수수료"
+
+#: src/components/routes/oauth/Connect/index.tsx:108
+msgid "Hi.Events hasn't verified this app. Only continue if you started connecting it yourself and you trust it."
+msgstr "Hi.Events에서 확인하지 않은 앱입니다. 직접 연결을 시작했고 신뢰할 수 있는 경우에만 계속하세요."
 
 #: src/components/routes/organizer/Reports/index.tsx:46
 msgid "Hi.Events platform fees and VAT breakdown by transaction"
@@ -9862,7 +9914,7 @@ msgstr "추가했습니다. 계속"
 msgid "I've made the payment"
 msgstr "결제를 완료했습니다"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:224
+#: src/components/routes/settings/ApiKeys/index.tsx:227
 msgid "If a key leaks, revoke it straight away and create a new one."
 msgstr "키가 유출되면 즉시 폐기하고 새 키를 만드세요."
 
@@ -10255,7 +10307,7 @@ msgstr "발급자 URL"
 msgid "It happens on more than one date"
 msgstr "여러 날짜에 진행됩니다"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:222
+#: src/components/routes/settings/ApiKeys/index.tsx:225
 msgid "It has your role and event access. Read-only keys can view and export, but can't change anything."
 msgstr "회원님의 역할과 이벤트 접근 권한을 가집니다. 읽기 전용 키는 조회와 내보내기만 할 수 있으며 아무것도 변경할 수 없습니다."
 
@@ -10408,7 +10460,7 @@ msgstr "발표할 준비가 될 때까지 공개 라인업과 일정에 표시�
 msgid "Keeps signing in with a password. {providerName} can't be used to sign this member in."
 msgstr "계속 비밀번호로 로그인합니다. 이 구성원은 {providerName}(으)로 로그인할 수 없습니다."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:173
+#: src/components/routes/settings/ApiKeys/index.tsx:174
 msgid "Key"
 msgstr "키"
 
@@ -10416,11 +10468,11 @@ msgstr "키"
 msgid "Key ending in {0}"
 msgstr "{0}(으)로 끝나는 키"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:79
+#: src/components/routes/settings/ApiKeys/index.tsx:80
 msgid "Key removed"
 msgstr "키가 삭제되었습니다"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:79
+#: src/components/routes/settings/ApiKeys/index.tsx:80
 msgid "Key revoked"
 msgstr "키가 폐기되었습니다"
 
@@ -10428,7 +10480,7 @@ msgstr "키가 폐기되었습니다"
 msgid "Keycloak, Authentik, Zitadel, OneLogin and others"
 msgstr "Keycloak, Authentik, Zitadel, OneLogin 등"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:223
+#: src/components/routes/settings/ApiKeys/index.tsx:226
 msgid "Keys can't sign in or manage your team, payouts, profile or security settings."
 msgstr "키로는 로그인하거나 팀, 정산, 프로필, 보안 설정을 관리할 수 없습니다."
 
@@ -10534,6 +10586,7 @@ msgstr "최근 7일"
 msgid "Last 90 days"
 msgstr "최근 90일"
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:92
 #: src/components/routes/settings/Team/index.tsx:220
 #: src/components/routes/settings/Team/MemberRow.tsx:165
 msgid "Last active"
@@ -10585,7 +10638,7 @@ msgstr "마지막 실행"
 
 #: src/components/common/SsoButtons/index.tsx:126
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:73
-#: src/components/routes/settings/ApiKeys/index.tsx:175
+#: src/components/routes/settings/ApiKeys/index.tsx:176
 msgid "Last used"
 msgstr "최근 사용"
 
@@ -11613,7 +11666,7 @@ msgstr "멋진 이벤트 설명..."
 msgid "My amazing event title..."
 msgstr "멋진 이벤트 제목..."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:157
+#: src/components/routes/settings/ApiKeys/index.tsx:158
 msgid "My keys"
 msgstr "내 키"
 
@@ -11709,6 +11762,7 @@ msgstr "순매출"
 #: src/components/common/PromoCodeTable/index.tsx:169
 #: src/components/common/WebhookTable/index.tsx:272
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:93
 #: src/components/routes/settings/Team/MemberRow.tsx:166
 msgid "Never"
 msgstr "없음"
@@ -12017,6 +12071,10 @@ msgstr "이 기간에 완료된 주문이 없습니다"
 #: src/components/routes/admin/Configurations/index.tsx:125
 msgid "No configurations found"
 msgstr "설정을 찾을 수 없습니다"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:61
+msgid "No connected apps"
+msgstr "연결된 앱이 없습니다"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:207
 msgid "No connections available"
@@ -12487,7 +12545,7 @@ msgstr "아니요, 여기 머무르겠습니다"
 msgid "Nobody has been added to this event's lineup yet."
 msgstr "이 이벤트 라인업에 아직 아무도 추가되지 않았습니다."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:196
+#: src/components/routes/settings/ApiKeys/index.tsx:197
 msgid "Nobody has created an API key yet"
 msgstr "아직 아무도 API 키를 만들지 않았습니다"
 
@@ -13076,6 +13134,10 @@ msgstr "관리자만 팀 접근 권한을 관리할 수 있습니다."
 #: src/components/forms/ProductForm/index.tsx:555
 msgid "Only available as an add-on"
 msgstr "추가 상품으로만 이용 가능"
+
+#: src/components/routes/oauth/Connect/index.tsx:107
+msgid "Only continue if you just started connecting from an app on this computer, such as Claude Code or Cursor."
+msgstr "이 컴퓨터의 앱(예: Claude Code 또는 Cursor)에서 방금 연결을 시작한 경우에만 계속하세요."
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:181
 msgid "Only members who can manage payments can change these instructions."
@@ -15139,7 +15201,9 @@ msgstr "다시 활성화"
 msgid "Reactivate this date? It will be reopened for future sales."
 msgstr "이 날짜를 재활성화하시겠습니까? 향후 판매를 위해 다시 열립니다."
 
+#: src/components/routes/oauth/Connect/index.tsx:121
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:73
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:250
 msgid "Read and write"
 msgstr "읽기 및 쓰기"
@@ -15149,7 +15213,12 @@ msgstr "읽기 및 쓰기"
 msgid "Read more"
 msgstr "더 보기"
 
+#: src/components/routes/oauth/Connect/index.tsx:127
+msgid "Read only"
+msgstr "읽기 전용"
+
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:73
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:261
 msgid "Read-only"
 msgstr "읽기 전용"
@@ -15471,7 +15540,7 @@ msgstr "제거"
 msgid "Remove"
 msgstr "제거"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:73
+#: src/components/routes/settings/ApiKeys/index.tsx:74
 msgid "Remove \"{0}\"? It has already expired."
 msgstr "\"{0}\"을(를) 삭제하시겠습니까? 이미 만료되었습니다."
 
@@ -15546,7 +15615,7 @@ msgstr "Hi.Events 브랜딩 제거"
 msgid "Remove Hi.Events branding from everything your attendees see, and put your own logo in their emails."
 msgstr "참석자가 보는 모든 곳에서 Hi.Events 브랜딩을 제거하고 이메일에 자체 로고를 넣으세요."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:81
+#: src/components/routes/settings/ApiKeys/index.tsx:82
 msgid "Remove key"
 msgstr "키 삭제"
 
@@ -15949,6 +16018,14 @@ msgstr "이벤트로 돌아가기"
 msgid "Return to Event Page"
 msgstr "이벤트 페이지로 돌아가기"
 
+#: src/components/routes/oauth/Connect/index.tsx:77
+msgid "Returning you to {leavingTo}…"
+msgstr "{leavingTo}(으)로 돌아가는 중…"
+
+#: src/components/routes/oauth/Connect/index.tsx:92
+msgid "Returns you to"
+msgstr "돌아갈 곳"
+
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:144
 msgid "Reusable venue layouts. Attach one to an event to sell reserved seats."
 msgstr "재사용 가능한 공연장 배치도입니다. 행사에 연결하면 지정 좌석을 판매할 수 있습니다."
@@ -16007,11 +16084,11 @@ msgstr "주문을 확인한 후 결제 방법을 선택하세요"
 msgid "Revoke"
 msgstr "폐기"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:75
+#: src/components/routes/settings/ApiKeys/index.tsx:76
 msgid "Revoke \"{0}\"? Anything using it stops working straight away, and {ownerName} will get an email about it."
 msgstr "\"{0}\"을(를) 폐기하시겠습니까? 이 키를 사용하는 모든 항목이 즉시 작동을 멈추며, {ownerName} 님에게 이메일이 발송됩니다."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:76
+#: src/components/routes/settings/ApiKeys/index.tsx:77
 msgid "Revoke \"{0}\"? Anything using it stops working straight away. This can't be undone."
 msgstr "\"{0}\"을(를) 폐기하시겠습니까? 이 키를 사용하는 모든 항목이 즉시 작동을 멈춥니다. 이 작업은 되돌릴 수 없습니다."
 
@@ -16023,7 +16100,7 @@ msgstr "{0} 폐기"
 msgid "Revoke invitation"
 msgstr "초대 취소"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:81
+#: src/components/routes/settings/ApiKeys/index.tsx:82
 msgid "Revoke key"
 msgstr "키 폐기"
 
@@ -17158,7 +17235,7 @@ msgstr "참가자, 티켓 소지자, 주문자에게 이메일을 보내세요. 
 msgid "Send invitation"
 msgstr "초대 보내기"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:221
+#: src/components/routes/settings/ApiKeys/index.tsx:224
 msgid "Send it in the Authorization header of every request."
 msgstr "모든 요청의 Authorization 헤더에 담아 보내세요."
 
@@ -17566,7 +17643,7 @@ msgstr "플랫폼 적게 표시"
 msgid "Show initials instead"
 msgstr "대신 이니셜 표시"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:160
+#: src/components/routes/settings/ApiKeys/index.tsx:161
 msgid "Show keys"
 msgstr "키 표시"
 
@@ -18147,10 +18224,13 @@ msgstr "문제가 발생했습니다. 나중에 다시 시도해 주세요."
 #: src/components/routes/auth/Login/index.tsx:132
 #: src/components/routes/auth/Register/index.tsx:81
 #: src/components/routes/my-tickets/index.tsx:162
+#: src/components/routes/oauth/Connect/index.tsx:63
+#: src/components/routes/oauth/Connect/index.tsx:70
 #: src/components/routes/product-widget/SelectProducts/index.tsx:383
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:79
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:30
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:123
-#: src/components/routes/settings/ApiKeys/index.tsx:80
+#: src/components/routes/settings/ApiKeys/index.tsx:81
 #: src/components/routes/settings/Profile/index.tsx:129
 #: src/components/routes/settings/Profile/index.tsx:139
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:46
@@ -19685,6 +19765,10 @@ msgstr "답변이 너무 깁니다. 저장하기 전에 줄여 주세요."
 msgid "This answer means you can't register for this event."
 msgstr "이 답변으로는 이 이벤트에 등록할 수 없습니다."
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:24
+msgid "this app"
+msgstr "이 앱"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:260
 msgid "This applies to every matching date in the event, including dates not currently visible. Attendees registered on any of those dates will be reachable via the message composer once the update finishes."
 msgstr "현재 표시되지 않는 날짜를 포함하여 이벤트의 모든 일치하는 날짜에 적용됩니다. 업데이트가 완료되면 해당 날짜에 등록된 참가자에게 메시지 작성기를 통해 연락할 수 있습니다."
@@ -19756,6 +19840,14 @@ msgstr "이 체크인 목록은 취소된 세션에 한정되어 있으므로 �
 #: src/components/forms/AffiliateForm/index.tsx:41
 msgid "This code will be used to track sales. Only letters, numbers, hyphens, and underscores allowed."
 msgstr "이 코드는 판매 추적에 사용됩니다. 문자, 숫자, 하이픈, 밑줄만 사용할 수 있습니다."
+
+#: src/components/routes/oauth/Connect/index.tsx:24
+msgid "This connection link doesn't work"
+msgstr "이 연결 링크는 작동하지 않습니다"
+
+#: src/components/routes/oauth/Connect/index.tsx:24
+msgid "This connection request has expired"
+msgstr "이 연결 요청이 만료되었습니다"
 
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:181
 msgid "This date"
@@ -20647,7 +20739,8 @@ msgstr "필터를 조정하여 더 많은 날짜를 확인하세요."
 #: src/components/common/OrganizerReportTable/index.tsx:273
 #: src/components/common/ReportTable/index.tsx:254
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1121
-#: src/components/routes/settings/ApiKeys/index.tsx:188
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:54
+#: src/components/routes/settings/ApiKeys/index.tsx:189
 #: src/components/routes/settings/ApiReference/index.tsx:83
 #: src/components/routes/settings/Organizers/index.tsx:41
 #: src/components/routes/settings/Security/index.tsx:77
@@ -21042,6 +21135,10 @@ msgstr "무제한 사용 허용"
 #: src/components/common/LocationsTable/index.tsx:32
 msgid "Unnamed"
 msgstr "이름 없음"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:71
+msgid "Unnamed app"
+msgstr "이름 없는 앱"
 
 #: src/components/common/LocationPicker/index.tsx:67
 msgid "Unnamed location"
@@ -21445,7 +21542,7 @@ msgstr "홈페이지 디자인의 색상과 글꼴을 사용합니다. 디자인
 msgid "Using them for real events? Get an Enterprise licence and put its key in <0>APP_LICENCE_KEY</0>."
 msgstr "실제 이벤트에 사용하나요? Enterprise 라이선스를 받아 그 키를 <0>APP_LICENCE_KEY</0>에 넣으세요."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:219
+#: src/components/routes/settings/ApiKeys/index.tsx:222
 msgid "Using your key"
 msgstr "키 사용 방법"
 
@@ -21591,6 +21688,7 @@ msgstr "인증 이메일을 보냈습니다. 받은 편지함을 확인하세요
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:216
 #: src/components/routes/admin/Attribution/index.tsx:198
 #: src/components/routes/admin/Dashboard/index.tsx:396
+#: src/components/routes/oauth/Connect/index.tsx:97
 #: src/ee/sso/components/SingleSignOn/DomainList.tsx:17
 msgid "Verified"
 msgstr "인증됨"
@@ -21749,6 +21847,10 @@ msgstr "이벤트 페이지 보기"
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:93
 msgid "View Event Page"
 msgstr "이벤트 페이지 보기"
+
+#: src/components/routes/oauth/Connect/index.tsx:128
+msgid "View events, tickets and sales, without changing anything."
+msgstr "아무것도 변경하지 않고 이벤트, 티켓, 판매를 봅니다."
 
 #: src/components/common/OrganizerWebhookTable/index.tsx:117
 #: src/components/common/WebhookTable/index.tsx:117
@@ -22689,6 +22791,10 @@ msgstr "계정 설정에서 추가 서비스 수수료와 세금을 설정할 �
 msgid "You can create a promo code which targets this product on the"
 msgstr "다음에서 이 상품을 대상으로 하는 프로모션 코드를 생성할 수 있습니다"
 
+#: src/components/routes/oauth/Connect/index.tsx:167
+msgid "You can disconnect it at any time from Settings → API keys."
+msgstr "언제든지 설정 → API 키에서 연결을 해제할 수 있습니다."
+
 #: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:31
 msgid "You can only change it back to a single event while it has exactly one date and no orders. Once someone places an order, this can't be undone."
 msgstr "날짜가 정확히 하나이고 주문이 없는 동안에만 단일 이벤트로 다시 변경할 수 있습니다. 누군가 주문하면 되돌릴 수 없습니다."
@@ -22750,7 +22856,7 @@ msgstr "이 주최자에 대한 접근 권한이 없습니다"
 msgid "You don't have access to this page"
 msgstr "이 페이지에 대한 접근 권한이 없습니다"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:196
+#: src/components/routes/settings/ApiKeys/index.tsx:197
 msgid "You don't have any API keys"
 msgstr "API 키가 없습니다"
 
@@ -22816,7 +22922,7 @@ msgstr "최소 하나의 가격 등급이 있어야 합니다"
 msgid "You must verify your email address before you can update the organizer status."
 msgstr "주최자 상태를 변경하려면 먼저 이메일 주소를 인증해야 합니다."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:131
+#: src/components/routes/settings/ApiKeys/index.tsx:132
 msgid "You need a confirmed email address to create API keys. Check your inbox, or resend the confirmation email from your <0>profile</0>."
 msgstr "API 키를 만들려면 인증된 이메일 주소가 필요합니다. 받은편지함을 확인하거나 <0>프로필</0>에서 인증 이메일을 다시 보내세요."
 
@@ -22956,7 +23062,7 @@ msgstr "자리가 제안되었습니다!"
 msgid "You've changed the session time"
 msgstr "세션 시간을 변경했습니다"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:145
+#: src/components/routes/settings/ApiKeys/index.tsx:146
 msgid "You've reached the limit of {0} active keys. Revoke one to create another."
 msgstr "활성 키 한도({0}개)에 도달했습니다. 새 키를 만들려면 하나를 폐기하세요."
 

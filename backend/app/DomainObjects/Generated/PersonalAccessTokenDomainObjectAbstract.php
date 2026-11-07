@@ -12,6 +12,7 @@ abstract class PersonalAccessTokenDomainObjectAbstract extends \HiEvents\DomainO
     final public const PLURAL_NAME = 'personal_access_tokens';
     final public const ID = 'id';
     final public const ACCOUNT_ID = 'account_id';
+    final public const OAUTH_CONNECTION_ID = 'oauth_connection_id';
     final public const TOKENABLE_TYPE = 'tokenable_type';
     final public const TOKENABLE_ID = 'tokenable_id';
     final public const NAME = 'name';
@@ -26,6 +27,7 @@ abstract class PersonalAccessTokenDomainObjectAbstract extends \HiEvents\DomainO
 
     protected int $id;
     protected int $account_id;
+    protected ?int $oauth_connection_id = null;
     protected string $tokenable_type;
     protected int $tokenable_id;
     protected string $name;
@@ -43,6 +45,7 @@ abstract class PersonalAccessTokenDomainObjectAbstract extends \HiEvents\DomainO
         return [
                     'id' => $this->id ?? null,
                     'account_id' => $this->account_id ?? null,
+                    'oauth_connection_id' => $this->oauth_connection_id ?? null,
                     'tokenable_type' => $this->tokenable_type ?? null,
                     'tokenable_id' => $this->tokenable_id ?? null,
                     'name' => $this->name ?? null,
@@ -77,6 +80,17 @@ abstract class PersonalAccessTokenDomainObjectAbstract extends \HiEvents\DomainO
     public function getAccountId(): int
     {
         return $this->account_id;
+    }
+
+    public function setOauthConnectionId(?int $oauth_connection_id): self
+    {
+        $this->oauth_connection_id = $oauth_connection_id;
+        return $this;
+    }
+
+    public function getOauthConnectionId(): ?int
+    {
+        return $this->oauth_connection_id;
     }
 
     public function setTokenableType(string $tokenable_type): self

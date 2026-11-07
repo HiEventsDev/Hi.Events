@@ -47,11 +47,11 @@ class ReportServiceTest extends TestCase
         $this->setupCachePassthrough();
         $this->queryBuilder->shouldReceive('select')
             ->once()
-            ->with(Mockery::on(fn ($sql) => str_contains($sql, 'filtered_orders') && ! str_contains($sql, ':occurrence_id')), ['event_id' => 1])
+            ->with(Mockery::on(fn ($sql) => str_contains($sql, 'filtered_orders') && ! str_contains($sql, ':occurrence_id')), ['event_id' => 1, 'start_at' => '2026-03-01 00:00:00.000000', 'end_at' => '2026-03-31 23:59:59.999999'])
             ->andReturn([]);
 
         $report = new ProductSalesReport($this->cache, $this->queryBuilder, $this->eventRepository);
-        $result = $report->generateReport(1, Carbon::now()->subDays(30), Carbon::now());
+        $result = $report->generateReport(1, Carbon::parse('2026-03-01'), Carbon::parse('2026-03-31'));
 
         $this->assertCount(0, $result);
     }
@@ -63,12 +63,12 @@ class ReportServiceTest extends TestCase
             ->once()
             ->with(
                 Mockery::on(fn ($sql) => str_contains($sql, ':occurrence_id')),
-                ['event_id' => 1, 'occurrence_id' => 10],
+                ['event_id' => 1, 'occurrence_id' => 10, 'start_at' => '2026-03-01 00:00:00.000000', 'end_at' => '2026-03-31 23:59:59.999999'],
             )
             ->andReturn([]);
 
         $report = new ProductSalesReport($this->cache, $this->queryBuilder, $this->eventRepository);
-        $result = $report->generateReport(1, Carbon::now()->subDays(30), Carbon::now(), occurrenceId: 10);
+        $result = $report->generateReport(1, Carbon::parse('2026-03-01'), Carbon::parse('2026-03-31'), occurrenceId: 10);
 
         $this->assertCount(0, $result);
     }
@@ -114,12 +114,12 @@ class ReportServiceTest extends TestCase
             ->once()
             ->with(
                 Mockery::on(fn ($sql) => str_contains($sql, ':occurrence_id')),
-                ['event_id' => 1, 'occurrence_id' => 10],
+                ['event_id' => 1, 'occurrence_id' => 10, 'start_at' => '2026-03-01 00:00:00.000000', 'end_at' => '2026-03-31 23:59:59.999999'],
             )
             ->andReturn([]);
 
         $report = new PromoCodesReport($this->cache, $this->queryBuilder, $this->eventRepository);
-        $result = $report->generateReport(1, Carbon::now()->subDays(30), Carbon::now(), occurrenceId: 10);
+        $result = $report->generateReport(1, Carbon::parse('2026-03-01'), Carbon::parse('2026-03-31'), occurrenceId: 10);
 
         $this->assertCount(0, $result);
     }
@@ -129,11 +129,11 @@ class ReportServiceTest extends TestCase
         $this->setupCachePassthrough();
         $this->queryBuilder->shouldReceive('select')
             ->once()
-            ->with(Mockery::on(fn ($sql) => ! str_contains($sql, ':occurrence_id')), ['event_id' => 1])
+            ->with(Mockery::on(fn ($sql) => ! str_contains($sql, ':occurrence_id')), ['event_id' => 1, 'start_at' => '2026-03-01 00:00:00.000000', 'end_at' => '2026-03-31 23:59:59.999999'])
             ->andReturn([]);
 
         $report = new PromoCodesReport($this->cache, $this->queryBuilder, $this->eventRepository);
-        $result = $report->generateReport(1, Carbon::now()->subDays(30), Carbon::now());
+        $result = $report->generateReport(1, Carbon::parse('2026-03-01'), Carbon::parse('2026-03-31'));
 
         $this->assertCount(0, $result);
     }

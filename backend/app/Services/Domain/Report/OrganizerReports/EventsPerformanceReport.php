@@ -97,4 +97,9 @@ class EventsPerformanceReport extends AbstractOrganizerReportService
                 ed.start_date DESC
 SQL;
     }
+
+    protected function getAdditionalBindings(Carbon $startDate, Carbon $endDate, ?string $currency): array
+    {
+        return $this->currencyBinding($currency);
+    }
 }

@@ -21,6 +21,11 @@ class GetReportAction extends BaseAction
     public function __construct(private readonly GetReportHandler $reportHandler) {}
 
     /**
+     * Get Report
+     *
+     * `start_date` and `end_date` are widened to whole days in the event's timezone. Rows of
+     * `daily_sales_report` are grouped by the UTC date of each order.
+     *
      * @throws ValidationException
      */
     public function __invoke(GetReportRequest $request, int $eventId, string $reportType): JsonResponse

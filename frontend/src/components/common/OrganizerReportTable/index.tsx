@@ -14,6 +14,7 @@ import {organizerClient} from "../../../api/organizer.client.ts";
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import {instantRangeToWallDates, wallDateInTimezone, wallDateRangeToInstants} from "../../../utilites/dates.ts";
 import classes from './OrganizerReportTable.module.scss';
 import {downloadBinary} from "../../../utilites/download.ts";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
@@ -161,14 +162,7 @@ const OrganizerReportTable = <T extends Record<string, any>>({
     };
 
     const handleDateRangeChange = (newRange: DatesRangeValue<string>) => {
-        const [start, end] = newRange;
-        const tzStart = start ? dayjs(start).tz(tz) : null;
-        const tzEnd = end ? dayjs(end).tz(tz) : null;
-
-        const tzRange: [Date | null, Date | null] = [
-            tzStart?.toDate() || null,
-            tzEnd?.toDate() || null
-        ];
+        const tzRange = wallDateRangeToInstants(newRange, tz);
 
         setDateRange(tzRange);
         setCurrentPage(1);
@@ -340,10 +334,10 @@ const OrganizerReportTable = <T extends Record<string, any>>({
                             leftSection={<IconCalendar stroke={1.5} size={20}/>}
                             type="range"
                             placeholder="Pick dates range"
-                            value={dateRange}
+                            value={instantRangeToWallDates(dateRange, tz)}
                             onChange={handleDateRangeChange}
-                            minDate={dayjs().subtract(1, 'year').tz(tz).toDate()}
-                            maxDate={dayjs().tz(tz).toDate()}
+                            minDate={wallDateInTimezone(dayjs().subtract(1, 'year').toDate(), tz)}
+                            maxDate={wallDateInTimezone(new Date(), tz)}
                             className={classes.datePicker}
                         />
                     )}

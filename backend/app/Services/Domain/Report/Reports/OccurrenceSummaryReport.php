@@ -9,7 +9,11 @@ class OccurrenceSummaryReport extends AbstractReportService
 {
     protected function getSqlQuery(Carbon $startDate, Carbon $endDate, ?int $occurrenceId = null): string
     {
-        return <<<'SQL'
+        $occurrenceFilter = $occurrenceId !== null
+            ? 'AND eo.id = :occurrence_id'
+            : '';
+
+        return <<<SQL
             SELECT
                 eo.id AS occurrence_id,
                 eo.short_id,
@@ -38,6 +42,7 @@ class OccurrenceSummaryReport extends AbstractReportService
             ) ci_stats ON ci_stats.event_occurrence_id = eo.id
             WHERE eo.event_id = :event_id
                 AND eo.deleted_at IS NULL
+                $occurrenceFilter
             ORDER BY eo.start_date
 SQL;
     }

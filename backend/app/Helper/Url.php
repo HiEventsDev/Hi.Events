@@ -18,6 +18,8 @@ class Url
 
     public const EVENT_HOMEPAGE = 'app.frontend_urls.event_homepage';
 
+    public const EVENT_PREVIEW = 'app.frontend_urls.event_preview';
+
     public const ATTENDEE_TICKET = 'app.frontend_urls.attendee_product';
 
     public const ORDER_SUMMARY = 'app.frontend_urls.order_summary';

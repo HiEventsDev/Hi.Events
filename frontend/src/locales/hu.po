@@ -276,6 +276,10 @@ msgstr "{0} jegy"
 msgid "{0} to {1}"
 msgstr "{0} – {1}"
 
+#: src/components/routes/oauth/Connect/index.tsx:87
+msgid "{0} wants to use your Hi.Events account {1}. It will act as you, with the access you choose below."
+msgstr "A(z) {0} használni szeretné a(z) {1} Hi.Events-fiókját. Az Ön nevében jár el, az alább választott hozzáféréssel."
+
 #: src/components/routes/settings/Security/SignInMethods.tsx:139
 msgid "{0} was disconnected."
 msgstr "{0} leválasztva."
@@ -544,7 +548,7 @@ msgstr "{organizerName} első eseménye"
 msgid "{outsideDomainCount, plural, one {# member outside your verified domains keeps their current sign-in.} other {# members outside your verified domains keep their current sign-in.}}"
 msgstr "{outsideDomainCount, plural, one {# tag a megerősített tartományain kívül megtartja a jelenlegi bejelentkezési módját.} other {# tag a megerősített tartományain kívül megtartja a jelenlegi bejelentkezési módját.}}"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:165
+#: src/components/routes/settings/ApiKeys/index.tsx:166
 msgid "{ownActiveCount} of {0} active keys"
 msgstr "{ownActiveCount} / {0} aktív kulcs"
 
@@ -1061,6 +1065,7 @@ msgstr "Hitelkártyás fizetések elfogadása a Stripe-pal"
 #: src/components/common/TeamAccessFields/index.tsx:207
 #: src/components/common/TeamAccessPanel/index.tsx:137
 #: src/components/forms/ProductForm/index.tsx:605
+#: src/components/routes/oauth/Connect/index.tsx:115
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:237
 #: src/components/routes/settings/Team/index.tsx:218
 #: src/components/routes/settings/Team/MemberRow.tsx:141
@@ -1802,6 +1807,10 @@ msgstr "Életkor-ellenőrzés (18+)"
 msgid "Agenda"
 msgstr "Napirend"
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:43
+msgid "AI assistants such as Claude and ChatGPT connect by signing in, without a key. Add this MCP server URL to your assistant to connect it."
+msgstr "Az olyan MI-asszisztensek, mint a Claude és a ChatGPT, bejelentkezéssel csatlakoznak, kulcs nélkül. Adja hozzá ezt az MCP-szerver URL-t az asszisztenséhez a csatlakoztatáshoz."
+
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:45
 msgid "Aisles after seats"
 msgstr "Folyosók a helyek után"
@@ -2152,6 +2161,10 @@ msgstr "Átvett összeg"
 msgid "An account with this email already exists. Sign in instead."
 msgstr "Ezzel az e-mail-címmel már létezik fiók. Jelentkezzen be helyette."
 
+#: src/components/routes/oauth/Connect/index.tsx:16
+msgid "an app on this computer"
+msgstr "egy alkalmazás ezen a számítógépen"
+
 #: src/components/forms/AffiliateForm/index.tsx:90
 msgid "An email to associate with this affiliate. The affiliate will not be notified."
 msgstr "E-mail cím, amelyet ehhez a partnerhez társít. A partner nem kap értesítést."
@@ -2319,19 +2332,27 @@ msgid "Anything else?"
 msgstr "Még valami?"
 
 #: src/components/layouts/SettingsLayout/index.tsx:74
-#: src/components/routes/settings/ApiKeys/index.tsx:111
+#: src/components/routes/settings/ApiKeys/index.tsx:112
 msgid "API keys"
 msgstr "API-kulcsok"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:139
+#: src/components/routes/settings/ApiKeys/index.tsx:140
 msgid "API keys can't be created while you're impersonating someone."
 msgstr "Nem hozhatsz létre API-kulcsot, amíg más felhasználó nevében vagy bejelentkezve."
 
 #: src/components/layouts/SettingsLayout/index.tsx:85
 #: src/components/layouts/SettingsLayout/index.tsx:89
-#: src/components/routes/settings/ApiKeys/index.tsx:122
+#: src/components/routes/settings/ApiKeys/index.tsx:123
 msgid "API reference"
 msgstr "API-referencia"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:29
+msgid "App disconnected"
+msgstr "Alkalmazás leválasztva"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:79
+msgid "App on your computer"
+msgstr "Alkalmazás a számítógépén"
 
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:136
 msgid "Appearance"
@@ -3381,7 +3402,7 @@ msgstr "Arculat és e-mailek"
 msgid "Brazilian Portuguese"
 msgstr "Brazíliai portugál"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:227
+#: src/components/routes/settings/ApiKeys/index.tsx:230
 msgid "Browse every endpoint in the API reference"
 msgstr "Az összes végpont megtekintése az API-referenciában"
 
@@ -3639,6 +3660,7 @@ msgstr "Nem tudja használni a hitelesítő alkalmazást vagy a helyreállítás
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:67
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1173
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:64
+#: src/components/routes/oauth/Connect/index.tsx:164
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:69
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:85
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:85
@@ -4901,7 +4923,7 @@ msgstr "Spam megerősítése"
 msgid "Confirm your email"
 msgstr "Erősítse meg e-mail-címét"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:130
+#: src/components/routes/settings/ApiKeys/index.tsx:131
 msgid "Confirm your email address"
 msgstr "Erősítse meg e-mail-címét"
 
@@ -4933,6 +4955,8 @@ msgstr "Gratulálunk! Az eseményed mostantól látható a nyilvánosság szám�
 msgid "Connect"
 msgstr "Csatlakoztatás"
 
+#: src/components/routes/oauth/Connect/index.tsx:86
+#: src/components/routes/oauth/Connect/index.tsx:151
 #: src/components/routes/settings/Security/SignInMethods.tsx:246
 msgid "Connect {0}"
 msgstr "{0} csatlakoztatása"
@@ -4945,7 +4969,7 @@ msgstr "Csatlakoztass egy Stripe-fiókot a Kifizetések alatt, mielőtt kártyao
 msgid "Connect bank"
 msgstr "Bank összekapcsolása"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:112
+#: src/components/routes/settings/ApiKeys/index.tsx:113
 msgid "Connect other tools and your own code to this account. A key can do what you can do, so treat it like a password."
 msgstr "Csatlakoztasson más eszközöket és saját kódját ehhez a fiókhoz. Egy kulcs mindenre képes, amire Ön, ezért kezelje úgy, mint egy jelszót."
 
@@ -4988,8 +5012,13 @@ msgid "Connect your identity provider, verify your email domains, then choose wh
 msgstr "Kapcsolja össze az identitásszolgáltatóját, erősítse meg az e-mail-tartományait, majd válassza ki, hogy mindenkinek kötelező-e használnia."
 
 #: src/components/routes/admin/Dashboard/index.tsx:410
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:88
 msgid "Connected"
 msgstr "Csatlakoztatva"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:41
+msgid "Connected apps"
+msgstr "Csatlakoztatott alkalmazások"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:298
 msgid "Connected the wrong Stripe account? Disconnect and start over."
@@ -5456,9 +5485,13 @@ msgstr "Nem sikerült betölteni az API-referenciát."
 msgid "Couldn't load this report"
 msgstr "Nem sikerült betölteni ezt a jelentést"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:187
+#: src/components/routes/settings/ApiKeys/index.tsx:188
 msgid "Couldn't load your API keys"
 msgstr "Nem sikerült betölteni az API-kulcsait"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:53
+msgid "Couldn't load your connected apps"
+msgstr "Nem sikerült betölteni a csatlakoztatott alkalmazásokat"
 
 #: src/components/routes/settings/Organizers/index.tsx:40
 msgid "Couldn't load your organizers"
@@ -5543,7 +5576,7 @@ msgstr "„{query}” létrehozása"
 msgid "Create {0} Template"
 msgstr "{0} sablon létrehozása"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:199
+#: src/components/routes/settings/ApiKeys/index.tsx:200
 msgid "Create a key to connect tools like Zapier, your CRM or your own scripts to your events, orders and attendees."
 msgstr "Hozzon létre egy kulcsot, hogy olyan eszközöket csatlakoztathasson eseményeihez, megrendeléseihez és résztvevőihez, mint a Zapier, a CRM-rendszere vagy saját szkriptjei."
 
@@ -5604,6 +5637,10 @@ msgstr "Hozzon létre egy közleményt, hogy üzenetet jelenítsen meg felhaszn�
 msgid "Create and change events, orders, attendees and more."
 msgstr "Események, megrendelések, résztvevők és egyebek létrehozása és módosítása."
 
+#: src/components/routes/oauth/Connect/index.tsx:122
+msgid "Create and change events, tickets, questions and settings."
+msgstr "Események, jegyek, kérdések és beállítások létrehozása és módosítása."
+
 #: src/components/routes/event/products.tsx:67
 msgid "Create and configure tickets and merchandise for sale."
 msgstr "Jegyek és árucikkek létrehozása és konfigurálása értékesítéshez."
@@ -5619,7 +5656,7 @@ msgid "Create Announcement"
 msgstr "Közlemény létrehozása"
 
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:215
-#: src/components/routes/settings/ApiKeys/index.tsx:91
+#: src/components/routes/settings/ApiKeys/index.tsx:92
 msgid "Create API key"
 msgstr "API-kulcs létrehozása"
 
@@ -5799,7 +5836,7 @@ msgstr "Hozza létre saját eseményét"
 #: src/components/routes/admin/Messages/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:310
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:69
-#: src/components/routes/settings/ApiKeys/index.tsx:174
+#: src/components/routes/settings/ApiKeys/index.tsx:175
 msgid "Created"
 msgstr "Létrehozva"
 
@@ -6618,14 +6655,21 @@ msgid "Disclaimers, contact info or a thank-you note, on a single line"
 msgstr "Jogi nyilatkozat, elérhetőség vagy köszönetnyilvánítás, egy sorban"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:120
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:32
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:99
 #: src/components/routes/settings/Security/SignInMethods.tsx:217
 #: src/components/routes/settings/Security/SignInMethods.tsx:251
 msgid "Disconnect"
 msgstr "Leválasztás"
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:103
 #: src/components/routes/settings/Security/SignInMethods.tsx:247
 msgid "Disconnect {0}"
 msgstr "{0} leválasztása"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:27
+msgid "Disconnect {name}? It stops working with your account straight away."
+msgstr "Leválasztja: {name}? Azonnal leáll a fiókjával való működése."
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:109
 msgid "Disconnect Stripe account"
@@ -8093,7 +8137,7 @@ msgstr "Minden szervező és esemény, az újakat is beleértve."
 msgid "Every trusted device will need a code at its next sign-in. Continue?"
 msgstr "Minden megbízható eszköznek kódra lesz szüksége a következő bejelentkezéskor. Folytatja?"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:158
+#: src/components/routes/settings/ApiKeys/index.tsx:159
 msgid "Everyone ({0})"
 msgstr "Mindenki ({0})"
 
@@ -8193,7 +8237,7 @@ msgstr "Lejárati dátum"
 
 #: src/components/common/WaitlistTable/index.tsx:30
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:119
-#: src/components/routes/settings/ApiKeys/index.tsx:210
+#: src/components/routes/settings/ApiKeys/index.tsx:211
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:35
 #: src/ee/licensing/licenceNotice.ts:78
 msgid "Expired"
@@ -8206,7 +8250,7 @@ msgstr "Lejárt {0}"
 #: src/components/common/PromoCodeTable/index.tsx:76
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:33
-#: src/components/routes/settings/ApiKeys/index.tsx:176
+#: src/components/routes/settings/ApiKeys/index.tsx:177
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:178
 msgid "Expires"
 msgstr "Lejár"
@@ -9281,6 +9325,10 @@ msgstr "Vissza"
 msgid "Go back to profile"
 msgstr "Vissza a profilhoz"
 
+#: src/components/routes/oauth/Connect/index.tsx:25
+msgid "Go back to the app you were connecting and start again."
+msgstr "Térjen vissza a csatlakoztatni kívánt alkalmazáshoz, és kezdje újra."
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:448
 msgid "Go to Event Page"
 msgstr "Esemény oldalra"
@@ -9501,6 +9549,10 @@ msgstr "Hi.Events Cloud"
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:75
 msgid "Hi.Events Fee"
 msgstr "Hi.Events díj"
+
+#: src/components/routes/oauth/Connect/index.tsx:108
+msgid "Hi.Events hasn't verified this app. Only continue if you started connecting it yourself and you trust it."
+msgstr "A Hi.Events nem ellenőrizte ezt az alkalmazást. Csak akkor folytassa, ha Ön indította a csatlakoztatást, és megbízik benne."
 
 #: src/components/routes/organizer/Reports/index.tsx:46
 msgid "Hi.Events platform fees and VAT breakdown by transaction"
@@ -9862,7 +9914,7 @@ msgstr "Hozzáadtam, tovább"
 msgid "I've made the payment"
 msgstr "Kifizettem"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:224
+#: src/components/routes/settings/ApiKeys/index.tsx:227
 msgid "If a key leaks, revoke it straight away and create a new one."
 msgstr "Ha egy kulcs kiszivárog, azonnal vonja vissza, és hozzon létre egy újat."
 
@@ -10255,7 +10307,7 @@ msgstr "Kibocsátó URL-je"
 msgid "It happens on more than one date"
 msgstr "Több időpontban is megrendezésre kerül"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:222
+#: src/components/routes/settings/ApiKeys/index.tsx:225
 msgid "It has your role and event access. Read-only keys can view and export, but can't change anything."
 msgstr "Az Ön szerepkörével és eseményhozzáférésével rendelkezik. A csak olvasható kulcsok megtekinthetnek és exportálhatnak, de semmit sem módosíthatnak."
 
@@ -10408,7 +10460,7 @@ msgstr "Ne jelenjenek meg a nyilvános line-upon és programban, amíg készen n
 msgid "Keeps signing in with a password. {providerName} can't be used to sign this member in."
 msgstr "Továbbra is jelszóval jelentkezik be. Ez a tag nem jelentkeztethető be a(z) {providerName} szolgáltatással."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:173
+#: src/components/routes/settings/ApiKeys/index.tsx:174
 msgid "Key"
 msgstr "Kulcs"
 
@@ -10416,11 +10468,11 @@ msgstr "Kulcs"
 msgid "Key ending in {0}"
 msgstr "{0} végű kulcs"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:79
+#: src/components/routes/settings/ApiKeys/index.tsx:80
 msgid "Key removed"
 msgstr "Kulcs eltávolítva"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:79
+#: src/components/routes/settings/ApiKeys/index.tsx:80
 msgid "Key revoked"
 msgstr "Kulcs visszavonva"
 
@@ -10428,7 +10480,7 @@ msgstr "Kulcs visszavonva"
 msgid "Keycloak, Authentik, Zitadel, OneLogin and others"
 msgstr "Keycloak, Authentik, Zitadel, OneLogin és mások"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:223
+#: src/components/routes/settings/ApiKeys/index.tsx:226
 msgid "Keys can't sign in or manage your team, payouts, profile or security settings."
 msgstr "A kulcsokkal nem lehet bejelentkezni, és nem kezelhető velük a csapata, a kifizetések, a profilja vagy a biztonsági beállításai."
 
@@ -10534,6 +10586,7 @@ msgstr "Utolsó 7 nap"
 msgid "Last 90 days"
 msgstr "Utolsó 90 nap"
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:92
 #: src/components/routes/settings/Team/index.tsx:220
 #: src/components/routes/settings/Team/MemberRow.tsx:165
 msgid "Last active"
@@ -10585,7 +10638,7 @@ msgstr "Utoljára aktiválva"
 
 #: src/components/common/SsoButtons/index.tsx:126
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:73
-#: src/components/routes/settings/ApiKeys/index.tsx:175
+#: src/components/routes/settings/ApiKeys/index.tsx:176
 msgid "Last used"
 msgstr "Legutóbb használt"
 
@@ -11613,7 +11666,7 @@ msgstr "Az én csodálatos eseményem leírása..."
 msgid "My amazing event title..."
 msgstr "Az én csodálatos eseményem címe..."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:157
+#: src/components/routes/settings/ApiKeys/index.tsx:158
 msgid "My keys"
 msgstr "Saját kulcsaim"
 
@@ -11709,6 +11762,7 @@ msgstr "Nettó bevétel"
 #: src/components/common/PromoCodeTable/index.tsx:169
 #: src/components/common/WebhookTable/index.tsx:272
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:93
 #: src/components/routes/settings/Team/MemberRow.tsx:166
 msgid "Never"
 msgstr "Soha"
@@ -12017,6 +12071,10 @@ msgstr "Ebben az időszakban nincs teljesített megrendelés"
 #: src/components/routes/admin/Configurations/index.tsx:125
 msgid "No configurations found"
 msgstr "Nem találhatók konfigurációk"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:61
+msgid "No connected apps"
+msgstr "Nincsenek csatlakoztatott alkalmazások"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:207
 msgid "No connections available"
@@ -12487,7 +12545,7 @@ msgstr "Nem, maradok itt"
 msgid "Nobody has been added to this event's lineup yet."
 msgstr "Még senkit sem adtak hozzá az esemény fellépőihez."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:196
+#: src/components/routes/settings/ApiKeys/index.tsx:197
 msgid "Nobody has created an API key yet"
 msgstr "Még senki nem hozott létre API-kulcsot"
 
@@ -13076,6 +13134,10 @@ msgstr "Csak adminisztrátorok kezelhetik a csapat hozzáférését."
 #: src/components/forms/ProductForm/index.tsx:555
 msgid "Only available as an add-on"
 msgstr "Csak kiegészítőként érhető el"
+
+#: src/components/routes/oauth/Connect/index.tsx:107
+msgid "Only continue if you just started connecting from an app on this computer, such as Claude Code or Cursor."
+msgstr "Csak akkor folytassa, ha épp most indította a csatlakoztatást egy ezen a számítógépen lévő alkalmazásból, például a Claude Code-ból vagy a Cursorból."
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:181
 msgid "Only members who can manage payments can change these instructions."
@@ -15139,7 +15201,9 @@ msgstr "Újraaktiválás"
 msgid "Reactivate this date? It will be reopened for future sales."
 msgstr "Újraaktiválja ezt az időpontot? Újra megnyílik a jövőbeli értékesítés előtt."
 
+#: src/components/routes/oauth/Connect/index.tsx:121
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:73
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:250
 msgid "Read and write"
 msgstr "Olvasás és írás"
@@ -15149,7 +15213,12 @@ msgstr "Olvasás és írás"
 msgid "Read more"
 msgstr "Tovább olvasom"
 
+#: src/components/routes/oauth/Connect/index.tsx:127
+msgid "Read only"
+msgstr "Csak olvasás"
+
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:73
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:261
 msgid "Read-only"
 msgstr "Csak olvasás"
@@ -15471,7 +15540,7 @@ msgstr "eltávolítás"
 msgid "Remove"
 msgstr "Eltávolítás"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:73
+#: src/components/routes/settings/ApiKeys/index.tsx:74
 msgid "Remove \"{0}\"? It has already expired."
 msgstr "Eltávolítja a(z) „{0}” kulcsot? Már lejárt."
 
@@ -15546,7 +15615,7 @@ msgstr "Hi.Events arculat eltávolítása"
 msgid "Remove Hi.Events branding from everything your attendees see, and put your own logo in their emails."
 msgstr "Távolítsa el a Hi.Events arculatot mindenhonnan, amit a résztvevői látnak, és tegye saját logóját az e-mailjeikbe."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:81
+#: src/components/routes/settings/ApiKeys/index.tsx:82
 msgid "Remove key"
 msgstr "Kulcs eltávolítása"
 
@@ -15949,6 +16018,14 @@ msgstr "Vissza az eseményhez"
 msgid "Return to Event Page"
 msgstr "Vissza az esemény oldalára"
 
+#: src/components/routes/oauth/Connect/index.tsx:77
+msgid "Returning you to {leavingTo}…"
+msgstr "Visszairányítás ide: {leavingTo}…"
+
+#: src/components/routes/oauth/Connect/index.tsx:92
+msgid "Returns you to"
+msgstr "Visszairányítja ide"
+
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:144
 msgid "Reusable venue layouts. Attach one to an event to sell reserved seats."
 msgstr "Újrafelhasználható helyszín-elrendezések. Csatoljon egyet egy eseményhez a helyfoglalásos jegyek értékesítéséhez."
@@ -16007,11 +16084,11 @@ msgstr "Ellenőrizd a rendelést, majd válaszd ki a fizetés módját"
 msgid "Revoke"
 msgstr "Visszavonás"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:75
+#: src/components/routes/settings/ApiKeys/index.tsx:76
 msgid "Revoke \"{0}\"? Anything using it stops working straight away, and {ownerName} will get an email about it."
 msgstr "Visszavonja a(z) „{0}” kulcsot? Minden, ami használja, azonnal leáll, és {ownerName} e-mailt kap erről."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:76
+#: src/components/routes/settings/ApiKeys/index.tsx:77
 msgid "Revoke \"{0}\"? Anything using it stops working straight away. This can't be undone."
 msgstr "Visszavonja a(z) „{0}” kulcsot? Minden, ami használja, azonnal leáll. Ez nem vonható vissza."
 
@@ -16023,7 +16100,7 @@ msgstr "{0} visszavonása"
 msgid "Revoke invitation"
 msgstr "Meghívó visszavonása"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:81
+#: src/components/routes/settings/ApiKeys/index.tsx:82
 msgid "Revoke key"
 msgstr "Kulcs visszavonása"
 
@@ -17158,7 +17235,7 @@ msgstr "E-mailek küldése résztvevőknek, jegytulajdonosoknak vagy rendelés t
 msgid "Send invitation"
 msgstr "Meghívó küldése"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:221
+#: src/components/routes/settings/ApiKeys/index.tsx:224
 msgid "Send it in the Authorization header of every request."
 msgstr "Küldje el minden kérés Authorization fejlécében."
 
@@ -17566,7 +17643,7 @@ msgstr "Kevesebb platform megjelenítése"
 msgid "Show initials instead"
 msgstr "Monogram megjelenítése helyette"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:160
+#: src/components/routes/settings/ApiKeys/index.tsx:161
 msgid "Show keys"
 msgstr "Kulcsok megjelenítése"
 
@@ -18147,10 +18224,13 @@ msgstr "Valami hiba történt. Kérjük, próbálja újra később."
 #: src/components/routes/auth/Login/index.tsx:132
 #: src/components/routes/auth/Register/index.tsx:81
 #: src/components/routes/my-tickets/index.tsx:162
+#: src/components/routes/oauth/Connect/index.tsx:63
+#: src/components/routes/oauth/Connect/index.tsx:70
 #: src/components/routes/product-widget/SelectProducts/index.tsx:383
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:79
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:30
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:123
-#: src/components/routes/settings/ApiKeys/index.tsx:80
+#: src/components/routes/settings/ApiKeys/index.tsx:81
 #: src/components/routes/settings/Profile/index.tsx:129
 #: src/components/routes/settings/Profile/index.tsx:139
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:46
@@ -19685,6 +19765,10 @@ msgstr "Ez a válasz túl hosszú. Mentés előtt rövidítse le."
 msgid "This answer means you can't register for this event."
 msgstr "Ezzel a válasszal nem regisztrálhat erre az eseményre."
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:24
+msgid "this app"
+msgstr "ezt az alkalmazást"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:260
 msgid "This applies to every matching date in the event, including dates not currently visible. Attendees registered on any of those dates will be reachable via the message composer once the update finishes."
 msgstr "Ez az esemény minden egyező időpontjára vonatkozik, azokra is, amelyek most nem láthatók. Az ezekre az időpontokra regisztrált résztvevők a frissítés befejezése után elérhetők lesznek az üzenetszerkesztőben."
@@ -19756,6 +19840,14 @@ msgstr "Ez a beléptetési lista egy lemondott alkalomhoz tartozik, ezért már 
 #: src/components/forms/AffiliateForm/index.tsx:41
 msgid "This code will be used to track sales. Only letters, numbers, hyphens, and underscores allowed."
 msgstr "Ezt a kódot az értékesítések nyomon követésére használjuk. Csak betűk, számok, kötőjelek és aláhúzások engedélyezettek."
+
+#: src/components/routes/oauth/Connect/index.tsx:24
+msgid "This connection link doesn't work"
+msgstr "Ez a csatlakozási hivatkozás nem működik"
+
+#: src/components/routes/oauth/Connect/index.tsx:24
+msgid "This connection request has expired"
+msgstr "Ez a csatlakozási kérés lejárt"
 
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:181
 msgid "This date"
@@ -20647,7 +20739,8 @@ msgstr "Módosítsa a szűrőket, hogy több időpontot lásson."
 #: src/components/common/OrganizerReportTable/index.tsx:273
 #: src/components/common/ReportTable/index.tsx:254
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1121
-#: src/components/routes/settings/ApiKeys/index.tsx:188
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:54
+#: src/components/routes/settings/ApiKeys/index.tsx:189
 #: src/components/routes/settings/ApiReference/index.tsx:83
 #: src/components/routes/settings/Organizers/index.tsx:41
 #: src/components/routes/settings/Security/index.tsx:77
@@ -21042,6 +21135,10 @@ msgstr "Korlátlan felhasználás engedélyezett"
 #: src/components/common/LocationsTable/index.tsx:32
 msgid "Unnamed"
 msgstr "Névtelen"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:71
+msgid "Unnamed app"
+msgstr "Névtelen alkalmazás"
 
 #: src/components/common/LocationPicker/index.tsx:67
 msgid "Unnamed location"
@@ -21445,7 +21542,7 @@ msgstr "A kezdőlapod dizájnjának színeit és betűtípusát használja. Ha m
 msgid "Using them for real events? Get an Enterprise licence and put its key in <0>APP_LICENCE_KEY</0>."
 msgstr "Valódi eseményekhez használod őket? Szerezz be egy Enterprise licencet, és add meg a kulcsát az <0>APP_LICENCE_KEY</0> értékeként."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:219
+#: src/components/routes/settings/ApiKeys/index.tsx:222
 msgid "Using your key"
 msgstr "A kulcs használata"
 
@@ -21591,6 +21688,7 @@ msgstr "Ellenőrző e-mail elküldve. Nézze meg a postaládáját."
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:216
 #: src/components/routes/admin/Attribution/index.tsx:198
 #: src/components/routes/admin/Dashboard/index.tsx:396
+#: src/components/routes/oauth/Connect/index.tsx:97
 #: src/ee/sso/components/SingleSignOn/DomainList.tsx:17
 msgid "Verified"
 msgstr "Ellenőrzött"
@@ -21749,6 +21847,10 @@ msgstr "Eseményoldal megtekintése"
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:93
 msgid "View Event Page"
 msgstr "Esemény oldal megtekintése"
+
+#: src/components/routes/oauth/Connect/index.tsx:128
+msgid "View events, tickets and sales, without changing anything."
+msgstr "Események, jegyek és eladások megtekintése, módosítás nélkül."
 
 #: src/components/common/OrganizerWebhookTable/index.tsx:117
 #: src/components/common/WebhookTable/index.tsx:117
@@ -22689,6 +22791,10 @@ msgstr "További szolgáltatási díjakat és adókat konfigurálhat a fiókbeá
 msgid "You can create a promo code which targets this product on the"
 msgstr "Létrehozhat egy promóciós kódot, amely ezt a terméket célozza meg a"
 
+#: src/components/routes/oauth/Connect/index.tsx:167
+msgid "You can disconnect it at any time from Settings → API keys."
+msgstr "Bármikor leválaszthatja a Beállítások → API-kulcsok menüben."
+
 #: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:31
 msgid "You can only change it back to a single event while it has exactly one date and no orders. Once someone places an order, this can't be undone."
 msgstr "Csak addig válthatod vissza egyszeri eseményre, amíg pontosan egy időpontja van, és nincs rendelése. Amint valaki rendel, ez nem vonható vissza."
@@ -22750,7 +22856,7 @@ msgstr "Nincs hozzáférése ehhez a szervezőhöz"
 msgid "You don't have access to this page"
 msgstr "Nincs hozzáférése ehhez az oldalhoz"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:196
+#: src/components/routes/settings/ApiKeys/index.tsx:197
 msgid "You don't have any API keys"
 msgstr "Nincsenek API-kulcsai"
 
@@ -22816,7 +22922,7 @@ msgstr "Legalább egy árszintre szüksége van."
 msgid "You must verify your email address before you can update the organizer status."
 msgstr "Megerősítenie kell e-mail címét, mielőtt frissítheti a szervezői státuszt."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:131
+#: src/components/routes/settings/ApiKeys/index.tsx:132
 msgid "You need a confirmed email address to create API keys. Check your inbox, or resend the confirmation email from your <0>profile</0>."
 msgstr "API-kulcsok létrehozásához megerősített e-mail-cím szükséges. Nézze meg a beérkező leveleit, vagy küldje el újra a megerősítő e-mailt a <0>profiljából</0>."
 
@@ -22956,7 +23062,7 @@ msgstr "Helyet ajánlottak neked!"
 msgid "You've changed the session time"
 msgstr "Módosította az alkalom időpontját"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:145
+#: src/components/routes/settings/ApiKeys/index.tsx:146
 msgid "You've reached the limit of {0} active keys. Revoke one to create another."
 msgstr "Elérte az aktív kulcsok korlátját ({0}). Vonjon vissza egyet, hogy újat hozhasson létre."
 

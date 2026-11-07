@@ -276,6 +276,10 @@ msgstr "{0} lístkov"
 msgid "{0} to {1}"
 msgstr "{0} – {1}"
 
+#: src/components/routes/oauth/Connect/index.tsx:87
+msgid "{0} wants to use your Hi.Events account {1}. It will act as you, with the access you choose below."
+msgstr "{0} chce používať váš účet Hi.Events {1}. Bude konať vo vašom mene s prístupom, ktorý nižšie zvolíte."
+
 #: src/components/routes/settings/Security/SignInMethods.tsx:139
 msgid "{0} was disconnected."
 msgstr "Účet {0} bol odpojený."
@@ -544,7 +548,7 @@ msgstr "Prvá udalosť organizátora {organizerName}"
 msgid "{outsideDomainCount, plural, one {# member outside your verified domains keeps their current sign-in.} other {# members outside your verified domains keep their current sign-in.}}"
 msgstr "{outsideDomainCount, plural, one {# člen mimo vašich overených domén si ponechá doterajší spôsob prihlásenia.} few {# členovia mimo vašich overených domén si ponechajú doterajší spôsob prihlásenia.} many {# člena mimo vašich overených domén si ponechá doterajší spôsob prihlásenia.} other {# členov mimo vašich overených domén si ponechá doterajší spôsob prihlásenia.}}"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:165
+#: src/components/routes/settings/ApiKeys/index.tsx:166
 msgid "{ownActiveCount} of {0} active keys"
 msgstr "Aktívne kľúče: {ownActiveCount} z {0}"
 
@@ -1061,6 +1065,7 @@ msgstr "Prijímajte platby kreditnou kartou cez Stripe"
 #: src/components/common/TeamAccessFields/index.tsx:207
 #: src/components/common/TeamAccessPanel/index.tsx:137
 #: src/components/forms/ProductForm/index.tsx:605
+#: src/components/routes/oauth/Connect/index.tsx:115
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:237
 #: src/components/routes/settings/Team/index.tsx:218
 #: src/components/routes/settings/Team/MemberRow.tsx:141
@@ -1802,6 +1807,10 @@ msgstr "Overenie veku (18+)"
 msgid "Agenda"
 msgstr "Program"
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:43
+msgid "AI assistants such as Claude and ChatGPT connect by signing in, without a key. Add this MCP server URL to your assistant to connect it."
+msgstr "AI asistenti ako Claude a ChatGPT sa pripájajú prihlásením, bez kľúča. Na pripojenie pridajte do svojho asistenta túto adresu MCP servera."
+
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:45
 msgid "Aisles after seats"
 msgstr "Uličky za miestami"
@@ -2152,6 +2161,10 @@ msgstr "Prijatá suma"
 msgid "An account with this email already exists. Sign in instead."
 msgstr "Účet s týmto e-mailom už existuje. Prihláste sa."
 
+#: src/components/routes/oauth/Connect/index.tsx:16
+msgid "an app on this computer"
+msgstr "aplikácia v tomto počítači"
+
 #: src/components/forms/AffiliateForm/index.tsx:90
 msgid "An email to associate with this affiliate. The affiliate will not be notified."
 msgstr "E-mail na priradenie k tomuto partnerovi. Partner nebude upozornený."
@@ -2319,19 +2332,27 @@ msgid "Anything else?"
 msgstr "Ešte niečo?"
 
 #: src/components/layouts/SettingsLayout/index.tsx:74
-#: src/components/routes/settings/ApiKeys/index.tsx:111
+#: src/components/routes/settings/ApiKeys/index.tsx:112
 msgid "API keys"
 msgstr "API kľúče"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:139
+#: src/components/routes/settings/ApiKeys/index.tsx:140
 msgid "API keys can't be created while you're impersonating someone."
 msgstr "Kľúče API nemôžete vytvárať, kým vystupujete ako iný používateľ."
 
 #: src/components/layouts/SettingsLayout/index.tsx:85
 #: src/components/layouts/SettingsLayout/index.tsx:89
-#: src/components/routes/settings/ApiKeys/index.tsx:122
+#: src/components/routes/settings/ApiKeys/index.tsx:123
 msgid "API reference"
 msgstr "Referencia API"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:29
+msgid "App disconnected"
+msgstr "Aplikácia odpojená"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:79
+msgid "App on your computer"
+msgstr "Aplikácia vo vašom počítači"
 
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:136
 msgid "Appearance"
@@ -3381,7 +3402,7 @@ msgstr "Značka a e-maily"
 msgid "Brazilian Portuguese"
 msgstr "Brazílska portugalčina"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:227
+#: src/components/routes/settings/ApiKeys/index.tsx:230
 msgid "Browse every endpoint in the API reference"
 msgstr "Prezrite si všetky endpointy v referencii API"
 
@@ -3639,6 +3660,7 @@ msgstr "Nemôžete použiť overovaciu aplikáciu ani záložné kódy?"
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:67
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1173
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:64
+#: src/components/routes/oauth/Connect/index.tsx:164
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:69
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:85
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:85
@@ -4901,7 +4923,7 @@ msgstr "Potvrdiť spam"
 msgid "Confirm your email"
 msgstr "Potvrďte svoj e-mail"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:130
+#: src/components/routes/settings/ApiKeys/index.tsx:131
 msgid "Confirm your email address"
 msgstr "Potvrďte svoju e-mailovú adresu"
 
@@ -4933,6 +4955,8 @@ msgstr "Gratulujeme! Vaša udalosť je teraz viditeľná pre verejnosť."
 msgid "Connect"
 msgstr "Pripojiť"
 
+#: src/components/routes/oauth/Connect/index.tsx:86
+#: src/components/routes/oauth/Connect/index.tsx:151
 #: src/components/routes/settings/Security/SignInMethods.tsx:246
 msgid "Connect {0}"
 msgstr "Pripojiť {0}"
@@ -4945,7 +4969,7 @@ msgstr "Pred pridaním čítačiek kariet pripojte účet Stripe v sekcii Výpla
 msgid "Connect bank"
 msgstr "Prepojiť banku"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:112
+#: src/components/routes/settings/ApiKeys/index.tsx:113
 msgid "Connect other tools and your own code to this account. A key can do what you can do, so treat it like a password."
 msgstr "Prepojte s týmto účtom ďalšie nástroje a vlastný kód. Kľúč môže robiť to isté čo vy, preto s ním zaobchádzajte ako s heslom."
 
@@ -4988,8 +5012,13 @@ msgid "Connect your identity provider, verify your email domains, then choose wh
 msgstr "Pripojte svojho poskytovateľa identity, overte svoje e-mailové domény a potom vyberte, či ho musia používať všetci."
 
 #: src/components/routes/admin/Dashboard/index.tsx:410
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:88
 msgid "Connected"
 msgstr "Pripojené"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:41
+msgid "Connected apps"
+msgstr "Pripojené aplikácie"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:298
 msgid "Connected the wrong Stripe account? Disconnect and start over."
@@ -5456,9 +5485,13 @@ msgstr "Referenciu API sa nepodarilo načítať."
 msgid "Couldn't load this report"
 msgstr "Túto správu sa nepodarilo načítať"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:187
+#: src/components/routes/settings/ApiKeys/index.tsx:188
 msgid "Couldn't load your API keys"
 msgstr "Vaše API kľúče sa nepodarilo načítať"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:53
+msgid "Couldn't load your connected apps"
+msgstr "Pripojené aplikácie sa nepodarilo načítať"
 
 #: src/components/routes/settings/Organizers/index.tsx:40
 msgid "Couldn't load your organizers"
@@ -5543,7 +5576,7 @@ msgstr "Vytvoriť „{query}“"
 msgid "Create {0} Template"
 msgstr "Vytvoriť šablónu {0}"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:199
+#: src/components/routes/settings/ApiKeys/index.tsx:200
 msgid "Create a key to connect tools like Zapier, your CRM or your own scripts to your events, orders and attendees."
 msgstr "Vytvorte kľúč na prepojenie nástrojov ako Zapier, vaše CRM alebo vlastné skripty s vašimi udalosťami, objednávkami a účastníkmi."
 
@@ -5604,6 +5637,10 @@ msgstr "Vytvorte oznámenie a zobrazte správu svojim používateľom."
 msgid "Create and change events, orders, attendees and more."
 msgstr "Vytvárať a meniť udalosti, objednávky, účastníkov a ďalšie."
 
+#: src/components/routes/oauth/Connect/index.tsx:122
+msgid "Create and change events, tickets, questions and settings."
+msgstr "Vytvárať a meniť podujatia, vstupenky, otázky a nastavenia."
+
 #: src/components/routes/event/products.tsx:67
 msgid "Create and configure tickets and merchandise for sale."
 msgstr "Vytvorte a nakonfigurujte lístky a tovar na predaj."
@@ -5619,7 +5656,7 @@ msgid "Create Announcement"
 msgstr "Vytvoriť oznámenie"
 
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:215
-#: src/components/routes/settings/ApiKeys/index.tsx:91
+#: src/components/routes/settings/ApiKeys/index.tsx:92
 msgid "Create API key"
 msgstr "Vytvoriť API kľúč"
 
@@ -5799,7 +5836,7 @@ msgstr "Vytvorte vlastnú udalosť"
 #: src/components/routes/admin/Messages/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:310
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:69
-#: src/components/routes/settings/ApiKeys/index.tsx:174
+#: src/components/routes/settings/ApiKeys/index.tsx:175
 msgid "Created"
 msgstr "Vytvorené"
 
@@ -6618,14 +6655,21 @@ msgid "Disclaimers, contact info or a thank-you note, on a single line"
 msgstr "Upozornenia, kontaktné údaje alebo poďakovanie, v jednom riadku"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:120
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:32
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:99
 #: src/components/routes/settings/Security/SignInMethods.tsx:217
 #: src/components/routes/settings/Security/SignInMethods.tsx:251
 msgid "Disconnect"
 msgstr "Odpojiť"
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:103
 #: src/components/routes/settings/Security/SignInMethods.tsx:247
 msgid "Disconnect {0}"
 msgstr "Odpojiť {0}"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:27
+msgid "Disconnect {name}? It stops working with your account straight away."
+msgstr "Odpojiť {name}? S vaším účtom okamžite prestane fungovať."
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:109
 msgid "Disconnect Stripe account"
@@ -8093,7 +8137,7 @@ msgstr "Všetci organizátori a podujatia vrátane nových."
 msgid "Every trusted device will need a code at its next sign-in. Continue?"
 msgstr "Každé dôveryhodné zariadenie bude pri ďalšom prihlásení vyžadovať kód. Pokračovať?"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:158
+#: src/components/routes/settings/ApiKeys/index.tsx:159
 msgid "Everyone ({0})"
 msgstr "Všetci ({0})"
 
@@ -8193,7 +8237,7 @@ msgstr "Dátum vypršania"
 
 #: src/components/common/WaitlistTable/index.tsx:30
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:119
-#: src/components/routes/settings/ApiKeys/index.tsx:210
+#: src/components/routes/settings/ApiKeys/index.tsx:211
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:35
 #: src/ee/licensing/licenceNotice.ts:78
 msgid "Expired"
@@ -8206,7 +8250,7 @@ msgstr "Platnosť vypršala {0}"
 #: src/components/common/PromoCodeTable/index.tsx:76
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:33
-#: src/components/routes/settings/ApiKeys/index.tsx:176
+#: src/components/routes/settings/ApiKeys/index.tsx:177
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:178
 msgid "Expires"
 msgstr "Vyprší"
@@ -9281,6 +9325,10 @@ msgstr "Späť"
 msgid "Go back to profile"
 msgstr "Späť na profil"
 
+#: src/components/routes/oauth/Connect/index.tsx:25
+msgid "Go back to the app you were connecting and start again."
+msgstr "Vráťte sa do aplikácie, ktorú ste pripájali, a začnite znova."
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:448
 msgid "Go to Event Page"
 msgstr "Prejsť na stránku udalosti"
@@ -9501,6 +9549,10 @@ msgstr "Hi.Events Cloud"
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:75
 msgid "Hi.Events Fee"
 msgstr "Poplatok Hi.Events"
+
+#: src/components/routes/oauth/Connect/index.tsx:108
+msgid "Hi.Events hasn't verified this app. Only continue if you started connecting it yourself and you trust it."
+msgstr "Hi.Events túto aplikáciu neoveril. Pokračujte, iba ak ste pripojenie začali sami a aplikácii dôverujete."
 
 #: src/components/routes/organizer/Reports/index.tsx:46
 msgid "Hi.Events platform fees and VAT breakdown by transaction"
@@ -9862,7 +9914,7 @@ msgstr "Pridal(a) som ho, pokračovať"
 msgid "I've made the payment"
 msgstr "Zaplatil(a) som"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:224
+#: src/components/routes/settings/ApiKeys/index.tsx:227
 msgid "If a key leaks, revoke it straight away and create a new one."
 msgstr "Ak kľúč unikne, okamžite ho odvolajte a vytvorte nový."
 
@@ -10255,7 +10307,7 @@ msgstr "URL vydavateľa"
 msgid "It happens on more than one date"
 msgstr "Koná sa vo viacerých termínoch"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:222
+#: src/components/routes/settings/ApiKeys/index.tsx:225
 msgid "It has your role and event access. Read-only keys can view and export, but can't change anything."
 msgstr "Má vašu rolu a prístup k udalostiam. Kľúče iba na čítanie môžu zobrazovať a exportovať, ale nemôžu nič meniť."
 
@@ -10408,7 +10460,7 @@ msgstr "Nezobrazujte ich vo verejnom line-upe a harmonograme, kým nebudete prip
 msgid "Keeps signing in with a password. {providerName} can't be used to sign this member in."
 msgstr "Naďalej sa prihlasuje heslom. {providerName} nemožno použiť na prihlásenie tohto člena."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:173
+#: src/components/routes/settings/ApiKeys/index.tsx:174
 msgid "Key"
 msgstr "Kľúč"
 
@@ -10416,11 +10468,11 @@ msgstr "Kľúč"
 msgid "Key ending in {0}"
 msgstr "Kľúč končiaci na {0}"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:79
+#: src/components/routes/settings/ApiKeys/index.tsx:80
 msgid "Key removed"
 msgstr "Kľúč bol odstránený"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:79
+#: src/components/routes/settings/ApiKeys/index.tsx:80
 msgid "Key revoked"
 msgstr "Kľúč bol odvolaný"
 
@@ -10428,7 +10480,7 @@ msgstr "Kľúč bol odvolaný"
 msgid "Keycloak, Authentik, Zitadel, OneLogin and others"
 msgstr "Keycloak, Authentik, Zitadel, OneLogin a ďalšie"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:223
+#: src/components/routes/settings/ApiKeys/index.tsx:226
 msgid "Keys can't sign in or manage your team, payouts, profile or security settings."
 msgstr "Kľúče sa nemôžu prihlásiť ani spravovať váš tím, výplaty, profil či nastavenia zabezpečenia."
 
@@ -10534,6 +10586,7 @@ msgstr "Posledných 7 dní"
 msgid "Last 90 days"
 msgstr "Posledných 90 dní"
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:92
 #: src/components/routes/settings/Team/index.tsx:220
 #: src/components/routes/settings/Team/MemberRow.tsx:165
 msgid "Last active"
@@ -10585,7 +10638,7 @@ msgstr "Naposledy spustené"
 
 #: src/components/common/SsoButtons/index.tsx:126
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:73
-#: src/components/routes/settings/ApiKeys/index.tsx:175
+#: src/components/routes/settings/ApiKeys/index.tsx:176
 msgid "Last used"
 msgstr "Naposledy použité"
 
@@ -11613,7 +11666,7 @@ msgstr "Popis mojej úžasnej udalosti..."
 msgid "My amazing event title..."
 msgstr "Názov mojej úžasnej udalosti..."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:157
+#: src/components/routes/settings/ApiKeys/index.tsx:158
 msgid "My keys"
 msgstr "Moje kľúče"
 
@@ -11709,6 +11762,7 @@ msgstr "Čistý príjem"
 #: src/components/common/PromoCodeTable/index.tsx:169
 #: src/components/common/WebhookTable/index.tsx:272
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:93
 #: src/components/routes/settings/Team/MemberRow.tsx:166
 msgid "Never"
 msgstr "Nikdy"
@@ -12017,6 +12071,10 @@ msgstr "V tomto období nie sú žiadne dokončené objednávky"
 #: src/components/routes/admin/Configurations/index.tsx:125
 msgid "No configurations found"
 msgstr "Nenašli sa žiadne konfigurácie"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:61
+msgid "No connected apps"
+msgstr "Žiadne pripojené aplikácie"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:207
 msgid "No connections available"
@@ -12487,7 +12545,7 @@ msgstr "Nie, nechajte ma tu"
 msgid "Nobody has been added to this event's lineup yet."
 msgstr "Do zostavy tohto podujatia zatiaľ nikto nebol pridaný."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:196
+#: src/components/routes/settings/ApiKeys/index.tsx:197
 msgid "Nobody has created an API key yet"
 msgstr "Zatiaľ nikto nevytvoril API kľúč"
 
@@ -13076,6 +13134,10 @@ msgstr "Prístup tímu môžu spravovať iba správcovia."
 #: src/components/forms/ProductForm/index.tsx:555
 msgid "Only available as an add-on"
 msgstr "Dostupné len ako doplnok"
+
+#: src/components/routes/oauth/Connect/index.tsx:107
+msgid "Only continue if you just started connecting from an app on this computer, such as Claude Code or Cursor."
+msgstr "Pokračujte, iba ak ste práve začali pripojenie z aplikácie v tomto počítači, napríklad Claude Code alebo Cursor."
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:181
 msgid "Only members who can manage payments can change these instructions."
@@ -15139,7 +15201,9 @@ msgstr "Znova aktivovať"
 msgid "Reactivate this date? It will be reopened for future sales."
 msgstr "Obnoviť tento termín? Predaj sa naň znova otvorí."
 
+#: src/components/routes/oauth/Connect/index.tsx:121
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:73
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:250
 msgid "Read and write"
 msgstr "Čítanie a zápis"
@@ -15149,7 +15213,12 @@ msgstr "Čítanie a zápis"
 msgid "Read more"
 msgstr "Čítať viac"
 
+#: src/components/routes/oauth/Connect/index.tsx:127
+msgid "Read only"
+msgstr "Iba čítanie"
+
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:73
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:261
 msgid "Read-only"
 msgstr "Iba na čítanie"
@@ -15471,7 +15540,7 @@ msgstr "odstrániť"
 msgid "Remove"
 msgstr "Odstrániť"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:73
+#: src/components/routes/settings/ApiKeys/index.tsx:74
 msgid "Remove \"{0}\"? It has already expired."
 msgstr "Odstrániť „{0}“? Jeho platnosť už vypršala."
 
@@ -15546,7 +15615,7 @@ msgstr "Odstrániť značku Hi.Events"
 msgid "Remove Hi.Events branding from everything your attendees see, and put your own logo in their emails."
 msgstr "Odstráňte značku Hi.Events zo všetkého, čo vidia vaši účastníci, a vložte do ich e-mailov vlastné logo."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:81
+#: src/components/routes/settings/ApiKeys/index.tsx:82
 msgid "Remove key"
 msgstr "Odstrániť kľúč"
 
@@ -15949,6 +16018,14 @@ msgstr "Vrátiť sa na udalosť"
 msgid "Return to Event Page"
 msgstr "Vrátiť sa na stránku udalosti"
 
+#: src/components/routes/oauth/Connect/index.tsx:77
+msgid "Returning you to {leavingTo}…"
+msgstr "Vraciame vás na {leavingTo}…"
+
+#: src/components/routes/oauth/Connect/index.tsx:92
+msgid "Returns you to"
+msgstr "Vráti vás na"
+
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:144
 msgid "Reusable venue layouts. Attach one to an event to sell reserved seats."
 msgstr "Opakovane použiteľné rozloženia miesta konania. Priraďte jedno k udalosti a predávajte rezervované sedadlá."
@@ -16007,11 +16084,11 @@ msgstr "Skontrolujte objednávku a potom zvoľte spôsob platby"
 msgid "Revoke"
 msgstr "Odvolať"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:75
+#: src/components/routes/settings/ApiKeys/index.tsx:76
 msgid "Revoke \"{0}\"? Anything using it stops working straight away, and {ownerName} will get an email about it."
 msgstr "Odvolať „{0}“? Všetko, čo ho používa, okamžite prestane fungovať a {ownerName} o tom dostane e-mail."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:76
+#: src/components/routes/settings/ApiKeys/index.tsx:77
 msgid "Revoke \"{0}\"? Anything using it stops working straight away. This can't be undone."
 msgstr "Odvolať „{0}“? Všetko, čo ho používa, okamžite prestane fungovať. Túto akciu nemožno vrátiť späť."
 
@@ -16023,7 +16100,7 @@ msgstr "Odvolať {0}"
 msgid "Revoke invitation"
 msgstr "Odvolať pozvánku"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:81
+#: src/components/routes/settings/ApiKeys/index.tsx:82
 msgid "Revoke key"
 msgstr "Odvolať kľúč"
 
@@ -17158,7 +17235,7 @@ msgstr "Odosielať e-maily účastníkom, držiteľom lístkov alebo vlastníkom
 msgid "Send invitation"
 msgstr "Odoslať pozvánku"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:221
+#: src/components/routes/settings/ApiKeys/index.tsx:224
 msgid "Send it in the Authorization header of every request."
 msgstr "Posielajte ho v hlavičke Authorization v každej požiadavke."
 
@@ -17566,7 +17643,7 @@ msgstr "Zobraziť menej platforiem"
 msgid "Show initials instead"
 msgstr "Namiesto toho zobraziť iniciály"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:160
+#: src/components/routes/settings/ApiKeys/index.tsx:161
 msgid "Show keys"
 msgstr "Zobraziť kľúče"
 
@@ -18147,10 +18224,13 @@ msgstr "Niečo sa pokazilo. Skúste to neskôr."
 #: src/components/routes/auth/Login/index.tsx:132
 #: src/components/routes/auth/Register/index.tsx:81
 #: src/components/routes/my-tickets/index.tsx:162
+#: src/components/routes/oauth/Connect/index.tsx:63
+#: src/components/routes/oauth/Connect/index.tsx:70
 #: src/components/routes/product-widget/SelectProducts/index.tsx:383
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:79
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:30
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:123
-#: src/components/routes/settings/ApiKeys/index.tsx:80
+#: src/components/routes/settings/ApiKeys/index.tsx:81
 #: src/components/routes/settings/Profile/index.tsx:129
 #: src/components/routes/settings/Profile/index.tsx:139
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:46
@@ -19685,6 +19765,10 @@ msgstr "Táto odpoveď je príliš dlhá. Pred uložením ju skráťte."
 msgid "This answer means you can't register for this event."
 msgstr "S touto odpoveďou sa na toto podujatie nemôžete zaregistrovať."
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:24
+msgid "this app"
+msgstr "túto aplikáciu"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:260
 msgid "This applies to every matching date in the event, including dates not currently visible. Attendees registered on any of those dates will be reachable via the message composer once the update finishes."
 msgstr "Platí to pre každý vyhovujúci termín podujatia vrátane termínov, ktoré práve nie sú viditeľné. Účastníci prihlásení na ktorýkoľvek z nich budú po dokončení aktualizácie dostupní v editore správ."
@@ -19756,6 +19840,14 @@ msgstr "Tento check-in zoznam patrí k termínu, ktorý bol zrušený, takže sa
 #: src/components/forms/AffiliateForm/index.tsx:41
 msgid "This code will be used to track sales. Only letters, numbers, hyphens, and underscores allowed."
 msgstr "Tento kód sa použije na sledovanie predajov. Povolené sú iba písmená, číslice, pomlčky a podčiarkovníky."
+
+#: src/components/routes/oauth/Connect/index.tsx:24
+msgid "This connection link doesn't work"
+msgstr "Tento odkaz na pripojenie nefunguje"
+
+#: src/components/routes/oauth/Connect/index.tsx:24
+msgid "This connection request has expired"
+msgstr "Táto požiadavka na pripojenie vypršala"
 
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:181
 msgid "This date"
@@ -20647,7 +20739,8 @@ msgstr "Upravte filtre, aby ste videli viac termínov."
 #: src/components/common/OrganizerReportTable/index.tsx:273
 #: src/components/common/ReportTable/index.tsx:254
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1121
-#: src/components/routes/settings/ApiKeys/index.tsx:188
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:54
+#: src/components/routes/settings/ApiKeys/index.tsx:189
 #: src/components/routes/settings/ApiReference/index.tsx:83
 #: src/components/routes/settings/Organizers/index.tsx:41
 #: src/components/routes/settings/Security/index.tsx:77
@@ -21042,6 +21135,10 @@ msgstr "Povolené neobmedzené použitia"
 #: src/components/common/LocationsTable/index.tsx:32
 msgid "Unnamed"
 msgstr "Bez názvu"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:71
+msgid "Unnamed app"
+msgstr "Aplikácia bez názvu"
 
 #: src/components/common/LocationPicker/index.tsx:67
 msgid "Unnamed location"
@@ -21445,7 +21542,7 @@ msgstr "Používa farby a písmo z dizajnu vašej stránky. Ak dizajn zmeníte, 
 msgid "Using them for real events? Get an Enterprise licence and put its key in <0>APP_LICENCE_KEY</0>."
 msgstr "Používate ich na skutočných podujatiach? Získajte licenciu Enterprise a vložte jej kľúč do <0>APP_LICENCE_KEY</0>."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:219
+#: src/components/routes/settings/ApiKeys/index.tsx:222
 msgid "Using your key"
 msgstr "Používanie kľúča"
 
@@ -21591,6 +21688,7 @@ msgstr "Overovací e-mail odoslaný. Skontrolujte si doručenú poštu."
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:216
 #: src/components/routes/admin/Attribution/index.tsx:198
 #: src/components/routes/admin/Dashboard/index.tsx:396
+#: src/components/routes/oauth/Connect/index.tsx:97
 #: src/ee/sso/components/SingleSignOn/DomainList.tsx:17
 msgid "Verified"
 msgstr "Overené"
@@ -21749,6 +21847,10 @@ msgstr "Zobraziť stránku udalosti"
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:93
 msgid "View Event Page"
 msgstr "Zobraziť stránku udalosti"
+
+#: src/components/routes/oauth/Connect/index.tsx:128
+msgid "View events, tickets and sales, without changing anything."
+msgstr "Zobrazovať podujatia, vstupenky a predaje bez akýchkoľvek zmien."
 
 #: src/components/common/OrganizerWebhookTable/index.tsx:117
 #: src/components/common/WebhookTable/index.tsx:117
@@ -22689,6 +22791,10 @@ msgstr "Ďalšie servisné poplatky a dane môžete nakonfigurovať v nastavenia
 msgid "You can create a promo code which targets this product on the"
 msgstr "Môžete vytvoriť promo kód, ktorý cieli na tento produkt na"
 
+#: src/components/routes/oauth/Connect/index.tsx:167
+msgid "You can disconnect it at any time from Settings → API keys."
+msgstr "Kedykoľvek ju môžete odpojiť v Nastavenia → API kľúče."
+
 #: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:31
 msgid "You can only change it back to a single event while it has exactly one date and no orders. Once someone places an order, this can't be undone."
 msgstr "Späť na jednorazové podujatie ho môžete zmeniť len vtedy, keď má presne jeden termín a žiadne objednávky. Keď niekto zadá objednávku, túto zmenu už nebude možné vrátiť."
@@ -22750,7 +22856,7 @@ msgstr "K tomuto organizátorovi nemáte prístup"
 msgid "You don't have access to this page"
 msgstr "K tejto stránke nemáte prístup"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:196
+#: src/components/routes/settings/ApiKeys/index.tsx:197
 msgid "You don't have any API keys"
 msgstr "Nemáte žiadne API kľúče"
 
@@ -22816,7 +22922,7 @@ msgstr "Musíte mať aspoň jednu cenovú úroveň"
 msgid "You must verify your email address before you can update the organizer status."
 msgstr "Pred aktualizáciou stavu organizátora musíte overiť e-mailovú adresu."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:131
+#: src/components/routes/settings/ApiKeys/index.tsx:132
 msgid "You need a confirmed email address to create API keys. Check your inbox, or resend the confirmation email from your <0>profile</0>."
 msgstr "Na vytváranie API kľúčov potrebujete potvrdenú e-mailovú adresu. Skontrolujte si doručenú poštu alebo znova odošlite potvrdzovací e-mail zo svojho <0>profilu</0>."
 
@@ -22956,7 +23062,7 @@ msgstr "Bolo vám ponúknuté miesto!"
 msgid "You've changed the session time"
 msgstr "Zmenili ste čas termínu"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:145
+#: src/components/routes/settings/ApiKeys/index.tsx:146
 msgid "You've reached the limit of {0} active keys. Revoke one to create another."
 msgstr "Dosiahli ste limit {0} aktívnych kľúčov. Ak chcete vytvoriť ďalší, jeden odvolajte."
 

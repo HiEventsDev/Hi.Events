@@ -276,6 +276,10 @@ msgstr "{0} εισιτήρια"
 msgid "{0} to {1}"
 msgstr "{0} έως {1}"
 
+#: src/components/routes/oauth/Connect/index.tsx:87
+msgid "{0} wants to use your Hi.Events account {1}. It will act as you, with the access you choose below."
+msgstr "Η εφαρμογή {0} θέλει να χρησιμοποιήσει τον λογαριασμό σας Hi.Events {1}. Θα ενεργεί ως εσείς, με την πρόσβαση που θα επιλέξετε παρακάτω."
+
 #: src/components/routes/settings/Security/SignInMethods.tsx:139
 msgid "{0} was disconnected."
 msgstr "Το {0} αποσυνδέθηκε."
@@ -544,7 +548,7 @@ msgstr "Πρώτη εκδήλωση του {organizerName}"
 msgid "{outsideDomainCount, plural, one {# member outside your verified domains keeps their current sign-in.} other {# members outside your verified domains keep their current sign-in.}}"
 msgstr "{outsideDomainCount, plural, one {# μέλος εκτός των επαληθευμένων τομέων σας διατηρεί τον τρέχοντα τρόπο σύνδεσής του.} other {# μέλη εκτός των επαληθευμένων τομέων σας διατηρούν τον τρέχοντα τρόπο σύνδεσής τους.}}"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:165
+#: src/components/routes/settings/ApiKeys/index.tsx:166
 msgid "{ownActiveCount} of {0} active keys"
 msgstr "{ownActiveCount} από {0} ενεργά κλειδιά"
 
@@ -1061,6 +1065,7 @@ msgstr "Αποδοχή πληρωμών με πιστωτική κάρτα μέ�
 #: src/components/common/TeamAccessFields/index.tsx:207
 #: src/components/common/TeamAccessPanel/index.tsx:137
 #: src/components/forms/ProductForm/index.tsx:605
+#: src/components/routes/oauth/Connect/index.tsx:115
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:237
 #: src/components/routes/settings/Team/index.tsx:218
 #: src/components/routes/settings/Team/MemberRow.tsx:141
@@ -1802,6 +1807,10 @@ msgstr "Έλεγχος ηλικίας (18+)"
 msgid "Agenda"
 msgstr "Ατζέντα"
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:43
+msgid "AI assistants such as Claude and ChatGPT connect by signing in, without a key. Add this MCP server URL to your assistant to connect it."
+msgstr "Οι βοηθοί AI όπως το Claude και το ChatGPT συνδέονται με σύνδεση λογαριασμού, χωρίς κλειδί. Προσθέστε αυτό το URL διακομιστή MCP στον βοηθό σας για να τον συνδέσετε."
+
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:45
 msgid "Aisles after seats"
 msgstr "Διάδρομοι μετά από θέσεις"
@@ -2152,6 +2161,10 @@ msgstr "Ποσό που δόθηκε"
 msgid "An account with this email already exists. Sign in instead."
 msgstr "Υπάρχει ήδη λογαριασμός με αυτό το email. Συνδεθείτε αντί γι' αυτό."
 
+#: src/components/routes/oauth/Connect/index.tsx:16
+msgid "an app on this computer"
+msgstr "μια εφαρμογή σε αυτόν τον υπολογιστή"
+
 #: src/components/forms/AffiliateForm/index.tsx:90
 msgid "An email to associate with this affiliate. The affiliate will not be notified."
 msgstr "Ένα email για συσχέτιση με αυτόν τον συνεργάτη. Ο συνεργάτης δεν θα ειδοποιηθεί."
@@ -2319,19 +2332,27 @@ msgid "Anything else?"
 msgstr "Κάτι άλλο;"
 
 #: src/components/layouts/SettingsLayout/index.tsx:74
-#: src/components/routes/settings/ApiKeys/index.tsx:111
+#: src/components/routes/settings/ApiKeys/index.tsx:112
 msgid "API keys"
 msgstr "Κλειδιά API"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:139
+#: src/components/routes/settings/ApiKeys/index.tsx:140
 msgid "API keys can't be created while you're impersonating someone."
 msgstr "Δεν μπορείτε να δημιουργήσετε κλειδιά API ενώ υποδύεστε άλλον χρήστη."
 
 #: src/components/layouts/SettingsLayout/index.tsx:85
 #: src/components/layouts/SettingsLayout/index.tsx:89
-#: src/components/routes/settings/ApiKeys/index.tsx:122
+#: src/components/routes/settings/ApiKeys/index.tsx:123
 msgid "API reference"
 msgstr "Τεκμηρίωση API"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:29
+msgid "App disconnected"
+msgstr "Η εφαρμογή αποσυνδέθηκε"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:79
+msgid "App on your computer"
+msgstr "Εφαρμογή στον υπολογιστή σας"
 
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:136
 msgid "Appearance"
@@ -3381,7 +3402,7 @@ msgstr "Ταυτότητα & email"
 msgid "Brazilian Portuguese"
 msgstr "Πορτογαλικά Βραζιλίας"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:227
+#: src/components/routes/settings/ApiKeys/index.tsx:230
 msgid "Browse every endpoint in the API reference"
 msgstr "Δείτε όλα τα endpoints στην τεκμηρίωση του API"
 
@@ -3639,6 +3660,7 @@ msgstr "Δεν μπορείτε να χρησιμοποιήσετε την εφ�
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:67
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1173
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:64
+#: src/components/routes/oauth/Connect/index.tsx:164
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:69
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:85
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:85
@@ -4901,7 +4923,7 @@ msgstr "Επιβεβαίωση spam"
 msgid "Confirm your email"
 msgstr "Επιβεβαιώστε το email σας"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:130
+#: src/components/routes/settings/ApiKeys/index.tsx:131
 msgid "Confirm your email address"
 msgstr "Επιβεβαιώστε τη διεύθυνση email σας"
 
@@ -4933,6 +4955,8 @@ msgstr "Συγχαρητήρια! Η εκδήλωσή σας είναι τώρα
 msgid "Connect"
 msgstr "Σύνδεση"
 
+#: src/components/routes/oauth/Connect/index.tsx:86
+#: src/components/routes/oauth/Connect/index.tsx:151
 #: src/components/routes/settings/Security/SignInMethods.tsx:246
 msgid "Connect {0}"
 msgstr "Σύνδεση {0}"
@@ -4945,7 +4969,7 @@ msgstr "Συνδέστε λογαριασμό Stripe στις Πληρωμές �
 msgid "Connect bank"
 msgstr "Σύνδεση τράπεζας"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:112
+#: src/components/routes/settings/ApiKeys/index.tsx:113
 msgid "Connect other tools and your own code to this account. A key can do what you can do, so treat it like a password."
 msgstr "Συνδέστε άλλα εργαλεία και τον δικό σας κώδικα με αυτόν τον λογαριασμό. Ένα κλειδί μπορεί να κάνει ό,τι μπορείτε κι εσείς, γι' αυτό χειριστείτε το σαν κωδικό πρόσβασης."
 
@@ -4988,8 +5012,13 @@ msgid "Connect your identity provider, verify your email domains, then choose wh
 msgstr "Συνδέστε τον πάροχο ταυτότητας, επαληθεύστε τους τομείς email σας και επιλέξτε αν θα είναι υποχρεωτικός για όλους."
 
 #: src/components/routes/admin/Dashboard/index.tsx:410
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:88
 msgid "Connected"
 msgstr "Συνδεδεμένο"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:41
+msgid "Connected apps"
+msgstr "Συνδεδεμένες εφαρμογές"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:298
 msgid "Connected the wrong Stripe account? Disconnect and start over."
@@ -5456,9 +5485,13 @@ msgstr "Δεν ήταν δυνατή η φόρτωση της τεκμηρίωσ
 msgid "Couldn't load this report"
 msgstr "Δεν ήταν δυνατή η φόρτωση αυτής της αναφοράς"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:187
+#: src/components/routes/settings/ApiKeys/index.tsx:188
 msgid "Couldn't load your API keys"
 msgstr "Δεν ήταν δυνατή η φόρτωση των κλειδιών API σας"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:53
+msgid "Couldn't load your connected apps"
+msgstr "Δεν ήταν δυνατή η φόρτωση των συνδεδεμένων εφαρμογών σας"
 
 #: src/components/routes/settings/Organizers/index.tsx:40
 msgid "Couldn't load your organizers"
@@ -5543,7 +5576,7 @@ msgstr "Δημιουργία «{query}»"
 msgid "Create {0} Template"
 msgstr "Δημιουργία Προτύπου {0}"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:199
+#: src/components/routes/settings/ApiKeys/index.tsx:200
 msgid "Create a key to connect tools like Zapier, your CRM or your own scripts to your events, orders and attendees."
 msgstr "Δημιουργήστε ένα κλειδί για να συνδέσετε εργαλεία όπως το Zapier, το CRM σας ή τα δικά σας scripts με τις εκδηλώσεις, τις παραγγελίες και τους συμμετέχοντές σας."
 
@@ -5604,6 +5637,10 @@ msgstr "Δημιουργήστε μια ανακοίνωση για να εμφ�
 msgid "Create and change events, orders, attendees and more."
 msgstr "Δημιουργία και αλλαγή εκδηλώσεων, παραγγελιών, συμμετεχόντων και άλλων."
 
+#: src/components/routes/oauth/Connect/index.tsx:122
+msgid "Create and change events, tickets, questions and settings."
+msgstr "Δημιουργία και αλλαγή εκδηλώσεων, εισιτηρίων, ερωτήσεων και ρυθμίσεων."
+
 #: src/components/routes/event/products.tsx:67
 msgid "Create and configure tickets and merchandise for sale."
 msgstr "Δημιουργία και ρύθμιση εισιτηρίων και εμπορευμάτων προς πώληση."
@@ -5619,7 +5656,7 @@ msgid "Create Announcement"
 msgstr "Δημιουργία ανακοίνωσης"
 
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:215
-#: src/components/routes/settings/ApiKeys/index.tsx:91
+#: src/components/routes/settings/ApiKeys/index.tsx:92
 msgid "Create API key"
 msgstr "Δημιουργία κλειδιού API"
 
@@ -5799,7 +5836,7 @@ msgstr "Δημιουργήστε τη δική σας εκδήλωση"
 #: src/components/routes/admin/Messages/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:310
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:69
-#: src/components/routes/settings/ApiKeys/index.tsx:174
+#: src/components/routes/settings/ApiKeys/index.tsx:175
 msgid "Created"
 msgstr "Δημιουργήθηκε"
 
@@ -6618,14 +6655,21 @@ msgid "Disclaimers, contact info or a thank-you note, on a single line"
 msgstr "Αποποιήσεις, στοιχεία επικοινωνίας ή ένα ευχαριστώ, σε μία γραμμή"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:120
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:32
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:99
 #: src/components/routes/settings/Security/SignInMethods.tsx:217
 #: src/components/routes/settings/Security/SignInMethods.tsx:251
 msgid "Disconnect"
 msgstr "Αποσύνδεση"
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:103
 #: src/components/routes/settings/Security/SignInMethods.tsx:247
 msgid "Disconnect {0}"
 msgstr "Αποσύνδεση {0}"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:27
+msgid "Disconnect {name}? It stops working with your account straight away."
+msgstr "Αποσύνδεση {name}; Θα σταματήσει αμέσως να λειτουργεί με τον λογαριασμό σας."
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:109
 msgid "Disconnect Stripe account"
@@ -8093,7 +8137,7 @@ msgstr "Όλοι οι διοργανωτές και οι εκδηλώσεις, �
 msgid "Every trusted device will need a code at its next sign-in. Continue?"
 msgstr "Κάθε αξιόπιστη συσκευή θα χρειαστεί κωδικό στην επόμενη σύνδεση. Συνέχεια;"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:158
+#: src/components/routes/settings/ApiKeys/index.tsx:159
 msgid "Everyone ({0})"
 msgstr "Όλοι ({0})"
 
@@ -8193,7 +8237,7 @@ msgstr "Ημερομηνία λήξης"
 
 #: src/components/common/WaitlistTable/index.tsx:30
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:119
-#: src/components/routes/settings/ApiKeys/index.tsx:210
+#: src/components/routes/settings/ApiKeys/index.tsx:211
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:35
 #: src/ee/licensing/licenceNotice.ts:78
 msgid "Expired"
@@ -8206,7 +8250,7 @@ msgstr "Έληξε {0}"
 #: src/components/common/PromoCodeTable/index.tsx:76
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:33
-#: src/components/routes/settings/ApiKeys/index.tsx:176
+#: src/components/routes/settings/ApiKeys/index.tsx:177
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:178
 msgid "Expires"
 msgstr "Λήγει"
@@ -9281,6 +9325,10 @@ msgstr "Πίσω"
 msgid "Go back to profile"
 msgstr "Επιστροφή στο προφίλ"
 
+#: src/components/routes/oauth/Connect/index.tsx:25
+msgid "Go back to the app you were connecting and start again."
+msgstr "Επιστρέψτε στην εφαρμογή που συνδέατε και ξεκινήστε ξανά."
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:448
 msgid "Go to Event Page"
 msgstr "Μετάβαση στη Σελίδα Εκδήλωσης"
@@ -9501,6 +9549,10 @@ msgstr "Hi.Events Cloud"
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:75
 msgid "Hi.Events Fee"
 msgstr "Χρέωση Hi.Events"
+
+#: src/components/routes/oauth/Connect/index.tsx:108
+msgid "Hi.Events hasn't verified this app. Only continue if you started connecting it yourself and you trust it."
+msgstr "Το Hi.Events δεν έχει επαληθεύσει αυτή την εφαρμογή. Συνεχίστε μόνο αν ξεκινήσατε εσείς τη σύνδεση και την εμπιστεύεστε."
 
 #: src/components/routes/organizer/Reports/index.tsx:46
 msgid "Hi.Events platform fees and VAT breakdown by transaction"
@@ -9862,7 +9914,7 @@ msgstr "Την πρόσθεσα, συνέχεια"
 msgid "I've made the payment"
 msgstr "Έχω κάνει την πληρωμή"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:224
+#: src/components/routes/settings/ApiKeys/index.tsx:227
 msgid "If a key leaks, revoke it straight away and create a new one."
 msgstr "Αν ένα κλειδί διαρρεύσει, ανακαλέστε το αμέσως και δημιουργήστε ένα νέο."
 
@@ -10255,7 +10307,7 @@ msgstr "URL εκδότη"
 msgid "It happens on more than one date"
 msgstr "Πραγματοποιείται σε περισσότερες από μία ημερομηνίες"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:222
+#: src/components/routes/settings/ApiKeys/index.tsx:225
 msgid "It has your role and event access. Read-only keys can view and export, but can't change anything."
 msgstr "Έχει τον ρόλο σας και την πρόσβασή σας στις εκδηλώσεις. Τα κλειδιά μόνο ανάγνωσης μπορούν να προβάλλουν και να εξάγουν δεδομένα, αλλά δεν μπορούν να αλλάξουν τίποτα."
 
@@ -10408,7 +10460,7 @@ msgstr "Κρατήστε τους εκτός του δημόσιου line-up κ�
 msgid "Keeps signing in with a password. {providerName} can't be used to sign this member in."
 msgstr "Συνεχίζει να συνδέεται με κωδικό πρόσβασης. Το {providerName} δεν μπορεί να χρησιμοποιηθεί για τη σύνδεση αυτού του μέλους."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:173
+#: src/components/routes/settings/ApiKeys/index.tsx:174
 msgid "Key"
 msgstr "Κλειδί"
 
@@ -10416,11 +10468,11 @@ msgstr "Κλειδί"
 msgid "Key ending in {0}"
 msgstr "Κλειδί που τελειώνει σε {0}"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:79
+#: src/components/routes/settings/ApiKeys/index.tsx:80
 msgid "Key removed"
 msgstr "Το κλειδί αφαιρέθηκε"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:79
+#: src/components/routes/settings/ApiKeys/index.tsx:80
 msgid "Key revoked"
 msgstr "Το κλειδί ανακλήθηκε"
 
@@ -10428,7 +10480,7 @@ msgstr "Το κλειδί ανακλήθηκε"
 msgid "Keycloak, Authentik, Zitadel, OneLogin and others"
 msgstr "Keycloak, Authentik, Zitadel, OneLogin και άλλοι"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:223
+#: src/components/routes/settings/ApiKeys/index.tsx:226
 msgid "Keys can't sign in or manage your team, payouts, profile or security settings."
 msgstr "Τα κλειδιά δεν μπορούν να συνδεθούν ούτε να διαχειριστούν την ομάδα, τις πληρωμές, το προφίλ ή τις ρυθμίσεις ασφαλείας σας."
 
@@ -10534,6 +10586,7 @@ msgstr "Τελευταίες 7 ημέρες"
 msgid "Last 90 days"
 msgstr "Τελευταίες 90 ημέρες"
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:92
 #: src/components/routes/settings/Team/index.tsx:220
 #: src/components/routes/settings/Team/MemberRow.tsx:165
 msgid "Last active"
@@ -10585,7 +10638,7 @@ msgstr "Τελευταία Ενεργοποίηση"
 
 #: src/components/common/SsoButtons/index.tsx:126
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:73
-#: src/components/routes/settings/ApiKeys/index.tsx:175
+#: src/components/routes/settings/ApiKeys/index.tsx:176
 msgid "Last used"
 msgstr "Χρησιμοποιήθηκε τελευταία"
 
@@ -11613,7 +11666,7 @@ msgstr "Η περιγραφή της εκδήλωσής μου..."
 msgid "My amazing event title..."
 msgstr "Ο τίτλος της εκδήλωσής μου..."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:157
+#: src/components/routes/settings/ApiKeys/index.tsx:158
 msgid "My keys"
 msgstr "Τα κλειδιά μου"
 
@@ -11709,6 +11762,7 @@ msgstr "Καθαρά Έσοδα"
 #: src/components/common/PromoCodeTable/index.tsx:169
 #: src/components/common/WebhookTable/index.tsx:272
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:93
 #: src/components/routes/settings/Team/MemberRow.tsx:166
 msgid "Never"
 msgstr "Ποτέ"
@@ -12017,6 +12071,10 @@ msgstr "Δεν υπάρχουν ολοκληρωμένες παραγγελίε�
 #: src/components/routes/admin/Configurations/index.tsx:125
 msgid "No configurations found"
 msgstr "Δεν βρέθηκαν ρυθμίσεις"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:61
+msgid "No connected apps"
+msgstr "Δεν υπάρχουν συνδεδεμένες εφαρμογές"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:207
 msgid "No connections available"
@@ -12487,7 +12545,7 @@ msgstr "Όχι, μείνετε εδώ"
 msgid "Nobody has been added to this event's lineup yet."
 msgstr "Δεν έχει προστεθεί ακόμη κανείς στο line-up αυτής της εκδήλωσης."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:196
+#: src/components/routes/settings/ApiKeys/index.tsx:197
 msgid "Nobody has created an API key yet"
 msgstr "Κανείς δεν έχει δημιουργήσει ακόμη κλειδί API"
 
@@ -13076,6 +13134,10 @@ msgstr "Μόνο οι διαχειριστές μπορούν να διαχει�
 #: src/components/forms/ProductForm/index.tsx:555
 msgid "Only available as an add-on"
 msgstr "Διαθέσιμο μόνο ως πρόσθετο"
+
+#: src/components/routes/oauth/Connect/index.tsx:107
+msgid "Only continue if you just started connecting from an app on this computer, such as Claude Code or Cursor."
+msgstr "Συνεχίστε μόνο αν μόλις ξεκινήσατε τη σύνδεση από μια εφαρμογή σε αυτόν τον υπολογιστή, όπως το Claude Code ή το Cursor."
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:181
 msgid "Only members who can manage payments can change these instructions."
@@ -15139,7 +15201,9 @@ msgstr "Επανενεργοποίηση"
 msgid "Reactivate this date? It will be reopened for future sales."
 msgstr "Επανενεργοποίηση αυτής της ημερομηνίας; Θα ανοίξει ξανά για μελλοντικές πωλήσεις."
 
+#: src/components/routes/oauth/Connect/index.tsx:121
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:73
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:250
 msgid "Read and write"
 msgstr "Ανάγνωση και εγγραφή"
@@ -15149,7 +15213,12 @@ msgstr "Ανάγνωση και εγγραφή"
 msgid "Read more"
 msgstr "Διαβάστε περισσότερα"
 
+#: src/components/routes/oauth/Connect/index.tsx:127
+msgid "Read only"
+msgstr "Μόνο ανάγνωση"
+
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:73
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:261
 msgid "Read-only"
 msgstr "Μόνο ανάγνωση"
@@ -15471,7 +15540,7 @@ msgstr "αφαίρεση"
 msgid "Remove"
 msgstr "Αφαίρεση"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:73
+#: src/components/routes/settings/ApiKeys/index.tsx:74
 msgid "Remove \"{0}\"? It has already expired."
 msgstr "Αφαίρεση του «{0}»; Έχει ήδη λήξει."
 
@@ -15546,7 +15615,7 @@ msgstr "Αφαίρεση του branding Hi.Events"
 msgid "Remove Hi.Events branding from everything your attendees see, and put your own logo in their emails."
 msgstr "Αφαιρέστε το branding του Hi.Events από όλα όσα βλέπουν οι συμμετέχοντές σας και βάλτε το δικό σας λογότυπο στα email τους."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:81
+#: src/components/routes/settings/ApiKeys/index.tsx:82
 msgid "Remove key"
 msgstr "Αφαίρεση κλειδιού"
 
@@ -15949,6 +16018,14 @@ msgstr "Επιστροφή στην Εκδήλωση"
 msgid "Return to Event Page"
 msgstr "Επιστροφή στη Σελίδα Εκδήλωσης"
 
+#: src/components/routes/oauth/Connect/index.tsx:77
+msgid "Returning you to {leavingTo}…"
+msgstr "Επιστρέφετε σε {leavingTo}…"
+
+#: src/components/routes/oauth/Connect/index.tsx:92
+msgid "Returns you to"
+msgstr "Σας επιστρέφει σε"
+
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:144
 msgid "Reusable venue layouts. Attach one to an event to sell reserved seats."
 msgstr "Επαναχρησιμοποιήσιμες διατάξεις χώρων. Συνδέστε μία σε μια εκδήλωση για να πουλήσετε θέσεις με κράτηση."
@@ -16007,11 +16084,11 @@ msgstr "Ελέγξτε την παραγγελία και επιλέξτε τρ�
 msgid "Revoke"
 msgstr "Ανάκληση"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:75
+#: src/components/routes/settings/ApiKeys/index.tsx:76
 msgid "Revoke \"{0}\"? Anything using it stops working straight away, and {ownerName} will get an email about it."
 msgstr "Ανάκληση του «{0}»; Ό,τι το χρησιμοποιεί θα σταματήσει να λειτουργεί αμέσως και θα σταλεί σχετικό email σε: {ownerName}."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:76
+#: src/components/routes/settings/ApiKeys/index.tsx:77
 msgid "Revoke \"{0}\"? Anything using it stops working straight away. This can't be undone."
 msgstr "Ανάκληση του «{0}»; Ό,τι το χρησιμοποιεί θα σταματήσει να λειτουργεί αμέσως. Αυτό δεν μπορεί να αναιρεθεί."
 
@@ -16023,7 +16100,7 @@ msgstr "Ανάκληση {0}"
 msgid "Revoke invitation"
 msgstr "Ανάκληση πρόσκλησης"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:81
+#: src/components/routes/settings/ApiKeys/index.tsx:82
 msgid "Revoke key"
 msgstr "Ανάκληση κλειδιού"
 
@@ -17158,7 +17235,7 @@ msgstr "Αποστολή email σε συμμετέχοντες, κατόχους
 msgid "Send invitation"
 msgstr "Αποστολή πρόσκλησης"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:221
+#: src/components/routes/settings/ApiKeys/index.tsx:224
 msgid "Send it in the Authorization header of every request."
 msgstr "Στείλτε το στην κεφαλίδα Authorization κάθε αιτήματος."
 
@@ -17566,7 +17643,7 @@ msgstr "Εμφάνιση λιγότερων πλατφορμών"
 msgid "Show initials instead"
 msgstr "Εμφάνιση αρχικών αντί αυτού"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:160
+#: src/components/routes/settings/ApiKeys/index.tsx:161
 msgid "Show keys"
 msgstr "Εμφάνιση κλειδιών"
 
@@ -18147,10 +18224,13 @@ msgstr "Κάτι πήγε στραβά. Παρακαλώ δοκιμάστε ξα
 #: src/components/routes/auth/Login/index.tsx:132
 #: src/components/routes/auth/Register/index.tsx:81
 #: src/components/routes/my-tickets/index.tsx:162
+#: src/components/routes/oauth/Connect/index.tsx:63
+#: src/components/routes/oauth/Connect/index.tsx:70
 #: src/components/routes/product-widget/SelectProducts/index.tsx:383
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:79
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:30
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:123
-#: src/components/routes/settings/ApiKeys/index.tsx:80
+#: src/components/routes/settings/ApiKeys/index.tsx:81
 #: src/components/routes/settings/Profile/index.tsx:129
 #: src/components/routes/settings/Profile/index.tsx:139
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:46
@@ -19685,6 +19765,10 @@ msgstr "Αυτή η απάντηση είναι πολύ μεγάλη. Συντ�
 msgid "This answer means you can't register for this event."
 msgstr "Με αυτή την απάντηση δεν μπορείτε να εγγραφείτε σε αυτή την εκδήλωση."
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:24
+msgid "this app"
+msgstr "αυτή την εφαρμογή"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:260
 msgid "This applies to every matching date in the event, including dates not currently visible. Attendees registered on any of those dates will be reachable via the message composer once the update finishes."
 msgstr "Ισχύει για κάθε ημερομηνία της εκδήλωσης που ταιριάζει, ακόμη και για όσες δεν φαίνονται τώρα. Οι συμμετέχοντες που είναι εγγεγραμμένοι σε οποιαδήποτε από αυτές θα είναι προσβάσιμοι από τον συντάκτη μηνυμάτων μόλις ολοκληρωθεί η ενημέρωση."
@@ -19756,6 +19840,14 @@ msgstr "Αυτή η λίστα check-in αφορά συνεδρία που έχ�
 #: src/components/forms/AffiliateForm/index.tsx:41
 msgid "This code will be used to track sales. Only letters, numbers, hyphens, and underscores allowed."
 msgstr "Αυτός ο κωδικός θα χρησιμοποιηθεί για παρακολούθηση πωλήσεων. Επιτρέπονται μόνο γράμματα, αριθμοί, παύλες και κάτω παύλες."
+
+#: src/components/routes/oauth/Connect/index.tsx:24
+msgid "This connection link doesn't work"
+msgstr "Αυτός ο σύνδεσμος σύνδεσης δεν λειτουργεί"
+
+#: src/components/routes/oauth/Connect/index.tsx:24
+msgid "This connection request has expired"
+msgstr "Αυτό το αίτημα σύνδεσης έχει λήξει"
 
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:181
 msgid "This date"
@@ -20647,7 +20739,8 @@ msgstr "Προσαρμόστε τα φίλτρα για να δείτε περι
 #: src/components/common/OrganizerReportTable/index.tsx:273
 #: src/components/common/ReportTable/index.tsx:254
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1121
-#: src/components/routes/settings/ApiKeys/index.tsx:188
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:54
+#: src/components/routes/settings/ApiKeys/index.tsx:189
 #: src/components/routes/settings/ApiReference/index.tsx:83
 #: src/components/routes/settings/Organizers/index.tsx:41
 #: src/components/routes/settings/Security/index.tsx:77
@@ -21042,6 +21135,10 @@ msgstr "Επιτρέπονται απεριόριστες χρήσεις"
 #: src/components/common/LocationsTable/index.tsx:32
 msgid "Unnamed"
 msgstr "Χωρίς όνομα"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:71
+msgid "Unnamed app"
+msgstr "Εφαρμογή χωρίς όνομα"
 
 #: src/components/common/LocationPicker/index.tsx:67
 msgid "Unnamed location"
@@ -21445,7 +21542,7 @@ msgstr "Χρησιμοποιεί τα χρώματα και τη γραμματ�
 msgid "Using them for real events? Get an Enterprise licence and put its key in <0>APP_LICENCE_KEY</0>."
 msgstr "Τα χρησιμοποιείτε σε πραγματικές εκδηλώσεις; Αποκτήστε άδεια Enterprise και βάλτε το κλειδί της στο <0>APP_LICENCE_KEY</0>."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:219
+#: src/components/routes/settings/ApiKeys/index.tsx:222
 msgid "Using your key"
 msgstr "Χρήση του κλειδιού σας"
 
@@ -21591,6 +21688,7 @@ msgstr "Το email επαλήθευσης στάλθηκε. Ελέγξτε τα 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:216
 #: src/components/routes/admin/Attribution/index.tsx:198
 #: src/components/routes/admin/Dashboard/index.tsx:396
+#: src/components/routes/oauth/Connect/index.tsx:97
 #: src/ee/sso/components/SingleSignOn/DomainList.tsx:17
 msgid "Verified"
 msgstr "Επαληθευμένο"
@@ -21749,6 +21847,10 @@ msgstr "Προβολή σελίδας εκδήλωσης"
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:93
 msgid "View Event Page"
 msgstr "Προβολή Σελίδας Εκδήλωσης"
+
+#: src/components/routes/oauth/Connect/index.tsx:128
+msgid "View events, tickets and sales, without changing anything."
+msgstr "Προβολή εκδηλώσεων, εισιτηρίων και πωλήσεων, χωρίς καμία αλλαγή."
 
 #: src/components/common/OrganizerWebhookTable/index.tsx:117
 #: src/components/common/WebhookTable/index.tsx:117
@@ -22689,6 +22791,10 @@ msgstr "Μπορείτε να ρυθμίσετε πρόσθετα τέλη υπ�
 msgid "You can create a promo code which targets this product on the"
 msgstr "Μπορείτε να δημιουργήσετε κωδικό προσφοράς για αυτό το προϊόν στη"
 
+#: src/components/routes/oauth/Connect/index.tsx:167
+msgid "You can disconnect it at any time from Settings → API keys."
+msgstr "Μπορείτε να την αποσυνδέσετε οποιαδήποτε στιγμή από Ρυθμίσεις → Κλειδιά API."
+
 #: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:31
 msgid "You can only change it back to a single event while it has exactly one date and no orders. Once someone places an order, this can't be undone."
 msgstr "Μπορείτε να την αλλάξετε ξανά σε μεμονωμένη εκδήλωση μόνο όσο έχει ακριβώς μία ημερομηνία και καμία παραγγελία. Μόλις κάποιος κάνει παραγγελία, η αλλαγή δεν αναιρείται."
@@ -22750,7 +22856,7 @@ msgstr "Δεν έχετε πρόσβαση σε αυτόν τον διοργαν
 msgid "You don't have access to this page"
 msgstr "Δεν έχετε πρόσβαση σε αυτή τη σελίδα"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:196
+#: src/components/routes/settings/ApiKeys/index.tsx:197
 msgid "You don't have any API keys"
 msgstr "Δεν έχετε κλειδιά API"
 
@@ -22816,7 +22922,7 @@ msgstr "Πρέπει να έχετε τουλάχιστον μία βαθμίδ�
 msgid "You must verify your email address before you can update the organizer status."
 msgstr "Πρέπει να επαληθεύσετε τη διεύθυνση email πριν ενημερώσετε την κατάσταση διοργανωτή."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:131
+#: src/components/routes/settings/ApiKeys/index.tsx:132
 msgid "You need a confirmed email address to create API keys. Check your inbox, or resend the confirmation email from your <0>profile</0>."
 msgstr "Χρειάζεστε επιβεβαιωμένη διεύθυνση email για να δημιουργήσετε κλειδιά API. Ελέγξτε τα εισερχόμενά σας ή στείλτε ξανά το email επιβεβαίωσης από το <0>προφίλ</0> σας."
 
@@ -22956,7 +23062,7 @@ msgstr "Σας προσφέρθηκε μια θέση!"
 msgid "You've changed the session time"
 msgstr "Αλλάξατε την ώρα της συνεδρίας"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:145
+#: src/components/routes/settings/ApiKeys/index.tsx:146
 msgid "You've reached the limit of {0} active keys. Revoke one to create another."
 msgstr "Φτάσατε το όριο των {0} ενεργών κλειδιών. Ανακαλέστε ένα για να δημιουργήσετε άλλο."
 
