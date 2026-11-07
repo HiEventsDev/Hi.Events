@@ -14,6 +14,10 @@ abstract class WriteApiTool extends ApiTool
 {
     public const MAX_WRITES_PER_MINUTE = 60;
 
+    public const RESEND_COOLDOWN_SECONDS = 600;
+
+    public const EMAILS_PER_ADDRESS_PER_COOLDOWN = 5;
+
     public function shouldRegister(AuthUserService $authUserService, AccountUserAccessService $accessService): bool
     {
         return $authUserService->apiKeyCanWrite()
@@ -46,5 +50,43 @@ abstract class WriteApiTool extends ApiTool
         }
 
         return $categoriesResponse->data()[0]['id'] ?? null;
+    }
+
+    protected function resendCooldownResponse(string $recipientKey): ?Response
+    {
+        if (RateLimiter::tooManyAttempts('mcp-resend:'.$recipientKey, 1)) {
+            return Response::error(__('This was sent less than :minutes minutes ago. Wait before sending it again.', [
+                'minutes' => intdiv(self::RESEND_COOLDOWN_SECONDS, 60),
+            ]));
+        }
+
+        return null;
+    }
+
+    protected function startResendCooldown(string $recipientKey): void
+    {
+        RateLimiter::hit('mcp-resend:'.$recipientKey, self::RESEND_COOLDOWN_SECONDS);
+    }
+
+    protected function emailBudgetResponse(string $email): ?Response
+    {
+        if (RateLimiter::tooManyAttempts($this->emailBudgetKey($email), self::EMAILS_PER_ADDRESS_PER_COOLDOWN)) {
+            return Response::error(__('That email address has already been sent :count emails in the last :minutes minutes. Wait before sending more.', [
+                'count' => self::EMAILS_PER_ADDRESS_PER_COOLDOWN,
+                'minutes' => intdiv(self::RESEND_COOLDOWN_SECONDS, 60),
+            ]));
+        }
+
+        return null;
+    }
+
+    protected function spendEmailBudget(string $email): void
+    {
+        RateLimiter::hit($this->emailBudgetKey($email), self::RESEND_COOLDOWN_SECONDS);
+    }
+
+    private function emailBudgetKey(string $email): string
+    {
+        return 'mcp-mail:'.hash('sha256', mb_strtolower(trim($email)));
     }
 }

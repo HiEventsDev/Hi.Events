@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Mcp;
 
+use HiEvents\DomainObjects\Enums\ApiKeyAccess;
 use HiEvents\DomainObjects\Enums\OrganizerReportTypes;
 use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\Enums\ReportTypes;
@@ -172,6 +173,32 @@ class McpToolAccessTest extends TestCase
             ->assertJsonPath('result.isError', true);
         $this->callTool($apiKey, 'get_organizer_report', ['organizer_id' => $this->organizerId, 'report_type' => OrganizerReportTypes::CHECK_IN_SUMMARY->value])
             ->assertJsonPath('result.isError', false);
+    }
+
+    public function test_sales_tools_respect_read_only_access_and_financial_permissions(): void
+    {
+        $owner = $this->createApiKey($this->owner, $this->accountId);
+        $eventId = $this->createEventWithTool($owner, $this->createOrganizerWithTool($owner));
+        $ticketId = $this->callTool($owner, 'create_ticket', ['event_id' => $eventId, 'title' => 'GA', 'type' => 'PAID', 'price' => 30])
+            ->json('result.structuredContent.ticket.id');
+        $attendee = $this->callTool($owner, 'add_attendee', [
+            'event_id' => $eventId, 'ticket_id' => $ticketId, 'first_name' => 'Jane', 'last_name' => 'Doe', 'email' => 'jane@example.com', 'send_ticket' => false,
+        ])->assertJsonPath('result.isError', false)->json('result.structuredContent.attendee');
+
+        $readOnly = $this->createApiKey($this->owner, $this->accountId, ApiKeyAccess::READ_ONLY);
+        $this->callTool($readOnly, 'get_attendee', ['event_id' => $eventId, 'attendee_id' => $attendee['id']])->assertJsonPath('result.isError', false);
+        $this->callTool($readOnly, 'check_in_attendee', ['event_id' => $eventId, 'attendee_id' => $attendee['id']])->assertJsonStructure(['error' => ['code', 'message']]);
+        $this->assertSame(0, DB::table('attendee_check_ins')->where('attendee_id', $attendee['id'])->count());
+
+        $member = $this->addAccountUser($this->accountId);
+        $this->setPermissionOverrides($member, $this->accountId, [Permission::VIEW_FINANCIALS->value => false]);
+        $order = $this->callTool($this->createApiKey($member, $this->accountId), 'get_order', ['event_id' => $eventId, 'order_id' => $attendee['order_id']])
+            ->assertJsonPath('result.isError', false)
+            ->json('result.structuredContent.order');
+
+        $this->assertSame('jane@example.com', $order['email']);
+        $this->assertArrayNotHasKey('total', $order);
+        $this->assertArrayNotHasKey('price', $order['items'][0]);
     }
 
     public function test_organizer_stats_refuse_another_accounts_organizer(): void

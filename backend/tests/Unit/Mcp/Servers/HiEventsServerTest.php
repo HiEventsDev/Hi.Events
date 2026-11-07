@@ -29,5 +29,6 @@ class HiEventsServerTest extends TestCase
         $defaults = (new ReflectionClass(HiEventsServer::class))->getDefaultProperties();
 
         $this->assertGreaterThanOrEqual(count($defaults['tools']), $defaults['defaultPaginationLength']);
+        $this->assertGreaterThanOrEqual(count($defaults['tools']), $defaults['maxPaginationLength']);
     }
 }
