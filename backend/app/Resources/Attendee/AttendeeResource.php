@@ -37,6 +37,10 @@ class AttendeeResource extends JsonResource
             'seat_label' => $this->getSeatLabel(),
             'locale' => $this->getLocale(),
             'notes' => $this->getNotes(),
+            'badge_printed_at' => $this->getBadgePrintedAt(),
+            'badge_print_count' => $this->getBadgePrintCount(),
+            /** @var 'NOT_PRINTED'|'PRINTED'|'NEEDS_REPRINT' */
+            'badge_print_status' => $this->getBadgePrintStatus()->value,
             'event_occurrence' => $this->when(
                 ! is_null($this->getEventOccurrence()),
                 fn () => new EventOccurrenceResource($this->getEventOccurrence()),

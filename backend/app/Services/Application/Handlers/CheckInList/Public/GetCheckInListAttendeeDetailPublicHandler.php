@@ -64,6 +64,10 @@ class GetCheckInListAttendeeDetailPublicHandler
         $currentListCheckIns = $this->filterCheckInsForList($attendee->getCheckIns(), $checkInList->getId());
         $isStaff = $this->hasStaffAccess($checkInList, $staffAccountId);
 
+        if (! $isStaff) {
+            $this->checkInListActivityValidator->assertAttendeeListsAvailable($checkInList);
+        }
+
         return new PublicAttendeeDetailDTO(
             attendee: $attendee,
             currentListCheckIns: $currentListCheckIns,

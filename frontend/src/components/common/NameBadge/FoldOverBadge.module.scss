@@ -1,0 +1,43 @@
+.unit {
+  position: relative;
+  display: flex;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  &[data-fold="STACKED"] {
+    flex-direction: column;
+
+    .panel[data-panel="back"] {
+      transform: rotate(180deg);
+    }
+
+    .foldLine {
+      top: 50%;
+      left: 0;
+      right: 0;
+      border-top: 0.25mm dashed rgba(128, 128, 128, 0.8);
+    }
+  }
+
+  &[data-fold="SIDE_BY_SIDE"] .foldLine {
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    border-left: 0.25mm dashed rgba(128, 128, 128, 0.8);
+  }
+
+  &[data-cut-guide="true"] {
+    outline: 0.15mm dashed rgba(0, 0, 0, 0.28);
+    outline-offset: -0.075mm;
+  }
+}
+
+.panel {
+  flex: none;
+  display: flex;
+}
+
+.foldLine {
+  position: absolute;
+  pointer-events: none;
+}

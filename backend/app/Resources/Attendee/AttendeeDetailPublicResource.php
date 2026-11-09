@@ -30,6 +30,9 @@ class AttendeeDetailPublicResource extends JsonResource
             'last_name' => $attendee->getLastName(),
             'status' => $attendee->getStatus(),
             'seat_label' => $attendee->getSeatLabel(),
+            'badge_print_count' => $attendee->getBadgePrintCount(),
+            /** @var 'NOT_PRINTED'|'PRINTED'|'NEEDS_REPRINT' */
+            'badge_print_status' => $attendee->getBadgePrintStatus()->value,
             'product_id' => $attendee->getProductId(),
             'product_title' => $product?->getTitle(),
             'event_occurrence' => $occurrence

@@ -15,7 +15,6 @@ class UpdateEventSettingsDTO extends BaseDTO
     public function __construct(
         public readonly int $account_id,
 
-        // event settings
         public readonly int $event_id,
         public readonly ?string $post_checkout_message,
         public readonly ?string $pre_checkout_message,
@@ -46,7 +45,6 @@ class UpdateEventSettingsDTO extends BaseDTO
 
         public readonly ?PriceDisplayMode $price_display_mode = PriceDisplayMode::INCLUSIVE,
 
-        // Payment settings
         public readonly array $payment_providers = [],
         public readonly ?string $offline_payment_instructions = null,
         public readonly bool $allow_orders_awaiting_offline_payment_to_check_in = false,
@@ -55,7 +53,6 @@ class UpdateEventSettingsDTO extends BaseDTO
         public readonly bool $payment_links_enabled = false,
         public readonly int $payment_link_expiry_hours = 72,
 
-        // Invoice settings
         public readonly bool $enable_invoicing = false,
         public readonly ?string $invoice_label = null,
         public readonly ?string $invoice_prefix = null,
@@ -67,34 +64,28 @@ class UpdateEventSettingsDTO extends BaseDTO
         public readonly ?string $invoice_notes = null,
         public readonly ?int $invoice_payment_terms_days = null,
 
-        // Ticket design settings
         public readonly ?array $ticket_design_settings = null,
 
-        // Marketing settings
         public readonly bool $show_marketing_opt_in = true,
 
-        // Attendee detail copy control
         public readonly bool $allow_copy_details_to_all_attendees = true,
 
-        // Platform fee settings
         public readonly bool $pass_platform_fee_to_buyer = false,
 
-        // Homepage theme settings
         public readonly ?array $homepage_theme_settings = null,
         public readonly ?array $homepage_sections = null,
 
-        // Self-service settings
         public readonly bool $allow_attendee_self_edit = false,
 
-        // Occurrence display
         public readonly bool $show_available_occurrence_capacity = false,
         public readonly bool $hide_sold_out_occurrences = false,
 
-        // Waitlist settings
         public readonly ?bool $waitlist_auto_process = null,
         public readonly ?int $waitlist_offer_timeout_minutes = null,
 
         public readonly ?string $get_tickets_button_text = null,
+
+        public readonly ?array $enabled_features = null,
     ) {}
 
     public static function createWithDefaults(
@@ -129,11 +120,9 @@ class UpdateEventSettingsDTO extends BaseDTO
             notify_organizer_of_new_orders: null,
             price_display_mode: PriceDisplayMode::INCLUSIVE,
 
-            // Payment defaults
             payment_providers: [PaymentProviders::STRIPE->value],
             offline_payment_instructions: null,
 
-            // Invoice defaults
             enable_invoicing: false,
             invoice_label: __('Invoice'),
             invoice_prefix: null,
@@ -145,7 +134,6 @@ class UpdateEventSettingsDTO extends BaseDTO
             invoice_notes: null,
             invoice_payment_terms_days: null,
 
-            // Ticket design defaults
             ticket_design_settings: [
                 'accent_color' => '#333333',
                 'logo_image_id' => null,
@@ -155,16 +143,12 @@ class UpdateEventSettingsDTO extends BaseDTO
                 'enabled' => true,
             ],
 
-            // Marketing defaults
             show_marketing_opt_in: true,
 
-            // Attendee detail copy control default
             allow_copy_details_to_all_attendees: true,
 
-            // Platform fee defaults
             pass_platform_fee_to_buyer: false,
 
-            // Homepage theme defaults (simplified 2-color + mode system)
             homepage_theme_settings: [
                 'accent' => '#7c3aed',
                 'background' => '#f5f3ff',
@@ -172,7 +156,6 @@ class UpdateEventSettingsDTO extends BaseDTO
                 'background_type' => 'COLOR',
             ],
 
-            // Self-service defaults
             allow_attendee_self_edit: false,
         );
     }

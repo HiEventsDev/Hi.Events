@@ -17,6 +17,7 @@ import {useClipboard, useDisclosure} from "@mantine/hooks";
 import {useMemo, useState} from "react";
 import {NoResultsSplash} from "../NoResultsSplash";
 import {useParams} from "react-router";
+import {useEventFeature} from "../../../hooks/useEventFeature.ts";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useGetEventCheckInLists} from "../../../queries/useGetCheckInLists.ts";
 import Truncate from "../Truncate";
@@ -99,6 +100,9 @@ export const AttendeeTable = ({attendees, openCreateModal, compact, occurrenceId
         setSelectedOrderId(orderId);
         orderModal.open();
     };
+
+    const badgesEnabled = useEventFeature(eventId, 'BADGES');
+    const hasPrintedBadges = badgesEnabled && attendees.some((attendee) => (attendee.badge_print_count ?? 0) > 0);
 
     const columns = useMemo<TanStackTableColumn<Attendee>[]>(
         () => {
@@ -327,6 +331,30 @@ export const AttendeeTable = ({attendees, openCreateModal, compact, occurrenceId
                     },
                 },
                 {
+                    id: 'badge',
+                    header: t`Badge`,
+                    enableHiding: true,
+                    cell: (info: CellContext<Attendee, unknown>) => {
+                        const attendee = info.row.original;
+                        const count = attendee.badge_print_count ?? 0;
+                        if (count === 0) {
+                            return <span className={classes.badgeStatus} data-status="NOT_PRINTED">{t`Not printed`}</span>;
+                        }
+                        if (attendee.badge_print_status === 'NEEDS_REPRINT') {
+                            return <span className={classes.badgeStatus} data-status="NEEDS_REPRINT">{t`Needs reprint`}</span>;
+                        }
+                        return (
+                            <span className={classes.badgeStatus} data-status="PRINTED">
+                                <IconCheck size={14}/>
+                                {count > 1 ? t`Printed ×${count}` : t`Printed`}
+                            </span>
+                        );
+                    },
+                    meta: {
+                        headerStyle: {minWidth: 110},
+                    },
+                },
+                {
                     id: 'actions',
                     header: '',
                     enableHiding: false,
@@ -349,10 +377,13 @@ export const AttendeeTable = ({attendees, openCreateModal, compact, occurrenceId
                 if (column.id === 'checkIn' && !hasCheckInLists) {
                     return false;
                 }
+                if (column.id === 'badge' && !hasPrintedBadges) {
+                    return false;
+                }
                 return true;
             });
         },
-        [emailPopoverId, event, hasCheckInLists, relevantCheckInLists, occurrenceId]
+        [emailPopoverId, event, hasCheckInLists, relevantCheckInLists, occurrenceId, hasPrintedBadges]
     );
 
     if (attendees.length === 0) {

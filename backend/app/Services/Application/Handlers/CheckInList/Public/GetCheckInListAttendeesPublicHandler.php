@@ -42,12 +42,12 @@ class GetCheckInListAttendeesPublicHandler
         }
 
         $this->checkInListActivityValidator->assertActive($checkInList);
+        $this->checkInListActivityValidator->assertAttendeeListsAvailable($checkInList);
 
         $queryParams = $this->applyCheckInListOccurrenceScope($checkInList, $queryParams);
 
         $attendees = $this->attendeeRepository->getAttendeesByCheckInShortId($shortId, $queryParams);
 
-        // Set the check-in for each attendee
         $attendees->getCollection()->transform(function (AttendeeDomainObject $attendee) use ($checkInList) {
             $attendee->setCheckIn($attendee->getCheckIns()?->first(fn ($checkIn) => $checkIn->getCheckInListId() === $checkInList->getId()));
 

@@ -36,6 +36,9 @@ class UpdateCheckInListAction extends BaseAction
                     publicShowAttendeeNotes: $request->validated('public_show_attendee_notes') ?? false,
                     publicShowQuestionAnswers: $request->validated('public_show_question_answers') ?? false,
                     publicShowOrderDetails: $request->validated('public_show_order_details') ?? false,
+                    badgePrintingEnabled: $request->validated('badge_printing_enabled'),
+                    kioskMode: $request->validated('kiosk_mode'),
+                    kioskLookupEnabled: $request->validated('kiosk_lookup_enabled'),
                 )
             );
         } catch (UnrecognizedProductIdException $exception) {

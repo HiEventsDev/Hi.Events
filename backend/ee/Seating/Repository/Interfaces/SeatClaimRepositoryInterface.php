@@ -95,6 +95,7 @@ interface SeatClaimRepositoryInterface extends RepositoryInterface
 
     /**
      * @param  array<string, string>  $labelsBySeatUid
+     * @return int[] ids of the attendees whose seat label changed
      */
-    public function relabel(int $eventId, array $labelsBySeatUid): void;
+    public function relabel(int $eventId, array $labelsBySeatUid): array;
 }

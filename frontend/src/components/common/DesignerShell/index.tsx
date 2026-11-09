@@ -1,4 +1,5 @@
 import {ReactNode, useState} from "react";
+import {WriteAccess} from "../WriteAccess";
 import {Button, SegmentedControl, Text, Tooltip, VisuallyHidden} from "@mantine/core";
 import {IconDeviceDesktop, IconDeviceMobile} from "@tabler/icons-react";
 import {t} from "@lingui/macro";
@@ -148,27 +149,29 @@ export const DesignerShell = ({
                     <Text size="xs" c={hasUnsavedChanges ? 'orange.7' : 'dimmed'} className={classes.saveStatus}>
                         {hasUnsavedChanges ? t`Unsaved changes` : t`All changes saved`}
                     </Text>
-                    {hasUnsavedChanges && (
+                    <WriteAccess>
+                        {hasUnsavedChanges && (
+                            <Button
+                                variant="subtle"
+                                color="gray"
+                                size="sm"
+                                onClick={onDiscard}
+                                disabled={isSaving}
+                                data-testid="designer-discard-button"
+                            >
+                                {t`Discard`}
+                            </Button>
+                        )}
                         <Button
-                            variant="subtle"
-                            color="gray"
                             size="sm"
-                            onClick={onDiscard}
-                            disabled={isSaving}
-                            data-testid="designer-discard-button"
+                            onClick={onSave}
+                            loading={isSaving}
+                            disabled={!hasUnsavedChanges}
+                            data-testid="designer-save-button"
                         >
-                            {t`Discard`}
+                            {t`Save Changes`}
                         </Button>
-                    )}
-                    <Button
-                        size="sm"
-                        onClick={onSave}
-                        loading={isSaving}
-                        disabled={!hasUnsavedChanges}
-                        data-testid="designer-save-button"
-                    >
-                        {t`Save Changes`}
-                    </Button>
+                    </WriteAccess>
                 </>
             )}
         />
