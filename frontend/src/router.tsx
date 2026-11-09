@@ -85,6 +85,13 @@ export const router: RouteObject[] = [
         ]
     },
     {
+        path: "connect",
+        async lazy() {
+            const Connect = await import("./components/routes/oauth/Connect");
+            return { Component: Connect.default };
+        }
+    },
+    {
         path: "sso/callback",
         async lazy() {
             const SsoCallback = await import("./components/routes/sso/Callback");

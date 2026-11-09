@@ -226,7 +226,7 @@ test.describe('enterprise single sign-on', () => {
     await expect(page).toHaveURL(/\/manage\//);
 
     await context.clearCookies();
-    await page.goto('/manage/events');
+    await page.goto('/manage/events', { waitUntil: 'commit' });
 
     await page.waitForURL(/prompt=none/);
     expect(new URL(page.url()).searchParams.get('login_hint')).toBeNull();

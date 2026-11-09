@@ -282,6 +282,17 @@ use HiEvents\Http\Actions\Messages\CancelMessageAction;
 use HiEvents\Http\Actions\Messages\GetMessageRecipientsAction;
 use HiEvents\Http\Actions\Messages\GetMessagesAction;
 use HiEvents\Http\Actions\Messages\SendMessageAction;
+use HiEvents\Http\Actions\OAuth\ApproveOAuthAuthorizationRequestAction;
+use HiEvents\Http\Actions\OAuth\AuthorizeOAuthClientAction;
+use HiEvents\Http\Actions\OAuth\DeleteOAuthConnectionAction;
+use HiEvents\Http\Actions\OAuth\DenyOAuthAuthorizationRequestAction;
+use HiEvents\Http\Actions\OAuth\GetOAuthAuthorizationRequestAction;
+use HiEvents\Http\Actions\OAuth\GetOAuthAuthorizationServerMetadataAction;
+use HiEvents\Http\Actions\OAuth\GetOAuthConnectionsAction;
+use HiEvents\Http\Actions\OAuth\GetOAuthProtectedResourceMetadataAction;
+use HiEvents\Http\Actions\OAuth\IssueOAuthTokenAction;
+use HiEvents\Http\Actions\OAuth\RegisterOAuthClientAction;
+use HiEvents\Http\Actions\OAuth\RevokeOAuthTokenAction;
 use HiEvents\Http\Actions\Orders\CancelOrderAction;
 use HiEvents\Http\Actions\Orders\DownloadOrderInvoiceAction;
 use HiEvents\Http\Actions\Orders\EditOrderAction;
@@ -417,11 +428,29 @@ use HiEvents\Http\Actions\Widgets\GetOrganizerWidgetsAction;
 use HiEvents\Http\Actions\Widgets\GetWidgetPublicAction;
 use HiEvents\Http\Actions\Widgets\UpdateEventWidgetAction;
 use HiEvents\Http\Actions\Widgets\UpdateOrganizerWidgetAction;
+use HiEvents\Services\Domain\Auth\OAuth\OAuthAuthorizationStore;
 use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Routing\Router;
 
 /** @var Router|Router $router */
 $router = app()->get('router');
+
+$router->middleware('throttle:120,1,oauth-metadata')->group(
+    function (Router $router): void {
+        $router->get('/.well-known/oauth-protected-resource/{path?}', GetOAuthProtectedResourceMetadataAction::class)->where('path', '.*');
+        $router->get('/.well-known/oauth-authorization-server/{path?}', GetOAuthAuthorizationServerMetadataAction::class)->where('path', '.*');
+        $router->get('/.well-known/openid-configuration/{path?}', GetOAuthAuthorizationServerMetadataAction::class)->where('path', '.*');
+    }
+);
+
+$router->prefix('/oauth')->group(
+    function (Router $router): void {
+        $router->post('/register', RegisterOAuthClientAction::class)->middleware('throttle:20,1,oauth-register');
+        $router->get('/authorize', AuthorizeOAuthClientAction::class)->middleware('throttle:30,1,oauth-authorize');
+        $router->post('/token', IssueOAuthTokenAction::class)->middleware('throttle:60,1,oauth-token');
+        $router->post('/revoke', RevokeOAuthTokenAction::class)->middleware('throttle:60,1,oauth-revoke');
+    }
+);
 
 $router->prefix('/auth')->group(
     function (Router $router): void {
@@ -524,6 +553,12 @@ $router->middleware(['auth:api'])->group(
         $router->get('/api-keys', GetApiKeysAction::class);
         $router->post('/api-keys', CreateApiKeyAction::class)->middleware('throttle:10,1,api-key-create');
         $router->delete('/api-keys/{api_key_id}', DeleteApiKeyAction::class)->whereNumber('api_key_id');
+
+        $router->get('/oauth/authorization-requests/{request_id}', GetOAuthAuthorizationRequestAction::class)->where('request_id', OAuthAuthorizationStore::REQUEST_ID_PATTERN);
+        $router->post('/oauth/authorization-requests/{request_id}/approve', ApproveOAuthAuthorizationRequestAction::class)->where('request_id', OAuthAuthorizationStore::REQUEST_ID_PATTERN)->middleware('throttle:10,1,oauth-approve');
+        $router->post('/oauth/authorization-requests/{request_id}/deny', DenyOAuthAuthorizationRequestAction::class)->where('request_id', OAuthAuthorizationStore::REQUEST_ID_PATTERN);
+        $router->get('/oauth/connections', GetOAuthConnectionsAction::class);
+        $router->delete('/oauth/connections/{connection_id}', DeleteOAuthConnectionAction::class)->whereNumber('connection_id');
     }
 );
 

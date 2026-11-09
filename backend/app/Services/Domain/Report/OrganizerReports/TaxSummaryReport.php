@@ -10,8 +10,6 @@ class TaxSummaryReport extends AbstractOrganizerReportService
 {
     protected function getSqlQuery(Carbon $startDate, Carbon $endDate, ?string $currency = null): string
     {
-        $startDateStr = $startDate->toDateString();
-        $endDateStr = $endDate->toDateString();
         $completedStatus = OrderStatus::COMPLETED->name;
         $currencyFilter = $this->buildCurrencyFilter('o.currency', $currency);
 
@@ -34,7 +32,7 @@ class TaxSummaryReport extends AbstractOrganizerReportService
                     AND o.deleted_at IS NULL
                     AND e.deleted_at IS NULL
                     $currencyFilter
-                    AND DATE(o.created_at) BETWEEN '$startDateStr' AND '$endDateStr'
+                    AND o.created_at BETWEEN :start_at AND :end_at
             )
             SELECT
                 event_id,
@@ -48,5 +46,13 @@ class TaxSummaryReport extends AbstractOrganizerReportService
             GROUP BY event_id, event_name, event_currency, tax_name, tax_rate
             ORDER BY event_name, tax_name
 SQL;
+    }
+
+    protected function getAdditionalBindings(Carbon $startDate, Carbon $endDate, ?string $currency): array
+    {
+        return [
+            ...$this->utcRangeBindings($startDate, $endDate),
+            ...$this->currencyBinding($currency),
+        ];
     }
 }

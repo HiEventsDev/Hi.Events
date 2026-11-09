@@ -17,6 +17,7 @@ import {ApiKey} from "../../../../types.ts";
 import {ApiKeyRow} from "./ApiKeyRow.tsx";
 import {CreateApiKeyModal} from "./CreateApiKeyModal.tsx";
 import {CodeSnippet} from "./CodeSnippet.tsx";
+import {ConnectedApps} from "./ConnectedApps.tsx";
 import {API_REFERENCE_PATH, CREATE_API_KEY_RESUME_ACTION} from "./constants.ts";
 import {useApiBaseUrl} from "./useApiBaseUrl.ts";
 import classes from "./ApiKeys.module.scss";
@@ -213,6 +214,8 @@ const ApiKeysSettings = () => {
                         </>
                     )}
                 </section>
+
+                <ConnectedApps mcpUrl={`${apiBaseUrl}/mcp`} timezone={timezone} locale={locale}/>
 
                 <section className={classes.guide}>
                     <div>

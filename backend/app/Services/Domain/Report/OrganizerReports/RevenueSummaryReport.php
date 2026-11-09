@@ -48,4 +48,9 @@ class RevenueSummaryReport extends AbstractOrganizerReportService
             ORDER BY d.date DESC
 SQL;
     }
+
+    protected function getAdditionalBindings(Carbon $startDate, Carbon $endDate, ?string $currency): array
+    {
+        return $this->currencyBinding($currency);
+    }
 }

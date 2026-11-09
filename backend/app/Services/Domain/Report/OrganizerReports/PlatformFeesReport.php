@@ -6,6 +6,7 @@ use HiEvents\DomainObjects\Status\OrderRefundStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Helper\Currency;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
+use HiEvents\Services\Domain\Report\Concerns\BindsReportFilters;
 use HiEvents\Services\Domain\Report\DTO\PaginatedReportDTO;
 use Illuminate\Cache\Repository;
 use Illuminate\Database\DatabaseManager;
@@ -13,6 +14,8 @@ use Illuminate\Support\Carbon;
 
 class PlatformFeesReport
 {
+    use BindsReportFilters;
+
     private const CACHE_TTL_SECONDS = 30;
 
     public function __construct(
@@ -52,10 +55,8 @@ class PlatformFeesReport
             key: $cacheKey,
             ttl: Carbon::now()->addSeconds(self::CACHE_TTL_SECONDS),
             callback: fn () => $this->queryBuilder->select(
-                $this->buildSqlQuery($startDate, $endDate, $currency, $eventId, $page, $perPage),
-                [
-                    'organizer_id' => $organizerId,
-                ]
+                $this->buildSqlQuery($currency, $eventId, $page, $perPage),
+                $this->bindings($organizerId, $startDate, $endDate, $currency),
             )
         );
 
@@ -93,17 +94,24 @@ class PlatformFeesReport
     private function getCount(int $organizerId, Carbon $startDate, Carbon $endDate, ?string $currency, ?int $eventId): int
     {
         $result = $this->queryBuilder->select(
-            $this->buildCountQuery($startDate, $endDate, $currency, $eventId),
-            ['organizer_id' => $organizerId]
+            $this->buildCountQuery($currency, $eventId),
+            $this->bindings($organizerId, $startDate, $endDate, $currency),
         );
 
         return (int) ($result[0]->count ?? 0);
     }
 
-    private function buildCountQuery(Carbon $startDate, Carbon $endDate, ?string $currency, ?int $eventId): string
+    private function bindings(int $organizerId, Carbon $startDate, Carbon $endDate, ?string $currency): array
     {
-        $startDateStr = $startDate->toDateString();
-        $endDateStr = $endDate->toDateString();
+        return [
+            'organizer_id' => $organizerId,
+            ...$this->utcRangeBindings($startDate, $endDate),
+            ...$this->currencyBinding($currency),
+        ];
+    }
+
+    private function buildCountQuery(?string $currency, ?int $eventId): string
+    {
         $completedStatus = OrderStatus::COMPLETED->name;
         $refundedStatus = OrderRefundStatus::REFUNDED->name;
         $currencyFilter = $this->buildCurrencyFilter('sp.currency', $currency);
@@ -122,17 +130,15 @@ class PlatformFeesReport
                 AND (o.refund_status IS NULL OR o.refund_status != '$refundedStatus')
                 AND sp.amount_received IS NOT NULL
                 AND sp.application_fee_gross > 0
-                AND sp.created_at >= '$startDateStr 00:00:00'
-                AND sp.created_at <= '$endDateStr 23:59:59'
+                AND sp.created_at >= :start_at
+                AND sp.created_at <= :end_at
                 $currencyFilter
                 $eventFilter
 SQL;
     }
 
-    private function buildSqlQuery(Carbon $startDate, Carbon $endDate, ?string $currency, ?int $eventId, int $page = 1, int $perPage = 1000): string
+    private function buildSqlQuery(?string $currency, ?int $eventId, int $page = 1, int $perPage = 1000): string
     {
-        $startDateStr = $startDate->toDateString();
-        $endDateStr = $endDate->toDateString();
         $completedStatus = OrderStatus::COMPLETED->name;
         $refundedStatus = OrderRefundStatus::REFUNDED->name;
         $currencyFilter = $this->buildCurrencyFilter('sp.currency', $currency);
@@ -164,8 +170,8 @@ SQL;
                 AND (o.refund_status IS NULL OR o.refund_status != '$refundedStatus')
                 AND sp.amount_received IS NOT NULL
                 AND sp.application_fee_gross > 0
-                AND sp.created_at >= '$startDateStr 00:00:00'
-                AND sp.created_at <= '$endDateStr 23:59:59'
+                AND sp.created_at >= :start_at
+                AND sp.created_at <= :end_at
                 $currencyFilter
                 $eventFilter
             ORDER BY sp.created_at DESC
@@ -185,15 +191,5 @@ SQL;
     private function getCacheKeyWithEvent(int $organizerId, ?string $currency, ?Carbon $startDate, ?Carbon $endDate, ?int $eventId, int $page, int $perPage): string
     {
         return static::class."$organizerId.$currency.{$startDate?->toDateString()}.{$endDate?->toDateString()}.$eventId.$page.$perPage";
-    }
-
-    private function buildCurrencyFilter(string $column, ?string $currency): string
-    {
-        if ($currency === null) {
-            return '';
-        }
-        $escapedCurrency = addslashes($currency);
-
-        return "AND $column = '$escapedCurrency'";
     }
 }

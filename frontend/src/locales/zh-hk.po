@@ -44,7 +44,7 @@ msgstr "{0, plural, other {# 個名牌}}"
 msgid "{0, plural, one {Badge printed once} other {Badge printed # times}}"
 msgstr "{0, plural, other {名牌已列印 # 次}}"
 
-#: src/components/common/ReportTable/index.tsx:336
+#: src/components/common/ReportTable/index.tsx:332
 msgid "{0}"
 msgstr "{0}"
 
@@ -304,6 +304,10 @@ msgstr "{0}張門票"
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:87
 msgid "{0} to {1}"
 msgstr "{0} 至 {1}"
+
+#: src/components/routes/oauth/Connect/index.tsx:89
+msgid "{0} wants to use your Hi.Events account {1}. It will act as you, with the access you choose below."
+msgstr "{0} 想使用您的 Hi.Events 帳戶 {1}。它會以您的身分操作，權限為您在下方選擇的存取級別。"
 
 #: src/components/routes/settings/Security/SignInMethods.tsx:139
 msgid "{0} was disconnected."
@@ -581,7 +585,7 @@ msgstr "{organizerName} 的首次活動"
 msgid "{outsideDomainCount, plural, one {# member outside your verified domains keeps their current sign-in.} other {# members outside your verified domains keep their current sign-in.}}"
 msgstr "{outsideDomainCount, plural, other {有 # 位成員不在您的已驗證網域內，會保留其目前的登入方式。}}"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:165
+#: src/components/routes/settings/ApiKeys/index.tsx:166
 msgid "{ownActiveCount} of {0} active keys"
 msgstr "{ownActiveCount} / {0} 個有效金鑰"
 
@@ -1154,6 +1158,7 @@ msgstr "通過 Stripe 接受信用卡支付"
 #: src/components/common/TeamAccessFields/index.tsx:207
 #: src/components/common/TeamAccessPanel/index.tsx:137
 #: src/components/forms/ProductForm/index.tsx:614
+#: src/components/routes/oauth/Connect/index.tsx:117
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:237
 #: src/components/routes/settings/Team/index.tsx:218
 #: src/components/routes/settings/Team/MemberRow.tsx:141
@@ -1908,6 +1913,10 @@ msgstr "議程"
 msgid "Agenda: devconf.example/agenda"
 msgstr "議程：devconf.example/agenda"
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:43
+msgid "AI assistants such as Claude and ChatGPT connect by signing in, without a key. Add this MCP server URL to your assistant to connect it."
+msgstr "Claude 和 ChatGPT 等 AI 助理透過登入連接，無需金鑰。將此 MCP 伺服器 URL 加入您的助理即可連接。"
+
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:45
 msgid "Aisles after seats"
 msgstr "在座位後設置走道"
@@ -1989,7 +1998,7 @@ msgstr "所有類別"
 msgid "All changes saved"
 msgstr "所有變更已儲存"
 
-#: src/components/common/OrganizerReportTable/index.tsx:302
+#: src/components/common/OrganizerReportTable/index.tsx:296
 msgid "All Currencies"
 msgstr "所有貨幣"
 
@@ -2056,7 +2065,7 @@ msgstr "所有符合的日期"
 msgid "All occurrences"
 msgstr "所有場次"
 
-#: src/components/common/ReportTable/index.tsx:287
+#: src/components/common/ReportTable/index.tsx:281
 msgid "All Occurrences"
 msgstr "所有場次"
 
@@ -2273,6 +2282,10 @@ msgstr "收款金額"
 msgid "An account with this email already exists. Sign in instead."
 msgstr "此電郵地址已有帳戶。請直接登入。"
 
+#: src/components/routes/oauth/Connect/index.tsx:18
+msgid "an app on this computer"
+msgstr "此電腦上的應用程式"
+
 #: src/components/forms/AffiliateForm/index.tsx:90
 msgid "An email to associate with this affiliate. The affiliate will not be notified."
 msgstr "同呢個推廣夥伴關聯嘅電郵。推廣夥伴唔會收到通知。"
@@ -2440,19 +2453,27 @@ msgid "Anything else?"
 msgstr "還需要其他嗎？"
 
 #: src/components/layouts/SettingsLayout/index.tsx:74
-#: src/components/routes/settings/ApiKeys/index.tsx:111
+#: src/components/routes/settings/ApiKeys/index.tsx:112
 msgid "API keys"
 msgstr "API 金鑰"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:139
+#: src/components/routes/settings/ApiKeys/index.tsx:140
 msgid "API keys can't be created while you're impersonating someone."
 msgstr "模擬其他用戶時無法建立 API 金鑰。"
 
 #: src/components/layouts/SettingsLayout/index.tsx:85
 #: src/components/layouts/SettingsLayout/index.tsx:89
-#: src/components/routes/settings/ApiKeys/index.tsx:122
+#: src/components/routes/settings/ApiKeys/index.tsx:123
 msgid "API reference"
 msgstr "API 參考"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:29
+msgid "App disconnected"
+msgstr "已中斷應用程式"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:79
+msgid "App on your computer"
+msgstr "您電腦上的應用程式"
 
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:136
 msgid "Appearance"
@@ -3592,7 +3613,7 @@ msgstr "品牌與電郵"
 msgid "Brazilian Portuguese"
 msgstr "巴西葡萄牙語"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:227
+#: src/components/routes/settings/ApiKeys/index.tsx:230
 msgid "Browse every endpoint in the API reference"
 msgstr "在 API 參考中瀏覽所有端點"
 
@@ -3855,6 +3876,7 @@ msgstr "無法使用驗證器應用程式或復原碼?"
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:67
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1173
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:64
+#: src/components/routes/oauth/Connect/index.tsx:166
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:69
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:85
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:85
@@ -4271,7 +4293,7 @@ msgstr "看看這個活動：{0}"
 msgid "Check out this event!"
 msgstr "看看這個活動吧！"
 
-#: src/components/common/ReportTable/index.tsx:251
+#: src/components/common/ReportTable/index.tsx:245
 #: src/components/routes/settings/TaxesAndFees/index.tsx:85
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:84
 msgid "Check your connection and try again."
@@ -5147,7 +5169,7 @@ msgstr "確認為垃圾內容"
 msgid "Confirm your email"
 msgstr "確認您的電郵"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:130
+#: src/components/routes/settings/ApiKeys/index.tsx:131
 msgid "Confirm your email address"
 msgstr "確認您的電郵地址"
 
@@ -5179,6 +5201,8 @@ msgstr "恭喜！您的活動現已對公眾可見。"
 msgid "Connect"
 msgstr "連接"
 
+#: src/components/routes/oauth/Connect/index.tsx:88
+#: src/components/routes/oauth/Connect/index.tsx:153
 #: src/components/routes/settings/Security/SignInMethods.tsx:246
 msgid "Connect {0}"
 msgstr "連接 {0}"
@@ -5191,7 +5215,7 @@ msgstr "新增讀卡機前，請先在「收款」中連接 Stripe 帳戶。"
 msgid "Connect bank"
 msgstr "連結銀行"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:112
+#: src/components/routes/settings/ApiKeys/index.tsx:113
 msgid "Connect other tools and your own code to this account. A key can do what you can do, so treat it like a password."
 msgstr "將其他工具和您自己的程式碼連接到此帳戶。金鑰擁有與您相同的權限，請像對待密碼一樣妥善保管。"
 
@@ -5234,8 +5258,13 @@ msgid "Connect your identity provider, verify your email domains, then choose wh
 msgstr "連接你的身份提供者，驗證你的電郵網域，然後選擇是否要求所有人使用。"
 
 #: src/components/routes/admin/Dashboard/index.tsx:410
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:88
 msgid "Connected"
 msgstr "已連接"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:41
+msgid "Connected apps"
+msgstr "已連接的應用程式"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:298
 msgid "Connected the wrong Stripe account? Disconnect and start over."
@@ -5698,14 +5727,18 @@ msgstr "無法上載 {fileName}"
 msgid "Couldn't load the API reference."
 msgstr "無法載入 API 參考。"
 
-#: src/components/common/OrganizerReportTable/index.tsx:271
-#: src/components/common/ReportTable/index.tsx:249
+#: src/components/common/OrganizerReportTable/index.tsx:265
+#: src/components/common/ReportTable/index.tsx:243
 msgid "Couldn't load this report"
 msgstr "無法載入此報告"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:187
+#: src/components/routes/settings/ApiKeys/index.tsx:188
 msgid "Couldn't load your API keys"
 msgstr "無法載入您的 API 金鑰"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:53
+msgid "Couldn't load your connected apps"
+msgstr "無法載入已連接的應用程式"
 
 #: src/components/routes/settings/Organizers/index.tsx:40
 msgid "Couldn't load your organizers"
@@ -5790,7 +5823,7 @@ msgstr "建立「{query}」"
 msgid "Create {0} Template"
 msgstr "建立{0}範本"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:199
+#: src/components/routes/settings/ApiKeys/index.tsx:200
 msgid "Create a key to connect tools like Zapier, your CRM or your own scripts to your events, orders and attendees."
 msgstr "建立金鑰，將 Zapier、您的 CRM 或自己的腳本等工具連接到您的活動、訂單和參加者。"
 
@@ -5855,6 +5888,10 @@ msgstr "建立公告，向您的用戶顯示訊息。"
 msgid "Create and change events, orders, attendees and more."
 msgstr "建立和更改活動、訂單、參加者等。"
 
+#: src/components/routes/oauth/Connect/index.tsx:124
+msgid "Create and change events, tickets, questions and settings."
+msgstr "建立和變更活動、門票、問題和設定。"
+
 #: src/components/routes/event/products.tsx:67
 msgid "Create and configure tickets and merchandise for sale."
 msgstr "建立並設定待售門票和商品。"
@@ -5870,7 +5907,7 @@ msgid "Create Announcement"
 msgstr "建立公告"
 
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:215
-#: src/components/routes/settings/ApiKeys/index.tsx:91
+#: src/components/routes/settings/ApiKeys/index.tsx:92
 msgid "Create API key"
 msgstr "建立 API 金鑰"
 
@@ -6050,7 +6087,7 @@ msgstr "建立您自己的活動"
 #: src/components/routes/admin/Messages/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:310
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:69
-#: src/components/routes/settings/ApiKeys/index.tsx:174
+#: src/components/routes/settings/ApiKeys/index.tsx:175
 msgid "Created"
 msgstr "已建立"
 
@@ -6086,7 +6123,7 @@ msgstr "行動呼籲"
 msgid "CTA label is required"
 msgstr "CTA標籤是必需的"
 
-#: src/components/common/OrganizerReportTable/index.tsx:317
+#: src/components/common/OrganizerReportTable/index.tsx:311
 #: src/components/forms/OrganizerForm/index.tsx:51
 #: src/components/modals/CreateEventModal/index.tsx:437
 #: src/components/modals/CreateEventModal/index.tsx:438
@@ -6159,8 +6196,8 @@ msgstr "此活動的自訂訂單及門票電郵"
 msgid "Custom questions"
 msgstr "自訂問題"
 
-#: src/components/common/OrganizerReportTable/index.tsx:61
-#: src/components/common/ReportTable/index.tsx:56
+#: src/components/common/OrganizerReportTable/index.tsx:62
+#: src/components/common/ReportTable/index.tsx:57
 #: src/components/routes/admin/Attribution/index.tsx:82
 msgid "Custom Range"
 msgstr "自定義範圍"
@@ -6896,14 +6933,21 @@ msgid "Disclaimers, contact info or a thank-you note, on a single line"
 msgstr "免責聲明、聯絡資料或感謝語，只限一行"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:120
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:32
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:99
 #: src/components/routes/settings/Security/SignInMethods.tsx:217
 #: src/components/routes/settings/Security/SignInMethods.tsx:251
 msgid "Disconnect"
 msgstr "中斷連接"
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:103
 #: src/components/routes/settings/Security/SignInMethods.tsx:247
 msgid "Disconnect {0}"
 msgstr "中斷 {0}"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:27
+msgid "Disconnect {name}? It stops working with your account straight away."
+msgstr "要中斷 {name} 嗎？它會立即停止使用您的帳戶。"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:109
 msgid "Disconnect Stripe account"
@@ -8411,7 +8455,7 @@ msgstr "每部信任的裝置在下次登錄時都需要輸入驗證碼。是否
 msgid "Everyone"
 msgstr "所有人"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:158
+#: src/components/routes/settings/ApiKeys/index.tsx:159
 msgid "Everyone ({0})"
 msgstr "所有人（{0}）"
 
@@ -8520,7 +8564,7 @@ msgstr "過期日期"
 
 #: src/components/common/WaitlistTable/index.tsx:30
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:119
-#: src/components/routes/settings/ApiKeys/index.tsx:210
+#: src/components/routes/settings/ApiKeys/index.tsx:211
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:35
 #: src/ee/licensing/licenceNotice.ts:78
 msgid "Expired"
@@ -8533,7 +8577,7 @@ msgstr "{0}已過期"
 #: src/components/common/PromoCodeTable/index.tsx:76
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:33
-#: src/components/routes/settings/ApiKeys/index.tsx:176
+#: src/components/routes/settings/ApiKeys/index.tsx:177
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:178
 msgid "Expires"
 msgstr "到期"
@@ -8558,7 +8602,7 @@ msgstr "出口"
 msgid "Export answers"
 msgstr "匯出答案"
 
-#: src/components/common/OrganizerReportTable/index.tsx:358
+#: src/components/common/OrganizerReportTable/index.tsx:352
 msgid "Export CSV"
 msgstr "匯出CSV"
 
@@ -8574,7 +8618,7 @@ msgstr "匯出購買記錄"
 msgid "Export started. Preparing file..."
 msgstr "導出已開始。正在準備文件..."
 
-#: src/components/common/OrganizerReportTable/index.tsx:204
+#: src/components/common/OrganizerReportTable/index.tsx:198
 msgid "Export successful"
 msgstr "匯出成功"
 
@@ -8774,7 +8818,7 @@ msgstr "導出訂單失敗"
 msgid "Failed to export purchases. Please try again."
 msgstr "匯出購買記錄失敗，請重試。"
 
-#: src/components/common/OrganizerReportTable/index.tsx:206
+#: src/components/common/OrganizerReportTable/index.tsx:200
 msgid "Failed to export report. Please try again."
 msgstr "匯出報告失敗。請重試。"
 
@@ -9682,6 +9726,10 @@ msgstr "返回"
 msgid "Go back to profile"
 msgstr "返回個人資料"
 
+#: src/components/routes/oauth/Connect/index.tsx:27
+msgid "Go back to the app you were connecting and start again."
+msgstr "請返回您正在連接的應用程式並重新開始。"
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:448
 msgid "Go to Event Page"
 msgstr "前往活動頁面"
@@ -9910,6 +9958,10 @@ msgstr "Hi.Events Cloud"
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:75
 msgid "Hi.Events Fee"
 msgstr "Hi.Events 費用"
+
+#: src/components/routes/oauth/Connect/index.tsx:110
+msgid "Hi.Events hasn't verified this app. Only continue if you started connecting it yourself and you trust it."
+msgstr "Hi.Events 尚未驗證此應用程式。只有在您親自發起連接並信任該應用程式時才繼續。"
 
 #: src/components/routes/organizer/Reports/index.tsx:46
 msgid "Hi.Events platform fees and VAT breakdown by transaction"
@@ -10295,7 +10347,7 @@ msgstr "證件卡 橫向 (CR80)"
 msgid "ID card portrait (CR80)"
 msgstr "證件卡 直向 (CR80)"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:224
+#: src/components/routes/settings/ApiKeys/index.tsx:227
 msgid "If a key leaks, revoke it straight away and create a new one."
 msgstr "如果金鑰外洩，請立即撤銷並建立新金鑰。"
 
@@ -10697,7 +10749,7 @@ msgstr "簽發者 URL"
 msgid "It happens on more than one date"
 msgstr "它在多個日期舉行"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:222
+#: src/components/routes/settings/ApiKeys/index.tsx:225
 msgid "It has your role and event access. Read-only keys can view and export, but can't change anything."
 msgstr "它擁有您的角色和活動存取權限。唯讀金鑰可以查看和匯出，但無法更改任何內容。"
 
@@ -10851,7 +10903,7 @@ msgstr "在準備好公佈之前，不在公開陣容和時間表中顯示"
 msgid "Keeps signing in with a password. {providerName} can't be used to sign this member in."
 msgstr "繼續使用密碼登入。此成員無法使用 {providerName} 登入。"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:173
+#: src/components/routes/settings/ApiKeys/index.tsx:174
 msgid "Key"
 msgstr "金鑰"
 
@@ -10859,11 +10911,11 @@ msgstr "金鑰"
 msgid "Key ending in {0}"
 msgstr "以 {0} 結尾的金鑰"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:79
+#: src/components/routes/settings/ApiKeys/index.tsx:80
 msgid "Key removed"
 msgstr "金鑰已移除"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:79
+#: src/components/routes/settings/ApiKeys/index.tsx:80
 msgid "Key revoked"
 msgstr "金鑰已撤銷"
 
@@ -10871,7 +10923,7 @@ msgstr "金鑰已撤銷"
 msgid "Keycloak, Authentik, Zitadel, OneLogin and others"
 msgstr "Keycloak、Authentik、Zitadel、OneLogin 等"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:223
+#: src/components/routes/settings/ApiKeys/index.tsx:226
 msgid "Keys can't sign in or manage your team, payouts, profile or security settings."
 msgstr "金鑰無法登入，也無法管理您的團隊、付款、個人資料或安全設定。"
 
@@ -10936,59 +10988,60 @@ msgstr "大"
 msgid "Last"
 msgstr "最後一個"
 
-#: src/components/common/OrganizerReportTable/index.tsx:60
-#: src/components/common/ReportTable/index.tsx:55
+#: src/components/common/OrganizerReportTable/index.tsx:61
+#: src/components/common/ReportTable/index.tsx:56
 msgid "Last 12 months"
 msgstr "過去 12 個月"
 
-#: src/components/common/OrganizerReportTable/index.tsx:55
-#: src/components/common/ReportTable/index.tsx:50
+#: src/components/common/OrganizerReportTable/index.tsx:56
+#: src/components/common/ReportTable/index.tsx:51
 msgid "Last 14 days"
 msgstr "過去 14 天"
 
-#: src/components/common/OrganizerReportTable/index.tsx:52
-#: src/components/common/ReportTable/index.tsx:47
+#: src/components/common/OrganizerReportTable/index.tsx:53
+#: src/components/common/ReportTable/index.tsx:48
 #: src/components/routes/admin/Attribution/index.tsx:77
 #: src/components/routes/admin/Dashboard/index.tsx:31
 #: src/components/routes/admin/EmailDelivery/index.tsx:14
 msgid "Last 24 hours"
 msgstr "過去 24 小時"
 
-#: src/components/common/OrganizerReportTable/index.tsx:56
+#: src/components/common/OrganizerReportTable/index.tsx:57
 #: src/components/common/PeriodSelector/index.tsx:34
-#: src/components/common/ReportTable/index.tsx:51
+#: src/components/common/ReportTable/index.tsx:52
 #: src/components/routes/admin/Attribution/index.tsx:79
 #: src/components/routes/admin/Dashboard/index.tsx:33
 #: src/components/routes/admin/EmailDelivery/index.tsx:16
 msgid "Last 30 days"
 msgstr "過去 30 天"
 
-#: src/components/common/OrganizerReportTable/index.tsx:53
-#: src/components/common/ReportTable/index.tsx:48
+#: src/components/common/OrganizerReportTable/index.tsx:54
+#: src/components/common/ReportTable/index.tsx:49
 msgid "Last 48 hours"
 msgstr "過去 48 小時"
 
-#: src/components/common/OrganizerReportTable/index.tsx:58
-#: src/components/common/ReportTable/index.tsx:53
+#: src/components/common/OrganizerReportTable/index.tsx:59
+#: src/components/common/ReportTable/index.tsx:54
 msgid "Last 6 months"
 msgstr "過去 6 個月"
 
-#: src/components/common/OrganizerReportTable/index.tsx:54
+#: src/components/common/OrganizerReportTable/index.tsx:55
 #: src/components/common/PeriodSelector/index.tsx:32
-#: src/components/common/ReportTable/index.tsx:49
+#: src/components/common/ReportTable/index.tsx:50
 #: src/components/routes/admin/Attribution/index.tsx:78
 #: src/components/routes/admin/Dashboard/index.tsx:32
 #: src/components/routes/admin/EmailDelivery/index.tsx:15
 msgid "Last 7 days"
 msgstr "過去 7 天"
 
-#: src/components/common/OrganizerReportTable/index.tsx:57
+#: src/components/common/OrganizerReportTable/index.tsx:58
 #: src/components/common/PeriodSelector/index.tsx:36
-#: src/components/common/ReportTable/index.tsx:52
+#: src/components/common/ReportTable/index.tsx:53
 #: src/components/routes/admin/Attribution/index.tsx:80
 msgid "Last 90 days"
 msgstr "過去 90 天"
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:92
 #: src/components/routes/settings/Team/index.tsx:220
 #: src/components/routes/settings/Team/MemberRow.tsx:165
 msgid "Last active"
@@ -11047,7 +11100,7 @@ msgstr "最近觸發"
 
 #: src/components/common/SsoButtons/index.tsx:126
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:73
-#: src/components/routes/settings/ApiKeys/index.tsx:175
+#: src/components/routes/settings/ApiKeys/index.tsx:176
 msgid "Last used"
 msgstr "上次使用"
 
@@ -11421,8 +11474,8 @@ msgstr "正在載入Webhook日誌..."
 msgid "Loading Webhooks"
 msgstr "正在加載 Webhook"
 
-#: src/components/common/OrganizerReportTable/index.tsx:265
-#: src/components/common/ReportTable/index.tsx:219
+#: src/components/common/OrganizerReportTable/index.tsx:259
+#: src/components/common/ReportTable/index.tsx:213
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:89
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:94
 msgid "Loading..."
@@ -12126,7 +12179,7 @@ msgstr "我的精彩活動描述"
 msgid "My amazing event title..."
 msgstr "我的精彩活動標題..."
 
-#: src/components/routes/settings/ApiKeys/index.tsx:157
+#: src/components/routes/settings/ApiKeys/index.tsx:158
 msgid "My keys"
 msgstr "我的金鑰"
 
@@ -12246,6 +12299,7 @@ msgstr "淨收入"
 #: src/components/common/PromoCodeTable/index.tsx:169
 #: src/components/common/WebhookTable/index.tsx:272
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:93
 #: src/components/routes/settings/Team/MemberRow.tsx:166
 msgid "Never"
 msgstr "從不"
@@ -12571,19 +12625,23 @@ msgstr "此期間沒有已完成的訂單"
 msgid "No configurations found"
 msgstr "找不到配置"
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:61
+msgid "No connected apps"
+msgstr "沒有已連接的應用程式"
+
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:207
 msgid "No connections available"
 msgstr "沒有可用的連線"
 
-#: src/components/common/ReportTable/index.tsx:227
+#: src/components/common/ReportTable/index.tsx:221
 msgid "No data available"
 msgstr "無可用數據"
 
-#: src/components/common/OrganizerReportTable/index.tsx:283
+#: src/components/common/OrganizerReportTable/index.tsx:277
 msgid "No data found for the selected filters. Try adjusting the date range or currency."
 msgstr "未找到所選篩選條件的數據。請嘗試調整日期範圍或貨幣。"
 
-#: src/components/common/ReportTable/index.tsx:223
+#: src/components/common/ReportTable/index.tsx:217
 msgid "No data to show. Please select a date range"
 msgstr "無數據顯示。請選擇日期範圍"
 
@@ -13040,7 +13098,7 @@ msgstr "否，保留在此"
 msgid "Nobody has been added to this event's lineup yet."
 msgstr "此活動的陣容尚未加入任何人。"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:196
+#: src/components/routes/settings/ApiKeys/index.tsx:197
 msgid "Nobody has created an API key yet"
 msgstr "尚未有人建立 API 金鑰"
 
@@ -13291,7 +13349,7 @@ msgstr "暫無可列印內容"
 msgid "Nothing to sell here yet. Add products to this box office."
 msgstr "暫無可售商品。請為此售票處新增商品。"
 
-#: src/components/common/ReportTable/index.tsx:263
+#: src/components/common/ReportTable/index.tsx:257
 msgid "Nothing to show yet"
 msgstr "暫無顯示內容"
 
@@ -13376,7 +13434,7 @@ msgstr "從中心起奇偶分列"
 msgid "Odd numbers only"
 msgstr "只限單數"
 
-#: src/components/common/OrganizerReportTable/index.tsx:367
+#: src/components/common/OrganizerReportTable/index.tsx:361
 msgid "of"
 msgstr "共"
 
@@ -13545,7 +13603,7 @@ msgstr "每張訂單一次"
 msgid "Once you create an event, you'll see it here."
 msgstr "創建事件後，您就可以在這裏看到它。"
 
-#: src/components/common/ReportTable/index.tsx:268
+#: src/components/common/ReportTable/index.tsx:262
 msgid "Once you start collecting data, you'll see it here."
 msgstr "一旦開始收集數據，您將在這裏看到。"
 
@@ -13661,6 +13719,10 @@ msgstr "只有管理員可以管理團隊存取權限。"
 #: src/components/forms/ProductForm/index.tsx:562
 msgid "Only available as an add-on"
 msgstr "只作附加產品提供"
+
+#: src/components/routes/oauth/Connect/index.tsx:109
+msgid "Only continue if you just started connecting from an app on this computer, such as Claude Code or Cursor."
+msgstr "只有在您剛從此電腦上的應用程式（如 Claude Code 或 Cursor）發起連接時才繼續。"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:181
 msgid "Only members who can manage payments can change these instructions."
@@ -14317,7 +14379,7 @@ msgstr "擁有另一個 Hi.Events 帳戶，因此在其於保安設定中連接 
 msgid "Padding"
 msgstr "內邊距"
 
-#: src/components/common/OrganizerReportTable/index.tsx:367
+#: src/components/common/OrganizerReportTable/index.tsx:361
 msgid "Page"
 msgstr "頁面"
 
@@ -15117,7 +15179,7 @@ msgstr "請前往登記處，我們會為你處理。"
 msgid "Please select a date and time"
 msgstr "請選擇日期和時間"
 
-#: src/components/common/OrganizerReportTable/index.tsx:280
+#: src/components/common/OrganizerReportTable/index.tsx:274
 msgid "Please select a date range"
 msgstr "請選擇日期範圍"
 
@@ -15859,7 +15921,9 @@ msgstr "重新啟用"
 msgid "Reactivate this date? It will be reopened for future sales."
 msgstr "重新啟用此日期？它會重新開放售票。"
 
+#: src/components/routes/oauth/Connect/index.tsx:123
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:73
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:250
 msgid "Read and write"
 msgstr "讀寫"
@@ -15869,7 +15933,12 @@ msgstr "讀寫"
 msgid "Read more"
 msgstr "閱讀更多"
 
+#: src/components/routes/oauth/Connect/index.tsx:129
+msgid "Read only"
+msgstr "唯讀"
+
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:73
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:261
 msgid "Read-only"
 msgstr "唯讀"
@@ -16203,7 +16272,7 @@ msgstr "去除"
 msgid "Remove"
 msgstr "移除"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:73
+#: src/components/routes/settings/ApiKeys/index.tsx:74
 msgid "Remove \"{0}\"? It has already expired."
 msgstr "移除「{0}」？它已經過期。"
 
@@ -16278,7 +16347,7 @@ msgstr "移除 Hi.Events 品牌"
 msgid "Remove Hi.Events branding from everything your attendees see, and put your own logo in their emails."
 msgstr "從參加者看到的所有內容中移除 Hi.Events 品牌，並在他們的電郵中使用您自己的標誌。"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:81
+#: src/components/routes/settings/ApiKeys/index.tsx:82
 msgid "Remove key"
 msgstr "移除金鑰"
 
@@ -16694,6 +16763,14 @@ msgstr "返回活動"
 msgid "Return to Event Page"
 msgstr "返回活動頁面"
 
+#: src/components/routes/oauth/Connect/index.tsx:79
+msgid "Returning you to {leavingTo}…"
+msgstr "正在返回 {leavingTo}…"
+
+#: src/components/routes/oauth/Connect/index.tsx:94
+msgid "Returns you to"
+msgstr "將返回至"
+
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:144
 msgid "Reusable venue layouts. Attach one to an event to sell reserved seats."
 msgstr "可重複使用的場地佈局。將其關聯到活動即可銷售預留座位。"
@@ -16752,11 +16829,11 @@ msgstr "請查看訂單，然後選擇付款方式"
 msgid "Revoke"
 msgstr "撤銷"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:75
+#: src/components/routes/settings/ApiKeys/index.tsx:76
 msgid "Revoke \"{0}\"? Anything using it stops working straight away, and {ownerName} will get an email about it."
 msgstr "撤銷「{0}」？所有使用它的服務會立即停止運作，{ownerName} 會收到相關電郵通知。"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:76
+#: src/components/routes/settings/ApiKeys/index.tsx:77
 msgid "Revoke \"{0}\"? Anything using it stops working straight away. This can't be undone."
 msgstr "撤銷「{0}」？所有使用它的服務會立即停止運作。此操作無法復原。"
 
@@ -16768,7 +16845,7 @@ msgstr "撤銷 {0}"
 msgid "Revoke invitation"
 msgstr "撤銷邀請"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:81
+#: src/components/routes/settings/ApiKeys/index.tsx:82
 msgid "Revoke key"
 msgstr "撤銷金鑰"
 
@@ -17790,8 +17867,8 @@ msgstr "選擇機票"
 msgid "Select tickets"
 msgstr "選擇票"
 
-#: src/components/common/OrganizerReportTable/index.tsx:328
-#: src/components/common/ReportTable/index.tsx:294
+#: src/components/common/OrganizerReportTable/index.tsx:322
+#: src/components/common/ReportTable/index.tsx:288
 msgid "Select time period"
 msgstr "選擇時間段"
 
@@ -17932,7 +18009,7 @@ msgstr "向參與者、持票人或訂單擁有者發送電子郵件。訊息可
 msgid "Send invitation"
 msgstr "發送邀請"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:221
+#: src/components/routes/settings/ApiKeys/index.tsx:224
 msgid "Send it in the Authorization header of every request."
 msgstr "在每個請求的 Authorization 標頭中傳送它。"
 
@@ -18356,7 +18433,7 @@ msgstr "顯示較少平台"
 msgid "Show initials instead"
 msgstr "改為顯示姓名縮寫"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:160
+#: src/components/routes/settings/ApiKeys/index.tsx:161
 msgid "Show keys"
 msgstr "顯示金鑰"
 
@@ -18426,7 +18503,7 @@ msgstr "顯示門票顏色條"
 msgid "Show tickets"
 msgstr "顯示門票"
 
-#: src/components/common/OrganizerReportTable/index.tsx:366
+#: src/components/common/OrganizerReportTable/index.tsx:360
 msgid "Showing {0} of {totalRows} records"
 msgstr "顯示 {0} / {totalRows} 條記錄"
 
@@ -18961,10 +19038,13 @@ msgstr "出了點問題。請稍後再試。"
 #: src/components/routes/auth/Login/index.tsx:132
 #: src/components/routes/auth/Register/index.tsx:81
 #: src/components/routes/my-tickets/index.tsx:162
+#: src/components/routes/oauth/Connect/index.tsx:65
+#: src/components/routes/oauth/Connect/index.tsx:72
 #: src/components/routes/product-widget/SelectProducts/index.tsx:383
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:79
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:30
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:123
-#: src/components/routes/settings/ApiKeys/index.tsx:80
+#: src/components/routes/settings/ApiKeys/index.tsx:81
 #: src/components/routes/settings/Profile/index.tsx:129
 #: src/components/routes/settings/Profile/index.tsx:139
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:46
@@ -20556,6 +20636,10 @@ msgstr "此答案太長，請縮短後再儲存。"
 msgid "This answer means you can't register for this event."
 msgstr "選擇此答案將無法登記參加此活動。"
 
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:24
+msgid "this app"
+msgstr "此應用程式"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:260
 msgid "This applies to every matching date in the event, including dates not currently visible. Attendees registered on any of those dates will be reachable via the message composer once the update finishes."
 msgstr "這會套用到活動中所有符合的日期，包括目前看不到的日期。更新完成後，這些日期上已登記的參加者都可在訊息編輯器中接觸到。"
@@ -20627,6 +20711,14 @@ msgstr "此簽到名單所屬的場次已取消，因此無法再用於簽到。
 #: src/components/forms/AffiliateForm/index.tsx:41
 msgid "This code will be used to track sales. Only letters, numbers, hyphens, and underscores allowed."
 msgstr "呢個代碼會用嚟追蹤銷售。只可以用字母、數字、連字號同底線。"
+
+#: src/components/routes/oauth/Connect/index.tsx:26
+msgid "This connection link doesn't work"
+msgstr "此連接連結無效"
+
+#: src/components/routes/oauth/Connect/index.tsx:26
+msgid "This connection request has expired"
+msgstr "此連接請求已過期"
 
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:181
 msgid "This date"
@@ -21547,10 +21639,11 @@ msgstr "試試超長姓名"
 msgid "Try adjusting your filters to see more dates."
 msgstr "調整篩選條件即可查看更多日期。"
 
-#: src/components/common/OrganizerReportTable/index.tsx:273
-#: src/components/common/ReportTable/index.tsx:254
+#: src/components/common/OrganizerReportTable/index.tsx:267
+#: src/components/common/ReportTable/index.tsx:248
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1121
-#: src/components/routes/settings/ApiKeys/index.tsx:188
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:54
+#: src/components/routes/settings/ApiKeys/index.tsx:189
 #: src/components/routes/settings/ApiReference/index.tsx:83
 #: src/components/routes/settings/Organizers/index.tsx:41
 #: src/components/routes/settings/Security/index.tsx:77
@@ -21966,6 +22059,10 @@ msgstr "允許無限次使用"
 #: src/components/common/LocationsTable/index.tsx:32
 msgid "Unnamed"
 msgstr "未命名"
+
+#: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:71
+msgid "Unnamed app"
+msgstr "未命名應用程式"
 
 #: src/components/common/LocationPicker/index.tsx:67
 msgid "Unnamed location"
@@ -22393,7 +22490,7 @@ msgstr "使用您主頁設計中的顏色和字型。如果更改設計，請重
 msgid "Using them for real events? Get an Enterprise licence and put its key in <0>APP_LICENCE_KEY</0>."
 msgstr "要在真實活動中使用它們？請取得企業版授權，並將其金鑰填入 <0>APP_LICENCE_KEY</0>。"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:219
+#: src/components/routes/settings/ApiKeys/index.tsx:222
 msgid "Using your key"
 msgstr "使用您的金鑰"
 
@@ -22539,6 +22636,7 @@ msgstr "驗證電郵已傳送，請查看收件匣。"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:216
 #: src/components/routes/admin/Attribution/index.tsx:198
 #: src/components/routes/admin/Dashboard/index.tsx:396
+#: src/components/routes/oauth/Connect/index.tsx:99
 #: src/ee/sso/components/SingleSignOn/DomainList.tsx:17
 msgid "Verified"
 msgstr "已驗證"
@@ -22697,6 +22795,10 @@ msgstr "查看活動頁面"
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:93
 msgid "View Event Page"
 msgstr "查看活動頁面"
+
+#: src/components/routes/oauth/Connect/index.tsx:130
+msgid "View events, tickets and sales, without changing anything."
+msgstr "檢視活動、門票和銷售，不作任何變更。"
 
 #: src/components/common/OrganizerWebhookTable/index.tsx:117
 #: src/components/common/WebhookTable/index.tsx:117
@@ -23584,9 +23686,9 @@ msgstr "X（Twitter）"
 msgid "year"
 msgstr "年"
 
-#: src/components/common/OrganizerReportTable/index.tsx:59
+#: src/components/common/OrganizerReportTable/index.tsx:60
 #: src/components/common/PeriodSelector/index.tsx:38
-#: src/components/common/ReportTable/index.tsx:54
+#: src/components/common/ReportTable/index.tsx:55
 msgid "Year to date"
 msgstr "年度至今"
 
@@ -23702,6 +23804,10 @@ msgstr "您可以在帳戶設置中配置額外的服務費和稅費。"
 msgid "You can create a promo code which targets this product on the"
 msgstr "您可以創建一個促銷代碼，針對該產品"
 
+#: src/components/routes/oauth/Connect/index.tsx:169
+msgid "You can disconnect it at any time from Settings → API keys."
+msgstr "您可以隨時在 設定 → API 金鑰 中斷連接。"
+
 #: src/components/routes/event/Settings/Sections/EventTypeSettings/index.tsx:31
 msgid "You can only change it back to a single event while it has exactly one date and no orders. Once someone places an order, this can't be undone."
 msgstr "只有在活動恰好只有一個日期且沒有訂單時，才能改回單次活動。一旦有人下單，此更改將無法撤銷。"
@@ -23763,7 +23869,7 @@ msgstr "您沒有此主辦方的存取權限"
 msgid "You don't have access to this page"
 msgstr "您沒有此頁面的存取權限"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:196
+#: src/components/routes/settings/ApiKeys/index.tsx:197
 msgid "You don't have any API keys"
 msgstr "您還沒有任何 API 金鑰"
 
@@ -23829,7 +23935,7 @@ msgstr "您必須至少有一個價格等級"
 msgid "You must verify your email address before you can update the organizer status."
 msgstr "在更新主辦單位狀態之前，您必須先驗證您的電郵地址。"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:131
+#: src/components/routes/settings/ApiKeys/index.tsx:132
 msgid "You need a confirmed email address to create API keys. Check your inbox, or resend the confirmation email from your <0>profile</0>."
 msgstr "您需要已確認的電郵地址才能建立 API 金鑰。請檢查收件匣，或從您的<0>個人資料</0>重新傳送確認電郵。"
 
@@ -23977,7 +24083,7 @@ msgstr "您已獲得一個名額！"
 msgid "You've changed the session time"
 msgstr "你已更改場次時間"
 
-#: src/components/routes/settings/ApiKeys/index.tsx:145
+#: src/components/routes/settings/ApiKeys/index.tsx:146
 msgid "You've reached the limit of {0} active keys. Revoke one to create another."
 msgstr "您已達到 {0} 個有效金鑰的上限。請撤銷一個後再建立新的。"
 

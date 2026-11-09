@@ -25,6 +25,7 @@ class ScrambleServiceProvider extends ServiceProvider
     private const UNDOCUMENTED_ACTION_NAMESPACES = [
         'HiEvents\\Enterprise\\Licensing\\',
         'HiEvents\\Http\\Actions\\Accounts\\Subscription\\',
+        'HiEvents\\Http\\Actions\\OAuth\\',
     ];
 
     private const ACTION_NAMESPACE_PATTERN = '/^HiEvents\\\\(Enterprise\\\\(\w+)\\\\)?Http\\\\Actions\\\\/';
