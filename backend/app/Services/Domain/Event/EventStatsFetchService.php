@@ -166,7 +166,7 @@ readonly class EventStatsFetchService
 
     private function resolveStatsDateRange(int $eventId, string $preset): array
     {
-        $event = $this->eventRepository->findById($eventId);
+        $event = $this->eventRepository->loadRelation('event_occurrences')->findById($eventId);
 
         $bounds = $this->db->selectOne(
             'SELECT MIN(date) as min_date, MAX(date) as max_date

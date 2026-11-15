@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Services\Domain\Event;
 
+use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\EventStatsRequestDTO;
 use HiEvents\Services\Domain\Event\EventStatsFetchService;
@@ -76,6 +77,23 @@ class EventStatsFetchServiceTest extends TestCase
         ));
 
         $this->assertSame(0, $response->total_orders);
+    }
+
+    public function test_event_range_includes_occurrence_dates(): void
+    {
+        $event = Mockery::mock(EventDomainObject::class);
+        $event->shouldReceive('getStartDate')->andReturn('2090-02-18 17:00:00');
+        $event->shouldReceive('getEndDate')->andReturn('2090-02-20 02:00:00');
+        $this->eventRepository->shouldReceive('loadRelation')->once()->with('event_occurrences')->andReturnSelf();
+        $this->eventRepository->shouldReceive('findById')->once()->with(10)->andReturn($event);
+        $this->db->shouldReceive('selectOne')->once()->andReturn((object) [
+            'min_date' => '2026-11-14', 'max_date' => '2026-11-14',
+        ]);
+
+        $range = (new \ReflectionMethod(EventStatsFetchService::class, 'resolveStatsDateRange'))
+            ->invoke($this->service, 10, 'event');
+
+        $this->assertSame(['2026-11-14 00:00:00', '2090-02-20 02:00:00'], $range);
     }
 
     protected function tearDown(): void
