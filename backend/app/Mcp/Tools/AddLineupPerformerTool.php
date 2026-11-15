@@ -20,11 +20,13 @@ use Laravel\Mcp\Server\Attributes\Description;
 use Laravel\Mcp\Server\Attributes\Name;
 use Laravel\Mcp\Server\Attributes\Title;
 use Laravel\Mcp\Server\Tools\Annotations\IsDestructive;
+use Laravel\Mcp\Server\Tools\Annotations\IsOpenWorld;
 
 #[Name('add_lineup_performer')]
 #[Title('Add performer to lineup')]
 #[Description('Adds a performer or speaker to an event\'s lineup. Give profile_id to reuse a saved profile, or a name (with optional tagline, bio, links and image_url) to save a new profile for the organizer; not both. image_url must be a public https JPEG, PNG or WebP of at least 200x200. If any step fails, no new profile is kept.')]
 #[IsDestructive]
+#[IsOpenWorld]
 class AddLineupPerformerTool extends WriteApiTool
 {
     public function __construct(

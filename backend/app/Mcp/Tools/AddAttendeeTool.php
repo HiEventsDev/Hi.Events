@@ -14,11 +14,13 @@ use Laravel\Mcp\Server\Attributes\Description;
 use Laravel\Mcp\Server\Attributes\Name;
 use Laravel\Mcp\Server\Attributes\Title;
 use Laravel\Mcp\Server\Tools\Annotations\IsDestructive;
+use Laravel\Mcp\Server\Tools\Annotations\IsOpenWorld;
 
 #[Name('add_attendee')]
 #[Title('Add complimentary attendee')]
 #[Description('Adds a complimentary attendee to an event, e.g. a guest-list name or a speaker pass, as a free manual order. Uses up one of the ticket\'s available places and never oversells. By default the attendee is emailed their ticket and order summary; an email address gets at most 5 emails from these tools every 10 minutes. Tiered tickets use their first tier unless a tier is given. Seated tickets can only be added from the dashboard.')]
 #[IsDestructive]
+#[IsOpenWorld]
 class AddAttendeeTool extends WriteApiTool
 {
     public const DEFAULT_LOCALE = 'en';

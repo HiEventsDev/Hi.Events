@@ -14,11 +14,13 @@ use Laravel\Mcp\Server\Attributes\Description;
 use Laravel\Mcp\Server\Attributes\Name;
 use Laravel\Mcp\Server\Attributes\Title;
 use Laravel\Mcp\Server\Tools\Annotations\IsDestructive;
+use Laravel\Mcp\Server\Tools\Annotations\IsOpenWorld;
 
 #[Name('set_event_cover_image')]
 #[Title('Set event cover image')]
 #[Description('Downloads an image from a public https URL and makes it the event\'s cover image, replacing the current one. JPEG, PNG or WebP, up to 5 MB, at least 600 pixels wide; a wide image around 1600x800 works best.')]
 #[IsDestructive]
+#[IsOpenWorld]
 class SetEventCoverImageTool extends WriteApiTool
 {
     public function __construct(

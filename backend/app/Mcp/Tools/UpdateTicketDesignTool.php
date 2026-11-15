@@ -17,11 +17,13 @@ use Laravel\Mcp\Server\Attributes\Description;
 use Laravel\Mcp\Server\Attributes\Name;
 use Laravel\Mcp\Server\Attributes\Title;
 use Laravel\Mcp\Server\Tools\Annotations\IsDestructive;
+use Laravel\Mcp\Server\Tools\Annotations\IsOpenWorld;
 
 #[Name('update_ticket_design')]
 #[Title('Update ticket design')]
 #[Description('Changes how an event\'s tickets look in emails and PDFs: accent colour, logo, footer text, layout and how the date is shown. Fields you leave out stay as they are. logo_url must be a public https JPEG, PNG or WebP of at least 100x100.')]
 #[IsDestructive]
+#[IsOpenWorld]
 class UpdateTicketDesignTool extends WriteApiTool
 {
     private const DESIGN_FIELDS = ['enabled', 'accent_color', 'footer_text', 'layout_type', 'date_display_mode'];
