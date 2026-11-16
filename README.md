@@ -125,6 +125,7 @@ Built with **Laravel 13** (PHP >=8.3) · **React 19** with SSR · **TypeScript**
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://github.com/HiEventsDev/hi.events-render.com)
 [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/8CGKmu?referralCode=KvSr11)
 [![Deploy on Zeabur](https://zeabur.com/button.svg)](https://zeabur.com/templates/8DIRY6)
+[![Deploy on ZopDay](https://zop.dev/deploytozopday-inkhard.svg)](https://zop.dev/zopday/app/deploy?image=daveearley/hi.events-all-in-one&port=80)
 
 ### Docker
 
