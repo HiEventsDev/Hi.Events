@@ -3,6 +3,8 @@
 namespace HiEvents\Services\Domain\Event;
 
 use Carbon\Carbon;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
+use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\EventStatsRequestDTO;
 use HiEvents\Services\Application\Handlers\Event\DTO\EventStatsResponseDTO;
@@ -166,7 +168,7 @@ readonly class EventStatsFetchService
 
     private function resolveStatsDateRange(int $eventId, string $preset): array
     {
-        $event = $this->eventRepository->findById($eventId);
+        $event = $this->eventRepository->loadRelation(new Relationship(EventOccurrenceDomainObject::class))->findById($eventId);
 
         $bounds = $this->db->selectOne(
             'SELECT MIN(date) as min_date, MAX(date) as max_date
