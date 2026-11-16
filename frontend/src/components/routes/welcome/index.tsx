@@ -24,7 +24,7 @@ import {Callout} from "../../common/Callout";
 import {getConfig} from "../../../utilites/config.ts";
 import {trackEvent, AnalyticsEvents} from "../../../utilites/analytics.ts";
 import {takeSsoSignupConversion} from "../../../utilites/ssoFlow.ts";
-import {getDateTimePickerFormat} from "../../../utilites/dates.ts";
+import {getDateTimePickerFormat, getTimePickerFormat} from "../../../utilites/dates.ts";
 
 export const CreateOrganizer = ({progressInfo}: {
     progressInfo?: { currentStep: number, totalSteps: number, progressPercentage: number }
@@ -429,7 +429,7 @@ export const CreateEvent = ({progressInfo}: {
                                             required
                                             dropdownType="modal"
                                             timePickerProps={{
-                                                format: '12h',
+                                                format: getTimePickerFormat(),
                                                 withDropdown: true,
                                             }}
                                             onChange={(value) => {
@@ -449,7 +449,7 @@ export const CreateEvent = ({progressInfo}: {
                                             size="lg"
                                             dropdownType="modal"
                                             timePickerProps={{
-                                                format: '12h',
+                                                format: getTimePickerFormat(),
                                                 withDropdown: true,
                                             }}
                                             minDate={form.values.start_date ?? undefined}
