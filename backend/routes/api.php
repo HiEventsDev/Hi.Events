@@ -331,6 +331,12 @@ use HiEvents\Http\Actions\Organizers\Webhooks\EditOrganizerWebhookAction;
 use HiEvents\Http\Actions\Organizers\Webhooks\GetOrganizerWebhookAction;
 use HiEvents\Http\Actions\Organizers\Webhooks\GetOrganizerWebhookLogsAction;
 use HiEvents\Http\Actions\Organizers\Webhooks\GetOrganizerWebhooksAction;
+use HiEvents\Http\Actions\OrganizerSubscriptions\ConfirmOrganizerSubscriptionPublicAction;
+use HiEvents\Http\Actions\OrganizerSubscriptions\ExportOrganizerSubscribersAction;
+use HiEvents\Http\Actions\OrganizerSubscriptions\GetOrganizerSubscribersAction;
+use HiEvents\Http\Actions\OrganizerSubscriptions\SubscribeToOrganizerPublicAction;
+use HiEvents\Http\Actions\OrganizerSubscriptions\UnsubscribeOrganizerSubscribersAction;
+use HiEvents\Http\Actions\OrganizerSubscriptions\UnsubscribeOrganizerSubscriptionPublicAction;
 use HiEvents\Http\Actions\ProductCategories\CreateProductCategoryAction;
 use HiEvents\Http\Actions\ProductCategories\DeleteProductCategoryAction;
 use HiEvents\Http\Actions\ProductCategories\EditProductCategoryAction;
@@ -446,22 +452,19 @@ $router->prefix('/oauth')->group(
 
 $router->prefix('/auth')->group(
     function (Router $router): void {
-        // Auth
+
         $router->post('/login', LoginAction::class)->name('auth.login')->middleware('throttle:auth-login');
         $router->post('/login/two-factor', TwoFactorLoginAction::class)->name('auth.login.two-factor')->middleware('throttle:auth-two-factor');
         $router->post('/logout', LogoutAction::class)->name('auth.logout');
         $router->post('/register', CreateAccountAction::class)->name('auth.register')->middleware('throttle:auth-register');
         $router->post('/forgot-password', ForgotPasswordAction::class)->name('auth.forgot-password')->middleware('throttle:auth-forgot-password');
 
-        // Invitations
         $router->get('/invitation/{invite_token}', GetUserInvitationAction::class)->name('auth.invitation');
         $router->post('/invitation/{invite_token}', AcceptInvitationAction::class)->name('auth.accept-invitation');
 
-        // Reset Passwords
         $router->get('/reset-password/{reset_token}', ValidateResetPasswordTokenAction::class)->name('auth.validate-reset-password-token');
         $router->post('/reset-password/{reset_token}', ResetPasswordAction::class)->name('auth.reset-password');
 
-        // Single sign-on
         $router->get('/sso/providers', GetSsoProvidersAction::class)->name('auth.sso.providers');
         $router->post('/sso/exchange', ExchangeSsoCodeAction::class)->name('auth.sso.exchange')->middleware('throttle:auth-sso-exchange');
         $router->post('/sso/complete', CompleteSsoLoginAction::class)->name('auth.sso.complete')->middleware('throttle:auth-sso-exchange');
@@ -559,15 +562,13 @@ $router->middleware(['auth:api'])->group(
  */
 $router->middleware(['auth:api,sanctum'])->group(
     function (Router $router): void {
-        // Users
+
         $router->get('/users/me', GetMeAction::class);
 
-        // Accounts
         $router->get('/accounts/{account_id?}', GetAccountAction::class)->whereNumber('account_id');
 
-        // Organizers
         $router->post('/organizers', CreateOrganizerAction::class);
-        // This is POST instead of PUT because you can't upload files via PUT in PHP (at least not easily)
+
         $router->post('/organizers/{organizer_id}', EditOrganizerAction::class);
         $router->put('/organizers/{organizer_id}/status', UpdateOrganizerStatusAction::class);
         $router->delete('/organizers/{organizer_id}', DeleteOrganizerAction::class);
@@ -577,6 +578,10 @@ $router->middleware(['auth:api,sanctum'])->group(
         $router->get('/organizers/{organizer_id}/events', GetOrganizerEventsAction::class);
         $router->get('/organizers/{organizer_id}/stats', GetOrganizerStatsAction::class);
         $router->get('/organizers/{organizer_id}/orders', GetOrganizerOrdersAction::class);
+        $router->get('/organizers/{organizer_id}/event-subscriptions', GetOrganizerSubscribersAction::class);
+        $router->get('/organizers/{organizer_id}/event-subscriptions/export', ExportOrganizerSubscribersAction::class)
+            ->middleware('throttle:5,1,organizer-subscriber-export');
+        $router->post('/organizers/{organizer_id}/event-subscriptions/unsubscribe', UnsubscribeOrganizerSubscribersAction::class);
         $router->get('/organizers/{organizer_id}/settings', GetOrganizerSettingsAction::class);
         $router->patch('/organizers/{organizer_id}/settings', PartialUpdateOrganizerSettingsAction::class);
         $router->patch('/organizers/{organizer_id}/location', UpdateOrganizerLocationAction::class);
@@ -589,7 +594,6 @@ $router->middleware(['auth:api,sanctum'])->group(
         $router->delete('/organizers/{organizer_id}/webhooks/{webhook_id}', DeleteOrganizerWebhookAction::class);
         $router->get('/organizers/{organizer_id}/webhooks/{webhook_id}/logs', GetOrganizerWebhookLogsAction::class);
 
-        // Locations - Organizer level
         $router->get('/organizers/{organizer_id}/locations', GetLocationsAction::class);
         $router->post('/organizers/{organizer_id}/locations', CreateLocationAction::class);
         $router->get('/geo/status', GetGeoStatusAction::class);
@@ -639,10 +643,8 @@ $router->middleware(['auth:api,sanctum'])->group(
         $router->post('/events/{event_id}/seat-blocks/release', ReleaseSeatBlocksAction::class);
         $router->put('/events/{event_id}/attendees/{attendee_id}/seat', MoveAttendeeSeatAction::class);
 
-        // VAT Settings - Organizer level
         $router->get('/organizers/{organizerId}/vat-settings', GetOrganizerVatSettingAction::class);
 
-        // Email Templates - Organizer level
         $router->get('/organizers/{organizerId}/email-templates', GetOrganizerEmailTemplatesAction::class);
         $router->get('/email-templates/defaults', GetDefaultEmailTemplateAction::class);
         $router->post('/organizers/{organizerId}/email-templates', CreateOrganizerEmailTemplateAction::class);
@@ -651,13 +653,11 @@ $router->middleware(['auth:api,sanctum'])->group(
         $router->post('/organizers/{organizerId}/email-templates/preview', PreviewOrganizerEmailTemplateAction::class);
         $router->get('/email-templates/tokens/{templateType}', GetAvailableTokensAction::class);
 
-        // Taxes and Fees
         $router->post('/accounts/{account_id}/taxes-and-fees', CreateTaxOrFeeAction::class);
         $router->get('/accounts/{account_id}/taxes-and-fees', GetTaxOrFeeAction::class);
         $router->put('/accounts/{account_id}/taxes-and-fees/{tax_or_fee_id}', EditTaxOrFeeAction::class);
         $router->delete('/accounts/{account_id}/taxes-and-fees/{tax_or_fee_id}', DeleteTaxOrFeeAction::class);
 
-        // Events
         $router->post('/events', CreateEventAction::class);
         $router->get('/events', GetEventsAction::class);
         $router->get('/events/{event_id}', GetEventAction::class);
@@ -669,14 +669,12 @@ $router->middleware(['auth:api,sanctum'])->group(
         $router->get('/events/{event_id}/deletion-status', GetEventDeletionStatusAction::class);
         $router->post('/events/{event_id}/duplicate', DuplicateEventAction::class);
 
-        // Product Categories
         $router->post('/events/{event_id}/product-categories', CreateProductCategoryAction::class);
         $router->get('/events/{event_id}/product-categories', GetProductCategoriesAction::class);
         $router->get('/events/{event_id}/product-categories/{category_id}', GetProductCategoryAction::class);
         $router->put('/events/{event_id}/product-categories/{category_id}', EditProductCategoryAction::class);
         $router->delete('/events/{event_id}/product-categories/{category_id}', DeleteProductCategoryAction::class);
 
-        // Products
         $router->post('/events/{event_id}/products', CreateProductAction::class);
         $router->post('/events/{event_id}/products/sort', SortProductsAction::class);
         $router->post('/events/{event_id}/products/purchases/export', ExportProductPurchasesAction::class);
@@ -687,18 +685,15 @@ $router->middleware(['auth:api,sanctum'])->group(
         $router->delete('/events/{event_id}/products/{ticket_id}', DeleteProductAction::class);
         $router->get('/events/{event_id}/products', GetProductsAction::class);
 
-        // Stats
         $router->get('/events/{event_id}/stats', GetEventStatsAction::class);
         $router->get('/events/{event_id}/counts', GetEventCountsAction::class);
 
-        // Email Templates - Event level
         $router->get('/events/{eventId}/email-templates', GetEventEmailTemplatesAction::class);
         $router->post('/events/{eventId}/email-templates', CreateEventEmailTemplateAction::class);
         $router->put('/events/{eventId}/email-templates/{templateId}', UpdateEventEmailTemplateAction::class);
         $router->delete('/events/{eventId}/email-templates/{templateId}', DeleteEventEmailTemplateAction::class);
         $router->post('/events/{eventId}/email-templates/preview', PreviewEventEmailTemplateAction::class);
 
-        // Attendees
         $router->post('/events/{event_id}/attendees', CreateAttendeeAction::class);
         $router->get('/events/{event_id}/attendees', GetAttendeesAction::class);
         $router->get('/events/{event_id}/attendees/{attendee_id}', GetAttendeeAction::class);
@@ -708,7 +703,6 @@ $router->middleware(['auth:api,sanctum'])->group(
         $router->post('/events/{event_id}/attendees/{attendee_public_id}/resend-ticket', ResendAttendeeTicketAction::class);
         $router->post('/events/{event_id}/attendees/{attendee_public_id}/check_in', CheckInAttendeeAction::class);
 
-        // Orders
         $router->get('/events/{event_id}/orders', GetOrdersAction::class);
         $router->get('/events/{event_id}/orders/{order_id}', GetOrderAction::class);
         $router->put('/events/{event_id}/orders/{order_id}', EditOrderAction::class);
@@ -719,7 +713,6 @@ $router->middleware(['auth:api,sanctum'])->group(
         $router->post('/events/{event_id}/orders/export', ExportOrdersAction::class);
         $router->get('/events/{event_id}/orders/{order_id}/invoice', DownloadOrderInvoiceAction::class);
 
-        // Questions
         $router->post('/events/{event_id}/questions', CreateQuestionAction::class);
         $router->put('/events/{event_id}/questions/{question_id}', EditQuestionAction::class);
         $router->get('/events/{event_id}/questions/{question_id}', GetQuestionAction::class);
@@ -729,19 +722,16 @@ $router->middleware(['auth:api,sanctum'])->group(
         $router->put('/events/{event_id}/questions/{question_id}/answers/{answer_id}', EditQuestionAnswerAction::class);
         $router->match(['get', 'post'], '/events/{event_id}/questions/answers/export', ExportQuestionAnswersAction::class);
 
-        // Images
         $router->post('/events/{event_id}/images', CreateEventImageAction::class);
         $router->get('/events/{event_id}/images', GetEventImagesAction::class);
         $router->delete('/events/{event_id}/images/{image_id}', DeleteEventImageAction::class);
 
-        // Promo Codes
         $router->post('/events/{event_id}/promo-codes', CreatePromoCodeAction::class);
         $router->put('/events/{event_id}/promo-codes/{promo_code_id}', UpdatePromoCodeAction::class);
         $router->get('/events/{event_id}/promo-codes', GetPromoCodesAction::class);
         $router->get('/events/{event_id}/promo-codes/{promo_code_id}', GetPromoCodeAction::class);
         $router->delete('/events/{event_id}/promo-codes/{promo_code_id}', DeletePromoCodeAction::class);
 
-        // Affiliates
         $router->post('/events/{event_id}/affiliates', CreateAffiliateAction::class);
         $router->put('/events/{event_id}/affiliates/{affiliate_id}', UpdateAffiliateAction::class);
         $router->get('/events/{event_id}/affiliates', GetAffiliatesAction::class);
@@ -768,33 +758,28 @@ $router->middleware(['auth:api,sanctum'])->group(
         $router->put('/events/{event_id}/lineup/schedule-items/{schedule_item_id}', UpdateScheduleItemAction::class);
         $router->delete('/events/{event_id}/lineup/schedule-items/{schedule_item_id}', DeleteScheduleItemAction::class);
 
-        // Messages
         $router->post('/events/{event_id}/messages', SendMessageAction::class);
         $router->get('/events/{event_id}/messages', GetMessagesAction::class);
         $router->post('/events/{event_id}/messages/{message_id}/cancel', CancelMessageAction::class);
         $router->get('/events/{event_id}/messages/{message_id}/recipients', GetMessageRecipientsAction::class);
 
-        // Event Settings
         $router->get('/events/{event_id}/settings', GetEventSettingsAction::class);
         $router->put('/events/{event_id}/settings', EditEventSettingsAction::class);
         $router->patch('/events/{event_id}/settings', PartialEditEventSettingsAction::class);
         $router->get('/events/{event_id}/settings/platform-fee-preview', GetPlatformFeePreviewAction::class);
 
-        // Capacity Assignments
         $router->post('/events/{event_id}/capacity-assignments', CreateCapacityAssignmentAction::class);
         $router->get('/events/{event_id}/capacity-assignments', GetCapacityAssignmentsAction::class);
         $router->get('/events/{event_id}/capacity-assignments/{capacity_assignment_id}', GetCapacityAssignmentAction::class);
         $router->put('/events/{event_id}/capacity-assignments/{capacity_assignment_id}', UpdateCapacityAssignmentAction::class);
         $router->delete('/events/{event_id}/capacity-assignments/{capacity_assignment_id}', DeleteCapacityAssignmentAction::class);
 
-        // Check-In Lists
         $router->post('/events/{event_id}/check-in-lists', CreateCheckInListAction::class);
         $router->get('/events/{event_id}/check-in-lists', GetCheckInListsAction::class);
         $router->get('/events/{event_id}/check-in-lists/{check_in_list_id}', GetCheckInListAction::class);
         $router->put('/events/{event_id}/check-in-lists/{check_in_list_id}', UpdateCheckInListAction::class);
         $router->delete('/events/{event_id}/check-in-lists/{check_in_list_id}', DeleteCheckInListAction::class);
 
-        // Box Offices
         $router->post('/events/{event_id}/box-offices', CreateBoxOfficeAction::class)
             ->middleware('ee.licensed:box_office');
         $router->get('/events/{event_id}/box-offices', GetBoxOfficesAction::class);
@@ -806,7 +791,6 @@ $router->middleware(['auth:api,sanctum'])->group(
         $router->post('/events/{event_id}/box-offices/{box_office_id}/reset-pin', ResetBoxOfficePinAction::class)
             ->middleware('ee.licensed:box_office');
 
-        // Webhooks
         $router->post('/events/{event_id}/webhooks', CreateWebhookAction::class);
         $router->get('/events/{event_id}/webhooks', GetWebhooksAction::class);
         $router->put('/events/{event_id}/webhooks/{webhook_id}', EditWebhookAction::class);
@@ -814,16 +798,13 @@ $router->middleware(['auth:api,sanctum'])->group(
         $router->delete('/events/{event_id}/webhooks/{webhook_id}', DeleteWebhookAction::class);
         $router->get('/events/{event_id}/webhooks/{webhook_id}/logs', GetWebhookLogsAction::class);
 
-        // Reports
         $router->get('/events/{event_id}/reports/{report_type}', GetReportAction::class);
 
-        // Waitlist
         $router->get('/events/{event_id}/waitlist', GetWaitlistEntriesAction::class);
         $router->get('/events/{event_id}/waitlist/stats', GetWaitlistStatsAction::class);
         $router->post('/events/{event_id}/waitlist/offer-next', OfferWaitlistEntryAction::class);
         $router->delete('/events/{event_id}/waitlist/{entry_id}', CancelWaitlistEntryAction::class);
 
-        // Event Occurrences
         $router->post('/events/{event_id}/occurrences/generate', GenerateOccurrencesAction::class);
         $router->get('/events/{event_id}/occurrences/generate/status', GetOccurrenceGenerationStatusAction::class);
         $router->post('/events/{event_id}/occurrences/bulk-update', BulkUpdateOccurrencesAction::class);
@@ -841,7 +822,6 @@ $router->middleware(['auth:api,sanctum'])->group(
         $router->get('/events/{event_id}/occurrences/{occurrence_id}/product-availability', GetOccurrenceProductAvailabilityAction::class);
         $router->put('/events/{event_id}/occurrences/{occurrence_id}/product-visibility', UpdateProductVisibilityAction::class);
 
-        // Images
         $router->post('/images', CreateImageAction::class);
         $router->delete('/images/{image_id}', DeleteImageAction::class);
     }
@@ -868,30 +848,25 @@ $router->prefix('/admin')->middleware(['auth:api'])->group(
         $router->post('/stop-impersonation', StopImpersonationAction::class);
         $router->post('/users/{user_id}/two-factor/reset', ResetUserTwoFactorAction::class)->whereNumber('user_id');
 
-        // Failed Jobs
         $router->get('/failed-jobs', GetAllFailedJobsAction::class);
         $router->delete('/failed-jobs/{jobId}', DeleteFailedJobAction::class);
         $router->delete('/failed-jobs', DeleteAllFailedJobsAction::class);
         $router->post('/failed-jobs/{jobId}/retry', RetryFailedJobAction::class);
         $router->post('/failed-jobs/retry-all', RetryAllFailedJobsAction::class);
 
-        // Messages
         $router->get('/messages', GetAllAdminMessagesAction::class);
         $router->post('/messages/{message_id}/approve', ApproveMessageAction::class);
 
-        // Spam Events
         $router->get('/spam-events', GetAllSpamEventsAction::class);
         $router->post('/spam-events/{event_id}/approve', ApproveSpamEventAction::class);
         $router->post('/spam-events/{event_id}/confirm-spam', ConfirmSpamEventAction::class);
         $router->post('/spam-events/{event_id}/delete', DeleteSpamEventAction::class)->whereNumber('event_id');
 
-        // Announcements
         $router->get('/announcements', GetAllAnnouncementsAction::class);
         $router->post('/announcements', CreateAnnouncementAction::class);
         $router->put('/announcements/{announcement_id}', UpdateAnnouncementAction::class);
         $router->delete('/announcements/{announcement_id}', DeleteAnnouncementAction::class);
 
-        // Lifecycle Emails
         $router->middleware('lifecycle-emails')->group(static function (Router $router): void {
             $router->get('/lifecycle-emails', GetLifecycleEmailsAction::class);
             $router->put('/lifecycle-emails/{nudge_type}', UpdateLifecycleEmailAction::class)
@@ -903,18 +878,14 @@ $router->prefix('/admin')->middleware(['auth:api'])->group(
                 ->middleware('throttle:10,1,admin-lifecycle-email-test');
         });
 
-        // Messaging Tiers
         $router->get('/messaging-tiers', GetMessagingTiersAction::class);
         $router->put('/accounts/{account_id}/messaging-tier', UpdateAccountMessagingTierAction::class);
 
-        // Account Verification
         $router->put('/accounts/{account_id}/verification', UpdateAccountVerificationAction::class);
 
-        // Account Suspension
         $router->post('/accounts/{account_id}/suspension', SuspendAccountAction::class)->whereNumber('account_id');
         $router->delete('/accounts/{account_id}/suspension', UnsuspendAccountAction::class)->whereNumber('account_id');
 
-        // Feature Flags
         $router->get('/licence', GetLicenceAdminAction::class);
         $router->get('/licence/sales', GetLicenceSalesAdminAction::class);
         $router->get('/feature-flags', GetFeatureFlagsAction::class);
@@ -925,16 +896,13 @@ $router->prefix('/admin')->middleware(['auth:api'])->group(
         $router->put('/accounts/{account_id}/feature-flags/{key}', UpdateAccountFeatureFlagAction::class)
             ->whereNumber('account_id');
 
-        // Account Deletion Requests
         $router->get('/deletion-requests', GetAllAccountDeletionRequestsAction::class);
         $router->post('/accounts/{account_id}/deletion-request', AdminRequestAccountDeletionAction::class);
         $router->delete('/deletion-requests/{deletion_request_id}', AdminCancelAccountDeletionAction::class);
         $router->post('/deletion-requests/{deletion_request_id}/execute', AdminExecuteAccountDeletionAction::class);
 
-        // System Info
         $router->get('/system-info', GetSystemInfoAction::class);
 
-        // Email Deliveries
         $router->get('/email-deliveries/stats', GetEmailDeliveryStatsAction::class);
     }
 );
@@ -949,7 +917,6 @@ $router->prefix('/public')->group(
         $router->get('/compliance', GetCompliancePublicAction::class)
             ->middleware(['cache.headers:public;max_age=300', 'throttle:60,1,public-compliance']);
 
-        // Events
         $router->get('/events/{event_id}', GetEventPublicAction::class);
         $router->get('/events/{event_id}/occurrences', GetEventOccurrencesPublicAction::class)
             ->middleware('throttle:60,1,public-occurrences');
@@ -962,21 +929,23 @@ $router->prefix('/public')->group(
         $router->get('/events/{event_id}/occurrences/{occurrence_id}/best-available-seats', GetBestAvailableSeatsPublicAction::class)
             ->middleware('throttle:60,1,public-best-available-seats');
 
-        // Organizers
         $router->get('/organizers/{organizer_id}', GetPublicOrganizerAction::class);
+        $router->post('/organizers/{organizer_id}/event-subscriptions', SubscribeToOrganizerPublicAction::class)
+            ->middleware('throttle:5,1,public-organizer-subscribe');
+        $router->post('/organizers/{organizer_id}/event-subscriptions/confirm/{token}', ConfirmOrganizerSubscriptionPublicAction::class)
+            ->middleware('throttle:10,1,public-organizer-subscription-confirm');
+        $router->post('/organizers/{organizer_id}/event-subscriptions/unsubscribe/{token}', UnsubscribeOrganizerSubscriptionPublicAction::class)
+            ->middleware('throttle:30,1,public-organizer-subscription-unsubscribe');
         $router->get('/organizers/{organizer_id}/events', GetOrganizerEventsPublicAction::class)
             ->middleware('cache.guest:10,page,per_page,sort_by,sort_direction,query,filter_fields,eventsStatus');
         $router->post('/organizers/{organizer_id}/contact', SendOrganizerContactMessagePublicAction::class)
             ->middleware('throttle:5,1,organizer-contact');
 
-        // Widgets
         $router->get('/widgets/{widget_short_id}', GetWidgetPublicAction::class)
             ->middleware('throttle:300,1,public-widgets');
 
-        // Products
         $router->get('/events/{event_id}/products', GetEventPublicAction::class);
 
-        // Orders
         $router->post('/events/{event_id}/order', CreateOrderActionPublic::class)
             ->middleware('throttle:public-order-create');
         $router->put('/events/{event_id}/order/{order_short_id}', CompleteOrderActionPublic::class);
@@ -989,28 +958,22 @@ $router->prefix('/public')->group(
             ->middleware('throttle:10,1,public-offline-payment-report');
         $router->get('/events/{event_id}/order/{order_short_id}/invoice', DownloadOrderInvoicePublicAction::class);
 
-        // Attendees
         $router->get('/events/{event_id}/attendees/{attendee_short_id}', GetAttendeeActionPublic::class);
 
-        // Waitlist
         $router->post('/events/{event_id}/waitlist', CreateWaitlistEntryActionPublic::class)
             ->middleware('throttle:10,1,public-waitlist');
         $router->delete('/events/{event_id}/waitlist/{token}', CancelWaitlistEntryActionPublic::class)
             ->middleware('throttle:10,1,public-waitlist');
 
-        // Promo codes
         $router->get('/events/{event_id}/promo-codes/{promo_code}', GetPromoCodePublic::class)
             ->middleware('throttle:public-promo-code');
 
-        // Stripe payment gateway
         $router->post('/events/{event_id}/order/{order_short_id}/stripe/payment_intent', CreatePaymentIntentActionPublic::class)
             ->middleware('throttle:public-payment-intent');
         $router->get('/events/{event_id}/order/{order_short_id}/stripe/payment_intent', GetPaymentIntentActionPublic::class);
 
-        // Questions
         $router->get('/events/{event_id}/questions', GetQuestionsPublicAction::class);
 
-        // Webhooks
         $router->post('/webhooks/stripe', StripeIncomingWebhookAction::class)
             ->withoutMiddleware(ThrottleRequests::class.':api');
         $router->post('/webhooks/email-delivery/{provider}', HandleEmailDeliveryWebhookPublicAction::class)
@@ -1018,7 +981,6 @@ $router->prefix('/public')->group(
         $router->post('/lifecycle-emails/unsubscribe/{token}', UnsubscribeFromLifecycleEmailsAction::class)
             ->middleware(['lifecycle-emails', 'throttle:30,1,lifecycle-email-unsubscribe']);
 
-        // Box office
         $router->get('/box-offices/{box_office_short_id}', GetBoxOfficePublicAction::class)
             ->middleware('throttle:box-office-read');
         $router->post('/box-offices/{box_office_short_id}/sessions', CreateBoxOfficeSessionPublicAction::class)
@@ -1044,7 +1006,6 @@ $router->prefix('/public')->group(
                 ->middleware(['throttle:self-service-email', 'throttle:box-office-email']);
         });
 
-        // Check-In
         $router->get('/check-in-lists/{check_in_list_short_id}', GetCheckInListPublicAction::class);
         $router->get('/check-in-lists/{check_in_list_short_id}/stats', GetCheckInListStatsPublicAction::class);
         $router->get('/check-in-lists/{check_in_list_short_id}/attendees', GetCheckInListAttendeesPublicAction::class);
@@ -1053,15 +1014,12 @@ $router->prefix('/public')->group(
         $router->post('/check-in-lists/{check_in_list_short_id}/check-ins', CreateAttendeeCheckInPublicAction::class);
         $router->delete('/check-in-lists/{check_in_list_short_id}/check-ins/{check_in_short_id}', DeleteAttendeeCheckInPublicAction::class);
 
-        // Color themes
         $router->get('/color-themes', GetColorThemesAction::class);
 
-        // Ticket Lookup
         $router->post('/ticket-lookup', SendTicketLookupEmailAction::class)
             ->middleware('throttle:10,1,ticket-lookup');
         $router->get('/ticket-lookup/{token}', GetOrdersByLookupTokenAction::class);
 
-        // Self-service order and attendee edits
         $router->prefix('/events/{event_id}/order/{order_short_id}')->group(function (Router $router): void {
             $router->patch('/', EditOrderPublicAction::class)->middleware('throttle:self-service-edit');
             $router->post('/resend-confirmation', ResendOrderConfirmationPublicAction::class)->middleware('throttle:self-service-email');
@@ -1071,7 +1029,6 @@ $router->prefix('/public')->group(
             $router->put('/attendees/{attendee_short_id}/seat', ChangeAttendeeSeatPublicAction::class)->middleware('throttle:self-service-edit');
         });
 
-        // Sitemap
         $router->get('/sitemap.xml', GetSitemapIndexAction::class);
         $router->get('/sitemap-events-{page}.xml', GetSitemapEventsAction::class)->where('page', '[0-9]+');
         $router->get('/sitemap-organizers-{page}.xml', GetSitemapOrganizersAction::class)->where('page', '[0-9]+');

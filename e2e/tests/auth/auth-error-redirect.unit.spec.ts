@@ -40,6 +40,8 @@ test.describe('api client auth error handling', () => {
       '/box-office/abc',
       '/my-tickets/abc',
       '/emails/unsubscribe/abc',
+      '/organizer/1/subscriptions/confirm/token',
+      '/organizer/1/subscriptions/unsubscribe/token',
       '/auth/login',
       '/auth/register',
       '/auth/accept-invitation/abc',

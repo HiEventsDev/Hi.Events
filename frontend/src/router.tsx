@@ -436,6 +436,13 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "subscribers",
+                async lazy() {
+                    const Subscribers = await import("./components/routes/organizer/Subscriptions");
+                    return {Component: Subscribers.default};
+                },
+            },
+            {
                 path: "locations",
                 async lazy() {
                     const Locations = await import("./components/routes/organizer/Locations");
@@ -893,6 +900,15 @@ export const router: RouteObject[] = [
         async lazy() {
             const BoxOffice = await import("./ee/box-office/components/layouts/BoxOffice");
             return { Component: BoxOffice.default };
+        },
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/organizer/:organizerId/subscriptions/:action/:token",
+        handle: {styles: "src/components/routes/organizer/Subscriptions/TokenPage.tsx"},
+        async lazy() {
+            const TokenPage = await import("./components/routes/organizer/Subscriptions/TokenPage");
+            return {Component: TokenPage.default};
         },
         errorElement: <ErrorPage />,
     },

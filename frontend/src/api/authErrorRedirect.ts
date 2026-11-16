@@ -32,7 +32,8 @@ export type AuthErrorAction =
 const NONE: AuthErrorAction = {type: 'none'};
 
 const isPublicPath = (path: string) => !path.startsWith('/manage/')
-    && ALLOWED_UNAUTHENTICATED_PATHS.some(allowed => path.includes(allowed));
+    && (/^\/organizer\/\d+\/subscriptions\/(confirm|unsubscribe)\/[^/]+\/?$/.test(path)
+        || ALLOWED_UNAUTHENTICATED_PATHS.some(allowed => path.includes(allowed)));
 
 export const resolveAuthErrorAction = (status: number, errorCode: string | undefined, currentPath: string): AuthErrorAction => {
     if (status === 403 && errorCode === 'ACCOUNT_PENDING_DELETION') {

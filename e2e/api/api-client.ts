@@ -167,8 +167,12 @@ export class ApiClient {
     );
   }
 
-  updateOrganizerSettings(organizerId: number, settings: { first_day_of_week?: number; facebook_handle?: string }): Promise<void> {
+  updateOrganizerSettings(organizerId: number, settings: { first_day_of_week?: number; facebook_handle?: string; new_event_notifications_enabled?: boolean }): Promise<void> {
     return check(this.request.patch(`organizers/${organizerId}/settings`, { headers: jsonHeaders, data: settings }));
+  }
+
+  async getOrganizerSubscribers(organizerId: number): Promise<{email: string; status: string}[]> {
+    return unwrap(this.request.get(`organizers/${organizerId}/event-subscriptions`));
   }
 
   updateOrganizerStatus(organizerId: number, status: 'LIVE' | 'DRAFT'): Promise<void> {

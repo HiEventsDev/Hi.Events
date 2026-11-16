@@ -59,6 +59,10 @@ abstract class OrganizerSettingDomainObjectAbstract extends AbstractDomainObject
 
     final public const FIRST_DAY_OF_WEEK = 'first_day_of_week';
 
+    final public const NEW_EVENT_NOTIFICATIONS_ENABLED = 'new_event_notifications_enabled';
+
+    final public const NEW_EVENT_NOTIFICATIONS_GENERATION = 'new_event_notifications_generation';
+
     protected int $id;
 
     protected int $organizer_id;
@@ -105,6 +109,10 @@ abstract class OrganizerSettingDomainObjectAbstract extends AbstractDomainObject
 
     protected int $first_day_of_week = 1;
 
+    protected bool $new_event_notifications_enabled = false;
+
+    protected int $new_event_notifications_generation = 0;
+
     public function toArray(): array
     {
         return [
@@ -131,6 +139,8 @@ abstract class OrganizerSettingDomainObjectAbstract extends AbstractDomainObject
             'tracking_consent_acknowledged' => $this->tracking_consent_acknowledged ?? null,
             'homepage_sections' => $this->homepage_sections ?? null,
             'first_day_of_week' => $this->first_day_of_week ?? null,
+            'new_event_notifications_enabled' => $this->new_event_notifications_enabled ?? null,
+            'new_event_notifications_generation' => $this->new_event_notifications_generation ?? null,
         ];
     }
 
@@ -409,5 +419,29 @@ abstract class OrganizerSettingDomainObjectAbstract extends AbstractDomainObject
     public function getFirstDayOfWeek(): int
     {
         return $this->first_day_of_week;
+    }
+
+    public function setNewEventNotificationsEnabled(bool $new_event_notifications_enabled): self
+    {
+        $this->new_event_notifications_enabled = $new_event_notifications_enabled;
+
+        return $this;
+    }
+
+    public function getNewEventNotificationsEnabled(): bool
+    {
+        return $this->new_event_notifications_enabled;
+    }
+
+    public function setNewEventNotificationsGeneration(int $new_event_notifications_generation): self
+    {
+        $this->new_event_notifications_generation = $new_event_notifications_generation;
+
+        return $this;
+    }
+
+    public function getNewEventNotificationsGeneration(): int
+    {
+        return $this->new_event_notifications_generation;
     }
 }

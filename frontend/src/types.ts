@@ -1139,6 +1139,7 @@ export interface OrganizerSettings {
     organizer_id: IdParam;
     default_attendee_details_collection_method?: AttendeeDetailsCollectionMethod;
     default_show_marketing_opt_in?: boolean;
+    new_event_notifications_enabled?: boolean;
     default_pass_platform_fee_to_buyer?: boolean;
     default_allow_attendee_self_edit?: boolean;
     homepage_visibility: 'PUBLIC' | 'PRIVATE' | 'PASSWORD_PROTECTED';

@@ -32,6 +32,10 @@ class PartialUpdateOrganizerSettingsHandler
             'organizer_id' => $organizer->getId(),
         ]);
 
+        if ($dto->getProvided('newEventNotificationsEnabled') !== null) {
+            $this->organizerSettingsRepository->setNewEventNotificationsEnabled($organizer->getId(), $dto->getProvided('newEventNotificationsEnabled'));
+        }
+
         $this->organizerSettingsRepository->updateWhere([
             'default_attendee_details_collection_method' => $dto->getProvided(
                 'defaultAttendeeDetailsCollectionMethod',

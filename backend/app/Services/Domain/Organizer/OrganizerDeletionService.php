@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Domain\Organizer;
 
 use HiEvents\Exceptions\CannotDeleteEntityException;
+use HiEvents\Repository\Eloquent\OrganizerEventSubscriptionRepository;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Services\Domain\Event\EventDeletionService;
@@ -18,6 +19,7 @@ class OrganizerDeletionService
         private readonly EventDeletionService $eventDeletionService,
         private readonly LoggerInterface $logger,
         private readonly DatabaseManager $databaseManager,
+        private readonly OrganizerEventSubscriptionRepository $subscriptions,
     ) {}
 
     public function canDeleteOrganizer(int $organizerId, int $accountId): bool
@@ -89,6 +91,8 @@ class OrganizerDeletionService
                     'account_id' => $accountId,
                 ]);
             }
+
+            $this->subscriptions->deleteWhere(['organizer_id' => $organizerId]);
 
             $this->organizerRepository->deleteWhere([
                 'id' => $organizerId,

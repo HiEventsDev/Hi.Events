@@ -20,6 +20,7 @@ use HiEvents\Enterprise\Seating\Services\Domain\EventSeatMapLookupService;
 use HiEvents\Enterprise\Seating\Services\Domain\SeatClaimService;
 use HiEvents\Enterprise\Seating\Services\Domain\SeatedOrderCompletionGuard;
 use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Repository\Eloquent\OrganizerEventSubscriptionRepository;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
@@ -152,6 +153,7 @@ class CompleteOrderHandlerTest extends TestCase
             new TransactionLockService(DB::getFacadeRoot()),
             $this->questionRepository,
             new QuestionVisibilityService,
+            Mockery::mock(OrganizerEventSubscriptionRepository::class)->shouldReceive('canSubscribeFromCheckout')->andReturnFalse()->getMock(),
         );
     }
 
