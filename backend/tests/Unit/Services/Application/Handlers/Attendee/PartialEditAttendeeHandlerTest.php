@@ -14,6 +14,7 @@ use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Attendee\DTO\PartialEditAttendeeDTO;
 use HiEvents\Services\Application\Handlers\Attendee\PartialEditAttendeeHandler;
+use HiEvents\Services\Domain\Badge\BadgeReprintService;
 use HiEvents\Services\Domain\EventOccurrence\OccurrencePurchaseEligibilityService;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsCancellationService;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsReactivationService;
@@ -73,6 +74,8 @@ class PartialEditAttendeeHandlerTest extends TestCase
 
     private AvailableProductQuantitiesFetchService|MockInterface $availableProductQuantitiesFetchService;
 
+    private MockInterface|BadgeReprintService $badgeReprintService;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -101,6 +104,9 @@ class PartialEditAttendeeHandlerTest extends TestCase
         $this->occurrenceEligibilityService = Mockery::mock(OccurrencePurchaseEligibilityService::class);
         $this->availableProductQuantitiesFetchService = Mockery::mock(AvailableProductQuantitiesFetchService::class);
 
+        $this->badgeReprintService = Mockery::mock(BadgeReprintService::class);
+        $this->badgeReprintService->shouldReceive('flagIfBadgeDetailsChanged')->andReturnUsing(fn ($before, $after) => $after)->byDefault();
+
         $this->handler = new PartialEditAttendeeHandler(
             $this->attendeeRepository,
             $this->orderRepository,
@@ -115,6 +121,7 @@ class PartialEditAttendeeHandlerTest extends TestCase
             $this->seatingEventLock,
             $this->occurrenceEligibilityService,
             $this->availableProductQuantitiesFetchService,
+            $this->badgeReprintService,
         );
     }
 

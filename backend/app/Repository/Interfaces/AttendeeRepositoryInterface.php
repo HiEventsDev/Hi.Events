@@ -4,6 +4,8 @@ namespace HiEvents\Repository\Interfaces;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\Http\DTO\QueryParamsDTO;
+use HiEvents\Repository\DTO\BadgeAttendeeQueryDTO;
+use HiEvents\Repository\DTO\BadgeStatsDTO;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -18,6 +20,22 @@ interface AttendeeRepositoryInterface extends RepositoryInterface
     public function findByEventIdForExport(int $eventId, ?int $eventOccurrenceId = null): Collection;
 
     public function getAttendeesByCheckInShortId(string $shortId, QueryParamsDTO $params): Paginator;
+
+    public function findForBadges(BadgeAttendeeQueryDTO $query): LengthAwarePaginator;
+
+    /**
+     * @param  int[]  $productIds
+     * @return Collection<int, AttendeeDomainObject>
+     */
+    public function findKioskTicketMatches(
+        int $eventId,
+        string $email,
+        string $lastName,
+        array $productIds,
+        ?int $eventOccurrenceId,
+    ): Collection;
+
+    public function getBadgeStats(int $eventId, bool $includeAwaitingPayment, ?int $eventOccurrenceId = null): BadgeStatsDTO;
 
     /**
      * @return array<int, int> product_price_id => quantity

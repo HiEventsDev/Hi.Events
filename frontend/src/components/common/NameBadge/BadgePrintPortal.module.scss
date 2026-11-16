@@ -1,0 +1,23 @@
+.root {
+  position: fixed;
+  top: 0;
+  left: -10000px;
+  pointer-events: none;
+}
+
+@media print {
+  :global(body.hi-badge-printing) > *:not(.root) {
+    display: none !important;
+  }
+
+  :global(body.hi-badge-printing) {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+  }
+
+  .root {
+    position: static;
+    left: auto;
+  }
+}

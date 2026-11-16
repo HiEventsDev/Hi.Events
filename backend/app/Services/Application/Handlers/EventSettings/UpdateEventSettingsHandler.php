@@ -67,7 +67,6 @@ class UpdateEventSettingsHandler
                     'notify_organizer_of_new_orders' => $settings->notify_organizer_of_new_orders,
                     'price_display_mode' => $settings->price_display_mode->name,
 
-                    // Payment settings
                     'payment_providers' => $settings->payment_providers,
                     'offline_payment_instructions' => $this->purifier->purify($settings->offline_payment_instructions),
                     'allow_orders_awaiting_offline_payment_to_check_in' => $settings->allow_orders_awaiting_offline_payment_to_check_in,
@@ -76,7 +75,6 @@ class UpdateEventSettingsHandler
                     'payment_links_enabled' => $settings->payment_links_enabled,
                     'payment_link_expiry_hours' => $settings->payment_link_expiry_hours,
 
-                    // Invoice settings
                     'enable_invoicing' => $settings->enable_invoicing,
                     'invoice_label' => trim($settings->invoice_label),
                     'invoice_prefix' => trim($settings->invoice_prefix),
@@ -88,34 +86,30 @@ class UpdateEventSettingsHandler
                     'invoice_notes' => $this->purifier->purify($settings->invoice_notes),
                     'invoice_payment_terms_days' => $settings->invoice_payment_terms_days,
 
-                    // Ticket design settings
                     'ticket_design_settings' => $settings->ticket_design_settings,
 
-                    // Marketing settings
                     'show_marketing_opt_in' => $settings->show_marketing_opt_in,
 
-                    // Attendee detail copy control
                     'allow_copy_details_to_all_attendees' => $settings->allow_copy_details_to_all_attendees,
 
-                    // Platform fee settings
                     'pass_platform_fee_to_buyer' => $settings->pass_platform_fee_to_buyer,
 
-                    // Homepage theme settings
                     'homepage_theme_settings' => $settings->homepage_theme_settings,
                     'homepage_sections' => $settings->homepage_sections === null
                         ? null
                         : $this->homepageSectionsSanitizer->sanitizeForEvent($settings->homepage_sections, $settings->event_id),
 
-                    // Self-service settings
                     'allow_attendee_self_edit' => $settings->allow_attendee_self_edit,
 
-                    // Occurrence display
                     'show_available_occurrence_capacity' => $settings->show_available_occurrence_capacity,
                     'hide_sold_out_occurrences' => $settings->hide_sold_out_occurrences,
 
-                    // Waitlist settings
                     'waitlist_auto_process' => $settings->waitlist_auto_process,
                     'waitlist_offer_timeout_minutes' => $settings->waitlist_offer_timeout_minutes,
+
+                    ...($settings->enabled_features === null ? [] : [
+                        'enabled_features' => array_values(array_unique($settings->enabled_features)),
+                    ]),
                 ],
                 where: [
                     'event_id' => $settings->event_id,

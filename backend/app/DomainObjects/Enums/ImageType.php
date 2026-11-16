@@ -14,13 +14,14 @@ enum ImageType
 
     case GENERIC;
 
-    // Event images
     case EVENT_COVER;
     case TICKET_LOGO;
     case EVENT_GALLERY;
     case EVENT_SPONSOR_LOGO;
+    case BADGE_LOGO;
+    case BADGE_ARTWORK;
+    case BADGE_SPONSORS;
 
-    // Organizer images
     case ORGANIZER_LOGO;
     case ORGANIZER_COVER;
     case ORGANIZER_GALLERY;
@@ -35,6 +36,18 @@ enum ImageType
             self::TICKET_LOGO,
             self::EVENT_GALLERY,
             self::EVENT_SPONSOR_LOGO,
+            self::BADGE_LOGO,
+            self::BADGE_ARTWORK,
+            self::BADGE_SPONSORS,
+        ];
+    }
+
+    public static function badgeImageTypes(): array
+    {
+        return [
+            self::BADGE_LOGO,
+            self::BADGE_ARTWORK,
+            self::BADGE_SPONSORS,
         ];
     }
 
@@ -73,6 +86,9 @@ enum ImageType
             self::PROFILE_IMAGE->name => [200, 200],
             self::EVENT_GALLERY->name => [400, 300],
             self::EVENT_SPONSOR_LOGO->name => [80, 40],
+            self::BADGE_LOGO->name => [100, 40],
+            self::BADGE_ARTWORK->name => [600, 300],
+            self::BADGE_SPONSORS->name => [600, 60],
             self::ORGANIZER_GALLERY->name => [400, 300],
             self::ORGANIZER_SPONSOR_LOGO->name => [80, 40],
         ];

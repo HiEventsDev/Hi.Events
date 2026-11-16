@@ -44,10 +44,8 @@ class EventSettingsResource extends JsonResource
 
             'price_display_mode' => $this->getPriceDisplayMode(),
 
-            // Ticket design settings
             'ticket_design_settings' => $this->getTicketDesignSettings(),
 
-            // Payment settings
             'payment_providers' => $this->getPaymentProviders(),
             'offline_payment_instructions' => $this->getOfflinePaymentInstructions(),
             'allow_orders_awaiting_offline_payment_to_check_in' => $this->getAllowOrdersAwaitingOfflinePaymentToCheckIn(),
@@ -56,7 +54,6 @@ class EventSettingsResource extends JsonResource
             'payment_links_enabled' => $this->getPaymentLinksEnabled(),
             'payment_link_expiry_hours' => $this->getPaymentLinkExpiryHours(),
 
-            // Invoice settings
             'enable_invoicing' => $this->getEnableInvoicing(),
             'invoice_label' => $this->getInvoiceLabel(),
             'invoice_prefix' => $this->getInvoicePrefix(),
@@ -68,29 +65,25 @@ class EventSettingsResource extends JsonResource
             'invoice_notes' => $this->getInvoiceNotes(),
             'invoice_payment_terms_days' => $this->getInvoicePaymentTermsDays(),
 
-            // Marketing settings
             'show_marketing_opt_in' => $this->getShowMarketingOptIn(),
 
-            // Attendee detail copy control
             'allow_copy_details_to_all_attendees' => $this->getAllowCopyDetailsToAllAttendees(),
 
-            // Platform fee settings
             'pass_platform_fee_to_buyer' => $this->getPassPlatformFeeToBuyer(),
 
-            // Homepage theme settings
             'homepage_theme_settings' => $this->getHomepageThemeSettings(),
             'homepage_sections' => $this->getHomepageSections(),
 
-            // Self-service settings
             'allow_attendee_self_edit' => $this->getAllowAttendeeSelfEdit(),
 
-            // Occurrence display
             'show_available_occurrence_capacity' => $this->getShowAvailableOccurrenceCapacity(),
             'hide_sold_out_occurrences' => $this->getHideSoldOutOccurrences(),
 
-            // Waitlist settings
             'waitlist_auto_process' => $this->getWaitlistAutoProcess(),
             'waitlist_offer_timeout_minutes' => $this->getWaitlistOfferTimeoutMinutes(),
+
+            /** @var array<'BADGES'> */
+            'enabled_features' => $this->getEnabledFeatures() ?? [],
         ];
     }
 }

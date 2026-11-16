@@ -23,4 +23,14 @@ class CheckInListActivityValidator
             throw new CannotCheckInException(__('Check-in list is not active yet'));
         }
     }
+
+    /**
+     * @throws CannotCheckInException
+     */
+    public function assertAttendeeListsAvailable(CheckInListDomainObject $checkInList): void
+    {
+        if ($checkInList->getKioskMode()) {
+            throw new CannotCheckInException(__('This check-in list is a self check-in kiosk, so attendee lists are not available on it.'));
+        }
+    }
 }

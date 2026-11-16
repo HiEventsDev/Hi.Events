@@ -5,6 +5,7 @@ namespace HiEvents\DomainObjects;
 use HiEvents\DomainObjects\Interfaces\IsFilterable;
 use HiEvents\DomainObjects\Interfaces\IsSortable;
 use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
+use HiEvents\DomainObjects\Status\BadgePrintStatus;
 use Illuminate\Support\Collection;
 
 class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implements IsSortable, IsFilterable
@@ -90,6 +91,17 @@ class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implem
     public function getFullName(): string
     {
         return $this->first_name.' '.$this->last_name;
+    }
+
+    public function getBadgePrintStatus(): BadgePrintStatus
+    {
+        if ($this->getBadgePrintCount() === 0) {
+            return BadgePrintStatus::NOT_PRINTED;
+        }
+
+        return $this->getBadgePrintedAt() === null
+            ? BadgePrintStatus::NEEDS_REPRINT
+            : BadgePrintStatus::PRINTED;
     }
 
     public function getProduct(): ?ProductDomainObject

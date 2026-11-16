@@ -13,6 +13,7 @@ use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Attendee\DTO\EditAttendeeDTO;
 use HiEvents\Services\Application\Handlers\Attendee\EditAttendeeHandler;
+use HiEvents\Services\Domain\Badge\BadgeReprintService;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesDTO;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesResponseDTO;
@@ -52,6 +53,8 @@ class EditAttendeeHandlerTest extends TestCase
 
     private SeatClaimService|MockInterface $seatClaimService;
 
+    private MockInterface|BadgeReprintService $badgeReprintService;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -71,6 +74,9 @@ class EditAttendeeHandlerTest extends TestCase
         $this->seatClaimService->shouldReceive('changeProductForAttendee')->andReturn(false)->byDefault();
         $this->seatClaimService->shouldReceive('releaseForAttendee')->byDefault();
 
+        $this->badgeReprintService = Mockery::mock(BadgeReprintService::class);
+        $this->badgeReprintService->shouldReceive('flagIfBadgeDetailsChanged')->andReturnUsing(fn ($before, $after) => $after)->byDefault();
+
         $this->handler = new EditAttendeeHandler(
             $this->attendeeRepository,
             $this->productRepository,
@@ -79,6 +85,7 @@ class EditAttendeeHandlerTest extends TestCase
             $this->domainEventDispatcherService,
             $this->availableProductQuantitiesFetchService,
             $this->seatClaimService,
+            $this->badgeReprintService,
         );
     }
 

@@ -16,6 +16,7 @@ use HiEvents\Exceptions\NoTicketsAvailableException;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Attendee\DTO\EditAttendeeDTO;
+use HiEvents\Services\Domain\Badge\BadgeReprintService;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
@@ -35,6 +36,7 @@ class EditAttendeeHandler
         private readonly DomainEventDispatcherService $domainEventDispatcherService,
         private readonly AvailableProductQuantitiesFetchService $availableProductQuantitiesFetchService,
         private readonly SeatClaimService $seatClaimService,
+        private readonly BadgeReprintService $badgeReprintService,
     ) {}
 
     /**
@@ -50,7 +52,10 @@ class EditAttendeeHandler
 
             $this->adjustProductQuantities($attendee, $editAttendeeDTO);
 
-            $updatedAttendee = $this->updateAttendee($editAttendeeDTO);
+            $updatedAttendee = $this->badgeReprintService->flagIfBadgeDetailsChanged(
+                before: $attendee,
+                after: $this->updateAttendee($editAttendeeDTO),
+            );
 
             $this->domainEventDispatcherService->dispatch(
                 new AttendeeEvent(

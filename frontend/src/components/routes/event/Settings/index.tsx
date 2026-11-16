@@ -9,6 +9,7 @@ import {PageTitle} from "../../../common/PageTitle";
 import {t} from "@lingui/macro";
 import {SeoSettings} from "./Sections/SeoSettings";
 import {MiscSettings} from "./Sections/MiscSettings";
+import {FeatureSettings} from "./Sections/FeatureSettings";
 import {Box, Group, NavLink as MantineNavLink, Stack} from "@mantine/core";
 import {
     IconAdjustments,
@@ -22,6 +23,7 @@ import {
     IconListCheck,
     IconMapPin,
     IconPercentage,
+    IconPuzzle,
     IconRepeat,
 } from "@tabler/icons-react";
 import {useMediaQuery} from "@mantine/hooks";
@@ -58,6 +60,12 @@ export const Settings = () => {
                 label: t`Event Type`,
                 icon: IconCalendarRepeat,
                 component: EventTypeSettings
+            },
+            {
+                id: 'features',
+                label: t`Features`,
+                icon: IconPuzzle,
+                component: FeatureSettings,
             },
             {
                 id: 'location-settings',

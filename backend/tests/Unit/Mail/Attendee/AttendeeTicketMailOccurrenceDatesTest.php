@@ -33,15 +33,11 @@ class AttendeeTicketMailOccurrenceDatesTest extends TestCase
         ]));
 
         $html = $mail->render();
-        $ics = $this->icsFor($mail);
 
         $this->assertStringContainsString('Mon, Nov 2, 2026 · 7:00 PM<br>', $html);
         $this->assertStringNotContainsString('Nov 9, 2026', $html);
         $this->assertStringNotContainsString('Nov 16, 2026', $html);
-        $this->assertStringContainsString('DTSTART:20261102T190000', $ics);
-        $this->assertStringNotContainsString('DTEND', $ics);
-        $this->assertStringNotContainsString('20261109', $ics);
-        $this->assertStringNotContainsString('20261116', $ics);
+        $this->assertSame(['DTSTART:20261102T190000Z'], $this->calendarEventDateLines($mail));
     }
 
     public function test_an_occurrence_with_an_end_shows_its_own_range(): void
@@ -53,12 +49,13 @@ class AttendeeTicketMailOccurrenceDatesTest extends TestCase
         ]));
 
         $html = $mail->render();
-        $ics = $this->icsFor($mail);
 
         $this->assertStringContainsString('Mon, Nov 2, 2026 · 7:00 PM – 9:00 PM', $html);
         $this->assertStringNotContainsString('Nov 16, 2026', $html);
-        $this->assertStringContainsString('DTEND:20261102T210000', $ics);
-        $this->assertStringNotContainsString('20261116', $ics);
+        $this->assertSame(
+            ['DTSTART:20261102T190000Z', 'DTEND:20261102T210000Z'],
+            $this->calendarEventDateLines($mail),
+        );
     }
 
     public function test_an_end_equal_to_the_start_is_not_shown_as_a_range(): void
@@ -171,5 +168,16 @@ class AttendeeTicketMailOccurrenceDatesTest extends TestCase
         );
 
         return $data;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function calendarEventDateLines(AttendeeTicketMail $mail): array
+    {
+        preg_match_all('/BEGIN:VEVENT.*?END:VEVENT/s', $this->icsFor($mail), $events);
+        preg_match_all('/^DT(?:START|END)[:;][^\r\n]*/m', implode("\r\n", $events[0]), $lines);
+
+        return $lines[0];
     }
 }

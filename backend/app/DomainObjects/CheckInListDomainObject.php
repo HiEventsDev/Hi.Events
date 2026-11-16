@@ -3,8 +3,10 @@
 namespace HiEvents\DomainObjects;
 
 use Carbon\Carbon;
+use HiEvents\DomainObjects\Enums\EventFeature;
 use HiEvents\DomainObjects\Interfaces\IsSortable;
 use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
+use HiEvents\Services\Domain\Badge\DTO\BadgeDesignDTO;
 use Illuminate\Support\Collection;
 
 class CheckInListDomainObject extends Generated\CheckInListDomainObjectAbstract implements IsSortable
@@ -20,6 +22,13 @@ class CheckInListDomainObject extends Generated\CheckInListDomainObjectAbstract 
     private ?int $totalAttendeesCount = null;
 
     private ?string $timezone = null;
+
+    private ?BadgeDesignDTO $badgeDesign = null;
+
+    public function isBadgePrintingActive(EventSettingDomainObject $eventSettings): bool
+    {
+        return $this->getBadgePrintingEnabled() && $eventSettings->isFeatureEnabled(EventFeature::BADGES);
+    }
 
     public static function getDefaultSort(): string
     {
@@ -121,6 +130,18 @@ class CheckInListDomainObject extends Generated\CheckInListDomainObjectAbstract 
     public function setCheckedInCount(?int $checkedInCount): static
     {
         $this->checkedInCount = $checkedInCount ?? 0;
+
+        return $this;
+    }
+
+    public function getBadgeDesign(): ?BadgeDesignDTO
+    {
+        return $this->badgeDesign;
+    }
+
+    public function setBadgeDesign(?BadgeDesignDTO $badgeDesign): static
+    {
+        $this->badgeDesign = $badgeDesign;
 
         return $this;
     }

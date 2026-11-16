@@ -20,6 +20,7 @@ import {
     IconShare,
     IconCashRegister,
     IconTicket,
+    IconIdBadge2,
     IconTrendingUp,
     IconUserQuestion,
     IconUsers,
@@ -31,6 +32,7 @@ import {
 import {useAccess} from "../../../hooks/useAccess.ts";
 import {t} from "@lingui/macro";
 import {useGetEvent} from "../../../queries/useGetEvent";
+import {useEventFeature} from "../../../hooks/useEventFeature.ts";
 import {OrganizerDatesProvider} from "../../common/OrganizerDatesProvider";
 import {useGetEventSettings} from "../../../queries/useGetEventSettings";
 import {useGetEventCounts} from "../../../queries/useGetEventCounts";
@@ -77,6 +79,7 @@ const EventLayout = () => {
     const {data: eventCounts} = useGetEventCounts(eventId);
     const seating = useLicensedFeature(FeatureFlag.SEATING);
     const boxOffice = useLicensedFeature(FeatureFlag.BOX_OFFICE);
+    const badgesEnabled = useEventFeature(eventId, 'BADGES');
     const {data: me} = useGetMe();
     const {isReadOnly, can, canManageOrganizer} = useAccess();
 
@@ -135,6 +138,7 @@ const EventLayout = () => {
         {link: 'lineup', label: t`Lineup & Schedule`, icon: IconMicrophone2},
         {link: 'homepage-designer', label: t`Homepage Designer`, icon: IconPaint, showWhen: () => !isReadOnly},
         {link: 'ticket-designer', label: t`Ticket Designer`, icon: IconTicket, showWhen: () => !isReadOnly},
+        {link: 'badges', label: t`Badges`, icon: IconIdBadge2, showWhen: () => !isReadOnly && badgesEnabled},
         {link: 'seating', label: t`Seating`, icon: IconArmchair, showWhen: () => !isReadOnly && (seating.isEnabled || !!event?.has_seat_map)},
         {link: 'questions', label: t`Registration Questions`, icon: IconUserQuestion},
 

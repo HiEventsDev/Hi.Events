@@ -26,6 +26,9 @@ class CreateImageHandler
         ImageType::ORGANIZER_COVER,
         ImageType::EVENT_COVER,
         ImageType::TICKET_LOGO,
+        ImageType::BADGE_LOGO,
+        ImageType::BADGE_ARTWORK,
+        ImageType::BADGE_SPONSORS,
     ];
 
     public function __construct(
@@ -42,7 +45,6 @@ class CreateImageHandler
     public function handle(CreateImageDTO $imageData): ImageDomainObject
     {
         if ($imageData->isGeneric()) {
-            // For generic images, we associate them with the user
             return $this->imageUploadService->upload(
                 image: $imageData->image,
                 entityId: $imageData->userId,

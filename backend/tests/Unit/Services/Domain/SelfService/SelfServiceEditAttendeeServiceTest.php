@@ -12,6 +12,7 @@ use HiEvents\Mail\Attendee\AttendeeDetailsChangedMail;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Domain\Attendee\SendAttendeeTicketService;
+use HiEvents\Services\Domain\Badge\BadgeReprintService;
 use HiEvents\Services\Domain\SelfService\OrderAuditLogService;
 use HiEvents\Services\Domain\SelfService\SelfServiceEditAttendeeService;
 use Illuminate\Support\Facades\Mail;
@@ -31,6 +32,8 @@ class SelfServiceEditAttendeeServiceTest extends TestCase
 
     private MockInterface|SendAttendeeTicketService $sendAttendeeTicketService;
 
+    private MockInterface|BadgeReprintService $badgeReprintService;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -41,17 +44,21 @@ class SelfServiceEditAttendeeServiceTest extends TestCase
         $this->eventRepository = Mockery::mock(EventRepositoryInterface::class);
         $this->orderAuditLogService = Mockery::mock(OrderAuditLogService::class);
         $this->sendAttendeeTicketService = Mockery::mock(SendAttendeeTicketService::class);
+        $this->badgeReprintService = Mockery::mock(BadgeReprintService::class);
+        $this->badgeReprintService->shouldReceive('flagForReprint')->byDefault();
 
         $this->service = new SelfServiceEditAttendeeService(
             $this->attendeeRepository,
             $this->eventRepository,
             $this->orderAuditLogService,
-            $this->sendAttendeeTicketService
+            $this->sendAttendeeTicketService,
+            $this->badgeReprintService,
         );
     }
 
     public function test_successful_edit_updates_attendee_fields(): void
     {
+        $this->badgeReprintService->shouldReceive('flagForReprint')->once()->with([456]);
         $attendee = Mockery::mock(AttendeeDomainObject::class);
         $attendee->shouldReceive('getId')->andReturn(456);
         $attendee->shouldReceive('getEventId')->andReturn(789);
@@ -234,6 +241,7 @@ class SelfServiceEditAttendeeServiceTest extends TestCase
 
         $this->attendeeRepository->shouldReceive('updateWhere')->never();
         $this->orderAuditLogService->shouldReceive('logAttendeeUpdate')->never();
+        $this->badgeReprintService->shouldReceive('flagForReprint')->never();
 
         $result = $this->service->editAttendee(
             attendee: $attendee,
