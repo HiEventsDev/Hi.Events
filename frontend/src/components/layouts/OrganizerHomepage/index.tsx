@@ -6,6 +6,7 @@ import {Event, GenericPaginatedResponse, HomepageSection, Organizer} from "../..
 import {OrganizerDocumentHead} from "../../common/OrganizerDocumentHead";
 import {IconCalendarEvent, IconCalendarOff, IconMail, IconMapPin, IconShare2, IconWorld} from '@tabler/icons-react';
 import {plural, t} from "@lingui/macro";
+import {OrganizerSubscribeButton} from "../../common/OrganizerSubscribeButton";
 import {ContactOrganizerModal} from "../../common/ContactOrganizerModal";
 import {getGoogleMapsUrl, getShortLocationDisplay} from "../../../utilites/addressUtilities.ts";
 import {organizerHomepagePath, organizerHomepageUrl} from "../../../utilites/urlHelper.ts";
@@ -113,6 +114,7 @@ export const OrganizerHomepage = ({
 
     const contactActions = (
         <div className={classes.contactActions}>
+            {!isPreview && <OrganizerSubscribeButton organizer={organizer}/>}
             <button type="button" onClick={() => setContactModalOpen(true)} className={classes.contactButton}>
                 <IconMail/>
                 {t`Contact`}

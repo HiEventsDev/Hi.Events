@@ -55,6 +55,8 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     final public const PAYMENT_LINK_CREATED_AT = 'payment_link_created_at';
     final public const OFFLINE_PAYMENT_REPORTED_AT = 'offline_payment_reported_at';
     final public const OFFLINE_PAYMENT_NOTE = 'offline_payment_note';
+    final public const NEW_EVENT_SUBSCRIPTION_REQUESTED_AT = 'new_event_subscription_requested_at';
+    final public const NEW_EVENT_SUBSCRIPTION_PROCESSED_AT = 'new_event_subscription_processed_at';
 
     protected int $id;
     protected int $event_id;
@@ -101,6 +103,8 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     protected ?string $payment_link_created_at = null;
     protected ?string $offline_payment_reported_at = null;
     protected ?string $offline_payment_note = null;
+    protected ?string $new_event_subscription_requested_at = null;
+    protected ?string $new_event_subscription_processed_at = null;
 
     public function toArray(): array
     {
@@ -150,6 +154,8 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
                     'payment_link_created_at' => $this->payment_link_created_at ?? null,
                     'offline_payment_reported_at' => $this->offline_payment_reported_at ?? null,
                     'offline_payment_note' => $this->offline_payment_note ?? null,
+                    'new_event_subscription_requested_at' => $this->new_event_subscription_requested_at ?? null,
+                    'new_event_subscription_processed_at' => $this->new_event_subscription_processed_at ?? null,
                 ];
     }
 
@@ -646,5 +652,27 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     public function getOfflinePaymentNote(): ?string
     {
         return $this->offline_payment_note;
+    }
+
+    public function setNewEventSubscriptionRequestedAt(?string $new_event_subscription_requested_at): self
+    {
+        $this->new_event_subscription_requested_at = $new_event_subscription_requested_at;
+        return $this;
+    }
+
+    public function getNewEventSubscriptionRequestedAt(): ?string
+    {
+        return $this->new_event_subscription_requested_at;
+    }
+
+    public function setNewEventSubscriptionProcessedAt(?string $new_event_subscription_processed_at): self
+    {
+        $this->new_event_subscription_processed_at = $new_event_subscription_processed_at;
+        return $this;
+    }
+
+    public function getNewEventSubscriptionProcessedAt(): ?string
+    {
+        return $this->new_event_subscription_processed_at;
     }
 }

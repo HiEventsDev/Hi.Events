@@ -1,3 +1,4 @@
+import SubscriberSettings from "./Sections/SubscriberSettings";
 import { SeoSettings } from "./Sections/SeoSettings";
 import BasicSettings from "./Sections/BasicSettings";
 import { SocialLinks } from "./Sections/SocialLinks";
@@ -39,6 +40,12 @@ const Settings = () => {
                 label: t`Basic Information`,
                 icon: IconInfoCircle,
                 component: BasicSettings
+            },
+            {
+                id: 'subscribers',
+                label: t`New-event subscriptions`,
+                icon: IconMail,
+                component: SubscriberSettings
             },
             {
                 id: 'event-defaults',

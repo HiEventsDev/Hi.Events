@@ -92,13 +92,13 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
     public static function rules(): array
     {
         return [
-            // Event defaults
+
             'default_attendee_details_collection_method' => ['sometimes', 'nullable', Rule::in(AttendeeDetailsCollectionMethod::valuesArray())],
+            'new_event_notifications_enabled' => ['sometimes', 'boolean'],
             'default_show_marketing_opt_in' => ['sometimes', 'nullable', 'boolean'],
             'default_pass_platform_fee_to_buyer' => ['sometimes', 'nullable', 'boolean'],
             'default_allow_attendee_self_edit' => ['sometimes', 'nullable', 'boolean'],
 
-            // Social handles
             'facebook_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
             'instagram_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
             'twitter_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
@@ -124,10 +124,8 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
 
             'website_url' => ['sometimes', 'nullable', 'url'],
 
-            // Homepage
             'homepage_visibility' => ['nullable', Rule::in(OrganizerHomepageVisibility::valuesArray())],
 
-            // Homepage theme settings
             'homepage_theme_settings' => ['nullable', 'array'],
             'homepage_theme_settings.accent' => ['nullable', 'string', ...RulesHelper::HEX_COLOR],
             'homepage_theme_settings.background' => ['nullable', 'string', ...RulesHelper::HEX_COLOR],
@@ -136,16 +134,13 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
             'homepage_theme_settings.font_family' => ['nullable', 'string', Rule::in(HomepageFontFamily::valuesArray())],
             ...HomepageSectionRules::rules(HomepageSectionType::organizerValues()),
 
-            // SEO
             'seo_keywords' => ['sometimes', 'nullable', 'string', 'max:255'],
             'seo_title' => ['sometimes', 'nullable', 'string', 'max:255'],
             'seo_description' => ['sometimes', 'nullable', 'string', 'max:1000'],
             'allow_search_engine_indexing' => ['sometimes', 'nullable', 'boolean'],
 
-            // Password
             'homepage_password' => ['sometimes', 'nullable', 'string', 'max:100'],
 
-            // Tracking pixels
             'tracking_pixels' => ['sometimes', 'nullable', 'array', 'max:10'],
             'tracking_pixels.*.provider' => ['required', 'string', Rule::in(TrackingPixelProvider::valuesArray())],
             'tracking_pixels.*.pixel_id' => ['required', 'string', 'max:50', 'regex:/^[a-zA-Z0-9\-_]+$/'],

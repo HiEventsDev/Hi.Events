@@ -47,6 +47,11 @@ class AccountHardDeletionService
         $manifest = [];
         $connection = $this->databaseManager->connection();
 
+        if ($context->organizerIds !== []) {
+            $manifest['organizer_event_subscriptions'] = $connection->table('organizer_event_subscriptions')
+                ->whereIn('organizer_id', $context->organizerIds)->delete();
+        }
+
         if ($context->eventIds !== []) {
             $questionIds = $connection->table('questions')
                 ->whereIn('event_id', $context->eventIds)

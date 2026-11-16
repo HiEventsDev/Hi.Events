@@ -18,14 +18,12 @@ class PartialUpdateOrganizerSettingsDTO extends BaseDataObject
         public readonly int $organizerId,
         public readonly string $accountId,
 
-        // Event defaults
         #[WithCast(EnumCast::class, AttendeeDetailsCollectionMethod::class)]
         public readonly AttendeeDetailsCollectionMethod|Optional|null $defaultAttendeeDetailsCollectionMethod,
         public readonly bool|Optional|null $defaultShowMarketingOptIn,
         public readonly bool|Optional|null $defaultPassPlatformFeeToBuyer,
         public readonly bool|Optional|null $defaultAllowAttendeeSelfEdit,
 
-        // Social
         public readonly string|Optional|null $facebookHandle,
         public readonly string|Optional|null $instagramHandle,
         public readonly string|Optional|null $twitterHandle,
@@ -49,29 +47,24 @@ class PartialUpdateOrganizerSettingsDTO extends BaseDataObject
         public readonly string|Optional|null $vimeoHandle,
         public readonly string|Optional|null $githubHandle,
 
-        // Website
         public readonly string|Optional|null $websiteUrl,
 
-        // Homepage settings
         public readonly OrganizerHomepageVisibility|Optional|null $homepageVisibility,
 
-        // Simplified homepage theme settings
         public readonly array|Optional|null $homepageThemeSettings,
         public readonly array|Optional|null $homepageSections,
 
-        // SEO
         public readonly string|Optional|null $seoKeywords,
         public readonly string|Optional|null $seoTitle,
         public readonly string|Optional|null $seoDescription,
         public readonly bool|Optional|null $allowSearchEngineIndexing,
 
-        // Password
         public readonly string|Optional|null $homepagePassword,
 
-        // Tracking pixels
         public readonly array|Optional|null $trackingPixels,
         public readonly bool|Optional|null $trackingConsentAcknowledged,
 
         public readonly int|Optional $firstDayOfWeek,
+        public readonly bool|Optional|null $newEventNotificationsEnabled = null,
     ) {}
 }

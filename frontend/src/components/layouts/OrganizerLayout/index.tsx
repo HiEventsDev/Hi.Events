@@ -116,6 +116,7 @@ const OrganizerLayout = () => {
 
         { label: t`Manage` },
         { link: 'events', label: t`Events`, icon: IconCalendar },
+        { link: 'subscribers', label: t`Subscribers`, icon: IconUsersGroup, showWhen: () => canManageOrganizer(organizerId) },
         { link: 'settings', label: t`Settings`, icon: IconSettings, showWhen: () => !isReadOnly },
 
         { label: t`Tools` },
