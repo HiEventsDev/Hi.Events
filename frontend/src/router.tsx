@@ -7,6 +7,8 @@ import { publicOrganizerRouteLoader } from "./routeLoaders/publicOrganizerRouteL
 import { organizerPreviewRouteLoader } from "./routeLoaders/organizerPreviewRouteLoader.ts";
 import { authRouteLoader } from "./routeLoaders/authRouteLoader.ts";
 import { eventContentWidgetRouteLoader, organizerWidgetRouteLoader, ticketWidgetRouteLoader } from "./routeLoaders/widgetRouteLoader.ts";
+import { signupFormRouteLoader } from "./ee/crm/routeLoaders/signupFormRouteLoader.ts";
+import { campaignUnsubscribeRouteLoader, subscriptionConfirmRouteLoader } from "./ee/crm/routeLoaders/tokenPageRouteLoaders.ts";
 
 const Root = () => {
     const [redirectPath, setRedirectPath] = useState<string | null>(null);
@@ -262,6 +264,13 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "audience-campaigns",
+                async lazy() {
+                    const AdminCampaignReview = await import("./ee/crm/components/routes/AdminCampaignReview");
+                    return { Component: AdminCampaignReview.default };
+                }
+            },
+            {
                 path: "messages",
                 async lazy() {
                     const Messages = await import("./components/routes/admin/Messages");
@@ -447,6 +456,62 @@ export const router: RouteObject[] = [
                 async lazy() {
                     const People = await import("./components/routes/organizer/People");
                     return { Component: People.default };
+                }
+            },
+            {
+                path: "audience",
+                async lazy() {
+                    const AudienceOverview = await import("./ee/crm/components/routes/AudienceOverview");
+                    return { Component: AudienceOverview.default };
+                }
+            },
+            {
+                path: "audience/contacts",
+                async lazy() {
+                    const AudienceContacts = await import("./ee/crm/components/routes/AudienceContacts");
+                    return { Component: AudienceContacts.default };
+                }
+            },
+            {
+                path: "audience/segments",
+                async lazy() {
+                    const AudienceSegments = await import("./ee/crm/components/routes/AudienceSegments");
+                    return { Component: AudienceSegments.default };
+                }
+            },
+            {
+                path: "audience/forms",
+                async lazy() {
+                    const AudienceForms = await import("./ee/crm/components/routes/AudienceForms");
+                    return { Component: AudienceForms.default };
+                }
+            },
+            {
+                path: "audience/campaigns",
+                async lazy() {
+                    const AudienceCampaigns = await import("./ee/crm/components/routes/AudienceCampaigns");
+                    return { Component: AudienceCampaigns.default };
+                }
+            },
+            {
+                path: "audience/campaigns/:campaignId",
+                async lazy() {
+                    const AudienceCampaign = await import("./ee/crm/components/routes/AudienceCampaign");
+                    return { Component: AudienceCampaign.default };
+                }
+            },
+            {
+                path: "audience/templates",
+                async lazy() {
+                    const AudienceTemplates = await import("./ee/crm/components/routes/AudienceTemplates");
+                    return { Component: AudienceTemplates.default };
+                }
+            },
+            {
+                path: "audience/automations",
+                async lazy() {
+                    const AudienceAutomations = await import("./ee/crm/components/routes/AudienceAutomations");
+                    return { Component: AudienceAutomations.default };
                 }
             },
             {
@@ -760,6 +825,16 @@ export const router: RouteObject[] = [
         errorElement: <ErrorPage />,
     },
     {
+        path: "/widget/forms/:publicId",
+        loader: signupFormRouteLoader,
+        handle: {styles: "src/ee/crm/components/routes/SignupFormWidget/index.tsx"},
+        async lazy() {
+            const SignupFormWidget = await import("./ee/crm/components/routes/SignupFormWidget");
+            return { Component: SignupFormWidget.default };
+        },
+        errorElement: <ErrorPage />,
+    },
+    {
         path: "/widget/:eventId",
         loader: ticketWidgetRouteLoader,
         async lazy() {
@@ -893,6 +968,46 @@ export const router: RouteObject[] = [
         async lazy() {
             const BoxOffice = await import("./ee/box-office/components/layouts/BoxOffice");
             return { Component: BoxOffice.default };
+        },
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/u/:token",
+        loader: campaignUnsubscribeRouteLoader,
+        handle: {styles: "src/ee/crm/components/routes/CampaignUnsubscribe/index.tsx"},
+        async lazy() {
+            const CampaignUnsubscribe = await import("./ee/crm/components/routes/CampaignUnsubscribe");
+            return { Component: CampaignUnsubscribe.default };
+        },
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/audience/unsubscribe/:token",
+        loader: campaignUnsubscribeRouteLoader,
+        handle: {styles: "src/ee/crm/components/routes/CampaignUnsubscribe/index.tsx"},
+        async lazy() {
+            const CampaignUnsubscribe = await import("./ee/crm/components/routes/CampaignUnsubscribe");
+            return { Component: CampaignUnsubscribe.default };
+        },
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/subscribe/:publicId",
+        loader: signupFormRouteLoader,
+        handle: {styles: "src/ee/crm/components/routes/SubscribePage/index.tsx"},
+        async lazy() {
+            const SubscribePage = await import("./ee/crm/components/routes/SubscribePage");
+            return { Component: SubscribePage.default };
+        },
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/audience/confirm/:token",
+        loader: subscriptionConfirmRouteLoader,
+        handle: {styles: "src/ee/crm/components/routes/SubscriptionConfirm/index.tsx"},
+        async lazy() {
+            const SubscriptionConfirm = await import("./ee/crm/components/routes/SubscriptionConfirm");
+            return { Component: SubscriptionConfirm.default };
         },
         errorElement: <ErrorPage />,
     },

@@ -1,0 +1,24 @@
+.dropdown {
+  width: min(320px, calc(100vw - 16px)) !important;
+}
+
+.target {
+  @media (max-width: 48em) {
+    min-width: 36px;
+    min-height: 36px;
+    padding-inline: 8px;
+
+    :global(.mantine-Button-section) {
+      margin-inline: 0;
+    }
+
+    :global(.mantine-Button-label) {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+  }
+}

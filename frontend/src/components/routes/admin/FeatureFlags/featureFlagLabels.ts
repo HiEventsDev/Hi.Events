@@ -18,6 +18,16 @@ export const getFeatureFlagLabel = (key: string): { name: string, description: s
                 name: t`Enterprise single sign-on`,
                 description: t`Lets accounts connect their identity provider, verify email domains and require single sign-on.`,
             };
+        case FeatureFlag.CRM:
+            return {
+                name: t`Audience`,
+                description: t`Lets accounts see every buyer and attendee as one contact, build segments and email the people who opted in.`,
+            };
+        case FeatureFlag.CRM_SMS:
+            return {
+                name: t`Audience text messages`,
+                description: t`Lets accounts connect their own Twilio account and send text message campaigns to people who opted in to texts.`,
+            };
         default:
             return {name: key, description: ''};
     }

@@ -23,6 +23,7 @@ use HiEvents\Services\Domain\LifecycleEmail\Nudges\StripeOnboardingIncompleteNud
 use HiEvents\Services\Domain\Payment\Stripe\StripeConnectTimezones;
 use HiEvents\Services\Infrastructure\Email\LiquidTemplateRenderer;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
+use HiEvents\Services\Infrastructure\Url\PublicApiUrl;
 use HTMLPurifier;
 use Illuminate\Config\Repository as ConfigRepository;
 use Illuminate\Support\Carbon;
@@ -54,13 +55,14 @@ class LifecycleEmailTemplateServiceTest extends TestCase
             new LiveEventNoSalesNudge($nudgeRepository),
             new LapsedPayerNudge($nudgeRepository),
         );
+        $config = new ConfigRepository(['app' => ['key' => 'test-key']]);
         $this->service = new LifecycleEmailTemplateService(
             templateRepository: $this->repository,
             nudgeRegistry: $this->registry,
             liquidRenderer: new LiquidTemplateRenderer,
             contextHtmlEscaper: new EmailContextHtmlEscaper,
             purifier: new HtmlPurifierService(new HTMLPurifier),
-            unsubscribeTokens: new LifecycleEmailUnsubscribeTokens(new ConfigRepository(['app' => ['key' => 'test-key']])),
+            unsubscribeTokens: new LifecycleEmailUnsubscribeTokens($config, new PublicApiUrl($config)),
         );
     }
 

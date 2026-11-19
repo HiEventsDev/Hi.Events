@@ -29,6 +29,7 @@ import {hasEventDetails, SetupChecklist} from "./SetupChecklist";
 import {PublishEventModal} from "../../../modals/PublishEventModal";
 import {EventLiveCelebrationModal} from "../../../modals/EventLiveCelebrationModal";
 import {eventHomepageUrl} from "../../../../utilites/urlHelper.ts";
+import {EventDashboardAudience} from "../../../../ee/crm/components/EventDashboardAudience";
 
 export const DashBoardSkeleton = () => {
     return (
@@ -292,6 +293,8 @@ export const EventDashboard = () => {
                     dateRangeLabel={dateRangeLabel}
                     syncId="events"
                 />
+
+                <EventDashboardAudience organizerId={organizerId} eventId={eventId}/>
             </>)}
         </PageBody>
     )

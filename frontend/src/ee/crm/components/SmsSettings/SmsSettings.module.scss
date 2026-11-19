@@ -1,0 +1,35 @@
+.card {
+  scroll-margin-top: 20px;
+}
+
+.summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mantine-spacing-md) var(--mantine-spacing-xl);
+
+  > div {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+}
+
+.sid {
+  font-family: var(--mantine-font-family-monospace);
+  font-size: var(--mantine-font-size-sm);
+}
+
+.testRow {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--mantine-spacing-sm);
+  flex-wrap: wrap;
+
+  > :first-child {
+    flex: 1;
+    min-width: 260px;
+  }
+
+  :global(.mantine-InputWrapper-root) {
+    margin-bottom: 0;
+  }
+}

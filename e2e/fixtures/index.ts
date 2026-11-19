@@ -16,8 +16,6 @@ interface SuperAdminAuth {
   token: string;
 }
 
-const TRUSTED_MESSAGING_TIER_ID = 2;
-
 const superAdminToken = (): string | null => process.env.E2E_SUPERADMIN_TOKEN || null;
 
 /**
@@ -39,9 +37,7 @@ const grantMessagingPrivileges = async (
 
   const adminContext = await newApiContext(playwright, { Authorization: `Bearer ${token}` });
   try {
-    const adminApi = new AdminApiClient(adminContext);
-    await adminApi.setAccountVerification(account.id, true);
-    await adminApi.setMessagingTier(account.id, TRUSTED_MESSAGING_TIER_ID);
+    await new AdminApiClient(adminContext).grantMessagingPrivileges(account.id);
   } finally {
     await adminContext.dispose();
   }

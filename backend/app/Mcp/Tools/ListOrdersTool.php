@@ -20,7 +20,7 @@ use Laravel\Mcp\Server\Tools\Annotations\IsReadOnly;
 
 #[Name('list_orders')]
 #[Title('List orders')]
-#[Description('Lists orders for one event, or across all of an organizer\'s events, 50 per page, newest first: buyer, status, payment and refund status, total, items and when it was placed. Search matches buyer name, email or order reference. Filter by status, e.g. AWAITING_OFFLINE_PAYMENT for unpaid bank-transfer orders. Attendees and registration answers are only returned for a single order. Amounts are left out for team members who may not view financials.')]
+#[Description('Lists orders for one event, or across all of an organizer\'s events, 50 per page, newest first: buyer, status, payment and refund status, total, items and when it was placed. Search matches buyer name, email, mobile number or order reference. Filter by status, e.g. AWAITING_OFFLINE_PAYMENT for unpaid bank-transfer orders. Attendees and registration answers are only returned for a single order. Amounts are left out for team members who may not view financials.')]
 #[IsReadOnly]
 class ListOrdersTool extends ApiTool
 {
@@ -33,7 +33,7 @@ class ListOrdersTool extends ApiTool
         return [
             'event_id' => $schema->integer()->description('List this event\'s orders.'),
             'organizer_id' => $schema->integer()->description('List orders across all of this organizer\'s events.'),
-            'search' => $schema->string()->description('Buyer name, email or order reference to search for.'),
+            'search' => $schema->string()->description('Buyer name, email, mobile number or order reference to search for.'),
             'status' => $schema->string()->enum(self::LISTED_STATUSES)->description('Only orders with this status.'),
             'page' => $schema->integer()->description('Page number, starting at 1.'),
         ];

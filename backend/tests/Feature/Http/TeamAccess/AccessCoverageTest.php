@@ -4,6 +4,8 @@ namespace Tests\Feature\Http\TeamAccess;
 
 use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\Enterprise\BoxOffice\Http\Actions\GetBoxOfficeStatsAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Contacts\ExportSelectedContactsAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Suppressions\LookupSuppressionsAction;
 use HiEvents\Http\Actions\Accounts\DeletionRequest\CancelAccountDeletionAction;
 use HiEvents\Http\Actions\Accounts\DeletionRequest\GetAccountDeletionStatusAction;
 use HiEvents\Http\Actions\Accounts\DeletionRequest\RequestAccountDeletionAction;
@@ -91,7 +93,7 @@ use Tests\TestCase;
 
 class AccessCoverageTest extends TestCase
 {
-    private const ENTITY_CHECKS = '/isActionAuthorized\(|isOrganizerReadAuthorized\(|isAccountReadAuthorized\(|authorizeSeatMapAccess\(|authorizeSeatMapSetup\(|authorizeEventSeatMapAccess\(/';
+    private const ENTITY_CHECKS = '/isActionAuthorized\(|isOrganizerReadAuthorized\(|isAccountReadAuthorized\(|authorizeCrm(?:Change)?\(|authorizeSmsChange\(|authorizeSeatMapAccess\(|authorizeSeatMapSetup\(|authorizeEventSeatMapAccess\(/';
 
     private const SELF_SERVICE_OR_STATIC = [
         GetMeAction::class,
@@ -173,6 +175,8 @@ class AccessCoverageTest extends TestCase
         DismissAnnouncementAction::class,
         ExportAffiliatesAction::class,
         ExportAttendeesAction::class,
+        ExportSelectedContactsAction::class,
+        LookupSuppressionsAction::class,
         ExportOrdersAction::class,
         ExportProductPurchasesAction::class,
         ExportQuestionAnswersAction::class,

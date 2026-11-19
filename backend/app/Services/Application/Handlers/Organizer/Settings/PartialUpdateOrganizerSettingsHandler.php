@@ -40,6 +40,10 @@ class PartialUpdateOrganizerSettingsHandler
 
             'default_show_marketing_opt_in' => $dto->getProvided('defaultShowMarketingOptIn')
                 ?? $organizerSettings->getDefaultShowMarketingOptIn(),
+            'default_phone_collection' => $dto->getProvided('defaultPhoneCollection')?->value
+                ?? $organizerSettings->getDefaultPhoneCollection(),
+            'default_show_sms_opt_in' => $dto->getProvided('defaultShowSmsOptIn')
+                ?? $organizerSettings->getDefaultShowSmsOptIn(),
 
             'default_pass_platform_fee_to_buyer' => $dto->getProvided('defaultPassPlatformFeeToBuyer')
                 ?? $organizerSettings->getDefaultPassPlatformFeeToBuyer(),

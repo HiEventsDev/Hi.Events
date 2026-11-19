@@ -5,6 +5,7 @@ namespace HiEvents\Services\Application\Handlers\Organizer\DTO;
 use HiEvents\DataTransferObjects\BaseDataObject;
 use HiEvents\DomainObjects\Enums\AttendeeDetailsCollectionMethod;
 use HiEvents\DomainObjects\Enums\OrganizerHomepageVisibility;
+use HiEvents\DomainObjects\Enums\PhoneCollection;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Casts\EnumCast;
@@ -22,6 +23,9 @@ class PartialUpdateOrganizerSettingsDTO extends BaseDataObject
         #[WithCast(EnumCast::class, AttendeeDetailsCollectionMethod::class)]
         public readonly AttendeeDetailsCollectionMethod|Optional|null $defaultAttendeeDetailsCollectionMethod,
         public readonly bool|Optional|null $defaultShowMarketingOptIn,
+        #[WithCast(EnumCast::class, PhoneCollection::class)]
+        public readonly PhoneCollection|Optional|null $defaultPhoneCollection,
+        public readonly bool|Optional|null $defaultShowSmsOptIn,
         public readonly bool|Optional|null $defaultPassPlatformFeeToBuyer,
         public readonly bool|Optional|null $defaultAllowAttendeeSelfEdit,
 

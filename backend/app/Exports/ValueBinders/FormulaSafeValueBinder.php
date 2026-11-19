@@ -17,7 +17,7 @@ class FormulaSafeValueBinder extends DefaultValueBinder
     {
         $this->escaper ??= app(SpreadsheetFormulaEscaper::class);
 
-        if ($this->escaper->isFormulaTrigger($value)) {
+        if ($this->escaper->isFormulaTrigger($value) || (is_string($value) && str_starts_with($value, '+'))) {
             $cell->setValueExplicit($value, DataType::TYPE_STRING);
 
             return true;

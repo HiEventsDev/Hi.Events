@@ -121,6 +121,8 @@ class PartialUpdateEventSettingsHandler
 
                 // Marketing settings
                 'show_marketing_opt_in' => $eventSettingsDTO->settings['show_marketing_opt_in'] ?? $existingSettings->getShowMarketingOptIn(),
+                'phone_collection' => $eventSettingsDTO->settings['phone_collection'] ?? $existingSettings->getPhoneCollection(),
+                'show_sms_opt_in' => $eventSettingsDTO->settings['show_sms_opt_in'] ?? $existingSettings->getShowSmsOptIn(),
 
                 // Attendee detail copy control
                 'allow_copy_details_to_all_attendees' => $eventSettingsDTO->settings['allow_copy_details_to_all_attendees'] ?? $existingSettings->getAllowCopyDetailsToAllAttendees(),

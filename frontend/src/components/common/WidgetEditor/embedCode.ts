@@ -281,7 +281,7 @@ ${trackingSnippet()}
 ` : ''}
 ${sellsTickets ? `## Optional: prefill buyer details
 
-If the visitor is signed in to this site, you can prefill checkout by adding \`data-hievents-prefill-email\`, \`data-hievents-prefill-first-name\` and \`data-hievents-prefill-last-name\` to the widget element. They end up in the widget's iframe URL, so only set them for the signed-in visitor's own details.
+If the visitor is signed in to this site, you can prefill checkout by adding \`data-hievents-prefill-email\`, \`data-hievents-prefill-first-name\`, \`data-hievents-prefill-last-name\` and \`data-hievents-prefill-phone\` (international format, e.g. +14155552671) to the widget element. They end up in the widget's iframe URL, so only set them for the signed-in visitor's own details.
 
 ` : ''}## Attributes in this embed
 

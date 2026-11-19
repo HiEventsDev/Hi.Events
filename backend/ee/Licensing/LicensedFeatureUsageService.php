@@ -6,6 +6,7 @@ namespace HiEvents\Enterprise\Licensing;
 
 use HiEvents\Enterprise\BoxOffice\Repository\Interfaces\BoxOfficeRepositoryInterface;
 use HiEvents\Enterprise\BoxOffice\Repository\Interfaces\StripeTerminalReaderRepositoryInterface;
+use HiEvents\Enterprise\Crm\Repository\Interfaces\CrmOrganizerStateRepositoryInterface;
 use HiEvents\Enterprise\Seating\Repository\Interfaces\EventSeatMapRepositoryInterface;
 use HiEvents\Enterprise\Seating\Repository\Interfaces\SeatMapRepositoryInterface;
 use HiEvents\Enterprise\Sso\Repository\Interfaces\AccountSsoConnectionRepositoryInterface;
@@ -25,6 +26,7 @@ class LicensedFeatureUsageService
         private readonly BoxOfficeRepositoryInterface $boxOfficeRepository,
         private readonly StripeTerminalReaderRepositoryInterface $stripeTerminalReaderRepository,
         private readonly AccountSsoConnectionRepositoryInterface $ssoConnectionRepository,
+        private readonly CrmOrganizerStateRepositoryInterface $crmOrganizerStateRepository,
         private readonly LicenceService $licenceService,
         private readonly CacheRepository $cache,
     ) {}
@@ -79,6 +81,10 @@ class LicensedFeatureUsageService
 
         if ($this->ssoConnectionRepository->countWhere($accountId === null ? [] : ['account_id' => $accountId]) > 0) {
             $features[] = LicensedFeature::ENTERPRISE_SSO;
+        }
+
+        if ($this->crmOrganizerStateRepository->isAudienceInUse($accountId, now())) {
+            $features[] = LicensedFeature::CRM;
         }
 
         return $features;

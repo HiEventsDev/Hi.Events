@@ -1,0 +1,29 @@
+.notice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.source {
+  margin: 0;
+  font-size: var(--mantine-font-size-xs);
+  color: var(--mantine-color-gray-7);
+}
+
+.hint {
+  margin: 0;
+  font-size: var(--mantine-font-size-xs);
+  color: var(--mantine-color-gray-6);
+}
+
+.action {
+  display: inline-flex;
+
+  @media (pointer: coarse) {
+    :global(.mantine-Button-root) {
+      min-height: 40px;
+    }
+  }
+}

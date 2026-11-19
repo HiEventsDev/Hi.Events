@@ -75,6 +75,8 @@ class OrdersExport implements FromCollection, WithHeadings, WithMapping, WithSty
             __('Amount Tendered'),
             __('Change Due'),
             __('Reference'),
+            __('Mobile Number'),
+            __('Opted In To Text Messages'),
         ]);
     }
 
@@ -126,7 +128,7 @@ class OrdersExport implements FromCollection, WithHeadings, WithMapping, WithSty
             $order->getBillingAddressString(),
             $order->getNotes(),
             $order->getPromoCode(),
-            $order->getOptedIntoMarketingAt() ? 'Yes' : 'No',
+            $order->getOptedIntoMarketingAt() ? __('Yes') : __('No'),
         ], $answers->toArray(), [
             $order->isBoxOfficeOrder() ? __('Box Office') : __('Online'),
             $order->getBoxOfficeTender(),
@@ -134,6 +136,8 @@ class OrdersExport implements FromCollection, WithHeadings, WithMapping, WithSty
             $order->getBoxOfficeAmountTendered(),
             $order->getBoxOfficeChangeDue(),
             $order->getBoxOfficeReference(),
+            $order->getPhone(),
+            $order->getSmsOptedInAt() ? __('Yes') : __('No'),
         ]);
     }
 

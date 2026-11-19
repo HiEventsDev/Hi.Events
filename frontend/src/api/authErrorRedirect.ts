@@ -21,6 +21,10 @@ const ALLOWED_UNAUTHENTICATED_PATHS = [
     '/events/',
     'my-tickets',
     'emails/unsubscribe',
+    'audience/unsubscribe',
+    '/u/',
+    'audience/confirm/',
+    '/subscribe/',
     'sso/callback',
 ];
 

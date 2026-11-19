@@ -12,6 +12,8 @@ use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\Mail\SendOrderDetailsService;
 use HiEvents\Services\Domain\SelfService\OrderAuditLogService;
 use HiEvents\Services\Domain\SelfService\SelfServiceEditOrderService;
+use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
+use HiEvents\Services\Infrastructure\Phone\PhoneNumberNormalizer;
 use Illuminate\Support\Facades\Mail;
 use Mockery;
 use Mockery\MockInterface;
@@ -29,6 +31,8 @@ class SelfServiceEditOrderServiceTest extends TestCase
 
     private MockInterface|SendOrderDetailsService $sendOrderDetailsService;
 
+    private MockInterface|DomainEventDispatcherService $domainEventDispatcherService;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -40,11 +44,15 @@ class SelfServiceEditOrderServiceTest extends TestCase
         $this->orderAuditLogService = Mockery::mock(OrderAuditLogService::class);
         $this->sendOrderDetailsService = Mockery::mock(SendOrderDetailsService::class);
 
+        $this->domainEventDispatcherService = Mockery::spy(DomainEventDispatcherService::class);
+
         $this->service = new SelfServiceEditOrderService(
             $this->orderRepository,
             $this->eventRepository,
             $this->orderAuditLogService,
-            $this->sendOrderDetailsService
+            $this->sendOrderDetailsService,
+            new PhoneNumberNormalizer,
+            $this->domainEventDispatcherService,
         );
     }
 

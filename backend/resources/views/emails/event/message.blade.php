@@ -20,6 +20,6 @@
 <b>{{ $event->getTitle() }}</b>. {{ __('If you believe you have received this email in error,') }}
 {{ __('please contact the event organizer at') }} <a
         href="mailto:{{$eventSettings->getSupportEmail()}}">{{$eventSettings->getSupportEmail()}}</a>.
-{{ __('If you believe this is spam, please report it to') }} <a href="mailto:{{config('mail.from.address')}}">{{config('mail.from.address')}}</a>.
+{!! str_replace(':email', '<a href="mailto:'.e(config('mail.from.address')).'">'.e(config('mail.from.address')).'</a>', e(__('If you believe this is spam, please report it to :email.'))) !!}
 </div>
 </x-mail::message>

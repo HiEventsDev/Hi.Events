@@ -6,10 +6,11 @@ import {Button, FileButton, Group, Image, Loader, Modal, Portal, Stack, Tabs, Te
 import {useUploadImage} from "../../../../../mutations/useUploadImage.ts";
 import {extractImageUploadErrors, validateImageFile} from "../../../../../utilites/imageUploadValidation.ts";
 
-export const InsertImageControl = () => {
+export const InsertImageControl = ({uploadOnly = false}: {uploadOnly?: boolean}) => {
     const editor = useRichTextEditorContext();
     const [isModalOpen, setModalOpen] = useState(false);
-    const [tab, setTab] = useState<string>('url');
+    const [tab, setTab] = useState<string>(uploadOnly ? 'upload' : 'url');
+    const [altText, setAltText] = useState('');
     const [imageUrl, setImageUrl] = useState('');
     const [uploadedImageUrl, setUploadedImageUrl] = useState('');
     const [urlError, setUrlError] = useState<string | null>(null);
@@ -38,7 +39,7 @@ export const InsertImageControl = () => {
             }
             await checkImageExists(finalUrl);
             if (editor) {
-                editor.editor!.commands.setImage({src: finalUrl});
+                editor.editor!.commands.setImage({src: finalUrl, alt: altText.trim() || undefined});
             }
             setModalOpen(false);
             resetState();
@@ -79,7 +80,8 @@ export const InsertImageControl = () => {
     };
 
     const resetState = () => {
-        setTab('url');
+        setTab(uploadOnly ? 'upload' : 'url');
+        setAltText('');
         setImageUrl('');
         setUploadedImageUrl('');
         setUrlError(null);
@@ -107,10 +109,12 @@ export const InsertImageControl = () => {
                     title={t`Insert Image`}
                 >
                     <Tabs value={tab} onChange={(value) => setTab(value ?? 'url')} variant="outline">
-                        <Tabs.List grow>
-                            <Tabs.Tab value="url">{t`Paste URL`}</Tabs.Tab>
-                            <Tabs.Tab value="upload">{t`Upload Image`}</Tabs.Tab>
-                        </Tabs.List>
+                        {!uploadOnly && (
+                            <Tabs.List grow>
+                                <Tabs.Tab value="url">{t`Paste URL`}</Tabs.Tab>
+                                <Tabs.Tab value="upload">{t`Upload Image`}</Tabs.Tab>
+                            </Tabs.List>
+                        )}
 
                         <Tabs.Panel value="url" pt="md">
                             <Stack>
@@ -143,11 +147,21 @@ export const InsertImageControl = () => {
                                     <>
                                         <Image
                                             src={uploadedImageUrl}
-                                            alt="Uploaded preview"
+                                            alt={altText}
                                             radius="md"
                                         />
+                                        {uploadOnly && (
+                                            <TextInput
+                                                label={t`Image description`}
+                                                description={t`Read aloud to people who can't see images, and shown when images are blocked.`}
+                                                value={altText}
+                                                onChange={event => setAltText(event.currentTarget.value)}
+                                                maxLength={200}
+                                                data-testid="editor-image-alt"
+                                            />
+                                        )}
                                         <Group grow>
-                                            <Button onClick={handleImageInsert} loading={loading}>
+                                            <Button onClick={handleImageInsert} loading={loading} disabled={uploadOnly && !altText.trim()}>
                                                 {t`Insert Image`}
                                             </Button>
                                             <Button variant="outline" color="red" onClick={resetState}>

@@ -26,11 +26,13 @@ enum Plan: string
                 LicensedFeature::SEATING,
                 LicensedFeature::BOX_OFFICE,
                 LicensedFeature::ENTERPRISE_SSO,
+                LicensedFeature::CRM,
             ],
             self::CLOUD => [
                 LicensedFeature::SEATING,
                 LicensedFeature::BOX_OFFICE,
                 LicensedFeature::ENTERPRISE_SSO,
+                LicensedFeature::CRM,
             ],
         };
     }

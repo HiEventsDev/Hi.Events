@@ -478,7 +478,7 @@ export interface LicenceSummary {
     features_in_use: LicensedFeature[];
 }
 
-export type LicensedFeature = 'seating' | 'box_office' | 'enterprise_sso' | 'white_label';
+export type LicensedFeature = 'seating' | 'box_office' | 'enterprise_sso' | 'white_label' | 'crm';
 
 export interface Account {
     id?: IdParam;
@@ -664,6 +664,8 @@ export type PaymentProvider = 'STRIPE' | 'OFFLINE';
 
 export type AttendeeDetailsCollectionMethod = 'PER_TICKET' | 'PER_ORDER';
 
+export type PhoneCollection = 'OFF' | 'OPTIONAL' | 'REQUIRED';
+
 export interface EventSettings {
     event_id?: IdParam;
     id?: IdParam;
@@ -723,6 +725,8 @@ export interface EventSettings {
 
     // Marketing settings
     show_marketing_opt_in?: boolean;
+    phone_collection?: PhoneCollection;
+    show_sms_opt_in?: boolean;
 
     // Attendee detail copy control
     allow_copy_details_to_all_attendees?: boolean;
@@ -1139,6 +1143,8 @@ export interface OrganizerSettings {
     organizer_id: IdParam;
     default_attendee_details_collection_method?: AttendeeDetailsCollectionMethod;
     default_show_marketing_opt_in?: boolean;
+    default_phone_collection?: PhoneCollection;
+    default_show_sms_opt_in?: boolean;
     default_pass_platform_fee_to_buyer?: boolean;
     default_allow_attendee_self_edit?: boolean;
     homepage_visibility: 'PUBLIC' | 'PRIVATE' | 'PASSWORD_PROTECTED';
@@ -1440,6 +1446,7 @@ export interface Order {
     payment_provider: PaymentProvider;
     notes?: string;
     email: string | null;
+    phone?: string | null;
     reserved_until: string;
     total_before_additions: number;
     total_tax: number;

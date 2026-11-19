@@ -28,6 +28,7 @@ class EditOrderPublicAction extends BaseAction
                 'firstName' => $request->input('first_name'),
                 'lastName' => $request->input('last_name'),
                 'email' => $request->input('email'),
+                'phone' => $request->collectedPhone(),
                 'ipAddress' => $this->getClientIp($request),
                 'userAgent' => $request->userAgent(),
             ]));

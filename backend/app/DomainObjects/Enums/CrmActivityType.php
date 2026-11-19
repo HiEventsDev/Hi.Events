@@ -1,0 +1,19 @@
+<?php
+
+namespace HiEvents\DomainObjects\Enums;
+
+enum CrmActivityType: string
+{
+    use BaseEnum;
+
+    case ORDER_COMPLETED = 'ORDER_COMPLETED';
+    case ORDER_AWAITING_PAYMENT = 'ORDER_AWAITING_PAYMENT';
+    case ORDER_CANCELLED = 'ORDER_CANCELLED';
+    case ORDER_REFUNDED = 'ORDER_REFUNDED';
+    case CHECKOUT_ABANDONED = 'CHECKOUT_ABANDONED';
+    case TICKET_HELD = 'TICKET_HELD';
+    case CHECKED_IN = 'CHECKED_IN';
+    case WAITLIST_JOINED = 'WAITLIST_JOINED';
+    case CAMPAIGN_SENT = 'CAMPAIGN_SENT';
+    case IMPORTED = 'IMPORTED';
+}

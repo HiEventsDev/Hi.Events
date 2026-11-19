@@ -1,0 +1,150 @@
+$border: var(--mantine-color-gray-2);
+$muted: var(--mantine-color-gray-6);
+$surface: var(--mantine-color-gray-0);
+
+.pageHeader {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "title actions"
+    "subheading subheading";
+  align-items: center;
+  column-gap: 16px;
+  margin-bottom: 20px;
+
+  @container audience-page (max-width: 559px) {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "title"
+      "subheading"
+      "actions";
+  }
+}
+
+.title {
+  grid-area: title;
+  min-width: 0;
+  margin: 0 !important;
+  font-size: 1.75rem;
+  line-height: 36px;
+  letter-spacing: -0.02em;
+
+  @container audience-page (max-width: 559px) {
+    font-size: 1.5rem;
+  }
+}
+
+.subheading {
+  grid-area: subheading;
+  margin: 4px 0 0;
+  max-width: 62ch;
+  font-size: var(--mantine-font-size-sm);
+  line-height: 1.5;
+  color: $muted;
+}
+
+.pageActions {
+  grid-area: actions;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+
+  @container audience-page (max-width: 559px) {
+    margin-top: 12px;
+  }
+}
+
+.syncStatus {
+  font-size: var(--mantine-font-size-xs);
+  font-variant-numeric: tabular-nums;
+  color: $muted;
+}
+
+.noticeAction {
+  margin-top: 8px;
+}
+
+.setup {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  border: 1px solid $border;
+  border-radius: var(--hi-radius-lg);
+  background: var(--mantine-color-body);
+  overflow: hidden;
+
+  @container audience-page (max-width: 799px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.setupMain {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 32px;
+
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    margin: 0;
+    max-width: 46ch;
+    color: var(--mantine-color-gray-7);
+  }
+
+  @container audience-page (max-width: 799px) {
+    padding: 24px 18px;
+  }
+}
+
+.setupAside {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 32px;
+  border-left: 1px solid $border;
+  background: $surface;
+
+  @container audience-page (max-width: 799px) {
+    padding: 24px 18px;
+    border-left: 0;
+    border-top: 1px solid $border;
+  }
+}
+
+.setupPoint {
+  display: flex;
+  gap: 12px;
+  font-size: var(--mantine-font-size-sm);
+
+  svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: var(--mantine-color-primary-6);
+  }
+
+  strong {
+    display: block;
+  }
+
+  span {
+    color: var(--mantine-color-gray-7);
+  }
+}
+
+.progress {
+  width: 100%;
+  max-width: 360px;
+}
+
+.progressLabel {
+  margin-top: 6px;
+  font-size: var(--mantine-font-size-xs);
+  color: $muted;
+}

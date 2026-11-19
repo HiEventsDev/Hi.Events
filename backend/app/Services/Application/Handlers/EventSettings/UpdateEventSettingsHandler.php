@@ -93,6 +93,8 @@ class UpdateEventSettingsHandler
 
                     // Marketing settings
                     'show_marketing_opt_in' => $settings->show_marketing_opt_in,
+                    'phone_collection' => $settings->phone_collection->value,
+                    'show_sms_opt_in' => $settings->show_sms_opt_in,
 
                     // Attendee detail copy control
                     'allow_copy_details_to_all_attendees' => $settings->allow_copy_details_to_all_attendees,

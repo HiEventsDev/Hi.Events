@@ -43,6 +43,7 @@ class OrderResourcePublic extends BaseResource
             'first_name' => $this->getFirstName(),
             'last_name' => $this->getLastName(),
             'email' => $this->getEmail(),
+            'phone' => $this->getPhone(),
             'public_id' => $this->getPublicId(),
             'is_payment_required' => $this->isPaymentRequired(),
             'payment_link_created_at' => $this->getPaymentLinkCreatedAt(),

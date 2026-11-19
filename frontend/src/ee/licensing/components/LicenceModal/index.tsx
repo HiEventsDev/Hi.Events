@@ -63,6 +63,8 @@ const unlicensedEffect = (feature: LicensedFeature): string => {
             return t`New box office sign-ins are refused, so open box office sessions end within 24 hours.`;
         case 'enterprise_sso':
             return t`Single sign-on connections keep signing people in. They can be switched off or deleted, but not changed or switched back on without a licence.`;
+        case 'crm':
+            return t`Audience contacts can still be viewed and deleted. New orders stop being added, automations and scheduled campaigns stop sending, and segments and campaigns can't be created or sent.`;
         case 'white_label':
             return whiteLabelLapsedNotice();
     }

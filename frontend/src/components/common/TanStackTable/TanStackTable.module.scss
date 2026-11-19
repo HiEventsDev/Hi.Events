@@ -16,6 +16,10 @@
 .tableHead {
   white-space: nowrap;
 
+  tr {
+    background-color: #f2f0f5;
+  }
+
   th {
     background-color: #f2f0f5;
     color: var(--hi-secondary-text) !important;
@@ -64,7 +68,6 @@
   position: sticky;
   left: 0;
   z-index: 10;
-  background: var(--mantine-color-body);
 
   &::after {
     content: '';
@@ -89,7 +92,6 @@
   position: sticky;
   right: 0;
   z-index: 2;
-  background: var(--mantine-color-body);
 
   &::before {
     content: '';
@@ -115,7 +117,57 @@
   opacity: 1;
 }
 
+.pinnedSelect {
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  box-sizing: border-box;
+  width: 40px;
+  min-width: 40px;
+  max-width: 40px;
+}
+
+.afterSelect {
+  left: 40px;
+}
+
+.stickyLeft,
+.stickyRight,
+.pinnedSelect {
+  --sticky-cell-background: var(--mantine-color-body);
+  background: linear-gradient(var(--sticky-cell-background), var(--sticky-cell-background)) 0 0 / 100% calc(100% - 1px) no-repeat;
+}
+
 .tableHead .stickyLeft,
-.tableHead .stickyRight {
-  background-color: #f2f0f5;
+.tableHead .stickyRight,
+.tableHead .pinnedSelect {
+  --sticky-cell-background: #f2f0f5;
+  background-color: transparent;
+}
+
+.selectCell {
+  width: 36px;
+  padding-right: 0 !important;
+
+  :global(.mantine-Checkbox-root) {
+    opacity: 0;
+    transition: opacity 120ms ease;
+  }
+}
+
+.table tbody tr:hover .selectCell :global(.mantine-Checkbox-root),
+.table[data-selecting] .selectCell :global(.mantine-Checkbox-root),
+.selectCell:focus-within :global(.mantine-Checkbox-root),
+.tableHead .selectCell :global(.mantine-Checkbox-root) {
+  opacity: 1;
+}
+
+.table tbody tr[data-selected] td {
+  background: var(--mantine-color-primary-0);
+}
+
+@media (hover: none) {
+  .selectCell :global(.mantine-Checkbox-root) {
+    opacity: 1;
+  }
 }

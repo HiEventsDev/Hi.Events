@@ -1,10 +1,12 @@
 import {useMemo} from "react";
 import {useSearchParams} from "react-router";
+import {parsePhoneNumberFromString} from "libphonenumber-js";
 
 export interface CheckoutPrefill {
     first_name?: string;
     last_name?: string;
     email?: string;
+    phone?: string;
 }
 
 export interface UseCheckoutPrefillResult {
@@ -12,10 +14,7 @@ export interface UseCheckoutPrefillResult {
     lock: boolean;
 }
 
-// Query params the checkout details form reads to prefill itself. Also forwarded
-// from the event page to the details step so prefill survives order creation
-// (see SelectProducts).
-export const CHECKOUT_PREFILL_PARAM_KEYS = ["first_name", "last_name", "email", "lock"] as const;
+export const CHECKOUT_PREFILL_PARAM_KEYS = ["first_name", "last_name", "email", "phone", "lock"] as const;
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -25,6 +24,7 @@ export const useCheckoutPrefill = (): UseCheckoutPrefillResult => {
     const firstNameParam = searchParams.get("first_name");
     const lastNameParam = searchParams.get("last_name");
     const emailParam = searchParams.get("email");
+    const phoneParam = searchParams.get("phone");
     const lockParam = searchParams.get("lock");
 
     return useMemo(() => {
@@ -45,9 +45,14 @@ export const useCheckoutPrefill = (): UseCheckoutPrefillResult => {
             prefill.email = email;
         }
 
+        const phone = phoneParam?.trim() ? parsePhoneNumberFromString(phoneParam.trim()) : undefined;
+        if (phone?.isValid()) {
+            prefill.phone = phone.number;
+        }
+
         const hasPrefill = Object.keys(prefill).length > 0;
         const lock = hasPrefill && (lockParam === "true" || lockParam === "1");
 
         return {prefill, lock};
-    }, [firstNameParam, lastNameParam, emailParam, lockParam]);
+    }, [firstNameParam, lastNameParam, emailParam, phoneParam, lockParam]);
 };

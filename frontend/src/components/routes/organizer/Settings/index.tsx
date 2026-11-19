@@ -13,7 +13,7 @@ import { PageBody } from "../../../common/PageBody";
 import { PageTitle } from "../../../common/PageTitle";
 import { t } from "@lingui/macro";
 import { Box, Group, NavLink as MantineNavLink, Stack } from "@mantine/core";
-import { IconAlertTriangle, IconDeviceMobile, IconBrandGoogleAnalytics, IconBrandStripe, IconInfoCircle, IconMapPin, IconShare, IconMail, IconCalendarEvent, IconPercentage, IconChartBar } from "@tabler/icons-react";
+import {IconAlertTriangle, IconDeviceMobile, IconBrandGoogleAnalytics, IconBrandStripe, IconInfoCircle, IconMapPin, IconShare, IconMail, IconCalendarEvent, IconPercentage, IconChartBar, IconMessage} from "@tabler/icons-react";
 import { useMediaQuery } from "@mantine/hooks";
 import { useEffect, useMemo, useState } from "react";
 import { Card } from "../../../common/Card";
@@ -22,6 +22,8 @@ import { useGetAccount } from "../../../../queries/useGetAccount.ts";
 import { useAccess } from "../../../../hooks/useAccess.ts";
 import { FeatureFlag } from "../../../../constants/featureFlags.ts";
 import { useLicensedFeature } from "../../../../ee/licensing/hooks/useLicensedFeature.ts";
+import {SmsSettings} from "../../../../ee/crm/components/SmsSettings";
+import {useTextMessageSettingsVisible} from "../../../../ee/crm/hooks/useTextMessageSettingsVisible.ts";
 
 const Settings = () => {
     const { organizerId } = useParams();
@@ -31,6 +33,7 @@ const Settings = () => {
     const canManagePayments = can('MANAGE_PAYMENTS');
     const canViewFinancials = can('VIEW_FINANCIALS');
     const showCardReaders = useLicensedFeature(FeatureFlag.BOX_OFFICE).isVisible && canManagePayments;
+    const showTextMessages = useTextMessageSettingsVisible(organizerId);
 
     const SECTIONS = useMemo(() => {
         const baseSections = [
@@ -70,6 +73,12 @@ const Settings = () => {
                 icon: IconMail,
                 component: () => <EmailTemplateSettings organizerId={organizerId!} />
             },
+            ...(showTextMessages ? [{
+                id: 'text-messages',
+                label: t`Text Messages`,
+                icon: IconMessage,
+                component: () => <SmsSettings organizerId={organizerId!}/>,
+            }] : []),
             {
                 id: 'tracking-pixels',
                 label: t`Tracking & Analytics`,
@@ -112,7 +121,7 @@ const Settings = () => {
         }
 
         return baseSections;
-    }, [showCardReaders, isSaasMode, organizerId, canManagePayments, canViewFinancials]);
+    }, [showCardReaders, showTextMessages, isSaasMode, organizerId, canManagePayments, canViewFinancials]);
 
     const isLargeScreen = useMediaQuery('(min-width: 1200px)', true);
     const location = useLocation();

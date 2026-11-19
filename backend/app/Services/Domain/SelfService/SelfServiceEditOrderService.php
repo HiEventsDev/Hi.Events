@@ -19,6 +19,10 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\Mail\SendOrderDetailsService;
 use HiEvents\Services\Domain\SelfService\DTO\EditOrderResultDTO;
+use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
+use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
+use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
+use HiEvents\Services\Infrastructure\Phone\PhoneNumberNormalizer;
 use Illuminate\Support\Facades\Mail;
 
 class SelfServiceEditOrderService
@@ -28,6 +32,8 @@ class SelfServiceEditOrderService
         private readonly EventRepositoryInterface $eventRepository,
         private readonly OrderAuditLogService $orderAuditLogService,
         private readonly SendOrderDetailsService $sendOrderDetailsService,
+        private readonly PhoneNumberNormalizer $phoneNumberNormalizer,
+        private readonly DomainEventDispatcherService $domainEventDispatcherService,
     ) {}
 
     public function editOrder(
@@ -36,7 +42,8 @@ class SelfServiceEditOrderService
         ?string $lastName,
         ?string $email,
         string $ipAddress,
-        ?string $userAgent
+        ?string $userAgent,
+        ?string $phone = null,
     ): EditOrderResultDTO {
         $oldValues = [];
         $newValues = [];
@@ -65,6 +72,16 @@ class SelfServiceEditOrderService
             $emailChanged = true;
         }
 
+        $normalizedPhone = $phone === null ? null : $this->phoneNumberNormalizer->toMobileE164($phone);
+
+        if ($phone !== null && $normalizedPhone !== $order->getPhone()) {
+            $oldValues['phone'] = $order->getPhone();
+            $newValues['phone'] = $normalizedPhone;
+            $updateData['phone'] = $normalizedPhone;
+            $updateData['phone_country'] = $this->phoneNumberNormalizer->countryOf($normalizedPhone);
+            $updateData['sms_opted_in_at'] = null;
+        }
+
         if (! empty($updateData)) {
             $oldEmail = $order->getEmail();
 
@@ -80,6 +97,13 @@ class SelfServiceEditOrderService
             $this->orderRepository->updateWhere(
                 attributes: $updateData,
                 where: ['id' => $order->getId()]
+            );
+
+            $this->domainEventDispatcherService->dispatch(
+                new OrderEvent(
+                    type: DomainEventType::ORDER_UPDATED,
+                    orderId: $order->getId(),
+                ),
             );
 
             $event = $this->loadEventWithRelations($order->getEventId());
@@ -195,6 +219,7 @@ class SelfServiceEditOrderService
             'first_name' => __('First Name'),
             'last_name' => __('Last Name'),
             'email' => __('Email'),
+            'phone' => __('Mobile number'),
             'short_id' => __('Order Reference'),
         ];
 

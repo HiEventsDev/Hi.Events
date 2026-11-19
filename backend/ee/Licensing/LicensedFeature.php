@@ -10,4 +10,5 @@ enum LicensedFeature: string
     case BOX_OFFICE = 'box_office';
     case ENTERPRISE_SSO = 'enterprise_sso';
     case WHITE_LABEL = 'white_label';
+    case CRM = 'crm';
 }

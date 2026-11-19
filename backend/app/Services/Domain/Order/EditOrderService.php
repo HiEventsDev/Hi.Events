@@ -8,6 +8,7 @@ use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
+use HiEvents\Services\Infrastructure\Phone\PhoneNumberNormalizer;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
@@ -17,9 +18,12 @@ class EditOrderService
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly DomainEventDispatcherService $domainEventDispatcherService,
         private readonly DatabaseManager $databaseManager,
+        private readonly PhoneNumberNormalizer $phoneNumberNormalizer,
     ) {}
 
     /**
+     * @param  string|null  $phone  null leaves the number unchanged, an empty string removes it
+     *
      * @throws ResourceNotFoundException
      * @throws Throwable
      */
@@ -29,17 +33,23 @@ class EditOrderService
         ?string $firstName,
         ?string $lastName,
         ?string $email,
-        ?string $notes
+        ?string $notes,
+        ?string $phone = null,
     ): OrderDomainObject {
-        return $this->databaseManager->transaction(function () use ($id, $firstName, $lastName, $email, $notes, $eventId) {
+        return $this->databaseManager->transaction(function () use ($id, $firstName, $lastName, $email, $notes, $eventId, $phone) {
             $where = [
                 'id' => $id,
                 'event_id' => $eventId,
             ];
 
-            if ($this->orderRepository->findFirstWhere($where) === null) {
+            $order = $this->orderRepository->findFirstWhere($where);
+
+            if ($order === null) {
                 throw new ResourceNotFoundException(__('Order not found'));
             }
+
+            $normalizedPhone = $phone === null ? null : $this->phoneNumberNormalizer->toMobileE164($phone);
+            $phoneChanged = $phone !== null && $normalizedPhone !== $order->getPhone();
 
             $this->orderRepository->updateWhere(
                 attributes: [
@@ -49,6 +59,11 @@ class EditOrderService
                         'notes' => $notes,
                     ]),
                     'email' => $email,
+                    ...($phoneChanged ? [
+                        'phone' => $normalizedPhone,
+                        'phone_country' => $this->phoneNumberNormalizer->countryOf($normalizedPhone),
+                        'sms_opted_in_at' => null,
+                    ] : []),
                 ],
                 where: $where,
             );
