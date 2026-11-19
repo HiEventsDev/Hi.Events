@@ -40,7 +40,7 @@ export const showSuccessWithUndo = (
     onUndo: () => void,
     options: { undoLabel?: string; autoClose?: number } = {},
 ) => {
-    const {undoLabel = 'Undo', autoClose = 5000} = options;
+    const {undoLabel = t`Undo`, autoClose = 5000} = options;
     const id = `undo-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
 
     const handleUndo = () => {
@@ -71,6 +71,9 @@ export const showSuccessWithUndo = (
                         background: 'transparent',
                         border: 'none',
                         padding: '2px 8px',
+                        minWidth: 40,
+                        minHeight: 40,
+                        margin: '-10px 0',
                         color: 'var(--mantine-color-green-8)',
                         fontWeight: 700,
                         cursor: 'pointer',

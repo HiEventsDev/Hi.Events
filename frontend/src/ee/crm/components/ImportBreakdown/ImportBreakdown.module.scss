@@ -1,0 +1,28 @@
+.breakdown {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+.breakdownRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-top: 1px solid var(--mantine-color-gray-2);
+  font-size: var(--mantine-font-size-sm);
+
+  &:first-child {
+    border-top: 0;
+  }
+
+  dt {
+    color: var(--mantine-color-gray-7);
+  }
+
+  dd {
+    margin: 0;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+}

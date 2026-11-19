@@ -5,6 +5,7 @@ namespace HiEvents\Providers;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\Enterprise\BoxOffice\Http\Middleware\AuthenticateBoxOfficeSession;
 use HiEvents\Enterprise\BoxOffice\Services\Domain\BoxOfficeSessionService;
+use HiEvents\Enterprise\Crm\Http\Actions\Public\TwilioSmsWebhookPublicAction;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -155,6 +156,17 @@ class RouteServiceProvider extends ServiceProvider
 
         RateLimiter::for('box-office-email', function (Request $request) {
             return Limit::perHour(60)->by($request->route('box_office_short_id'));
+        });
+
+        RateLimiter::for('crm-sms-webhook', function (Request $request) {
+            $kind = (string) $request->route('kind');
+
+            return Limit::perMinute(TwilioSmsWebhookPublicAction::maxRequestsPerMinute($kind))
+                ->by('crm-sms-webhook|'.$kind.'|'.$request->route('public_id'));
+        });
+
+        RateLimiter::for('crm-form-submit', function (Request $request) {
+            return Limit::perMinute(60)->by('crm-form-submit|'.$request->route('public_id').'|'.$request->ip());
         });
 
         $this->routes(function () {

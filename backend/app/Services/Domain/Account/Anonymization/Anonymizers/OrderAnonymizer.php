@@ -29,6 +29,7 @@ class OrderAnonymizer implements AccountAnonymizerInterface
                     'first_name' => AnonymizationStrategy::SCRUB_TEXT,
                     'last_name' => AnonymizationStrategy::SCRUB_TEXT,
                     'email' => AnonymizationStrategy::SCRUB_EMAIL,
+                    'phone' => AnonymizationStrategy::NULLIFY,
                     'address' => AnonymizationStrategy::NULLIFY,
                     'session_id' => AnonymizationStrategy::NULLIFY,
                     'notes' => AnonymizationStrategy::NULLIFY,

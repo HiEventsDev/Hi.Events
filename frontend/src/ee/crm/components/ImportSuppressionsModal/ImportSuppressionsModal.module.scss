@@ -1,0 +1,38 @@
+.preview {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: var(--mantine-spacing-md);
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: 16px 0;
+}
+
+.sample {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--mantine-font-size-sm);
+
+  th {
+    padding: 6px 8px;
+    text-align: left;
+    font-size: var(--mantine-font-size-xs);
+    font-weight: 600;
+    color: var(--mantine-color-gray-6);
+    border-bottom: 1px solid var(--mantine-color-gray-2);
+  }
+
+  td {
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--mantine-color-gray-1);
+    overflow-wrap: anywhere;
+
+    &:last-child {
+      overflow-wrap: normal;
+      white-space: nowrap;
+    }
+  }
+}

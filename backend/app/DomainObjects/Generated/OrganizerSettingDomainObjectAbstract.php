@@ -59,6 +59,10 @@ abstract class OrganizerSettingDomainObjectAbstract extends AbstractDomainObject
 
     final public const FIRST_DAY_OF_WEEK = 'first_day_of_week';
 
+    final public const DEFAULT_PHONE_COLLECTION = 'default_phone_collection';
+
+    final public const DEFAULT_SHOW_SMS_OPT_IN = 'default_show_sms_opt_in';
+
     protected int $id;
 
     protected int $organizer_id;
@@ -105,6 +109,10 @@ abstract class OrganizerSettingDomainObjectAbstract extends AbstractDomainObject
 
     protected int $first_day_of_week = 1;
 
+    protected string $default_phone_collection = 'OFF';
+
+    protected bool $default_show_sms_opt_in = false;
+
     public function toArray(): array
     {
         return [
@@ -131,6 +139,8 @@ abstract class OrganizerSettingDomainObjectAbstract extends AbstractDomainObject
             'tracking_consent_acknowledged' => $this->tracking_consent_acknowledged ?? null,
             'homepage_sections' => $this->homepage_sections ?? null,
             'first_day_of_week' => $this->first_day_of_week ?? null,
+            'default_phone_collection' => $this->default_phone_collection ?? null,
+            'default_show_sms_opt_in' => $this->default_show_sms_opt_in ?? null,
         ];
     }
 
@@ -409,5 +419,29 @@ abstract class OrganizerSettingDomainObjectAbstract extends AbstractDomainObject
     public function getFirstDayOfWeek(): int
     {
         return $this->first_day_of_week;
+    }
+
+    public function setDefaultPhoneCollection(string $default_phone_collection): self
+    {
+        $this->default_phone_collection = $default_phone_collection;
+
+        return $this;
+    }
+
+    public function getDefaultPhoneCollection(): string
+    {
+        return $this->default_phone_collection;
+    }
+
+    public function setDefaultShowSmsOptIn(bool $default_show_sms_opt_in): self
+    {
+        $this->default_show_sms_opt_in = $default_show_sms_opt_in;
+
+        return $this;
+    }
+
+    public function getDefaultShowSmsOptIn(): bool
+    {
+        return $this->default_show_sms_opt_in;
     }
 }

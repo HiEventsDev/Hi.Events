@@ -8,6 +8,40 @@ use HiEvents\Enterprise\BoxOffice\Repository\Eloquent\BoxOfficeRepository;
 use HiEvents\Enterprise\BoxOffice\Repository\Eloquent\StripeTerminalReaderRepository;
 use HiEvents\Enterprise\BoxOffice\Repository\Interfaces\BoxOfficeRepositoryInterface;
 use HiEvents\Enterprise\BoxOffice\Repository\Interfaces\StripeTerminalReaderRepositoryInterface;
+use HiEvents\Enterprise\Crm\Repository\Eloquent\CrmAutomationRepository;
+use HiEvents\Enterprise\Crm\Repository\Eloquent\CrmBulkOperationRepository;
+use HiEvents\Enterprise\Crm\Repository\Eloquent\CrmCampaignRepository;
+use HiEvents\Enterprise\Crm\Repository\Eloquent\CrmCampaignTemplateRepository;
+use HiEvents\Enterprise\Crm\Repository\Eloquent\CrmContactActivityRepository;
+use HiEvents\Enterprise\Crm\Repository\Eloquent\CrmContactNoteRepository;
+use HiEvents\Enterprise\Crm\Repository\Eloquent\CrmContactRepository;
+use HiEvents\Enterprise\Crm\Repository\Eloquent\CrmImportRepository;
+use HiEvents\Enterprise\Crm\Repository\Eloquent\CrmInsightsRepository;
+use HiEvents\Enterprise\Crm\Repository\Eloquent\CrmOrganizerStateRepository;
+use HiEvents\Enterprise\Crm\Repository\Eloquent\CrmPendingSubscriptionRepository;
+use HiEvents\Enterprise\Crm\Repository\Eloquent\CrmProjectionRepository;
+use HiEvents\Enterprise\Crm\Repository\Eloquent\CrmSegmentRepository;
+use HiEvents\Enterprise\Crm\Repository\Eloquent\CrmSignupFormRepository;
+use HiEvents\Enterprise\Crm\Repository\Eloquent\CrmSmsConnectionRepository;
+use HiEvents\Enterprise\Crm\Repository\Eloquent\CrmSuppressionRepository;
+use HiEvents\Enterprise\Crm\Repository\Eloquent\CrmTagRepository;
+use HiEvents\Enterprise\Crm\Repository\Interfaces\CrmAutomationRepositoryInterface;
+use HiEvents\Enterprise\Crm\Repository\Interfaces\CrmBulkOperationRepositoryInterface;
+use HiEvents\Enterprise\Crm\Repository\Interfaces\CrmCampaignRepositoryInterface;
+use HiEvents\Enterprise\Crm\Repository\Interfaces\CrmCampaignTemplateRepositoryInterface;
+use HiEvents\Enterprise\Crm\Repository\Interfaces\CrmContactActivityRepositoryInterface;
+use HiEvents\Enterprise\Crm\Repository\Interfaces\CrmContactNoteRepositoryInterface;
+use HiEvents\Enterprise\Crm\Repository\Interfaces\CrmContactRepositoryInterface;
+use HiEvents\Enterprise\Crm\Repository\Interfaces\CrmImportRepositoryInterface;
+use HiEvents\Enterprise\Crm\Repository\Interfaces\CrmInsightsRepositoryInterface;
+use HiEvents\Enterprise\Crm\Repository\Interfaces\CrmOrganizerStateRepositoryInterface;
+use HiEvents\Enterprise\Crm\Repository\Interfaces\CrmPendingSubscriptionRepositoryInterface;
+use HiEvents\Enterprise\Crm\Repository\Interfaces\CrmProjectionRepositoryInterface;
+use HiEvents\Enterprise\Crm\Repository\Interfaces\CrmSegmentRepositoryInterface;
+use HiEvents\Enterprise\Crm\Repository\Interfaces\CrmSignupFormRepositoryInterface;
+use HiEvents\Enterprise\Crm\Repository\Interfaces\CrmSmsConnectionRepositoryInterface;
+use HiEvents\Enterprise\Crm\Repository\Interfaces\CrmSuppressionRepositoryInterface;
+use HiEvents\Enterprise\Crm\Repository\Interfaces\CrmTagRepositoryInterface;
 use HiEvents\Enterprise\Seating\Repository\Eloquent\EventSeatMapBandProductRepository;
 use HiEvents\Enterprise\Seating\Repository\Eloquent\EventSeatMapRepository;
 use HiEvents\Enterprise\Seating\Repository\Eloquent\SeatClaimRepository;
@@ -231,6 +265,23 @@ class RepositoryServiceProvider extends ServiceProvider
         StripeCustomerRepositoryInterface::class => StripeCustomerRepository::class,
         CheckInListRepositoryInterface::class => CheckInListRepository::class,
         BoxOfficeRepositoryInterface::class => BoxOfficeRepository::class,
+        CrmOrganizerStateRepositoryInterface::class => CrmOrganizerStateRepository::class,
+        CrmAutomationRepositoryInterface::class => CrmAutomationRepository::class,
+        CrmImportRepositoryInterface::class => CrmImportRepository::class,
+        CrmCampaignRepositoryInterface::class => CrmCampaignRepository::class,
+        CrmInsightsRepositoryInterface::class => CrmInsightsRepository::class,
+        CrmContactRepositoryInterface::class => CrmContactRepository::class,
+        CrmTagRepositoryInterface::class => CrmTagRepository::class,
+        CrmSmsConnectionRepositoryInterface::class => CrmSmsConnectionRepository::class,
+        CrmContactNoteRepositoryInterface::class => CrmContactNoteRepository::class,
+        CrmContactActivityRepositoryInterface::class => CrmContactActivityRepository::class,
+        CrmSegmentRepositoryInterface::class => CrmSegmentRepository::class,
+        CrmBulkOperationRepositoryInterface::class => CrmBulkOperationRepository::class,
+        CrmSignupFormRepositoryInterface::class => CrmSignupFormRepository::class,
+        CrmSuppressionRepositoryInterface::class => CrmSuppressionRepository::class,
+        CrmCampaignTemplateRepositoryInterface::class => CrmCampaignTemplateRepository::class,
+        CrmPendingSubscriptionRepositoryInterface::class => CrmPendingSubscriptionRepository::class,
+        CrmProjectionRepositoryInterface::class => CrmProjectionRepository::class,
         StripeTerminalReaderRepositoryInterface::class => StripeTerminalReaderRepository::class,
         AttendeeCheckInRepositoryInterface::class => AttendeeCheckInRepository::class,
         ProductCategoryRepositoryInterface::class => ProductCategoryRepository::class,

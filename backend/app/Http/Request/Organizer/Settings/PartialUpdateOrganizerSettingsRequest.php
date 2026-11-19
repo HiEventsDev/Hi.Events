@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\Enums\HomepageFontFamily;
 use HiEvents\DomainObjects\Enums\HomepageSectionType;
 use HiEvents\DomainObjects\Enums\OrganizerHomepageVisibility;
 use HiEvents\DomainObjects\Enums\Permission;
+use HiEvents\DomainObjects\Enums\PhoneCollection;
 use HiEvents\DomainObjects\Enums\TrackingPixelProvider;
 use HiEvents\Http\Request\BaseRequest;
 use HiEvents\Repository\Interfaces\OrganizerSettingsRepositoryInterface;
@@ -95,6 +96,8 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
             // Event defaults
             'default_attendee_details_collection_method' => ['sometimes', 'nullable', Rule::in(AttendeeDetailsCollectionMethod::valuesArray())],
             'default_show_marketing_opt_in' => ['sometimes', 'nullable', 'boolean'],
+            'default_phone_collection' => ['sometimes', 'nullable', Rule::in(PhoneCollection::valuesArray())],
+            'default_show_sms_opt_in' => ['sometimes', 'nullable', 'boolean'],
             'default_pass_platform_fee_to_buyer' => ['sometimes', 'nullable', 'boolean'],
             'default_allow_attendee_self_edit' => ['sometimes', 'nullable', 'boolean'],
 

@@ -3,7 +3,7 @@ import {Button, NumberInput, Switch} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {useParams} from "react-router";
 import {useEffect} from "react";
-import {EventSettings} from "../../../../../../types.ts";
+import {EventSettings, PhoneCollection} from "../../../../../../types.ts";
 import {Card} from "../../../../../common/Card";
 import {showSuccess} from "../../../../../../utilites/notifications.tsx";
 import {useFormErrorResponseHandler} from "../../../../../../hooks/useFormErrorResponseHandler.tsx";
@@ -14,11 +14,15 @@ import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
 import {isEmptyHtml} from "../../../../../../utilites/helpers.ts";
 import {CustomSelect, ItemProps} from "../../../../../common/CustomSelect";
 import {IconUser, IconUsers} from "@tabler/icons-react";
+import {getPhoneCollectionOptions} from "../../../../../../utilites/phoneCollection.tsx";
+import {useTextMessagesPaused, useTextMessagesVisible} from "../../../../../../ee/crm/hooks/useTextMessagesVisible.ts";
 
 export const HomepageAndCheckoutSettings = () => {
     const {eventId} = useParams();
     const eventSettingsQuery = useGetEventSettings(eventId);
     const updateMutation = useUpdateEventSettings();
+    const showTextMessageOptIn = useTextMessagesVisible();
+    const isTextMessageOptInPaused = useTextMessagesPaused();
     const form = useForm({
         initialValues: {
             pre_checkout_message: '',
@@ -27,6 +31,8 @@ export const HomepageAndCheckoutSettings = () => {
             attendee_details_collection_method: 'PER_TICKET' as 'PER_TICKET' | 'PER_ORDER',
             show_marketing_opt_in: true,
             allow_copy_details_to_all_attendees: true,
+            phone_collection: 'OFF' as PhoneCollection,
+            show_sms_opt_in: false,
         },
         transformValues: (values) => ({
             ...values,
@@ -60,6 +66,8 @@ export const HomepageAndCheckoutSettings = () => {
                 attendee_details_collection_method: eventSettingsQuery.data.attendee_details_collection_method || 'PER_TICKET',
                 show_marketing_opt_in: eventSettingsQuery.data.show_marketing_opt_in ?? true,
                 allow_copy_details_to_all_attendees: eventSettingsQuery.data.allow_copy_details_to_all_attendees ?? true,
+                phone_collection: eventSettingsQuery.data.phone_collection ?? 'OFF',
+                show_sms_opt_in: eventSettingsQuery.data.show_sms_opt_in ?? false,
             });
         }
     }, [eventSettingsQuery.isFetched]);
@@ -117,6 +125,15 @@ export const HomepageAndCheckoutSettings = () => {
                         required
                     />
 
+                    <CustomSelect
+                        optionList={getPhoneCollectionOptions()}
+                        form={form}
+                        name={'phone_collection'}
+                        label={t`Buyer's mobile number`}
+                        required
+                        dataTestId="phone-collection-select"
+                    />
+
                     <NumberInput
                         label={t`Order timeout`}
                         description={t`How many minutes the customer has to complete their order. We recommend at least 15 minutes`}
@@ -129,6 +146,20 @@ export const HomepageAndCheckoutSettings = () => {
                         description={t`Display a checkbox allowing customers to opt-in to receive marketing communications from this event organizer.`}
                         {...form.getInputProps('show_marketing_opt_in', {type: 'checkbox'})}
                     />
+
+                    {showTextMessageOptIn && (
+                        <Switch
+                            mt="md"
+                            label={t`Show text message opt-in checkbox`}
+                            description={isTextMessageOptInPaused
+                                ? t`Text messages aren't available on this account at the moment, so checkout doesn't show this checkbox. Your choice is kept for when they are.`
+                                : form.values.phone_collection === 'OFF'
+                                    ? t`Ask for the buyer's mobile number above to use this.`
+                                    : t`Lets buyers with a mobile number in the United Kingdom, Ireland, the United States or Australia agree to receive text messages from this organizer. Only buyers who tick it can be sent marketing texts.`}
+                            disabled={form.values.phone_collection === 'OFF'}
+                            {...form.getInputProps('show_sms_opt_in', {type: 'checkbox'})}
+                        />
+                    )}
 
                     <Switch
                         mt="md"

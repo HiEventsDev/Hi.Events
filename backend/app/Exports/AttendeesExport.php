@@ -74,7 +74,7 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
             __('Created Date'),
             __('Last Updated Date'),
             __('Notes'),
-        ], $productQuestionTitles, $orderQuestionsTitles, [__('Sales Channel')]);
+        ], $productQuestionTitles, $orderQuestionsTitles, [__('Sales Channel'), __('Buyer Mobile Number')]);
     }
 
     /**
@@ -151,6 +151,7 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
             $attendee->getNotes(),
         ], $productAnswers->toArray(), $orderAnswers->toArray(), [
             $attendee->getOrder()?->isBoxOfficeOrder() ? __('Box Office') : __('Online'),
+            $attendee->getOrder()?->getPhone(),
         ]);
     }
 

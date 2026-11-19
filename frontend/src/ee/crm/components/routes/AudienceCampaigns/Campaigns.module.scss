@@ -1,0 +1,140 @@
+$muted: var(--mantine-color-gray-6);
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--mantine-spacing-sm);
+  margin-bottom: var(--mantine-spacing-sm);
+}
+
+.toolbar > .search {
+  flex: 1 1 240px;
+  max-width: 360px;
+
+  @container audience-page (max-width: 559px) {
+    flex-basis: 100%;
+    max-width: none;
+  }
+}
+
+.search:global(.mantine-InputWrapper-root) {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.filterSelect {
+  flex: 1 1 100%;
+
+  &:global(.mantine-InputWrapper-root) {
+    margin-bottom: 0;
+  }
+}
+
+.total {
+  font-size: var(--mantine-font-size-sm);
+  color: $muted;
+}
+
+.table {
+  &[data-refreshing] {
+    opacity: 0.6;
+    transition: opacity 120ms ease;
+  }
+
+  tbody tr {
+    cursor: pointer;
+  }
+
+  &[data-narrow] thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  &[data-narrow] :global(table) tbody tr td {
+    white-space: normal;
+  }
+
+  tbody tr:hover td {
+    background: var(--mantine-color-gray-0);
+  }
+
+  :global(table) thead th,
+  :global(table) tbody tr td {
+    padding: 10px 12px !important;
+  }
+}
+
+.subject {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+
+  a {
+    overflow: hidden;
+    font-size: var(--mantine-font-size-sm);
+    font-weight: 600;
+    color: inherit;
+    text-decoration: none;
+    text-overflow: ellipsis;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  small {
+    overflow: hidden;
+    font-size: var(--mantine-font-size-xs);
+    color: $muted;
+    text-overflow: ellipsis;
+  }
+}
+
+.narrowMeta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  margin-top: 4px;
+  font-size: var(--mantine-font-size-xs);
+  color: $muted;
+}
+
+.statusCell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  width: max-content;
+}
+
+.audience {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.number {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.muted {
+  color: $muted;
+}
+
+.footnote {
+  margin: 0 0 var(--mantine-spacing-md);
+  font-size: var(--mantine-font-size-xs);
+  color: $muted;
+}
+
+.channelIcon {
+  margin-right: 4px;
+  vertical-align: -2px;
+  color: var(--mantine-color-dimmed);
+}

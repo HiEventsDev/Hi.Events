@@ -8,6 +8,7 @@ import {
     IconCash,
     IconCheck,
     IconClock,
+    IconDeviceMobile,
     IconEdit,
     IconExternalLink,
     IconId,
@@ -54,6 +55,7 @@ import {Attendee, Event, IdParam, LocationType, Order, Product} from "../../../.
 import classes from './OrderSummaryAndProducts.module.scss';
 import {clearWaitlistJoinedForEvent} from "../../../../hooks/useWaitlistJoined.ts";
 import {UserGeneratedContent} from "../../../common/UserGeneratedContent";
+import {formatPhoneNumber} from "../../../../utilites/phoneNumber.ts";
 import {OfflinePaymentDetails} from "../../../common/OfflinePaymentDetails";
 import {formatCurrency, plainAmount} from "../../../../utilites/currency.ts";
 import {ReportOfflinePayment} from "./ReportOfflinePayment";
@@ -311,6 +313,13 @@ const OrderDetails = ({
                     }
                 />
             ) : null}
+            {order.phone && (
+                <DetailItem
+                    icon={IconDeviceMobile}
+                    label={t`Mobile Number`}
+                    value={formatPhoneNumber(order.phone)}
+                />
+            )}
             <DetailItem
                 icon={IconCalendar}
                 label={t`Order Date`}
@@ -761,6 +770,8 @@ export const OrderSummaryAndProducts = () => {
                     opened={editOrderModalOpened}
                     onClose={() => setEditOrderModalOpened(false)}
                     order={order}
+                    phoneCollection={event?.settings?.phone_collection ?? 'OFF'}
+                    defaultCountry={event?.event_location?.location?.structured_address?.country}
                     onSuccess={(values: any) => {
                         handleEditOrder(values);
                     }}

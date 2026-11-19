@@ -14,6 +14,7 @@ class EventSettingsResourcePublic extends JsonResource
     public function __construct(
         mixed $resource,
         private readonly bool $includePostCheckoutData = false,
+        private readonly bool $offersSmsOptIn = false,
     ) {
         parent::__construct($resource);
     }
@@ -23,9 +24,6 @@ class EventSettingsResourcePublic extends JsonResource
         return [
             'pre_checkout_message' => $this->getPreCheckoutMessage(),
 
-            // We only show post checkout data if the order is completed. So this data is only returned when this
-            // resource is returned within the context of an order that is completed.
-            // i.e. order->event->event_settings and not event->event_settings
             $this->mergeWhen($this->includePostCheckoutData, [
                 'post_checkout_message' => $this->getPostCheckoutMessage(),
             ]),
@@ -77,6 +75,10 @@ class EventSettingsResourcePublic extends JsonResource
 
             // Marketing settings
             'show_marketing_opt_in' => $this->getShowMarketingOptIn(),
+            /** @var 'OFF'|'OPTIONAL'|'REQUIRED' */
+            'phone_collection' => $this->getPhoneCollection(),
+            /** @var bool */
+            'show_sms_opt_in' => $this->offersSmsOptIn,
 
             // Attendee detail copy control
             'allow_copy_details_to_all_attendees' => $this->getAllowCopyDetailsToAllAttendees(),

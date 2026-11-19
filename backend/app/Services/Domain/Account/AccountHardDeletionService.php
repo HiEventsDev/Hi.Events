@@ -5,6 +5,7 @@ namespace HiEvents\Services\Domain\Account;
 use HiEvents\Models\User;
 use HiEvents\Services\Domain\Account\Anonymization\AccountDataResolver;
 use HiEvents\Services\Domain\Account\Anonymization\AnonymizationContext;
+use HiEvents\Services\Domain\Account\Anonymization\Anonymizers\CrmAnonymizer;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Facades\Storage;
 use Psr\Log\LoggerInterface;
@@ -127,6 +128,18 @@ class AccountHardDeletionService
 
             $manifest['events'] = $connection->table('events')
                 ->whereIn('id', $context->eventIds)
+                ->delete();
+        }
+
+        foreach ($context->organizerIds === [] ? [] : CrmAnonymizer::ORGANIZER_TABLES as $crmTable) {
+            $manifest[$crmTable] = $connection->table($crmTable)
+                ->whereIn('organizer_id', $context->organizerIds)
+                ->delete();
+        }
+
+        foreach (CrmAnonymizer::ACCOUNT_TABLES as $crmTable) {
+            $manifest[$crmTable] = $connection->table($crmTable)
+                ->where('account_id', $context->accountId)
                 ->delete();
         }
 

@@ -4190,6 +4190,674 @@
         "security": []
       }
     },
+    "/public/crm/forms/{publicId}": {
+      "get": {
+        "operationId": "public.getSignupFormPublicAction",
+        "summary": "Get Signup Form (public)",
+        "tags": [
+          "Crm / Public"
+        ],
+        "parameters": [
+          {
+            "name": "publicId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "`SignupFormPublicResource`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/SignupFormPublicResource"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/public/crm/forms/{publicId}/submissions": {
+      "post": {
+        "operationId": "public.submitSignupFormPublicAction",
+        "summary": "Submit Signup Form (public)",
+        "tags": [
+          "Crm / Public"
+        ],
+        "parameters": [
+          {
+            "name": "publicId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitSignupFormRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "const": "check_inbox"
+                    }
+                  },
+                  "required": [
+                    "status"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/public/organizers/{organizerId}/signup-form": {
+      "get": {
+        "operationId": "public.getOrganizerSignupFormPublicAction",
+        "summary": "Get Organizer Signup Form (public)",
+        "tags": [
+          "Crm / Public"
+        ],
+        "parameters": [
+          {
+            "name": "organizerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "`SignupFormPublicResource`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/SignupFormPublicResource"
+                        }
+                      },
+                      "required": [
+                        "data"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "null"
+                        }
+                      },
+                      "required": [
+                        "data"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/public/crm/confirm/{token}": {
+      "get": {
+        "operationId": "public.getSubscriptionConfirmationPublicAction",
+        "summary": "Get Subscription Confirmation (public)",
+        "tags": [
+          "Crm / Public"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      },
+      "post": {
+        "operationId": "public.confirmSubscriptionPublicAction",
+        "summary": "Confirm Subscription (public)",
+        "tags": [
+          "Crm / Public"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/public/crm/unsubscribe/{token}": {
+      "get": {
+        "operationId": "public.getCampaignUnsubscribePublicAction",
+        "summary": "Get Campaign Unsubscribe (public)",
+        "tags": [
+          "Crm / Public"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "`UnsubscribeStatusResource`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/UnsubscribeStatusResource"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      },
+      "post": {
+        "operationId": "public.unsubscribeFromCampaignsPublicAction",
+        "summary": "Unsubscribe From Campaigns (public)",
+        "tags": [
+          "Crm / Public"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "`UnsubscribeStatusResource`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/UnsubscribeStatusResource"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/public/crm/unsubscribe/{token}/resubscribe": {
+      "post": {
+        "operationId": "public.resubscribeToCampaignsPublicAction",
+        "summary": "Resubscribe To Campaigns (public)",
+        "tags": [
+          "Crm / Public"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "`UnsubscribeStatusResource`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/UnsubscribeStatusResource"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
     "/organizers/{organizerId}/email-templates": {
       "get": {
         "operationId": "emailTemplates.getOrganizerEmailTemplatesAction",
@@ -27855,6 +28523,16 @@
                 "type": "string",
                 "format": "email"
               },
+              "phone": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 30
+              },
+              "sms_opted_in": {
+                "type": "boolean"
+              },
               "questions": {
                 "type": "array",
                 "items": {
@@ -28883,6 +29561,9 @@
             "type": "string",
             "format": "email",
             "maxLength": 255
+          },
+          "phone": {
+            "type": "string"
           }
         },
         "title": "EditOrderPublicRequest"
@@ -28911,6 +29592,13 @@
               "null"
             ],
             "maxLength": 2000
+          },
+          "phone": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 30
           }
         },
         "required": [
@@ -30158,6 +30846,17 @@
             "type": "boolean",
             "description": "Marketing settings"
           },
+          "phone_collection": {
+            "type": "string",
+            "enum": [
+              "OFF",
+              "OPTIONAL",
+              "REQUIRED"
+            ]
+          },
+          "show_sms_opt_in": {
+            "type": "boolean"
+          },
           "allow_copy_details_to_all_attendees": {
             "type": "boolean",
             "description": "Attendee detail copy control"
@@ -30268,6 +30967,8 @@
           "invoice_notes",
           "invoice_payment_terms_days",
           "show_marketing_opt_in",
+          "phone_collection",
+          "show_sms_opt_in",
           "allow_copy_details_to_all_attendees",
           "pass_platform_fee_to_buyer",
           "homepage_theme_settings",
@@ -30482,6 +31183,17 @@
             "type": "boolean",
             "description": "Marketing settings"
           },
+          "phone_collection": {
+            "type": "string",
+            "enum": [
+              "OFF",
+              "OPTIONAL",
+              "REQUIRED"
+            ]
+          },
+          "show_sms_opt_in": {
+            "type": "boolean"
+          },
           "allow_copy_details_to_all_attendees": {
             "type": "boolean",
             "description": "Attendee detail copy control"
@@ -30582,6 +31294,8 @@
           "require_billing_address",
           "invoice_label",
           "show_marketing_opt_in",
+          "phone_collection",
+          "show_sms_opt_in",
           "allow_copy_details_to_all_attendees",
           "pass_platform_fee_to_buyer",
           "homepage_theme_settings",
@@ -31684,7 +32398,8 @@
                     "seating",
                     "box_office",
                     "enterprise_sso",
-                    "white_label"
+                    "white_label",
+                    "crm"
                   ]
                 }
               },
@@ -31696,7 +32411,8 @@
                     "seating",
                     "box_office",
                     "enterprise_sso",
-                    "white_label"
+                    "white_label",
+                    "crm"
                   ]
                 }
               },
@@ -31708,7 +32424,8 @@
                     "seating",
                     "box_office",
                     "enterprise_sso",
-                    "white_label"
+                    "white_label",
+                    "crm"
                   ]
                 }
               }
@@ -32261,6 +32978,12 @@
               "null"
             ]
           },
+          "phone": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
           "created_at": {
             "type": "string"
           },
@@ -32439,6 +33162,7 @@
           "first_name",
           "last_name",
           "email",
+          "phone",
           "created_at",
           "public_id",
           "is_partially_refunded",
@@ -32537,6 +33261,12 @@
             ]
           },
           "email": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "phone": {
             "type": [
               "string",
               "null"
@@ -32772,6 +33502,7 @@
           "first_name",
           "last_name",
           "email",
+          "phone",
           "public_id",
           "is_payment_required",
           "payment_link_created_at",
@@ -33036,6 +33767,17 @@
           "default_show_marketing_opt_in": {
             "type": "boolean"
           },
+          "default_phone_collection": {
+            "type": "string",
+            "enum": [
+              "OFF",
+              "OPTIONAL",
+              "REQUIRED"
+            ]
+          },
+          "default_show_sms_opt_in": {
+            "type": "boolean"
+          },
           "default_pass_platform_fee_to_buyer": {
             "type": "boolean"
           },
@@ -33136,6 +33878,8 @@
           "organizer_id",
           "default_attendee_details_collection_method",
           "default_show_marketing_opt_in",
+          "default_phone_collection",
+          "default_show_sms_opt_in",
           "default_pass_platform_fee_to_buyer",
           "default_allow_attendee_self_edit",
           "social_media_handles",
@@ -33165,6 +33909,17 @@
             "type": "string"
           },
           "default_show_marketing_opt_in": {
+            "type": "boolean"
+          },
+          "default_phone_collection": {
+            "type": "string",
+            "enum": [
+              "OFF",
+              "OPTIONAL",
+              "REQUIRED"
+            ]
+          },
+          "default_show_sms_opt_in": {
             "type": "boolean"
           },
           "default_pass_platform_fee_to_buyer": {
@@ -33289,6 +34044,8 @@
           "organizer_id",
           "default_attendee_details_collection_method",
           "default_show_marketing_opt_in",
+          "default_phone_collection",
+          "default_show_sms_opt_in",
           "default_pass_platform_fee_to_buyer",
           "default_allow_attendee_self_edit",
           "social_media_handles",
@@ -33593,6 +34350,24 @@
             ]
           },
           "default_show_marketing_opt_in": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "default_phone_collection": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "OFF",
+              "OPTIONAL",
+              "REQUIRED",
+              null
+            ]
+          },
+          "default_show_sms_opt_in": {
             "type": [
               "boolean",
               "null"
@@ -35980,6 +36755,69 @@
         ],
         "title": "SendTicketLookupEmailRequest"
       },
+      "SignupFormPublicResource": {
+        "type": "object",
+        "properties": {
+          "public_id": {
+            "type": "string"
+          },
+          "organizer_id": {
+            "type": "integer"
+          },
+          "organizer_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "organizer_slug": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "button_label": {
+            "type": "string"
+          },
+          "success_message": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "asks_for_name": {
+            "type": "boolean"
+          },
+          "privacy_url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "public_id",
+          "organizer_id",
+          "organizer_name",
+          "organizer_slug",
+          "title",
+          "description",
+          "button_label",
+          "success_message",
+          "asks_for_name",
+          "privacy_url"
+        ],
+        "title": "SignupFormPublicResource"
+      },
       "SortLineupEntriesRequest": {
         "type": "object",
         "properties": {
@@ -36074,6 +36912,80 @@
         },
         "title": "SortQuestionsRequest"
       },
+      "SubmitSignupFormRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 254
+          },
+          "first_name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1,
+            "maxLength": 50
+          },
+          "last_name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1,
+            "maxLength": 50
+          },
+          "locale": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "en",
+              "de",
+              "fi",
+              "fr",
+              "it",
+              "nl",
+              "hu",
+              "es",
+              "pt",
+              "pt-br",
+              "zh-cn",
+              "se",
+              "zh-hk",
+              "vi",
+              "tr",
+              "pl",
+              "sk",
+              "el",
+              "ko",
+              "ja",
+              "cs",
+              null
+            ]
+          },
+          "turnstile_token": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 2048
+          },
+          "website": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 255
+          }
+        },
+        "required": [
+          "email"
+        ],
+        "title": "SubmitSignupFormRequest"
+      },
       "TaxAndFeeResource": {
         "type": "object",
         "properties": {
@@ -36123,6 +37035,48 @@
           "type"
         ],
         "title": "TaxAndFeeResource"
+      },
+      "UnsubscribeStatusResource": {
+        "type": "object",
+        "properties": {
+          "organizer_name": {
+            "type": "string"
+          },
+          "email": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "is_unsubscribed": {
+            "type": "boolean"
+          },
+          "can_resubscribe": {
+            "type": "boolean"
+          },
+          "channel": {
+            "type": "string",
+            "enum": [
+              "EMAIL",
+              "SMS"
+            ]
+          },
+          "phone": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "organizer_name",
+          "email",
+          "is_unsubscribed",
+          "can_resubscribe",
+          "channel",
+          "phone"
+        ],
+        "title": "UnsubscribeStatusResource"
       },
       "UpdateAffiliateRequest": {
         "type": "object",
@@ -36857,6 +37811,17 @@
           "show_marketing_opt_in": {
             "type": "boolean",
             "description": "Marketing settings"
+          },
+          "phone_collection": {
+            "type": "string",
+            "enum": [
+              "OFF",
+              "OPTIONAL",
+              "REQUIRED"
+            ]
+          },
+          "show_sms_opt_in": {
+            "type": "boolean"
           },
           "allow_copy_details_to_all_attendees": {
             "type": "boolean",

@@ -33,6 +33,7 @@ use HiEvents\Services\Application\Handlers\Order\DTO\CompleteOrderDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\CompleteOrderOrderDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\CompleteOrderProductDataDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\OrderQuestionsDTO;
+use HiEvents\Services\Domain\Order\CheckoutSmsOptInService;
 use HiEvents\Services\Domain\Order\OccurrenceStatusValidator;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Domain\Question\QuestionVisibilityService;
@@ -40,6 +41,7 @@ use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
 use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
+use HiEvents\Services\Infrastructure\Phone\PhoneNumberNormalizer;
 use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Collection;
@@ -152,6 +154,8 @@ class CompleteOrderHandlerTest extends TestCase
             new TransactionLockService(DB::getFacadeRoot()),
             $this->questionRepository,
             new QuestionVisibilityService,
+            new PhoneNumberNormalizer,
+            Mockery::mock(CheckoutSmsOptInService::class)->shouldReceive('isRecordedFor')->andReturn(false)->byDefault()->getMock(),
         );
     }
 

@@ -39,7 +39,7 @@ class LicenceKeyCodecTest extends TestCase
     public function test_the_platform_plan_includes_every_enterprise_feature_and_white_label(): void
     {
         $this->assertSame(
-            [LicensedFeature::WHITE_LABEL, LicensedFeature::SEATING, LicensedFeature::BOX_OFFICE, LicensedFeature::ENTERPRISE_SSO],
+            [LicensedFeature::WHITE_LABEL, LicensedFeature::SEATING, LicensedFeature::BOX_OFFICE, LicensedFeature::ENTERPRISE_SSO, LicensedFeature::CRM],
             $this->codec->decode($this->issue(['plan' => 'platform']))->features,
         );
     }
@@ -48,7 +48,7 @@ class LicenceKeyCodecTest extends TestCase
     {
         $licence = $this->codec->decode($this->issue(['plan' => 'cloud', 'covered_sales' => null]));
 
-        $this->assertSame([LicensedFeature::SEATING, LicensedFeature::BOX_OFFICE, LicensedFeature::ENTERPRISE_SSO], $licence->features);
+        $this->assertSame([LicensedFeature::SEATING, LicensedFeature::BOX_OFFICE, LicensedFeature::ENTERPRISE_SSO, LicensedFeature::CRM], $licence->features);
         $this->assertNull($licence->covered_sales);
     }
 

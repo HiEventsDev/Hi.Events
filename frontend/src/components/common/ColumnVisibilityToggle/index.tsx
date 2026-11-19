@@ -2,6 +2,7 @@ import {Button, Checkbox, Menu} from '@mantine/core';
 import {IconColumns} from '@tabler/icons-react';
 import {Table} from '@tanstack/react-table';
 import {t} from '@lingui/macro';
+import {TanStackTableColumnMeta} from '../TanStackTable';
 
 interface ColumnVisibilityToggleProps<TData> {
     table: Table<TData>;
@@ -26,9 +27,8 @@ export function ColumnVisibilityToggle<TData>({table}: ColumnVisibilityTogglePro
                 <Menu.Label>{t`Toggle columns`}</Menu.Label>
                 {columns.map((column) => {
                     const columnDef = column.columnDef;
-                    const label = typeof columnDef.header === 'string'
-                        ? columnDef.header
-                        : (columnDef.id || column.id);
+                    const label = (columnDef.meta as TanStackTableColumnMeta | undefined)?.label
+                        ?? (typeof columnDef.header === 'string' ? columnDef.header : (columnDef.id || column.id));
 
                     return (
                         <Menu.Item key={column.id}>

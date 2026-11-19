@@ -11,6 +11,8 @@ import classes from "./Editor.module.scss";
 import classNames from "classnames";
 import {Trans} from "@lingui/macro";
 import {InsertImageControl} from "./Controls/InsertImageControl";
+import {InsertButtonControl} from "./Controls/InsertButtonControl";
+import {InsertDividerControl} from "./Controls/InsertDividerControl";
 import {InlineInsertMenu} from "./Controls/InlineInsertMenu";
 import {ImageResize} from "./Extensions/ImageResizeExtension";
 import {Extension} from '@tiptap/core';
@@ -32,7 +34,17 @@ export interface EditorProps {
     size?: MantineFontSize;
     additionalExtensions?: Extension[];
     additionalToolbarControls?: React.ReactNode;
+    emailContent?: boolean;
 }
+
+const EmailLink = Link.extend({
+    addAttributes() {
+        return {
+            ...this.parent?.(),
+            class: {default: null},
+        };
+    },
+});
 
 export const Editor = ({
                            error,
@@ -47,6 +59,7 @@ export const Editor = ({
                            size = 'md',
                            additionalExtensions = [],
                            additionalToolbarControls,
+                           emailContent = false,
                            placeholder,
                            autoFocus = false,
                            ariaLabel,
@@ -69,7 +82,7 @@ export const Editor = ({
                     }
                 }
             }),
-            Link,
+            emailContent ? EmailLink : Link,
             TextAlign.configure({types: ['heading', 'paragraph']}),
             ImageResize,
             TextStyle,
@@ -247,7 +260,9 @@ export const Editor = ({
                                 <RichTextEditor.OrderedList/>
                             </RichTextEditor.ControlsGroup>
                             <RichTextEditor.ControlsGroup>
-                                <InsertImageControl/>
+                                <InsertImageControl uploadOnly={emailContent}/>
+                                {emailContent && <InsertButtonControl/>}
+                                {emailContent && <InsertDividerControl/>}
                             </RichTextEditor.ControlsGroup>
                         </>
                     )}

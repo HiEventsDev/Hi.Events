@@ -36,6 +36,8 @@ return [
     'platform_support_email' => env('APP_PLATFORM_SUPPORT_EMAIL', 'support@example.com'),
     'event_spam_check_enabled' => env('APP_EVENT_SPAM_CHECK_ENABLED', false),
     'event_spam_check_confidence_threshold' => env('APP_EVENT_SPAM_CHECK_CONFIDENCE_THRESHOLD', 0.7),
+    'crm_campaign_ai_review_enabled' => env('APP_CRM_CAMPAIGN_AI_REVIEW_ENABLED', false),
+    'crm_campaign_ai_review_confidence_threshold' => env('APP_CRM_CAMPAIGN_AI_REVIEW_CONFIDENCE_THRESHOLD', 0.8),
     'enforce_email_confirmation_during_registration' => env('APP_ENFORCE_EMAIL_CONFIRMATION_DURING_REGISTRATION', false),
     'allowed_internal_webhook_hosts' => env('APP_ALLOWED_INTERNAL_WEBHOOK_HOSTS', ''),
 
@@ -85,6 +87,11 @@ return [
         'organizer_events' => '/manage/organizer/%d/events/%s',
         'welcome' => '/welcome',
         'lifecycle_email_unsubscribe' => '/emails/unsubscribe/%s',
+        'crm_unsubscribe' => '/audience/unsubscribe/%s',
+        'crm_sms_unsubscribe' => '/u/%s',
+        'crm_confirm_subscription' => '/audience/confirm/%s',
+        'crm_campaign' => '/manage/organizer/%d/audience/campaigns/%d',
+        'crm_automations' => '/manage/organizer/%d/audience/automations',
         'sso_callback' => '/sso/callback',
     ],
 

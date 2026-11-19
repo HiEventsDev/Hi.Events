@@ -24,6 +24,7 @@ import {CoverMedia} from "../HomepageFrame/CoverMedia.tsx";
 import {scrollBehavior} from "../../../utilites/motion.ts";
 import {sizedImageUrl} from "../../../utilites/imageTransform.ts";
 import {OrganizerPastEventsSection} from "./OrganizerPastEventsSection.tsx";
+import {OrganizerSignupForm} from "../../../ee/crm/components/OrganizerSignupForm";
 
 interface OrganizerHomepageProps {
     organizer?: Organizer;
@@ -340,6 +341,8 @@ export const OrganizerHomepage = ({
                     {layout.blocks.map(block => block.kind === 'events'
                         ? renderEventsBlock(block.section.heading, block.includesPastEvents)
                         : <Fragment key={block.section.id}>{renderSection(block.section)}</Fragment>)}
+
+                    {organizer.id && <OrganizerSignupForm organizerId={organizer.id} sectionClassName={classes.section}/>}
                 </div>
             </HomepageFrame>
         </>

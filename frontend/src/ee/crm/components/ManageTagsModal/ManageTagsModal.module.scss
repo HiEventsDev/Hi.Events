@@ -1,0 +1,99 @@
+$border: var(--mantine-color-gray-2);
+
+.tagRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 0;
+  border-top: 1px solid $border;
+
+  &:first-of-type {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  &[data-new] {
+    padding-bottom: 14px;
+  }
+
+  :global(.mantine-InputWrapper-root) {
+    margin-bottom: 0;
+  }
+}
+
+.tagRowName {
+  flex: 1;
+  min-width: 0;
+}
+
+.tagRowCount {
+  flex: none;
+  min-width: 84px;
+  font-size: var(--mantine-font-size-xs);
+  line-height: 36px;
+  color: var(--mantine-color-gray-6);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+
+  @media (max-width: 36em) {
+    min-width: 72px;
+  }
+}
+
+.tagRowActions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  min-height: 36px;
+}
+
+.colorButton {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--mantine-color-gray-4);
+  border-radius: var(--mantine-radius-default);
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  @media (pointer: coarse) {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.colorOptions {
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+
+  button {
+    padding: 0;
+    border: 0;
+    cursor: pointer;
+  }
+
+  @media (pointer: coarse) {
+    gap: 6px;
+
+    button {
+      --cs-size: 40px !important;
+    }
+  }
+}
+
+.touchTarget {
+  @media (pointer: coarse) {
+    width: 40px;
+    height: 40px;
+  }
+}

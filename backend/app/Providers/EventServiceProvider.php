@@ -2,6 +2,7 @@
 
 namespace HiEvents\Providers;
 
+use HiEvents\Enterprise\Crm\Listeners\ContactSyncListener;
 use HiEvents\Listeners\Webhook\WebhookEventListener;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\AttendeeEvent;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\CheckinEvent;
@@ -28,6 +29,11 @@ class EventServiceProvider extends ServiceProvider
             AttendeeEvent::class,
             CheckinEvent::class,
             OccurrenceEvent::class,
+        ],
+        ContactSyncListener::class => [
+            OrderEvent::class,
+            AttendeeEvent::class,
+            CheckinEvent::class,
         ],
     ];
 

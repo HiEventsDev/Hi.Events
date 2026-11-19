@@ -70,6 +70,9 @@ class EventSettingsResource extends JsonResource
 
             // Marketing settings
             'show_marketing_opt_in' => $this->getShowMarketingOptIn(),
+            /** @var 'OFF'|'OPTIONAL'|'REQUIRED' */
+            'phone_collection' => $this->getPhoneCollection(),
+            'show_sms_opt_in' => $this->getShowSmsOptIn(),
 
             // Attendee detail copy control
             'allow_copy_details_to_all_attendees' => $this->getAllowCopyDetailsToAllAttendees(),

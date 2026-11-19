@@ -6,6 +6,7 @@ namespace Tests\Unit\Enterprise\Licensing;
 
 use HiEvents\Enterprise\BoxOffice\Repository\Interfaces\BoxOfficeRepositoryInterface;
 use HiEvents\Enterprise\BoxOffice\Repository\Interfaces\StripeTerminalReaderRepositoryInterface;
+use HiEvents\Enterprise\Crm\Repository\Interfaces\CrmOrganizerStateRepositoryInterface;
 use HiEvents\Enterprise\Licensing\DTO\LicenceStateDTO;
 use HiEvents\Enterprise\Licensing\LicenceService;
 use HiEvents\Enterprise\Licensing\LicenceStatus;
@@ -32,6 +33,8 @@ class LicensedFeatureUsageServiceTest extends TestCase
 
     private AccountSsoConnectionRepositoryInterface&MockInterface $ssoConnections;
 
+    private CrmOrganizerStateRepositoryInterface&MockInterface $crmOrganizerStates;
+
     private CacheRepository $cache;
 
     private LicenceService $licenceService;
@@ -45,6 +48,8 @@ class LicensedFeatureUsageServiceTest extends TestCase
         $this->boxOffices = Mockery::mock(BoxOfficeRepositoryInterface::class);
         $this->readers = Mockery::mock(StripeTerminalReaderRepositoryInterface::class);
         $this->ssoConnections = Mockery::mock(AccountSsoConnectionRepositoryInterface::class);
+        $this->crmOrganizerStates = Mockery::mock(CrmOrganizerStateRepositoryInterface::class);
+        $this->crmOrganizerStates->shouldReceive('isAudienceInUse')->andReturn(false)->byDefault();
         $this->cache = new CacheRepository(new ArrayStore);
         $this->licenceWithFeatures(LicenceStatus::ACTIVE, [LicensedFeature::SEATING, LicensedFeature::BOX_OFFICE]);
     }
@@ -93,6 +98,23 @@ class LicensedFeatureUsageServiceTest extends TestCase
             ->andReturn(1);
 
         $this->assertSame([LicensedFeature::ENTERPRISE_SSO], $this->service()->featuresInUse(42));
+    }
+
+    public function test_crm_is_in_use_when_the_audience_repository_reports_use(): void
+    {
+        $this->usage(seatMaps: false, eventSeatMaps: false, boxOffices: false, readers: false);
+        $this->crmOrganizerStates->shouldReceive('isAudienceInUse')->with(null, Mockery::any())->once()->andReturn(true);
+
+        $this->assertSame([LicensedFeature::CRM], $this->service()->featuresInUse());
+    }
+
+    public function test_crm_usage_is_scoped_to_the_account(): void
+    {
+        $this->usage(seatMaps: false, eventSeatMaps: false, boxOffices: false, readers: false, accountId: 42);
+        $this->ssoConnections->shouldReceive('countWhere')->with(['account_id' => 42])->once()->andReturn(0);
+        $this->crmOrganizerStates->shouldReceive('isAudienceInUse')->with(42, Mockery::any())->once()->andReturn(true);
+
+        $this->assertSame([LicensedFeature::CRM], $this->service()->featuresInUse(42));
     }
 
     public function test_both_features_are_reported(): void
@@ -195,6 +217,7 @@ class LicensedFeatureUsageServiceTest extends TestCase
             $this->boxOffices,
             $this->readers,
             $this->ssoConnections,
+            $this->crmOrganizerStates,
             $this->licenceService,
             $this->cache,
         );

@@ -9,6 +9,7 @@ use HiEvents\DomainObjects\Enums\HomepageLayout;
 use HiEvents\DomainObjects\Enums\HomepageSectionType;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\Enums\Permission;
+use HiEvents\DomainObjects\Enums\PhoneCollection;
 use HiEvents\DomainObjects\Enums\PriceDisplayMode;
 use HiEvents\DomainObjects\Enums\TicketDateDisplayMode;
 use HiEvents\DomainObjects\EventDomainObject;
@@ -105,6 +106,8 @@ class UpdateEventSettingsRequest extends BaseRequest
 
             // Marketing settings
             'show_marketing_opt_in' => ['boolean'],
+            'phone_collection' => [Rule::in(PhoneCollection::valuesArray())],
+            'show_sms_opt_in' => ['boolean'],
 
             // Attendee detail copy control
             'allow_copy_details_to_all_attendees' => ['boolean'],
