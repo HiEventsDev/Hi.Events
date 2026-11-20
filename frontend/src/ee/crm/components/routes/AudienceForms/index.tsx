@@ -21,7 +21,7 @@ import {formatCount} from "../../../utilites/format.ts";
 import {signupFormRequest} from "../../../utilites/signupForms.ts";
 import {AudienceShell} from "../../AudienceShell";
 import {LoadError} from "../../LoadError";
-import {StatusBadge} from "../../StatusBadge";
+import {StatusBadge} from "../../../../../components/common/StatusBadge";
 import shared from "../../Audience.module.scss";
 import {ShareSignupFormModal} from "./ShareSignupFormModal.tsx";
 import {SignupFormModal} from "./SignupFormModal.tsx";

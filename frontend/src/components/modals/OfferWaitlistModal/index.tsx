@@ -3,12 +3,15 @@ import {Modal} from "../../common/Modal";
 import {useOfferWaitlistEntry} from "../../../mutations/useOfferWaitlistEntry.ts";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {t} from "@lingui/macro";
-import {Anchor, Badge, NumberInput, Paper, Table, Text} from "@mantine/core";
+import {Anchor, NumberInput, Text, VisuallyHidden} from "@mantine/core";
 import {IconSend} from "@tabler/icons-react";
 import {NavLink} from "react-router";
 import {Button} from "../../common/Button";
 import {useState} from "react";
 import {BouncingEmoji} from "../../common/BouncingEmoji";
+import {TanStackTable, TanStackTableColumn} from "../../common/TanStackTable";
+import {CellText} from "../../common/TanStackTable/cells.tsx";
+import {StatusBadge} from "../../common/StatusBadge";
 
 interface OfferWaitlistModalProps extends GenericModalProps {
     eventId: IdParam;
@@ -159,79 +162,82 @@ const ProductOfferTable = ({products, quantities, setQuantities, onOffer, loadin
     onOffer: (product: WaitlistProductStats) => void;
     loadingProductId: number | null;
     isBusy: boolean;
-}) => (
-    <Paper withBorder radius="md" style={{overflow: 'hidden'}}>
-        <Table verticalSpacing="sm" horizontalSpacing="md">
-            <Table.Thead>
-                <Table.Tr>
-                    <Table.Th>{t`Product`}</Table.Th>
-                    <Table.Th style={{textAlign: 'center'}}>{t`Waiting`}</Table.Th>
-                    <Table.Th style={{textAlign: 'center'}}>{t`Available`}</Table.Th>
-                    <Table.Th style={{textAlign: 'right'}}>{t`Qty`}</Table.Th>
-                    <Table.Th style={{width: 1}}></Table.Th>
-                </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-                {products.map(product => {
-                    const noCapacity = product.available === 0;
-                    const isRowLoading = loadingProductId === product.product_price_id;
-                    const max = getMaxQuantity(product);
+}) => {
+    const columns: TanStackTableColumn<WaitlistProductStats>[] = [
+        {
+            id: 'product',
+            header: t`Product`,
+            meta: {sticky: 'left'},
+            cell: ({row: {original: product}}) => <CellText strong title={product.product_title}>{product.product_title}</CellText>,
+        },
+        {
+            id: 'waiting',
+            header: t`Waiting`,
+            meta: {align: 'right'},
+            cell: ({row: {original: product}}) => product.waiting,
+        },
+        {
+            id: 'available',
+            header: t`Available`,
+            meta: {align: 'right'},
+            cell: ({row: {original: product}}) => {
+                if (product.available === 0) {
+                    return <StatusBadge tone="negative">{t`No capacity`}</StatusBadge>;
+                }
+                if (product.available === null) {
+                    return <StatusBadge tone="positive">{t`Unlimited`}</StatusBadge>;
+                }
+                return product.available;
+            },
+        },
+        {
+            id: 'quantity',
+            header: t`Qty`,
+            meta: {align: 'right'},
+            cell: ({row: {original: product}}) => product.available !== 0 && (
+                <NumberInput
+                    size="xs"
+                    min={1}
+                    max={getMaxQuantity(product)}
+                    mb={0}
+                    value={quantities[product.product_price_id] ?? 1}
+                    onChange={(val) => setQuantities(prev => ({
+                        ...prev,
+                        [product.product_price_id]: Number(val) || 1,
+                    }))}
+                    disabled={isBusy}
+                    style={{width: 70, marginLeft: 'auto'}}
+                />
+            ),
+        },
+        {
+            id: 'actions',
+            header: () => <VisuallyHidden>{t`Actions`}</VisuallyHidden>,
+            meta: {sticky: 'right'},
+            cell: ({row: {original: product}}) => {
+                const isRowLoading = loadingProductId === product.product_price_id;
 
-                    return (
-                        <Table.Tr
-                            key={product.product_price_id}
-                            style={noCapacity ? {opacity: 0.5} : undefined}
-                        >
-                            <Table.Td>
-                                <Text size="sm" fw={500}>{product.product_title}</Text>
-                            </Table.Td>
-                            <Table.Td style={{textAlign: 'center'}}>
-                                {product.waiting}
-                            </Table.Td>
-                            <Table.Td style={{textAlign: 'center'}}>
-                                {noCapacity ? (
-                                    <Badge color="red" variant="light" size="sm">{t`No capacity`}</Badge>
-                                ) : product.available === null ? (
-                                    <Badge color="teal" variant="light" size="sm">{t`Unlimited`}</Badge>
-                                ) : (
-                                    product.available
-                                )}
-                            </Table.Td>
-                            <Table.Td style={{textAlign: 'right'}}>
-                                {!noCapacity && (
-                                    <NumberInput
-                                        size="xs"
-                                        min={1}
-                                        max={max}
-                                        mb={0}
-                                        value={quantities[product.product_price_id] ?? 1}
-                                        onChange={(val) => setQuantities(prev => ({
-                                            ...prev,
-                                            [product.product_price_id]: Number(val) || 1,
-                                        }))}
-                                        disabled={isBusy}
-                                        style={{width: 70, marginLeft: 'auto'}}
-                                    />
-                                )}
-                            </Table.Td>
-                            <Table.Td>
-                                {!noCapacity && (
-                                    <Button
-                                        size="xs"
-                                        variant="light"
-                                        leftSection={<IconSend size={14}/>}
-                                        onClick={() => onOffer(product)}
-                                        disabled={isBusy && !isRowLoading}
-                                        loading={isRowLoading}
-                                    >
-                                        {t`Offer`}
-                                    </Button>
-                                )}
-                            </Table.Td>
-                        </Table.Tr>
-                    );
-                })}
-            </Table.Tbody>
-        </Table>
-    </Paper>
-);
+                return product.available !== 0 && (
+                    <Button
+                        size="xs"
+                        variant="light"
+                        leftSection={<IconSend size={14}/>}
+                        onClick={() => onOffer(product)}
+                        disabled={isBusy && !isRowLoading}
+                        loading={isRowLoading}
+                    >
+                        {t`Offer`}
+                    </Button>
+                );
+            },
+        },
+    ];
+
+    return (
+        <TanStackTable
+            data={products}
+            columns={columns}
+            rowProps={product => ({style: product.available === 0 ? {opacity: 0.5} : undefined})}
+        />
+    );
+};

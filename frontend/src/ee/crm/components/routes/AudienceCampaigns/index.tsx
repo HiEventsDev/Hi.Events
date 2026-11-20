@@ -9,6 +9,7 @@ import {Pagination} from "../../../../../components/common/Pagination";
 import {SearchBar} from "../../../../../components/common/SearchBar";
 import {TableSkeleton} from "../../../../../components/common/TableSkeleton";
 import {TanStackTable, TanStackTableColumn} from "../../../../../components/common/TanStackTable";
+import {IdentityCell} from "../../../../../components/common/TanStackTable/cells.tsx";
 import {useAccess} from "../../../../../hooks/useAccess.ts";
 import {useGetAccount} from "../../../../../queries/useGetAccount.ts";
 import {useGetOrganizer} from "../../../../../queries/useGetOrganizer.ts";
@@ -118,20 +119,26 @@ const AudienceCampaigns = () => {
             id: 'campaign',
             header: t`Campaign`,
             meta: {cellStyle: CAMPAIGN_CELL},
-            cell: ({row: {original: campaign}}) => (
+            cell: ({row: {original: campaign}}) => isNarrow ? (
                 <span className={classes.subject}>
                     <Link to={`${basePath}/${campaign.id}`} onClick={event => event.stopPropagation()}>
                         {campaign.channel === 'SMS' && <IconMessage size={14} className={classes.channelIcon} aria-label={t`Text message`}/>}
                         {campaign.subject || campaign.name}
                     </Link>
                     {campaign.subject && campaign.name !== campaign.subject && <small>{campaign.name}</small>}
-                    {isNarrow && (
-                        <span className={classes.narrowMeta}>
-                            <CampaignStatusBadge status={campaign.status} isStopped={isCampaignStopped(campaign)}/>
-                            {dateLabel(campaign)}
-                        </span>
-                    )}
+                    <span className={classes.narrowMeta}>
+                        <CampaignStatusBadge status={campaign.status} isStopped={isCampaignStopped(campaign)}/>
+                        {dateLabel(campaign)}
+                    </span>
                 </span>
+            ) : (
+                <IdentityCell
+                    primary={<span className={classes.subjectLink}><Link to={`${basePath}/${campaign.id}`} onClick={event => event.stopPropagation()}>
+                            {campaign.channel === 'SMS' && <IconMessage size={14} className={classes.channelIcon} aria-label={t`Text message`}/>}
+                            {campaign.subject || campaign.name}
+                        </Link></span>}
+                    secondary={campaign.subject && campaign.name !== campaign.subject ? campaign.name : undefined}
+                />
             ),
         },
         {
@@ -295,11 +302,12 @@ const AudienceCampaigns = () => {
             )}
 
             {campaigns.length > 0 && (
-                <div className={classes.table} data-narrow={isNarrow || undefined} data-refreshing={campaignsQuery.isPlaceholderData || undefined}>
+                <div className={classes.table} data-narrow={isNarrow || undefined}>
                     <TanStackTable
                         data={campaigns}
                         columns={columns}
-                        rowProps={campaign => ({onClick: () => navigate(`${basePath}/${campaign.id}`)})}
+                        isRefreshing={campaignsQuery.isPlaceholderData}
+                        onRowClick={campaign => navigate(`${basePath}/${campaign.id}`)}
                     />
                 </div>
             )}

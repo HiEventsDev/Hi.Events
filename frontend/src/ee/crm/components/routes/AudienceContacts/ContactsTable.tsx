@@ -1,17 +1,15 @@
-import {createPortal} from "react-dom";
 import {plural, t} from "@lingui/macro";
-import {Avatar, UnstyledButton, VisuallyHidden} from "@mantine/core";
-import {IconArrowDown, IconArrowUp, IconSelector} from "@tabler/icons-react";
-import {VisibilityState} from "@tanstack/react-table";
-import {ColumnVisibilityToggle} from "../../../../../components/common/ColumnVisibilityToggle";
+import {Avatar, UnstyledButton} from "@mantine/core";
 import {TanStackTable, TanStackTableColumn} from "../../../../../components/common/TanStackTable";
+import {CellLink, IdentityCell} from "../../../../../components/common/TanStackTable/cells.tsx";
+import {SortDirection, sortableHeader, TableSort} from "../../../../../components/common/TanStackTable/sorting.tsx";
 import {relativeDate} from "../../../../../utilites/dates.ts";
 import {formatPhoneNumber} from "../../../../../utilites/phoneNumber.ts";
 import {CrmContact} from "../../../types.ts";
 import {contactAvatarColor, contactDisplayName, contactInitials, formatCount, getContactId} from "../../../utilites/format.ts";
 import {MarketingStatusBadge} from "../../MarketingStatusBadge";
 import {TagList} from "../../TagList";
-import {ContactStack, SortDirection, SortOption} from "./ContactStack.tsx";
+import {ContactStack, SortOption} from "./ContactStack.tsx";
 import classes from "./Contacts.module.scss";
 
 interface ContactsTableProps {
@@ -24,43 +22,15 @@ interface ContactsTableProps {
     onOpen: (contact: CrmContact) => void;
     selectedIds: ReadonlySet<string>;
     onSelectionChange: (selectedIds: Set<string>) => void;
-    columnVisibility: VisibilityState;
-    onColumnVisibilityChange: (columnVisibility: VisibilityState) => void;
     columnToggleSlot: HTMLElement | null;
+    isRefreshing: boolean;
 }
 
+const DEFAULT_COLUMN_VISIBILITY = {attended_count: false, first_seen_at: false, phone: false, sms: false};
 const ROW_TAG_LIMIT = 2;
 const STACK_TAG_LIMIT = 1;
 
-const CONTACT_CELL = {width: '70%', maxWidth: 0, minWidth: 'clamp(280px, 32cqi, 380px)'};
-const TAGS_CELL = {width: '30%', maxWidth: 0, minWidth: 150};
-const NUMBER_CELL = {textAlign: 'right' as const};
-
-export const SortHeader = ({label, field, firstDirection, sortBy, sortDirection, onSort}: {
-    label: string,
-    field: string,
-    firstDirection: SortDirection,
-    sortBy: string,
-    sortDirection: SortDirection,
-    onSort: ContactsTableProps['onSort'],
-}) => {
-    const isActive = sortBy === field;
-    const Icon = !isActive ? IconSelector : sortDirection === 'asc' ? IconArrowUp : IconArrowDown;
-
-    return (
-        <UnstyledButton
-            className={classes.sortHeader}
-            data-active={isActive || undefined}
-            onClick={() => onSort(field, isActive ? (sortDirection === 'asc' ? 'desc' : 'asc') : firstDirection)}
-        >
-            {label}
-            <Icon size={14} stroke={1.8} aria-hidden/>
-            {isActive && (
-                <VisuallyHidden>{sortDirection === 'asc' ? t`Sorted ascending` : t`Sorted descending`}</VisuallyHidden>
-            )}
-        </UnstyledButton>
-    );
-};
+const TAGS_CELL = {width: '100%', minWidth: 150};
 
 const Count = ({value}: { value: number }) => (
     <span className={classes.figure} data-zero={value === 0 || undefined}>{formatCount(value)}</span>
@@ -82,9 +52,8 @@ export const ContactsTable = ({
     onOpen,
     selectedIds,
     onSelectionChange,
-    columnVisibility,
-    onColumnVisibilityChange,
     columnToggleSlot,
+    isRefreshing,
 }: ContactsTableProps) => {
     const sortOptions: SortOption[] = [
         {field: 'last_activity_at', label: t`Last active`, firstDirection: 'desc'},
@@ -137,24 +106,16 @@ export const ContactsTable = ({
         );
     }
 
+    const sort: TableSort = {sortBy, sortDirection, onSort};
     const sortable = (label: string, field: string, firstDirection: SortDirection = 'desc') => ({
         meta: {label},
-        header: () => (
-            <SortHeader
-                label={label}
-                field={field}
-                firstDirection={firstDirection}
-                sortBy={sortBy}
-                sortDirection={sortDirection}
-                onSort={onSort}
-            />
-        ),
+        ...sortableHeader(label, field, sort, firstDirection),
     });
 
     const countColumn = (id: 'events_count' | 'orders_count' | 'attended_count', label: string): TanStackTableColumn<CrmContact> => ({
         id,
         ...sortable(label, id),
-        meta: {label, headerStyle: NUMBER_CELL, cellStyle: NUMBER_CELL},
+        meta: {label, align: 'right'},
         cell: ({row: {original: contact}}) => <Count value={contact[id]}/>,
     });
 
@@ -163,17 +124,18 @@ export const ContactsTable = ({
             id: 'contact',
             enableHiding: false,
             ...sortable(t`Contact`, 'first_name', 'asc'),
-            meta: {label: t`Contact`, sticky: 'left', cellStyle: CONTACT_CELL},
+            meta: {label: t`Contact`, sticky: 'left'},
             cell: ({row: {original: contact}}) => (
-                <span className={classes.identity}>
-                    <Avatar size={30} radius="xl" color={contactAvatarColor(contact)} className={classes.avatar}>{contactInitials(contact)}</Avatar>
-                    <span className={classes.identityText}>
-                        <UnstyledButton className={classes.identityName} onClick={() => onOpen(contact)} title={contactDisplayName(contact)}>
+                <IdentityCell
+                    stacked
+                    avatar={<Avatar size={30} radius="xl" color={contactAvatarColor(contact)} className={classes.rowAvatar}>{contactInitials(contact)}</Avatar>}
+                    primary={(
+                        <CellLink strong onClick={() => onOpen(contact)} title={contactDisplayName(contact)}>
                             {contactDisplayName(contact)}
-                        </UnstyledButton>
-                        <span title={contact.full_name ? contact.email : undefined}>{contact.full_name ? contact.email : t`No name yet`}</span>
-                    </span>
-                </span>
+                        </CellLink>
+                    )}
+                    secondary={contact.full_name ? <span title={contact.email}>{contact.email}</span> : t`No name yet`}
+                />
             ),
         },
         countColumn('events_count', t`Events`),
@@ -214,22 +176,23 @@ export const ContactsTable = ({
 
     return (
         <TanStackTable
+            rowLines={2}
             data={contacts}
             columns={columns}
             enableColumnVisibility
-            renderColumnVisibilityToggle={table => columnToggleSlot && createPortal(<ColumnVisibilityToggle table={table}/>, columnToggleSlot)}
-            columnVisibility={columnVisibility}
-            onColumnVisibilityChange={onColumnVisibilityChange}
+            columnToggleSlot={columnToggleSlot}
+            storageKey="audience-contacts"
+            defaultColumnVisibility={DEFAULT_COLUMN_VISIBILITY}
+            noCard
+            isRefreshing={isRefreshing}
+            onRowClick={onOpen}
             selection={{
                 selectedIds,
                 onChange: onSelectionChange,
                 getRowId: getContactId,
                 getRowLabel: getContactLabel,
             }}
-            rowProps={contact => ({
-                onClick: () => onOpen(contact),
-                'data-testid': 'audience-contact-row',
-            })}
+            rowProps={() => ({'data-testid': 'audience-contact-row'})}
         />
     );
 };

@@ -1,20 +1,27 @@
-import {Badge, Button, Container, Group, Modal, Pagination, SegmentedControl, Skeleton, Stack, Table, Text, TextInput, Title} from "@mantine/core";
+import {Button, Container, Group, Modal, SegmentedControl, Stack, Text, TextInput, Title, VisuallyHidden} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {IconSearch} from "@tabler/icons-react";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {useNavigate} from "react-router";
 import {useGetAllDeletionRequests} from "../../../../queries/useGetAllDeletionRequests";
 import {useAdminCancelDeletionRequest} from "../../../../mutations/useAdminCancelDeletionRequest";
 import {useAdminExecuteDeletionRequest} from "../../../../mutations/useAdminExecuteDeletionRequest";
 import {AdminDeletionRequest} from "../../../../api/admin.client";
 import {showError, showSuccess} from "../../../../utilites/notifications";
+import {TanStackTable, TanStackTableColumn} from "../../../common/TanStackTable";
+import {CellLink, CellText, EmptyCell, IdentityCell} from "../../../common/TanStackTable/cells.tsx";
+import {StatusBadge, StatusTone} from "../../../common/StatusBadge";
+import {TableCard, TableCardFooter, TableCardSkeleton} from "../../../common/TableCard";
+import {ToolBar} from "../../../common/ToolBar";
 import tableStyles from "../../../../styles/admin-table.module.scss";
 
-const statusColors: Record<AdminDeletionRequest['status'], string> = {
-    REQUESTED: 'orange',
-    CANCELLED: 'gray',
-    COMPLETED: 'red',
+const statusTones: Record<AdminDeletionRequest['status'], StatusTone> = {
+    REQUESTED: 'waiting',
+    CANCELLED: 'neutral',
+    COMPLETED: 'negative',
 };
+
+const formatDate = (dateString?: string | null) => dateString ? new Date(dateString).toLocaleDateString() : <EmptyCell/>;
 
 const DeletionRequests = () => {
     const navigate = useNavigate();
@@ -43,8 +50,6 @@ const DeletionRequests = () => {
         return () => clearTimeout(timer);
     }, [search]);
 
-    const formatDate = (dateString?: string | null) => dateString ? new Date(dateString).toLocaleDateString() : '-';
-
     const handleConfirm = () => {
         if (!confirmAction) {
             return;
@@ -69,142 +74,142 @@ const DeletionRequests = () => {
 
     const requests = requestsData?.data || [];
 
+    const columns = useMemo<TanStackTableColumn<AdminDeletionRequest>[]>(() => [
+        {
+            id: 'account',
+            header: t`Account`,
+            meta: {sticky: 'left'},
+            cell: ({row: {original: request}}) => {
+                const account = request.account;
+                if (!account) {
+                    return <CellText muted>{t`Deleted account`}</CellText>;
+                }
+
+                return (
+                    <IdentityCell
+                        primary={(
+                            <CellLink strong title={account.name} onClick={() => navigate(`/admin/accounts/${account.id}`)}>
+                                {account.name}
+                            </CellLink>
+                        )}
+                        secondary={account.email}
+                    />
+                );
+            },
+        },
+        {
+            id: 'requested_by',
+            header: t`Requested by`,
+            cell: ({row: {original: request}}) => (
+                <IdentityCell
+                    primary={request.requested_by_user?.full_name || <EmptyCell/>}
+                    trailing={(
+                        <StatusBadge tone={request.initiated_by === 'ADMIN' ? 'active' : 'neutral'}>
+                            {request.initiated_by === 'ADMIN' ? t`Admin` : t`Account owner`}
+                        </StatusBadge>
+                    )}
+                />
+            ),
+        },
+        {
+            id: 'requested',
+            header: t`Requested`,
+            cell: ({row: {original: request}}) => formatDate(request.requested_at),
+        },
+        {
+            id: 'scheduled',
+            header: t`Scheduled deletion`,
+            cell: ({row: {original: request}}) => formatDate(request.scheduled_deletion_at),
+        },
+        {
+            id: 'outcome',
+            header: t`Outcome`,
+            cell: ({row: {original: request}}) => (request.outcome || request.expected_outcome) === 'HARD_DELETE'
+                ? <StatusBadge tone="negative">{t`Hard delete`}</StatusBadge>
+                : <StatusBadge tone="waiting">{t`Anonymize`}</StatusBadge>,
+        },
+        {
+            id: 'status',
+            header: t`Status`,
+            cell: ({row: {original: request}}) => (
+                <StatusBadge tone={statusTones[request.status]}>{request.status}</StatusBadge>
+            ),
+        },
+        {
+            id: 'actions',
+            header: () => <VisuallyHidden>{t`Actions`}</VisuallyHidden>,
+            meta: {sticky: 'right'},
+            cell: ({row: {original: request}}) => request.status === 'REQUESTED' && (
+                <Group gap="xs" wrap="nowrap" justify="flex-end">
+                    <Button
+                        size="xs"
+                        variant="light"
+                        onClick={() => setConfirmAction({type: 'cancel', request})}
+                        data-testid="admin-cancel-deletion-button"
+                    >
+                        {t`Cancel`}
+                    </Button>
+                    <Button
+                        size="xs"
+                        color="red"
+                        variant="light"
+                        onClick={() => setConfirmAction({type: 'execute', request})}
+                        data-testid="admin-execute-deletion-button"
+                    >
+                        {t`Execute now`}
+                    </Button>
+                </Group>
+            ),
+        },
+    ], []);
+
     return (
         <Container size="xl" p="xl">
             <Stack gap="lg">
                 <Title order={1}>{t`Deletion Requests`}</Title>
 
-                <Group>
-                    <SegmentedControl
-                        value={status}
-                        onChange={(value) => {
-                            setStatus(value);
-                            setPage(1);
-                        }}
-                        data={[
-                            {label: t`Pending`, value: 'REQUESTED'},
-                            {label: t`Completed`, value: 'COMPLETED'},
-                            {label: t`Cancelled`, value: 'CANCELLED'},
-                            {label: t`All`, value: 'ALL'},
-                        ]}
+                <TableCard>
+                    <ToolBar
+                        embedded
+                        searchComponent={() => (
+                            <TextInput
+                                placeholder={t`Search by account name or email...`}
+                                leftSection={<IconSearch size={16}/>}
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                            />
+                        )}
+                        filterComponent={(
+                            <SegmentedControl
+                                value={status}
+                                onChange={(value) => {
+                                    setStatus(value);
+                                    setPage(1);
+                                }}
+                                data={[
+                                    {label: t`Pending`, value: 'REQUESTED'},
+                                    {label: t`Completed`, value: 'COMPLETED'},
+                                    {label: t`Cancelled`, value: 'CANCELLED'},
+                                    {label: t`All`, value: 'ALL'},
+                                ]}
+                            />
+                        )}
                     />
-                    <TextInput
-                        style={{flex: 1}}
-                        placeholder={t`Search by account name or email...`}
-                        leftSection={<IconSearch size={16}/>}
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                    />
-                </Group>
 
-                {isLoading && (
-                    <Stack gap="md">
-                        <Skeleton height={120} radius="md"/>
-                        <Skeleton height={120} radius="md"/>
-                    </Stack>
-                )}
+                    {isLoading && <TableCardSkeleton/>}
 
-                {!isLoading && requests.length === 0 && (
-                    <Text size="lg" c="dimmed" ta="center" py="xl">{t`No deletion requests found`}</Text>
-                )}
-
-                {!isLoading && requests.length > 0 && (
-                    <div className={tableStyles.tableWrapper}>
-                        <div className={tableStyles.tableScroll}>
-                            <Table className={tableStyles.table}>
-                                <Table.Thead>
-                                    <Table.Tr>
-                                        <Table.Th>{t`Account`}</Table.Th>
-                                        <Table.Th>{t`Requested by`}</Table.Th>
-                                        <Table.Th>{t`Requested`}</Table.Th>
-                                        <Table.Th>{t`Scheduled deletion`}</Table.Th>
-                                        <Table.Th>{t`Outcome`}</Table.Th>
-                                        <Table.Th>{t`Status`}</Table.Th>
-                                        <Table.Th></Table.Th>
-                                    </Table.Tr>
-                                </Table.Thead>
-                                <Table.Tbody>
-                                    {requests.map((request) => (
-                                        <Table.Tr key={String(request.id)}>
-                                            <Table.Td>
-                                                {request.account ? (
-                                                    <Stack gap={2}>
-                                                        <Text
-                                                            size="sm"
-                                                            fw={500}
-                                                            style={{cursor: 'pointer'}}
-                                                            onClick={() => navigate(`/admin/accounts/${request.account?.id}`)}
-                                                        >
-                                                            {request.account.name}
-                                                        </Text>
-                                                        <Text size="xs" c="dimmed">{request.account.email}</Text>
-                                                    </Stack>
-                                                ) : (
-                                                    <Text size="sm" c="dimmed">{t`Deleted account`}</Text>
-                                                )}
-                                            </Table.Td>
-                                            <Table.Td>
-                                                <Stack gap={2}>
-                                                    <Text size="sm">{request.requested_by_user?.full_name || '-'}</Text>
-                                                    <Badge size="xs" variant="light" color={request.initiated_by === 'ADMIN' ? 'grape' : 'blue'}>
-                                                        {request.initiated_by === 'ADMIN' ? t`Admin` : t`Account owner`}
-                                                    </Badge>
-                                                </Stack>
-                                            </Table.Td>
-                                            <Table.Td>{formatDate(request.requested_at)}</Table.Td>
-                                            <Table.Td>{formatDate(request.scheduled_deletion_at)}</Table.Td>
-                                            <Table.Td>
-                                                <Badge
-                                                    variant="light"
-                                                    color={(request.outcome || request.expected_outcome) === 'HARD_DELETE' ? 'red' : 'yellow'}
-                                                >
-                                                    {(request.outcome || request.expected_outcome) === 'HARD_DELETE' ? t`Hard delete` : t`Anonymize`}
-                                                </Badge>
-                                            </Table.Td>
-                                            <Table.Td>
-                                                <Badge variant="light" color={statusColors[request.status]}>
-                                                    {request.status}
-                                                </Badge>
-                                            </Table.Td>
-                                            <Table.Td>
-                                                {request.status === 'REQUESTED' && (
-                                                    <Group gap="xs" wrap="nowrap">
-                                                        <Button
-                                                            size="xs"
-                                                            variant="light"
-                                                            onClick={() => setConfirmAction({type: 'cancel', request})}
-                                                            data-testid="admin-cancel-deletion-button"
-                                                        >
-                                                            {t`Cancel`}
-                                                        </Button>
-                                                        <Button
-                                                            size="xs"
-                                                            color="red"
-                                                            variant="light"
-                                                            onClick={() => setConfirmAction({type: 'execute', request})}
-                                                            data-testid="admin-execute-deletion-button"
-                                                        >
-                                                            {t`Execute now`}
-                                                        </Button>
-                                                    </Group>
-                                                )}
-                                            </Table.Td>
-                                        </Table.Tr>
-                                    ))}
-                                </Table.Tbody>
-                            </Table>
+                    {!isLoading && requests.length === 0 && (
+                        <div className={tableStyles.emptyState}>
+                            <Text size="lg" c="dimmed">{t`No deletion requests found`}</Text>
                         </div>
-                    </div>
-                )}
+                    )}
 
-                {requestsData?.meta && requestsData.meta.last_page > 1 && (
-                    <Pagination
-                        total={requestsData.meta.last_page}
-                        value={page}
-                        onChange={setPage}
-                        mt="md"
-                    />
-                )}
+                    {!isLoading && requests.length > 0 && (
+                        <TanStackTable data={requests} columns={columns} noCard/>
+                    )}
+
+                    <TableCardFooter pagination={requestsData?.meta} page={page} onPageChange={setPage}/>
+                </TableCard>
             </Stack>
 
             <Modal

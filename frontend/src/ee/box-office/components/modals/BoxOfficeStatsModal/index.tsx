@@ -1,11 +1,12 @@
 import {ReactNode, useState} from "react";
-import {Alert, Loader, Table, Text} from "@mantine/core";
+import {Alert, Loader, Text, VisuallyHidden} from "@mantine/core";
 import {DatePickerInput} from "@mantine/dates";
 import {IconCalendar} from "@tabler/icons-react";
 import {t} from "@lingui/macro";
 import '@mantine/dates/styles.css';
 import {BoxOffice, BoxOfficeStatsRange, BoxOfficeStatsTotals, GenericModalProps, IdParam} from "../../../../../types.ts";
 import {Modal} from "../../../../../components/common/Modal";
+import {TanStackTable, TanStackTableColumn} from "../../../../../components/common/TanStackTable";
 import {useGetBoxOfficeStats} from "../../../queries/useGetBoxOfficeStats.ts";
 import {formatCurrency} from "../../../../../utilites/currency.ts";
 import {formatDateWithLocale} from "../../../../../utilites/dates.ts";
@@ -28,26 +29,15 @@ const Breakdown = ({title, rows, currency}: { title: string; rows: BreakdownRow[
         {rows.length === 0 ? (
             <Text size="sm" c="dimmed">{t`No sales in this period`}</Text>
         ) : (
-            <Table striped withTableBorder fz="sm">
-                <Table.Thead>
-                    <Table.Tr>
-                        <Table.Th/>
-                        <Table.Th className={classes.number}>{t`Orders`}</Table.Th>
-                        <Table.Th className={classes.number}>{t`Gross`}</Table.Th>
-                        <Table.Th className={classes.number}>{t`Refunded`}</Table.Th>
-                    </Table.Tr>
-                </Table.Thead>
-                <Table.Tbody>
-                    {rows.map(row => (
-                        <Table.Tr key={row.key}>
-                            <Table.Td>{row.label}</Table.Td>
-                            <Table.Td className={classes.number}>{row.orders}</Table.Td>
-                            <Table.Td className={classes.number}>{formatCurrency(row.gross, currency)}</Table.Td>
-                            <Table.Td className={classes.number}>{formatCurrency(row.refunded, currency)}</Table.Td>
-                        </Table.Tr>
-                    ))}
-                </Table.Tbody>
-            </Table>
+            <TanStackTable
+                data={rows}
+                columns={[
+                    {id: 'label', header: () => <VisuallyHidden>{title}</VisuallyHidden>, meta: {sticky: 'left'}, cell: ({row: {original: row}}) => row.label},
+                    {id: 'orders', header: t`Orders`, meta: {align: 'right'}, cell: ({row: {original: row}}) => row.orders},
+                    {id: 'gross', header: t`Gross`, meta: {align: 'right'}, cell: ({row: {original: row}}) => formatCurrency(row.gross, currency)},
+                    {id: 'refunded', header: t`Refunded`, meta: {align: 'right'}, cell: ({row: {original: row}}) => formatCurrency(row.refunded, currency)},
+                ] satisfies TanStackTableColumn<BreakdownRow>[]}
+            />
         )}
     </div>
 );

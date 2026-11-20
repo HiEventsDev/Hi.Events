@@ -1,4 +1,4 @@
-import {Container, Title, TextInput, Skeleton, Pagination, Stack} from "@mantine/core";
+import {Container, Title, TextInput, Stack} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {IconSearch} from "@tabler/icons-react";
 import {useState, useEffect} from "react";
@@ -6,6 +6,9 @@ import {useNavigate} from "react-router";
 import {useGetAllAdminEvents} from "../../../../queries/useGetAllAdminEvents.ts";
 import {useStartImpersonation} from "../../../../mutations/useStartImpersonation";
 import AdminEventsTable from "../../../common/AdminEventsTable";
+import {TableCard, TableCardFooter, TableCardSkeleton} from "../../../common/TableCard";
+import {ToolBar} from "../../../common/ToolBar";
+import {TableSort} from "../../../common/TanStackTable/sorting.tsx";
 import {showError, showSuccess} from "../../../../utilites/notifications";
 import {IdParam} from "../../../../types";
 import {AdminEvent} from "../../../../api/admin.client";
@@ -38,13 +41,13 @@ const Events = () => {
         return () => clearTimeout(timer);
     }, [search]);
 
-    const handleSort = (column: string) => {
-        if (sortBy === column) {
-            setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-        } else {
+    const sort: TableSort = {
+        sortBy,
+        sortDirection,
+        onSort: (column, direction) => {
             setSortBy(column);
-            setSortDirection('desc');
-        }
+            setSortDirection(direction);
+        },
     };
 
     const handleViewEvent = (event: AdminEvent) => {
@@ -76,38 +79,31 @@ const Events = () => {
             <Stack gap="lg">
                 <Title order={1}>{t`Events`}</Title>
 
-                <TextInput
-                    placeholder={t`Search by event title or organizer...`}
-                    leftSection={<IconSearch size={16} />}
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                />
-
-                {isLoading ? (
-                    <Stack gap="md">
-                        <Skeleton height={50} radius="md" />
-                        <Skeleton height={400} radius="md" />
-                    </Stack>
-                ) : (
-                    <AdminEventsTable
-                        events={eventsData?.data || []}
-                        onSort={handleSort}
-                        sortBy={sortBy}
-                        sortDirection={sortDirection}
-                        onViewEvent={handleViewEvent}
-                        onImpersonate={handleImpersonate}
-                        isImpersonating={startImpersonationMutation.isPending}
+                <TableCard>
+                    <ToolBar
+                        embedded
+                        searchComponent={() => (
+                            <TextInput
+                                placeholder={t`Search by event title or organizer...`}
+                                leftSection={<IconSearch size={16}/>}
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                            />
+                        )}
                     />
-                )}
 
-                {eventsData?.meta && eventsData.meta.last_page > 1 && (
-                    <Pagination
-                        total={eventsData.meta.last_page}
-                        value={page}
-                        onChange={setPage}
-                        mt="md"
-                    />
-                )}
+                    {isLoading ? <TableCardSkeleton/> : (
+                        <AdminEventsTable
+                            events={eventsData?.data || []}
+                            sort={sort}
+                            onViewEvent={handleViewEvent}
+                            onImpersonate={handleImpersonate}
+                            isImpersonating={startImpersonationMutation.isPending}
+                        />
+                    )}
+
+                    <TableCardFooter pagination={eventsData?.meta} page={page} onPageChange={setPage}/>
+                </TableCard>
             </Stack>
         </Container>
     );

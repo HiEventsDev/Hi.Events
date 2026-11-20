@@ -1,14 +1,17 @@
-import {ColumnDef, flexRender, getCoreRowModel, Updater, useReactTable, VisibilityState,} from '@tanstack/react-table';
+import {ColumnDef, getCoreRowModel, Updater, useReactTable, VisibilityState,} from '@tanstack/react-table';
 import {Checkbox, Table as MantineTable} from '@mantine/core';
 import {t} from '@lingui/macro';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {Card} from '../Card';
+import {createPortal} from 'react-dom';
+import classNames from 'classnames';
+import {ColumnVisibilityToggle} from '../ColumnVisibilityToggle';
 import classes from './TanStackTable.module.scss';
 
 export interface TanStackTableColumnMeta {
     label?: string;
     sticky?: 'left' | 'right';
-    headerStyle?: React.CSSProperties;
+    align?: 'right';
+    interactive?: boolean;
     cellStyle?: React.CSSProperties;
 }
 
@@ -28,53 +31,75 @@ interface TanStackTableProps<TData> {
     columns: TanStackTableColumn<TData>[];
     storageKey?: string;
     enableColumnVisibility?: boolean;
-    renderColumnVisibilityToggle?: (table: ReturnType<typeof useReactTable<TData>>) => React.ReactNode;
+    defaultColumnVisibility?: VisibilityState;
+    columnToggleSlot?: HTMLElement | null;
     hideHeader?: boolean;
     noCard?: boolean;
-    rowStyle?: (row: TData) => React.CSSProperties | undefined;
+    isRefreshing?: boolean;
+    rowLines?: 1 | 2;
+    dataTestId?: string;
+    onRowClick?: (row: TData) => void;
     rowProps?: (row: TData) => React.ComponentPropsWithoutRef<'tr'> & Record<`data-${string}`, string | boolean | undefined>;
     selection?: TanStackTableSelection<TData>;
-    columnVisibility?: VisibilityState;
-    onColumnVisibilityChange?: (columnVisibility: VisibilityState) => void;
 }
+
+const MAX_ICON_COLUMN_WIDTH = 64;
+const MAX_PINNED_SHARE = 0.7;
+
+const renderDefinition = <TContext,>(definition: unknown, context: TContext): React.ReactNode =>
+    typeof definition === 'function' ? definition(context) : definition as React.ReactNode;
+
+const readStoredVisibility = (storageKey: string | undefined): VisibilityState => {
+    if (!storageKey || typeof window === 'undefined') {
+        return {};
+    }
+    try {
+        const stored = window.localStorage.getItem(`${storageKey}-column-visibility`);
+        return stored ? JSON.parse(stored) : {};
+    } catch {
+        return {};
+    }
+};
+
+const writeStoredVisibility = (storageKey: string, visibility: VisibilityState) => {
+    try {
+        window.localStorage.setItem(`${storageKey}-column-visibility`, JSON.stringify(visibility));
+    } catch {
+        return;
+    }
+};
 
 export function TanStackTable<TData>({
                                          data,
                                          columns,
                                          storageKey,
                                          enableColumnVisibility = false,
-                                         renderColumnVisibilityToggle,
+                                         defaultColumnVisibility,
+                                         columnToggleSlot,
                                          hideHeader = false,
                                          noCard = false,
-                                         rowStyle,
+                                         isRefreshing = false,
+                                         rowLines = 1,
+                                         dataTestId,
+                                         onRowClick,
                                          rowProps,
                                          selection,
-                                         columnVisibility: controlledColumnVisibility,
-                                         onColumnVisibilityChange,
                                      }: TanStackTableProps<TData>) {
-    const isVisibilityControlled = controlledColumnVisibility !== undefined;
-    const [storedColumnVisibility, setStoredColumnVisibility] = useState<VisibilityState>(() => {
-        if (storageKey && enableColumnVisibility && !isVisibilityControlled) {
-            const stored = localStorage.getItem(`${storageKey}-column-visibility`);
-            if (stored) {
-                try {
-                    return JSON.parse(stored);
-                } catch {
-                    return {};
-                }
-            }
-        }
-        return {};
-    });
+    const [storedColumnVisibility, setStoredColumnVisibility] = useState<VisibilityState>({});
 
-    const columnVisibility = controlledColumnVisibility ?? storedColumnVisibility;
+    useEffect(() => {
+        if (enableColumnVisibility) {
+            setStoredColumnVisibility(readStoredVisibility(storageKey));
+        }
+    }, [storageKey, enableColumnVisibility]);
+
+    const columnVisibility = {...defaultColumnVisibility, ...storedColumnVisibility};
     const setColumnVisibility = (updater: Updater<VisibilityState>) => {
         const next = typeof updater === 'function' ? updater(columnVisibility) : updater;
 
-        if (isVisibilityControlled) {
-            onColumnVisibilityChange?.(next);
-        } else {
-            setStoredColumnVisibility(next);
+        setStoredColumnVisibility(next);
+        if (storageKey) {
+            writeStoredVisibility(storageKey, next);
         }
     };
 
@@ -82,6 +107,7 @@ export function TanStackTable<TData>({
     const viewportRef = useRef<HTMLDivElement>(null);
     const [showStartShadow, setShowStartShadow] = useState(false);
     const [showEndShadow, setShowEndShadow] = useState(false);
+    const [releaseEndPin, setReleaseEndPin] = useState(false);
 
     const updateStickyShadows = useCallback(() => {
         const viewport = viewportRef.current;
@@ -91,6 +117,13 @@ export function TanStackTable<TData>({
         const {scrollLeft, clientWidth, scrollWidth} = viewport;
         setShowStartShadow(scrollLeft > 1);
         setShowEndShadow(scrollWidth - clientWidth - scrollLeft > 1);
+
+        const firstRow = viewport.querySelector('tbody tr');
+        const pinnedWidth = (selector: string) => Array.from(firstRow?.querySelectorAll<HTMLElement>(selector) ?? [])
+            .reduce((total, cell) => total + cell.offsetWidth, 0);
+        const pinnedLeft = pinnedWidth(`.${classes.stickyLeft}, .${classes.pinnedSelect}`);
+        const pinnedRight = pinnedWidth(`.${classes.stickyRight}`);
+        setReleaseEndPin(pinnedRight > MAX_ICON_COLUMN_WIDTH && pinnedLeft + pinnedRight > clientWidth * MAX_PINNED_SHARE);
     }, []);
 
     useEffect(() => {
@@ -117,16 +150,6 @@ export function TanStackTable<TData>({
         onColumnVisibilityChange: setColumnVisibility,
         enableHiding: enableColumnVisibility,
     });
-
-    useEffect(() => {
-        if (storageKey && enableColumnVisibility && !isVisibilityControlled) {
-            try {
-                localStorage.setItem(`${storageKey}-column-visibility`, JSON.stringify(storedColumnVisibility));
-            } catch {
-                return;
-            }
-        }
-    }, [storedColumnVisibility, storageKey, enableColumnVisibility, isVisibilityControlled]);
 
     const pageIds = selection ? data.map(selection.getRowId) : [];
     const selectedOnPage = selection ? pageIds.filter(id => selection.selectedIds.has(id)).length : 0;
@@ -164,9 +187,17 @@ export function TanStackTable<TData>({
         selection.onChange(next);
     };
 
-    const pinsSelection = !!selection && columns.some(column => (column.meta as TanStackTableColumnMeta | undefined)?.sticky === 'left');
-    const selectCellClass = pinsSelection ? `${classes.selectCell} ${classes.pinnedSelect}` : classes.selectCell;
-    const stickyLeftClass = pinsSelection ? `${classes.stickyLeft} ${classes.afterSelect}` : classes.stickyLeft;
+    const pinsSelection = !!selection && columns.some(column => column.meta?.sticky === 'left');
+    const selectCellClass = classNames(classes.selectCell, pinsSelection && classes.pinnedSelect);
+
+    const cellClass = (meta: TanStackTableColumnMeta | undefined) => classNames(
+        meta?.sticky === 'left' && classes.stickyLeft,
+        meta?.sticky === 'left' && pinsSelection && classes.afterSelect,
+        meta?.sticky === 'right' && classes.stickyRight,
+        meta?.align === 'right' && classes.alignRight,
+    );
+
+    const stopRowClick = (event: React.MouseEvent) => event.stopPropagation();
 
     const tableContent = (
         <MantineTable.ScrollContainer minWidth={200} scrollAreaProps={{
@@ -175,8 +206,13 @@ export function TanStackTable<TData>({
             onScrollPositionChange: updateStickyShadows,
         }}>
             <MantineTable
-                className={`${classes.table} ${showStartShadow ? classes.showStartShadow : ''} ${showEndShadow ? classes.showEndShadow : ''}`}
+                className={classNames(classes.table, showStartShadow && classes.showStartShadow, showEndShadow && classes.showEndShadow)}
                 data-selecting={isSelecting || undefined}
+                data-refreshing={isRefreshing || undefined}
+                data-row-lines={rowLines}
+                data-release-end-pin={releaseEndPin || undefined}
+                data-testid={dataTestId}
+                data-clickable={!!onRowClick || undefined}
             >
                 {!hideHeader && (
                     <MantineTable.Thead className={classes.tableHead}>
@@ -195,26 +231,13 @@ export function TanStackTable<TData>({
                                 )}
                                 {headerGroup.headers.map((header) => {
                                     const columnMeta = header.column.columnDef.meta as TanStackTableColumnMeta | undefined;
-                                    const stickyClass = columnMeta?.sticky === 'left'
-                                        ? stickyLeftClass
-                                        : columnMeta?.sticky === 'right'
-                                            ? classes.stickyRight
-                                            : '';
 
                                     return (
                                         <MantineTable.Th
                                             key={header.id}
-                                            className={stickyClass}
-                                            style={{
-                                                ...columnMeta?.headerStyle,
-                                            }}
+                                            className={cellClass(columnMeta)}
                                         >
-                                            {header.isPlaceholder
-                                                ? null
-                                                : flexRender(
-                                                    header.column.columnDef.header,
-                                                    header.getContext()
-                                                )}
+                                            {header.isPlaceholder ? null : renderDefinition(header.column.columnDef.header, header.getContext())}
                                         </MantineTable.Th>
                                     );
                                 })}
@@ -226,8 +249,8 @@ export function TanStackTable<TData>({
                     {table.getRowModel().rows.map((row, index) => (
                         <MantineTable.Tr
                             key={row.id}
+                            onClick={onRowClick ? () => onRowClick(row.original) : undefined}
                             {...rowProps?.(row.original)}
-                            style={rowStyle?.(row.original)}
                             data-selected={selection?.selectedIds.has(selection.getRowId(row.original)) || undefined}
                         >
                             {selection && (
@@ -252,21 +275,18 @@ export function TanStackTable<TData>({
                             )}
                             {row.getVisibleCells().map((cell) => {
                                 const columnMeta = cell.column.columnDef.meta as TanStackTableColumnMeta | undefined;
-                                const stickyClass = columnMeta?.sticky === 'left'
-                                    ? stickyLeftClass
-                                    : columnMeta?.sticky === 'right'
-                                        ? classes.stickyRight
-                                        : '';
+                                const content = renderDefinition(cell.column.columnDef.cell, cell.getContext());
 
                                 return (
                                     <MantineTable.Td
                                         key={cell.id}
-                                        className={stickyClass}
-                                        style={{
-                                            ...columnMeta?.cellStyle,
-                                        }}
+                                        className={cellClass(columnMeta)}
+                                        style={columnMeta?.cellStyle}
+                                        onClick={columnMeta?.interactive || columnMeta?.sticky === 'right' ? stopRowClick : undefined}
                                     >
-                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                        {columnMeta?.sticky === 'left'
+                                            ? <div className={classes.pinnedContent}>{content}</div>
+                                            : content}
                                     </MantineTable.Td>
                                 );
                             })}
@@ -277,14 +297,17 @@ export function TanStackTable<TData>({
         </MantineTable.ScrollContainer>
     );
 
+    const columnToggle = enableColumnVisibility && (
+        <ColumnVisibilityToggle table={table} defaultColumnVisibility={defaultColumnVisibility}/>
+    );
+
     return (
         <div className={classes.tableWrapper}>
-            {enableColumnVisibility && renderColumnVisibilityToggle && (
-                <div className={classes.toolbar}>
-                    {renderColumnVisibilityToggle(table)}
-                </div>
+            {columnToggle && columnToggleSlot === undefined && (
+                <div className={classes.toolbar}>{columnToggle}</div>
             )}
-            {noCard ? tableContent : <Card className={classes.card}>{tableContent}</Card>}
+            {columnToggle && columnToggleSlot && createPortal(columnToggle, columnToggleSlot)}
+            {noCard ? tableContent : <div className={classes.card}>{tableContent}</div>}
         </div>
     );
 }

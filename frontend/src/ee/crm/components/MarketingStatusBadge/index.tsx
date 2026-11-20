@@ -1,6 +1,6 @@
 import {CrmEmailMarketingStatus} from "../../types.ts";
 import {marketingStatusLabel} from "../../utilites/labels.ts";
-import {StatusBadge, StatusTone} from "../StatusBadge";
+import {StatusBadge, StatusTone} from "../../../../components/common/StatusBadge";
 
 const TONES: Record<CrmEmailMarketingStatus, StatusTone> = {
     SUBSCRIBED: 'positive',

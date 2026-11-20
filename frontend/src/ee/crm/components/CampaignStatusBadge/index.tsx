@@ -1,6 +1,6 @@
 import {CrmCampaignStatus} from "../../types.ts";
 import {campaignStatusLabel} from "../../utilites/labels.ts";
-import {StatusBadge, StatusTone} from "../StatusBadge";
+import {StatusBadge, StatusTone} from "../../../../components/common/StatusBadge";
 
 const TONES: Record<CrmCampaignStatus, StatusTone> = {
     DRAFT: 'neutral',

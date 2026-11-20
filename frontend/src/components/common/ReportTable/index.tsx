@@ -1,11 +1,13 @@
-import {Button, Group, Select, Skeleton, Table as MantineTable} from '@mantine/core';
+import {Button, Group, Select, Skeleton} from '@mantine/core';
 import {t} from '@lingui/macro';
 import {DatePickerInput, DatesRangeValue} from "@mantine/dates";
-import {IconArrowDown, IconArrowsSort, IconArrowUp, IconCalendar} from "@tabler/icons-react";
+import {IconCalendar} from "@tabler/icons-react";
 import React, {useMemo, useState} from "react";
 import {PageTitle} from "../PageTitle";
+import {Card} from "../Card";
 import {DownloadCsvButton} from "../DownloadCsvButton";
-import {Table, TableHead} from "../Table";
+import {TanStackTable, TanStackTableColumn} from "../TanStackTable";
+import {SortHeader} from "../TanStackTable/sorting.tsx";
 import '@mantine/dates/styles.css';
 import {useGetEventReport} from "../../../queries/useGetEventReport.ts";
 import {useParams} from "react-router";
@@ -162,12 +164,26 @@ const ReportTable = <T extends Record<string, any>>({
         }
     };
 
-    const getSortIcon = (field: keyof T) => {
-        if (sortField !== field) return <IconArrowsSort size={16}/>;
-        if (sortDirection === 'asc') return <IconArrowUp size={16}/>;
-        if (sortDirection === 'desc') return <IconArrowDown size={16}/>;
-        return <IconArrowsSort size={16} className="ml-2 text-gray-400"/>;
-    };
+    const tableColumns: TanStackTableColumn<T>[] = columns.map((column, index) => ({
+        id: String(column.key),
+        header: column.sortable
+            ? () => (
+                <SortHeader
+                    label={column.label}
+                    field={String(column.key)}
+                    sort={{
+                        sortBy: sortField && sortDirection ? String(sortField) : '',
+                        sortDirection: sortDirection ?? 'asc',
+                        onSort: () => handleSort(column.key),
+                    }}
+                />
+            )
+            : column.label,
+        meta: {label: column.label, sticky: index === 0 ? 'left' : undefined},
+        cell: ({row: {original: row}}) => column.render
+            ? column.render(row[column.key], row)
+            : row[column.key],
+    }));
 
     const sortedData = useMemo(() => {
         return [...data].sort((a, b) => {
@@ -199,28 +215,6 @@ const ReportTable = <T extends Record<string, any>>({
             return typeof value === 'number' ? value.toString() : value;
         })
     );
-
-    const loadingMessage = () => {
-        const wrapper = (message: React.ReactNode) => (
-            <MantineTable.Tr>
-                <MantineTable.Td colSpan={columns.length} align="center">
-                    {message}
-                </MantineTable.Td>
-            </MantineTable.Tr>
-        );
-
-        if (reportQuery.isLoading) {
-            return wrapper(t`Loading...`);
-        }
-
-        if (showDateFilter && (!dateRange[0] || !dateRange[1])) {
-            return wrapper(t`No data to show. Please select a date range`);
-        }
-
-        if (!showDateFilter && dateRange[0] && dateRange[1]) {
-            return wrapper(t`No data available`);
-        }
-    };
 
     if (reportQuery.isLoading) {
         return (
@@ -319,39 +313,17 @@ const ReportTable = <T extends Record<string, any>>({
                     )}
                 </Group>
             </Group>
-            <Table>
-                <TableHead>
-                    <MantineTable.Tr>
-                        {columns.map((column) => (
-                            <MantineTable.Th
-                                key={String(column.key)}
-                                onClick={column.sortable ? () => handleSort(column.key) : undefined}
-                                style={{cursor: column.sortable ? 'pointer' : 'default', minWidth: '180px'}}
-                            >
-                                <Group gap="xs" wrap={'nowrap'}>
-                                    {t`${column.label}`}
-                                    {column.sortable && getSortIcon(column.key)}
-                                </Group>
-                            </MantineTable.Th>
-                        ))}
-                    </MantineTable.Tr>
-                </TableHead>
-                <MantineTable.Tbody>
-                    {!sortedData.length && loadingMessage()}
-                    {sortedData.map((row, index) => (
-                        <MantineTable.Tr key={index}>
-                            {columns.map((column) => (
-                                <MantineTable.Td key={String(column.key)}>
-                                    {column.render
-                                        ? column.render(row[column.key], row)
-                                        : row[column.key]
-                                    }
-                                </MantineTable.Td>
-                            ))}
-                        </MantineTable.Tr>
-                    ))}
-                </MantineTable.Tbody>
-            </Table>
+            {sortedData.length > 0
+                ? <TanStackTable data={sortedData} columns={tableColumns}/>
+                : (
+                    <Card>
+                        <Group justify="center">
+                            {showDateFilter && (!dateRange[0] || !dateRange[1])
+                                ? t`No data to show. Please select a date range`
+                                : t`No data available`}
+                        </Group>
+                    </Card>
+                )}
         </>
     );
 };

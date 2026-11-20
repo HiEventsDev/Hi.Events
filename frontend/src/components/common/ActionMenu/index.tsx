@@ -1,5 +1,6 @@
 import React from 'react';
-import {Button, Menu} from '@mantine/core';
+import {ActionIcon, Button, Menu} from '@mantine/core';
+import {t} from '@lingui/macro';
 import {IconDotsVertical} from '@tabler/icons-react';
 import {useAccess} from "../../../hooks/useAccess.ts";
 
@@ -31,6 +32,12 @@ const DefaultTarget = () => (
     </Button>
 );
 
+export const RowActionsTarget = () => (
+    <ActionIcon variant="subtle" color="gray" aria-label={t`Actions`}>
+        <IconDotsVertical size={18}/>
+    </ActionIcon>
+);
+
 export const ActionMenu: React.FC<ActionMenuProps> = ({
                                                           itemsGroups,
                                                           target = <DefaultTarget/>,
@@ -50,7 +57,7 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({
 
     return (
         <>
-            <Menu shadow="md" width={200}>
+            <Menu shadow="md" width={200} position="bottom-end">
                 <Menu.Target>
                     <div style={{cursor: 'pointer'}} data-testid={dataTestId}>
                         {target}

@@ -10,6 +10,9 @@ import {WebhookTable} from "../../../common/WebhookTable";
 import {useGetWebhooks} from "../../../../queries/useGetWebhooks.ts";
 import {useParams} from "react-router";
 import {CreateWebhookModal} from "../../../modals/CreateWebhookModal";
+import {EditWebhookModal} from "../../../modals/EditWebhookModal";
+import {WebhookLogsModal} from "../../../modals/WebhookLogsModal";
+import {useDeleteWebhook} from "../../../../mutations/useDeleteWebhook.ts";
 import {TableSkeleton} from "../../../common/TableSkeleton";
 import {RequirePermission} from "../../../common/WriteAccess";
 
@@ -17,6 +20,7 @@ const WebhookList = () => {
     const {eventId} = useParams();
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
     const webhooksQuery = useGetWebhooks(eventId);
+    const deleteMutation = useDeleteWebhook();
     const webhooks = webhooksQuery.data?.data?.data;
 
     const getWebhookCountText = () => {
@@ -47,6 +51,9 @@ const WebhookList = () => {
                 {webhooks && (<WebhookTable
                     webhooks={webhooks}
                     openCreateModal={openCreateModal}
+                    deleteWebhook={webhookId => deleteMutation.mutateAsync({eventId, webhookId})}
+                    EditModal={EditWebhookModal}
+                    LogsModal={WebhookLogsModal}
                 />)}
             </div>
 

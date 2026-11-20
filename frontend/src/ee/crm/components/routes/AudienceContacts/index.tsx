@@ -40,7 +40,6 @@ import {ContactsTable} from "./ContactsTable.tsx";
 import {SuppressedTable} from "./SuppressedTable.tsx";
 import {SuppressionReasonFilter} from "./SuppressionReasonFilter.tsx";
 import {useBulkContactActions} from "./useBulkContactActions.tsx";
-import {useContactColumns} from "./useContactColumns.ts";
 import {useContactSelection} from "./useContactSelection.ts";
 import {SUPPRESSED_SCOPE, useContactsUrlState} from "./useContactsUrlState.ts";
 import shared from "../../Audience.module.scss";
@@ -66,7 +65,6 @@ const AudienceContacts = () => {
     const isCompact = listCard.width > 0 ? listCard.width < COMPACT_LIST_WIDTH : !!isSmallViewport;
     const exportContacts = useExportCrmContacts();
     const exportSelected = useExportSelectedCrmContacts();
-    const columns = useContactColumns();
     const [modal, setModal] = useState<ContactsModal | null>(null);
     const [columnToggleSlot, setColumnToggleSlot] = useState<HTMLDivElement | null>(null);
     const url = useContactsUrlState();
@@ -352,11 +350,12 @@ const AudienceContacts = () => {
                 )}
 
                 {contacts.length > 0 && (
-                    <div className={classes.table} data-refreshing={listQuery.isPlaceholderData || undefined}>
+                    <div className={classes.table} data-refreshing={(isCompact && listQuery.isPlaceholderData) || undefined}>
                         {isSuppressed ? (
                             <SuppressedTable
                                 contacts={contacts}
                                 isCompact={isCompact}
+                                isRefreshing={listQuery.isPlaceholderData}
                                 timezone={timezone}
                                 sortBy={sortBy}
                                 sortDirection={sortDirection}
@@ -376,9 +375,8 @@ const AudienceContacts = () => {
                                 onOpen={(contact: CrmContact) => url.openContact(contact.id)}
                                 selectedIds={selected.visibleSelectedIds}
                                 onSelectionChange={selected.change}
-                                columnVisibility={columns.visibility}
-                                onColumnVisibilityChange={columns.change}
                                 columnToggleSlot={columnToggleSlot}
+                                isRefreshing={listQuery.isPlaceholderData}
                             />
                         )}
                     </div>

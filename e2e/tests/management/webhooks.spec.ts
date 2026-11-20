@@ -10,6 +10,6 @@ test.describe('webhooks', () => {
 
     const row = authedPage.getByRole('row').filter({ hasText: url });
     await expect(row).toBeVisible();
-    await expect(row.getByText('ENABLED')).toBeVisible();
+    await expect(row.getByText('Enabled')).toBeVisible();
   });
 });

@@ -8,8 +8,8 @@ export class CapacityPage {
     await this.page.waitForLoadState('networkidle');
   }
 
-  cardByName(name: string): Locator {
-    return this.page.locator('[class*="capacityCard"]').filter({ hasText: name });
+  rowByName(name: string): Locator {
+    return this.page.getByRole('row').filter({ hasText: name });
   }
 
   capacityInput(): Locator {
@@ -27,8 +27,8 @@ export class CapacityPage {
     await this.page.getByRole('dialog').getByRole('button', { name: 'Create Capacity Assignment' }).click();
   }
 
-  async openCardAction(name: string, action: string): Promise<void> {
-    await this.cardByName(name).getByRole('button').click();
+  async openRowAction(name: string, action: string): Promise<void> {
+    await this.rowByName(name).getByRole('button').click();
     await this.page.getByRole('menuitem', { name: action }).click();
   }
 

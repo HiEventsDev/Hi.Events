@@ -21,7 +21,7 @@ import {CrmAutomation, CrmAutomationTemplate} from "../../../types.ts";
 import {automationSummary, automationTitle, presetLabel} from "../../../utilites/labels.ts";
 import {AudienceShell} from "../../AudienceShell";
 import {LoadError} from "../../LoadError";
-import {StatusBadge} from "../../StatusBadge";
+import {StatusBadge} from "../../../../../components/common/StatusBadge";
 import sharedClasses from "../../Audience.module.scss";
 import {AutomationModal} from "./AutomationModal.tsx";
 import {ConfirmAutomationModal} from "./ConfirmAutomationModal.tsx";

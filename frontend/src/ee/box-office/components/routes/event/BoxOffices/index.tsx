@@ -108,11 +108,12 @@ const BoxOffices = () => {
                 </>
             )}
 
-            <TableSkeleton isVisible={!boxOffices || boxOfficesQuery.isFetching}/>
+            <TableSkeleton isVisible={!boxOffices}/>
 
             {boxOffices && <BoxOfficeTable
                 boxOffices={boxOffices}
                 openCreateModal={openCreateModal}
+                isRefreshing={boxOfficesQuery.isFetching}
                 event={event}
                 isLocked={isLocked}
             />}
