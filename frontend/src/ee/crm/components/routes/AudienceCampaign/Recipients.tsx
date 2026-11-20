@@ -11,7 +11,7 @@ import {useGetCrmCampaignRecipients} from "../../../queries/useGetCrmCampaignRec
 import {CrmCampaign, CrmCampaignRecipient, CrmRecipientFilter} from "../../../types.ts";
 import {formatCount} from "../../../utilites/format.ts";
 import {recipientFailureReason} from "../../../utilites/labels.ts";
-import {StatusBadge, StatusTone} from "../../StatusBadge";
+import {StatusBadge, StatusTone} from "../../../../../components/common/StatusBadge";
 import classes from "./Campaign.module.scss";
 
 const deliveryBadge = (recipient: CrmCampaignRecipient): { label: string, tone: StatusTone } => {

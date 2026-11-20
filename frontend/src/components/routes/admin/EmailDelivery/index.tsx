@@ -1,10 +1,11 @@
-import {useState} from "react";
-import {Alert, Container, SegmentedControl, Skeleton, Stack, Table, Text, Title} from "@mantine/core";
+import {useMemo, useState} from "react";
+import {Alert, Container, SegmentedControl, Skeleton, Stack, Text, Title} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {IconInfoCircle} from "@tabler/icons-react";
 import {useGetAdminEmailDeliveryStats} from "../../../../queries/useGetAdminEmailDeliveryStats";
 import {AdminDashboardPeriod, AdminEmailDeliveryCategoryStats} from "../../../../api/admin.client";
-import tableStyles from "../../../../styles/admin-table.module.scss";
+import {TanStackTable, TanStackTableColumn} from "../../../common/TanStackTable";
+import {CellText, EmptyCell} from "../../../common/TanStackTable/cells.tsx";
 import classes from "./EmailDelivery.module.scss";
 import {getConfig} from "../../../../utilites/config";
 
@@ -48,6 +49,56 @@ const EmailDelivery = () => {
     const delivered = sumBy(categories, 'delivered');
     const permanentBounces = sumBy(categories, 'permanent_bounces');
 
+    const columns = useMemo<TanStackTableColumn<AdminEmailDeliveryCategoryStats>[]>(() => {
+        const trackedColumn = (
+            id: string,
+            header: string,
+            value: (row: AdminEmailDeliveryCategoryStats) => string,
+        ): TanStackTableColumn<AdminEmailDeliveryCategoryStats> => ({
+            id,
+            header,
+            meta: {align: 'right'},
+            cell: ({row: {original: row}}) => tracked ? value(row) : <EmptyCell/>,
+        });
+
+        return [
+            {
+                id: 'category',
+                header: t`Email`,
+                meta: {sticky: 'left'},
+                cell: ({row: {original: row}}) => <CellText strong>{categoryLabel(row.category)}</CellText>,
+            },
+            {
+                id: 'sent',
+                header: t`Sent`,
+                meta: {align: 'right'},
+                cell: ({row: {original: row}}) => formatNumber(row.sent),
+            },
+            trackedColumn('delivered', t`Delivered`, row => formatRate(row.delivered, row.sent)),
+            {
+                id: 'permanent_bounces',
+                header: t`Hard bounces`,
+                meta: {align: 'right'},
+                cell: ({row: {original: row}}) => {
+                    if (!tracked) {
+                        return <EmptyCell/>;
+                    }
+                    const isHigh = row.sent > 0 && row.permanent_bounces / row.sent >= PERMANENT_BOUNCE_WARNING_RATE;
+
+                    return (
+                        <span className={isHigh ? classes.warning : undefined}>
+                            {formatNumber(row.permanent_bounces)}
+                        </span>
+                    );
+                },
+            },
+            trackedColumn('transient_bounces', t`Soft bounces`, row => formatNumber(row.transient_bounces)),
+            trackedColumn('complaints', t`Spam complaints`, row => formatNumber(row.complaints)),
+            trackedColumn('opened', t`Opened`, row => formatRate(row.opened, row.delivered)),
+            trackedColumn('clicked', t`Clicked`, row => formatRate(row.clicked, row.delivered)),
+        ];
+    }, [tracked]);
+
     return (
         <Container size="xl" className={classes.container}>
             <Stack gap="lg">
@@ -81,60 +132,14 @@ const EmailDelivery = () => {
                     </Alert>
                 )}
 
-                {isLoading ? (
-                    <Skeleton height={320} radius="md"/>
-                ) : (
-                    <div className={tableStyles.tableWrapper}>
-                        {categories.length === 0 ? (
-                            <div className={classes.empty}>{t`No emails sent in this period`}</div>
-                        ) : (
-                            <div className={tableStyles.tableScroll}>
-                                <Table className={tableStyles.table}>
-                                    <Table.Thead>
-                                        <Table.Tr>
-                                            <Table.Th>{t`Email`}</Table.Th>
-                                            <Table.Th className={classes.numeric}>{t`Sent`}</Table.Th>
-                                            <Table.Th className={classes.numeric}>{t`Delivered`}</Table.Th>
-                                            <Table.Th className={classes.numeric}>{t`Hard bounces`}</Table.Th>
-                                            <Table.Th className={classes.numeric}>{t`Soft bounces`}</Table.Th>
-                                            <Table.Th className={classes.numeric}>{t`Spam complaints`}</Table.Th>
-                                            <Table.Th className={classes.numeric}>{t`Opened`}</Table.Th>
-                                            <Table.Th className={classes.numeric}>{t`Clicked`}</Table.Th>
-                                        </Table.Tr>
-                                    </Table.Thead>
-                                    <Table.Tbody>
-                                        {categories.map((row) => (
-                                            <Table.Tr key={row.category ?? 'other'}>
-                                                <Table.Td>{categoryLabel(row.category)}</Table.Td>
-                                                <Table.Td className={classes.numeric}>{formatNumber(row.sent)}</Table.Td>
-                                                <Table.Td className={classes.numeric}>
-                                                    {tracked ? formatRate(row.delivered, row.sent) : '-'}
-                                                </Table.Td>
-                                                <Table.Td
-                                                    className={`${classes.numeric} ${tracked && row.sent > 0 && row.permanent_bounces / row.sent >= PERMANENT_BOUNCE_WARNING_RATE ? classes.warning : ''}`}
-                                                >
-                                                    {tracked ? formatNumber(row.permanent_bounces) : '-'}
-                                                </Table.Td>
-                                                <Table.Td className={classes.numeric}>
-                                                    {tracked ? formatNumber(row.transient_bounces) : '-'}
-                                                </Table.Td>
-                                                <Table.Td className={classes.numeric}>
-                                                    {tracked ? formatNumber(row.complaints) : '-'}
-                                                </Table.Td>
-                                                <Table.Td className={classes.numeric}>
-                                                    {tracked ? formatRate(row.opened, row.delivered) : '-'}
-                                                </Table.Td>
-                                                <Table.Td className={classes.numeric}>
-                                                    {tracked ? formatRate(row.clicked, row.delivered) : '-'}
-                                                </Table.Td>
-                                            </Table.Tr>
-                                        ))}
-                                    </Table.Tbody>
-                                </Table>
-                            </div>
-                        )}
-                    </div>
+                {isLoading && <Skeleton height={320} radius="md"/>}
+
+                {!isLoading && categories.length === 0 && (
+                    <div className={classes.empty}>{t`No emails sent in this period`}</div>
                 )}
+
+                {!isLoading && categories.length > 0 && <TanStackTable data={categories} columns={columns}/>}
+
                 {tracked && (
                     <Text size="xs" c="dimmed">
                         {t`Open and click rates are a share of delivered emails and only cover streams with tracking turned on. Hard bounces are highlighted at 2% or more.`}

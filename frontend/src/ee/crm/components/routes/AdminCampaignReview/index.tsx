@@ -1,6 +1,6 @@
-import {useState} from "react";
-import {plural, t, Trans} from "@lingui/macro";
-import {Alert, Button, Container, Group, List, Skeleton, Stack, Table, Text, Textarea, Title} from "@mantine/core";
+import {useMemo, useState} from "react";
+import {t, Trans} from "@lingui/macro";
+import {Alert, Button, Container, Group, List, Skeleton, Stack, Text, Textarea, Title, VisuallyHidden} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
 import {Modal, ModalFooter} from "../../../../../components/common/Modal";
 import {FeatureFlag} from "../../../../../constants/featureFlags.ts";
@@ -8,7 +8,8 @@ import {dateToBrowserTz, isDateInFuture, relativeDate} from "../../../../../util
 import {firstApiError} from "../../../../../utilites/apiErrors.ts";
 import {showError, showSuccess} from "../../../../../utilites/notifications.tsx";
 import {useLicensedFeature} from "../../../../licensing/hooks/useLicensedFeature.ts";
-import tableStyles from "../../../../../styles/admin-table.module.scss";
+import {TanStackTable, TanStackTableColumn} from "../../../../../components/common/TanStackTable";
+import {CellText, IdentityCell} from "../../../../../components/common/TanStackTable/cells.tsx";
 import {useReviewAdminCrmCampaign} from "../../../mutations/useReviewAdminCrmCampaign.ts";
 import {useGetAdminCrmCampaigns} from "../../../queries/useGetAdminCrmCampaigns.ts";
 import {CrmAdminCampaign} from "../../../types.ts";
@@ -115,6 +116,14 @@ const ApprovalLockedNotice = () => (
     </Alert>
 );
 
+const secondLine = (campaign: CrmAdminCampaign): string | null => {
+    if (campaign.channel === 'SMS') {
+        return t`Text message`;
+    }
+
+    return campaign.subject && campaign.subject !== campaign.name ? campaign.subject : null;
+};
+
 const AdminCampaignReview = () => {
     const campaignsQuery = useGetAdminCrmCampaigns();
     const review = useReviewAdminCrmCampaign();
@@ -144,13 +153,64 @@ const AdminCampaignReview = () => {
         onError: error => showError(firstApiError(error, t`We couldn't save your decision. Please try again.`)),
     });
 
-    const secondLine = (campaign: CrmAdminCampaign): string | null => {
-        if (campaign.channel === 'SMS') {
-            return t`Text message`;
-        }
-
-        return campaign.subject && campaign.subject !== campaign.name ? campaign.subject : null;
-    };
+    const columns = useMemo<TanStackTableColumn<CrmAdminCampaign>[]>(() => [
+        {
+            id: 'campaign',
+            header: t`Campaign`,
+            meta: {sticky: 'left'},
+            cell: ({row: {original: campaign}}) => (
+                <IdentityCell
+                    primary={<CellText strong title={campaign.name}>{campaign.name}</CellText>}
+                    secondary={secondLine(campaign)}
+                />
+            ),
+        },
+        {
+            id: 'account',
+            header: t`Account`,
+            cell: ({row: {original: campaign}}) => (
+                <CellText maxWidth={220}>{campaign.account_name} (#{campaign.account_id})</CellText>
+            ),
+        },
+        {
+            id: 'organizer',
+            header: t`Organizer`,
+            cell: ({row: {original: campaign}}) => (
+                <CellText muted maxWidth={200} title={campaign.organizer_name ?? undefined}>{campaign.organizer_name}</CellText>
+            ),
+        },
+        {
+            id: 'recipients',
+            header: t`Recipients`,
+            meta: {align: 'right'},
+            cell: ({row: {original: campaign}}) => formatCount(campaign.recipients_count),
+        },
+        {
+            id: 'reason',
+            header: t`Reason`,
+            cell: ({row: {original: campaign}}) => (
+                <IdentityCell
+                    primary={reviewReasonLabel(campaign.status_reason)}
+                    secondary={automaticCheckLabel(campaign)}
+                />
+            ),
+        },
+        {
+            id: 'submitted',
+            header: t`Submitted`,
+            cell: ({row: {original: campaign}}) => relativeDate(campaign.updated_at),
+        },
+        {
+            id: 'actions',
+            header: () => <VisuallyHidden>{t`Actions`}</VisuallyHidden>,
+            meta: {sticky: 'right'},
+            cell: ({row: {original: campaign}}) => (
+                <Button size="xs" variant="default" onClick={() => setSelected(campaign)}>
+                    {t`Review`}
+                </Button>
+            ),
+        },
+    ], []);
 
     return (
         <Container size="xl" p={isNarrow ? 'md' : 'xl'}>
@@ -172,68 +232,7 @@ const AdminCampaignReview = () => {
                     <Text c="dimmed">{t`Nothing is waiting for review.`}</Text>
                 )}
 
-                {campaigns.length > 0 && (
-                    <div className={tableStyles.tableWrapper}>
-                        <Table className={tableStyles.table} highlightOnHover>
-                            <Table.Thead>
-                                <Table.Tr>
-                                    <Table.Th>{t`Campaign`}</Table.Th>
-                                    {!isNarrow && (
-                                        <>
-                                            <Table.Th>{t`Account`}</Table.Th>
-                                            <Table.Th>{t`Recipients`}</Table.Th>
-                                            <Table.Th>{t`Reason`}</Table.Th>
-                                            <Table.Th>{t`Submitted`}</Table.Th>
-                                        </>
-                                    )}
-                                    <Table.Th/>
-                                </Table.Tr>
-                            </Table.Thead>
-                            <Table.Tbody>
-                                {campaigns.map(campaign => {
-                                    const detail = secondLine(campaign);
-                                    const recipients = formatCount(campaign.recipients_count);
-                                    const recipientsLabel = plural(campaign.recipients_count, {one: '# recipient', other: '# recipients'});
-                                    const accountName = campaign.account_name;
-                                    const submitted = relativeDate(campaign.updated_at);
-
-                                    return (
-                                        <Table.Tr key={campaign.id}>
-                                            <Table.Td>
-                                                <Text fw={600} size="sm">{campaign.name}</Text>
-                                                {detail && <Text size="xs" c="dimmed">{detail}</Text>}
-                                                {isNarrow && (
-                                                    <Text size="xs" c="dimmed">
-                                                        {[accountName, recipientsLabel, submitted].filter(Boolean).join(' · ')}
-                                                    </Text>
-                                                )}
-                                            </Table.Td>
-                                            {!isNarrow && (
-                                                <>
-                                                    <Table.Td>
-                                                        <Text size="sm">{campaign.account_name} (#{campaign.account_id})</Text>
-                                                        <Text size="xs" c="dimmed">{campaign.organizer_name}</Text>
-                                                    </Table.Td>
-                                                    <Table.Td>{recipients}</Table.Td>
-                                                    <Table.Td>
-                                                        {reviewReasonLabel(campaign.status_reason)}
-                                                        <Text size="xs" c="dimmed">{automaticCheckLabel(campaign)}</Text>
-                                                    </Table.Td>
-                                                    <Table.Td>{submitted}</Table.Td>
-                                                </>
-                                            )}
-                                            <Table.Td>
-                                                <Button size="sm" variant="default" onClick={() => setSelected(campaign)}>
-                                                    {t`Review`}
-                                                </Button>
-                                            </Table.Td>
-                                        </Table.Tr>
-                                    );
-                                })}
-                            </Table.Tbody>
-                        </Table>
-                    </div>
-                )}
+                {campaigns.length > 0 && <TanStackTable data={campaigns} columns={columns}/>}
             </Stack>
 
             {selected && (

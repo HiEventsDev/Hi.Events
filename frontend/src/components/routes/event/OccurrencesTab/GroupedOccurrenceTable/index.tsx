@@ -5,7 +5,6 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import {EventOccurrence} from "../../../../../types.ts";
-import {Card} from "../../../../common/Card";
 import classes from "./GroupedOccurrenceTable.module.scss";
 
 dayjs.extend(utc);
@@ -13,7 +12,7 @@ dayjs.extend(timezone);
 
 export interface GroupedTableColumn {
     id: string;
-    header: string;
+    header: ReactNode;
     render: (occ: EventOccurrence) => ReactNode;
     headerStyle?: CSSProperties;
     sticky?: 'right';
@@ -114,13 +113,13 @@ export const GroupedOccurrenceTable = ({
 
     return (
         <div className={classes.tableWrapper}>
-            <Card className={classes.card}>
+            <div className={classes.card}>
                 <MantineTable.ScrollContainer minWidth={200} scrollAreaProps={{type: 'hover'}}>
-                    <MantineTable className={classes.table}>
-                        <MantineTable.Thead className={classes.tableHead}>
+                    <MantineTable className={classes.table} data-selecting={selectedIds.size > 0 || undefined}>
+                        <MantineTable.Thead>
                             <MantineTable.Tr>
                                 {selectable && (
-                                    <MantineTable.Th style={{width: 40, paddingLeft: 20}}>
+                                    <MantineTable.Th className={classes.selectCell}>
                                         <Checkbox
                                             size="xs"
                                             checked={allSelected}
@@ -154,7 +153,6 @@ export const GroupedOccurrenceTable = ({
                                                 {selectable && (
                                                     <Checkbox
                                                         size="xs"
-                                                        className={classes.dateHeaderCheckbox}
                                                         checked={allGroupSelected}
                                                         indeterminate={someGroupSelected}
                                                         onChange={() => toggleGroup(group.occurrences)}
@@ -174,9 +172,10 @@ export const GroupedOccurrenceTable = ({
                                         <MantineTable.Tr
                                             key={occ.id}
                                             style={rowStyle?.(occ)}
+                                            data-selected={selectedIds.has(occ.id as number) || undefined}
                                         >
                                             {selectable && (
-                                                <MantineTable.Td style={{width: 40, paddingLeft: 20}}>
+                                                <MantineTable.Td className={classes.selectCell}>
                                                     <div className={classes.rowCheckbox}>
                                                         <Checkbox
                                                             size="xs"
@@ -202,7 +201,7 @@ export const GroupedOccurrenceTable = ({
                         </MantineTable.Tbody>
                     </MantineTable>
                 </MantineTable.ScrollContainer>
-            </Card>
+            </div>
         </div>
     );
 };

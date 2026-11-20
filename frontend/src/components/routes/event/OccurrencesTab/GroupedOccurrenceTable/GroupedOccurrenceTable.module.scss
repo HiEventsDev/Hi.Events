@@ -1,11 +1,11 @@
 .tableWrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
+  min-width: 0;
 }
 
 .card {
-  padding: 0 !important;
+  border: 1px solid var(--mantine-color-gray-3);
+  border-radius: var(--hi-radius-lg);
+  background: var(--mantine-color-body);
   overflow: hidden;
 
   :global(.mantine-ScrollArea-viewport) {
@@ -13,70 +13,113 @@
   }
 
   :global(.mantine-ScrollArea-scrollbar) {
-    z-index: 20 !important;
+    z-index: 20;
   }
 }
 
-.table {
-  th {
+table.table {
+  position: relative;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: var(--mantine-font-size-sm);
+  font-variant-numeric: tabular-nums;
+
+  thead tr th {
+    height: 36px;
+    padding: 0 12px;
+    border-bottom: 1px solid var(--mantine-color-gray-3);
+    background: var(--mantine-color-gray-0);
+    font-size: var(--mantine-font-size-xs);
+    font-weight: 600;
+    color: var(--mantine-color-gray-6);
     white-space: nowrap;
+  }
+
+  tbody tr {
+    --row-background: var(--mantine-color-body);
+    border: 0;
   }
 
   tbody tr td {
-    padding: 16px 20px !important;
+    height: 56px;
+    padding: 0 12px;
+    border-bottom: 1px solid var(--mantine-color-gray-2);
+    background: var(--row-background);
+    color: var(--mantine-color-gray-7);
     white-space: nowrap;
+    vertical-align: middle;
   }
 
-  position: relative;
-}
-
-.tableHead {
-  white-space: nowrap;
-
-  th {
-    background-color: var(--mantine-color-gray-1);
-    color: var(--hi-secondary-text) !important;
-    padding: 16px 20px !important;
+  tbody tr:last-child td {
+    border-bottom: 0;
   }
-}
 
-.stickyRight {
-  position: sticky;
-  right: 0;
-  z-index: 2;
-  background: var(--mantine-color-body);
-}
+  tbody tr:hover {
+    --row-background: var(--mantine-color-gray-0);
+  }
 
-.tableHead .stickyRight {
-  background-color: var(--mantine-color-gray-1);
-}
+  tbody tr.dateHeaderRow td {
+    height: 32px;
+    padding: 0 12px;
+    background: var(--mantine-color-gray-0);
+  }
 
-.dateHeaderRow td {
-  background: var(--mantine-color-gray-0) !important;
-  padding: 10px 20px !important;
-  border-bottom: 1px solid var(--mantine-color-gray-2);
+  thead tr th.selectCell,
+  tbody tr td.selectCell {
+    width: 40px;
+    min-width: 40px;
+    padding: 0 0 0 12px;
+  }
+
+  tbody tr[data-selected] {
+    --row-background: var(--mantine-color-primary-0);
+  }
+
+  tbody tr td.selectCell :global(.mantine-Checkbox-root),
+  tbody tr.dateHeaderRow td :global(.mantine-Checkbox-root) {
+    opacity: 0;
+    transition: opacity 120ms ease;
+  }
+
+  tbody tr:hover td :global(.mantine-Checkbox-root),
+  tbody tr td:focus-within :global(.mantine-Checkbox-root),
+  &[data-selecting] tbody tr td :global(.mantine-Checkbox-root) {
+    opacity: 1;
+  }
+
+  @media (hover: none) {
+    tbody tr td.selectCell :global(.mantine-Checkbox-root),
+    tbody tr.dateHeaderRow td :global(.mantine-Checkbox-root) {
+      opacity: 1;
+    }
+  }
+
+  .stickyRight {
+    position: sticky;
+    right: 0;
+    z-index: 2;
+    width: 1%;
+    padding: 0 12px 0 4px;
+    text-align: right;
+  }
 }
 
 .dateHeaderContent {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .dateHeaderLabel {
-  font-size: 13px;
+  font-size: var(--mantine-font-size-xs);
   font-weight: 600;
-  color: var(--mantine-color-text);
+  color: var(--mantine-color-gray-9);
 }
 
 .dateHeaderBadge {
-  font-size: 11px;
+  font-size: var(--mantine-font-size-xs);
   font-weight: 500;
-  color: var(--mantine-color-dimmed);
-}
-
-.dateHeaderCheckbox {
-  margin-right: 2px;
+  color: var(--mantine-color-gray-6);
 }
 
 .rowCheckbox {

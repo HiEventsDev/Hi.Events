@@ -6,7 +6,7 @@ import {CrmSegmentDefinition, CrmSegmentReference, CrmSuppressionReason} from ".
 import {parseDefinitionParam, parseSegmentParam, selectionToReference} from "../../../utilites/format.ts";
 import {SUPPRESSION_REASONS} from "../../../utilites/suppression.ts";
 import {isRuleComplete} from "../../SegmentBuilder";
-import {SortDirection} from "./ContactStack.tsx";
+import {SortDirection} from "../../../../../components/common/TanStackTable/sorting.tsx";
 
 export const SUPPRESSED_SCOPE = 'suppressed';
 

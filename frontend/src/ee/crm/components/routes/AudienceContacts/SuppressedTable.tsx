@@ -1,17 +1,17 @@
 import {t} from "@lingui/macro";
 import {Tooltip, UnstyledButton} from "@mantine/core";
 import {TanStackTable, TanStackTableColumn} from "../../../../../components/common/TanStackTable";
+import {CellLink, CellText, IdentityCell} from "../../../../../components/common/TanStackTable/cells.tsx";
+import {SortDirection, sortableHeader} from "../../../../../components/common/TanStackTable/sorting.tsx";
 import {formatDateWithLocale, relativeDate} from "../../../../../utilites/dates.ts";
 import {CrmContact} from "../../../types.ts";
 import {contactDisplayName, getContactId} from "../../../utilites/format.ts";
 import {suppressionSourceLabel} from "../../../utilites/suppression.ts";
 import {MarketingStatusBadge} from "../../MarketingStatusBadge";
-import {ContactStack, SortDirection, SortOption} from "./ContactStack.tsx";
-import {SortHeader} from "./ContactsTable.tsx";
+import {ContactStack, SortOption} from "./ContactStack.tsx";
 import classes from "./Contacts.module.scss";
 
-const CONTACT_CELL = {width: '60%', maxWidth: 0, minWidth: 280};
-const SOURCE_CELL = {width: '40%', maxWidth: 0, minWidth: 160};
+const SOURCE_CELL = {width: '100%'};
 
 const suppressedSince = (contact: CrmContact) => contact.suppression?.since ?? contact.email_marketing_status_changed_at;
 
@@ -20,9 +20,10 @@ const getContactLabel = (contact: CrmContact) => {
     return t`Select ${email}`;
 };
 
-export const SuppressedTable = ({contacts, isCompact, timezone, sortBy, sortDirection, onSort, onOpen, selectedIds, onSelectionChange}: {
+export const SuppressedTable = ({contacts, isCompact, isRefreshing, timezone, sortBy, sortDirection, onSort, onOpen, selectedIds, onSelectionChange}: {
     contacts: CrmContact[],
     isCompact: boolean,
+    isRefreshing: boolean,
     timezone: string,
     sortBy: string,
     sortDirection: SortDirection,
@@ -73,19 +74,20 @@ export const SuppressedTable = ({contacts, isCompact, timezone, sortBy, sortDire
 
     const sortable = ({label, field, firstDirection}: SortOption) => ({
         meta: {label},
-        header: () => <SortHeader label={label} field={field} firstDirection={firstDirection} sortBy={sortBy} sortDirection={sortDirection} onSort={onSort}/>,
+        ...sortableHeader(label, field, {sortBy, sortDirection, onSort}, firstDirection),
     });
 
     const columns: TanStackTableColumn<CrmContact>[] = [
         {
             id: 'contact',
             ...sortable(sortOptions[1]),
-            meta: {label: sortOptions[1].label, cellStyle: CONTACT_CELL},
+            meta: {label: sortOptions[1].label, sticky: 'left'},
             cell: ({row: {original: contact}}) => (
-                <span className={classes.identityText}>
-                    <UnstyledButton className={classes.identityName} onClick={() => onOpen(contact)} title={contact.email}>{contact.email}</UnstyledButton>
-                    {contact.full_name && <span>{contactDisplayName(contact)}</span>}
-                </span>
+                <IdentityCell
+                    stacked
+                    primary={<CellLink strong onClick={() => onOpen(contact)} title={contact.email}>{contact.email}</CellLink>}
+                    secondary={contact.full_name ? contactDisplayName(contact) : undefined}
+                />
             ),
         },
         {
@@ -113,13 +115,14 @@ export const SuppressedTable = ({contacts, isCompact, timezone, sortBy, sortDire
             cell: ({row: {original: contact}}) => {
                 const source = contact.suppression ? suppressionSourceLabel(contact.suppression) : '–';
 
-                return <span className={classes.source} title={source}>{source}</span>;
+                return <CellText maxWidth={420} title={source}>{source}</CellText>;
             },
         },
     ];
 
     return (
         <TanStackTable
+            rowLines={2}
             data={contacts}
             columns={columns}
             selection={{
@@ -128,7 +131,10 @@ export const SuppressedTable = ({contacts, isCompact, timezone, sortBy, sortDire
                 getRowId: getContactId,
                 getRowLabel: getContactLabel,
             }}
-            rowProps={contact => ({onClick: () => onOpen(contact), 'data-testid': 'audience-contact-row'})}
+            noCard
+            isRefreshing={isRefreshing}
+            onRowClick={onOpen}
+            rowProps={() => ({'data-testid': 'audience-contact-row'})}
         />
     );
 };

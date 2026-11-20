@@ -4,7 +4,10 @@ import { Badge, Group, Box } from "@mantine/core"
 import { IconPlus } from "@tabler/icons-react";
 import { Card } from "../../../common/Card";
 import { useDisclosure } from "@mantine/hooks";
-import { OrganizerWebhookTable } from "../../../common/OrganizerWebhookTable";
+import { WebhookTable } from "../../../common/WebhookTable";
+import { EditOrganizerWebhookModal } from "../../../modals/EditOrganizerWebhookModal";
+import { OrganizerWebhookLogsModal } from "../../../modals/OrganizerWebhookLogsModal";
+import { useDeleteOrganizerWebhook } from "../../../../mutations/useDeleteOrganizerWebhook.ts";
 import { useGetOrganizerWebhooks } from "../../../../queries/useGetOrganizerWebhooks";
 import { useParams } from "react-router";
 import { CreateOrganizerWebhookModal } from "../../../modals/CreateOrganizerWebhookModal";
@@ -18,6 +21,7 @@ const WebhookList = () => {
     const { organizerId } = useParams();
     const [createModalOpen, { open: openCreateModal, close: closeCreateModal }] = useDisclosure(false);
     const webhooksQuery = useGetOrganizerWebhooks(organizerId as IdParam);
+    const deleteMutation = useDeleteOrganizerWebhook();
     const webhooks = webhooksQuery.data?.data?.data;
 
     const getWebhookCountText = () => {
@@ -45,9 +49,12 @@ const WebhookList = () => {
             <div>
                 <TableSkeleton isVisible={!webhooks} />
 
-                {webhooks && (<OrganizerWebhookTable
+                {webhooks && (<WebhookTable
                     webhooks={webhooks}
                     openCreateModal={openCreateModal}
+                    deleteWebhook={webhookId => deleteMutation.mutateAsync({organizerId: organizerId as IdParam, webhookId})}
+                    EditModal={EditOrganizerWebhookModal}
+                    LogsModal={OrganizerWebhookLogsModal}
                 />)}
             </div>
 

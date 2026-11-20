@@ -2,9 +2,8 @@ import {ReactNode} from "react";
 import {t} from "@lingui/macro";
 import {Button, Checkbox, Menu} from "@mantine/core";
 import {IconArrowDown, IconArrowsSort, IconArrowUp} from "@tabler/icons-react";
+import {SortDirection} from "../../../../../components/common/TanStackTable/sorting.tsx";
 import classes from "./Contacts.module.scss";
-
-export type SortDirection = 'asc' | 'desc';
 
 export interface SortOption {
     field: string;

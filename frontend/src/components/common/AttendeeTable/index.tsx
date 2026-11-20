@@ -1,17 +1,7 @@
-import {ActionIcon, Anchor, Avatar, Button, Group, Popover, Text, Tooltip} from '@mantine/core';
+import {ActionIcon, Avatar, Button, Group, Popover, Tooltip, VisuallyHidden} from '@mantine/core';
 import {CreateButton} from "../CreateButton";
-import {Attendee, IdParam} from "../../../types.ts";
-import {
-    IconCalendarEvent,
-    IconCheck,
-    IconClock,
-    IconClipboardList,
-    IconCopy,
-    IconNote,
-    IconPlus,
-    IconSend,
-    IconX
-} from "@tabler/icons-react";
+import {Attendee, EventType, IdParam} from "../../../types.ts";
+import {IconCheck, IconCopy, IconNote, IconPlus, IconSend} from "@tabler/icons-react";
 import {getInitials, getProductFromEvent} from "../../../utilites/helpers.ts";
 import {useClipboard, useDisclosure} from "@mantine/hooks";
 import {useMemo, useState} from "react";
@@ -19,18 +9,19 @@ import {NoResultsSplash} from "../NoResultsSplash";
 import {useParams} from "react-router";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useGetEventCheckInLists} from "../../../queries/useGetCheckInLists.ts";
-import Truncate from "../Truncate";
 import {showSuccess} from "../../../utilites/notifications.tsx";
 import {t} from "@lingui/macro";
 import {ManageAttendeeModal} from "../../modals/ManageAttendeeModal";
 import {ManageOrderModal} from "../../modals/ManageOrderModal";
-import {ActionMenu} from '../ActionMenu';
+import {ActionMenu, RowActionsTarget} from '../ActionMenu';
 import {toActionMenuGroups} from "../EntityActions";
 import {useAttendeeActions} from "../../../hooks/useAttendeeActions.tsx";
 import {CheckInStatusModal} from "../CheckInStatusModal";
-import {formatDateWithLocale, prettyDate} from "../../../utilites/dates.ts";
+import {formatDateWithLocale, prettyDate, relativeDate} from "../../../utilites/dates.ts";
 import {TanStackTable, TanStackTableColumn} from "../TanStackTable";
-import {ColumnVisibilityToggle} from "../ColumnVisibilityToggle";
+import {CellCopy, CellLink, CellText, EmptyCell, IdentityCell} from "../TanStackTable/cells.tsx";
+import {sortableHeader, TableSort} from "../TanStackTable/sorting.tsx";
+import {StatusBadge, StatusTone} from "../StatusBadge";
 import {CellContext} from "@tanstack/react-table";
 import classes from './AttendeeTable.module.scss';
 import {WriteAccess} from "../WriteAccess";
@@ -39,10 +30,20 @@ interface AttendeeTableProps {
     attendees: Attendee[];
     openCreateModal?: () => void;
     compact?: boolean;
+    embedded?: boolean;
+    isRefreshing?: boolean;
+    sort?: TableSort;
+    columnToggleSlot?: HTMLElement | null;
     occurrenceId?: IdParam;
 }
 
-export const AttendeeTable = ({attendees, openCreateModal, compact, occurrenceId}: AttendeeTableProps) => {
+const ATTENDEE_STATUS_TONES: Record<string, StatusTone> = {
+    ACTIVE: 'positive',
+    AWAITING_PAYMENT: 'waiting',
+    CANCELLED: 'negative',
+};
+
+export const AttendeeTable = ({attendees, openCreateModal, compact, embedded, isRefreshing, sort, columnToggleSlot, occurrenceId}: AttendeeTableProps) => {
     const {eventId} = useParams();
     const [isViewModalOpen, viewModalOpen] = useDisclosure(false);
     const [isCheckInModalOpen, checkInModal] = useDisclosure(false);
@@ -77,10 +78,6 @@ export const AttendeeTable = ({attendees, openCreateModal, compact, occurrenceId
         return attendee.check_ins.filter(ci => ci.event_occurrence_id === Number(occurrenceId)).length;
     };
 
-    const hasCheckIns = (attendee: Attendee) => {
-        return getCheckInCount(attendee) > 0;
-    };
-
     const handleCopyEmail = (email: string | null) => {
         if (!email) {
             return;
@@ -100,259 +97,225 @@ export const AttendeeTable = ({attendees, openCreateModal, compact, occurrenceId
         orderModal.open();
     };
 
+    const openAttendee = (attendee: Attendee) => handleModalClick(attendee, viewModalOpen);
+    const hasSeats = attendees.some(attendee => attendee.seat_label);
+    const hasOccurrences = event?.type === EventType.RECURRING && attendees.some(attendee => attendee.event_occurrence);
+
     const columns = useMemo<TanStackTableColumn<Attendee>[]>(
         () => {
-            const allColumns: TanStackTableColumn<Attendee>[] = [
+            const renderEmail = (attendee: Attendee) => {
+                if (!attendee.email) {
+                    return <CellText muted>{t`No email provided`}</CellText>;
+                }
+
+                return (
+                    <Popover
+                        opened={emailPopoverId === attendee.id}
+                        onChange={(opened) => {
+                            if (!opened) setEmailPopoverId(null);
+                        }}
+                        width={200}
+                        position="bottom-start"
+                        shadow="md"
+                    >
+                        <Popover.Target>
+                            <span className={classes.emailTarget}>
+                                <CellLink onClick={() => setEmailPopoverId(attendee.id || null)} title={attendee.email}>
+                                    {attendee.email}
+                                </CellLink>
+                            </span>
+                        </Popover.Target>
+                        <Popover.Dropdown>
+                            <Group gap="xs" style={{flexDirection: 'column', width: '100%'}}>
+                                <WriteAccess>
+                                    <Button
+                                        fullWidth
+                                        variant="light"
+                                        leftSection={<IconSend size={16}/>}
+                                        onClick={() => handleMessageFromEmail(attendee)}
+                                    >
+                                        {t`Message`}
+                                    </Button>
+                                </WriteAccess>
+                                <Button
+                                    fullWidth
+                                    variant="light"
+                                    color="gray"
+                                    leftSection={<IconCopy size={16}/>}
+                                    onClick={() => handleCopyEmail(attendee.email)}
+                                >
+                                    {t`Copy Email`}
+                                </Button>
+                            </Group>
+                        </Popover.Dropdown>
+                    </Popover>
+                );
+            };
+
+            const allColumns: (TanStackTableColumn<Attendee> | false)[] = [
                 {
-                    id: 'attendeeDetails',
-                    header: t`Attendee Details`,
+                    id: 'attendee',
                     enableHiding: false,
-                    cell: (info: CellContext<Attendee, unknown>) => (
-                        <Group gap="sm" wrap="nowrap">
-                            <Avatar size={44} radius={10} color="primary" variant="light">
-                                {getInitials(info.row.original.first_name + ' ' + info.row.original.last_name)}
-                            </Avatar>
-                            <div className={classes.attendeeDetails}>
-                                <div className={classes.nameRow}>
-                                    <Anchor
-                                        className={classes.attendeeName}
-                                        onClick={() => handleModalClick(info.row.original, viewModalOpen)}
-                                        style={{cursor: 'pointer'}}
-                                    >
-                                        <Truncate
-                                            length={30}
-                                            text={info.row.original.first_name + ' ' + info.row.original.last_name}
-                                        />
-                                    </Anchor>
-                                    <div className={classes.attendeeId}>
-                                        {info.row.original.public_id}
-                                    </div>
-                                </div>
-                                <div className={classes.emailRow}>
-                                    {!info.row.original.email && (
-                                        <Text className={classes.attendeeEmail}
-                                              c="dimmed">{t`No email provided`}</Text>
-                                    )}
-                                    {info.row.original.email && <Popover
-                                        opened={emailPopoverId === info.row.original.id}
-                                        onChange={(opened) => {
-                                            if (!opened) setEmailPopoverId(null);
-                                        }}
-                                        width={200}
-                                        position="bottom"
+                    ...sortableHeader(t`Attendee`, 'first_name', sort, 'asc'),
+                    meta: {label: t`Attendee`, sticky: 'left', interactive: true},
+                    cell: ({row: {original: attendee}}: CellContext<Attendee, unknown>) => {
+                        const name = [attendee.first_name, attendee.last_name].filter(Boolean).join(' ');
+                        const notes = attendee.notes;
+
+                        return (
+                            <IdentityCell
+                                stacked
+                                avatar={!compact && (
+                                    <Avatar size={30} radius="xl" color="primary" variant="light" className={classes.avatar}>
+                                        {getInitials(name)}
+                                    </Avatar>
+                                )}
+                                primary={(
+                                    <CellLink strong onClick={() => openAttendee(attendee)} title={name || undefined}>
+                                        {name || attendee.public_id}
+                                    </CellLink>
+                                )}
+                                secondary={renderEmail(attendee)}
+                                trailing={notes && (
+                                    <Tooltip
+                                        label={notes.length > 100 ? t`Click to view notes` : notes}
+                                        multiline
+                                        w={notes.length > 100 ? 'auto' : 300}
                                         withArrow
-                                        shadow="md"
                                     >
-                                        <Popover.Target>
-                                            <Anchor
-                                                onClick={() => setEmailPopoverId(info.row.original.id || null)}
-                                                className={classes.attendeeEmail}
-                                                style={{cursor: 'pointer'}}
-                                            >
-                                                {info.row.original.email}
-                                            </Anchor>
-                                        </Popover.Target>
-                                        <Popover.Dropdown>
-                                            <Group gap="xs" style={{flexDirection: 'column', width: '100%'}}>
-                                                <WriteAccess>
-                                                    <Button
-                                                        fullWidth
-                                                        variant="light"
-                                                        leftSection={<IconSend size={16}/>}
-                                                        onClick={() => handleMessageFromEmail(info.row.original)}
-                                                    >
-                                                        {t`Message`}
-                                                    </Button>
-                                                </WriteAccess>
-                                                <Button
-                                                    fullWidth
-                                                    variant="light"
-                                                    color="gray"
-                                                    leftSection={<IconCopy size={16}/>}
-                                                    onClick={() => handleCopyEmail(info.row.original.email)}
-                                                >
-                                                    {t`Copy Email`}
-                                                </Button>
-                                            </Group>
-                                        </Popover.Dropdown>
-                                    </Popover>}
-                                    <div className={classes.emailActions}>
-                                        {info.row.original.notes && (
-                                            <Tooltip
-                                                label={
-                                                    info.row.original.notes.length > 100
-                                                        ? t`Click to view notes`
-                                                        : info.row.original.notes
-                                                }
-                                                multiline
-                                                w={info.row.original.notes.length > 100 ? 'auto' : 300}
-                                                withArrow
-                                            >
-                                                <ActionIcon
-                                                    className={classes.actionIcon}
-                                                    size="xs"
-                                                    variant="subtle"
-                                                    color="green"
-                                                    onClick={() => {
-                                                        if (info.row.original.notes && info.row.original.notes.length > 100) {
-                                                            handleModalClick(info.row.original, viewModalOpen);
-                                                        }
-                                                    }}
-                                                >
-                                                    <IconNote size={16}/>
-                                                </ActionIcon>
-                                            </Tooltip>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        </Group>
-                    ),
-                    meta: {
-                        headerStyle: {minWidth: 300},
+                                        <ActionIcon
+                                            size="sm"
+                                            variant="subtle"
+                                            color="teal"
+                                            aria-label={t`Notes`}
+                                            onClick={() => openAttendee(attendee)}
+                                        >
+                                            <IconNote size={15} stroke={1.6}/>
+                                        </ActionIcon>
+                                    </Tooltip>
+                                )}
+                            />
+                        );
                     },
                 },
                 {
-                    id: 'orderAndTicket',
-                    header: t`Order & Ticket`,
-                    enableHiding: true,
-                    cell: (info: CellContext<Attendee, unknown>) => {
-                        const attendee = info.row.original;
+                    id: 'reference',
+                    header: t`Reference`,
+                    cell: ({row: {original: attendee}}: CellContext<Attendee, unknown>) => (
+                        <CellCopy value={attendee.public_id}>
+                            <CellText mono>{attendee.public_id}</CellText>
+                        </CellCopy>
+                    ),
+                },
+                {
+                    id: 'ticket',
+                    ...sortableHeader(t`Ticket`, 'ticket_name', sort, 'asc'),
+                    meta: {label: t`Ticket`},
+                    cell: ({row: {original: attendee}}: CellContext<Attendee, unknown>) => {
                         const ticketTitle = getProductFromEvent(attendee.product_id, event)?.title;
-                        const occurrence = attendee.event_occurrence;
-                        return (
-                            <div className={classes.orderTicketContainer}>
-                                <div className={classes.ticketName}>
-                                    <Truncate
-                                        text={ticketTitle}
-                                        length={25}
-                                    />
-                                </div>
-                                {attendee.seat_label && (
-                                    <div className={classes.seatLabel}>{attendee.seat_label}</div>
-                                )}
-                                {occurrence && event?.timezone && (
-                                    <span className={classes.occurrenceChip}>
-                                        <IconCalendarEvent size={12}/>
-                                        {formatDateWithLocale(occurrence.start_date, 'shortDate', event.timezone)}
-                                        {' '}
-                                        {formatDateWithLocale(occurrence.start_date, 'timeOnly', event.timezone)}
-                                        {occurrence.label && ` · ${occurrence.label}`}
-                                    </span>
-                                )}
-                                <div className={classes.orderId}>
-                                    <Anchor
-                                        onClick={() => handleOrderClick(attendee.order_id)}
-                                        style={{cursor: 'pointer', color: 'inherit', textDecoration: 'none'}}
-                                    >
-                                        {attendee.order?.public_id}
-                                    </Anchor>
-                                </div>
-                                {attendee.order?.created_at && event?.timezone && (
-                                    <div className={classes.registrationDate}>
-                                        {prettyDate(attendee.order.created_at, event.timezone)}
-                                    </div>
-                                )}
-                            </div>
-                        );
+
+                        return ticketTitle ? <CellText maxWidth={220} title={ticketTitle}>{ticketTitle}</CellText> : <EmptyCell/>;
                     },
-                    meta: {
-                        headerStyle: {minWidth: 160},
+                },
+                hasSeats && {
+                    id: 'seat',
+                    header: t`Seat`,
+                    cell: ({row: {original: attendee}}: CellContext<Attendee, unknown>) => attendee.seat_label ?? <EmptyCell/>,
+                },
+                hasOccurrences && {
+                    id: 'occurrence',
+                    header: t`Date`,
+                    cell: ({row: {original: attendee}}: CellContext<Attendee, unknown>) => {
+                        const occurrence = attendee.event_occurrence;
+                        if (!occurrence || !event?.timezone) {
+                            return <EmptyCell/>;
+                        }
+
+                        return (
+                            <CellText maxWidth={240}>
+                                {formatDateWithLocale(occurrence.start_date, 'shortDate', event.timezone)}
+                                {' '}
+                                {formatDateWithLocale(occurrence.start_date, 'timeOnly', event.timezone)}
+                                {occurrence.label && ` · ${occurrence.label}`}
+                            </CellText>
+                        );
                     },
                 },
                 {
                     id: 'status',
                     header: t`Status`,
-                    enableHiding: true,
-                    cell: (info: CellContext<Attendee, unknown>) => {
-                        const attendee = info.row.original;
-                        return (
-                            <div className={classes.statusBadge} data-status={attendee.status}>
-                                {attendee.status === 'ACTIVE' && (
-                                    <>
-                                        <IconCheck size={14}/>
-                                        {t`Active`}
-                                    </>
-                                )}
-                                {attendee.status === 'AWAITING_PAYMENT' && (
-                                    <>
-                                        <IconClock size={14}/>
-                                        {t`Awaiting Payment`}
-                                    </>
-                                )}
-                                {attendee.status === 'CANCELLED' && (
-                                    <>
-                                        <IconX size={14}/>
-                                        {t`Cancelled`}
-                                    </>
-                                )}
-                            </div>
-                        );
-                    },
-                    meta: {
-                        headerStyle: {minWidth: 120},
-                    },
+                    cell: ({row: {original: attendee}}: CellContext<Attendee, unknown>) => (
+                        <StatusBadge tone={ATTENDEE_STATUS_TONES[attendee.status] ?? 'neutral'}>
+                            {attendee.status === 'ACTIVE' && t`Active`}
+                            {attendee.status === 'AWAITING_PAYMENT' && t`Awaiting Payment`}
+                            {attendee.status === 'CANCELLED' && t`Cancelled`}
+                        </StatusBadge>
+                    ),
                 },
-                {
+                hasCheckInLists && {
                     id: 'checkIn',
                     header: t`Check-In Status`,
-                    enableHiding: true,
-                    cell: (info: CellContext<Attendee, unknown>) => {
-                        const checkInCount = getCheckInCount(info.row.original);
-                        const hasChecked = hasCheckIns(info.row.original);
+                    meta: {interactive: true},
+                    cell: ({row: {original: attendee}}: CellContext<Attendee, unknown>) => {
+                        const checkInCount = getCheckInCount(attendee);
                         const totalLists = relevantCheckInLists.length;
 
                         return (
                             <button
-                                className={`${classes.checkInButton} ${hasChecked ? classes.checkedIn : classes.notCheckedIn}`}
-                                onClick={() => handleModalClick(info.row.original, checkInModal)}
+                                className={classes.checkInButton}
+                                data-checked-in={checkInCount > 0 || undefined}
+                                onClick={() => handleModalClick(attendee, checkInModal)}
                             >
-                                {hasChecked ? (
+                                {checkInCount > 0 ? (
                                     <>
-                                        <IconCheck size={16}/>
+                                        <IconCheck size={14}/>
                                         {t`Checked In`} ({checkInCount}/{totalLists})
                                     </>
-                                ) : (
-                                    <>
-                                        <IconClipboardList size={16}/>
-                                        {t`Not Checked In`}
-                                    </>
-                                )}
+                                ) : t`Not Checked In`}
                             </button>
                         );
                     },
-                    meta: {
-                        headerStyle: {width: 80, textAlign: 'center'},
-                        cellStyle: {textAlign: 'center'},
-                    },
+                },
+                {
+                    id: 'order',
+                    header: t`Order`,
+                    meta: {interactive: true},
+                    cell: ({row: {original: attendee}}: CellContext<Attendee, unknown>) => attendee.order?.public_id ? (
+                        <CellCopy value={attendee.order.public_id}>
+                            <CellLink mono onClick={() => handleOrderClick(attendee.order_id)}>
+                                {attendee.order.public_id}
+                            </CellLink>
+                        </CellCopy>
+                    ) : <EmptyCell/>,
+                },
+                {
+                    id: 'created',
+                    ...sortableHeader(t`Created`, 'created_at', sort),
+                    meta: {label: t`Created`},
+                    cell: ({row: {original: attendee}}: CellContext<Attendee, unknown>) => attendee.order?.created_at && event?.timezone ? (
+                        <Tooltip label={prettyDate(attendee.order.created_at, event.timezone)} withArrow openDelay={300}>
+                            <span>{relativeDate(attendee.order.created_at)}</span>
+                        </Tooltip>
+                    ) : <EmptyCell/>,
                 },
                 {
                     id: 'actions',
-                    header: '',
+                    header: () => <VisuallyHidden>{t`Actions`}</VisuallyHidden>,
                     enableHiding: false,
-                    cell: (info: CellContext<Attendee, unknown>) => (
-                        <div className={classes.actionsMenu}>
-                            <ActionMenu
-                                dataTestId="attendee-actions-trigger"
-                                itemsGroups={toActionMenuGroups(getAttendeeActions(info.row.original))}
-                            />
-                        </div>
+                    meta: {sticky: 'right'},
+                    cell: ({row: {original: attendee}}: CellContext<Attendee, unknown>) => (
+                        <ActionMenu
+                            dataTestId="attendee-actions-trigger"
+                            itemsGroups={toActionMenuGroups(getAttendeeActions(attendee))}
+                            target={<RowActionsTarget/>}
+                        />
                     ),
-                    meta: {
-                        sticky: 'right',
-                        cellStyle: {paddingRight: 0},
-                    },
                 },
             ];
 
-            return allColumns.filter(column => {
-                if (column.id === 'checkIn' && !hasCheckInLists) {
-                    return false;
-                }
-                return true;
-            });
+            return allColumns.filter(Boolean) as TanStackTableColumn<Attendee>[];
         },
-        [emailPopoverId, event, hasCheckInLists, relevantCheckInLists, occurrenceId]
+        [emailPopoverId, event, hasCheckInLists, relevantCheckInLists, occurrenceId, hasSeats, hasOccurrences, compact, sort?.sortBy, sort?.sortDirection]
     );
 
     if (attendees.length === 0) {
@@ -382,11 +345,14 @@ export const AttendeeTable = ({attendees, openCreateModal, compact, occurrenceId
             <TanStackTable
                 data={attendees}
                 columns={columns}
-                storageKey="attendee-table"
+                storageKey="attendees-list"
                 enableColumnVisibility={!compact}
-                renderColumnVisibilityToggle={!compact ? (table) => <ColumnVisibilityToggle table={table}/> : undefined}
+                columnToggleSlot={columnToggleSlot}
                 hideHeader={compact}
-                noCard={compact}
+                noCard={compact || embedded}
+                isRefreshing={isRefreshing}
+                rowLines={2}
+                onRowClick={openAttendee}
             />
             {attendeeActionModals}
             {(selectedAttendee?.id && isViewModalOpen) && <ManageAttendeeModal

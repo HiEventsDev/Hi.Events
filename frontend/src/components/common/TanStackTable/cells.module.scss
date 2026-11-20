@@ -1,0 +1,137 @@
+$muted: var(--mantine-color-gray-6);
+
+.sortHeader {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+
+  @media (pointer: coarse) {
+    min-height: 36px;
+  }
+
+  svg {
+    opacity: 0.45;
+  }
+
+  &:hover,
+  &[data-active] {
+    color: var(--mantine-color-gray-9);
+
+    svg {
+      opacity: 1;
+    }
+  }
+}
+
+.link,
+.text {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  font-size: inherit;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.link {
+  color: var(--mantine-color-gray-9);
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--mantine-color-primary-5);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  @media (pointer: coarse) {
+    margin-block: -8px;
+    padding-block: 8px;
+  }
+}
+
+.strong {
+  font-weight: 600;
+  color: var(--mantine-color-gray-9);
+}
+
+.muted {
+  color: $muted;
+}
+
+.mono {
+  font-family: var(--mantine-font-family-monospace);
+  font-size: var(--mantine-font-size-xs);
+  letter-spacing: 0.01em;
+}
+
+.identity {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+
+  > :global(.mantine-Avatar-root) {
+    flex-shrink: 0;
+  }
+}
+
+.identityStack {
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.35;
+
+  .identitySecondary {
+    min-height: 1.35em;
+  }
+}
+
+.identityPrimary {
+  display: flex;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.identitySecondary {
+  flex: 0 9999 auto;
+  min-width: 0;
+  overflow: hidden;
+  font-size: var(--mantine-font-size-xs);
+  color: $muted;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  max-width: 100%;
+}
+
+.copyButton {
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 120ms ease;
+
+  &[data-copied],
+  &:focus-visible {
+    opacity: 1;
+  }
+
+  @media (hover: none) {
+    opacity: 1;
+  }
+}
+
+tr:hover .copyButton {
+  opacity: 1;
+}

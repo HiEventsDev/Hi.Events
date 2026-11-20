@@ -1,7 +1,7 @@
-import {Container, Title, TextInput, Skeleton, Pagination, Stack, Table, Text, Badge, Group, Select, Modal, ScrollArea, ActionIcon, Tooltip} from "@mantine/core";
+import {Container, Title, TextInput, Stack, Text, Badge, Group, Menu, Select, Modal, ScrollArea, ActionIcon, Tooltip, VisuallyHidden} from "@mantine/core";
 import {t} from "@lingui/macro";
-import {IconSearch, IconMail, IconUsers, IconEye, IconCheck} from "@tabler/icons-react";
-import {useState, useEffect} from "react";
+import {IconDotsVertical, IconSearch, IconEye, IconCheck} from "@tabler/icons-react";
+import {useState, useEffect, useMemo} from "react";
 import {useGetAdminMessages} from "../../../../queries/useGetAdminMessages";
 import {useApproveMessage} from "../../../../mutations/useApproveMessage";
 import {relativeDate} from "../../../../utilites/dates";
@@ -9,7 +9,21 @@ import {useDisclosure} from "@mantine/hooks";
 import {AdminMessage} from "../../../../api/admin.client";
 import {showSuccess} from "../../../../utilites/notifications";
 import {IdParam} from "../../../../types";
+import {TanStackTable, TanStackTableColumn} from "../../../common/TanStackTable";
+import {CellText, EmptyCell} from "../../../common/TanStackTable/cells.tsx";
+import {StatusBadge, StatusTone} from "../../../common/StatusBadge";
+import {TableCard, TableCardFooter, TableCardSkeleton} from "../../../common/TableCard";
+import {ToolBar} from "../../../common/ToolBar";
 import tableStyles from "../../../../styles/admin-table.module.scss";
+
+const STATUS_TONES: Record<string, StatusTone> = {
+    sent: 'positive',
+    pending: 'waiting',
+    pending_review: 'waiting',
+    failed: 'negative',
+    scheduled: 'active',
+    queued: 'active',
+};
 
 const Messages = () => {
     const [page, setPage] = useState(1);
@@ -100,6 +114,96 @@ const Messages = () => {
 
     const totalMessages = messagesData?.meta?.total || 0;
 
+    const columns = useMemo<TanStackTableColumn<AdminMessage>[]>(() => [
+        {
+            id: 'subject',
+            header: t`Subject`,
+            meta: {sticky: 'left'},
+            cell: ({row: {original: message}}) => <CellText strong title={message.subject}>{message.subject}</CellText>,
+        },
+        {
+            id: 'event',
+            header: t`Event`,
+            cell: ({row: {original: message}}) => (
+                <CellText maxWidth={200} title={message.event_title}>{message.event_title}</CellText>
+            ),
+        },
+        {
+            id: 'account',
+            header: t`Account`,
+            cell: ({row: {original: message}}) => (
+                <CellText muted maxWidth={160} title={message.account_name}>{message.account_name}</CellText>
+            ),
+        },
+        {
+            id: 'type',
+            header: t`Type`,
+            cell: ({row: {original: message}}) => getTypeLabel(message.type),
+        },
+        {
+            id: 'recipients',
+            header: t`Recipients`,
+            meta: {align: 'right'},
+            cell: ({row: {original: message}}) => message.recipients_count,
+        },
+        {
+            id: 'status',
+            header: t`Status`,
+            cell: ({row: {original: message}}) => (
+                <StatusBadge tone={STATUS_TONES[message.status.toLowerCase()] ?? 'neutral'}>{message.status}</StatusBadge>
+            ),
+        },
+        {
+            id: 'sent_by',
+            header: t`Sent By`,
+            cell: ({row: {original: message}}) => message.sent_by
+                ? <CellText muted maxWidth={180} title={message.sent_by}>{message.sent_by}</CellText>
+                : <EmptyCell/>,
+        },
+        {
+            id: 'created',
+            header: t`Created`,
+            cell: ({row: {original: message}}) => (
+                <span title={message.created_at}>{relativeDate(message.created_at)}</span>
+            ),
+        },
+        {
+            id: 'actions',
+            header: () => <VisuallyHidden>{t`Actions`}</VisuallyHidden>,
+            meta: {sticky: 'right'},
+            cell: ({row: {original: message}}) => (
+                <Group gap={4} wrap="nowrap" justify="flex-end">
+                    {message.status === 'PENDING_REVIEW' && (
+                        <Tooltip label={t`Approve Message`}>
+                            <ActionIcon
+                                variant="subtle"
+                                color="green"
+                                aria-label={t`Approve Message`}
+                                data-testid="admin-approve-message-button"
+                                onClick={() => handleApprove(message.id)}
+                                loading={approveMutation.isPending}
+                            >
+                                <IconCheck size={18}/>
+                            </ActionIcon>
+                        </Tooltip>
+                    )}
+                    <Menu shadow="md" width={200} position="bottom-end">
+                        <Menu.Target>
+                            <ActionIcon variant="subtle" color="gray" aria-label={t`Actions`}>
+                                <IconDotsVertical size={18}/>
+                            </ActionIcon>
+                        </Menu.Target>
+                        <Menu.Dropdown>
+                            <Menu.Item leftSection={<IconEye size={14}/>} onClick={() => handleViewMessage(message)}>
+                                {t`View Message`}
+                            </Menu.Item>
+                        </Menu.Dropdown>
+                    </Menu>
+                </Group>
+            ),
+        },
+    ], [approveMutation.isPending]);
+
     return (
         <Container size="xl" p="xl">
             <Stack gap="lg">
@@ -108,157 +212,63 @@ const Messages = () => {
                     <Text c="dimmed" size="sm">{t`View all messages sent across the platform`}</Text>
                 </div>
 
-                <Group>
-                    <TextInput
-                        placeholder={t`Search by subject, event, or account...`}
-                        leftSection={<IconSearch size={16} />}
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        style={{flex: 1}}
+                <TableCard>
+                    <ToolBar
+                        embedded
+                        searchComponent={() => (
+                            <TextInput
+                                placeholder={t`Search by subject, event, or account...`}
+                                leftSection={<IconSearch size={16}/>}
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                            />
+                        )}
+                        filterComponent={(
+                            <>
+                                <Select
+                                    placeholder={t`Status`}
+                                    clearable
+                                    data={[
+                                        {value: 'SENT', label: t`Sent`},
+                                        {value: 'PENDING_REVIEW', label: t`Pending Review`},
+                                        {value: 'SCHEDULED', label: t`Scheduled`},
+                                        {value: 'CANCELLED', label: t`Cancelled`},
+                                        {value: 'FAILED', label: t`Failed`},
+                                    ]}
+                                    value={statusFilter}
+                                    onChange={setStatusFilter}
+                                    w={150}
+                                />
+                                <Select
+                                    placeholder={t`Type`}
+                                    clearable
+                                    data={[
+                                        {value: 'TICKET', label: t`Ticket Holders`},
+                                        {value: 'ORDER', label: t`Order Holders`},
+                                        {value: 'ATTENDEE', label: t`Attendees`},
+                                    ]}
+                                    value={typeFilter}
+                                    onChange={setTypeFilter}
+                                    w={150}
+                                />
+                            </>
+                        )}
                     />
-                    <Select
-                        placeholder={t`Status`}
-                        clearable
-                        data={[
-                            {value: 'SENT', label: t`Sent`},
-                            {value: 'PENDING_REVIEW', label: t`Pending Review`},
-                            {value: 'SCHEDULED', label: t`Scheduled`},
-                            {value: 'CANCELLED', label: t`Cancelled`},
-                            {value: 'FAILED', label: t`Failed`},
-                        ]}
-                        value={statusFilter}
-                        onChange={setStatusFilter}
-                        w={150}
-                    />
-                    <Select
-                        placeholder={t`Type`}
-                        clearable
-                        data={[
-                            {value: 'TICKET', label: t`Ticket Holders`},
-                            {value: 'ORDER', label: t`Order Holders`},
-                            {value: 'ATTENDEE', label: t`Attendees`},
-                        ]}
-                        value={typeFilter}
-                        onChange={setTypeFilter}
-                        w={150}
-                    />
-                </Group>
 
-                {isLoading ? (
-                    <Stack gap="md">
-                        <Skeleton height={50} radius="md" />
-                        <Skeleton height={400} radius="md" />
-                    </Stack>
-                ) : totalMessages === 0 ? (
-                    <div className={tableStyles.emptyState}>
-                        <Text c="dimmed" size="lg">{t`No messages found`}</Text>
-                    </div>
-                ) : (
-                    <div className={tableStyles.tableWrapper}>
-                        <div className={tableStyles.tableScroll}>
-                            <Table className={tableStyles.table} highlightOnHover>
-                                <Table.Thead>
-                                    <Table.Tr>
-                                        <Table.Th>{t`Subject`}</Table.Th>
-                                        <Table.Th>{t`Event`}</Table.Th>
-                                        <Table.Th>{t`Account`}</Table.Th>
-                                        <Table.Th>{t`Type`}</Table.Th>
-                                        <Table.Th>{t`Recipients`}</Table.Th>
-                                        <Table.Th>{t`Status`}</Table.Th>
-                                        <Table.Th>{t`Sent By`}</Table.Th>
-                                        <Table.Th>{t`Created`}</Table.Th>
-                                        <Table.Th style={{width: 60}}></Table.Th>
-                                    </Table.Tr>
-                                </Table.Thead>
-                                <Table.Tbody>
-                                    {messagesData?.data?.map((message) => (
-                                        <Table.Tr key={message.id}>
-                                            <Table.Td>
-                                                <Group gap="xs">
-                                                    <IconMail size={16} color="gray" />
-                                                    <Text size="sm" fw={500} lineClamp={1} maw={200}>
-                                                        {message.subject}
-                                                    </Text>
-                                                </Group>
-                                            </Table.Td>
-                                            <Table.Td>
-                                                <Text size="sm" lineClamp={1} maw={150}>
-                                                    {message.event_title}
-                                                </Text>
-                                            </Table.Td>
-                                            <Table.Td>
-                                                <Text size="sm" c="dimmed" lineClamp={1} maw={120}>
-                                                    {message.account_name}
-                                                </Text>
-                                            </Table.Td>
-                                            <Table.Td>
-                                                <Badge variant="light" color="gray">
-                                                    {getTypeLabel(message.type)}
-                                                </Badge>
-                                            </Table.Td>
-                                            <Table.Td>
-                                                <Group gap={4}>
-                                                    <IconUsers size={14} color="gray" />
-                                                    <Text size="sm" fw={500}>
-                                                        {message.recipients_count}
-                                                    </Text>
-                                                </Group>
-                                            </Table.Td>
-                                            <Table.Td>
-                                                <Badge color={getStatusColor(message.status)} variant="light">
-                                                    {message.status}
-                                                </Badge>
-                                            </Table.Td>
-                                            <Table.Td>
-                                                <Text size="sm" c="dimmed">
-                                                    {message.sent_by || '-'}
-                                                </Text>
-                                            </Table.Td>
-                                            <Table.Td>
-                                                <Text size="sm">{relativeDate(message.created_at)}</Text>
-                                            </Table.Td>
-                                            <Table.Td>
-                                                <Group gap="xs">
-                                                    <Tooltip label={t`View Message`}>
-                                                        <ActionIcon
-                                                            variant="subtle"
-                                                            color="gray"
-                                                            onClick={() => handleViewMessage(message)}
-                                                        >
-                                                            <IconEye size={16} />
-                                                        </ActionIcon>
-                                                    </Tooltip>
-                                                    {message.status === 'PENDING_REVIEW' && (
-                                                        <Tooltip label={t`Approve Message`}>
-                                                            <ActionIcon
-                                                                variant="subtle"
-                                                                color="green"
-                                                                data-testid="admin-approve-message-button"
-                                                                onClick={() => handleApprove(message.id)}
-                                                                loading={approveMutation.isPending}
-                                                            >
-                                                                <IconCheck size={16} />
-                                                            </ActionIcon>
-                                                        </Tooltip>
-                                                    )}
-                                                </Group>
-                                            </Table.Td>
-                                        </Table.Tr>
-                                    ))}
-                                </Table.Tbody>
-                            </Table>
+                    {isLoading && <TableCardSkeleton/>}
+
+                    {!isLoading && totalMessages === 0 && (
+                        <div className={tableStyles.emptyState}>
+                            <Text c="dimmed" size="lg">{t`No messages found`}</Text>
                         </div>
-                    </div>
-                )}
+                    )}
 
-                {messagesData?.meta && messagesData.meta.last_page > 1 && (
-                    <Pagination
-                        total={messagesData.meta.last_page}
-                        value={page}
-                        onChange={setPage}
-                        mt="md"
-                    />
-                )}
+                    {!isLoading && totalMessages > 0 && (
+                        <TanStackTable data={messagesData?.data ?? []} columns={columns} noCard/>
+                    )}
+
+                    <TableCardFooter pagination={messagesData?.meta} page={page} onPageChange={setPage}/>
+                </TableCard>
             </Stack>
 
             <Modal

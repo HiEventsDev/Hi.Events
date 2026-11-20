@@ -1,5 +1,5 @@
-import {ReactNode, useState} from "react";
-import {Container, SegmentedControl, Skeleton, Stack, Table, Text, Title, Tooltip} from "@mantine/core";
+import {ReactNode, useMemo, useState} from "react";
+import {Container, SegmentedControl, Skeleton, Stack, Text, Title, Tooltip} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {Link} from "react-router";
 import {IconExternalLink} from "@tabler/icons-react";
@@ -13,12 +13,19 @@ import {
     AdminCommissionByCurrency,
     AdminDashboardAttention,
     AdminDashboardPeriod,
+    AdminMostViewedEvent,
     AdminSalesByCurrency,
+    AdminTopCommissionAccount,
+    AdminTopSellingEvent,
+    AdminUpcomingEvent,
+    RecentAccount,
 } from "../../../../api/admin.client";
 import {eventHomepageUrl} from "../../../../utilites/urlHelper";
 import {formatCurrency} from "../../../../utilites/currency";
-import {Event, IdParam} from "../../../../types";
-import tableStyles from "../../../../styles/admin-table.module.scss";
+import {Event} from "../../../../types";
+import {TanStackTable, TanStackTableColumn} from "../../../common/TanStackTable";
+import {CellText, EmptyCell} from "../../../common/TanStackTable/cells.tsx";
+import {StatusBadge} from "../../../common/StatusBadge";
 import classes from "./Dashboard.module.scss";
 
 dayjs.extend(utc);
@@ -35,28 +42,72 @@ const periodLabel = (period: AdminDashboardPeriod) => ({
 
 const formatNumber = (value: number) => new Intl.NumberFormat().format(value);
 
-const EventCell = ({event}: { event: { id: IdParam, slug: string, title: string, account_id: IdParam, account_name: string | null } }) => (
-    <div className={classes.eventCell}>
-        <a
-            className={classes.eventLink}
-            href={eventHomepageUrl({id: event.id, slug: event.slug} as Event)}
-            target="_blank"
-            rel="noopener noreferrer"
-        >
-            <Text span inherit lineClamp={2}>{event.title}</Text>
-            <IconExternalLink size={12} className={classes.eventLinkIcon}/>
-        </a>
-        <div>
+type DashboardEvent = Pick<AdminTopSellingEvent, 'id' | 'slug' | 'title' | 'account_id' | 'account_name'>;
+
+const eventColumns = <TEvent extends DashboardEvent>(): TanStackTableColumn<TEvent>[] => [
+    {
+        id: 'event',
+        header: t`Event`,
+        meta: {sticky: 'left'},
+        cell: ({row: {original: event}}) => (
+            <a
+                className={classes.eventLink}
+                href={eventHomepageUrl({id: event.id, slug: event.slug} as Event)}
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <CellText strong title={event.title}>{event.title}</CellText>
+                <IconExternalLink size={12} className={classes.eventLinkIcon}/>
+            </a>
+        ),
+    },
+    {
+        id: 'account',
+        header: t`Account`,
+        cell: ({row: {original: event}}) => (
             <Link className={classes.subLink} to={`/admin/accounts/${event.account_id}`}>
                 {event.account_name || '-'}
             </Link>
-        </div>
-    </div>
+        ),
+    },
+];
+
+const accountColumns = <TAccount extends Pick<RecentAccount, 'id' | 'name' | 'email'>>(): TanStackTableColumn<TAccount>[] => [
+    {
+        id: 'account',
+        header: t`Account`,
+        meta: {sticky: 'left'},
+        cell: ({row: {original: account}}) => (
+            <Link className={classes.eventLink} to={`/admin/accounts/${account.id}`}>
+                <CellText strong title={account.name}>{account.name}</CellText>
+            </Link>
+        ),
+    },
+    {
+        id: 'email',
+        header: t`Email`,
+        cell: ({row: {original: account}}) => (
+            <CellText muted maxWidth={260} title={account.email}>{account.email}</CellText>
+        ),
+    },
+];
+
+const Commission = ({net, gross, currency}: { net: number, gross: number, currency: string }) => (
+    <span>
+        <CellText strong>{formatCurrency(net, currency)}</CellText>
+        {' '}
+        <CellText muted>{t`Gross`} {formatCurrency(gross, currency)}</CellText>
+    </span>
 );
 
-const DataTable = ({headers, rows, isLoading, emptyMessage}: {
-    headers: { label: string, numeric?: boolean }[],
-    rows: ReactNode[],
+const formatStart = (startDate: string, eventTimezone: string) => {
+    const start = dayjs.utc(startDate);
+    return `${start.fromNow()} · ${start.tz(eventTimezone).format('ddd MMM D, h:mma')}`;
+};
+
+const DataTable = <TData,>({data, columns, isLoading, emptyMessage}: {
+    data: TData[],
+    columns: TanStackTableColumn<TData>[],
     isLoading: boolean,
     emptyMessage: string,
 }) => {
@@ -64,36 +115,12 @@ const DataTable = ({headers, rows, isLoading, emptyMessage}: {
         return <Skeleton height={240} radius="md"/>;
     }
 
-    return (
-        <div className={tableStyles.tableWrapper}>
-            {rows.length === 0 ? (
-                <div className={classes.empty}>{emptyMessage}</div>
-            ) : (
-                <div className={tableStyles.tableScroll}>
-                    <Table className={`${tableStyles.table} ${classes.compactTable}`}>
-                        <Table.Thead>
-                            <Table.Tr>
-                                {headers.map((header) => (
-                                    <Table.Th key={header.label} className={header.numeric ? classes.numeric : undefined}>
-                                        {header.label}
-                                    </Table.Th>
-                                ))}
-                            </Table.Tr>
-                        </Table.Thead>
-                        <Table.Tbody>{rows}</Table.Tbody>
-                    </Table>
-                </div>
-            )}
-        </div>
-    );
-};
+    if (data.length === 0) {
+        return <div className={classes.empty}>{emptyMessage}</div>;
+    }
 
-const CommissionCell = ({row, period}: { row: AdminCommissionByCurrency, period: AdminDashboardPeriod }) => (
-    <Table.Td className={classes.numeric}>
-        <Text size="sm" fw={600}>{formatCurrency(row[period].net, row.currency)}</Text>
-        <Text size="xs" c="dimmed">{t`Gross`} {formatCurrency(row[period].gross, row.currency)}</Text>
-    </Table.Td>
-);
+    return <TanStackTable data={data} columns={columns}/>;
+};
 
 const SalesValue = ({sales}: { sales: AdminSalesByCurrency[] }) => {
     if (sales.length === 0) {
@@ -167,10 +194,136 @@ const AdminDashboard = () => {
         : commissionCurrencies[0] ?? '';
     const topCommissionAccounts = commissionAccounts.filter((account) => account.currency === activeCommissionCurrency);
 
-    const formatStart = (startDate: string, eventTimezone: string) => {
-        const start = dayjs.utc(startDate);
-        return `${start.fromNow()} · ${start.tz(eventTimezone).format('ddd MMM D, h:mma')}`;
-    };
+    const commissionColumns = useMemo<TanStackTableColumn<AdminCommissionByCurrency>[]>(() => [
+        {
+            id: 'currency',
+            header: t`Currency`,
+            meta: {sticky: 'left'},
+            cell: ({row: {original: row}}) => <CellText strong>{row.currency}</CellText>,
+        },
+        ...PERIODS.map((p): TanStackTableColumn<AdminCommissionByCurrency> => ({
+            id: p,
+            header: periodLabel(p),
+            meta: {align: 'right'},
+            cell: ({row: {original: row}}) => (
+                <Commission net={row[p].net} gross={row[p].gross} currency={row.currency}/>
+            ),
+        })),
+    ], []);
+
+    const topSellingColumns = useMemo<TanStackTableColumn<AdminTopSellingEvent>[]>(() => [
+        ...eventColumns<AdminTopSellingEvent>(),
+        {
+            id: 'tickets',
+            header: t`Tickets`,
+            meta: {align: 'right'},
+            cell: ({row: {original: event}}) => formatNumber(event.tickets_sold),
+        },
+        {
+            id: 'orders',
+            header: t`Orders`,
+            meta: {align: 'right'},
+            cell: ({row: {original: event}}) => formatNumber(event.orders_count),
+        },
+        {
+            id: 'sales',
+            header: t`Sales`,
+            meta: {align: 'right'},
+            cell: ({row: {original: event}}) => formatCurrency(event.sales_total, event.currency),
+        },
+    ], []);
+
+    const mostViewedColumns = useMemo<TanStackTableColumn<AdminMostViewedEvent>[]>(() => [
+        ...eventColumns<AdminMostViewedEvent>(),
+        {
+            id: 'views',
+            header: t`Views`,
+            meta: {align: 'right'},
+            cell: ({row: {original: event}}) => formatNumber(event.views),
+        },
+        {
+            id: 'orders',
+            header: t`Orders`,
+            meta: {align: 'right'},
+            cell: ({row: {original: event}}) => formatNumber(event.orders_count),
+        },
+        {
+            id: 'conversion',
+            header: t`Conversion`,
+            meta: {align: 'right'},
+            cell: ({row: {original: event}}) => `${((event.orders_count / event.views) * 100).toFixed(1)}%`,
+        },
+    ], []);
+
+    const topAccountColumns = useMemo<TanStackTableColumn<AdminTopCommissionAccount>[]>(() => [
+        ...accountColumns<AdminTopCommissionAccount>(),
+        {
+            id: 'orders',
+            header: t`Orders`,
+            meta: {align: 'right'},
+            cell: ({row: {original: account}}) => formatNumber(account.orders_count),
+        },
+        {
+            id: 'commission',
+            header: t`Commission`,
+            meta: {align: 'right'},
+            cell: ({row: {original: account}}) => (
+                <Commission net={account.net} gross={account.gross} currency={account.currency}/>
+            ),
+        },
+    ], []);
+
+    const upcomingColumns = useMemo<TanStackTableColumn<AdminUpcomingEvent>[]>(() => [
+        ...eventColumns<AdminUpcomingEvent>(),
+        {
+            id: 'starts',
+            header: t`Starts`,
+            cell: ({row: {original: event}}) => formatStart(event.start_date, event.timezone),
+        },
+        {
+            id: 'attendees',
+            header: t`Attendees`,
+            meta: {align: 'right'},
+            cell: ({row: {original: event}}) => (
+                `${formatNumber(event.attendees_count)}${event.capacity ? ` / ${formatNumber(event.capacity)}` : ''}`
+            ),
+        },
+        {
+            id: 'orders_last_24h',
+            header: t`Orders (24h)`,
+            meta: {align: 'right'},
+            cell: ({row: {original: event}}) => formatNumber(event.orders_last_24h),
+        },
+    ], []);
+
+    const recentAccountColumns = useMemo<TanStackTableColumn<RecentAccount>[]>(() => [
+        ...accountColumns<RecentAccount>(),
+        {
+            id: 'signed_up',
+            header: t`Signed up`,
+            cell: ({row: {original: account}}) => dayjs.utc(account.created_at).fromNow(),
+        },
+        {
+            id: 'verified',
+            header: t`Verified`,
+            cell: ({row: {original: account}}) => account.account_verified_at
+                ? <StatusBadge tone="positive">{t`Yes`}</StatusBadge>
+                : <StatusBadge tone="neutral">{t`No`}</StatusBadge>,
+        },
+        {
+            id: 'stripe',
+            header: t`Stripe`,
+            cell: ({row: {original: account}}) => account.stripe_connect_setup_complete
+                ? <StatusBadge tone="positive">{t`Connected`}</StatusBadge>
+                : <EmptyCell/>,
+        },
+        {
+            id: 'events',
+            header: t`Events`,
+            meta: {align: 'right'},
+            cell: ({row: {original: account}}) => formatNumber(account.events_count),
+        },
+    ], []);
 
     return (
         <Container size="xl" className={classes.container}>
@@ -201,16 +354,8 @@ const AdminDashboard = () => {
                     <DataTable
                         isLoading={isLoading && !data}
                         emptyMessage={t`No commission collected in the last 30 days`}
-                        headers={[
-                            {label: t`Currency`},
-                            ...PERIODS.map((p) => ({label: periodLabel(p), numeric: true})),
-                        ]}
-                        rows={(data?.commission_by_currency ?? []).map((row) => (
-                            <Table.Tr key={row.currency}>
-                                <Table.Td><Text size="sm" fw={600}>{row.currency}</Text></Table.Td>
-                                {PERIODS.map((p) => <CommissionCell key={p} row={row} period={p}/>)}
-                            </Table.Tr>
-                        ))}
+                        data={data?.commission_by_currency ?? []}
+                        columns={commissionColumns}
                     />
                 </section>
 
@@ -258,20 +403,8 @@ const AdminDashboard = () => {
                         <DataTable
                             isLoading={isLoading && !data}
                             emptyMessage={t`No completed orders in this period`}
-                            headers={[
-                                {label: t`Event`},
-                                {label: t`Tickets`, numeric: true},
-                                {label: t`Orders`, numeric: true},
-                                {label: t`Sales`, numeric: true},
-                            ]}
-                            rows={(data?.top_selling_events ?? []).map((event) => (
-                                <Table.Tr key={event.id}>
-                                    <Table.Td><EventCell event={event}/></Table.Td>
-                                    <Table.Td className={classes.numeric}>{formatNumber(event.tickets_sold)}</Table.Td>
-                                    <Table.Td className={classes.numeric}>{formatNumber(event.orders_count)}</Table.Td>
-                                    <Table.Td className={classes.numeric}>{formatCurrency(event.sales_total, event.currency)}</Table.Td>
-                                </Table.Tr>
-                            ))}
+                            data={data?.top_selling_events ?? []}
+                            columns={topSellingColumns}
                         />
                     </section>
 
@@ -287,22 +420,8 @@ const AdminDashboard = () => {
                         <DataTable
                             isLoading={isLoading && !data}
                             emptyMessage={t`No event page views in this period`}
-                            headers={[
-                                {label: t`Event`},
-                                {label: t`Views`, numeric: true},
-                                {label: t`Orders`, numeric: true},
-                                {label: t`Conversion`, numeric: true},
-                            ]}
-                            rows={(data?.most_viewed_events ?? []).map((event) => (
-                                <Table.Tr key={event.id}>
-                                    <Table.Td><EventCell event={event}/></Table.Td>
-                                    <Table.Td className={classes.numeric}>{formatNumber(event.views)}</Table.Td>
-                                    <Table.Td className={classes.numeric}>{formatNumber(event.orders_count)}</Table.Td>
-                                    <Table.Td className={classes.numeric}>
-                                        {`${((event.orders_count / event.views) * 100).toFixed(1)}%`}
-                                    </Table.Td>
-                                </Table.Tr>
-                            ))}
+                            data={data?.most_viewed_events ?? []}
+                            columns={mostViewedColumns}
                         />
                     </section>
                 </div>
@@ -326,26 +445,8 @@ const AdminDashboard = () => {
                     <DataTable
                         isLoading={isLoading && !data}
                         emptyMessage={t`No commission collected in this period`}
-                        headers={[
-                            {label: t`Account`},
-                            {label: t`Orders`, numeric: true},
-                            {label: t`Commission`, numeric: true},
-                        ]}
-                        rows={topCommissionAccounts.map((account) => (
-                            <Table.Tr key={`${account.id}-${account.currency}`}>
-                                <Table.Td>
-                                    <Link className={classes.eventLink} to={`/admin/accounts/${account.id}`}>
-                                        {account.name}
-                                    </Link>
-                                    <Text size="xs" c="dimmed">{account.email}</Text>
-                                </Table.Td>
-                                <Table.Td className={classes.numeric}>{formatNumber(account.orders_count)}</Table.Td>
-                                <Table.Td className={classes.numeric}>
-                                    <Text size="sm" fw={600}>{formatCurrency(account.net, account.currency)}</Text>
-                                    <Text size="xs" c="dimmed">{t`Gross`} {formatCurrency(account.gross, account.currency)}</Text>
-                                </Table.Td>
-                            </Table.Tr>
-                        ))}
+                        data={topCommissionAccounts}
+                        columns={topAccountColumns}
                     />
                 </section>
 
@@ -361,25 +462,8 @@ const AdminDashboard = () => {
                     <DataTable
                         isLoading={isLoading && !data}
                         emptyMessage={t`No live events starting in the next 7 days`}
-                        headers={[
-                            {label: t`Event`},
-                            {label: t`Starts`},
-                            {label: t`Attendees`, numeric: true},
-                            {label: t`Orders (24h)`, numeric: true},
-                        ]}
-                        rows={(data?.upcoming_events ?? []).map((event) => (
-                            <Table.Tr key={event.occurrence_id}>
-                                <Table.Td><EventCell event={event}/></Table.Td>
-                                <Table.Td>
-                                    <Text size="sm">{formatStart(event.start_date, event.timezone)}</Text>
-                                </Table.Td>
-                                <Table.Td className={classes.numeric}>
-                                    {formatNumber(event.attendees_count)}
-                                    {event.capacity ? ` / ${formatNumber(event.capacity)}` : ''}
-                                </Table.Td>
-                                <Table.Td className={classes.numeric}>{formatNumber(event.orders_last_24h)}</Table.Td>
-                            </Table.Tr>
-                        ))}
+                        data={data?.upcoming_events ?? []}
+                        columns={upcomingColumns}
                     />
                 </section>
 
@@ -390,27 +474,8 @@ const AdminDashboard = () => {
                     <DataTable
                         isLoading={isLoading && !data}
                         emptyMessage={t`No recent account signups`}
-                        headers={[
-                            {label: t`Account`},
-                            {label: t`Signed up`},
-                            {label: t`Verified`},
-                            {label: t`Stripe`},
-                            {label: t`Events`, numeric: true},
-                        ]}
-                        rows={(data?.recent_accounts ?? []).map((account) => (
-                            <Table.Tr key={account.id}>
-                                <Table.Td>
-                                    <Link className={classes.eventLink} to={`/admin/accounts/${account.id}`}>
-                                        {account.name}
-                                    </Link>
-                                    <Text size="xs" c="dimmed">{account.email}</Text>
-                                </Table.Td>
-                                <Table.Td><Text size="sm">{dayjs.utc(account.created_at).fromNow()}</Text></Table.Td>
-                                <Table.Td><Text size="sm">{account.account_verified_at ? t`Yes` : t`No`}</Text></Table.Td>
-                                <Table.Td><Text size="sm">{account.stripe_connect_setup_complete ? t`Connected` : '-'}</Text></Table.Td>
-                                <Table.Td className={classes.numeric}>{formatNumber(account.events_count)}</Table.Td>
-                            </Table.Tr>
-                        ))}
+                        data={data?.recent_accounts ?? []}
+                        columns={recentAccountColumns}
                     />
                 </section>
             </Stack>

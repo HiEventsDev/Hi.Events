@@ -1,10 +1,12 @@
-import {Button, Group, Select, Skeleton, Table as MantineTable, Text} from '@mantine/core';
+import {Button, Group, Select, Skeleton, Text} from '@mantine/core';
 import {t} from '@lingui/macro';
 import {DatePickerInput, DatesRangeValue} from "@mantine/dates";
-import {IconArrowDown, IconArrowsSort, IconArrowUp, IconCalendar, IconDownload} from "@tabler/icons-react";
-import {useMemo, useState} from "react";
+import {IconCalendar, IconDownload} from "@tabler/icons-react";
+import {ReactNode, useMemo, useState} from "react";
 import {PageTitle} from "../PageTitle";
-import {Table, TableHead} from "../Table";
+import {Card} from "../Card";
+import {TanStackTable, TanStackTableColumn} from "../TanStackTable";
+import {SortHeader} from "../TanStackTable/sorting.tsx";
 import {Pagination} from "../Pagination";
 import '@mantine/dates/styles.css';
 import {useGetOrganizerReport} from "../../../queries/useGetOrganizerReport.ts";
@@ -29,7 +31,7 @@ export interface RenderContext {
 interface Column<T> {
     key: keyof T;
     label: string;
-    render?: (value: any, row: T, context: RenderContext) => React.ReactNode;
+    render?: (value: any, row: T, context: RenderContext) => ReactNode;
     sortable?: boolean;
 }
 
@@ -216,12 +218,26 @@ const OrganizerReportTable = <T extends Record<string, any>>({
         }
     };
 
-    const getSortIcon = (field: keyof T) => {
-        if (sortField !== field) return <IconArrowsSort size={16}/>;
-        if (sortDirection === 'asc') return <IconArrowUp size={16}/>;
-        if (sortDirection === 'desc') return <IconArrowDown size={16}/>;
-        return <IconArrowsSort size={16} className="ml-2 text-gray-400"/>;
-    };
+    const tableColumns: TanStackTableColumn<T>[] = columns.map((column, index) => ({
+        id: String(column.key),
+        header: column.sortable
+            ? () => (
+                <SortHeader
+                    label={column.label}
+                    field={String(column.key)}
+                    sort={{
+                        sortBy: sortField && sortDirection ? String(sortField) : '',
+                        sortDirection: sortDirection ?? 'asc',
+                        onSort: () => handleSort(column.key),
+                    }}
+                />
+            )
+            : column.label,
+        meta: {label: column.label, sticky: index === 0 ? 'left' : undefined},
+        cell: ({row: {original: row}}) => column.render
+            ? column.render(row[column.key], row, {currency: selectedCurrency || organizer.currency || 'USD'})
+            : row[column.key],
+    }));
 
     const sortedData = useMemo(() => {
         return [...data].sort((a, b) => {
@@ -247,13 +263,7 @@ const OrganizerReportTable = <T extends Record<string, any>>({
     }, [data, sortField, sortDirection]);
 
     const emptyStateMessage = () => {
-        const wrapper = (message: React.ReactNode) => (
-            <MantineTable.Tr>
-                <MantineTable.Td colSpan={columns.length} align="center" py="xl">
-                    {message}
-                </MantineTable.Td>
-            </MantineTable.Tr>
-        );
+        const wrapper = (message: ReactNode) => <Card><Group justify="center">{message}</Group></Card>;
 
         if (reportQuery.isLoading) {
             return wrapper(t`Loading...`);
@@ -362,39 +372,9 @@ const OrganizerReportTable = <T extends Record<string, any>>({
                 </Text>
             )}
 
-            <Table>
-                <TableHead>
-                    <MantineTable.Tr>
-                        {columns.map((column) => (
-                            <MantineTable.Th
-                                key={String(column.key)}
-                                onClick={column.sortable ? () => handleSort(column.key) : undefined}
-                                style={{cursor: column.sortable ? 'pointer' : 'default', minWidth: '180px'}}
-                            >
-                                <Group gap="xs" wrap={'nowrap'}>
-                                    {column.label}
-                                    {column.sortable && getSortIcon(column.key)}
-                                </Group>
-                            </MantineTable.Th>
-                        ))}
-                    </MantineTable.Tr>
-                </TableHead>
-                <MantineTable.Tbody>
-                    {!sortedData.length && emptyStateMessage()}
-                    {sortedData.map((row, index) => (
-                        <MantineTable.Tr key={index}>
-                            {columns.map((column) => (
-                                <MantineTable.Td key={String(column.key)}>
-                                    {column.render
-                                        ? column.render(row[column.key], row, { currency: selectedCurrency || organizer.currency || 'USD' })
-                                        : row[column.key]
-                                    }
-                                </MantineTable.Td>
-                            ))}
-                        </MantineTable.Tr>
-                    ))}
-                </MantineTable.Tbody>
-            </Table>
+            {sortedData.length === 0 ? emptyStateMessage() : (
+                <TanStackTable data={sortedData} columns={tableColumns}/>
+            )}
 
             {totalPages > 1 && (
                 <Pagination
