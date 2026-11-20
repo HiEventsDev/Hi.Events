@@ -4,18 +4,18 @@ export class EmailTemplatePage {
   constructor(private readonly page: Page) {}
 
   async gotoEventTemplates(eventId: number): Promise<void> {
-    await this.page.goto(`/manage/event/${eventId}/settings#email-settings`);
+    await this.page.goto(`/manage/event/${eventId}/settings/email`);
     await this.page.waitForLoadState('networkidle');
   }
 
   async gotoOrganizerTemplates(organizerId: number): Promise<void> {
-    await this.page.goto(`/manage/organizer/${organizerId}/settings#email-templates`);
+    await this.page.goto(`/manage/organizer/${organizerId}/settings/email-templates`);
     await this.page.waitForLoadState('networkidle');
   }
 
   templateCard(typeLabel: string): Locator {
     return this.page
-      .locator('.mantine-Paper-root')
+      .getByTestId('email-template-card')
       .filter({ has: this.page.getByText(typeLabel, { exact: true }) });
   }
 

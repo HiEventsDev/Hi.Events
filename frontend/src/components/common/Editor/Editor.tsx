@@ -112,7 +112,16 @@ export const Editor = ({
     });
 
     useEffect(() => {
-        if (value && editor) {
+        if (!editor) {
+            return;
+        }
+
+        const isClearedByParent = !value && !editor.isEmpty;
+        if (isClearedByParent) {
+            editor.commands.clearContent(false);
+        }
+
+        if (value) {
             if (value !== editor.getHTML()) {
                 editor.commands.setContent(value, {emitUpdate: false, parseOptions: {preserveWhitespace: "full"}});
             }

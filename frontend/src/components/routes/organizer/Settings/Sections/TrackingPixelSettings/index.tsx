@@ -4,10 +4,8 @@ import {useFormErrorResponseHandler} from "../../../../../../hooks/useFormErrorR
 import {useEffect} from "react";
 import {showSuccess} from "../../../../../../utilites/notifications.tsx";
 import {t} from "@lingui/macro";
-import {Card} from "../../../../../common/Card";
-import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
-import {Button, Checkbox, Switch, Text, TextInput} from "@mantine/core";
-import {Callout} from "../../../../../common/Callout";
+import {SettingsPage, SettingsRow, SettingsSaveFooter, SettingsSection} from "../../../../../common/SettingsPage";
+import {Checkbox, Switch, TextInput} from "@mantine/core";
 import {
     IconBrandFacebook,
     IconBrandGoogle,
@@ -118,10 +116,12 @@ export const TrackingPixelSettings = () => {
 
     useEffect(() => {
         if (organizerSettingsQuery?.isFetched && organizerSettingsQuery?.data) {
-            form.setValues({
+            const values = {
                 pixels: pixelsToFormState(organizerSettingsQuery.data.tracking_pixels),
                 tracking_consent_acknowledged: organizerSettingsQuery.data.tracking_consent_acknowledged || false,
-            });
+            };
+            form.setInitialValues(values);
+            form.setValues(values);
         }
     }, [organizerSettingsQuery.isFetched]);
 
@@ -156,6 +156,7 @@ export const TrackingPixelSettings = () => {
             organizerId: organizerId,
         }, {
             onSuccess: () => {
+                form.resetDirty();
                 showSuccess(t`Successfully Updated Tracking Settings`);
             },
             onError: (error) => {
@@ -167,102 +168,72 @@ export const TrackingPixelSettings = () => {
     const hasAnyPixels = availableProviders.some(p => form.values.pixels[p.key]?.pixel_id.trim() !== '');
 
     return (
-        <Card>
-            <HeadingWithDescription
-                heading={t`Tracking & Analytics`}
-                description={t`Add tracking pixels to your public event pages and organizer homepage. A cookie consent banner will be shown to visitors when tracking is active.`}
-            />
-            <form onSubmit={form.onSubmit(handleSubmit)}>
-                <fieldset disabled={organizerSettingsQuery.isLoading || updateMutation.isPending}>
-                    <div style={{display: 'flex', flexDirection: 'column', gap: '12px'}}>
+        <SettingsPage
+            title={t`Tracking & Analytics`}
+            description={t`Add tracking pixels to your public event pages and organizer homepage. A cookie consent banner will be shown to visitors when tracking is active.`}
+        >
+            <SettingsSection>
+                <form onSubmit={form.onSubmit(handleSubmit)}>
+                    <fieldset disabled={organizerSettingsQuery.isLoading || updateMutation.isPending}>
                         {availableProviders.map((provider) => {
                             const Icon = provider.icon;
                             const pixelState = form.values.pixels[provider.key];
                             const hasValue = pixelState?.pixel_id.trim() !== '';
+                            const inputId = `organizer-tracking-${provider.key}`;
 
                             return (
-                                <div
+                                <SettingsRow
                                     key={provider.key}
-                                    style={{
-                                        padding: '14px 16px',
-                                        borderRadius: '8px',
-                                        border: `1px solid var(--mantine-color-${hasValue && pixelState?.enabled ? 'primary-3' : 'gray-3'})`,
-                                        backgroundColor: hasValue && pixelState?.enabled ? 'var(--mantine-color-primary-0)' : 'transparent',
-                                        transition: 'all 0.15s ease',
-                                    }}
+                                    label={provider.label}
+                                    description={provider.description}
+                                    htmlFor={inputId}
                                 >
-                                    <div style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between',
-                                        marginBottom: hasValue ? '10px' : 0,
-                                    }}>
-                                        <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
-                                            <Icon size={20} style={{opacity: 0.7}}/>
-                                            <div>
-                                                <Text size="sm" fw={500}>{provider.label}</Text>
-                                                {!hasValue && (
-                                                    <Text size="xs" c="dimmed">{provider.description}</Text>
-                                                )}
-                                            </div>
-                                        </div>
-                                        {hasValue && (
-                                            <Switch
-                                                size="sm"
-                                                checked={pixelState?.enabled ?? false}
-                                                onChange={(e) => form.setFieldValue(
-                                                    `pixels.${provider.key}.enabled`,
-                                                    e.currentTarget.checked
-                                                )}
-                                            />
-                                        )}
-                                    </div>
                                     <TextInput
+                                        id={inputId}
                                         {...form.getInputProps(`pixels.${provider.key}.pixel_id`)}
                                         placeholder={provider.placeholder}
-                                        size="sm"
-                                        description={hasValue ? provider.description : undefined}
+                                        leftSection={<Icon size={18}/>}
                                         onChange={(e) => {
                                             form.setFieldValue(`pixels.${provider.key}.pixel_id`, e.currentTarget.value);
                                             if (e.currentTarget.value.trim() !== '' && !pixelState?.enabled) {
                                                 form.setFieldValue(`pixels.${provider.key}.enabled`, true);
                                             }
                                         }}
-                                        styles={{
-                                            input: {
-                                                fontFamily: 'monospace',
-                                                fontSize: '13px',
-                                            },
-                                        }}
                                     />
-                                </div>
+                                    {hasValue && (
+                                        <Switch
+                                            checked={pixelState?.enabled ?? false}
+                                            onChange={(e) => form.setFieldValue(
+                                                `pixels.${provider.key}.enabled`,
+                                                e.currentTarget.checked
+                                            )}
+                                        />
+                                    )}
+                                </SettingsRow>
                             );
                         })}
-                    </div>
 
-                    {hasAnyPixels && (
-                        <>
-                            <Callout variant="tip" style={{marginTop: 24}}>
-                                {t`By adding tracking pixels, you acknowledge that you and this platform are joint controllers of the data collected. You are responsible for ensuring you have a lawful basis for this processing under applicable privacy laws (GDPR, CCPA, etc.).`}
-                            </Callout>
-                            <Checkbox
-                                {...form.getInputProps('tracking_consent_acknowledged', {type: 'checkbox'})}
+                        {hasAnyPixels && (
+                            <SettingsRow
                                 label={t`I acknowledge my responsibilities as a data controller`}
-                                mb="md"
-                                error={form.errors.tracking_consent_acknowledged}
-                            />
-                        </>
-                    )}
-
-                    <Button
-                        loading={updateMutation.isPending}
-                        type="submit"
-                        mt="md"
-                    >
-                        {t`Save`}
-                    </Button>
-                </fieldset>
-            </form>
-        </Card>
+                                description={t`By adding tracking pixels, you acknowledge that you and this platform are joint controllers of the data collected. You are responsible for ensuring you have a lawful basis for this processing under applicable privacy laws (GDPR, CCPA, etc.).`}
+                                htmlFor="organizer-tracking-consent"
+                                inlineControl
+                            >
+                                <Checkbox
+                                    id="organizer-tracking-consent"
+                                    {...form.getInputProps('tracking_consent_acknowledged', {type: 'checkbox'})}
+                                />
+                            </SettingsRow>
+                        )}
+                    </fieldset>
+                    <SettingsSaveFooter
+                        isDirty={form.isDirty()}
+                        isSaving={updateMutation.isPending}
+                        onDiscard={form.reset}
+                    />
+                </form>
+            </SettingsSection>
+        </SettingsPage>
     );
 };

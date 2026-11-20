@@ -1,3 +1,4 @@
+import {t} from "@lingui/macro";
 import {useState} from 'react';
 import {useParams} from 'react-router';
 import {useGetEmailTemplatesForEvent} from '../../../../../../queries/useGetEmailTemplates';
@@ -16,11 +17,9 @@ export const TemplateSettings = () => {
     const {data: event} = useGetEvent(eventId);
     const [shouldFetchDefaults, setShouldFetchDefaults] = useState(false);
 
-    // Queries
     const {data: templatesData, isLoading} = useGetEmailTemplatesForEvent(eventId!, {include_inactive: true});
     const {data: defaultTemplatesData} = useGetDefaultEmailTemplates(shouldFetchDefaults);
 
-    // Mutations
     const createMutation = useCreateEmailTemplateForEvent();
     const updateMutation = useUpdateEmailTemplateForEvent();
     const deleteMutation = useDeleteEmailTemplateForEvent();
@@ -29,7 +28,6 @@ export const TemplateSettings = () => {
     const templates = templatesData?.data || [];
 
     const handleCreateTemplate = () => {
-        // Enable fetching default templates if not already fetched
         if (!defaultTemplatesData) {
             setShouldFetchDefaults(true);
         }
@@ -39,6 +37,7 @@ export const TemplateSettings = () => {
         <EmailTemplateSettingsBase
             contextId={eventId!}
             contextType="event"
+            sectionTitle={t`Email Templates`}
             templates={templates}
             defaultTemplates={defaultTemplatesData}
             isLoading={isLoading}

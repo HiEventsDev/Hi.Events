@@ -6,7 +6,6 @@ import {
     Box,
     Button,
     CopyButton,
-    Divider,
     Group,
     Loader,
     Select,
@@ -32,8 +31,7 @@ import {t, Trans} from "@lingui/macro";
 import {modals} from "@mantine/modals";
 import {useEffect, useState} from "react";
 import {useParams} from "react-router";
-import {Card} from "../../../../../common/Card";
-import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
+import {SettingsBlock, SettingsPage, SettingsSection} from "../../../../../common/SettingsPage";
 import {useGetOrganizerStripeConnect} from "../../../../../../queries/useGetOrganizerStripeConnect";
 import {useCreateOrGetOrganizerStripeConnect} from "../../../../../../queries/useCreateOrGetOrganizerStripeConnect";
 import {useCopyStripeConnectFromOrganizer} from "../../../../../../mutations/useCopyStripeConnectFromOrganizer";
@@ -136,8 +134,7 @@ export const PayoutsSettings = () => {
     };
 
     const renderDisconnect = (account: OrganizerStripeConnectAccount, label: string) => (
-        <Box mt="md">
-            <Divider my="sm"/>
+        <SettingsBlock>
             <Anchor
                 component="button"
                 type="button"
@@ -149,7 +146,7 @@ export const PayoutsSettings = () => {
             >
                 {label}
             </Anchor>
-        </Box>
+        </SettingsBlock>
     );
 
     const handleReuse = () => {
@@ -179,8 +176,7 @@ export const PayoutsSettings = () => {
         }));
 
         return (
-            <Box mt="md">
-                <Divider my="sm"/>
+            <SettingsBlock>
                 {!reuseExpanded ? (
                     <Anchor
                         component="button"
@@ -220,51 +216,53 @@ export const PayoutsSettings = () => {
                         </Group>
                     </Stack>
                 )}
-            </Box>
+            </SettingsBlock>
         );
     };
 
     const renderHero = () => (
-        <>
-            <Group gap="md" mb="sm" wrap="nowrap">
-                <ThemeIcon size={48} radius="md" variant="light" color="indigo">
-                    <IconBrandStripe size={28}/>
-                </ThemeIcon>
-                <Box>
-                    <Title order={4}>{t`Get paid with Stripe`}</Title>
-                    <Text c="dimmed" size="sm" mt={4}>
-                        {t`We partner with Stripe to send payouts straight to your bank account.`}
-                    </Text>
+        <SettingsSection>
+            <SettingsBlock>
+                <Group gap="md" mb="sm" wrap="nowrap">
+                    <ThemeIcon size={48} radius="md" variant="light" color="indigo">
+                        <IconBrandStripe size={28}/>
+                    </ThemeIcon>
+                    <Box>
+                        <Title order={4}>{t`Get paid with Stripe`}</Title>
+                        <Text c="dimmed" size="sm" mt={4}>
+                            {t`We partner with Stripe to send payouts straight to your bank account.`}
+                        </Text>
+                    </Box>
+                </Group>
+
+                <Text size="sm" mb="md" lh={1.5}>
+                    {t`Setup takes just a few minutes — you don't need an existing Stripe account. Stripe handles cards, wallets, regional payment methods, and fraud protection so you can focus on your event.`}
+                </Text>
+
+                <Box className={classes.heroBullets}>
+                    <span className={classes.bullet}>
+                        <IconBolt size={16}/>{t`Fast payouts to your bank`}
+                    </span>
+                    <span className={classes.bullet}>
+                        <IconWorld size={16}/>{t`135+ currencies & 40+ payment methods`}
+                    </span>
+                    <span className={classes.bullet}>
+                        <IconShieldCheck size={16}/>{t`Built-in fraud protection`}
+                    </span>
                 </Box>
-            </Group>
 
-            <Text size="sm" mb="md" lh={1.5}>
-                {t`Setup takes just a few minutes — you don't need an existing Stripe account. Stripe handles cards, wallets, regional payment methods, and fraud protection so you can focus on your event.`}
-            </Text>
-
-            <Box className={classes.heroBullets}>
-                <span className={classes.bullet}>
-                    <IconBolt size={16}/>{t`Fast payouts to your bank`}
-                </span>
-                <span className={classes.bullet}>
-                    <IconWorld size={16}/>{t`135+ currencies & 40+ payment methods`}
-                </span>
-                <span className={classes.bullet}>
-                    <IconShieldCheck size={16}/>{t`Built-in fraud protection`}
-                </span>
-            </Box>
-
-            <Button
-                size="md"
-                leftSection={<IconBrandStripe size={18}/>}
-                onClick={handleConnect}
-                loading={pendingConnect && (connectDetails.isLoading || !connectDetails.data)}
-            >
-                {t`Connect with Stripe`}
-            </Button>
+                <Button
+                    size="md"
+                    leftSection={<IconBrandStripe size={18}/>}
+                    onClick={handleConnect}
+                    loading={pendingConnect && (connectDetails.isLoading || !connectDetails.data)}
+                >
+                    {t`Connect with Stripe`}
+                </Button>
+            </SettingsBlock>
 
             {renderInlineReuse()}
-        </>
+        </SettingsSection>
     );
 
     const renderInProgress = (account: OrganizerStripeConnectAccount) => {
@@ -272,63 +270,65 @@ export const PayoutsSettings = () => {
             || account.requirements.currently_due.length > 0;
 
         return (
-            <>
-                <Group gap="md" mb="md" wrap="nowrap">
-                    <ThemeIcon size={40} radius="md" variant="light" color="orange">
-                        <IconAlertCircle size={22}/>
-                    </ThemeIcon>
-                    <div>
-                        <Title order={4}>{t`Finish setting up Stripe`}</Title>
-                        <Text c="dimmed" size="sm">
-                            {t`Stripe will walk you through a few quick questions to finish setup.`}
-                        </Text>
-                    </div>
-                </Group>
+            <SettingsSection>
+                <SettingsBlock>
+                    <Group gap="md" mb="md" wrap="nowrap">
+                        <ThemeIcon size={40} radius="md" variant="light" color="orange">
+                            <IconAlertCircle size={22}/>
+                        </ThemeIcon>
+                        <div>
+                            <Title order={4}>{t`Finish setting up Stripe`}</Title>
+                            <Text c="dimmed" size="sm">
+                                {t`Stripe will walk you through a few quick questions to finish setup.`}
+                            </Text>
+                        </div>
+                    </Group>
 
-                <Button
-                    leftSection={<IconExternalLink size={16}/>}
-                    onClick={handleConnect}
-                    loading={pendingConnect && (connectDetails.isLoading || !connectDetails.data)}
-                >
-                    {t`Complete Stripe setup`}
-                </Button>
+                    <Button
+                        leftSection={<IconExternalLink size={16}/>}
+                        onClick={handleConnect}
+                        loading={pendingConnect && (connectDetails.isLoading || !connectDetails.data)}
+                    >
+                        {t`Complete Stripe setup`}
+                    </Button>
+
+                    {hasRequirements && (
+                        <Box mt="md">
+                            <Anchor
+                                component="button"
+                                type="button"
+                                size="xs"
+                                c="dimmed"
+                                underline="hover"
+                                onClick={() => setRequirementsExpanded((v) => !v)}
+                            >
+                                {requirementsExpanded ? t`Hide details` : t`See what Stripe still needs`}
+                            </Anchor>
+
+                            {requirementsExpanded && (
+                                <Box mt="sm">
+                                    {account.requirements.past_due.length > 0 && (
+                                        <Box mb="sm">
+                                            <Text size="xs" c="dimmed" mb={4}>{t`Past due`}</Text>
+                                            <RequirementsList items={account.requirements.past_due}/>
+                                        </Box>
+                                    )}
+                                    {account.requirements.currently_due.length > 0 && (
+                                        <Box>
+                                            <Text size="xs" c="dimmed" mb={4}>{t`Still needed`}</Text>
+                                            <RequirementsList items={account.requirements.currently_due}/>
+                                        </Box>
+                                    )}
+                                </Box>
+                            )}
+                        </Box>
+                    )}
+                </SettingsBlock>
 
                 {renderInlineReuse()}
 
                 {renderDisconnect(account, t`Connected the wrong Stripe account? Disconnect and start over.`)}
-
-                {hasRequirements && (
-                    <Box mt="md">
-                        <Anchor
-                            component="button"
-                            type="button"
-                            size="xs"
-                            c="dimmed"
-                            underline="hover"
-                            onClick={() => setRequirementsExpanded((v) => !v)}
-                        >
-                            {requirementsExpanded ? t`Hide details` : t`See what Stripe still needs`}
-                        </Anchor>
-
-                        {requirementsExpanded && (
-                            <Box mt="sm">
-                                {account.requirements.past_due.length > 0 && (
-                                    <Box mb="sm">
-                                        <Text size="xs" c="dimmed" mb={4}>{t`Past due`}</Text>
-                                        <RequirementsList items={account.requirements.past_due}/>
-                                    </Box>
-                                )}
-                                {account.requirements.currently_due.length > 0 && (
-                                    <Box>
-                                        <Text size="xs" c="dimmed" mb={4}>{t`Still needed`}</Text>
-                                        <RequirementsList items={account.requirements.currently_due}/>
-                                    </Box>
-                                )}
-                            </Box>
-                        )}
-                    </Box>
-                )}
-            </>
+            </SettingsSection>
         );
     };
 
@@ -341,132 +341,139 @@ export const PayoutsSettings = () => {
 
         return (
             <>
-                <Box className={classes.connectedHeader} mb="md">
-                    <Box className={classes.connectedIdentity}>
-                        <ThemeIcon size={48} radius="md" variant="light" color="green">
-                            <IconCircleCheck size={26}/>
-                        </ThemeIcon>
-                        <div>
-                            <Title order={4}>{t`Stripe connected`}</Title>
-                            <Text c="dimmed" size="sm" className={classes.connectedMeta}>
-                                {account.country
-                                    ? t`Account · ${account.country} · ${account.account_type ?? "Standard"}`
-                                    : t`Account · ${account.account_type ?? "Standard"}`}
-                            </Text>
-                            {stripeAccountId && (
-                                <Group gap={4} mt={2} wrap="nowrap" className={classes.accountIdRow}>
-                                    <Text size="xs" c="dimmed" className={classes.accountIdValue}>
-                                        {stripeAccountId}
+                <SettingsSection>
+                    <SettingsBlock>
+                        <Box className={classes.connectedHeader} mb="md">
+                            <Box className={classes.connectedIdentity}>
+                                <ThemeIcon size={48} radius="md" variant="light" color="green">
+                                    <IconCircleCheck size={26}/>
+                                </ThemeIcon>
+                                <div>
+                                    <Title order={4}>{t`Stripe connected`}</Title>
+                                    <Text c="dimmed" size="sm" className={classes.connectedMeta}>
+                                        {account.country
+                                            ? t`Account · ${account.country} · ${account.account_type ?? "Standard"}`
+                                            : t`Account · ${account.account_type ?? "Standard"}`}
                                     </Text>
-                                    <CopyButton value={stripeAccountId} timeout={1500}>
-                                        {({copied, copy}) => (
-                                            <Tooltip
-                                                label={copied ? t`Copied` : t`Copy account ID`}
-                                                withArrow
-                                                position="right"
-                                            >
-                                                <ActionIcon
-                                                    size="xs"
-                                                    variant="subtle"
-                                                    color={copied ? "green" : "gray"}
-                                                    onClick={copy}
-                                                    aria-label={t`Copy account ID`}
-                                                >
-                                                    {copied ? <IconCheck size={12}/> : <IconCopy size={12}/>}
-                                                </ActionIcon>
-                                            </Tooltip>
-                                        )}
-                                    </CopyButton>
-                                </Group>
-                            )}
-                        </div>
-                    </Box>
-                    <Button
-                        component="a"
-                        href={stripeDashboardUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        variant="subtle"
-                        leftSection={<IconExternalLink size={16}/>}
-                        className={classes.manageButton}
-                    >
-                        {t`Manage on Stripe`}
-                    </Button>
-                </Box>
+                                    {stripeAccountId && (
+                                        <Group gap={4} mt={2} wrap="nowrap" className={classes.accountIdRow}>
+                                            <Text size="xs" c="dimmed" className={classes.accountIdValue}>
+                                                {stripeAccountId}
+                                            </Text>
+                                            <CopyButton value={stripeAccountId} timeout={1500}>
+                                                {({copied, copy}) => (
+                                                    <Tooltip
+                                                        label={copied ? t`Copied` : t`Copy account ID`}
+                                                        withArrow
+                                                        position="right"
+                                                    >
+                                                        <ActionIcon
+                                                            size="xs"
+                                                            variant="subtle"
+                                                            color={copied ? "green" : "gray"}
+                                                            onClick={copy}
+                                                            aria-label={t`Copy account ID`}
+                                                        >
+                                                            {copied ? <IconCheck size={12}/> : <IconCopy size={12}/>}
+                                                        </ActionIcon>
+                                                    </Tooltip>
+                                                )}
+                                            </CopyButton>
+                                        </Group>
+                                    )}
+                                </div>
+                            </Box>
+                            <Button
+                                component="a"
+                                href={stripeDashboardUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                variant="subtle"
+                                leftSection={<IconExternalLink size={16}/>}
+                                className={classes.manageButton}
+                            >
+                                {t`Manage on Stripe`}
+                            </Button>
+                        </Box>
 
-                <Box className={classes.statusGrid}>
-                    <div className={classes.statusCell}>
-                        <span className={classes.statusCellLabel}>{t`Charges`}</span>
-                        <span className={classes.statusCellValue}>
-                            {account.charges_enabled
-                                ? <Badge color="green" leftSection={<IconCheck size={12}/>}>{t`Enabled`}</Badge>
-                                : <Badge color="red">{t`Disabled`}</Badge>}
-                        </span>
-                    </div>
-                    <div className={classes.statusCell}>
-                        <span className={classes.statusCellLabel}>{t`Payouts`}</span>
-                        <span className={classes.statusCellValue}>
-                            {account.payouts_enabled
-                                ? <Badge color="green" leftSection={<IconCheck size={12}/>}>{t`Enabled`}</Badge>
-                                : <Badge color="red">{t`Disabled`}</Badge>}
-                        </span>
-                    </div>
-                    <div className={classes.statusCell}>
-                        <span className={classes.statusCellLabel}>{t`Active payment methods`}</span>
-                        <span className={classes.statusCellValue}>
-                            <Trans>{activeCount} enabled</Trans>
-                        </span>
-                    </div>
-                </Box>
+                        <Box className={classes.statusGrid}>
+                            <div className={classes.statusCell}>
+                                <span className={classes.statusCellLabel}>{t`Charges`}</span>
+                                <span className={classes.statusCellValue}>
+                                    {account.charges_enabled
+                                        ? <Badge color="green" leftSection={<IconCheck size={12}/>}>{t`Enabled`}</Badge>
+                                        : <Badge color="red">{t`Disabled`}</Badge>}
+                                </span>
+                            </div>
+                            <div className={classes.statusCell}>
+                                <span className={classes.statusCellLabel}>{t`Payouts`}</span>
+                                <span className={classes.statusCellValue}>
+                                    {account.payouts_enabled
+                                        ? <Badge color="green" leftSection={<IconCheck size={12}/>}>{t`Enabled`}</Badge>
+                                        : <Badge color="red">{t`Disabled`}</Badge>}
+                                </span>
+                            </div>
+                            <div className={classes.statusCell}>
+                                <span className={classes.statusCellLabel}>{t`Active payment methods`}</span>
+                                <span className={classes.statusCellValue}>
+                                    <Trans>{activeCount} enabled</Trans>
+                                </span>
+                            </div>
+                        </Box>
 
-                <Accordion variant="separated" radius="md" mt="md">
-                    <Accordion.Item value="capabilities">
-                        <Accordion.Control>{t`View all capabilities`}</Accordion.Control>
-                        <Accordion.Panel>
-                            <CapabilityList capabilities={account.capabilities}/>
-                        </Accordion.Panel>
-                    </Accordion.Item>
-                </Accordion>
+                        <Accordion variant="separated" radius="md" mt="md">
+                            <Accordion.Item value="capabilities">
+                                <Accordion.Control>{t`View all capabilities`}</Accordion.Control>
+                                <Accordion.Panel>
+                                    <CapabilityList capabilities={account.capabilities}/>
+                                </Accordion.Panel>
+                            </Accordion.Item>
+                        </Accordion>
 
-                {account.requirements.eventually_due.length > 0 && (
-                    <Callout
-                        variant="tip"
-                        title={t`Stripe will need a few more details soon`}
-                        style={{marginTop: 16}}
-                    >
-                        <Text size="sm" mb="xs">
-                            {t`Provide the following before Stripe's next review to keep payouts flowing.`}
-                        </Text>
-                        <RequirementsList items={account.requirements.eventually_due} severity="eventually"/>
-                    </Callout>
-                )}
+                        {account.requirements.eventually_due.length > 0 && (
+                            <Callout
+                                variant="tip"
+                                title={t`Stripe will need a few more details soon`}
+                                style={{marginTop: 16}}
+                            >
+                                <Text size="sm" mb="xs">
+                                    {t`Provide the following before Stripe's next review to keep payouts flowing.`}
+                                </Text>
+                                <RequirementsList items={account.requirements.eventually_due} severity="eventually"/>
+                            </Callout>
+                        )}
+                    </SettingsBlock>
+
+                    {renderDisconnect(account, t`Need to switch Stripe accounts? Disconnect this one.`)}
+                </SettingsSection>
 
                 {organizerId && getVatInfo(account.country).isEU && (
-                    <Box mt="xl">
-                        <Divider mb="md"/>
-                        <Title order={4} mb={4}>{t`VAT`}</Title>
-                        <Text c="dimmed" size="sm" mb="md">
-                            {t`How VAT is applied to the platform fees we charge you.`}
-                        </Text>
-                        <VatSettingsBody organizerId={organizerId} stripeCountry={account.country}/>
-                    </Box>
+                    <SettingsSection title={t`VAT`}>
+                        <SettingsBlock>
+                            <Text c="dimmed" size="sm" mb="md">
+                                {t`How VAT is applied to the platform fees we charge you.`}
+                            </Text>
+                            <VatSettingsBody organizerId={organizerId} stripeCountry={account.country}/>
+                        </SettingsBlock>
+                    </SettingsSection>
                 )}
-
-                {renderDisconnect(account, t`Need to switch Stripe accounts? Disconnect this one.`)}
             </>
         );
     };
 
     return (
-        <Card>
-            <HeadingWithDescription
-                heading={t`Payouts`}
-                description={t`Connect Stripe to receive ticket payments directly to your bank account.`}
-            />
+        <SettingsPage
+            title={t`Payouts`}
+            description={t`Connect Stripe to receive ticket payments directly to your bank account.`}
+        >
             {stripeQuery.isLoading ? (
-                <Group justify="center" p="xl">
-                    <Loader/>
-                </Group>
+                <SettingsSection>
+                    <SettingsBlock>
+                        <Group justify="center" p="xl">
+                            <Loader/>
+                        </Group>
+                    </SettingsBlock>
+                </SettingsSection>
             ) : hasConnected && primaryAccount ? (
                 renderConnected(primaryAccount)
             ) : hasInProgress && primaryAccount ? (
@@ -474,6 +481,6 @@ export const PayoutsSettings = () => {
             ) : (
                 renderHero()
             )}
-        </Card>
+        </SettingsPage>
     );
 };
