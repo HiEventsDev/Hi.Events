@@ -39,13 +39,13 @@ test.describe('text messages on Hi.Events Cloud', () => {
     const audience = new AudiencePage(page, organizerId);
     const checkoutSettings = settings.section('homepage-settings');
     const textOptIn = checkoutSettings.getByRole('switch', { name: 'Show text message opt-in checkbox' });
-    await settings.goto(event.eventId);
+    await settings.goto(event.eventId, 'homepage-settings');
     await expect(checkoutSettings.getByTestId('phone-collection-select')).toContainText('Required');
     await expect(textOptIn).toHaveCount(0);
 
-    await page.goto(`/manage/organizer/${organizerId}/settings`);
+    await page.goto(`/manage/organizer/${organizerId}/settings/event-defaults`);
     await expect(page.getByRole('heading', { name: 'Event Defaults' }).first()).toBeVisible();
-    await expect(page.locator('#text-messages')).toHaveCount(0);
+    await expect(page.getByRole('link', { name: 'Text Messages' })).toHaveCount(0);
     await expect(page.getByRole('switch', { name: 'Show text message opt-in checkbox by default' })).toHaveCount(0);
 
     await openCampaignPicker(page, audience);
@@ -64,9 +64,9 @@ test.describe('text messages on Hi.Events Cloud', () => {
       await expect(visitor.getByTestId('checkout-sms-opt-in')).toHaveCount(0);
 
       await switchTextMessages(adminApi, freshAccount, true);
-      await settings.goto(event.eventId);
+      await settings.goto(event.eventId, 'homepage-settings');
       await expect(textOptIn).toBeChecked();
-      await page.goto(`/manage/organizer/${organizerId}/settings#text-messages`);
+      await page.goto(`/manage/organizer/${organizerId}/settings/text-messages`);
       await expect(page.locator('#text-messages').getByRole('button', { name: 'Find Messaging Services' })).toBeVisible();
       await openCampaignPicker(page, audience);
       await expect(page.getByTestId('campaign-picker-channel')).toBeVisible();
@@ -95,7 +95,7 @@ test.describe('text messages on Hi.Events Cloud', () => {
     await openCampaignPicker(page, audience);
     await expect(page.getByTestId('campaign-picker-channel')).toHaveCount(0);
 
-    await page.goto(`/manage/organizer/${organizerId}/settings#text-messages`);
+    await page.goto(`/manage/organizer/${organizerId}/settings/text-messages`);
     const texts = page.locator('#text-messages');
     await expect(texts).toContainText("Text messages aren't available on this account");
     await expect(texts).toContainText("Text message campaigns can't be sent, but your Twilio account is still connected. You can disconnect it here.");
@@ -105,9 +105,9 @@ test.describe('text messages on Hi.Events Cloud', () => {
     await texts.getByRole('button', { name: 'Disconnect' }).click();
     await audience.confirm('Disconnect');
     await expect(page.getByText('Twilio disconnected')).toBeVisible();
-    await expect(page.locator('#text-messages')).toHaveCount(0);
+    await expect(page.getByRole('link', { name: 'Text Messages' })).toHaveCount(0);
     await page.reload();
-    await expect(page.getByRole('heading', { name: 'Event Defaults' }).first()).toBeVisible();
-    await expect(page.locator('#text-messages')).toHaveCount(0);
+    await expect(page.getByRole('heading', { name: 'Basic Information' }).first()).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Text Messages' })).toHaveCount(0);
   });
 });

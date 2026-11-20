@@ -101,7 +101,7 @@ const OrganizerLayout = () => {
         ...(showPayoutsSection && !isStripeConnected && can('MANAGE_PAYMENTS') ? [
             { label: t`Get Paid` },
             {
-                link: 'settings#payouts',
+                link: 'settings/payouts',
                 label: t`Set up payouts`,
                 icon: IconBrandStripe,
                 isActive: () => false,

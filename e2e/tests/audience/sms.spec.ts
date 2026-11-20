@@ -137,7 +137,7 @@ test.describe('audience text messages', () => {
     await expect(page.getByTestId('campaign-picker-start-sms')).toBeDisabled();
     await expect(page.getByText('Connect your Twilio account before sending text messages.')).toBeVisible();
     await page.getByRole('link', { name: 'Set up text messages' }).click();
-    await expect(page).toHaveURL(/\/settings#text-messages$/);
+    await expect(page).toHaveURL(/\/settings\/text-messages$/);
 
     const accountSid = page.getByLabel(/^Twilio Account SID/);
     const findServices = page.getByRole('button', { name: 'Find Messaging Services' });
@@ -185,7 +185,7 @@ test.describe('audience text messages', () => {
     await expect(page.getByTestId('campaign-picker-start-sms')).toBeEnabled();
     await page.getByRole('button', { name: 'Cancel' }).click();
 
-    await page.goto(`/manage/organizer/${organizerId}/settings#text-messages`);
+    await page.goto(`/manage/organizer/${organizerId}/settings/text-messages`);
     await page.getByRole('button', { name: 'Disconnect' }).click();
     const disconnect = page.getByRole('dialog', { name: 'Disconnect Twilio?' });
     await expect(disconnect).toContainText("Text message campaigns can't be sent until you connect again. Your contacts and their text message consent are kept.");

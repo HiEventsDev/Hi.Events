@@ -99,7 +99,7 @@ export const OfferWaitlistModal = ({onClose, eventId, eventSettings, stats, even
                     </Text>
                     <Anchor
                         component={NavLink}
-                        to={`/manage/event/${eventId}/settings#waitlist-settings`}
+                        to={`/manage/event/${eventId}/settings/waitlist`}
                         size="xs"
                     >
                         {t`Change waitlist settings`}

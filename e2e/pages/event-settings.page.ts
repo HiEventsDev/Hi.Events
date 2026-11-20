@@ -1,10 +1,21 @@
 import type { Locator, Page } from '@playwright/test';
 
+const SECTION_SLUGS = {
+  'event-details': 'details',
+  'event-type': 'event-type',
+  'homepage-settings': 'checkout',
+  'payment-settings': 'payments',
+  'seo-settings': 'seo',
+  'danger-zone': 'danger-zone',
+} as const;
+
+type SectionId = keyof typeof SECTION_SLUGS;
+
 export class EventSettingsPage {
   constructor(private readonly page: Page) {}
 
-  async goto(eventId: number): Promise<void> {
-    await this.page.goto(`/manage/event/${eventId}/settings`);
+  async goto(eventId: number, section: SectionId = 'event-details'): Promise<void> {
+    await this.page.goto(`/manage/event/${eventId}/settings/${SECTION_SLUGS[section]}`);
     await this.page.waitForLoadState('networkidle');
   }
 
@@ -33,7 +44,7 @@ export class EventSettingsPage {
   }
 
   get selfServiceSwitch(): Locator {
-    return this.section('misc-settings').getByLabel('Enable attendee self-service');
+    return this.section('homepage-settings').getByLabel('Enable attendee self-service');
   }
 
   get offlinePaymentsCheckbox(): Locator {

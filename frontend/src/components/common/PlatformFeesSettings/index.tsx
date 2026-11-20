@@ -1,8 +1,9 @@
+import classNames from "classnames";
 import {t} from "@lingui/macro";
-import {Anchor, Button, Grid, Group, NumberInput, SegmentedControl, Stack, Text, Title} from "@mantine/core";
-import {useEffect, useState} from "react";
+import {Anchor, Grid, Group, NumberInput, SegmentedControl, Text} from "@mantine/core";
+import {FormEvent, useEffect, useState} from "react";
 import {Card} from "../Card";
-import {HeadingWithDescription} from "../Card/CardHeading";
+import {SettingsBlock, SettingsRow, SettingsSaveFooter, SettingsSection} from "../SettingsPage";
 import {formatCurrency} from "../../../utilites/currency.ts";
 import {IconArrowRight} from "@tabler/icons-react";
 import classes from "./PlatformFeesSettings.module.scss";
@@ -32,15 +33,10 @@ const FeeBreakdown = ({ticketPrice, feePercentage, fixedFee, currency, passToBuy
 
     let platformFee: number;
     if (passToBuyer) {
-        // Gross-up formula: P = (fixed + total * r) / (1 - r)
-        // When passing to buyer, we need to add enough so that after Stripe takes
-        // its percentage from the new total, the platform still receives the full fee
         platformFee = percentageRate >= 1
             ? fixedFee + (ticketPrice * percentageRate)
             : (fixedFee + (ticketPrice * percentageRate)) / (1 - percentageRate);
     } else {
-        // Simple formula: fee = fixed + (total * percentage)
-        // When absorbing, the fee is calculated directly on the ticket price
         platformFee = fixedFee + (ticketPrice * percentageRate);
     }
     const roundedPlatformFee = Math.round(platformFee * 100) / 100;
@@ -86,8 +82,6 @@ export interface PlatformFeesSettingsProps {
     onSave: (passToBuyer: boolean) => void;
     isLoading: boolean;
     isSaving: boolean;
-    heading: string;
-    description: string;
     feeHandlingLabel: string;
     feeHandlingDescription: string;
     feePreview?: PlatformFeePreview;
@@ -100,8 +94,6 @@ export const PlatformFeesSettings = ({
     onSave,
     isLoading,
     isSaving,
-    heading,
-    description,
     feeHandlingLabel,
     feeHandlingDescription,
     feePreview,
@@ -126,153 +118,149 @@ export const PlatformFeesSettings = ({
         }
     };
 
-    const handleSave = () => {
-        onSave(selectedOption === 'pass');
-    };
-
-    // Sync selected option when currentValue changes (e.g., after data loads)
     useEffect(() => {
         if (!isLoading) {
             setSelectedOption(currentValue ? 'pass' : 'absorb');
         }
     }, [isLoading, currentValue]);
 
+    const isDirty = (selectedOption === 'pass') !== currentValue;
+
+    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        onSave(selectedOption === 'pass');
+    };
+
     return (
-        <Card>
-            <HeadingWithDescription
-                heading={heading}
-                description={description}
-            />
-
-            <Stack gap="xl">
-                {configuration && (
-                    <Card variant="lightGray">
-                        <Group justify="space-between" align="flex-start">
-                            <div>
-                                <Text size="sm" fw={500} mb="xs">{t`Your Plan`}</Text>
-                                <Title order={4}>{configuration.name}</Title>
-                            </div>
-                            <div style={{textAlign: 'right'}}>
-                                <Text size="sm" c="dimmed">{t`Platform fee`}</Text>
-                                <Text fw={600}>
-                                    {formatPercentage(feePercentage)}
-                                    {configuration.application_fees?.fixed > 0 && ` + ${formatCurrency(configuration.application_fees.fixed, configCurrency)}`}
+        <>
+            {configuration && (
+                <SettingsSection title={t`Your Plan`}>
+                    <SettingsRow label={configuration.name} description={t`Platform fee`}>
+                        <div className={classes.planFee}>
+                            <Text fw={600}>
+                                {formatPercentage(feePercentage)}
+                                {configuration.application_fees?.fixed > 0 && ` + ${formatCurrency(configuration.application_fees.fixed, configCurrency)}`}
+                            </Text>
+                            {feePreview && configCurrency !== feeCurrency && configuration.application_fees?.fixed > 0 && (
+                                <Text size="xs" c="dimmed">
+                                    {t`≈ ${formatCurrency(fixedFee, feeCurrency)} at current rate`}
                                 </Text>
-                                {feePreview && configCurrency !== feeCurrency && configuration.application_fees?.fixed > 0 && (
-                                    <Text size="xs" c="dimmed">
-                                        {t`≈ ${formatCurrency(fixedFee, feeCurrency)} at current rate`}
-                                    </Text>
-                                )}
-                            </div>
-                        </Group>
-                    </Card>
-                )}
+                            )}
+                        </div>
+                    </SettingsRow>
+                </SettingsSection>
+            )}
 
-                <div>
-                    <Text fw={500} mb="sm">{feeHandlingLabel}</Text>
-                    <Text size="sm" c="dimmed" mb="md">
-                        {feeHandlingDescription}
-                    </Text>
-
-                    <NumberInput
+            <SettingsSection title={feeHandlingLabel}>
+                <form onSubmit={handleSubmit}>
+                    <SettingsRow
                         label={t`Sample ticket price`}
-                        value={samplePrice}
-                        onChange={handlePriceChange}
-                        min={0}
-                        max={10000}
-                        decimalScale={2}
-                        prefix={formatCurrency(0, feeCurrency).replace(/[\d.,\s]/g, '')}
-                        mb="lg"
-                        style={{maxWidth: 200}}
-                    />
-
-                    <fieldset disabled={isLoading || isSaving}>
-                        <SegmentedControl
-                            value={selectedOption}
-                            onChange={(value) => setSelectedOption(value as 'pass' | 'absorb')}
-                            data={[
-                                {label: t`Pass fee to buyer`, value: 'pass'},
-                                {label: t`Absorb fee`, value: 'absorb'},
-                            ]}
-                            mb="md"
-                            fullWidth
-                            size="md"
+                        htmlFor="platform-fees-sample-price"
+                    >
+                        <NumberInput
+                            id="platform-fees-sample-price"
+                            value={samplePrice}
+                            onChange={handlePriceChange}
+                            min={0}
+                            max={10000}
+                            decimalScale={2}
+                            prefix={formatCurrency(0, feeCurrency).replace(/[\d.,\s]/g, '')}
                         />
+                    </SettingsRow>
 
-                        <Grid mb="lg">
-                            <Grid.Col span={{base: 12, sm: 6}}>
-                                <Card
-                                    variant={selectedOption === 'pass' ? 'default' : 'lightGray'}
-                                    className={selectedOption === 'pass' ? classes.activeCard : ''}
-                                >
-                                    <Group gap="xs" mb="md">
-                                        <Text fw={600}>{t`Pass to Buyer`}</Text>
-                                        {selectedOption === 'pass' && (
-                                            <Text size="xs" c="teal" fw={500}>{t`Selected`}</Text>
-                                        )}
-                                    </Group>
-                                    <Text size="sm" c="dimmed" mb="md">
-                                        {t`The platform fee is added to the ticket price. Buyers pay more, but you receive the full ticket price.`}
-                                    </Text>
-                                    <FeeBreakdown
-                                        ticketPrice={numericPrice}
-                                        feePercentage={feePercentage}
-                                        fixedFee={fixedFee}
-                                        currency={feeCurrency}
-                                        passToBuyer={true}
-                                    />
-                                </Card>
-                            </Grid.Col>
-                            <Grid.Col span={{base: 12, sm: 6}}>
-                                <Card
-                                    variant={selectedOption === 'absorb' ? 'default' : 'lightGray'}
-                                    className={selectedOption === 'absorb' ? classes.activeCard : ''}
-                                >
-                                    <Group gap="xs" mb="md">
-                                        <Text fw={600}>{t`Absorb Fee`}</Text>
-                                        {selectedOption === 'absorb' && (
-                                            <Text size="xs" c="teal" fw={500}>{t`Selected`}</Text>
-                                        )}
-                                    </Group>
-                                    <Text size="sm" c="dimmed" mb="md">
-                                        {t`Buyers see a clean price. The platform fee is deducted from your payout.`}
-                                    </Text>
-                                    <FeeBreakdown
-                                        ticketPrice={numericPrice}
-                                        feePercentage={feePercentage}
-                                        fixedFee={fixedFee}
-                                        currency={feeCurrency}
-                                        passToBuyer={false}
-                                    />
-                                </Card>
-                            </Grid.Col>
-                        </Grid>
+                    <SettingsBlock>
+                        <Text size="sm" c="dimmed" mb="md">
+                            {feeHandlingDescription}
+                        </Text>
 
-                        <Button loading={isSaving} onClick={handleSave}>
-                            {t`Save`}
-                        </Button>
-                    </fieldset>
-                </div>
+                        <fieldset disabled={isLoading || isSaving}>
+                            <SegmentedControl
+                                value={selectedOption}
+                                onChange={(value) => setSelectedOption(value as 'pass' | 'absorb')}
+                                data={[
+                                    {label: t`Pass fee to buyer`, value: 'pass'},
+                                    {label: t`Absorb fee`, value: 'absorb'},
+                                ]}
+                                mb="md"
+                                fullWidth
+                                size="md"
+                            />
 
-                {!isRestricted && (
-                    <Card variant="lightGray">
-                        <Group justify="space-between" align="center">
-                            <div>
-                                <Text fw={500} mb={4}>{t`Additional Fees`}</Text>
-                                <Text size="sm" c="dimmed">
-                                    {t`You can configure additional service fees and taxes in your account settings.`}
-                                </Text>
-                            </div>
-                            <Anchor component={NavLink} to="/settings/taxes-and-fees" size="sm">
-                                <Group gap="xs">
-                                    <span>{t`Configure Taxes & Fees`}</span>
-                                    <IconArrowRight size={16} />
-                                </Group>
-                            </Anchor>
-                        </Group>
-                    </Card>
-                )}
-            </Stack>
-        </Card>
+                            <Grid>
+                                <Grid.Col span={{base: 12, sm: 6}}>
+                                    <Card
+                                        variant={selectedOption === 'pass' ? 'default' : 'lightGray'}
+                                        className={classNames(classes.optionCard, {[classes.activeCard]: selectedOption === 'pass'})}
+                                    >
+                                        <Group gap="xs" mb="md">
+                                            <Text fw={600}>{t`Pass to Buyer`}</Text>
+                                            {selectedOption === 'pass' && (
+                                                <Text size="xs" c="teal" fw={500}>{t`Selected`}</Text>
+                                            )}
+                                        </Group>
+                                        <Text size="sm" c="dimmed" mb="md">
+                                            {t`The platform fee is added to the ticket price. Buyers pay more, but you receive the full ticket price.`}
+                                        </Text>
+                                        <FeeBreakdown
+                                            ticketPrice={numericPrice}
+                                            feePercentage={feePercentage}
+                                            fixedFee={fixedFee}
+                                            currency={feeCurrency}
+                                            passToBuyer={true}
+                                        />
+                                    </Card>
+                                </Grid.Col>
+                                <Grid.Col span={{base: 12, sm: 6}}>
+                                    <Card
+                                        variant={selectedOption === 'absorb' ? 'default' : 'lightGray'}
+                                        className={classNames(classes.optionCard, {[classes.activeCard]: selectedOption === 'absorb'})}
+                                    >
+                                        <Group gap="xs" mb="md">
+                                            <Text fw={600}>{t`Absorb Fee`}</Text>
+                                            {selectedOption === 'absorb' && (
+                                                <Text size="xs" c="teal" fw={500}>{t`Selected`}</Text>
+                                            )}
+                                        </Group>
+                                        <Text size="sm" c="dimmed" mb="md">
+                                            {t`Buyers see a clean price. The platform fee is deducted from your payout.`}
+                                        </Text>
+                                        <FeeBreakdown
+                                            ticketPrice={numericPrice}
+                                            feePercentage={feePercentage}
+                                            fixedFee={fixedFee}
+                                            currency={feeCurrency}
+                                            passToBuyer={false}
+                                        />
+                                    </Card>
+                                </Grid.Col>
+                            </Grid>
+                        </fieldset>
+                    </SettingsBlock>
+
+                    <SettingsSaveFooter
+                        isDirty={isDirty}
+                        isSaving={isSaving}
+                        onDiscard={() => setSelectedOption(currentValue ? 'pass' : 'absorb')}
+                    />
+                </form>
+            </SettingsSection>
+
+            {!isRestricted && (
+                <SettingsSection>
+                    <SettingsRow
+                        label={t`Additional Fees`}
+                        description={t`You can configure additional service fees and taxes in your account settings.`}
+                        inlineControl
+                    >
+                        <Anchor component={NavLink} to="/settings/taxes-and-fees" size="sm">
+                            <Group gap="xs" wrap="nowrap">
+                                <span>{t`Configure Taxes & Fees`}</span>
+                                <IconArrowRight size={16} />
+                            </Group>
+                        </Anchor>
+                    </SettingsRow>
+                </SettingsSection>
+            )}
+        </>
     );
 };

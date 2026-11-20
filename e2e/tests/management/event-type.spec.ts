@@ -7,7 +7,7 @@ test.describe('event type', () => {
     const event = await createDraftEvent(api, account.organizerId);
 
     const settings = new EventSettingsPage(authedPage);
-    await settings.goto(event.eventId);
+    await settings.goto(event.eventId, 'event-type');
     await expect(settings.section('event-type')).toContainText('This is a single event.');
     await expect(settings.section('event-type')).toContainText('while it has exactly one date and no orders');
 
@@ -30,7 +30,7 @@ test.describe('event type', () => {
 
     const settings = new EventSettingsPage(authedPage);
     await expect(async () => {
-      await settings.goto(event.eventId);
+      await settings.goto(event.eventId, 'event-type');
       await expect(settings.section('event-type')).toContainText('already has orders', { timeout: 2_000 });
     }).toPass();
 
@@ -49,7 +49,7 @@ test.describe('event type', () => {
     const event = await createRecurringLiveEvent(api, account.organizerId, { count: 2 });
 
     const settings = new EventSettingsPage(authedPage);
-    await settings.goto(event.eventId);
+    await settings.goto(event.eventId, 'event-type');
 
     await settings.changeEventType('Change to single event');
     await expect(authedPage.getByText('Only a recurring event with exactly one date can be changed to a single event.', { exact: false })).toBeVisible();

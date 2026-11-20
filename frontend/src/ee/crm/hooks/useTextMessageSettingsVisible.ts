@@ -2,9 +2,14 @@ import {IdParam} from "../../../types.ts";
 import {useGetCrmSmsConnection} from "../queries/useGetCrmSmsConnection.ts";
 import {useTextMessagesVisible} from "./useTextMessagesVisible.ts";
 
-export const useTextMessageSettingsVisible = (organizerId: IdParam | undefined): boolean => {
-    const isAvailable = useTextMessagesVisible();
-    const {data: connection} = useGetCrmSmsConnection(organizerId, !isAvailable);
+interface TextMessageSettingsVisibility {
+    isVisible: boolean;
+    isResolved: boolean;
+}
 
-    return isAvailable || !!connection;
+export const useTextMessageSettingsVisible = (organizerId: IdParam | undefined): TextMessageSettingsVisibility => {
+    const isAvailable = useTextMessagesVisible();
+    const {data: connection, isLoading} = useGetCrmSmsConnection(organizerId, !isAvailable);
+
+    return {isVisible: isAvailable || !!connection, isResolved: isAvailable || !isLoading};
 };

@@ -1,9 +1,8 @@
 import {t} from "@lingui/macro";
-import {Button, TextInput, Stack, Text} from "@mantine/core";
-import {Callout} from "../../../../../common/Callout";
+import {Button, TextInput} from "@mantine/core";
 import {useNavigate, useParams} from "react-router";
 import {useState} from "react";
-import {DangerZone, DangerZoneSection} from "../../../../../common/DangerZone";
+import {SettingsPage, SettingsRow, SettingsSection} from "../../../../../common/SettingsPage";
 import {useGetEventDeletionStatus} from "../../../../../../queries/useGetEventDeletionStatus.ts";
 import {useDeleteEvent} from "../../../../../../mutations/useDeleteEvent.ts";
 import {useUpdateEventStatus} from "../../../../../../mutations/useUpdateEventStatus.ts";
@@ -13,7 +12,6 @@ import {confirmationDialog} from "../../../../../../utilites/confirmationDialog.
 import {EventStatus} from "../../../../../../types.ts";
 import {IconTrash, IconArchive, IconArrowBackUp} from "@tabler/icons-react";
 import {useAccess} from "../../../../../../hooks/useAccess.ts";
-import {BouncingEmoji} from "../../../../../common/BouncingEmoji";
 
 export const DangerZoneSettings = () => {
     const {eventId} = useParams();
@@ -67,71 +65,61 @@ export const DangerZoneSettings = () => {
 
     if (!isAdmin) {
         return (
-            <DangerZone>
-                <div style={{textAlign: 'center', padding: '20px 0'}}>
-                    <BouncingEmoji emoji="✋"/>
-                    <h3>{t`Admin Access Required`}</h3>
-                    <Text size="sm" c="dimmed">
-                        {t`Only account administrators can delete or archive events. Contact your account admin for assistance.`}
-                    </Text>
-                </div>
-            </DangerZone>
+            <SettingsPage title={t`Danger Zone`}>
+                <SettingsSection tone="danger">
+                    <SettingsRow
+                        label={t`Admin Access Required`}
+                        description={t`Only account administrators can delete or archive events. Contact your account admin for assistance.`}
+                    />
+                </SettingsSection>
+            </SettingsPage>
         );
     }
 
+    const canDelete = !!deletionStatus?.can_delete;
+
     return (
-        <DangerZone>
-            <DangerZoneSection
-                title={t`Delete Event`}
-                description={
-                    deletionStatus?.can_delete
-                        ? t`Permanently delete this event and all its associated data.`
-                        : deletionStatus?.reason || t`Loading...`
-                }
-                action={
-                    <>
-                        {!isDeletionStatusLoading && !deletionStatus?.can_delete && (
-                            <Callout variant="info" style={{marginBottom: 8}}>
-                                {deletionStatus?.reason}
-                            </Callout>
-                        )}
-                        {deletionStatus?.can_delete && (
-                            <Stack gap="xs" maw={400}>
-                                <Text size="sm" c="dimmed">
-                                    {t`Type "delete" to confirm`}
-                                </Text>
-                                <TextInput
-                                    placeholder={deleteConfirmationPhrase}
-                                    value={deleteConfirmation}
-                                    onChange={(e) => setDeleteConfirmation(e.currentTarget.value)}
-                                />
-                            </Stack>
-                        )}
-                        <Button
-                            mt="sm"
-                            color="red"
-                            variant="outline"
-                            data-testid="event-delete-button"
-                            onClick={handleDelete}
-                            loading={deleteMutation.isPending}
-                            disabled={!deletionStatus?.can_delete || isDeletionStatusLoading || !isDeleteConfirmed}
-                            leftSection={<IconTrash size={16}/>}
-                        >
-                            {t`Delete Event`}
-                        </Button>
-                    </>
-                }
-            />
-            <DangerZoneSection
-                title={isArchived ? t`Restore Event` : t`Archive Event`}
-                description={
-                    isPendingReview
+        <SettingsPage title={t`Danger Zone`}>
+            <SettingsSection tone="danger">
+                <SettingsRow
+                    label={t`Delete Event`}
+                    description={canDelete
+                        ? (
+                            <>
+                                {t`Permanently delete this event and all its associated data.`}
+                                <div>{t`Type "delete" to confirm`}</div>
+                            </>
+                        )
+                        : deletionStatus?.reason || t`Loading...`}
+                >
+                    {canDelete && (
+                        <TextInput
+                            aria-label={t`Type "delete" to confirm`}
+                            placeholder={deleteConfirmationPhrase}
+                            value={deleteConfirmation}
+                            onChange={(e) => setDeleteConfirmation(e.currentTarget.value)}
+                        />
+                    )}
+                    <Button
+                        color="red"
+                        variant="outline"
+                        data-testid="event-delete-button"
+                        onClick={handleDelete}
+                        loading={deleteMutation.isPending}
+                        disabled={!canDelete || isDeletionStatusLoading || !isDeleteConfirmed}
+                        leftSection={<IconTrash size={16}/>}
+                    >
+                        {t`Delete Event`}
+                    </Button>
+                </SettingsRow>
+                <SettingsRow
+                    label={isArchived ? t`Restore Event` : t`Archive Event`}
+                    description={isPendingReview
                         ? t`This event is pending manual review. Its status cannot be changed until the review is complete.`
                         : isArchived
                             ? t`Restore this event to make it visible again.`
-                            : t`Archive this event to hide it from the public. You can restore it later.`
-                }
-                action={
+                            : t`Archive this event to hide it from the public. You can restore it later.`}
+                >
                     <Button
                         color={isArchived ? "blue" : "orange"}
                         variant="outline"
@@ -142,8 +130,8 @@ export const DangerZoneSettings = () => {
                     >
                         {isArchived ? t`Restore Event` : t`Archive Event`}
                     </Button>
-                }
-            />
-        </DangerZone>
+                </SettingsRow>
+            </SettingsSection>
+        </SettingsPage>
     );
 };

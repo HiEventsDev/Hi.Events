@@ -98,7 +98,7 @@ test.describe('event lifecycle', () => {
     const event = await createDraftEvent(api, account.organizerId);
 
     const settings = new EventSettingsPage(authedPage);
-    await settings.goto(event.eventId);
+    await settings.goto(event.eventId, 'danger-zone');
 
     await settings.deleteConfirmationInput.fill('delete');
     await settings.deleteButton.click();

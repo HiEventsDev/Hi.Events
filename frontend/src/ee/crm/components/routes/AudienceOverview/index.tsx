@@ -264,7 +264,7 @@ const AudienceOverview = () => {
                             {can('EDIT') && (
                                 <span className={classes.noticeLinks}>
                                     {optInWarning.fixedInEvents && overview.live_events_not_collecting_opt_in.map(event => (
-                                        <Link key={event.id} to={`/manage/event/${event.id}/settings#homepage-settings`}>{event.title}</Link>
+                                        <Link key={event.id} to={`/manage/event/${event.id}/settings/checkout`}>{event.title}</Link>
                                     ))}
                                     {optInWarning.fixedInEvents && (unlistedEvents > 0 || overview.live_events_not_collecting_opt_in.length === 0) && (
                                         <Link to={`${organizerPath}/events`}>
@@ -273,7 +273,7 @@ const AudienceOverview = () => {
                                                 : t`Go to your events`}
                                         </Link>
                                     )}
-                                    {optInWarning.fixedInDefaults && <Link to={`${organizerPath}/settings#event-defaults`}>{t`Open event defaults`}</Link>}
+                                    {optInWarning.fixedInDefaults && <Link to={`${organizerPath}/settings/event-defaults`}>{t`Open event defaults`}</Link>}
                                 </span>
                             )}
                         </Notice>

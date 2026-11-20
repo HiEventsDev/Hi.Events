@@ -1,0 +1,84 @@
+@use "../../../styles/mixins";
+
+.layout {
+  display: grid;
+  grid-template-columns: 208px minmax(0, 1080px);
+  align-items: start;
+  gap: 32px;
+
+  @include mixins.respond-below(lg) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+}
+
+.nav {
+  position: sticky;
+  top: 0;
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  @include mixins.respond-below(lg) {
+    display: none;
+  }
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.groupLabel {
+  padding: 0 10px 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--hi-color-text-muted);
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: var(--hi-radius-md);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--hi-text);
+  text-decoration: none;
+
+  &:hover {
+    background: color-mix(in srgb, var(--hi-primary) 6%, transparent);
+  }
+
+  &.active {
+    background: color-mix(in srgb, var(--hi-primary) 10%, transparent);
+    font-weight: 600;
+  }
+
+  &.danger {
+    color: var(--hi-color-danger);
+
+    &:hover,
+    &.active {
+      background: color-mix(in srgb, var(--hi-color-danger) 8%, transparent);
+    }
+  }
+}
+
+.picker {
+  display: none;
+
+  @include mixins.respond-below(lg) {
+    display: block;
+  }
+}
+
+.content {
+  --settings-page-inline-margin: 0;
+
+  min-width: 0;
+}

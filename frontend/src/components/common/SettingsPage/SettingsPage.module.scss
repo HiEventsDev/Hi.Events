@@ -3,7 +3,7 @@
 .page {
   width: 100%;
   max-width: 720px;
-  margin: 0 auto;
+  margin: 0 var(--settings-page-inline-margin, auto);
   padding-top: 8px;
 
   &.wide {
@@ -12,6 +12,10 @@
 
   @include mixins.respond-below(md) {
     padding-top: 4px;
+  }
+
+  fieldset {
+    margin: 0;
   }
 }
 
@@ -112,6 +116,35 @@
   }
 }
 
+.block {
+  > :last-child {
+    margin-bottom: 0;
+  }
+
+  > :global(.mantine-Stack-root):last-child > :global(.mantine-InputWrapper-root):last-child {
+    margin-bottom: 0;
+  }
+
+  > :global(.mantine-SimpleGrid-root):last-child {
+    margin-bottom: calc(-1 * var(--hi-spacing-lg));
+  }
+
+  :global(.mantine-InputWrapper-label) {
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  :global(.mantine-InputWrapper-description) {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+}
+
+.requiredMark {
+  color: var(--hi-color-danger);
+}
+
 .rowMain {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 320px);
@@ -120,6 +153,10 @@
 
   &.textOnly {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  &.inlineControl {
+    grid-template-columns: minmax(0, 1fr) auto;
   }
 
   @include mixins.respond-below(sm, true) {
@@ -207,4 +244,30 @@
   display: flex;
   gap: 8px;
   margin-left: auto;
+}
+
+.saveBar {
+  border: 1px solid var(--hi-color-border);
+  border-radius: var(--hi-radius-card);
+  background: var(--hi-color-white);
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+
+  &:not(.pinned) {
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  &.pinned {
+    position: sticky;
+    bottom: 16px;
+    z-index: 2;
+    box-shadow: 0 6px 20px rgba(16, 24, 40, 0.1);
+  }
+
+  .footer {
+    border-top: 0;
+    border-radius: inherit;
+    background: transparent;
+  }
 }
