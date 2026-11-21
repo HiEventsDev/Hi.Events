@@ -269,6 +269,14 @@ msgstr "{0}님은 비밀번호로 로그인할 수 있습니다"
 msgid "{0} cancelled"
 msgstr "{0}개 취소됨"
 
+#: src/components/modals/ShareModal/index.tsx:165
+msgid "{0} characters"
+msgstr "{0}자"
+
+#: src/components/modals/ShareModal/index.tsx:164
+msgid "{0} characters, too long for an X post"
+msgstr "{0}자, X 게시물로는 너무 깁니다"
+
 #: src/components/routes/admin/Configurations/index.tsx:84
 msgid "{0} Default"
 msgstr "{0} 기본값"
@@ -316,6 +324,10 @@ msgstr "{0}개 항목 선택됨"
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:398
 msgid "{0} left"
 msgstr "{0}개 남음"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:77
+msgid "{0} left today"
+msgstr "오늘 {0}회 남음"
 
 #: src/components/layouts/AppLayout/Sidebar/index.tsx:117
 #: src/components/layouts/AuthLayout/AuthShell.tsx:153
@@ -1911,6 +1923,10 @@ msgstr "카드 리더기 추가"
 #: src/ee/crm/components/routes/AudienceContacts/AddContactModal.tsx:56
 msgid "Add a contact"
 msgstr "연락처 추가"
+
+#: src/components/modals/ShareModal/index.tsx:143
+msgid "Add a cover image"
+msgstr "커버 이미지 추가"
 
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:147
 msgid "Add a cover image and theme to match your brand"
@@ -4908,6 +4924,18 @@ msgstr "사용된 정원"
 msgid "Capacity, sold, held and free seats per price band and area, with revenue per band"
 msgstr "가격 등급 및 구역별 정원, 판매·보류·잔여 좌석과 가격 등급별 매출"
 
+#: src/components/modals/ShareModal/index.tsx:154
+msgid "Caption"
+msgstr "문구"
+
+#: src/components/modals/ShareModal/index.tsx:76
+msgid "Caption copied. Paste it into your {0} post."
+msgstr "문구를 복사했습니다. {0} 게시물에 붙여 넣으세요."
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:38
+msgid "Caption suggestions are available once you connect Stripe."
+msgstr "문구 추천은 Stripe를 연결하면 사용할 수 있습니다."
+
 #: src/ee/box-office/components/layouts/BoxOffice/TenderStage.tsx:173
 #: src/ee/box-office/utilites/boxOfficeTender.ts:9
 msgid "Card"
@@ -6126,7 +6154,7 @@ msgstr "이메일 주소를 인증하세요"
 msgid "Confirm your email address to take signups"
 msgstr "가입을 받으려면 이메일 주소를 확인하세요"
 
-#: src/components/layouts/Event/index.tsx:337
+#: src/components/layouts/Event/index.tsx:338
 msgid "Confirm your email to access all features."
 msgstr "모든 기능을 이용하려면 이메일을 확인하세요."
 
@@ -6138,7 +6166,7 @@ msgstr "구독을 확인하세요"
 msgid "Confirmation code"
 msgstr "확인 코드"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:395
+#: src/components/layouts/OrganizerLayout/index.tsx:396
 msgid "Confirmation email sent! Please check your inbox."
 msgstr "확인 이메일이 발송되었습니다! 받은 편지함을 확인해 주세요."
 
@@ -6158,7 +6186,7 @@ msgstr "양식으로 가입 후 이메일로 확인됨"
 msgid "Confirming email address..."
 msgstr "이메일 주소 확인 중..."
 
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:52
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:51
 msgid "Congratulations! Your event is now visible to the public."
 msgstr "축하합니다! 이제 이벤트가 공개적으로 표시됩니다."
 
@@ -6449,9 +6477,9 @@ msgstr "쿠키 설정"
 #: src/components/common/WidgetEditor/index.tsx:221
 #: src/components/common/WidgetEditor/InstallPanel.tsx:52
 #: src/components/modals/CheckInListSuccessModal/index.tsx:42
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:75
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:74
 #: src/components/modals/ManageOrderModal/index.tsx:237
-#: src/components/modals/ShareModal/index.tsx:255
+#: src/components/modals/ShareModal/index.tsx:225
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:366
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:70
 #: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:20
@@ -6470,8 +6498,7 @@ msgstr "위에서 복사됨"
 msgid "Copied to clipboard"
 msgstr "클립보드에 복사됨"
 
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:67
-#: src/components/modals/ShareModal/index.tsx:248
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:66
 msgid "Copied!"
 msgstr "복사되었습니다!"
 
@@ -6484,10 +6511,9 @@ msgstr "ChatGPT, Claude, Cursor 또는 사이트 빌더의 AI 어시스턴트에
 #: src/components/common/TanStackTable/cells.tsx:79
 #: src/components/common/TanStackTable/cells.tsx:86
 #: src/components/modals/CheckInListSuccessModal/index.tsx:42
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:75
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:74
 #: src/components/modals/ManageOrderModal/index.tsx:237
 #: src/components/modals/ManageOrderModal/index.tsx:243
-#: src/components/modals/ShareModal/index.tsx:255
 #: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:20
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:51
 #: src/ee/crm/components/routes/AudienceForms/ShareSignupFormModal.tsx:19
@@ -6564,13 +6590,13 @@ msgid "Copy key"
 msgstr "키 복사"
 
 #: src/components/common/SsoButtons/index.tsx:54
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:67
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:66
+#: src/components/modals/ShareModal/index.tsx:225
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:70
 msgid "Copy link"
 msgstr "링크 복사"
 
 #: src/components/common/AttendeeTicket/index.tsx:192
-#: src/components/modals/ShareModal/index.tsx:171
 msgid "Copy Link"
 msgstr "링크 복사"
 
@@ -6626,14 +6652,6 @@ msgstr "라이선스 이메일에서 따옴표나 공백 없이 키를 다시 �
 #: src/components/common/WidgetEditor/index.tsx:184
 msgid "Copy the new code to your site"
 msgstr "새 코드를 사이트에 복사하세요"
-
-#: src/components/modals/ShareModal/index.tsx:264
-msgid "Copy this link to share it anywhere"
-msgstr "어디서든 공유하려면 이 링크를 복사하세요"
-
-#: src/components/modals/ShareModal/index.tsx:248
-msgid "Copy to clipboard"
-msgstr "클립보드에 복사"
 
 #: src/ee/sso/components/SingleSignOn/DomainList.tsx:112
 msgid "Copy TXT record name"
@@ -8248,7 +8266,7 @@ msgstr "기부"
 #: src/components/modals/CheckInListSuccessModal/index.tsx:59
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:73
 #: src/components/modals/CreateWebhookModal/index.tsx:73
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:123
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:122
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:122
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:200
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:207
@@ -8302,8 +8320,8 @@ msgstr "인보이스 다운로드"
 msgid "Download PNG"
 msgstr "PNG 다운로드"
 
-#: src/components/modals/ShareModal/index.tsx:228
-msgid "Download QR Code"
+#: src/components/modals/ShareModal/index.tsx:235
+msgid "Download QR code"
 msgstr "QR 코드 다운로드"
 
 #: src/components/routes/event/Reports/index.tsx:53
@@ -9077,7 +9095,7 @@ msgstr "이 세그먼트에 이메일 보내기"
 msgid "Email to send tickets"
 msgstr "티켓을 보낼 이메일"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:374
+#: src/components/layouts/OrganizerLayout/index.tsx:375
 msgid "Email Verification Required"
 msgstr "이메일 인증 필요"
 
@@ -9110,7 +9128,7 @@ msgid "Embed on your website"
 msgstr "웹사이트에 임베드"
 
 #: src/components/common/WidgetEditor/index.tsx:189
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:113
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:112
 msgid "Embed Widget"
 msgstr "임베드 위젯"
 
@@ -9244,6 +9262,10 @@ msgstr "종료일"
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:187
 msgid "Ends the next day"
 msgstr "다음 날 종료"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:22
+msgid "Energetic"
+msgstr "활기찬"
 
 #: src/components/common/LanguageSwitcher/index.tsx:22
 #: src/components/modals/CreateAttendeeModal/index.tsx:241
@@ -9627,7 +9649,7 @@ msgstr "이용할 수 없는 이벤트입니다"
 msgid "Event not live"
 msgstr "이벤트가 게시되지 않음"
 
-#: src/components/layouts/Event/index.tsx:326
+#: src/components/layouts/Event/index.tsx:327
 msgid "Event Page"
 msgstr "이벤트 페이지"
 
@@ -9673,7 +9695,7 @@ msgstr "이벤트 제목, 날짜 및 이미지"
 msgid "Event Too New"
 msgstr "이벤트가 너무 최근에 생성됨"
 
-#: src/components/routes/event/EventDashboard/index.tsx:265
+#: src/components/routes/event/EventDashboard/index.tsx:264
 msgid "Event totals"
 msgstr "이벤트 합계"
 
@@ -10469,6 +10491,10 @@ msgstr "수수료 재정의가 저장되었습니다"
 msgid "Fee updated"
 msgstr "수수료가 업데이트되었습니다"
 
+#: src/components/modals/ShareModal/SharePreview.tsx:52
+msgid "Feed"
+msgstr "피드"
+
 #: src/components/common/InlineOrderSummary/index.tsx:164
 #: src/components/common/OrdersTable/index.tsx:234
 #: src/components/forms/ProductForm/index.tsx:497
@@ -10942,6 +10968,10 @@ msgstr "금요일"
 #: src/components/routes/event/Questions/questionTemplates.ts:55
 msgid "Friend or colleague"
 msgstr "친구 또는 동료"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:20
+msgid "Friendly"
+msgstr "친근한"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1086
 #: src/ee/crm/components/routes/AudienceCampaign/index.tsx:418
@@ -12549,6 +12579,10 @@ msgstr "티켓만 찾고 계신가요?"
 msgid "just now"
 msgstr "방금 전"
 
+#: src/components/modals/ShareModal/SharePreview.tsx:65
+msgid "Just now"
+msgstr "방금"
+
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:185
 msgid "Just taken by someone else: {lostLabels}. Choose replacement seats."
 msgstr "방금 다른 사람이 선택함: {lostLabels}. 대체 좌석을 선택하세요."
@@ -13066,6 +13100,7 @@ msgstr "라인업이 이벤트 페이지에서 숨겨져 있어 위젯에 표시
 
 #: src/components/common/AffiliateTable/index.tsx:119
 #: src/components/common/Editor/Controls/InsertButtonControl/index.tsx:51
+#: src/components/modals/ShareModal/index.tsx:209
 #: src/ee/crm/components/routes/AudienceForms/ShareSignupFormModal.tsx:62
 msgid "Link"
 msgstr "링크"
@@ -13595,6 +13630,7 @@ msgstr "다른 연락처와 병합"
 #: src/components/common/ContactOrganizerModal/index.tsx:91
 #: src/components/common/OrdersTable/index.tsx:175
 #: src/components/modals/SendMessageModal/index.tsx:455
+#: src/components/modals/ShareModal/SharePreview.tsx:53
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:63
 #: src/ee/crm/components/routes/AudienceAutomations/AutomationModal.tsx:258
 #: src/ee/crm/components/routes/AudienceCampaign/index.tsx:585
@@ -13871,6 +13907,11 @@ msgstr "더 많은 이벤트"
 #: src/components/layouts/EventHomepage/MoreEventsSection.tsx:31
 msgid "More from {0}"
 msgstr "{0}의 다른 이벤트"
+
+#: src/components/modals/ShareModal/index.tsx:189
+#: src/components/modals/ShareModal/index.tsx:193
+msgid "More options"
+msgstr "옵션 더 보기"
 
 #: src/ee/seating/components/SeatPicker/SeatSheet.tsx:74
 msgid "More places"
@@ -15225,6 +15266,10 @@ msgstr "없음"
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:262
 msgid "None (cash only)"
 msgstr "없음 (현금만)"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:76
+msgid "None left today"
+msgstr "오늘은 남은 횟수가 없습니다"
 
 #: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:138
 msgid "None shared"
@@ -16761,10 +16806,6 @@ msgstr "더 이상 이용할 수 없는 페이지입니다"
 msgid "Page not found"
 msgstr "페이지를 찾을 수 없습니다"
 
-#: src/components/modals/ShareModal/index.tsx:236
-msgid "Page URL"
-msgstr "페이지 URL"
-
 #: src/components/common/StatBoxes/index.tsx:103
 msgid "Page views"
 msgstr "페이지 조회수"
@@ -17670,6 +17711,10 @@ msgstr "포르투갈어"
 msgid "Position"
 msgstr "위치"
 
+#: src/components/modals/ShareModal/SharePreview.tsx:54
+msgid "Post"
+msgstr "게시물"
+
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:137
 msgid "Post Checkout message"
 msgstr "결제 완료 후 메시지"
@@ -17730,14 +17775,18 @@ msgstr "결제 미리보기 대상"
 msgid "Preview as"
 msgstr "미리보기 대상"
 
-#: src/components/layouts/Event/index.tsx:319
-#: src/components/layouts/Event/index.tsx:323
+#: src/components/layouts/Event/index.tsx:320
+#: src/components/layouts/Event/index.tsx:324
 msgid "Preview Event page"
 msgstr "이벤트 페이지 미리보기"
 
 #: src/ee/crm/components/routes/AudienceCampaign/SmsPreviewPane.tsx:53
 msgid "Preview for"
 msgstr "미리보기 국가"
+
+#: src/components/modals/ShareModal/SharePreview.tsx:50
+msgid "Preview style"
+msgstr "미리보기 스타일"
 
 #: src/ee/crm/components/routes/AudienceAutomations/AutomationModal.tsx:244
 #: src/ee/crm/components/routes/AudienceCampaign/index.tsx:504
@@ -17985,6 +18034,10 @@ msgstr "판매된 상품"
 msgid "Products sorted successfully"
 msgstr "상품이 성공적으로 정렬되었습니다"
 
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:21
+msgid "Professional"
+msgstr "전문적인"
+
 #: src/components/layouts/SettingsLayout/index.tsx:62
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:271
 #: src/components/routes/settings/Profile/index.tsx:170
@@ -18158,10 +18211,6 @@ msgstr "새 키를 <0>APP_LICENCE_KEY</0>에 넣고 백엔드를 다시 배포�
 
 #: src/ee/crm/components/routes/AudienceForms/ShareSignupFormModal.tsx:74
 msgid "QR code"
-msgstr "QR 코드"
-
-#: src/components/modals/ShareModal/index.tsx:168
-msgid "QR Code"
 msgstr "QR 코드"
 
 #: src/components/layouts/AuthLayout/AuthShell.tsx:15
@@ -19097,11 +19146,11 @@ msgstr "코드 재발송"
 msgid "Resend Confirmation"
 msgstr "확인 재발송"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:391
+#: src/components/layouts/OrganizerLayout/index.tsx:392
 msgid "Resend Confirmation Email"
 msgstr "확인 이메일 재발송"
 
-#: src/components/layouts/Event/index.tsx:339
+#: src/components/layouts/Event/index.tsx:340
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:162
 msgid "Resend email"
 msgstr "이메일 재발송"
@@ -20998,6 +21047,7 @@ msgid "Set up Audience to see who has been to your events before, who is likely 
 msgstr "오디언스를 설정하면 이전에 이벤트에 왔던 사람, 참석할 가능성이 높은 사람, 그리고 이들이 참여하는 다른 이벤트를 볼 수 있습니다."
 
 #: src/components/layouts/OrganizerLayout/index.tsx:105
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:43
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:126
 msgid "Set up payouts"
 msgstr "정산 설정"
@@ -21103,9 +21153,7 @@ msgstr "도형"
 #: src/components/layouts/OrganizerHomepage/index.tsx:334
 #: src/components/layouts/OrganizerHomepage/index.tsx:334
 #: src/components/layouts/OrganizerLayout/index.tsx:320
-#: src/components/modals/ShareModal/index.tsx:37
-#: src/components/modals/ShareModal/index.tsx:165
-#: src/components/modals/ShareModal/index.tsx:186
+#: src/components/modals/ShareModal/index.tsx:49
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:65
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:76
 #: src/ee/crm/components/routes/AudienceForms/index.tsx:173
@@ -21123,8 +21171,8 @@ msgstr "제휴 링크 공유"
 
 #: src/components/layouts/Event/index.tsx:277
 #: src/components/layouts/Event/index.tsx:283
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:102
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:131
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:101
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:130
 msgid "Share Event"
 msgstr "이벤트 공유"
 
@@ -21153,9 +21201,21 @@ msgstr "새 PIN을 현장 스태프와 공유하세요. 로그인되어 있던 �
 msgid "Share the payment details"
 msgstr "결제 정보 공유"
 
+#: src/components/modals/ShareModal/index.tsx:174
+msgid "Share to"
+msgstr "공유 대상"
+
+#: src/components/modals/ShareModal/index.tsx:181
+msgid "Share to {0}"
+msgstr "{0}에 공유"
+
 #: src/components/routes/event/CapacityAssignments/index.tsx:32
 msgid "Shared Capacity Management"
 msgstr "공유 정원 관리"
+
+#: src/components/modals/ShareModal/index.tsx:132
+msgid "Shared links show the cover image, so links without one are easy to scroll past."
+msgstr "공유된 링크에는 커버 이미지가 표시되므로 이미지가 없는 링크는 지나치기 쉽습니다."
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:34
 msgid "Shift times"
@@ -21164,6 +21224,10 @@ msgstr "시간 이동"
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:212
 msgid "Shifted times for {count} date(s)"
 msgstr "{count}개 날짜의 시간을 이동했습니다"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:23
+msgid "Short"
+msgstr "짧은"
 
 #: src/components/forms/QuestionForm/questionTypes.ts:23
 msgid "Short answer"
@@ -22795,6 +22859,18 @@ msgstr "추적 설정이 성공적으로 수정되었습니다"
 msgid "Successfully updated Webhook"
 msgstr "웹훅이 성공적으로 수정되었습니다"
 
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:89
+msgid "Suggest captions"
+msgstr "문구 추천받기"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:89
+msgid "Suggest new ones"
+msgstr "새로 추천받기"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:71
+msgid "Suggestions"
+msgstr "추천"
+
 #: src/components/common/ProgressStepper/index.tsx:20
 #: src/components/common/ProgressStepper/index.tsx:24
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:651
@@ -24204,6 +24280,10 @@ msgstr "이 이벤트에는 전화번호 질문도 있습니다. 구매자가 �
 #: src/components/layouts/EventHomepage/index.tsx:131
 msgid "This event has ended"
 msgstr "이 이벤트는 종료되었습니다"
+
+#: src/components/modals/ShareModal/index.tsx:130
+msgid "This event has no cover image"
+msgstr "이 이벤트에는 커버 이미지가 없습니다"
 
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:154
 msgid "This event has no seat map, so there is no plan to print. Attach one in the seating settings."
@@ -26333,7 +26413,7 @@ msgstr "이메일 인증"
 msgid "Verify recovery code"
 msgstr "복구 코드 확인"
 
-#: src/components/layouts/Event/index.tsx:336
+#: src/components/layouts/Event/index.tsx:337
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:156
 msgid "Verify your email"
 msgstr "이메일을 인증하세요"
@@ -26454,7 +26534,7 @@ msgstr "이벤트 보기"
 msgid "View event page"
 msgstr "이벤트 페이지 보기"
 
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:93
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:92
 msgid "View Event Page"
 msgstr "이벤트 페이지 보기"
 
@@ -27052,6 +27132,10 @@ msgstr "이 캠페인을 중지하지 못했습니다. 다시 시도해 주세�
 #: src/ee/crm/components/routes/CampaignUnsubscribe/index.tsx:145
 msgid "We couldn't subscribe you again. Please try again."
 msgstr "다시 구독하지 못했습니다. 다시 시도해 주세요."
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:60
+msgid "We couldn't suggest captions right now. Please try again."
+msgstr "지금은 문구를 추천할 수 없습니다. 다시 시도해 주세요."
 
 #: src/ee/crm/components/ContactDrawer/index.tsx:119
 msgid "We couldn't unsubscribe this contact. Please try again."
@@ -28014,7 +28098,7 @@ msgstr "참가자를 수동으로 추가하려면 먼저 티켓을 생성해야 
 msgid "You must have at least one price tier"
 msgstr "최소 하나의 가격 등급이 있어야 합니다"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:380
+#: src/components/layouts/OrganizerLayout/index.tsx:381
 msgid "You must verify your email address before you can update the organizer status."
 msgstr "주최자 상태를 변경하려면 먼저 이메일 주소를 인증해야 합니다."
 
@@ -28315,7 +28399,7 @@ msgstr "이날은 이벤트 날짜가 아니므로 이 시간대는 이벤트 �
 msgid "Your event has no description yet."
 msgstr "이벤트에 아직 설명이 없습니다."
 
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:48
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:47
 msgid "Your event is live!"
 msgstr "이벤트가 공개되었습니다!"
 

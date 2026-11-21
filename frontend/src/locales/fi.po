@@ -269,6 +269,14 @@ msgstr "{0} voi kirjautua sisään salasanallaan"
 msgid "{0} cancelled"
 msgstr "{0} peruttu"
 
+#: src/components/modals/ShareModal/index.tsx:165
+msgid "{0} characters"
+msgstr "{0} merkkiä"
+
+#: src/components/modals/ShareModal/index.tsx:164
+msgid "{0} characters, too long for an X post"
+msgstr "{0} merkkiä, liian pitkä X-julkaisuun"
+
 #: src/components/routes/admin/Configurations/index.tsx:84
 msgid "{0} Default"
 msgstr "{0} Oletus"
@@ -316,6 +324,10 @@ msgstr "{0} kohdetta valittu"
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:398
 msgid "{0} left"
 msgstr "{0} jäljellä"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:77
+msgid "{0} left today"
+msgstr "{0} jäljellä tänään"
 
 #: src/components/layouts/AppLayout/Sidebar/index.tsx:117
 #: src/components/layouts/AuthLayout/AuthShell.tsx:153
@@ -1911,6 +1923,10 @@ msgstr "Lisää kortinlukija"
 #: src/ee/crm/components/routes/AudienceContacts/AddContactModal.tsx:56
 msgid "Add a contact"
 msgstr "Lisää yhteystieto"
+
+#: src/components/modals/ShareModal/index.tsx:143
+msgid "Add a cover image"
+msgstr "Lisää kansikuva"
 
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:147
 msgid "Add a cover image and theme to match your brand"
@@ -4908,6 +4924,18 @@ msgstr "Käytetty kapasiteetti"
 msgid "Capacity, sold, held and free seats per price band and area, with revenue per band"
 msgstr "Kapasiteetti sekä myydyt, pidätetyt ja vapaat paikat hintaryhmittäin ja alueittain, tuotot hintaryhmittäin"
 
+#: src/components/modals/ShareModal/index.tsx:154
+msgid "Caption"
+msgstr "Kuvateksti"
+
+#: src/components/modals/ShareModal/index.tsx:76
+msgid "Caption copied. Paste it into your {0} post."
+msgstr "Teksti kopioitu. Liitä se {0}-julkaisuusi."
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:38
+msgid "Caption suggestions are available once you connect Stripe."
+msgstr "Tekstiehdotukset ovat käytettävissä, kun olet yhdistänyt Stripen."
+
 #: src/ee/box-office/components/layouts/BoxOffice/TenderStage.tsx:173
 #: src/ee/box-office/utilites/boxOfficeTender.ts:9
 msgid "Card"
@@ -6126,7 +6154,7 @@ msgstr "Vahvista sähköpostiosoitteesi"
 msgid "Confirm your email address to take signups"
 msgstr "Vahvista sähköpostiosoitteesi, jotta voit kerätä tilaajia"
 
-#: src/components/layouts/Event/index.tsx:337
+#: src/components/layouts/Event/index.tsx:338
 msgid "Confirm your email to access all features."
 msgstr "Vahvista sähköpostiosoitteesi päästäksesi kaikkiin ominaisuuksiin."
 
@@ -6138,7 +6166,7 @@ msgstr "Vahvista tilauksesi"
 msgid "Confirmation code"
 msgstr "Vahvistuskoodi"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:395
+#: src/components/layouts/OrganizerLayout/index.tsx:396
 msgid "Confirmation email sent! Please check your inbox."
 msgstr "Vahvistussähköposti lähetetty! Tarkista postilaatikkosi."
 
@@ -6158,7 +6186,7 @@ msgstr "Vahvistettu sähköpostitse lomakkeella tilaamisen jälkeen"
 msgid "Confirming email address..."
 msgstr "Sähköpostiosoitetta vahvistetaan..."
 
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:52
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:51
 msgid "Congratulations! Your event is now visible to the public."
 msgstr "Onnittelut! Tapahtumasi on nyt julkisesti nähtävillä."
 
@@ -6449,9 +6477,9 @@ msgstr "Evästeasetukset"
 #: src/components/common/WidgetEditor/index.tsx:221
 #: src/components/common/WidgetEditor/InstallPanel.tsx:52
 #: src/components/modals/CheckInListSuccessModal/index.tsx:42
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:75
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:74
 #: src/components/modals/ManageOrderModal/index.tsx:237
-#: src/components/modals/ShareModal/index.tsx:255
+#: src/components/modals/ShareModal/index.tsx:225
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:366
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:70
 #: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:20
@@ -6470,8 +6498,7 @@ msgstr "Kopioitu yllä olevasta"
 msgid "Copied to clipboard"
 msgstr "Kopioitu leikepöydälle"
 
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:67
-#: src/components/modals/ShareModal/index.tsx:248
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:66
 msgid "Copied!"
 msgstr "Kopioitu!"
 
@@ -6484,10 +6511,9 @@ msgstr "Kopioi vaiheittaiset ohjeet liitettäväksi ChatGPT:hen, Claudeen, Curso
 #: src/components/common/TanStackTable/cells.tsx:79
 #: src/components/common/TanStackTable/cells.tsx:86
 #: src/components/modals/CheckInListSuccessModal/index.tsx:42
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:75
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:74
 #: src/components/modals/ManageOrderModal/index.tsx:237
 #: src/components/modals/ManageOrderModal/index.tsx:243
-#: src/components/modals/ShareModal/index.tsx:255
 #: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:20
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:51
 #: src/ee/crm/components/routes/AudienceForms/ShareSignupFormModal.tsx:19
@@ -6564,13 +6590,13 @@ msgid "Copy key"
 msgstr "Kopioi avain"
 
 #: src/components/common/SsoButtons/index.tsx:54
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:67
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:66
+#: src/components/modals/ShareModal/index.tsx:225
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:70
 msgid "Copy link"
 msgstr "Kopioi linkki"
 
 #: src/components/common/AttendeeTicket/index.tsx:192
-#: src/components/modals/ShareModal/index.tsx:171
 msgid "Copy Link"
 msgstr "Kopioi linkki"
 
@@ -6626,14 +6652,6 @@ msgstr "Kopioi avain uudelleen lisenssisähköpostistasi ilman lainausmerkkejä 
 #: src/components/common/WidgetEditor/index.tsx:184
 msgid "Copy the new code to your site"
 msgstr "Kopioi uusi koodi sivustollesi"
-
-#: src/components/modals/ShareModal/index.tsx:264
-msgid "Copy this link to share it anywhere"
-msgstr "Kopioi tämä linkki jakamista varten"
-
-#: src/components/modals/ShareModal/index.tsx:248
-msgid "Copy to clipboard"
-msgstr "Kopioi leikepöydälle"
 
 #: src/ee/sso/components/SingleSignOn/DomainList.tsx:112
 msgid "Copy TXT record name"
@@ -8248,7 +8266,7 @@ msgstr "Lahjoitus"
 #: src/components/modals/CheckInListSuccessModal/index.tsx:59
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:73
 #: src/components/modals/CreateWebhookModal/index.tsx:73
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:123
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:122
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:122
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:200
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:207
@@ -8302,8 +8320,8 @@ msgstr "Lataa lasku"
 msgid "Download PNG"
 msgstr "Lataa PNG"
 
-#: src/components/modals/ShareModal/index.tsx:228
-msgid "Download QR Code"
+#: src/components/modals/ShareModal/index.tsx:235
+msgid "Download QR code"
 msgstr "Lataa QR-koodi"
 
 #: src/components/routes/event/Reports/index.tsx:53
@@ -9077,7 +9095,7 @@ msgstr "Lähetä sähköposti tälle segmentille"
 msgid "Email to send tickets"
 msgstr "Sähköposti lippujen lähettämiseen"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:374
+#: src/components/layouts/OrganizerLayout/index.tsx:375
 msgid "Email Verification Required"
 msgstr "Sähköpostivarmistus vaaditaan"
 
@@ -9110,7 +9128,7 @@ msgid "Embed on your website"
 msgstr "Upota verkkosivustollesi"
 
 #: src/components/common/WidgetEditor/index.tsx:189
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:113
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:112
 msgid "Embed Widget"
 msgstr "Upota widget"
 
@@ -9244,6 +9262,10 @@ msgstr "Päättyy"
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:187
 msgid "Ends the next day"
 msgstr "Päättyy seuraavana päivänä"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:22
+msgid "Energetic"
+msgstr "Energinen"
 
 #: src/components/common/LanguageSwitcher/index.tsx:22
 #: src/components/modals/CreateAttendeeModal/index.tsx:241
@@ -9627,7 +9649,7 @@ msgstr "Tapahtuma ei ole saatavilla"
 msgid "Event not live"
 msgstr "Tapahtuma ei ole julkaistu"
 
-#: src/components/layouts/Event/index.tsx:326
+#: src/components/layouts/Event/index.tsx:327
 msgid "Event Page"
 msgstr "Tapahtumasivu"
 
@@ -9673,7 +9695,7 @@ msgstr "Tapahtuman nimi, päivämäärä ja kuva"
 msgid "Event Too New"
 msgstr "Tapahtuma on liian uusi"
 
-#: src/components/routes/event/EventDashboard/index.tsx:265
+#: src/components/routes/event/EventDashboard/index.tsx:264
 msgid "Event totals"
 msgstr "Tapahtuman yhteissummat"
 
@@ -10469,6 +10491,10 @@ msgstr "Kulun ohitus tallennettu"
 msgid "Fee updated"
 msgstr "Maksu päivitetty"
 
+#: src/components/modals/ShareModal/SharePreview.tsx:52
+msgid "Feed"
+msgstr "Syöte"
+
 #: src/components/common/InlineOrderSummary/index.tsx:164
 #: src/components/common/OrdersTable/index.tsx:234
 #: src/components/forms/ProductForm/index.tsx:497
@@ -10942,6 +10968,10 @@ msgstr "Perjantai"
 #: src/components/routes/event/Questions/questionTemplates.ts:55
 msgid "Friend or colleague"
 msgstr "Ystävä tai kollega"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:20
+msgid "Friendly"
+msgstr "Ystävällinen"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1086
 #: src/ee/crm/components/routes/AudienceCampaign/index.tsx:418
@@ -12549,6 +12579,10 @@ msgstr "Etsitkö vain lippujasi?"
 msgid "just now"
 msgstr "juuri nyt"
 
+#: src/components/modals/ShareModal/SharePreview.tsx:65
+msgid "Just now"
+msgstr "Juuri nyt"
+
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:185
 msgid "Just taken by someone else: {lostLabels}. Choose replacement seats."
 msgstr "Joku muu ehti juuri varata: {lostLabels}. Valitse korvaavat paikat."
@@ -13066,6 +13100,7 @@ msgstr "Esiintyjät on piilotettu tapahtumasivulta, joten widget ei voi näyttä
 
 #: src/components/common/AffiliateTable/index.tsx:119
 #: src/components/common/Editor/Controls/InsertButtonControl/index.tsx:51
+#: src/components/modals/ShareModal/index.tsx:209
 #: src/ee/crm/components/routes/AudienceForms/ShareSignupFormModal.tsx:62
 msgid "Link"
 msgstr "Linkki"
@@ -13595,6 +13630,7 @@ msgstr "Yhdistä toiseen yhteystietoon"
 #: src/components/common/ContactOrganizerModal/index.tsx:91
 #: src/components/common/OrdersTable/index.tsx:175
 #: src/components/modals/SendMessageModal/index.tsx:455
+#: src/components/modals/ShareModal/SharePreview.tsx:53
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:63
 #: src/ee/crm/components/routes/AudienceAutomations/AutomationModal.tsx:258
 #: src/ee/crm/components/routes/AudienceCampaign/index.tsx:585
@@ -13871,6 +13907,11 @@ msgstr "Lisää tapahtumia"
 #: src/components/layouts/EventHomepage/MoreEventsSection.tsx:31
 msgid "More from {0}"
 msgstr "Lisää järjestäjältä {0}"
+
+#: src/components/modals/ShareModal/index.tsx:189
+#: src/components/modals/ShareModal/index.tsx:193
+msgid "More options"
+msgstr "Lisää vaihtoehtoja"
 
 #: src/ee/seating/components/SeatPicker/SeatSheet.tsx:74
 msgid "More places"
@@ -15225,6 +15266,10 @@ msgstr "Ei mitään"
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:262
 msgid "None (cash only)"
 msgstr "Ei mitään (vain käteinen)"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:76
+msgid "None left today"
+msgstr "Ei yhtään jäljellä tänään"
 
 #: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:138
 msgid "None shared"
@@ -16761,10 +16806,6 @@ msgstr "Sivu ei ole enää saatavilla"
 msgid "Page not found"
 msgstr "Sivua ei löytynyt"
 
-#: src/components/modals/ShareModal/index.tsx:236
-msgid "Page URL"
-msgstr "Sivun URL"
-
 #: src/components/common/StatBoxes/index.tsx:103
 msgid "Page views"
 msgstr "Sivun katselut"
@@ -17670,6 +17711,10 @@ msgstr "Portugali"
 msgid "Position"
 msgstr "Sijainti"
 
+#: src/components/modals/ShareModal/SharePreview.tsx:54
+msgid "Post"
+msgstr "Julkaisu"
+
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:137
 msgid "Post Checkout message"
 msgstr "Kassanjälkeinen viesti"
@@ -17730,14 +17775,18 @@ msgstr "Kassan esikatselu lipulle"
 msgid "Preview as"
 msgstr "Esikatsele vastaanottajana"
 
-#: src/components/layouts/Event/index.tsx:319
-#: src/components/layouts/Event/index.tsx:323
+#: src/components/layouts/Event/index.tsx:320
+#: src/components/layouts/Event/index.tsx:324
 msgid "Preview Event page"
 msgstr "Esikatsele tapahtumasivua"
 
 #: src/ee/crm/components/routes/AudienceCampaign/SmsPreviewPane.tsx:53
 msgid "Preview for"
 msgstr "Esikatselun kohdemaa"
+
+#: src/components/modals/ShareModal/SharePreview.tsx:50
+msgid "Preview style"
+msgstr "Esikatselun tyyli"
 
 #: src/ee/crm/components/routes/AudienceAutomations/AutomationModal.tsx:244
 #: src/ee/crm/components/routes/AudienceCampaign/index.tsx:504
@@ -17985,6 +18034,10 @@ msgstr "Myydyt tuotteet"
 msgid "Products sorted successfully"
 msgstr "Tuotteet lajiteltu onnistuneesti"
 
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:21
+msgid "Professional"
+msgstr "Asiallinen"
+
 #: src/components/layouts/SettingsLayout/index.tsx:62
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:271
 #: src/components/routes/settings/Profile/index.tsx:170
@@ -18158,10 +18211,6 @@ msgstr "Aseta uusi avain muuttujaan <0>APP_LICENCE_KEY</0> ja ota taustajärjest
 
 #: src/ee/crm/components/routes/AudienceForms/ShareSignupFormModal.tsx:74
 msgid "QR code"
-msgstr "QR-koodi"
-
-#: src/components/modals/ShareModal/index.tsx:168
-msgid "QR Code"
 msgstr "QR-koodi"
 
 #: src/components/layouts/AuthLayout/AuthShell.tsx:15
@@ -19097,11 +19146,11 @@ msgstr "Lähetä koodi uudelleen"
 msgid "Resend Confirmation"
 msgstr "Lähetä vahvistus uudelleen"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:391
+#: src/components/layouts/OrganizerLayout/index.tsx:392
 msgid "Resend Confirmation Email"
 msgstr "Lähetä vahvistussähköposti uudelleen"
 
-#: src/components/layouts/Event/index.tsx:339
+#: src/components/layouts/Event/index.tsx:340
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:162
 msgid "Resend email"
 msgstr "Lähetä sähköposti uudelleen"
@@ -20998,6 +21047,7 @@ msgid "Set up Audience to see who has been to your events before, who is likely 
 msgstr "Ota Yleisö käyttöön nähdäksesi, ketkä ovat käyneet tapahtumissasi aiemmin, ketkä todennäköisesti saapuvat ja missä muualla he käyvät."
 
 #: src/components/layouts/OrganizerLayout/index.tsx:105
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:43
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:126
 msgid "Set up payouts"
 msgstr "Aseta tilitykset"
@@ -21103,9 +21153,7 @@ msgstr "Muoto"
 #: src/components/layouts/OrganizerHomepage/index.tsx:334
 #: src/components/layouts/OrganizerHomepage/index.tsx:334
 #: src/components/layouts/OrganizerLayout/index.tsx:320
-#: src/components/modals/ShareModal/index.tsx:37
-#: src/components/modals/ShareModal/index.tsx:165
-#: src/components/modals/ShareModal/index.tsx:186
+#: src/components/modals/ShareModal/index.tsx:49
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:65
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:76
 #: src/ee/crm/components/routes/AudienceForms/index.tsx:173
@@ -21123,8 +21171,8 @@ msgstr "Jaa kumppanilinkki"
 
 #: src/components/layouts/Event/index.tsx:277
 #: src/components/layouts/Event/index.tsx:283
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:102
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:131
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:101
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:130
 msgid "Share Event"
 msgstr "Jaa tapahtuma"
 
@@ -21153,9 +21201,21 @@ msgstr "Jaa uusi PIN-koodi ovihenkilökunnallesi. Kaikki sisäänkirjautuneet on
 msgid "Share the payment details"
 msgstr "Jaa maksutiedot"
 
+#: src/components/modals/ShareModal/index.tsx:174
+msgid "Share to"
+msgstr "Jaa kohteeseen"
+
+#: src/components/modals/ShareModal/index.tsx:181
+msgid "Share to {0}"
+msgstr "Jaa: {0}"
+
 #: src/components/routes/event/CapacityAssignments/index.tsx:32
 msgid "Shared Capacity Management"
 msgstr "Jaettu kapasiteetin hallinta"
+
+#: src/components/modals/ShareModal/index.tsx:132
+msgid "Shared links show the cover image, so links without one are easy to scroll past."
+msgstr "Jaetuissa linkeissä näkyy kansikuva, joten ilman kuvaa linkki jää helposti huomaamatta."
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:34
 msgid "Shift times"
@@ -21164,6 +21224,10 @@ msgstr "Siirrä aikoja"
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:212
 msgid "Shifted times for {count} date(s)"
 msgstr "Aikoja siirretty {count} päivälle"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:23
+msgid "Short"
+msgstr "Lyhyt"
 
 #: src/components/forms/QuestionForm/questionTypes.ts:23
 msgid "Short answer"
@@ -22795,6 +22859,18 @@ msgstr "Seurantasetukset päivitetty onnistuneesti"
 msgid "Successfully updated Webhook"
 msgstr "Webhook päivitetty onnistuneesti"
 
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:89
+msgid "Suggest captions"
+msgstr "Ehdota tekstejä"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:89
+msgid "Suggest new ones"
+msgstr "Ehdota uusia"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:71
+msgid "Suggestions"
+msgstr "Ehdotukset"
+
 #: src/components/common/ProgressStepper/index.tsx:20
 #: src/components/common/ProgressStepper/index.tsx:24
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:651
@@ -24204,6 +24280,10 @@ msgstr "Tässä tapahtumassa on myös puhelinnumerokysymys. Ostajilta saatetaan 
 #: src/components/layouts/EventHomepage/index.tsx:131
 msgid "This event has ended"
 msgstr "Tämä tapahtuma on päättynyt"
+
+#: src/components/modals/ShareModal/index.tsx:130
+msgid "This event has no cover image"
+msgstr "Tällä tapahtumalla ei ole kansikuvaa"
 
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:154
 msgid "This event has no seat map, so there is no plan to print. Attach one in the seating settings."
@@ -26333,7 +26413,7 @@ msgstr "Vahvista sähköpostiosoite"
 msgid "Verify recovery code"
 msgstr "Vahvista palautuskoodi"
 
-#: src/components/layouts/Event/index.tsx:336
+#: src/components/layouts/Event/index.tsx:337
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:156
 msgid "Verify your email"
 msgstr "Vahvista sähköpostiosoitteesi"
@@ -26454,7 +26534,7 @@ msgstr "Näytä tapahtuma"
 msgid "View event page"
 msgstr "Näytä tapahtumasivu"
 
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:93
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:92
 msgid "View Event Page"
 msgstr "Näytä tapahtumasivu"
 
@@ -27052,6 +27132,10 @@ msgstr "Kampanjan pysäyttäminen ei onnistunut. Yritä uudelleen."
 #: src/ee/crm/components/routes/CampaignUnsubscribe/index.tsx:145
 msgid "We couldn't subscribe you again. Please try again."
 msgstr "Emme voineet tilata sinua uudelleen. Yritä uudelleen."
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:60
+msgid "We couldn't suggest captions right now. Please try again."
+msgstr "Emme voineet ehdottaa tekstejä juuri nyt. Yritä uudelleen."
 
 #: src/ee/crm/components/ContactDrawer/index.tsx:119
 msgid "We couldn't unsubscribe this contact. Please try again."
@@ -28014,7 +28098,7 @@ msgstr "Sinun on luotava lippu ennen kuin voit lisätä osallistujan manuaalises
 msgid "You must have at least one price tier"
 msgstr "Sinulla on oltava vähintään yksi hintaporras"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:380
+#: src/components/layouts/OrganizerLayout/index.tsx:381
 msgid "You must verify your email address before you can update the organizer status."
 msgstr "Sinun on vahvistettava sähköpostiosoitteesi ennen kuin voit päivittää järjestäjän tilaa."
 
@@ -28315,7 +28399,7 @@ msgstr "Tapahtumallasi ei ole päivämäärää tänä päivänä, joten tämä 
 msgid "Your event has no description yet."
 msgstr "Tapahtumallasi ei ole vielä kuvausta."
 
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:48
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:47
 msgid "Your event is live!"
 msgstr "Tapahtumasi on julkaistu!"
 

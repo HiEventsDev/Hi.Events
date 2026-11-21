@@ -269,6 +269,14 @@ msgstr "{0} 可以使用密碼登入"
 msgid "{0} cancelled"
 msgstr "{0} 已取消"
 
+#: src/components/modals/ShareModal/index.tsx:165
+msgid "{0} characters"
+msgstr "{0} 個字元"
+
+#: src/components/modals/ShareModal/index.tsx:164
+msgid "{0} characters, too long for an X post"
+msgstr "{0} 個字元，超出 X 帖子的長度"
+
 #: src/components/routes/admin/Configurations/index.tsx:84
 msgid "{0} Default"
 msgstr "{0} 預設"
@@ -316,6 +324,10 @@ msgstr "已選中 {0} 個項目"
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:398
 msgid "{0} left"
 msgstr "剩餘 {0}"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:77
+msgid "{0} left today"
+msgstr "今天尚餘 {0} 次"
 
 #: src/components/layouts/AppLayout/Sidebar/index.tsx:117
 #: src/components/layouts/AuthLayout/AuthShell.tsx:153
@@ -1911,6 +1923,10 @@ msgstr "新增讀卡機"
 #: src/ee/crm/components/routes/AudienceContacts/AddContactModal.tsx:56
 msgid "Add a contact"
 msgstr "新增聯絡人"
+
+#: src/components/modals/ShareModal/index.tsx:143
+msgid "Add a cover image"
+msgstr "新增封面圖片"
 
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:147
 msgid "Add a cover image and theme to match your brand"
@@ -4908,6 +4924,18 @@ msgstr "已用容量"
 msgid "Capacity, sold, held and free seats per price band and area, with revenue per band"
 msgstr "按價位區及區域統計的容量、已售、保留及空餘座位，以及各價位區的收入"
 
+#: src/components/modals/ShareModal/index.tsx:154
+msgid "Caption"
+msgstr "文案"
+
+#: src/components/modals/ShareModal/index.tsx:76
+msgid "Caption copied. Paste it into your {0} post."
+msgstr "文案已複製，請貼到您的 {0} 帖子中。"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:38
+msgid "Caption suggestions are available once you connect Stripe."
+msgstr "連接 Stripe 後即可使用文案建議。"
+
 #: src/ee/box-office/components/layouts/BoxOffice/TenderStage.tsx:173
 #: src/ee/box-office/utilites/boxOfficeTender.ts:9
 msgid "Card"
@@ -6126,7 +6154,7 @@ msgstr "確認您的電郵地址"
 msgid "Confirm your email address to take signups"
 msgstr "確認您的電郵地址以接受訂閱"
 
-#: src/components/layouts/Event/index.tsx:337
+#: src/components/layouts/Event/index.tsx:338
 msgid "Confirm your email to access all features."
 msgstr "請確認您的電郵地址以使用所有功能。"
 
@@ -6138,7 +6166,7 @@ msgstr "確認您的訂閱"
 msgid "Confirmation code"
 msgstr "驗證碼"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:395
+#: src/components/layouts/OrganizerLayout/index.tsx:396
 msgid "Confirmation email sent! Please check your inbox."
 msgstr "確認電郵已發送！請檢查您的收件匣。"
 
@@ -6158,7 +6186,7 @@ msgstr "透過表格訂閱後已經電郵確認"
 msgid "Confirming email address..."
 msgstr "確認電子郵件地址..."
 
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:52
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:51
 msgid "Congratulations! Your event is now visible to the public."
 msgstr "恭喜！您的活動現已對公眾可見。"
 
@@ -6449,9 +6477,9 @@ msgstr "Cookie 設定"
 #: src/components/common/WidgetEditor/index.tsx:221
 #: src/components/common/WidgetEditor/InstallPanel.tsx:52
 #: src/components/modals/CheckInListSuccessModal/index.tsx:42
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:75
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:74
 #: src/components/modals/ManageOrderModal/index.tsx:237
-#: src/components/modals/ShareModal/index.tsx:255
+#: src/components/modals/ShareModal/index.tsx:225
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:366
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:70
 #: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:20
@@ -6470,8 +6498,7 @@ msgstr "從上方複製"
 msgid "Copied to clipboard"
 msgstr "已複製到剪貼簿"
 
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:67
-#: src/components/modals/ShareModal/index.tsx:248
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:66
 msgid "Copied!"
 msgstr "已複製！"
 
@@ -6484,10 +6511,9 @@ msgstr "複製逐步說明，可貼到 ChatGPT、Claude、Cursor 或網站建立
 #: src/components/common/TanStackTable/cells.tsx:79
 #: src/components/common/TanStackTable/cells.tsx:86
 #: src/components/modals/CheckInListSuccessModal/index.tsx:42
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:75
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:74
 #: src/components/modals/ManageOrderModal/index.tsx:237
 #: src/components/modals/ManageOrderModal/index.tsx:243
-#: src/components/modals/ShareModal/index.tsx:255
 #: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:20
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:51
 #: src/ee/crm/components/routes/AudienceForms/ShareSignupFormModal.tsx:19
@@ -6564,13 +6590,13 @@ msgid "Copy key"
 msgstr "複製金鑰"
 
 #: src/components/common/SsoButtons/index.tsx:54
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:67
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:66
+#: src/components/modals/ShareModal/index.tsx:225
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:70
 msgid "Copy link"
 msgstr "複製連結"
 
 #: src/components/common/AttendeeTicket/index.tsx:192
-#: src/components/modals/ShareModal/index.tsx:171
 msgid "Copy Link"
 msgstr "複製鏈接"
 
@@ -6626,14 +6652,6 @@ msgstr "從授權電郵中重新複製金鑰，不要包含引號或空格。"
 #: src/components/common/WidgetEditor/index.tsx:184
 msgid "Copy the new code to your site"
 msgstr "將新代碼複製到您的網站"
-
-#: src/components/modals/ShareModal/index.tsx:264
-msgid "Copy this link to share it anywhere"
-msgstr "複製此連結以便隨處分享"
-
-#: src/components/modals/ShareModal/index.tsx:248
-msgid "Copy to clipboard"
-msgstr "複製到剪貼簿"
 
 #: src/ee/sso/components/SingleSignOn/DomainList.tsx:112
 msgid "Copy TXT record name"
@@ -8248,7 +8266,7 @@ msgstr "捐款"
 #: src/components/modals/CheckInListSuccessModal/index.tsx:59
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:73
 #: src/components/modals/CreateWebhookModal/index.tsx:73
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:123
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:122
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:122
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:200
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:207
@@ -8302,8 +8320,8 @@ msgstr "下載發票"
 msgid "Download PNG"
 msgstr "下載 PNG"
 
-#: src/components/modals/ShareModal/index.tsx:228
-msgid "Download QR Code"
+#: src/components/modals/ShareModal/index.tsx:235
+msgid "Download QR code"
 msgstr "下載二維碼"
 
 #: src/components/routes/event/Reports/index.tsx:53
@@ -9077,7 +9095,7 @@ msgstr "向此分群發送電郵"
 msgid "Email to send tickets"
 msgstr "傳送門票的電郵"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:374
+#: src/components/layouts/OrganizerLayout/index.tsx:375
 msgid "Email Verification Required"
 msgstr "需要電郵驗證"
 
@@ -9110,7 +9128,7 @@ msgid "Embed on your website"
 msgstr "嵌入到您的網站"
 
 #: src/components/common/WidgetEditor/index.tsx:189
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:113
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:112
 msgid "Embed Widget"
 msgstr "嵌入小工具"
 
@@ -9244,6 +9262,10 @@ msgstr "結束日期"
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:187
 msgid "Ends the next day"
 msgstr "翌日結束"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:22
+msgid "Energetic"
+msgstr "活力"
 
 #: src/components/common/LanguageSwitcher/index.tsx:22
 #: src/components/modals/CreateAttendeeModal/index.tsx:241
@@ -9627,7 +9649,7 @@ msgstr "活動不可用"
 msgid "Event not live"
 msgstr "活動未上線"
 
-#: src/components/layouts/Event/index.tsx:326
+#: src/components/layouts/Event/index.tsx:327
 msgid "Event Page"
 msgstr "活動頁面"
 
@@ -9673,7 +9695,7 @@ msgstr "活動標題、日期和圖片"
 msgid "Event Too New"
 msgstr "活動太新"
 
-#: src/components/routes/event/EventDashboard/index.tsx:265
+#: src/components/routes/event/EventDashboard/index.tsx:264
 msgid "Event totals"
 msgstr "活動總計"
 
@@ -10469,6 +10491,10 @@ msgstr "個別收費已儲存"
 msgid "Fee updated"
 msgstr "費用已更新"
 
+#: src/components/modals/ShareModal/SharePreview.tsx:52
+msgid "Feed"
+msgstr "動態"
+
 #: src/components/common/InlineOrderSummary/index.tsx:164
 #: src/components/common/OrdersTable/index.tsx:234
 #: src/components/forms/ProductForm/index.tsx:497
@@ -10942,6 +10968,10 @@ msgstr "星期五"
 #: src/components/routes/event/Questions/questionTemplates.ts:55
 msgid "Friend or colleague"
 msgstr "朋友或同事"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:20
+msgid "Friendly"
+msgstr "親切"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1086
 #: src/ee/crm/components/routes/AudienceCampaign/index.tsx:418
@@ -12549,6 +12579,10 @@ msgstr "只是在找您的票？"
 msgid "just now"
 msgstr "剛剛"
 
+#: src/components/modals/ShareModal/SharePreview.tsx:65
+msgid "Just now"
+msgstr "剛剛"
+
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:185
 msgid "Just taken by someone else: {lostLabels}. Choose replacement seats."
 msgstr "剛被他人選走：{lostLabels}。請選擇替代座位。"
@@ -13066,6 +13100,7 @@ msgstr "陣容在活動頁面上已隱藏，因此小工具無法顯示。"
 
 #: src/components/common/AffiliateTable/index.tsx:119
 #: src/components/common/Editor/Controls/InsertButtonControl/index.tsx:51
+#: src/components/modals/ShareModal/index.tsx:209
 #: src/ee/crm/components/routes/AudienceForms/ShareSignupFormModal.tsx:62
 msgid "Link"
 msgstr "連結"
@@ -13595,6 +13630,7 @@ msgstr "與另一位聯絡人合併"
 #: src/components/common/ContactOrganizerModal/index.tsx:91
 #: src/components/common/OrdersTable/index.tsx:175
 #: src/components/modals/SendMessageModal/index.tsx:455
+#: src/components/modals/ShareModal/SharePreview.tsx:53
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:63
 #: src/ee/crm/components/routes/AudienceAutomations/AutomationModal.tsx:258
 #: src/ee/crm/components/routes/AudienceCampaign/index.tsx:585
@@ -13871,6 +13907,11 @@ msgstr "更多活動"
 #: src/components/layouts/EventHomepage/MoreEventsSection.tsx:31
 msgid "More from {0}"
 msgstr "{0} 的更多活動"
+
+#: src/components/modals/ShareModal/index.tsx:189
+#: src/components/modals/ShareModal/index.tsx:193
+msgid "More options"
+msgstr "更多選項"
 
 #: src/ee/seating/components/SeatPicker/SeatSheet.tsx:74
 msgid "More places"
@@ -15225,6 +15266,10 @@ msgstr "無"
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:262
 msgid "None (cash only)"
 msgstr "無（僅現金）"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:76
+msgid "None left today"
+msgstr "今天已無剩餘次數"
 
 #: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:138
 msgid "None shared"
@@ -16761,10 +16806,6 @@ msgstr "頁面不再可用"
 msgid "Page not found"
 msgstr "頁面未找到"
 
-#: src/components/modals/ShareModal/index.tsx:236
-msgid "Page URL"
-msgstr "頁面網址"
-
 #: src/components/common/StatBoxes/index.tsx:103
 msgid "Page views"
 msgstr "頁面瀏覽量"
@@ -17670,6 +17711,10 @@ msgstr "葡萄牙語"
 msgid "Position"
 msgstr "排序位置"
 
+#: src/components/modals/ShareModal/SharePreview.tsx:54
+msgid "Post"
+msgstr "帖子"
+
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:137
 msgid "Post Checkout message"
 msgstr "結賬後信息"
@@ -17730,14 +17775,18 @@ msgstr "預覽以下門票的結賬"
 msgid "Preview as"
 msgstr "預覽身份"
 
-#: src/components/layouts/Event/index.tsx:319
-#: src/components/layouts/Event/index.tsx:323
+#: src/components/layouts/Event/index.tsx:320
+#: src/components/layouts/Event/index.tsx:324
 msgid "Preview Event page"
 msgstr "預覽活動頁面"
 
 #: src/ee/crm/components/routes/AudienceCampaign/SmsPreviewPane.tsx:53
 msgid "Preview for"
 msgstr "預覽國家/地區"
+
+#: src/components/modals/ShareModal/SharePreview.tsx:50
+msgid "Preview style"
+msgstr "預覽樣式"
 
 #: src/ee/crm/components/routes/AudienceAutomations/AutomationModal.tsx:244
 #: src/ee/crm/components/routes/AudienceCampaign/index.tsx:504
@@ -17985,6 +18034,10 @@ msgstr "已售產品"
 msgid "Products sorted successfully"
 msgstr "產品排序成功"
 
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:21
+msgid "Professional"
+msgstr "專業"
+
 #: src/components/layouts/SettingsLayout/index.tsx:62
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:271
 #: src/components/routes/settings/Profile/index.tsx:170
@@ -18159,10 +18212,6 @@ msgstr "將新金鑰填入 <0>APP_LICENCE_KEY</0> 並重新部署後端。"
 #: src/ee/crm/components/routes/AudienceForms/ShareSignupFormModal.tsx:74
 msgid "QR code"
 msgstr "QR code"
-
-#: src/components/modals/ShareModal/index.tsx:168
-msgid "QR Code"
-msgstr "二維碼"
 
 #: src/components/layouts/AuthLayout/AuthShell.tsx:15
 msgid "QR code check-in"
@@ -19097,11 +19146,11 @@ msgstr "重新發送驗證碼"
 msgid "Resend Confirmation"
 msgstr "重新發送確認"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:391
+#: src/components/layouts/OrganizerLayout/index.tsx:392
 msgid "Resend Confirmation Email"
 msgstr "重新發送確認電郵"
 
-#: src/components/layouts/Event/index.tsx:339
+#: src/components/layouts/Event/index.tsx:340
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:162
 msgid "Resend email"
 msgstr "重新發送電郵"
@@ -20998,6 +21047,7 @@ msgid "Set up Audience to see who has been to your events before, who is likely 
 msgstr "設定受眾功能，即可查看誰曾參加過您的活動、誰可能會到場，以及他們還去了哪些活動。"
 
 #: src/components/layouts/OrganizerLayout/index.tsx:105
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:43
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:126
 msgid "Set up payouts"
 msgstr "設定收款"
@@ -21103,9 +21153,7 @@ msgstr "形狀"
 #: src/components/layouts/OrganizerHomepage/index.tsx:334
 #: src/components/layouts/OrganizerHomepage/index.tsx:334
 #: src/components/layouts/OrganizerLayout/index.tsx:320
-#: src/components/modals/ShareModal/index.tsx:37
-#: src/components/modals/ShareModal/index.tsx:165
-#: src/components/modals/ShareModal/index.tsx:186
+#: src/components/modals/ShareModal/index.tsx:49
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:65
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:76
 #: src/ee/crm/components/routes/AudienceForms/index.tsx:173
@@ -21123,8 +21171,8 @@ msgstr "分享推廣連結"
 
 #: src/components/layouts/Event/index.tsx:277
 #: src/components/layouts/Event/index.tsx:283
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:102
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:131
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:101
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:130
 msgid "Share Event"
 msgstr "分享活動"
 
@@ -21153,9 +21201,21 @@ msgstr "將新的 PIN 碼分享給門口工作人員。所有已登入的人員�
 msgid "Share the payment details"
 msgstr "分享付款資料"
 
+#: src/components/modals/ShareModal/index.tsx:174
+msgid "Share to"
+msgstr "分享到"
+
+#: src/components/modals/ShareModal/index.tsx:181
+msgid "Share to {0}"
+msgstr "分享到 {0}"
+
 #: src/components/routes/event/CapacityAssignments/index.tsx:32
 msgid "Shared Capacity Management"
 msgstr "共享容量管理"
+
+#: src/components/modals/ShareModal/index.tsx:132
+msgid "Shared links show the cover image, so links without one are easy to scroll past."
+msgstr "分享的連結會顯示封面圖片，沒有封面的連結很容易被忽略。"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:34
 msgid "Shift times"
@@ -21164,6 +21224,10 @@ msgstr "調整時間"
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:212
 msgid "Shifted times for {count} date(s)"
 msgstr "已調整 {count} 個日期的時間"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:23
+msgid "Short"
+msgstr "簡短"
 
 #: src/components/forms/QuestionForm/questionTypes.ts:23
 msgid "Short answer"
@@ -22795,6 +22859,18 @@ msgstr "追蹤設定更新成功"
 msgid "Successfully updated Webhook"
 msgstr "Webhook 更新成功"
 
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:89
+msgid "Suggest captions"
+msgstr "產生文案建議"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:89
+msgid "Suggest new ones"
+msgstr "換一批"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:71
+msgid "Suggestions"
+msgstr "建議"
+
 #: src/components/common/ProgressStepper/index.tsx:20
 #: src/components/common/ProgressStepper/index.tsx:24
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:651
@@ -24204,6 +24280,10 @@ msgstr "此活動亦有電話號碼問題。購買者可能需要填寫兩次號
 #: src/components/layouts/EventHomepage/index.tsx:131
 msgid "This event has ended"
 msgstr "此活動已結束"
+
+#: src/components/modals/ShareModal/index.tsx:130
+msgid "This event has no cover image"
+msgstr "此活動沒有封面圖片"
 
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:154
 msgid "This event has no seat map, so there is no plan to print. Attach one in the seating settings."
@@ -26333,7 +26413,7 @@ msgstr "驗證電郵"
 msgid "Verify recovery code"
 msgstr "驗證復原碼"
 
-#: src/components/layouts/Event/index.tsx:336
+#: src/components/layouts/Event/index.tsx:337
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:156
 msgid "Verify your email"
 msgstr "驗證您的電郵"
@@ -26454,7 +26534,7 @@ msgstr "查看活動"
 msgid "View event page"
 msgstr "查看活動頁面"
 
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:93
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:92
 msgid "View Event Page"
 msgstr "查看活動頁面"
 
@@ -27052,6 +27132,10 @@ msgstr "無法停止此推廣活動，請再試一次。"
 #: src/ee/crm/components/routes/CampaignUnsubscribe/index.tsx:145
 msgid "We couldn't subscribe you again. Please try again."
 msgstr "無法為您重新訂閱，請再試一次。"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:60
+msgid "We couldn't suggest captions right now. Please try again."
+msgstr "暫時無法產生文案建議，請重試。"
 
 #: src/ee/crm/components/ContactDrawer/index.tsx:119
 msgid "We couldn't unsubscribe this contact. Please try again."
@@ -28014,7 +28098,7 @@ msgstr "必須先創建機票，然後才能手動添加與會者。"
 msgid "You must have at least one price tier"
 msgstr "您必須至少有一個價格等級"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:380
+#: src/components/layouts/OrganizerLayout/index.tsx:381
 msgid "You must verify your email address before you can update the organizer status."
 msgstr "在更新主辦單位狀態之前，您必須先驗證您的電郵地址。"
 
@@ -28315,7 +28399,7 @@ msgstr "您的活動在當日沒有日期，因此此時段不會顯示在活動
 msgid "Your event has no description yet."
 msgstr "您的活動尚未有描述。"
 
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:48
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:47
 msgid "Your event is live!"
 msgstr "您的活動已上線！"
 

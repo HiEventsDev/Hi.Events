@@ -269,6 +269,14 @@ msgstr "Το μέλος {0} μπορεί να συνδεθεί με κωδικό
 msgid "{0} cancelled"
 msgstr "{0} ακυρώθηκαν"
 
+#: src/components/modals/ShareModal/index.tsx:165
+msgid "{0} characters"
+msgstr "{0} χαρακτήρες"
+
+#: src/components/modals/ShareModal/index.tsx:164
+msgid "{0} characters, too long for an X post"
+msgstr "{0} χαρακτήρες, πολύ μεγάλο για ανάρτηση στο X"
+
 #: src/components/routes/admin/Configurations/index.tsx:84
 msgid "{0} Default"
 msgstr "Προεπιλογή {0}"
@@ -316,6 +324,10 @@ msgstr "{0} στοιχεία επιλεγμένα"
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:398
 msgid "{0} left"
 msgstr "{0} απομένουν"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:77
+msgid "{0} left today"
+msgstr "Απομένουν {0} σήμερα"
 
 #: src/components/layouts/AppLayout/Sidebar/index.tsx:117
 #: src/components/layouts/AuthLayout/AuthShell.tsx:153
@@ -1911,6 +1923,10 @@ msgstr "Προσθήκη συσκευής ανάγνωσης καρτών"
 #: src/ee/crm/components/routes/AudienceContacts/AddContactModal.tsx:56
 msgid "Add a contact"
 msgstr "Προσθήκη επαφής"
+
+#: src/components/modals/ShareModal/index.tsx:143
+msgid "Add a cover image"
+msgstr "Προσθήκη εικόνας εξωφύλλου"
 
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:147
 msgid "Add a cover image and theme to match your brand"
@@ -4908,6 +4924,18 @@ msgstr "Χωρητικότητα που χρησιμοποιήθηκε"
 msgid "Capacity, sold, held and free seats per price band and area, with revenue per band"
 msgstr "Χωρητικότητα, πωλημένες, δεσμευμένες και ελεύθερες θέσεις ανά κατηγορία τιμής και περιοχή, με έσοδα ανά κατηγορία"
 
+#: src/components/modals/ShareModal/index.tsx:154
+msgid "Caption"
+msgstr "Λεζάντα"
+
+#: src/components/modals/ShareModal/index.tsx:76
+msgid "Caption copied. Paste it into your {0} post."
+msgstr "Η λεζάντα αντιγράφηκε. Επικολλήστε τη στην ανάρτησή σας στο {0}."
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:38
+msgid "Caption suggestions are available once you connect Stripe."
+msgstr "Οι προτάσεις λεζάντας είναι διαθέσιμες μόλις συνδέσετε το Stripe."
+
 #: src/ee/box-office/components/layouts/BoxOffice/TenderStage.tsx:173
 #: src/ee/box-office/utilites/boxOfficeTender.ts:9
 msgid "Card"
@@ -6126,7 +6154,7 @@ msgstr "Επιβεβαιώστε τη διεύθυνση email σας"
 msgid "Confirm your email address to take signups"
 msgstr "Επιβεβαιώστε τη διεύθυνση email σας για να δέχεστε εγγραφές"
 
-#: src/components/layouts/Event/index.tsx:337
+#: src/components/layouts/Event/index.tsx:338
 msgid "Confirm your email to access all features."
 msgstr "Επιβεβαιώστε το email σας για πρόσβαση σε όλες τις λειτουργίες."
 
@@ -6138,7 +6166,7 @@ msgstr "Επιβεβαιώστε τη συνδρομή σας"
 msgid "Confirmation code"
 msgstr "Κωδικός επιβεβαίωσης"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:395
+#: src/components/layouts/OrganizerLayout/index.tsx:396
 msgid "Confirmation email sent! Please check your inbox."
 msgstr "Στάλθηκε email επιβεβαίωσης! Παρακαλώ ελέγξτε τα εισερχόμενά σας."
 
@@ -6158,7 +6186,7 @@ msgstr "Επιβεβαιώθηκε μέσω email μετά την εγγραφή
 msgid "Confirming email address..."
 msgstr "Επιβεβαίωση διεύθυνσης email..."
 
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:52
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:51
 msgid "Congratulations! Your event is now visible to the public."
 msgstr "Συγχαρητήρια! Η εκδήλωσή σας είναι τώρα ορατή στο κοινό."
 
@@ -6449,9 +6477,9 @@ msgstr "Ρυθμίσεις cookies"
 #: src/components/common/WidgetEditor/index.tsx:221
 #: src/components/common/WidgetEditor/InstallPanel.tsx:52
 #: src/components/modals/CheckInListSuccessModal/index.tsx:42
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:75
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:74
 #: src/components/modals/ManageOrderModal/index.tsx:237
-#: src/components/modals/ShareModal/index.tsx:255
+#: src/components/modals/ShareModal/index.tsx:225
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:366
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:70
 #: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:20
@@ -6470,8 +6498,7 @@ msgstr "Αντιγράφηκε από παραπάνω"
 msgid "Copied to clipboard"
 msgstr "Αντιγράφηκε στο πρόχειρο"
 
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:67
-#: src/components/modals/ShareModal/index.tsx:248
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:66
 msgid "Copied!"
 msgstr "Αντιγράφηκε!"
 
@@ -6484,10 +6511,9 @@ msgstr "Αντιγράφει οδηγίες βήμα προς βήμα για ε
 #: src/components/common/TanStackTable/cells.tsx:79
 #: src/components/common/TanStackTable/cells.tsx:86
 #: src/components/modals/CheckInListSuccessModal/index.tsx:42
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:75
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:74
 #: src/components/modals/ManageOrderModal/index.tsx:237
 #: src/components/modals/ManageOrderModal/index.tsx:243
-#: src/components/modals/ShareModal/index.tsx:255
 #: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:20
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:51
 #: src/ee/crm/components/routes/AudienceForms/ShareSignupFormModal.tsx:19
@@ -6564,13 +6590,13 @@ msgid "Copy key"
 msgstr "Αντιγραφή κλειδιού"
 
 #: src/components/common/SsoButtons/index.tsx:54
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:67
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:66
+#: src/components/modals/ShareModal/index.tsx:225
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:70
 msgid "Copy link"
 msgstr "Αντιγραφή συνδέσμου"
 
 #: src/components/common/AttendeeTicket/index.tsx:192
-#: src/components/modals/ShareModal/index.tsx:171
 msgid "Copy Link"
 msgstr "Αντιγραφή Συνδέσμου"
 
@@ -6626,14 +6652,6 @@ msgstr "Αντιγράψτε ξανά το κλειδί από το email της
 #: src/components/common/WidgetEditor/index.tsx:184
 msgid "Copy the new code to your site"
 msgstr "Αντιγράψτε τον νέο κώδικα στον ιστότοπό σας"
-
-#: src/components/modals/ShareModal/index.tsx:264
-msgid "Copy this link to share it anywhere"
-msgstr "Αντιγράψτε αυτό τον σύνδεσμο για κοινοποίηση οπουδήποτε"
-
-#: src/components/modals/ShareModal/index.tsx:248
-msgid "Copy to clipboard"
-msgstr "Αντιγραφή στο πρόχειρο"
 
 #: src/ee/sso/components/SingleSignOn/DomainList.tsx:112
 msgid "Copy TXT record name"
@@ -8248,7 +8266,7 @@ msgstr "Δωρεά"
 #: src/components/modals/CheckInListSuccessModal/index.tsx:59
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:73
 #: src/components/modals/CreateWebhookModal/index.tsx:73
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:123
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:122
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:122
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:200
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:207
@@ -8302,9 +8320,9 @@ msgstr "Λήψη Τιμολογίου"
 msgid "Download PNG"
 msgstr "Λήψη PNG"
 
-#: src/components/modals/ShareModal/index.tsx:228
-msgid "Download QR Code"
-msgstr "Λήψη QR Code"
+#: src/components/modals/ShareModal/index.tsx:235
+msgid "Download QR code"
+msgstr "Λήψη κωδικού QR"
 
 #: src/components/routes/event/Reports/index.tsx:53
 msgid "Download sales, attendee, and financial reports for all completed orders."
@@ -9077,7 +9095,7 @@ msgstr "Αποστολή email σε αυτό το τμήμα"
 msgid "Email to send tickets"
 msgstr "Email για αποστολή εισιτηρίων"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:374
+#: src/components/layouts/OrganizerLayout/index.tsx:375
 msgid "Email Verification Required"
 msgstr "Απαιτείται Επαλήθευση Email"
 
@@ -9110,7 +9128,7 @@ msgid "Embed on your website"
 msgstr "Ενσωμάτωση στον ιστότοπό σας"
 
 #: src/components/common/WidgetEditor/index.tsx:189
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:113
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:112
 msgid "Embed Widget"
 msgstr "Ενσωμάτωση Widget"
 
@@ -9244,6 +9262,10 @@ msgstr "Λήγει στις"
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:187
 msgid "Ends the next day"
 msgstr "Λήγει την επόμενη ημέρα"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:22
+msgid "Energetic"
+msgstr "Δυναμικό"
 
 #: src/components/common/LanguageSwitcher/index.tsx:22
 #: src/components/modals/CreateAttendeeModal/index.tsx:241
@@ -9627,7 +9649,7 @@ msgstr "Η Εκδήλωση Δεν Είναι Διαθέσιμη"
 msgid "Event not live"
 msgstr "Η εκδήλωση δεν είναι ενεργή"
 
-#: src/components/layouts/Event/index.tsx:326
+#: src/components/layouts/Event/index.tsx:327
 msgid "Event Page"
 msgstr "Σελίδα Εκδήλωσης"
 
@@ -9673,7 +9695,7 @@ msgstr "Τίτλος, ημερομηνία και εικόνα εκδήλωση�
 msgid "Event Too New"
 msgstr "Εκδήλωση Πολύ Νέα"
 
-#: src/components/routes/event/EventDashboard/index.tsx:265
+#: src/components/routes/event/EventDashboard/index.tsx:264
 msgid "Event totals"
 msgstr "Σύνολα εκδήλωσης"
 
@@ -10469,6 +10491,10 @@ msgstr "Η παράκαμψη χρέωσης αποθηκεύτηκε"
 msgid "Fee updated"
 msgstr "Το τέλος ενημερώθηκε"
 
+#: src/components/modals/ShareModal/SharePreview.tsx:52
+msgid "Feed"
+msgstr "Ροή"
+
 #: src/components/common/InlineOrderSummary/index.tsx:164
 #: src/components/common/OrdersTable/index.tsx:234
 #: src/components/forms/ProductForm/index.tsx:497
@@ -10942,6 +10968,10 @@ msgstr "Παρασκευή"
 #: src/components/routes/event/Questions/questionTemplates.ts:55
 msgid "Friend or colleague"
 msgstr "Φίλος ή συνάδελφος"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:20
+msgid "Friendly"
+msgstr "Φιλικό"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1086
 #: src/ee/crm/components/routes/AudienceCampaign/index.tsx:418
@@ -12549,6 +12579,10 @@ msgstr "Αναζητάτε μόνο τα εισιτήριά σας;"
 msgid "just now"
 msgstr "μόλις τώρα"
 
+#: src/components/modals/ShareModal/SharePreview.tsx:65
+msgid "Just now"
+msgstr "Μόλις τώρα"
+
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:185
 msgid "Just taken by someone else: {lostLabels}. Choose replacement seats."
 msgstr "Μόλις πάρθηκαν από κάποιον άλλον: {lostLabels}. Επιλέξτε θέσεις αντικατάστασης."
@@ -13066,6 +13100,7 @@ msgstr "Το line-up είναι κρυφό στη σελίδα της εκδήλ
 
 #: src/components/common/AffiliateTable/index.tsx:119
 #: src/components/common/Editor/Controls/InsertButtonControl/index.tsx:51
+#: src/components/modals/ShareModal/index.tsx:209
 #: src/ee/crm/components/routes/AudienceForms/ShareSignupFormModal.tsx:62
 msgid "Link"
 msgstr "Σύνδεσμος"
@@ -13595,6 +13630,7 @@ msgstr "Συγχώνευση με άλλη επαφή"
 #: src/components/common/ContactOrganizerModal/index.tsx:91
 #: src/components/common/OrdersTable/index.tsx:175
 #: src/components/modals/SendMessageModal/index.tsx:455
+#: src/components/modals/ShareModal/SharePreview.tsx:53
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:63
 #: src/ee/crm/components/routes/AudienceAutomations/AutomationModal.tsx:258
 #: src/ee/crm/components/routes/AudienceCampaign/index.tsx:585
@@ -13871,6 +13907,11 @@ msgstr "Περισσότερες εκδηλώσεις"
 #: src/components/layouts/EventHomepage/MoreEventsSection.tsx:31
 msgid "More from {0}"
 msgstr "Περισσότερα από {0}"
+
+#: src/components/modals/ShareModal/index.tsx:189
+#: src/components/modals/ShareModal/index.tsx:193
+msgid "More options"
+msgstr "Περισσότερες επιλογές"
 
 #: src/ee/seating/components/SeatPicker/SeatSheet.tsx:74
 msgid "More places"
@@ -15225,6 +15266,10 @@ msgstr "Κανένα"
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:262
 msgid "None (cash only)"
 msgstr "Κανένας (μόνο μετρητά)"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:76
+msgid "None left today"
+msgstr "Δεν απομένουν άλλες σήμερα"
 
 #: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:138
 msgid "None shared"
@@ -16761,10 +16806,6 @@ msgstr "Η σελίδα δεν είναι πλέον διαθέσιμη"
 msgid "Page not found"
 msgstr "Η σελίδα δεν βρέθηκε"
 
-#: src/components/modals/ShareModal/index.tsx:236
-msgid "Page URL"
-msgstr "URL Σελίδας"
-
 #: src/components/common/StatBoxes/index.tsx:103
 msgid "Page views"
 msgstr "Προβολές σελίδας"
@@ -17670,6 +17711,10 @@ msgstr "Πορτογαλικά"
 msgid "Position"
 msgstr "Θέση"
 
+#: src/components/modals/ShareModal/SharePreview.tsx:54
+msgid "Post"
+msgstr "Ανάρτηση"
+
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:137
 msgid "Post Checkout message"
 msgstr "Μήνυμα Μετά το Checkout"
@@ -17730,14 +17775,18 @@ msgstr "Προεπισκόπηση αγοράς για"
 msgid "Preview as"
 msgstr "Προεπισκόπηση ως"
 
-#: src/components/layouts/Event/index.tsx:319
-#: src/components/layouts/Event/index.tsx:323
+#: src/components/layouts/Event/index.tsx:320
+#: src/components/layouts/Event/index.tsx:324
 msgid "Preview Event page"
 msgstr "Προεπισκόπηση σελίδας εκδήλωσης"
 
 #: src/ee/crm/components/routes/AudienceCampaign/SmsPreviewPane.tsx:53
 msgid "Preview for"
 msgstr "Προεπισκόπηση για"
+
+#: src/components/modals/ShareModal/SharePreview.tsx:50
+msgid "Preview style"
+msgstr "Στυλ προεπισκόπησης"
 
 #: src/ee/crm/components/routes/AudienceAutomations/AutomationModal.tsx:244
 #: src/ee/crm/components/routes/AudienceCampaign/index.tsx:504
@@ -17985,6 +18034,10 @@ msgstr "Προϊόντα που Πωλήθηκαν"
 msgid "Products sorted successfully"
 msgstr "Τα προϊόντα ταξινομήθηκαν επιτυχώς"
 
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:21
+msgid "Professional"
+msgstr "Επαγγελματικό"
+
 #: src/components/layouts/SettingsLayout/index.tsx:62
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:271
 #: src/components/routes/settings/Profile/index.tsx:170
@@ -18159,10 +18212,6 @@ msgstr "Βάλτε το νέο κλειδί στο <0>APP_LICENCE_KEY</0> και
 #: src/ee/crm/components/routes/AudienceForms/ShareSignupFormModal.tsx:74
 msgid "QR code"
 msgstr "Κωδικός QR"
-
-#: src/components/modals/ShareModal/index.tsx:168
-msgid "QR Code"
-msgstr "QR Code"
 
 #: src/components/layouts/AuthLayout/AuthShell.tsx:15
 msgid "QR code check-in"
@@ -19097,11 +19146,11 @@ msgstr "Επαναποστολή κωδικού"
 msgid "Resend Confirmation"
 msgstr "Επαναποστολή Επιβεβαίωσης"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:391
+#: src/components/layouts/OrganizerLayout/index.tsx:392
 msgid "Resend Confirmation Email"
 msgstr "Επαναποστολή Email Επιβεβαίωσης"
 
-#: src/components/layouts/Event/index.tsx:339
+#: src/components/layouts/Event/index.tsx:340
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:162
 msgid "Resend email"
 msgstr "Επαναποστολή email"
@@ -20998,6 +21047,7 @@ msgid "Set up Audience to see who has been to your events before, who is likely 
 msgstr "Ρυθμίστε το Κοινό για να δείτε ποιοι έχουν έρθει ξανά στις εκδηλώσεις σας, ποιοι είναι πιθανό να έρθουν και πού αλλού πηγαίνουν."
 
 #: src/components/layouts/OrganizerLayout/index.tsx:105
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:43
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:126
 msgid "Set up payouts"
 msgstr "Ρύθμιση πληρωμών"
@@ -21103,9 +21153,7 @@ msgstr "Σχήμα"
 #: src/components/layouts/OrganizerHomepage/index.tsx:334
 #: src/components/layouts/OrganizerHomepage/index.tsx:334
 #: src/components/layouts/OrganizerLayout/index.tsx:320
-#: src/components/modals/ShareModal/index.tsx:37
-#: src/components/modals/ShareModal/index.tsx:165
-#: src/components/modals/ShareModal/index.tsx:186
+#: src/components/modals/ShareModal/index.tsx:49
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:65
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:76
 #: src/ee/crm/components/routes/AudienceForms/index.tsx:173
@@ -21123,8 +21171,8 @@ msgstr "Κοινοποίηση Συνδέσμου Συνεργάτη"
 
 #: src/components/layouts/Event/index.tsx:277
 #: src/components/layouts/Event/index.tsx:283
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:102
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:131
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:101
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:130
 msgid "Share Event"
 msgstr "Κοινοποίηση Εκδήλωσης"
 
@@ -21153,9 +21201,21 @@ msgstr "Μοιραστείτε το νέο PIN με το προσωπικό ει
 msgid "Share the payment details"
 msgstr "Κοινοποίηση στοιχείων πληρωμής"
 
+#: src/components/modals/ShareModal/index.tsx:174
+msgid "Share to"
+msgstr "Κοινοποίηση σε"
+
+#: src/components/modals/ShareModal/index.tsx:181
+msgid "Share to {0}"
+msgstr "Κοινοποίηση στο {0}"
+
 #: src/components/routes/event/CapacityAssignments/index.tsx:32
 msgid "Shared Capacity Management"
 msgstr "Διαχείριση Κοινής Χωρητικότητας"
+
+#: src/components/modals/ShareModal/index.tsx:132
+msgid "Shared links show the cover image, so links without one are easy to scroll past."
+msgstr "Οι κοινοποιημένοι σύνδεσμοι δείχνουν την εικόνα εξωφύλλου, οπότε όσοι δεν έχουν περνούν εύκολα απαρατήρητοι."
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:34
 msgid "Shift times"
@@ -21164,6 +21224,10 @@ msgstr "Μετατόπιση ωρών"
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:212
 msgid "Shifted times for {count} date(s)"
 msgstr "Οι ώρες μετατοπίστηκαν για {count} ημερομηνία/ες"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:23
+msgid "Short"
+msgstr "Σύντομο"
 
 #: src/components/forms/QuestionForm/questionTypes.ts:23
 msgid "Short answer"
@@ -22795,6 +22859,18 @@ msgstr "Επιτυχής Ενημέρωση Ρυθμίσεων Παρακολο�
 msgid "Successfully updated Webhook"
 msgstr "Επιτυχής ενημέρωση Webhook"
 
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:89
+msgid "Suggest captions"
+msgstr "Πρόταση λεζαντών"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:89
+msgid "Suggest new ones"
+msgstr "Πρόταση νέων"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:71
+msgid "Suggestions"
+msgstr "Προτάσεις"
+
 #: src/components/common/ProgressStepper/index.tsx:20
 #: src/components/common/ProgressStepper/index.tsx:24
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:651
@@ -24204,6 +24280,10 @@ msgstr "Αυτή η εκδήλωση έχει επίσης ερώτηση για
 #: src/components/layouts/EventHomepage/index.tsx:131
 msgid "This event has ended"
 msgstr "Αυτή η εκδήλωση έχει τελειώσει"
+
+#: src/components/modals/ShareModal/index.tsx:130
+msgid "This event has no cover image"
+msgstr "Αυτή η εκδήλωση δεν έχει εικόνα εξωφύλλου"
 
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:154
 msgid "This event has no seat map, so there is no plan to print. Attach one in the seating settings."
@@ -26333,7 +26413,7 @@ msgstr "Επαλήθευση Email"
 msgid "Verify recovery code"
 msgstr "Επαλήθευση κωδικού ανάκτησης"
 
-#: src/components/layouts/Event/index.tsx:336
+#: src/components/layouts/Event/index.tsx:337
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:156
 msgid "Verify your email"
 msgstr "Επαληθεύστε το email σας"
@@ -26454,7 +26534,7 @@ msgstr "Προβολή Εκδήλωσης"
 msgid "View event page"
 msgstr "Προβολή σελίδας εκδήλωσης"
 
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:93
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:92
 msgid "View Event Page"
 msgstr "Προβολή Σελίδας Εκδήλωσης"
 
@@ -27052,6 +27132,10 @@ msgstr "Δεν μπορέσαμε να διακόψουμε αυτή την κα
 #: src/ee/crm/components/routes/CampaignUnsubscribe/index.tsx:145
 msgid "We couldn't subscribe you again. Please try again."
 msgstr "Δεν μπορέσαμε να σας εγγράψουμε ξανά. Δοκιμάστε ξανά."
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:60
+msgid "We couldn't suggest captions right now. Please try again."
+msgstr "Δεν μπορέσαμε να προτείνουμε λεζάντες αυτήν τη στιγμή. Δοκιμάστε ξανά."
 
 #: src/ee/crm/components/ContactDrawer/index.tsx:119
 msgid "We couldn't unsubscribe this contact. Please try again."
@@ -28014,7 +28098,7 @@ msgstr "Πρέπει να δημιουργήσετε εισιτήριο πριν
 msgid "You must have at least one price tier"
 msgstr "Πρέπει να έχετε τουλάχιστον μία βαθμίδα τιμής"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:380
+#: src/components/layouts/OrganizerLayout/index.tsx:381
 msgid "You must verify your email address before you can update the organizer status."
 msgstr "Πρέπει να επαληθεύσετε τη διεύθυνση email πριν ενημερώσετε την κατάσταση διοργανωτή."
 
@@ -28315,7 +28399,7 @@ msgstr "Η εκδήλωσή σας δεν έχει ημερομηνία αυτή
 msgid "Your event has no description yet."
 msgstr "Η εκδήλωσή σας δεν έχει ακόμη περιγραφή."
 
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:48
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:47
 msgid "Your event is live!"
 msgstr "Η εκδήλωσή σας είναι δημοσιευμένη!"
 
