@@ -193,7 +193,7 @@ class ExportOrganizerReportAction extends BaseAction
                 $row->event_name ?? '',
                 $row->event_currency ?? '',
                 $row->tax_name ?? '',
-                $row->tax_rate ? ($row->tax_rate * 100).'%' : '',
+                $row->tax_rate !== null ? ((float) $row->tax_rate).'%' : '',
                 $row->total_collected ?? 0,
                 $row->order_count ?? 0,
             ],

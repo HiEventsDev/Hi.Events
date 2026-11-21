@@ -129,6 +129,10 @@ msgstr "{0, plural, one {文件中有 # 行} other {文件中有 # 行}}"
 msgid "{0, plural, one {# row skipped} other {# rows skipped}}"
 msgstr "{0, plural, one {已跳过 # 行} other {已跳过 # 行}}"
 
+#: src/components/common/ReportView/index.tsx:231
+msgid "{0, plural, one {# row} other {# rows}}"
+msgstr "{0, plural, other {# 行}}"
+
 #: src/ee/crm/components/routes/AudienceSegments/index.tsx:169
 msgid "{0, plural, one {# rule} other {# rules}}"
 msgstr "{0, plural, one {# 条规则} other {# 条规则}}"
@@ -963,6 +967,10 @@ msgstr "{totalLabel} 封邮件中已有 {sentLabel} 封发出。剩余邮件将�
 msgid "{sentLabel} of {totalLabel} texts have already gone out. The rest won't be sent, and this can't be undone."
 msgstr "{totalLabel} 条短信中已发送 {sentLabel} 条。剩余短信将不会发送，此操作无法撤销。"
 
+#: src/components/common/ReportView/index.tsx:229
+msgid "{shown} of {total} rows"
+msgstr "{shown} / {total} 行"
+
 #: src/ee/crm/components/routes/AudienceContacts/useBulkContactActions.tsx:82
 msgid "{skipped, plural, one {The other contact had already unsubscribed or marked an email as spam.} other {The other # had already unsubscribed or marked an email as spam.}}"
 msgstr "{skipped, plural, one {其余 # 位联系人此前已退订或将邮件标记为垃圾邮件。} other {其余 # 位联系人此前已退订或将邮件标记为垃圾邮件。}}"
@@ -1075,6 +1083,14 @@ msgstr "{unlistedEvents, plural, one {以及另外 # 场活动} other {以及另
 #: src/components/routes/event/Lineup/LineupStats.tsx:23
 msgid "{unscheduled} without a time"
 msgstr "{unscheduled} 个未安排时间"
+
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:49
+msgid "{used} (no limit)"
+msgstr "{used}(无限制)"
+
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:49
+msgid "{used} of {capacity}"
+msgstr "{used} / {capacity}"
 
 #: src/ee/crm/utilites/labels.ts:302
 msgid "{wait} after a checkout is abandoned · {audience}"
@@ -1859,7 +1875,7 @@ msgstr "激活日期"
 #: src/components/modals/ProductPurchasesModal/index.tsx:246
 #: src/components/routes/event/attendees.tsx:29
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:217
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:20
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:32
 #: src/components/routes/organizer/Payments/CapabilityList.tsx:57
 #: src/components/routes/settings/Billing/index.tsx:45
 #: src/components/routes/settings/Team/MemberRow.tsx:28
@@ -2080,6 +2096,10 @@ msgstr "添加日期"
 msgid "Add dates and times for your recurring event"
 msgstr "为你的重复活动添加日期和时间"
 
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:82
+msgid "Add dates to this event's schedule to see them here."
+msgstr "将日期添加到此活动的日程后,即可在此处查看。"
+
 #: src/components/forms/QuestionForm/index.tsx:136
 msgid "Add description"
 msgstr "添加描述"
@@ -2238,6 +2258,10 @@ msgstr "在您的 DNS 提供商处添加此 TXT 记录，然后进行验证。�
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:97
 msgid "Add tickets"
 msgstr "添加机票"
+
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:38
+msgid "Add tickets or products to this event to see their sales here."
+msgstr "将门票或产品添加到此活动后,即可在此处查看销售情况。"
 
 #: src/components/forms/ProductForm/index.tsx:380
 msgid "Add tier"
@@ -2480,6 +2504,12 @@ msgstr "晚于"
 msgid "After an event ends, thank everyone who had a ticket."
 msgstr "活动结束后，向所有持票人致谢。"
 
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:66
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:30
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:46
+msgid "After refunds"
+msgstr "退款后"
+
 #: src/components/routes/welcome/index.tsx:419
 msgid "After your event is created, you can choose how often it repeats from the dashboard."
 msgstr "活动创建后，你可以在控制台选择它的重复频率。"
@@ -2540,7 +2570,7 @@ msgstr "全部"
 msgid "All Archived Events"
 msgstr "所有已归档活动"
 
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:41
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:43
 msgid "All areas"
 msgstr "所有区域"
 
@@ -2573,8 +2603,8 @@ msgstr "所有更改已保存"
 msgid "All contacts"
 msgstr "所有联系人"
 
-#: src/components/common/OrganizerReportTable/index.tsx:306
-msgid "All Currencies"
+#: src/components/routes/organizer/Reports/OrganizerReport.tsx:77
+msgid "All currencies"
 msgstr "所有货币"
 
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:77
@@ -2611,11 +2641,8 @@ msgstr "所有已结束活动"
 
 #: src/components/common/WidgetEditor/ContentFields.tsx:180
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:128
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:128
 msgid "All events"
-msgstr "所有活动"
-
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:33
-msgid "All Events"
 msgstr "所有活动"
 
 #: src/components/routes/admin/FailedJobs/index.tsx:94
@@ -2639,7 +2666,7 @@ msgstr "所有匹配的日期"
 msgid "All occurrences"
 msgstr "全部场次"
 
-#: src/components/common/ReportTable/index.tsx:275
+#: src/components/routes/event/Reports/EventReport.tsx:89
 msgid "All Occurrences"
 msgstr "全部场次"
 
@@ -2679,6 +2706,8 @@ msgid "All tickets"
 msgstr "所有门票"
 
 #: src/components/routes/admin/Attribution/index.tsx:82
+#: src/components/routes/event/Reports/EventReport.tsx:66
+#: src/components/routes/organizer/Reports/OrganizerReport.tsx:84
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:66
 msgid "All time"
 msgstr "全部时间"
@@ -2861,8 +2890,9 @@ msgstr "应付金额"
 msgid "Amount off"
 msgstr "折扣金额"
 
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:69
-msgid "Amount Paid"
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:77
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:119
+msgid "Amount paid"
 msgstr "支付金额"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:304
@@ -3419,7 +3449,7 @@ msgstr "您确定要删除此签到列表吗？"
 msgid "Are you VAT registered in the EU?"
 msgstr "您在欧盟注册了增值税吗?"
 
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:40
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:47
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:441
 msgid "Area"
 msgstr "区域"
@@ -3574,10 +3604,6 @@ msgstr "关联座位图"
 msgid "Attempts"
 msgstr "尝试次数"
 
-#: src/components/routes/organizer/Reports/index.tsx:40
-msgid "Attendance and check-in rates across all events"
-msgstr "所有活动的出席率和签到率"
-
 #: src/components/routes/event/EventDashboard/NextOccurrenceHero/index.tsx:194
 msgid "attendee"
 msgstr "位参与者"
@@ -3675,12 +3701,19 @@ msgstr "位参与者"
 #: src/components/routes/admin/Messages/index.tsx:248
 #: src/components/routes/event/attendees.tsx:206
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:61
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:61
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:65
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:84
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:122
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:148
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:282
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:38
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:53
 msgid "Attendees"
 msgstr "参与者"
+
+#: src/components/routes/organizer/Reports/index.tsx:47
+msgid "Attendees and check-ins for every event, across all time."
+msgstr "所有活动的参与者和签到情况(全部时间)。"
 
 #: src/components/layouts/CheckIn/tabs/StatsTab.tsx:72
 msgid "attendees checked in"
@@ -3952,10 +3985,6 @@ msgstr "返回消息"
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:246
 msgid "Back to QR code"
 msgstr "返回二维码"
-
-#: src/components/routes/organizer/Reports/ReportLayout/index.tsx:44
-msgid "Back to Reports"
-msgstr "返回报告"
 
 #: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:118
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:241
@@ -4840,7 +4869,7 @@ msgstr "取消将取消与此订单关联的所有参与者，并将门票释放
 #: src/components/routes/event/attendees.tsx:30
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:219
 #: src/components/routes/event/orders.tsx:31
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:21
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:33
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:121
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:433
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:116
@@ -4867,7 +4896,8 @@ msgstr "正在取消 {0} 个日期，可能需要一点时间。"
 #: src/components/routes/event/OccurrencesTab/BookingSummary/index.tsx:63
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:512
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1122
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:45
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:48
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:75
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:86
 msgid "Capacity"
 msgstr "容量"
@@ -4900,13 +4930,13 @@ msgstr "容量必须大于或等于 0"
 msgid "capacity updates"
 msgstr "容量更新"
 
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:66
-msgid "Capacity Used"
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:67
+msgid "Capacity used"
 msgstr "已用容量"
 
-#: src/components/routes/event/Reports/index.tsx:45
-msgid "Capacity, sold, held and free seats per price band and area, with revenue per band"
-msgstr "按价位区和区域统计的容量、已售、保留和空余座位，以及各价位区的收入"
+#: src/components/routes/event/Reports/index.tsx:63
+msgid "Capacity, sold, held and free seats for each price band and area, with revenue per band."
+msgstr "每个价格档位和区域的容量、已售、已保留和空闲座位,以及每个档位的收入。"
 
 #: src/ee/box-office/components/layouts/BoxOffice/TenderStage.tsx:173
 #: src/ee/box-office/utilites/boxOfficeTender.ts:9
@@ -5182,7 +5212,7 @@ msgstr "看看这个活动吧！"
 msgid "Check up to 50 addresses at a time."
 msgstr "每次最多检查 50 个地址。"
 
-#: src/components/common/ReportTable/index.tsx:239
+#: src/components/common/ReportView/index.tsx:244
 #: src/components/routes/settings/TaxesAndFees/index.tsx:85
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:84
 msgid "Check your connection and try again."
@@ -5273,11 +5303,8 @@ msgid "Check-in list not found"
 msgstr "未找到签到列表"
 
 #: src/components/modals/DuplicateEventModal/index.tsx:137
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:41
 msgid "Check-in lists"
-msgstr "签到列表"
-
-#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:51
-msgid "Check-in Lists"
 msgstr "签到列表"
 
 #: src/components/layouts/Event/index.tsx:151
@@ -5293,8 +5320,9 @@ msgstr "签到导航"
 msgid "Check-in progress"
 msgstr "签到进度"
 
-#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:45
-msgid "Check-in Rate"
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:40
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:55
+msgid "Check-in rate"
 msgstr "签到率"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:254
@@ -5307,16 +5335,12 @@ msgstr "检票人员会看到订单未付款,并可在入口处将其标记为�
 msgid "Check-In Status"
 msgstr "签到状态"
 
-#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:58
-#: src/components/routes/organizer/Reports/index.tsx:39
-msgid "Check-in Summary"
-msgstr "签到摘要"
-
 #: src/components/common/CheckInListList/index.tsx:162
 #: src/components/common/CheckInListTable/index.tsx:33
 msgid "Check-In URL copied to clipboard"
 msgstr "签到链接已复制到剪贴板"
 
+#: src/components/routes/organizer/Reports/index.tsx:46
 #: src/ee/crm/components/ContactDrawer/index.tsx:177
 #: src/ee/crm/components/routes/AudienceContacts/ContactsTable.tsx:63
 #: src/ee/crm/components/routes/AudienceContacts/ContactsTable.tsx:143
@@ -5344,6 +5368,10 @@ msgstr "{checked}审核，置信度 {confidence}%。"
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:111
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:151
 #: src/components/layouts/CheckIn/tabs/StatsTab.tsx:89
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:66
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:85
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:39
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:54
 #: src/ee/crm/components/EventDashboardAudience/index.tsx:23
 #: src/ee/crm/utilites/labels.ts:95
 msgid "Checked in"
@@ -5351,8 +5379,6 @@ msgstr "已签到"
 
 #: src/components/common/AttendeeTable/index.tsx:272
 #: src/components/common/CheckInStatusModal/index.tsx:116
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:95
-#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:40
 msgid "Checked In"
 msgstr "已签到"
 
@@ -6046,10 +6072,6 @@ msgstr "配置生命周期邮件发送器以发送测试邮件"
 msgid "Configure which products are available for this date, and optionally adjust prices or per-date quantities."
 msgstr "配置此日期可用的产品，并可选择调整价格或每日数量。"
 
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:35
-msgid "Configured Discount"
-msgstr "已配置折扣"
-
 #: src/ee/crm/components/routes/AudienceCampaign/SendModal.tsx:228
 #: src/utilites/confirmationDialog.tsx:19
 #: src/utilites/confirmationDialog.tsx:56
@@ -6737,12 +6759,15 @@ msgstr "无法更新 {name}"
 msgid "Could not upload {fileName}"
 msgstr "无法上传 {fileName}"
 
+#: src/components/common/ReportView/index.tsx:215
+msgid "Couldn't export this report. Try again."
+msgstr "无法导出此报表,请重试。"
+
 #: src/components/routes/settings/ApiReference/index.tsx:77
 msgid "Couldn't load the API reference."
 msgstr "无法加载 API 参考。"
 
-#: src/components/common/OrganizerReportTable/index.tsx:275
-#: src/components/common/ReportTable/index.tsx:237
+#: src/components/common/ReportView/index.tsx:242
 msgid "Couldn't load this report"
 msgstr "无法加载此报告"
 
@@ -6883,6 +6908,10 @@ msgstr "创建一个产品"
 msgid "Create a Promo Code"
 msgstr "创建促销代码"
 
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:64
+msgid "Create a promo code to see how it performs here."
+msgstr "创建促销代码后,即可在此处查看其表现。"
+
 #: src/ee/seating/components/routes/event/Seating/AttachSeatMap.tsx:55
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:64
 msgid "Create a seat map"
@@ -6923,6 +6952,14 @@ msgstr "创建推广员"
 #: src/components/routes/admin/Announcements/index.tsx:245
 msgid "Create an announcement to show a message to your users."
 msgstr "创建公告，向您的用户展示消息。"
+
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:82
+msgid "Create an event to see how it performs here."
+msgstr "创建活动后,即可在此处查看其表现。"
+
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:51
+msgid "Create an event to see its check-ins here."
+msgstr "创建活动后,即可在此处查看其签到情况。"
 
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:255
 msgid "Create and change events, orders, attendees and more."
@@ -7187,7 +7224,6 @@ msgstr "行动号召"
 msgid "CTA label is required"
 msgstr "CTA标签是必需的"
 
-#: src/components/common/OrganizerReportTable/index.tsx:321
 #: src/components/forms/OrganizerForm/index.tsx:51
 #: src/components/modals/CreateEventModal/index.tsx:437
 #: src/components/modals/CreateEventModal/index.tsx:438
@@ -7195,9 +7231,10 @@ msgstr "CTA标签是必需的"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:186
 #: src/components/routes/admin/Dashboard/index.tsx:200
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:145
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:51
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:99
-#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:33
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:63
+#: src/components/routes/organizer/Reports/OrganizerReport.tsx:110
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:76
+#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:30
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:153
 #: src/components/routes/settings/Account/index.tsx:83
 #: src/ee/crm/components/SegmentBuilder/index.tsx:198
@@ -7245,6 +7282,10 @@ msgstr "自定义颜色"
 msgid "Custom date and time"
 msgstr "自定义日期和时间"
 
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:77
+msgid "Custom date range"
+msgstr "自定义日期范围"
+
 #: src/ee/crm/components/routes/AudienceContacts/index.tsx:211
 msgid "Custom filter"
 msgstr "自定义筛选"
@@ -7265,8 +7306,10 @@ msgstr "此活动的自定义订单和门票邮件"
 msgid "Custom questions"
 msgstr "自定义问题"
 
-#: src/components/common/OrganizerReportTable/index.tsx:64
-#: src/components/common/ReportTable/index.tsx:59
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:21
+msgid "Custom range"
+msgstr "自定义范围"
+
 #: src/components/routes/admin/Attribution/index.tsx:83
 msgid "Custom Range"
 msgstr "自定义范围"
@@ -7293,10 +7336,6 @@ msgstr "客户链接已复制到剪贴板"
 #: src/components/modals/RefundOrderModal/index.tsx:134
 msgid "Customer will receive an email confirming the refund"
 msgstr "客户将收到确认退款的电子邮件"
-
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:108
-msgid "Customers"
-msgstr "客户"
 
 #: src/components/common/WidgetEditor/index.tsx:281
 msgid "Customise"
@@ -7343,17 +7382,9 @@ msgstr "捷克语"
 msgid "Daily"
 msgstr "每天"
 
-#: src/components/routes/organizer/Reports/index.tsx:22
-msgid "Daily revenue, taxes, fees, and refunds across all events"
-msgstr "所有活动的每日收入、税费和退款"
-
-#: src/components/routes/event/Reports/index.tsx:26
-msgid "Daily Sales Report"
-msgstr "每日销售报告"
-
-#: src/components/routes/event/Reports/index.tsx:27
-msgid "Daily sales, tax, and fee breakdown"
-msgstr "每日销售、税费和费用明细"
+#: src/components/routes/event/Reports/index.tsx:34
+msgid "Daily sales"
+msgstr "每日销售"
 
 #: src/constants/eventCategories.ts:13
 msgid "Dance"
@@ -7414,9 +7445,9 @@ msgstr "Dashboard"
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:117
 #: src/components/forms/QuestionForm/questionTypes.ts:29
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:175
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:39
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:56
-#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:24
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:33
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:55
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:27
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:105
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:275
 #: src/ee/box-office/components/layouts/BoxOffice/OccurrenceSwitchSheet.tsx:47
@@ -8152,6 +8183,7 @@ msgid "Discord"
 msgstr "Discord"
 
 #: src/components/common/PromoCodeTable/index.tsx:76
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:48
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:62
 #: src/ee/box-office/components/layouts/BoxOffice/CartPanel.tsx:119
 msgid "Discount"
@@ -8168,6 +8200,11 @@ msgstr "{0}中的折扣"
 #: src/components/forms/PromoCodeForm/index.tsx:91
 msgid "Discount Type"
 msgstr "折扣类型"
+
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:50
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:67
+msgid "Discounts given"
+msgstr "已给予折扣"
 
 #: src/components/common/Callout/index.tsx:62
 msgid "Dismiss"
@@ -8286,10 +8323,6 @@ msgstr "下载 .ics"
 msgid "Download a template with your current lineup"
 msgstr "下载包含当前阵容的模板"
 
-#: src/components/common/DownloadCsvButton/index.tsx:48
-msgid "Download CSV"
-msgstr "下载 CSV"
-
 #: src/hooks/useOrderActions.tsx:151
 msgid "Download invoice"
 msgstr "下载发票"
@@ -8305,10 +8338,6 @@ msgstr "下载 PNG"
 #: src/components/modals/ShareModal/index.tsx:228
 msgid "Download QR Code"
 msgstr "下载二维码"
-
-#: src/components/routes/event/Reports/index.tsx:53
-msgid "Download sales, attendee, and financial reports for all completed orders."
-msgstr "下载所有已完成订单的销售、参与者和财务报告。"
 
 #: src/components/routes/event/Lineup/index.tsx:145
 msgid "Download spreadsheet (.xlsx)"
@@ -9496,10 +9525,11 @@ msgstr "仅偶数"
 #: src/components/routes/admin/SpamEvents/index.tsx:139
 #: src/components/routes/admin/SpamEvents/index.tsx:316
 #: src/components/routes/events/Dashboard/index.tsx:188
-#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:19
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:41
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:43
-#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:23
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:32
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:52
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:60
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:127
+#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:27
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:252
 #: src/ee/crm/components/routes/AudienceCampaign/index.tsx:528
 msgid "Event"
@@ -9552,7 +9582,6 @@ msgstr "活动仪表板"
 
 #: src/components/routes/event/TicketDesigner/index.tsx:165
 #: src/components/routes/my-tickets/index.tsx:79
-#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:29
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:375
 msgid "Event Date"
 msgstr "活动日期"
@@ -9702,6 +9731,8 @@ msgstr "活动已更新"
 #: src/components/routes/admin/Events/index.tsx:80
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:236
 #: src/components/routes/organizer/Events/index.tsx:46
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:84
+#: src/components/routes/organizer/Reports/index.tsx:31
 #: src/ee/crm/components/ContactDrawer/index.tsx:175
 #: src/ee/crm/components/routes/AudienceContacts/ContactsTable.tsx:61
 #: src/ee/crm/components/routes/AudienceContacts/ContactsTable.tsx:141
@@ -9716,11 +9747,6 @@ msgstr "活动始终显示"
 #: src/ee/crm/components/routes/AudienceOverview/index.tsx:46
 msgid "Events per person"
 msgstr "人均活动数"
-
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:120
-#: src/components/routes/organizer/Reports/index.tsx:27
-msgid "Events Performance"
-msgstr "活动表现"
 
 #: src/components/common/WidgetEditor/index.tsx:189
 msgid "Events Widget"
@@ -9984,7 +10010,8 @@ msgstr "出口"
 msgid "Export answers"
 msgstr "导出答案"
 
-#: src/components/common/OrganizerReportTable/index.tsx:362
+#: src/components/common/ReportView/index.tsx:297
+#: src/components/common/ReportView/index.tsx:303
 msgid "Export CSV"
 msgstr "导出CSV"
 
@@ -9999,10 +10026,6 @@ msgstr "导出购买记录"
 #: src/mutations/useExportAnswers.ts:17
 msgid "Export started. Preparing file..."
 msgstr "导出已开始。正在准备文件..."
-
-#: src/components/common/OrganizerReportTable/index.tsx:200
-msgid "Export successful"
-msgstr "导出成功"
 
 #: src/ee/crm/components/routes/AudienceContacts/ContactsHeaderActions.tsx:58
 msgid "Export this list"
@@ -10205,10 +10228,6 @@ msgstr "导出订单失败"
 #: src/components/routes/event/products.tsx:58
 msgid "Failed to export purchases. Please try again."
 msgstr "导出购买记录失败，请重试。"
-
-#: src/components/common/OrganizerReportTable/index.tsx:202
-msgid "Failed to export report. Please try again."
-msgstr "导出报告失败。请重试。"
 
 #: src/ee/box-office/components/modals/EditBoxOfficeModal/index.tsx:84
 msgid "Failed to load box office"
@@ -10472,7 +10491,6 @@ msgstr "费用已更新"
 #: src/components/common/InlineOrderSummary/index.tsx:164
 #: src/components/common/OrdersTable/index.tsx:234
 #: src/components/forms/ProductForm/index.tsx:497
-#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:54
 #: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:88
 #: src/components/routes/settings/TaxesAndFees/index.tsx:126
 msgid "Fees"
@@ -10525,10 +10543,6 @@ msgstr "筛选参与者"
 #: src/components/layouts/CheckIn/OccurrenceFilterPill.tsx:82
 msgid "Filter by date"
 msgstr "按日期筛选"
-
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:118
-msgid "Filter by Event"
-msgstr "按活动筛选"
 
 #: src/components/routes/settings/Team/index.tsx:196
 msgid "Filter by role"
@@ -10723,8 +10737,8 @@ msgstr "首个座位编号"
 msgid "First seen"
 msgstr "首次出现"
 
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:64
-msgid "First Used"
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:52
+msgid "First used"
 msgstr "首次使用"
 
 #: src/ee/crm/utilites/labels.ts:24
@@ -10907,7 +10921,8 @@ msgstr "门厅"
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:37
 #: src/ee/box-office/components/layouts/BoxOffice/ProductTile.tsx:54
 #: src/ee/box-office/utilites/boxOfficeTender.ts:15
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:65
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:52
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:77
 #: src/ee/seating/components/SeatPicker/ticketOptions.ts:105
 #: src/utilites/eventListingLabels.ts:20
 msgid "Free"
@@ -11302,24 +11317,36 @@ msgstr "总额"
 msgid "Gross revenue"
 msgstr "总收入"
 
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:73
-msgid "Gross Revenue"
-msgstr "总收入"
-
 #: src/components/common/StatBoxes/index.tsx:96
 #: src/components/modals/ProductPurchasesModal/index.tsx:211
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:34
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:52
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:70
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:87
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:27
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:41
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:51
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:68
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:119
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:268
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:64
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:85
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:28
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:44
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:55
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:78
 msgid "Gross sales"
 msgstr "销售总额"
 
 #: src/components/common/StatsCharts/index.tsx:83
 #: src/components/modals/ManageOccurrenceModal/index.tsx:188
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:83
-#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:30
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:70
 msgid "Gross Sales"
 msgstr "总销售额"
+
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:60
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:52
+msgid "Gross sales per day"
+msgstr "每日销售总额"
 
 #: src/components/routes/event/Lineup/RunSheetPrint.tsx:85
 msgid "Group by stage or room"
@@ -11417,7 +11444,7 @@ msgstr "头牌"
 msgid "Height"
 msgstr "高度"
 
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:60
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:51
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:152
 msgid "Held back"
 msgstr "已保留"
@@ -11478,17 +11505,18 @@ msgstr "此日期之后将恢复显示 Hi.Events 品牌。在此之前您可以�
 msgid "Hi.Events Cloud"
 msgstr "Hi.Events Cloud"
 
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:75
-msgid "Hi.Events Fee"
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:78
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:120
+msgid "Hi.Events fee"
 msgstr "Hi.Events 费用"
 
 #: src/components/routes/oauth/Connect/index.tsx:110
 msgid "Hi.Events hasn't verified this app. Only continue if you started connecting it yourself and you trust it."
 msgstr "Hi.Events 尚未验证此应用。仅当您亲自发起连接并信任该应用时才继续。"
 
-#: src/components/routes/organizer/Reports/index.tsx:46
-msgid "Hi.Events platform fees and VAT breakdown by transaction"
-msgstr "Hi.Events 平台费用和每笔交易的增值税明细"
+#: src/components/routes/organizer/Reports/index.tsx:54
+msgid "Hi.Events platform fees and the VAT charged on them, payment by payment."
+msgstr "Hi.Events 平台费用及其增值税(VAT),按付款明细列出。"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:137
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:474
@@ -11795,6 +11823,10 @@ msgstr "需要多少个?"
 msgid "How often"
 msgstr "频率"
 
+#: src/components/routes/event/Reports/index.tsx:49
+msgid "How often each promo code was used on completed orders, and the discount it gave."
+msgstr "每个促销代码在已完成订单中的使用次数及其给予的折扣。"
+
 #: src/components/routes/product-widget/Payment/PaymentMethods/Offline/index.tsx:7
 msgid "How paying later works"
 msgstr "稍后付款如何进行"
@@ -12009,10 +12041,6 @@ msgstr "导入阵容和日程"
 msgid "Import suppressions"
 msgstr "导入屏蔽地址"
 
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:112
-msgid "Important Notice"
-msgstr "重要通知"
-
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:100
 msgid "Important: Changing your email address will update the link to access this order. You will be redirected to the new order link after saving."
 msgstr "重要提示：更改您的电子邮件地址将更新访问此订单的链接。保存后，您将被重定向到新的订单链接。"
@@ -12037,7 +12065,7 @@ msgstr "从 {file} 导入，已确认同意"
 msgid "Imported, with consent confirmed"
 msgstr "已导入，已确认同意"
 
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:55
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:50
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:151
 msgid "In a basket"
 msgstr "已在购物车中"
@@ -12634,7 +12662,7 @@ msgstr "犹太洁食"
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:177
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:458
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1043
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:45
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:58
 #: src/ee/box-office/components/modals/AddTerminalReaderModal/index.tsx:46
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:97
 #: src/ee/seating/components/SeatMapDesigner/newElements.ts:129
@@ -12676,55 +12704,42 @@ msgstr "大文件会在后台导入。您可以关闭此窗口：导入完成后
 msgid "Last"
 msgstr "最后一个"
 
-#: src/components/common/OrganizerReportTable/index.tsx:63
-#: src/components/common/ReportTable/index.tsx:58
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:20
 msgid "Last 12 months"
 msgstr "过去 12 个月"
 
-#: src/components/common/OrganizerReportTable/index.tsx:58
-#: src/components/common/ReportTable/index.tsx:53
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:15
 msgid "Last 14 days"
 msgstr "过去 14 天"
 
-#: src/components/common/OrganizerReportTable/index.tsx:55
-#: src/components/common/ReportTable/index.tsx:50
 #: src/components/routes/admin/Attribution/index.tsx:78
 #: src/components/routes/admin/Dashboard/index.tsx:38
 #: src/components/routes/admin/EmailDelivery/index.tsx:15
 msgid "Last 24 hours"
 msgstr "过去 24 小时"
 
-#: src/components/common/OrganizerReportTable/index.tsx:59
 #: src/components/common/PeriodSelector/index.tsx:34
-#: src/components/common/ReportTable/index.tsx:54
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:16
 #: src/components/routes/admin/Attribution/index.tsx:80
 #: src/components/routes/admin/Dashboard/index.tsx:40
 #: src/components/routes/admin/EmailDelivery/index.tsx:17
 msgid "Last 30 days"
 msgstr "过去 30 天"
 
-#: src/components/common/OrganizerReportTable/index.tsx:56
-#: src/components/common/ReportTable/index.tsx:51
-msgid "Last 48 hours"
-msgstr "过去 48 小时"
-
-#: src/components/common/OrganizerReportTable/index.tsx:61
-#: src/components/common/ReportTable/index.tsx:56
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:18
 msgid "Last 6 months"
 msgstr "过去 6 个月"
 
-#: src/components/common/OrganizerReportTable/index.tsx:57
 #: src/components/common/PeriodSelector/index.tsx:32
-#: src/components/common/ReportTable/index.tsx:52
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:14
 #: src/components/routes/admin/Attribution/index.tsx:79
 #: src/components/routes/admin/Dashboard/index.tsx:39
 #: src/components/routes/admin/EmailDelivery/index.tsx:16
 msgid "Last 7 days"
 msgstr "过去 7 天"
 
-#: src/components/common/OrganizerReportTable/index.tsx:60
 #: src/components/common/PeriodSelector/index.tsx:36
-#: src/components/common/ReportTable/index.tsx:55
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:17
 #: src/components/routes/admin/Attribution/index.tsx:81
 msgid "Last 90 days"
 msgstr "过去 90 天"
@@ -12800,14 +12815,11 @@ msgid "Last Triggered"
 msgstr "最近触发"
 
 #: src/components/common/SsoButtons/index.tsx:126
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:53
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:73
 #: src/components/routes/settings/ApiKeys/index.tsx:176
 msgid "Last used"
 msgstr "上次使用"
-
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:70
-msgid "Last Used"
-msgstr "最近一次使用"
 
 #: src/components/routes/settings/Security/index.tsx:41
 #: src/components/routes/settings/Security/SignInMethods.tsx:205
@@ -13082,6 +13094,10 @@ msgstr "链接已复制"
 msgid "Link Expired or Invalid"
 msgstr "链接已过期或无效"
 
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:73
+msgid "Link price bands to tickets to see seat sales here."
+msgstr "将价格档位关联到门票后,即可在此处查看座位销售情况。"
+
 #: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:155
 msgid "Link text"
 msgstr "链接文字"
@@ -13211,7 +13227,6 @@ msgstr "正在加载Webhook日志..."
 msgid "Loading Webhooks"
 msgstr "正在加载 Webhook"
 
-#: src/components/common/OrganizerReportTable/index.tsx:269
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:93
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:94
 msgid "Loading..."
@@ -13804,6 +13819,10 @@ msgstr "周一"
 msgid "Monday"
 msgstr "星期一"
 
+#: src/components/common/ReportView/index.tsx:360
+msgid "Money totals are hidden because these rows are in more than one currency. Choose a currency to see totals."
+msgstr "这些行包含多种货币,因此金额合计已隐藏。请选择一种货币以查看合计。"
+
 #: src/components/routes/admin/FailedJobs/index.tsx:179
 msgid "Monitor and manage failed background jobs"
 msgstr "监控和管理失败的后台任务"
@@ -14115,11 +14134,6 @@ msgstr "需要 Email 列。可选的 Reason 列支持 unsubscribed、bounced（�
 #: src/components/modals/DuplicateEventModal/index.tsx:299
 msgid "Needs products"
 msgstr "需要产品"
-
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:85
-#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:36
-msgid "Net Revenue"
-msgstr "净收入"
 
 #: src/ee/crm/utilites/labels.ts:133
 msgid "never"
@@ -14580,18 +14594,6 @@ msgstr "尚无联系人。一旦有人预订，他们就会出现在这里。"
 msgid "No countries found"
 msgstr "未找到国家/地区"
 
-#: src/components/common/ReportTable/index.tsx:323
-msgid "No data available"
-msgstr "无可用数据"
-
-#: src/components/common/OrganizerReportTable/index.tsx:287
-msgid "No data found for the selected filters. Try adjusting the date range or currency."
-msgstr "未找到所选筛选条件的数据。请尝试调整日期范围或货币。"
-
-#: src/components/common/ReportTable/index.tsx:322
-msgid "No data to show. Please select a date range"
-msgstr "无数据显示。请选择日期范围"
-
 #: src/components/common/EventCard/index.tsx:241
 #: src/components/common/EventCard/index.tsx:339
 msgid "No date added"
@@ -14888,6 +14890,10 @@ msgstr "无照片"
 msgid "No PIN"
 msgstr "无 PIN 码"
 
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:117
+msgid "No platform fees were charged in this period."
+msgstr "此期间未收取平台费用。"
+
 #: src/components/common/ProductSelector/index.tsx:35
 msgid "No products available for selection"
 msgstr "没有可供选择的产品"
@@ -14980,6 +14986,11 @@ msgstr "暂无销售"
 msgid "No sales in this period"
 msgstr "此期间没有销售"
 
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:67
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:59
+msgid "No sales or refunds in this period."
+msgstr "此期间没有销售或退款。"
+
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/OrdersTab.tsx:65
 msgid "No sales yet from this box office"
 msgstr "此售票处尚无销售"
@@ -15057,6 +15068,10 @@ msgstr "暂无标签。输入名称即可创建。"
 #: src/ee/crm/components/ContactDrawer/Tags.tsx:31
 msgid "No tags."
 msgstr "无标签。"
+
+#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:41
+msgid "No tax was collected on completed orders in this period."
+msgstr "此期间已完成订单未收取税款。"
 
 #: src/components/routes/settings/TaxesAndFees/index.tsx:106
 msgid "No taxes or fees yet"
@@ -15475,7 +15490,7 @@ msgstr "暂无可打印内容"
 msgid "Nothing to sell here yet. Add products to this box office."
 msgstr "暂无可售商品。请为此售票处添加商品。"
 
-#: src/components/common/ReportTable/index.tsx:251
+#: src/components/common/ReportView/index.tsx:256
 msgid "Nothing to show yet"
 msgstr "暂无显示内容"
 
@@ -15558,13 +15573,9 @@ msgstr "场次已取消"
 msgid "Occurrence Schedule"
 msgstr "场次排期"
 
-#: src/components/routes/event/Reports/index.tsx:38
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:102
-msgid "Occurrence Summary"
-msgstr "场次概览"
-
 #: src/components/common/OrderDetails/index.tsx:57
 #: src/components/modals/ManageOrderModal/index.tsx:157
+#: src/components/routes/event/Reports/index.tsx:55
 msgid "Occurrences"
 msgstr "场次"
 
@@ -15579,10 +15590,6 @@ msgstr "从中心起奇偶分列"
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:66
 msgid "Odd numbers only"
 msgstr "仅奇数"
-
-#: src/components/common/OrganizerReportTable/index.tsx:371
-msgid "of"
-msgstr "共"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:998
 msgid "of every month"
@@ -15701,7 +15708,7 @@ msgstr "正在进行"
 
 #: src/components/common/EventCard/index.tsx:104
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:140
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:32
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:37
 msgid "On Sale"
 msgstr "销售中"
 
@@ -15777,10 +15784,6 @@ msgstr "门票售出后，您将看到人们提前多久购票。"
 msgid "Once you create an event, you'll see it here."
 msgstr "创建事件后，您就可以在这里看到它。"
 
-#: src/components/common/ReportTable/index.tsx:256
-msgid "Once you start collecting data, you'll see it here."
-msgstr "一旦开始收集数据，您将在这里看到。"
-
 #: src/components/routes/product-widget/OrderSummaryAndProducts/ReportOfflinePayment/index.tsx:53
 msgid "Once you've sent the payment, let the organizer know so they can look out for it. Your order stays unpaid until they confirm it."
 msgstr "付款后，请告知主办方以便其留意。在主办方确认之前，您的订单仍为未付款状态。"
@@ -15817,7 +15820,7 @@ msgid "One profile per person, built from every order, ticket, check-in and sign
 msgstr "每人一个档案，由每笔订单、门票、签到和注册汇总而成。"
 
 #: src/components/common/EventStatusBadge/index.tsx:18
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:31
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:36
 msgid "Ongoing"
 msgstr "持续进行"
 
@@ -16112,6 +16115,10 @@ msgstr "打开页面"
 msgid "Open this page in your browser"
 msgstr "在浏览器中打开此页面"
 
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:98
+msgid "Open this payment in Stripe"
+msgstr "在 Stripe 中打开此付款"
+
 #: src/components/routes/event/Lineup/index.tsx:351
 msgid "Open timetable"
 msgstr "打开时间表"
@@ -16310,6 +16317,7 @@ msgstr "个订单"
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:261
 #: src/components/modals/ManageAttendeeModal/index.tsx:159
 #: src/components/routes/my-tickets/index.tsx:70
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:68
 msgid "Order"
 msgstr "订购"
 
@@ -16439,10 +16447,6 @@ msgstr "订单已提交，等待付款"
 msgid "Order questions only. Attendee questions need products."
 msgstr "仅订单问题。参会者问题需要产品。"
 
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:59
-msgid "Order Ref"
-msgstr "订单参考"
-
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:295
 msgid "Order Reference"
 msgstr "订购参考"
@@ -16518,12 +16522,18 @@ msgstr "个订单"
 #: src/components/routes/admin/Orders/index.tsx:47
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:62
 #: src/components/routes/event/orders.tsx:198
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:78
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:39
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:55
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:69
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:86
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:121
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:147
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:103
-#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:60
-#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:55
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:69
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:86
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:33
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:47
+#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:32
+#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:44
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:125
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:65
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:36
@@ -16741,10 +16751,6 @@ msgstr "拥有另一个 Hi.Events 账户，因此在其于安全设置中连接 
 msgid "Padding"
 msgstr "内边距"
 
-#: src/components/common/OrganizerReportTable/index.tsx:371
-msgid "Page"
-msgstr "页面"
-
 #: src/components/common/SsoButtons/index.tsx:50
 msgid "Page address"
 msgstr "页面地址"
@@ -16766,11 +16772,9 @@ msgid "Page URL"
 msgstr "页面链接"
 
 #: src/components/common/StatBoxes/index.tsx:103
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:41
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:72
 msgid "Page views"
-msgstr "页面浏览量"
-
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:113
-msgid "Page Views"
 msgstr "页面浏览量"
 
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:224
@@ -16879,7 +16883,7 @@ msgstr "密码不一样"
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:138
 #: src/components/layouts/OrganizerHomepage/index.tsx:162
 #: src/components/routes/event/OccurrencesTab/index.tsx:521
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:30
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:35
 msgid "Past"
 msgstr "过去"
 
@@ -17021,9 +17025,9 @@ msgstr "支付和发票"
 msgid "Payment complete"
 msgstr "付款完成"
 
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:53
-msgid "Payment Date"
-msgstr "支付日期"
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:63
+msgid "Payment date"
+msgstr "付款日期"
 
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:116
 msgid "Payment details: {0}"
@@ -17496,17 +17500,16 @@ msgstr "平台费用"
 msgid "Platform fee of {0} deducted from your payout"
 msgstr "从您的付款中扣除 {0} 的平台费用"
 
+#: src/components/routes/organizer/Reports/index.tsx:53
+msgid "Platform fees"
+msgstr "平台费用"
+
 #: src/components/routes/event/Settings/index.tsx:104
 #: src/components/routes/event/Settings/Sections/PlatformFeesSettings/index.tsx:44
-#: src/components/routes/organizer/Reports/index.tsx:45
 #: src/components/routes/organizer/Settings/index.tsx:89
 #: src/components/routes/organizer/Settings/Sections/PlatformFeesSettings/index.tsx:38
 msgid "Platform Fees"
 msgstr "平台费用"
-
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:129
-msgid "Platform Fees Report"
-msgstr "平台费用报告"
 
 #: src/components/layouts/EventHomepage/Lineup/ProfileEmbed.tsx:66
 msgid "Play on {service}"
@@ -17602,10 +17605,6 @@ msgstr "请返回活动页面重新开始。"
 #: src/components/routes/product-widget/SelectProducts/index.tsx:757
 msgid "Please select a date and time"
 msgstr "请选择日期和时间"
-
-#: src/components/common/OrganizerReportTable/index.tsx:284
-msgid "Please select a date range"
-msgstr "请选择日期范围"
 
 #: src/components/common/Editor/Controls/InsertImageControl/index.tsx:59
 msgid "Please select an image."
@@ -17770,7 +17769,7 @@ msgstr "上一张照片"
 msgid "Price"
 msgstr "价格"
 
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:35
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:46
 msgid "Price band"
 msgstr "价位区"
 
@@ -17894,6 +17893,7 @@ msgstr "处理订单中"
 #: src/components/modals/ManageAttendeeModal/index.tsx:237
 #: src/components/modals/OfferWaitlistModal/index.tsx:169
 #: src/components/routes/event/orders.tsx:68
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:25
 msgid "Product"
 msgstr "产品"
 
@@ -17925,14 +17925,13 @@ msgstr "产品删除成功"
 msgid "Product Price Type"
 msgstr "产品价格类型"
 
-#: src/components/common/StatsCharts/index.tsx:44
-#: src/components/routes/event/Reports/index.tsx:20
-msgid "Product Sales"
+#: src/components/routes/event/Reports/index.tsx:41
+msgid "Product sales"
 msgstr "产品销售"
 
-#: src/components/routes/event/Reports/index.tsx:21
-msgid "Product sales, revenue, and tax breakdown"
-msgstr "产品销售、收入和税费明细"
+#: src/components/common/StatsCharts/index.tsx:44
+msgid "Product Sales"
+msgstr "产品销售"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:617
 msgid "Product settings cannot be edited for cancelled dates."
@@ -17971,13 +17970,15 @@ msgid "Products"
 msgstr "产品"
 
 #: src/components/common/StatBoxes/index.tsx:82
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:40
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:68
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:275
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:70
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:87
 msgid "Products sold"
 msgstr "已售产品"
 
 #: src/components/common/StatsCharts/index.tsx:55
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:73
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:68
 msgid "Products Sold"
 msgstr "已售产品"
 
@@ -18025,13 +18026,10 @@ msgstr "已使用促销 {promo_code} 代码"
 #: src/components/common/WidgetEditor/ContentFields.tsx:139
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:107
 #: src/components/modals/ManageOrderModal/index.tsx:212
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:44
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1233
 msgid "Promo code"
 msgstr "优惠码"
-
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:20
-msgid "Promo Code"
-msgstr "促销代码"
 
 #: src/ee/crm/components/ContactDrawer/ActivityTimeline.tsx:70
 msgid "Promo code {0}"
@@ -18049,12 +18047,9 @@ msgstr "促销代码页面"
 msgid "Promo code required"
 msgstr "需要优惠码"
 
-#: src/components/routes/event/Reports/index.tsx:33
-msgid "Promo code usage and discount breakdown"
-msgstr "促销码使用情况及折扣明细"
-
 #: src/components/layouts/AuthLayout/AuthShell.tsx:17
 #: src/components/modals/DuplicateEventModal/index.tsx:124
+#: src/components/routes/event/Reports/index.tsx:48
 msgid "Promo codes"
 msgstr "优惠码"
 
@@ -18066,11 +18061,6 @@ msgstr "促销代码"
 #: src/components/common/PromoCodeTable/index.tsx:174
 msgid "Promo codes can be used to offer discounts, presale access, or provide special access to your event."
 msgstr "促销代码可用于提供折扣、预售权限或为您的活动提供特殊权限。"
-
-#: src/components/routes/event/Reports/index.tsx:32
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:95
-msgid "Promo Codes Report"
-msgstr "促销代码报告"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:474
 msgid "Promo Only"
@@ -18267,7 +18257,6 @@ msgid "Quicker checkout, but every ticket is issued in the buyer's name."
 msgstr "结账更快，但所有门票都以购买者的名义签发。"
 
 #: src/components/forms/TaxAndFeeForm/index.tsx:73
-#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:43
 msgid "Rate"
 msgstr "费率"
 
@@ -18653,7 +18642,12 @@ msgstr "退款、取消并退款，以及将订单标记为已付款。"
 #: src/components/modals/ProductPurchasesModal/index.tsx:61
 #: src/components/modals/ProductPurchasesModal/index.tsx:248
 #: src/components/routes/event/orders.tsx:36
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:38
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:54
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:436
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:65
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:29
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:45
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:84
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:38
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:94
@@ -18664,11 +18658,6 @@ msgstr "退款"
 #: src/components/common/OrdersTable/index.tsx:75
 msgid "Refunded: {0}"
 msgstr "已退款:{0}"
-
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:79
-#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:42
-msgid "Refunds"
-msgstr "退款"
 
 #: src/ee/crm/utilites/suppression.ts:18
 msgid "Refused by the email provider"
@@ -18720,10 +18709,6 @@ msgstr "按顺序释放价格档位"
 #: src/components/layouts/CheckIn/tabs/StatsTab.tsx:94
 msgid "Remaining"
 msgstr "剩余"
-
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:82
-msgid "Remaining Uses"
-msgstr "剩余使用次数"
 
 #: src/ee/crm/utilites/labels.ts:270
 msgid "Remind people before an event"
@@ -19002,10 +18987,6 @@ msgstr "回复短信 STOP"
 msgid "Reply STOP to opt out."
 msgstr "回复 STOP 退订。"
 
-#: src/components/routes/organizer/Reports/ReportLayout/index.tsx:27
-msgid "Report not found"
-msgstr "未找到报告"
-
 #: src/ee/crm/components/ContactDrawer/ConsentHistory.tsx:70
 msgid "Reported on \"{campaign}\""
 msgstr "举报了“{campaign}”"
@@ -19018,10 +18999,15 @@ msgstr "举报了一个营销活动"
 msgid "Reported one of your emails as spam. Campaigns skip them permanently."
 msgstr "将您的某封邮件举报为垃圾邮件。营销活动将永久跳过他们。"
 
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:54
+msgid "Reporting period: {currentLabel}"
+msgstr "报表期间:{currentLabel}"
+
+#: src/components/common/ReportWorkspace/index.tsx:73
+#: src/components/common/ReportWorkspace/index.tsx:79
 #: src/components/layouts/Event/index.tsx:120
 #: src/components/layouts/OrganizerLayout/index.tsx:119
-#: src/components/routes/event/Reports/index.tsx:54
-#: src/components/routes/organizer/Reports/index.tsx:55
+#: src/components/routes/event/Reports/index.tsx:25
 msgid "Reports"
 msgstr "报告"
 
@@ -19330,14 +19316,14 @@ msgstr "复用本账户中其他主办方的 Stripe 连接。"
 #: src/components/common/StatsCharts/index.tsx:70
 #: src/components/common/WidgetEditor/WidgetStats.tsx:18
 #: src/components/routes/admin/Attribution/index.tsx:134
+#: src/components/routes/organizer/Reports/index.tsx:24
 #: src/ee/crm/components/routes/AudienceCampaigns/index.tsx:192
 msgid "Revenue"
 msgstr "收入"
 
-#: src/components/routes/organizer/Reports/index.tsx:21
-#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:67
-msgid "Revenue Summary"
-msgstr "收入摘要"
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:42
+msgid "Revenue will appear here once orders are completed."
+msgstr "订单完成后,收入将显示在此处。"
 
 #: src/components/common/TeamAccessFields/index.tsx:256
 msgid "Revenue, order totals, reports, payouts and payment settings."
@@ -19554,6 +19540,14 @@ msgstr "扣除退款后的销售额"
 msgid "Sales are paused"
 msgstr "销售已暂停"
 
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:49
+msgid "Sales before discounts"
+msgstr "折扣前销售额"
+
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:35
+msgid "Sales before tax and fees"
+msgstr "税费前销售额"
+
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:122
 msgid "Sales by licence year"
 msgstr "按许可证年度划分的销售额"
@@ -19591,17 +19585,29 @@ msgstr "{0} 的销售汇总"
 msgid "Sales totals start at zero"
 msgstr "销售总额从零开始"
 
-#: src/components/routes/event/Reports/index.tsx:39
-msgid "Sales, attendance, and check-in breakdown per occurrence"
-msgstr "按场次统计的销售、出席和签到明细"
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:50
+msgid "Sales will appear here once orders are completed."
+msgstr "订单完成后,销售情况将显示在此处。"
+
+#: src/components/routes/event/Reports/index.tsx:56
+msgid "Sales, attendance and check-ins for every occurrence of this event."
+msgstr "此活动每个场次的销售、出席和签到情况。"
 
 #: src/ee/box-office/components/layouts/BoxOffice/OccurrenceSwitchSheet.tsx:41
 msgid "Sales, availability and check-in switch to the date you pick."
 msgstr "销售、余票和签到将切换到你选择的日期。"
 
-#: src/components/routes/organizer/Reports/index.tsx:28
-msgid "Sales, orders, and performance metrics for all events"
-msgstr "所有活动的销售、订单和性能指标"
+#: src/components/routes/organizer/Reports/index.tsx:32
+msgid "Sales, orders and page views for every event, across all time."
+msgstr "所有活动的销售、订单和页面浏览量(全部时间)。"
+
+#: src/components/routes/organizer/Reports/index.tsx:25
+msgid "Sales, refunds, tax and fees from completed orders across all your events, day by day. Days are counted in UTC."
+msgstr "您所有活动已完成订单的销售、退款、税费和手续费,按天统计。日期按 UTC 计算。"
+
+#: src/components/routes/event/Reports/index.tsx:35
+msgid "Sales, tax, fees and refunds from completed orders, day by day. Days are counted in UTC."
+msgstr "已完成订单的销售、税费、手续费和退款,按天统计。日期按 UTC 计算。"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:480
 msgid "Same as event"
@@ -20251,17 +20257,13 @@ msgid "Seated"
 msgstr "对号入座"
 
 #: src/components/layouts/Event/index.tsx:138
+#: src/components/routes/event/Reports/index.tsx:62
 #: src/ee/seating/components/routes/event/Seating/AttachSeatMap.tsx:40
 #: src/ee/seating/components/routes/event/Seating/index.tsx:62
 #: src/ee/seating/components/routes/event/Seating/index.tsx:67
 #: src/ee/seating/components/routes/event/Seating/index.tsx:82
 msgid "Seating"
 msgstr "座位"
-
-#: src/components/routes/event/Reports/index.tsx:44
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:77
-msgid "Seating Sales"
-msgstr "座位销售"
 
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:130
 msgid "Seating settings"
@@ -20270,6 +20272,10 @@ msgstr "座位设置"
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:72
 msgid "Seats"
 msgstr "座位"
+
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:71
+msgid "Seats as they are now"
+msgstr "座位当前状态"
 
 #: src/ee/box-office/components/layouts/BoxOffice/BoxOfficeSeatMap.tsx:224
 msgid "Seats cannot be chosen until the latest availability loads."
@@ -20435,14 +20441,10 @@ msgstr "全选"
 msgid "Select all on {0}"
 msgstr "全选 {0} 当天"
 
-#: src/components/common/TanStackTable/index.tsx:225
+#: src/components/common/TanStackTable/index.tsx:227
 #: src/ee/crm/components/routes/AudienceContacts/ContactStack.tsx:76
 msgid "Select all rows on this page"
 msgstr "选择本页所有行"
-
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:119
-msgid "Select an event"
-msgstr "选择活动"
 
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:59
 msgid "Select and move"
@@ -20529,11 +20531,6 @@ msgstr "选择机票"
 #: src/components/modals/SendMessageModal/index.tsx:413
 msgid "Select tickets"
 msgstr "选择票"
-
-#: src/components/common/OrganizerReportTable/index.tsx:332
-#: src/components/common/ReportTable/index.tsx:282
-msgid "Select time period"
-msgstr "选择时间段"
 
 #: src/components/forms/OrganizerForm/index.tsx:61
 #: src/components/modals/CreateOrganizerModal/index.tsx:60
@@ -20909,6 +20906,14 @@ msgstr "9 月"
 msgid "Service fee"
 msgstr "服务费"
 
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:37
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:29
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:43
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:68
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:32
+msgid "Service fees"
+msgstr "服务费"
+
 #: src/components/layouts/CheckIn/index.tsx:116
 msgid "Session cancelled"
 msgstr "场次已取消"
@@ -21202,6 +21207,11 @@ msgstr "向未登录的工作人员显示参与者备注"
 msgid "Show available product quantity"
 msgstr "显示可用产品数量"
 
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:66
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:58
+msgid "Show days with no sales"
+msgstr "显示无销售的日期"
+
 #: src/ee/crm/components/ContactDrawer/ActivityTimeline.tsx:136
 msgid "Show earlier activity"
 msgstr "显示更早的活动记录"
@@ -21312,10 +21322,6 @@ msgstr "显示此问题"
 msgid "Show tickets"
 msgstr "显示门票"
 
-#: src/components/common/OrganizerReportTable/index.tsx:370
-msgid "Showing {0} of {totalRows} records"
-msgstr "显示 {0} / {totalRows} 条记录"
-
 #: src/components/common/TableCard/index.tsx:24
 #: src/components/routes/event/OccurrencesTab/index.tsx:650
 msgid "Showing {0}–{1} of {2}"
@@ -21325,6 +21331,10 @@ msgstr "正在显示第 {0}–{1} 个，共 {2} 个"
 #: src/components/layouts/CheckIn/OccurrenceFilterPill.tsx:135
 msgid "Showing {MAX_VISIBLE} of {totalAvailable} dates. Type to search."
 msgstr "正在显示 {totalAvailable} 个日期中的 {MAX_VISIBLE} 个。输入即可搜索。"
+
+#: src/components/common/ReportView/index.tsx:226
+msgid "Showing {shown} of {total} rows"
+msgstr "显示 {shown} / {total} 行"
 
 #: src/components/routes/organizer/People/index.tsx:70
 msgid "Showing on a public event page"
@@ -21755,7 +21765,8 @@ msgstr "软退信"
 #: src/components/modals/ManageOccurrenceModal/index.tsx:193
 #: src/components/modals/ProductPurchasesModal/index.tsx:82
 #: src/components/modals/ProductPurchasesModal/index.tsx:208
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:50
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:49
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:76
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:150
 msgid "Sold"
 msgstr "已售出"
@@ -21791,7 +21802,7 @@ msgstr "售罄"
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:128
 #: src/components/layouts/EventHomepage/index.tsx:133
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:221
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:22
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:34
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:317
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:386
 msgid "Sold Out"
@@ -22235,6 +22246,8 @@ msgid "Start check-in"
 msgstr "开始签到"
 
 #: src/components/modals/CreateEventModal/index.tsx:387
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:35
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:55
 msgid "Start date"
 msgstr "开始日期"
 
@@ -22378,9 +22391,9 @@ msgstr "统计"
 #: src/components/routes/admin/Messages/index.tsx:229
 #: src/components/routes/admin/Messages/index.tsx:304
 #: src/components/routes/event/OccurrencesTab/index.tsx:354
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:51
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:88
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:62
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:61
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:45
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:60
 #: src/components/routes/settings/Billing/index.tsx:117
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:141
 #: src/ee/crm/components/routes/AudienceCampaigns/index.tsx:146
@@ -22544,9 +22557,9 @@ msgstr "此安装未配置 Stripe，因此无法使用刷卡机。"
 msgid "Stripe Not Connected"
 msgstr "Stripe未连接"
 
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:104
-msgid "Stripe Payment ID"
-msgstr "Stripe 支付 ID"
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:90
+msgid "Stripe payment ID"
+msgstr "Stripe 付款 ID"
 
 #: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:50
 msgid "Stripe payments are not enabled for this event."
@@ -22998,14 +23011,27 @@ msgstr "将面向所选 {0} 个场次的参与者。"
 #: src/components/common/AdminOrdersTable/index.tsx:70
 #: src/components/common/OrdersTable/index.tsx:234
 #: src/components/forms/TaxAndFeeForm/index.tsx:21
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:89
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:36
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:53
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:71
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:28
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:42
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:67
+#: src/components/routes/organizer/Reports/index.tsx:38
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:31
+#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:28
 #: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:91
 msgid "Tax"
 msgstr "税收"
 
-#: src/components/routes/organizer/Reports/index.tsx:34
-msgid "Tax collected grouped by tax type and event"
-msgstr "按税种和活动分组的已收税款"
+#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:31
+#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:43
+msgid "Tax collected"
+msgstr "已收税款"
+
+#: src/components/routes/organizer/Reports/index.tsx:39
+msgid "Tax collected on completed orders, by tax and event."
+msgstr "已完成订单的已收税款,按税种和活动统计。"
 
 #: src/components/modals/CreateTaxOrFeeModal/index.tsx:36
 msgid "Tax created"
@@ -23023,14 +23049,9 @@ msgstr "税务详情"
 msgid "Tax information to appear at the bottom of all invoices (e.g., VAT number, tax registration)"
 msgstr "所有发票底部显示的税务信息（例如，增值税号、税务注册号）"
 
-#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:38
-msgid "Tax Name"
-msgstr "税种名称"
-
-#: src/components/routes/organizer/Reports/index.tsx:33
-#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:62
-msgid "Tax Summary"
-msgstr "税务摘要"
+#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:29
+msgid "Tax rate"
+msgstr "税率"
 
 #: src/components/modals/EditTaxOrFeeModal/index.tsx:28
 msgid "Tax updated"
@@ -23038,7 +23059,6 @@ msgstr "税项已更新"
 
 #: src/components/common/InlineOrderSummary/index.tsx:195
 #: src/components/forms/ProductForm/index.tsx:494
-#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:48
 #: src/components/routes/settings/TaxesAndFees/index.tsx:123
 msgid "Taxes"
 msgstr "税收"
@@ -23866,6 +23886,10 @@ msgstr "这些信息将替换受影响日期上原有的地点，并显示在参
 msgid "These events are not available"
 msgstr "这些活动不可用"
 
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:139
+msgid "These figures are a guide. Your Stripe dashboard has the complete payment history, and a tax adviser can confirm what to use in your accounts."
+msgstr "这些数据仅供参考。完整的付款记录可在您的 Stripe 控制台中查看，至于在账目中应使用哪些数据，税务顾问可以为您确认。"
+
 #: src/ee/crm/components/ImportContactsModal/index.tsx:167
 msgid "These people opted in to marketing emails from us"
 msgstr "这些人已同意接收我们的营销邮件"
@@ -24503,9 +24527,9 @@ msgstr "这将从受众中移除他们的备注、标签和历史记录。他们
 msgid "This replaces \"{otherFormName}\", which is shown there now."
 msgstr "这将替换当前显示的 \"{otherFormName}\"。"
 
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:113
-msgid "This report is for informational purposes only. Always consult with a tax professional before using this data for accounting or tax purposes. Please cross-reference with your Stripe dashboard as Hi.Events may be missing historical data."
-msgstr "此报告仅供参考。在将此数据用于会计或税务目的之前，请务必咨询税务专业人士。请与您的Stripe仪表板进行交叉验证，因为Hi.Events可能缺少历史数据。"
+#: src/components/common/ReportView/index.tsx:366
+msgid "This report spans several pages, so totals and sorting are turned off. Export the CSV to work with every row."
+msgstr "此报表跨多个页面,因此已关闭合计和排序。请导出 CSV 以处理所有行。"
 
 #: src/components/routes/auth/ResetPassword/index.tsx:28
 msgid "This reset password link is invalid or expired."
@@ -24971,11 +24995,9 @@ msgstr "时间以 {timezoneAbbr} 显示"
 
 #: src/components/common/PromoCodeTable/index.tsx:83
 #: src/components/common/PromoCodeTable/index.tsx:84
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:46
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:66
 msgid "Times used"
-msgstr "使用次数"
-
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:25
-msgid "Times Used"
 msgstr "使用次数"
 
 #: src/utilites/lineup.ts:24
@@ -25046,6 +25068,7 @@ msgstr "为防止垃圾邮件，我们会手动为每个账户开通营销活动
 
 #: src/components/common/OccurrenceSelect/index.tsx:151
 #: src/components/common/PeriodSelector/index.tsx:30
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:13
 #: src/components/layouts/CheckIn/OccurrenceFilterPill.tsx:119
 #: src/components/routes/event/OccurrencesTab/GroupedOccurrenceTable/index.tsx:43
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:127
@@ -25102,6 +25125,7 @@ msgstr "总计"
 #: src/components/common/AdminOrdersTable/index.tsx:62
 #: src/components/common/InlineOrderSummary/index.tsx:225
 #: src/components/common/OrderSummary/index.tsx:104
+#: src/components/common/ReportView/index.tsx:151
 #: src/components/layouts/CheckIn/tabs/StatsTab.tsx:99
 #: src/components/modals/ManageOrderModal/index.tsx:123
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:359
@@ -25110,28 +25134,13 @@ msgstr "总计"
 msgid "Total"
 msgstr "总计"
 
-#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:35
-msgid "Total Attendees"
-msgstr "总参与人数"
-
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:52
-msgid "Total Before Discounts"
-msgstr "折扣前总计"
-
-#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:49
-msgid "Total Collected"
-msgstr "总收款"
-
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:58
-msgid "Total Discount Amount"
-msgstr "折扣总金额"
-
 #: src/components/common/WaitlistStats/index.tsx:11
 msgid "Total Entries"
 msgstr "总条目"
 
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:93
-msgid "Total Fee"
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:87
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:122
+msgid "Total fee"
 msgstr "总费用"
 
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:304
@@ -25139,13 +25148,8 @@ msgid "Total fees"
 msgstr "费用合计"
 
 #: src/components/common/StatsCharts/index.tsx:82
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:97
 msgid "Total Fees"
 msgstr "总费用"
-
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:46
-msgid "Total Gross Sales"
-msgstr "总销售额"
 
 #: src/components/common/OrderDetails/index.tsx:83
 msgid "Total order amount"
@@ -25173,7 +25177,6 @@ msgid "Total tax"
 msgstr "税费合计"
 
 #: src/components/common/StatsCharts/index.tsx:84
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:91
 msgid "Total Tax"
 msgstr "总税额"
 
@@ -25228,8 +25231,7 @@ msgstr "换个搜索词或筛选条件试试"
 msgid "Try adjusting your filters to see more dates."
 msgstr "调整筛选条件即可查看更多日期。"
 
-#: src/components/common/OrganizerReportTable/index.tsx:277
-#: src/components/common/ReportTable/index.tsx:242
+#: src/components/common/ReportView/index.tsx:247
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1121
 #: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:54
 #: src/components/routes/settings/ApiKeys/index.tsx:189
@@ -25631,8 +25633,9 @@ msgstr "撤销"
 msgid "Unique buyers: {0}"
 msgstr "独立买家：{0}"
 
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:30
-msgid "Unique Customers"
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:47
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:71
+msgid "Unique customers"
 msgstr "独立客户"
 
 #: src/ee/crm/utilites/smsCountries.ts:8
@@ -25644,6 +25647,15 @@ msgstr "英国"
 #: src/ee/crm/utilites/smsCountries.ts:7
 msgid "United States"
 msgstr "美国"
+
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:26
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:40
+msgid "Units sold"
+msgstr "售出数量"
+
+#: src/components/routes/event/Reports/index.tsx:42
+msgid "Units sold and revenue from completed orders for each ticket and product."
+msgstr "已完成订单中每种门票和产品的售出数量和收入。"
 
 #: src/components/common/MessageList/index.tsx:44
 #: src/components/common/MessageList/index.tsx:49
@@ -25677,8 +25689,7 @@ msgstr "未知设备"
 #: src/components/routes/event/OccurrencesTab/CalendarView/index.tsx:171
 #: src/components/routes/event/OccurrencesTab/PriceOverrideForm/index.tsx:319
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1125
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:78
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:84
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:38
 msgid "Unlimited"
 msgstr "无限制"
 
@@ -25843,7 +25854,7 @@ msgstr "最多 40 张照片，尺寸至少 400 × 300px。第一张显示最大�
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:137
 #: src/components/layouts/OrganizerHomepage/index.tsx:153
 #: src/components/routes/event/OccurrencesTab/index.tsx:520
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:33
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:38
 msgid "Upcoming"
 msgstr "即将推出"
 
@@ -25979,9 +25990,9 @@ msgstr "链接必须以 http:// 或 https:// 开头"
 msgid "Usage counts start at zero"
 msgstr "使用次数从零开始"
 
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:76
-msgid "Usage Limit"
-msgstr "使用限制"
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:54
+msgid "Usage limit"
+msgstr "使用上限"
 
 #: src/components/layouts/CheckIn/tabs/ScanTab.tsx:80
 msgid "USB"
@@ -26138,6 +26149,10 @@ msgstr "用户"
 msgid "Users ({0})"
 msgstr "用户（{0}）"
 
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:55
+msgid "Uses left"
+msgstr "剩余使用次数"
+
 #: src/components/common/WidgetEditor/AppearancePanel.tsx:69
 msgid "Uses the colours and font from your homepage design, and updates when you change them."
 msgstr "使用你主页设计中的颜色和字体，并会在你修改时同步更新。"
@@ -26217,13 +26232,14 @@ msgstr "增值税号验证失败"
 msgid "VAT number validation failed. Please check your VAT number."
 msgstr "增值税号验证失败。请检查您的增值税号。"
 
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:87
-msgid "VAT on Fee"
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:86
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:121
+msgid "VAT on fee"
 msgstr "费用增值税"
 
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:81
-msgid "VAT Rate"
-msgstr "增值税率"
+msgid "VAT rate"
+msgstr "增值税税率"
 
 #: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:172
 msgid "VAT registered"
@@ -26405,10 +26421,6 @@ msgstr "查看平台上发送的所有消息"
 #: src/components/layouts/OrganizerHomepage/OrganizerPastEventsSection.tsx:30
 msgid "View all past events"
 msgstr "查看所有往期活动"
-
-#: src/components/routes/organizer/Reports/index.tsx:54
-msgid "View and download reports across all your events. Only completed orders are included."
-msgstr "查看和下载所有活动的报告。仅包含已完成的订单。"
 
 #: src/components/common/AttendeeList/index.tsx:85
 msgid "View Answers"
@@ -27740,9 +27752,8 @@ msgstr "X（推特）"
 msgid "year"
 msgstr "年"
 
-#: src/components/common/OrganizerReportTable/index.tsx:62
 #: src/components/common/PeriodSelector/index.tsx:38
-#: src/components/common/ReportTable/index.tsx:57
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:19
 msgid "Year to date"
 msgstr "年度至今"
 

@@ -129,6 +129,10 @@ msgstr "{0, plural, one {# riadok v súbore} few {# riadky v súbore} many {# ri
 msgid "{0, plural, one {# row skipped} other {# rows skipped}}"
 msgstr "{0, plural, one {preskočený # riadok} few {preskočené # riadky} many {preskočených # riadka} other {preskočených # riadkov}}"
 
+#: src/components/common/ReportView/index.tsx:231
+msgid "{0, plural, one {# row} other {# rows}}"
+msgstr "{0, plural, one {# riadok} few {# riadky} many {# riadka} other {# riadkov}}"
+
 #: src/ee/crm/components/routes/AudienceSegments/index.tsx:169
 msgid "{0, plural, one {# rule} other {# rules}}"
 msgstr "{0, plural, one {# pravidlo} few {# pravidlá} many {# pravidla} other {# pravidiel}}"
@@ -963,6 +967,10 @@ msgstr "{sentLabel} z {totalLabel} e-mailov už bolo odoslaných. Zvyšné sa ne
 msgid "{sentLabel} of {totalLabel} texts have already gone out. The rest won't be sent, and this can't be undone."
 msgstr "Už bolo odoslaných {sentLabel} z {totalLabel} SMS. Zvyšné sa neodošlú a túto akciu nie je možné vrátiť späť."
 
+#: src/components/common/ReportView/index.tsx:229
+msgid "{shown} of {total} rows"
+msgstr "{shown} z {total} riadkov"
+
 #: src/ee/crm/components/routes/AudienceContacts/useBulkContactActions.tsx:82
 msgid "{skipped, plural, one {The other contact had already unsubscribed or marked an email as spam.} other {The other # had already unsubscribed or marked an email as spam.}}"
 msgstr "{skipped, plural, one {Zvyšný kontakt sa už predtým odhlásil alebo označil e-mail ako spam.} few {Zvyšné # sa už predtým odhlásili alebo označili e-mail ako spam.} many {Zvyšných # sa už predtým odhlásilo alebo označilo e-mail ako spam.} other {Zvyšných # sa už predtým odhlásilo alebo označilo e-mail ako spam.}}"
@@ -1075,6 +1083,14 @@ msgstr "{unlistedEvents, plural, one {a # ďalšia udalosť} few {a # ďalšie u
 #: src/components/routes/event/Lineup/LineupStats.tsx:23
 msgid "{unscheduled} without a time"
 msgstr "Bez času: {unscheduled}"
+
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:49
+msgid "{used} (no limit)"
+msgstr "{used} (bez limitu)"
+
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:49
+msgid "{used} of {capacity}"
+msgstr "{used} z {capacity}"
 
 #: src/ee/crm/utilites/labels.ts:302
 msgid "{wait} after a checkout is abandoned · {audience}"
@@ -1859,7 +1875,7 @@ msgstr "Dátum aktivácie"
 #: src/components/modals/ProductPurchasesModal/index.tsx:246
 #: src/components/routes/event/attendees.tsx:29
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:217
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:20
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:32
 #: src/components/routes/organizer/Payments/CapabilityList.tsx:57
 #: src/components/routes/settings/Billing/index.tsx:45
 #: src/components/routes/settings/Team/MemberRow.tsx:28
@@ -2080,6 +2096,10 @@ msgstr "Pridať termíny"
 msgid "Add dates and times for your recurring event"
 msgstr "Pridajte termíny a časy pre vaše opakujúce sa podujatie"
 
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:82
+msgid "Add dates to this event's schedule to see them here."
+msgstr "Pridajte do harmonogramu tejto udalosti termíny, aby sa tu zobrazili."
+
 #: src/components/forms/QuestionForm/index.tsx:136
 msgid "Add description"
 msgstr "Pridať popis"
@@ -2238,6 +2258,10 @@ msgstr "Pridajte tento záznam TXT u svojho poskytovateľa DNS a potom overte. S
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:97
 msgid "Add tickets"
 msgstr "Pridať lístky"
+
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:38
+msgid "Add tickets or products to this event to see their sales here."
+msgstr "Pridajte k tejto udalosti lístky alebo produkty, aby sa tu zobrazil ich predaj."
 
 #: src/components/forms/ProductForm/index.tsx:380
 msgid "Add tier"
@@ -2480,6 +2504,12 @@ msgstr "po"
 msgid "After an event ends, thank everyone who had a ticket."
 msgstr "Po skončení udalosti poďakujte všetkým, ktorí mali lístok."
 
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:66
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:30
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:46
+msgid "After refunds"
+msgstr "Po vrátení platieb"
+
 #: src/components/routes/welcome/index.tsx:419
 msgid "After your event is created, you can choose how often it repeats from the dashboard."
 msgstr "Po vytvorení podujatia si v nástenke zvolíte, ako často sa má opakovať."
@@ -2540,7 +2570,7 @@ msgstr "Všetky"
 msgid "All Archived Events"
 msgstr "Všetky archivované udalosti"
 
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:41
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:43
 msgid "All areas"
 msgstr "Všetky oblasti"
 
@@ -2573,8 +2603,8 @@ msgstr "Všetky zmeny uložené"
 msgid "All contacts"
 msgstr "Všetky kontakty"
 
-#: src/components/common/OrganizerReportTable/index.tsx:306
-msgid "All Currencies"
+#: src/components/routes/organizer/Reports/OrganizerReport.tsx:77
+msgid "All currencies"
 msgstr "Všetky meny"
 
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:77
@@ -2611,11 +2641,8 @@ msgstr "Všetky ukončené udalosti"
 
 #: src/components/common/WidgetEditor/ContentFields.tsx:180
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:128
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:128
 msgid "All events"
-msgstr "Všetky udalosti"
-
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:33
-msgid "All Events"
 msgstr "Všetky udalosti"
 
 #: src/components/routes/admin/FailedJobs/index.tsx:94
@@ -2639,7 +2666,7 @@ msgstr "Všetky vyhovujúce termíny"
 msgid "All occurrences"
 msgstr "Všetky termíny"
 
-#: src/components/common/ReportTable/index.tsx:275
+#: src/components/routes/event/Reports/EventReport.tsx:89
 msgid "All Occurrences"
 msgstr "Všetky termíny"
 
@@ -2679,6 +2706,8 @@ msgid "All tickets"
 msgstr "Všetky lístky"
 
 #: src/components/routes/admin/Attribution/index.tsx:82
+#: src/components/routes/event/Reports/EventReport.tsx:66
+#: src/components/routes/organizer/Reports/OrganizerReport.tsx:84
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:66
 msgid "All time"
 msgstr "Celé obdobie"
@@ -2861,8 +2890,9 @@ msgstr "Suma na úhradu"
 msgid "Amount off"
 msgstr "Suma zľavy"
 
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:69
-msgid "Amount Paid"
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:77
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:119
+msgid "Amount paid"
 msgstr "Zaplatená suma"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:304
@@ -3419,7 +3449,7 @@ msgstr "Naozaj chcete odstrániť tento zoznam odbavení?"
 msgid "Are you VAT registered in the EU?"
 msgstr "Ste registrovaný pre DPH v EÚ?"
 
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:40
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:47
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:441
 msgid "Area"
 msgstr "Oblasť"
@@ -3574,10 +3604,6 @@ msgstr "Priradiť mapu sedadiel"
 msgid "Attempts"
 msgstr "Pokusy"
 
-#: src/components/routes/organizer/Reports/index.tsx:40
-msgid "Attendance and check-in rates across all events"
-msgstr "Miera účasti a odbavenia naprieč všetkými udalosťami"
-
 #: src/components/routes/event/EventDashboard/NextOccurrenceHero/index.tsx:194
 msgid "attendee"
 msgstr "účastník"
@@ -3675,12 +3701,19 @@ msgstr "účastníci"
 #: src/components/routes/admin/Messages/index.tsx:248
 #: src/components/routes/event/attendees.tsx:206
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:61
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:61
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:65
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:84
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:122
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:148
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:282
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:38
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:53
 msgid "Attendees"
 msgstr "Účastníci"
+
+#: src/components/routes/organizer/Reports/index.tsx:47
+msgid "Attendees and check-ins for every event, across all time."
+msgstr "Účastníci a check-iny pri všetkých udalostiach za celé obdobie."
 
 #: src/components/layouts/CheckIn/tabs/StatsTab.tsx:72
 msgid "attendees checked in"
@@ -3952,10 +3985,6 @@ msgstr "Späť na správy"
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:246
 msgid "Back to QR code"
 msgstr "Späť na QR kód"
-
-#: src/components/routes/organizer/Reports/ReportLayout/index.tsx:44
-msgid "Back to Reports"
-msgstr "Späť na správy"
 
 #: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:118
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:241
@@ -4840,7 +4869,7 @@ msgstr "Zrušením sa zrušia všetci účastníci spojení s touto objednávkou
 #: src/components/routes/event/attendees.tsx:30
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:219
 #: src/components/routes/event/orders.tsx:31
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:21
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:33
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:121
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:433
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:116
@@ -4867,7 +4896,8 @@ msgstr "Ruší sa {0} termín(ov). Môže to chvíľu trvať."
 #: src/components/routes/event/OccurrencesTab/BookingSummary/index.tsx:63
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:512
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1122
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:45
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:48
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:75
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:86
 msgid "Capacity"
 msgstr "Kapacita"
@@ -4900,13 +4930,13 @@ msgstr "Kapacita musí byť 0 alebo viac"
 msgid "capacity updates"
 msgstr "zmeny kapacity"
 
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:66
-msgid "Capacity Used"
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:67
+msgid "Capacity used"
 msgstr "Využitá kapacita"
 
-#: src/components/routes/event/Reports/index.tsx:45
-msgid "Capacity, sold, held and free seats per price band and area, with revenue per band"
-msgstr "Kapacita, predané, pozdržané a voľné sedadlá podľa cenovej kategórie a oblasti s tržbami za cenovú kategóriu"
+#: src/components/routes/event/Reports/index.tsx:63
+msgid "Capacity, sold, held and free seats for each price band and area, with revenue per band."
+msgstr "Kapacita, predané, držané a voľné sedadlá pre každé cenové pásmo a oblasť spolu s tržbami za pásmo."
 
 #: src/ee/box-office/components/layouts/BoxOffice/TenderStage.tsx:173
 #: src/ee/box-office/utilites/boxOfficeTender.ts:9
@@ -5182,7 +5212,7 @@ msgstr "Pozrite si túto udalosť!"
 msgid "Check up to 50 addresses at a time."
 msgstr "Naraz možno skontrolovať najviac 50 adries."
 
-#: src/components/common/ReportTable/index.tsx:239
+#: src/components/common/ReportView/index.tsx:244
 #: src/components/routes/settings/TaxesAndFees/index.tsx:85
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:84
 msgid "Check your connection and try again."
@@ -5273,12 +5303,9 @@ msgid "Check-in list not found"
 msgstr "Zoznam odbavení nenájdený"
 
 #: src/components/modals/DuplicateEventModal/index.tsx:137
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:41
 msgid "Check-in lists"
 msgstr "Zoznamy na check-in"
-
-#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:51
-msgid "Check-in Lists"
-msgstr "Zoznamy odbavení"
 
 #: src/components/layouts/Event/index.tsx:151
 #: src/components/routes/event/CheckInLists/index.tsx:38
@@ -5293,9 +5320,10 @@ msgstr "Navigácia check-inu"
 msgid "Check-in progress"
 msgstr "Priebeh check-inu"
 
-#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:45
-msgid "Check-in Rate"
-msgstr "Miera odbavenia"
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:40
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:55
+msgid "Check-in rate"
+msgstr "Miera check-inov"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:254
 msgid "Check-in staff are told the order is unpaid and can mark it as paid at the door. When this is off, guests from unpaid orders can't be checked in."
@@ -5307,16 +5335,12 @@ msgstr "Personál pri vstupe vidí, že objednávka nie je zaplatená, a môže 
 msgid "Check-In Status"
 msgstr "Stav odbavenia"
 
-#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:58
-#: src/components/routes/organizer/Reports/index.tsx:39
-msgid "Check-in Summary"
-msgstr "Súhrn odbavení"
-
 #: src/components/common/CheckInListList/index.tsx:162
 #: src/components/common/CheckInListTable/index.tsx:33
 msgid "Check-In URL copied to clipboard"
 msgstr "URL odbavenia skopírovaná do schránky"
 
+#: src/components/routes/organizer/Reports/index.tsx:46
 #: src/ee/crm/components/ContactDrawer/index.tsx:177
 #: src/ee/crm/components/routes/AudienceContacts/ContactsTable.tsx:63
 #: src/ee/crm/components/routes/AudienceContacts/ContactsTable.tsx:143
@@ -5344,6 +5368,10 @@ msgstr "Skontrolované {checked}, istota {confidence} %."
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:111
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:151
 #: src/components/layouts/CheckIn/tabs/StatsTab.tsx:89
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:66
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:85
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:39
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:54
 #: src/ee/crm/components/EventDashboardAudience/index.tsx:23
 #: src/ee/crm/utilites/labels.ts:95
 msgid "Checked in"
@@ -5351,8 +5379,6 @@ msgstr "Prihlásený"
 
 #: src/components/common/AttendeeTable/index.tsx:272
 #: src/components/common/CheckInStatusModal/index.tsx:116
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:95
-#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:40
 msgid "Checked In"
 msgstr "Odbavený"
 
@@ -6046,10 +6072,6 @@ msgstr "Nakonfigurujte odosielateľa e-mailov životného cyklu na odosielanie t
 msgid "Configure which products are available for this date, and optionally adjust prices or per-date quantities."
 msgstr "Nastavte, ktoré produkty sú dostupné pre tento dátum, a voliteľne upravte ceny alebo množstvá na dátum."
 
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:35
-msgid "Configured Discount"
-msgstr "Nakonfigurovaná zľava"
-
 #: src/ee/crm/components/routes/AudienceCampaign/SendModal.tsx:228
 #: src/utilites/confirmationDialog.tsx:19
 #: src/utilites/confirmationDialog.tsx:56
@@ -6737,12 +6759,15 @@ msgstr "{name} sa nepodarilo aktualizovať"
 msgid "Could not upload {fileName}"
 msgstr "{fileName} sa nepodarilo nahrať"
 
+#: src/components/common/ReportView/index.tsx:215
+msgid "Couldn't export this report. Try again."
+msgstr "Tento report sa nepodarilo exportovať. Skúste to znova."
+
 #: src/components/routes/settings/ApiReference/index.tsx:77
 msgid "Couldn't load the API reference."
 msgstr "Referenciu API sa nepodarilo načítať."
 
-#: src/components/common/OrganizerReportTable/index.tsx:275
-#: src/components/common/ReportTable/index.tsx:237
+#: src/components/common/ReportView/index.tsx:242
 msgid "Couldn't load this report"
 msgstr "Túto správu sa nepodarilo načítať"
 
@@ -6883,6 +6908,10 @@ msgstr "Vytvoriť produkt"
 msgid "Create a Promo Code"
 msgstr "Vytvoriť promo kód"
 
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:64
+msgid "Create a promo code to see how it performs here."
+msgstr "Vytvorte promo kód, aby sa tu zobrazila jeho výkonnosť."
+
 #: src/ee/seating/components/routes/event/Seating/AttachSeatMap.tsx:55
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:64
 msgid "Create a seat map"
@@ -6923,6 +6952,14 @@ msgstr "Vytvoriť partnera"
 #: src/components/routes/admin/Announcements/index.tsx:245
 msgid "Create an announcement to show a message to your users."
 msgstr "Vytvorte oznámenie a zobrazte správu svojim používateľom."
+
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:82
+msgid "Create an event to see how it performs here."
+msgstr "Vytvorte udalosť, aby sa tu zobrazila jej výkonnosť."
+
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:51
+msgid "Create an event to see its check-ins here."
+msgstr "Vytvorte udalosť, aby sa tu zobrazili jej check-iny."
 
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:255
 msgid "Create and change events, orders, attendees and more."
@@ -7187,7 +7224,6 @@ msgstr "CTA"
 msgid "CTA label is required"
 msgstr "Popis CTA je povinný"
 
-#: src/components/common/OrganizerReportTable/index.tsx:321
 #: src/components/forms/OrganizerForm/index.tsx:51
 #: src/components/modals/CreateEventModal/index.tsx:437
 #: src/components/modals/CreateEventModal/index.tsx:438
@@ -7195,9 +7231,10 @@ msgstr "Popis CTA je povinný"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:186
 #: src/components/routes/admin/Dashboard/index.tsx:200
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:145
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:51
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:99
-#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:33
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:63
+#: src/components/routes/organizer/Reports/OrganizerReport.tsx:110
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:76
+#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:30
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:153
 #: src/components/routes/settings/Account/index.tsx:83
 #: src/ee/crm/components/SegmentBuilder/index.tsx:198
@@ -7245,6 +7282,10 @@ msgstr "Vlastné farby"
 msgid "Custom date and time"
 msgstr "Vlastný dátum a čas"
 
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:77
+msgid "Custom date range"
+msgstr "Vlastné obdobie"
+
 #: src/ee/crm/components/routes/AudienceContacts/index.tsx:211
 msgid "Custom filter"
 msgstr "Vlastný filter"
@@ -7265,8 +7306,10 @@ msgstr "Vlastné e-maily objednávok a vstupeniek pre toto podujatie"
 msgid "Custom questions"
 msgstr "Vlastné otázky"
 
-#: src/components/common/OrganizerReportTable/index.tsx:64
-#: src/components/common/ReportTable/index.tsx:59
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:21
+msgid "Custom range"
+msgstr "Vlastný rozsah"
+
 #: src/components/routes/admin/Attribution/index.tsx:83
 msgid "Custom Range"
 msgstr "Vlastný rozsah"
@@ -7293,10 +7336,6 @@ msgstr "Odkaz pre zákazníka skopírovaný do schránky"
 #: src/components/modals/RefundOrderModal/index.tsx:134
 msgid "Customer will receive an email confirming the refund"
 msgstr "Zákazník dostane e-mail potvrdzujúci vrátenie platby"
-
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:108
-msgid "Customers"
-msgstr "Zákazníci"
 
 #: src/components/common/WidgetEditor/index.tsx:281
 msgid "Customise"
@@ -7343,17 +7382,9 @@ msgstr "Čeština"
 msgid "Daily"
 msgstr "Denne"
 
-#: src/components/routes/organizer/Reports/index.tsx:22
-msgid "Daily revenue, taxes, fees, and refunds across all events"
-msgstr "Denné príjmy, dane, poplatky a vrátenia naprieč všetkými udalosťami"
-
-#: src/components/routes/event/Reports/index.tsx:26
-msgid "Daily Sales Report"
-msgstr "Denná správa o predajoch"
-
-#: src/components/routes/event/Reports/index.tsx:27
-msgid "Daily sales, tax, and fee breakdown"
-msgstr "Denný rozklad predajov, daní a poplatkov"
+#: src/components/routes/event/Reports/index.tsx:34
+msgid "Daily sales"
+msgstr "Denný predaj"
 
 #: src/constants/eventCategories.ts:13
 msgid "Dance"
@@ -7414,9 +7445,9 @@ msgstr "Panel"
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:117
 #: src/components/forms/QuestionForm/questionTypes.ts:29
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:175
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:39
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:56
-#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:24
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:33
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:55
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:27
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:105
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:275
 #: src/ee/box-office/components/layouts/BoxOffice/OccurrenceSwitchSheet.tsx:47
@@ -8152,6 +8183,7 @@ msgid "Discord"
 msgstr "Discord"
 
 #: src/components/common/PromoCodeTable/index.tsx:76
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:48
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:62
 #: src/ee/box-office/components/layouts/BoxOffice/CartPanel.tsx:119
 msgid "Discount"
@@ -8168,6 +8200,11 @@ msgstr "Zľava v {0}"
 #: src/components/forms/PromoCodeForm/index.tsx:91
 msgid "Discount Type"
 msgstr "Typ zľavy"
+
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:50
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:67
+msgid "Discounts given"
+msgstr "Poskytnuté zľavy"
 
 #: src/components/common/Callout/index.tsx:62
 msgid "Dismiss"
@@ -8286,10 +8323,6 @@ msgstr "Stiahnuť .ics"
 msgid "Download a template with your current lineup"
 msgstr "Stiahnuť šablónu s aktuálnym line-upom"
 
-#: src/components/common/DownloadCsvButton/index.tsx:48
-msgid "Download CSV"
-msgstr "Stiahnuť CSV"
-
 #: src/hooks/useOrderActions.tsx:151
 msgid "Download invoice"
 msgstr "Stiahnuť faktúru"
@@ -8305,10 +8338,6 @@ msgstr "Stiahnuť PNG"
 #: src/components/modals/ShareModal/index.tsx:228
 msgid "Download QR Code"
 msgstr "Stiahnuť QR kód"
-
-#: src/components/routes/event/Reports/index.tsx:53
-msgid "Download sales, attendee, and financial reports for all completed orders."
-msgstr "Stiahnuť správy o predajoch, účastníkoch a financiách pre všetky dokončené objednávky."
 
 #: src/components/routes/event/Lineup/index.tsx:145
 msgid "Download spreadsheet (.xlsx)"
@@ -9496,10 +9525,11 @@ msgstr "Len párne čísla"
 #: src/components/routes/admin/SpamEvents/index.tsx:139
 #: src/components/routes/admin/SpamEvents/index.tsx:316
 #: src/components/routes/events/Dashboard/index.tsx:188
-#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:19
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:41
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:43
-#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:23
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:32
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:52
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:60
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:127
+#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:27
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:252
 #: src/ee/crm/components/routes/AudienceCampaign/index.tsx:528
 msgid "Event"
@@ -9552,7 +9582,6 @@ msgstr "Prehľad udalosti"
 
 #: src/components/routes/event/TicketDesigner/index.tsx:165
 #: src/components/routes/my-tickets/index.tsx:79
-#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:29
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:375
 msgid "Event Date"
 msgstr "Dátum udalosti"
@@ -9702,6 +9731,8 @@ msgstr "Udalosť aktualizovaná"
 #: src/components/routes/admin/Events/index.tsx:80
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:236
 #: src/components/routes/organizer/Events/index.tsx:46
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:84
+#: src/components/routes/organizer/Reports/index.tsx:31
 #: src/ee/crm/components/ContactDrawer/index.tsx:175
 #: src/ee/crm/components/routes/AudienceContacts/ContactsTable.tsx:61
 #: src/ee/crm/components/routes/AudienceContacts/ContactsTable.tsx:141
@@ -9716,11 +9747,6 @@ msgstr "Udalosti sa zobrazujú vždy"
 #: src/ee/crm/components/routes/AudienceOverview/index.tsx:46
 msgid "Events per person"
 msgstr "Udalosti na osobu"
-
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:120
-#: src/components/routes/organizer/Reports/index.tsx:27
-msgid "Events Performance"
-msgstr "Výkonnosť udalostí"
 
 #: src/components/common/WidgetEditor/index.tsx:189
 msgid "Events Widget"
@@ -9984,7 +10010,8 @@ msgstr "Exportovať"
 msgid "Export answers"
 msgstr "Exportovať odpovede"
 
-#: src/components/common/OrganizerReportTable/index.tsx:362
+#: src/components/common/ReportView/index.tsx:297
+#: src/components/common/ReportView/index.tsx:303
 msgid "Export CSV"
 msgstr "Exportovať CSV"
 
@@ -9999,10 +10026,6 @@ msgstr "Exportovať nákupy"
 #: src/mutations/useExportAnswers.ts:17
 msgid "Export started. Preparing file..."
 msgstr "Export spustený. Pripravuje sa súbor..."
-
-#: src/components/common/OrganizerReportTable/index.tsx:200
-msgid "Export successful"
-msgstr "Export úspešný"
 
 #: src/ee/crm/components/routes/AudienceContacts/ContactsHeaderActions.tsx:58
 msgid "Export this list"
@@ -10205,10 +10228,6 @@ msgstr "Nepodarilo sa exportovať objednávky"
 #: src/components/routes/event/products.tsx:58
 msgid "Failed to export purchases. Please try again."
 msgstr "Nákupy sa nepodarilo exportovať. Skúste to znova."
-
-#: src/components/common/OrganizerReportTable/index.tsx:202
-msgid "Failed to export report. Please try again."
-msgstr "Nepodarilo sa exportovať správu. Skúste to znovu."
 
 #: src/ee/box-office/components/modals/EditBoxOfficeModal/index.tsx:84
 msgid "Failed to load box office"
@@ -10472,7 +10491,6 @@ msgstr "Poplatok aktualizovaný"
 #: src/components/common/InlineOrderSummary/index.tsx:164
 #: src/components/common/OrdersTable/index.tsx:234
 #: src/components/forms/ProductForm/index.tsx:497
-#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:54
 #: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:88
 #: src/components/routes/settings/TaxesAndFees/index.tsx:126
 msgid "Fees"
@@ -10525,10 +10543,6 @@ msgstr "Filtrovať účastníkov"
 #: src/components/layouts/CheckIn/OccurrenceFilterPill.tsx:82
 msgid "Filter by date"
 msgstr "Filtrovať podľa termínu"
-
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:118
-msgid "Filter by Event"
-msgstr "Filtrovať podľa udalosti"
 
 #: src/components/routes/settings/Team/index.tsx:196
 msgid "Filter by role"
@@ -10723,8 +10737,8 @@ msgstr "Číslo prvého sedadla"
 msgid "First seen"
 msgstr "Prvýkrát zaznamenaný"
 
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:64
-msgid "First Used"
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:52
+msgid "First used"
 msgstr "Prvé použitie"
 
 #: src/ee/crm/utilites/labels.ts:24
@@ -10907,7 +10921,8 @@ msgstr "Foyer"
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:37
 #: src/ee/box-office/components/layouts/BoxOffice/ProductTile.tsx:54
 #: src/ee/box-office/utilites/boxOfficeTender.ts:15
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:65
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:52
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:77
 #: src/ee/seating/components/SeatPicker/ticketOptions.ts:105
 #: src/utilites/eventListingLabels.ts:20
 msgid "Free"
@@ -11302,24 +11317,36 @@ msgstr "Hrubý príjem"
 msgid "Gross revenue"
 msgstr "Hrubé príjmy"
 
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:73
-msgid "Gross Revenue"
-msgstr "Hrubé príjmy"
-
 #: src/components/common/StatBoxes/index.tsx:96
 #: src/components/modals/ProductPurchasesModal/index.tsx:211
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:34
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:52
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:70
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:87
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:27
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:41
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:51
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:68
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:119
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:268
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:64
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:85
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:28
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:44
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:55
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:78
 msgid "Gross sales"
 msgstr "Hrubý predaj"
 
 #: src/components/common/StatsCharts/index.tsx:83
 #: src/components/modals/ManageOccurrenceModal/index.tsx:188
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:83
-#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:30
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:70
 msgid "Gross Sales"
 msgstr "Hrubý predaj"
+
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:60
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:52
+msgid "Gross sales per day"
+msgstr "Hrubý predaj za deň"
 
 #: src/components/routes/event/Lineup/RunSheetPrint.tsx:85
 msgid "Group by stage or room"
@@ -11417,7 +11444,7 @@ msgstr "Hlavné hviezdy"
 msgid "Height"
 msgstr "Výška"
 
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:60
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:51
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:152
 msgid "Held back"
 msgstr "Pozdržané"
@@ -11478,17 +11505,18 @@ msgstr "Po tomto dátume sa značka Hi.Events vráti. Predplatné môžete dovte
 msgid "Hi.Events Cloud"
 msgstr "Hi.Events Cloud"
 
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:75
-msgid "Hi.Events Fee"
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:78
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:120
+msgid "Hi.Events fee"
 msgstr "Poplatok Hi.Events"
 
 #: src/components/routes/oauth/Connect/index.tsx:110
 msgid "Hi.Events hasn't verified this app. Only continue if you started connecting it yourself and you trust it."
 msgstr "Hi.Events túto aplikáciu neoveril. Pokračujte, iba ak ste pripojenie začali sami a aplikácii dôverujete."
 
-#: src/components/routes/organizer/Reports/index.tsx:46
-msgid "Hi.Events platform fees and VAT breakdown by transaction"
-msgstr "Poplatky platformy Hi.Events a rozklad DPH podľa transakcií"
+#: src/components/routes/organizer/Reports/index.tsx:54
+msgid "Hi.Events platform fees and the VAT charged on them, payment by payment."
+msgstr "Poplatky platformy Hi.Events a DPH účtovaná z nich, platba po platbe."
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:137
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:474
@@ -11795,6 +11823,10 @@ msgstr "Koľko?"
 msgid "How often"
 msgstr "Ako často"
 
+#: src/components/routes/event/Reports/index.tsx:49
+msgid "How often each promo code was used on completed orders, and the discount it gave."
+msgstr "Ako často bol každý promo kód použitý pri dokončených objednávkach a akú zľavu poskytol."
+
 #: src/components/routes/product-widget/Payment/PaymentMethods/Offline/index.tsx:7
 msgid "How paying later works"
 msgstr "Ako funguje platba neskôr"
@@ -12009,10 +12041,6 @@ msgstr "Importovať line-up a program"
 msgid "Import suppressions"
 msgstr "Importovať blokované adresy"
 
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:112
-msgid "Important Notice"
-msgstr "Dôležité upozornenie"
-
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:100
 msgid "Important: Changing your email address will update the link to access this order. You will be redirected to the new order link after saving."
 msgstr "Dôležité: Zmena e-mailovej adresy aktualizuje odkaz na prístup k tejto objednávke. Po uložení budete presmerovaní na nový odkaz objednávky."
@@ -12037,7 +12065,7 @@ msgstr "Importované zo súboru {file}, s potvrdeným súhlasom"
 msgid "Imported, with consent confirmed"
 msgstr "Importované, s potvrdeným súhlasom"
 
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:55
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:50
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:151
 msgid "In a basket"
 msgstr "V košíku"
@@ -12634,7 +12662,7 @@ msgstr "Kóšer"
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:177
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:458
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1043
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:45
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:58
 #: src/ee/box-office/components/modals/AddTerminalReaderModal/index.tsx:46
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:97
 #: src/ee/seating/components/SeatMapDesigner/newElements.ts:129
@@ -12676,55 +12704,42 @@ msgstr "Veľké súbory sa importujú na pozadí. Toto okno môžete zavrieť: z
 msgid "Last"
 msgstr "Posledný"
 
-#: src/components/common/OrganizerReportTable/index.tsx:63
-#: src/components/common/ReportTable/index.tsx:58
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:20
 msgid "Last 12 months"
 msgstr "Posledných 12 mesiacov"
 
-#: src/components/common/OrganizerReportTable/index.tsx:58
-#: src/components/common/ReportTable/index.tsx:53
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:15
 msgid "Last 14 days"
 msgstr "Posledných 14 dní"
 
-#: src/components/common/OrganizerReportTable/index.tsx:55
-#: src/components/common/ReportTable/index.tsx:50
 #: src/components/routes/admin/Attribution/index.tsx:78
 #: src/components/routes/admin/Dashboard/index.tsx:38
 #: src/components/routes/admin/EmailDelivery/index.tsx:15
 msgid "Last 24 hours"
 msgstr "Posledných 24 hodín"
 
-#: src/components/common/OrganizerReportTable/index.tsx:59
 #: src/components/common/PeriodSelector/index.tsx:34
-#: src/components/common/ReportTable/index.tsx:54
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:16
 #: src/components/routes/admin/Attribution/index.tsx:80
 #: src/components/routes/admin/Dashboard/index.tsx:40
 #: src/components/routes/admin/EmailDelivery/index.tsx:17
 msgid "Last 30 days"
 msgstr "Posledných 30 dní"
 
-#: src/components/common/OrganizerReportTable/index.tsx:56
-#: src/components/common/ReportTable/index.tsx:51
-msgid "Last 48 hours"
-msgstr "Posledných 48 hodín"
-
-#: src/components/common/OrganizerReportTable/index.tsx:61
-#: src/components/common/ReportTable/index.tsx:56
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:18
 msgid "Last 6 months"
 msgstr "Posledných 6 mesiacov"
 
-#: src/components/common/OrganizerReportTable/index.tsx:57
 #: src/components/common/PeriodSelector/index.tsx:32
-#: src/components/common/ReportTable/index.tsx:52
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:14
 #: src/components/routes/admin/Attribution/index.tsx:79
 #: src/components/routes/admin/Dashboard/index.tsx:39
 #: src/components/routes/admin/EmailDelivery/index.tsx:16
 msgid "Last 7 days"
 msgstr "Posledných 7 dní"
 
-#: src/components/common/OrganizerReportTable/index.tsx:60
 #: src/components/common/PeriodSelector/index.tsx:36
-#: src/components/common/ReportTable/index.tsx:55
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:17
 #: src/components/routes/admin/Attribution/index.tsx:81
 msgid "Last 90 days"
 msgstr "Posledných 90 dní"
@@ -12800,13 +12815,10 @@ msgid "Last Triggered"
 msgstr "Naposledy spustené"
 
 #: src/components/common/SsoButtons/index.tsx:126
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:53
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:73
 #: src/components/routes/settings/ApiKeys/index.tsx:176
 msgid "Last used"
-msgstr "Naposledy použité"
-
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:70
-msgid "Last Used"
 msgstr "Naposledy použité"
 
 #: src/components/routes/settings/Security/index.tsx:41
@@ -13082,6 +13094,10 @@ msgstr "Odkaz skopírovaný"
 msgid "Link Expired or Invalid"
 msgstr "Odkaz vypršal alebo je neplatný"
 
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:73
+msgid "Link price bands to tickets to see seat sales here."
+msgstr "Prepojte cenové pásma s lístkami, aby sa tu zobrazil predaj sedadiel."
+
 #: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:155
 msgid "Link text"
 msgstr "Text odkazu"
@@ -13211,7 +13227,6 @@ msgstr "Načítavanie protokolov webhookov..."
 msgid "Loading Webhooks"
 msgstr "Načítavanie webhookov"
 
-#: src/components/common/OrganizerReportTable/index.tsx:269
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:93
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:94
 msgid "Loading..."
@@ -13804,6 +13819,10 @@ msgstr "Po"
 msgid "Monday"
 msgstr "Pondelok"
 
+#: src/components/common/ReportView/index.tsx:360
+msgid "Money totals are hidden because these rows are in more than one currency. Choose a currency to see totals."
+msgstr "Súčty súm sú skryté, pretože tieto riadky sú vo viac ako jednej mene. Vyberte menu, aby sa súčty zobrazili."
+
 #: src/components/routes/admin/FailedJobs/index.tsx:179
 msgid "Monitor and manage failed background jobs"
 msgstr "Monitorovať a spravovať neúspešné úlohy na pozadí"
@@ -14115,11 +14134,6 @@ msgstr "Súbor potrebuje stĺpec Email. Voliteľný stĺpec Reason prijíma hodn
 #: src/components/modals/DuplicateEventModal/index.tsx:299
 msgid "Needs products"
 msgstr "Vyžaduje produkty"
-
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:85
-#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:36
-msgid "Net Revenue"
-msgstr "Čistý príjem"
 
 #: src/ee/crm/utilites/labels.ts:133
 msgid "never"
@@ -14580,18 +14594,6 @@ msgstr "Zatiaľ žiadne kontakty. Objavia sa tu, hneď ako si niekto rezervuje."
 msgid "No countries found"
 msgstr "Nenašli sa žiadne krajiny"
 
-#: src/components/common/ReportTable/index.tsx:323
-msgid "No data available"
-msgstr "Žiadne dostupné dáta"
-
-#: src/components/common/OrganizerReportTable/index.tsx:287
-msgid "No data found for the selected filters. Try adjusting the date range or currency."
-msgstr "Pre vybrané filtre sa nenašli žiadne dáta. Skúste upraviť rozsah dátumov alebo menu."
-
-#: src/components/common/ReportTable/index.tsx:322
-msgid "No data to show. Please select a date range"
-msgstr "Žiadne dáta na zobrazenie. Vyberte rozsah dátumov."
-
 #: src/components/common/EventCard/index.tsx:241
 #: src/components/common/EventCard/index.tsx:339
 msgid "No date added"
@@ -14888,6 +14890,10 @@ msgstr "Bez fotky"
 msgid "No PIN"
 msgstr "Bez PIN"
 
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:117
+msgid "No platform fees were charged in this period."
+msgstr "V tomto období neboli účtované žiadne poplatky platformy."
+
 #: src/components/common/ProductSelector/index.tsx:35
 msgid "No products available for selection"
 msgstr "Žiadne produkty nie sú dostupné na výber"
@@ -14980,6 +14986,11 @@ msgstr "Žiadny predaj"
 msgid "No sales in this period"
 msgstr "V tomto období nie sú žiadne predaje"
 
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:67
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:59
+msgid "No sales or refunds in this period."
+msgstr "V tomto období nebol žiadny predaj ani vrátenie platieb."
+
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/OrdersTab.tsx:65
 msgid "No sales yet from this box office"
 msgstr "Z tejto pokladne zatiaľ žiadne predaje"
@@ -15057,6 +15068,10 @@ msgstr "Zatiaľ žiadne štítky. Napíšte názov a vytvorte nový."
 #: src/ee/crm/components/ContactDrawer/Tags.tsx:31
 msgid "No tags."
 msgstr "Žiadne štítky."
+
+#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:41
+msgid "No tax was collected on completed orders in this period."
+msgstr "V tomto období nebola pri dokončených objednávkach vybraná žiadna daň."
 
 #: src/components/routes/settings/TaxesAndFees/index.tsx:106
 msgid "No taxes or fees yet"
@@ -15475,7 +15490,7 @@ msgstr "Zatiaľ nie je čo tlačiť"
 msgid "Nothing to sell here yet. Add products to this box office."
 msgstr "Zatiaľ nie je čo predávať. Pridajte produkty do tejto pokladne."
 
-#: src/components/common/ReportTable/index.tsx:251
+#: src/components/common/ReportView/index.tsx:256
 msgid "Nothing to show yet"
 msgstr "Zatiaľ nič na zobrazenie"
 
@@ -15558,13 +15573,9 @@ msgstr "Termín zrušený"
 msgid "Occurrence Schedule"
 msgstr "Rozvrh termínov"
 
-#: src/components/routes/event/Reports/index.tsx:38
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:102
-msgid "Occurrence Summary"
-msgstr "Súhrn termínu"
-
 #: src/components/common/OrderDetails/index.tsx:57
 #: src/components/modals/ManageOrderModal/index.tsx:157
+#: src/components/routes/event/Reports/index.tsx:55
 msgid "Occurrences"
 msgstr "Termíny"
 
@@ -15579,10 +15590,6 @@ msgstr "Nepárne a párne od stredu"
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:66
 msgid "Odd numbers only"
 msgstr "Len nepárne čísla"
-
-#: src/components/common/OrganizerReportTable/index.tsx:371
-msgid "of"
-msgstr "z"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:998
 msgid "of every month"
@@ -15701,7 +15708,7 @@ msgstr "Práve prebieha"
 
 #: src/components/common/EventCard/index.tsx:104
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:140
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:32
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:37
 msgid "On Sale"
 msgstr "V predaji"
 
@@ -15777,10 +15784,6 @@ msgstr "Keď sa predajú prvé lístky, uvidíte, s akým predstihom pred udalos
 msgid "Once you create an event, you'll see it here."
 msgstr "Po vytvorení udalosti ju uvidíte tu."
 
-#: src/components/common/ReportTable/index.tsx:256
-msgid "Once you start collecting data, you'll see it here."
-msgstr "Po začatí zberu dát ich uvidíte tu."
-
 #: src/components/routes/product-widget/OrderSummaryAndProducts/ReportOfflinePayment/index.tsx:53
 msgid "Once you've sent the payment, let the organizer know so they can look out for it. Your order stays unpaid until they confirm it."
 msgstr "Po odoslaní platby dajte vedieť organizátorovi, aby ju mohol sledovať. Vaša objednávka zostane nezaplatená, kým ju nepotvrdí."
@@ -15817,7 +15820,7 @@ msgid "One profile per person, built from every order, ticket, check-in and sign
 msgstr "Jeden profil na osobu, zostavený z každej objednávky, vstupenky, registrácie pri vstupe a prihlásenia."
 
 #: src/components/common/EventStatusBadge/index.tsx:18
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:31
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:36
 msgid "Ongoing"
 msgstr "Prebiehajúce"
 
@@ -16112,6 +16115,10 @@ msgstr "Otvoriť stránku"
 msgid "Open this page in your browser"
 msgstr "Otvorte túto stránku v prehliadači"
 
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:98
+msgid "Open this payment in Stripe"
+msgstr "Otvoriť túto platbu v službe Stripe"
+
 #: src/components/routes/event/Lineup/index.tsx:351
 msgid "Open timetable"
 msgstr "Otvoriť časový rozpis"
@@ -16310,6 +16317,7 @@ msgstr "objednávka"
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:261
 #: src/components/modals/ManageAttendeeModal/index.tsx:159
 #: src/components/routes/my-tickets/index.tsx:70
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:68
 msgid "Order"
 msgstr "Objednávka"
 
@@ -16439,10 +16447,6 @@ msgstr "Objednávka vytvorená, platba čaká"
 msgid "Order questions only. Attendee questions need products."
 msgstr "Iba otázky k objednávke. Otázky k účastníkom vyžadujú produkty."
 
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:59
-msgid "Order Ref"
-msgstr "Ref. objednávky"
-
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:295
 msgid "Order Reference"
 msgstr "Referencia objednávky"
@@ -16518,12 +16522,18 @@ msgstr "objednávky"
 #: src/components/routes/admin/Orders/index.tsx:47
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:62
 #: src/components/routes/event/orders.tsx:198
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:78
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:39
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:55
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:69
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:86
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:121
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:147
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:103
-#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:60
-#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:55
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:69
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:86
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:33
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:47
+#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:32
+#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:44
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:125
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:65
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:36
@@ -16741,10 +16751,6 @@ msgstr "Vlastní iný účet Hi.Events, preto sa naďalej prihlasuje heslom, ký
 msgid "Padding"
 msgstr "Odsadenie"
 
-#: src/components/common/OrganizerReportTable/index.tsx:371
-msgid "Page"
-msgstr "Stránka"
-
 #: src/components/common/SsoButtons/index.tsx:50
 msgid "Page address"
 msgstr "Adresa stránky"
@@ -16766,11 +16772,9 @@ msgid "Page URL"
 msgstr "URL stránky"
 
 #: src/components/common/StatBoxes/index.tsx:103
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:41
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:72
 msgid "Page views"
-msgstr "Zobrazenia stránky"
-
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:113
-msgid "Page Views"
 msgstr "Zobrazenia stránky"
 
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:224
@@ -16879,7 +16883,7 @@ msgstr "Heslá sa nezhodujú"
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:138
 #: src/components/layouts/OrganizerHomepage/index.tsx:162
 #: src/components/routes/event/OccurrencesTab/index.tsx:521
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:30
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:35
 msgid "Past"
 msgstr "Minulé"
 
@@ -17021,8 +17025,8 @@ msgstr "Platba a fakturácia"
 msgid "Payment complete"
 msgstr "Platba dokončená"
 
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:53
-msgid "Payment Date"
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:63
+msgid "Payment date"
 msgstr "Dátum platby"
 
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:116
@@ -17496,17 +17500,16 @@ msgstr "Poplatok platformy"
 msgid "Platform fee of {0} deducted from your payout"
 msgstr "Poplatok platformy {0} odpočítaný z vašej výplaty"
 
+#: src/components/routes/organizer/Reports/index.tsx:53
+msgid "Platform fees"
+msgstr "Poplatky platformy"
+
 #: src/components/routes/event/Settings/index.tsx:104
 #: src/components/routes/event/Settings/Sections/PlatformFeesSettings/index.tsx:44
-#: src/components/routes/organizer/Reports/index.tsx:45
 #: src/components/routes/organizer/Settings/index.tsx:89
 #: src/components/routes/organizer/Settings/Sections/PlatformFeesSettings/index.tsx:38
 msgid "Platform Fees"
 msgstr "Poplatky platformy"
-
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:129
-msgid "Platform Fees Report"
-msgstr "Správa o poplatkoch platformy"
 
 #: src/components/layouts/EventHomepage/Lineup/ProfileEmbed.tsx:66
 msgid "Play on {service}"
@@ -17602,10 +17605,6 @@ msgstr "Vráťte sa na stránku udalosti a začnite odznova."
 #: src/components/routes/product-widget/SelectProducts/index.tsx:757
 msgid "Please select a date and time"
 msgstr "Vyberte dátum a čas"
-
-#: src/components/common/OrganizerReportTable/index.tsx:284
-msgid "Please select a date range"
-msgstr "Vyberte rozsah dátumov"
 
 #: src/components/common/Editor/Controls/InsertImageControl/index.tsx:59
 msgid "Please select an image."
@@ -17770,7 +17769,7 @@ msgstr "Predchádzajúca fotka"
 msgid "Price"
 msgstr "Cena"
 
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:35
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:46
 msgid "Price band"
 msgstr "Cenová kategória"
 
@@ -17894,6 +17893,7 @@ msgstr "Spracovanie objednávky"
 #: src/components/modals/ManageAttendeeModal/index.tsx:237
 #: src/components/modals/OfferWaitlistModal/index.tsx:169
 #: src/components/routes/event/orders.tsx:68
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:25
 msgid "Product"
 msgstr "Produkt"
 
@@ -17925,14 +17925,13 @@ msgstr "Produkt bol úspešne odstránený"
 msgid "Product Price Type"
 msgstr "Typ ceny produktu"
 
-#: src/components/common/StatsCharts/index.tsx:44
-#: src/components/routes/event/Reports/index.tsx:20
-msgid "Product Sales"
+#: src/components/routes/event/Reports/index.tsx:41
+msgid "Product sales"
 msgstr "Predaj produktov"
 
-#: src/components/routes/event/Reports/index.tsx:21
-msgid "Product sales, revenue, and tax breakdown"
-msgstr "Predaj produktov, príjmy a rozklad daní"
+#: src/components/common/StatsCharts/index.tsx:44
+msgid "Product Sales"
+msgstr "Predaj produktov"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:617
 msgid "Product settings cannot be edited for cancelled dates."
@@ -17971,13 +17970,15 @@ msgid "Products"
 msgstr "Produkty"
 
 #: src/components/common/StatBoxes/index.tsx:82
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:40
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:68
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:275
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:70
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:87
 msgid "Products sold"
 msgstr "Predané produkty"
 
 #: src/components/common/StatsCharts/index.tsx:55
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:73
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:68
 msgid "Products Sold"
 msgstr "Predané produkty"
 
@@ -18025,12 +18026,9 @@ msgstr "Promo kód {promo_code} bol uplatnený"
 #: src/components/common/WidgetEditor/ContentFields.tsx:139
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:107
 #: src/components/modals/ManageOrderModal/index.tsx:212
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:44
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1233
 msgid "Promo code"
-msgstr "Promo kód"
-
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:20
-msgid "Promo Code"
 msgstr "Promo kód"
 
 #: src/ee/crm/components/ContactDrawer/ActivityTimeline.tsx:70
@@ -18049,12 +18047,9 @@ msgstr "Stránka promo kódu"
 msgid "Promo code required"
 msgstr "Vyžaduje sa promo kód"
 
-#: src/components/routes/event/Reports/index.tsx:33
-msgid "Promo code usage and discount breakdown"
-msgstr "Použitie promo kódu a rozklad zliav"
-
 #: src/components/layouts/AuthLayout/AuthShell.tsx:17
 #: src/components/modals/DuplicateEventModal/index.tsx:124
+#: src/components/routes/event/Reports/index.tsx:48
 msgid "Promo codes"
 msgstr "Promo kódy"
 
@@ -18066,11 +18061,6 @@ msgstr "Promo kódy"
 #: src/components/common/PromoCodeTable/index.tsx:174
 msgid "Promo codes can be used to offer discounts, presale access, or provide special access to your event."
 msgstr "Promo kódy možno použiť na ponúkanie zliav, predpredajný prístup alebo špeciálny prístup k vašej udalosti."
-
-#: src/components/routes/event/Reports/index.tsx:32
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:95
-msgid "Promo Codes Report"
-msgstr "Správa o promo kódoch"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:474
 msgid "Promo Only"
@@ -18267,7 +18257,6 @@ msgid "Quicker checkout, but every ticket is issued in the buyer's name."
 msgstr "Rýchlejšia pokladňa, ale všetky lístky sa vystavia na meno kupujúceho."
 
 #: src/components/forms/TaxAndFeeForm/index.tsx:73
-#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:43
 msgid "Rate"
 msgstr "Sadzba"
 
@@ -18653,7 +18642,12 @@ msgstr "Vrátiť peniaze, zrušiť s vrátením peňazí a označiť objednávky
 #: src/components/modals/ProductPurchasesModal/index.tsx:61
 #: src/components/modals/ProductPurchasesModal/index.tsx:248
 #: src/components/routes/event/orders.tsx:36
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:38
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:54
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:436
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:65
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:29
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:45
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:84
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:38
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:94
@@ -18664,11 +18658,6 @@ msgstr "Vrátené"
 #: src/components/common/OrdersTable/index.tsx:75
 msgid "Refunded: {0}"
 msgstr "Vrátené: {0}"
-
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:79
-#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:42
-msgid "Refunds"
-msgstr "Vrátenia"
 
 #: src/ee/crm/utilites/suppression.ts:18
 msgid "Refused by the email provider"
@@ -18720,10 +18709,6 @@ msgstr "Uvoľňovať úrovne v poradí"
 #: src/components/layouts/CheckIn/tabs/StatsTab.tsx:94
 msgid "Remaining"
 msgstr "Zostáva"
-
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:82
-msgid "Remaining Uses"
-msgstr "Zostatok použití"
 
 #: src/ee/crm/utilites/labels.ts:270
 msgid "Remind people before an event"
@@ -19002,10 +18987,6 @@ msgstr "Odpovedal(a) STOP na SMS"
 msgid "Reply STOP to opt out."
 msgstr "Odpovedzte STOP na odhlásenie."
 
-#: src/components/routes/organizer/Reports/ReportLayout/index.tsx:27
-msgid "Report not found"
-msgstr "Správa nenájdená"
-
 #: src/ee/crm/components/ContactDrawer/ConsentHistory.tsx:70
 msgid "Reported on \"{campaign}\""
 msgstr "Nahlásil(a) „{campaign}“"
@@ -19018,10 +18999,15 @@ msgstr "Nahlásil(a) kampaň"
 msgid "Reported one of your emails as spam. Campaigns skip them permanently."
 msgstr "Táto osoba nahlásila jeden z vašich e-mailov ako spam. Kampane ju natrvalo preskakujú."
 
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:54
+msgid "Reporting period: {currentLabel}"
+msgstr "Obdobie reportu: {currentLabel}"
+
+#: src/components/common/ReportWorkspace/index.tsx:73
+#: src/components/common/ReportWorkspace/index.tsx:79
 #: src/components/layouts/Event/index.tsx:120
 #: src/components/layouts/OrganizerLayout/index.tsx:119
-#: src/components/routes/event/Reports/index.tsx:54
-#: src/components/routes/organizer/Reports/index.tsx:55
+#: src/components/routes/event/Reports/index.tsx:25
 msgid "Reports"
 msgstr "Reporty"
 
@@ -19330,14 +19316,14 @@ msgstr "Použite znova prepojenie Stripe od iného organizátora na tomto účte
 #: src/components/common/StatsCharts/index.tsx:70
 #: src/components/common/WidgetEditor/WidgetStats.tsx:18
 #: src/components/routes/admin/Attribution/index.tsx:134
+#: src/components/routes/organizer/Reports/index.tsx:24
 #: src/ee/crm/components/routes/AudienceCampaigns/index.tsx:192
 msgid "Revenue"
 msgstr "Príjmy"
 
-#: src/components/routes/organizer/Reports/index.tsx:21
-#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:67
-msgid "Revenue Summary"
-msgstr "Súhrn príjmov"
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:42
+msgid "Revenue will appear here once orders are completed."
+msgstr "Tržby sa tu zobrazia po dokončení objednávok."
 
 #: src/components/common/TeamAccessFields/index.tsx:256
 msgid "Revenue, order totals, reports, payouts and payment settings."
@@ -19554,6 +19540,14 @@ msgstr "Predaj po vrátení peňazí"
 msgid "Sales are paused"
 msgstr "Predaj je pozastavený"
 
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:49
+msgid "Sales before discounts"
+msgstr "Predaj pred zľavami"
+
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:35
+msgid "Sales before tax and fees"
+msgstr "Predaj pred daňou a poplatkami"
+
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:122
 msgid "Sales by licence year"
 msgstr "Predaj podľa licenčného roka"
@@ -19591,17 +19585,29 @@ msgstr "Prehľad predaja pre {0}"
 msgid "Sales totals start at zero"
 msgstr "Súčty predaja začínajú od nuly"
 
-#: src/components/routes/event/Reports/index.tsx:39
-msgid "Sales, attendance, and check-in breakdown per occurrence"
-msgstr "Rozpis predaja, účasti a check-inov podľa termínu"
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:50
+msgid "Sales will appear here once orders are completed."
+msgstr "Predaj sa tu zobrazí po dokončení objednávok."
+
+#: src/components/routes/event/Reports/index.tsx:56
+msgid "Sales, attendance and check-ins for every occurrence of this event."
+msgstr "Predaj, účasť a check-iny pre každý termín tejto udalosti."
 
 #: src/ee/box-office/components/layouts/BoxOffice/OccurrenceSwitchSheet.tsx:41
 msgid "Sales, availability and check-in switch to the date you pick."
 msgstr "Predaj, dostupnosť a check-in sa prepnú na zvolený dátum."
 
-#: src/components/routes/organizer/Reports/index.tsx:28
-msgid "Sales, orders, and performance metrics for all events"
-msgstr "Predaje, objednávky a metriky výkonnosti pre všetky udalosti"
+#: src/components/routes/organizer/Reports/index.tsx:32
+msgid "Sales, orders and page views for every event, across all time."
+msgstr "Predaj, objednávky a zobrazenia stránky pri všetkých udalostiach za celé obdobie."
+
+#: src/components/routes/organizer/Reports/index.tsx:25
+msgid "Sales, refunds, tax and fees from completed orders across all your events, day by day. Days are counted in UTC."
+msgstr "Predaj, vrátenia platieb, dane a poplatky z dokončených objednávok naprieč všetkými vašimi udalosťami, deň po dni. Dni sa počítajú v UTC."
+
+#: src/components/routes/event/Reports/index.tsx:35
+msgid "Sales, tax, fees and refunds from completed orders, day by day. Days are counted in UTC."
+msgstr "Predaj, dane, poplatky a vrátenia platieb z dokončených objednávok, deň po dni. Dni sa počítajú v UTC."
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:480
 msgid "Same as event"
@@ -20251,17 +20257,13 @@ msgid "Seated"
 msgstr "Číslované sedenie"
 
 #: src/components/layouts/Event/index.tsx:138
+#: src/components/routes/event/Reports/index.tsx:62
 #: src/ee/seating/components/routes/event/Seating/AttachSeatMap.tsx:40
 #: src/ee/seating/components/routes/event/Seating/index.tsx:62
 #: src/ee/seating/components/routes/event/Seating/index.tsx:67
 #: src/ee/seating/components/routes/event/Seating/index.tsx:82
 msgid "Seating"
 msgstr "Sedenie"
-
-#: src/components/routes/event/Reports/index.tsx:44
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:77
-msgid "Seating Sales"
-msgstr "Predaj sedadiel"
 
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:130
 msgid "Seating settings"
@@ -20270,6 +20272,10 @@ msgstr "Nastavenia sedenia"
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:72
 msgid "Seats"
 msgstr "Sedadlá"
+
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:71
+msgid "Seats as they are now"
+msgstr "Sedadlá v aktuálnom stave"
 
 #: src/ee/box-office/components/layouts/BoxOffice/BoxOfficeSeatMap.tsx:224
 msgid "Seats cannot be chosen until the latest availability loads."
@@ -20435,14 +20441,10 @@ msgstr "Vybrať všetko"
 msgid "Select all on {0}"
 msgstr "Vybrať všetko — {0}"
 
-#: src/components/common/TanStackTable/index.tsx:225
+#: src/components/common/TanStackTable/index.tsx:227
 #: src/ee/crm/components/routes/AudienceContacts/ContactStack.tsx:76
 msgid "Select all rows on this page"
 msgstr "Vybrať všetky riadky na tejto stránke"
-
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:119
-msgid "Select an event"
-msgstr "Vybrať udalosť"
 
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:59
 msgid "Select and move"
@@ -20529,11 +20531,6 @@ msgstr "Vybrať lístok"
 #: src/components/modals/SendMessageModal/index.tsx:413
 msgid "Select tickets"
 msgstr "Vybrať lístky"
-
-#: src/components/common/OrganizerReportTable/index.tsx:332
-#: src/components/common/ReportTable/index.tsx:282
-msgid "Select time period"
-msgstr "Vybrať časové obdobie"
 
 #: src/components/forms/OrganizerForm/index.tsx:61
 #: src/components/modals/CreateOrganizerModal/index.tsx:60
@@ -20909,6 +20906,14 @@ msgstr "September"
 msgid "Service fee"
 msgstr "Servisný poplatok"
 
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:37
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:29
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:43
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:68
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:32
+msgid "Service fees"
+msgstr "Servisné poplatky"
+
 #: src/components/layouts/CheckIn/index.tsx:116
 msgid "Session cancelled"
 msgstr "Termín zrušený"
@@ -21202,6 +21207,11 @@ msgstr "Zobrazovať poznámky o účastníkoch neprihlásenému personálu"
 msgid "Show available product quantity"
 msgstr "Zobraziť dostupné množstvo produktu"
 
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:66
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:58
+msgid "Show days with no sales"
+msgstr "Zobraziť dni bez predaja"
+
 #: src/ee/crm/components/ContactDrawer/ActivityTimeline.tsx:136
 msgid "Show earlier activity"
 msgstr "Zobraziť staršiu aktivitu"
@@ -21312,10 +21322,6 @@ msgstr "Zobraziť túto otázku"
 msgid "Show tickets"
 msgstr "Zobraziť lístky"
 
-#: src/components/common/OrganizerReportTable/index.tsx:370
-msgid "Showing {0} of {totalRows} records"
-msgstr "Zobrazuje sa {0} z {totalRows} záznamov"
-
 #: src/components/common/TableCard/index.tsx:24
 #: src/components/routes/event/OccurrencesTab/index.tsx:650
 msgid "Showing {0}–{1} of {2}"
@@ -21325,6 +21331,10 @@ msgstr "Zobrazuje sa {0}–{1} z {2}"
 #: src/components/layouts/CheckIn/OccurrenceFilterPill.tsx:135
 msgid "Showing {MAX_VISIBLE} of {totalAvailable} dates. Type to search."
 msgstr "Zobrazuje sa {MAX_VISIBLE} z {totalAvailable} termínov. Píšte pre vyhľadávanie."
+
+#: src/components/common/ReportView/index.tsx:226
+msgid "Showing {shown} of {total} rows"
+msgstr "Zobrazených {shown} z {total} riadkov"
 
 #: src/components/routes/organizer/People/index.tsx:70
 msgid "Showing on a public event page"
@@ -21755,7 +21765,8 @@ msgstr "Dočasné odrazy"
 #: src/components/modals/ManageOccurrenceModal/index.tsx:193
 #: src/components/modals/ProductPurchasesModal/index.tsx:82
 #: src/components/modals/ProductPurchasesModal/index.tsx:208
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:50
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:49
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:76
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:150
 msgid "Sold"
 msgstr "Predané"
@@ -21791,7 +21802,7 @@ msgstr "Vypredané"
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:128
 #: src/components/layouts/EventHomepage/index.tsx:133
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:221
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:22
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:34
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:317
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:386
 msgid "Sold Out"
@@ -22235,6 +22246,8 @@ msgid "Start check-in"
 msgstr "Spustiť check-in"
 
 #: src/components/modals/CreateEventModal/index.tsx:387
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:35
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:55
 msgid "Start date"
 msgstr "Dátum začiatku"
 
@@ -22378,9 +22391,9 @@ msgstr "Štatistiky"
 #: src/components/routes/admin/Messages/index.tsx:229
 #: src/components/routes/admin/Messages/index.tsx:304
 #: src/components/routes/event/OccurrencesTab/index.tsx:354
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:51
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:88
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:62
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:61
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:45
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:60
 #: src/components/routes/settings/Billing/index.tsx:117
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:141
 #: src/ee/crm/components/routes/AudienceCampaigns/index.tsx:146
@@ -22544,8 +22557,8 @@ msgstr "Stripe nie je v tejto inštalácii nakonfigurovaný, čítačky kariet p
 msgid "Stripe Not Connected"
 msgstr "Stripe nie je pripojený"
 
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:104
-msgid "Stripe Payment ID"
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:90
+msgid "Stripe payment ID"
 msgstr "ID platby Stripe"
 
 #: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:50
@@ -22998,14 +23011,27 @@ msgstr "Cielené na účastníkov z {0} vybraných termínov."
 #: src/components/common/AdminOrdersTable/index.tsx:70
 #: src/components/common/OrdersTable/index.tsx:234
 #: src/components/forms/TaxAndFeeForm/index.tsx:21
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:89
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:36
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:53
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:71
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:28
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:42
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:67
+#: src/components/routes/organizer/Reports/index.tsx:38
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:31
+#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:28
 #: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:91
 msgid "Tax"
 msgstr "Daň"
 
-#: src/components/routes/organizer/Reports/index.tsx:34
-msgid "Tax collected grouped by tax type and event"
-msgstr "Vybraná daň zoskupená podľa typu dane a udalosti"
+#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:31
+#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:43
+msgid "Tax collected"
+msgstr "Vybraná daň"
+
+#: src/components/routes/organizer/Reports/index.tsx:39
+msgid "Tax collected on completed orders, by tax and event."
+msgstr "Daň vybraná pri dokončených objednávkach podľa dane a udalosti."
 
 #: src/components/modals/CreateTaxOrFeeModal/index.tsx:36
 msgid "Tax created"
@@ -23023,14 +23049,9 @@ msgstr "Podrobnosti dane"
 msgid "Tax information to appear at the bottom of all invoices (e.g., VAT number, tax registration)"
 msgstr "Daňové informácie na spodku všetkých faktúr (napr. číslo DPH, daňová registrácia)"
 
-#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:38
-msgid "Tax Name"
-msgstr "Názov dane"
-
-#: src/components/routes/organizer/Reports/index.tsx:33
-#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:62
-msgid "Tax Summary"
-msgstr "Súhrn daní"
+#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:29
+msgid "Tax rate"
+msgstr "Sadzba dane"
 
 #: src/components/modals/EditTaxOrFeeModal/index.tsx:28
 msgid "Tax updated"
@@ -23038,7 +23059,6 @@ msgstr "Daň aktualizovaná"
 
 #: src/components/common/InlineOrderSummary/index.tsx:195
 #: src/components/forms/ProductForm/index.tsx:494
-#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:48
 #: src/components/routes/settings/TaxesAndFees/index.tsx:123
 msgid "Taxes"
 msgstr "Dane"
@@ -23866,6 +23886,10 @@ msgstr "Tieto údaje nahradia doterajšie miesto pri dotknutých termínoch a zo
 msgid "These events are not available"
 msgstr "Tieto udalosti nie sú dostupné"
 
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:139
+msgid "These figures are a guide. Your Stripe dashboard has the complete payment history, and a tax adviser can confirm what to use in your accounts."
+msgstr "Tieto údaje sú orientačné. Úplnú históriu platieb nájdete na svojom Stripe dashboarde a daňový poradca vám potvrdí, čo použiť vo svojom účtovníctve."
+
 #: src/ee/crm/components/ImportContactsModal/index.tsx:167
 msgid "These people opted in to marketing emails from us"
 msgstr "Títo ľudia súhlasili s našimi marketingovými e-mailmi"
@@ -24503,9 +24527,9 @@ msgstr "Týmto sa z Publika odstránia ich poznámky, štítky a história. Ich 
 msgid "This replaces \"{otherFormName}\", which is shown there now."
 msgstr "Nahradí formulár \"{otherFormName}\", ktorý sa tam teraz zobrazuje."
 
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:113
-msgid "This report is for informational purposes only. Always consult with a tax professional before using this data for accounting or tax purposes. Please cross-reference with your Stripe dashboard as Hi.Events may be missing historical data."
-msgstr "Táto správa slúži iba na informačné účely. Pred použitím týchto dát na účtovné alebo daňové účely vždy konzultujte s daňovým poradcom. Skontrolujte si aj Stripe dashboard, pretože Hi.Events môže mať chýbajúce historické dáta."
+#: src/components/common/ReportView/index.tsx:366
+msgid "This report spans several pages, so totals and sorting are turned off. Export the CSV to work with every row."
+msgstr "Tento report zahŕňa niekoľko strán, preto sú súčty a zoraďovanie vypnuté. Exportujte CSV a pracujte so všetkými riadkami."
 
 #: src/components/routes/auth/ResetPassword/index.tsx:28
 msgid "This reset password link is invalid or expired."
@@ -24971,11 +24995,9 @@ msgstr "Časy v {timezoneAbbr}"
 
 #: src/components/common/PromoCodeTable/index.tsx:83
 #: src/components/common/PromoCodeTable/index.tsx:84
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:46
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:66
 msgid "Times used"
-msgstr "Počet použití"
-
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:25
-msgid "Times Used"
 msgstr "Počet použití"
 
 #: src/utilites/lineup.ts:24
@@ -25046,6 +25068,7 @@ msgstr "Aby sme ľudí chránili pred spamom, povoľujeme kampane každému úč
 
 #: src/components/common/OccurrenceSelect/index.tsx:151
 #: src/components/common/PeriodSelector/index.tsx:30
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:13
 #: src/components/layouts/CheckIn/OccurrenceFilterPill.tsx:119
 #: src/components/routes/event/OccurrencesTab/GroupedOccurrenceTable/index.tsx:43
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:127
@@ -25102,6 +25125,7 @@ msgstr "celkom"
 #: src/components/common/AdminOrdersTable/index.tsx:62
 #: src/components/common/InlineOrderSummary/index.tsx:225
 #: src/components/common/OrderSummary/index.tsx:104
+#: src/components/common/ReportView/index.tsx:151
 #: src/components/layouts/CheckIn/tabs/StatsTab.tsx:99
 #: src/components/modals/ManageOrderModal/index.tsx:123
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:359
@@ -25110,42 +25134,22 @@ msgstr "celkom"
 msgid "Total"
 msgstr "Celkom"
 
-#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:35
-msgid "Total Attendees"
-msgstr "Celkový počet účastníkov"
-
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:52
-msgid "Total Before Discounts"
-msgstr "Celkovo pred zľavami"
-
-#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:49
-msgid "Total Collected"
-msgstr "Celkovo vybrané"
-
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:58
-msgid "Total Discount Amount"
-msgstr "Celková suma zľavy"
-
 #: src/components/common/WaitlistStats/index.tsx:11
 msgid "Total Entries"
 msgstr "Celkový počet záznamov"
 
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:93
-msgid "Total Fee"
-msgstr "Celkový poplatok"
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:87
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:122
+msgid "Total fee"
+msgstr "Poplatok celkom"
 
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:304
 msgid "Total fees"
 msgstr "Poplatky spolu"
 
 #: src/components/common/StatsCharts/index.tsx:82
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:97
 msgid "Total Fees"
 msgstr "Celkové poplatky"
-
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:46
-msgid "Total Gross Sales"
-msgstr "Celkový hrubý predaj"
 
 #: src/components/common/OrderDetails/index.tsx:83
 msgid "Total order amount"
@@ -25173,7 +25177,6 @@ msgid "Total tax"
 msgstr "Daň spolu"
 
 #: src/components/common/StatsCharts/index.tsx:84
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:91
 msgid "Total Tax"
 msgstr "Celková daň"
 
@@ -25228,8 +25231,7 @@ msgstr "Skúste iný výraz alebo iný filter"
 msgid "Try adjusting your filters to see more dates."
 msgstr "Upravte filtre, aby ste videli viac termínov."
 
-#: src/components/common/OrganizerReportTable/index.tsx:277
-#: src/components/common/ReportTable/index.tsx:242
+#: src/components/common/ReportView/index.tsx:247
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1121
 #: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:54
 #: src/components/routes/settings/ApiKeys/index.tsx:189
@@ -25631,9 +25633,10 @@ msgstr "Späť"
 msgid "Unique buyers: {0}"
 msgstr "Jedineční kupujúci: {0}"
 
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:30
-msgid "Unique Customers"
-msgstr "Jedinečných zákazníkov"
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:47
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:71
+msgid "Unique customers"
+msgstr "Jedineční zákazníci"
 
 #: src/ee/crm/utilites/smsCountries.ts:8
 msgid "United Kingdom"
@@ -25644,6 +25647,15 @@ msgstr "Spojené kráľovstvo"
 #: src/ee/crm/utilites/smsCountries.ts:7
 msgid "United States"
 msgstr "Spojené štáty"
+
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:26
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:40
+msgid "Units sold"
+msgstr "Predané kusy"
+
+#: src/components/routes/event/Reports/index.tsx:42
+msgid "Units sold and revenue from completed orders for each ticket and product."
+msgstr "Predané kusy a tržby z dokončených objednávok pri každom lístku a produkte."
 
 #: src/components/common/MessageList/index.tsx:44
 #: src/components/common/MessageList/index.tsx:49
@@ -25677,8 +25689,7 @@ msgstr "Neznáme zariadenie"
 #: src/components/routes/event/OccurrencesTab/CalendarView/index.tsx:171
 #: src/components/routes/event/OccurrencesTab/PriceOverrideForm/index.tsx:319
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1125
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:78
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:84
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:38
 msgid "Unlimited"
 msgstr "Neobmedzené"
 
@@ -25843,7 +25854,7 @@ msgstr "Až 40 fotiek, aspoň 400 × 300px. Prvá sa zobrazí najväčšia."
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:137
 #: src/components/layouts/OrganizerHomepage/index.tsx:153
 #: src/components/routes/event/OccurrencesTab/index.tsx:520
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:33
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:38
 msgid "Upcoming"
 msgstr "Nadchádzajúce"
 
@@ -25979,9 +25990,9 @@ msgstr "URL adresa musí začínať http:// alebo https://"
 msgid "Usage counts start at zero"
 msgstr "Počítadlá použitia začínajú od nuly"
 
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:76
-msgid "Usage Limit"
-msgstr "Limit použitia"
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:54
+msgid "Usage limit"
+msgstr "Limit použití"
 
 #: src/components/layouts/CheckIn/tabs/ScanTab.tsx:80
 msgid "USB"
@@ -26138,6 +26149,10 @@ msgstr "Používatelia"
 msgid "Users ({0})"
 msgstr "Používatelia ({0})"
 
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:55
+msgid "Uses left"
+msgstr "Zostávajúce použitia"
+
 #: src/components/common/WidgetEditor/AppearancePanel.tsx:69
 msgid "Uses the colours and font from your homepage design, and updates when you change them."
 msgstr "Používa farby a písmo z dizajnu vašej domovskej stránky a aktualizuje sa, keď ich zmeníte."
@@ -26217,12 +26232,13 @@ msgstr "Overenie čísla DPH zlyhalo"
 msgid "VAT number validation failed. Please check your VAT number."
 msgstr "Overenie čísla DPH zlyhalo. Skontrolujte číslo DPH."
 
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:87
-msgid "VAT on Fee"
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:86
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:121
+msgid "VAT on fee"
 msgstr "DPH z poplatku"
 
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:81
-msgid "VAT Rate"
+msgid "VAT rate"
 msgstr "Sadzba DPH"
 
 #: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:172
@@ -26405,10 +26421,6 @@ msgstr "Zobraziť všetky správy odoslané naprieč platformou"
 #: src/components/layouts/OrganizerHomepage/OrganizerPastEventsSection.tsx:30
 msgid "View all past events"
 msgstr "Zobraziť všetky minulé udalosti"
-
-#: src/components/routes/organizer/Reports/index.tsx:54
-msgid "View and download reports across all your events. Only completed orders are included."
-msgstr "Zobraziť a stiahnuť správy naprieč všetkými udalosťami. Zahrnuté sú iba dokončené objednávky."
 
 #: src/components/common/AttendeeList/index.tsx:85
 msgid "View Answers"
@@ -27740,9 +27752,8 @@ msgstr "X (Twitter)"
 msgid "year"
 msgstr "rok"
 
-#: src/components/common/OrganizerReportTable/index.tsx:62
 #: src/components/common/PeriodSelector/index.tsx:38
-#: src/components/common/ReportTable/index.tsx:57
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:19
 msgid "Year to date"
 msgstr "Od začiatku roka"
 

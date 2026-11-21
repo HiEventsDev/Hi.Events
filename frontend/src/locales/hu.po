@@ -129,6 +129,10 @@ msgstr "{0, plural, one {# sor a fájlban} other {# sor a fájlban}}"
 msgid "{0, plural, one {# row skipped} other {# rows skipped}}"
 msgstr "{0, plural, one {# sor kihagyva} other {# sor kihagyva}}"
 
+#: src/components/common/ReportView/index.tsx:231
+msgid "{0, plural, one {# row} other {# rows}}"
+msgstr "{0, plural, one {# sor} other {# sor}}"
+
 #: src/ee/crm/components/routes/AudienceSegments/index.tsx:169
 msgid "{0, plural, one {# rule} other {# rules}}"
 msgstr "{0, plural, one {# szabály} other {# szabály}}"
@@ -963,6 +967,10 @@ msgstr "{totalLabel} e-mailből már {sentLabel} kiment. A többit nem küldjük
 msgid "{sentLabel} of {totalLabel} texts have already gone out. The rest won't be sent, and this can't be undone."
 msgstr "{totalLabel} SMS-ből már {sentLabel} kiment. A többit nem küldjük el, és ez nem vonható vissza."
 
+#: src/components/common/ReportView/index.tsx:229
+msgid "{shown} of {total} rows"
+msgstr "{shown} / {total} sor"
+
 #: src/ee/crm/components/routes/AudienceContacts/useBulkContactActions.tsx:82
 msgid "{skipped, plural, one {The other contact had already unsubscribed or marked an email as spam.} other {The other # had already unsubscribed or marked an email as spam.}}"
 msgstr "{skipped, plural, one {A másik kapcsolat már korábban leiratkozott, vagy spamként jelölt meg egy e-mailt.} other {A másik # kapcsolat már korábban leiratkozott, vagy spamként jelölt meg egy e-mailt.}}"
@@ -1075,6 +1083,14 @@ msgstr "{unlistedEvents, plural, one {és további # esemény} other {és továb
 #: src/components/routes/event/Lineup/LineupStats.tsx:23
 msgid "{unscheduled} without a time"
 msgstr "{unscheduled} időpont nélkül"
+
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:49
+msgid "{used} (no limit)"
+msgstr "{used} (korlátlan)"
+
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:49
+msgid "{used} of {capacity}"
+msgstr "{used} / {capacity}"
 
 #: src/ee/crm/utilites/labels.ts:302
 msgid "{wait} after a checkout is abandoned · {audience}"
@@ -1859,7 +1875,7 @@ msgstr "Aktiválás dátuma"
 #: src/components/modals/ProductPurchasesModal/index.tsx:246
 #: src/components/routes/event/attendees.tsx:29
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:217
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:20
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:32
 #: src/components/routes/organizer/Payments/CapabilityList.tsx:57
 #: src/components/routes/settings/Billing/index.tsx:45
 #: src/components/routes/settings/Team/MemberRow.tsx:28
@@ -2080,6 +2096,10 @@ msgstr "Időpontok hozzáadása"
 msgid "Add dates and times for your recurring event"
 msgstr "Adja meg ismétlődő eseményének időpontjait"
 
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:82
+msgid "Add dates to this event's schedule to see them here."
+msgstr "Adjon időpontokat az esemény menetrendjéhez, hogy itt megjelenjenek."
+
 #: src/components/forms/QuestionForm/index.tsx:136
 msgid "Add description"
 msgstr "Leírás hozzáadása"
@@ -2238,6 +2258,10 @@ msgstr "Adja hozzá ezt a TXT rekordot a DNS-szolgáltatójánál, majd ellenőr
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:97
 msgid "Add tickets"
 msgstr "Jegyek hozzáadása"
+
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:38
+msgid "Add tickets or products to this event to see their sales here."
+msgstr "Adjon jegyeket vagy termékeket az eseményhez, hogy itt megjelenjen az értékesítésük."
 
 #: src/components/forms/ProductForm/index.tsx:380
 msgid "Add tier"
@@ -2480,6 +2504,12 @@ msgstr "után"
 msgid "After an event ends, thank everyone who had a ticket."
 msgstr "Az esemény vége után köszönetet mond mindenkinek, akinek volt jegye."
 
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:66
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:30
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:46
+msgid "After refunds"
+msgstr "Visszatérítések után"
+
 #: src/components/routes/welcome/index.tsx:419
 msgid "After your event is created, you can choose how often it repeats from the dashboard."
 msgstr "Az esemény létrehozása után az irányítópulton választhatja ki, milyen gyakran ismétlődjön."
@@ -2540,7 +2570,7 @@ msgstr "Összes"
 msgid "All Archived Events"
 msgstr "Összes archivált esemény"
 
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:41
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:43
 msgid "All areas"
 msgstr "Minden terület"
 
@@ -2573,8 +2603,8 @@ msgstr "Minden módosítás mentve"
 msgid "All contacts"
 msgstr "Összes kapcsolat"
 
-#: src/components/common/OrganizerReportTable/index.tsx:306
-msgid "All Currencies"
+#: src/components/routes/organizer/Reports/OrganizerReport.tsx:77
+msgid "All currencies"
 msgstr "Minden pénznem"
 
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:77
@@ -2611,12 +2641,9 @@ msgstr "Összes befejezett esemény"
 
 #: src/components/common/WidgetEditor/ContentFields.tsx:180
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:128
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:128
 msgid "All events"
 msgstr "Minden esemény"
-
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:33
-msgid "All Events"
-msgstr "Összes esemény"
 
 #: src/components/routes/admin/FailedJobs/index.tsx:94
 msgid "All failed jobs deleted"
@@ -2639,7 +2666,7 @@ msgstr "Minden egyező időpont"
 msgid "All occurrences"
 msgstr "Minden időpont"
 
-#: src/components/common/ReportTable/index.tsx:275
+#: src/components/routes/event/Reports/EventReport.tsx:89
 msgid "All Occurrences"
 msgstr "Minden időpont"
 
@@ -2679,6 +2706,8 @@ msgid "All tickets"
 msgstr "Minden jegy"
 
 #: src/components/routes/admin/Attribution/index.tsx:82
+#: src/components/routes/event/Reports/EventReport.tsx:66
+#: src/components/routes/organizer/Reports/OrganizerReport.tsx:84
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:66
 msgid "All time"
 msgstr "Teljes időszak"
@@ -2861,8 +2890,9 @@ msgstr "Fizetendő összeg"
 msgid "Amount off"
 msgstr "Kedvezmény összege"
 
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:69
-msgid "Amount Paid"
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:77
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:119
+msgid "Amount paid"
 msgstr "Fizetett összeg"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:304
@@ -3419,7 +3449,7 @@ msgstr "Biztosan törölni szeretné ezt a bejelentkezési listát?"
 msgid "Are you VAT registered in the EU?"
 msgstr "ÁFA regisztrált az EU-ban?"
 
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:40
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:47
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:441
 msgid "Area"
 msgstr "Terület"
@@ -3574,10 +3604,6 @@ msgstr "Ülésterv csatolása"
 msgid "Attempts"
 msgstr "Próbálkozások"
 
-#: src/components/routes/organizer/Reports/index.tsx:40
-msgid "Attendance and check-in rates across all events"
-msgstr "Részvétel és bejelentkezési arányok minden eseményen"
-
 #: src/components/routes/event/EventDashboard/NextOccurrenceHero/index.tsx:194
 msgid "attendee"
 msgstr "résztvevő"
@@ -3675,12 +3701,19 @@ msgstr "résztvevő"
 #: src/components/routes/admin/Messages/index.tsx:248
 #: src/components/routes/event/attendees.tsx:206
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:61
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:61
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:65
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:84
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:122
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:148
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:282
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:38
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:53
 msgid "Attendees"
 msgstr "Résztvevők"
+
+#: src/components/routes/organizer/Reports/index.tsx:47
+msgid "Attendees and check-ins for every event, across all time."
+msgstr "Résztvevők és beléptetések minden eseményhez, a teljes időszakra."
 
 #: src/components/layouts/CheckIn/tabs/StatsTab.tsx:72
 msgid "attendees checked in"
@@ -3952,10 +3985,6 @@ msgstr "Vissza az üzenetekhez"
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:246
 msgid "Back to QR code"
 msgstr "Vissza a QR-kódhoz"
-
-#: src/components/routes/organizer/Reports/ReportLayout/index.tsx:44
-msgid "Back to Reports"
-msgstr "Vissza a jelentésekhez"
 
 #: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:118
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:241
@@ -4840,7 +4869,7 @@ msgstr "A törlés törli az összes ehhez a rendeléshez tartozó résztvevőt,
 #: src/components/routes/event/attendees.tsx:30
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:219
 #: src/components/routes/event/orders.tsx:31
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:21
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:33
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:121
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:433
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:116
@@ -4867,7 +4896,8 @@ msgstr "{0} időpont lemondása folyamatban. Ez eltarthat egy ideig."
 #: src/components/routes/event/OccurrencesTab/BookingSummary/index.tsx:63
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:512
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1122
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:45
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:48
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:75
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:86
 msgid "Capacity"
 msgstr "Kapacitás"
@@ -4900,13 +4930,13 @@ msgstr "A kapacitásnak legalább 0-nak kell lennie"
 msgid "capacity updates"
 msgstr "kapacitásfrissítések"
 
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:66
-msgid "Capacity Used"
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:67
+msgid "Capacity used"
 msgstr "Felhasznált kapacitás"
 
-#: src/components/routes/event/Reports/index.tsx:45
-msgid "Capacity, sold, held and free seats per price band and area, with revenue per band"
-msgstr "Kapacitás, eladott, visszatartott és szabad székek árkategóriánként és területenként, árkategóriánkénti bevétellel"
+#: src/components/routes/event/Reports/index.tsx:63
+msgid "Capacity, sold, held and free seats for each price band and area, with revenue per band."
+msgstr "Kapacitás, eladott, foglalt és szabad székek minden árkategóriához és területhez, kategóriánkénti bevétellel."
 
 #: src/ee/box-office/components/layouts/BoxOffice/TenderStage.tsx:173
 #: src/ee/box-office/utilites/boxOfficeTender.ts:9
@@ -5182,7 +5212,7 @@ msgstr "Nézze meg ezt az eseményt!"
 msgid "Check up to 50 addresses at a time."
 msgstr "Egyszerre legfeljebb 50 cím ellenőrizhető."
 
-#: src/components/common/ReportTable/index.tsx:239
+#: src/components/common/ReportView/index.tsx:244
 #: src/components/routes/settings/TaxesAndFees/index.tsx:85
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:84
 msgid "Check your connection and try again."
@@ -5273,12 +5303,9 @@ msgid "Check-in list not found"
 msgstr "Bejelentkezési lista nem található"
 
 #: src/components/modals/DuplicateEventModal/index.tsx:137
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:41
 msgid "Check-in lists"
 msgstr "Beléptetési listák"
-
-#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:51
-msgid "Check-in Lists"
-msgstr "Bejelentkezési listák"
 
 #: src/components/layouts/Event/index.tsx:151
 #: src/components/routes/event/CheckInLists/index.tsx:38
@@ -5293,9 +5320,10 @@ msgstr "Beléptetési navigáció"
 msgid "Check-in progress"
 msgstr "Beléptetés állása"
 
-#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:45
-msgid "Check-in Rate"
-msgstr "Bejelentkezési arány"
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:40
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:55
+msgid "Check-in rate"
+msgstr "Beléptetési arány"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:254
 msgid "Check-in staff are told the order is unpaid and can mark it as paid at the door. When this is off, guests from unpaid orders can't be checked in."
@@ -5307,16 +5335,12 @@ msgstr "A beléptető személyzet látja, hogy a rendelés kifizetetlen, és a b
 msgid "Check-In Status"
 msgstr "Bejelentkezési állapot"
 
-#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:58
-#: src/components/routes/organizer/Reports/index.tsx:39
-msgid "Check-in Summary"
-msgstr "Bejelentkezési összefoglaló"
-
 #: src/components/common/CheckInListList/index.tsx:162
 #: src/components/common/CheckInListTable/index.tsx:33
 msgid "Check-In URL copied to clipboard"
 msgstr "Bejelentkezési URL a vágólapra másolva"
 
+#: src/components/routes/organizer/Reports/index.tsx:46
 #: src/ee/crm/components/ContactDrawer/index.tsx:177
 #: src/ee/crm/components/routes/AudienceContacts/ContactsTable.tsx:63
 #: src/ee/crm/components/routes/AudienceContacts/ContactsTable.tsx:143
@@ -5344,6 +5368,10 @@ msgstr "Ellenőrizve: {checked}, {confidence}%-os bizonyossággal."
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:111
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:151
 #: src/components/layouts/CheckIn/tabs/StatsTab.tsx:89
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:66
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:85
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:39
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:54
 #: src/ee/crm/components/EventDashboardAudience/index.tsx:23
 #: src/ee/crm/utilites/labels.ts:95
 msgid "Checked in"
@@ -5351,8 +5379,6 @@ msgstr "Beléptetve"
 
 #: src/components/common/AttendeeTable/index.tsx:272
 #: src/components/common/CheckInStatusModal/index.tsx:116
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:95
-#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:40
 msgid "Checked In"
 msgstr "Bejelentkezve"
 
@@ -6046,10 +6072,6 @@ msgstr "Állítsd be az életciklus-levelezőt a teszt e-mailek küldéséhez"
 msgid "Configure which products are available for this date, and optionally adjust prices or per-date quantities."
 msgstr "Állítsa be, mely termékek érhetők el ezen a dátumon, és igény szerint módosítsa az árakat vagy a dátumonkénti mennyiségeket."
 
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:35
-msgid "Configured Discount"
-msgstr "Konfigurált kedvezmény"
-
 #: src/ee/crm/components/routes/AudienceCampaign/SendModal.tsx:228
 #: src/utilites/confirmationDialog.tsx:19
 #: src/utilites/confirmationDialog.tsx:56
@@ -6737,12 +6759,15 @@ msgstr "Nem sikerült frissíteni: {name}"
 msgid "Could not upload {fileName}"
 msgstr "Nem sikerült feltölteni: {fileName}"
 
+#: src/components/common/ReportView/index.tsx:215
+msgid "Couldn't export this report. Try again."
+msgstr "A jelentést nem sikerült exportálni. Próbálja újra."
+
 #: src/components/routes/settings/ApiReference/index.tsx:77
 msgid "Couldn't load the API reference."
 msgstr "Nem sikerült betölteni az API-referenciát."
 
-#: src/components/common/OrganizerReportTable/index.tsx:275
-#: src/components/common/ReportTable/index.tsx:237
+#: src/components/common/ReportView/index.tsx:242
 msgid "Couldn't load this report"
 msgstr "Nem sikerült betölteni ezt a jelentést"
 
@@ -6883,6 +6908,10 @@ msgstr "Termék létrehozása"
 msgid "Create a Promo Code"
 msgstr "Promóciós kód létrehozása"
 
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:64
+msgid "Create a promo code to see how it performs here."
+msgstr "Hozzon létre promóciós kódot, hogy itt lássa a teljesítményét."
+
 #: src/ee/seating/components/routes/event/Seating/AttachSeatMap.tsx:55
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:64
 msgid "Create a seat map"
@@ -6923,6 +6952,14 @@ msgstr "Partner létrehozása"
 #: src/components/routes/admin/Announcements/index.tsx:245
 msgid "Create an announcement to show a message to your users."
 msgstr "Hozzon létre egy közleményt, hogy üzenetet jelenítsen meg felhasználóinak."
+
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:82
+msgid "Create an event to see how it performs here."
+msgstr "Hozzon létre eseményt, hogy itt lássa a teljesítményét."
+
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:51
+msgid "Create an event to see its check-ins here."
+msgstr "Hozzon létre eseményt, hogy itt lássa a beléptetéseit."
 
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:255
 msgid "Create and change events, orders, attendees and more."
@@ -7187,7 +7224,6 @@ msgstr "CTA"
 msgid "CTA label is required"
 msgstr "CTA címke kötelező"
 
-#: src/components/common/OrganizerReportTable/index.tsx:321
 #: src/components/forms/OrganizerForm/index.tsx:51
 #: src/components/modals/CreateEventModal/index.tsx:437
 #: src/components/modals/CreateEventModal/index.tsx:438
@@ -7195,9 +7231,10 @@ msgstr "CTA címke kötelező"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:186
 #: src/components/routes/admin/Dashboard/index.tsx:200
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:145
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:51
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:99
-#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:33
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:63
+#: src/components/routes/organizer/Reports/OrganizerReport.tsx:110
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:76
+#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:30
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:153
 #: src/components/routes/settings/Account/index.tsx:83
 #: src/ee/crm/components/SegmentBuilder/index.tsx:198
@@ -7245,6 +7282,10 @@ msgstr "Egyéni színek"
 msgid "Custom date and time"
 msgstr "Egyéni dátum és idő"
 
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:77
+msgid "Custom date range"
+msgstr "Egyéni időszak"
+
 #: src/ee/crm/components/routes/AudienceContacts/index.tsx:211
 msgid "Custom filter"
 msgstr "Egyéni szűrő"
@@ -7265,8 +7306,10 @@ msgstr "Egyedi rendelési és jegy e-mailek ehhez az eseményhez"
 msgid "Custom questions"
 msgstr "Egyedi kérdések"
 
-#: src/components/common/OrganizerReportTable/index.tsx:64
-#: src/components/common/ReportTable/index.tsx:59
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:21
+msgid "Custom range"
+msgstr "Egyéni tartomány"
+
 #: src/components/routes/admin/Attribution/index.tsx:83
 msgid "Custom Range"
 msgstr "Egyedi tartomány"
@@ -7293,10 +7336,6 @@ msgstr "Ügyféllink vágólapra másolva"
 #: src/components/modals/RefundOrderModal/index.tsx:134
 msgid "Customer will receive an email confirming the refund"
 msgstr "A vásárló e-mailt kap a visszatérítés megerősítéséről"
-
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:108
-msgid "Customers"
-msgstr "Vásárlók"
 
 #: src/components/common/WidgetEditor/index.tsx:281
 msgid "Customise"
@@ -7343,17 +7382,9 @@ msgstr "Cseh"
 msgid "Daily"
 msgstr "Naponta"
 
-#: src/components/routes/organizer/Reports/index.tsx:22
-msgid "Daily revenue, taxes, fees, and refunds across all events"
-msgstr "Napi bevétel, adók, díjak és visszatérítések az összes eseményen"
-
-#: src/components/routes/event/Reports/index.tsx:26
-msgid "Daily Sales Report"
-msgstr "Napi értékesítési jelentés"
-
-#: src/components/routes/event/Reports/index.tsx:27
-msgid "Daily sales, tax, and fee breakdown"
-msgstr "Napi értékesítési, adó- és díj bontás."
+#: src/components/routes/event/Reports/index.tsx:34
+msgid "Daily sales"
+msgstr "Napi értékesítés"
 
 #: src/constants/eventCategories.ts:13
 msgid "Dance"
@@ -7414,9 +7445,9 @@ msgstr "Irányítópult"
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:117
 #: src/components/forms/QuestionForm/questionTypes.ts:29
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:175
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:39
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:56
-#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:24
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:33
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:55
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:27
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:105
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:275
 #: src/ee/box-office/components/layouts/BoxOffice/OccurrenceSwitchSheet.tsx:47
@@ -8152,6 +8183,7 @@ msgid "Discord"
 msgstr "Discord"
 
 #: src/components/common/PromoCodeTable/index.tsx:76
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:48
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:62
 #: src/ee/box-office/components/layouts/BoxOffice/CartPanel.tsx:119
 msgid "Discount"
@@ -8168,6 +8200,11 @@ msgstr "Kedvezmény {0}-ban"
 #: src/components/forms/PromoCodeForm/index.tsx:91
 msgid "Discount Type"
 msgstr "Kedvezmény típusa"
+
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:50
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:67
+msgid "Discounts given"
+msgstr "Adott kedvezmények"
 
 #: src/components/common/Callout/index.tsx:62
 msgid "Dismiss"
@@ -8286,10 +8323,6 @@ msgstr ".ics letöltése"
 msgid "Download a template with your current lineup"
 msgstr "Sablon letöltése a jelenlegi line-uppal"
 
-#: src/components/common/DownloadCsvButton/index.tsx:48
-msgid "Download CSV"
-msgstr "CSV letöltése"
-
 #: src/hooks/useOrderActions.tsx:151
 msgid "Download invoice"
 msgstr "Számla letöltése"
@@ -8305,10 +8338,6 @@ msgstr "PNG letöltése"
 #: src/components/modals/ShareModal/index.tsx:228
 msgid "Download QR Code"
 msgstr "QR kód letöltése"
-
-#: src/components/routes/event/Reports/index.tsx:53
-msgid "Download sales, attendee, and financial reports for all completed orders."
-msgstr "Értékesítési, résztvevői és pénzügyi jelentések letöltése minden befejezett rendeléshez."
 
 #: src/components/routes/event/Lineup/index.tsx:145
 msgid "Download spreadsheet (.xlsx)"
@@ -9496,10 +9525,11 @@ msgstr "Csak páros számok"
 #: src/components/routes/admin/SpamEvents/index.tsx:139
 #: src/components/routes/admin/SpamEvents/index.tsx:316
 #: src/components/routes/events/Dashboard/index.tsx:188
-#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:19
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:41
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:43
-#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:23
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:32
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:52
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:60
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:127
+#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:27
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:252
 #: src/ee/crm/components/routes/AudienceCampaign/index.tsx:528
 msgid "Event"
@@ -9552,7 +9582,6 @@ msgstr "Esemény vezérlőpult"
 
 #: src/components/routes/event/TicketDesigner/index.tsx:165
 #: src/components/routes/my-tickets/index.tsx:79
-#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:29
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:375
 msgid "Event Date"
 msgstr "Esemény dátuma"
@@ -9702,6 +9731,8 @@ msgstr "Esemény frissítve"
 #: src/components/routes/admin/Events/index.tsx:80
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:236
 #: src/components/routes/organizer/Events/index.tsx:46
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:84
+#: src/components/routes/organizer/Reports/index.tsx:31
 #: src/ee/crm/components/ContactDrawer/index.tsx:175
 #: src/ee/crm/components/routes/AudienceContacts/ContactsTable.tsx:61
 #: src/ee/crm/components/routes/AudienceContacts/ContactsTable.tsx:141
@@ -9716,11 +9747,6 @@ msgstr "Az események mindig láthatók"
 #: src/ee/crm/components/routes/AudienceOverview/index.tsx:46
 msgid "Events per person"
 msgstr "Események személyenként"
-
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:120
-#: src/components/routes/organizer/Reports/index.tsx:27
-msgid "Events Performance"
-msgstr "Események teljesítménye"
 
 #: src/components/common/WidgetEditor/index.tsx:189
 msgid "Events Widget"
@@ -9984,7 +10010,8 @@ msgstr "Exportálás"
 msgid "Export answers"
 msgstr "Válaszok exportálása"
 
-#: src/components/common/OrganizerReportTable/index.tsx:362
+#: src/components/common/ReportView/index.tsx:297
+#: src/components/common/ReportView/index.tsx:303
 msgid "Export CSV"
 msgstr "CSV exportálása"
 
@@ -9999,10 +10026,6 @@ msgstr "Vásárlások exportálása"
 #: src/mutations/useExportAnswers.ts:17
 msgid "Export started. Preparing file..."
 msgstr "Exportálás elindítva. Fájl előkészítése..."
-
-#: src/components/common/OrganizerReportTable/index.tsx:200
-msgid "Export successful"
-msgstr "Exportálás sikeres"
 
 #: src/ee/crm/components/routes/AudienceContacts/ContactsHeaderActions.tsx:58
 msgid "Export this list"
@@ -10205,10 +10228,6 @@ msgstr "Megrendelések exportálása sikertelen"
 #: src/components/routes/event/products.tsx:58
 msgid "Failed to export purchases. Please try again."
 msgstr "A vásárlások exportálása nem sikerült. Kérjük, próbálja újra."
-
-#: src/components/common/OrganizerReportTable/index.tsx:202
-msgid "Failed to export report. Please try again."
-msgstr "A jelentés exportálása sikertelen. Kérjük, próbálja újra."
 
 #: src/ee/box-office/components/modals/EditBoxOfficeModal/index.tsx:84
 msgid "Failed to load box office"
@@ -10472,7 +10491,6 @@ msgstr "Díj frissítve"
 #: src/components/common/InlineOrderSummary/index.tsx:164
 #: src/components/common/OrdersTable/index.tsx:234
 #: src/components/forms/ProductForm/index.tsx:497
-#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:54
 #: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:88
 #: src/components/routes/settings/TaxesAndFees/index.tsx:126
 msgid "Fees"
@@ -10525,10 +10543,6 @@ msgstr "Résztvevők szűrése"
 #: src/components/layouts/CheckIn/OccurrenceFilterPill.tsx:82
 msgid "Filter by date"
 msgstr "Szűrés időpont szerint"
-
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:118
-msgid "Filter by Event"
-msgstr "Szűrés esemény szerint"
 
 #: src/components/routes/settings/Team/index.tsx:196
 msgid "Filter by role"
@@ -10723,9 +10737,9 @@ msgstr "Az első szék száma"
 msgid "First seen"
 msgstr "Első megjelenés"
 
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:64
-msgid "First Used"
-msgstr "Először használva"
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:52
+msgid "First used"
+msgstr "Első használat"
 
 #: src/ee/crm/utilites/labels.ts:24
 msgid "First-timers"
@@ -10907,7 +10921,8 @@ msgstr "Előcsarnok"
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:37
 #: src/ee/box-office/components/layouts/BoxOffice/ProductTile.tsx:54
 #: src/ee/box-office/utilites/boxOfficeTender.ts:15
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:65
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:52
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:77
 #: src/ee/seating/components/SeatPicker/ticketOptions.ts:105
 #: src/utilites/eventListingLabels.ts:20
 msgid "Free"
@@ -11302,24 +11317,36 @@ msgstr "Bruttó"
 msgid "Gross revenue"
 msgstr "Bruttó bevétel"
 
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:73
-msgid "Gross Revenue"
-msgstr "Bruttó bevétel"
-
 #: src/components/common/StatBoxes/index.tsx:96
 #: src/components/modals/ProductPurchasesModal/index.tsx:211
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:34
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:52
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:70
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:87
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:27
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:41
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:51
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:68
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:119
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:268
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:64
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:85
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:28
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:44
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:55
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:78
 msgid "Gross sales"
 msgstr "Bruttó értékesítés"
 
 #: src/components/common/StatsCharts/index.tsx:83
 #: src/components/modals/ManageOccurrenceModal/index.tsx:188
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:83
-#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:30
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:70
 msgid "Gross Sales"
 msgstr "Bruttó értékesítés"
+
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:60
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:52
+msgid "Gross sales per day"
+msgstr "Bruttó értékesítés naponta"
 
 #: src/components/routes/event/Lineup/RunSheetPrint.tsx:85
 msgid "Group by stage or room"
@@ -11417,7 +11444,7 @@ msgstr "Fő fellépők"
 msgid "Height"
 msgstr "Magasság"
 
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:60
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:51
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:152
 msgid "Held back"
 msgstr "Visszatartva"
@@ -11478,17 +11505,18 @@ msgstr "Ezt a dátumot követően visszakerül a Hi.Events arculat. Addig folyta
 msgid "Hi.Events Cloud"
 msgstr "Hi.Events Cloud"
 
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:75
-msgid "Hi.Events Fee"
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:78
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:120
+msgid "Hi.Events fee"
 msgstr "Hi.Events díj"
 
 #: src/components/routes/oauth/Connect/index.tsx:110
 msgid "Hi.Events hasn't verified this app. Only continue if you started connecting it yourself and you trust it."
 msgstr "A Hi.Events nem ellenőrizte ezt az alkalmazást. Csak akkor folytassa, ha Ön indította a csatlakoztatást, és megbízik benne."
 
-#: src/components/routes/organizer/Reports/index.tsx:46
-msgid "Hi.Events platform fees and VAT breakdown by transaction"
-msgstr "Hi.Events platform díjak és ÁFA bontás tranzakciónként"
+#: src/components/routes/organizer/Reports/index.tsx:54
+msgid "Hi.Events platform fees and the VAT charged on them, payment by payment."
+msgstr "A Hi.Events platformdíjak és az azokra felszámított ÁFA, fizetésenként."
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:137
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:474
@@ -11795,6 +11823,10 @@ msgstr "Hány?"
 msgid "How often"
 msgstr "Milyen gyakran"
 
+#: src/components/routes/event/Reports/index.tsx:49
+msgid "How often each promo code was used on completed orders, and the discount it gave."
+msgstr "Hányszor használták az egyes promóciós kódokat teljesített megrendeléseken, és mekkora kedvezményt adtak."
+
 #: src/components/routes/product-widget/Payment/PaymentMethods/Offline/index.tsx:7
 msgid "How paying later works"
 msgstr "Így működik a későbbi fizetés"
@@ -12009,10 +12041,6 @@ msgstr "Line-up és program importálása"
 msgid "Import suppressions"
 msgstr "Letiltások importálása"
 
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:112
-msgid "Important Notice"
-msgstr "Fontos megjegyzés"
-
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:100
 msgid "Important: Changing your email address will update the link to access this order. You will be redirected to the new order link after saving."
 msgstr "Fontos: Az e-mail cím módosítása frissíti a rendeléshez való hozzáférés linkjét. Mentés után átirányítjuk az új rendelési linkre."
@@ -12037,7 +12065,7 @@ msgstr "Importálva innen: {file}, megerősített hozzájárulással"
 msgid "Imported, with consent confirmed"
 msgstr "Importálva, megerősített hozzájárulással"
 
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:55
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:50
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:151
 msgid "In a basket"
 msgstr "Kosárban"
@@ -12634,7 +12662,7 @@ msgstr "Kóser"
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:177
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:458
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1043
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:45
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:58
 #: src/ee/box-office/components/modals/AddTerminalReaderModal/index.tsx:46
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:97
 #: src/ee/seating/components/SeatMapDesigner/newElements.ts:129
@@ -12676,55 +12704,42 @@ msgstr "A nagy fájlokat a háttérben importáljuk. Ezt az ablakot bezárhatja:
 msgid "Last"
 msgstr "Utolsó"
 
-#: src/components/common/OrganizerReportTable/index.tsx:63
-#: src/components/common/ReportTable/index.tsx:58
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:20
 msgid "Last 12 months"
 msgstr "Utolsó 12 hónap"
 
-#: src/components/common/OrganizerReportTable/index.tsx:58
-#: src/components/common/ReportTable/index.tsx:53
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:15
 msgid "Last 14 days"
 msgstr "Utolsó 14 nap"
 
-#: src/components/common/OrganizerReportTable/index.tsx:55
-#: src/components/common/ReportTable/index.tsx:50
 #: src/components/routes/admin/Attribution/index.tsx:78
 #: src/components/routes/admin/Dashboard/index.tsx:38
 #: src/components/routes/admin/EmailDelivery/index.tsx:15
 msgid "Last 24 hours"
 msgstr "Utolsó 24 óra"
 
-#: src/components/common/OrganizerReportTable/index.tsx:59
 #: src/components/common/PeriodSelector/index.tsx:34
-#: src/components/common/ReportTable/index.tsx:54
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:16
 #: src/components/routes/admin/Attribution/index.tsx:80
 #: src/components/routes/admin/Dashboard/index.tsx:40
 #: src/components/routes/admin/EmailDelivery/index.tsx:17
 msgid "Last 30 days"
 msgstr "Utolsó 30 nap"
 
-#: src/components/common/OrganizerReportTable/index.tsx:56
-#: src/components/common/ReportTable/index.tsx:51
-msgid "Last 48 hours"
-msgstr "Utolsó 48 óra"
-
-#: src/components/common/OrganizerReportTable/index.tsx:61
-#: src/components/common/ReportTable/index.tsx:56
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:18
 msgid "Last 6 months"
 msgstr "Utolsó 6 hónap"
 
-#: src/components/common/OrganizerReportTable/index.tsx:57
 #: src/components/common/PeriodSelector/index.tsx:32
-#: src/components/common/ReportTable/index.tsx:52
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:14
 #: src/components/routes/admin/Attribution/index.tsx:79
 #: src/components/routes/admin/Dashboard/index.tsx:39
 #: src/components/routes/admin/EmailDelivery/index.tsx:16
 msgid "Last 7 days"
 msgstr "Utolsó 7 nap"
 
-#: src/components/common/OrganizerReportTable/index.tsx:60
 #: src/components/common/PeriodSelector/index.tsx:36
-#: src/components/common/ReportTable/index.tsx:55
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:17
 #: src/components/routes/admin/Attribution/index.tsx:81
 msgid "Last 90 days"
 msgstr "Utolsó 90 nap"
@@ -12800,14 +12815,11 @@ msgid "Last Triggered"
 msgstr "Utoljára aktiválva"
 
 #: src/components/common/SsoButtons/index.tsx:126
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:53
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:73
 #: src/components/routes/settings/ApiKeys/index.tsx:176
 msgid "Last used"
 msgstr "Legutóbb használt"
-
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:70
-msgid "Last Used"
-msgstr "Utoljára használva"
 
 #: src/components/routes/settings/Security/index.tsx:41
 #: src/components/routes/settings/Security/SignInMethods.tsx:205
@@ -13082,6 +13094,10 @@ msgstr "Link másolva"
 msgid "Link Expired or Invalid"
 msgstr "A link lejárt vagy érvénytelen"
 
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:73
+msgid "Link price bands to tickets to see seat sales here."
+msgstr "Kapcsolja az árkategóriákat jegyekhez, hogy itt lássa a székértékesítést."
+
 #: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:155
 msgid "Link text"
 msgstr "Link szövege"
@@ -13211,7 +13227,6 @@ msgstr "Webhook naplók betöltése..."
 msgid "Loading Webhooks"
 msgstr "Webhookok betöltése"
 
-#: src/components/common/OrganizerReportTable/index.tsx:269
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:93
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:94
 msgid "Loading..."
@@ -13804,6 +13819,10 @@ msgstr "Hét"
 msgid "Monday"
 msgstr "Hétfő"
 
+#: src/components/common/ReportView/index.tsx:360
+msgid "Money totals are hidden because these rows are in more than one currency. Choose a currency to see totals."
+msgstr "Az összegek rejtve vannak, mert ezek a sorok több pénznemben vannak. Válasszon pénznemet az összegek megtekintéséhez."
+
 #: src/components/routes/admin/FailedJobs/index.tsx:179
 msgid "Monitor and manage failed background jobs"
 msgstr "Sikertelen háttérfeladatok figyelése és kezelése"
@@ -14115,11 +14134,6 @@ msgstr "Email oszlop szükséges. A nem kötelező Reason oszlop értékei: unsu
 #: src/components/modals/DuplicateEventModal/index.tsx:299
 msgid "Needs products"
 msgstr "Termékek szükségesek"
-
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:85
-#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:36
-msgid "Net Revenue"
-msgstr "Nettó bevétel"
 
 #: src/ee/crm/utilites/labels.ts:133
 msgid "never"
@@ -14580,18 +14594,6 @@ msgstr "Még nincsenek kapcsolatok. Megjelennek itt, amint valaki foglal."
 msgid "No countries found"
 msgstr "Nem található ország"
 
-#: src/components/common/ReportTable/index.tsx:323
-msgid "No data available"
-msgstr "Nincs adat"
-
-#: src/components/common/OrganizerReportTable/index.tsx:287
-msgid "No data found for the selected filters. Try adjusting the date range or currency."
-msgstr "Nincs adat a kiválasztott szűrőkhöz. Próbálja meg módosítani a dátumtartományt vagy a pénznemet."
-
-#: src/components/common/ReportTable/index.tsx:322
-msgid "No data to show. Please select a date range"
-msgstr "Nincs megjeleníthető adat. Kérjük, válasszon dátumtartományt."
-
 #: src/components/common/EventCard/index.tsx:241
 #: src/components/common/EventCard/index.tsx:339
 msgid "No date added"
@@ -14888,6 +14890,10 @@ msgstr "Nincs fotó"
 msgid "No PIN"
 msgstr "Nincs PIN"
 
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:117
+msgid "No platform fees were charged in this period."
+msgstr "Ebben az időszakban nem számítottak fel platformdíjat."
+
 #: src/components/common/ProductSelector/index.tsx:35
 msgid "No products available for selection"
 msgstr "Nincsenek kiválasztható termékek"
@@ -14980,6 +14986,11 @@ msgstr "Nincs értékesítés"
 msgid "No sales in this period"
 msgstr "Nincs eladás ebben az időszakban"
 
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:67
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:59
+msgid "No sales or refunds in this period."
+msgstr "Ebben az időszakban nem volt értékesítés vagy visszatérítés."
+
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/OrdersTab.tsx:65
 msgid "No sales yet from this box office"
 msgstr "Még nincs eladás ebben a pénztárban"
@@ -15057,6 +15068,10 @@ msgstr "Még nincsenek címkék. Írjon be egy nevet egy új létrehozásához."
 #: src/ee/crm/components/ContactDrawer/Tags.tsx:31
 msgid "No tags."
 msgstr "Nincsenek címkék."
+
+#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:41
+msgid "No tax was collected on completed orders in this period."
+msgstr "Ebben az időszakban nem szedtek be adót teljesített megrendeléseken."
 
 #: src/components/routes/settings/TaxesAndFees/index.tsx:106
 msgid "No taxes or fees yet"
@@ -15475,7 +15490,7 @@ msgstr "Még nincs mit nyomtatni"
 msgid "Nothing to sell here yet. Add products to this box office."
 msgstr "Még nincs mit eladni. Adj termékeket ehhez a pénztárhoz."
 
-#: src/components/common/ReportTable/index.tsx:251
+#: src/components/common/ReportView/index.tsx:256
 msgid "Nothing to show yet"
 msgstr "Még nincs mit mutatni"
 
@@ -15558,13 +15573,9 @@ msgstr "Időpont lemondva"
 msgid "Occurrence Schedule"
 msgstr "Időpontok ütemterve"
 
-#: src/components/routes/event/Reports/index.tsx:38
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:102
-msgid "Occurrence Summary"
-msgstr "Időpont összegzése"
-
 #: src/components/common/OrderDetails/index.tsx:57
 #: src/components/modals/ManageOrderModal/index.tsx:157
+#: src/components/routes/event/Reports/index.tsx:55
 msgid "Occurrences"
 msgstr "Időpontok"
 
@@ -15579,10 +15590,6 @@ msgstr "Páratlan és páros a középtől"
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:66
 msgid "Odd numbers only"
 msgstr "Csak páratlan számok"
-
-#: src/components/common/OrganizerReportTable/index.tsx:371
-msgid "of"
-msgstr "/"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:998
 msgid "of every month"
@@ -15701,7 +15708,7 @@ msgstr "Most zajlik"
 
 #: src/components/common/EventCard/index.tsx:104
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:140
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:32
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:37
 msgid "On Sale"
 msgstr "Eladó"
 
@@ -15777,10 +15784,6 @@ msgstr "Amint elkelnek az első jegyek, itt láthatja, mennyivel az esemény el�
 msgid "Once you create an event, you'll see it here."
 msgstr "Miután létrehozott egy eseményt, itt fogja látni."
 
-#: src/components/common/ReportTable/index.tsx:256
-msgid "Once you start collecting data, you'll see it here."
-msgstr "Miután elkezd gyűjteni adatokat, itt fogja látni."
-
 #: src/components/routes/product-widget/OrderSummaryAndProducts/ReportOfflinePayment/index.tsx:53
 msgid "Once you've sent the payment, let the organizer know so they can look out for it. Your order stays unpaid until they confirm it."
 msgstr "Miután elküldted a fizetést, jelezd a szervezőnek, hogy figyelhesse. A rendelésed kifizetetlen marad, amíg meg nem erősíti."
@@ -15817,7 +15820,7 @@ msgid "One profile per person, built from every order, ticket, check-in and sign
 msgstr "Egy profil személyenként, minden rendelésből, jegyből, belépésből és feliratkozásból."
 
 #: src/components/common/EventStatusBadge/index.tsx:18
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:31
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:36
 msgid "Ongoing"
 msgstr "Folyamatban"
 
@@ -16112,6 +16115,10 @@ msgstr "Oldal megnyitása"
 msgid "Open this page in your browser"
 msgstr "Nyissa meg ezt az oldalt a böngészőjében"
 
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:98
+msgid "Open this payment in Stripe"
+msgstr "Fizetés megnyitása a Stripe-ban"
+
 #: src/components/routes/event/Lineup/index.tsx:351
 msgid "Open timetable"
 msgstr "Időbeosztás megnyitása"
@@ -16310,6 +16317,7 @@ msgstr "megrendelés"
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:261
 #: src/components/modals/ManageAttendeeModal/index.tsx:159
 #: src/components/routes/my-tickets/index.tsx:70
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:68
 msgid "Order"
 msgstr "Megrendelés"
 
@@ -16439,10 +16447,6 @@ msgstr "Rendelés leadva, fizetés függőben"
 msgid "Order questions only. Attendee questions need products."
 msgstr "Csak rendelési kérdések. A résztvevői kérdésekhez termékek kellenek."
 
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:59
-msgid "Order Ref"
-msgstr "Rendelés hiv."
-
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:295
 msgid "Order Reference"
 msgstr "Rendelésszám"
@@ -16518,12 +16522,18 @@ msgstr "megrendelés"
 #: src/components/routes/admin/Orders/index.tsx:47
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:62
 #: src/components/routes/event/orders.tsx:198
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:78
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:39
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:55
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:69
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:86
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:121
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:147
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:103
-#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:60
-#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:55
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:69
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:86
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:33
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:47
+#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:32
+#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:44
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:125
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:65
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:36
@@ -16741,10 +16751,6 @@ msgstr "Egy másik Hi.Events-fiók tulajdonosa, ezért továbbra is jelszóval j
 msgid "Padding"
 msgstr "Kitöltés"
 
-#: src/components/common/OrganizerReportTable/index.tsx:371
-msgid "Page"
-msgstr "Oldal"
-
 #: src/components/common/SsoButtons/index.tsx:50
 msgid "Page address"
 msgstr "Az oldal címe"
@@ -16766,12 +16772,10 @@ msgid "Page URL"
 msgstr "Oldal URL-címe"
 
 #: src/components/common/StatBoxes/index.tsx:103
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:41
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:72
 msgid "Page views"
 msgstr "Oldalmegtekintések"
-
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:113
-msgid "Page Views"
-msgstr "Oldal megtekintések"
 
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:224
 msgid "Pages: {pageCount}"
@@ -16879,7 +16883,7 @@ msgstr "A jelszavak nem egyeznek."
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:138
 #: src/components/layouts/OrganizerHomepage/index.tsx:162
 #: src/components/routes/event/OccurrencesTab/index.tsx:521
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:30
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:35
 msgid "Past"
 msgstr "Múlt"
 
@@ -17021,8 +17025,8 @@ msgstr "Fizetés és számlázás"
 msgid "Payment complete"
 msgstr "Fizetés teljesítve"
 
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:53
-msgid "Payment Date"
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:63
+msgid "Payment date"
 msgstr "Fizetés dátuma"
 
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:116
@@ -17496,17 +17500,16 @@ msgstr "Platformdíj"
 msgid "Platform fee of {0} deducted from your payout"
 msgstr "{0} platformdíj levonva a kifizetésből"
 
+#: src/components/routes/organizer/Reports/index.tsx:53
+msgid "Platform fees"
+msgstr "Platformdíjak"
+
 #: src/components/routes/event/Settings/index.tsx:104
 #: src/components/routes/event/Settings/Sections/PlatformFeesSettings/index.tsx:44
-#: src/components/routes/organizer/Reports/index.tsx:45
 #: src/components/routes/organizer/Settings/index.tsx:89
 #: src/components/routes/organizer/Settings/Sections/PlatformFeesSettings/index.tsx:38
 msgid "Platform Fees"
 msgstr "Platform díjak"
-
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:129
-msgid "Platform Fees Report"
-msgstr "Platform díjak jelentés"
 
 #: src/components/layouts/EventHomepage/Lineup/ProfileEmbed.tsx:66
 msgid "Play on {service}"
@@ -17602,10 +17605,6 @@ msgstr "Kérjük, térjen vissza az esemény oldalára az újrakezdéshez."
 #: src/components/routes/product-widget/SelectProducts/index.tsx:757
 msgid "Please select a date and time"
 msgstr "Válasszon dátumot és időpontot"
-
-#: src/components/common/OrganizerReportTable/index.tsx:284
-msgid "Please select a date range"
-msgstr "Kérjük, válasszon dátumtartományt"
 
 #: src/components/common/Editor/Controls/InsertImageControl/index.tsx:59
 msgid "Please select an image."
@@ -17770,7 +17769,7 @@ msgstr "Előző fotó"
 msgid "Price"
 msgstr "Ár"
 
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:35
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:46
 msgid "Price band"
 msgstr "Árkategória"
 
@@ -17894,6 +17893,7 @@ msgstr "Rendelés feldolgozása"
 #: src/components/modals/ManageAttendeeModal/index.tsx:237
 #: src/components/modals/OfferWaitlistModal/index.tsx:169
 #: src/components/routes/event/orders.tsx:68
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:25
 msgid "Product"
 msgstr "Termék"
 
@@ -17925,14 +17925,13 @@ msgstr "Termék sikeresen törölve"
 msgid "Product Price Type"
 msgstr "Termék ár típusa"
 
+#: src/components/routes/event/Reports/index.tsx:41
+msgid "Product sales"
+msgstr "Termékértékesítés"
+
 #: src/components/common/StatsCharts/index.tsx:44
-#: src/components/routes/event/Reports/index.tsx:20
 msgid "Product Sales"
 msgstr "Termék értékesítés"
-
-#: src/components/routes/event/Reports/index.tsx:21
-msgid "Product sales, revenue, and tax breakdown"
-msgstr "Termék értékesítés, bevétel és adó bontás"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:617
 msgid "Product settings cannot be edited for cancelled dates."
@@ -17971,13 +17970,15 @@ msgid "Products"
 msgstr "Termékek"
 
 #: src/components/common/StatBoxes/index.tsx:82
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:40
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:68
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:275
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:70
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:87
 msgid "Products sold"
 msgstr "Eladott termékek"
 
 #: src/components/common/StatsCharts/index.tsx:55
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:73
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:68
 msgid "Products Sold"
 msgstr "Eladott termékek"
 
@@ -18025,12 +18026,9 @@ msgstr "Promóciós kód {promo_code} alkalmazva"
 #: src/components/common/WidgetEditor/ContentFields.tsx:139
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:107
 #: src/components/modals/ManageOrderModal/index.tsx:212
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:44
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1233
 msgid "Promo code"
-msgstr "Promóciós kód"
-
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:20
-msgid "Promo Code"
 msgstr "Promóciós kód"
 
 #: src/ee/crm/components/ContactDrawer/ActivityTimeline.tsx:70
@@ -18049,12 +18047,9 @@ msgstr "Promóciós kód oldal"
 msgid "Promo code required"
 msgstr "Promóciós kód szükséges"
 
-#: src/components/routes/event/Reports/index.tsx:33
-msgid "Promo code usage and discount breakdown"
-msgstr "Promóciós kód felhasználás és kedvezmény bontás"
-
 #: src/components/layouts/AuthLayout/AuthShell.tsx:17
 #: src/components/modals/DuplicateEventModal/index.tsx:124
+#: src/components/routes/event/Reports/index.tsx:48
 msgid "Promo codes"
 msgstr "Promóciós kódok"
 
@@ -18066,11 +18061,6 @@ msgstr "Promóciós kódok"
 #: src/components/common/PromoCodeTable/index.tsx:174
 msgid "Promo codes can be used to offer discounts, presale access, or provide special access to your event."
 msgstr "A promóciós kódok kedvezmények, előzetes hozzáférés vagy különleges hozzáférés biztosítására használhatók az eseményéhez."
-
-#: src/components/routes/event/Reports/index.tsx:32
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:95
-msgid "Promo Codes Report"
-msgstr "Promóciós kódok jelentés"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:474
 msgid "Promo Only"
@@ -18267,7 +18257,6 @@ msgid "Quicker checkout, but every ticket is issued in the buyer's name."
 msgstr "Gyorsabb fizetés, de minden jegy a vásárló nevére szól."
 
 #: src/components/forms/TaxAndFeeForm/index.tsx:73
-#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:43
 msgid "Rate"
 msgstr "Arány"
 
@@ -18653,7 +18642,12 @@ msgstr "Visszatérítés, lemondás visszatérítéssel és rendelések fizetett
 #: src/components/modals/ProductPurchasesModal/index.tsx:61
 #: src/components/modals/ProductPurchasesModal/index.tsx:248
 #: src/components/routes/event/orders.tsx:36
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:38
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:54
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:436
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:65
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:29
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:45
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:84
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:38
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:94
@@ -18664,11 +18658,6 @@ msgstr "Visszatérítve"
 #: src/components/common/OrdersTable/index.tsx:75
 msgid "Refunded: {0}"
 msgstr "Visszatérítve: {0}"
-
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:79
-#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:42
-msgid "Refunds"
-msgstr "Visszatérítések"
 
 #: src/ee/crm/utilites/suppression.ts:18
 msgid "Refused by the email provider"
@@ -18720,10 +18709,6 @@ msgstr "Szintek sorrendben történő megnyitása"
 #: src/components/layouts/CheckIn/tabs/StatsTab.tsx:94
 msgid "Remaining"
 msgstr "Hátralévő"
-
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:82
-msgid "Remaining Uses"
-msgstr "Fennmaradó felhasználások"
 
 #: src/ee/crm/utilites/labels.ts:270
 msgid "Remind people before an event"
@@ -19002,10 +18987,6 @@ msgstr "STOP üzenettel válaszolt egy SMS-re"
 msgid "Reply STOP to opt out."
 msgstr "Válaszoljon STOP üzenettel a leiratkozáshoz."
 
-#: src/components/routes/organizer/Reports/ReportLayout/index.tsx:27
-msgid "Report not found"
-msgstr "Jelentés nem található"
-
 #: src/ee/crm/components/ContactDrawer/ConsentHistory.tsx:70
 msgid "Reported on \"{campaign}\""
 msgstr "Bejelentette: „{campaign}”"
@@ -19018,10 +18999,15 @@ msgstr "Bejelentett egy kampányt"
 msgid "Reported one of your emails as spam. Campaigns skip them permanently."
 msgstr "Spamként jelentette az egyik e-mailjét. A kampányok véglegesen kihagyják."
 
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:54
+msgid "Reporting period: {currentLabel}"
+msgstr "Jelentési időszak: {currentLabel}"
+
+#: src/components/common/ReportWorkspace/index.tsx:73
+#: src/components/common/ReportWorkspace/index.tsx:79
 #: src/components/layouts/Event/index.tsx:120
 #: src/components/layouts/OrganizerLayout/index.tsx:119
-#: src/components/routes/event/Reports/index.tsx:54
-#: src/components/routes/organizer/Reports/index.tsx:55
+#: src/components/routes/event/Reports/index.tsx:25
 msgid "Reports"
 msgstr "Jelentések"
 
@@ -19330,14 +19316,14 @@ msgstr "Használjon újra egy Stripe-kapcsolatot a fiók egy másik szervezőjé
 #: src/components/common/StatsCharts/index.tsx:70
 #: src/components/common/WidgetEditor/WidgetStats.tsx:18
 #: src/components/routes/admin/Attribution/index.tsx:134
+#: src/components/routes/organizer/Reports/index.tsx:24
 #: src/ee/crm/components/routes/AudienceCampaigns/index.tsx:192
 msgid "Revenue"
 msgstr "Bevétel"
 
-#: src/components/routes/organizer/Reports/index.tsx:21
-#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:67
-msgid "Revenue Summary"
-msgstr "Bevételi összefoglaló"
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:42
+msgid "Revenue will appear here once orders are completed."
+msgstr "A bevétel itt jelenik meg, amint megrendelések teljesülnek."
 
 #: src/components/common/TeamAccessFields/index.tsx:256
 msgid "Revenue, order totals, reports, payouts and payment settings."
@@ -19554,6 +19540,14 @@ msgstr "Értékesítés visszatérítések után"
 msgid "Sales are paused"
 msgstr "Értékesítés szüneteltetve"
 
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:49
+msgid "Sales before discounts"
+msgstr "Értékesítés kedvezmények előtt"
+
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:35
+msgid "Sales before tax and fees"
+msgstr "Értékesítés adó és díjak előtt"
+
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:122
 msgid "Sales by licence year"
 msgstr "Értékesítés licencévenként"
@@ -19591,17 +19585,29 @@ msgstr "Eladási összesítő: {0}"
 msgid "Sales totals start at zero"
 msgstr "Az eladási összesítők nulláról indulnak"
 
-#: src/components/routes/event/Reports/index.tsx:39
-msgid "Sales, attendance, and check-in breakdown per occurrence"
-msgstr "Értékesítés, látogatottság és beléptetés időpontonkénti bontásban"
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:50
+msgid "Sales will appear here once orders are completed."
+msgstr "Az értékesítés itt jelenik meg, amint megrendelések teljesülnek."
+
+#: src/components/routes/event/Reports/index.tsx:56
+msgid "Sales, attendance and check-ins for every occurrence of this event."
+msgstr "Értékesítés, részvétel és beléptetések az esemény minden időpontjára."
 
 #: src/ee/box-office/components/layouts/BoxOffice/OccurrenceSwitchSheet.tsx:41
 msgid "Sales, availability and check-in switch to the date you pick."
 msgstr "Az eladás, a készlet és a beléptetés a kiválasztott dátumra vált."
 
-#: src/components/routes/organizer/Reports/index.tsx:28
-msgid "Sales, orders, and performance metrics for all events"
-msgstr "Értékesítések, rendelések és teljesítménymutatók minden eseményhez"
+#: src/components/routes/organizer/Reports/index.tsx:32
+msgid "Sales, orders and page views for every event, across all time."
+msgstr "Értékesítés, megrendelések és oldalmegtekintések minden eseményhez, a teljes időszakra."
+
+#: src/components/routes/organizer/Reports/index.tsx:25
+msgid "Sales, refunds, tax and fees from completed orders across all your events, day by day. Days are counted in UTC."
+msgstr "Értékesítés, visszatérítések, adó és díjak a teljesített megrendelésekből az összes eseményén, naponta. A napokat UTC szerint számítjuk."
+
+#: src/components/routes/event/Reports/index.tsx:35
+msgid "Sales, tax, fees and refunds from completed orders, day by day. Days are counted in UTC."
+msgstr "Értékesítés, adó, díjak és visszatérítések a teljesített megrendelésekből, naponta. A napokat UTC szerint számítjuk."
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:480
 msgid "Same as event"
@@ -20251,17 +20257,13 @@ msgid "Seated"
 msgstr "Helyfoglalásos"
 
 #: src/components/layouts/Event/index.tsx:138
+#: src/components/routes/event/Reports/index.tsx:62
 #: src/ee/seating/components/routes/event/Seating/AttachSeatMap.tsx:40
 #: src/ee/seating/components/routes/event/Seating/index.tsx:62
 #: src/ee/seating/components/routes/event/Seating/index.tsx:67
 #: src/ee/seating/components/routes/event/Seating/index.tsx:82
 msgid "Seating"
 msgstr "Ülőhelyek"
-
-#: src/components/routes/event/Reports/index.tsx:44
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:77
-msgid "Seating Sales"
-msgstr "Ülőhely-értékesítés"
 
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:130
 msgid "Seating settings"
@@ -20270,6 +20272,10 @@ msgstr "Ülőhely-beállítások"
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:72
 msgid "Seats"
 msgstr "Székek"
+
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:71
+msgid "Seats as they are now"
+msgstr "Székek jelenlegi állapotban"
 
 #: src/ee/box-office/components/layouts/BoxOffice/BoxOfficeSeatMap.tsx:224
 msgid "Seats cannot be chosen until the latest availability loads."
@@ -20435,14 +20441,10 @@ msgstr "Összes kijelölése"
 msgid "Select all on {0}"
 msgstr "Összes kijelölése ekkor: {0}"
 
-#: src/components/common/TanStackTable/index.tsx:225
+#: src/components/common/TanStackTable/index.tsx:227
 #: src/ee/crm/components/routes/AudienceContacts/ContactStack.tsx:76
 msgid "Select all rows on this page"
 msgstr "Az oldal összes sorának kijelölése"
-
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:119
-msgid "Select an event"
-msgstr "Válasszon eseményt"
 
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:59
 msgid "Select and move"
@@ -20529,11 +20531,6 @@ msgstr "Jegy kiválasztása"
 #: src/components/modals/SendMessageModal/index.tsx:413
 msgid "Select tickets"
 msgstr "Jegyek kiválasztása"
-
-#: src/components/common/OrganizerReportTable/index.tsx:332
-#: src/components/common/ReportTable/index.tsx:282
-msgid "Select time period"
-msgstr "Időszak kiválasztása"
 
 #: src/components/forms/OrganizerForm/index.tsx:61
 #: src/components/modals/CreateOrganizerModal/index.tsx:60
@@ -20909,6 +20906,14 @@ msgstr "Szeptember"
 msgid "Service fee"
 msgstr "Szolgáltatási díj"
 
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:37
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:29
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:43
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:68
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:32
+msgid "Service fees"
+msgstr "Szolgáltatási díjak"
+
 #: src/components/layouts/CheckIn/index.tsx:116
 msgid "Session cancelled"
 msgstr "Alkalom lemondva"
@@ -21202,6 +21207,11 @@ msgstr "Résztvevői megjegyzések mutatása a be nem jelentkezett személyzetne
 msgid "Show available product quantity"
 msgstr "Elérhető termékmennyiség megjelenítése"
 
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:66
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:58
+msgid "Show days with no sales"
+msgstr "Értékesítés nélküli napok megjelenítése"
+
 #: src/ee/crm/components/ContactDrawer/ActivityTimeline.tsx:136
 msgid "Show earlier activity"
 msgstr "Korábbi aktivitás megjelenítése"
@@ -21312,10 +21322,6 @@ msgstr "Kérdés megjelenítése"
 msgid "Show tickets"
 msgstr "Jegyek megjelenítése"
 
-#: src/components/common/OrganizerReportTable/index.tsx:370
-msgid "Showing {0} of {totalRows} records"
-msgstr "{0} / {totalRows} rekord megjelenítése"
-
 #: src/components/common/TableCard/index.tsx:24
 #: src/components/routes/event/OccurrencesTab/index.tsx:650
 msgid "Showing {0}–{1} of {2}"
@@ -21325,6 +21331,10 @@ msgstr "{0}–{1} megjelenítve a következőből: {2}"
 #: src/components/layouts/CheckIn/OccurrenceFilterPill.tsx:135
 msgid "Showing {MAX_VISIBLE} of {totalAvailable} dates. Type to search."
 msgstr "{totalAvailable} időpontból {MAX_VISIBLE} látható. Gépeljen a kereséshez."
+
+#: src/components/common/ReportView/index.tsx:226
+msgid "Showing {shown} of {total} rows"
+msgstr "{shown} / {total} sor látható"
 
 #: src/components/routes/organizer/People/index.tsx:70
 msgid "Showing on a public event page"
@@ -21755,7 +21765,8 @@ msgstr "Átmeneti visszapattanások"
 #: src/components/modals/ManageOccurrenceModal/index.tsx:193
 #: src/components/modals/ProductPurchasesModal/index.tsx:82
 #: src/components/modals/ProductPurchasesModal/index.tsx:208
-#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:50
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:49
+#: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:76
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:150
 msgid "Sold"
 msgstr "Eladva"
@@ -21791,7 +21802,7 @@ msgstr "Elfogyott"
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:128
 #: src/components/layouts/EventHomepage/index.tsx:133
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:221
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:22
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:34
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:317
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:386
 msgid "Sold Out"
@@ -22235,6 +22246,8 @@ msgid "Start check-in"
 msgstr "Beléptetés indítása"
 
 #: src/components/modals/CreateEventModal/index.tsx:387
+#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:35
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:55
 msgid "Start date"
 msgstr "Kezdő dátum"
 
@@ -22378,9 +22391,9 @@ msgstr "Statisztika"
 #: src/components/routes/admin/Messages/index.tsx:229
 #: src/components/routes/admin/Messages/index.tsx:304
 #: src/components/routes/event/OccurrencesTab/index.tsx:354
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:51
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:88
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:62
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:61
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:45
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:60
 #: src/components/routes/settings/Billing/index.tsx:117
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:141
 #: src/ee/crm/components/routes/AudienceCampaigns/index.tsx:146
@@ -22544,8 +22557,8 @@ msgstr "A Stripe nincs beállítva ezen a telepítésen, ezért a kártyaolvasó
 msgid "Stripe Not Connected"
 msgstr "Stripe nincs csatlakoztatva"
 
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:104
-msgid "Stripe Payment ID"
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:90
+msgid "Stripe payment ID"
 msgstr "Stripe fizetési azonosító"
 
 #: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:50
@@ -22998,14 +23011,27 @@ msgstr "{0} kiválasztott alkalom résztvevőit célozza."
 #: src/components/common/AdminOrdersTable/index.tsx:70
 #: src/components/common/OrdersTable/index.tsx:234
 #: src/components/forms/TaxAndFeeForm/index.tsx:21
-#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:89
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:36
+#: src/components/routes/event/Reports/DailySalesReport/index.tsx:53
+#: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:71
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:28
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:42
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:67
+#: src/components/routes/organizer/Reports/index.tsx:38
+#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:31
+#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:28
 #: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:91
 msgid "Tax"
 msgstr "Adó"
 
-#: src/components/routes/organizer/Reports/index.tsx:34
-msgid "Tax collected grouped by tax type and event"
-msgstr "Beszedett adók adótípus és esemény szerint csoportosítva"
+#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:31
+#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:43
+msgid "Tax collected"
+msgstr "Beszedett adó"
+
+#: src/components/routes/organizer/Reports/index.tsx:39
+msgid "Tax collected on completed orders, by tax and event."
+msgstr "Teljesített megrendeléseken beszedett adó, adó és esemény szerint."
 
 #: src/components/modals/CreateTaxOrFeeModal/index.tsx:36
 msgid "Tax created"
@@ -23023,14 +23049,9 @@ msgstr "Adó adatok"
 msgid "Tax information to appear at the bottom of all invoices (e.g., VAT number, tax registration)"
 msgstr "Adózási információk, amelyek minden számla alján megjelennek (pl. adószám, adóazonosító szám)."
 
-#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:38
-msgid "Tax Name"
-msgstr "Adó neve"
-
-#: src/components/routes/organizer/Reports/index.tsx:33
-#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:62
-msgid "Tax Summary"
-msgstr "Adó összefoglaló"
+#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:29
+msgid "Tax rate"
+msgstr "Adókulcs"
 
 #: src/components/modals/EditTaxOrFeeModal/index.tsx:28
 msgid "Tax updated"
@@ -23038,7 +23059,6 @@ msgstr "Adó frissítve"
 
 #: src/components/common/InlineOrderSummary/index.tsx:195
 #: src/components/forms/ProductForm/index.tsx:494
-#: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:48
 #: src/components/routes/settings/TaxesAndFees/index.tsx:123
 msgid "Taxes"
 msgstr "Adók"
@@ -23866,6 +23886,10 @@ msgstr "Ezek az adatok felülírják az érintett időpontok meglévő helyszín
 msgid "These events are not available"
 msgstr "Ezek az események nem érhetők el"
 
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:139
+msgid "These figures are a guide. Your Stripe dashboard has the complete payment history, and a tax adviser can confirm what to use in your accounts."
+msgstr "Ezek az adatok tájékoztató jellegűek. A teljes fizetési előzményeket a Stripe-irányítópultján találja, és egy adótanácsadó megerősítheti, hogy mit használjon a könyvelésében."
+
 #: src/ee/crm/components/ImportContactsModal/index.tsx:167
 msgid "These people opted in to marketing emails from us"
 msgstr "Ezek a személyek hozzájárultak a marketing e-mailjeinkhez"
@@ -24503,9 +24527,9 @@ msgstr "Ez eltávolítja a jegyzeteiket, címkéiket és előzményeiket a Köz�
 msgid "This replaces \"{otherFormName}\", which is shown there now."
 msgstr "Ez felváltja a(z) \"{otherFormName}\" űrlapot, amely jelenleg ott látható."
 
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:113
-msgid "This report is for informational purposes only. Always consult with a tax professional before using this data for accounting or tax purposes. Please cross-reference with your Stripe dashboard as Hi.Events may be missing historical data."
-msgstr "Ez a jelentés csak tájékoztató jellegű. Mindig konzultáljon adószakértővel, mielőtt ezeket az adatokat számviteli vagy adózási célokra használná. Kérjük, ellenőrizze a Stripe irányítópultjával, mivel a Hi.Events esetleg hiányos előzményadatokkal rendelkezik."
+#: src/components/common/ReportView/index.tsx:366
+msgid "This report spans several pages, so totals and sorting are turned off. Export the CSV to work with every row."
+msgstr "Ez a jelentés több oldalból áll, ezért az összesítések és a rendezés ki van kapcsolva. Exportálja a CSV-t, hogy minden sorral dolgozhasson."
 
 #: src/components/routes/auth/ResetPassword/index.tsx:28
 msgid "This reset password link is invalid or expired."
@@ -24971,11 +24995,9 @@ msgstr "Időpontok: {timezoneAbbr}"
 
 #: src/components/common/PromoCodeTable/index.tsx:83
 #: src/components/common/PromoCodeTable/index.tsx:84
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:46
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:66
 msgid "Times used"
-msgstr "Felhasználások száma"
-
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:25
-msgid "Times Used"
 msgstr "Felhasználások száma"
 
 #: src/utilites/lineup.ts:24
@@ -25046,6 +25068,7 @@ msgstr "Hogy megvédjük az embereket a spamtől, a kampányokat minden fiókná
 
 #: src/components/common/OccurrenceSelect/index.tsx:151
 #: src/components/common/PeriodSelector/index.tsx:30
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:13
 #: src/components/layouts/CheckIn/OccurrenceFilterPill.tsx:119
 #: src/components/routes/event/OccurrencesTab/GroupedOccurrenceTable/index.tsx:43
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:127
@@ -25102,6 +25125,7 @@ msgstr "összesen"
 #: src/components/common/AdminOrdersTable/index.tsx:62
 #: src/components/common/InlineOrderSummary/index.tsx:225
 #: src/components/common/OrderSummary/index.tsx:104
+#: src/components/common/ReportView/index.tsx:151
 #: src/components/layouts/CheckIn/tabs/StatsTab.tsx:99
 #: src/components/modals/ManageOrderModal/index.tsx:123
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:359
@@ -25110,42 +25134,22 @@ msgstr "összesen"
 msgid "Total"
 msgstr "Összesen"
 
-#: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:35
-msgid "Total Attendees"
-msgstr "Összes résztvevő"
-
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:52
-msgid "Total Before Discounts"
-msgstr "Összesen kedvezmények előtt"
-
-#: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:49
-msgid "Total Collected"
-msgstr "Összesen beszedve"
-
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:58
-msgid "Total Discount Amount"
-msgstr "Összes kedvezmény összege"
-
 #: src/components/common/WaitlistStats/index.tsx:11
 msgid "Total Entries"
 msgstr "Összes bejegyzés"
 
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:93
-msgid "Total Fee"
-msgstr "Összesített díj"
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:87
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:122
+msgid "Total fee"
+msgstr "Teljes díj"
 
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:304
 msgid "Total fees"
 msgstr "Díjak összesen"
 
 #: src/components/common/StatsCharts/index.tsx:82
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:97
 msgid "Total Fees"
 msgstr "Összes díj"
-
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:46
-msgid "Total Gross Sales"
-msgstr "Összes bruttó értékesítés"
 
 #: src/components/common/OrderDetails/index.tsx:83
 msgid "Total order amount"
@@ -25173,7 +25177,6 @@ msgid "Total tax"
 msgstr "Adó összesen"
 
 #: src/components/common/StatsCharts/index.tsx:84
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:91
 msgid "Total Tax"
 msgstr "Összes adó"
 
@@ -25228,8 +25231,7 @@ msgstr "Próbáljon meg más keresőkifejezést vagy szűrőt"
 msgid "Try adjusting your filters to see more dates."
 msgstr "Módosítsa a szűrőket, hogy több időpontot lásson."
 
-#: src/components/common/OrganizerReportTable/index.tsx:277
-#: src/components/common/ReportTable/index.tsx:242
+#: src/components/common/ReportView/index.tsx:247
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1121
 #: src/components/routes/settings/ApiKeys/ConnectedApps.tsx:54
 #: src/components/routes/settings/ApiKeys/index.tsx:189
@@ -25631,9 +25633,10 @@ msgstr "Visszavonás"
 msgid "Unique buyers: {0}"
 msgstr "Egyedi vásárlók: {0}"
 
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:30
-msgid "Unique Customers"
-msgstr "Egyedi ügyfelek"
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:47
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:71
+msgid "Unique customers"
+msgstr "Egyedi vásárlók"
 
 #: src/ee/crm/utilites/smsCountries.ts:8
 msgid "United Kingdom"
@@ -25644,6 +25647,15 @@ msgstr "Egyesült Királyság"
 #: src/ee/crm/utilites/smsCountries.ts:7
 msgid "United States"
 msgstr "Egyesült Államok"
+
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:26
+#: src/components/routes/event/Reports/ProductSalesReport/index.tsx:40
+msgid "Units sold"
+msgstr "Eladott darabszám"
+
+#: src/components/routes/event/Reports/index.tsx:42
+msgid "Units sold and revenue from completed orders for each ticket and product."
+msgstr "Eladott darabszám és bevétel a teljesített megrendelésekből jegyenként és termékenként."
 
 #: src/components/common/MessageList/index.tsx:44
 #: src/components/common/MessageList/index.tsx:49
@@ -25677,8 +25689,7 @@ msgstr "Ismeretlen eszköz"
 #: src/components/routes/event/OccurrencesTab/CalendarView/index.tsx:171
 #: src/components/routes/event/OccurrencesTab/PriceOverrideForm/index.tsx:319
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1125
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:78
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:84
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:38
 msgid "Unlimited"
 msgstr "Korlátlan"
 
@@ -25843,7 +25854,7 @@ msgstr "Legfeljebb 40 fotó, legalább 400 × 300px. Az első jelenik meg a legn
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:137
 #: src/components/layouts/OrganizerHomepage/index.tsx:153
 #: src/components/routes/event/OccurrencesTab/index.tsx:520
-#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:33
+#: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:38
 msgid "Upcoming"
 msgstr "Közelgő"
 
@@ -25979,9 +25990,9 @@ msgstr "Az URL-nek http:// vagy https:// előtaggal kell kezdődnie"
 msgid "Usage counts start at zero"
 msgstr "A felhasználási számlálók nulláról indulnak"
 
-#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:76
-msgid "Usage Limit"
-msgstr "Használati limit"
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:54
+msgid "Usage limit"
+msgstr "Használati korlát"
 
 #: src/components/layouts/CheckIn/tabs/ScanTab.tsx:80
 msgid "USB"
@@ -26138,6 +26149,10 @@ msgstr "Felhasználók"
 msgid "Users ({0})"
 msgstr "Felhasználók ({0})"
 
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:55
+msgid "Uses left"
+msgstr "Hátralévő használatok"
+
 #: src/components/common/WidgetEditor/AppearancePanel.tsx:69
 msgid "Uses the colours and font from your homepage design, and updates when you change them."
 msgstr "A honlapdizájn színeit és betűtípusát használja, és frissül, amikor módosítja azokat."
@@ -26217,13 +26232,14 @@ msgstr "ÁFA szám érvényesítése sikertelen"
 msgid "VAT number validation failed. Please check your VAT number."
 msgstr "ÁFA szám érvényesítése sikertelen. Kérjük, ellenőrizze az ÁFA számát."
 
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:87
-msgid "VAT on Fee"
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:86
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:121
+msgid "VAT on fee"
 msgstr "ÁFA a díjon"
 
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:81
-msgid "VAT Rate"
-msgstr "ÁFA kulcs"
+msgid "VAT rate"
+msgstr "ÁFA-kulcs"
 
 #: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:172
 msgid "VAT registered"
@@ -26405,10 +26421,6 @@ msgstr "Platformon küldött összes üzenet megtekintése"
 #: src/components/layouts/OrganizerHomepage/OrganizerPastEventsSection.tsx:30
 msgid "View all past events"
 msgstr "Összes korábbi esemény megtekintése"
-
-#: src/components/routes/organizer/Reports/index.tsx:54
-msgid "View and download reports across all your events. Only completed orders are included."
-msgstr "Jelentések megtekintése és letöltése az összes eseményéhez. Csak a befejezett rendelések szerepelnek."
 
 #: src/components/common/AttendeeList/index.tsx:85
 msgid "View Answers"
@@ -27740,9 +27752,8 @@ msgstr "X (Twitter)"
 msgid "year"
 msgstr "év"
 
-#: src/components/common/OrganizerReportTable/index.tsx:62
 #: src/components/common/PeriodSelector/index.tsx:38
-#: src/components/common/ReportTable/index.tsx:57
+#: src/components/common/ReportView/ReportPeriodPicker.tsx:19
 msgid "Year to date"
 msgstr "Év elejétől napjainkig"
 

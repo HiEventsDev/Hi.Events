@@ -36,11 +36,6 @@ export class OrganizerPage {
     await this.page.waitForLoadState('networkidle');
   }
 
-  async gotoReport(organizerId: number, reportType: string): Promise<void> {
-    await this.page.goto(`/manage/organizer/${organizerId}/report/${reportType}`);
-    await this.page.waitForLoadState('networkidle');
-  }
-
   async openCreateOrganizerModal(): Promise<void> {
     await this.page.getByTestId('account-menu-button').click();
     await this.page.getByRole('menuitem', { name: 'Create Organizer' }).click();
@@ -66,13 +61,6 @@ export class OrganizerPage {
     await this.page.locator('#basic-settings').getByRole('button', { name: 'Save' }).click();
   }
 
-  reportRow(text: string): Locator {
-    return this.page.getByRole('row').filter({ hasText: text });
-  }
-
-  get exportCsvButton(): Locator {
-    return this.page.getByRole('button', { name: 'Export CSV' });
-  }
 }
 
 export class OrganizerPublicPage {

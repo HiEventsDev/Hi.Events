@@ -545,8 +545,8 @@ export const router: RouteObject[] = [
             {
                 path: "report/:reportType",
                 async lazy() {
-                    const OrganizerReportLayout = await import("./components/routes/organizer/Reports/ReportLayout");
-                    return { Component: OrganizerReportLayout.default };
+                    const OrganizerReports = await import("./components/routes/organizer/Reports");
+                    return { Component: OrganizerReports.default };
                 }
             }
         ],
@@ -587,8 +587,8 @@ export const router: RouteObject[] = [
             {
                 path: "report/:reportType",
                 async lazy() {
-                    const ReportLayout = await import("./components/routes/event/Reports/ReportLayout");
-                    return { Component: ReportLayout.default };
+                    const Reports = await import("./components/routes/event/Reports");
+                    return { Component: Reports.default };
                 },
             },
             {

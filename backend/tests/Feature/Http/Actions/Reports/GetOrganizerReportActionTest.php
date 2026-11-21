@@ -89,6 +89,21 @@ class GetOrganizerReportActionTest extends TestCase
         $response = $this->localDayReport('platform_fees');
 
         $this->assertSame([$insideOrderId], array_column($response['data'], 'order_id'));
+        $this->assertSame('acct_report_test', $response['data'][0]['stripe_account_id']);
+    }
+
+    public function test_the_tax_summary_export_shows_the_rate_as_charged(): void
+    {
+        $this->insertCompletedOrder(self::INSIDE_LOCAL_DAY_UTC, taxValue: 5.00, feeGross: 0);
+        $query = http_build_query(['start_date' => self::LOCAL_DAY_START_UTC, 'end_date' => self::LOCAL_DAY_END_UTC]);
+
+        $csv = $this->get("/organizers/{$this->organizerId}/reports/tax_summary/export?$query", $this->headers())
+            ->assertStatus(ResponseCodes::HTTP_OK)
+            ->streamedContent();
+
+        $taxRow = str_getcsv(explode("\n", trim($csv))[1]);
+        $this->assertSame('VAT', $taxRow[3]);
+        $this->assertSame('23%', $taxRow[4]);
     }
 
     private function localDayReport(string $reportType, array $extra = []): array
@@ -120,6 +135,7 @@ class GetOrganizerReportActionTest extends TestCase
             DB::table('stripe_payments')->insert([
                 'order_id' => $orderId,
                 'payment_intent_id' => 'pi_'.uniqid(),
+                'connected_account_id' => 'acct_report_test',
                 'amount_received' => 1000,
                 'application_fee_gross' => $feeGross,
                 'currency' => 'usd',
