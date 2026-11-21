@@ -24,7 +24,7 @@ test.describe('audience mobile numbers', () => {
 
     const page = await freshAccount.newAuthedPage();
     const settings = new EventSettingsPage(page);
-    await settings.goto(event.eventId);
+    await settings.goto(event.eventId, 'homepage-settings');
     const checkoutSettings = settings.section('homepage-settings');
     const textOptIn = checkoutSettings.getByRole('switch', { name: 'Show text message opt-in checkbox' });
     await expect(checkoutSettings.getByTestId('phone-collection-select')).toBeVisible();
@@ -34,7 +34,7 @@ test.describe('audience mobile numbers', () => {
     await expect(checkoutSettings.getByText("Ask for the buyer's mobile number above to use this.")).toBeVisible();
     await checkoutSettings.getByTestId('phone-collection-select').click();
     await page.getByTestId('phone-collection-select-option-REQUIRED').click();
-    await textOptIn.check();
+    await textOptIn.check({ force: true });
     await checkoutSettings.getByRole('button', { name: 'Save' }).click();
     await expect(page.getByText('Successfully Updated Homepage Settings')).toBeVisible();
 
@@ -192,13 +192,13 @@ test.describe('audience mobile numbers', () => {
     await api.updateOrganizerSettings(organizerId, { default_phone_collection: 'REQUIRED', default_show_sms_opt_in: true } as never);
 
     const page = await freshAccount.newAuthedPage();
-    await page.goto(`/manage/organizer/${organizerId}/settings`);
+    await page.goto(`/manage/organizer/${organizerId}/settings/event-defaults`);
     await expect(page.getByRole('switch', { name: 'Show text message opt-in checkbox by default' })).toBeChecked();
     await expect(page.getByText('New events that ask for a mobile number will let buyers agree to receive text messages. This can be changed per event.')).toBeVisible();
 
     const event = await createLiveEventWithFreeTicket(api, organizerId);
     const settings = new EventSettingsPage(page);
-    await settings.goto(event.eventId);
+    await settings.goto(event.eventId, 'homepage-settings');
     const checkoutSettings = settings.section('homepage-settings');
     await expect(checkoutSettings.getByTestId('phone-collection-select')).toContainText('Required');
     await expect(checkoutSettings.getByRole('switch', { name: 'Show text message opt-in checkbox' })).toBeChecked();

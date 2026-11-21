@@ -1,11 +1,10 @@
-import {ActionIcon, Badge, Group} from "@mantine/core";
+import {ActionIcon, Badge} from "@mantine/core";
 import {CreateButton} from "../../../../../../../components/common/CreateButton";
 import {IconDeviceMobile, IconPlus, IconRefresh, IconTrash} from "@tabler/icons-react";
 import {t, Trans} from "@lingui/macro";
 import {useDisclosure} from "@mantine/hooks";
 import {useParams} from "react-router";
-import {Card} from "../../../../../../../components/common/Card";
-import {HeadingWithDescription} from "../../../../../../../components/common/Card/CardHeading";
+import {SettingsBlock, SettingsFooter, SettingsPage, SettingsSection} from "../../../../../../../components/common/SettingsPage";
 import {Callout} from "../../../../../../../components/common/Callout";
 import {useGetOrganizerTerminalReaders} from "../../../../../queries/useGetOrganizerTerminalReaders.ts";
 import {useDeleteTerminalReader} from "../../../../../mutations/useDeleteTerminalReader.ts";
@@ -62,66 +61,72 @@ export const TerminalReadersSettings = () => {
     };
 
     return (
-        <Card>
-            <HeadingWithDescription
-                heading={t`Card readers`}
-                description={t`Pair Stripe Terminal readers to take card payments at the box office.`}
-            />
+        <SettingsPage
+            title={t`Card Readers`}
+            description={t`Pair Stripe Terminal readers to take card payments at the box office.`}
+        >
+            <SettingsSection>
+                {isLocked && <SettingsBlock><LicenceLockedCallout/></SettingsBlock>}
 
-            {isLocked && <LicenceLockedCallout/>}
+                {data && !data.stripe_configured && (
+                    <SettingsBlock>
+                        <Callout variant="info" className={classes.callout}>
+                            <Trans>Stripe is not configured on this installation, so card readers are unavailable.</Trans>
+                        </Callout>
+                    </SettingsBlock>
+                )}
 
-            {data && !data.stripe_configured && (
-                <Callout variant="info">
-                    <Trans>Stripe is not configured on this installation, so card readers are unavailable.</Trans>
-                </Callout>
-            )}
+                {data && data.stripe_configured && !data.stripe_connected && (
+                    <SettingsBlock>
+                        <Callout variant="info" className={classes.callout}>
+                            <Trans>Connect a Stripe account under Payouts before adding card readers.</Trans>
+                        </Callout>
+                    </SettingsBlock>
+                )}
 
-            {data && data.stripe_configured && !data.stripe_connected && (
-                <Callout variant="info">
-                    <Trans>Connect a Stripe account under Payouts before adding card readers.</Trans>
-                </Callout>
-            )}
-
-            {data?.stripe_connected && (
-                <>
-                    <div className={classes.list}>
+                {data?.stripe_connected && (
+                    <>
                         {data.readers.length === 0 && (
-                            <div className={classes.empty}>{t`No card readers yet. Pair a Stripe Reader S700, S710 or WisePOS E to get started.`}</div>
+                            <SettingsBlock>
+                                <div className={classes.empty}>{t`No card readers yet. Pair a Stripe Reader S700, S710 or WisePOS E to get started.`}</div>
+                            </SettingsBlock>
                         )}
                         {data.readers.map(reader => (
-                            <div key={reader.id} className={classes.row}>
-                                <IconDeviceMobile size={20}/>
-                                <div className={classes.rowMain}>
-                                    <div className={classes.rowLabel}>{reader.label}</div>
-                                    <div className={classes.rowMeta}>{reader.device_type ?? t`Stripe Terminal reader`}</div>
+                            <SettingsBlock key={reader.id}>
+                                <div className={classes.reader}>
+                                    <IconDeviceMobile size={20}/>
+                                    <div className={classes.readerMain}>
+                                        <div className={classes.readerLabel}>{reader.label}</div>
+                                        <div className={classes.readerMeta}>{reader.device_type ?? t`Stripe Terminal reader`}</div>
+                                    </div>
+                                    <Badge color={statusColor(reader.status)} variant="light">{statusLabel(reader.status)}</Badge>
+                                    <ActionIcon
+                                        variant="subtle"
+                                        color="red"
+                                        aria-label={t`Remove card reader`}
+                                        onClick={() => handleDelete(reader)}
+                                        data-testid="terminal-reader-delete-button"
+                                    >
+                                        <IconTrash size={16}/>
+                                    </ActionIcon>
                                 </div>
-                                <Badge color={statusColor(reader.status)} variant="light">{statusLabel(reader.status)}</Badge>
-                                <ActionIcon
-                                    variant="subtle"
-                                    color="red"
-                                    aria-label={t`Remove card reader`}
-                                    onClick={() => handleDelete(reader)}
-                                    data-testid="terminal-reader-delete-button"
-                                >
-                                    <IconTrash size={16}/>
-                                </ActionIcon>
-                            </div>
+                            </SettingsBlock>
                         ))}
-                    </div>
-                    <Group mt="md">
-                        {!isLocked && (
-                            <CreateButton leftSection={<IconPlus size={16}/>} onClick={openAdd} data-testid="terminal-reader-add-button">
-                                {t`Add reader`}
-                            </CreateButton>
-                        )}
-                        <ActionIcon variant="light" aria-label={t`Refresh reader status`} onClick={() => readersQuery.refetch()}>
-                            <IconRefresh size={16}/>
-                        </ActionIcon>
-                    </Group>
-                </>
-            )}
+                        <SettingsFooter>
+                            <ActionIcon variant="light" size="lg" aria-label={t`Refresh reader status`} onClick={() => readersQuery.refetch()}>
+                                <IconRefresh size={16}/>
+                            </ActionIcon>
+                            {!isLocked && (
+                                <CreateButton leftSection={<IconPlus size={16}/>} onClick={openAdd} data-testid="terminal-reader-add-button">
+                                    {t`Add reader`}
+                                </CreateButton>
+                            )}
+                        </SettingsFooter>
+                    </>
+                )}
+            </SettingsSection>
 
             {addOpen && organizerId && <AddTerminalReaderModal onClose={closeAdd} organizerId={organizerId}/>}
-        </Card>
+        </SettingsPage>
     );
 };

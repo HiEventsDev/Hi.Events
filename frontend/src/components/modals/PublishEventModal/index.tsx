@@ -81,9 +81,9 @@ export const PublishEventModal = ({opened, onClose, event, onSuccess}: PublishEv
             title: t`Connect Stripe to accept payments`,
             description: t`You have paid tickets, but Stripe isn't connected yet, so you can't take payments.`,
             actionLabel: t`Connect Stripe`,
-            actionUrl: `/manage/organizer/${organizerId}/settings#payouts`,
+            actionUrl: `/manage/organizer/${organizerId}/settings/payouts`,
             secondaryActionLabel: t`Or enable offline payments and disable Stripe`,
-            secondaryActionUrl: `/manage/event/${eventId}/settings#payment-settings`,
+            secondaryActionUrl: `/manage/event/${eventId}/settings/payments`,
         });
     }
 

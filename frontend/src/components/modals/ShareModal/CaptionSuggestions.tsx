@@ -39,7 +39,7 @@ export const CaptionSuggestions = ({event, caption, onPick}: CaptionSuggestionsP
                 {can('MANAGE_PAYMENTS') && (
                     <>
                         {' '}
-                        <Anchor component={NavLink} to={`/manage/organizer/${event.organizer_id}/settings#payouts`} size="sm">
+                        <Anchor component={NavLink} to={`/manage/organizer/${event.organizer_id}/settings/payouts`} size="sm">
                             {t`Set up payouts`}
                         </Anchor>
                     </>

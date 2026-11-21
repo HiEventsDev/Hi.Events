@@ -117,7 +117,7 @@ export const NewCampaignModal = ({organizerId, onClose}: {organizerId: IdParam, 
                     ) : (
                         <p>
                             {t`Connect your Twilio account before sending text messages.`}{' '}
-                            <Link to={`/manage/organizer/${organizerId}/settings#text-messages`} onClick={onClose}>{t`Set up text messages`}</Link>
+                            <Link to={`/manage/organizer/${organizerId}/settings/text-messages`} onClick={onClose}>{t`Set up text messages`}</Link>
                         </p>
                     )}
                 </div>

@@ -32,7 +32,7 @@ export class OrganizerPage {
   }
 
   async gotoSettings(organizerId: number): Promise<void> {
-    await this.page.goto(`/manage/organizer/${organizerId}/settings`);
+    await this.page.goto(`/manage/organizer/${organizerId}/settings/basic`);
     await this.page.waitForLoadState('networkidle');
   }
 

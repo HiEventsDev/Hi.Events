@@ -5,9 +5,8 @@ import {useEffect} from "react";
 import {EventSettings} from "../../../../../../types.ts";
 import {showSuccess} from "../../../../../../utilites/notifications.tsx";
 import {t} from "@lingui/macro";
-import {Card} from "../../../../../common/Card";
-import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
-import {Button, Switch, TextInput} from "@mantine/core";
+import {SettingsPage, SettingsRow, SettingsSaveFooter, SettingsSection} from "../../../../../common/SettingsPage";
+import {Switch, TextInput} from "@mantine/core";
 import {useGetOrganizerSettings} from "../../../../../../queries/useGetOrganizerSettings.ts";
 import {useUpdateOrganizerSettings} from "../../../../../../mutations/useUpdateOrganizerSettings.ts";
 
@@ -27,12 +26,14 @@ export const SeoSettings = () => {
 
     useEffect(() => {
         if (organizerSettingsQuery?.isFetched && organizerSettingsQuery?.data) {
-            form.setValues({
-                allow_search_engine_indexing: organizerSettingsQuery.data.allow_search_engine_indexing,
-                seo_title: organizerSettingsQuery.data.seo_title,
-                seo_description: organizerSettingsQuery.data.seo_description,
-                seo_keywords: organizerSettingsQuery.data.seo_keywords,
-            });
+            const values = {
+                allow_search_engine_indexing: organizerSettingsQuery.data.allow_search_engine_indexing ?? true,
+                seo_title: organizerSettingsQuery.data.seo_title ?? '',
+                seo_description: organizerSettingsQuery.data.seo_description ?? '',
+                seo_keywords: organizerSettingsQuery.data.seo_keywords ?? '',
+            };
+            form.setInitialValues(values);
+            form.setValues(values);
         }
     }, [organizerSettingsQuery.isFetched]);
 
@@ -42,6 +43,7 @@ export const SeoSettings = () => {
             organizerId: organizerId,
         }, {
             onSuccess: () => {
+                form.resetDirty();
                 showSuccess(t`Successfully Updated SEO Settings`);
             },
             onError: (error) => {
@@ -51,42 +53,65 @@ export const SeoSettings = () => {
     }
 
     return (
-        <Card>
-            <HeadingWithDescription
-                heading={t`SEO Settings`}
-                description={t`Customize the SEO settings for this event`}
-            />
-            <form onSubmit={form.onSubmit(handleSubmit)}>
-                <fieldset disabled={organizerSettingsQuery.isLoading || updateMutation.isPending}>
-                    <TextInput
-                        {...form.getInputProps('seo_title')}
-                        description={t`The title of the event that will be displayed in search engine results and when sharing on social media. By default, the event title will be used`}
-                        label={t`SEO Title`}
-                        placeholder={t`My amazing event title...`}
+        <SettingsPage
+            title={t`SEO`}
+            description={t`Customize the SEO settings for your organizer page`}
+        >
+            <SettingsSection>
+                <form onSubmit={form.onSubmit(handleSubmit)}>
+                    <fieldset disabled={organizerSettingsQuery.isLoading || updateMutation.isPending}>
+                        <SettingsRow
+                            label={t`SEO Title`}
+                            description={t`Shown in search engine results and when your organizer page is shared on social media`}
+                            htmlFor="organizer-seo-title"
+                        >
+                            <TextInput
+                                id="organizer-seo-title"
+                                {...form.getInputProps('seo_title')}
+                                placeholder={t`My organizer title...`}
+                            />
+                        </SettingsRow>
+                        <SettingsRow
+                            label={t`SEO Description`}
+                            description={t`A short description shown in search engine results and when your organizer page is shared on social media`}
+                            htmlFor="organizer-seo-description"
+                        >
+                            <TextInput
+                                id="organizer-seo-description"
+                                {...form.getInputProps('seo_description')}
+                                placeholder={t`A short description of my organizer...`}
+                            />
+                        </SettingsRow>
+                        <SettingsRow
+                            label={t`SEO Keywords`}
+                            description={t`Comma separated keywords that help search engines categorize your organizer page`}
+                            htmlFor="organizer-seo-keywords"
+                        >
+                            <TextInput
+                                id="organizer-seo-keywords"
+                                {...form.getInputProps('seo_keywords')}
+                                placeholder={t`Amazing, Event, Keywords...`}
+                            />
+                        </SettingsRow>
+                        <SettingsRow
+                            label={t`Allow search engine indexing`}
+                            description={t`Allow search engines to index your organizer page`}
+                            htmlFor="organizer-seo-indexing"
+                            inlineControl
+                        >
+                            <Switch
+                                id="organizer-seo-indexing"
+                                {...form.getInputProps('allow_search_engine_indexing', {type: 'checkbox'})}
+                            />
+                        </SettingsRow>
+                    </fieldset>
+                    <SettingsSaveFooter
+                        isDirty={form.isDirty()}
+                        isSaving={updateMutation.isPending}
+                        onDiscard={form.reset}
                     />
-                    <TextInput
-                        {...form.getInputProps('seo_description')}
-                        description={t`A short description of the event that will be displayed in search engine results and when sharing on social media. By default, the event description will be used`}
-                        label={t`SEO Description`}
-                        placeholder={t`My amazing event description...`}
-                    />
-                    <TextInput
-                        {...form.getInputProps('seo_keywords')}
-                        description={t`Comma seperated keywords that describe the event. These will be used by search engines to help categorize and index the event`}
-                        label={t`SEO Keywords`}
-                        placeholder={t`Amazing, Event, Keywords...`}
-                    />
-                    <Switch
-                        {...form.getInputProps('allow_search_engine_indexing', {type: 'checkbox'})}
-                        description={t`Allow search engines to index this event`}
-                        label={t`Allow search engine indexing`}
-                    />
-                    <Button loading={updateMutation.isPending} type={'submit'}>
-                        {t`Save`}
-                    </Button>
-
-                </fieldset>
-            </form>
-        </Card>
+                </form>
+            </SettingsSection>
+        </SettingsPage>
     );
 }

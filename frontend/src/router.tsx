@@ -410,7 +410,7 @@ export const router: RouteObject[] = [
                 }
             },
             {
-                path: "settings",
+                path: "settings/:section?",
                 async lazy() {
                     const Settings = await import("./components/routes/organizer/Settings");
                     return { Component: Settings.default };
@@ -662,7 +662,7 @@ export const router: RouteObject[] = [
                 }
             },
             {
-                path: "settings",
+                path: "settings/:section?",
                 async lazy() {
                     const Settings = await import("./components/routes/event/Settings");
                     return { Component: Settings.default };

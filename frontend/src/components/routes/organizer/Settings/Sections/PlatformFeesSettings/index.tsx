@@ -6,6 +6,7 @@ import {useGetOrganizerSettings} from "../../../../../../queries/useGetOrganizer
 import {useUpdateOrganizerSettings} from "../../../../../../mutations/useUpdateOrganizerSettings.ts";
 import {useGetOrganizer} from "../../../../../../queries/useGetOrganizer.ts";
 import {PlatformFeesSettings as PlatformFeesSettingsBase} from "../../../../../common/PlatformFeesSettings";
+import {SettingsPage} from "../../../../../common/SettingsPage";
 
 export const PlatformFeesSettings = () => {
     const {organizerId} = useParams();
@@ -33,16 +34,19 @@ export const PlatformFeesSettings = () => {
     };
 
     return (
-        <PlatformFeesSettingsBase
-            configuration={organizerQuery.data?.configuration}
-            currentValue={currentValue}
-            onSave={handleSave}
-            isLoading={organizerSettingsQuery.isLoading}
-            isSaving={updateMutation.isPending}
-            heading={t`Platform Fees`}
+        <SettingsPage
+            title={t`Platform Fees`}
             description={t`Set default platform fee settings for new events created under this organizer.`}
-            feeHandlingLabel={t`Default Fee Handling`}
-            feeHandlingDescription={t`Choose the default setting for new events. This can be overridden for individual events.`}
-        />
+        >
+            <PlatformFeesSettingsBase
+                configuration={organizerQuery.data?.configuration}
+                currentValue={currentValue}
+                onSave={handleSave}
+                isLoading={organizerSettingsQuery.isLoading}
+                isSaving={updateMutation.isPending}
+                feeHandlingLabel={t`Default Fee Handling`}
+                feeHandlingDescription={t`Choose the default setting for new events. This can be overridden for individual events.`}
+            />
+        </SettingsPage>
     );
 };

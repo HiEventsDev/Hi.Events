@@ -135,7 +135,7 @@ test.describe('audience messaging access', () => {
       await expect(page.getByTestId('signup-form-create-button')).toHaveCount(0);
       await expect(form.getByRole('button', { name: 'Form actions' })).toHaveCount(0);
 
-      await page.goto(`/manage/organizer/${organizerId}/settings#text-messages`);
+      await page.goto(`/manage/organizer/${organizerId}/settings/text-messages`);
       const texts = page.locator('#text-messages');
       await expect(texts).toContainText('United Kingdom');
       await expect(texts).toContainText(/Messaging ServiceMG[0-9a-f]{32}/);
@@ -198,7 +198,7 @@ test.describe('audience messaging access', () => {
     await expect(page.getByText('Automations are paused')).toHaveCount(0);
     await expect(automationSwitch(page, arranged.automation)).toBeDisabled();
 
-    await page.goto(`/manage/organizer/${organizerId}/settings#text-messages`);
+    await page.goto(`/manage/organizer/${organizerId}/settings/text-messages`);
     const texts = page.locator('#text-messages');
     await expect(texts).toContainText('United Kingdom');
     await expect(texts.getByRole('button', { name: 'Edit', exact: true })).toHaveCount(0);
