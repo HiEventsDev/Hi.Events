@@ -269,6 +269,14 @@ msgstr "{0} pode entrar com a senha"
 msgid "{0} cancelled"
 msgstr "{0} cancelados"
 
+#: src/components/modals/ShareModal/index.tsx:165
+msgid "{0} characters"
+msgstr "{0} caracteres"
+
+#: src/components/modals/ShareModal/index.tsx:164
+msgid "{0} characters, too long for an X post"
+msgstr "{0} caracteres, longo demais para um post no X"
+
 #: src/components/routes/admin/Configurations/index.tsx:84
 msgid "{0} Default"
 msgstr "Padrão {0}"
@@ -316,6 +324,10 @@ msgstr "{0} itens selecionados"
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:398
 msgid "{0} left"
 msgstr "{0} restante"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:77
+msgid "{0} left today"
+msgstr "Restam {0} hoje"
 
 #: src/components/layouts/AppLayout/Sidebar/index.tsx:117
 #: src/components/layouts/AuthLayout/AuthShell.tsx:153
@@ -1904,6 +1916,10 @@ msgstr "Adicionar uma maquininha"
 #: src/ee/crm/components/routes/AudienceContacts/AddContactModal.tsx:56
 msgid "Add a contact"
 msgstr "Adicionar um contato"
+
+#: src/components/modals/ShareModal/index.tsx:143
+msgid "Add a cover image"
+msgstr "Adicionar imagem de capa"
 
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:147
 msgid "Add a cover image and theme to match your brand"
@@ -4889,6 +4905,18 @@ msgstr "Capacidade utilizada"
 msgid "Capacity, sold, held and free seats per price band and area, with revenue per band"
 msgstr "Capacidade, assentos vendidos, retidos e livres por categoria de preço e área, com receita por categoria"
 
+#: src/components/modals/ShareModal/index.tsx:154
+msgid "Caption"
+msgstr "Legenda"
+
+#: src/components/modals/ShareModal/index.tsx:76
+msgid "Caption copied. Paste it into your {0} post."
+msgstr "Legenda copiada. Cole no seu post do {0}."
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:38
+msgid "Caption suggestions are available once you connect Stripe."
+msgstr "As sugestões de legenda ficam disponíveis depois que você conecta o Stripe."
+
 #: src/ee/box-office/components/layouts/BoxOffice/TenderStage.tsx:173
 #: src/ee/box-office/utilites/boxOfficeTender.ts:9
 msgid "Card"
@@ -6109,7 +6137,7 @@ msgstr "Confirme seu endereço de e-mail"
 msgid "Confirm your email address to take signups"
 msgstr "Confirme seu endereço de e-mail para receber inscrições"
 
-#: src/components/layouts/Event/index.tsx:337
+#: src/components/layouts/Event/index.tsx:338
 msgid "Confirm your email to access all features."
 msgstr "Confirme seu e-mail para acessar todos os recursos."
 
@@ -6121,7 +6149,7 @@ msgstr "Confirme sua inscrição"
 msgid "Confirmation code"
 msgstr "Código de confirmação"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:395
+#: src/components/layouts/OrganizerLayout/index.tsx:396
 msgid "Confirmation email sent! Please check your inbox."
 msgstr "E-mail de confirmação enviado! Verifique sua caixa de entrada."
 
@@ -6141,7 +6169,7 @@ msgstr "Confirmado por e-mail após se inscrever por um formulário"
 msgid "Confirming email address..."
 msgstr "Confirmação do endereço de e-mail..."
 
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:52
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:51
 msgid "Congratulations! Your event is now visible to the public."
 msgstr "Parabéns! Seu evento agora está visível para o público."
 
@@ -6432,9 +6460,9 @@ msgstr "Configurações de cookies"
 #: src/components/common/WidgetEditor/index.tsx:221
 #: src/components/common/WidgetEditor/InstallPanel.tsx:52
 #: src/components/modals/CheckInListSuccessModal/index.tsx:42
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:75
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:74
 #: src/components/modals/ManageOrderModal/index.tsx:237
-#: src/components/modals/ShareModal/index.tsx:255
+#: src/components/modals/ShareModal/index.tsx:225
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:364
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:70
 #: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:20
@@ -6453,8 +6481,7 @@ msgstr "Copiado de cima"
 msgid "Copied to clipboard"
 msgstr "Copiado para a área de transferência"
 
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:67
-#: src/components/modals/ShareModal/index.tsx:248
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:66
 msgid "Copied!"
 msgstr "Copiado!"
 
@@ -6467,10 +6494,9 @@ msgstr "Copia instruções passo a passo para colar no ChatGPT, Claude, Cursor o
 #: src/components/common/TanStackTable/cells.tsx:79
 #: src/components/common/TanStackTable/cells.tsx:86
 #: src/components/modals/CheckInListSuccessModal/index.tsx:42
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:75
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:74
 #: src/components/modals/ManageOrderModal/index.tsx:237
 #: src/components/modals/ManageOrderModal/index.tsx:243
-#: src/components/modals/ShareModal/index.tsx:255
 #: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:20
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:51
 #: src/ee/crm/components/routes/AudienceForms/ShareSignupFormModal.tsx:19
@@ -6547,13 +6573,13 @@ msgid "Copy key"
 msgstr "Copiar chave"
 
 #: src/components/common/SsoButtons/index.tsx:54
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:67
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:66
+#: src/components/modals/ShareModal/index.tsx:225
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:70
 msgid "Copy link"
 msgstr "Copiar link"
 
 #: src/components/common/AttendeeTicket/index.tsx:192
-#: src/components/modals/ShareModal/index.tsx:171
 msgid "Copy Link"
 msgstr "Copiar link"
 
@@ -6609,14 +6635,6 @@ msgstr "Copie a chave novamente do e-mail da sua licença, sem aspas ou espaços
 #: src/components/common/WidgetEditor/index.tsx:184
 msgid "Copy the new code to your site"
 msgstr "Copie o novo código para o seu site"
-
-#: src/components/modals/ShareModal/index.tsx:264
-msgid "Copy this link to share it anywhere"
-msgstr "Copie este link para compartilhá-lo em qualquer lugar"
-
-#: src/components/modals/ShareModal/index.tsx:248
-msgid "Copy to clipboard"
-msgstr "Copiar para a área de transferência"
 
 #: src/ee/sso/components/SingleSignOn/DomainList.tsx:112
 msgid "Copy TXT record name"
@@ -8237,7 +8255,7 @@ msgstr "Doação"
 #: src/components/modals/CheckInListSuccessModal/index.tsx:59
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:73
 #: src/components/modals/CreateWebhookModal/index.tsx:73
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:123
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:122
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:122
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:200
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:207
@@ -8291,8 +8309,8 @@ msgstr "Baixar fatura"
 msgid "Download PNG"
 msgstr "Baixar PNG"
 
-#: src/components/modals/ShareModal/index.tsx:228
-msgid "Download QR Code"
+#: src/components/modals/ShareModal/index.tsx:235
+msgid "Download QR code"
 msgstr "Baixar código QR"
 
 #: src/components/routes/event/Reports/index.tsx:53
@@ -9068,7 +9086,7 @@ msgstr "Enviar e-mail para este segmento"
 msgid "Email to send tickets"
 msgstr "E-mail para enviar ingressos"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:374
+#: src/components/layouts/OrganizerLayout/index.tsx:375
 msgid "Email Verification Required"
 msgstr "Verificação de e-mail necessária"
 
@@ -9101,7 +9119,7 @@ msgid "Embed on your website"
 msgstr "Incorporar no seu site"
 
 #: src/components/common/WidgetEditor/index.tsx:189
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:113
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:112
 msgid "Embed Widget"
 msgstr "Widget incorporado"
 
@@ -9235,6 +9253,10 @@ msgstr "Termina em"
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:187
 msgid "Ends the next day"
 msgstr "Termina no dia seguinte"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:22
+msgid "Energetic"
+msgstr "Enérgico"
 
 #: src/components/common/LanguageSwitcher/index.tsx:22
 #: src/components/modals/CreateAttendeeModal/index.tsx:241
@@ -9618,7 +9640,7 @@ msgstr "Evento não disponível"
 msgid "Event not live"
 msgstr "Evento não publicado"
 
-#: src/components/layouts/Event/index.tsx:326
+#: src/components/layouts/Event/index.tsx:327
 msgid "Event Page"
 msgstr "Página do Evento"
 
@@ -9664,7 +9686,7 @@ msgstr "Título, data e imagem do evento"
 msgid "Event Too New"
 msgstr "Evento muito recente"
 
-#: src/components/routes/event/EventDashboard/index.tsx:265
+#: src/components/routes/event/EventDashboard/index.tsx:264
 msgid "Event totals"
 msgstr "Totais do evento"
 
@@ -10460,6 +10482,10 @@ msgstr "Taxa personalizada salva"
 msgid "Fee updated"
 msgstr "Taxa atualizada"
 
+#: src/components/modals/ShareModal/SharePreview.tsx:52
+msgid "Feed"
+msgstr "Feed"
+
 #: src/components/common/InlineOrderSummary/index.tsx:164
 #: src/components/common/OrdersTable/index.tsx:234
 #: src/components/forms/ProductForm/index.tsx:497
@@ -10933,6 +10959,10 @@ msgstr "Sexta-feira"
 #: src/components/routes/event/Questions/questionTemplates.ts:55
 msgid "Friend or colleague"
 msgstr "Amigo ou colega"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:20
+msgid "Friendly"
+msgstr "Amigável"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1086
 #: src/ee/crm/components/routes/AudienceCampaign/index.tsx:418
@@ -12538,6 +12568,10 @@ msgstr "Apenas procurando seus ingressos?"
 msgid "just now"
 msgstr "agora mesmo"
 
+#: src/components/modals/ShareModal/SharePreview.tsx:65
+msgid "Just now"
+msgstr "Agora mesmo"
+
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:185
 msgid "Just taken by someone else: {lostLabels}. Choose replacement seats."
 msgstr "Acabaram de ser ocupados por outra pessoa: {lostLabels}. Escolha assentos substitutos."
@@ -13055,6 +13089,7 @@ msgstr "O line-up está oculto na página do evento, então o widget não pode e
 
 #: src/components/common/AffiliateTable/index.tsx:119
 #: src/components/common/Editor/Controls/InsertButtonControl/index.tsx:51
+#: src/components/modals/ShareModal/index.tsx:209
 #: src/ee/crm/components/routes/AudienceForms/ShareSignupFormModal.tsx:62
 msgid "Link"
 msgstr "Link"
@@ -13589,6 +13624,7 @@ msgstr "Mesclar com outro contato"
 #: src/components/common/ContactOrganizerModal/index.tsx:91
 #: src/components/common/OrdersTable/index.tsx:175
 #: src/components/modals/SendMessageModal/index.tsx:455
+#: src/components/modals/ShareModal/SharePreview.tsx:53
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:63
 #: src/ee/crm/components/routes/AudienceAutomations/AutomationModal.tsx:258
 #: src/ee/crm/components/routes/AudienceCampaign/index.tsx:585
@@ -13872,6 +13908,11 @@ msgstr "Mais eventos"
 #: src/components/layouts/EventHomepage/MoreEventsSection.tsx:31
 msgid "More from {0}"
 msgstr "Mais de {0}"
+
+#: src/components/modals/ShareModal/index.tsx:189
+#: src/components/modals/ShareModal/index.tsx:193
+msgid "More options"
+msgstr "Mais opções"
 
 #: src/ee/seating/components/SeatPicker/SeatSheet.tsx:74
 msgid "More places"
@@ -15224,6 +15265,10 @@ msgstr "Nenhum"
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:262
 msgid "None (cash only)"
 msgstr "Nenhum (somente dinheiro)"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:76
+msgid "None left today"
+msgstr "Não restam mais hoje"
 
 #: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:138
 msgid "None shared"
@@ -16764,10 +16809,6 @@ msgstr "Página não disponível mais"
 msgid "Page not found"
 msgstr "Página não encontrada"
 
-#: src/components/modals/ShareModal/index.tsx:236
-msgid "Page URL"
-msgstr "URL da página"
-
 #: src/components/common/StatBoxes/index.tsx:103
 msgid "Page views"
 msgstr "Visualizações de página"
@@ -17672,6 +17713,10 @@ msgstr "Português"
 msgid "Position"
 msgstr "Posição"
 
+#: src/components/modals/ShareModal/SharePreview.tsx:54
+msgid "Post"
+msgstr "Post"
+
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:105
 msgid "Post Checkout message"
 msgstr "Mensagem de pós-cheque"
@@ -17732,14 +17777,18 @@ msgstr "Visualizar o checkout de"
 msgid "Preview as"
 msgstr "Visualizar como"
 
-#: src/components/layouts/Event/index.tsx:319
-#: src/components/layouts/Event/index.tsx:323
+#: src/components/layouts/Event/index.tsx:320
+#: src/components/layouts/Event/index.tsx:324
 msgid "Preview Event page"
 msgstr "Pré-visualizar página do evento"
 
 #: src/ee/crm/components/routes/AudienceCampaign/SmsPreviewPane.tsx:53
 msgid "Preview for"
 msgstr "Prévia para"
+
+#: src/components/modals/ShareModal/SharePreview.tsx:50
+msgid "Preview style"
+msgstr "Estilo da prévia"
 
 #: src/ee/crm/components/routes/AudienceAutomations/AutomationModal.tsx:244
 #: src/ee/crm/components/routes/AudienceCampaign/index.tsx:504
@@ -17983,6 +18032,10 @@ msgstr "Produtos Vendidos"
 msgid "Products sorted successfully"
 msgstr "Produtos ordenados com sucesso"
 
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:21
+msgid "Professional"
+msgstr "Profissional"
+
 #: src/components/layouts/SettingsLayout/index.tsx:62
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:271
 #: src/components/routes/settings/Profile/index.tsx:170
@@ -18156,10 +18209,6 @@ msgstr "Coloque a nova chave em <0>APP_LICENCE_KEY</0> e faça o deploy do backe
 
 #: src/ee/crm/components/routes/AudienceForms/ShareSignupFormModal.tsx:74
 msgid "QR code"
-msgstr "Código QR"
-
-#: src/components/modals/ShareModal/index.tsx:168
-msgid "QR Code"
 msgstr "Código QR"
 
 #: src/components/layouts/AuthLayout/AuthShell.tsx:15
@@ -19098,11 +19147,11 @@ msgstr "Reenviar código"
 msgid "Resend Confirmation"
 msgstr "Reenviar confirmação"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:391
+#: src/components/layouts/OrganizerLayout/index.tsx:392
 msgid "Resend Confirmation Email"
 msgstr "Reenviar e-mail de confirmação"
 
-#: src/components/layouts/Event/index.tsx:339
+#: src/components/layouts/Event/index.tsx:340
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:162
 msgid "Resend email"
 msgstr "Reenviar e-mail"
@@ -21021,6 +21070,7 @@ msgid "Set up Audience to see who has been to your events before, who is likely 
 msgstr "Configure o Público para ver quem já veio aos seus eventos, quem provavelmente vai comparecer e a que outros eventos vão."
 
 #: src/components/layouts/OrganizerLayout/index.tsx:105
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:43
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:126
 msgid "Set up payouts"
 msgstr "Configurar repasses"
@@ -21122,9 +21172,7 @@ msgstr "Forma"
 #: src/components/layouts/OrganizerHomepage/index.tsx:334
 #: src/components/layouts/OrganizerHomepage/index.tsx:334
 #: src/components/layouts/OrganizerLayout/index.tsx:320
-#: src/components/modals/ShareModal/index.tsx:37
-#: src/components/modals/ShareModal/index.tsx:165
-#: src/components/modals/ShareModal/index.tsx:186
+#: src/components/modals/ShareModal/index.tsx:49
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:65
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:76
 #: src/ee/crm/components/routes/AudienceForms/index.tsx:173
@@ -21142,8 +21190,8 @@ msgstr "Partilhar link de afiliado"
 
 #: src/components/layouts/Event/index.tsx:277
 #: src/components/layouts/Event/index.tsx:283
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:102
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:131
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:101
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:130
 msgid "Share Event"
 msgstr "Compartilhar evento"
 
@@ -21172,9 +21220,21 @@ msgstr "Compartilhe o novo PIN com a equipe da porta. Quem estava conectado foi 
 msgid "Share the payment details"
 msgstr "Compartilhar os dados de pagamento"
 
+#: src/components/modals/ShareModal/index.tsx:174
+msgid "Share to"
+msgstr "Compartilhar em"
+
+#: src/components/modals/ShareModal/index.tsx:181
+msgid "Share to {0}"
+msgstr "Compartilhar no {0}"
+
 #: src/components/routes/event/CapacityAssignments/index.tsx:32
 msgid "Shared Capacity Management"
 msgstr "Gestão de capacidade compartilhada"
+
+#: src/components/modals/ShareModal/index.tsx:132
+msgid "Shared links show the cover image, so links without one are easy to scroll past."
+msgstr "Links compartilhados mostram a imagem de capa, então os que não têm passam despercebidos."
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:34
 msgid "Shift times"
@@ -21183,6 +21243,10 @@ msgstr "Deslocar horários"
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:212
 msgid "Shifted times for {count} date(s)"
 msgstr "Horários deslocados em {count} data(s)"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:23
+msgid "Short"
+msgstr "Curto"
 
 #: src/components/forms/QuestionForm/questionTypes.ts:23
 msgid "Short answer"
@@ -22817,6 +22881,18 @@ msgstr "Configurações de rastreamento atualizadas com sucesso"
 msgid "Successfully updated Webhook"
 msgstr "Webhook atualizado com sucesso"
 
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:87
+msgid "Suggest captions"
+msgstr "Sugerir legendas"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:87
+msgid "Suggest new ones"
+msgstr "Sugerir outras"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:71
+msgid "Suggestions"
+msgstr "Sugestões"
+
 #: src/components/common/ProgressStepper/index.tsx:20
 #: src/components/common/ProgressStepper/index.tsx:24
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:651
@@ -24227,6 +24303,10 @@ msgstr "Este evento também tem uma pergunta de número de telefone. Os comprado
 #: src/components/layouts/EventHomepage/index.tsx:131
 msgid "This event has ended"
 msgstr "Este evento terminou"
+
+#: src/components/modals/ShareModal/index.tsx:130
+msgid "This event has no cover image"
+msgstr "Este evento não tem imagem de capa"
 
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:154
 msgid "This event has no seat map, so there is no plan to print. Attach one in the seating settings."
@@ -26359,7 +26439,7 @@ msgstr "Verificar email"
 msgid "Verify recovery code"
 msgstr "Verificar código de recuperação"
 
-#: src/components/layouts/Event/index.tsx:336
+#: src/components/layouts/Event/index.tsx:337
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:156
 msgid "Verify your email"
 msgstr "Verifique seu e-mail"
@@ -26480,7 +26560,7 @@ msgstr "Ver evento"
 msgid "View event page"
 msgstr "Exibir página do evento"
 
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:93
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:92
 msgid "View Event Page"
 msgstr "Ver página do evento"
 
@@ -27078,6 +27158,10 @@ msgstr "Não foi possível parar esta campanha. Tente novamente."
 #: src/ee/crm/components/routes/CampaignUnsubscribe/index.tsx:145
 msgid "We couldn't subscribe you again. Please try again."
 msgstr "Não conseguimos inscrever você novamente. Tente novamente."
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:60
+msgid "We couldn't suggest captions right now. Please try again."
+msgstr "Não foi possível sugerir legendas agora. Tente novamente."
 
 #: src/ee/crm/components/ContactDrawer/index.tsx:119
 msgid "We couldn't unsubscribe this contact. Please try again."
@@ -28040,7 +28124,7 @@ msgstr "Você deve criar um tíquete antes de adicionar manualmente um participa
 msgid "You must have at least one price tier"
 msgstr "Você deve ter pelo menos um nível de preço"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:380
+#: src/components/layouts/OrganizerLayout/index.tsx:381
 msgid "You must verify your email address before you can update the organizer status."
 msgstr "Você precisa verificar seu e-mail antes de atualizar o status do organizador."
 
@@ -28341,7 +28425,7 @@ msgstr "Seu evento não tem data neste dia, então esta faixa não aparecerá na
 msgid "Your event has no description yet."
 msgstr "Seu evento ainda não tem descrição."
 
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:48
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:47
 msgid "Your event is live!"
 msgstr "Seu evento está no ar!"
 

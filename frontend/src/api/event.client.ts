@@ -1,6 +1,7 @@
 import {ProductSelection} from "../utilites/widgetConfig.ts";
 import {api} from "./client";
 import {
+    EventShareSuggestions,
     CheckInStats,
     Event,
     EventDuplicatePayload,
@@ -94,6 +95,16 @@ export const eventsClient = {
 
     getDeletionStatus: async (eventId: IdParam) => {
         const response = await api.get<GenericDataResponse<{ can_delete: boolean; reason?: string }>>('events/' + eventId + '/deletion-status');
+        return response.data;
+    },
+
+    getShareSuggestions: async (eventId: IdParam) => {
+        const response = await api.get<GenericDataResponse<EventShareSuggestions>>('events/' + eventId + '/share-suggestions');
+        return response.data;
+    },
+
+    generateShareSuggestions: async (eventId: IdParam) => {
+        const response = await api.post<GenericDataResponse<EventShareSuggestions>>('events/' + eventId + '/share-suggestions');
         return response.data;
     },
 

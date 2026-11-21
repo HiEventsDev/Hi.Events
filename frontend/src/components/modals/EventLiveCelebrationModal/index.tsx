@@ -9,6 +9,7 @@ import {
 } from '@tabler/icons-react';
 import {t} from "@lingui/macro";
 import {NavLink} from "react-router";
+import {Event} from "../../../types.ts";
 import {ShareModal} from "../ShareModal";
 import classes from './EventLiveCelebrationModal.module.scss';
 
@@ -16,16 +17,14 @@ interface EventLiveCelebrationModalProps {
     opened: boolean;
     onClose: () => void;
     url: string;
-    eventTitle: string;
-    eventId: string;
+    event: Event;
 }
 
 export const EventLiveCelebrationModal = ({
     opened,
     onClose,
     url,
-    eventTitle,
-    eventId
+    event,
 }: EventLiveCelebrationModalProps) => {
     const [shareModalOpened, {open: openShareModal, close: closeShareModal}] = useDisclosure(false);
 
@@ -104,7 +103,7 @@ export const EventLiveCelebrationModal = ({
 
                         <Button
                             component={NavLink}
-                            to={`/manage/event/${eventId}/widget`}
+                            to={`/manage/event/${event.id}/widget`}
                             variant="light"
                             leftSection={<IconCode size={16}/>}
                             onClick={onClose}
@@ -127,8 +126,10 @@ export const EventLiveCelebrationModal = ({
 
             <ShareModal
                 url={url}
-                title={eventTitle}
+                title={event.title}
                 modalTitle={t`Share Event`}
+                event={event}
+                suggestCaptions
                 opened={shareModalOpened}
                 onClose={closeShareModal}
             />

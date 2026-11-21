@@ -10552,6 +10552,211 @@
         }
       }
     },
+    "/events/{eventId}/share-suggestions": {
+      "get": {
+        "operationId": "shareSuggestions.getEventShareSuggestionsAction",
+        "summary": "Get Event Share Suggestions",
+        "tags": [
+          "Events / Share Suggestions"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "`EventShareSuggestionsResource`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/EventShareSuggestionsResource"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "403": {
+            "description": "The authenticated user is not allowed to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "shareSuggestions.generateEventShareSuggestionsAction",
+        "summary": "Generate Event Share Suggestions",
+        "tags": [
+          "Events / Share Suggestions"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "`EventShareSuggestionsResource`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/EventShareSuggestionsResource"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/events/{eventId}/stats": {
       "get": {
         "operationId": "stats.getEventStatsAction",
@@ -31307,6 +31512,54 @@
           "waitlist_offer_timeout_minutes"
         ],
         "title": "EventSettingsResourcePublic"
+      },
+      "EventShareSuggestionsResource": {
+        "type": "object",
+        "properties": {
+          "availability": {
+            "type": "string",
+            "enum": [
+              "AVAILABLE",
+              "NOT_CONFIGURED",
+              "EMAIL_NOT_CONFIRMED",
+              "PAYMENTS_NOT_CONNECTED",
+              "EVENT_UNDER_REVIEW"
+            ]
+          },
+          "captions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "tone": {
+                  "type": "string",
+                  "enum": [
+                    "FRIENDLY",
+                    "PROFESSIONAL",
+                    "ENERGETIC",
+                    "SHORT"
+                  ]
+                },
+                "text": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "tone",
+                "text"
+              ]
+            }
+          },
+          "remaining_generations": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "availability",
+          "captions",
+          "remaining_generations"
+        ],
+        "title": "EventShareSuggestionsResource"
       },
       "EventSpaceResource": {
         "type": "object",
