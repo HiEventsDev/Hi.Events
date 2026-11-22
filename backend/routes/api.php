@@ -324,6 +324,8 @@ use HiEvents\Http\Actions\Events\GetOrganizerEventsPublicAction;
 use HiEvents\Http\Actions\Events\Images\CreateEventImageAction;
 use HiEvents\Http\Actions\Events\Images\DeleteEventImageAction;
 use HiEvents\Http\Actions\Events\Images\GetEventImagesAction;
+use HiEvents\Http\Actions\Events\ShareSuggestions\GenerateEventShareSuggestionsAction;
+use HiEvents\Http\Actions\Events\ShareSuggestions\GetEventShareSuggestionsAction;
 use HiEvents\Http\Actions\Events\Stats\GetEventCountsAction;
 use HiEvents\Http\Actions\Events\Stats\GetEventStatsAction;
 use HiEvents\Http\Actions\Events\UpdateEventAction;
@@ -843,6 +845,8 @@ $router->middleware(['auth:api,sanctum'])->group(
         $router->delete('/events/{event_id}', DeleteEventAction::class);
         $router->get('/events/{event_id}/deletion-status', GetEventDeletionStatusAction::class);
         $router->post('/events/{event_id}/duplicate', DuplicateEventAction::class);
+        $router->get('/events/{event_id}/share-suggestions', GetEventShareSuggestionsAction::class);
+        $router->post('/events/{event_id}/share-suggestions', GenerateEventShareSuggestionsAction::class)->middleware('throttle:6,1,event-share-suggestions');
 
         // Product Categories
         $router->post('/events/{event_id}/product-categories', CreateProductCategoryAction::class);

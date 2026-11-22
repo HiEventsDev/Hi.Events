@@ -618,6 +618,21 @@ export interface Image {
     lqip_base64?: string | null;
 }
 
+export type ShareSuggestionAvailability = 'AVAILABLE' | 'NOT_CONFIGURED' | 'EMAIL_NOT_CONFIRMED' | 'PAYMENTS_NOT_CONNECTED' | 'EVENT_UNDER_REVIEW';
+
+export type ShareCaptionTone = 'FRIENDLY' | 'PROFESSIONAL' | 'ENERGETIC' | 'SHORT';
+
+export interface ShareCaption {
+    tone: ShareCaptionTone;
+    text: string;
+}
+
+export interface EventShareSuggestions {
+    availability: ShareSuggestionAvailability;
+    captions: ShareCaption[];
+    remaining_generations: number;
+}
+
 export type ImageType = 'EVENT_COVER' | 'EDITOR_IMAGE' | 'ORGANIZER_LOGO' | 'ORGANIZER_COVER' | 'ORGANIZER_IMAGE' | 'TICKET_LOGO' | 'PROFILE_IMAGE' | 'EVENT_GALLERY' | 'EVENT_SPONSOR_LOGO' | 'ORGANIZER_GALLERY' | 'ORGANIZER_SPONSOR_LOGO';
 
 export type HomepageSectionType =

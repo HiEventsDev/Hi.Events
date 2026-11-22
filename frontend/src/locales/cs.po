@@ -273,6 +273,14 @@ msgstr "{0} se může přihlásit svým heslem"
 msgid "{0} cancelled"
 msgstr "Zrušeno: {0}"
 
+#: src/components/modals/ShareModal/index.tsx:165
+msgid "{0} characters"
+msgstr "Počet znaků: {0}"
+
+#: src/components/modals/ShareModal/index.tsx:164
+msgid "{0} characters, too long for an X post"
+msgstr "Počet znaků: {0}, příliš dlouhé pro příspěvek na X"
+
 #: src/components/routes/admin/Configurations/index.tsx:84
 msgid "{0} Default"
 msgstr "Výchozí pro {0}"
@@ -320,6 +328,10 @@ msgstr "Vybrané položky: {0}"
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:398
 msgid "{0} left"
 msgstr "Zbývá {0}"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:77
+msgid "{0} left today"
+msgstr "Dnes zbývá: {0}"
 
 #: src/components/layouts/AppLayout/Sidebar/index.tsx:117
 #: src/components/layouts/AuthLayout/AuthShell.tsx:153
@@ -1927,6 +1939,10 @@ msgstr "Přidat čtečku karet"
 #: src/ee/crm/components/routes/AudienceContacts/AddContactModal.tsx:56
 msgid "Add a contact"
 msgstr "Přidat kontakt"
+
+#: src/components/modals/ShareModal/index.tsx:143
+msgid "Add a cover image"
+msgstr "Přidat úvodní obrázek"
 
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:147
 msgid "Add a cover image and theme to match your brand"
@@ -4938,6 +4954,18 @@ msgstr "Využitá kapacita"
 msgid "Capacity, sold, held and free seats for each price band and area, with revenue per band."
 msgstr "Kapacita, prodaná, držená a volná místa pro každé cenové pásmo a oblast spolu s tržbami za pásmo."
 
+#: src/components/modals/ShareModal/index.tsx:154
+msgid "Caption"
+msgstr "Popisek"
+
+#: src/components/modals/ShareModal/index.tsx:76
+msgid "Caption copied. Paste it into your {0} post."
+msgstr "Popisek zkopírován. Vložte ho do příspěvku na {0}."
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:38
+msgid "Caption suggestions are available once you connect Stripe."
+msgstr "Návrhy popisků budou dostupné po propojení se Stripe."
+
 #: src/ee/box-office/components/layouts/BoxOffice/TenderStage.tsx:173
 #: src/ee/box-office/utilites/boxOfficeTender.ts:9
 msgid "Card"
@@ -6148,7 +6176,7 @@ msgstr "Potvrďte svou e-mailovou adresu"
 msgid "Confirm your email address to take signups"
 msgstr "Potvrďte svou e-mailovou adresu, abyste mohli přijímat přihlášky k odběru"
 
-#: src/components/layouts/Event/index.tsx:337
+#: src/components/layouts/Event/index.tsx:338
 msgid "Confirm your email to access all features."
 msgstr "Potvrďte svůj e-mail pro přístup ke všem funkcím."
 
@@ -6160,7 +6188,7 @@ msgstr "Potvrďte svůj odběr"
 msgid "Confirmation code"
 msgstr "Potvrzovací kód"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:395
+#: src/components/layouts/OrganizerLayout/index.tsx:396
 msgid "Confirmation email sent! Please check your inbox."
 msgstr "Potvrzovací e-mail byl odeslán! Zkontrolujte prosím svou schránku."
 
@@ -6180,7 +6208,7 @@ msgstr "Potvrzeno e-mailem po přihlášení přes formulář"
 msgid "Confirming email address..."
 msgstr "Potvrzování e-mailové adresy..."
 
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:52
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:51
 msgid "Congratulations! Your event is now visible to the public."
 msgstr "Gratulujeme! Vaše událost je nyní viditelná pro veřejnost."
 
@@ -6471,9 +6499,9 @@ msgstr "Nastavení cookies"
 #: src/components/common/WidgetEditor/index.tsx:221
 #: src/components/common/WidgetEditor/InstallPanel.tsx:52
 #: src/components/modals/CheckInListSuccessModal/index.tsx:42
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:75
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:74
 #: src/components/modals/ManageOrderModal/index.tsx:237
-#: src/components/modals/ShareModal/index.tsx:255
+#: src/components/modals/ShareModal/index.tsx:225
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:366
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:70
 #: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:20
@@ -6492,8 +6520,7 @@ msgstr "Zkopírováno shora"
 msgid "Copied to clipboard"
 msgstr "Zkopírováno do schránky"
 
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:67
-#: src/components/modals/ShareModal/index.tsx:248
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:66
 msgid "Copied!"
 msgstr "Zkopírováno!"
 
@@ -6506,10 +6533,9 @@ msgstr "Zkopíruje podrobné pokyny k vložení do ChatGPT, Claude, Cursor nebo 
 #: src/components/common/TanStackTable/cells.tsx:79
 #: src/components/common/TanStackTable/cells.tsx:86
 #: src/components/modals/CheckInListSuccessModal/index.tsx:42
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:75
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:74
 #: src/components/modals/ManageOrderModal/index.tsx:237
 #: src/components/modals/ManageOrderModal/index.tsx:243
-#: src/components/modals/ShareModal/index.tsx:255
 #: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:20
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:51
 #: src/ee/crm/components/routes/AudienceForms/ShareSignupFormModal.tsx:19
@@ -6586,13 +6612,13 @@ msgid "Copy key"
 msgstr "Kopírovat klíč"
 
 #: src/components/common/SsoButtons/index.tsx:54
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:67
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:66
+#: src/components/modals/ShareModal/index.tsx:225
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:70
 msgid "Copy link"
 msgstr "Kopírovat odkaz"
 
 #: src/components/common/AttendeeTicket/index.tsx:192
-#: src/components/modals/ShareModal/index.tsx:171
 msgid "Copy Link"
 msgstr "Kopírovat odkaz"
 
@@ -6648,14 +6674,6 @@ msgstr "Zkopírujte klíč znovu z e-mailu s licencí, bez uvozovek a mezer."
 #: src/components/common/WidgetEditor/index.tsx:184
 msgid "Copy the new code to your site"
 msgstr "Zkopírujte nový kód na svůj web"
-
-#: src/components/modals/ShareModal/index.tsx:264
-msgid "Copy this link to share it anywhere"
-msgstr "Zkopírujte tento odkaz a sdílejte jej kdekoli"
-
-#: src/components/modals/ShareModal/index.tsx:248
-msgid "Copy to clipboard"
-msgstr "Kopírovat do schránky"
 
 #: src/ee/sso/components/SingleSignOn/DomainList.tsx:112
 msgid "Copy TXT record name"
@@ -8285,7 +8303,7 @@ msgstr "Dar"
 #: src/components/modals/CheckInListSuccessModal/index.tsx:59
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:73
 #: src/components/modals/CreateWebhookModal/index.tsx:73
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:123
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:122
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:122
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:200
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:207
@@ -8335,8 +8353,8 @@ msgstr "Stáhnout fakturu"
 msgid "Download PNG"
 msgstr "Stáhnout PNG"
 
-#: src/components/modals/ShareModal/index.tsx:228
-msgid "Download QR Code"
+#: src/components/modals/ShareModal/index.tsx:235
+msgid "Download QR code"
 msgstr "Stáhnout QR kód"
 
 #: src/components/routes/event/Lineup/index.tsx:145
@@ -9106,7 +9124,7 @@ msgstr "Poslat e-mail tomuto segmentu"
 msgid "Email to send tickets"
 msgstr "E-mail pro odeslání vstupenek"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:374
+#: src/components/layouts/OrganizerLayout/index.tsx:375
 msgid "Email Verification Required"
 msgstr "Vyžadováno ověření e-mailu"
 
@@ -9139,7 +9157,7 @@ msgid "Embed on your website"
 msgstr "Vložit na váš web"
 
 #: src/components/common/WidgetEditor/index.tsx:189
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:113
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:112
 msgid "Embed Widget"
 msgstr "Vložit widget"
 
@@ -9273,6 +9291,10 @@ msgstr "Končí"
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:187
 msgid "Ends the next day"
 msgstr "Končí následující den"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:22
+msgid "Energetic"
+msgstr "Energický"
 
 #: src/components/common/LanguageSwitcher/index.tsx:22
 #: src/components/modals/CreateAttendeeModal/index.tsx:241
@@ -9656,7 +9678,7 @@ msgstr "Událost není dostupná"
 msgid "Event not live"
 msgstr "Událost není zveřejněna"
 
-#: src/components/layouts/Event/index.tsx:326
+#: src/components/layouts/Event/index.tsx:327
 msgid "Event Page"
 msgstr "Stránka události"
 
@@ -9702,7 +9724,7 @@ msgstr "Název, datum a obrázek události"
 msgid "Event Too New"
 msgstr "Událost je příliš nová"
 
-#: src/components/routes/event/EventDashboard/index.tsx:265
+#: src/components/routes/event/EventDashboard/index.tsx:264
 msgid "Event totals"
 msgstr "Souhrn události"
 
@@ -10488,6 +10510,10 @@ msgstr "Vlastní poplatky uloženy"
 msgid "Fee updated"
 msgstr "Poplatek aktualizován"
 
+#: src/components/modals/ShareModal/SharePreview.tsx:52
+msgid "Feed"
+msgstr "Kanál"
+
 #: src/components/common/InlineOrderSummary/index.tsx:164
 #: src/components/common/OrdersTable/index.tsx:234
 #: src/components/forms/ProductForm/index.tsx:497
@@ -10957,6 +10983,10 @@ msgstr "Pátek"
 #: src/components/routes/event/Questions/questionTemplates.ts:55
 msgid "Friend or colleague"
 msgstr "Přítel nebo kolega"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:20
+msgid "Friendly"
+msgstr "Přátelský"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1086
 #: src/ee/crm/components/routes/AudienceCampaign/index.tsx:418
@@ -12577,6 +12607,10 @@ msgstr "Hledáte jen své vstupenky?"
 msgid "just now"
 msgstr "právě teď"
 
+#: src/components/modals/ShareModal/SharePreview.tsx:65
+msgid "Just now"
+msgstr "Právě teď"
+
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:185
 msgid "Just taken by someone else: {lostLabels}. Choose replacement seats."
 msgstr "Právě je obsadil někdo jiný: {lostLabels}. Vyberte náhradní místa."
@@ -13078,6 +13112,7 @@ msgstr "Line-up je na stránce události skrytý, takže ho widget nemůže zobr
 
 #: src/components/common/AffiliateTable/index.tsx:119
 #: src/components/common/Editor/Controls/InsertButtonControl/index.tsx:51
+#: src/components/modals/ShareModal/index.tsx:209
 #: src/ee/crm/components/routes/AudienceForms/ShareSignupFormModal.tsx:62
 msgid "Link"
 msgstr "Odkaz"
@@ -13610,6 +13645,7 @@ msgstr "Sloučit s jiným kontaktem"
 #: src/components/common/ContactOrganizerModal/index.tsx:91
 #: src/components/common/OrdersTable/index.tsx:175
 #: src/components/modals/SendMessageModal/index.tsx:455
+#: src/components/modals/ShareModal/SharePreview.tsx:53
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:63
 #: src/ee/crm/components/routes/AudienceAutomations/AutomationModal.tsx:258
 #: src/ee/crm/components/routes/AudienceCampaign/index.tsx:585
@@ -13890,6 +13926,11 @@ msgstr "Další události"
 #: src/components/layouts/EventHomepage/MoreEventsSection.tsx:31
 msgid "More from {0}"
 msgstr "Další od organizátora {0}"
+
+#: src/components/modals/ShareModal/index.tsx:189
+#: src/components/modals/ShareModal/index.tsx:193
+msgid "More options"
+msgstr "Další možnosti"
 
 #: src/ee/seating/components/SeatPicker/SeatSheet.tsx:74
 msgid "More places"
@@ -15240,6 +15281,10 @@ msgstr "Žádné"
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:262
 msgid "None (cash only)"
 msgstr "Žádná (pouze hotovost)"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:76
+msgid "None left today"
+msgstr "Dnes už žádné nezbývají"
 
 #: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:138
 msgid "None shared"
@@ -16767,10 +16812,6 @@ msgstr "Stránka již není k dispozici"
 msgid "Page not found"
 msgstr "Stránka nenalezena"
 
-#: src/components/modals/ShareModal/index.tsx:236
-msgid "Page URL"
-msgstr "URL stránky"
-
 #: src/components/common/StatBoxes/index.tsx:103
 #: src/components/routes/event/Reports/DailySalesReport/index.tsx:41
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:72
@@ -17669,6 +17710,10 @@ msgstr "Portugalština"
 msgid "Position"
 msgstr "Pořadí"
 
+#: src/components/modals/ShareModal/SharePreview.tsx:54
+msgid "Post"
+msgstr "Příspěvek"
+
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:137
 msgid "Post Checkout message"
 msgstr "Zpráva po dokončení objednávky"
@@ -17729,14 +17774,18 @@ msgstr "Zobrazit náhled objednávky pro"
 msgid "Preview as"
 msgstr "Náhled jako"
 
-#: src/components/layouts/Event/index.tsx:319
-#: src/components/layouts/Event/index.tsx:323
+#: src/components/layouts/Event/index.tsx:320
+#: src/components/layouts/Event/index.tsx:324
 msgid "Preview Event page"
 msgstr "Náhled stránky události"
 
 #: src/ee/crm/components/routes/AudienceCampaign/SmsPreviewPane.tsx:53
 msgid "Preview for"
 msgstr "Náhled pro"
+
+#: src/components/modals/ShareModal/SharePreview.tsx:50
+msgid "Preview style"
+msgstr "Styl náhledu"
 
 #: src/ee/crm/components/routes/AudienceAutomations/AutomationModal.tsx:244
 #: src/ee/crm/components/routes/AudienceCampaign/index.tsx:504
@@ -17986,6 +18035,10 @@ msgstr "Prodané produkty"
 msgid "Products sorted successfully"
 msgstr "Produkty byly úspěšně seřazeny"
 
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:21
+msgid "Professional"
+msgstr "Profesionální"
+
 #: src/components/layouts/SettingsLayout/index.tsx:62
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:271
 #: src/components/routes/settings/Profile/index.tsx:170
@@ -18148,10 +18201,6 @@ msgstr "Vložte nový klíč do <0>APP_LICENCE_KEY</0> a znovu nasaďte backend.
 
 #: src/ee/crm/components/routes/AudienceForms/ShareSignupFormModal.tsx:74
 msgid "QR code"
-msgstr "QR kód"
-
-#: src/components/modals/ShareModal/index.tsx:168
-msgid "QR Code"
 msgstr "QR kód"
 
 #: src/components/layouts/AuthLayout/AuthShell.tsx:15
@@ -19083,11 +19132,11 @@ msgstr "Odeslat kód znovu"
 msgid "Resend Confirmation"
 msgstr "Odeslat potvrzení znovu"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:391
+#: src/components/layouts/OrganizerLayout/index.tsx:392
 msgid "Resend Confirmation Email"
 msgstr "Odeslat potvrzovací e-mail znovu"
 
-#: src/components/layouts/Event/index.tsx:339
+#: src/components/layouts/Event/index.tsx:340
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:162
 msgid "Resend email"
 msgstr "Odeslat e-mail znovu"
@@ -21003,6 +21052,7 @@ msgid "Set up Audience to see who has been to your events before, who is likely 
 msgstr "Nastavte si Publikum a uvidíte, kdo už byl na vašich akcích, kdo pravděpodobně přijde a kam dalšího chodí."
 
 #: src/components/layouts/OrganizerLayout/index.tsx:105
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:43
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:126
 msgid "Set up payouts"
 msgstr "Nastavit výplaty"
@@ -21108,9 +21158,7 @@ msgstr "Tvar"
 #: src/components/layouts/OrganizerHomepage/index.tsx:334
 #: src/components/layouts/OrganizerHomepage/index.tsx:334
 #: src/components/layouts/OrganizerLayout/index.tsx:320
-#: src/components/modals/ShareModal/index.tsx:37
-#: src/components/modals/ShareModal/index.tsx:165
-#: src/components/modals/ShareModal/index.tsx:186
+#: src/components/modals/ShareModal/index.tsx:49
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:65
 #: src/components/routes/product-widget/Payment/PaymentLink/index.tsx:76
 #: src/ee/crm/components/routes/AudienceForms/index.tsx:173
@@ -21128,8 +21176,8 @@ msgstr "Sdílet partnerský odkaz"
 
 #: src/components/layouts/Event/index.tsx:277
 #: src/components/layouts/Event/index.tsx:283
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:102
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:131
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:101
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:130
 msgid "Share Event"
 msgstr "Sdílet událost"
 
@@ -21158,9 +21206,21 @@ msgstr "Sdílejte nový PIN s obsluhou u vchodu. Všichni, kdo byli přihlášen
 msgid "Share the payment details"
 msgstr "Sdílet platební údaje"
 
+#: src/components/modals/ShareModal/index.tsx:174
+msgid "Share to"
+msgstr "Sdílet na"
+
+#: src/components/modals/ShareModal/index.tsx:181
+msgid "Share to {0}"
+msgstr "Sdílet na {0}"
+
 #: src/components/routes/event/CapacityAssignments/index.tsx:32
 msgid "Shared Capacity Management"
 msgstr "Správa sdílené kapacity"
+
+#: src/components/modals/ShareModal/index.tsx:132
+msgid "Shared links show the cover image, so links without one are easy to scroll past."
+msgstr "Sdílené odkazy zobrazují úvodní obrázek, takže odkazy bez něj snadno zapadnou."
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:34
 msgid "Shift times"
@@ -21169,6 +21229,10 @@ msgstr "Posunout časy"
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:212
 msgid "Shifted times for {count} date(s)"
 msgstr "Časy posunuty (počet termínů: {count})"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:23
+msgid "Short"
+msgstr "Krátký"
 
 #: src/components/forms/QuestionForm/questionTypes.ts:23
 msgid "Short answer"
@@ -22808,6 +22872,18 @@ msgstr "Nastavení sledování bylo úspěšně aktualizováno"
 msgid "Successfully updated Webhook"
 msgstr "Webhook byl úspěšně aktualizován"
 
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:89
+msgid "Suggest captions"
+msgstr "Navrhnout popisky"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:89
+msgid "Suggest new ones"
+msgstr "Navrhnout nové"
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:71
+msgid "Suggestions"
+msgstr "Návrhy"
+
 #: src/components/common/ProgressStepper/index.tsx:20
 #: src/components/common/ProgressStepper/index.tsx:24
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:651
@@ -24228,6 +24304,10 @@ msgstr "Tato akce má také otázku na telefonní číslo. Kupující mohou být
 #: src/components/layouts/EventHomepage/index.tsx:131
 msgid "This event has ended"
 msgstr "Tato událost skončila"
+
+#: src/components/modals/ShareModal/index.tsx:130
+msgid "This event has no cover image"
+msgstr "Tato událost nemá úvodní obrázek"
 
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:154
 msgid "This event has no seat map, so there is no plan to print. Attach one in the seating settings."
@@ -26349,7 +26429,7 @@ msgstr "Ověřit e-mail"
 msgid "Verify recovery code"
 msgstr "Ověřit záložní kód"
 
-#: src/components/layouts/Event/index.tsx:336
+#: src/components/layouts/Event/index.tsx:337
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:156
 msgid "Verify your email"
 msgstr "Ověřte svůj e-mail"
@@ -26466,7 +26546,7 @@ msgstr "Zobrazit událost"
 msgid "View event page"
 msgstr "Zobrazit stránku události"
 
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:93
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:92
 msgid "View Event Page"
 msgstr "Zobrazit stránku události"
 
@@ -27064,6 +27144,10 @@ msgstr "Tuto kampaň se nepodařilo zastavit. Zkuste to prosím znovu."
 #: src/ee/crm/components/routes/CampaignUnsubscribe/index.tsx:145
 msgid "We couldn't subscribe you again. Please try again."
 msgstr "Nepodařilo se vás znovu přihlásit. Zkuste to znovu."
+
+#: src/components/modals/ShareModal/CaptionSuggestions.tsx:60
+msgid "We couldn't suggest captions right now. Please try again."
+msgstr "Návrhy popisků se teď nepodařilo vytvořit. Zkuste to prosím znovu."
 
 #: src/ee/crm/components/ContactDrawer/index.tsx:119
 msgid "We couldn't unsubscribe this contact. Please try again."
@@ -28025,7 +28109,7 @@ msgstr "Než budete moci ručně přidat účastníka, musíte vytvořit vstupen
 msgid "You must have at least one price tier"
 msgstr "Musíte mít alespoň jednu cenovou úroveň"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:380
+#: src/components/layouts/OrganizerLayout/index.tsx:381
 msgid "You must verify your email address before you can update the organizer status."
 msgstr "Před aktualizací stavu organizátora musíte ověřit svou e-mailovou adresu."
 
@@ -28326,7 +28410,7 @@ msgstr "Vaše událost nemá v tento den termín, takže se tento blok nezobraz�
 msgid "Your event has no description yet."
 msgstr "Vaše událost zatím nemá popis."
 
-#: src/components/modals/EventLiveCelebrationModal/index.tsx:48
+#: src/components/modals/EventLiveCelebrationModal/index.tsx:47
 msgid "Your event is live!"
 msgstr "Vaše událost je spuštěna!"
 

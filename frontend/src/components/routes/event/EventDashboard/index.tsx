@@ -231,8 +231,7 @@ export const EventDashboard = () => {
                     opened={celebrationOpened}
                     onClose={closeCelebration}
                     url={eventHomepageUrl(event)}
-                    eventTitle={event.title}
-                    eventId={String(event.id)}
+                    event={event}
                 />
 
                 {shouldShowChecklist && (

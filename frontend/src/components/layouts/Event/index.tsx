@@ -281,6 +281,8 @@ const EventLayout = () => {
                                     url={eventHomepageUrl(event)}
                                     title={event.title}
                                     modalTitle={t`Share Event`}
+                                    event={event}
+                                    suggestCaptions
                                     opened={opened}
                                     onClose={close}
                                 />
@@ -289,8 +291,7 @@ const EventLayout = () => {
                                     opened={celebrationOpened}
                                     onClose={closeCelebration}
                                     url={eventHomepageUrl(event)}
-                                    eventTitle={event.title}
-                                    eventId={String(event.id)}
+                                    event={event}
                                 />
 
                                 {publishModalOpened && (
