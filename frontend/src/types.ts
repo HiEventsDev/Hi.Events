@@ -45,7 +45,8 @@ export interface AcceptInvitationRequest {
     marketing_opt_in?: boolean;
 }
 
-export interface RegisterAccountRequest extends AcceptInvitationRequest {
+export interface RegisterAccountRequest extends Omit<AcceptInvitationRequest, 'last_name'> {
+    last_name?: string;
     email: string;
     locale: SupportedLocales;
     utm_source?: string | null;

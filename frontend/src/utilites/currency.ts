@@ -282,10 +282,77 @@ const euroZoneCountries = [
     'LV', 'LT', 'LU', 'MT', 'NL', 'PT', 'SK', 'SI', 'ES', 'HR'
 ] as const;
 
+const timezonesByCurrency: Partial<Record<CurrencyCode, string[]>> = {
+    USD: [
+        'America/New_York', 'America/Chicago', 'America/Denver', 'America/Los_Angeles', 'America/Phoenix',
+        'America/Anchorage', 'America/Detroit', 'America/Boise', 'America/Juneau', 'Pacific/Honolulu',
+        'America/Puerto_Rico',
+    ],
+    CAD: [
+        'America/Toronto', 'America/Vancouver', 'America/Edmonton', 'America/Winnipeg', 'America/Halifax',
+        'America/St_Johns', 'America/Regina', 'America/Moncton',
+    ],
+    GBP: ['Europe/London', 'Europe/Belfast', 'Europe/Jersey', 'Europe/Guernsey', 'Europe/Isle_of_Man'],
+    EUR: [
+        'Europe/Dublin', 'Europe/Paris', 'Europe/Berlin', 'Europe/Madrid', 'Europe/Rome', 'Europe/Amsterdam',
+        'Europe/Brussels', 'Europe/Vienna', 'Europe/Lisbon', 'Europe/Helsinki', 'Europe/Athens',
+        'Europe/Luxembourg', 'Europe/Malta', 'Europe/Tallinn', 'Europe/Riga', 'Europe/Vilnius',
+        'Europe/Bratislava', 'Europe/Ljubljana', 'Europe/Zagreb', 'Europe/Monaco', 'Europe/Busingen',
+        'Asia/Nicosia', 'Atlantic/Canary', 'Atlantic/Madeira', 'Atlantic/Azores',
+    ],
+    AUD: [
+        'Australia/Sydney', 'Australia/Melbourne', 'Australia/Brisbane', 'Australia/Perth', 'Australia/Adelaide',
+        'Australia/Hobart', 'Australia/Darwin', 'Australia/Canberra',
+    ],
+    NZD: ['Pacific/Auckland'],
+    CHF: ['Europe/Zurich'],
+    SEK: ['Europe/Stockholm'],
+    NOK: ['Europe/Oslo'],
+    DKK: ['Europe/Copenhagen'],
+    PLN: ['Europe/Warsaw'],
+    CZK: ['Europe/Prague'],
+    HUF: ['Europe/Budapest'],
+    RON: ['Europe/Bucharest'],
+    TRY: ['Europe/Istanbul'],
+    INR: ['Asia/Kolkata', 'Asia/Calcutta'],
+    JPY: ['Asia/Tokyo'],
+    KRW: ['Asia/Seoul'],
+    SGD: ['Asia/Singapore'],
+    HKD: ['Asia/Hong_Kong'],
+    AED: ['Asia/Dubai'],
+    ILS: ['Asia/Jerusalem', 'Asia/Tel_Aviv'],
+    THB: ['Asia/Bangkok'],
+    MYR: ['Asia/Kuala_Lumpur'],
+    PHP: ['Asia/Manila'],
+    IDR: ['Asia/Jakarta'],
+    VND: ['Asia/Ho_Chi_Minh', 'Asia/Saigon'],
+    ZAR: ['Africa/Johannesburg'],
+    NGN: ['Africa/Lagos'],
+    KES: ['Africa/Nairobi'],
+    MXN: ['America/Mexico_City', 'America/Monterrey', 'America/Tijuana', 'America/Cancun'],
+    BRL: ['America/Sao_Paulo', 'America/Rio_Branco', 'America/Manaus', 'America/Bahia', 'America/Fortaleza'],
+    ARS: ['America/Argentina/Buenos_Aires', 'America/Buenos_Aires'],
+    CLP: ['America/Santiago'],
+    COP: ['America/Bogota'],
+};
+
+const currencyByTimezone: Record<string, CurrencyCode> = Object.fromEntries(
+    Object.entries(timezonesByCurrency).flatMap(([currency, zones]) =>
+        (zones ?? []).map((zone) => [zone, currency as CurrencyCode])),
+);
+
+const getCurrencyForTimezone = (timezone: string | undefined): CurrencyCode | undefined =>
+    timezone ? currencyByTimezone[timezone] : undefined;
+
 export const getUserCurrency = (): CurrencyCode => {
     if (typeof window === 'undefined') return 'USD';
 
     try {
+        const timezoneCurrency = getCurrencyForTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone);
+        if (timezoneCurrency) {
+            return timezoneCurrency;
+        }
+
         const userLocales = [
             // Primary: Full user locale (e.g., 'en-US')
             navigator.language,
