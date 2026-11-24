@@ -11,7 +11,7 @@
 @if($preheader)
 <div style="display: none; max-height: 0; max-width: 0; overflow: hidden; opacity: 0; mso-hide: all;">{{ $preheader }}</div>
 @endif
-@if(config('app.saas_mode_enabled'))
+@if(config('app.saas_mode_enabled') && ! ($mailBranding ?? null)?->hideHiEventsBranding)
 <div style="background-color: #f7f5fb; border: 1px solid #ebe7f2; border-radius: 10px; padding: 10px 16px; margin: 0 0 24px 0; color: #56506a; font-size: 13px; line-height: 1.6; text-align: center; overflow-wrap: anywhere; word-wrap: break-word; word-break: break-word;">
 {{ __('This message is from :organizer, not from :platform.', ['organizer' => $organizerName, 'platform' => config('app.name')]) }}
 </div>

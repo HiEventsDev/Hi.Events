@@ -3,7 +3,23 @@ import {GenericPaginatedResponse, IdParam, Message, OutgoingMessage, QueryFilter
 import {queryParamsHelper} from "../utilites/queryParamsHelper.ts";
 import {AxiosResponse} from "axios";
 
+export interface MessagePreviewRequest {
+    subject: string;
+    message: string;
+}
+
+export interface MessagePreview {
+    html: string;
+    subject: string;
+    from_name: string;
+    reply_to: string | null;
+}
+
 export const messagesClient = {
+    preview: async (eventId: IdParam, draft: MessagePreviewRequest) => {
+        const response = await api.post<{ data: MessagePreview }>(`events/${eventId}/messages/preview`, draft);
+        return response.data;
+    },
     send: async (eventId: IdParam, messagesRequest: Message) => {
         return await api.post(`events/${eventId}/messages`, messagesRequest);
     },

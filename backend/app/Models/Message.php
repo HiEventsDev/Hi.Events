@@ -33,6 +33,7 @@ class Message extends BaseModel
             'product_ids' => 'array',
             'send_data' => 'array',
             'eligibility_failures' => 'array',
+            'ai_review' => 'array',
         ];
     }
 }

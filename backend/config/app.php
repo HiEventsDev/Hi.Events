@@ -38,6 +38,8 @@ return [
     'event_spam_check_confidence_threshold' => env('APP_EVENT_SPAM_CHECK_CONFIDENCE_THRESHOLD', 0.7),
     'crm_campaign_ai_review_enabled' => env('APP_CRM_CAMPAIGN_AI_REVIEW_ENABLED', false),
     'crm_campaign_ai_review_confidence_threshold' => env('APP_CRM_CAMPAIGN_AI_REVIEW_CONFIDENCE_THRESHOLD', 0.8),
+    'message_ai_review_enabled' => env('APP_MESSAGE_AI_REVIEW_ENABLED', false),
+    'message_ai_review_confidence_threshold' => env('APP_MESSAGE_AI_REVIEW_CONFIDENCE_THRESHOLD', 0.8),
     'enforce_email_confirmation_during_registration' => env('APP_ENFORCE_EMAIL_CONFIRMATION_DURING_REGISTRATION', false),
     'allowed_internal_webhook_hosts' => env('APP_ALLOWED_INTERNAL_WEBHOOK_HOSTS', ''),
 

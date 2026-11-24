@@ -10,6 +10,13 @@
             <span class="organizer-name">{{ $mailBranding->organizerName }}</span>
 @endif
         </x-mail::header>
+@elseif($mailBranding?->organizerName)
+        <x-mail::header :url="null">
+            <span class="organizer-name">{{ $mailBranding->organizerName }}</span>
+@if(config('app.email_logo_url') || ! app(\HiEvents\Enterprise\Licensing\LicenceService::class)->allows(\HiEvents\Enterprise\Licensing\LicensedFeature::WHITE_LABEL))
+            <x-mail::ticketing-by />
+@endif
+        </x-mail::header>
 @else
         <x-mail::header :url="config('app.email_logo_link_url')">
             @if($appLogo = config('app.email_logo_url'))

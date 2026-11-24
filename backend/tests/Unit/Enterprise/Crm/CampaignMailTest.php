@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Enterprise\Crm;
 
+use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Enterprise\Crm\Mail\CampaignMail;
 use HiEvents\Enterprise\Crm\Services\Domain\Campaign\DTO\CampaignEventCardDTO;
 use Tests\TestCase;
@@ -49,6 +50,7 @@ class CampaignMailTest extends TestCase
             preheader: null,
             body: '<p>Plain</p>',
             organizerName: '<script>alert(1)</script>',
+            organizer: (new OrganizerDomainObject)->setId(4)->setAccountId(7)->setName('<script>alert(1)</script>'),
             replyToAddress: null,
             eventCard: null,
             unsubscribeUrl: 'https://app.example.test/audience/unsubscribe/1.s',
@@ -68,6 +70,7 @@ class CampaignMailTest extends TestCase
             preheader: 'Tickets are going fast',
             body: '<p>See you there</p>',
             organizerName: 'The Jazz & Blues Club',
+            organizer: (new OrganizerDomainObject)->setId(4)->setAccountId(7)->setName('The Jazz & Blues Club'),
             replyToAddress: 'reply@organizer.test',
             eventCard: new CampaignEventCardDTO(
                 title: 'Spring Show',

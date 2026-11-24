@@ -1002,8 +1002,10 @@ class AutomationRunnerTest extends TestCase
     {
         Bus::fake([DispatchCampaignJob::class]);
         DB::table('organizers')->where('id', $this->organizerId)->update(['timezone' => 'America/Los_Angeles']);
-        $this->travelTo(Carbon::parse('2027-05-11 09:45:00', 'America/Los_Angeles'));
-        $automationId = $this->insertAutomation($trigger, ['last_run_at' => Carbon::parse('2027-05-10 10:00:00', 'America/Los_Angeles')->utc()]);
+        $firstDay = now('America/Los_Angeles')->addDay()->toImmutable();
+        $secondDay = $firstDay->addDay();
+        $this->travelTo($firstDay->setTime(9, 45));
+        $automationId = $this->insertAutomation($trigger, ['last_run_at' => $firstDay->subDay()->setTime(10, 0)->utc()]);
         $this->eligibleContact($trigger, 'first@example.com');
 
         $this->runAutomation($automationId);
@@ -1011,16 +1013,16 @@ class AutomationRunnerTest extends TestCase
 
         $this->travel(15)->minutes();
         $this->runAutomation($automationId);
-        $this->assertSame(['date:2027-05-11'], $this->campaigns($automationId)->pluck('automation_run_key')->all());
+        $this->assertSame(['date:'.$firstDay->toDateString()], $this->campaigns($automationId)->pluck('automation_run_key')->all());
 
         $this->eligibleContact($trigger, 'evening@example.com');
-        $this->travelTo(Carbon::parse('2027-05-11 17:30:00', 'America/Los_Angeles'));
+        $this->travelTo($firstDay->setTime(17, 30));
         $this->runAutomation($automationId);
         $this->assertCount(1, $this->campaigns($automationId));
 
-        $this->travelTo(Carbon::parse('2027-05-12 10:00:00', 'America/Los_Angeles'));
+        $this->travelTo($secondDay->setTime(10, 0));
         $this->runAutomation($automationId);
-        $this->assertSame(['date:2027-05-11', 'date:2027-05-12'], $this->campaigns($automationId)->pluck('automation_run_key')->all());
+        $this->assertSame(['date:'.$firstDay->toDateString(), 'date:'.$secondDay->toDateString()], $this->campaigns($automationId)->pluck('automation_run_key')->all());
         $this->assertSame(['evening@example.com'], $this->recipientEmails((int) $this->campaigns($automationId)->last()->id));
     }
 

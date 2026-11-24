@@ -15,6 +15,7 @@ import {useGetCrmSmsCampaignPreview} from "../../../queries/useGetCrmSmsCampaign
 import {campaignStatusReason} from "../../../utilites/labels.ts";
 import {smsCountryLabel} from "../../../utilites/smsCountries.ts";
 import {CrmCampaign, CrmCampaignSendCheck, CrmSmsCountryEstimate, CrmSmsPreview} from "../../../types.ts";
+import {SendGateReason} from "../../SendGateReason";
 import audienceClasses from "../../Audience.module.scss";
 import classes from "./Campaign.module.scss";
 
@@ -188,7 +189,14 @@ export const SendModal = ({organizerId, campaign, timezone, isScheduling, estima
             {check && isBlocked && (
                 <div className={classes.blocked} data-testid="campaign-send-summary">
                     <IconAlertTriangle size={18}/>
-                    <span>{check.blocked_reason}</span>
+                    <span>
+                        <SendGateReason
+                            organizerId={organizerId}
+                            reason={check.blocked_reason}
+                            code={check.blocked_reason_code}
+                            params={check.blocked_reason_params}
+                        />
+                    </span>
                 </div>
             )}
             {check && !isBlocked && (

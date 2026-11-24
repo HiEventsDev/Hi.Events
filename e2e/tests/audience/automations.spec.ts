@@ -447,7 +447,8 @@ test.describe('audience automations', () => {
     await new AudiencePage(page, organizerId).gotoAutomations();
     const failed = card(page, name);
     await expect(failed).toContainText("The last one couldn't be sent");
-    await expect(failed).toContainText("To protect people from spam, we enable campaigns for each account by hand, and yours isn't enabled yet.");
+    await expect(failed).toContainText('To protect people from spam, campaigns are switched on once your account is verified.');
+    await expect(failed.getByRole('link', { name: 'Connect Stripe' })).toHaveAttribute('href', `/manage/organizer/${organizerId}/settings/payouts`);
     await expect(failed).toContainText('Nothing sent yet.');
   });
 

@@ -4,7 +4,7 @@
 @php /** @var string|null $unsubscribeUrl */ @endphp
 @php /** @var bool $isTest */ @endphp
 @php /** @see \HiEvents\Enterprise\Crm\Mail\CampaignMail */ @endphp
-@if(config('app.saas_mode_enabled'))
+@if(config('app.saas_mode_enabled') && ! ($mailBranding ?? null)?->hideHiEventsBranding)
 {!! __('This message is from :organizer, not from :platform.', ['organizer' => $organizerName, 'platform' => config('app.name')]) !!}
 
 @endif
