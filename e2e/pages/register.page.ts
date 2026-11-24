@@ -17,7 +17,6 @@ export class RegisterPage {
     }
     await this.page.getByLabel(/^Email/).fill(details.email);
     await this.page.getByLabel(/^Password/).fill(details.password);
-    await this.page.getByLabel(/^Confirm Password/).fill(details.password);
-    await this.page.getByRole('button', { name: 'Register' }).click();
+    await this.page.getByRole('button', { name: 'Create account' }).click();
   }
 }

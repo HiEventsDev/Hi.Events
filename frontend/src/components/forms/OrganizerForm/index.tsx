@@ -11,7 +11,7 @@ import {timezones} from "../../../../data/timezones.ts";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
 import {useGetMe} from "../../../queries/useGetMe.ts";
 import {IconBuilding} from "@tabler/icons-react";
-import classes from "../../routes/welcome/Welcome.module.scss";
+import classes from "./OrganizerForm.module.scss";
 import {trackEvent, AnalyticsEvents} from "../../../utilites/analytics.ts";
 
 export const organizerCurrencyOptions = Object.entries(currencies).map(([key, value]) => ({
