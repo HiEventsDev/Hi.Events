@@ -96,7 +96,7 @@ class MailBrandingLayoutTest extends TestCase
         $this->assertStringNotContainsString('hi-events-horizontal-light.png', $html);
     }
 
-    public function test_a_configured_email_logo_replaces_the_ticketing_by_logo(): void
+    public function test_a_configured_email_logo_stays_full_size_above_the_organizer_name(): void
     {
         config(['app.email_logo_url' => 'https://cdn.test/platform-logo.png']);
 
@@ -107,7 +107,10 @@ class MailBrandingLayoutTest extends TestCase
             organizerName: 'Acme Events',
         ));
 
-        $this->assertMatchesRegularExpression('/<span class="ticketing-by"[^>]*>Ticketing by <a[^>]*><img src="https:\/\/cdn\.test\/platform-logo\.png"/', $html);
+        $this->assertMatchesRegularExpression('/<td class="header"[^>]*>\s*<a href="[^"]+"[^>]*><img src="https:\/\/cdn\.test\/platform-logo\.png" class="logo"[^>]*><\/a>\s*<span class="organizer-name organizer-name-under-logo"[^>]*>Acme Events<\/span>/', $html);
+        $this->assertStringNotContainsString('Ticketing by', $html);
+        $this->assertStringNotContainsString('hi-events-horizontal-light.png', $html);
+        $this->assertStringContainsString('Powered by', $html);
     }
 
     public function test_subscribed_organizers_replace_hi_events_branding_with_their_own(): void
