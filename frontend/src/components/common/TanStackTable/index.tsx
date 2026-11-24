@@ -35,6 +35,7 @@ interface TanStackTableProps<TData> {
     columnToggleSlot?: HTMLElement | null;
     hideHeader?: boolean;
     noCard?: boolean;
+    showFooter?: boolean;
     isRefreshing?: boolean;
     rowLines?: 1 | 2;
     dataTestId?: string;
@@ -78,6 +79,7 @@ export function TanStackTable<TData>({
                                          columnToggleSlot,
                                          hideHeader = false,
                                          noCard = false,
+                                         showFooter = false,
                                          isRefreshing = false,
                                          rowLines = 1,
                                          dataTestId,
@@ -293,6 +295,23 @@ export function TanStackTable<TData>({
                         </MantineTable.Tr>
                     ))}
                 </MantineTable.Tbody>
+                {showFooter && (
+                    <MantineTable.Tfoot>
+                        {table.getFooterGroups().map((footerGroup) => (
+                            <MantineTable.Tr key={footerGroup.id}>
+                                {footerGroup.headers.map((footer) => {
+                                    const columnMeta = footer.column.columnDef.meta as TanStackTableColumnMeta | undefined;
+
+                                    return (
+                                        <MantineTable.Td key={footer.id} className={cellClass(columnMeta)}>
+                                            {footer.isPlaceholder ? null : renderDefinition(footer.column.columnDef.footer, footer.getContext())}
+                                        </MantineTable.Td>
+                                    );
+                                })}
+                            </MantineTable.Tr>
+                        ))}
+                    </MantineTable.Tfoot>
+                )}
             </MantineTable>
         </MantineTable.ScrollContainer>
     );

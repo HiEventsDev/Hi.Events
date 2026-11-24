@@ -79,6 +79,7 @@ class PlatformFeesReport
                 'total_fee' => Currency::round($gross / $divisor),
                 'currency' => $currencyCode,
                 'payment_intent_id' => $row->payment_intent_id,
+                'stripe_account_id' => $row->connected_account_id,
             ];
         });
 
@@ -158,7 +159,8 @@ SQL;
                 sp.application_fee_vat,
                 sp.application_fee_gross,
                 sp.currency,
-                sp.payment_intent_id
+                sp.payment_intent_id,
+                sp.connected_account_id
             FROM stripe_payments sp
             INNER JOIN orders o ON sp.order_id = o.id
             INNER JOIN events e ON o.event_id = e.id
