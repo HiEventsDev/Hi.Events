@@ -1,12 +1,12 @@
-import {Container, Title, TextInput, Stack, Text, Badge, Group, Menu, Select, Modal, ScrollArea, ActionIcon, Tooltip, VisuallyHidden} from "@mantine/core";
-import {t} from "@lingui/macro";
+import {Container, Title, TextInput, Stack, Text, Badge, Group, List, Menu, Select, Modal, ScrollArea, ActionIcon, Tooltip, VisuallyHidden} from "@mantine/core";
+import {t, Trans} from "@lingui/macro";
 import {IconDotsVertical, IconSearch, IconEye, IconCheck} from "@tabler/icons-react";
 import {useState, useEffect, useMemo} from "react";
 import {useGetAdminMessages} from "../../../../queries/useGetAdminMessages";
 import {useApproveMessage} from "../../../../mutations/useApproveMessage";
 import {relativeDate} from "../../../../utilites/dates";
 import {useDisclosure} from "@mantine/hooks";
-import {AdminMessage} from "../../../../api/admin.client";
+import {AdminMessage, AdminMessageAiReview} from "../../../../api/admin.client";
 import {showSuccess} from "../../../../utilites/notifications";
 import {IdParam} from "../../../../types";
 import {TanStackTable, TanStackTableColumn} from "../../../common/TanStackTable";
@@ -23,6 +23,32 @@ const STATUS_TONES: Record<string, StatusTone> = {
     failed: 'negative',
     scheduled: 'active',
     queued: 'active',
+};
+
+const automaticCheckLabel = (review: AdminMessageAiReview): string => (
+    review.decision === 'APPROVED' ? t`Approved automatically` : t`Handed to a person`
+);
+
+const AutomaticCheckDetails = ({review}: {review: AdminMessageAiReview}) => {
+    const confidence = Math.round(review.confidence * 100);
+    const checked = relativeDate(review.reviewed_at);
+
+    return (
+        <div>
+            <Text size="sm" fw={500} c="dimmed" mb="xs">{t`Automatic check`}</Text>
+            <StatusBadge tone={review.decision === 'APPROVED' ? 'positive' : 'waiting'}>
+                {automaticCheckLabel(review)}
+            </StatusBadge>
+            {review.reasons.length > 0 && (
+                <List size="sm" spacing={4} mt="xs">
+                    {review.reasons.map((reason, index) => <List.Item key={index}>{reason}</List.Item>)}
+                </List>
+            )}
+            <Text size="xs" c="dimmed" mt="xs">
+                <Trans>Checked {checked}, {confidence}% confident.</Trans>
+            </Text>
+        </div>
+    );
 };
 
 const Messages = () => {
@@ -152,6 +178,17 @@ const Messages = () => {
             cell: ({row: {original: message}}) => (
                 <StatusBadge tone={STATUS_TONES[message.status.toLowerCase()] ?? 'neutral'}>{message.status}</StatusBadge>
             ),
+        },
+        {
+            id: 'automatic_check',
+            header: t`Automatic check`,
+            cell: ({row: {original: message}}) => message.ai_review
+                ? (
+                    <StatusBadge tone={message.ai_review.decision === 'APPROVED' ? 'positive' : 'waiting'}>
+                        {automaticCheckLabel(message.ai_review)}
+                    </StatusBadge>
+                )
+                : <EmptyCell/>,
         },
         {
             id: 'sent_by',
@@ -342,6 +379,7 @@ const Messages = () => {
                                 </Group>
                             </div>
                         )}
+                        {selectedMessage.ai_review && <AutomaticCheckDetails review={selectedMessage.ai_review}/>}
                     </Stack>
                 )}
             </Modal>

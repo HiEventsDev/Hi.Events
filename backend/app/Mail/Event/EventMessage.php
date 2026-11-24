@@ -30,7 +30,7 @@ class EventMessage extends BaseMail implements ContainsEventContent
     {
         return new Envelope(
             replyTo: $this->eventSettings->getSupportEmail(),
-            subject: $this->messageData->subject,
+            subject: ($this->messageData->is_test ? __('[Test]').' ' : '').$this->messageData->subject,
         );
     }
 

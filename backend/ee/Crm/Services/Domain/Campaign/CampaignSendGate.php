@@ -54,8 +54,8 @@ class CampaignSendGate
 
             throw new CampaignNotSendableException(
                 $contact === []
-                    ? __('To protect people from spam, we enable campaigns for each account by hand. Please contact us to get yours enabled.')
-                    : __('To protect people from spam, we enable campaigns for each account by hand. Please contact us at :email.', $contact),
+                    ? __('To protect people from spam, campaigns are switched on once your account is verified. Connect Stripe or contact us to get yours enabled.')
+                    : __('To protect people from spam, campaigns are switched on once your account is verified. Connect Stripe or contact us at :email.', $contact),
                 CampaignNotSendableException::REASON_ACCOUNT_NOT_APPROVED,
                 $contact,
             );

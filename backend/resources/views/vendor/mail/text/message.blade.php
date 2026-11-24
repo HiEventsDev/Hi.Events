@@ -6,6 +6,10 @@
         <x-mail::header :url="$mailBranding->organizerUrl">
             {{ $mailBranding->organizerName }}
         </x-mail::header>
+@elseif($mailBranding?->organizerName)
+        <x-mail::header :url="null">
+            {{ $mailBranding->organizerName }} · {{ __('Ticketing by :platform', ['platform' => config('app.name')]) }}
+        </x-mail::header>
 @else
         <x-mail::header :url="config('app.url')">
             {{ config('app.name') }}

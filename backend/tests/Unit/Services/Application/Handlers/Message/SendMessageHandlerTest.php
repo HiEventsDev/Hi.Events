@@ -21,6 +21,7 @@ use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Message\DTO\SendMessageDTO;
 use HiEvents\Services\Application\Handlers\Message\SendMessageHandler;
 use HiEvents\Services\Domain\Message\MessagingEligibilityService;
+use HiEvents\Services\Domain\Message\Review\MessageAiReviewService;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Config\Repository;
 use Illuminate\Support\Facades\Bus;
@@ -73,7 +74,8 @@ class SendMessageHandlerTest extends TestCase
             eventRepository: $this->eventRepository,
             purifier: $this->purifier,
             config: $this->config,
-            eligibilityService: $this->eligibilityService
+            eligibilityService: $this->eligibilityService,
+            aiReviewService: m::mock(MessageAiReviewService::class),
         );
     }
 

@@ -30,6 +30,7 @@ import {TriggerIcon} from "./TriggerIcon.tsx";
 import {TriggerPicker} from "./TriggerPicker.tsx";
 import classes from "./Automations.module.scss";
 import {Notice} from "../../Notice";
+import {SendGateReason} from "../../SendGateReason";
 
 type Editing = {automation: CrmAutomation} | {template: CrmAutomationTemplate};
 
@@ -184,7 +185,12 @@ const AudienceAutomations = () => {
                                             title={automation.last_failure_reason === 'EVENT_AWAITING_REVIEW' ? t`Waiting to send` : t`The last one couldn't be sent`}
                                             className={classes.automationWarning}
                                         >
-                                            {automationFailureReason(automation.last_failure_reason, automation.last_failure_reason_params)}
+                                            <SendGateReason
+                                                organizerId={organizerId}
+                                                reason={automationFailureReason(automation.last_failure_reason, automation.last_failure_reason_params)}
+                                                code={automation.last_failure_reason}
+                                                params={automation.last_failure_reason_params}
+                                            />
                                         </Notice>
                                     )}
                                 </div>

@@ -28,7 +28,7 @@ class GetCampaignPreviewAction extends BaseCrmAction
         }
 
         return $this->jsonResponse([
-            'html' => $preview->render(),
+            'html' => $preview->renderAsSent(),
             'subject' => $preview->getSubjectLine(),
             'preheader' => $preview->getPreheader(),
             'from_name' => $this->senderName->for($preview),

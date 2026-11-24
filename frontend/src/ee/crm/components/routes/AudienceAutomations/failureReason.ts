@@ -12,8 +12,8 @@ export const automationFailureReason = (
         case 'ACCOUNT_NOT_APPROVED': {
             const email = String(params?.email ?? '');
             return email
-                ? t`To protect people from spam, we enable campaigns for each account by hand, and yours isn't enabled yet. Contact us at ${email}.`
-                : t`To protect people from spam, we enable campaigns for each account by hand, and yours isn't enabled yet. Contact us to get it enabled.`;
+                ? t`To protect people from spam, campaigns are switched on once your account is verified, and yours isn't yet. Connect Stripe or contact us at ${email}.`
+                : t`To protect people from spam, campaigns are switched on once your account is verified, and yours isn't yet. Connect Stripe or contact us to get it verified.`;
         }
         case 'TOO_MANY_RECIPIENTS': {
             const count = Number(params?.count ?? 0);

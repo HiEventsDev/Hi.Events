@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Enterprise\Crm;
 
+use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Enterprise\Crm\Mail\CampaignMail;
 use HiEvents\Enterprise\Crm\Services\Domain\Campaign\DTO\CampaignEventCardDTO;
 use Tests\TestCase;
@@ -81,6 +82,7 @@ class CampaignMailPlainTextTest extends TestCase
             preheader: 'Tickets are going fast',
             body: $body,
             organizerName: 'The Jazz & Blues Club',
+            organizer: (new OrganizerDomainObject)->setId(4)->setAccountId(7)->setName('The Jazz & Blues Club'),
             replyToAddress: 'reply@organizer.test',
             eventCard: new CampaignEventCardDTO(
                 title: 'Spring Show',

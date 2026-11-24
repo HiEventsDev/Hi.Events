@@ -59,6 +59,11 @@ abstract class BaseMail extends Mailable implements ShouldQueue
         return $this->withMailBranding(fn () => parent::send($mailer));
     }
 
+    public function renderAsSent(): string
+    {
+        return $this->withMailBranding(fn () => $this->render());
+    }
+
     private function withMailBranding(callable $callback): mixed
     {
         $branding = app(MailBrandingService::class)->forMail($this);
