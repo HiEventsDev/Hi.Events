@@ -13,6 +13,8 @@ class CampaignSendCheckDTO extends BaseDataObject
         public readonly bool $requires_review,
         public readonly ?string $review_reason,
         public readonly ?string $blocked_reason,
+        public readonly ?string $blocked_reason_code = null,
+        public readonly ?array $blocked_reason_params = null,
         public readonly array $warnings = [],
         public readonly array $early_access_tickets = [],
     ) {}

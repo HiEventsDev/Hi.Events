@@ -1,8 +1,10 @@
 import {useState} from "react";
 import {t} from "@lingui/macro";
-import {Avatar, SegmentedControl, Select} from "@mantine/core";
+import {Select} from "@mantine/core";
 import {useDebouncedValue} from "@mantine/hooks";
-import {IconDeviceDesktop, IconDeviceMobile} from "@tabler/icons-react";
+import {BrandingSwitch} from "../../../../../components/common/BrandingUpsell";
+import {EmailPreview} from "../../../../../components/common/EmailPreview";
+import {useBrandingSubscription} from "../../../../../hooks/useBrandingSubscription.ts";
 import {IdParam} from "../../../../../types.ts";
 import {useGetCrmContacts} from "../../../queries/useGetCrmContacts.ts";
 import {contactDisplayName} from "../../../utilites/format.ts";
@@ -83,50 +85,21 @@ export const PreviewPane = ({
     html,
     isError,
 }: PreviewPaneProps) => {
-    const [device, setDevice] = useState<'desktop' | 'phone'>('desktop');
+    const {canUpgrade: canRemoveBranding} = useBrandingSubscription();
 
     return (
         <div className={classes.previewPane} data-hidden={isHidden || undefined}>
-            <div className={classes.previewBar}>
-                <span>{isSent ? t`What was sent` : t`How it will look`}</span>
-                <div className={classes.previewControls}>
-                    {isEditable && <PreviewAsContact organizerId={organizerId} value={previewContactId} onChange={onPreviewContactChange}/>}
-                    <SegmentedControl
-                        className={classes.deviceSwitch}
-                        size="xs"
-                        value={device}
-                        onChange={value => setDevice(value === 'phone' ? 'phone' : 'desktop')}
-                        data={[
-                            {value: 'desktop', label: <IconDeviceDesktop size={14} aria-label={t`Desktop`}/>},
-                            {value: 'phone', label: <IconDeviceMobile size={14} aria-label={t`Phone`}/>},
-                        ]}
-                    />
-                </div>
-            </div>
-            <div className={classes.inbox}>
-                <Avatar size={32} radius="xl" color="primary">{fromName.slice(0, 1).toUpperCase()}</Avatar>
-                <span className={classes.inboxText} data-testid="campaign-preview-inbox">
-                    <span>{fromName}</span>
-                    <strong>{subject || t`Your subject line`}</strong>
-                    {preheader && <span className={classes.inboxPreheader}>{preheader}</span>}
-                </span>
-            </div>
-            <div className={classes.previewStage}>
-                {html ? (
-                    <iframe
-                        className={classes.previewFrame}
-                        data-device={device}
-                        title={t`Email preview`}
-                        sandbox=""
-                        srcDoc={html}
-                        data-testid="campaign-preview"
-                    />
-                ) : (
-                    <div className={classes.previewEmpty}>
-                        {isError ? t`We couldn't load the preview. Please try again.` : t`Loading preview…`}
-                    </div>
-                )}
-            </div>
+            <EmailPreview
+                label={isSent ? t`What was sent` : t`How it will look`}
+                controls={isEditable && <PreviewAsContact organizerId={organizerId} value={previewContactId} onChange={onPreviewContactChange}/>}
+                banner={isEditable && canRemoveBranding && <BrandingSwitch/>}
+                fromName={fromName}
+                subject={subject}
+                preheader={preheader}
+                html={html}
+                isError={isError}
+                testId="campaign-preview"
+            />
         </div>
     );
 };

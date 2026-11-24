@@ -12,6 +12,7 @@ use HiEvents\Exceptions\MessagingTierLimitExceededException;
 use HiEvents\Helper\DateHelper;
 use HiEvents\Jobs\Event\SendMessagesJob;
 use HiEvents\Jobs\Message\MessagePendingReviewJob;
+use HiEvents\Jobs\Message\ReviewMessageWithAiJob;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -20,6 +21,7 @@ use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Message\DTO\SendMessageDTO;
 use HiEvents\Services\Domain\Message\MessagingEligibilityService;
+use HiEvents\Services\Domain\Message\Review\MessageAiReviewService;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Config\Repository;
 use Illuminate\Support\Collection;
@@ -37,6 +39,7 @@ class SendMessageHandler
         private readonly HtmlPurifierService $purifier,
         private readonly Repository $config,
         private readonly MessagingEligibilityService $eligibilityService,
+        private readonly MessageAiReviewService $aiReviewService,
     ) {}
 
     /**
@@ -125,7 +128,9 @@ class SendMessageHandler
             ],
         ]);
 
-        if ($status === MessageStatus::PENDING_REVIEW) {
+        if ($status === MessageStatus::PENDING_REVIEW && $this->aiReviewService->isEnabled()) {
+            ReviewMessageWithAiJob::dispatch($message->getId(), $recipientCount);
+        } elseif ($status === MessageStatus::PENDING_REVIEW) {
             MessagePendingReviewJob::dispatch($message->getId(), $eligibilityFailure->getFailureValues());
         } elseif ($status === MessageStatus::PROCESSING) {
             $updatedData = SendMessageDTO::fromArray([

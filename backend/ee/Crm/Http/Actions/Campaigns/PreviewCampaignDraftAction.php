@@ -41,7 +41,7 @@ class PreviewCampaignDraftAction extends BaseCrmAction
         }
 
         return $this->jsonResponse([
-            'html' => $mail->render(),
+            'html' => $mail->renderAsSent(),
             'subject' => $mail->getSubjectLine(),
             'preheader' => $mail->getPreheader(),
             'from_name' => $this->senderName->for($mail),

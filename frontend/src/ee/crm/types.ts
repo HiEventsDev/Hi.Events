@@ -443,6 +443,8 @@ export interface CrmSmsPreview {
 
 interface CrmCampaignSendGate {
     blocked_reason: string | null;
+    blocked_reason_code: string | null;
+    blocked_reason_params: Record<string, string | number> | null;
 }
 
 export interface CrmUnsubscribeStatus {
@@ -548,6 +550,8 @@ export interface CrmCampaignSendCheck {
     requires_review: boolean;
     review_reason: string | null;
     blocked_reason: string | null;
+    blocked_reason_code: string | null;
+    blocked_reason_params: Record<string, string | number> | null;
     warnings: string[];
     early_access_tickets: {id: number, title: string, is_hidden: boolean}[];
 }

@@ -28,6 +28,7 @@ import {NewCampaignModal} from "../../NewCampaignModal";
 import shared from "../../Audience.module.scss";
 import classes from "./Campaigns.module.scss";
 import {Notice} from "../../Notice";
+import {SendGateReason} from "../../SendGateReason";
 
 type CampaignFilter = CrmCampaignFolder | 'all' | 'automated';
 
@@ -81,7 +82,7 @@ const AudienceCampaigns = () => {
     const lacksDeliveryReports = campaigns.some(campaign => campaign.delivery_reports_available === false);
     const [isPicking, setIsPicking] = useState(false);
     const isSaas = !!account?.is_saas_mode_enabled;
-    const blockedReason = canChange ? meta?.send_gate?.blocked_reason : null;
+    const sendGate = canChange ? meta?.send_gate : null;
 
     const filterLabels: Record<CampaignFilter, string> = {
         all: t`All`,
@@ -247,9 +248,14 @@ const AudienceCampaigns = () => {
                 </Notice>
             )}
 
-            {blockedReason && (
+            {sendGate?.blocked_reason && (
                 <Notice title={t`You can't send campaigns yet`}>
-                    {blockedReason}
+                    <SendGateReason
+                        organizerId={organizerId}
+                        reason={sendGate.blocked_reason}
+                        code={sendGate.blocked_reason_code}
+                        params={sendGate.blocked_reason_params}
+                    />
                 </Notice>
             )}
 

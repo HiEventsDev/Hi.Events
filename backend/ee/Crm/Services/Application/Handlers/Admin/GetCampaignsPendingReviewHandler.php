@@ -66,7 +66,7 @@ class GetCampaignsPendingReviewHandler
             if ($campaign->isSms()) {
                 $campaign->setPreviewText($this->smsPreviewService->preview($campaign, null)->variants[0]->text);
             } else {
-                $campaign->setPreviewHtml($this->mailFactory->make($campaign, null)->render());
+                $campaign->setPreviewHtml($this->mailFactory->make($campaign, null)->renderAsSent());
             }
         });
     }

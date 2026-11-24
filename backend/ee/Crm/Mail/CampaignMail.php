@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace HiEvents\Enterprise\Crm\Mail;
 
+use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Enterprise\Crm\Services\Domain\Campaign\DTO\CampaignEventCardDTO;
 use HiEvents\Mail\BaseMail;
+use HiEvents\Mail\Concerns\SentOnBehalfOfOrganizer;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Mail\Mailables\Headers;
@@ -14,7 +16,7 @@ use Illuminate\Mail\Mailables\Headers;
  * @uses /backend/resources/views/emails/crm/campaign.blade.php
  * @uses /backend/resources/views/emails/crm/campaign-text.blade.php
  */
-class CampaignMail extends BaseMail
+class CampaignMail extends BaseMail implements SentOnBehalfOfOrganizer
 {
     private ?string $preheader = null;
 
@@ -25,6 +27,7 @@ class CampaignMail extends BaseMail
         ?string $preheader,
         private readonly string $body,
         private readonly string $organizerName,
+        private readonly OrganizerDomainObject $organizer,
         private readonly ?string $replyToAddress,
         ?CampaignEventCardDTO $eventCard,
         private readonly ?string $unsubscribeUrl,
@@ -50,6 +53,11 @@ class CampaignMail extends BaseMail
     public function getReplyToAddress(): ?string
     {
         return $this->replyToAddress;
+    }
+
+    public function getContentOrganizer(): OrganizerDomainObject
+    {
+        return $this->organizer;
     }
 
     public function envelope(): Envelope

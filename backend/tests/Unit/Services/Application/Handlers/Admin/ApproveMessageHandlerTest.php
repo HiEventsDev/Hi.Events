@@ -9,6 +9,7 @@ use HiEvents\Jobs\Event\SendMessagesJob;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Admin\ApproveMessageHandler;
+use HiEvents\Services\Domain\Message\MessageApprovalService;
 use HiEvents\Services\Domain\Message\MessageDispatchService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Facades\Bus;
@@ -36,9 +37,12 @@ class ApproveMessageHandlerTest extends TestCase
         $this->handler = new ApproveMessageHandler(
             $this->messageRepository,
             $databaseManager,
-            new MessageDispatchService(
+            new MessageApprovalService(
                 $this->messageRepository,
-                Mockery::mock(EventOccurrenceRepositoryInterface::class),
+                new MessageDispatchService(
+                    $this->messageRepository,
+                    Mockery::mock(EventOccurrenceRepositoryInterface::class),
+                ),
             ),
         );
     }
@@ -73,10 +77,13 @@ class ApproveMessageHandlerTest extends TestCase
         $message = $this->makeHeldMessage(scheduledAt: Carbon::now()->addDay()->toDateTimeString(), isTest: false);
 
         $this->messageRepository->shouldReceive('findFirst')->with(1)->andReturn($message);
-        $this->messageRepository->shouldReceive('updateFromArray')
+        $this->messageRepository->shouldReceive('updateWhere')
             ->once()
-            ->with(1, ['status' => MessageStatus::SCHEDULED->name])
-            ->andReturn($message);
+            ->with(
+                ['status' => MessageStatus::SCHEDULED->name],
+                ['id' => 1, 'status' => MessageStatus::PENDING_REVIEW->name],
+            )
+            ->andReturn(1);
 
         $this->handler->handle(1);
 

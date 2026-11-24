@@ -38,16 +38,20 @@ class GetCampaignsHandler
     }
 
     /**
-     * @return array{blocked_reason: string|null}
+     * @return array{blocked_reason: string|null, blocked_reason_code: string|null, blocked_reason_params: array<string, int|string>|null}
      */
     public function sendGate(int $accountId): array
     {
         try {
             $this->sendGate->assertAccountMaySend($accountId);
         } catch (CampaignNotSendableException $exception) {
-            return ['blocked_reason' => $exception->getMessage()];
+            return [
+                'blocked_reason' => $exception->getMessage(),
+                'blocked_reason_code' => $exception->reasonCode,
+                'blocked_reason_params' => $exception->reasonParams ?: null,
+            ];
         }
 
-        return ['blocked_reason' => null];
+        return ['blocked_reason' => null, 'blocked_reason_code' => null, 'blocked_reason_params' => null];
     }
 }

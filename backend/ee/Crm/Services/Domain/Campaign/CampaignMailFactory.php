@@ -74,6 +74,7 @@ class CampaignMailFactory
             preheader: $campaign->getPreheader() === null ? null : $this->tokenRenderer->renderSubject($campaign->getPreheader(), $tokens),
             body: $this->onOneLine($this->buttonStyler->style((string) $this->sanitizer->sanitize($body))),
             organizerName: $this->onOneLine($organizer->getName()),
+            organizer: $organizer,
             replyToAddress: $organizer->getEmail(),
             eventCard: $eventContext['event_card'] === null ? null : new CampaignEventCardDTO(...$eventContext['event_card']),
             unsubscribeUrl: $recipientId === null ? null : $this->unsubscribeTokenService->pageUrl($recipientId),

@@ -1,0 +1,112 @@
+@use "../../../styles/mixins";
+
+$border: var(--mantine-color-gray-2);
+$muted: var(--mantine-color-gray-6);
+
+.preview {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  background: var(--mantine-color-gray-1);
+  container: email-preview / inline-size;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid $border;
+  background: var(--mantine-color-body);
+  font-size: var(--mantine-font-size-xs);
+  color: $muted;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.deviceSwitch {
+  @container email-preview (max-width: 479px) {
+    display: none;
+  }
+}
+
+.inbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-bottom: 1px solid $border;
+  background: var(--mantine-color-body);
+}
+
+.inboxText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  font-size: var(--mantine-font-size-xs);
+  color: $muted;
+
+  strong {
+    font-size: var(--mantine-font-size-sm);
+    color: var(--mantine-color-gray-9);
+    @include mixins.ellipsis;
+  }
+
+  span {
+    @include mixins.ellipsis;
+  }
+}
+
+.inboxPreheader {
+  color: var(--mantine-color-gray-5);
+}
+
+.banner {
+  padding: 10px 14px;
+  border-bottom: 1px solid $border;
+  background: var(--mantine-color-body);
+
+  :global(.mantine-Switch-root) {
+    margin-bottom: 0;
+  }
+}
+
+.stage {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+  padding: 16px;
+}
+
+.frame {
+  width: 100%;
+  height: 560px;
+  border: 1px solid $border;
+  border-radius: var(--mantine-radius-md);
+  background: #fff;
+
+  &[data-device="phone"] {
+    width: 375px;
+    max-width: 100%;
+    border-radius: 24px;
+  }
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 240px;
+  font-size: var(--mantine-font-size-sm);
+  color: $muted;
+  text-align: center;
+}

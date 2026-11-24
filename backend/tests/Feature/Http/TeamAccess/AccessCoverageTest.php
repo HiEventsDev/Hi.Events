@@ -35,6 +35,7 @@ use HiEvents\Http\Actions\Events\CreateEventAction;
 use HiEvents\Http\Actions\Events\GetEventsAction;
 use HiEvents\Http\Actions\EventSettings\GetPlatformFeePreviewAction;
 use HiEvents\Http\Actions\Locations\GetGeoStatusAction;
+use HiEvents\Http\Actions\Messages\PreviewMessageAction;
 use HiEvents\Http\Actions\OAuth\ApproveOAuthAuthorizationRequestAction;
 use HiEvents\Http\Actions\OAuth\DeleteOAuthConnectionAction;
 use HiEvents\Http\Actions\OAuth\DenyOAuthAuthorizationRequestAction;
@@ -181,6 +182,7 @@ class AccessCoverageTest extends TestCase
         ExportProductPurchasesAction::class,
         ExportQuestionAnswersAction::class,
         PreviewEventEmailTemplateAction::class,
+        PreviewMessageAction::class,
         PreviewOrganizerEmailTemplateAction::class,
         RegenerateRecoveryCodesAction::class,
         ResendEmailConfirmationAction::class,

@@ -157,7 +157,14 @@ class CampaignLaunchService
             $mailableCount = $audience->mailable_count;
             $decision = $this->sendGate->evaluate($campaign, $mailableCount, $audience->segment, checkDailyCap: ! $isScheduled);
         } catch (CampaignNotSendableException $exception) {
-            return new CampaignSendCheckDTO($mailableCount, false, null, $exception->getMessage());
+            return new CampaignSendCheckDTO(
+                mailable_count: $mailableCount,
+                requires_review: false,
+                review_reason: null,
+                blocked_reason: $exception->getMessage(),
+                blocked_reason_code: $exception->reasonCode,
+                blocked_reason_params: $exception->reasonParams ?: null,
+            );
         }
 
         return new CampaignSendCheckDTO(

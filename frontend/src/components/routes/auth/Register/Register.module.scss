@@ -3,6 +3,17 @@
 
 .header {
   @include auth.auth-header;
+
+  .pitch {
+    display: none;
+
+    @include mixins.respond-below(md) {
+      display: block;
+      margin-bottom: 0.375rem;
+      font-weight: 600;
+      color: var(--hi-text);
+    }
+  }
 }
 
 .registerCard {
@@ -15,25 +26,15 @@
     :global(.mantine-InputWrapper-root) {
       margin-bottom: 1rem;
     }
+  }
 
-    :global(.mantine-SimpleGrid-root) {
-      gap: 1rem;
+  .nameFields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 1rem;
 
-      @include mixins.respond-below(sm) {
-        gap: 0;
-      }
-
-      :global(.mantine-InputWrapper-root) {
-        margin-bottom: 0;
-
-        @include mixins.respond-below(sm) {
-          margin-bottom: 1rem;
-
-          &:last-child {
-            margin-bottom: 0;
-          }
-        }
-      }
+    @include mixins.respond-below(sm) {
+      grid-template-columns: 1fr;
     }
   }
 

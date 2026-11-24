@@ -61,7 +61,7 @@ class AutomationPreviewService
             mailable_count: $this->reach($dto, $this->asRunOf($automation, $campaign), $occurrence),
             first_send: $this->firstSend($dto, $automation, $occurrence, $campaign->getEventTitle()),
             subject: $mail->getSubjectLine(),
-            html: $mail->render(),
+            html: $mail->renderAsSent(),
         );
     }
 

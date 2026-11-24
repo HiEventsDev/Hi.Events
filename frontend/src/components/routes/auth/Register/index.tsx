@@ -1,5 +1,5 @@
-import {Button, Checkbox, PasswordInput, SimpleGrid, TextInput} from "@mantine/core";
-import {hasLength, isEmail, matchesField, useForm} from "@mantine/form";
+import {Button, Checkbox, PasswordInput, TextInput} from "@mantine/core";
+import {hasLength, isEmail, useForm} from "@mantine/form";
 import {RegisterAccountRequest} from "../../../../types.ts";
 import {useFormErrorResponseHandler} from "../../../../hooks/useFormErrorResponseHandler.tsx";
 import {useRegisterAccount} from "../../../../mutations/useRegisterAccount.ts";
@@ -7,7 +7,7 @@ import {NavLink, useLocation, useNavigate} from "react-router";
 import {t, Trans} from "@lingui/macro";
 import classes from "./Register.module.scss";
 import {getClientLocale} from "../../../../locales.ts";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {getUserCurrency} from "../../../../utilites/currency.ts";
 import {getConfig} from "../../../../utilites/config.ts";
 import {getStoredUtmData, clearStoredUtmData} from "../../../../utilites/utm.ts";
@@ -15,6 +15,7 @@ import {Turnstile} from "../../../common/Turnstile";
 import {Callout} from "../../../common/Callout";
 import {SsoSection, useSsoOptions} from "../../../common/SsoButtons/SsoSection.tsx";
 
+type RegistrationFormValues = Omit<RegisterAccountRequest, 'password_confirmation'>;
 
 export const Register = () => {
     const navigate = useNavigate();
@@ -27,7 +28,6 @@ export const Register = () => {
             last_name: '',
             email: '',
             password: '',
-            password_confirmation: '',
             timezone: typeof window !== 'undefined'
                 ? Intl.DateTimeFormat().resolvedOptions().timeZone
                 : 'UTC',
@@ -38,7 +38,6 @@ export const Register = () => {
         },
         validate: {
             password: hasLength({min: 8}, t`Password must be at least 8 characters`),
-            password_confirmation: matchesField('password', t`Passwords are not the same`),
             email: isEmail(t`Please check your email is valid`),
         },
     });
@@ -49,11 +48,17 @@ export const Register = () => {
     const [ssoRequiredEmail, setSsoRequiredEmail] = useState<string | null>(null);
     const {passwordLoginEnabled, registrationEnabled} = useSsoOptions();
     const [turnstileResetKey, setTurnstileResetKey] = useState(0);
+    const firstNameRef = useRef<HTMLInputElement>(null);
 
-    const registerUser = (data: RegisterAccountRequest) => {
+    useEffect(() => {
+        firstNameRef.current?.focus({preventScroll: true});
+    }, []);
+
+    const registerUser = (data: RegistrationFormValues) => {
         const utmData = getStoredUtmData();
         const registrationData = {
             ...data,
+            password_confirmation: data.password,
             ...(utmData ?? {}),
             ...(turnstileToken ? {turnstile_token: turnstileToken} : {}),
         };
@@ -95,7 +100,8 @@ export const Register = () => {
     return (
         <>
             <header className={classes.header}>
-                <h2>{t`Get started`}</h2>
+                <h2>{t`Create your account`}</h2>
+                <p className={classes.pitch}>{t`Sell out your event.`} {t`Keep the profit.`}</p>
                 <p>
                     <Trans>
                         Already have an account?{' '}
@@ -131,44 +137,40 @@ export const Register = () => {
 
             <div className={classes.registerCard}>
                 {passwordLoginEnabled && (
-                <form onSubmit={form.onSubmit((values) => registerUser(values as RegisterAccountRequest))}>
-
-                    <SimpleGrid verticalSpacing={{base: "md", lg: 0}} cols={{base: 1, lg: 2}} mb="md">
+                <form onSubmit={form.onSubmit((values) => registerUser(values as RegistrationFormValues))}>
+                    <div className={classes.nameFields}>
                         <TextInput
                             {...form.getInputProps('first_name')}
+                            ref={firstNameRef}
                             label={t`First Name`}
-                            placeholder={t`John`}
+                            autoComplete="given-name"
                             required
                         />
                         <TextInput
                             {...form.getInputProps('last_name')}
                             label={t`Last Name`}
-                            placeholder={t`Smith`}
+                            autoComplete="family-name"
                         />
-                    </SimpleGrid>
+                    </div>
 
                     <TextInput
-                        mb={0}
                         {...form.getInputProps('email')}
                         label={t`Email`}
-                        placeholder={'your@email.com'}
+                        type="email"
+                        inputMode="email"
+                        autoComplete="email"
+                        autoCapitalize="none"
+                        spellCheck={false}
                         required
                     />
 
-                    <SimpleGrid verticalSpacing={{base: "md", lg: 0}} cols={{base: 1, lg: 2}} mt="md" mb="md">
-                        <PasswordInput
-                            {...form.getInputProps('password')}
-                            label={t`Password`}
-                            placeholder={t`Your password`}
-                            required
-                        />
-                        <PasswordInput
-                            {...form.getInputProps('password_confirmation')}
-                            label={t`Confirm Password`}
-                            placeholder={t`Confirm password`}
-                            required
-                        />
-                    </SimpleGrid>
+                    <PasswordInput
+                        {...form.getInputProps('password')}
+                        label={t`Password`}
+                        description={t`At least 8 characters`}
+                        autoComplete="new-password"
+                        required
+                    />
 
                     <TextInput
                         style={{display: 'none'}}
@@ -185,7 +187,7 @@ export const Register = () => {
                     <Turnstile onToken={setTurnstileToken} resetKey={turnstileResetKey}/>
 
                     <Button color="secondary.5" type="submit" fullWidth disabled={mutate.isPending}>
-                        {mutate.isPending ? t`Working...` : t`Register`}
+                        {mutate.isPending ? t`Working...` : t`Create account`}
                     </Button>
                 </form>
                 )}

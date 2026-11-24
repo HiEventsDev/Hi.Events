@@ -7,7 +7,7 @@ import { buildAudience, createOptedInOrder, waitForContact } from './audience.sh
 import { emailsAbout } from './coverage.helpers';
 import { test, waitForCampaignStatus } from './messaging.shared';
 
-const NOT_ENABLED = 'To protect people from spam, we enable campaigns for each account by hand. Please contact us';
+const NOT_ENABLED = 'To protect people from spam, campaigns are switched on once your account is verified. Connect Stripe or contact us';
 
 test.describe('audience campaign send gate', () => {
   test('on Hi.Events Cloud a new account writes a campaign but cannot send it until the account is enabled, and its first send then waits for review', async ({ freshAccount, publicApi, mailpit, adminApi }) => {
@@ -26,6 +26,7 @@ test.describe('audience campaign send gate', () => {
     await audience.gotoCampaigns();
     const banner = page.getByRole('complementary').filter({ hasText: "You can't send campaigns yet" });
     await expect(banner).toContainText(NOT_ENABLED);
+    await expect(banner.getByRole('link', { name: 'Connect Stripe' })).toHaveAttribute('href', `/manage/organizer/${organizerId}/settings/payouts`);
 
     await audience.composeCampaign(subject, 'Doors open at seven on Friday.');
     await expect(page.getByTestId('campaign-recipient-count')).toContainText('1 of 1 opted in');
@@ -36,6 +37,7 @@ test.describe('audience campaign send gate', () => {
     await page.getByTestId('campaign-review-send').click();
     const send = page.getByRole('dialog', { name: `Send "${subject}"` });
     await expect(send.getByTestId('campaign-send-summary')).toContainText(NOT_ENABLED);
+    await expect(send.getByRole('link', { name: 'Connect Stripe' })).toBeVisible();
     await expect(send.getByTestId('campaign-send-confirm')).toHaveText("Can't send yet");
     await expect(send.getByTestId('campaign-send-confirm')).toBeDisabled();
     await expect(send.getByRole('button', { name: 'Cancel', exact: true })).toHaveCount(0);
