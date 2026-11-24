@@ -244,41 +244,6 @@ $muted: var(--mantine-color-gray-6);
   }
 }
 
-.previewBar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 8px 12px;
-  border-bottom: 1px solid $border;
-  background: var(--mantine-color-body);
-  font-size: var(--mantine-font-size-xs);
-  color: $muted;
-}
-
-.inbox {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  border-bottom: 1px solid $border;
-  background: var(--mantine-color-body);
-}
-
-.previewControls {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-}
-
-.deviceSwitch {
-  @container audience-page (max-width: 559px) {
-    display: none;
-  }
-}
-
 .previewAs {
   width: 220px;
   max-width: 50vw;
@@ -291,60 +256,6 @@ $muted: var(--mantine-color-gray-6);
 .previewAsLabel {
   font-size: var(--mantine-font-size-xs);
   color: $muted;
-}
-
-.inboxPreheader {
-  color: var(--mantine-color-gray-5);
-}
-
-.inboxText {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  font-size: var(--mantine-font-size-xs);
-  color: $muted;
-
-  strong {
-    font-size: var(--mantine-font-size-sm);
-    color: var(--mantine-color-gray-9);
-    @include mixins.ellipsis;
-  }
-
-  span {
-    @include mixins.ellipsis;
-  }
-}
-
-.previewStage {
-  display: flex;
-  justify-content: center;
-  flex: 1;
-  padding: 16px;
-}
-
-.previewFrame {
-  width: 100%;
-  height: 560px;
-  border: 1px solid $border;
-  border-radius: var(--mantine-radius-md);
-  background: #fff;
-
-  &[data-device="phone"] {
-    width: 375px;
-    max-width: 100%;
-    border-radius: 24px;
-  }
-}
-
-.previewEmpty {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-height: 240px;
-  font-size: var(--mantine-font-size-sm);
-  color: $muted;
-  text-align: center;
 }
 
 .report {
@@ -678,5 +589,10 @@ $muted: var(--mantine-color-gray-6);
   svg {
     flex-shrink: 0;
     margin-top: 2px;
+  }
+
+  a {
+    font-weight: 500;
+    color: var(--mantine-color-primary-7);
   }
 }

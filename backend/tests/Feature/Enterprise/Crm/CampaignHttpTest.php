@@ -838,10 +838,10 @@ class CampaignHttpTest extends TestCase
     public static function sendChecks(): array
     {
         return [
-            'self-hosted sends straight away' => [false, 'Untrusted', false, ['requires_review' => false, 'review_reason' => null, 'blocked_reason' => null, 'warnings' => [], 'early_access_tickets' => []]],
-            'saas untrusted account is reviewed' => [true, 'Untrusted', true, ['requires_review' => true, 'review_reason' => 'UNTRUSTED_ACCOUNT', 'blocked_reason' => null, 'warnings' => [], 'early_access_tickets' => []]],
-            'saas first campaign is reviewed' => [true, 'Trusted', false, ['requires_review' => true, 'review_reason' => 'FIRST_CAMPAIGN', 'blocked_reason' => null, 'warnings' => [], 'early_access_tickets' => []]],
-            'saas trusted account that sent before is not reviewed' => [true, 'Trusted', true, ['requires_review' => false, 'review_reason' => null, 'blocked_reason' => null, 'warnings' => [], 'early_access_tickets' => []]],
+            'self-hosted sends straight away' => [false, 'Untrusted', false, ['requires_review' => false, 'review_reason' => null, 'blocked_reason' => null, 'blocked_reason_code' => null, 'blocked_reason_params' => null, 'warnings' => [], 'early_access_tickets' => []]],
+            'saas untrusted account is reviewed' => [true, 'Untrusted', true, ['requires_review' => true, 'review_reason' => 'UNTRUSTED_ACCOUNT', 'blocked_reason' => null, 'blocked_reason_code' => null, 'blocked_reason_params' => null, 'warnings' => [], 'early_access_tickets' => []]],
+            'saas first campaign is reviewed' => [true, 'Trusted', false, ['requires_review' => true, 'review_reason' => 'FIRST_CAMPAIGN', 'blocked_reason' => null, 'blocked_reason_code' => null, 'blocked_reason_params' => null, 'warnings' => [], 'early_access_tickets' => []]],
+            'saas trusted account that sent before is not reviewed' => [true, 'Trusted', true, ['requires_review' => false, 'review_reason' => null, 'blocked_reason' => null, 'blocked_reason_code' => null, 'blocked_reason_params' => null, 'warnings' => [], 'early_access_tickets' => []]],
         ];
     }
 
@@ -1259,18 +1259,24 @@ class CampaignHttpTest extends TestCase
     {
         $this->crm('GET', 'campaigns', [], $this->ownerHeaders())
             ->assertOk()
-            ->assertJsonPath('meta.send_gate', ['blocked_reason' => null]);
+            ->assertJsonPath('meta.send_gate', ['blocked_reason' => null, 'blocked_reason_code' => null, 'blocked_reason_params' => null]);
 
         config(['app.saas_mode_enabled' => true, 'app.platform_support_email' => 'support@platform.test']);
         DB::table('accounts')->where('id', $this->accountId)->update(['is_manually_verified' => false]);
-        $reason = 'To protect people from spam, we enable campaigns for each account by hand. Please contact us at support@platform.test.';
+        $reason = 'To protect people from spam, campaigns are switched on once your account is verified. Connect Stripe or contact us at support@platform.test.';
 
         $this->crm('GET', 'campaigns', [], $this->ownerHeaders())
             ->assertOk()
-            ->assertJsonPath('meta.send_gate', ['blocked_reason' => $reason]);
+            ->assertJsonPath('meta.send_gate', [
+                'blocked_reason' => $reason,
+                'blocked_reason_code' => 'ACCOUNT_NOT_APPROVED',
+                'blocked_reason_params' => ['email' => 'support@platform.test'],
+            ]);
         $this->crm('GET', "campaigns/{$this->campaignId}/send-check", [], $this->ownerHeaders())
             ->assertOk()
-            ->assertJsonPath('data.blocked_reason', $reason);
+            ->assertJsonPath('data.blocked_reason', $reason)
+            ->assertJsonPath('data.blocked_reason_code', 'ACCOUNT_NOT_APPROVED')
+            ->assertJsonPath('data.blocked_reason_params', ['email' => 'support@platform.test']);
     }
 
     public function test_an_account_waiting_to_be_enabled_is_never_pointed_at_a_placeholder_support_address(): void
@@ -1280,7 +1286,9 @@ class CampaignHttpTest extends TestCase
 
         $this->crm('GET', "campaigns/{$this->campaignId}/send-check", [], $this->ownerHeaders())
             ->assertOk()
-            ->assertJsonPath('data.blocked_reason', 'To protect people from spam, we enable campaigns for each account by hand. Please contact us to get yours enabled.');
+            ->assertJsonPath('data.blocked_reason', 'To protect people from spam, campaigns are switched on once your account is verified. Connect Stripe or contact us to get yours enabled.')
+            ->assertJsonPath('data.blocked_reason_code', 'ACCOUNT_NOT_APPROVED')
+            ->assertJsonPath('data.blocked_reason_params', null);
     }
 
     public static function installs(): array

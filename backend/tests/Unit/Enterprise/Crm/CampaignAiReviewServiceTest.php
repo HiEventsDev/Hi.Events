@@ -18,6 +18,7 @@ use HiEvents\Enterprise\Crm\Services\Domain\Sms\SmsPreviewVariantDTO;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
+use HiEvents\Services\Infrastructure\Ai\UntrustedPromptText;
 use Illuminate\Config\Repository;
 use Mockery;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -121,6 +122,7 @@ class CampaignAiReviewServiceTest extends TestCase
             $accounts,
             $organizers,
             Mockery::mock(EventRepositoryInterface::class),
+            new UntrustedPromptText,
         );
     }
 }

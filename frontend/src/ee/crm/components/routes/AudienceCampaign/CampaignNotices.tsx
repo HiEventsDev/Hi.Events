@@ -9,6 +9,7 @@ import {CrmCampaign} from "../../../types.ts";
 import {campaignStatusReason} from "../../../utilites/labels.ts";
 import {smsCountryLabel} from "../../../utilites/smsCountries.ts";
 import {Notice} from "../../Notice";
+import {SendGateReason} from "../../SendGateReason";
 import classes from "./Campaign.module.scss";
 
 const AUTOMATION_RUN_REASONS = ['REJECTED_BY_REVIEW', 'REVIEW_EXPIRED'];
@@ -29,7 +30,7 @@ export const CampaignNotices = ({organizerId, campaign, isSms, timezone, loadErr
     const isScheduled = campaign?.status === 'SCHEDULED' && !isPausedByLicence;
     const isCancelled = campaign?.status === 'CANCELLED' && !reason;
     const listMetaQuery = useGetCrmCampaigns(organizerId, {}, 1, isEditable || isPausedByLicence);
-    const blockedReason = isEditable ? listMetaQuery.data?.meta.send_gate?.blocked_reason : null;
+    const sendGate = isEditable ? listMetaQuery.data?.meta.send_gate : null;
     const sendWindowHours = listMetaQuery.data?.meta.scheduled_send_window_hours;
     const waiting = campaign?.sms_waiting ?? [];
 
@@ -43,12 +44,17 @@ export const CampaignNotices = ({organizerId, campaign, isSms, timezone, loadErr
                 </Notice>
             )}
 
-            {blockedReason && (
+            {sendGate?.blocked_reason && (
                 <Notice
                     title={isSms ? t`You can write this text message, but you can't send it yet.` : t`You can write this campaign, but you can't send it yet.`}
                     data-testid="campaign-send-gate-notice"
                 >
-                    {blockedReason}
+                    <SendGateReason
+                        organizerId={organizerId}
+                        reason={sendGate.blocked_reason}
+                        code={sendGate.blocked_reason_code}
+                        params={sendGate.blocked_reason_params}
+                    />
                 </Notice>
             )}
 

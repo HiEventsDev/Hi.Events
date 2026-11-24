@@ -14,6 +14,7 @@ use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\Status\MessageStatus;
 use HiEvents\Jobs\Event\SendMessagesJob;
 use HiEvents\Jobs\Message\MessagePendingReviewJob;
+use HiEvents\Jobs\Message\ReviewMessageWithAiJob;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -24,6 +25,7 @@ use HiEvents\Services\Application\Handlers\Message\DTO\SendMessageDTO;
 use HiEvents\Services\Application\Handlers\Message\SendMessageHandler;
 use HiEvents\Services\Domain\Message\DTO\MessagingEligibilityFailureDTO;
 use HiEvents\Services\Domain\Message\MessagingEligibilityService;
+use HiEvents\Services\Domain\Message\Review\MessageAiReviewService;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Config\Repository;
 use Illuminate\Support\Facades\Bus;
@@ -50,6 +52,8 @@ class SendMessageHandlerScheduledTest extends TestCase
 
     private MessagingEligibilityService $eligibilityService;
 
+    private MessageAiReviewService $aiReviewService;
+
     private SendMessageHandler $handler;
 
     protected function setUp(): void
@@ -65,6 +69,7 @@ class SendMessageHandlerScheduledTest extends TestCase
         $this->purifier = m::mock(HtmlPurifierService::class);
         $this->config = m::mock(Repository::class);
         $this->eligibilityService = m::mock(MessagingEligibilityService::class);
+        $this->aiReviewService = m::mock(MessageAiReviewService::class);
 
         $this->handler = new SendMessageHandler(
             $this->orderRepository,
@@ -75,7 +80,8 @@ class SendMessageHandlerScheduledTest extends TestCase
             $this->eventRepository,
             $this->purifier,
             $this->config,
-            $this->eligibilityService
+            $this->eligibilityService,
+            $this->aiReviewService,
         );
     }
 
@@ -303,13 +309,41 @@ class SendMessageHandlerScheduledTest extends TestCase
             ->withArgs(fn ($data) => $data['status'] === MessageStatus::PENDING_REVIEW->name
                 && $data['scheduled_at'] === null)
             ->andReturn($this->makeCreatedMessage());
+        $this->aiReviewService->shouldReceive('isEnabled')->andReturn(false);
 
         $this->handler->handle($this->makeTestDto(
             Carbon::now('America/New_York')->addDays(2)->format('Y-m-d\TH:i'),
         ));
 
         Bus::assertNotDispatched(SendMessagesJob::class);
+        Bus::assertNotDispatched(ReviewMessageWithAiJob::class);
         Bus::assertDispatched(MessagePendingReviewJob::class);
+    }
+
+    public function test_message_held_for_review_goes_to_the_ai_check_when_it_is_enabled(): void
+    {
+        Bus::fake();
+
+        $this->setupAccountMocks(new MessagingEligibilityFailureDTO(
+            accountId: 1,
+            eventId: 101,
+            failures: [MessagingEligibilityFailureEnum::STRIPE_NOT_CONNECTED],
+        ));
+        $this->setupRepositoryMocks();
+
+        $this->messageRepository->shouldReceive('create')->once()->andReturn($this->makeCreatedMessage());
+        $this->aiReviewService->shouldReceive('isEnabled')->andReturn(true);
+
+        $this->handler->handle($this->makeTestDto(
+            Carbon::now('America/New_York')->addDays(2)->format('Y-m-d\TH:i'),
+        ));
+
+        Bus::assertDispatched(
+            ReviewMessageWithAiJob::class,
+            fn (ReviewMessageWithAiJob $job) => $job->messageId === 1 && $job->recipientsCount === 1,
+        );
+        Bus::assertNotDispatched(MessagePendingReviewJob::class);
+        Bus::assertNotDispatched(SendMessagesJob::class);
     }
 
     private function makeCreatedMessage(): MessageDomainObject

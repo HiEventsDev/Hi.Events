@@ -368,6 +368,7 @@ use HiEvents\Http\Actions\Locations\UpdateLocationAction;
 use HiEvents\Http\Actions\Messages\CancelMessageAction;
 use HiEvents\Http\Actions\Messages\GetMessageRecipientsAction;
 use HiEvents\Http\Actions\Messages\GetMessagesAction;
+use HiEvents\Http\Actions\Messages\PreviewMessageAction;
 use HiEvents\Http\Actions\Messages\SendMessageAction;
 use HiEvents\Http\Actions\OAuth\ApproveOAuthAuthorizationRequestAction;
 use HiEvents\Http\Actions\OAuth\AuthorizeOAuthClientAction;
@@ -948,7 +949,8 @@ $router->middleware(['auth:api,sanctum'])->group(
         $router->delete('/events/{event_id}/lineup/schedule-items/{schedule_item_id}', DeleteScheduleItemAction::class);
 
         // Messages
-        $router->post('/events/{event_id}/messages', SendMessageAction::class);
+        $router->post('/events/{event_id}/messages', SendMessageAction::class)->middleware('throttle:60,60,message-send');
+        $router->post('/events/{event_id}/messages/preview', PreviewMessageAction::class)->middleware('throttle:120,1,message-preview');
         $router->get('/events/{event_id}/messages', GetMessagesAction::class);
         $router->post('/events/{event_id}/messages/{message_id}/cancel', CancelMessageAction::class);
         $router->get('/events/{event_id}/messages/{message_id}/recipients', GetMessageRecipientsAction::class);

@@ -46,6 +46,15 @@ class SendMessageActionTest extends TestCase
         $this->assertSame(0, DB::table('messages')->where('event_id', $this->eventId)->count());
     }
 
+    public function test_sends_are_rate_limited_per_member(): void
+    {
+        foreach (range(1, 60) as $ignored) {
+            $this->sendMessage(['message_type' => null])->assertStatus(422);
+        }
+
+        $this->sendMessage(['message_type' => null])->assertStatus(429);
+    }
+
     private function sendMessage(array $overrides)
     {
         return $this->withHeader('Authorization', 'Bearer '.$this->authToken)

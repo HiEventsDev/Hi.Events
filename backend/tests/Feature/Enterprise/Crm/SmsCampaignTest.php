@@ -69,6 +69,7 @@ class SmsCampaignTest extends TestCase
     {
         parent::setUp();
 
+        Carbon::setTestNow(Carbon::parse('2026-11-17 12:00:00', 'UTC'));
         config(['app.saas_mode_enabled' => false]);
         $this->setUpCrmOrganizer();
         $this->setFeatureFlagOverride($this->accountId, FeatureFlag::CRM_SMS, true);
