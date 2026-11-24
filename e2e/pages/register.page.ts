@@ -10,8 +10,11 @@ export class RegisterPage {
     await waitForHydration(this.page, 'form');
   }
 
-  async register(details: { firstName: string; email: string; password: string }): Promise<void> {
+  async register(details: { firstName: string; lastName?: string; email: string; password: string }): Promise<void> {
     await this.page.getByLabel(/^First Name/).fill(details.firstName);
+    if (details.lastName) {
+      await this.page.getByLabel(/^Last Name/).fill(details.lastName);
+    }
     await this.page.getByLabel(/^Email/).fill(details.email);
     await this.page.getByLabel(/^Password/).fill(details.password);
     await this.page.getByRole('button', { name: 'Create account' }).click();

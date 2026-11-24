@@ -9,7 +9,7 @@ test.describe('registration', () => {
 
     const register = new RegisterPage(page);
     await register.goto();
-    await register.register({ firstName: 'New', email, password: 'Password123!' });
+    await register.register({ firstName: 'New', lastName: 'Organizer', email, password: 'Password123!' });
 
     await expect(page).toHaveURL(/\/welcome/);
 
@@ -23,7 +23,7 @@ test.describe('registration', () => {
     }
 
     await expect(page.getByRole('heading', { name: 'Create your first event' })).toBeVisible();
-    await expect(page.getByLabel(/^Organizer name/)).toHaveValue('New');
+    await expect(page.getByLabel(/^Organizer name/)).toHaveValue('New Organizer');
     await page.getByLabel(/^Event name/).fill('Harbour Lights Supper Club');
     await page.getByRole('button', { name: 'Create event' }).click();
 

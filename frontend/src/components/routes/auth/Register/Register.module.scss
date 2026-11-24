@@ -28,6 +28,16 @@
     }
   }
 
+  .nameFields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 1rem;
+
+    @include mixins.respond-below(sm) {
+      grid-template-columns: 1fr;
+    }
+  }
+
   footer {
     @include auth.auth-footer-terms;
   }

@@ -15,7 +15,7 @@ import {Turnstile} from "../../../common/Turnstile";
 import {Callout} from "../../../common/Callout";
 import {SsoSection, useSsoOptions} from "../../../common/SsoButtons/SsoSection.tsx";
 
-type RegistrationFormValues = Omit<RegisterAccountRequest, 'password_confirmation' | 'last_name'>;
+type RegistrationFormValues = Omit<RegisterAccountRequest, 'password_confirmation'>;
 
 export const Register = () => {
     const navigate = useNavigate();
@@ -25,6 +25,7 @@ export const Register = () => {
         validateInputOnBlur: true,
         initialValues: {
             first_name: '',
+            last_name: '',
             email: '',
             password: '',
             timezone: typeof window !== 'undefined'
@@ -137,13 +138,20 @@ export const Register = () => {
             <div className={classes.registerCard}>
                 {passwordLoginEnabled && (
                 <form onSubmit={form.onSubmit((values) => registerUser(values as RegistrationFormValues))}>
-                    <TextInput
-                        {...form.getInputProps('first_name')}
-                        ref={firstNameRef}
-                        label={t`First Name`}
-                        autoComplete="given-name"
-                        required
-                    />
+                    <div className={classes.nameFields}>
+                        <TextInput
+                            {...form.getInputProps('first_name')}
+                            ref={firstNameRef}
+                            label={t`First Name`}
+                            autoComplete="given-name"
+                            required
+                        />
+                        <TextInput
+                            {...form.getInputProps('last_name')}
+                            label={t`Last Name`}
+                            autoComplete="family-name"
+                        />
+                    </div>
 
                     <TextInput
                         {...form.getInputProps('email')}
