@@ -242,7 +242,6 @@ export const OrganizerHomepage = ({
                     entityType="organizer"
                     entityId={organizer.id}
                     currentStatus={organizer.status as 'DRAFT' | 'LIVE'}
-                    entityName={organizer.name}
                     onSuccess={() =>
                         setTimeout(() => {
                             window.location.reload();

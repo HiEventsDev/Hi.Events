@@ -1,104 +1,42 @@
-import React, {useCallback} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button} from '@mantine/core';
 import {IconEye} from '@tabler/icons-react';
 import {t} from '@lingui/macro';
 import {showError, showSuccess} from '../../../utilites/notifications';
 import {confirmationDialog} from '../../../utilites/confirmationDialog';
-import {useUpdateEventStatus} from '../../../mutations/useUpdateEventStatus';
+import {createLazyModule} from '../../../utilites/lazyModule';
 import {useUpdateOrganizerStatus} from '../../../mutations/useUpdateOrganizerStatus';
-import {IdParam} from '../../../types';
+import {useAccess} from '../../../hooks/useAccess';
+import {Event, IdParam} from '../../../types';
+import type {EventPublishFlowProps} from './EventPublishFlow';
 import classes from './StatusToggle.module.scss';
-import {trackEvent, AnalyticsEvents} from '../../../utilites/analytics';
 
-interface StatusToggleProps {
-    entityType: 'event' | 'organizer';
+type StatusToggleProps =
+    | {
+    entityType: 'event';
+    event: Event;
+}
+    | {
+    entityType: 'organizer';
     entityId: IdParam;
-    currentStatus: 'DRAFT' | 'LIVE' | 'PENDING_MANUAL_REVIEW';
-    entityName?: string;
+    currentStatus: 'DRAFT' | 'LIVE';
     onSuccess?: () => void;
+};
+
+interface StatusBannerProps {
+    message: string;
+    onPublish?: () => void;
+    loading?: boolean;
 }
 
-export const StatusToggle: React.FC<StatusToggleProps> = ({
-                                                              entityType,
-                                                              entityId,
-                                                              currentStatus,
-    onSuccess,
-                                                          }) => {
-    const eventStatusMutation = useUpdateEventStatus();
-    const organizerStatusMutation = useUpdateOrganizerStatus();
-    const mutation = entityType === 'event' ? eventStatusMutation : organizerStatusMutation;
-
-    const handleToggle = useCallback(() => {
-        const isDraft = currentStatus === 'DRAFT';
-        const newStatus = isDraft ? 'LIVE' : 'DRAFT';
-
-        const confirmMessage = isDraft
-            ? entityType === 'event'
-                ? t`Are you sure you want to publish this event? Once published, it will be visible to the public.`
-                : t`Are you sure you want to publish this organizer profile? Once published, it will be visible to the public.`
-            : entityType === 'event'
-                ? t`Are you sure you want to unpublish this event? It will no longer be visible to the public.`
-                : t`Are you sure you want to unpublish this organizer profile? It will no longer be visible to the public.`;
-
-        confirmationDialog(confirmMessage, () => {
-            const mutationParams = entityType === 'event'
-                ? {eventId: entityId, status: newStatus}
-                : {organizerId: entityId, status: newStatus};
-
-            mutation.mutate(mutationParams as any, {
-                onSuccess: () => {
-                    if (entityType === 'event' && newStatus === 'LIVE') {
-                        trackEvent(AnalyticsEvents.EVENT_PUBLISHED);
-                    }
-                    const successMessage = entityType === 'event'
-                        ? t`Event status updated`
-                        : t`Organizer status updated`;
-                    showSuccess(successMessage);
-                    onSuccess?.();
-                },
-                onError: (error: any) => {
-                    const errorMessage = error?.response?.data?.message ||
-                        (entityType === 'event'
-                            ? t`Event status update failed. Please try again later`
-                            : t`Organizer status update failed. Please try again later`);
-                    showError(errorMessage);
-                }
-            });
-        });
-    }, [
-        entityType,
-        entityId,
-        currentStatus,
-        mutation
-    ]);
-
-    if (currentStatus === 'LIVE') {
-        return null;
-    }
-
-    if (currentStatus === 'PENDING_MANUAL_REVIEW') {
-        return (
-            <div className={classes.banner} data-status-banner="">
-                <div className={classes.content}>
-                    <span className={classes.message}>
-                        {t`This event is pending manual review and is not visible to the public`}
-                    </span>
-                </div>
-            </div>
-        );
-    }
-
-    const message = entityType === 'event'
-        ? t`This event is not published yet`
-        : t`This organizer profile is not published yet`;
-
-    return (
-        <div className={classes.banner} data-status-banner="">
-            <div className={classes.content}>
-                <span className={classes.message}>{message}</span>
+const StatusBanner = ({message, onPublish, loading}: StatusBannerProps) => (
+    <div className={classes.banner} data-status-banner="">
+        <div className={classes.content}>
+            <span className={classes.message}>{message}</span>
+            {onPublish && (
                 <Button
-                    onClick={handleToggle}
-                    loading={mutation.isPending}
+                    onClick={onPublish}
+                    loading={loading}
                     size="xs"
                     variant="white"
                     leftSection={<IconEye size={14}/>}
@@ -106,7 +44,119 @@ export const StatusToggle: React.FC<StatusToggleProps> = ({
                 >
                     {t`Publish`}
                 </Button>
-            </div>
+            )}
         </div>
+    </div>
+);
+
+const eventPublishFlowModule = createLazyModule(() => import('./EventPublishFlow'));
+
+const LazyEventPublishFlow = (props: EventPublishFlowProps) => {
+    const module = eventPublishFlowModule.useModule();
+
+    return module ? <module.EventPublishFlow {...props}/> : null;
+};
+
+const EventDraftBanner = ({onPublish}: { onPublish: () => void }) => {
+    const {isLoaded, isReadOnly} = useAccess();
+    const canPublish = isLoaded && !isReadOnly;
+    const [isLoadingFlow, setIsLoadingFlow] = useState(false);
+
+    useEffect(() => {
+        if (canPublish) {
+            eventPublishFlowModule.load().catch(() => undefined);
+        }
+    }, [canPublish]);
+
+    const handlePublish = () => {
+        setIsLoadingFlow(true);
+        eventPublishFlowModule.load().then(
+            onPublish,
+            () => showError(t`Something went wrong. Please try again.`),
+        ).finally(() => setIsLoadingFlow(false));
+    };
+
+    return (
+        <StatusBanner
+            message={t`This event is not published yet`}
+            onPublish={canPublish ? handlePublish : undefined}
+            loading={isLoadingFlow}
+        />
+    );
+};
+
+const EventStatusToggle = ({event}: { event: Event }) => {
+    const [isFlowOpen, setIsFlowOpen] = useState(false);
+    const [isPublished, setIsPublished] = useState(false);
+
+    return (
+        <>
+            {event.status === 'PENDING_MANUAL_REVIEW' && (
+                <StatusBanner message={t`This event is pending manual review and is not visible to the public`}/>
+            )}
+
+            {event.status === 'DRAFT' && !isPublished && (
+                <EventDraftBanner onPublish={() => setIsFlowOpen(true)}/>
+            )}
+
+            {isFlowOpen && (
+                <LazyEventPublishFlow
+                    event={event}
+                    onPublished={() => setIsPublished(true)}
+                    onClose={() => setIsFlowOpen(false)}
+                />
+            )}
+        </>
+    );
+};
+
+const OrganizerStatusToggle = ({entityId, currentStatus, onSuccess}: {
+    entityId: IdParam;
+    currentStatus: 'DRAFT' | 'LIVE';
+    onSuccess?: () => void;
+}) => {
+    const mutation = useUpdateOrganizerStatus();
+
+    const handlePublish = () => {
+        confirmationDialog(
+            t`Are you sure you want to publish this organizer profile? Once published, it will be visible to the public.`,
+            () => {
+                mutation.mutate({organizerId: entityId, status: 'LIVE'}, {
+                    onSuccess: () => {
+                        showSuccess(t`Organizer status updated`);
+                        onSuccess?.();
+                    },
+                    onError: (error: any) => {
+                        showError(error?.response?.data?.message || t`Organizer status update failed. Please try again later`);
+                    }
+                });
+            }
+        );
+    };
+
+    if (currentStatus === 'LIVE') {
+        return null;
+    }
+
+    return (
+        <StatusBanner
+            message={t`This organizer profile is not published yet`}
+            onPublish={handlePublish}
+            loading={mutation.isPending}
+        />
+    );
+};
+
+export const StatusToggle: React.FC<StatusToggleProps> = (props) => {
+    if (props.entityType === 'event') {
+        return <EventStatusToggle event={props.event}/>;
+    }
+
+    return (
+        <OrganizerStatusToggle
+            entityId={props.entityId}
+            currentStatus={props.currentStatus}
+            onSuccess={props.onSuccess}
+        />
     );
 };
