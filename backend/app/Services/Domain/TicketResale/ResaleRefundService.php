@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Domain\TicketResale;
 
+use Carbon\Carbon;
 use HiEvents\DomainObjects\Enums\OrderAuditAction;
 use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\Enums\ResaleRefundOutcome;
@@ -71,7 +72,7 @@ class ResaleRefundService
         }
 
         try {
-            $refundedListing = $this->databaseManager->transaction(function () use ($listingId, $sellerOrderShortId) {
+            $outcome = $this->databaseManager->transaction(function () use ($listingId, $sellerOrderShortId) {
                 $this->transactionLockService->lockOrder($sellerOrderShortId);
 
                 return $this->refundUnderLock($listingId);
@@ -82,21 +83,25 @@ class ResaleRefundService
             return ResaleRefundOutcome::FAILED;
         }
 
-        if ($refundedListing === null) {
-            return ResaleRefundOutcome::NOT_READY;
+        if ($outcome === ResaleRefundOutcome::NOT_READY) {
+            $this->listingRepository->updateFromArray($listingId, [
+                TicketResaleListingDomainObjectAbstract::UPDATED_AT => Carbon::now()->toDateTimeString(),
+            ]);
         }
 
-        if ($refundedListing->getStripeRefundId() !== null) {
-            $this->notificationService->notifySeller(
-                TicketResaleNotice::SOLD_FOR_SELLER,
-                $refundedListing,
-                $refundedListing->getRefundAmount(),
-            );
-        } elseif ($refundedListing->getRefundStatus() === TicketResaleRefundStatus::SUCCEEDED->name) {
-            $this->notificationService->notifySeller(TicketResaleNotice::SOLD_WITHOUT_REFUND_FOR_SELLER, $refundedListing);
-        }
+        return $outcome;
+    }
 
-        return ResaleRefundOutcome::SETTLED;
+    public function startRefundsForSoldOrder(int $soldOrderId): void
+    {
+        $this->listingRepository
+            ->findWhere([
+                TicketResaleListingDomainObjectAbstract::SOLD_ORDER_ID => $soldOrderId,
+                TicketResaleListingDomainObjectAbstract::STATUS => TicketResaleListingStatus::SOLD->name,
+                TicketResaleListingDomainObjectAbstract::REFUND_STATUS => TicketResaleRefundStatus::PENDING->name,
+                TicketResaleListingDomainObjectAbstract::STRIPE_REFUND_ID => null,
+            ])
+            ->each(fn (TicketResaleListingDomainObject $listing) => ProcessResaleRefundJob::dispatch($listing->getId()));
     }
 
     public function recordStripeOutcome(Refund $refund): void
@@ -239,12 +244,12 @@ class ResaleRefundService
     /**
      * @throws Throwable
      */
-    private function refundUnderLock(int $listingId): ?TicketResaleListingDomainObject
+    private function refundUnderLock(int $listingId): ResaleRefundOutcome
     {
         $listing = $this->listingRepository->findByIdLocked($listingId);
 
         if ($listing === null || ! $this->isAwaitingRefund($listing)) {
-            return $listing;
+            return ResaleRefundOutcome::SETTLED;
         }
 
         $sellerOrder = $this->orderWithPayment($listing->getOrderId());
@@ -254,22 +259,27 @@ class ResaleRefundService
         ]);
 
         if ($fees === null || $sellerOrder->getRefundStatus() === OrderRefundStatus::REFUND_PENDING->name) {
-            return null;
+            return ResaleRefundOutcome::NOT_READY;
         }
 
         if ($sellerOrder->getStripePayment() === null || strtoupper($fees->getCurrency()) !== strtoupper($sellerOrder->getCurrency())) {
             $this->markFailed($listing->getId());
 
-            return $this->listingRepository->findById($listing->getId());
+            return ResaleRefundOutcome::FAILED;
         }
 
         $refund = $this->refundAmount($listing, $sellerOrder, $replacementOrder, $fees);
 
         if ($refund->toMinorUnit() <= 0) {
-            return $this->listingRepository->updateFromArray($listing->getId(), [
-                TicketResaleListingDomainObjectAbstract::REFUND_STATUS => TicketResaleRefundStatus::SUCCEEDED->name,
-                TicketResaleListingDomainObjectAbstract::REFUND_AMOUNT => 0,
-            ]);
+            $this->notificationService->notifySeller(
+                TicketResaleNotice::SOLD_WITHOUT_REFUND_FOR_SELLER,
+                $this->listingRepository->updateFromArray($listing->getId(), [
+                    TicketResaleListingDomainObjectAbstract::REFUND_STATUS => TicketResaleRefundStatus::SUCCEEDED->name,
+                    TicketResaleListingDomainObjectAbstract::REFUND_AMOUNT => 0,
+                ]),
+            );
+
+            return ResaleRefundOutcome::SETTLED;
         }
 
         $this->orderRepository->updateFromArray($sellerOrder->getId(), [
@@ -284,10 +294,14 @@ class ResaleRefundService
             metadata: [StripePaymentIntentRefundService::RESALE_LISTING_METADATA_KEY => (string) $listing->getId()],
         );
 
-        return $this->listingRepository->updateFromArray($listing->getId(), [
+        $refundedListing = $this->listingRepository->updateFromArray($listing->getId(), [
             TicketResaleListingDomainObjectAbstract::STRIPE_REFUND_ID => $stripeRefund->id,
             TicketResaleListingDomainObjectAbstract::REFUND_AMOUNT => $refund->toFloat(),
         ]);
+
+        $this->notificationService->notifySeller(TicketResaleNotice::SOLD_FOR_SELLER, $refundedListing, $refundedListing->getRefundAmount());
+
+        return ResaleRefundOutcome::SETTLED;
     }
 
     private function refundAmount(

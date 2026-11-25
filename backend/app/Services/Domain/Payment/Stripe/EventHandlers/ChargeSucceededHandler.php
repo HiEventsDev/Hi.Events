@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\StripePaymentDomainObject;
 use HiEvents\Repository\Eloquent\StripePaymentsRepository;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Services\Domain\Payment\Stripe\StripePaymentPlatformFeeExtractionService;
+use HiEvents\Services\Domain\TicketResale\ResaleRefundService;
 use Psr\Log\LoggerInterface;
 use Stripe\Charge;
 
@@ -17,6 +18,7 @@ class ChargeSucceededHandler
         private readonly StripePaymentsRepository $stripePaymentsRepository,
         private readonly StripePaymentPlatformFeeExtractionService $platformFeeExtractionService,
         private readonly LoggerInterface $logger,
+        private readonly ResaleRefundService $resaleRefundService,
     ) {}
 
     public function handleEvent(Charge $charge): void
@@ -68,5 +70,7 @@ class ChargeSucceededHandler
             charge: $charge,
             stripePayment: $stripePayment
         );
+
+        $this->resaleRefundService->startRefundsForSoldOrder($order->getId());
     }
 }

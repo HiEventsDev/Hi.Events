@@ -14,7 +14,7 @@ class MaintainTicketResaleCommand extends Command
 {
     private const BATCH_SIZE = 500;
 
-    private const REFUND_REDISPATCH_AFTER_MINUTES = 15;
+    private const REFUND_REDISPATCH_AFTER_MINUTES = 75;
 
     private const REFUND_RECONCILE_AFTER_MINUTES = 60;
 

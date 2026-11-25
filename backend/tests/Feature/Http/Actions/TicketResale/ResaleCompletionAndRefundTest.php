@@ -23,6 +23,7 @@ use HiEvents\Mail\TicketResale\TicketResaleNoticeMail;
 use HiEvents\Models\AccountConfiguration;
 use HiEvents\Models\User;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\ChargeRefundUpdatedHandler;
+use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\ChargeSucceededHandler;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\PaymentIntentSucceededHandler;
 use HiEvents\Services\Domain\TicketResale\ResaleRefundService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
@@ -280,6 +281,37 @@ class ResaleCompletionAndRefundTest extends TestCase
         $this->assertDatabaseHas('orders', ['id' => $this->sellerOrderId, 'total_refunded' => 97.50]);
         $this->assertSame(2, DB::table('ticket_resale_listings')->where('refund_status', TicketResaleRefundStatus::SUCCEEDED->name)->whereIn('id', [$firstListingId, $secondListingId])->count());
         $this->assertSame(2, (int) DB::table('product_prices')->where('id', $this->priceId)->value('quantity_sold'));
+    }
+
+    public function test_a_refund_waiting_for_the_new_sales_fees_starts_as_soon_as_they_are_recorded(): void
+    {
+        $listingId = $this->list();
+        $buyerOrderId = $this->startCheckout('buyer');
+        $this->pay($buyerOrderId);
+        $this->assertSame(ResaleRefundOutcome::NOT_READY, $this->processRefund($listingId));
+        Queue::assertPushed(ProcessResaleRefundJob::class, 1);
+
+        $this->app->make(ChargeSucceededHandler::class)->handleEvent(Charge::constructFrom(array_merge(
+            $this->fakeStripeCharges()->retrieve('ch_buyer_'.$buyerOrderId)->toArray(),
+            ['payment_intent' => 'pi_buyer_'.$buyerOrderId, 'status' => 'succeeded'],
+        )));
+
+        Queue::assertPushed(ProcessResaleRefundJob::class, 2);
+        $this->assertSame(ResaleRefundOutcome::SETTLED, $this->processRefund($listingId));
+        $this->assertCount(1, $this->stripeRefunds->created);
+    }
+
+    public function test_a_refund_still_waiting_for_fees_is_not_restarted_by_the_scheduled_command(): void
+    {
+        $listingId = $this->list();
+        $this->pay($this->startCheckout('buyer'));
+
+        $this->travel(70)->minutes();
+        $this->assertSame(ResaleRefundOutcome::NOT_READY, $this->processRefund($listingId, attempt: 2));
+        $this->travel(70)->minutes();
+        $this->artisan('ticket-resale:maintain')->assertSuccessful();
+
+        Queue::assertPushed(ProcessResaleRefundJob::class, 1);
     }
 
     public function test_a_refund_created_at_stripe_but_not_recorded_is_not_created_twice(): void

@@ -9,9 +9,7 @@ use HiEvents\DomainObjects\Status\TicketResaleListingStatus;
 use HiEvents\DomainObjects\Status\TicketResaleRefundStatus;
 use HiEvents\Jobs\TicketResale\ProcessResaleRefundJob;
 use HiEvents\Mail\TicketResale\TicketResaleNoticeMail;
-use Illuminate\Bus\UniqueLock;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
@@ -64,13 +62,13 @@ class MaintainTicketResaleCommandTest extends TestCase
         );
     }
 
-    public function test_it_restarts_a_refund_that_never_started_once_per_quarter_hour_unless_its_job_is_still_alive(): void
+    public function test_it_restarts_a_refund_that_never_started_once_nothing_has_touched_it_for_longer_than_the_longest_retry_gap(): void
     {
-        $stuckId = $this->insertListing(0, $this->awaitingRefund(['updated_at' => now()->subMinutes(20)]));
-        $this->insertListing(1, $this->awaitingRefund(['updated_at' => now()->subMinutes(5)]));
-        $this->insertListing(2, $this->awaitingRefund(['updated_at' => now()->subHour(), 'stripe_refund_id' => 're_started']));
+        $stuckId = $this->insertListing(0, $this->awaitingRefund(['updated_at' => now()->subMinutes(80)]));
+        $this->insertListing(1, $this->awaitingRefund(['updated_at' => now()->subMinutes(70)]));
+        $this->insertListing(2, $this->awaitingRefund(['updated_at' => now()->subHours(3), 'stripe_refund_id' => 're_started']));
         $this->insertListing(3, $this->awaitingRefund([
-            'updated_at' => now()->subHour(),
+            'updated_at' => now()->subHours(3),
             'refund_status' => TicketResaleRefundStatus::FAILED->name,
         ]));
 
@@ -84,13 +82,7 @@ class MaintainTicketResaleCommandTest extends TestCase
             'refund_attempts' => 0,
         ]);
 
-        DB::table('ticket_resale_listings')->where('id', $stuckId)->update(['updated_at' => now()->subMinutes(16)]);
-        $this->artisan('ticket-resale:maintain')->assertSuccessful();
-
-        Queue::assertPushed(ProcessResaleRefundJob::class, 1);
-
-        (new UniqueLock(Cache::driver()))->release(new ProcessResaleRefundJob($stuckId));
-        DB::table('ticket_resale_listings')->where('id', $stuckId)->update(['updated_at' => now()->subMinutes(16)]);
+        DB::table('ticket_resale_listings')->where('id', $stuckId)->update(['updated_at' => now()->subMinutes(76)]);
         $this->artisan('ticket-resale:maintain')->assertSuccessful();
 
         Queue::assertPushed(ProcessResaleRefundJob::class, 2);
@@ -115,7 +107,7 @@ class MaintainTicketResaleCommandTest extends TestCase
     {
         $this->insertListing(0);
         $this->insertListing(1, ['withdrawal_requested_at' => now()->subHour()]);
-        $this->insertListing(2, $this->awaitingRefund(['updated_at' => now()->subMinutes(20)]));
+        $this->insertListing(2, $this->awaitingRefund(['updated_at' => now()->subMinutes(80)]));
         $this->insertListingOnAnotherEvent(daysAhead: 0);
         $this->insertVerification(['code_hash' => 'old-code', 'code_expires_at' => now()->subDays(2)], createdAt: now()->subDays(2));
 
