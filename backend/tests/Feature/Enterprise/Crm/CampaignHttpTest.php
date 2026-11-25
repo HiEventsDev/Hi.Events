@@ -255,6 +255,7 @@ class CampaignHttpTest extends TestCase
 
     public function test_approving_a_campaign_records_when_it_was_approved(): void
     {
+        $this->freezeTime();
         Bus::fake();
         config(['app.saas_mode_enabled' => true]);
         $this->crm('POST', "campaigns/{$this->campaignId}/send", [], $this->ownerHeaders())->assertOk()->assertJsonPath('data.status', 'PENDING_REVIEW');

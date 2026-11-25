@@ -10,6 +10,7 @@ import {
   getPaymentIntentRefundedAmount,
   listPaymentIntentRefunds,
   STRIPE_PAYMENTS_SKIP_REASON,
+  stripeSettlementCurrency,
 } from '../../api/stripe';
 import { liftResaleThrottles } from '../../utils/resale';
 import {
@@ -78,6 +79,7 @@ test.describe('unsold tickets sell before listed ones', () => {
   test('a ticket listed for one date of a recurring event adds availability to that date only', { tag: '@stripe' }, async ({ page, api, account, publicApi, mailpit }) => {
     test.slow();
     const event = await createRecurringLiveEvent(api, account.organizerId, {
+      currency: await stripeSettlementCurrency(),
       count: 3,
       price: RESALE_TICKET_PRICE,
       quantityAvailable: 1,

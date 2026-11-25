@@ -259,6 +259,18 @@ class ResaleCompletionAndRefundTest extends TestCase
         $this->assertDatabaseMissing('attendees', ['id' => $sellerAttendeeId, 'email' => 'someone.else@example.test']);
     }
 
+    public function test_the_tax_stripe_charges_on_its_fee_is_part_of_the_new_sales_costs(): void
+    {
+        $listingId = $this->list();
+        $buyerOrderId = $this->startCheckout('buyer');
+        $this->pay($buyerOrderId);
+        $this->recordFees($buyerOrderId, cardFee: 1.00, applicationFee: 1.50, totalFeeMinor: 273);
+
+        $this->processRefund($listingId);
+
+        $this->assertSame([4727], array_column($this->stripeRefunds->created, 'amount'));
+    }
+
     public function test_two_tickets_from_one_order_resold_together_are_refunded_one_after_the_other(): void
     {
         $firstListingId = $this->list();
@@ -274,8 +286,10 @@ class ResaleCompletionAndRefundTest extends TestCase
         $this->assertCount(1, $this->stripeRefunds->created);
 
         $this->stripeSends('re_1', 'succeeded');
+        Queue::assertPushed(ProcessResaleRefundJob::class, 3);
         $this->assertSame(ResaleRefundOutcome::SETTLED, $this->processRefund($secondListingId));
         $this->stripeSends('re_2', 'succeeded');
+        Queue::assertPushed(ProcessResaleRefundJob::class, 3);
 
         $this->assertSame([4875, 4875], array_column($this->stripeRefunds->created, 'amount'));
         $this->assertDatabaseHas('orders', ['id' => $this->sellerOrderId, 'total_refunded' => 97.50]);
@@ -800,10 +814,11 @@ class ResaleCompletionAndRefundTest extends TestCase
         ]));
     }
 
-    private function recordFees(int $orderId, float $cardFee, float $applicationFee): void
+    private function recordFees(int $orderId, float $cardFee, float $applicationFee, ?int $totalFeeMinor = null): void
     {
         DB::table('order_payment_platform_fees')->insert([
             'order_id' => $orderId,
+            'fee_rollup' => $totalFeeMinor === null ? null : json_encode(['total_fee' => $totalFeeMinor]),
             'payment_platform' => PaymentProviders::STRIPE->value,
             'payment_platform_fee_amount' => $cardFee,
             'application_fee_gross_amount' => $applicationFee,

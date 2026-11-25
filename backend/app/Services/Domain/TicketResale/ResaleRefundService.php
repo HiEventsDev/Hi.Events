@@ -94,14 +94,7 @@ class ResaleRefundService
 
     public function startRefundsForSoldOrder(int $soldOrderId): void
     {
-        $this->listingRepository
-            ->findWhere([
-                TicketResaleListingDomainObjectAbstract::SOLD_ORDER_ID => $soldOrderId,
-                TicketResaleListingDomainObjectAbstract::STATUS => TicketResaleListingStatus::SOLD->name,
-                TicketResaleListingDomainObjectAbstract::REFUND_STATUS => TicketResaleRefundStatus::PENDING->name,
-                TicketResaleListingDomainObjectAbstract::STRIPE_REFUND_ID => null,
-            ])
-            ->each(fn (TicketResaleListingDomainObject $listing) => ProcessResaleRefundJob::dispatch($listing->getId()));
+        $this->dispatchRefundsNotStarted([TicketResaleListingDomainObjectAbstract::SOLD_ORDER_ID => $soldOrderId]);
     }
 
     public function recordStripeOutcome(Refund $refund): void
@@ -112,26 +105,38 @@ class ResaleRefundService
             return;
         }
 
-        if ($refund->status !== Refund::STATUS_SUCCEEDED) {
-            $this->markFailed((int) $listingId, $refund->id);
-
-            return;
-        }
-
         $listing = $this->listingRepository->findFirst((int) $listingId);
 
         if ($listing === null || $listing->getStatus() !== TicketResaleListingStatus::SOLD->name) {
             return;
         }
 
-        $this->orderAuditLogService->logTicketResale(
-            OrderAuditAction::TICKET_RESALE_REFUNDED,
-            $this->listingRepository->updateFromArray($listing->getId(), [
-                TicketResaleListingDomainObjectAbstract::REFUND_STATUS => TicketResaleRefundStatus::SUCCEEDED->name,
-                TicketResaleListingDomainObjectAbstract::STRIPE_REFUND_ID => $refund->id,
-                TicketResaleListingDomainObjectAbstract::REFUND_AMOUNT => MoneyValue::fromMinorUnit($refund->amount, strtoupper($refund->currency))->toFloat(),
-            ]),
-        );
+        if ($refund->status === Refund::STATUS_SUCCEEDED) {
+            $this->orderAuditLogService->logTicketResale(
+                OrderAuditAction::TICKET_RESALE_REFUNDED,
+                $this->listingRepository->updateFromArray($listing->getId(), [
+                    TicketResaleListingDomainObjectAbstract::REFUND_STATUS => TicketResaleRefundStatus::SUCCEEDED->name,
+                    TicketResaleListingDomainObjectAbstract::STRIPE_REFUND_ID => $refund->id,
+                    TicketResaleListingDomainObjectAbstract::REFUND_AMOUNT => MoneyValue::fromMinorUnit($refund->amount, strtoupper($refund->currency))->toFloat(),
+                ]),
+            );
+        } else {
+            $this->markFailed($listing->getId(), $refund->id);
+        }
+
+        $this->dispatchRefundsNotStarted([TicketResaleListingDomainObjectAbstract::ORDER_ID => $listing->getOrderId()]);
+    }
+
+    private function dispatchRefundsNotStarted(array $scope): void
+    {
+        $this->listingRepository
+            ->findWhere([
+                ...$scope,
+                TicketResaleListingDomainObjectAbstract::STATUS => TicketResaleListingStatus::SOLD->name,
+                TicketResaleListingDomainObjectAbstract::REFUND_STATUS => TicketResaleRefundStatus::PENDING->name,
+                TicketResaleListingDomainObjectAbstract::STRIPE_REFUND_ID => null,
+            ])
+            ->each(fn (TicketResaleListingDomainObject $listing) => ProcessResaleRefundJob::dispatch($listing->getId())->afterCommit());
     }
 
     public function markFailed(int $listingId, ?string $failedStripeRefundId = null): void
@@ -316,10 +321,7 @@ class ResaleRefundService
             seller_unit_gross: $this->lowestUnitGross($sellerOrder, $listing),
             replacement_unit_gross: $this->lowestUnitGross($replacementOrder, $listing),
             replacement_order_gross: $this->minorUnits($replacementOrder->getTotalGross(), $currency),
-            replacement_order_costs: $this->minorUnits(
-                $fees->getPaymentPlatformFeeAmount() + $fees->getApplicationFeeGrossAmount(),
-                $currency,
-            ),
+            replacement_order_costs: $fees->getTotalFeeMinorUnit(),
             replacement_paid_ticket_count: (int) $replacementOrder->getOrderItems()
                 ->filter(fn (OrderItemDomainObject $item) => $item->getProductType() === ProductType::TICKET->name
                     && $item->getTotalGross() > 0)

@@ -53,13 +53,8 @@ export class ProductEditPage {
   async toggleSwitchInLedgerRow(id: string, label: string): Promise<void> {
     await this.ledgerRow(id).click();
     await expect(this.ledgerRow(id)).toHaveAttribute('aria-expanded', 'true');
-    const control = this.page.getByLabel(label);
-    await control.scrollIntoViewIfNeeded();
-    const box = await control.boundingBox();
-    if (!box) {
-      throw new Error(`Switch "${label}" is not on screen`);
-    }
-    await this.page.mouse.click(box.x + 20, box.y + 12);
+    const control = this.page.getByRole('switch', { name: label });
+    await control.setChecked(!(await control.isChecked()));
   }
 
   async clickSubmit(): Promise<void> {

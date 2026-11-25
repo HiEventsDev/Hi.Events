@@ -383,6 +383,7 @@ export async function createRecurringLiveEvent(
     quantityAppliesTo?: 'OCCURRENCE' | 'EVENT';
     waitlistEnabled?: boolean;
     showQuantityRemaining?: boolean;
+    currency?: string;
   } = {},
 ): Promise<SeededEvent & { occurrences: Occurrence[] }> {
   const count = opts.count ?? 3;
@@ -395,7 +396,7 @@ export async function createRecurringLiveEvent(
     organizer_id: organizerId,
     start_date: futureStartDate(),
     category: 'MUSIC',
-    currency: 'USD',
+    currency: opts.currency ?? 'USD',
     timezone: 'UTC',
   });
 

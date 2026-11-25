@@ -17,7 +17,6 @@ use HiEvents\Repository\Interfaces\OrderRefundRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketResaleListingRepositoryInterface;
 use HiEvents\Services\Domain\Payment\Stripe\StripePaymentIntentRefundService;
 use HiEvents\Services\Domain\TicketResale\DTO\TicketResalePaymentFactsDTO;
-use HiEvents\Values\MoneyValue;
 use Stripe\Refund;
 
 class TicketResalePaymentFactsService
@@ -47,9 +46,7 @@ class TicketResalePaymentFactsService
             payment_fees_recorded: $fees->isNotEmpty(),
             settles_in_order_currency: $feeInOrderCurrency !== null,
             has_only_resale_refunds: $this->hasOnlyResaleRefunds($order),
-            card_fee: $feeInOrderCurrency === null
-                ? 0
-                : MoneyValue::fromFloat($feeInOrderCurrency->getPaymentPlatformFeeAmount(), $order->getCurrency())->toMinorUnit(),
+            card_fee: $feeInOrderCurrency?->getCardFeeMinorUnit() ?? 0,
             connected_account_id: $payment?->getConnectedAccountId(),
         );
     }

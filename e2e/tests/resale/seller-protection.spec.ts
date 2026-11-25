@@ -83,7 +83,7 @@ test.describe('a seller is not undersold', () => {
 
     const publicPage = new PublicEventPage(page);
     await publicPage.expectTicketsAvailable(event, 1);
-    await expect(publicPage.ticketRow(event.productTitle)).toContainText(`$${raisedPrice}.00`);
+    await expect(publicPage.ticketRow(event.productTitle)).toContainText(formatMoney(raisedPrice * 100, event.currency));
 
     const buyerOrder = await createCompletedOrder(publicApi, event, { buyerLastName: 'Later' });
     const buyerPayment = await payReservedOrderByCard(publicApi, event.eventId, buyerOrder);
