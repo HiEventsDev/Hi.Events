@@ -112,6 +112,10 @@ return [
 
     'campaigns' => [
         'mailer' => env('MAIL_CAMPAIGNS_MAILER') ?: null,
+        'from' => [
+            'address' => env('MAIL_CAMPAIGNS_FROM_ADDRESS') ?: null,
+            'name' => env('MAIL_CAMPAIGNS_FROM_NAME') ?: env('MAIL_FROM_NAME', 'Hi.Events'),
+        ],
     ],
 
     'lifecycle' => [

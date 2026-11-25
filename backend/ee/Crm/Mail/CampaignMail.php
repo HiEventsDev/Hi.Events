@@ -9,6 +9,7 @@ use HiEvents\Enterprise\Crm\Services\Domain\Campaign\DTO\CampaignEventCardDTO;
 use HiEvents\Helper\AddressHelper;
 use HiEvents\Mail\BaseMail;
 use HiEvents\Mail\Concerns\SentOnBehalfOfOrganizer;
+use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Mail\Mailables\Headers;
@@ -59,6 +60,13 @@ class CampaignMail extends BaseMail implements SentOnBehalfOfOrganizer
     public function getContentOrganizer(): OrganizerDomainObject
     {
         return $this->organizer;
+    }
+
+    protected function defaultFrom(): ?Address
+    {
+        $address = config('mail.campaigns.from.address');
+
+        return $address ? new Address($address, config('mail.campaigns.from.name')) : null;
     }
 
     public function envelope(): Envelope
