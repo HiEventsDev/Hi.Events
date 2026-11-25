@@ -3,6 +3,7 @@ import type { ApiClient } from '../api/api-client';
 import { createCompletedOrder, createLiveEventWithProduct, type OrderSeedOptions, type SeededEvent, type SeededOrder } from '../api/factory';
 import { getPublicOrder } from '../api/public-client';
 import {
+  canTakeStripePayments,
   enableStripePayments,
   listPaymentIntentRefunds,
   payOrderWithTestCard,
@@ -10,6 +11,7 @@ import {
   sendPaymentIntentSucceededWebhook,
   sendRefundUpdatedWebhooks,
   STRIPE_CARD_PAYING_INTO_AVAILABLE_BALANCE,
+  stripeSettlementCurrency,
   type StripeRefund,
 } from '../api/stripe';
 import type { EventSettings } from '../api/types';
@@ -64,21 +66,30 @@ const assertShortId = (shortId: string): void => {
   }
 };
 
+export interface ResaleEvent extends SeededEvent {
+  currency: string;
+}
+
+export const formatMoney = (minor: number, currency: string): string =>
+  new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(minor / 100);
+
 export async function createResaleEvent(
   api: ApiClient,
   organizerId: number,
   opts: Partial<Parameters<typeof createLiveEventWithProduct>[1]> & { settings?: Partial<EventSettings> } = {},
-): Promise<SeededEvent> {
+): Promise<ResaleEvent> {
   const { settings, ...seed } = opts;
+  const currency = seed.currency ?? (canTakeStripePayments() ? await stripeSettlementCurrency() : 'USD');
   const event = await createLiveEventWithProduct(api, {
     organizerId,
     price: RESALE_TICKET_PRICE,
     showQuantityRemaining: true,
     ...seed,
+    currency,
   });
   await api.updateEventSettings(event.eventId, { allow_ticket_resale: true, pass_platform_fee_to_buyer: false, ...settings });
   enableStripePayments(organizerId);
-  return event;
+  return { ...event, currency };
 }
 
 async function deliverPaymentWebhooks(publicApi: APIRequestContext, paymentIntentId: string): Promise<void> {
@@ -231,7 +242,7 @@ export async function expectOrderRefusedAsSoldOut(response: APIResponse): Promis
 }
 
 export interface SoldOutResaleEvent {
-  event: SeededEvent;
+  event: ResaleEvent;
   seller: CardPaidOrder;
   session: SellerSession;
 }

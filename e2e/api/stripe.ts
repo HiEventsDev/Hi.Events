@@ -1,5 +1,5 @@
 import { createHmac, randomUUID } from 'node:crypto';
-import type { APIRequestContext } from '@playwright/test';
+import { request as playwrightRequest, type APIRequestContext } from '@playwright/test';
 import { IS_SAAS_MODE, STRIPE_CONNECT_ACCOUNT_ID, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET } from '../utils/env';
 import { linkStripeConnectAccount } from '../utils/db';
 
@@ -105,6 +105,20 @@ async function stripeGet<T>(request: APIRequestContext, path: string): Promise<T
   }
   return (await response.json()) as T;
 }
+
+let settlementCurrency: Promise<string> | undefined;
+
+export const stripeSettlementCurrency = (): Promise<string> => {
+  settlementCurrency ??= (async () => {
+    const context = await playwrightRequest.newContext();
+    try {
+      return (await stripeGet<{ default_currency: string }>(context, 'account')).default_currency.toUpperCase();
+    } finally {
+      await context.dispose();
+    }
+  })();
+  return settlementCurrency;
+};
 
 async function postSignedStripeEvent(
   request: APIRequestContext,

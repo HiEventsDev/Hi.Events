@@ -10,6 +10,7 @@ import {
   attemptOrder,
   createSoldOutEventWithListings,
   expectOrderRefusedAsSoldOut,
+  formatMoney,
   listingFor,
   payReservedOrderByCard,
   RESALE_TICKET_PRICE,
@@ -44,7 +45,7 @@ test.describe('a seller is not undersold', () => {
     await new PublicEventPage(page).expectTicketsAvailable(event, 1);
     const checkout = new CheckoutPage(page);
     await checkout.applyPromoCode(promo.code);
-    await expect(page.locator('.hi-product-row').getByText('$20.00')).toBeVisible();
+    await expect(page.locator('.hi-product-row').getByText(formatMoney(2000, event.currency))).toBeVisible();
     await checkout.setFirstProductQuantity(1);
     await page.getByTestId('checkout-continue-button').click();
 

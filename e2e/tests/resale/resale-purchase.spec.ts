@@ -18,6 +18,7 @@ import {
 import { liftResaleThrottles } from '../../utils/resale';
 import {
   createSoldOutEventWithListings,
+  formatMoney,
   RESALE_TICKET_PRICE,
   scanTicket,
   settleSellerRefunds,
@@ -27,8 +28,6 @@ import {
   waitForSellerRefund,
 } from '../../utils/stripe-resale';
 import { uniqueEmail, uniqueName, uniqueShort } from '../../utils/unique';
-
-const dollars = (minor: number): string => `$${(minor / 100).toFixed(2)}`;
 
 test.describe('buying a resold ticket', () => {
   test.skip(!canTakeStripePayments(), STRIPE_PAYMENTS_SKIP_REASON);
@@ -90,7 +89,7 @@ test.describe('buying a resold ticket', () => {
     expect((await settleSellerRefunds(publicApi, seller, sellerTicket.shortId)).refundAmountMinor).toBe(refund.amount);
 
     const soldEmail = await mailpit.waitForMessage(seller.buyerEmail, { subjectContains: 'Your ticket sold and your refund is on its way' });
-    expect((await mailpit.getMessage(soldEmail.ID)).Text).toContain(`**${dollars(refund.amount)}** is on its way back to the card you paid with`);
+    expect((await mailpit.getMessage(soldEmail.ID)).Text).toContain(`**${formatMoney(refund.amount, event.currency)}** is on its way back to the card you paid with`);
 
     await summary.goto(event.eventId, seller.orderShortId);
     await expect(summary.guest(sellerLastName)).toContainText('Resold');
