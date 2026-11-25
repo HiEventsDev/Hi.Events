@@ -295,7 +295,12 @@ class ResaleRefundService
             amount: $refund,
             payment: $sellerOrder->getStripePayment(),
             stripeClient: $this->stripeClientFactory->createForPlatform($sellerOrder->getStripePayment()->getStripePlatformEnum()),
-            idempotencyKey: sprintf('resale_refund_%d_%d', $listing->getId(), $listing->getRefundAttempts()),
+            idempotencyKey: sprintf(
+                'resale_refund_%s_%d_%d',
+                $sellerOrder->getStripePayment()->getPaymentIntentId(),
+                $listing->getId(),
+                $listing->getRefundAttempts(),
+            ),
             metadata: [StripePaymentIntentRefundService::RESALE_LISTING_METADATA_KEY => (string) $listing->getId()],
         );
 

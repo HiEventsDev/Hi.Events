@@ -11,6 +11,7 @@ use HiEvents\Services\Domain\Payment\Stripe\StripePaymentPlatformFeeExtractionSe
 use HiEvents\Services\Domain\TicketResale\ResaleRefundService;
 use Psr\Log\LoggerInterface;
 use Stripe\Charge;
+use Throwable;
 
 class ChargeSucceededHandler
 {
@@ -71,6 +72,13 @@ class ChargeSucceededHandler
             stripePayment: $stripePayment
         );
 
-        $this->resaleRefundService->startRefundsForSoldOrder($order->getId());
+        try {
+            $this->resaleRefundService->startRefundsForSoldOrder($order->getId());
+        } catch (Throwable $exception) {
+            $this->logger->error('Could not start resale refunds after recording the sale fee', [
+                'order_id' => $order->getId(),
+                'exception' => $exception->getMessage(),
+            ]);
+        }
     }
 }

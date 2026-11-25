@@ -351,6 +351,23 @@ class ResaleCompletionAndRefundTest extends TestCase
         $this->assertDatabaseHas('ticket_resale_listings', ['id' => $listingId, 'stripe_refund_id' => 're_1']);
     }
 
+    public function test_a_refund_key_another_install_used_on_the_same_stripe_account_is_never_reused(): void
+    {
+        $listingId = $this->list();
+        $buyerOrderId = $this->startCheckout('buyer');
+        $this->pay($buyerOrderId);
+        $this->recordFees($buyerOrderId, cardFee: 1.00, applicationFee: 1.50);
+        $this->stripeRefunds->create(
+            ['payment_intent' => 'pi_from_another_install', 'amount' => 1234],
+            ['idempotency_key' => sprintf('resale_refund_%d_0', $listingId)],
+        );
+
+        $this->assertSame(ResaleRefundOutcome::SETTLED, $this->processRefund($listingId));
+
+        $this->assertSame('pi_seller', $this->stripeRefunds->created[1]->payment_intent);
+        $this->assertSame(4750, $this->stripeRefunds->created[1]->amount);
+    }
+
     public function test_the_refund_waits_for_the_new_sales_fees_and_then_fetches_them_from_stripe(): void
     {
         $listingId = $this->list();
