@@ -9,6 +9,7 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Exceptions\EventPendingReviewException;
 use HiEvents\Jobs\Event\EventSpamCheckJob;
+use HiEvents\Repository\Eloquent\OrganizerEventSubscriptionRepository;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\UpdateEventStatusDTO;
@@ -52,6 +53,7 @@ class UpdateEventStatusHandlerTest extends TestCase
             new NullLogger,
             $databaseManager,
             new EventSpamCheckDispatchService($this->eventSpamCheckService, Mockery::mock(EventRepositoryInterface::class)),
+            Mockery::mock(OrganizerEventSubscriptionRepository::class)->shouldReceive('recordPublication')->andReturnNull()->getMock(),
         );
 
         $this->accountRepository

@@ -651,6 +651,7 @@ export const CollectInformation = () => {
                             <Checkbox
                                 mt="md"
                                 label={t`Keep me updated on news and events from ${event?.organizer?.name || t`this organizer`}`}
+                                description={event?.organizer?.settings?.new_event_notifications_enabled ? t`Confirm your subscription through the email we send after your order is completed.` : undefined}
                                 {...form.getInputProps('order.opted_into_marketing', {type: 'checkbox'})}
                             />
                         </LockedFields>

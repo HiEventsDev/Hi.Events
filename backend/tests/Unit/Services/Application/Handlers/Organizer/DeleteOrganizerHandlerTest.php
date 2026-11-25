@@ -4,6 +4,7 @@ namespace Tests\Unit\Services\Application\Handlers\Organizer;
 
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\CannotDeleteEntityException;
+use HiEvents\Repository\Eloquent\OrganizerEventSubscriptionRepository;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
@@ -58,6 +59,7 @@ class DeleteOrganizerHandlerTest extends TestCase
             $eventDeletionService,
             $logger,
             $databaseManager,
+            m::mock(OrganizerEventSubscriptionRepository::class)->shouldReceive('deleteWhere')->andReturn(0)->getMock(),
         );
 
         $this->handler = new DeleteOrganizerHandler($organizerDeletionService);

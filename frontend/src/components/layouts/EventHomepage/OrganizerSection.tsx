@@ -6,6 +6,7 @@ import {organizerHomepageUrl} from "../../../utilites/urlHelper.ts";
 import {organizerSocialLinks, websiteHostname} from "../../../utilites/organizerLinks.ts";
 import {UserGeneratedContent} from "../../common/UserGeneratedContent";
 import {sizedImageUrl} from "../../../utilites/imageTransform.ts";
+import {OrganizerSubscribeButton} from "../../common/OrganizerSubscribeButton";
 import classes from "./EventHomepage.module.scss";
 
 interface OrganizerSectionProps {
@@ -53,6 +54,7 @@ export const OrganizerSection = ({heading, organizer, logo, onContact}: Organize
                             </div>
                         )}
                     </div>
+                    <OrganizerSubscribeButton organizer={organizer}/>
                     <button type="button" onClick={onContact} className={classes.pillButton}>
                         <IconMail/>
                         {t`Contact`}

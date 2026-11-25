@@ -11,6 +11,7 @@ use HiEvents\Exceptions\AccountNotVerifiedException;
 use HiEvents\Exceptions\EventPendingReviewException;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Jobs\Event\Webhook\DispatchEventWebhookJob;
+use HiEvents\Repository\Eloquent\OrganizerEventSubscriptionRepository;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -30,6 +31,7 @@ readonly class UpdateEventStatusHandler
         private LoggerInterface $logger,
         private DatabaseManager $databaseManager,
         private readonly EventSpamCheckDispatchService $eventSpamCheckDispatchService,
+        private readonly OrganizerEventSubscriptionRepository $subscriptions,
     ) {}
 
     /**
@@ -115,6 +117,8 @@ readonly class UpdateEventStatusHandler
         if ($isEnteringCheckedStatus) {
             $this->eventSpamCheckDispatchService->dispatchForEvent($event->getId());
         }
+
+        $this->subscriptions->recordPublication($event->getId());
 
         return $event;
     }

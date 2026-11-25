@@ -22,6 +22,10 @@ class OrganizerAnonymizer implements AccountAnonymizerInterface
         }
 
         return [
+            $this->executor->delete(
+                query: $this->databaseManager->table('organizer_event_subscriptions')->whereIn('organizer_id', $context->organizerIds),
+                entity: 'organizer_event_subscriptions',
+            ),
             $this->executor->scrub(
                 query: $this->databaseManager->table('organizers')->whereIn('id', $context->organizerIds),
                 entity: 'organizers',

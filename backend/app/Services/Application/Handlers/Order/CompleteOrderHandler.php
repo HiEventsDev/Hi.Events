@@ -29,6 +29,7 @@ use HiEvents\Events\OrderStatusChangedEvent;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Exceptions\UnauthorizedException;
 use HiEvents\Helper\IdHelper;
+use HiEvents\Repository\Eloquent\OrganizerEventSubscriptionRepository;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
@@ -77,6 +78,7 @@ class CompleteOrderHandler
         private readonly TransactionLockService $transactionLockService,
         private readonly QuestionRepositoryInterface $questionRepository,
         private readonly QuestionVisibilityService $questionVisibilityService,
+        private readonly OrganizerEventSubscriptionRepository $subscriptions,
     ) {}
 
     /**
@@ -443,6 +445,7 @@ class CompleteOrderHandler
 
     private function updateOrder(OrderDomainObject $order, CompleteOrderOrderDTO $orderDTO): OrderDomainObject
     {
+        $subscribe = $orderDTO->opted_into_marketing && $this->subscriptions->canSubscribeFromCheckout($order->getEventId());
         $updatedOrder = $this->orderRepository
             ->loadRelation(OrderItemDomainObject::class)
             ->updateFromArray(
@@ -458,6 +461,7 @@ class CompleteOrderHandler
                     OrderDomainObjectAbstract::STATUS => $order->isPaymentRequired()
                         ? OrderStatus::RESERVED->name
                         : OrderStatus::COMPLETED->name,
+                    'new_event_subscription_requested_at' => $subscribe ? Carbon::now()->toDateTimeString() : null,
                     OrderDomainObjectAbstract::OPTED_INTO_MARKETING_AT => $orderDTO->opted_into_marketing
                         ? Carbon::now()
                         : null,

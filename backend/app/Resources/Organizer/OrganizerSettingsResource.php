@@ -16,6 +16,7 @@ class OrganizerSettingsResource extends BaseResource
             'id' => $this->getId(),
             'organizer_id' => $this->getOrganizerId(),
             'default_attendee_details_collection_method' => $this->getDefaultAttendeeDetailsCollectionMethod(),
+            'new_event_notifications_enabled' => $this->getNewEventNotificationsEnabled(),
             'default_show_marketing_opt_in' => $this->getDefaultShowMarketingOptIn(),
             'default_pass_platform_fee_to_buyer' => $this->getDefaultPassPlatformFeeToBuyer(),
             'default_allow_attendee_self_edit' => $this->getDefaultAllowAttendeeSelfEdit(),

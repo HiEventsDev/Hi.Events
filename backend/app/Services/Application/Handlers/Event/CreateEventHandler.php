@@ -10,6 +10,7 @@ use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
 use HiEvents\Exceptions\OrganizerNotFoundException;
 use HiEvents\Jobs\Event\Webhook\DispatchEventWebhookJob;
+use HiEvents\Repository\Eloquent\OrganizerEventSubscriptionRepository;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\CreateEventDTO;
 use HiEvents\Services\Domain\Event\CreateEventService;
@@ -29,6 +30,7 @@ class CreateEventHandler
         private readonly EventLocationUpserter $eventLocationUpserter,
         private readonly EventRepositoryInterface $eventRepository,
         private readonly DatabaseManager $databaseManager,
+        private readonly OrganizerEventSubscriptionRepository $subscriptions,
     ) {}
 
     /**
@@ -104,6 +106,8 @@ class CreateEventHandler
                 ->findById($newEvent->getId())
                 ->getEventOccurrences()
         );
+
+        $this->subscriptions->recordPublication($newEvent->getId());
 
         return $newEvent;
     }
