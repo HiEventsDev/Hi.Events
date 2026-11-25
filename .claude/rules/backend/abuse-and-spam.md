@@ -14,7 +14,7 @@ paths:
 # Abuse & spam
 
 - Any new public order, waitlist or contact path must respect event status: public orders on non-LIVE events only for the event's own account and never on PENDING_MANUAL_REVIEW; waitlist joins and organizer contact require LIVE.
-- New abuse signals go in `SuspiciousActivityDetector`.
+- New abuse signals go in `SuspiciousActivityDetector`. Each finding needs a `nextStep`, and each item sets `accountId` where one exists so the report shows the account and links to its admin page (`?action=suspend` opens the suspend modal). Names and titles in the report go through `StringHelper::escapeMarkdown`; markdown mail otherwise renders `[text](url)` inside `{{ }}` as a live link.
 - ARCHIVED events are spam-checked like LIVE ones (`EventSpamCheckService::CHECKED_EVENT_STATUSES`): on entering the status and on content edits. Approving a flagged event restores `previous_event_status`. Mail is not withheld while the first check runs; that window is accepted.
 - Any user text that reaches a buyer's email belongs in `EventSpamCheckContentService`, and editing it dispatches a re-check through `EventSpamCheckDispatchService`. Custom email templates go in as raw Liquid source (hashed) plus a sample render (not hashed: the preview context is random); never strip Liquid, string literals print.
 - Spam-review notices go to the account email, never `organizers.email` (unverified, free text).
