@@ -121,12 +121,15 @@ use HiEvents\Repository\Eloquent\PromoCodeRepository;
 use HiEvents\Repository\Eloquent\QuestionAndAnswerViewRepository;
 use HiEvents\Repository\Eloquent\QuestionAnswerRepository;
 use HiEvents\Repository\Eloquent\QuestionRepository;
+use HiEvents\Repository\Eloquent\SelfServiceVerificationRepository;
 use HiEvents\Repository\Eloquent\StripeCustomerRepository;
 use HiEvents\Repository\Eloquent\StripePaymentsRepository;
 use HiEvents\Repository\Eloquent\StripePayoutsRepository;
 use HiEvents\Repository\Eloquent\SuspiciousActivityRepository;
 use HiEvents\Repository\Eloquent\TaxAndFeeRepository;
 use HiEvents\Repository\Eloquent\TicketLookupTokenRepository;
+use HiEvents\Repository\Eloquent\TicketResaleListingRepository;
+use HiEvents\Repository\Eloquent\TicketTransferRepository;
 use HiEvents\Repository\Eloquent\UserIdentityRepository;
 use HiEvents\Repository\Eloquent\UserRepository;
 use HiEvents\Repository\Eloquent\UserTrustedDeviceRepository;
@@ -201,12 +204,15 @@ use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionAndAnswerViewRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionAnswerRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
+use HiEvents\Repository\Interfaces\SelfServiceVerificationRepositoryInterface;
 use HiEvents\Repository\Interfaces\StripeCustomerRepositoryInterface;
 use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
 use HiEvents\Repository\Interfaces\StripePayoutsRepositoryInterface;
 use HiEvents\Repository\Interfaces\SuspiciousActivityRepositoryInterface;
 use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketLookupTokenRepositoryInterface;
+use HiEvents\Repository\Interfaces\TicketResaleListingRepositoryInterface;
+use HiEvents\Repository\Interfaces\TicketTransferRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserIdentityRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserTrustedDeviceRepositoryInterface;
@@ -304,6 +310,9 @@ class RepositoryServiceProvider extends ServiceProvider
         OrganizerVatSettingRepositoryInterface::class => OrganizerVatSettingRepository::class,
         OrganizerConfigurationRepositoryInterface::class => OrganizerConfigurationRepository::class,
         TicketLookupTokenRepositoryInterface::class => TicketLookupTokenRepository::class,
+        SelfServiceVerificationRepositoryInterface::class => SelfServiceVerificationRepository::class,
+        TicketTransferRepositoryInterface::class => TicketTransferRepository::class,
+        TicketResaleListingRepositoryInterface::class => TicketResaleListingRepository::class,
         AccountMessagingTierRepositoryInterface::class => AccountMessagingTierRepository::class,
         AccountSubscriptionRepositoryInterface::class => AccountSubscriptionRepository::class,
         AnnouncementRepositoryInterface::class => AnnouncementRepository::class,

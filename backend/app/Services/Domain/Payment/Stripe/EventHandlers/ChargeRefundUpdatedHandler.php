@@ -17,6 +17,7 @@ use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsRefundService;
 use HiEvents\Services\Domain\Payment\Stripe\StripePaymentIntentRefundService;
+use HiEvents\Services\Domain\TicketResale\ResaleRefundService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
@@ -41,6 +42,7 @@ class ChargeRefundUpdatedHandler
         private readonly TransactionLockService $transactionLockService,
         private readonly EventRepositoryInterface $eventRepository,
         private readonly Mailer $mailer,
+        private readonly ResaleRefundService $resaleRefundService,
     ) {}
 
     /**
@@ -69,6 +71,10 @@ class ChargeRefundUpdatedHandler
                     'payment_intent_id' => $refund->payment_intent,
                     'existing_refund' => $existingRefund->toArray(),
                 ]);
+
+                if ($refund->status === Refund::STATUS_FAILED) {
+                    $this->resaleRefundService->recordStripeOutcome($refund);
+                }
 
                 return;
             }
@@ -99,6 +105,7 @@ class ChargeRefundUpdatedHandler
             $this->updateOrderStatus($order, $refundedAmount);
             $this->updateEventStatistics($order, $refundedMoney);
             $this->createOrderRefund($refund, $order, $refundedAmount);
+            $this->resaleRefundService->recordStripeOutcome($refund);
 
             if ($this->wasBuyerNotificationRequested($refund) && $order->getEmail() !== null) {
                 $this->notifyBuyer($order, $refundedMoney);
@@ -191,6 +198,7 @@ class ChargeRefundUpdatedHandler
         ]);
 
         $this->createOrderRefund($refund, $order, $this->amountAsFloat($refund->amount, $order->getCurrency()));
+        $this->resaleRefundService->recordStripeOutcome($refund);
 
         $this->logger->error(__('Failed to refund stripe charge'), $refund->toArray());
     }

@@ -12,3 +12,7 @@ export function liftThrottle(name: string): void {
     .join('; ');
   execFileSync('docker', ['compose', '-f', composeFile(), 'exec', '-T', 'redis', 'sh', '-c', forget], { stdio: ['ignore', 'pipe', 'pipe'] });
 }
+
+export function liftSelfServiceThrottles(): void {
+  ['self-service-verify-ip', 'self-service-verify-confirm-ip', 'self-service-transfer-ip'].forEach(liftThrottle);
+}

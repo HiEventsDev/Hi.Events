@@ -20,6 +20,7 @@ const ALLOWED_UNAUTHENTICATED_PATHS = [
     'check-in',
     '/events/',
     'my-tickets',
+    '/transfer/',
     'emails/unsubscribe',
     'audience/unsubscribe',
     '/u/',

@@ -24,6 +24,12 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
     {
         return [
             function ($validator) {
+                if ($this->changesDefaultTicketResale()
+                    && app(AccountUserAccessService::class)->isWithheldFromCurrentUser(Permission::ISSUE_REFUNDS)) {
+                    $validator->errors()->add('default_allow_ticket_resale', __('Only members who can issue refunds can turn ticket resale on or off.'));
+                }
+            },
+            function ($validator) {
                 $pixels = $this->input('tracking_pixels', []);
                 if (! is_array($pixels)) {
                     return;
@@ -100,6 +106,8 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
             'default_show_sms_opt_in' => ['sometimes', 'nullable', 'boolean'],
             'default_pass_platform_fee_to_buyer' => ['sometimes', 'nullable', 'boolean'],
             'default_allow_attendee_self_edit' => ['sometimes', 'nullable', 'boolean'],
+            'default_allow_ticket_transfer' => ['sometimes', 'nullable', 'boolean'],
+            'default_allow_ticket_resale' => ['sometimes', 'nullable', 'boolean'],
 
             // Social handles
             'facebook_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
@@ -167,6 +175,19 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
     /**
      * @return string[]
      */
+    private function changesDefaultTicketResale(): bool
+    {
+        if ($this->input('default_allow_ticket_resale') === null) {
+            return false;
+        }
+
+        $saved = (bool) app(OrganizerSettingsRepositoryInterface::class)
+            ->findFirstWhere(['organizer_id' => (int) $this->route('organizer_id')])
+            ?->getDefaultAllowTicketResale();
+
+        return $this->boolean('default_allow_ticket_resale') !== $saved;
+    }
+
     private function existingTagManagerIds(): array
     {
         $pixels = app(OrganizerSettingsRepositoryInterface::class)

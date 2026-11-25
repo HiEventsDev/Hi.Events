@@ -5,6 +5,8 @@ import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useGetOrder} from "../../../queries/useGetOrder.ts";
 import {OrderSummary} from "../../common/OrderSummary";
 import {AttendeeList} from "../../common/AttendeeList";
+import {TicketHistory} from "../../common/TicketHistory";
+import {useGetOrderHistory} from "../../../queries/useGetTicketHistory.ts";
 import {t} from "@lingui/macro";
 import {QuestionAndAnswerList} from "../../common/QuestionAndAnswerList";
 import {ActionIcon, Anchor, Avatar, Button, CopyButton, Text, Textarea, TextInput, Tooltip} from "@mantine/core";
@@ -48,6 +50,7 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
     const {eventId} = useParams();
     const {data: order, refetch: refetchOrder} = useGetOrder(eventId, orderId);
     const {data: event, data: {product_categories: productCategories} = {}} = useGetEvent(eventId);
+    const {data: history = []} = useGetOrderHistory(eventId, orderId);
     const products = productCategories?.flatMap(category => category.products);
     const [isEditing, setIsEditing] = useState(false);
     const errorHandler = useFormErrorResponseHandler();
@@ -366,6 +369,12 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
                                 onEditAnswer={refetchOrder}
                                 questionAnswers={questionAnswers as QuestionAnswer[]}
                             />
+                        </SideDrawerSection>
+                    )}
+
+                    {history.length > 0 && (
+                        <SideDrawerSection title={t`History`} count={history.length}>
+                            <TicketHistory entries={history} timezone={event.timezone}/>
                         </SideDrawerSection>
                     )}
                 </>

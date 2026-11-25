@@ -39,6 +39,8 @@ abstract class ProductDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     final public const WAITLIST_ENABLED = 'waitlist_enabled';
     final public const IS_ADDON_ONLY = 'is_addon_only';
     final public const SEQUENTIAL_TIER_RELEASE_ENABLED = 'sequential_tier_release_enabled';
+    final public const IS_TRANSFERABLE = 'is_transferable';
+    final public const IS_RESELLABLE = 'is_resellable';
 
     protected int $id;
     protected int $event_id;
@@ -69,6 +71,8 @@ abstract class ProductDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     protected ?bool $waitlist_enabled = null;
     protected bool $is_addon_only = false;
     protected bool $sequential_tier_release_enabled = false;
+    protected bool $is_transferable = true;
+    protected bool $is_resellable = true;
 
     public function toArray(): array
     {
@@ -102,6 +106,8 @@ abstract class ProductDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
                     'waitlist_enabled' => $this->waitlist_enabled ?? null,
                     'is_addon_only' => $this->is_addon_only ?? null,
                     'sequential_tier_release_enabled' => $this->sequential_tier_release_enabled ?? null,
+                    'is_transferable' => $this->is_transferable ?? null,
+                    'is_resellable' => $this->is_resellable ?? null,
                 ];
     }
 
@@ -422,5 +428,27 @@ abstract class ProductDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     public function getSequentialTierReleaseEnabled(): bool
     {
         return $this->sequential_tier_release_enabled;
+    }
+
+    public function setIsTransferable(bool $is_transferable): self
+    {
+        $this->is_transferable = $is_transferable;
+        return $this;
+    }
+
+    public function getIsTransferable(): bool
+    {
+        return $this->is_transferable;
+    }
+
+    public function setIsResellable(bool $is_resellable): self
+    {
+        $this->is_resellable = $is_resellable;
+        return $this;
+    }
+
+    public function getIsResellable(): bool
+    {
+        return $this->is_resellable;
     }
 }

@@ -3,11 +3,14 @@
 namespace HiEvents\Http\Actions\SelfService;
 
 use HiEvents\Exceptions\SelfServiceDisabledException;
+use HiEvents\Exceptions\SelfServiceVerificationRequiredException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\SelfService\EditOrderPublicRequest;
 use HiEvents\Services\Application\Handlers\SelfService\DTO\EditOrderPublicDTO;
 use HiEvents\Services\Application\Handlers\SelfService\EditOrderPublicHandler;
+use HiEvents\Services\Domain\SelfService\SelfServiceVerificationService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class EditOrderPublicAction extends BaseAction
@@ -31,6 +34,7 @@ class EditOrderPublicAction extends BaseAction
                 'phone' => $request->collectedPhone(),
                 'ipAddress' => $this->getClientIp($request),
                 'userAgent' => $request->userAgent(),
+                'sessionToken' => $request->header(SelfServiceVerificationService::SESSION_HEADER),
             ]));
 
             $response = [
@@ -42,6 +46,8 @@ class EditOrderPublicAction extends BaseAction
             }
 
             return $this->jsonResponse($response);
+        } catch (SelfServiceVerificationRequiredException $e) {
+            throw ValidationException::withMessages(['email' => $e->getMessage()]);
         } catch (SelfServiceDisabledException $e) {
             return $this->errorResponse($e->getMessage(), $e->getCode());
         } catch (ResourceNotFoundException $e) {

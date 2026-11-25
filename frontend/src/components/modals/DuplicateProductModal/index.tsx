@@ -46,6 +46,8 @@ export const DuplicateProductModal = ({onClose, originalProductId}: DuplicatePro
             tax_and_fee_ids: undefined,
             addon_product_ids: [],
             is_addon_only: false,
+            is_transferable: true,
+            is_resellable: true,
             product_category_id: undefined,
             prices: [{
                 price: 0,
@@ -84,6 +86,8 @@ export const DuplicateProductModal = ({onClose, originalProductId}: DuplicatePro
             tax_and_fee_ids: originalProduct.taxes_and_fees?.map(t => String(t.id)) ?? [],
             addon_product_ids: originalProduct.addon_product_ids?.map(String) ?? [],
             is_addon_only: originalProduct.is_addon_only ?? false,
+            is_transferable: originalProduct.is_transferable ?? true,
+            is_resellable: originalProduct.is_resellable ?? true,
             product_type: originalProduct.product_type,
             product_category_id: originalProduct.product_category_id,
             price: originalProduct.type === ProductPriceType.Free ? 0.00 : undefined,

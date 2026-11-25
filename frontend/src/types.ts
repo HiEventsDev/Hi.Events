@@ -751,6 +751,11 @@ export interface EventSettings {
 
     // Self-service settings
     allow_attendee_self_edit?: boolean;
+    allow_ticket_transfer?: boolean;
+    ticket_transfer_cutoff_minutes?: number;
+    max_transfers_per_ticket?: number | null;
+    allow_ticket_resale?: boolean;
+    ticket_resale_cutoff_minutes?: number;
 
     // Simplified homepage theme settings (new 2-color + mode system)
     homepage_theme_settings?: HomepageThemeSettings;
@@ -1162,6 +1167,8 @@ export interface OrganizerSettings {
     default_show_sms_opt_in?: boolean;
     default_pass_platform_fee_to_buyer?: boolean;
     default_allow_attendee_self_edit?: boolean;
+    default_allow_ticket_transfer?: boolean;
+    default_allow_ticket_resale?: boolean;
     homepage_visibility: 'PUBLIC' | 'PRIVATE' | 'PASSWORD_PROTECTED';
     homepage_theme_settings: HomepageThemeSettings;
     homepage_sections?: HomepageSection[] | null;
@@ -1323,6 +1330,8 @@ export interface Product {
     waitlist_entry_count?: number;
     addon_product_ids?: IdParam[];
     is_addon_only?: boolean;
+    is_transferable?: boolean;
+    is_resellable?: boolean;
     addons?: Array<{ id: number; title: string }>;
 }
 
@@ -1336,8 +1345,115 @@ export interface ProductCategory {
     no_products_message?: string;
 }
 
+export interface TicketTransferState {
+    can_start: boolean;
+    blocked_reason?: string | null;
+    pending?: PendingTicketTransfer | null;
+}
+
+export interface PendingTicketTransfer {
+    recipient_email: string;
+    expires_at: string;
+}
+
+export interface TicketResaleState {
+    can_list: boolean;
+    status: 'LISTED' | 'SOLD' | null;
+    held_until: string | null;
+    withdrawal_requested: boolean;
+    cutoff: string | null;
+}
+
+export interface AttendeeResaleSummary {
+    status: 'LISTED' | 'SOLD' | null;
+    sold_order_id: number | null;
+    sold_order_public_id: string | null;
+}
+
+export type TicketResaleListingState = 'OPEN' | 'HELD' | 'WITHDRAWAL_REQUESTED' | 'NOT_OFFERED' | 'SOLD' | 'CLOSED';
+
+export type TicketResaleCloseReason =
+    | 'WITHDRAWN'
+    | 'CUTOFF_PASSED'
+    | 'RESALE_TURNED_OFF'
+    | 'TICKET_CANCELLED'
+    | 'TICKET_USED'
+    | 'TICKET_TYPE_CHANGED'
+    | 'DATE_CANCELLED'
+    | 'CLOSED_BY_ORGANIZER';
+
+export interface TicketResaleListing {
+    id: number;
+    status: 'LISTED' | 'SOLD' | 'CLOSED';
+    state: TicketResaleListingState | null;
+    closed_reason: TicketResaleCloseReason | null;
+    needs_attention: boolean;
+    attendee: {
+        id: number;
+        public_id: string | null;
+        first_name: string | null;
+        last_name: string | null;
+        email: string | null;
+    };
+    order: {
+        id: number;
+        public_id: string | null;
+        short_id?: string | null;
+    };
+    sold_order: {
+        id: number;
+        public_id: string;
+    } | null;
+    product_title: string | null;
+    price_label: string | null;
+    event_occurrence_id: number;
+    held_until: string | null;
+    created_at: string;
+    updated_at: string;
+    currency?: string | null;
+    estimated_refund?: number;
+    refund_amount?: number | null;
+    refund_status?: 'PENDING' | 'SUCCEEDED' | 'FAILED' | null;
+}
+
+export interface TicketResaleEstimate {
+    can_list: boolean;
+    block: string | null;
+    block_message: string | null;
+    currency: string;
+    amount_paid: number;
+    estimated_fees: number;
+    estimated_refund: number;
+    add_ons: string[];
+    cutoff: string;
+}
+
+export interface TransferredTicket {
+    product_id: number;
+    product_title?: string | null;
+    recipient_email: string;
+    transferred_at: string;
+}
+
+export interface TicketTransferClaim {
+    status: 'PENDING' | 'ACCEPTED' | 'CANCELLED' | 'DECLINED' | 'EXPIRED';
+    can_accept: boolean;
+    recipient_email: string;
+    sender_email: string;
+    expires_at: string;
+    event_id: number;
+    event_title: string;
+    event_timezone: string;
+    product_id: number;
+    ticket_title: string;
+    start_date: string;
+    questions: Question[];
+}
+
 export interface Attendee {
     id?: number;
+    transfer?: TicketTransferState;
+    resale?: TicketResaleState & Partial<AttendeeResaleSummary>;
     seat_uid?: string | null;
     seat_label?: string | null;
     product_id: number;
@@ -1472,6 +1588,7 @@ export interface Order {
     is_expired: boolean;
     order_items?: OrderItem[];
     attendees?: Attendee[];
+    transferred_tickets?: TransferredTicket[];
     created_at: string;
     currency: string;
     status: 'RESERVED' | 'CANCELLED' | 'COMPLETED' | 'AWAITING_OFFLINE_PAYMENT' | 'ABANDONED';
@@ -1498,6 +1615,7 @@ export interface Order {
     payment_link_created_at?: string | null;
     payment_link_url?: string;
     is_payment_link_payer?: boolean;
+    holds_resale_listing?: boolean;
     offline_payment_reported_at?: string | null;
     offline_payment_note?: string | null;
 }
@@ -2230,4 +2348,25 @@ export interface WaitlistStats {
     cancelled: number;
     expired: number;
     products: WaitlistProductStats[];
+}
+
+export interface TicketHistoryEntry {
+    id: number;
+    action: string;
+    order_id: number;
+    attendee_id?: number | null;
+    old_values: Record<string, string | number | boolean | null>;
+    new_values: Record<string, string | number | boolean | null>;
+    created_at: string;
+}
+
+export interface LookupTicket {
+    short_id: string;
+    first_name: string;
+    last_name: string;
+    product_title?: string | null;
+    event_id: number;
+    event_title: string;
+    event_timezone: string;
+    start_date?: string | null;
 }

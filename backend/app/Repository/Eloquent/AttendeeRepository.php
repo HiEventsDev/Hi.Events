@@ -33,6 +33,28 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
         return AttendeeDomainObject::class;
     }
 
+    public function findByIdLocked(int $id): AttendeeDomainObject
+    {
+        return $this->runQuery(fn () => $this->handleSingleResult(Attendee::query()->where('id', $id)->lockForUpdate()->firstOrFail()));
+    }
+
+    public function findGuestTicketsByEmail(string $email): Collection
+    {
+        return $this->runQuery(function () use ($email) {
+            $normalisedEmail = mb_strtolower($email);
+
+            $this->applyConditions(['attendees.status' => AttendeeStatus::ACTIVE->name]);
+
+            $this->model->select('attendees.*');
+            $this->model->join('orders', 'orders.id', '=', 'attendees.order_id');
+            $this->model->where('orders.status', OrderStatus::COMPLETED->name);
+            $this->model->whereRaw('lower(attendees.email) = ?', [$normalisedEmail]);
+            $this->model->whereRaw("lower(coalesce(orders.email, '')) <> ?", [$normalisedEmail]);
+
+            return $this->handleResults($this->model->orderByDesc('attendees.id')->limit(200)->get());
+        });
+    }
+
     public function findByEventIdForExport(int $eventId, ?int $eventOccurrenceId = null): Collection
     {
         return $this->runQuery(function () use ($eventId, $eventOccurrenceId) {

@@ -16,11 +16,9 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Testing\TestResponse;
 use Mockery;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
-use Stripe\Exception\ApiConnectionException;
-use Stripe\Exception\IdempotencyException;
 use Stripe\Refund;
-use Stripe\Service\RefundService;
 use Stripe\StripeClient;
+use Tests\Feature\Support\FakeStripeRefunds;
 use Tests\Feature\Support\InsertsRecurringEventRows;
 use Tests\TestCase;
 
@@ -33,7 +31,7 @@ class StripeRefundFlowTest extends TestCase
 
     private int $orderId;
 
-    private RefundService $stripeRefunds;
+    private FakeStripeRefunds $stripeRefunds;
 
     protected function setUp(): void
     {
@@ -79,7 +77,7 @@ class StripeRefundFlowTest extends TestCase
             'updated_at' => now(),
         ]);
 
-        $this->stripeRefunds = $this->fakeStripeRefunds();
+        $this->stripeRefunds = new FakeStripeRefunds;
 
         $stripeClient = Mockery::mock(StripeClient::class);
         $stripeClient->shouldReceive('getService')->with('refunds')->andReturn($this->stripeRefunds);
@@ -248,51 +246,5 @@ class StripeRefundFlowTest extends TestCase
             ->all();
 
         $this->assertSame($amountsInMinorUnits, $sent);
-    }
-
-    private function fakeStripeRefunds(): RefundService
-    {
-        return new class(Mockery::mock(StripeClient::class)) extends RefundService
-        {
-            public array $created = [];
-
-            public bool $loseNextResponse = false;
-
-            private array $responsesByIdempotencyKey = [];
-
-            public function create($params = null, $opts = null)
-            {
-                $key = $opts['idempotency_key'];
-
-                if (isset($this->responsesByIdempotencyKey[$key])) {
-                    if ($this->responsesByIdempotencyKey[$key]['params'] !== $params) {
-                        throw IdempotencyException::factory('Keys for idempotent requests can only be used with the same parameters they were first used with.');
-                    }
-
-                    return $this->responsesByIdempotencyKey[$key]['refund'];
-                }
-
-                $refund = Refund::constructFrom([
-                    'id' => 're_'.(count($this->created) + 1),
-                    'object' => 'refund',
-                    'amount' => $params['amount'],
-                    'currency' => 'usd',
-                    'payment_intent' => $params['payment_intent'],
-                    'status' => 'pending',
-                    'metadata' => $params['metadata'] ?? [],
-                ]);
-
-                $this->responsesByIdempotencyKey[$key] = ['params' => $params, 'refund' => $refund];
-                $this->created[] = $refund;
-
-                if ($this->loseNextResponse) {
-                    $this->loseNextResponse = false;
-
-                    throw ApiConnectionException::factory('Request timed out');
-                }
-
-                return $refund;
-            }
-        };
     }
 }

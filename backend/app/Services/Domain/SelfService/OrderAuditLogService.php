@@ -5,10 +5,17 @@ namespace HiEvents\Services\Domain\SelfService;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\OrderAuditAction;
 use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\TicketResaleListingDomainObject;
 use HiEvents\Repository\Interfaces\OrderAuditLogRepositoryInterface;
 
 class OrderAuditLogService
 {
+    public const CREDENTIALS_REPLACED = 'credentials_replaced';
+
+    public const RESALE_CLOSED_REASON = 'resale_closed_reason';
+
+    public const RESALE_SOLD_ORDER_ID = 'resale_sold_order_id';
+
     public function __construct(
         private readonly OrderAuditLogRepositoryInterface $orderAuditLogRepository,
     ) {}
@@ -30,6 +37,69 @@ class OrderAuditLogService
             'old_values' => $oldValues,
             'new_values' => $newValues,
             'changed_fields' => implode(',', $changedFields),
+            'ip_address' => $ipAddress,
+            'user_agent' => $userAgent,
+        ]);
+    }
+
+    public function logOrganizerAttendeeUpdate(
+        AttendeeDomainObject $attendee,
+        array $oldValues,
+        array $newValues,
+    ): void {
+        $this->orderAuditLogRepository->create([
+            'event_id' => $attendee->getEventId(),
+            'order_id' => $attendee->getOrderId(),
+            'attendee_id' => $attendee->getId(),
+            'action' => OrderAuditAction::ATTENDEE_UPDATED_BY_ORGANIZER->value,
+            'old_values' => $oldValues,
+            'new_values' => $newValues,
+            'changed_fields' => implode(',', array_keys($newValues)),
+            'ip_address' => null,
+            'user_agent' => null,
+        ]);
+    }
+
+    public function logTicketTransfer(
+        OrderAuditAction $action,
+        AttendeeDomainObject $attendee,
+        string $senderEmail,
+        string $recipientEmail,
+        ?string $ipAddress,
+        ?string $userAgent,
+    ): void {
+        $this->orderAuditLogRepository->create([
+            'event_id' => $attendee->getEventId(),
+            'order_id' => $attendee->getOrderId(),
+            'attendee_id' => $attendee->getId(),
+            'action' => $action->value,
+            'old_values' => ['email' => $senderEmail],
+            'new_values' => $action === OrderAuditAction::TICKET_TRANSFER_ACCEPTED
+                ? ['email' => $recipientEmail, self::CREDENTIALS_REPLACED => true]
+                : ['email' => $recipientEmail],
+            'changed_fields' => 'email',
+            'ip_address' => $ipAddress,
+            'user_agent' => $userAgent,
+        ]);
+    }
+
+    public function logTicketResale(
+        OrderAuditAction $action,
+        TicketResaleListingDomainObject $listing,
+        ?string $ipAddress = null,
+        ?string $userAgent = null,
+    ): void {
+        $this->orderAuditLogRepository->create([
+            'event_id' => $listing->getEventId(),
+            'order_id' => $listing->getOrderId(),
+            'attendee_id' => $listing->getAttendeeId(),
+            'action' => $action->value,
+            'old_values' => [],
+            'new_values' => array_filter([
+                self::RESALE_CLOSED_REASON => $listing->getClosedReason(),
+                self::RESALE_SOLD_ORDER_ID => $listing->getSoldOrderId(),
+            ], static fn ($value) => $value !== null),
+            'changed_fields' => '',
             'ip_address' => $ipAddress,
             'user_agent' => $userAgent,
         ]);

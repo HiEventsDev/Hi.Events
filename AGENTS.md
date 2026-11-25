@@ -119,6 +119,7 @@ Feature rules live in `.claude/rules/`; Claude Code loads each file automaticall
 | Homepage sections | `.claude/rules/features/homepage-sections.md` |
 | Embeddable widget | `.claude/rules/features/widget.md` |
 | Registration questions | `.claude/rules/features/questions.md` |
+| Ticket transfer, resale, verified self-service | `.claude/rules/features/ticket-transfer-resale.md` |
 | Frontend UI patterns | `.claude/rules/frontend/ui.md` |
 | E2E specs | `.claude/rules/e2e.md` |
 

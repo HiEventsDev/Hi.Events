@@ -139,6 +139,7 @@ class OrderCreateRequestValidationServiceTest extends TestCase
 
         $this->setupOccurrenceLookup(1, 10, $occurrence);
         $this->setupEventLookup(1);
+        $this->setupAvailability(1);
 
         $this->service->validateRequestData(1, $this->createRequestData(10));
     }
@@ -156,6 +157,7 @@ class OrderCreateRequestValidationServiceTest extends TestCase
 
         $this->setupOccurrenceLookup(1, 10, $occurrence);
         $this->setupEventLookup(1);
+        $this->setupAvailability(1);
 
         $data = $this->createRequestData(10, quantity: 5);
 
@@ -300,6 +302,7 @@ class OrderCreateRequestValidationServiceTest extends TestCase
 
         $this->setupOccurrenceLookup(1, 10, $occurrence);
         $this->setupEventLookup(1);
+        $this->setupAvailability(1);
 
         $visibilityRule = (new ProductOccurrenceVisibilityDomainObject)
             ->setEventOccurrenceId(10)
@@ -360,6 +363,7 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $this->setupOccurrenceLookup(1, 10, $occurrence10);
         $this->setupOccurrenceLookup(1, 20, $occurrence20);
         $this->setupEventLookup(1);
+        $this->setupAvailability(1);
 
         $rule10 = (new ProductOccurrenceVisibilityDomainObject)
             ->setEventOccurrenceId(10)
@@ -1099,6 +1103,7 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $price->shouldReceive('isAfterSaleEndDate')->andReturn($priceAfterSaleEnd);
         $price->shouldReceive('isOnSale')->andReturn(! $priceBeforeSaleStart && ! $priceAfterSaleEnd);
         $price->shouldReceive('setQuantityReserved')->andReturnSelf();
+        $price->shouldReceive('setResaleQuantityAvailable')->andReturnSelf();
         $price->shouldReceive('isQuantityPerOccurrence')->andReturn(false);
         $price->shouldReceive('isLockedBehindEarlierTier')->andReturn(false);
 
@@ -1142,6 +1147,7 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $price->shouldReceive('isAfterSaleEndDate')->andReturn(false);
         $price->shouldReceive('isOnSale')->andReturn(true);
         $price->shouldReceive('setQuantityReserved')->andReturnSelf();
+        $price->shouldReceive('setResaleQuantityAvailable')->andReturnSelf();
         $price->shouldReceive('isQuantityPerOccurrence')->andReturn(false);
         $price->shouldReceive('isLockedBehindEarlierTier')->andReturn(false);
 

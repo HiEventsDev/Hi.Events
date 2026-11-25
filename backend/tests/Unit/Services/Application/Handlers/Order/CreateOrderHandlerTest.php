@@ -34,6 +34,7 @@ use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesDTO;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesResponseDTO;
 use HiEvents\Services\Domain\Product\DTO\OrderProductPriceDTO;
 use HiEvents\Services\Domain\PromoCode\PromoCodeUsageValidationService;
+use HiEvents\Services\Domain\TicketResale\ResaleClaimService;
 use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Validation\ValidationException;
@@ -111,6 +112,7 @@ class CreateOrderHandlerTest extends TestCase
             ),
             $this->widgetRepository,
             Mockery::mock(ProductRepositoryInterface::class, fn (MockInterface $mock) => $mock->shouldReceive('findWhereIn')->andReturn(collect())),
+            Mockery::mock(ResaleClaimService::class, fn (MockInterface $mock) => $mock->shouldReceive('claimForOrder')->andReturnUsing(fn ($order) => $order)),
         );
     }
 
@@ -220,7 +222,7 @@ class CreateOrderHandlerTest extends TestCase
         $this->orderManagementService->shouldReceive('deleteExistingOrders');
 
         $this->availabilityService->shouldReceive('getAvailableProductQuantities')
-            ->with($eventId, true, Mockery::any())
+            ->with($eventId, true, Mockery::any(), true, false, true)
             ->andReturn(new AvailableProductQuantitiesResponseDTO(
                 productQuantities: collect([
                     $this->createAvailabilityDTO(10, 100, 2),
@@ -275,7 +277,7 @@ class CreateOrderHandlerTest extends TestCase
             ->andReturn($occurrence);
 
         $this->availabilityService->shouldReceive('getAvailableProductQuantities')
-            ->with($eventId, true, Mockery::any())
+            ->with($eventId, true, Mockery::any(), true, false, true)
             ->andReturn(new AvailableProductQuantitiesResponseDTO(
                 productQuantities: collect([
                     $this->createAvailabilityDTO(10, 100, 100),
@@ -288,6 +290,7 @@ class CreateOrderHandlerTest extends TestCase
             ));
 
         $order = Mockery::mock(OrderDomainObject::class);
+        $order->shouldReceive('setHoldsResaleListing')->andReturnSelf();
         $this->orderManagementService->shouldReceive('createNewOrder')->andReturn($order);
         $this->orderItemProcessingService->shouldReceive('process')->andReturn(collect([new ProcessedOrderItemDTO(order_item: Mockery::mock(OrderItemDomainObject::class), seat_uids: [])]));
         $this->orderManagementService->shouldReceive('updateOrderTotals')->andReturn($order);
@@ -313,7 +316,7 @@ class CreateOrderHandlerTest extends TestCase
         $occurrence = Mockery::mock(EventOccurrenceDomainObject::class);
 
         $this->availabilityService->shouldReceive('getAvailableProductQuantities')
-            ->with($eventId, true, Mockery::any())
+            ->with($eventId, true, Mockery::any(), true, false, true)
             ->andReturn(new AvailableProductQuantitiesResponseDTO(
                 productQuantities: collect([
                     $this->createAvailabilityDTO(10, 100, 100),
@@ -353,7 +356,7 @@ class CreateOrderHandlerTest extends TestCase
         $occurrence = Mockery::mock(EventOccurrenceDomainObject::class);
 
         $this->availabilityService->shouldReceive('getAvailableProductQuantities')
-            ->with($eventId, true, Mockery::any())
+            ->with($eventId, true, Mockery::any(), true, false, true)
             ->andReturn(new AvailableProductQuantitiesResponseDTO(
                 productQuantities: collect([
                     $this->createAvailabilityDTO(12, 102, 100, ProductType::GENERAL->name),
@@ -369,6 +372,7 @@ class CreateOrderHandlerTest extends TestCase
             ->andReturn($occurrence);
 
         $order = Mockery::mock(OrderDomainObject::class);
+        $order->shouldReceive('setHoldsResaleListing')->andReturnSelf();
         $this->orderManagementService->shouldReceive('createNewOrder')->andReturn($order);
         $this->orderItemProcessingService->shouldReceive('process')->andReturn(collect([new ProcessedOrderItemDTO(order_item: Mockery::mock(OrderItemDomainObject::class), seat_uids: [])]));
         $this->orderManagementService->shouldReceive('updateOrderTotals')->andReturn($order);
@@ -579,7 +583,7 @@ class CreateOrderHandlerTest extends TestCase
         $this->orderManagementService->shouldReceive('deleteExistingOrders');
 
         $this->availabilityService->shouldReceive('getAvailableProductQuantities')
-            ->with($eventId, true, Mockery::any())
+            ->with($eventId, true, Mockery::any(), true, false, true)
             ->andReturn(new AvailableProductQuantitiesResponseDTO(
                 productQuantities: collect([
                     $this->createAvailabilityDTO($productId, $priceId, $available),
@@ -587,6 +591,7 @@ class CreateOrderHandlerTest extends TestCase
             ));
 
         $order = Mockery::mock(OrderDomainObject::class);
+        $order->shouldReceive('setHoldsResaleListing')->andReturnSelf();
         $order->shouldReceive('getId')->andReturn(1);
 
         $this->orderManagementService->shouldReceive('createNewOrder')->andReturnUsing(function (...$args) use ($order) {

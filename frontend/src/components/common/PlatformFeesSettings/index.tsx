@@ -134,7 +134,7 @@ export const PlatformFeesSettings = ({
     return (
         <>
             {configuration && (
-                <SettingsSection title={t`Your Plan`}>
+                <SettingsSection id="your-plan" title={t`Your Plan`}>
                     <SettingsRow label={configuration.name} description={t`Platform fee`}>
                         <div className={classes.planFee}>
                             <Text fw={600}>
@@ -151,7 +151,7 @@ export const PlatformFeesSettings = ({
                 </SettingsSection>
             )}
 
-            <SettingsSection title={feeHandlingLabel}>
+            <SettingsSection id="fee-handling" title={feeHandlingLabel}>
                 <form onSubmit={handleSubmit}>
                     <SettingsRow
                         label={t`Sample ticket price`}

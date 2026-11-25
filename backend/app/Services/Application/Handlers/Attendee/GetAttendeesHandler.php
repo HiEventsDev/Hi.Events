@@ -8,17 +8,19 @@ use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
+use HiEvents\Services\Domain\TicketResale\TicketResaleStateService;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class GetAttendeesHandler
 {
     public function __construct(
         private readonly AttendeeRepositoryInterface $attendeeRepository,
+        private readonly TicketResaleStateService $ticketResaleStateService,
     ) {}
 
     public function handle(int $eventId, QueryParamsDTO $queryParams): LengthAwarePaginator
     {
-        return $this->attendeeRepository
+        $attendees = $this->attendeeRepository
             ->loadRelation(new Relationship(
                 domainObject: OrderDomainObject::class,
                 name: 'order'
@@ -32,5 +34,9 @@ class GetAttendeesHandler
                 name: 'event_occurrence'
             ))
             ->findByEventId($eventId, $queryParams);
+
+        $this->ticketResaleStateService->summarize($attendees->getCollection());
+
+        return $attendees;
     }
 }

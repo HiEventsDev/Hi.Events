@@ -16,6 +16,7 @@ import {getPhoneCollectionOptions} from "../../../../../../utilites/phoneCollect
 import {useTextMessagesPaused, useTextMessagesVisible} from "../../../../../../ee/crm/hooks/useTextMessagesVisible.ts";
 import {useSmsConnectionMissing} from "../../../../../../ee/crm/hooks/useSmsConnectionMissing.ts";
 import {Callout} from "../../../../../common/Callout";
+import {useAccess} from "../../../../../../hooks/useAccess.ts";
 
 export const EventDefaults = () => {
     const {organizerId} = useParams();
@@ -25,11 +26,14 @@ export const EventDefaults = () => {
     const isTextMessageOptInPaused = useTextMessagesPaused();
     const isSmsConnectionMissing = useSmsConnectionMissing(organizerId);
 
+    const canTurnResaleOnOrOff = useAccess().can('ISSUE_REFUNDS');
     const form = useForm({
         initialValues: {
             default_attendee_details_collection_method: 'PER_ORDER' as 'PER_TICKET' | 'PER_ORDER',
             default_show_marketing_opt_in: true,
             default_allow_attendee_self_edit: false,
+            default_allow_ticket_transfer: true,
+            default_allow_ticket_resale: false,
             default_phone_collection: 'OFF' as PhoneCollection,
             default_show_sms_opt_in: false,
         }
@@ -58,6 +62,8 @@ export const EventDefaults = () => {
                 default_attendee_details_collection_method: organizerSettingsQuery.data.default_attendee_details_collection_method || 'PER_ORDER',
                 default_show_marketing_opt_in: organizerSettingsQuery.data.default_show_marketing_opt_in ?? true,
                 default_allow_attendee_self_edit: organizerSettingsQuery.data.default_allow_attendee_self_edit ?? false,
+                default_allow_ticket_transfer: organizerSettingsQuery.data.default_allow_ticket_transfer ?? true,
+                default_allow_ticket_resale: organizerSettingsQuery.data.default_allow_ticket_resale ?? false,
                 default_phone_collection: organizerSettingsQuery.data.default_phone_collection ?? 'OFF',
                 default_show_sms_opt_in: organizerSettingsQuery.data.default_show_sms_opt_in ?? false,
             };
@@ -153,6 +159,32 @@ export const EventDefaults = () => {
                             <Switch
                                 id="organizer-defaults-self-service"
                                 {...form.getInputProps('default_allow_attendee_self_edit', {type: 'checkbox'})}
+                            />
+                        </SettingsRow>
+                        <SettingsRow
+                            label={t`Let ticket holders transfer tickets by default`}
+                            description={t`New events will let a holder send a ticket to someone else by email. This can be changed per event.`}
+                            htmlFor="organizer-defaults-ticket-transfer"
+                            inlineControl
+                        >
+                            <Switch
+                                id="organizer-defaults-ticket-transfer"
+                                data-testid="organizer-default-ticket-transfer-switch"
+                                {...form.getInputProps('default_allow_ticket_transfer', {type: 'checkbox'})}
+                            />
+                        </SettingsRow>
+                        <SettingsRow
+                            label={t`Let buyers resell tickets by default`}
+                            description={t`New events will let a buyer list a ticket they cannot use for resale. This can be changed per event.`}
+                            htmlFor="organizer-defaults-ticket-resale"
+                            inlineControl
+                        >
+                            <Switch
+                                id="organizer-defaults-ticket-resale"
+                                data-testid="organizer-default-ticket-resale-switch"
+                                disabled={!canTurnResaleOnOrOff}
+                                title={canTurnResaleOnOrOff ? undefined : t`Only members who can issue refunds can turn ticket resale on or off.`}
+                                {...form.getInputProps('default_allow_ticket_resale', {type: 'checkbox'})}
                             />
                         </SettingsRow>
                     </fieldset>

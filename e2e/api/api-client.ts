@@ -184,6 +184,10 @@ export class ApiClient {
     return unwrap<Organizer>(this.request.get(`organizers/${organizerId}`, { headers: jsonHeaders }));
   }
 
+  getOrganizerSettings(organizerId: number): Promise<Record<string, unknown>> {
+    return unwrap<Record<string, unknown>>(this.request.get(`organizers/${organizerId}/settings`, { headers: jsonHeaders }));
+  }
+
   updateOrganizerSettings(organizerId: number, settings: { first_day_of_week?: number; facebook_handle?: string }): Promise<void> {
     return check(this.request.patch(`organizers/${organizerId}/settings`, { headers: jsonHeaders, data: settings }));
   }
@@ -643,6 +647,12 @@ export class ApiClient {
   updateOccurrence(eventId: number, occurrenceId: number, payload: UpdateOccurrencePayload): Promise<void> {
     return check(
       this.request.put(`events/${eventId}/occurrences/${occurrenceId}`, { headers: jsonHeaders, data: payload }),
+    );
+  }
+
+  cancelOccurrence(eventId: number, occurrenceId: number): Promise<void> {
+    return check(
+      this.request.post(`events/${eventId}/occurrences/${occurrenceId}/cancel`, { headers: jsonHeaders, data: { refund_orders: false } }),
     );
   }
 

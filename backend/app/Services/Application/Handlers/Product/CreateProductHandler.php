@@ -66,6 +66,8 @@ class CreateProductHandler
                 ->setHighlightMessage($productsData->highlight_message)
                 ->setWaitlistEnabled($productsData->waitlist_enabled)
                 ->setIsAddonOnly($productsData->is_addon_only ?? false)
+                ->setIsTransferable($productsData->is_transferable ?? true)
+                ->setIsResellable($productsData->is_resellable ?? true)
                 ->setProductPrices($productPrices)
                 ->setEventId($productsData->event_id)
                 ->setProductType($productsData->product_type->name)

@@ -4,6 +4,7 @@ namespace Tests\Unit\Services\Application\Handlers\TicketLookup;
 
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\Mail\TicketLookup\TicketLookupEmail;
+use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketLookupTokenRepositoryInterface;
 use HiEvents\Services\Application\Handlers\TicketLookup\DTO\SendTicketLookupEmailDTO;
@@ -43,8 +44,12 @@ class SendTicketLookupEmailHandlerTest extends TestCase
         $this->logger = m::mock(LoggerInterface::class);
         $this->databaseManager = m::mock(DatabaseManager::class);
 
+        $attendeeRepository = m::mock(AttendeeRepositoryInterface::class);
+        $attendeeRepository->shouldReceive('findGuestTicketsByEmail')->andReturn(collect());
+
         $this->handler = new SendTicketLookupEmailHandler(
             $this->orderRepository,
+            $attendeeRepository,
             $this->ticketLookupTokenRepository,
             $this->tokenGeneratorService,
             $this->mailer,

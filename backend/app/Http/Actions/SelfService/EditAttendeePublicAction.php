@@ -3,11 +3,16 @@
 namespace HiEvents\Http\Actions\SelfService;
 
 use HiEvents\Exceptions\SelfServiceDisabledException;
+use HiEvents\Exceptions\SelfServiceVerificationRequiredException;
+use HiEvents\Exceptions\TicketListedForResaleException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\SelfService\EditAttendeePublicRequest;
+use HiEvents\Http\ResponseCodes;
 use HiEvents\Services\Application\Handlers\SelfService\DTO\EditAttendeePublicDTO;
 use HiEvents\Services\Application\Handlers\SelfService\EditAttendeePublicHandler;
+use HiEvents\Services\Domain\SelfService\SelfServiceVerificationService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class EditAttendeePublicAction extends BaseAction
@@ -32,6 +37,7 @@ class EditAttendeePublicAction extends BaseAction
                 'email' => $request->input('email'),
                 'ipAddress' => $this->getClientIp($request),
                 'userAgent' => $request->userAgent(),
+                'sessionToken' => $request->header(SelfServiceVerificationService::SESSION_HEADER),
             ]));
 
             $response = [
@@ -43,6 +49,10 @@ class EditAttendeePublicAction extends BaseAction
             }
 
             return $this->jsonResponse($response);
+        } catch (SelfServiceVerificationRequiredException $e) {
+            throw ValidationException::withMessages(['email' => $e->getMessage()]);
+        } catch (TicketListedForResaleException $e) {
+            return $this->errorResponse($e->getMessage(), ResponseCodes::HTTP_CONFLICT);
         } catch (SelfServiceDisabledException $e) {
             return $this->errorResponse($e->getMessage(), $e->getCode());
         } catch (ResourceNotFoundException $e) {

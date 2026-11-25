@@ -25,6 +25,8 @@ class ProductPriceDomainObject extends Generated\ProductPriceDomainObjectAbstrac
 
     private int $quantityReserved = 0;
 
+    private int $resaleQuantityAvailable = 0;
+
     private bool $isLockedBehindEarlierTier = false;
 
     /**
@@ -133,7 +135,8 @@ class ProductPriceDomainObject extends Generated\ProductPriceDomainObjectAbstrac
         }
 
         if ($this->isQuantityPerOccurrence()) {
-            return $this->getQuantityAvailable() !== null && $this->getQuantityAvailable() <= 0;
+            return $this->getQuantityAvailable() !== null
+                && $this->getQuantityAvailable() - $this->resaleQuantityAvailable <= 0;
         }
 
         return $this->getInitialQuantityAvailable() !== null
@@ -143,6 +146,13 @@ class ProductPriceDomainObject extends Generated\ProductPriceDomainObjectAbstrac
     public function setQuantityReserved(int $quantityReserved): self
     {
         $this->quantityReserved = $quantityReserved;
+
+        return $this;
+    }
+
+    public function setResaleQuantityAvailable(int $resaleQuantityAvailable): self
+    {
+        $this->resaleQuantityAvailable = $resaleQuantityAvailable;
 
         return $this;
     }

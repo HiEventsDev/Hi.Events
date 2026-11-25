@@ -24,6 +24,7 @@ class GetWaitlistStatsHandler
             $eventId,
             ignoreCache: true,
             eventOccurrenceId: $eventOccurrenceId,
+            includeResaleStock: true,
         );
 
         $products = $productRows->map(function ($row) use ($quantities) {

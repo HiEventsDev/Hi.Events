@@ -26,9 +26,11 @@ export function enableStripePayments(organizerId: number): void {
   }
 }
 
+export const STRIPE_CARD_PAYING_INTO_AVAILABLE_BALANCE = 'pm_card_bypassPending';
+
 export async function payOrderWithTestCard(
   request: APIRequestContext,
-  opts: { eventId: number; orderShortId: string; sessionId: string },
+  opts: { eventId: number; orderShortId: string; sessionId: string; paymentMethod?: string },
 ): Promise<{ paymentIntentId: string; amount: number }> {
   const created = await request.post(
     `public/events/${opts.eventId}/order/${opts.orderShortId}/stripe/payment_intent?session_identifier=${opts.sessionId}`,
@@ -42,7 +44,7 @@ export async function payOrderWithTestCard(
 
   const confirmed = await request.post(`https://api.stripe.com/v1/payment_intents/${paymentIntentId}/confirm`, {
     headers: stripeHeaders(),
-    form: { payment_method: 'pm_card_visa', return_url: 'https://example.com/return' },
+    form: { payment_method: opts.paymentMethod ?? 'pm_card_visa', return_url: 'https://example.com/return' },
   });
   if (!confirmed.ok()) {
     throw new Error(`stripe confirm → ${confirmed.status()}: ${await confirmed.text()}`);
@@ -96,28 +98,28 @@ export async function deliverPaymentIntentSucceededWebhook(
   return paymentIntentId;
 }
 
-export async function sendPaymentIntentSucceededWebhook(
+async function stripeGet<T>(request: APIRequestContext, path: string): Promise<T> {
+  const response = await request.get(`https://api.stripe.com/v1/${path}`, { headers: stripeHeaders() });
+  if (!response.ok()) {
+    throw new Error(`stripe GET ${path} → ${response.status()}: ${await response.text()}`);
+  }
+  return (await response.json()) as T;
+}
+
+async function postSignedStripeEvent(
   request: APIRequestContext,
-  paymentIntentId: string,
+  type: string,
+  object: unknown,
   delivery: { tolerateRejection?: boolean } = {},
 ): Promise<void> {
-  const stripeResponse = await request.get(
-    `https://api.stripe.com/v1/payment_intents/${paymentIntentId}?expand[]=latest_charge`,
-    { headers: stripeHeaders() },
-  );
-  if (!stripeResponse.ok()) {
-    throw new Error(`stripe payment intent fetch → ${stripeResponse.status()}: ${await stripeResponse.text()}`);
-  }
-  const paymentIntent = await stripeResponse.json();
-
   const timestamp = Math.floor(Date.now() / 1000);
   const payload = JSON.stringify({
     id: `evt_e2e_${randomUUID().replace(/-/g, '')}`,
     object: 'event',
     api_version: '2024-06-20',
     created: timestamp,
-    type: 'payment_intent.succeeded',
-    data: { object: paymentIntent },
+    type,
+    data: { object },
     livemode: false,
     ...(connectedAccountId() ? { account: connectedAccountId() } : {}),
     pending_webhooks: 1,
@@ -135,6 +137,64 @@ export async function sendPaymentIntentSucceededWebhook(
     data: payload,
   });
   if (!webhookResponse.ok() && !delivery.tolerateRejection) {
-    throw new Error(`stripe webhook delivery → ${webhookResponse.status()}: ${await webhookResponse.text()}`);
+    throw new Error(`stripe ${type} webhook delivery → ${webhookResponse.status()}: ${await webhookResponse.text()}`);
+  }
+}
+
+export async function sendPaymentIntentSucceededWebhook(
+  request: APIRequestContext,
+  paymentIntentId: string,
+  delivery: { tolerateRejection?: boolean } = {},
+): Promise<void> {
+  const paymentIntent = await stripeGet(request, `payment_intents/${paymentIntentId}?expand[]=latest_charge`);
+  await postSignedStripeEvent(request, 'payment_intent.succeeded', paymentIntent, delivery);
+}
+
+interface ChargeWithBalanceTransaction {
+  balance_transaction: { fee: number } | null;
+}
+
+async function chargeOnceFeesAreKnown(request: APIRequestContext, paymentIntentId: string): Promise<ChargeWithBalanceTransaction> {
+  const deadline = Date.now() + 30_000;
+  for (;;) {
+    const { latest_charge: charge } = await stripeGet<{ latest_charge: ChargeWithBalanceTransaction }>(
+      request,
+      `payment_intents/${paymentIntentId}?expand[]=latest_charge.balance_transaction`,
+    );
+    if (charge.balance_transaction) {
+      return charge;
+    }
+    if (Date.now() > deadline) {
+      throw new Error(`Stripe has no balance transaction for the charge on ${paymentIntentId}`);
+    }
+    await new Promise((resolve) => setTimeout(resolve, 500));
+  }
+}
+
+export async function sendChargeSucceededWebhook(request: APIRequestContext, paymentIntentId: string): Promise<void> {
+  await postSignedStripeEvent(request, 'charge.succeeded', await chargeOnceFeesAreKnown(request, paymentIntentId));
+}
+
+export interface StripeRefund {
+  id: string;
+  amount: number;
+  currency: string;
+  status: string;
+  payment_intent: string;
+  metadata: Record<string, string>;
+}
+
+export async function listPaymentIntentRefunds(request: APIRequestContext, paymentIntentId: string): Promise<StripeRefund[]> {
+  const { data } = await stripeGet<{ data: StripeRefund[] }>(request, `refunds?payment_intent=${paymentIntentId}&limit=100`);
+  return data;
+}
+
+export async function getPaymentIntentFees(request: APIRequestContext, paymentIntentId: string): Promise<number> {
+  return (await chargeOnceFeesAreKnown(request, paymentIntentId)).balance_transaction?.fee ?? 0;
+}
+
+export async function sendRefundUpdatedWebhooks(request: APIRequestContext, paymentIntentId: string): Promise<void> {
+  for (const refund of await listPaymentIntentRefunds(request, paymentIntentId)) {
+    await postSignedStripeEvent(request, 'refund.updated', refund);
   }
 }

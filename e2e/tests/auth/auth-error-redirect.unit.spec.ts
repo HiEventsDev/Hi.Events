@@ -39,6 +39,7 @@ test.describe('api client auth error handling', () => {
       '/check-in/abc',
       '/box-office/abc',
       '/my-tickets/abc',
+      '/transfer/tt_abc',
       '/emails/unsubscribe/abc',
       '/audience/unsubscribe/abc',
       '/audience/confirm/abc',

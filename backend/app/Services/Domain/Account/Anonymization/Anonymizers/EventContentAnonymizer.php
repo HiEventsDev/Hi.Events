@@ -43,6 +43,10 @@ class EventContentAnonymizer implements AccountAnonymizerInterface
                 query: $this->databaseManager->table('waitlist_entries')->whereIn('event_id', $context->eventIds),
                 entity: 'waitlist_entries',
             ),
+            $this->executor->delete(
+                query: $this->databaseManager->table('ticket_transfers')->whereIn('event_id', $context->eventIds),
+                entity: 'ticket_transfers',
+            ),
             $this->executor->scrub(
                 query: $this->databaseManager->table('box_offices')->whereIn('event_id', $context->eventIds),
                 entity: 'box_offices',

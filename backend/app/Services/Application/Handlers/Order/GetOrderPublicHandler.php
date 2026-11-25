@@ -30,6 +30,9 @@ use HiEvents\Services\Domain\Order\OfflinePaymentInstructionsRenderService;
 use HiEvents\Services\Domain\Order\PaymentLink\OrderCheckoutAccessService;
 use HiEvents\Services\Domain\Order\PaymentLink\OrderPaymentLinkTokenService;
 use HiEvents\Services\Domain\Subscription\AccountSubscriptionAccessService;
+use HiEvents\Services\Domain\TicketResale\ResaleClaimService;
+use HiEvents\Services\Domain\TicketResale\TicketResaleStateService;
+use HiEvents\Services\Domain\TicketTransfer\TicketTransferStateService;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class GetOrderPublicHandler
@@ -40,6 +43,9 @@ class GetOrderPublicHandler
         private readonly OrderPaymentLinkTokenService $paymentLinkTokenService,
         private readonly OfflinePaymentInstructionsRenderService $offlinePaymentInstructionsRenderService,
         private readonly AccountSubscriptionAccessService $accountSubscriptionAccessService,
+        private readonly TicketTransferStateService $ticketTransferStateService,
+        private readonly TicketResaleStateService $ticketResaleStateService,
+        private readonly ResaleClaimService $resaleClaimService,
     ) {}
 
     public function handle(GetOrderPublicDTO $getOrderData): OrderDomainObject
@@ -52,11 +58,17 @@ class GetOrderPublicHandler
 
         if ($order->getStatus() === OrderStatus::RESERVED->name) {
             $this->authorizeReservedOrder($order);
+            $order->setHoldsResaleListing($this->resaleClaimService->orderHoldsListing($order->getId()));
         } elseif ($order->hasPaymentLink()) {
             $this->markPaymentLinkAccess($order, $this->checkoutAccessService->resolve($order));
         }
 
         $this->offlinePaymentInstructionsRenderService->renderForOrder($order);
+
+        if ($order->isOrderCompleted() && $order->getEvent() !== null && $order->getAttendees() !== null) {
+            $this->ticketTransferStateService->describe($order->getAttendees(), $order, $order->getEvent());
+            $this->ticketResaleStateService->describe($order->getAttendees(), $order->getEvent(), viewerHoldsOrderLink: true);
+        }
 
         $organizer = $order->getEvent()?->getOrganizer();
         $organizer?->setBrandingRemoved(

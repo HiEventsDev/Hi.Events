@@ -146,6 +146,11 @@ abstract class EventSettingDomainObjectAbstract extends AbstractDomainObject
     final public const PHONE_COLLECTION = 'phone_collection';
 
     final public const SHOW_SMS_OPT_IN = 'show_sms_opt_in';
+    final public const ALLOW_TICKET_TRANSFER = 'allow_ticket_transfer';
+    final public const TICKET_TRANSFER_CUTOFF_MINUTES = 'ticket_transfer_cutoff_minutes';
+    final public const MAX_TRANSFERS_PER_TICKET = 'max_transfers_per_ticket';
+    final public const ALLOW_TICKET_RESALE = 'allow_ticket_resale';
+    final public const TICKET_RESALE_CUTOFF_MINUTES = 'ticket_resale_cutoff_minutes';
 
     protected int $id;
 
@@ -280,6 +285,11 @@ abstract class EventSettingDomainObjectAbstract extends AbstractDomainObject
     protected string $phone_collection = 'OFF';
 
     protected bool $show_sms_opt_in = false;
+    protected bool $allow_ticket_transfer = true;
+    protected int $ticket_transfer_cutoff_minutes = 0;
+    protected ?int $max_transfers_per_ticket = null;
+    protected bool $allow_ticket_resale = false;
+    protected int $ticket_resale_cutoff_minutes = 120;
 
     public function toArray(): array
     {
@@ -351,6 +361,11 @@ abstract class EventSettingDomainObjectAbstract extends AbstractDomainObject
             'payment_link_expiry_hours' => $this->payment_link_expiry_hours ?? null,
             'phone_collection' => $this->phone_collection ?? null,
             'show_sms_opt_in' => $this->show_sms_opt_in ?? null,
+            'allow_ticket_transfer' => $this->allow_ticket_transfer ?? null,
+            'ticket_transfer_cutoff_minutes' => $this->ticket_transfer_cutoff_minutes ?? null,
+            'max_transfers_per_ticket' => $this->max_transfers_per_ticket ?? null,
+            'allow_ticket_resale' => $this->allow_ticket_resale ?? null,
+            'ticket_resale_cutoff_minutes' => $this->ticket_resale_cutoff_minutes ?? null,
         ];
     }
 
@@ -1157,5 +1172,60 @@ abstract class EventSettingDomainObjectAbstract extends AbstractDomainObject
     public function getShowSmsOptIn(): bool
     {
         return $this->show_sms_opt_in;
+    }
+
+    public function setAllowTicketTransfer(bool $allow_ticket_transfer): self
+    {
+        $this->allow_ticket_transfer = $allow_ticket_transfer;
+        return $this;
+    }
+
+    public function getAllowTicketTransfer(): bool
+    {
+        return $this->allow_ticket_transfer;
+    }
+
+    public function setTicketTransferCutoffMinutes(int $ticket_transfer_cutoff_minutes): self
+    {
+        $this->ticket_transfer_cutoff_minutes = $ticket_transfer_cutoff_minutes;
+        return $this;
+    }
+
+    public function getTicketTransferCutoffMinutes(): int
+    {
+        return $this->ticket_transfer_cutoff_minutes;
+    }
+
+    public function setMaxTransfersPerTicket(?int $max_transfers_per_ticket): self
+    {
+        $this->max_transfers_per_ticket = $max_transfers_per_ticket;
+        return $this;
+    }
+
+    public function getMaxTransfersPerTicket(): ?int
+    {
+        return $this->max_transfers_per_ticket;
+    }
+
+    public function setAllowTicketResale(bool $allow_ticket_resale): self
+    {
+        $this->allow_ticket_resale = $allow_ticket_resale;
+        return $this;
+    }
+
+    public function getAllowTicketResale(): bool
+    {
+        return $this->allow_ticket_resale;
+    }
+
+    public function setTicketResaleCutoffMinutes(int $ticket_resale_cutoff_minutes): self
+    {
+        $this->ticket_resale_cutoff_minutes = $ticket_resale_cutoff_minutes;
+        return $this;
+    }
+
+    public function getTicketResaleCutoffMinutes(): int
+    {
+        return $this->ticket_resale_cutoff_minutes;
     }
 }

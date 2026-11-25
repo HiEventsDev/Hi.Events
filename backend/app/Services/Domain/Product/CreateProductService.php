@@ -107,6 +107,8 @@ class CreateProductService
             'highlight_message' => $productsData->getHighlightMessage(),
             'waitlist_enabled' => $productsData->getWaitlistEnabled(),
             'is_addon_only' => $productsData->getIsAddonOnly(),
+            'is_transferable' => $productsData->getIsTransferable(),
+            'is_resellable' => $productsData->getIsResellable(),
         ]);
     }
 

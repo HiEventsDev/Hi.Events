@@ -57,6 +57,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new ReportSuspiciousActivityJob)->everyFiveMinutes()->withoutOverlapping()->when(fn () => (bool) config('app.saas_mode_enabled'));
         $schedule->job(new SendLifecycleNudgesJob)->hourly()->withoutOverlapping()
             ->when(static fn (): bool => app(LifecycleEmailSender::class)->isConfigured());
+        $schedule->command('ticket-resale:maintain')->everyFiveMinutes()->withoutOverlapping();
 
         $schedule->call(function (): void {
             $count = DB::table('failed_jobs')->count();

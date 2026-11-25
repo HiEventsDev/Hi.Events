@@ -118,6 +118,29 @@ class RouteServiceProvider extends ServiceProvider
             ];
         });
 
+        RateLimiter::for('self-service-transfer', function (Request $request) {
+            $recipient = $request->input('recipient_email');
+
+            return [
+                Limit::perHour(10)->by('self-service-transfer|'.$this->selfServiceLinkKey($request)),
+                ...(is_string($recipient) && $recipient !== ''
+                    ? [Limit::perHour(5)->by('self-service-transfer-recipient|'.mb_strtolower($recipient))]
+                    : []),
+            ];
+        });
+
+        RateLimiter::for('self-service-resale', function (Request $request) {
+            return Limit::perHour(10)->by('self-service-resale|'.$this->selfServiceLinkKey($request));
+        });
+
+        RateLimiter::for('self-service-verify-request', function (Request $request) {
+            return Limit::perMinutes(10, 5)->by('self-service-verify-request|'.$this->selfServiceLinkKey($request));
+        });
+
+        RateLimiter::for('self-service-verify-confirm', function (Request $request) {
+            return Limit::perMinutes(10, 15)->by('self-service-verify-confirm|'.$this->selfServiceLinkKey($request));
+        });
+
         RateLimiter::for('box-office-session', function (Request $request) {
             return [
                 Limit::perMinute(10)->by($request->route('box_office_short_id').'|'.$request->ip()),
@@ -187,6 +210,15 @@ class RouteServiceProvider extends ServiceProvider
         }
 
         return 'box-office-session|'.hash('sha256', $token);
+    }
+
+    private function selfServiceLinkKey(Request $request): string
+    {
+        $attendeeShortId = $request->route('attendee_short_id');
+
+        return is_string($attendeeShortId) && $request->route('order_short_id') === null
+            ? 'attendee|'.$attendeeShortId
+            : $this->selfServiceOrderKey($request);
     }
 
     private function selfServiceOrderKey(Request $request): string

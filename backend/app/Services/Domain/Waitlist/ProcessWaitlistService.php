@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Domain\Waitlist;
 
+use Carbon\Carbon;
 use HiEvents\Constants;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
@@ -28,6 +29,8 @@ use HiEvents\Services\Domain\Order\OrderItemProcessingService;
 use HiEvents\Services\Domain\Order\OrderManagementService;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\DTO\OrderProductPriceDTO;
+use HiEvents\Services\Domain\TicketResale\DTO\ResaleDemandDTO;
+use HiEvents\Services\Domain\TicketResale\ResaleClaimService;
 use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
@@ -43,6 +46,7 @@ class ProcessWaitlistService
         private readonly DatabaseManager $databaseManager,
         private readonly OrderManagementService $orderManagementService,
         private readonly OrderItemProcessingService $orderItemProcessingService,
+        private readonly ResaleClaimService $resaleClaimService,
         private readonly ProductRepositoryInterface $productRepository,
         private readonly AvailableProductQuantitiesFetchService $availableQuantitiesService,
         private readonly ProductPriceRepositoryInterface $productPriceRepository,
@@ -109,6 +113,7 @@ class ProcessWaitlistService
                         $event->getId(),
                         ignoreCache: true,
                         eventOccurrenceId: $occurrenceId,
+                        includeResaleStock: true,
                     );
                     $remainingByOccurrenceAndPrice[$occurrenceId][$priceId] = $this->getAvailableCountForPrice($quantities, $priceId);
                 }
@@ -240,9 +245,11 @@ class ProcessWaitlistService
         EventDomainObject $event,
         EventSettingDomainObject $eventSettings,
     ): WaitlistEntryDomainObject {
-        $offerExpiresAt = $this->calculateOfferExpiry($eventSettings);
         $sessionIdentifier = sha1(Str::uuid().Str::random(40));
         $order = $this->createReservedOrder($entry, $event, $eventSettings, $sessionIdentifier);
+        $offerExpiresAt = Carbon::parse($this->calculateOfferExpiry($eventSettings))
+            ->min(Carbon::parse($order->getReservedUntil()))
+            ->toDateTimeString();
 
         $this->waitlistEntryRepository->updateWhere(
             attributes: [
@@ -270,6 +277,16 @@ class ProcessWaitlistService
         string $sessionIdentifier,
     ): OrderDomainObject {
         $timeoutMinutes = $eventSettings->getWaitlistOfferTimeoutMinutes() ?? self::DEFAULT_OFFER_TIMEOUT_MINUTES;
+        $eventOccurrenceId = $this->resolveEventOccurrenceId($event, $entry);
+
+        $listedTicketsNeeded = $this->availableQuantitiesService
+            ->getAvailableProductQuantities(
+                $event->getId(),
+                ignoreCache: true,
+                eventOccurrenceId: $eventOccurrenceId,
+                includeResaleStock: true,
+            )
+            ->resaleUnitsNeeded($entry->getProductPriceId(), 1);
 
         $order = $this->orderManagementService->createNewOrder(
             eventId: $event->getId(),
@@ -286,8 +303,6 @@ class ProcessWaitlistService
             ->loadRelation(TaxAndFeesDomainObject::class)
             ->loadRelation(ProductPriceDomainObject::class)
             ->findById($productPrice->getProductId());
-
-        $eventOccurrenceId = $this->resolveEventOccurrenceId($event, $entry);
 
         $orderDetails = collect([
             new ProductOrderDetailsDTO(
@@ -309,9 +324,18 @@ class ProcessWaitlistService
             promoCode: null,
         );
 
+        $items = $orderItems->map(fn (ProcessedOrderItemDTO $item) => $item->order_item);
+
         return $this->orderManagementService->updateOrderTotals(
-            $order,
-            $orderItems->map(fn (ProcessedOrderItemDTO $item) => $item->order_item),
+            $this->resaleClaimService->claimForOrder(
+                $order,
+                $eventSettings,
+                $items,
+                $listedTicketsNeeded > 0
+                    ? collect([new ResaleDemandDTO($entry->getProductPriceId(), $eventOccurrenceId, $listedTicketsNeeded)])
+                    : collect(),
+            ),
+            $items,
         );
     }
 
@@ -376,6 +400,7 @@ class ProcessWaitlistService
             $event->getId(),
             ignoreCache: true,
             eventOccurrenceId: $eventOccurrenceId,
+            includeResaleStock: true,
         );
 
         return $this->getAvailableCountForPrice($quantities, $entry->getProductPriceId()) > 0;

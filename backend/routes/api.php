@@ -240,6 +240,7 @@ use HiEvents\Http\Actions\Attendees\EditAttendeeAction;
 use HiEvents\Http\Actions\Attendees\ExportAttendeesAction;
 use HiEvents\Http\Actions\Attendees\GetAttendeeAction;
 use HiEvents\Http\Actions\Attendees\GetAttendeeActionPublic;
+use HiEvents\Http\Actions\Attendees\GetAttendeeHistoryAction;
 use HiEvents\Http\Actions\Attendees\GetAttendeesAction;
 use HiEvents\Http\Actions\Attendees\PartialEditAttendeeAction;
 use HiEvents\Http\Actions\Attendees\ResendAttendeeTicketAction;
@@ -386,6 +387,7 @@ use HiEvents\Http\Actions\Orders\DownloadOrderInvoiceAction;
 use HiEvents\Http\Actions\Orders\EditOrderAction;
 use HiEvents\Http\Actions\Orders\ExportOrdersAction;
 use HiEvents\Http\Actions\Orders\GetOrderAction;
+use HiEvents\Http\Actions\Orders\GetOrderHistoryAction;
 use HiEvents\Http\Actions\Orders\GetOrdersAction;
 use HiEvents\Http\Actions\Orders\MarkOrderAsPaidAction;
 use HiEvents\Http\Actions\Orders\Payment\RefundOrderAction;
@@ -463,6 +465,11 @@ use HiEvents\Http\Actions\SelfService\EditAttendeePublicAction;
 use HiEvents\Http\Actions\SelfService\EditOrderPublicAction;
 use HiEvents\Http\Actions\SelfService\ResendAttendeeTicketPublicAction;
 use HiEvents\Http\Actions\SelfService\ResendOrderConfirmationPublicAction;
+use HiEvents\Http\Actions\SelfService\Verification\ConfirmAttendeeVerificationPublicAction;
+use HiEvents\Http\Actions\SelfService\Verification\ConfirmOrderVerificationPublicAction;
+use HiEvents\Http\Actions\SelfService\Verification\RequestAttendeeVerificationPublicAction;
+use HiEvents\Http\Actions\SelfService\Verification\RequestOrderVerificationPublicAction;
+use HiEvents\Http\Actions\SelfService\Verification\StartSessionFromTicketLookupPublicAction;
 use HiEvents\Http\Actions\Sitemap\GetSitemapEventsAction;
 use HiEvents\Http\Actions\Sitemap\GetSitemapIndexAction;
 use HiEvents\Http\Actions\Sitemap\GetSitemapOrganizersAction;
@@ -473,7 +480,21 @@ use HiEvents\Http\Actions\TaxesAndFees\GetTaxOrFeeAction;
 use HiEvents\Http\Actions\Team\GetEventTeamAction;
 use HiEvents\Http\Actions\Team\GetOrganizerTeamAction;
 use HiEvents\Http\Actions\TicketLookup\GetOrdersByLookupTokenAction;
+use HiEvents\Http\Actions\TicketLookup\GetTicketsByLookupTokenAction;
 use HiEvents\Http\Actions\TicketLookup\SendTicketLookupEmailAction;
+use HiEvents\Http\Actions\TicketResale\CloseTicketResaleListingAction;
+use HiEvents\Http\Actions\TicketResale\GetTicketResaleEstimatePublicAction;
+use HiEvents\Http\Actions\TicketResale\GetTicketResaleListingsAction;
+use HiEvents\Http\Actions\TicketResale\ListTicketForResalePublicAction;
+use HiEvents\Http\Actions\TicketResale\RetryTicketResaleRefundAction;
+use HiEvents\Http\Actions\TicketResale\WithdrawTicketResalePublicAction;
+use HiEvents\Http\Actions\TicketTransfer\AcceptTicketTransferPublicAction;
+use HiEvents\Http\Actions\TicketTransfer\CancelOrderTicketTransferPublicAction;
+use HiEvents\Http\Actions\TicketTransfer\CancelTicketTransferPublicAction;
+use HiEvents\Http\Actions\TicketTransfer\DeclineTicketTransferPublicAction;
+use HiEvents\Http\Actions\TicketTransfer\GetTicketTransferClaimPublicAction;
+use HiEvents\Http\Actions\TicketTransfer\StartOrderTicketTransferPublicAction;
+use HiEvents\Http\Actions\TicketTransfer\StartTicketTransferPublicAction;
 use HiEvents\Http\Actions\Users\CancelEmailChangeAction;
 use HiEvents\Http\Actions\Users\ConfirmEmailAddressAction;
 use HiEvents\Http\Actions\Users\ConfirmEmailChangeAction;
@@ -884,14 +905,20 @@ $router->middleware(['auth:api,sanctum'])->group(
         $router->get('/events/{event_id}/attendees/{attendee_id}', GetAttendeeAction::class);
         $router->put('/events/{event_id}/attendees/{attendee_id}', EditAttendeeAction::class);
         $router->patch('/events/{event_id}/attendees/{attendee_id}', PartialEditAttendeeAction::class);
+        $router->get('/events/{event_id}/attendees/{attendee_id}/history', GetAttendeeHistoryAction::class);
         $router->post('/events/{event_id}/attendees/export', ExportAttendeesAction::class);
         $router->post('/events/{event_id}/attendees/{attendee_public_id}/resend-ticket', ResendAttendeeTicketAction::class);
         $router->post('/events/{event_id}/attendees/{attendee_public_id}/check_in', CheckInAttendeeAction::class);
+
+        $router->get('/events/{event_id}/resale-listings', GetTicketResaleListingsAction::class);
+        $router->post('/events/{event_id}/resale-listings/{listing_id}/close', CloseTicketResaleListingAction::class);
+        $router->post('/events/{event_id}/resale-listings/{listing_id}/retry-refund', RetryTicketResaleRefundAction::class);
 
         // Orders
         $router->get('/events/{event_id}/orders', GetOrdersAction::class);
         $router->get('/events/{event_id}/orders/{order_id}', GetOrderAction::class);
         $router->put('/events/{event_id}/orders/{order_id}', EditOrderAction::class);
+        $router->get('/events/{event_id}/orders/{order_id}/history', GetOrderHistoryAction::class);
         $router->post('/events/{event_id}/orders/{order_id}/refund', RefundOrderAction::class);
         $router->post('/events/{event_id}/orders/{order_id}/resend_confirmation', ResendOrderConfirmationAction::class);
         $router->post('/events/{event_id}/orders/{order_id}/cancel', CancelOrderAction::class);
@@ -1272,16 +1299,36 @@ $router->prefix('/public')->group(
         $router->post('/ticket-lookup', SendTicketLookupEmailAction::class)
             ->middleware('throttle:10,1,ticket-lookup');
         $router->get('/ticket-lookup/{token}', GetOrdersByLookupTokenAction::class);
+        $router->get('/ticket-lookup/{token}/tickets', GetTicketsByLookupTokenAction::class);
+        $router->post('/ticket-lookup/{token}/session', StartSessionFromTicketLookupPublicAction::class)->middleware('throttle:20,1,ticket-lookup-session');
 
         // Self-service order and attendee edits
         $router->prefix('/events/{event_id}/order/{order_short_id}')->group(function (Router $router): void {
             $router->patch('/', EditOrderPublicAction::class)->middleware('throttle:self-service-edit');
+            $router->post('/verification', RequestOrderVerificationPublicAction::class)->middleware(['throttle:self-service-verify-request', 'throttle:60,60,self-service-verify-ip']);
+            $router->post('/verification/confirm', ConfirmOrderVerificationPublicAction::class)->middleware(['throttle:self-service-verify-confirm', 'throttle:180,60,self-service-verify-confirm-ip']);
             $router->post('/resend-confirmation', ResendOrderConfirmationPublicAction::class)->middleware('throttle:self-service-email');
 
             $router->patch('/attendees/{attendee_short_id}', EditAttendeePublicAction::class)->middleware('throttle:self-service-edit');
             $router->post('/attendees/{attendee_short_id}/resend-ticket', ResendAttendeeTicketPublicAction::class)->middleware('throttle:self-service-email');
             $router->put('/attendees/{attendee_short_id}/seat', ChangeAttendeeSeatPublicAction::class)->middleware('throttle:self-service-edit');
+            $router->post('/attendees/{attendee_short_id}/transfer', StartOrderTicketTransferPublicAction::class)->middleware(['throttle:self-service-transfer', 'throttle:40,60,self-service-transfer-ip']);
+            $router->delete('/attendees/{attendee_short_id}/transfer', CancelOrderTicketTransferPublicAction::class)->middleware('throttle:self-service-edit');
+            $router->get('/attendees/{attendee_short_id}/resale', GetTicketResaleEstimatePublicAction::class)->middleware('throttle:30,1,self-service-resale-estimate');
+            $router->post('/attendees/{attendee_short_id}/resale', ListTicketForResalePublicAction::class)->middleware(['throttle:self-service-resale', 'throttle:40,60,self-service-resale-ip']);
+            $router->delete('/attendees/{attendee_short_id}/resale', WithdrawTicketResalePublicAction::class)->middleware('throttle:self-service-edit');
         });
+
+        $router->prefix('/events/{event_id}/attendees/{attendee_short_id}')->group(function (Router $router): void {
+            $router->post('/verification', RequestAttendeeVerificationPublicAction::class)->middleware(['throttle:self-service-verify-request', 'throttle:60,60,self-service-verify-ip']);
+            $router->post('/verification/confirm', ConfirmAttendeeVerificationPublicAction::class)->middleware(['throttle:self-service-verify-confirm', 'throttle:180,60,self-service-verify-confirm-ip']);
+            $router->post('/transfer', StartTicketTransferPublicAction::class)->middleware(['throttle:self-service-transfer', 'throttle:40,60,self-service-transfer-ip']);
+            $router->delete('/transfer', CancelTicketTransferPublicAction::class)->middleware('throttle:self-service-edit');
+        });
+
+        $router->get('/ticket-transfers/{token}', GetTicketTransferClaimPublicAction::class)->middleware('throttle:60,1,ticket-transfer-claim');
+        $router->post('/ticket-transfers/{token}/accept', AcceptTicketTransferPublicAction::class)->middleware('throttle:20,1,ticket-transfer-claim-write');
+        $router->post('/ticket-transfers/{token}/decline', DeclineTicketTransferPublicAction::class)->middleware('throttle:20,1,ticket-transfer-claim-write');
 
         // Sitemap
         $router->get('/sitemap.xml', GetSitemapIndexAction::class);

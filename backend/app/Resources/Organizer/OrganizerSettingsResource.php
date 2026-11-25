@@ -22,6 +22,8 @@ class OrganizerSettingsResource extends BaseResource
             'default_show_sms_opt_in' => $this->getDefaultShowSmsOptIn(),
             'default_pass_platform_fee_to_buyer' => $this->getDefaultPassPlatformFeeToBuyer(),
             'default_allow_attendee_self_edit' => $this->getDefaultAllowAttendeeSelfEdit(),
+            'default_allow_ticket_transfer' => $this->getDefaultAllowTicketTransfer(),
+            'default_allow_ticket_resale' => $this->getDefaultAllowTicketResale(),
             'social_media_handles' => $this->getSocialMediaHandles(),
             'homepage_theme_settings' => $this->getHomepageThemeSettings(),
             'homepage_sections' => $this->getHomepageSections(),

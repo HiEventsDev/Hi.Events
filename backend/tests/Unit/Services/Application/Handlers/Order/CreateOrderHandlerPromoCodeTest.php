@@ -26,12 +26,14 @@ use HiEvents\Services\Domain\Order\OrderManagementService;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesResponseDTO;
 use HiEvents\Services\Domain\PromoCode\PromoCodeUsageValidationService;
+use HiEvents\Services\Domain\TicketResale\ResaleClaimService;
 use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use Mockery\MockInterface;
 use Tests\TestCase;
 
 class CreateOrderHandlerPromoCodeTest extends TestCase
@@ -124,6 +126,7 @@ class CreateOrderHandlerPromoCodeTest extends TestCase
 
         $captured = false;
         $order = Mockery::mock(OrderDomainObject::class);
+        $order->shouldReceive('setHoldsResaleListing')->andReturnSelf();
         $orderManagementService
             ->shouldReceive('createNewOrder')
             ->andReturnUsing(function ($eventId, $event, $timeOut, $locale, $promo, $affiliate, $sessionId) use (&$captured, $order) {
@@ -167,6 +170,7 @@ class CreateOrderHandlerPromoCodeTest extends TestCase
             ),
             Mockery::mock(WidgetRepositoryInterface::class),
             $productRepository,
+            Mockery::mock(ResaleClaimService::class, fn (MockInterface $mock) => $mock->shouldReceive('claimForOrder')->andReturnUsing(fn ($order) => $order)),
         );
 
         $dto = new CreateOrderPublicDTO(
