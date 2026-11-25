@@ -187,7 +187,7 @@ export const AffiliateTable = ({affiliates, openCreateModal, isRefreshing, sort}
         return (
             <NoResultsSplash
                 heading={t`No Affiliates to show`}
-                imageHref={'/blank-slate/affiliates.png'}
+                imageHref={'/blank-slate/affiliates.svg'}
                 subHeading={(
                     <>
                         <p>
