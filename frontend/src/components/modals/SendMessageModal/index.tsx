@@ -27,7 +27,7 @@ import {Callout} from "../../common/Callout";
 import {useGetMe} from "../../../queries/useGetMe.ts";
 import {useForm, UseFormReturnType} from "@mantine/form";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
-import {showSuccess} from "../../../utilites/notifications.tsx";
+import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {t} from "@lingui/macro";
 import {Editor} from "../../common/Editor";
 import {useSendEventMessage} from "../../../mutations/useSendEventMessage.ts";
@@ -113,6 +113,8 @@ const AttendeeField = ({orderId, eventId, attendeeId, form}: {
 const CUSTOM_PRESET = 'custom';
 
 const MAX_MESSAGE_LENGTH = 8000;
+
+const MESSAGING_TIER_LIMIT_ERROR_CODE = 'MESSAGING_TIER_LIMIT_EXCEEDED';
 
 const getSchedulePresets = (event: Event, occurrence?: EventOccurrence) => {
     const now = dayjs.utc();
@@ -252,19 +254,27 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
             eventId: eventId,
             messageData: submitData as Partial<Message>,
         }, {
-            onSuccess: () => {
+            onSuccess: (response) => {
+                const isPendingReview = response.data.data.status === 'PENDING_REVIEW';
                 if (isTest) {
-                    showSuccess(t`Test email sent to your inbox`);
+                    showSuccess(isPendingReview
+                        ? t`Your test is waiting for a quick review before it's sent.`
+                        : t`Test email sent to your inbox`);
                     return;
                 }
-                showSuccess(isScheduled ? t`Message Scheduled` : t`Message Sent`);
+                if (isPendingReview) {
+                    showSuccess(t`Your message is waiting for a quick review before it's sent.`);
+                } else {
+                    showSuccess(isScheduled ? t`Message Scheduled` : t`Message Sent`);
+                }
                 form.reset();
                 onClose();
             },
             onError: (error: any) => {
-                if (error?.response?.status === 429) {
-                    const message = error?.response?.data?.message || t`You have reached your messaging limit.`;
-                    setTierLimitError(message);
+                if (error?.response?.data?.error_code === MESSAGING_TIER_LIMIT_ERROR_CODE) {
+                    setTierLimitError(error.response.data.message || t`You have reached your messaging limit.`);
+                } else if (error?.response?.status === 429) {
+                    showError(t`You're sending messages too quickly. Please wait a few minutes and try again.`);
                 } else {
                     errorHandler(form, error);
                 }

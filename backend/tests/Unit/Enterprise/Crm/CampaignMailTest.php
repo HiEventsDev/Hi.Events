@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Enterprise\Crm;
 
+use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Enterprise\Crm\Mail\CampaignMail;
 use HiEvents\Enterprise\Crm\Services\Domain\Campaign\DTO\CampaignEventCardDTO;
@@ -63,14 +64,54 @@ class CampaignMailTest extends TestCase
         $this->assertStringNotContainsString('promo_code', $mail->render());
     }
 
-    private function mail(bool $isTest): CampaignMail
+    public function test_the_footer_shows_the_organizers_postal_address_when_it_has_one(): void
+    {
+        $organizer = (new OrganizerDomainObject)->setId(4)->setAccountId(7)->setName('The Jazz & Blues Club')
+            ->setLocationRecord((new LocationDomainObject)->setStructuredAddress([
+                'address_line_1' => '12 <b>Quay</b> Street',
+                'address_line_2' => '',
+                'city' => 'Dublin',
+                'zip_or_postal_code' => 'D02 X285',
+                'country' => 'IE',
+            ]));
+
+        $mail = $this->mail(isTest: false, organizer: $organizer);
+
+        $mail->assertSeeInHtml('12 &lt;b&gt;Quay&lt;/b&gt; Street, Dublin, D02 X285, IE', false);
+        $mail->assertDontSeeInHtml('<b>Quay</b>', false);
+        $mail->assertSeeInOrderInText([
+            'You are receiving this email because you opted in to hear from The Jazz & Blues Club.',
+            '12 <b>Quay</b> Street, Dublin, D02 X285, IE',
+            'Unsubscribe: https://app.example.test/audience/unsubscribe/42.signature',
+        ]);
+    }
+
+    public function test_the_footer_has_no_postal_address_when_the_organizer_has_none(): void
+    {
+        $withoutLocation = $this->mail(isTest: false);
+        $withEmptyAddress = $this->mail(
+            isTest: false,
+            organizer: (new OrganizerDomainObject)->setId(4)->setAccountId(7)->setName('The Jazz & Blues Club')
+                ->setLocationRecord((new LocationDomainObject)->setStructuredAddress(['address_line_1' => '', 'city' => null])),
+        );
+
+        foreach ([$withoutLocation, $withEmptyAddress] as $mail) {
+            $mail->assertSeeInOrderInText([
+                'You are receiving this email because you opted in to hear from The Jazz & Blues Club.',
+                'Unsubscribe: https://app.example.test/audience/unsubscribe/42.signature',
+            ]);
+            $this->assertStringNotContainsString('<br>', $mail->render());
+        }
+    }
+
+    private function mail(bool $isTest, ?OrganizerDomainObject $organizer = null): CampaignMail
     {
         return new CampaignMail(
             subjectLine: 'Doors open soon',
             preheader: 'Tickets are going fast',
             body: '<p>See you there</p>',
             organizerName: 'The Jazz & Blues Club',
-            organizer: (new OrganizerDomainObject)->setId(4)->setAccountId(7)->setName('The Jazz & Blues Club'),
+            organizer: $organizer ?? (new OrganizerDomainObject)->setId(4)->setAccountId(7)->setName('The Jazz & Blues Club'),
             replyToAddress: 'reply@organizer.test',
             eventCard: new CampaignEventCardDTO(
                 title: 'Spring Show',

@@ -75,12 +75,13 @@ export const SentEarlyAccess = ({organizerId, campaign, canRelease}: {
     const {tickets} = useEventTickets(campaign.event_id as number);
     const chosen = tickets.filter(ticket => campaign.early_access_product_ids.includes(Number(ticket.id)));
     const hidden = chosen.filter(ticket => ticket.isHidden);
+    const releasable = hidden.filter(ticket => campaign.early_access_releasable_product_ids.includes(Number(ticket.id)));
     const titles = chosen.map(ticket => ticket.title).join(', ');
-    const hiddenTitles = hidden.map(ticket => ticket.title).join(', ');
+    const hiddenTitles = releasable.map(ticket => ticket.title).join(', ');
     const code = campaign.promo_code;
 
     const release = () => confirmationDialog(
-        plural(hidden.length, {one: 'Make # ticket public?', other: 'Make # tickets public?'}),
+        plural(releasable.length, {one: 'Make # ticket public?', other: 'Make # tickets public?'}),
         () => endEarlyAccess.mutate({organizerId, campaignId: campaign.id}, {
             onSuccess: () => {
                 showSuccess(t`Tickets are public again`);
@@ -105,7 +106,7 @@ export const SentEarlyAccess = ({organizerId, campaign, canRelease}: {
                     ? t`Early access with code ${code}: ${titles}. Hidden from everyone else.`
                     : t`Early access with code ${code}: ${titles}. Now public.`}
             </span>
-            {canRelease && hidden.length > 0 && (
+            {canRelease && releasable.length > 0 && (
                 <Button
                     variant="default"
                     size="sm"

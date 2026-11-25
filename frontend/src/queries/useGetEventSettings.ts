@@ -4,8 +4,9 @@ import {eventsSettingsClient} from "../api/event-settings.client.ts";
 
 export const GET_EVENT_SETTINGS_QUERY_KEY = 'getEventSettings';
 
-export const useGetEventSettings = (eventId: IdParam) => {
+export const useGetEventSettings = (eventId: IdParam, enabled = true) => {
     return useQuery({
+        enabled,
         queryKey: [GET_EVENT_SETTINGS_QUERY_KEY, eventId],
 
         queryFn: async () => {

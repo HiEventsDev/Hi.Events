@@ -1,6 +1,7 @@
 import {Button, PinInput} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {useEffect, useState} from "react";
+import {useLocation} from "react-router";
 import classes from "./Welcome.module.scss";
 import {User} from "../../../types.ts";
 import {useConfirmEmailWithCode} from "../../../mutations/useConfirmEmailWithCode.ts";
@@ -20,6 +21,7 @@ interface VerifyEmailStepProps {
 export const VerifyEmailStep = ({user, stepLabel}: VerifyEmailStepProps) => {
     const confirmEmailMutation = useConfirmEmailWithCode();
     const resendMutation = useResendEmailConfirmation();
+    const location = useLocation();
     const [code, setCode] = useState('');
     const [resendCooldown, setResendCooldown] = useState(0);
     const [isSigningOut, setIsSigningOut] = useState(false);
@@ -75,7 +77,7 @@ export const VerifyEmailStep = ({user, stepLabel}: VerifyEmailStepProps) => {
         try {
             await authClient.logout();
         } finally {
-            window.location.href = '/auth/register';
+            window.location.href = `/auth/register${location.search}`;
         }
     };
 

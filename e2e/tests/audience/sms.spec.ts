@@ -56,6 +56,7 @@ const arrangeTexters = async (
   const { api, organizerId } = freshAccount;
   const event = await createLiveEventWithFreeTicket(api, organizerId);
   await askForMobileAtCheckout(api, event.eventId);
+  await messaging.connectSms(countries);
   const texters = countries.map((country) => ({ ...TEXTERS[country], email: uniqueEmail(`texter-${country.toLowerCase()}`) }));
   for (const texter of texters) {
     await createOptedInOrder(publicApi, event, { ...texter, agreesToTexts: true });
@@ -64,7 +65,6 @@ const arrangeTexters = async (
   for (const texter of texters) {
     await waitForContact(api, organizerId, texter.email);
   }
-  await messaging.connectSms(countries);
   return texters;
 };
 

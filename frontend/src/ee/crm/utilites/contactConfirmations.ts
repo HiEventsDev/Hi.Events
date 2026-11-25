@@ -20,12 +20,12 @@ export const unsubscribeContactConsequence = (status: CrmEmailMarketingStatus): 
                 emailOptInRoutes(),
             ].join(' ');
         default:
-            return [t`They'll stop receiving campaigns and automations.`, emailOptInRoutes()].join(' ');
+            return [t`They'll stop receiving email campaigns and automations. Text message consent isn't changed.`, emailOptInRoutes()].join(' ');
     }
 };
 
 export const bulkUnsubscribeContactsConsequence = (): string => [
-    t`They'll stop receiving campaigns and automations. Contacts who haven't opted in or whose address bounced are marked as unsubscribed too.`,
+    t`They'll stop receiving email campaigns and automations. Text message consent isn't changed. Contacts who haven't opted in or whose address bounced are marked as unsubscribed too.`,
     emailOptInRoutes(),
 ].join(' ');
 

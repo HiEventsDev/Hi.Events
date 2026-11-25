@@ -148,6 +148,10 @@ export class MessagingApi {
     }));
   }
 
+  async disconnectSms(): Promise<void> {
+    await ok(this.request.delete(this.path('sms-connection')));
+  }
+
   async createSignupForm(form: { name: string; title: string; show_on_organizer_page?: boolean; status?: 'ACTIVE' | 'PAUSED' }): Promise<SignupForm> {
     return dataOf(this.request.post(this.path('forms'), {
       data: {

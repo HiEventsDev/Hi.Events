@@ -129,7 +129,7 @@ class SendMessageHandler
         ]);
 
         if ($status === MessageStatus::PENDING_REVIEW && $this->aiReviewService->isEnabled()) {
-            ReviewMessageWithAiJob::dispatch($message->getId(), $recipientCount);
+            ReviewMessageWithAiJob::dispatch($message->getId(), $messageData->is_test ? 1 : $recipientCount);
         } elseif ($status === MessageStatus::PENDING_REVIEW) {
             MessagePendingReviewJob::dispatch($message->getId(), $eligibilityFailure->getFailureValues());
         } elseif ($status === MessageStatus::PROCESSING) {

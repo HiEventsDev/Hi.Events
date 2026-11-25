@@ -78,7 +78,7 @@ test.describe('audience bulk actions and saved views', () => {
     await audience.selectPageCheckbox().check();
     await expect(audience.contactRow(`Dora ${family}`)).toContainText('Subscribed');
     await audience.bulkMoreAction('Unsubscribe');
-    await expect(page.getByRole('dialog', { name: 'Unsubscribe 2 contacts?' })).toContainText("Contacts who haven't opted in or whose address bounced are marked as unsubscribed too. Your team can't undo this. They're only subscribed again if they opt in themselves, at checkout or through a signup form.");
+    await expect(page.getByRole('dialog', { name: 'Unsubscribe 2 contacts from marketing emails?' })).toContainText("Contacts who haven't opted in or whose address bounced are marked as unsubscribed too. Your team can't undo this. They're only subscribed again if they opt in themselves, at checkout or through a signup form.");
     await audience.bulkConfirmButton().click();
     await expect(audience.contactRow(`Dora ${family}`)).toContainText('Unsubscribed');
     await expect(audience.contactRow(`Eli ${family}`)).toContainText('Unsubscribed');
@@ -169,13 +169,13 @@ test.describe('audience bulk actions and saved views', () => {
     await audience.selectPageCheckbox().check();
     await audience.selectAllMatchingButton().click();
     await audience.bulkMoreAction('Unsubscribe');
-    await page.getByRole('dialog', { name: 'Unsubscribe 26 contacts?' }).getByLabel('Type 26 to confirm').fill('26');
+    await page.getByRole('dialog', { name: 'Unsubscribe 26 contacts from marketing emails?' }).getByLabel('Type 26 to confirm').fill('26');
 
     await withAudienceApi(playwright, freshAccount, (audienceApi) =>
       audienceApi.createContact({ email: uniqueEmail('late'), first_name: 'Late', last_name: family }));
     await audience.bulkConfirmButton().click();
 
-    const retry = page.getByRole('dialog', { name: 'Unsubscribe 27 contacts?' });
+    const retry = page.getByRole('dialog', { name: 'Unsubscribe 27 contacts from marketing emails?' });
     await expect(retry).toContainText('This selection has changed. It now has 27 contacts.');
     await expect(audience.bulkConfirmButton()).toBeDisabled();
     await retry.getByLabel('Type 27 to confirm').fill('27');

@@ -10,7 +10,7 @@ import {getClientLocale} from "../../../../locales.ts";
 import {useEffect, useRef, useState} from "react";
 import {getUserCurrency} from "../../../../utilites/currency.ts";
 import {getConfig} from "../../../../utilites/config.ts";
-import {getStoredUtmData, clearStoredUtmData} from "../../../../utilites/utm.ts";
+import {getStoredUtmData} from "../../../../utilites/utm.ts";
 import {Turnstile} from "../../../common/Turnstile";
 import {Callout} from "../../../common/Callout";
 import {SsoSection, useSsoOptions} from "../../../common/SsoButtons/SsoSection.tsx";
@@ -65,7 +65,6 @@ export const Register = () => {
 
         mutate.mutate({registerData: registrationData}, {
             onSuccess: () => {
-                clearStoredUtmData();
                 navigate(`/welcome${location.search}`);
             },
             onError: (error: any) => {

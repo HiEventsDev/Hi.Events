@@ -1,6 +1,8 @@
-import {Event, Organizer} from "../types.ts";
+import {t} from "@lingui/macro";
+import {Event, EventSettings, Organizer, OrganizerSettings} from "../types.ts";
 import {eventCoverImage} from "./urlHelper.ts";
 import {htmlToText} from "./helpers.ts";
+import {eventMetaDescription} from "./eventMeta.ts";
 
 export interface SharePreviewContent {
     title: string;
@@ -9,25 +11,29 @@ export interface SharePreviewContent {
     imageBackground?: string;
 }
 
-export const eventSharePreview = (event: Event): SharePreviewContent => {
+export const eventSharePreview = (event: Event, settings: EventSettings | undefined = event.settings): SharePreviewContent => {
     const cover = eventCoverImage(event);
-    const pageTitle = event.settings?.seo_title ?? event.title;
+    const pageTitle = settings?.seo_title ?? event.title;
 
     return {
         title: event.organizer?.name ? `${pageTitle} | ${event.organizer.name}` : pageTitle,
-        description: htmlToText(event.settings?.seo_description ?? event.description_preview),
+        description: htmlToText(eventMetaDescription(event, settings)),
         imageUrl: cover?.url,
         imageBackground: cover?.avg_colour ?? undefined,
     };
 };
 
-export const organizerSharePreview = (organizer: Organizer): SharePreviewContent => {
+export const organizerSharePreview = (
+    organizer: Organizer,
+    settings: OrganizerSettings | undefined = organizer.settings,
+): SharePreviewContent => {
+    const name = organizer.name;
     const cover = organizer.images?.find(image => image.type === 'ORGANIZER_COVER')
         ?? organizer.images?.find(image => image.type === 'ORGANIZER_LOGO');
 
     return {
-        title: organizer.name,
-        description: organizer.settings?.seo_description || `Discover upcoming events by ${organizer.name}.`,
+        title: settings?.seo_title || t`${name} - Events`,
+        description: settings?.seo_description || t`Discover upcoming events by ${name}.`,
         imageUrl: cover?.url,
         imageBackground: cover?.avg_colour ?? undefined,
     };

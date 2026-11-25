@@ -34,6 +34,7 @@ class CampaignReportService
         private readonly CacheRepository $cache,
         private readonly CrmCacheVersion $cacheVersion,
         private readonly EmailDeliveryWebhookReceiverResolver $deliveryWebhookResolver,
+        private readonly EarlyAccessService $earlyAccessService,
     ) {}
 
     /**
@@ -183,6 +184,7 @@ class CampaignReportService
 
         if ($campaign->getPromoCodeId() !== null) {
             $campaign->setPromoCode($this->promoCodeRepository->findFirstWhere(['id' => $campaign->getPromoCodeId()])?->getCode());
+            $campaign->setEarlyAccessReleasableProductIds($this->earlyAccessService->releasableProductIds($campaign));
         }
     }
 }

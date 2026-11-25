@@ -1,6 +1,7 @@
 import {useParams} from "react-router";
 import {t} from "@lingui/macro";
 import {useGetEvent} from "../../../../../queries/useGetEvent.ts";
+import {PromoCodeDiscountType} from "../../../../../types.ts";
 import {formatCurrency} from "../../../../../utilites/currency.ts";
 import {formatDateWithLocale} from "../../../../../utilites/dates.ts";
 import {formatNumber} from "../../../../../utilites/helpers.ts";
@@ -36,7 +37,7 @@ const PromoCodesReport = ({description}: { description: string }) => {
         ? formatDateWithLocale(date, 'shortDate', event.timezone)
         : <EmptyCell/>;
     const limit = (value: number | null) => value === null ? t`Unlimited` : formatNumber(Number(value));
-    const discount = (row: PromoCodesRow) => row.discount_type === 'percentage'
+    const discount = (row: PromoCodesRow) => row.discount_type === PromoCodeDiscountType.Percentage
         ? `${Number(row.configured_discount)}%`
         : formatCurrency(row.configured_discount, event.currency);
 

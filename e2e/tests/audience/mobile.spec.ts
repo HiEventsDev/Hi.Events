@@ -106,7 +106,7 @@ test.describe('audience on a phone', () => {
     await audience.selectPageCheckbox().check();
     await expect(audience.bulkBar()).toContainText('2 selected');
     await audience.bulkMoreAction('Unsubscribe');
-    const confirm = page.getByRole('dialog', { name: 'Unsubscribe 2 contacts?' });
+    const confirm = page.getByRole('dialog', { name: 'Unsubscribe 2 contacts from marketing emails?' });
     await expect(confirm).toBeVisible();
     await expectNoSidewaysScroll(page);
     await audience.bulkConfirmButton().click();

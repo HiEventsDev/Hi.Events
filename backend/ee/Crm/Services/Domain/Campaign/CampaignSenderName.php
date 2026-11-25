@@ -17,9 +17,14 @@ class CampaignSenderName
 
     public function for(CampaignMail $mail): string
     {
+        $campaignFrom = $this->config->get('mail.campaigns.from');
         $mailer = $this->config->get('mail.campaigns.mailer') ?? $this->config->get('mail.default');
         $mailerFrom = $this->config->get('mail.mailers.'.$mailer.'.from');
-        $from = isset($mailerFrom['address']) ? $mailerFrom : $this->config->get('mail.from');
+        $from = match (true) {
+            isset($campaignFrom['address']) => $campaignFrom,
+            isset($mailerFrom['address']) => $mailerFrom,
+            default => $this->config->get('mail.from'),
+        };
 
         return (string) ($this->brandingService->forMail($mail)->senderName ?? $from['name'] ?? $from['address']);
     }

@@ -12,7 +12,7 @@ export const Report = ({organizerId, campaign, showRevenue}: { organizerId: IdPa
     const {stats} = campaign;
     const share = (value: number) => stats.sent === 0 ? '–' : formatPercent(Math.round(value / stats.sent * 100));
     const hasReports = campaign.delivery_reports_available !== false;
-    const hasDeliveryData = hasReports && stats.delivered + stats.opened + stats.clicked + stats.bounced > 0;
+    const hasDeliveryData = hasReports && stats.delivered + stats.opened + stats.clicked + stats.bounced + stats.complained > 0;
     const isSms = campaign.channel === 'SMS';
     const showsAttribution = canAttributeCampaignRevenue(campaign);
 
@@ -31,7 +31,7 @@ export const Report = ({organizerId, campaign, showRevenue}: { organizerId: IdPa
                     <span className={audienceClasses.statHint}>
                         {stats.pending > 0
                             ? t`${formatCount(stats.pending)} still to go`
-                            : t`${formatCount(stats.skipped + stats.failed)} skipped or failed`}
+                            : t`${formatCount(stats.skipped + stats.failed - stats.undelivered)} skipped or failed`}
                     </span>
                 </div>
                 <div className={audienceClasses.stat}>
@@ -40,7 +40,10 @@ export const Report = ({organizerId, campaign, showRevenue}: { organizerId: IdPa
                     <span className={audienceClasses.statHint}>
                         {!hasReports && t`Not available`}
                         {hasReports && !hasDeliveryData && t`No reports yet`}
-                        {hasDeliveryData && (isSms ? t`${formatCount(stats.failed)} not delivered` : t`${formatCount(stats.bounced)} bounced`)}
+                        {hasDeliveryData && isSms && t`${formatCount(stats.undelivered)} not delivered`}
+                        {hasDeliveryData && !isSms && (stats.complained > 0
+                            ? t`${formatCount(stats.bounced)} bounced, ${formatCount(stats.complained)} marked as spam`
+                            : t`${formatCount(stats.bounced)} bounced`)}
                     </span>
                 </div>
                 {!isSms && <>
@@ -55,9 +58,7 @@ export const Report = ({organizerId, campaign, showRevenue}: { organizerId: IdPa
                     <span className={audienceClasses.statLabel}>{t`Clicked`}</span>
                     <span className={audienceClasses.statValue}>{hasDeliveryData ? share(stats.clicked) : '–'}</span>
                     <span className={audienceClasses.statHint}>
-                        {stats.complained > 0
-                            ? t`${formatCount(stats.complained)} marked as spam`
-                            : hasDeliveryData ? plural(stats.clicked, {one: '# person', other: '# people'}) : ''}
+                        {hasDeliveryData ? plural(stats.clicked, {one: '# person', other: '# people'}) : ''}
                     </span>
                 </div>
                 </>}

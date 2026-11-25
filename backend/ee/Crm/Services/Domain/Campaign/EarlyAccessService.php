@@ -4,14 +4,18 @@ declare(strict_types=1);
 
 namespace HiEvents\Enterprise\Crm\Services\Domain\Campaign;
 
+use HiEvents\DomainObjects\CrmCampaignDomainObject;
 use HiEvents\DomainObjects\Enums\PromoCodeDiscountAppliesToEnum;
 use HiEvents\DomainObjects\Enums\PromoCodeDiscountTypeEnum;
+use HiEvents\DomainObjects\Generated\CrmCampaignDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Enterprise\Crm\Exceptions\CampaignNotSendableException;
+use HiEvents\Enterprise\Crm\Repository\Interfaces\CrmCampaignRepositoryInterface;
+use HiEvents\Enterprise\Crm\Services\Domain\Campaign\DTO\EarlyAccessGrantDTO;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
@@ -36,6 +40,7 @@ class EarlyAccessService
         private readonly CreatePromoCodeService $createPromoCodeService,
         private readonly DomainEventDispatcherService $domainEventDispatcher,
         private readonly DatabaseManager $databaseManager,
+        private readonly CrmCampaignRepositoryInterface $campaignRepository,
     ) {}
 
     /**
@@ -44,13 +49,27 @@ class EarlyAccessService
      * @throws CampaignNotSendableException
      * @throws UnrecognizedProductIdException
      */
-    public function createAccessCode(int $organizerId, int $eventId, array $productIds): PromoCodeDomainObject
+    public function createAccessCode(int $organizerId, int $eventId, array $productIds): EarlyAccessGrantDTO
     {
         $products = $this->findOfferableTickets($organizerId, $eventId, $productIds);
+        $productIdsOnOffer = $products->map(static fn (ProductDomainObject $product) => $product->getId())->values()->all();
+        $heldByOthers = array_intersect($productIdsOnOffer, $this->heldByOtherCampaigns($eventId, null));
+        $hiddenNow = $this->hide($products);
 
-        $this->hide($products);
-        $hiddenProductIds = $products->map(static fn (ProductDomainObject $product) => $product->getId())->values()->all();
+        return new EarlyAccessGrantDTO(
+            promo_code_id: $this->createPromoCode($eventId, $productIdsOnOffer)->getId(),
+            hidden_product_ids: array_values(array_unique([...$hiddenNow, ...$heldByOthers])),
+        );
+    }
 
+    /**
+     * @param  int[]  $productIds
+     *
+     * @throws CampaignNotSendableException
+     * @throws UnrecognizedProductIdException
+     */
+    private function createPromoCode(int $eventId, array $productIds): PromoCodeDomainObject
+    {
         for ($attempt = 1; ; $attempt++) {
             try {
                 return $this->createPromoCodeService->createPromoCode(
@@ -59,7 +78,7 @@ class EarlyAccessService
                         ->setCode(self::CODE_PREFIX.Str::lower(Str::random(8)))
                         ->setDiscountType(PromoCodeDiscountTypeEnum::NONE->name)
                         ->setDiscount(0.0)
-                        ->setApplicableProductIds($hiddenProductIds)
+                        ->setApplicableProductIds($productIds)
                         ->setDiscountAppliesTo(PromoCodeDiscountAppliesToEnum::EACH_PRODUCT->name),
                 );
             } catch (ResourceConflictException $exception) {
@@ -115,13 +134,10 @@ class EarlyAccessService
         ]);
     }
 
-    /**
-     * @param  int[]  $productIds
-     */
-    public function makePublic(int $eventId, array $productIds): void
+    public function makePublic(CrmCampaignDomainObject $campaign): void
     {
-        $this->databaseManager->transaction(function () use ($eventId, $productIds): void {
-            foreach ($this->findTickets($eventId, $productIds) as $product) {
+        $this->databaseManager->transaction(function () use ($campaign): void {
+            foreach ($this->findTickets((int) $campaign->getEventId(), $this->releasableProductIds($campaign)) as $product) {
                 if (! $product->getIsHiddenWithoutPromoCode()) {
                     continue;
                 }
@@ -131,14 +147,54 @@ class EarlyAccessService
                 ]);
                 $this->dispatchUpdatedAfterCommit($product->getId());
             }
+
+            $this->campaignRepository->updateWhere(
+                attributes: [CrmCampaignDomainObjectAbstract::EARLY_ACCESS_HIDDEN_PRODUCT_IDS => json_encode([])],
+                where: [CrmCampaignDomainObjectAbstract::ID => $campaign->getId()],
+            );
+            $campaign->setEarlyAccessHiddenProductIds([]);
         });
     }
 
     /**
-     * @param  Collection<int, ProductDomainObject>  $products
+     * @return int[]
      */
-    private function hide(Collection $products): void
+    public function releasableProductIds(CrmCampaignDomainObject $campaign): array
     {
+        $hiddenProductIds = $campaign->earlyAccessHiddenProductIds();
+
+        if ($hiddenProductIds === [] || $campaign->getEventId() === null) {
+            return [];
+        }
+
+        return array_values(array_diff($hiddenProductIds, $this->heldByOtherCampaigns($campaign->getEventId(), $campaign->getId())));
+    }
+
+    /**
+     * @return int[]
+     */
+    private function heldByOtherCampaigns(int $eventId, ?int $exceptCampaignId): array
+    {
+        return $this->campaignRepository
+            ->findWhere(array_filter([
+                CrmCampaignDomainObjectAbstract::EVENT_ID => $eventId,
+                [CrmCampaignDomainObjectAbstract::EARLY_ACCESS_HIDDEN_PRODUCT_IDS, 'not null', null],
+                $exceptCampaignId === null ? null : [CrmCampaignDomainObjectAbstract::ID, '!=', $exceptCampaignId],
+            ]))
+            ->flatMap(static fn (CrmCampaignDomainObject $other) => $other->earlyAccessHiddenProductIds())
+            ->unique()
+            ->values()
+            ->all();
+    }
+
+    /**
+     * @param  Collection<int, ProductDomainObject>  $products
+     * @return int[]
+     */
+    private function hide(Collection $products): array
+    {
+        $hiddenProductIds = [];
+
         foreach ($products as $product) {
             if ($product->getIsHiddenWithoutPromoCode()) {
                 continue;
@@ -148,7 +204,10 @@ class EarlyAccessService
                 ProductDomainObjectAbstract::IS_HIDDEN_WITHOUT_PROMO_CODE => true,
             ]);
             $this->dispatchUpdatedAfterCommit($product->getId());
+            $hiddenProductIds[] = $product->getId();
         }
+
+        return $hiddenProductIds;
     }
 
     private function dispatchUpdatedAfterCommit(int $productId): void

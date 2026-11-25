@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\CrmCampaignDomainObject;
 use HiEvents\DomainObjects\Enums\LocationType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
+use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Enterprise\Crm\Exceptions\CampaignOrganizerDeletedException;
 use HiEvents\Enterprise\Crm\Mail\CampaignMail;
@@ -15,6 +16,7 @@ use HiEvents\Enterprise\Crm\Repository\Interfaces\CrmCampaignRepositoryInterface
 use HiEvents\Enterprise\Crm\Services\Domain\Campaign\DTO\CampaignEventCardDTO;
 use HiEvents\Enterprise\Crm\Services\Domain\Campaign\DTO\CampaignRecipientDTO;
 use HiEvents\Helper\Url;
+use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
@@ -102,7 +104,9 @@ class CampaignMailFactory
      */
     private function context(CrmCampaignDomainObject $campaign, ?int $recipientId, ?CampaignRecipientDTO $recipient, bool $isAutomated): array
     {
-        $organizer = $this->organizerRepository->findFirstWhere(['id' => $campaign->getOrganizerId()]);
+        $organizer = $this->organizerRepository
+            ->loadRelation(new Relationship(LocationDomainObject::class, name: 'location_record'))
+            ->findFirstWhere(['id' => $campaign->getOrganizerId()]);
 
         if ($organizer === null) {
             throw new CampaignOrganizerDeletedException(__('The organizer of this campaign has been deleted.'));

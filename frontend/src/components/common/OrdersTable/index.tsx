@@ -71,9 +71,10 @@ const RefundStatus = ({order}: { order: Order }) => {
     if (!order.refund_status) {
         return null;
     }
+    const hasAmount = order.total_refunded != null;
     const labels: Record<string, string> = {
-        REFUNDED: t`Refunded: ${formatCurrency(order.total_refunded, order.currency)}`,
-        PARTIALLY_REFUNDED: t`Partially refunded: ${formatCurrency(order.total_refunded, order.currency)}`,
+        REFUNDED: hasAmount ? t`Refunded: ${formatCurrency(order.total_refunded, order.currency)}` : t`Refunded`,
+        PARTIALLY_REFUNDED: hasAmount ? t`Partially refunded: ${formatCurrency(order.total_refunded, order.currency)}` : t`Partially refunded`,
         REFUND_PENDING: t`Refund pending`,
         REFUND_FAILED: t`Refund failed`,
     };

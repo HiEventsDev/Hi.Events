@@ -227,6 +227,7 @@ class CheckoutPhoneCollectionTest extends TestCase
             'text messages switched off' => ['sms_off'],
             'audience switched off' => ['audience_off'],
             'no audience licence' => ['unlicensed'],
+            'no text message connection' => ['not_connected'],
         ];
     }
 
@@ -238,6 +239,7 @@ class CheckoutPhoneCollectionTest extends TestCase
             'sms_off' => $this->setFeatureFlagOverride($this->accountId, FeatureFlag::CRM_SMS, false),
             'audience_off' => $this->setFeatureFlagOverride($this->accountId, FeatureFlag::CRM, false),
             'unlicensed' => $this->useLicenceKey(null),
+            'not_connected' => DB::table('crm_sms_connections')->where('organizer_id', $this->organizerId)->delete(),
         };
 
         $this->getJson("/public/events/{$this->eventId}")->assertOk()->assertJsonPath('data.settings.show_sms_opt_in', false);
@@ -277,6 +279,18 @@ class CheckoutPhoneCollectionTest extends TestCase
         DB::table('events')->where('id', $this->eventId)->update(['status' => 'LIVE']);
         $this->setPhoneCollection(PhoneCollection::OPTIONAL);
         DB::table('event_settings')->where('event_id', $this->eventId)->update(['show_sms_opt_in' => true]);
+        DB::table('crm_sms_connections')->insert([
+            'account_id' => $this->accountId,
+            'organizer_id' => $this->organizerId,
+            'public_id' => 'smsc_'.str_pad((string) $this->organizerId, 24, '0', STR_PAD_LEFT),
+            'provider' => 'TWILIO',
+            'account_sid' => 'AC'.str_repeat('0', 32),
+            'auth_token' => encrypt('token'),
+            'messaging_service_sid' => 'MG'.str_pad((string) $this->organizerId, 32, '0', STR_PAD_LEFT),
+            'enabled_countries' => json_encode(['IE', 'GB', 'US', 'AU']),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 
     private function setPhoneCollection(PhoneCollection $collection): void
