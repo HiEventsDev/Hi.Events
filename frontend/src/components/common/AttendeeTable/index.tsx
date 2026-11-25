@@ -244,13 +244,38 @@ export const AttendeeTable = ({attendees, openCreateModal, compact, embedded, is
                 {
                     id: 'status',
                     header: t`Status`,
-                    cell: ({row: {original: attendee}}: CellContext<Attendee, unknown>) => (
-                        <StatusBadge tone={ATTENDEE_STATUS_TONES[attendee.status] ?? 'neutral'}>
-                            {attendee.status === 'ACTIVE' && t`Active`}
-                            {attendee.status === 'AWAITING_PAYMENT' && t`Awaiting Payment`}
-                            {attendee.status === 'CANCELLED' && t`Cancelled`}
-                        </StatusBadge>
-                    ),
+                    cell: ({row: {original: attendee}}: CellContext<Attendee, unknown>) => {
+                        const resale = attendee.resale;
+
+                        if (resale?.status === 'SOLD') {
+                            return (
+                                <span className={classes.resold}>
+                                    <StatusBadge tone="neutral">{t`Resold`}</StatusBadge>
+                                    {resale.sold_order_id && (
+                                        <CellLink
+                                            mono
+                                            title={t`Replacement order`}
+                                            onClick={() => handleOrderClick(resale.sold_order_id ?? undefined)}
+                                        >
+                                            {resale.sold_order_public_id}
+                                        </CellLink>
+                                    )}
+                                </span>
+                            );
+                        }
+
+                        if (resale?.status === 'LISTED') {
+                            return <StatusBadge tone="waiting">{t`Listed for resale`}</StatusBadge>;
+                        }
+
+                        return (
+                            <StatusBadge tone={ATTENDEE_STATUS_TONES[attendee.status] ?? 'neutral'}>
+                                {attendee.status === 'ACTIVE' && t`Active`}
+                                {attendee.status === 'AWAITING_PAYMENT' && t`Awaiting Payment`}
+                                {attendee.status === 'CANCELLED' && t`Cancelled`}
+                            </StatusBadge>
+                        );
+                    },
                 },
                 hasCheckInLists && {
                     id: 'checkIn',

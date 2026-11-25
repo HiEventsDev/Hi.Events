@@ -25,6 +25,9 @@ enum DomainEventType: string
     case ATTENDEE_CREATED = 'attendee.created';
     case ATTENDEE_UPDATED = 'attendee.updated';
     case ATTENDEE_CANCELLED = 'attendee.cancelled';
+    case ATTENDEE_TRANSFERRED = 'attendee.transferred';
+    case ATTENDEE_RESALE_LISTED = 'attendee.resale_listed';
+    case ATTENDEE_RESOLD = 'attendee.resold';
 
     case CHECKIN_CREATED = 'checkin.created';
     case CHECKIN_DELETED = 'checkin.deleted';

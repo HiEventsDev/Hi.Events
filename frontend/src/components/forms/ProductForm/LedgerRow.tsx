@@ -14,7 +14,8 @@ export type LedgerRowId =
     | 'order-limits'
     | 'addons'
     | 'highlight'
-    | 'access';
+    | 'access'
+    | 'after-purchase';
 
 interface LedgerRowProps {
     id: LedgerRowId;

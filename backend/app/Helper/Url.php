@@ -34,6 +34,10 @@ class Url
 
     public const TICKET_LOOKUP = 'app.frontend_urls.ticket_lookup';
 
+    public const TICKET_TRANSFER_CLAIM = 'app.frontend_urls.ticket_transfer_claim';
+
+    public const EVENT_RESALE = 'app.frontend_urls.event_resale';
+
     public const ACCOUNT_DANGER_ZONE = 'app.frontend_urls.account_danger_zone';
 
     public const PROFILE_SECURITY = 'app.frontend_urls.profile_security';

@@ -1,5 +1,5 @@
 import {t} from "@lingui/macro";
-import {NumberInput, Switch} from "@mantine/core";
+import {NumberInput, Select, Switch} from "@mantine/core";
 import {SettingsBlock, SettingsPage, SettingsRow, SettingsSaveBar, SettingsSection, SettingsSections} from "../../../../../common/SettingsPage";
 import {useForm} from "@mantine/form";
 import {useParams} from "react-router";
@@ -19,6 +19,28 @@ import {useTextMessagesPaused, useTextMessagesVisible} from "../../../../../../e
 import {useSmsConnectionMissing} from "../../../../../../ee/crm/hooks/useSmsConnectionMissing.ts";
 import {useGetEvent} from "../../../../../../queries/useGetEvent.ts";
 import {Callout} from "../../../../../common/Callout";
+import {useAccess} from "../../../../../../hooks/useAccess.ts";
+
+const CUTOFF_MINUTES = [0, 60, 120, 720, 1440, 2880, 10080];
+
+const cutoffLabel = (minutes: number): string => {
+    if (minutes === 0) {
+        return t`When the event starts`;
+    }
+    if (minutes % 1440 === 0) {
+        const days = minutes / 1440;
+        return days === 1 ? t`1 day before` : t`${days} days before`;
+    }
+    if (minutes % 60 === 0) {
+        const hours = minutes / 60;
+        return hours === 1 ? t`1 hour before` : t`${hours} hours before`;
+    }
+    return t`${minutes} minutes before`;
+};
+
+const cutoffOptions = (current: number) => [...new Set([...CUTOFF_MINUTES, current])]
+    .sort((a, b) => a - b)
+    .map((minutes) => ({value: String(minutes), label: cutoffLabel(minutes)}));
 
 export const HomepageAndCheckoutSettings = () => {
     const {eventId} = useParams();
@@ -28,6 +50,7 @@ export const HomepageAndCheckoutSettings = () => {
     const isTextMessageOptInPaused = useTextMessagesPaused();
     const eventQuery = useGetEvent(eventId);
     const isSmsConnectionMissing = useSmsConnectionMissing(eventQuery.data?.organizer_id);
+    const canTurnResaleOnOrOff = useAccess().can('ISSUE_REFUNDS');
     const form = useForm({
         initialValues: {
             pre_checkout_message: '',
@@ -40,11 +63,17 @@ export const HomepageAndCheckoutSettings = () => {
             show_sms_opt_in: false,
             price_display_mode: 'EXCLUSIVE',
             allow_attendee_self_edit: false,
+            allow_ticket_transfer: true,
+            ticket_transfer_cutoff_minutes: 0,
+            max_transfers_per_ticket: '' as number | '',
+            allow_ticket_resale: false,
+            ticket_resale_cutoff_minutes: 120,
         },
         transformValues: (values) => ({
             ...values,
             pre_checkout_message: isEmptyHtml(values.pre_checkout_message) ? null : values.pre_checkout_message,
             post_checkout_message: isEmptyHtml(values.post_checkout_message) ? null : values.post_checkout_message,
+            max_transfers_per_ticket: values.max_transfers_per_ticket === '' ? null : values.max_transfers_per_ticket,
         }),
     });
 
@@ -91,6 +120,11 @@ export const HomepageAndCheckoutSettings = () => {
                 show_sms_opt_in: eventSettingsQuery.data.show_sms_opt_in ?? false,
                 price_display_mode: eventSettingsQuery.data.price_display_mode,
                 allow_attendee_self_edit: eventSettingsQuery.data.allow_attendee_self_edit ?? false,
+                allow_ticket_transfer: eventSettingsQuery.data.allow_ticket_transfer ?? true,
+                ticket_transfer_cutoff_minutes: eventSettingsQuery.data.ticket_transfer_cutoff_minutes ?? 0,
+                max_transfers_per_ticket: eventSettingsQuery.data.max_transfers_per_ticket ?? ('' as const),
+                allow_ticket_resale: eventSettingsQuery.data.allow_ticket_resale ?? false,
+                ticket_resale_cutoff_minutes: eventSettingsQuery.data.ticket_resale_cutoff_minutes ?? 120,
             };
             form.setInitialValues(values as typeof form.values);
             form.setValues(values);
@@ -128,7 +162,7 @@ export const HomepageAndCheckoutSettings = () => {
                 <SettingsSections>
                     <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending}>
                         <SettingsSections>
-                            <SettingsSection title={t`Messages`}>
+                            <SettingsSection id="checkout-messages" title={t`Messages`}>
                                 <SettingsBlock>
                                     <Editor
                                         label={t`Pre Checkout message`}
@@ -152,7 +186,7 @@ export const HomepageAndCheckoutSettings = () => {
                                 </SettingsBlock>
                             </SettingsSection>
 
-                            <SettingsSection title={t`Buyer and attendee details`}>
+                            <SettingsSection id="buyer-details" title={t`Buyer and attendee details`}>
                                 <SettingsBlock>
                                     <CustomSelect
                                         optionList={attendeeCollectionOptions}
@@ -196,7 +230,86 @@ export const HomepageAndCheckoutSettings = () => {
                                 </SettingsRow>
                             </SettingsSection>
 
-                            <SettingsSection title={t`Pricing and order`}>
+                            <SettingsSection id="ticket-transfers" title={t`Ticket transfers`}>
+                                <SettingsRow
+                                    label={t`Let ticket holders transfer tickets`}
+                                    description={t`A holder can send a ticket to someone else by email. The recipient accepts it and gets a new ticket, and the old one stops working. You can turn this off for individual ticket types.`}
+                                    htmlFor="event-ticket-transfer"
+                                    inlineControl
+                                >
+                                    <Switch
+                                        id="event-ticket-transfer"
+                                        data-testid="ticket-transfer-enabled-switch"
+                                        {...form.getInputProps('allow_ticket_transfer', {type: 'checkbox'})}
+                                    />
+                                </SettingsRow>
+                                <SettingsRow
+                                    label={t`Stop transfers`}
+                                    description={t`How long before the start time transfers close. Transfers that have not been accepted by then expire.`}
+                                    htmlFor="event-ticket-transfer-cutoff"
+                                >
+                                    <Select
+                                        id="event-ticket-transfer-cutoff"
+                                        data-testid="ticket-transfer-cutoff-select"
+                                        allowDeselect={false}
+                                        disabled={!form.values.allow_ticket_transfer}
+                                        data={cutoffOptions(form.values.ticket_transfer_cutoff_minutes)}
+                                        value={String(form.values.ticket_transfer_cutoff_minutes)}
+                                        onChange={(value) => form.setFieldValue('ticket_transfer_cutoff_minutes', Number(value ?? 0))}
+                                        error={form.errors.ticket_transfer_cutoff_minutes}
+                                    />
+                                </SettingsRow>
+                                <SettingsRow
+                                    label={t`Transfers per ticket`}
+                                    description={t`The most times one ticket can change hands. Leave empty for no limit.`}
+                                    htmlFor="event-ticket-transfer-limit"
+                                >
+                                    <NumberInput
+                                        id="event-ticket-transfer-limit"
+                                        min={1}
+                                        max={100}
+                                        allowDecimal={false}
+                                        placeholder={t`No limit`}
+                                        disabled={!form.values.allow_ticket_transfer}
+                                        {...form.getInputProps('max_transfers_per_ticket')}
+                                    />
+                                </SettingsRow>
+                            </SettingsSection>
+
+                            <SettingsSection id="ticket-resale" title={t`Ticket resale`}>
+                                <SettingsRow
+                                    label={t`Let buyers resell tickets`}
+                                    description={t`Buyers who can't attend can list a ticket. Once that ticket type is sold out, the listed ticket is sold through your normal checkout and the seller is refunded to their original card, minus the card and platform fees of the replacement sale, so you are not out of pocket. You can turn this off for individual ticket types. If a replacement buyer later disputes their payment and wins, that chargeback is at your risk, as with any sale.`}
+                                    htmlFor="event-ticket-resale"
+                                    inlineControl
+                                >
+                                    <Switch
+                                        id="event-ticket-resale"
+                                        data-testid="ticket-resale-enabled-switch"
+                                        disabled={!canTurnResaleOnOrOff}
+                                        title={canTurnResaleOnOrOff ? undefined : t`Only members who can issue refunds can turn ticket resale on or off.`}
+                                        {...form.getInputProps('allow_ticket_resale', {type: 'checkbox'})}
+                                    />
+                                </SettingsRow>
+                                <SettingsRow
+                                    label={t`Stop resale`}
+                                    description={t`How long before the start time resale closes. A ticket that has not sold by then goes back to its buyer to use.`}
+                                    htmlFor="event-ticket-resale-cutoff"
+                                >
+                                    <Select
+                                        id="event-ticket-resale-cutoff"
+                                        data-testid="ticket-resale-cutoff-select"
+                                        allowDeselect={false}
+                                        disabled={!form.values.allow_ticket_resale}
+                                        data={cutoffOptions(form.values.ticket_resale_cutoff_minutes)}
+                                        value={String(form.values.ticket_resale_cutoff_minutes)}
+                                        onChange={(value) => form.setFieldValue('ticket_resale_cutoff_minutes', Number(value ?? 120))}
+                                        error={form.errors.ticket_resale_cutoff_minutes}
+                                    />
+                                </SettingsRow>
+                            </SettingsSection>
+
+                            <SettingsSection id="pricing-and-order" title={t`Pricing and order`}>
                                 <SettingsBlock>
                                     <CustomSelect
                                         optionList={priceDisplayOptions}
@@ -218,7 +331,7 @@ export const HomepageAndCheckoutSettings = () => {
                                 </SettingsRow>
                             </SettingsSection>
 
-                            <SettingsSection title={t`Marketing consent`}>
+                            <SettingsSection id="marketing-consent" title={t`Marketing consent`}>
                                 <SettingsRow
                                     label={t`Show marketing opt-in checkbox`}
                                     description={t`Display a checkbox allowing customers to opt-in to receive marketing communications from this event organizer.`}

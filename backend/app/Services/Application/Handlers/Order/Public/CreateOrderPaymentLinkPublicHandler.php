@@ -24,6 +24,7 @@ use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\WaitlistEntryRepositoryInterface;
 use HiEvents\Services\Domain\Order\PaymentLink\OrderCheckoutAccessService;
 use HiEvents\Services\Domain\Order\PaymentLink\OrderPaymentLinkTokenService;
+use HiEvents\Services\Domain\TicketResale\ResaleClaimService;
 use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
@@ -41,6 +42,7 @@ class CreateOrderPaymentLinkPublicHandler
         private readonly TransactionLockService $transactionLockService,
         private readonly DatabaseManager $databaseManager,
         private readonly Mailer $mailer,
+        private readonly ResaleClaimService $resaleClaimService,
     ) {}
 
     /**
@@ -71,6 +73,7 @@ class CreateOrderPaymentLinkPublicHandler
                 }
 
                 $this->validateReservedOrder($order, $event->getEventSettings());
+                $this->resaleClaimService->assertPaidOnlineNow($order->getId());
 
                 if (! $order->hasPaymentLink()) {
                     $order = $this->createLinkForReservedOrder($order, $event);

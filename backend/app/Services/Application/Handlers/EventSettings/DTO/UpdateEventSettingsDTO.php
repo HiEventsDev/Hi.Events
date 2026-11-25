@@ -88,6 +88,11 @@ class UpdateEventSettingsDTO extends BaseDTO
 
         // Self-service settings
         public readonly bool $allow_attendee_self_edit = false,
+        public readonly bool $allow_ticket_transfer = true,
+        public readonly int $ticket_transfer_cutoff_minutes = 0,
+        public readonly ?int $max_transfers_per_ticket = null,
+        public readonly bool $allow_ticket_resale = false,
+        public readonly int $ticket_resale_cutoff_minutes = 120,
 
         // Occurrence display
         public readonly bool $show_available_occurrence_capacity = false,

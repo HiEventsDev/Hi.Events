@@ -274,6 +274,8 @@ class CreateEventService
             'allow_copy_details_to_all_attendees' => true,
             'pass_platform_fee_to_buyer' => $organizerSettings->getDefaultPassPlatformFeeToBuyer(),
             'allow_attendee_self_edit' => $organizerSettings->getDefaultAllowAttendeeSelfEdit(),
+            'allow_ticket_transfer' => $organizerSettings->getDefaultAllowTicketTransfer(),
+            'allow_ticket_resale' => $organizerSettings->getDefaultAllowTicketResale(),
             'ticket_design_settings' => [
                 'accent_color' => $homepageThemeSettings['accent'] ?? '#333',
             ],

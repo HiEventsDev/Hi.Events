@@ -29,6 +29,7 @@ use HiEvents\Services\Domain\Order\OrderManagementService;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesDTO;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesResponseDTO;
+use HiEvents\Services\Domain\TicketResale\ResaleClaimService;
 use HiEvents\Services\Domain\Waitlist\ProcessWaitlistService;
 use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use Illuminate\Database\DatabaseManager;
@@ -50,6 +51,8 @@ class ProcessWaitlistServiceTest extends TestCase
 
     private MockInterface|OrderItemProcessingService $orderItemProcessingService;
 
+    private MockInterface|ResaleClaimService $resaleClaimService;
+
     private MockInterface|ProductRepositoryInterface $productRepository;
 
     private MockInterface|AvailableProductQuantitiesFetchService $availableQuantitiesService;
@@ -70,6 +73,10 @@ class ProcessWaitlistServiceTest extends TestCase
         $this->databaseManager = Mockery::mock(DatabaseManager::class);
         $this->orderManagementService = Mockery::mock(OrderManagementService::class);
         $this->orderItemProcessingService = Mockery::mock(OrderItemProcessingService::class);
+        $this->resaleClaimService = Mockery::mock(ResaleClaimService::class);
+        $this->resaleClaimService->shouldReceive('claimForOrder')
+            ->andReturnUsing(fn ($order) => $order)
+            ->byDefault();
         $this->productRepository = Mockery::mock(ProductRepositoryInterface::class);
         $this->availableQuantitiesService = Mockery::mock(AvailableProductQuantitiesFetchService::class);
         $this->productPriceRepository = Mockery::mock(ProductPriceRepositoryInterface::class);
@@ -128,6 +135,7 @@ class ProcessWaitlistServiceTest extends TestCase
             databaseManager: $this->databaseManager,
             orderManagementService: $this->orderManagementService,
             orderItemProcessingService: $this->orderItemProcessingService,
+            resaleClaimService: $this->resaleClaimService,
             productRepository: $this->productRepository,
             availableQuantitiesService: $this->availableQuantitiesService,
             productPriceRepository: $this->productPriceRepository,
@@ -160,7 +168,7 @@ class ProcessWaitlistServiceTest extends TestCase
     {
         $this->availableQuantitiesService
             ->shouldReceive('getAvailableProductQuantities')
-            ->with($eventId, true, $occurrenceId)
+            ->with($eventId, true, $occurrenceId, true, false, true)
             ->andReturn(new AvailableProductQuantitiesResponseDTO(
                 productQuantities: collect([
                     new AvailableProductQuantitiesDTO(
@@ -182,6 +190,7 @@ class ProcessWaitlistServiceTest extends TestCase
         $order = new OrderDomainObject;
         $order->setId(100);
         $order->setShortId('o_test123');
+        $order->setReservedUntil(now()->addYear()->toDateTimeString());
 
         $this->orderManagementService
             ->shouldReceive('createNewOrder')

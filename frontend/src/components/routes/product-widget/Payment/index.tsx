@@ -40,15 +40,17 @@ const Payment = () => {
     const paymentLinkModal = usePaymentLinkModal();
     const isPaymentLinkPayer = !!order?.is_payment_link_payer;
     const hasPaymentLink = !!order?.payment_link_url;
+    const mustPayByCardNow = !!order?.holds_resale_listing;
     const canCreatePaymentLink = !hasPaymentLink
         && !isPaymentLinkPayer
+        && !mustPayByCardNow
         && !!order?.is_payment_required
         && !!checkoutEvent?.settings?.payment_links_enabled
         && !!checkoutEvent?.settings?.payment_providers?.includes('OFFLINE')
         && !!checkoutEvent?.settings?.payment_providers?.includes('STRIPE');
 
     const isStripeEnabled = checkoutEvent?.settings?.payment_providers?.includes('STRIPE');
-    const isOfflineEnabled = checkoutEvent?.settings?.payment_providers?.includes('OFFLINE');
+    const isOfflineEnabled = !mustPayByCardNow && checkoutEvent?.settings?.payment_providers?.includes('OFFLINE');
     const isPayingLater = activePaymentMethod === 'OFFLINE';
 
     React.useEffect(() => {
@@ -153,6 +155,12 @@ const Payment = () => {
                             </button>
                         </div>
                     </div>
+                )}
+
+                {(mustPayByCardNow && isStripeEnabled) && (
+                    <Text size="sm" className={classes.cardOnlyNotice}>
+                        {t`This order includes a resold ticket, so it needs to be paid by card now.`}
+                    </Text>
                 )}
 
                 {isStripeEnabled && (

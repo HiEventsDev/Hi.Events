@@ -59,6 +59,7 @@ use HiEvents\Http\Actions\Products\Purchases\GetProductPurchasesAction;
 use HiEvents\Http\Actions\Products\Purchases\GetProductPurchaseSummaryAction;
 use HiEvents\Http\Actions\Questions\ExportQuestionAnswersAction;
 use HiEvents\Http\Actions\Reports\GetReportAction;
+use HiEvents\Http\Actions\TicketResale\RetryTicketResaleRefundAction;
 use HiEvents\Http\Actions\Users\CancelEmailChangeAction;
 use HiEvents\Http\Actions\Users\ConfirmEmailAddressAction;
 use HiEvents\Http\Actions\Users\ConfirmEmailChangeAction;
@@ -216,6 +217,7 @@ class AccessCoverageTest extends TestCase
         GetOrganizerWebhookLogsAction::class => Permission::VIEW_FINANCIALS,
         RefundOrderAction::class => Permission::ISSUE_REFUNDS,
         MarkOrderAsPaidAction::class => Permission::ISSUE_REFUNDS,
+        RetryTicketResaleRefundAction::class => Permission::ISSUE_REFUNDS,
     ];
 
     public function test_financial_actions_require_their_permission(): void

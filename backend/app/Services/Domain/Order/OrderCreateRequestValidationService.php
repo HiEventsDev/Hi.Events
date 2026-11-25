@@ -36,6 +36,11 @@ class OrderCreateRequestValidationService
 {
     private AvailableProductQuantitiesResponseDTO $availableProductQuantities;
 
+    /**
+     * @var array<int, AvailableProductQuantitiesResponseDTO>
+     */
+    private array $occurrenceAvailability = [];
+
     public function __construct(
         private readonly ProductRepositoryInterface $productRepository,
         private readonly PromoCodeRepositoryInterface $promoCodeRepository,
@@ -55,6 +60,7 @@ class OrderCreateRequestValidationService
     {
         $event = $this->eventRepository->findById($eventId);
         $data = $this->normalizeOccurrenceIds($event, $data);
+        $this->occurrenceAvailability = [];
 
         $this->validateTypes($data);
         $promoCode = $this->validatePromoCode($eventId, $data);
@@ -66,6 +72,7 @@ class OrderCreateRequestValidationService
             ->getAvailableProductQuantities(
                 $event->getId(),
                 ignoreCache: true,
+                includeResaleStock: true,
             );
 
         $this->validateOverallCapacity($event, $data);
@@ -132,14 +139,7 @@ class OrderCreateRequestValidationService
 
         try {
             foreach ($productsByOccurrence as $occurrenceId => $products) {
-                $this->availableProductQuantities = $this->fetchAvailableProductQuantitiesService
-                    ->getAvailableProductQuantities(
-                        $event->getId(),
-                        ignoreCache: true,
-                        eventOccurrenceId: $occurrenceId !== null && $occurrenceId !== ''
-                            ? (int) $occurrenceId
-                            : null,
-                    );
+                $this->availableProductQuantities = $this->availabilityForOccurrence($event->getId(), (int) $occurrenceId);
 
                 $occurrenceRequestedQuantities = $this->sumRequestedQuantities($products->all());
 
@@ -338,14 +338,22 @@ class OrderCreateRequestValidationService
                 ]);
             }
 
-            $totalQuantityRequested = (int) $products
-                ->filter(fn ($product) => in_array((int) $product['product_id'], $ticketProductIds, true))
-                ->sum(fn ($product) => collect($product['quantities'])->sum('quantity'));
+            $this->occurrenceEligibilityService->assertOccurrencePurchasable(
+                eventId: $eventId,
+                occurrenceId: (int) $occurrenceId,
+                additionalQuantity: 0,
+            );
+
+            $availability = $this->availabilityForOccurrence($eventId, (int) $occurrenceId);
 
             $this->occurrenceEligibilityService->assertOccurrencePurchasable(
                 eventId: $eventId,
                 occurrenceId: (int) $occurrenceId,
-                additionalQuantity: $totalQuantityRequested,
+                additionalQuantity: (int) $products
+                    ->filter(fn ($product) => in_array((int) $product['product_id'], $ticketProductIds, true))
+                    ->sum(fn ($product) => $this->quantityNeedingUnsoldStock($product['quantities'], $availability)),
+                occurrence: $availability->occurrence,
+                reservedQuantity: $availability->occurrenceReservedQuantity,
             );
 
             $productIds = $products->pluck('product_id')->map(fn ($id) => (int) $id)->all();
@@ -354,6 +362,27 @@ class OrderCreateRequestValidationService
                 $productIds,
             );
         }
+    }
+
+    private function availabilityForOccurrence(int $eventId, int $occurrenceId): AvailableProductQuantitiesResponseDTO
+    {
+        return $this->occurrenceAvailability[$occurrenceId] ??= $this->fetchAvailableProductQuantitiesService
+            ->getAvailableProductQuantities(
+                $eventId,
+                ignoreCache: true,
+                eventOccurrenceId: $occurrenceId,
+                includeResaleStock: true,
+            );
+    }
+
+    private function quantityNeedingUnsoldStock(array $quantities, AvailableProductQuantitiesResponseDTO $availability): int
+    {
+        return (int) collect($quantities)->sum(
+            fn ($quantity) => (int) ($quantity['quantity'] ?? 0) - $availability->resaleUnitsNeeded(
+                (int) ($quantity['price_id'] ?? 0),
+                (int) ($quantity['quantity'] ?? 0),
+            )
+        );
     }
 
     /**
@@ -453,8 +482,9 @@ class OrderCreateRequestValidationService
             /** @var AvailableProductQuantitiesDTO|null $quantities */
             $quantities = $quantitiesByPriceId->get($price->getId());
             $price->setQuantityReserved($quantities?->quantity_reserved ?? 0);
+            $price->setResaleQuantityAvailable($quantities?->resale_quantity_available ?? 0);
 
-            if ($quantities !== null && $price->isQuantityPerOccurrence()) {
+            if ($quantities !== null && ($price->isQuantityPerOccurrence() || $quantities->resale_quantity_available > 0)) {
                 $price->setQuantityAvailable(
                     $quantities->quantity_available === Constants::INFINITE ? null : $quantities->quantity_available
                 );
@@ -708,7 +738,7 @@ class OrderCreateRequestValidationService
             $productIds = $capacity->getProducts()->map(fn (ProductDomainObject $product) => $product->getId());
             $totalQuantity = collect($data['products'])
                 ->filter(fn ($product) => in_array($product['product_id'], $productIds->toArray(), true))
-                ->sum(fn ($product) => collect($product['quantities'])->sum('quantity'));
+                ->sum(fn ($product) => $this->quantityNeedingUnsoldStock($product['quantities'], $this->availableProductQuantities));
 
             if ($totalQuantity === 0) {
                 continue;

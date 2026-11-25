@@ -53,6 +53,7 @@ interface SeedOptions {
   sequentialTierReleaseEnabled?: boolean;
   attendeeDetails?: AttendeeDetailsCollection;
   currency?: string;
+  isResellable?: boolean;
 }
 
 export const setAttendeeDetailsCollection = (
@@ -130,6 +131,7 @@ export async function createLiveEventWithProduct(api: ApiClient, opts: SeedOptio
     ...(opts.showQuantityRemaining !== undefined ? { show_quantity_remaining: opts.showQuantityRemaining } : {}),
     ...(opts.sequentialTierReleaseEnabled !== undefined ? { sequential_tier_release_enabled: opts.sequentialTierReleaseEnabled } : {}),
     ...(opts.taxIds ? { tax_and_fee_ids: opts.taxIds } : {}),
+    ...(opts.isResellable !== undefined ? { is_resellable: opts.isResellable } : {}),
   });
 
   const product = await api.getProduct(event.id, created.id);
@@ -216,6 +218,8 @@ export interface SeededOrder {
 
 export interface OrderSeedOptions {
   buyerEmail?: string;
+  /** Email for every attendee when it should differ from the buyer's. */
+  attendeeEmail?: string;
   buyerFirstName?: string;
   buyerLastName?: string;
   quantity?: number;
@@ -280,7 +284,7 @@ export async function createCompletedOrder(
       product_price_id: event.priceId,
       first_name: buyerFirstName,
       last_name: buyerLastName,
-      email: buyerEmail,
+      email: opts.attendeeEmail ?? buyerEmail,
       ...(opts.attendeeQuestions ? { questions: opts.attendeeQuestions } : {}),
     })),
   });
@@ -379,6 +383,7 @@ export async function createRecurringLiveEvent(
     quantityAppliesTo?: 'OCCURRENCE' | 'EVENT';
     waitlistEnabled?: boolean;
     showQuantityRemaining?: boolean;
+    currency?: string;
   } = {},
 ): Promise<SeededEvent & { occurrences: Occurrence[] }> {
   const count = opts.count ?? 3;
@@ -391,7 +396,7 @@ export async function createRecurringLiveEvent(
     organizer_id: organizerId,
     start_date: futureStartDate(),
     category: 'MUSIC',
-    currency: 'USD',
+    currency: opts.currency ?? 'USD',
     timezone: 'UTC',
   });
 

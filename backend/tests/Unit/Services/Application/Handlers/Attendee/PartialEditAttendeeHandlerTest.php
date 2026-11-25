@@ -4,6 +4,7 @@ namespace Tests\Unit\Services\Application\Handlers\Attendee;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
+use HiEvents\DomainObjects\Enums\TicketResaleCloseReason;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\Enterprise\Seating\Services\Domain\SeatClaimService;
@@ -12,8 +13,10 @@ use HiEvents\Enterprise\Seating\Services\Domain\SeatingEventLockService;
 use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Repository\Interfaces\TicketResaleListingRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Attendee\DTO\PartialEditAttendeeDTO;
 use HiEvents\Services\Application\Handlers\Attendee\PartialEditAttendeeHandler;
+use HiEvents\Services\Domain\Attendee\OrganizerAttendeeIdentityChangeService;
 use HiEvents\Services\Domain\EventOccurrence\OccurrencePurchaseEligibilityService;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsCancellationService;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsReactivationService;
@@ -21,6 +24,7 @@ use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesDTO;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesResponseDTO;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
+use HiEvents\Services\Domain\TicketResale\TicketResaleClosureService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\AttendeeEvent;
@@ -73,6 +77,10 @@ class PartialEditAttendeeHandlerTest extends TestCase
 
     private AvailableProductQuantitiesFetchService|MockInterface $availableProductQuantitiesFetchService;
 
+    private TicketResaleClosureService|MockInterface $resaleClosureService;
+
+    private TicketResaleListingRepositoryInterface|MockInterface $resaleListingRepository;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -101,6 +109,12 @@ class PartialEditAttendeeHandlerTest extends TestCase
         $this->occurrenceEligibilityService = Mockery::mock(OccurrencePurchaseEligibilityService::class);
         $this->availableProductQuantitiesFetchService = Mockery::mock(AvailableProductQuantitiesFetchService::class);
 
+        $this->resaleClosureService = Mockery::mock(TicketResaleClosureService::class);
+        $this->resaleClosureService->shouldReceive('closeForAttendees')->byDefault();
+
+        $this->resaleListingRepository = Mockery::mock(TicketResaleListingRepositoryInterface::class);
+        $this->resaleListingRepository->shouldReceive('countWhere')->andReturn(0)->byDefault();
+
         $this->handler = new PartialEditAttendeeHandler(
             $this->attendeeRepository,
             $this->orderRepository,
@@ -115,7 +129,19 @@ class PartialEditAttendeeHandlerTest extends TestCase
             $this->seatingEventLock,
             $this->occurrenceEligibilityService,
             $this->availableProductQuantitiesFetchService,
+            $this->identityChangeService(),
+            $this->resaleClosureService,
+            $this->resaleListingRepository,
         );
+    }
+
+    private function identityChangeService(): OrganizerAttendeeIdentityChangeService
+    {
+        $service = Mockery::mock(OrganizerAttendeeIdentityChangeService::class);
+        $service->shouldReceive('credentialAttributesFor')->andReturn([]);
+        $service->shouldReceive('record')->andReturn(false);
+
+        return $service;
     }
 
     public function test_cancelling_an_active_attendee_releases_capacity_and_decrements_statistics(): void
@@ -150,6 +176,41 @@ class PartialEditAttendeeHandlerTest extends TestCase
                 && $event->productPriceId === self::PRODUCT_PRICE_ID
                 && $event->eventOccurrenceId === self::OCCURRENCE_ID
         );
+    }
+
+    public function test_cancelling_an_attendee_closes_their_resale_listing(): void
+    {
+        $this->givenAttendee(AttendeeStatus::ACTIVE);
+        $this->givenOrderExists();
+        $this->expectAttendeeUpdatedWithStatus(AttendeeStatus::CANCELLED);
+        $this->productQuantityService->shouldReceive('decreaseQuantitySold')->once();
+        $this->cancellationService->shouldReceive('decrementForCancelledAttendee')->once();
+        $this->domainEventDispatcherService->shouldReceive('dispatch')->once();
+
+        $this->resaleClosureService->shouldReceive('closeForAttendees')
+            ->once()
+            ->with([self::ATTENDEE_ID], TicketResaleCloseReason::TICKET_CANCELLED);
+
+        $this->handler->handle($this->dto(AttendeeStatus::CANCELLED));
+    }
+
+    public function test_a_resold_ticket_cannot_be_reactivated(): void
+    {
+        $this->givenAttendee(AttendeeStatus::CANCELLED);
+        $this->resaleListingRepository->shouldReceive('countWhere')->once()->andReturn(1);
+
+        $this->productQuantityService->shouldNotReceive('increaseQuantitySold');
+        $this->reactivationService->shouldNotReceive('incrementForReactivatedAttendee');
+        $this->attendeeRepository->shouldNotReceive('updateByIdWhere');
+
+        try {
+            $this->handler->handle($this->dto(AttendeeStatus::ACTIVE));
+            $this->fail('Expected ValidationException was not thrown');
+        } catch (ValidationException $exception) {
+            $this->assertArrayHasKey('status', $exception->errors());
+        }
+
+        Event::assertNotDispatched(CapacityChangedEvent::class);
     }
 
     public function test_reactivating_a_cancelled_attendee_consumes_capacity_and_increments_statistics(): void

@@ -462,6 +462,10 @@ class CreateEventServiceTest extends TestCase
             ->andReturn(false);
         $organizerSettings->shouldReceive('getDefaultAllowAttendeeSelfEdit')
             ->andReturn(false);
+        $organizerSettings->shouldReceive('getDefaultAllowTicketTransfer')
+            ->andReturn(false);
+        $organizerSettings->shouldReceive('getDefaultAllowTicketResale')
+            ->andReturn(false);
 
         $organizer = $this->createMockOrganizerDomainObject()
             ->shouldReceive('getOrganizerSettings')

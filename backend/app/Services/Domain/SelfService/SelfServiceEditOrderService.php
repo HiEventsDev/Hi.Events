@@ -90,8 +90,6 @@ class SelfServiceEditOrderService
                 $updateData['short_id'] = $newShortId;
                 $shortIdChanged = true;
 
-                $oldValues['short_id'] = $order->getShortId();
-                $newValues['short_id'] = $newShortId;
             }
 
             $this->orderRepository->updateWhere(
@@ -220,14 +218,10 @@ class SelfServiceEditOrderService
             'last_name' => __('Last Name'),
             'email' => __('Email'),
             'phone' => __('Mobile number'),
-            'short_id' => __('Order Reference'),
         ];
 
         $changedFields = [];
         foreach ($oldValues as $field => $oldValue) {
-            if ($field === 'short_id') {
-                continue;
-            }
             $label = $fieldLabels[$field] ?? $field;
             $changedFields[$label] = [
                 'old' => $oldValue,

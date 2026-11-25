@@ -43,6 +43,8 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
 
     private bool $accessedViaPaymentLink = false;
 
+    private bool $holdsResaleListing = false;
+
     public static function getAllowedFilterFields(): array
     {
         return [
@@ -363,6 +365,18 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
     public function isAccessedViaPaymentLink(): bool
     {
         return $this->accessedViaPaymentLink;
+    }
+
+    public function setHoldsResaleListing(bool $holdsResaleListing): OrderDomainObject
+    {
+        $this->holdsResaleListing = $holdsResaleListing;
+
+        return $this;
+    }
+
+    public function holdsResaleListing(): bool
+    {
+        return $this->holdsResaleListing;
     }
 
     public function hasPaymentLink(): bool

@@ -86,6 +86,11 @@ class EventSettingsResource extends JsonResource
 
             // Self-service settings
             'allow_attendee_self_edit' => $this->getAllowAttendeeSelfEdit(),
+            'allow_ticket_transfer' => $this->getAllowTicketTransfer(),
+            'ticket_transfer_cutoff_minutes' => $this->getTicketTransferCutoffMinutes(),
+            'max_transfers_per_ticket' => $this->getMaxTransfersPerTicket(),
+            'allow_ticket_resale' => $this->getAllowTicketResale(),
+            'ticket_resale_cutoff_minutes' => $this->getTicketResaleCutoffMinutes(),
 
             // Occurrence display
             'show_available_occurrence_capacity' => $this->getShowAvailableOccurrenceCapacity(),

@@ -70,6 +70,14 @@ class AccountHardDeletionService
                 ->whereIn('order_id', $context->orderIds)
                 ->delete();
 
+            $manifest['ticket_transfers'] = $connection->table('ticket_transfers')
+                ->whereIn('order_id', $context->orderIds)
+                ->delete();
+
+            $manifest['ticket_resale_listings'] = $connection->table('ticket_resale_listings')
+                ->whereIn('order_id', $context->orderIds)
+                ->delete();
+
             $manifest['orders'] = $connection->table('orders')
                 ->whereIn('id', $context->orderIds)
                 ->delete();

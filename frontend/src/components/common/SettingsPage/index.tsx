@@ -4,7 +4,7 @@ import {t} from "@lingui/macro";
 import classNames from "classnames";
 import {StatusDot} from "../StatusDot";
 import classes from "./SettingsPage.module.scss";
-import {useReportUnsavedSettings} from "../SectionedSettings";
+import {useRegisterSettingsSubsection, useReportUnsavedSettings} from "../SectionedSettings";
 
 interface SettingsPageProps {
     title: ReactNode;
@@ -34,14 +34,18 @@ interface SettingsSectionProps {
     children: ReactNode;
 }
 
-export const SettingsSection = ({id, title, tone = 'default', children}: SettingsSectionProps) => (
-    <section id={id} className={classes.section}>
-        {title && <h2 className={classes.sectionTitle}>{title}</h2>}
-        <div className={classNames(classes.card, {[classes.danger]: tone === 'danger'})}>
-            {children}
-        </div>
-    </section>
-);
+export const SettingsSection = ({id, title, tone = 'default', children}: SettingsSectionProps) => {
+    useRegisterSettingsSubsection(id, typeof title === 'string' ? title : undefined);
+
+    return (
+        <section id={id} className={classes.section}>
+            {title && <h2 className={classes.sectionTitle}>{title}</h2>}
+            <div className={classNames(classes.card, {[classes.danger]: tone === 'danger'})}>
+                {children}
+            </div>
+        </section>
+    );
+};
 
 interface SettingsRowProps {
     label: ReactNode;

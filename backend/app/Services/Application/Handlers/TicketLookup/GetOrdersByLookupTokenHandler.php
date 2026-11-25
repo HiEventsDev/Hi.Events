@@ -2,7 +2,6 @@
 
 namespace HiEvents\Services\Application\Handlers\TicketLookup;
 
-use Carbon\Carbon;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
@@ -17,20 +16,19 @@ use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\Status\OrderStatus;
-use HiEvents\DomainObjects\TicketLookupTokenDomainObject;
 use HiEvents\Exceptions\InvalidTicketLookupTokenException;
 use HiEvents\Repository\Eloquent\Value\OrderAndDirection;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
-use HiEvents\Repository\Interfaces\TicketLookupTokenRepositoryInterface;
 use HiEvents\Services\Application\Handlers\TicketLookup\DTO\GetOrdersByLookupTokenDTO;
 use HiEvents\Services\Domain\Order\OfflinePaymentInstructionsRenderService;
+use HiEvents\Services\Domain\TicketLookup\TicketLookupTokenService;
 use Illuminate\Support\Collection;
 
 class GetOrdersByLookupTokenHandler
 {
     public function __construct(
-        private readonly TicketLookupTokenRepositoryInterface $ticketLookupTokenRepository,
+        private readonly TicketLookupTokenService $ticketLookupTokenService,
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly OfflinePaymentInstructionsRenderService $offlinePaymentInstructionsRenderService,
     ) {}
@@ -42,33 +40,8 @@ class GetOrdersByLookupTokenHandler
      */
     public function handle(GetOrdersByLookupTokenDTO $dto): Collection
     {
-        $tokenRecord = $this->validateAndFetchToken($dto->token);
-
-        return $this->getOrdersForEmail($tokenRecord->getEmail())
+        return $this->getOrdersForEmail($this->ticketLookupTokenService->emailFor($dto->token))
             ->each(fn (OrderDomainObject $order) => $this->offlinePaymentInstructionsRenderService->renderForOrder($order));
-    }
-
-    /**
-     * @throws InvalidTicketLookupTokenException
-     */
-    private function validateAndFetchToken(string $token): TicketLookupTokenDomainObject
-    {
-        $tokenRecord = $this->ticketLookupTokenRepository->findFirstWhere(['token' => $token]);
-
-        if (! $tokenRecord) {
-            throw new InvalidTicketLookupTokenException(__('Invalid or expired link. Please request a new one.'));
-        }
-
-        if ($this->isTokenExpired($tokenRecord->getExpiresAt())) {
-            throw new InvalidTicketLookupTokenException(__('This link has expired. Please request a new one.'));
-        }
-
-        return $tokenRecord;
-    }
-
-    private function isTokenExpired(string $expiresAt): bool
-    {
-        return (new Carbon($expiresAt))->isPast();
     }
 
     /**

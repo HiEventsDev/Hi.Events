@@ -20,6 +20,7 @@ import {
     IconShare,
     IconCashRegister,
     IconTicket,
+    IconTransfer,
     IconTrendingUp,
     IconUserQuestion,
     IconUsers,
@@ -152,6 +153,7 @@ const EventLayout = () => {
         {link: 'box-office', label: t`Box Office`, icon: IconCashRegister, showWhen: () => boxOffice.isVisible},
         {link: 'messages', label: t`Messages`, icon: IconSend},
         {link: 'sold-out-waitlist', label: t`Waitlist`, icon: IconListCheck},
+        {link: 'resale', label: t`Ticket resale`, icon: IconTransfer},
         {
             link: 'capacity-assignments',
             label: t`Capacity Management`,

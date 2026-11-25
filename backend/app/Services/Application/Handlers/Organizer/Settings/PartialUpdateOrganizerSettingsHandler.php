@@ -51,6 +51,12 @@ class PartialUpdateOrganizerSettingsHandler
             'default_allow_attendee_self_edit' => $dto->getProvided('defaultAllowAttendeeSelfEdit')
                 ?? $organizerSettings->getDefaultAllowAttendeeSelfEdit(),
 
+            'default_allow_ticket_transfer' => $dto->getProvided('defaultAllowTicketTransfer')
+                ?? $organizerSettings->getDefaultAllowTicketTransfer(),
+
+            'default_allow_ticket_resale' => $dto->getProvided('defaultAllowTicketResale')
+                ?? $organizerSettings->getDefaultAllowTicketResale(),
+
             'social_media_handles' => array_filter([
                 'facebook' => $dto->getProvided('facebookHandle', $organizerSettings->getSocialMediaHandle('facebook')),
                 'instagram' => $dto->getProvided('instagramHandle', $organizerSettings->getSocialMediaHandle('instagram')),

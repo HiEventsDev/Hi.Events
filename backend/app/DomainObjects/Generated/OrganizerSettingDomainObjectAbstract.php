@@ -62,6 +62,8 @@ abstract class OrganizerSettingDomainObjectAbstract extends AbstractDomainObject
     final public const DEFAULT_PHONE_COLLECTION = 'default_phone_collection';
 
     final public const DEFAULT_SHOW_SMS_OPT_IN = 'default_show_sms_opt_in';
+    final public const DEFAULT_ALLOW_TICKET_TRANSFER = 'default_allow_ticket_transfer';
+    final public const DEFAULT_ALLOW_TICKET_RESALE = 'default_allow_ticket_resale';
 
     protected int $id;
 
@@ -112,6 +114,8 @@ abstract class OrganizerSettingDomainObjectAbstract extends AbstractDomainObject
     protected string $default_phone_collection = 'OFF';
 
     protected bool $default_show_sms_opt_in = false;
+    protected bool $default_allow_ticket_transfer = true;
+    protected bool $default_allow_ticket_resale = false;
 
     public function toArray(): array
     {
@@ -141,6 +145,8 @@ abstract class OrganizerSettingDomainObjectAbstract extends AbstractDomainObject
             'first_day_of_week' => $this->first_day_of_week ?? null,
             'default_phone_collection' => $this->default_phone_collection ?? null,
             'default_show_sms_opt_in' => $this->default_show_sms_opt_in ?? null,
+            'default_allow_ticket_transfer' => $this->default_allow_ticket_transfer ?? null,
+            'default_allow_ticket_resale' => $this->default_allow_ticket_resale ?? null,
         ];
     }
 
@@ -443,5 +449,27 @@ abstract class OrganizerSettingDomainObjectAbstract extends AbstractDomainObject
     public function getDefaultShowSmsOptIn(): bool
     {
         return $this->default_show_sms_opt_in;
+    }
+
+    public function setDefaultAllowTicketTransfer(bool $default_allow_ticket_transfer): self
+    {
+        $this->default_allow_ticket_transfer = $default_allow_ticket_transfer;
+        return $this;
+    }
+
+    public function getDefaultAllowTicketTransfer(): bool
+    {
+        return $this->default_allow_ticket_transfer;
+    }
+
+    public function setDefaultAllowTicketResale(bool $default_allow_ticket_resale): self
+    {
+        $this->default_allow_ticket_resale = $default_allow_ticket_resale;
+        return $this;
+    }
+
+    public function getDefaultAllowTicketResale(): bool
+    {
+        return $this->default_allow_ticket_resale;
     }
 }

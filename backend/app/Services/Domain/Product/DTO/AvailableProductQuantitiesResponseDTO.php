@@ -26,6 +26,20 @@ class AvailableProductQuantitiesResponseDTO extends BaseDTO
             ?->quantity_available ?? 0;
     }
 
+    public function resaleUnitsNeeded(int $productPriceId, int $requestedQuantity): int
+    {
+        $price = $this->productQuantities
+            ->first(fn (AvailableProductQuantitiesDTO $dto) => $dto->price_id === $productPriceId);
+
+        if ($price === null || $price->resale_quantity_available === 0) {
+            return 0;
+        }
+
+        $unsold = $price->quantity_available - $price->resale_quantity_available;
+
+        return max(0, min($price->resale_quantity_available, $requestedQuantity - $unsold));
+    }
+
     /**
      * @param  array<int, int>  $quantityByProductId
      */

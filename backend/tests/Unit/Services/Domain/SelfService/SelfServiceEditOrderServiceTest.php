@@ -182,9 +182,9 @@ class SelfServiceEditOrderServiceTest extends TestCase
             ->withArgs(function ($ord, $oldValues, $newValues, $ip, $ua) use ($order) {
                 return $ord === $order
                     && isset($oldValues['email']) && $oldValues['email'] === 'old@example.com'
-                    && isset($oldValues['short_id'])
+                    && ! array_key_exists('short_id', $oldValues)
                     && isset($newValues['email']) && $newValues['email'] === 'new@example.com'
-                    && isset($newValues['short_id']) && str_starts_with($newValues['short_id'], 'o_')
+                    && ! array_key_exists('short_id', $newValues)
                     && $ip === '192.168.1.1'
                     && $ua === 'Mozilla/5.0';
             });
@@ -298,11 +298,11 @@ class SelfServiceEditOrderServiceTest extends TestCase
                     && $oldValues['first_name'] === 'John'
                     && $oldValues['last_name'] === 'Doe'
                     && $oldValues['email'] === 'old@example.com'
-                    && isset($oldValues['short_id'])
+                    && ! array_key_exists('short_id', $oldValues)
                     && $newValues['first_name'] === 'Jane'
                     && $newValues['last_name'] === 'Smith'
                     && $newValues['email'] === 'new@example.com'
-                    && isset($newValues['short_id']) && str_starts_with($newValues['short_id'], 'o_')
+                    && ! array_key_exists('short_id', $newValues)
                     && $ip === '192.168.1.1'
                     && $ua === 'Mozilla/5.0';
             });

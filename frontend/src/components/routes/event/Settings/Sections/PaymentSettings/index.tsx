@@ -135,7 +135,7 @@ export const PaymentAndInvoicingSettings = () => {
                 <SettingsSections>
                     <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending}>
                         <SettingsSections>
-                            <SettingsSection title={t`Payment Methods`}>
+                            <SettingsSection id="payment-methods" title={t`Payment Methods`}>
                                 {paymentOptions.map((option) => (
                                     <SettingsRow
                                         key={option.value}
@@ -176,7 +176,7 @@ export const PaymentAndInvoicingSettings = () => {
 
                             {isOfflineEnabled && (
                                 <>
-                                    <SettingsSection title={t`How buyers pay`}>
+                                    <SettingsSection id="how-buyers-pay" title={t`How buyers pay`}>
                                         <SettingsBlock>
                                             {canEditOfflineInstructions ? (
                                                 <Editor
@@ -236,7 +236,7 @@ export const PaymentAndInvoicingSettings = () => {
                                         </SettingsRow>
                                     </SettingsSection>
 
-                                    <SettingsSection title={t`Unpaid orders`}>
+                                    <SettingsSection id="unpaid-orders" title={t`Unpaid orders`}>
                                         <SettingsRow
                                             label={t`Let buyers tell you when they have paid`}
                                             description={t`Adds an "I've paid" button to unpaid orders. You and your team get an email when a buyer uses it. You still mark the order as paid yourself.`}
@@ -262,7 +262,7 @@ export const PaymentAndInvoicingSettings = () => {
                                         </SettingsRow>
                                     </SettingsSection>
 
-                                    <SettingsSection title={t`Someone else paying`}>
+                                    <SettingsSection id="someone-else-paying" title={t`Someone else paying`}>
                                         <SettingsRow
                                             label={t`Let someone else pay for an order`}
                                             description={t`Buyers can send a payment link to whoever is paying, such as their finance team. The person paying can use any payment method you accept.`}
@@ -298,7 +298,7 @@ export const PaymentAndInvoicingSettings = () => {
                                 </>
                             )}
 
-                            <SettingsSection title={t`Billing Settings`}>
+                            <SettingsSection id="billing" title={t`Billing Settings`}>
                                 <SettingsRow
                                     label={t`Require Billing Address`}
                                     description={t`Make billing address mandatory during checkout`}
@@ -312,7 +312,7 @@ export const PaymentAndInvoicingSettings = () => {
                                 </SettingsRow>
                             </SettingsSection>
 
-                            <SettingsSection title={t`Invoice Settings`}>
+                            <SettingsSection id="invoicing" title={t`Invoice Settings`}>
                                 <SettingsRow
                                     label={t`Enable Invoicing`}
                                     description={t`When enabled, invoices will be generated for ticket orders. Invoices will sent along with the order confirmation email. Attendees can also download their invoices from the order confirmation page.`}
@@ -341,7 +341,7 @@ export const PaymentAndInvoicingSettings = () => {
 
                             {form.values.enable_invoicing && (
                                 <>
-                                    <SettingsSection title={t`Invoice Numbering`}>
+                                    <SettingsSection id="invoice-numbering" title={t`Invoice Numbering`}>
                                         <SettingsRow
                                             label={t`Number Prefix`}
                                             description={t`Optional prefix for invoice numbers (e.g., INV-)`}
@@ -366,7 +366,7 @@ export const PaymentAndInvoicingSettings = () => {
                                         </SettingsRow>
                                     </SettingsSection>
 
-                                    <SettingsSection title={t`Payment Terms`}>
+                                    <SettingsSection id="payment-terms" title={t`Payment Terms`}>
                                         <SettingsRow
                                             label={t`Payment Due Period`}
                                             description={t`Number of days allowed for payment (leave blank to omit payment terms from invoices)`}
@@ -382,7 +382,7 @@ export const PaymentAndInvoicingSettings = () => {
                                         </SettingsRow>
                                     </SettingsSection>
 
-                                    <SettingsSection title={t`Organization Details`}>
+                                    <SettingsSection id="organization-details" title={t`Organization Details`}>
                                         <SettingsRow
                                             label={t`Organization Name`}
                                             htmlFor="event-payment-organization-name"

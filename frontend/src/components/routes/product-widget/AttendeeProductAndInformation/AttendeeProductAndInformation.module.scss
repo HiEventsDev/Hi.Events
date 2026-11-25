@@ -10,3 +10,29 @@
     display: none;
   }
 }
+
+.manage {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--mantine-spacing-md);
+    margin-top: var(--mantine-spacing-lg);
+    padding: var(--mantine-spacing-md);
+    border: 1px solid var(--mantine-color-gray-3);
+    border-radius: var(--mantine-radius-md);
+    background: var(--mantine-color-body);
+
+    @media print {
+        display: none;
+    }
+}
+
+.manageTitle {
+    font-weight: 600;
+}
+
+.manageText {
+    font-size: var(--mantine-font-size-sm);
+    color: var(--mantine-color-dimmed);
+}

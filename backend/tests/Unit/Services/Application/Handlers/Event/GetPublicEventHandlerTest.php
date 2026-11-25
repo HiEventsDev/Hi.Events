@@ -19,6 +19,7 @@ use HiEvents\Repository\Eloquent\Value\OrderAndDirection;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
+use HiEvents\Repository\Interfaces\TicketResaleListingRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\GetPublicEventDTO;
 use HiEvents\Services\Application\Handlers\Event\GetPublicEventHandler;
 use HiEvents\Services\Domain\Event\EventPageViewIncrementService;
@@ -26,6 +27,7 @@ use HiEvents\Services\Domain\EventOccurrence\PublicOccurrenceVisibilityService;
 use HiEvents\Services\Domain\Product\ProductFilterService;
 use HiEvents\Services\Domain\Product\PublicProductSelectionFilter;
 use HiEvents\Services\Domain\Subscription\AccountSubscriptionAccessService;
+use HiEvents\Services\Domain\TicketResale\ResaleOccurrenceAvailabilityService;
 use Illuminate\Support\Collection;
 use Mockery as m;
 use Tests\TestCase;
@@ -67,6 +69,7 @@ class GetPublicEventHandlerTest extends TestCase
             m::mock(EventSeatMapLookupService::class, ['existsForEvent' => false]),
             new PublicProductSelectionFilter,
             $this->accountSubscriptionAccessService,
+            new ResaleOccurrenceAvailabilityService(m::mock(TicketResaleListingRepositoryInterface::class)),
         );
     }
 

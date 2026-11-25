@@ -697,6 +697,13 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "resale",
+                async lazy() {
+                    const Resale = await import("./components/routes/event/Resale");
+                    return { Component: Resale.default };
+                }
+            },
+            {
                 path: "occurrences",
                 async lazy() {
                     const OccurrencesTab = await import("./components/routes/event/OccurrencesTab");
@@ -1024,6 +1031,15 @@ export const router: RouteObject[] = [
         async lazy() {
             const MyTickets = await import("./components/routes/my-tickets");
             return { Component: MyTickets.default };
+        },
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/transfer/:token",
+        handle: {styles: "src/components/routes/ticket-transfer/Claim/index.tsx"},
+        async lazy() {
+            const TicketTransferClaim = await import("./components/routes/ticket-transfer/Claim");
+            return { Component: TicketTransferClaim.default };
         },
         errorElement: <ErrorPage />,
     }

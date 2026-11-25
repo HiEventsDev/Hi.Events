@@ -22,5 +22,6 @@ class AvailableProductQuantitiesDTO extends BaseDTO
         public ?Collection $capacities = null,
         public ?int $seats_available = null,
         public ?int $quantity_available_before_seats = null,
+        public int $resale_quantity_available = 0,
     ) {}
 }

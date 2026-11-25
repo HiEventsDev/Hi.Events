@@ -5,6 +5,7 @@ namespace Tests\Unit\Services\Domain\Order;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
 use HiEvents\DomainObjects\Enums\ProductType;
+use HiEvents\DomainObjects\Enums\TicketResaleCloseReason;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
@@ -19,10 +20,12 @@ use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsCancellationService;
 use HiEvents\Services\Domain\Order\OrderCancelService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
+use HiEvents\Services\Domain\TicketResale\TicketResaleClosureService;
 use HiEvents\Services\Domain\Waitlist\RevertWaitlistOffersForCancelledOrderService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
+use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\Connection;
 use Illuminate\Database\DatabaseManager;
@@ -56,6 +59,10 @@ class OrderCancelServiceTest extends TestCase
 
     private RevertWaitlistOffersForCancelledOrderService $revertWaitlistOffersService;
 
+    private TransactionLockService $transactionLockService;
+
+    private TicketResaleClosureService $resaleClosureService;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -75,6 +82,11 @@ class OrderCancelServiceTest extends TestCase
         $this->eventStatisticsCancellationService = m::mock(EventStatisticsCancellationService::class);
         $this->revertWaitlistOffersService = m::mock(RevertWaitlistOffersForCancelledOrderService::class);
 
+        $this->transactionLockService = m::mock(TransactionLockService::class);
+        $this->transactionLockService->shouldReceive('lockEvent')->byDefault();
+        $this->resaleClosureService = m::mock(TicketResaleClosureService::class);
+        $this->resaleClosureService->shouldReceive('closeForOrder')->byDefault();
+
         $this->service = new OrderCancelService(
             mailer: $this->mailer,
             attendeeRepository: $this->attendeeRepository,
@@ -85,6 +97,8 @@ class OrderCancelServiceTest extends TestCase
             domainEventDispatcherService: $this->domainEventDispatcherService,
             eventStatisticsCancellationService: $this->eventStatisticsCancellationService,
             revertWaitlistOffersService: $this->revertWaitlistOffersService,
+            transactionLockService: $this->transactionLockService,
+            resaleClosureService: $this->resaleClosureService,
         );
     }
 
@@ -124,6 +138,12 @@ class OrderCancelServiceTest extends TestCase
         $this->revertWaitlistOffersService->shouldReceive('revertOffersForOrder')->once()->with(1)->andReturn([]);
 
         $this->expectCancellationEmail();
+
+        $this->transactionLockService->shouldReceive('lockEvent')->once()->with(1)->ordered();
+        $this->resaleClosureService->shouldReceive('closeForOrder')
+            ->once()
+            ->with(1, TicketResaleCloseReason::TICKET_CANCELLED)
+            ->ordered();
 
         $this->domainEventDispatcherService->shouldReceive('dispatch')
             ->withArgs(function (OrderEvent $event) use ($order) {

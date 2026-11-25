@@ -140,6 +140,13 @@ class PartialUpdateEventSettingsHandler
 
                 // Self-service settings
                 'allow_attendee_self_edit' => $eventSettingsDTO->settings['allow_attendee_self_edit'] ?? $existingSettings->getAllowAttendeeSelfEdit(),
+                'allow_ticket_transfer' => $eventSettingsDTO->settings['allow_ticket_transfer'] ?? $existingSettings->getAllowTicketTransfer(),
+                'ticket_transfer_cutoff_minutes' => $eventSettingsDTO->settings['ticket_transfer_cutoff_minutes'] ?? $existingSettings->getTicketTransferCutoffMinutes(),
+                'max_transfers_per_ticket' => array_key_exists('max_transfers_per_ticket', $eventSettingsDTO->settings)
+                    ? $eventSettingsDTO->settings['max_transfers_per_ticket']
+                    : $existingSettings->getMaxTransfersPerTicket(),
+                'allow_ticket_resale' => $eventSettingsDTO->settings['allow_ticket_resale'] ?? $existingSettings->getAllowTicketResale(),
+                'ticket_resale_cutoff_minutes' => $eventSettingsDTO->settings['ticket_resale_cutoff_minutes'] ?? $existingSettings->getTicketResaleCutoffMinutes(),
 
                 // Occurrence display
                 'show_available_occurrence_capacity' => $eventSettingsDTO->settings['show_available_occurrence_capacity'] ?? $existingSettings->getShowAvailableOccurrenceCapacity(),

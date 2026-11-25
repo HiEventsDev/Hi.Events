@@ -28,6 +28,8 @@ class PartialUpdateOrganizerSettingsDTO extends BaseDataObject
         public readonly bool|Optional|null $defaultShowSmsOptIn,
         public readonly bool|Optional|null $defaultPassPlatformFeeToBuyer,
         public readonly bool|Optional|null $defaultAllowAttendeeSelfEdit,
+        public readonly bool|Optional|null $defaultAllowTicketTransfer,
+        public readonly bool|Optional|null $defaultAllowTicketResale,
 
         // Social
         public readonly string|Optional|null $facebookHandle,

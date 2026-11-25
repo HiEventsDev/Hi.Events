@@ -11,6 +11,7 @@ use HiEvents\Repository\Interfaces\TicketLookupTokenRepositoryInterface;
 use HiEvents\Services\Application\Handlers\TicketLookup\DTO\GetOrdersByLookupTokenDTO;
 use HiEvents\Services\Application\Handlers\TicketLookup\GetOrdersByLookupTokenHandler;
 use HiEvents\Services\Domain\Order\OfflinePaymentInstructionsRenderService;
+use HiEvents\Services\Domain\TicketLookup\TicketLookupTokenService;
 use Illuminate\Support\Collection;
 use Mockery as m;
 use Tests\TestCase;
@@ -31,7 +32,7 @@ class GetOrdersByLookupTokenHandlerTest extends TestCase
         $this->orderRepository = m::mock(OrderRepositoryInterface::class);
 
         $this->handler = new GetOrdersByLookupTokenHandler(
-            $this->ticketLookupTokenRepository,
+            new TicketLookupTokenService($this->ticketLookupTokenRepository),
             $this->orderRepository,
             app(OfflinePaymentInstructionsRenderService::class),
         );

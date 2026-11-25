@@ -35,6 +35,8 @@ use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesDTO;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesResponseDTO;
 use HiEvents\Services\Domain\PromoCode\PromoCodeUsageValidationService;
+use HiEvents\Services\Domain\TicketResale\DTO\ResaleDemandDTO;
+use HiEvents\Services\Domain\TicketResale\ResaleClaimService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
@@ -56,6 +58,7 @@ class CreateOrderHandler
         private readonly SeatingEventLockService $seatingEventLock,
         private readonly WidgetRepositoryInterface $widgetRepository,
         private readonly ProductRepositoryInterface $productRepository,
+        private readonly ResaleClaimService $resaleClaimService,
     ) {}
 
     /**
@@ -84,7 +87,7 @@ class CreateOrderHandler
             $affiliate = $this->getAffiliate($createOrderPublicDTO, $eventId);
             $widget = $this->getWidget($createOrderPublicDTO, $event);
 
-            $this->validateProductAvailability($eventId, $createOrderPublicDTO);
+            $resaleDemand = $this->validateProductAvailability($eventId, $createOrderPublicDTO);
 
             $order = $this->orderManagementService->createNewOrder(
                 eventId: $eventId,
@@ -106,10 +109,14 @@ class CreateOrderHandler
 
             $this->seatClaimService->claimForOrderItems($order, $orderItems, enforceSelectionRules: true);
 
-            return $this->orderManagementService->updateOrderTotals(
-                $order,
-                $orderItems->map(fn (ProcessedOrderItemDTO $item) => $item->order_item),
-            );
+            $items = $orderItems->map(fn (ProcessedOrderItemDTO $item) => $item->order_item);
+
+            return $this->orderManagementService
+                ->updateOrderTotals(
+                    $this->resaleClaimService->claimForOrder($order, $event->getEventSettings(), $items, $resaleDemand),
+                    $items,
+                )
+                ->setHoldsResaleListing($resaleDemand->isNotEmpty());
         });
     }
 
@@ -206,13 +213,17 @@ class CreateOrderHandler
     }
 
     /**
+     * @return Collection<int, ResaleDemandDTO>
+     *
      * @throws ValidationException
      */
-    private function validateProductAvailability(int $eventId, CreateOrderPublicDTO $createOrderPublicDTO): void
+    private function validateProductAvailability(int $eventId, CreateOrderPublicDTO $createOrderPublicDTO): Collection
     {
         $productsByOccurrence = $createOrderPublicDTO->products->groupBy(
             fn (DTO\ProductOrderDetailsDTO $p) => $p->event_occurrence_id
         );
+
+        $resaleDemand = collect();
 
         foreach ($productsByOccurrence as $occurrenceId => $products) {
             $availability = $this->availableProductQuantitiesFetchService
@@ -220,38 +231,53 @@ class CreateOrderHandler
                     $eventId,
                     ignoreCache: true,
                     eventOccurrenceId: $occurrenceId ?: null,
+                    includeResaleStock: (bool) $occurrenceId,
                 );
+
+            $requestedQuantities = $this->requestedQuantities($products);
+            $resaleUnits = $this->resaleUnits($requestedQuantities, $availability);
 
             if ($occurrenceId) {
                 $this->occurrencePurchaseEligibilityService->assertOccurrencePurchasable(
                     eventId: $eventId,
                     occurrenceId: (int) $occurrenceId,
-                    additionalQuantity: $this->sumTicketQuantities($products, $availability),
+                    additionalQuantity: $this->sumTicketQuantities($products, $availability) - array_sum($resaleUnits),
                     occurrence: $availability->occurrence,
                     reservedQuantity: $availability->occurrenceReservedQuantity,
                 );
             }
 
-            $this->assertQuantitiesAvailable($products, $availability);
+            $this->assertQuantitiesAvailable($requestedQuantities, $availability, $resaleUnits);
+
+            foreach ($resaleUnits as $priceId => $quantity) {
+                $resaleDemand->push(new ResaleDemandDTO(
+                    product_price_id: $priceId,
+                    event_occurrence_id: (int) $occurrenceId,
+                    quantity: $quantity,
+                ));
+            }
         }
 
         if ($productsByOccurrence->count() > 1) {
             $this->assertQuantitiesAvailable(
-                $createOrderPublicDTO->products,
+                $this->requestedQuantities($createOrderPublicDTO->products),
                 $this->availableProductQuantitiesFetchService->getAvailableProductQuantities($eventId, ignoreCache: true),
+                $resaleDemand
+                    ->groupBy(fn (ResaleDemandDTO $line) => $line->product_price_id)
+                    ->map(fn (Collection $lines) => $lines->sum(fn (ResaleDemandDTO $line) => $line->quantity))
+                    ->all(),
                 ignoreSeats: true,
             );
         }
+
+        return $resaleDemand;
     }
 
     /**
-     * @throws ValidationException
+     * @return array<int, array<int, int>> product id => price id => quantity
      */
-    private function assertQuantitiesAvailable(
-        Collection $products,
-        AvailableProductQuantitiesResponseDTO $availability,
-        bool $ignoreSeats = false,
-    ): void {
+    private function requestedQuantities(Collection $products): array
+    {
         $requestedQuantities = [];
         foreach ($products as $product) {
             foreach ($product->quantities as $priceQuantity) {
@@ -264,6 +290,40 @@ class CreateOrderHandler
             }
         }
 
+        return $requestedQuantities;
+    }
+
+    /**
+     * @param  array<int, array<int, int>>  $requestedQuantities
+     * @return array<int, int> price id => units that only listed tickets can supply
+     */
+    private function resaleUnits(array $requestedQuantities, AvailableProductQuantitiesResponseDTO $availability): array
+    {
+        $resaleUnits = [];
+        foreach ($requestedQuantities as $priceQuantities) {
+            foreach ($priceQuantities as $priceId => $requestedQuantity) {
+                $units = $availability->resaleUnitsNeeded($priceId, $requestedQuantity);
+                if ($units > 0) {
+                    $resaleUnits[$priceId] = $units;
+                }
+            }
+        }
+
+        return $resaleUnits;
+    }
+
+    /**
+     * @param  array<int, array<int, int>>  $requestedQuantities
+     * @param  array<int, int>  $resaleUnits
+     *
+     * @throws ValidationException
+     */
+    private function assertQuantitiesAvailable(
+        array $requestedQuantities,
+        AvailableProductQuantitiesResponseDTO $availability,
+        array $resaleUnits,
+        bool $ignoreSeats = false,
+    ): void {
         foreach ($requestedQuantities as $productId => $priceQuantities) {
             foreach ($priceQuantities as $priceId => $requestedQuantity) {
                 $priceAvailability = $availability->productQuantities
@@ -274,7 +334,7 @@ class CreateOrderHandler
                     ? $priceAvailability?->quantity_available_before_seats ?? $priceAvailability?->quantity_available ?? 0
                     : $priceAvailability?->quantity_available ?? 0;
 
-                if ($requestedQuantity > $available) {
+                if ($requestedQuantity - ($resaleUnits[$priceId] ?? 0) > $available - ($priceAvailability?->resale_quantity_available ?? 0)) {
                     throw ValidationException::withMessages([
                         'products' => __('Not enough products available. Please try again.'),
                     ]);
@@ -282,7 +342,10 @@ class CreateOrderHandler
             }
         }
 
-        $quantityByProductId = array_map(array_sum(...), $requestedQuantities);
+        $quantityByProductId = array_map(
+            fn (array $priceQuantities) => array_sum($priceQuantities) - array_sum(array_intersect_key($resaleUnits, $priceQuantities)),
+            $requestedQuantities,
+        );
 
         if ($availability->firstOverflowingPool($quantityByProductId) !== null) {
             throw ValidationException::withMessages([
