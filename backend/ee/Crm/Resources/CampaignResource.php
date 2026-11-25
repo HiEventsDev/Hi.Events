@@ -49,6 +49,8 @@ class CampaignResource extends BaseResource
             'event_title' => $this->getEventTitle(),
             /** @var int[] */
             'early_access_product_ids' => $this->earlyAccessProductIds(),
+            /** @var int[] */
+            'early_access_releasable_product_ids' => $this->getEarlyAccessReleasableProductIds(),
             'promo_code' => $this->getPromoCode(),
             'attribution_window_days' => $this->getAttributionWindowDays(),
             'recipients_count' => $this->getRecipientsCount(),
@@ -63,6 +65,7 @@ class CampaignResource extends BaseResource
                 'sent' => (int) ($stats->sent ?? 0),
                 'pending' => (int) ($stats->pending ?? 0),
                 'failed' => (int) ($stats->failed ?? 0),
+                'undelivered' => (int) ($stats->undelivered ?? 0),
                 'skipped' => (int) ($stats->skipped ?? 0),
                 'delivered' => (int) ($stats->delivered ?? 0),
                 'opened' => (int) ($stats->opened ?? 0),

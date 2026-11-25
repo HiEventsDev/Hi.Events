@@ -44,7 +44,10 @@ export const OrganizerReport = <T extends object>({
     const currencies = currencyFilter === 'none' ? [] : statsQuery.data?.all_organizers_currencies ?? [];
     const currencyParam = param('currency')?.toUpperCase() ?? null;
     const selectedCurrency = currencyParam && currencies.includes(currencyParam) ? currencyParam : null;
-    const currency = currencyFilter === 'required' ? selectedCurrency ?? organizer.currency ?? null : selectedCurrency;
+    const defaultCurrency = organizer.currency && currencies.includes(organizer.currency)
+        ? organizer.currency
+        : currencies[0] ?? organizer.currency ?? null;
+    const currency = currencyFilter === 'required' ? selectedCurrency ?? defaultCurrency : selectedCurrency;
     const page = Math.max(1, Number(param('page')) || 1);
 
     const reportQuery = useGetOrganizerReport(

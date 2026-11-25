@@ -27,7 +27,7 @@ export const BulkConfirmModal = ({action, count, changedCount, isPending, onConf
             size="md"
             heading={isDelete
                 ? plural(count, {one: 'Delete # contact?', other: 'Delete # contacts?'})
-                : plural(count, {one: 'Unsubscribe # contact?', other: 'Unsubscribe # contacts?'})}
+                : plural(count, {one: 'Unsubscribe # contact from marketing emails?', other: 'Unsubscribe # contacts from marketing emails?'})}
         >
             {changedCount && (
                 <Notice>

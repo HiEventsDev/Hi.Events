@@ -5,7 +5,7 @@ import { AudiencePage } from '../../pages/audience.page';
 import { simulateLicence, withLicence } from '../../utils/licence';
 import { invitedMember } from '../../utils/team';
 import { uniqueEmail, uniqueName, uniqueShort } from '../../utils/unique';
-import { askForMobileAtCheckout, buildAudience, createOptedInOrder, marketingStatusOf, UK_MOBILE, waitForContact } from './audience.shared';
+import { askForMobileAtCheckout, buildAudience, createOptedInOrder, marketingStatusOf, UK_MOBILE, waitForContact, withAudienceApi } from './audience.shared';
 import {
   chooseRule,
   closeDialog,
@@ -17,6 +17,7 @@ import {
   tagRow,
   withContactsApi,
 } from './contacts.helpers';
+import { withMessagingApi } from './messaging.shared';
 
 const NO_CLOUD = 'This backend is not acting as Hi.Events Cloud (no Cloud licence and X-Hi-Licence-Simulation is ignored), so account feature flags have no effect.';
 
@@ -334,6 +335,9 @@ test.describe('audience access', () => {
     const { api, organizerId } = freshAccount;
     const accountId = (await api.getAccount()).id;
     await adminApi.setAccountFeatureFlag(accountId, 'crm_sms', true);
+    const isFaked = await withAudienceApi(playwright, freshAccount, (audienceApi) => audienceApi.smsProviderIsFaked());
+    test.skip(!isFaked, 'This backend talks to real Twilio (SMS_DRIVER is not fake), so a Twilio number cannot be connected.');
+    await withMessagingApi(playwright, freshAccount, (messaging) => messaging.connectSms(['GB']));
     const event = await createLiveEventWithFreeTicket(api, organizerId);
     await askForMobileAtCheckout(api, event.eventId);
     const email = uniqueEmail('texter');

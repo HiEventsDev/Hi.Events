@@ -16,6 +16,9 @@ import {IconCoin, IconCoins, IconUser, IconUsers} from "@tabler/icons-react";
 import {selfServiceCopy} from "../../../../../common/SelfServiceSettings";
 import {getPhoneCollectionOptions} from "../../../../../../utilites/phoneCollection.tsx";
 import {useTextMessagesPaused, useTextMessagesVisible} from "../../../../../../ee/crm/hooks/useTextMessagesVisible.ts";
+import {useSmsConnectionMissing} from "../../../../../../ee/crm/hooks/useSmsConnectionMissing.ts";
+import {useGetEvent} from "../../../../../../queries/useGetEvent.ts";
+import {Callout} from "../../../../../common/Callout";
 
 export const HomepageAndCheckoutSettings = () => {
     const {eventId} = useParams();
@@ -23,6 +26,8 @@ export const HomepageAndCheckoutSettings = () => {
     const updateMutation = useUpdateEventSettings();
     const showTextMessageOptIn = useTextMessagesVisible();
     const isTextMessageOptInPaused = useTextMessagesPaused();
+    const eventQuery = useGetEvent(eventId);
+    const isSmsConnectionMissing = useSmsConnectionMissing(eventQuery.data?.organizer_id);
     const form = useForm({
         initialValues: {
             pre_checkout_message: '',
@@ -229,6 +234,11 @@ export const HomepageAndCheckoutSettings = () => {
                                     <SettingsRow
                                         label={t`Show text message opt-in checkbox`}
                                         description={textOptInDescription}
+                                        below={isSmsConnectionMissing && (
+                                            <Callout variant="warning">
+                                                {t`Connect a Twilio number in Settings › Text Messages, or buyers won't see this option.`}
+                                            </Callout>
+                                        )}
                                         htmlFor="event-checkout-sms-opt-in"
                                         inlineControl
                                     >

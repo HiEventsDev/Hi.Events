@@ -1,4 +1,5 @@
-import { test, expect } from '../../fixtures';
+import type { APIRequest } from '@playwright/test';
+import { expect, type FreshAccount } from '../../fixtures';
 import { createCompletedOrder, createLiveEventWithFreeTicket, createReservedOrder } from '../../api/factory';
 import { completePublicOrder } from '../../api/public-client';
 import { AudiencePage } from '../../pages/audience.page';
@@ -8,14 +9,21 @@ import { OrderSummaryPage } from '../../pages/order-summary.page';
 import { EventSettingsPage } from '../../pages/event-settings.page';
 import { BASE_URL } from '../../utils/env';
 import { uniqueEmail } from '../../utils/unique';
-import { askForMobileAtCheckout, buildAudience, createOptedInOrder, UK_MOBILE, waitForContact } from './audience.shared';
+import { askForMobileAtCheckout, buildAudience, createOptedInOrder, UK_MOBILE, waitForContact, withAudienceApi } from './audience.shared';
 import { expectNoSidewaysScroll, PHONE_VIEWPORT } from './contacts.helpers';
+import { test, type MessagingApi } from './messaging.shared';
 
 const FRENCH_MOBILE = '+33612345678';
 const GUERNSEY_MOBILE = '+447781123456';
 
+const connectTwilio = async (freshAccount: FreshAccount, playwright: { request: APIRequest }, messaging: MessagingApi): Promise<void> => {
+  const isFaked = await withAudienceApi(playwright, freshAccount, (audienceApi) => audienceApi.smsProviderIsFaked());
+  test.skip(!isFaked, 'This backend talks to real Twilio (SMS_DRIVER is not fake), so a Twilio number cannot be connected.');
+  await messaging.connectSms(['GB']);
+};
+
 test.describe('audience mobile numbers', () => {
-  test('an organizer asks for a mobile number at checkout, the text box only shows for a number in a country we text, the buyer agrees, and staff can stop them later', async ({ freshAccount, adminApi, browser }) => {
+  test('an organizer asks for a mobile number at checkout, the text box only shows for a number in a country we text, the buyer agrees, and staff can stop them later', async ({ freshAccount, adminApi, playwright, messaging, browser }) => {
     const { api, organizerId } = freshAccount;
     const accountId = (await api.getAccount()).id;
     const event = await createLiveEventWithFreeTicket(api, organizerId);
@@ -29,6 +37,7 @@ test.describe('audience mobile numbers', () => {
     const textOptIn = checkoutSettings.getByRole('switch', { name: 'Show text message opt-in checkbox' });
     await expect(checkoutSettings.getByTestId('phone-collection-select')).toBeVisible();
     await adminApi.setAccountFeatureFlag(accountId, 'crm_sms', true);
+    await connectTwilio(freshAccount, playwright, messaging);
     await page.reload();
     await expect(textOptIn).toBeDisabled();
     await expect(checkoutSettings.getByText("Ask for the buyer's mobile number above to use this.")).toBeVisible();
@@ -97,9 +106,10 @@ test.describe('audience mobile numbers', () => {
     await expect(page.getByRole('menuitem', { name: 'Opt out of text messages' })).toHaveCount(0);
   });
 
-  test('an optional mobile number can be skipped (no text box without a number), and a buyer who gives one without ticking the box is not opted in to texts', async ({ freshAccount, adminApi, browser }) => {
+  test('an optional mobile number can be skipped (no text box without a number), and a buyer who gives one without ticking the box is not opted in to texts', async ({ freshAccount, adminApi, playwright, messaging, browser }) => {
     const { api, organizerId } = freshAccount;
     await adminApi.setAccountFeatureFlag((await api.getAccount()).id, 'crm_sms', true);
+    await connectTwilio(freshAccount, playwright, messaging);
     const event = await createLiveEventWithFreeTicket(api, organizerId);
     await askForMobileAtCheckout(api, event.eventId, 'OPTIONAL');
     await buildAudience(api, organizerId);
@@ -152,9 +162,10 @@ test.describe('audience mobile numbers', () => {
     await expect(audience.drawer()).not.toContainText('+44');
   });
 
-  test('checkout leaves the mobile number out when the event does not ask, and the text box out when it is switched off', async ({ freshAccount, adminApi, browser }) => {
+  test('checkout leaves the mobile number out when the event does not ask, and the text box out when it is switched off', async ({ freshAccount, adminApi, playwright, messaging, browser }) => {
     const { api, organizerId } = freshAccount;
     await adminApi.setAccountFeatureFlag((await api.getAccount()).id, 'crm_sms', true);
+    await connectTwilio(freshAccount, playwright, messaging);
     const notAsking = await createLiveEventWithFreeTicket(api, organizerId);
     const numberOnly = await createLiveEventWithFreeTicket(api, organizerId);
     await api.updateEventSettings(numberOnly.eventId, { phone_collection: 'REQUIRED', show_sms_opt_in: false });
@@ -181,6 +192,33 @@ test.describe('audience mobile numbers', () => {
       await visitor.getByRole('textbox', { name: 'Mobile number' }).fill(UK_MOBILE);
       await checkout.completeFreeOrder();
       await expect(visitor.getByText(`You're going to ${numberOnly.title}`)).toBeVisible();
+    } finally {
+      await visitor.close();
+    }
+  });
+
+  test('without a connected Twilio number the event settings warn under the text opt-in switch and checkout shows no text box', async ({ freshAccount, adminApi, browser }) => {
+    const { api, organizerId } = freshAccount;
+    await adminApi.setAccountFeatureFlag((await api.getAccount()).id, 'crm_sms', true);
+    const event = await createLiveEventWithFreeTicket(api, organizerId);
+    await askForMobileAtCheckout(api, event.eventId, 'REQUIRED');
+
+    const page = await freshAccount.newAuthedPage();
+    const settings = new EventSettingsPage(page);
+    await settings.goto(event.eventId, 'homepage-settings');
+    const checkoutSettings = settings.section('homepage-settings');
+    await expect(checkoutSettings.getByRole('switch', { name: 'Show text message opt-in checkbox' })).toBeChecked();
+    await expect(checkoutSettings.getByText("Connect a Twilio number in Settings › Text Messages, or buyers won't see this option.")).toBeVisible();
+
+    const visitor = await browser.newPage();
+    try {
+      const checkout = new CheckoutPage(visitor);
+      await checkout.gotoPublicEvent(event.eventId, event.slug);
+      await checkout.setFirstProductQuantity(1);
+      await checkout.continueToCheckout();
+      await visitor.getByRole('textbox', { name: 'Mobile number' }).fill(UK_MOBILE);
+      await expect(visitor.getByRole('button', { name: 'Country code' })).toContainText('GB +44');
+      await expect(visitor.getByTestId('checkout-sms-opt-in')).toHaveCount(0);
     } finally {
       await visitor.close();
     }
@@ -250,9 +288,10 @@ test.describe('audience mobile numbers', () => {
     await expect(audience.drawerSection('Text message status')).toContainText('+44 7400 123888');
   });
 
-  test('on a phone the buyer gives a required mobile number and agrees to texts without the page scrolling sideways', async ({ freshAccount, adminApi, browser }) => {
+  test('on a phone the buyer gives a required mobile number and agrees to texts without the page scrolling sideways', async ({ freshAccount, adminApi, playwright, messaging, browser }) => {
     const { api, organizerId } = freshAccount;
     await adminApi.setAccountFeatureFlag((await api.getAccount()).id, 'crm_sms', true);
+    await connectTwilio(freshAccount, playwright, messaging);
     const event = await createLiveEventWithFreeTicket(api, organizerId);
     await askForMobileAtCheckout(api, event.eventId, 'REQUIRED');
     await buildAudience(api, organizerId);

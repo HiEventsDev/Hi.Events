@@ -1156,7 +1156,7 @@ class CampaignDeliveryTest extends TestCase
         $stats = (array) app(CrmCampaignRepositoryInterface::class)->getDeliveryStats([$campaignId])->get($campaignId);
 
         $this->assertEquals(
-            ['campaign_id' => $campaignId, 'recipients' => 8, 'sent' => 5, 'failed' => 1, 'skipped' => 1, 'pending' => 1, 'delivered' => 5, 'opened' => 0, 'clicked' => 0, 'bounced' => 2, 'complained' => 1],
+            ['campaign_id' => $campaignId, 'recipients' => 8, 'sent' => 5, 'failed' => 1, 'skipped' => 1, 'pending' => 1, 'delivered' => 5, 'opened' => 0, 'clicked' => 0, 'bounced' => 2, 'complained' => 1, 'undelivered' => 0],
             $stats,
         );
     }
@@ -1730,6 +1730,47 @@ class CampaignDeliveryTest extends TestCase
         $this->assertStringContainsString('/event/'.$this->eventId.'/main-event?promo_code='.$promoCode->code, $html);
     }
 
+    public function test_ending_early_access_leaves_tickets_that_were_hidden_before_the_campaign_hidden(): void
+    {
+        Bus::fake([DispatchCampaignJob::class]);
+        DB::table('events')->where('id', $this->eventId)->update(['status' => 'LIVE']);
+        [$alreadyHiddenProductId] = $this->insertTicket($this->eventId);
+        DB::table('products')->where('id', $alreadyHiddenProductId)->update(['is_hidden_without_promo_code' => true]);
+        $campaignId = $this->insertCampaign(['event_id' => $this->eventId, 'early_access_product_ids' => json_encode([$this->productId, $alreadyHiddenProductId])]);
+
+        $this->launch($campaignId);
+
+        $this->assertEquals([$this->productId], json_decode($this->campaign($campaignId)->early_access_hidden_product_ids, true));
+
+        $this->endEarlyAccess($campaignId);
+
+        $this->assertFalse((bool) DB::table('products')->where('id', $this->productId)->value('is_hidden_without_promo_code'));
+        $this->assertTrue((bool) DB::table('products')->where('id', $alreadyHiddenProductId)->value('is_hidden_without_promo_code'));
+        $this->assertEquals([], json_decode($this->campaign($campaignId)->early_access_hidden_product_ids, true));
+    }
+
+    public function test_a_ticket_two_campaigns_give_early_access_to_stays_hidden_until_both_end(): void
+    {
+        Bus::fake([DispatchCampaignJob::class]);
+        DB::table('events')->where('id', $this->eventId)->update(['status' => 'LIVE']);
+        $firstId = $this->insertCampaign(['event_id' => $this->eventId, 'early_access_product_ids' => json_encode([$this->productId])]);
+        $secondId = $this->insertCampaign(['event_id' => $this->eventId, 'early_access_product_ids' => json_encode([$this->productId])]);
+        $this->launch($firstId);
+        $this->launch($secondId);
+        $repository = app(CrmCampaignRepositoryInterface::class);
+
+        $this->assertSame([], app(EarlyAccessService::class)->releasableProductIds($repository->findById($firstId)));
+
+        $this->endEarlyAccess($firstId);
+
+        $this->assertTrue((bool) DB::table('products')->where('id', $this->productId)->value('is_hidden_without_promo_code'));
+        $this->assertSame([$this->productId], app(EarlyAccessService::class)->releasableProductIds($repository->findById($secondId)));
+
+        $this->endEarlyAccess($secondId);
+
+        $this->assertFalse((bool) DB::table('products')->where('id', $this->productId)->value('is_hidden_without_promo_code'));
+    }
+
     public function test_relaunching_a_rejected_early_access_campaign_reuses_its_code(): void
     {
         Bus::fake([DispatchCampaignJob::class]);
@@ -1860,6 +1901,11 @@ class CampaignDeliveryTest extends TestCase
         }
 
         $this->launch($campaignId);
+    }
+
+    private function endEarlyAccess(int $campaignId): void
+    {
+        app(EarlyAccessService::class)->makePublic(app(CrmCampaignRepositoryInterface::class)->findById($campaignId));
     }
 
     private function launch(int $campaignId): CrmCampaignStatus

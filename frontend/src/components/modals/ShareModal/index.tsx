@@ -5,12 +5,14 @@ import QRCode from 'react-qr-code';
 import {t} from "@lingui/macro";
 import {NavLink} from "react-router";
 import classNames from "classnames";
-import {Event, Organizer} from "../../../types.ts";
+import {Event, EventSettings, Organizer, OrganizerSettings} from "../../../types.ts";
 import {Modal} from "../../common/Modal";
 import {WriteAccess} from "../../common/WriteAccess";
 import {showSuccess} from "../../../utilites/notifications.tsx";
 import {eventSharePreview, organizerSharePreview, SharePreviewContent} from "../../../utilites/sharePreview.ts";
 import {SharePreview} from "./SharePreview.tsx";
+import {useGetEventSettings} from "../../../queries/useGetEventSettings.ts";
+import {useGetOrganizerSettings} from "../../../queries/useGetOrganizerSettings.ts";
 import {CaptionSuggestions} from "./CaptionSuggestions.tsx";
 import {SHARE_PLATFORMS, SharePlatform, X_POST_CAPTION_LIMIT} from "./platforms.ts";
 import classes from './ShareModal.module.scss';
@@ -29,13 +31,21 @@ interface ShareModalProps {
 
 const QR_CODE_ELEMENT_ID = 'share-qr-code';
 
-const resolvePreview = (title: string, event?: Event, organizer?: Organizer): SharePreviewContent => {
+interface PreviewSource {
+    title: string;
+    event?: Event;
+    eventSettings?: EventSettings;
+    organizer?: Organizer;
+    organizerSettings?: OrganizerSettings;
+}
+
+const resolvePreview = ({title, event, eventSettings, organizer, organizerSettings}: PreviewSource): SharePreviewContent => {
     if (event) {
-        return eventSharePreview(event);
+        return eventSharePreview(event, eventSettings ?? event.settings);
     }
 
     if (organizer) {
-        return organizerSharePreview(organizer);
+        return organizerSharePreview(organizer, organizerSettings ?? organizer.settings);
     }
 
     return {title, description: ''};
@@ -53,7 +63,9 @@ export const ShareModal = ({
     suggestCaptions = false,
 }: ShareModalProps) => {
     const [caption, setCaption] = useState(shareText || title);
-    const preview = resolvePreview(title, event, organizer);
+    const {data: eventSettings} = useGetEventSettings(event?.id?.toString(), opened && !!event);
+    const {data: organizerSettings} = useGetOrganizerSettings(organizer?.id?.toString(), opened && !event && !!organizer);
+    const preview = resolvePreview({title, event, eventSettings, organizer, organizerSettings});
     const authorName = event?.organizer?.name || organizer?.name || title;
     const canShareNatively = typeof navigator !== 'undefined' && 'share' in navigator;
     const isTooLongForX = caption.length > X_POST_CAPTION_LIMIT;

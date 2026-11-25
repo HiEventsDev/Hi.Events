@@ -1,6 +1,7 @@
 @php /** @var string|null $preheader */ @endphp
 @php /** @var string $body */ @endphp
 @php /** @var string $organizerName */ @endphp
+@php /** @var string|null $postalAddress */ @endphp
 @php /** @var \HiEvents\Enterprise\Crm\Services\Domain\Campaign\DTO\CampaignEventCardDTO|null $eventCard */ @endphp
 @php /** @var string|null $unsubscribeUrl */ @endphp
 @php /** @var bool $isTest */ @endphp
@@ -39,6 +40,9 @@
 
 <div style="color: #6b6b6b; margin-top: 30px; font-size: .8em; overflow-wrap: anywhere; word-wrap: break-word; word-break: break-word;">
 {{ __('You are receiving this email because you opted in to hear from :organizer.', ['organizer' => $organizerName]) }}
+@if($postalAddress)
+<br>{{ $postalAddress }}<br>
+@endif
 @if($unsubscribeUrl)
 <a href="{{ $unsubscribeUrl }}">{{ __('Unsubscribe') }}</a>.
 @elseif($isTest)

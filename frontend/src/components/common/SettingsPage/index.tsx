@@ -4,6 +4,7 @@ import {t} from "@lingui/macro";
 import classNames from "classnames";
 import {StatusDot} from "../StatusDot";
 import classes from "./SettingsPage.module.scss";
+import {useReportUnsavedSettings} from "../SectionedSettings";
 
 interface SettingsPageProps {
     title: ReactNode;
@@ -115,6 +116,8 @@ const isBehindModalDialog = (element: HTMLElement) => Array
 export const SettingsSaveFooter = ({isDirty, isSaving, onDiscard, saveTestId}: SettingsSaveFooterProps) => {
     const saveButton = useRef<HTMLButtonElement>(null);
     const focusBeforeSave = useRef<HTMLElement | null>(null);
+
+    useReportUnsavedSettings(isDirty);
 
     useEffect(() => {
         const target = focusBeforeSave.current;

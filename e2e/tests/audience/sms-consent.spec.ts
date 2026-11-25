@@ -28,6 +28,7 @@ test.describe('audience text message consent', () => {
     const { api, organizerId } = freshAccount;
     const event = await createLiveEventWithFreeTicket(api, organizerId);
     await askForMobileAtCheckout(api, event.eventId);
+    await messaging.connectSms(['GB']);
     const first = { email: uniqueEmail('shared-first'), firstName: 'Petra', lastName: 'Partner', phone: UK_MOBILE, agreesToTexts: true };
     const second = { email: uniqueEmail('shared-second'), firstName: 'Paul', lastName: 'Partner', phone: UK_MOBILE, agreesToTexts: true };
     await createOptedInOrder(publicApi, event, first);
@@ -35,7 +36,6 @@ test.describe('audience text message consent', () => {
     await buildAudience(api, organizerId);
     await waitForContact(api, organizerId, first.email);
     await waitForContact(api, organizerId, second.email);
-    await messaging.connectSms(['GB']);
 
     const page = await freshAccount.newAuthedPage();
     const audience = new AudiencePage(page, organizerId);
@@ -103,12 +103,14 @@ test.describe('audience text message consent', () => {
     const { api, organizerId } = freshAccount;
     const event = await createLiveEventWithFreeTicket(api, organizerId);
     await askForMobileAtCheckout(api, event.eventId);
+    await messaging.connectSms(['GB']);
     const texter = uniqueEmail('texter');
     const emailOnly = uniqueEmail('email-only');
     await createOptedInOrder(publicApi, event, { email: texter, firstName: 'Tess', lastName: 'Texter', phone: UK_MOBILE, agreesToTexts: true });
     await createOptedInOrder(publicApi, event, { email: emailOnly, firstName: 'Emil', lastName: 'Emailer' });
     await buildAudience(api, organizerId);
     await waitForContact(api, organizerId, emailOnly);
+    await messaging.disconnectSms();
     const segmentName = uniqueShort('Ticket holders');
     await messaging.createSegment(segmentName, [{ field: 'events_count', operator: 'gte', value: 1 }]);
 

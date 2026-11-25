@@ -43,6 +43,11 @@ class CrmCampaignDomainObject extends Generated\CrmCampaignDomainObjectAbstract
     private array $earlyAccessTicketTitles = [];
 
     /**
+     * @var int[]
+     */
+    private array $earlyAccessReleasableProductIds = [];
+
+    /**
      * @var array<int, array{country: string, pending_count: int, next_sending_at: string}>
      */
     private array $smsWaiting = [];
@@ -251,6 +256,24 @@ class CrmCampaignDomainObject extends Generated\CrmCampaignDomainObjectAbstract
         return $this;
     }
 
+    /**
+     * @return int[]
+     */
+    public function getEarlyAccessReleasableProductIds(): array
+    {
+        return $this->earlyAccessReleasableProductIds;
+    }
+
+    /**
+     * @param  int[]  $earlyAccessReleasableProductIds
+     */
+    public function setEarlyAccessReleasableProductIds(array $earlyAccessReleasableProductIds): static
+    {
+        $this->earlyAccessReleasableProductIds = $earlyAccessReleasableProductIds;
+
+        return $this;
+    }
+
     public function isEditable(): bool
     {
         return in_array($this->getStatus(), CrmCampaignStatus::editableValues(), true);
@@ -282,6 +305,24 @@ class CrmCampaignDomainObject extends Generated\CrmCampaignDomainObjectAbstract
     public function earlyAccessProductIds(): array
     {
         $ids = $this->getEarlyAccessProductIds();
+
+        return is_array($ids) ? array_values(array_map('intval', $ids)) : [];
+    }
+
+    /**
+     * @return int[]
+     */
+    public function earlyAccessHiddenProductIds(): array
+    {
+        if ($this->getPromoCodeId() === null) {
+            return [];
+        }
+
+        $ids = $this->getEarlyAccessHiddenProductIds();
+
+        if ($ids === null) {
+            return $this->earlyAccessProductIds();
+        }
 
         return is_array($ids) ? array_values(array_map('intval', $ids)) : [];
     }

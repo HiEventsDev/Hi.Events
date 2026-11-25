@@ -1,5 +1,5 @@
 import {api} from "./client";
-import {GenericPaginatedResponse, IdParam, Message, OutgoingMessage, QueryFilters,} from "../types";
+import {GenericDataResponse, GenericPaginatedResponse, IdParam, Message, OutgoingMessage, QueryFilters,} from "../types";
 import {queryParamsHelper} from "../utilites/queryParamsHelper.ts";
 import {AxiosResponse} from "axios";
 
@@ -21,7 +21,7 @@ export const messagesClient = {
         return response.data;
     },
     send: async (eventId: IdParam, messagesRequest: Message) => {
-        return await api.post(`events/${eventId}/messages`, messagesRequest);
+        return await api.post<GenericDataResponse<Message>>(`events/${eventId}/messages`, messagesRequest);
     },
     all: async (eventId: IdParam, pagination: QueryFilters) => {
         const response: AxiosResponse<GenericPaginatedResponse<Message>> = await api.get<GenericPaginatedResponse<Message>>(

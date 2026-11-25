@@ -29,8 +29,8 @@ class PromoCodesReport extends AbstractReportService
                         o.id as order_id,
                         o.promo_code_id,
                         o.promo_code,
-                        SUM(oi.price * oi.quantity) as original_total,
-                        SUM(oi.price_before_discount * oi.quantity) as discounted_total,
+                        SUM(COALESCE(oi.price_before_discount, oi.price) * oi.quantity) as original_total,
+                        SUM(oi.price * oi.quantity) as discounted_total,
                         o.total_gross,
                         o.email,
                         o.created_at

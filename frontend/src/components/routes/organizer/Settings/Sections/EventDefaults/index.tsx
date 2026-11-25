@@ -14,6 +14,8 @@ import {selfServiceCopy} from "../../../../../common/SelfServiceSettings";
 import {PhoneCollection} from "../../../../../../types.ts";
 import {getPhoneCollectionOptions} from "../../../../../../utilites/phoneCollection.tsx";
 import {useTextMessagesPaused, useTextMessagesVisible} from "../../../../../../ee/crm/hooks/useTextMessagesVisible.ts";
+import {useSmsConnectionMissing} from "../../../../../../ee/crm/hooks/useSmsConnectionMissing.ts";
+import {Callout} from "../../../../../common/Callout";
 
 export const EventDefaults = () => {
     const {organizerId} = useParams();
@@ -21,6 +23,7 @@ export const EventDefaults = () => {
     const updateMutation = useUpdateOrganizerSettings();
     const showTextMessageOptIn = useTextMessagesVisible();
     const isTextMessageOptInPaused = useTextMessagesPaused();
+    const isSmsConnectionMissing = useSmsConnectionMissing(organizerId);
 
     const form = useForm({
         initialValues: {
@@ -126,6 +129,11 @@ export const EventDefaults = () => {
                             <SettingsRow
                                 label={t`Show text message opt-in checkbox by default`}
                                 description={textOptInDescription}
+                                below={isSmsConnectionMissing && (
+                                    <Callout variant="warning">
+                                        {t`Connect a Twilio number in Settings › Text Messages, or buyers won't see this option.`}
+                                    </Callout>
+                                )}
                                 htmlFor="organizer-defaults-sms-opt-in"
                                 inlineControl
                             >

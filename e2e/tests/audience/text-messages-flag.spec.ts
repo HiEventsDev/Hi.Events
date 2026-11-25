@@ -6,10 +6,11 @@ import { AudiencePage } from '../../pages/audience.page';
 import { CheckoutPage } from '../../pages/checkout.page';
 import { EventSettingsPage } from '../../pages/event-settings.page';
 import { simulateLicence, withLicence } from '../../utils/licence';
-import { askForMobileAtCheckout, buildAudience, UK_MOBILE } from './audience.shared';
+import { askForMobileAtCheckout, buildAudience, UK_MOBILE, withAudienceApi } from './audience.shared';
 import { test } from './messaging.shared';
 
 const NOT_CLOUD = 'This backend is not running as Hi.Events Cloud and ignores licence simulation, so account feature flags cannot be switched off.';
+const NOT_FAKED = 'This backend talks to real Twilio (SMS_DRIVER is not fake), so a Twilio number cannot be connected.';
 
 const switchTextMessages = async (adminApi: AdminApiClient, freshAccount: FreshAccount, isOn: boolean): Promise<void> => {
   await adminApi.setAccountFeatureFlag((await freshAccount.api.getAccount()).id, 'crm_sms', isOn);
@@ -25,7 +26,9 @@ const openCampaignPicker = async (page: Page, audience: AudiencePage): Promise<v
 };
 
 test.describe('text messages on Hi.Events Cloud', () => {
-  test('text messages stay hidden from settings, campaigns and checkout until they are switched on for the account', async ({ freshAccount, adminApi, playwright, browser }) => {
+  test('text messages stay hidden from settings, campaigns and checkout until they are switched on for the account', async ({ freshAccount, adminApi, playwright, messaging, browser }) => {
+    await switchTextMessages(adminApi, freshAccount, true);
+    test.skip(!(await withAudienceApi(playwright, freshAccount, (audienceApi) => audienceApi.smsProviderIsFaked())), NOT_FAKED);
     await switchTextMessages(adminApi, freshAccount, false);
     test.skip(await textMessagesAreOn(playwright, freshAccount), NOT_CLOUD);
     const { api, organizerId } = freshAccount;
@@ -64,6 +67,7 @@ test.describe('text messages on Hi.Events Cloud', () => {
       await expect(visitor.getByTestId('checkout-sms-opt-in')).toHaveCount(0);
 
       await switchTextMessages(adminApi, freshAccount, true);
+      await messaging.connectSms(['GB']);
       await settings.goto(event.eventId, 'homepage-settings');
       await expect(textOptIn).toBeChecked();
       await page.goto(`/manage/organizer/${organizerId}/settings/text-messages`);

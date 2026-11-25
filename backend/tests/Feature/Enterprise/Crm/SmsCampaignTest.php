@@ -1594,8 +1594,8 @@ class SmsCampaignTest extends TestCase
     public static function receiptsAfterTheCampaignFinished(): array
     {
         return [
-            'delivered' => ['delivered', ['sent' => 1, 'delivered' => 1, 'failed' => 0]],
-            'undelivered' => ['undelivered', ['sent' => 0, 'delivered' => 0, 'failed' => 1]],
+            'delivered' => ['delivered', ['sent' => 1, 'delivered' => 1, 'failed' => 0, 'undelivered' => 0]],
+            'undelivered' => ['undelivered', ['sent' => 0, 'delivered' => 0, 'failed' => 1, 'undelivered' => 1]],
         ];
     }
 

@@ -43,6 +43,7 @@ abstract class CrmCampaignDomainObjectAbstract extends \HiEvents\DomainObjects\A
     final public const EARLY_ACCESS_PRODUCT_IDS = 'early_access_product_ids';
     final public const CHANNEL = 'channel';
     final public const AI_REVIEW = 'ai_review';
+    final public const EARLY_ACCESS_HIDDEN_PRODUCT_IDS = 'early_access_hidden_product_ids';
 
     protected int $id;
     protected int $account_id;
@@ -77,6 +78,7 @@ abstract class CrmCampaignDomainObjectAbstract extends \HiEvents\DomainObjects\A
     protected array|string|null $early_access_product_ids = null;
     protected string $channel = 'EMAIL';
     protected array|string|null $ai_review = null;
+    protected array|string|null $early_access_hidden_product_ids = null;
 
     public function toArray(): array
     {
@@ -114,6 +116,7 @@ abstract class CrmCampaignDomainObjectAbstract extends \HiEvents\DomainObjects\A
                     'early_access_product_ids' => $this->early_access_product_ids ?? null,
                     'channel' => $this->channel ?? null,
                     'ai_review' => $this->ai_review ?? null,
+                    'early_access_hidden_product_ids' => $this->early_access_hidden_product_ids ?? null,
                 ];
     }
 
@@ -478,5 +481,16 @@ abstract class CrmCampaignDomainObjectAbstract extends \HiEvents\DomainObjects\A
     public function getAiReview(): array|string|null
     {
         return $this->ai_review;
+    }
+
+    public function setEarlyAccessHiddenProductIds(array|string|null $early_access_hidden_product_ids): self
+    {
+        $this->early_access_hidden_product_ids = $early_access_hidden_product_ids;
+        return $this;
+    }
+
+    public function getEarlyAccessHiddenProductIds(): array|string|null
+    {
+        return $this->early_access_hidden_product_ids;
     }
 }

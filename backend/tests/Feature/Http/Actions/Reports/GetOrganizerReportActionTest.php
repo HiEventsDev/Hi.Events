@@ -81,6 +81,27 @@ class GetOrganizerReportActionTest extends TestCase
         $this->assertSame(1, $rows[0]['order_count']);
     }
 
+    public function test_tax_summary_counts_an_order_paying_two_taxes_once_in_the_total(): void
+    {
+        $twoTaxOrderId = $this->insertCompletedOrder(self::INSIDE_LOCAL_DAY_UTC, taxValue: 5.00, feeGross: 0);
+        DB::table('orders')->where('id', $twoTaxOrderId)->update([
+            'taxes_and_fees_rollup' => json_encode([
+                'taxes' => [
+                    ['name' => 'VAT', 'rate' => 23, 'value' => 5.00],
+                    ['name' => 'Levy', 'rate' => 2, 'value' => 0.20],
+                ],
+                'fees' => [],
+            ]),
+        ]);
+        $this->insertCompletedOrder(self::INSIDE_LOCAL_DAY_UTC, taxValue: 5.00, feeGross: 0);
+
+        $rows = collect($this->localDayReport('tax_summary')['data'])->keyBy('tax_name');
+
+        $this->assertSame(2, $rows['VAT']['order_count']);
+        $this->assertSame(1, $rows['Levy']['order_count']);
+        $this->assertSame([2, 2], $rows->pluck('total_order_count')->values()->all());
+    }
+
     public function test_platform_fees_cover_the_organizer_local_day(): void
     {
         $insideOrderId = $this->insertCompletedOrder(self::INSIDE_LOCAL_DAY_UTC, taxValue: 0, feeGross: 100);

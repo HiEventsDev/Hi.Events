@@ -76,6 +76,30 @@ class CampaignReportHttpTest extends TestCase
         $this->assertSame([0, 1], [$listed['stats']['pending'], $listed['stats']['sent']]);
     }
 
+    public function test_only_texts_the_carrier_could_not_deliver_count_as_not_delivered(): void
+    {
+        $campaignId = $this->insertCampaign(['status' => 'SENT', 'sent_at' => now()]);
+        $recipients = [
+            ['status' => 'SENT'],
+            ['status' => 'FAILED', 'failure_reason' => 'UNDELIVERED'],
+            ['status' => 'FAILED', 'failure_reason' => 'UNDELIVERED'],
+            ['status' => 'FAILED', 'failure_reason' => 'PROVIDER_REJECTED'],
+            ['status' => 'FAILED', 'failure_reason' => 'TIMEOUT'],
+            ['status' => 'FAILED', 'failure_reason' => 'PROVIDER_UNAVAILABLE'],
+            ['status' => 'SKIPPED', 'failure_reason' => 'CAMPAIGN_STOPPED'],
+        ];
+        foreach ($recipients as $index => $attributes) {
+            $this->insertRecipient($campaignId, null, "recipient$index@example.com", $attributes);
+        }
+
+        $stats = $this->crm('GET', "campaigns/$campaignId", [], $this->ownerHeaders())->assertOk()->json('data.stats');
+
+        $this->assertSame(
+            ['sent' => 1, 'failed' => 5, 'undelivered' => 2, 'skipped' => 1],
+            array_intersect_key($stats, array_flip(['sent', 'failed', 'undelivered', 'skipped'])),
+        );
+    }
+
     public function test_without_a_known_folder_every_campaign_is_listed_with_the_folder_counts(): void
     {
         $sentId = $this->insertCampaign(['status' => 'SENT']);

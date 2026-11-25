@@ -25,6 +25,7 @@ export interface ReportColumn<T> {
     kind?: ReportValueKind;
     render?: (row: T) => ReactNode;
     total?: boolean;
+    totalValue?: (rows: T[]) => number;
     sortable?: boolean;
     csv?: (row: T) => CsvCell;
 }
@@ -156,7 +157,7 @@ export const ReportView = <T extends object>({
             return null;
         }
 
-        return formatValue(kind, sum(column.key), totalsCurrency ?? currency);
+        return formatValue(kind, column.totalValue ? column.totalValue(totalsSource) : sum(column.key), totalsCurrency ?? currency);
     };
 
     const tableColumns: TanStackTableColumn<T>[] = columns.map((column, index) => ({

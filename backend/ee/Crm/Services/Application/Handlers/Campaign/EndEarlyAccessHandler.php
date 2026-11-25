@@ -31,7 +31,7 @@ class EndEarlyAccessHandler
             throw new ResourceConflictException(__('This campaign hasn\'t given anyone early access.'));
         }
 
-        $this->earlyAccessService->makePublic($campaign->getEventId(), $campaign->earlyAccessProductIds());
+        $this->earlyAccessService->makePublic($campaign);
         $this->reportService->attachDetail($campaign, $canViewFinancials);
 
         return $campaign;

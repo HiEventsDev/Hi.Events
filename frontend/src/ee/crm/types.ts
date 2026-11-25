@@ -390,6 +390,7 @@ export interface CrmCampaign {
     event_id: number | null;
     event_title: string | null;
     early_access_product_ids: number[];
+    early_access_releasable_product_ids: number[];
     promo_code: string | null;
     attribution_window_days: number;
     recipients_count: number;
@@ -407,6 +408,7 @@ export interface CrmCampaign {
         clicked: number;
         bounced: number;
         complained: number;
+        undelivered: number;
     };
     revenue?: CrmCampaignRevenue[];
     delivery_reports_available?: boolean;

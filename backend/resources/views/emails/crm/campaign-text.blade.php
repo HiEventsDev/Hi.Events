@@ -1,5 +1,6 @@
 @php /** @var string $plainTextBody */ @endphp
 @php /** @var string $organizerName */ @endphp
+@php /** @var string|null $postalAddress */ @endphp
 @php /** @var \HiEvents\Enterprise\Crm\Services\Domain\Campaign\DTO\CampaignEventCardDTO|null $eventCard */ @endphp
 @php /** @var string|null $unsubscribeUrl */ @endphp
 @php /** @var bool $isTest */ @endphp
@@ -23,6 +24,9 @@
 
 --
 {!! __('You are receiving this email because you opted in to hear from :organizer.', ['organizer' => $organizerName]) !!}
+@if($postalAddress)
+{!! $postalAddress !!}
+@endif
 @if($unsubscribeUrl)
 {!! __('Unsubscribe') !!}: {!! $unsubscribeUrl !!}
 @elseif($isTest)

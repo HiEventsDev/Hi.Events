@@ -6,6 +6,7 @@ namespace HiEvents\Enterprise\Crm\Mail;
 
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Enterprise\Crm\Services\Domain\Campaign\DTO\CampaignEventCardDTO;
+use HiEvents\Helper\AddressHelper;
 use HiEvents\Mail\BaseMail;
 use HiEvents\Mail\Concerns\SentOnBehalfOfOrganizer;
 use Illuminate\Mail\Mailables\Content;
@@ -90,11 +91,25 @@ class CampaignMail extends BaseMail implements SentOnBehalfOfOrganizer
                 'body' => $this->body,
                 'plainTextBody' => $this->plainTextBody(),
                 'organizerName' => $this->organizerName,
+                'postalAddress' => $this->postalAddress(),
                 'eventCard' => $this->eventCard,
                 'unsubscribeUrl' => $this->unsubscribeUrl,
                 'isTest' => $this->isTest,
             ],
         );
+    }
+
+    private function postalAddress(): ?string
+    {
+        $address = $this->organizer->getLocationRecord()?->getStructuredAddress();
+
+        if (! is_array($address)) {
+            return null;
+        }
+
+        $formatted = trim((string) preg_replace('/\s*\R\s*/u', ' ', AddressHelper::formatAddress($address)));
+
+        return $formatted === '' ? null : $formatted;
     }
 
     private function plainTextBody(): string

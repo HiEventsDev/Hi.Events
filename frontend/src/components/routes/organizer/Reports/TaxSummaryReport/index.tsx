@@ -13,7 +13,10 @@ interface TaxSummaryRow {
     tax_rate: number;
     total_collected: string;
     order_count: number;
+    total_order_count: number;
 }
+
+const distinctOrderCount = (rows: TaxSummaryRow[]) => Number(rows[0]?.total_order_count ?? 0);
 
 const TaxSummaryReport = ({description}: { description: string }) => {
     const {organizerId} = useParams();
@@ -29,7 +32,7 @@ const TaxSummaryReport = ({description}: { description: string }) => {
         {key: 'tax_rate', label: t`Tax rate`, kind: 'count', total: false, render: row => `${Number(row.tax_rate)}%`},
         {key: 'event_currency', label: t`Currency`},
         {key: 'total_collected', label: t`Tax collected`, kind: 'money'},
-        {key: 'order_count', label: t`Orders`, kind: 'count'},
+        {key: 'order_count', label: t`Orders`, kind: 'count', totalValue: distinctOrderCount},
     ];
 
     return (
@@ -39,9 +42,9 @@ const TaxSummaryReport = ({description}: { description: string }) => {
             columns={columns}
             rowCurrency={row => row.event_currency}
             emptyMessage={t`No tax was collected on completed orders in this period.`}
-            summary={sum => [
+            summary={(sum, rows) => [
                 {label: t`Tax collected`, value: sum('total_collected'), kind: 'money'},
-                {label: t`Orders`, value: sum('order_count'), kind: 'count'},
+                {label: t`Orders`, value: distinctOrderCount(rows), kind: 'count'},
             ]}
         />
     );

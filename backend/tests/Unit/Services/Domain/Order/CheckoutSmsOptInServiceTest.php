@@ -2,10 +2,12 @@
 
 namespace Tests\Unit\Services\Domain\Order;
 
+use HiEvents\DomainObjects\CrmSmsConnectionDomainObject;
 use HiEvents\DomainObjects\Enums\FeatureFlag;
 use HiEvents\DomainObjects\Enums\PhoneCollection;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\Enterprise\Crm\Repository\Interfaces\CrmSmsConnectionRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Domain\FeatureFlag\FeatureFlagService;
 use HiEvents\Services\Domain\Order\CheckoutSmsOptInService;
@@ -20,6 +22,8 @@ class CheckoutSmsOptInServiceTest extends TestCase
 
     private EventRepositoryInterface|MockInterface $eventRepository;
 
+    private CrmSmsConnectionRepositoryInterface|MockInterface $smsConnectionRepository;
+
     private CheckoutSmsOptInService $service;
 
     protected function setUp(): void
@@ -28,7 +32,9 @@ class CheckoutSmsOptInServiceTest extends TestCase
 
         $this->featureFlagService = Mockery::mock(FeatureFlagService::class);
         $this->eventRepository = Mockery::mock(EventRepositoryInterface::class);
-        $this->service = new CheckoutSmsOptInService($this->featureFlagService, $this->eventRepository);
+        $this->smsConnectionRepository = Mockery::mock(CrmSmsConnectionRepositoryInterface::class);
+        $this->smsConnectionRepository->shouldReceive('findFirstWhere')->with(['organizer_id' => 3])->andReturn(new CrmSmsConnectionDomainObject)->byDefault();
+        $this->service = new CheckoutSmsOptInService($this->featureFlagService, $this->eventRepository, $this->smsConnectionRepository);
     }
 
     public static function accountFlags(): array
@@ -43,13 +49,26 @@ class CheckoutSmsOptInServiceTest extends TestCase
     #[DataProvider('accountFlags')]
     public function test_the_opt_in_is_offered_only_when_the_account_can_send_texts(bool $audience, bool $textMessages, bool $offered): void
     {
-        $this->eventRepository->shouldReceive('findById')->with(7)->andReturn((new EventDomainObject)->setAccountId(42));
+        $this->eventRepository->shouldReceive('findById')->with(7)->andReturn((new EventDomainObject)->setAccountId(42)->setOrganizerId(3));
         $this->featureFlagService->shouldReceive('getEnabledFlagsForAccount')->with(42)->andReturn([
             FeatureFlag::CRM->value => $audience,
             FeatureFlag::CRM_SMS->value => $textMessages,
         ]);
 
         $this->assertSame($offered, $this->service->isOffered($this->settings(PhoneCollection::OPTIONAL, true)));
+    }
+
+    public function test_the_opt_in_is_not_offered_when_the_organizer_has_no_text_message_connection(): void
+    {
+        $this->eventRepository->shouldReceive('findById')->with(7)->andReturn((new EventDomainObject)->setAccountId(42)->setOrganizerId(3));
+        $this->featureFlagService->shouldReceive('getEnabledFlagsForAccount')->with(42)->andReturn([
+            FeatureFlag::CRM->value => true,
+            FeatureFlag::CRM_SMS->value => true,
+        ]);
+        $this->smsConnectionRepository->shouldReceive('findFirstWhere')->with(['organizer_id' => 3])->andReturnNull();
+
+        $this->assertFalse($this->service->isOffered($this->settings(PhoneCollection::REQUIRED, true)));
+        $this->assertFalse($this->service->isRecordedFor($this->settings(PhoneCollection::REQUIRED, true), 'GB'));
     }
 
     public static function eventSettings(): array
@@ -65,6 +84,7 @@ class CheckoutSmsOptInServiceTest extends TestCase
     {
         $this->eventRepository->shouldNotReceive('findById');
         $this->featureFlagService->shouldNotReceive('getEnabledFlagsForAccount');
+        $this->smsConnectionRepository->shouldNotReceive('findFirstWhere');
 
         $this->assertFalse($this->service->isOffered($this->settings($phoneCollection, $showSmsOptIn)));
     }
@@ -82,7 +102,7 @@ class CheckoutSmsOptInServiceTest extends TestCase
     #[DataProvider('numberCountries')]
     public function test_an_opt_in_is_recorded_only_for_a_number_in_a_country_we_text(?string $phoneCountry, bool $recorded): void
     {
-        $this->eventRepository->shouldReceive('findById')->with(7)->andReturn((new EventDomainObject)->setAccountId(42));
+        $this->eventRepository->shouldReceive('findById')->with(7)->andReturn((new EventDomainObject)->setAccountId(42)->setOrganizerId(3));
         $this->featureFlagService->shouldReceive('getEnabledFlagsForAccount')->with(42)->andReturn([
             FeatureFlag::CRM->value => true,
             FeatureFlag::CRM_SMS->value => true,

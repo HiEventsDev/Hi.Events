@@ -588,6 +588,7 @@ class CrmCampaignRepository extends BaseRepository implements CrmCampaignReposit
                 count(*) AS recipients,
                 count(*) FILTER (WHERE r.status = ?) AS sent,
                 count(*) FILTER (WHERE r.status = ?) AS failed,
+                count(*) FILTER (WHERE r.status = ? AND r.failure_reason = ?) AS undelivered,
                 count(*) FILTER (WHERE r.status = ?) AS skipped,
                 count(*) FILTER (WHERE r.status IN (?, ?)) AS pending,
                 count(coalesce(d.delivered_at, r.delivered_at)) AS delivered,
@@ -598,6 +599,8 @@ class CrmCampaignRepository extends BaseRepository implements CrmCampaignReposit
             ', [
                 CrmCampaignRecipientStatus::SENT->value,
                 CrmCampaignRecipientStatus::FAILED->value,
+                CrmCampaignRecipientStatus::FAILED->value,
+                CrmRecipientFailureReason::UNDELIVERED->value,
                 CrmCampaignRecipientStatus::SKIPPED->value,
                 CrmCampaignRecipientStatus::PENDING->value,
                 CrmCampaignRecipientStatus::SENDING->value,

@@ -328,11 +328,12 @@ class CampaignLaunchService
             return;
         }
 
+        $grant = $this->earlyAccessService->createAccessCode($campaign->getOrganizerId(), $campaign->getEventId(), $campaign->earlyAccessProductIds());
+
         $this->campaignRepository->updateWhere(
             attributes: [
-                CrmCampaignDomainObjectAbstract::PROMO_CODE_ID => $this->earlyAccessService
-                    ->createAccessCode($campaign->getOrganizerId(), $campaign->getEventId(), $campaign->earlyAccessProductIds())
-                    ->getId(),
+                CrmCampaignDomainObjectAbstract::PROMO_CODE_ID => $grant->promo_code_id,
+                CrmCampaignDomainObjectAbstract::EARLY_ACCESS_HIDDEN_PRODUCT_IDS => json_encode($grant->hidden_product_ids),
             ],
             where: [CrmCampaignDomainObjectAbstract::ID => $campaign->getId()],
         );

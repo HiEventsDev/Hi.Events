@@ -6,6 +6,7 @@ import {useGetOrganizers} from "../../../queries/useGetOrganizers.ts";
 import {useGetEvents} from "../../../queries/useGetEvents.ts";
 import {AnalyticsEvents, trackEvent} from "../../../utilites/analytics.ts";
 import {takeSsoSignupConversion} from "../../../utilites/ssoFlow.ts";
+import {clearStoredUtmData} from "../../../utilites/utm.ts";
 import {AuthShell, TicketPreview} from "../../layouts/AuthLayout/AuthShell.tsx";
 import {VerifyEmailStep} from "./VerifyEmailStep.tsx";
 import {FirstEventStep} from "./FirstEventStep.tsx";
@@ -30,6 +31,12 @@ const Welcome = () => {
             trackEvent(AnalyticsEvents.SIGNUP_COMPLETED);
         }
     }, [user]);
+
+    useEffect(() => {
+        if (user && !requiresVerification) {
+            clearStoredUtmData();
+        }
+    }, [user, requiresVerification]);
 
     useEffect(() => {
         if (eventsQuery.isFetched && (eventsQuery.data?.data.length ?? 0) > 0) {
