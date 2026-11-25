@@ -30,4 +30,9 @@ interface SuspiciousActivityRepositoryInterface
     public function findLiveEventsWithoutSpamCheck(CarbonInterface $createdAfter, CarbonInterface $createdBefore, int $limit): Collection;
 
     public function findEmailCategoryStats(CarbonInterface $since): Collection;
+
+    /**
+     * @param  array<int, int>  $accountIds
+     */
+    public function findAccountContexts(array $accountIds): Collection;
 }

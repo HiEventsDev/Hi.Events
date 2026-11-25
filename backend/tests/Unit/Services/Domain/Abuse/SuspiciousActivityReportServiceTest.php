@@ -109,8 +109,9 @@ class SuspiciousActivityReportServiceTest extends TestCase
         return new SuspiciousActivityFindingDTO(
             type: 'signup_spike',
             summary: 'Spike',
-            details: [],
+            items: [],
             fingerprint: $fingerprint,
+            nextStep: 'Look',
         );
     }
 }
