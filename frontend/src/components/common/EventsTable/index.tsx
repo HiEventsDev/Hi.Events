@@ -86,14 +86,14 @@ export const EventsTable = ({events, showOrganizer = false, isRefreshing, sort}:
                                 </CellLink>
                                 {event.type === EventType.RECURRING && (
                                     <Tooltip label={t`Recurring`} withArrow>
-                                        <span className={classes.marker} aria-label={t`Recurring`}>
+                                        <span className={classes.marker} role="img" aria-label={t`Recurring`}>
                                             <IconRepeat size={14}/>
                                         </span>
                                     </Tooltip>
                                 )}
                                 {event.has_seat_map === true && (
                                     <Tooltip label={t`Reserved seating`} withArrow>
-                                        <span className={classes.marker} aria-label={t`Reserved seating`}>
+                                        <span className={classes.marker} role="img" aria-label={t`Reserved seating`}>
                                             <IconArmchair size={14}/>
                                         </span>
                                     </Tooltip>
