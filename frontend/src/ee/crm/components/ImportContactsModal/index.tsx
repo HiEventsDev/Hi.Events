@@ -161,6 +161,11 @@ export const ImportContactsModal = ({organizerId, onImportSuppressions, onClose}
                     description={t`Optional. Pick a tag or type a new one. Makes it easy to find this list again.`}
                     placeholder={t`Newsletter`}
                     maxLength={50}
+                    onKeyDown={event => {
+                        if (event.key === 'Enter') {
+                            event.preventDefault();
+                        }
+                    }}
                 />
                 <Checkbox
                     {...form.getInputProps('consent_attested', {type: 'checkbox'})}

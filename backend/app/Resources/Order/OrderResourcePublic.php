@@ -37,6 +37,7 @@ class OrderResourcePublic extends BaseResource
             /** @var 'NO_PAYMENT_REQUIRED'|'AWAITING_PAYMENT'|'AWAITING_OFFLINE_PAYMENT'|'PAYMENT_FAILED'|'PAYMENT_RECEIVED'|null */
             'payment_status' => $this->getPaymentStatus(),
             'currency' => $this->getCurrency(),
+            'created_at' => $this->getCreatedAt(),
             'reserved_until' => $this->getReservedUntil(),
             'is_expired' => $this->when(
                 ! is_null($this->getReservedUntil()),
@@ -109,7 +110,6 @@ class OrderResourcePublic extends BaseResource
                 'session_identifier' => $this->getSessionIdentifier(),
             ]),
             $this->mergeWhen($this->isBoxOfficeOrder() && $request->attributes->has(AuthenticateBoxOfficeSession::SESSION_ATTRIBUTE), fn () => [
-                'created_at' => $this->getCreatedAt(),
                 'box_office_operator_name' => $this->getBoxOfficeOperatorName(),
                 /** @var 'CASH'|'CARD'|'COMP'|'OTHER'|'FREE'|null */
                 'box_office_tender' => $this->getBoxOfficeTender(),
