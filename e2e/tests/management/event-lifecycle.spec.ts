@@ -89,9 +89,9 @@ test.describe('event lifecycle', () => {
 
     await organizer.searchEvents(account.organizerId, duplicateTitle);
 
-    const duplicateCard = organizer.eventCard(duplicateTitle);
-    await expect(duplicateCard).toBeVisible();
-    await expect(duplicateCard.getByText('Draft')).toBeVisible();
+    const duplicateRow = organizer.eventRow(duplicateTitle);
+    await expect(duplicateRow).toBeVisible();
+    await expect(duplicateRow.getByText('Draft')).toBeVisible();
   });
 
   test('an organizer deletes a draft event from the danger zone', async ({ authedPage, api, account }) => {

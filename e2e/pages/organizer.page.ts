@@ -16,19 +16,31 @@ export class OrganizerPage {
     await this.page.waitForLoadState('networkidle');
   }
 
-  eventCard(title: string): Locator {
-    return this.page.locator('a').filter({ has: this.page.getByRole('heading', { name: title }) });
+  eventRow(title: string): Locator {
+    return this.page.getByRole('row').filter({ hasText: title });
   }
 
   async openEventDuplicateModal(title: string): Promise<void> {
     const duplicateItem = this.page.getByTestId('event-duplicate-menu-item');
     await expect(async () => {
       if (!(await duplicateItem.isVisible())) {
-        await this.eventCard(title).getByRole('button').click();
+        await this.eventRow(title).getByRole('button', { name: 'Actions' }).click();
       }
       await duplicateItem.click({ timeout: 2_000 });
       await expect(this.page.getByRole('dialog').getByLabel(/^Name/)).toBeVisible({ timeout: 2_000 });
     }).toPass({ timeout: 20_000 });
+  }
+
+  async openSwitcher(): Promise<void> {
+    await this.page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Switch Organizer' }).click();
+  }
+
+  get switcherSearch(): Locator {
+    return this.page.getByRole('dialog').getByRole('textbox', { name: 'Search organizers' });
+  }
+
+  switcherOption(name: string): Locator {
+    return this.page.getByRole('dialog').getByRole('button', { name });
   }
 
   async gotoSettings(organizerId: number): Promise<void> {

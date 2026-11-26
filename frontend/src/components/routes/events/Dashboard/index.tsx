@@ -1,43 +1,35 @@
-import {Event, QueryFilters} from "../../../../types.ts";
-import {useGetEvents} from "../../../../queries/useGetEvents.ts";
-import {EventCard} from "../../../common/EventCard";
-import {t, Trans} from "@lingui/macro";
-import {SearchBarWrapper} from "../../../common/SearchBar";
-import {Button, Menu, Skeleton} from "@mantine/core";
+import {useState} from "react";
+import {t} from "@lingui/macro";
+import {Button, Menu} from "@mantine/core";
+import {useDisclosure} from "@mantine/hooks";
 import {
-    IconArrowRight,
     IconBuilding,
     IconCalendarPlus,
     IconChevronDown,
+    IconChevronRight,
     IconPlus,
     IconUserPlus
 } from "@tabler/icons-react";
-import {ToolBar} from "../../../common/ToolBar";
-import {Pagination} from "../../../common/Pagination";
-import {useFilterQueryParamSync} from "../../../../hooks/useFilterQueryParamSync.ts";
-import {useDisclosure} from "@mantine/hooks";
-import {CreateEventModal} from "../../../modals/CreateEventModal";
-import {useGetOrganizers} from "../../../../queries/useGetOrganizers.ts";
 import {Navigate, useNavigate, useParams} from "react-router";
+import {QueryFilterOperator, QueryFilters} from "../../../../types.ts";
+import {useGetEvents} from "../../../../queries/useGetEvents.ts";
+import {useGetOrganizers} from "../../../../queries/useGetOrganizers.ts";
+import {useAccess} from "../../../../hooks/useAccess.ts";
+import {useFilterQueryParamSync} from "../../../../hooks/useFilterQueryParamSync.ts";
+import {getEventQueryFilters} from "../../../../utilites/eventsPageFiltersHelper.ts";
+import {EventsStatusControl} from "../../../common/EventsStatusControl";
+import {EventsTable} from "../../../common/EventsTable";
+import {FilterModal} from "../../../common/FilterModal";
+import {NoEventsBlankSlate} from "../../../common/NoEventsBlankSlate";
+import {PageTitle} from "../../../common/PageTitle";
+import {SearchBarWrapper} from "../../../common/SearchBar";
+import {TableCard, TableCardFooter, TableCardSkeleton} from "../../../common/TableCard";
+import {tableSortFromQuery} from "../../../common/TanStackTable/sorting.tsx";
+import {ToolBar} from "../../../common/ToolBar";
+import {CreateEventModal} from "../../../modals/CreateEventModal";
 import {CreateOrganizerModal} from "../../../modals/CreateOrganizerModal";
 import {SwitchOrganizerModal} from "../../../modals/SwitchOrganizerModal";
 import classes from "./Dashboard.module.scss";
-import {getEventQueryFilters} from "../../../../utilites/eventsPageFiltersHelper.ts";
-import {EventsDashboardStatusButtons} from "../../../common/EventsDashboardStatusButtons";
-import {NoEventsBlankSlate} from "../../../common/NoEventsBlankSlate";
-import {useState} from "react";
-import {getConfig} from "../../../../utilites/config.ts";
-import {useAccess} from "../../../../hooks/useAccess.ts";
-
-const DashboardSkeleton = () => {
-    return (
-        <>
-            <Skeleton height={120} radius="l" mb="20px"/>
-            <Skeleton height={120} radius="l" mb="20px"/>
-            <Skeleton height={120} radius="l"/>
-        </>
-    );
-}
 
 export function Dashboard() {
     const {eventsState} = useParams();
@@ -49,15 +41,11 @@ export function Dashboard() {
         close: closeCreateOrganizerModal
     }] = useDisclosure(false);
     const [organizerModalOpen, setOrganizerModalOpen] = useState(false);
-    const {
-        data: eventData,
-        isFetched: isEventsFetched,
-        isFetching: isEventsFetching,
-    } = useGetEvents(getEventQueryFilters(searchParams) as QueryFilters);
+    const eventsQuery = useGetEvents(getEventQueryFilters(searchParams) as QueryFilters);
     const organizersQuery = useGetOrganizers();
     const {canManageOrganizer, canCreateOrganizers, isReadOnly, isLoaded: isAccessLoaded} = useAccess();
-    const pagination = eventData?.meta;
-    const events = eventData?.data;
+    const pagination = eventsQuery.data?.meta;
+    const events = eventsQuery.data?.data;
     const readableOrganizers = organizersQuery?.data?.data;
     const organizers = readableOrganizers?.filter(organizer => canManageOrganizer(organizer.id));
     const canCreateEvents = !isReadOnly && !!organizers?.length;
@@ -70,159 +58,136 @@ export function Dashboard() {
         return <Navigate to={'/manage/organizer/' + organizers[0].id}/>;
     }
 
-    const getHeading = () => {
-        if (eventsState === 'upcoming' || !eventsState) {
-            return t`All Upcoming Events`;
-        } else if (eventsState === 'ended') {
-            return t`All Ended Events`;
-        } else if (eventsState === 'archived') {
-            return t`All Archived Events`;
+    const organizerFilter = searchParams.filterFields?.organizer_id;
+    const selectedOrganizerIds = organizerFilter && !Array.isArray(organizerFilter)
+        ? String(organizerFilter.value).split(',')
+        : [];
+
+    const showOrganizers = (organizerIds: string[]) => {
+        const filterFields = {...(searchParams.filterFields || {})};
+        if (organizerIds.length > 0) {
+            filterFields.organizer_id = {operator: QueryFilterOperator.In, value: organizerIds.join(',')};
+        } else {
+            delete filterFields.organizer_id;
         }
-    }
+
+        setSearchParams({...searchParams, filterFields, pageNumber: 1} as QueryFilters, true);
+    };
 
     return (
-        <div className={classes.eventsContainer}>
-            <div className={classes.pageHeader}>
-                <div className={classes.headerContent}>
-                    <h1 className={classes.pageTitle}>{getHeading()}</h1>
-                    <p className={classes.welcomeMessage}>
-                        <Trans>Welcome to {getConfig('VITE_APP_NAME', 'Hi.Events')}, here's a listing of all your events</Trans>
-                    </p>
-                </div>
+        <div className={classes.page}>
+            <header className={classes.header}>
+                <PageTitle subheading={t`All events across your organizers.`}>
+                    {t`Events`}
+                </PageTitle>
 
-                {/* Organizer Navigation */}
-                {organizers && organizers.length === 1 ? (
-                    <button
-                        className={classes.organizerButton}
-                        onClick={() => navigate(`/manage/organizer/${organizers[0].id}`)}
+                {!!organizers?.length && (
+                    <Button
+                        className={classes.organizersButton}
+                        variant="default"
+                        leftSection={<IconBuilding size={16} stroke={1.5}/>}
+                        rightSection={<IconChevronRight size={16} stroke={1.5}/>}
+                        onClick={() => organizers.length === 1
+                            ? navigate(`/manage/organizer/${organizers[0].id}`)
+                            : setOrganizerModalOpen(true)}
                     >
-                        <div className={classes.organizerLogo}>
-                            {organizers[0].images?.find((image) => image.type === 'ORGANIZER_LOGO') ? (
-                                <img
-                                    src={organizers[0].images.find((image) => image.type === 'ORGANIZER_LOGO')?.url}
-                                    alt={organizers[0].name}
+                        {organizers.length === 1 ? organizers[0].name : t`${organizers.length} organizers`}
+                    </Button>
+                )}
+            </header>
+
+            <TableCard>
+                <ToolBar
+                    embedded
+                    searchComponent={() => (
+                        <SearchBarWrapper
+                            placeholder={t`Search by event name...`}
+                            setSearchParams={setSearchParams}
+                            searchParams={searchParams}
+                        />
+                    )}
+                    filterComponent={(
+                        <div className={classes.filters}>
+                            <EventsStatusControl baseUrl="/manage/events" eventsState={eventsState}/>
+                            {readableOrganizers && readableOrganizers.length > 1 && (
+                                <FilterModal
+                                    filters={[{
+                                        field: 'organizer_id',
+                                        label: t`Organizer`,
+                                        type: 'multi-select',
+                                        options: readableOrganizers.map(organizer => ({
+                                            value: String(organizer.id),
+                                            label: organizer.name,
+                                        })),
+                                    }]}
+                                    activeFilters={{organizer_id: selectedOrganizerIds}}
+                                    onChange={values => showOrganizers(values.organizer_id ?? [])}
                                 />
-                            ) : (
-                                <div className={classes.logoPlaceholder}>
-                                    <IconBuilding size={20}/>
-                                </div>
                             )}
                         </div>
-                        <span className={classes.organizerName}>{organizers[0].name}</span>
-                        <IconArrowRight size={16} className={classes.arrowIcon}/>
-                    </button>
-                ) : organizers && organizers.length > 1 ? (
-                    <button
-                        className={classes.organizerButton}
-                        onClick={() => setOrganizerModalOpen(true)}
-                    >
-                        <div className={classes.organizerLogos}>
-                            {organizers.slice(0, 3).map((organizer, index) => (
-                                <div
-                                    key={organizer.id}
-                                    className={classes.miniLogo}
-                                    style={{zIndex: 3 - index}}
+                    )}
+                >
+                    {(canCreateEvents || canCreateOrganizers) && (
+                        <Menu transitionProps={{transition: 'pop-top-right'}} position="bottom-end" width={200} withinPortal>
+                            <Menu.Target>
+                                <Button
+                                    color="green"
+                                    leftSection={<IconPlus size={16}/>}
+                                    rightSection={<IconChevronDown size={14} stroke={1.5}/>}
+                                    data-testid="create-new-menu-button"
                                 >
-                                    {organizer.images?.find((image) => image.type === 'ORGANIZER_LOGO') ? (
-                                        <img
-                                            src={organizer.images.find((image) => image.type === 'ORGANIZER_LOGO')?.url}
-                                            alt={organizer.name}
-                                        />
-                                    ) : (
-                                        <IconBuilding size={12}/>
-                                    )}
-                                </div>
-                            ))}
-                            {organizers.length > 3 && (
-                                <div className={classes.miniLogo} style={{zIndex: 0}}>
-                                    <span>+{organizers.length - 3}</span>
-                                </div>
-                            )}
-                        </div>
-                        <span className={classes.organizerCount}>
-                            {t`${organizers.length} organizers`}
-                        </span>
-                        <IconArrowRight size={16} className={classes.arrowIcon}/>
-                    </button>
-                ) : null}
-            </div>
+                                    {t`Create new`}
+                                </Button>
+                            </Menu.Target>
+                            <Menu.Dropdown>
+                                {canCreateEvents && (
+                                    <Menu.Item
+                                        leftSection={<IconCalendarPlus size={16} stroke={1.5}/>}
+                                        onClick={openCreateModal}
+                                        data-testid="create-event-menu-item"
+                                    >
+                                        {t`Event`}
+                                    </Menu.Item>
+                                )}
+                                {canCreateOrganizers && (
+                                    <Menu.Item
+                                        leftSection={<IconUserPlus size={16} stroke={1.5}/>}
+                                        onClick={openCreateOrganizerModal}
+                                    >
+                                        {t`Organizer`}
+                                    </Menu.Item>
+                                )}
+                            </Menu.Dropdown>
+                        </Menu>
+                    )}
+                </ToolBar>
 
-            <ToolBar
-                searchComponent={() => (
-                    <SearchBarWrapper
-                        placeholder={t`Search by event name...`}
-                        setSearchParams={setSearchParams}
-                        searchParams={searchParams}
+                {!events && <TableCardSkeleton rows={8}/>}
+
+                {events?.length === 0 && (
+                    <NoEventsBlankSlate
+                        openCreateModal={canCreateEvents ? openCreateModal : undefined}
+                        eventsState={eventsState}
                     />
                 )}
-            >
-                {(canCreateEvents || canCreateOrganizers) && <Menu
-                    transitionProps={{transition: 'pop-top-right'}}
-                    position="bottom"
-                    width={220}
-                    withinPortal
-                >
-                    <Menu.Target>
-                        <Button
-                            leftSection={<IconPlus/>}
-                            color={'green'}
-                            rightSection={
-                                <IconChevronDown stroke={1.5}/>
-                            }
-                            pr={12}
-                            data-testid="create-new-menu-button"
-                        >
-                            {t`Create new`}
-                        </Button>
-                    </Menu.Target>
-                    <Menu.Dropdown>
-                        {canCreateEvents && <Menu.Item
-                            leftSection={
-                                <IconCalendarPlus
-                                    stroke={1.5}
-                                />
-                            }
-                            onClick={openCreateModal}
-                            data-testid="create-event-menu-item"
-                        >
-                            {t`Event`}
-                        </Menu.Item>}
-                        {canCreateOrganizers && <Menu.Item
-                            leftSection={
-                                <IconUserPlus
-                                    stroke={1.5}
-                                />
-                            }
-                            onClick={openCreateOrganizerModal}
-                        >
-                            {t`Organizer`}
-                        </Menu.Item>}
-                    </Menu.Dropdown>
-                </Menu>}
-            </ToolBar>
 
-            <EventsDashboardStatusButtons
-                baseUrl={`/manage/events`}
-                eventsState={eventsState as string}
-            />
+                {!!events?.length && (
+                    <>
+                        <EventsTable
+                            events={events}
+                            showOrganizer
+                            isRefreshing={eventsQuery.isFetching}
+                            sort={tableSortFromQuery(searchParams, setSearchParams, pagination)}
+                        />
+                        <TableCardFooter
+                            pagination={pagination}
+                            page={searchParams.pageNumber}
+                            onPageChange={(value) => setSearchParams({pageNumber: value})}
+                        />
+                    </>
+                )}
+            </TableCard>
 
-            {(events?.length === 0 && isEventsFetched)
-                && <NoEventsBlankSlate openCreateModal={canCreateEvents ? openCreateModal : undefined} eventsState={eventsState}/>}
-
-            <div>
-                {(isEventsFetching && !events) && <DashboardSkeleton/>}
-
-                {events?.map((event: Event) =>
-                    (
-                        <EventCard key={event.id} event={event}/>
-                    ))}
-            </div>
-            {events && events.length > 0
-                && <Pagination value={searchParams.pageNumber}
-                               onChange={(value) => setSearchParams({pageNumber: value})}
-                               total={Number(pagination?.last_page)}
-                />
-            }
             {createModalOpen && <CreateEventModal onClose={closeCreateModal}/>}
             {createOrganizerModalOpen && <CreateOrganizerModal onClose={closeCreateOrganizerModal}/>}
             {organizerModalOpen && (
@@ -234,7 +199,6 @@ export function Dashboard() {
                         openCreateOrganizerModal();
                     }}
                     heading={t`Choose an Organizer`}
-                    excludeCurrentOrganizer={false}
                 />
             )}
         </div>

@@ -374,7 +374,7 @@ msgstr "チケットの{0}"
 msgid "{0} orders"
 msgstr "{0}件の注文"
 
-#: src/components/routes/events/Dashboard/index.tsx:143
+#: src/components/routes/events/Dashboard/index.tsx:94
 msgid "{0} organizers"
 msgstr "{0}件の主催者"
 
@@ -532,7 +532,7 @@ msgstr "このセッションには{attendeeCount}名の参加者が登録され
 msgid "{attentionCount, plural, one {# refund needs attention} other {# refunds need attention}}"
 msgstr "{attentionCount, plural, other {#件の返金に対応が必要です}}"
 
-#: src/components/common/EventCard/index.tsx:144
+#: src/utilites/eventSummary.ts:80
 msgid "{availableCount} of {totalCount} available"
 msgstr "{totalCount}中{availableCount}利用可能"
 
@@ -1100,7 +1100,7 @@ msgstr "{total, plural, one {# 件の連絡先を配信停止中…} other {# �
 msgid "{total, plural, one {Updating # contact…} other {Updating # contacts…}}"
 msgstr "{total, plural, one {# 件の連絡先を更新中…} other {# 件の連絡先を更新中…}}"
 
-#: src/components/common/EventCard/index.tsx:140
+#: src/utilites/eventSummary.ts:76
 msgid "{totalCount} ticket types"
 msgstr "{totalCount}種類のチケットタイプ"
 
@@ -1383,7 +1383,7 @@ msgstr "1 枠"
 msgid "1 ticket"
 msgstr "1枚のチケット"
 
-#: src/components/common/EventCard/index.tsx:140
+#: src/utilites/eventSummary.ts:76
 msgid "1 ticket type"
 msgstr "1種類のチケットタイプ"
 
@@ -1887,6 +1887,7 @@ msgstr "対応が必要です：VAT情報が必要です"
 #: src/components/common/CapacityAssignmentList/index.tsx:103
 #: src/components/common/CheckInListTable/index.tsx:145
 #: src/components/common/EntityActions/index.tsx:28
+#: src/components/common/EventsTable/index.tsx:190
 #: src/components/common/LocationsTable/index.tsx:76
 #: src/components/common/LocationsTable/index.tsx:83
 #: src/components/common/OrdersTable/index.tsx:127
@@ -2653,10 +2654,6 @@ msgstr "すべて"
 msgid "All"
 msgstr "すべて"
 
-#: src/components/routes/events/Dashboard/index.tsx:79
-msgid "All Archived Events"
-msgstr "すべてのアーカイブ済みイベント"
-
 #: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:43
 msgid "All areas"
 msgstr "すべてのエリア"
@@ -2722,15 +2719,15 @@ msgstr "すべての日付 · 共有"
 msgid "All days"
 msgstr "すべての日"
 
-#: src/components/routes/events/Dashboard/index.tsx:77
-msgid "All Ended Events"
-msgstr "すべての終了済みイベント"
-
 #: src/components/common/WidgetEditor/ContentFields.tsx:180
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:128
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:128
 msgid "All events"
 msgstr "すべてのイベント"
+
+#: src/components/routes/events/Dashboard/index.tsx:80
+msgid "All events across your organizers."
+msgstr "すべての主催者のイベント一覧です。"
 
 #: src/components/routes/admin/FailedJobs/index.tsx:94
 msgid "All failed jobs deleted"
@@ -2806,10 +2803,6 @@ msgstr "信頼済みデバイスをすべて削除しました"
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:182
 msgid "All upcoming"
 msgstr "今後のすべて"
-
-#: src/components/routes/events/Dashboard/index.tsx:75
-msgid "All Upcoming Events"
-msgstr "今後のすべてのイベント"
 
 #: src/components/routes/admin/Announcements/index.tsx:78
 #: src/components/routes/admin/Announcements/index.tsx:435
@@ -3334,7 +3327,7 @@ msgstr "4月"
 msgid "Archive"
 msgstr "アーカイブ"
 
-#: src/components/common/EventCard/index.tsx:169
+#: src/hooks/useEventActions.tsx:73
 msgid "Archive event"
 msgstr "イベントをアーカイブ"
 
@@ -3356,14 +3349,15 @@ msgstr "このイベントをアーカイブして、一般公開から非表示
 msgid "Archive this organizer. This will also archive all events belonging to this organizer."
 msgstr "この主催者をアーカイブします。この主催者に属するすべてのイベントもアーカイブされます。"
 
-#: src/components/common/EventCard/index.tsx:90
-#: src/components/common/EventsDashboardStatusButtons/index.tsx:32
+#: src/components/common/EventsStatusControl/index.tsx:33
+#: src/components/modals/SwitchOrganizerModal/index.tsx:67
 #: src/components/routes/event/Lineup/EventStatusBadge.tsx:12
 #: src/components/routes/settings/Organizers/index.tsx:21
+#: src/utilites/eventSummary.ts:22
 msgid "Archived"
 msgstr "アーカイブ済み"
 
-#: src/components/modals/SwitchOrganizerModal/index.tsx:111
+#: src/components/modals/SwitchOrganizerModal/index.tsx:120
 msgid "Archived Organizers"
 msgstr "アーカイブ済みの主催者"
 
@@ -3379,7 +3373,7 @@ msgstr "このイベントは本当にスパムではありませんか？すぐ
 msgid "Are you sure you want to activate this attendee?"
 msgstr "この参加者を有効化してもよろしいですか？"
 
-#: src/components/common/EventCard/index.tsx:70
+#: src/hooks/useEventActions.tsx:33
 msgid "Are you sure you want to archive this event?"
 msgstr "このイベントをアーカイブしてもよろしいですか？"
 
@@ -3511,7 +3505,7 @@ msgstr "{0}にチケットを再送信してもよろしいですか？"
 msgid "Are you sure you want to restore this event?"
 msgstr "このイベントを復元してもよろしいですか？"
 
-#: src/components/common/EventCard/index.tsx:71
+#: src/hooks/useEventActions.tsx:34
 msgid "Are you sure you want to restore this event? It will be restored as a draft event."
 msgstr "このイベントを復元してもよろしいですか？下書きイベントとして復元されます。"
 
@@ -3794,8 +3788,8 @@ msgid "attendees"
 msgstr "参加者"
 
 #: src/components/common/AdminEventsTable/index.tsx:76
-#: src/components/common/EventCard/index.tsx:271
-#: src/components/common/EventCard/index.tsx:397
+#: src/components/common/EventCard/index.tsx:135
+#: src/components/common/EventsTable/index.tsx:166
 #: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:60
 #: src/components/common/ProductsTable/index.tsx:96
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:530
@@ -3829,10 +3823,6 @@ msgstr "チェックイン済みの参加者"
 #: src/components/routes/event/attendees.tsx:164
 msgid "Attendees Exported"
 msgstr "参加者をエクスポートしました"
-
-#: src/components/common/EventCard/index.tsx:394
-msgid "Attendees registered"
-msgstr "登録済みの参加者"
 
 #: src/components/common/StatsCharts/index.tsx:56
 msgid "Attendees Registered"
@@ -5704,7 +5694,7 @@ msgstr "エリアを選択"
 msgid "Choose an organizer"
 msgstr "主催者を選択"
 
-#: src/components/routes/events/Dashboard/index.tsx:236
+#: src/components/routes/events/Dashboard/index.tsx:201
 msgid "Choose an Organizer"
 msgstr "主催者を選択"
 
@@ -5943,7 +5933,7 @@ msgid "close"
 msgstr "閉じる"
 
 #: src/components/common/BrandingUpsell/BrandingUpgradeModal.tsx:41
-#: src/components/common/Modal/index.tsx:33
+#: src/components/common/Modal/index.tsx:31
 #: src/components/common/SideDrawer/index.tsx:117
 #: src/components/common/TicketResale/SellTicketModal.tsx:122
 #: src/components/common/WidgetEditor/WidgetPreview.tsx:128
@@ -6654,7 +6644,7 @@ msgstr "Cookie設定"
 #: src/components/common/AttendeeTicket/index.tsx:229
 #: src/components/common/CopyButton/index.tsx:14
 #: src/components/common/OfflinePaymentDetails/index.tsx:31
-#: src/components/common/TanStackTable/cells.tsx:79
+#: src/components/common/TanStackTable/cells.tsx:93
 #: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:84
 #: src/components/common/WidgetEditor/index.tsx:221
 #: src/components/common/WidgetEditor/InstallPanel.tsx:52
@@ -6690,8 +6680,8 @@ msgstr "ChatGPT、Claude、Cursor、またはサイトビルダーのAIアシス
 
 #: src/components/common/CopyButton/index.tsx:14
 #: src/components/common/OfflinePaymentDetails/index.tsx:31
-#: src/components/common/TanStackTable/cells.tsx:79
-#: src/components/common/TanStackTable/cells.tsx:86
+#: src/components/common/TanStackTable/cells.tsx:93
+#: src/components/common/TanStackTable/cells.tsx:100
 #: src/components/modals/CheckInListSuccessModal/index.tsx:42
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:74
 #: src/components/modals/ManageOrderModal/index.tsx:240
@@ -7233,7 +7223,7 @@ msgstr "イベントを作成"
 
 #: src/components/common/NoEventsBlankSlate/index.tsx:28
 #: src/components/layouts/OrganizerLayout/index.tsx:248
-#: src/components/routes/organizer/Events/index.tsx:66
+#: src/components/routes/organizer/Events/index.tsx:54
 msgid "Create Event"
 msgstr "イベントを作成"
 
@@ -7253,7 +7243,7 @@ msgstr "キーを作成"
 msgid "Create more tickets or products to offer them as add-ons"
 msgstr "アドオンとして提供するチケットや商品をさらに作成します"
 
-#: src/components/routes/events/Dashboard/index.tsx:175
+#: src/components/routes/events/Dashboard/index.tsx:139
 msgid "Create new"
 msgstr "新規作成"
 
@@ -7268,7 +7258,7 @@ msgid "Create organizer"
 msgstr "主催者を作成"
 
 #: src/components/common/GlobalMenu/index.tsx:104
-#: src/components/modals/SwitchOrganizerModal/index.tsx:100
+#: src/components/modals/SwitchOrganizerModal/index.tsx:140
 msgid "Create Organizer"
 msgstr "主催者を作成"
 
@@ -7429,6 +7419,10 @@ msgstr "通貨"
 #: src/components/routes/welcome/FirstEventStep.tsx:86
 msgid "Currency is required"
 msgstr "通貨は必須です"
+
+#: src/components/modals/SwitchOrganizerModal/index.tsx:71
+msgid "Current organizer"
+msgstr "現在の主催者"
 
 #: src/components/common/ConfirmIdentity/index.tsx:70
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:40
@@ -7627,6 +7621,7 @@ msgstr "ダッシュボード"
 #: src/components/common/AdminOrdersTable/index.tsx:83
 #: src/components/common/AttendeeTable/index.tsx:227
 #: src/components/common/CheckInListTable/index.tsx:90
+#: src/components/common/EventsTable/index.tsx:127
 #: src/components/common/OrderDetails/index.tsx:44
 #: src/components/common/OrdersTable/index.tsx:271
 #: src/components/common/WaitlistTable/index.tsx:178
@@ -8550,7 +8545,6 @@ msgstr "スプレッドシートをダウンロード (.xlsx)"
 msgid "Downloading Invoice"
 msgstr "請求書をダウンロード中"
 
-#: src/components/common/EventCard/index.tsx:99
 #: src/components/layouts/Event/index.tsx:261
 #: src/components/layouts/OrganizerLayout/index.tsx:298
 #: src/components/routes/admin/Announcements/index.tsx:134
@@ -8558,6 +8552,7 @@ msgstr "請求書をダウンロード中"
 #: src/components/routes/event/Lineup/EventStatusBadge.tsx:10
 #: src/components/routes/settings/Organizers/index.tsx:23
 #: src/ee/crm/utilites/labels.ts:157
+#: src/utilites/eventSummary.ts:31
 msgid "Draft"
 msgstr "下書き"
 
@@ -8663,7 +8658,7 @@ msgstr "{0}を複製"
 msgid "Duplicate Date"
 msgstr "日付を複製"
 
-#: src/components/common/EventCard/index.tsx:162
+#: src/hooks/useEventActions.tsx:66
 msgid "Duplicate event"
 msgstr "イベントを複製"
 
@@ -9444,10 +9439,10 @@ msgstr "終了日は開始日より後にしてください"
 msgid "End time"
 msgstr "終了時刻"
 
-#: src/components/common/EventCard/index.tsx:93
-#: src/components/common/EventsDashboardStatusButtons/index.tsx:26
+#: src/components/common/EventsStatusControl/index.tsx:32
 #: src/components/common/EventStatusBadge/index.tsx:14
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:134
+#: src/utilites/eventSummary.ts:25
 msgid "Ended"
 msgstr "終了"
 
@@ -9733,12 +9728,13 @@ msgid "Even numbers only"
 msgstr "偶数のみ"
 
 #: src/components/common/AdminOrdersTable/index.tsx:55
+#: src/components/common/EventsTable/index.tsx:60
 #: src/components/routes/admin/Dashboard/index.tsx:50
 #: src/components/routes/admin/Messages/index.tsx:152
 #: src/components/routes/admin/Messages/index.tsx:325
 #: src/components/routes/admin/SpamEvents/index.tsx:139
 #: src/components/routes/admin/SpamEvents/index.tsx:316
-#: src/components/routes/events/Dashboard/index.tsx:188
+#: src/components/routes/events/Dashboard/index.tsx:149
 #: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:32
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:52
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:60
@@ -9893,16 +9889,16 @@ msgstr "イベント設定"
 msgid "Event setup"
 msgstr "イベントの設定"
 
-#: src/components/common/EventCard/index.tsx:82
 #: src/components/common/StatusToggle/index.tsx:62
 #: src/components/layouts/Event/index.tsx:223
 #: src/components/modals/PublishEventModal/index.tsx:129
+#: src/hooks/useEventActions.tsx:45
 msgid "Event status update failed. Please try again later"
 msgstr "イベントのステータスの更新に失敗しました。しばらくしてからもう一度お試しください"
 
-#: src/components/common/EventCard/index.tsx:79
 #: src/components/common/StatusToggle/index.tsx:54
 #: src/components/layouts/Event/index.tsx:220
+#: src/hooks/useEventActions.tsx:42
 msgid "Event status updated"
 msgstr "イベントのステータスを更新しました"
 
@@ -9946,7 +9942,8 @@ msgstr "イベントを更新しました"
 #: src/components/routes/admin/Dashboard/index.tsx:322
 #: src/components/routes/admin/Events/index.tsx:80
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:236
-#: src/components/routes/organizer/Events/index.tsx:46
+#: src/components/routes/events/Dashboard/index.tsx:81
+#: src/components/routes/organizer/Events/index.tsx:34
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:84
 #: src/components/routes/organizer/Reports/index.tsx:31
 #: src/ee/crm/components/ContactDrawer/index.tsx:175
@@ -10773,6 +10770,7 @@ msgstr "役割で絞り込む"
 msgid "Filter by sign-in method"
 msgstr "サインイン方法で絞り込む"
 
+#: src/components/common/EventsStatusControl/index.tsx:27
 #: src/components/routes/event/Resale/index.tsx:98
 msgid "Filter by status"
 msgstr "ステータスで絞り込む"
@@ -11546,10 +11544,6 @@ msgstr "グリッド"
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:88
 msgid "Gross"
 msgstr "総額"
-
-#: src/components/common/EventCard/index.tsx:400
-msgid "Gross revenue"
-msgstr "総収益"
 
 #: src/components/common/StatBoxes/index.tsx:96
 #: src/components/modals/ProductPurchasesModal/index.tsx:211
@@ -13471,13 +13465,13 @@ msgstr "出品を終了しました。売り手にメールでお知らせしま
 msgid "Listing withdrawn. Your ticket works again."
 msgstr "出品を取り下げました。チケットは再び使えます。"
 
-#: src/components/common/EventCard/index.tsx:102
 #: src/components/layouts/Event/index.tsx:263
 #: src/components/layouts/OrganizerLayout/index.tsx:300
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:122
 #: src/components/routes/event/Lineup/EventStatusBadge.tsx:8
 #: src/components/routes/settings/Organizers/index.tsx:19
 #: src/ee/crm/components/routes/AudienceForms/index.tsx:130
+#: src/utilites/eventSummary.ts:34
 msgid "Live"
 msgstr "公開中"
 
@@ -13568,6 +13562,7 @@ msgstr "{service} からコンテンツを読み込みます"
 
 #: src/components/common/AttendeeTicket/index.tsx:139
 #: src/components/common/AttendeeTicket/index.tsx:146
+#: src/components/common/EventsTable/index.tsx:145
 #: src/components/common/LocationPicker/index.tsx:173
 #: src/components/common/LocationPicker/index.tsx:221
 #: src/components/common/LocationPicker/index.tsx:294
@@ -13735,7 +13730,7 @@ msgstr "定期イベントの日付と時間を管理します"
 msgid "Manage defaults"
 msgstr "デフォルトを管理"
 
-#: src/components/common/EventCard/index.tsx:157
+#: src/hooks/useEventActions.tsx:61
 msgid "Manage event"
 msgstr "イベントを管理"
 
@@ -14315,11 +14310,11 @@ msgstr "複数選択ドロップダウン"
 msgid "Multiple dates until {lastOccurrenceDate}"
 msgstr "{lastOccurrenceDate}までの複数日程"
 
-#: src/components/common/EventCard/index.tsx:111
 #: src/components/layouts/EventHomepage/index.tsx:112
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:29
 #: src/components/layouts/OrganizerHomepage/EventList/index.tsx:38
 #: src/components/widget/WidgetSections/index.tsx:58
+#: src/utilites/eventSummary.ts:45
 msgid "Multiple locations"
 msgstr "複数の場所"
 
@@ -14934,8 +14929,8 @@ msgstr "連絡先はまだありません。誰かが予約するとすぐにこ
 msgid "No countries found"
 msgstr "国が見つかりません"
 
-#: src/components/common/EventCard/index.tsx:241
-#: src/components/common/EventCard/index.tsx:339
+#: src/components/common/EventCard/index.tsx:105
+#: src/components/common/EventsTable/index.tsx:131
 msgid "No date added"
 msgstr "日付が追加されていません"
 
@@ -15196,7 +15191,7 @@ msgstr "利用可能な主催者のコンテキストがありません。"
 msgid "No organizers yet."
 msgstr "主催者はまだいません。"
 
-#: src/components/modals/SwitchOrganizerModal/index.tsx:60
+#: src/components/modals/SwitchOrganizerModal/index.tsx:106
 msgid "No other organizers available"
 msgstr "利用可能な他の主催者はありません"
 
@@ -15353,6 +15348,7 @@ msgid "No Search Results"
 msgstr "検索結果なし"
 
 #: src/components/common/NoResultsSplash/index.tsx:29
+#: src/components/modals/SwitchOrganizerModal/index.tsx:106
 msgid "No search results."
 msgstr "検索結果はありません。"
 
@@ -16087,9 +16083,9 @@ msgstr "公開中のイベント"
 msgid "On now"
 msgstr "開催中"
 
-#: src/components/common/EventCard/index.tsx:104
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:140
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:37
+#: src/utilites/eventSummary.ts:36
 msgid "On Sale"
 msgstr "販売中"
 
@@ -16209,7 +16205,6 @@ msgstr "注文、チケット、チェックイン、登録のすべてから作
 msgid "Ongoing"
 msgstr "開催中"
 
-#: src/components/common/EventCard/index.tsx:114
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:32
 #: src/components/routes/event/OccurrencesTab/index.tsx:343
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:482
@@ -16217,6 +16212,7 @@ msgstr "開催中"
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:393
 #: src/ee/box-office/components/layouts/BoxOffice/ReaderPicker.tsx:16
 #: src/ee/box-office/components/routes/organizer/Payments/TerminalReaders/index.tsx:36
+#: src/utilites/eventSummary.ts:49
 msgid "Online"
 msgstr "オンライン"
 
@@ -16224,10 +16220,10 @@ msgstr "オンライン"
 msgid "Online — provide connection details"
 msgstr "オンライン — 接続情報を入力"
 
-#: src/components/common/EventCard/index.tsx:111
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:29
 #: src/components/layouts/OrganizerHomepage/EventList/index.tsx:38
 #: src/components/widget/WidgetSections/index.tsx:58
+#: src/utilites/eventSummary.ts:45
 msgid "Online & in-person"
 msgstr "オンライン＆対面"
 
@@ -16989,7 +16985,8 @@ msgstr "組織名"
 #: src/components/modals/CreateEventModal/index.tsx:270
 #: src/components/routes/admin/SpamEvents/index.tsx:147
 #: src/components/routes/admin/SpamEvents/index.tsx:331
-#: src/components/routes/events/Dashboard/index.tsx:198
+#: src/components/routes/events/Dashboard/index.tsx:116
+#: src/components/routes/events/Dashboard/index.tsx:157
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:496
 #: src/components/widget/WidgetSections/index.tsx:135
 #: src/ee/crm/components/routes/AdminCampaignReview/index.tsx:177
@@ -17562,9 +17559,9 @@ msgstr "保留中の招待"
 msgid "Pending review"
 msgstr "レビュー待ち"
 
-#: src/components/common/EventCard/index.tsx:96
 #: src/components/layouts/Event/index.tsx:259
 #: src/components/routes/admin/Messages/index.tsx:270
+#: src/utilites/eventSummary.ts:28
 msgid "Pending Review"
 msgstr "レビュー待ち"
 
@@ -18925,9 +18922,9 @@ msgstr "リカバリーコード"
 msgid "Rectangular"
 msgstr "長方形"
 
-#: src/components/common/EventCard/index.tsx:224
-#: src/components/common/EventCard/index.tsx:328
-#: src/components/common/EventCard/index.tsx:343
+#: src/components/common/EventCard/index.tsx:88
+#: src/components/common/EventsTable/index.tsx:88
+#: src/components/common/EventsTable/index.tsx:89
 msgid "Recurring"
 msgstr "繰り返し"
 
@@ -19612,8 +19609,9 @@ msgstr "予約済み"
 msgid "reserved seating"
 msgstr "指定席"
 
-#: src/components/common/EventCard/index.tsx:229
-#: src/components/common/EventCard/index.tsx:329
+#: src/components/common/EventCard/index.tsx:93
+#: src/components/common/EventsTable/index.tsx:95
+#: src/components/common/EventsTable/index.tsx:96
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:365
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:8
 #: src/ee/licensing/licenceNotice.ts:55
@@ -19700,7 +19698,7 @@ msgstr "削除した{removedSeats}席を復元"
 msgid "Restore contact"
 msgstr "連絡先を復元"
 
-#: src/components/common/EventCard/index.tsx:169
+#: src/hooks/useEventActions.tsx:73
 msgid "Restore event"
 msgstr "イベントを復元"
 
@@ -19806,8 +19804,8 @@ msgstr "このアカウント内の別の主催者のStripe接続を再利用し
 
 #: src/components/common/AffiliateTable/index.tsx:105
 #: src/components/common/AffiliateTable/index.tsx:106
-#: src/components/common/EventCard/index.tsx:275
-#: src/components/common/EventCard/index.tsx:405
+#: src/components/common/EventCard/index.tsx:139
+#: src/components/common/EventsTable/index.tsx:176
 #: src/components/common/StatsCharts/index.tsx:70
 #: src/components/common/WidgetEditor/WidgetStats.tsx:18
 #: src/components/routes/admin/Attribution/index.tsx:134
@@ -20487,8 +20485,8 @@ msgstr "アカウント名またはメールアドレスで検索..."
 msgid "Search by attendee name, email or order #..."
 msgstr "参加者名、メールアドレス、注文番号で検索..."
 
-#: src/components/routes/events/Dashboard/index.tsx:153
-#: src/components/routes/organizer/Events/index.tsx:51
+#: src/components/routes/events/Dashboard/index.tsx:104
+#: src/components/routes/organizer/Events/index.tsx:41
 msgid "Search by event name..."
 msgstr "イベント名で検索..."
 
@@ -20614,6 +20612,10 @@ msgstr "名前またはメールで検索"
 msgid "Search orders"
 msgstr "注文を検索"
 
+#: src/components/modals/SwitchOrganizerModal/index.tsx:84
+msgid "Search organizers"
+msgstr "主催者を検索"
+
 #: src/components/common/TeamAccessFields/index.tsx:236
 msgid "Search organizers and events"
 msgstr "主催者とイベントを検索"
@@ -20648,6 +20650,7 @@ msgid "Search your saved profiles or type a new name in the {lineupLabel} panel.
 msgstr "保存済みプロフィールを検索するか、{lineupLabel}パネルで新しい名前を入力します。それぞれに写真、略歴、リンクを追加できます。"
 
 #: src/components/common/SearchBar/index.tsx:35
+#: src/components/modals/SwitchOrganizerModal/index.tsx:85
 msgid "Search..."
 msgstr "検索..."
 
@@ -20746,10 +20749,6 @@ msgstr "座席の販売と保留中の座席"
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:43
 msgid "Seat spacing"
 msgstr "座席の間隔"
-
-#: src/components/common/EventCard/index.tsx:349
-msgid "Seated"
-msgstr "着席"
 
 #: src/components/layouts/Event/index.tsx:139
 #: src/components/routes/event/Reports/index.tsx:62
@@ -22298,7 +22297,6 @@ msgstr "販売元：{operatorName}"
 msgid "sold out"
 msgstr "完売"
 
-#: src/components/common/EventCard/index.tsx:136
 #: src/components/common/EventDateRange/index.tsx:65
 #: src/components/common/ProductPriceAvailability/index.tsx:21
 #: src/components/common/ProductPriceAvailability/index.tsx:61
@@ -22311,6 +22309,7 @@ msgstr "完売"
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:54
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:85
 #: src/utilites/eventListingLabels.ts:18
+#: src/utilites/eventSummary.ts:72
 msgid "Sold out"
 msgstr "完売"
 
@@ -22891,6 +22890,7 @@ msgstr "統計"
 #: src/components/common/AttendeeTable/index.tsx:246
 #: src/components/common/CapacityAssignmentList/index.tsx:94
 #: src/components/common/CheckInListTable/index.tsx:132
+#: src/components/common/EventsTable/index.tsx:118
 #: src/components/common/OrderDetails/index.tsx:73
 #: src/components/common/OrdersTable/index.tsx:221
 #: src/components/common/ProductsTable/index.tsx:100
@@ -23424,7 +23424,7 @@ msgid "Switch date"
 msgstr "日付を切り替え"
 
 #: src/components/layouts/OrganizerLayout/index.tsx:95
-#: src/components/modals/SwitchOrganizerModal/index.tsx:49
+#: src/components/modals/SwitchOrganizerModal/index.tsx:79
 msgid "Switch Organizer"
 msgstr "主催者を切り替え"
 
@@ -24857,7 +24857,7 @@ msgstr "このイベントは手動レビュー待ちのため、レビューが
 msgid "This event is pending manual review and is not visible to the public"
 msgstr "このイベントは手動レビュー待ちのため、一般には表示されません"
 
-#: src/components/common/EventCard/index.tsx:65
+#: src/hooks/useEventActions.tsx:28
 msgid "This event is pending manual review and its status cannot be changed until the review is complete."
 msgstr "このイベントは手動レビュー待ちのため、レビューが完了するまでステータスを変更できません。"
 
@@ -25494,6 +25494,7 @@ msgstr "チケット販売"
 msgid "tickets"
 msgstr "チケット"
 
+#: src/components/common/EventsTable/index.tsx:154
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:96
 #: src/components/common/WidgetEditor/SectionsPicker.tsx:28
 #: src/components/common/WidgetEditor/TypePicker.tsx:7
@@ -26624,7 +26625,7 @@ msgstr "日付ごとに最大{perDateAllocation}まで"
 msgid "Up to 40 photos, at least 400 × 300px. The first one is shown largest."
 msgstr "最大 40 枚、400 × 300px 以上。最初の写真が最も大きく表示されます。"
 
-#: src/components/common/EventsDashboardStatusButtons/index.tsx:20
+#: src/components/common/EventsStatusControl/index.tsx:31
 #: src/components/common/EventStatusBadge/index.tsx:16
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:137
 #: src/components/layouts/OrganizerHomepage/index.tsx:153
@@ -27243,7 +27244,7 @@ msgstr "イベントを見る"
 msgid "View Event"
 msgstr "イベントを表示"
 
-#: src/components/common/EventCard/index.tsx:152
+#: src/hooks/useEventActions.tsx:56
 msgid "View event page"
 msgstr "イベントページを表示"
 
@@ -28145,10 +28146,6 @@ msgstr "おかえりなさい{0} 👋"
 #: src/ee/crm/utilites/labels.ts:276
 msgid "Welcome first-timers"
 msgstr "初参加者を歓迎"
-
-#: src/components/routes/events/Dashboard/index.tsx:89
-msgid "Welcome to {0}, here's a listing of all your events"
-msgstr "{0}へようこそ。すべてのイベントの一覧です"
 
 #: src/constants/eventCategories.ts:20
 msgid "Wellness"
