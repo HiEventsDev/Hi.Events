@@ -1,17 +1,19 @@
 import {ReactNode} from 'react';
 import {Anchor, Button, Modal, Skeleton, Text} from '@mantine/core';
-import {IconCalendarOff, IconCreditCardOff, IconTicketOff} from '@tabler/icons-react';
+import {IconCalendarOff, IconCreditCardOff, IconMailCheck, IconTicketOff} from '@tabler/icons-react';
 import {t} from "@lingui/macro";
 import {useNavigate} from "react-router";
 import {BouncingEmoji} from "../../common/BouncingEmoji";
-import {Event, EventType, Product, ProductPriceType} from "../../../types.ts";
+import {Event, EventType, IdParam, Product, ProductPriceType} from "../../../types.ts";
 import {useGetAccount} from "../../../queries/useGetAccount.ts";
+import {useGetMe} from "../../../queries/useGetMe.ts";
+import {useResendEmailConfirmation} from "../../../mutations/useResendEmailConfirmation.ts";
 import {useGetEventSettings} from "../../../queries/useGetEventSettings.ts";
 import {useGetOrganizer} from "../../../queries/useGetOrganizer.ts";
 import {useGetEventProductCategories} from "../../../queries/useGetProductCategories.ts";
 import {useGetEventOccurrences} from "../../../queries/useGetEventOccurrences.ts";
 import {useUpdateEventStatus} from "../../../mutations/useUpdateEventStatus.ts";
-import {showError} from "../../../utilites/notifications.tsx";
+import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import classes from './PublishEventModal.module.scss';
 
 interface PublishEventModalProps {
@@ -28,7 +30,9 @@ interface PublishCheck {
     title: string;
     description: string;
     actionLabel: string;
-    actionUrl: string;
+    actionUrl?: string;
+    onAction?: () => void;
+    actionLoading?: boolean;
     secondaryActionLabel?: string;
     secondaryActionUrl?: string;
 }
@@ -50,6 +54,8 @@ export const PublishEventModal = ({opened, onClose, event, onSuccess}: PublishEv
     const isRecurring = event.type === EventType.RECURRING;
 
     const {data: account, isFetched: isAccountFetched} = useGetAccount();
+    const {data: me} = useGetMe();
+    const resendConfirmation = useResendEmailConfirmation();
     const {data: eventSettings, isFetched: isSettingsFetched} = useGetEventSettings(eventId);
     const {data: organizer, isFetched: isOrganizerFetched} = useGetOrganizer(organizerId);
     const {data: productCategories, isFetched: isProductsFetched} = useGetEventProductCategories(eventId);
@@ -72,6 +78,24 @@ export const PublishEventModal = ({opened, onClose, event, onSuccess}: PublishEv
         && (!isRecurring || occurrencesQuery.isFetched);
 
     const checks: PublishCheck[] = [];
+
+    const resendEmail = () => resendConfirmation.mutate({userId: me?.id as IdParam}, {
+        onSuccess: () => showSuccess(t`Confirmation email sent`),
+        onError: () => showError(t`We couldn't send the email. Please try again.`),
+    });
+
+    if (account?.is_account_email_confirmed === false) {
+        checks.push({
+            key: 'email',
+            blocking: true,
+            icon: <IconMailCheck size={18}/>,
+            title: t`Verify your email to publish`,
+            description: t`Click the link we emailed to ${account.email}, then publish.`,
+            actionLabel: t`Resend email`,
+            onAction: resendEmail,
+            actionLoading: resendConfirmation.isPending,
+        });
+    }
 
     if (isSaasMode && hasPaidProducts && isStripeEnabled && !isStripeConnected) {
         checks.push({
@@ -182,7 +206,8 @@ export const PublishEventModal = ({opened, onClose, event, onSuccess}: PublishEv
                                     variant="light"
                                     color={check.blocking ? 'red' : 'yellow'}
                                     className={classes.checkAction}
-                                    onClick={() => handleFix(check.actionUrl)}
+                                    onClick={() => check.onAction ? check.onAction() : handleFix(check.actionUrl as string)}
+                                    loading={check.actionLoading}
                                 >
                                     {check.actionLabel}
                                 </Button>

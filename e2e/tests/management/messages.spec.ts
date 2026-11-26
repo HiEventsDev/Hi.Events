@@ -110,7 +110,7 @@ test.describe('messages', () => {
     await expect(authedPage.getByText('Test email sent to your inbox')).toBeVisible();
     await expect(authedPage.getByRole('heading', { name: 'Send a message' })).toBeVisible();
     await expect(messages.listItem(subject)).toBeVisible();
-    await expect(messages.listItem(subject).getByText('SCHEDULED', { exact: true })).toHaveCount(0);
+    await expect(messages.listItem(subject).getByText('Scheduled', { exact: true })).toHaveCount(0);
     const delivered = await mailpit.waitForMessage(account.email, { subjectContains: subject });
     expect(delivered.Subject).toContain('[Test]');
   });
