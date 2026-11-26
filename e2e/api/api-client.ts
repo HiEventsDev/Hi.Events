@@ -192,7 +192,7 @@ export class ApiClient {
     return check(this.request.patch(`organizers/${organizerId}/settings`, { headers: jsonHeaders, data: settings }));
   }
 
-  updateOrganizerStatus(organizerId: number, status: 'LIVE' | 'DRAFT'): Promise<void> {
+  updateOrganizerStatus(organizerId: number, status: 'LIVE' | 'DRAFT' | 'ARCHIVED'): Promise<void> {
     return check(this.request.put(`organizers/${organizerId}/status`, { headers: jsonHeaders, data: { status } }));
   }
 

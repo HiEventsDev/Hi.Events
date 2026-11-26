@@ -47,5 +47,9 @@ export const getEventQueryFiltersWithParams = (
     return {
         ...searchParams,
         ...filter,
+        filterFields: {
+            ...searchParams.filterFields,
+            ...filter.filterFields,
+        },
     };
 };

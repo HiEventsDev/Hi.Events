@@ -374,7 +374,7 @@ msgstr "{0} số vé"
 msgid "{0} orders"
 msgstr "{0} đơn hàng"
 
-#: src/components/routes/events/Dashboard/index.tsx:143
+#: src/components/routes/events/Dashboard/index.tsx:94
 msgid "{0} organizers"
 msgstr "{0} nhà tổ chức"
 
@@ -532,7 +532,7 @@ msgstr "Có {attendeeCount} người tham dự đã đăng ký cho buổi này."
 msgid "{attentionCount, plural, one {# refund needs attention} other {# refunds need attention}}"
 msgstr "{attentionCount, plural, other {# khoản hoàn tiền cần xử lý}}"
 
-#: src/components/common/EventCard/index.tsx:144
+#: src/utilites/eventSummary.ts:80
 msgid "{availableCount} of {totalCount} available"
 msgstr "{availableCount} trong số {totalCount} có sẵn"
 
@@ -1100,7 +1100,7 @@ msgstr "{total, plural, one {Đang hủy đăng ký cho # liên hệ…} other {
 msgid "{total, plural, one {Updating # contact…} other {Updating # contacts…}}"
 msgstr "{total, plural, one {Đang cập nhật # liên hệ…} other {Đang cập nhật # liên hệ…}}"
 
-#: src/components/common/EventCard/index.tsx:140
+#: src/utilites/eventSummary.ts:76
 msgid "{totalCount} ticket types"
 msgstr "{totalCount} loại vé"
 
@@ -1383,7 +1383,7 @@ msgstr "1 khung giờ"
 msgid "1 ticket"
 msgstr "1 vé"
 
-#: src/components/common/EventCard/index.tsx:140
+#: src/utilites/eventSummary.ts:76
 msgid "1 ticket type"
 msgstr "1 loại vé"
 
@@ -1887,6 +1887,7 @@ msgstr "Cần hành động: Cần thông tin VAT"
 #: src/components/common/CapacityAssignmentList/index.tsx:103
 #: src/components/common/CheckInListTable/index.tsx:145
 #: src/components/common/EntityActions/index.tsx:28
+#: src/components/common/EventsTable/index.tsx:190
 #: src/components/common/LocationsTable/index.tsx:76
 #: src/components/common/LocationsTable/index.tsx:83
 #: src/components/common/OrdersTable/index.tsx:127
@@ -2653,10 +2654,6 @@ msgstr "tất cả"
 msgid "All"
 msgstr "Tất cả"
 
-#: src/components/routes/events/Dashboard/index.tsx:79
-msgid "All Archived Events"
-msgstr "Tất cả sự kiện đã lưu trữ"
-
 #: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:43
 msgid "All areas"
 msgstr "Tất cả khu vực"
@@ -2722,15 +2719,15 @@ msgstr "Tất cả các ngày · dùng chung"
 msgid "All days"
 msgstr "Tất cả các ngày"
 
-#: src/components/routes/events/Dashboard/index.tsx:77
-msgid "All Ended Events"
-msgstr "Tất cả sự kiện đã kết thúc"
-
 #: src/components/common/WidgetEditor/ContentFields.tsx:180
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:128
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:128
 msgid "All events"
 msgstr "Tất cả sự kiện"
+
+#: src/components/routes/events/Dashboard/index.tsx:80
+msgid "All events across your organizers."
+msgstr "Tất cả sự kiện của các nhà tổ chức của bạn."
 
 #: src/components/routes/admin/FailedJobs/index.tsx:94
 msgid "All failed jobs deleted"
@@ -2806,10 +2803,6 @@ msgstr "Đã xóa tất cả thiết bị tin cậy"
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:182
 msgid "All upcoming"
 msgstr "Tất cả ngày sắp tới"
-
-#: src/components/routes/events/Dashboard/index.tsx:75
-msgid "All Upcoming Events"
-msgstr "Tất cả sự kiện sắp diễn ra"
 
 #: src/components/routes/admin/Announcements/index.tsx:78
 #: src/components/routes/admin/Announcements/index.tsx:435
@@ -3334,7 +3327,7 @@ msgstr "Tháng 4"
 msgid "Archive"
 msgstr "Lưu trữ"
 
-#: src/components/common/EventCard/index.tsx:169
+#: src/hooks/useEventActions.tsx:73
 msgid "Archive event"
 msgstr "Lưu trữ sự kiện"
 
@@ -3356,14 +3349,15 @@ msgstr "Lưu trữ sự kiện này để ẩn khỏi công chúng. Bạn có th
 msgid "Archive this organizer. This will also archive all events belonging to this organizer."
 msgstr "Lưu trữ ban tổ chức này. Điều này cũng sẽ lưu trữ tất cả các sự kiện thuộc ban tổ chức này."
 
-#: src/components/common/EventCard/index.tsx:90
-#: src/components/common/EventsDashboardStatusButtons/index.tsx:32
+#: src/components/common/EventsStatusControl/index.tsx:33
+#: src/components/modals/SwitchOrganizerModal/index.tsx:67
 #: src/components/routes/event/Lineup/EventStatusBadge.tsx:12
 #: src/components/routes/settings/Organizers/index.tsx:21
+#: src/utilites/eventSummary.ts:22
 msgid "Archived"
 msgstr "Lưu trữ"
 
-#: src/components/modals/SwitchOrganizerModal/index.tsx:111
+#: src/components/modals/SwitchOrganizerModal/index.tsx:120
 msgid "Archived Organizers"
 msgstr "Ban tổ chức đã lưu trữ"
 
@@ -3379,7 +3373,7 @@ msgstr "Bạn có chắc sự kiện này không phải spam? Nó sẽ được 
 msgid "Are you sure you want to activate this attendee?"
 msgstr "Bạn có chắc mình muốn kích hoạt người tham dự này không?"
 
-#: src/components/common/EventCard/index.tsx:70
+#: src/hooks/useEventActions.tsx:33
 msgid "Are you sure you want to archive this event?"
 msgstr "Bạn có chắc mình muốn lưu trữ sự kiện này không?"
 
@@ -3511,7 +3505,7 @@ msgstr "Bạn có chắc chắn muốn gửi lại vé đến {0}?"
 msgid "Are you sure you want to restore this event?"
 msgstr "Bạn có chắc chắn muốn khôi phục sự kiện này không?"
 
-#: src/components/common/EventCard/index.tsx:71
+#: src/hooks/useEventActions.tsx:34
 msgid "Are you sure you want to restore this event? It will be restored as a draft event."
 msgstr "Bạn có chắc chắn muốn khôi phục sự kiện này không? Sự kiện sẽ được khôi phục dưới dạng bản nháp."
 
@@ -3794,8 +3788,8 @@ msgid "attendees"
 msgstr "người tham dự"
 
 #: src/components/common/AdminEventsTable/index.tsx:76
-#: src/components/common/EventCard/index.tsx:271
-#: src/components/common/EventCard/index.tsx:397
+#: src/components/common/EventCard/index.tsx:135
+#: src/components/common/EventsTable/index.tsx:166
 #: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:60
 #: src/components/common/ProductsTable/index.tsx:96
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:530
@@ -3829,10 +3823,6 @@ msgstr "người tham dự đã check-in"
 #: src/components/routes/event/attendees.tsx:164
 msgid "Attendees Exported"
 msgstr "Danh sách người tham dự đã được xuất"
-
-#: src/components/common/EventCard/index.tsx:394
-msgid "Attendees registered"
-msgstr "Người tham dự đã đăng ký"
 
 #: src/components/common/StatsCharts/index.tsx:56
 msgid "Attendees Registered"
@@ -5705,7 +5695,7 @@ msgstr "Chọn khu vực"
 msgid "Choose an organizer"
 msgstr "Chọn nhà tổ chức"
 
-#: src/components/routes/events/Dashboard/index.tsx:236
+#: src/components/routes/events/Dashboard/index.tsx:201
 msgid "Choose an Organizer"
 msgstr "Chọn một nhà tổ chức"
 
@@ -5948,7 +5938,7 @@ msgid "close"
 msgstr "đóng"
 
 #: src/components/common/BrandingUpsell/BrandingUpgradeModal.tsx:41
-#: src/components/common/Modal/index.tsx:33
+#: src/components/common/Modal/index.tsx:31
 #: src/components/common/SideDrawer/index.tsx:117
 #: src/components/common/TicketResale/SellTicketModal.tsx:122
 #: src/components/common/WidgetEditor/WidgetPreview.tsx:128
@@ -6663,7 +6653,7 @@ msgstr "Cài đặt cookie"
 #: src/components/common/AttendeeTicket/index.tsx:229
 #: src/components/common/CopyButton/index.tsx:14
 #: src/components/common/OfflinePaymentDetails/index.tsx:31
-#: src/components/common/TanStackTable/cells.tsx:79
+#: src/components/common/TanStackTable/cells.tsx:93
 #: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:84
 #: src/components/common/WidgetEditor/index.tsx:221
 #: src/components/common/WidgetEditor/InstallPanel.tsx:52
@@ -6699,8 +6689,8 @@ msgstr "Sao chép hướng dẫn từng bước để dán vào ChatGPT, Claude,
 
 #: src/components/common/CopyButton/index.tsx:14
 #: src/components/common/OfflinePaymentDetails/index.tsx:31
-#: src/components/common/TanStackTable/cells.tsx:79
-#: src/components/common/TanStackTable/cells.tsx:86
+#: src/components/common/TanStackTable/cells.tsx:93
+#: src/components/common/TanStackTable/cells.tsx:100
 #: src/components/modals/CheckInListSuccessModal/index.tsx:42
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:74
 #: src/components/modals/ManageOrderModal/index.tsx:240
@@ -7242,7 +7232,7 @@ msgstr "Tạo sự kiện"
 
 #: src/components/common/NoEventsBlankSlate/index.tsx:28
 #: src/components/layouts/OrganizerLayout/index.tsx:248
-#: src/components/routes/organizer/Events/index.tsx:66
+#: src/components/routes/organizer/Events/index.tsx:54
 msgid "Create Event"
 msgstr "Tạo sự kiện"
 
@@ -7262,7 +7252,7 @@ msgstr "Tạo khóa"
 msgid "Create more tickets or products to offer them as add-ons"
 msgstr "Tạo thêm vé hoặc sản phẩm để cung cấp chúng dưới dạng bổ sung"
 
-#: src/components/routes/events/Dashboard/index.tsx:175
+#: src/components/routes/events/Dashboard/index.tsx:139
 msgid "Create new"
 msgstr "Tạo mới"
 
@@ -7277,7 +7267,7 @@ msgid "Create organizer"
 msgstr "Tạo nhà tổ chức"
 
 #: src/components/common/GlobalMenu/index.tsx:104
-#: src/components/modals/SwitchOrganizerModal/index.tsx:100
+#: src/components/modals/SwitchOrganizerModal/index.tsx:140
 msgid "Create Organizer"
 msgstr "Tạo tổ chức"
 
@@ -7438,6 +7428,10 @@ msgstr "Tiền tệ"
 #: src/components/routes/welcome/FirstEventStep.tsx:86
 msgid "Currency is required"
 msgstr "Tiền tệ là bắt buộc"
+
+#: src/components/modals/SwitchOrganizerModal/index.tsx:71
+msgid "Current organizer"
+msgstr "Nhà tổ chức hiện tại"
 
 #: src/components/common/ConfirmIdentity/index.tsx:70
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:40
@@ -7636,6 +7630,7 @@ msgstr "Dashboard"
 #: src/components/common/AdminOrdersTable/index.tsx:83
 #: src/components/common/AttendeeTable/index.tsx:227
 #: src/components/common/CheckInListTable/index.tsx:90
+#: src/components/common/EventsTable/index.tsx:127
 #: src/components/common/OrderDetails/index.tsx:44
 #: src/components/common/OrdersTable/index.tsx:271
 #: src/components/common/WaitlistTable/index.tsx:178
@@ -8559,7 +8554,6 @@ msgstr "Tải xuống bảng tính (.xlsx)"
 msgid "Downloading Invoice"
 msgstr "Tải xuống hóa đơn"
 
-#: src/components/common/EventCard/index.tsx:99
 #: src/components/layouts/Event/index.tsx:261
 #: src/components/layouts/OrganizerLayout/index.tsx:298
 #: src/components/routes/admin/Announcements/index.tsx:134
@@ -8567,6 +8561,7 @@ msgstr "Tải xuống hóa đơn"
 #: src/components/routes/event/Lineup/EventStatusBadge.tsx:10
 #: src/components/routes/settings/Organizers/index.tsx:23
 #: src/ee/crm/utilites/labels.ts:157
+#: src/utilites/eventSummary.ts:31
 msgid "Draft"
 msgstr "Bản nháp"
 
@@ -8672,7 +8667,7 @@ msgstr "Nhân bản {0}"
 msgid "Duplicate Date"
 msgstr "Nhân bản ngày"
 
-#: src/components/common/EventCard/index.tsx:162
+#: src/hooks/useEventActions.tsx:66
 msgid "Duplicate event"
 msgstr "Nhân bản sự kiện"
 
@@ -9453,10 +9448,10 @@ msgstr "Ngày kết thúc phải sau ngày bắt đầu"
 msgid "End time"
 msgstr "Giờ kết thúc"
 
-#: src/components/common/EventCard/index.tsx:93
-#: src/components/common/EventsDashboardStatusButtons/index.tsx:26
+#: src/components/common/EventsStatusControl/index.tsx:32
 #: src/components/common/EventStatusBadge/index.tsx:14
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:134
+#: src/utilites/eventSummary.ts:25
 msgid "Ended"
 msgstr "Kết thúc"
 
@@ -9742,12 +9737,13 @@ msgid "Even numbers only"
 msgstr "Chỉ số chẵn"
 
 #: src/components/common/AdminOrdersTable/index.tsx:55
+#: src/components/common/EventsTable/index.tsx:60
 #: src/components/routes/admin/Dashboard/index.tsx:50
 #: src/components/routes/admin/Messages/index.tsx:152
 #: src/components/routes/admin/Messages/index.tsx:325
 #: src/components/routes/admin/SpamEvents/index.tsx:139
 #: src/components/routes/admin/SpamEvents/index.tsx:316
-#: src/components/routes/events/Dashboard/index.tsx:188
+#: src/components/routes/events/Dashboard/index.tsx:149
 #: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:32
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:52
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:60
@@ -9902,16 +9898,16 @@ msgstr "Cài đặt sự kiện"
 msgid "Event setup"
 msgstr "Thiết lập sự kiện"
 
-#: src/components/common/EventCard/index.tsx:82
 #: src/components/common/StatusToggle/index.tsx:62
 #: src/components/layouts/Event/index.tsx:223
 #: src/components/modals/PublishEventModal/index.tsx:153
+#: src/hooks/useEventActions.tsx:45
 msgid "Event status update failed. Please try again later"
 msgstr "Cập nhật trạng thái sự kiện thất bại. Vui lòng thử lại sau"
 
-#: src/components/common/EventCard/index.tsx:79
 #: src/components/common/StatusToggle/index.tsx:54
 #: src/components/layouts/Event/index.tsx:220
+#: src/hooks/useEventActions.tsx:42
 msgid "Event status updated"
 msgstr "Trạng thái sự kiện đã được cập nhật"
 
@@ -9955,7 +9951,8 @@ msgstr "Sự kiện đã cập nhật"
 #: src/components/routes/admin/Dashboard/index.tsx:322
 #: src/components/routes/admin/Events/index.tsx:80
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:236
-#: src/components/routes/organizer/Events/index.tsx:46
+#: src/components/routes/events/Dashboard/index.tsx:81
+#: src/components/routes/organizer/Events/index.tsx:34
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:84
 #: src/components/routes/organizer/Reports/index.tsx:31
 #: src/ee/crm/components/ContactDrawer/index.tsx:175
@@ -10783,6 +10780,7 @@ msgstr "Lọc theo vai trò"
 msgid "Filter by sign-in method"
 msgstr "Lọc theo cách đăng nhập"
 
+#: src/components/common/EventsStatusControl/index.tsx:27
 #: src/components/routes/event/Resale/index.tsx:98
 msgid "Filter by status"
 msgstr "Lọc theo trạng thái"
@@ -11556,10 +11554,6 @@ msgstr "Lưới"
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:88
 msgid "Gross"
 msgstr "Tổng doanh thu"
-
-#: src/components/common/EventCard/index.tsx:400
-msgid "Gross revenue"
-msgstr "Doanh thu gộp"
 
 #: src/components/common/StatBoxes/index.tsx:96
 #: src/components/modals/ProductPurchasesModal/index.tsx:211
@@ -13482,13 +13476,13 @@ msgstr "Đã đóng tin đăng. Người bán đã được thông báo qua emai
 msgid "Listing withdrawn. Your ticket works again."
 msgstr "Đã gỡ tin đăng. Vé của bạn dùng lại được."
 
-#: src/components/common/EventCard/index.tsx:102
 #: src/components/layouts/Event/index.tsx:263
 #: src/components/layouts/OrganizerLayout/index.tsx:300
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:122
 #: src/components/routes/event/Lineup/EventStatusBadge.tsx:8
 #: src/components/routes/settings/Organizers/index.tsx:19
 #: src/ee/crm/components/routes/AudienceForms/index.tsx:130
+#: src/utilites/eventSummary.ts:34
 msgid "Live"
 msgstr "Trực tiếp"
 
@@ -13579,6 +13573,7 @@ msgstr "Tải nội dung từ {service}"
 
 #: src/components/common/AttendeeTicket/index.tsx:139
 #: src/components/common/AttendeeTicket/index.tsx:146
+#: src/components/common/EventsTable/index.tsx:145
 #: src/components/common/LocationPicker/index.tsx:173
 #: src/components/common/LocationPicker/index.tsx:221
 #: src/components/common/LocationPicker/index.tsx:294
@@ -13746,7 +13741,7 @@ msgstr "Quản lý ngày và giờ cho sự kiện định kỳ của bạn"
 msgid "Manage defaults"
 msgstr "Quản lý mặc định"
 
-#: src/components/common/EventCard/index.tsx:157
+#: src/hooks/useEventActions.tsx:61
 msgid "Manage event"
 msgstr "Quản lý sự kiện"
 
@@ -14326,11 +14321,11 @@ msgstr "Danh sách thả xuống chọn nhiều"
 msgid "Multiple dates until {lastOccurrenceDate}"
 msgstr "Nhiều ngày, đến hết {lastOccurrenceDate}"
 
-#: src/components/common/EventCard/index.tsx:111
 #: src/components/layouts/EventHomepage/index.tsx:112
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:29
 #: src/components/layouts/OrganizerHomepage/EventList/index.tsx:38
 #: src/components/widget/WidgetSections/index.tsx:58
+#: src/utilites/eventSummary.ts:45
 msgid "Multiple locations"
 msgstr "Nhiều địa điểm"
 
@@ -14945,8 +14940,8 @@ msgstr "Chưa có liên hệ nào. Họ sẽ xuất hiện ở đây ngay khi c�
 msgid "No countries found"
 msgstr "Không tìm thấy quốc gia"
 
-#: src/components/common/EventCard/index.tsx:241
-#: src/components/common/EventCard/index.tsx:339
+#: src/components/common/EventCard/index.tsx:105
+#: src/components/common/EventsTable/index.tsx:131
 msgid "No date added"
 msgstr "Chưa thêm ngày nào"
 
@@ -15207,7 +15202,7 @@ msgstr "Không có ngữ cảnh nhà tổ chức."
 msgid "No organizers yet."
 msgstr "Chưa có nhà tổ chức nào."
 
-#: src/components/modals/SwitchOrganizerModal/index.tsx:60
+#: src/components/modals/SwitchOrganizerModal/index.tsx:106
 msgid "No other organizers available"
 msgstr "Không có nhà tổ chức nào khác"
 
@@ -15364,6 +15359,7 @@ msgid "No Search Results"
 msgstr "Không có kết quả tìm kiếm"
 
 #: src/components/common/NoResultsSplash/index.tsx:29
+#: src/components/modals/SwitchOrganizerModal/index.tsx:106
 msgid "No search results."
 msgstr "Không có kết quả tìm kiếm."
 
@@ -16102,9 +16098,9 @@ msgstr "Trong sự kiện đang diễn ra"
 msgid "On now"
 msgstr "Đang diễn ra"
 
-#: src/components/common/EventCard/index.tsx:104
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:140
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:37
+#: src/utilites/eventSummary.ts:36
 msgid "On Sale"
 msgstr "Đang Bán"
 
@@ -16224,7 +16220,6 @@ msgstr "Mỗi người một hồ sơ, được tạo từ mọi đơn hàng, v�
 msgid "Ongoing"
 msgstr "Đang diễn ra"
 
-#: src/components/common/EventCard/index.tsx:114
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:32
 #: src/components/routes/event/OccurrencesTab/index.tsx:343
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:482
@@ -16232,6 +16227,7 @@ msgstr "Đang diễn ra"
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:393
 #: src/ee/box-office/components/layouts/BoxOffice/ReaderPicker.tsx:16
 #: src/ee/box-office/components/routes/organizer/Payments/TerminalReaders/index.tsx:36
+#: src/utilites/eventSummary.ts:49
 msgid "Online"
 msgstr "Trực tuyến"
 
@@ -16239,10 +16235,10 @@ msgstr "Trực tuyến"
 msgid "Online — provide connection details"
 msgstr "Trực tuyến — cung cấp thông tin kết nối"
 
-#: src/components/common/EventCard/index.tsx:111
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:29
 #: src/components/layouts/OrganizerHomepage/EventList/index.tsx:38
 #: src/components/widget/WidgetSections/index.tsx:58
+#: src/utilites/eventSummary.ts:45
 msgid "Online & in-person"
 msgstr "Trực tuyến và trực tiếp"
 
@@ -17008,7 +17004,8 @@ msgstr "Tên tổ chức"
 #: src/components/modals/CreateEventModal/index.tsx:270
 #: src/components/routes/admin/SpamEvents/index.tsx:147
 #: src/components/routes/admin/SpamEvents/index.tsx:331
-#: src/components/routes/events/Dashboard/index.tsx:198
+#: src/components/routes/events/Dashboard/index.tsx:116
+#: src/components/routes/events/Dashboard/index.tsx:157
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:496
 #: src/components/widget/WidgetSections/index.tsx:135
 #: src/ee/crm/components/routes/AdminCampaignReview/index.tsx:177
@@ -17581,9 +17578,9 @@ msgstr "Lời mời đang chờ"
 msgid "Pending review"
 msgstr "Đang chờ xem xét"
 
-#: src/components/common/EventCard/index.tsx:96
 #: src/components/layouts/Event/index.tsx:259
 #: src/components/routes/admin/Messages/index.tsx:270
+#: src/utilites/eventSummary.ts:28
 msgid "Pending Review"
 msgstr "Đang chờ xem xét"
 
@@ -18944,9 +18941,9 @@ msgstr "Mã khôi phục"
 msgid "Rectangular"
 msgstr "Hình chữ nhật"
 
-#: src/components/common/EventCard/index.tsx:224
-#: src/components/common/EventCard/index.tsx:328
-#: src/components/common/EventCard/index.tsx:343
+#: src/components/common/EventCard/index.tsx:88
+#: src/components/common/EventsTable/index.tsx:88
+#: src/components/common/EventsTable/index.tsx:89
 msgid "Recurring"
 msgstr "Định kỳ"
 
@@ -19632,8 +19629,9 @@ msgstr "Đã đặt chỗ"
 msgid "reserved seating"
 msgstr "chỗ ngồi đặt trước"
 
-#: src/components/common/EventCard/index.tsx:229
-#: src/components/common/EventCard/index.tsx:329
+#: src/components/common/EventCard/index.tsx:93
+#: src/components/common/EventsTable/index.tsx:95
+#: src/components/common/EventsTable/index.tsx:96
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:365
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:8
 #: src/ee/licensing/licenceNotice.ts:55
@@ -19720,7 +19718,7 @@ msgstr "Khôi phục {removedSeats} ghế đã xóa"
 msgid "Restore contact"
 msgstr "Khôi phục liên hệ"
 
-#: src/components/common/EventCard/index.tsx:169
+#: src/hooks/useEventActions.tsx:73
 msgid "Restore event"
 msgstr "Khôi phục sự kiện"
 
@@ -19826,8 +19824,8 @@ msgstr "Dùng lại kết nối Stripe từ một nhà tổ chức khác trong t
 
 #: src/components/common/AffiliateTable/index.tsx:105
 #: src/components/common/AffiliateTable/index.tsx:106
-#: src/components/common/EventCard/index.tsx:275
-#: src/components/common/EventCard/index.tsx:405
+#: src/components/common/EventCard/index.tsx:139
+#: src/components/common/EventsTable/index.tsx:176
 #: src/components/common/StatsCharts/index.tsx:70
 #: src/components/common/WidgetEditor/WidgetStats.tsx:18
 #: src/components/routes/admin/Attribution/index.tsx:134
@@ -20508,8 +20506,8 @@ msgstr "Tìm kiếm theo tên tài khoản hoặc email..."
 msgid "Search by attendee name, email or order #..."
 msgstr "Tìm kiếm theo tên người tham dự, email hoặc đơn hàng"
 
-#: src/components/routes/events/Dashboard/index.tsx:153
-#: src/components/routes/organizer/Events/index.tsx:51
+#: src/components/routes/events/Dashboard/index.tsx:104
+#: src/components/routes/organizer/Events/index.tsx:41
 msgid "Search by event name..."
 msgstr "Tìm kiếm theo tên sự kiện"
 
@@ -20635,6 +20633,10 @@ msgstr "Tìm theo tên hoặc email"
 msgid "Search orders"
 msgstr "Tìm đơn hàng"
 
+#: src/components/modals/SwitchOrganizerModal/index.tsx:84
+msgid "Search organizers"
+msgstr "Tìm nhà tổ chức"
+
 #: src/components/common/TeamAccessFields/index.tsx:236
 msgid "Search organizers and events"
 msgstr "Tìm nhà tổ chức và sự kiện"
@@ -20669,6 +20671,7 @@ msgid "Search your saved profiles or type a new name in the {lineupLabel} panel.
 msgstr "Tìm trong hồ sơ đã lưu hoặc nhập tên mới trong bảng {lineupLabel}. Thêm ảnh, tiểu sử và liên kết cho từng người."
 
 #: src/components/common/SearchBar/index.tsx:35
+#: src/components/modals/SwitchOrganizerModal/index.tsx:85
 msgid "Search..."
 msgstr "Tìm kiếm"
 
@@ -20767,10 +20770,6 @@ msgstr "Bán ghế và ghế đang giữ lại"
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:43
 msgid "Seat spacing"
 msgstr "Khoảng cách ghế"
-
-#: src/components/common/EventCard/index.tsx:349
-msgid "Seated"
-msgstr "Chỗ ngồi cố định"
 
 #: src/components/layouts/Event/index.tsx:139
 #: src/components/routes/event/Reports/index.tsx:62
@@ -22321,7 +22320,6 @@ msgstr "Bán bởi {operatorName}"
 msgid "sold out"
 msgstr "đã bán hết"
 
-#: src/components/common/EventCard/index.tsx:136
 #: src/components/common/EventDateRange/index.tsx:65
 #: src/components/common/ProductPriceAvailability/index.tsx:21
 #: src/components/common/ProductPriceAvailability/index.tsx:61
@@ -22334,6 +22332,7 @@ msgstr "đã bán hết"
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:54
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:85
 #: src/utilites/eventListingLabels.ts:18
+#: src/utilites/eventSummary.ts:72
 msgid "Sold out"
 msgstr "Đã bán hết"
 
@@ -22914,6 +22913,7 @@ msgstr "Thống kê"
 #: src/components/common/AttendeeTable/index.tsx:246
 #: src/components/common/CapacityAssignmentList/index.tsx:94
 #: src/components/common/CheckInListTable/index.tsx:132
+#: src/components/common/EventsTable/index.tsx:118
 #: src/components/common/OrderDetails/index.tsx:73
 #: src/components/common/OrdersTable/index.tsx:221
 #: src/components/common/ProductsTable/index.tsx:100
@@ -23447,7 +23447,7 @@ msgid "Switch date"
 msgstr "Chuyển ngày"
 
 #: src/components/layouts/OrganizerLayout/index.tsx:95
-#: src/components/modals/SwitchOrganizerModal/index.tsx:49
+#: src/components/modals/SwitchOrganizerModal/index.tsx:79
 msgid "Switch Organizer"
 msgstr "Chuyển đổi nhà tổ chức"
 
@@ -24884,7 +24884,7 @@ msgstr "Sự kiện này đang chờ xem xét thủ công và không thể đư�
 msgid "This event is pending manual review and is not visible to the public"
 msgstr "Sự kiện này đang chờ xem xét thủ công và không hiển thị với công chúng"
 
-#: src/components/common/EventCard/index.tsx:65
+#: src/hooks/useEventActions.tsx:28
 msgid "This event is pending manual review and its status cannot be changed until the review is complete."
 msgstr "Sự kiện này đang chờ xem xét thủ công và trạng thái của nó không thể thay đổi cho đến khi quá trình xem xét hoàn tất."
 
@@ -25521,6 +25521,7 @@ msgstr "Bán vé"
 msgid "tickets"
 msgstr "vé"
 
+#: src/components/common/EventsTable/index.tsx:154
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:96
 #: src/components/common/WidgetEditor/SectionsPicker.tsx:28
 #: src/components/common/WidgetEditor/TypePicker.tsx:7
@@ -26655,7 +26656,7 @@ msgstr "tối đa {perDateAllocation} mỗi ngày"
 msgid "Up to 40 photos, at least 400 × 300px. The first one is shown largest."
 msgstr "Tối đa 40 ảnh, tối thiểu 400 × 300px. Ảnh đầu tiên hiển thị lớn nhất."
 
-#: src/components/common/EventsDashboardStatusButtons/index.tsx:20
+#: src/components/common/EventsStatusControl/index.tsx:31
 #: src/components/common/EventStatusBadge/index.tsx:16
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:137
 #: src/components/layouts/OrganizerHomepage/index.tsx:153
@@ -27278,7 +27279,7 @@ msgstr "Xem sự kiện"
 msgid "View Event"
 msgstr "Xem sự kiện"
 
-#: src/components/common/EventCard/index.tsx:152
+#: src/hooks/useEventActions.tsx:56
 msgid "View event page"
 msgstr "Xem trang sự kiện"
 
@@ -28184,10 +28185,6 @@ msgstr "Chào mừng trở lại{0} 👋"
 #: src/ee/crm/utilites/labels.ts:276
 msgid "Welcome first-timers"
 msgstr "Chào mừng người đến lần đầu"
-
-#: src/components/routes/events/Dashboard/index.tsx:89
-msgid "Welcome to {0}, here's a listing of all your events"
-msgstr "Chào mừng đến với {0}, đây là danh sách tất cả sự kiện của bạn"
 
 #: src/constants/eventCategories.ts:20
 msgid "Wellness"

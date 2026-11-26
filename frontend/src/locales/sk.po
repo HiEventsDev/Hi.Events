@@ -374,7 +374,7 @@ msgstr "{0} lístkov"
 msgid "{0} orders"
 msgstr "{0} objednávok"
 
-#: src/components/routes/events/Dashboard/index.tsx:143
+#: src/components/routes/events/Dashboard/index.tsx:94
 msgid "{0} organizers"
 msgstr "{0} organizátorov"
 
@@ -532,7 +532,7 @@ msgstr "Na tento termín je prihlásených {attendeeCount} účastníkov."
 msgid "{attentionCount, plural, one {# refund needs attention} other {# refunds need attention}}"
 msgstr "{attentionCount, plural, one {# vrátenie vyžaduje pozornosť} few {# vrátenia vyžadujú pozornosť} many {# vrátenia vyžaduje pozornosť} other {# vrátení vyžaduje pozornosť}}"
 
-#: src/components/common/EventCard/index.tsx:144
+#: src/utilites/eventSummary.ts:80
 msgid "{availableCount} of {totalCount} available"
 msgstr "{availableCount} z {totalCount} dostupných"
 
@@ -1100,7 +1100,7 @@ msgstr "{total, plural, one {Odhlasovanie # kontaktu…} few {Odhlasovanie # kon
 msgid "{total, plural, one {Updating # contact…} other {Updating # contacts…}}"
 msgstr "{total, plural, one {Aktualizácia # kontaktu…} few {Aktualizácia # kontaktov…} many {Aktualizácia # kontaktu…} other {Aktualizácia # kontaktov…}}"
 
-#: src/components/common/EventCard/index.tsx:140
+#: src/utilites/eventSummary.ts:76
 msgid "{totalCount} ticket types"
 msgstr "{totalCount} typov lístkov"
 
@@ -1383,7 +1383,7 @@ msgstr "1 slot"
 msgid "1 ticket"
 msgstr "1 lístok"
 
-#: src/components/common/EventCard/index.tsx:140
+#: src/utilites/eventSummary.ts:76
 msgid "1 ticket type"
 msgstr "1 typ lístka"
 
@@ -1887,6 +1887,7 @@ msgstr "Vyžaduje sa akcia: Potrebné informácie o DPH"
 #: src/components/common/CapacityAssignmentList/index.tsx:103
 #: src/components/common/CheckInListTable/index.tsx:145
 #: src/components/common/EntityActions/index.tsx:28
+#: src/components/common/EventsTable/index.tsx:190
 #: src/components/common/LocationsTable/index.tsx:76
 #: src/components/common/LocationsTable/index.tsx:83
 #: src/components/common/OrdersTable/index.tsx:127
@@ -2653,10 +2654,6 @@ msgstr "všetky"
 msgid "All"
 msgstr "Všetky"
 
-#: src/components/routes/events/Dashboard/index.tsx:79
-msgid "All Archived Events"
-msgstr "Všetky archivované udalosti"
-
 #: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:43
 msgid "All areas"
 msgstr "Všetky oblasti"
@@ -2722,15 +2719,15 @@ msgstr "Všetky dátumy · zdieľané"
 msgid "All days"
 msgstr "Všetky dni"
 
-#: src/components/routes/events/Dashboard/index.tsx:77
-msgid "All Ended Events"
-msgstr "Všetky ukončené udalosti"
-
 #: src/components/common/WidgetEditor/ContentFields.tsx:180
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:128
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:128
 msgid "All events"
 msgstr "Všetky udalosti"
+
+#: src/components/routes/events/Dashboard/index.tsx:80
+msgid "All events across your organizers."
+msgstr "Všetky podujatia vašich organizátorov."
 
 #: src/components/routes/admin/FailedJobs/index.tsx:94
 msgid "All failed jobs deleted"
@@ -2806,10 +2803,6 @@ msgstr "Všetky dôveryhodné zariadenia boli odstránené"
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:182
 msgid "All upcoming"
 msgstr "Všetky nadchádzajúce"
-
-#: src/components/routes/events/Dashboard/index.tsx:75
-msgid "All Upcoming Events"
-msgstr "Všetky nadchádzajúce udalosti"
 
 #: src/components/routes/admin/Announcements/index.tsx:78
 #: src/components/routes/admin/Announcements/index.tsx:435
@@ -3334,7 +3327,7 @@ msgstr "Apríl"
 msgid "Archive"
 msgstr "Archivovať"
 
-#: src/components/common/EventCard/index.tsx:169
+#: src/hooks/useEventActions.tsx:73
 msgid "Archive event"
 msgstr "Archivovať udalosť"
 
@@ -3356,14 +3349,15 @@ msgstr "Archivujte túto udalosť, aby bola skrytá pred verejnosťou. Neskôr j
 msgid "Archive this organizer. This will also archive all events belonging to this organizer."
 msgstr "Archivujte tohto organizátora. Tým sa archivujú aj všetky udalosti patriace tomuto organizátorovi."
 
-#: src/components/common/EventCard/index.tsx:90
-#: src/components/common/EventsDashboardStatusButtons/index.tsx:32
+#: src/components/common/EventsStatusControl/index.tsx:33
+#: src/components/modals/SwitchOrganizerModal/index.tsx:67
 #: src/components/routes/event/Lineup/EventStatusBadge.tsx:12
 #: src/components/routes/settings/Organizers/index.tsx:21
+#: src/utilites/eventSummary.ts:22
 msgid "Archived"
 msgstr "Archivované"
 
-#: src/components/modals/SwitchOrganizerModal/index.tsx:111
+#: src/components/modals/SwitchOrganizerModal/index.tsx:120
 msgid "Archived Organizers"
 msgstr "Archivovaní organizátori"
 
@@ -3379,7 +3373,7 @@ msgstr "Ste si istí, že toto podujatie nie je spam? Bude okamžite zverejnené
 msgid "Are you sure you want to activate this attendee?"
 msgstr "Naozaj chcete aktivovať tohto účastníka?"
 
-#: src/components/common/EventCard/index.tsx:70
+#: src/hooks/useEventActions.tsx:33
 msgid "Are you sure you want to archive this event?"
 msgstr "Naozaj chcete archivovať túto udalosť?"
 
@@ -3511,7 +3505,7 @@ msgstr "Naozaj chcete znovu odoslať lístok na adresu {0}?"
 msgid "Are you sure you want to restore this event?"
 msgstr "Naozaj chcete obnoviť túto udalosť?"
 
-#: src/components/common/EventCard/index.tsx:71
+#: src/hooks/useEventActions.tsx:34
 msgid "Are you sure you want to restore this event? It will be restored as a draft event."
 msgstr "Naozaj chcete obnoviť túto udalosť? Bude obnovená ako koncept."
 
@@ -3794,8 +3788,8 @@ msgid "attendees"
 msgstr "účastníci"
 
 #: src/components/common/AdminEventsTable/index.tsx:76
-#: src/components/common/EventCard/index.tsx:271
-#: src/components/common/EventCard/index.tsx:397
+#: src/components/common/EventCard/index.tsx:135
+#: src/components/common/EventsTable/index.tsx:166
 #: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:60
 #: src/components/common/ProductsTable/index.tsx:96
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:530
@@ -3829,10 +3823,6 @@ msgstr "prihlásených účastníkov"
 #: src/components/routes/event/attendees.tsx:164
 msgid "Attendees Exported"
 msgstr "Účastníci exportovaní"
-
-#: src/components/common/EventCard/index.tsx:394
-msgid "Attendees registered"
-msgstr "Registrovaní účastníci"
 
 #: src/components/common/StatsCharts/index.tsx:56
 msgid "Attendees Registered"
@@ -5705,7 +5695,7 @@ msgstr "Vyberte oblasť"
 msgid "Choose an organizer"
 msgstr "Vyberte organizátora"
 
-#: src/components/routes/events/Dashboard/index.tsx:236
+#: src/components/routes/events/Dashboard/index.tsx:201
 msgid "Choose an Organizer"
 msgstr "Vyberte organizátora"
 
@@ -5948,7 +5938,7 @@ msgid "close"
 msgstr "zavrieť"
 
 #: src/components/common/BrandingUpsell/BrandingUpgradeModal.tsx:41
-#: src/components/common/Modal/index.tsx:33
+#: src/components/common/Modal/index.tsx:31
 #: src/components/common/SideDrawer/index.tsx:117
 #: src/components/common/TicketResale/SellTicketModal.tsx:122
 #: src/components/common/WidgetEditor/WidgetPreview.tsx:128
@@ -6663,7 +6653,7 @@ msgstr "Nastavenia cookies"
 #: src/components/common/AttendeeTicket/index.tsx:229
 #: src/components/common/CopyButton/index.tsx:14
 #: src/components/common/OfflinePaymentDetails/index.tsx:31
-#: src/components/common/TanStackTable/cells.tsx:79
+#: src/components/common/TanStackTable/cells.tsx:93
 #: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:84
 #: src/components/common/WidgetEditor/index.tsx:221
 #: src/components/common/WidgetEditor/InstallPanel.tsx:52
@@ -6699,8 +6689,8 @@ msgstr "Skopíruje podrobné pokyny na vloženie do ChatGPT, Claude, Cursor aleb
 
 #: src/components/common/CopyButton/index.tsx:14
 #: src/components/common/OfflinePaymentDetails/index.tsx:31
-#: src/components/common/TanStackTable/cells.tsx:79
-#: src/components/common/TanStackTable/cells.tsx:86
+#: src/components/common/TanStackTable/cells.tsx:93
+#: src/components/common/TanStackTable/cells.tsx:100
 #: src/components/modals/CheckInListSuccessModal/index.tsx:42
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:74
 #: src/components/modals/ManageOrderModal/index.tsx:240
@@ -7242,7 +7232,7 @@ msgstr "Vytvoriť podujatie"
 
 #: src/components/common/NoEventsBlankSlate/index.tsx:28
 #: src/components/layouts/OrganizerLayout/index.tsx:248
-#: src/components/routes/organizer/Events/index.tsx:66
+#: src/components/routes/organizer/Events/index.tsx:54
 msgid "Create Event"
 msgstr "Vytvoriť udalosť"
 
@@ -7262,7 +7252,7 @@ msgstr "Vytvoriť kľúč"
 msgid "Create more tickets or products to offer them as add-ons"
 msgstr "Vytvorte ďalšie lístky alebo produkty, aby ste ich mohli ponúkať ako doplnky"
 
-#: src/components/routes/events/Dashboard/index.tsx:175
+#: src/components/routes/events/Dashboard/index.tsx:139
 msgid "Create new"
 msgstr "Vytvoriť nové"
 
@@ -7277,7 +7267,7 @@ msgid "Create organizer"
 msgstr "Vytvoriť organizátora"
 
 #: src/components/common/GlobalMenu/index.tsx:104
-#: src/components/modals/SwitchOrganizerModal/index.tsx:100
+#: src/components/modals/SwitchOrganizerModal/index.tsx:140
 msgid "Create Organizer"
 msgstr "Vytvoriť organizátora"
 
@@ -7438,6 +7428,10 @@ msgstr "Mena"
 #: src/components/routes/welcome/FirstEventStep.tsx:86
 msgid "Currency is required"
 msgstr "Mena je povinná"
+
+#: src/components/modals/SwitchOrganizerModal/index.tsx:71
+msgid "Current organizer"
+msgstr "Aktuálny organizátor"
 
 #: src/components/common/ConfirmIdentity/index.tsx:70
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:40
@@ -7636,6 +7630,7 @@ msgstr "Panel"
 #: src/components/common/AdminOrdersTable/index.tsx:83
 #: src/components/common/AttendeeTable/index.tsx:227
 #: src/components/common/CheckInListTable/index.tsx:90
+#: src/components/common/EventsTable/index.tsx:127
 #: src/components/common/OrderDetails/index.tsx:44
 #: src/components/common/OrdersTable/index.tsx:271
 #: src/components/common/WaitlistTable/index.tsx:178
@@ -8559,7 +8554,6 @@ msgstr "Stiahnuť tabuľku (.xlsx)"
 msgid "Downloading Invoice"
 msgstr "Sťahovanie faktúry"
 
-#: src/components/common/EventCard/index.tsx:99
 #: src/components/layouts/Event/index.tsx:261
 #: src/components/layouts/OrganizerLayout/index.tsx:298
 #: src/components/routes/admin/Announcements/index.tsx:134
@@ -8567,6 +8561,7 @@ msgstr "Sťahovanie faktúry"
 #: src/components/routes/event/Lineup/EventStatusBadge.tsx:10
 #: src/components/routes/settings/Organizers/index.tsx:23
 #: src/ee/crm/utilites/labels.ts:157
+#: src/utilites/eventSummary.ts:31
 msgid "Draft"
 msgstr "Koncept"
 
@@ -8672,7 +8667,7 @@ msgstr "Duplikovať {0}"
 msgid "Duplicate Date"
 msgstr "Duplikovať termín"
 
-#: src/components/common/EventCard/index.tsx:162
+#: src/hooks/useEventActions.tsx:66
 msgid "Duplicate event"
 msgstr "Duplikovať udalosť"
 
@@ -9453,10 +9448,10 @@ msgstr "Dátum ukončenia musí byť po dátume začiatku"
 msgid "End time"
 msgstr "Čas konca"
 
-#: src/components/common/EventCard/index.tsx:93
-#: src/components/common/EventsDashboardStatusButtons/index.tsx:26
+#: src/components/common/EventsStatusControl/index.tsx:32
 #: src/components/common/EventStatusBadge/index.tsx:14
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:134
+#: src/utilites/eventSummary.ts:25
 msgid "Ended"
 msgstr "Ukončené"
 
@@ -9742,12 +9737,13 @@ msgid "Even numbers only"
 msgstr "Len párne čísla"
 
 #: src/components/common/AdminOrdersTable/index.tsx:55
+#: src/components/common/EventsTable/index.tsx:60
 #: src/components/routes/admin/Dashboard/index.tsx:50
 #: src/components/routes/admin/Messages/index.tsx:152
 #: src/components/routes/admin/Messages/index.tsx:325
 #: src/components/routes/admin/SpamEvents/index.tsx:139
 #: src/components/routes/admin/SpamEvents/index.tsx:316
-#: src/components/routes/events/Dashboard/index.tsx:188
+#: src/components/routes/events/Dashboard/index.tsx:149
 #: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:32
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:52
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:60
@@ -9902,16 +9898,16 @@ msgstr "Nastavenia udalosti"
 msgid "Event setup"
 msgstr "Nastavenie podujatia"
 
-#: src/components/common/EventCard/index.tsx:82
 #: src/components/common/StatusToggle/index.tsx:62
 #: src/components/layouts/Event/index.tsx:223
 #: src/components/modals/PublishEventModal/index.tsx:153
+#: src/hooks/useEventActions.tsx:45
 msgid "Event status update failed. Please try again later"
 msgstr "Aktualizácia stavu udalosti zlyhala. Skúste to neskôr."
 
-#: src/components/common/EventCard/index.tsx:79
 #: src/components/common/StatusToggle/index.tsx:54
 #: src/components/layouts/Event/index.tsx:220
+#: src/hooks/useEventActions.tsx:42
 msgid "Event status updated"
 msgstr "Stav udalosti aktualizovaný"
 
@@ -9955,7 +9951,8 @@ msgstr "Udalosť aktualizovaná"
 #: src/components/routes/admin/Dashboard/index.tsx:322
 #: src/components/routes/admin/Events/index.tsx:80
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:236
-#: src/components/routes/organizer/Events/index.tsx:46
+#: src/components/routes/events/Dashboard/index.tsx:81
+#: src/components/routes/organizer/Events/index.tsx:34
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:84
 #: src/components/routes/organizer/Reports/index.tsx:31
 #: src/ee/crm/components/ContactDrawer/index.tsx:175
@@ -10783,6 +10780,7 @@ msgstr "Filtrovať podľa roly"
 msgid "Filter by sign-in method"
 msgstr "Filtrovať podľa spôsobu prihlásenia"
 
+#: src/components/common/EventsStatusControl/index.tsx:27
 #: src/components/routes/event/Resale/index.tsx:98
 msgid "Filter by status"
 msgstr "Filtrovať podľa stavu"
@@ -11556,10 +11554,6 @@ msgstr "Mriežka"
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:88
 msgid "Gross"
 msgstr "Hrubý príjem"
-
-#: src/components/common/EventCard/index.tsx:400
-msgid "Gross revenue"
-msgstr "Hrubé príjmy"
 
 #: src/components/common/StatBoxes/index.tsx:96
 #: src/components/modals/ProductPurchasesModal/index.tsx:211
@@ -13482,13 +13476,13 @@ msgstr "Ponuka uzavretá. Predávajúci dostal e-mail."
 msgid "Listing withdrawn. Your ticket works again."
 msgstr "Ponuka stiahnutá. Vaša vstupenka opäť platí."
 
-#: src/components/common/EventCard/index.tsx:102
 #: src/components/layouts/Event/index.tsx:263
 #: src/components/layouts/OrganizerLayout/index.tsx:300
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:122
 #: src/components/routes/event/Lineup/EventStatusBadge.tsx:8
 #: src/components/routes/settings/Organizers/index.tsx:19
 #: src/ee/crm/components/routes/AudienceForms/index.tsx:130
+#: src/utilites/eventSummary.ts:34
 msgid "Live"
 msgstr "Aktívne"
 
@@ -13579,6 +13573,7 @@ msgstr "Načítava obsah z {service}"
 
 #: src/components/common/AttendeeTicket/index.tsx:139
 #: src/components/common/AttendeeTicket/index.tsx:146
+#: src/components/common/EventsTable/index.tsx:145
 #: src/components/common/LocationPicker/index.tsx:173
 #: src/components/common/LocationPicker/index.tsx:221
 #: src/components/common/LocationPicker/index.tsx:294
@@ -13746,7 +13741,7 @@ msgstr "Spravujte termíny a časy vášho opakujúceho sa podujatia"
 msgid "Manage defaults"
 msgstr "Spravovať predvolené hodnoty"
 
-#: src/components/common/EventCard/index.tsx:157
+#: src/hooks/useEventActions.tsx:61
 msgid "Manage event"
 msgstr "Spravovať udalosť"
 
@@ -14326,11 +14321,11 @@ msgstr "Rozbaľovací zoznam s viacerými možnosťami"
 msgid "Multiple dates until {lastOccurrenceDate}"
 msgstr "Viac termínov do {lastOccurrenceDate}"
 
-#: src/components/common/EventCard/index.tsx:111
 #: src/components/layouts/EventHomepage/index.tsx:112
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:29
 #: src/components/layouts/OrganizerHomepage/EventList/index.tsx:38
 #: src/components/widget/WidgetSections/index.tsx:58
+#: src/utilites/eventSummary.ts:45
 msgid "Multiple locations"
 msgstr "Viacero miest"
 
@@ -14945,8 +14940,8 @@ msgstr "Zatiaľ žiadne kontakty. Objavia sa tu, hneď ako si niekto rezervuje."
 msgid "No countries found"
 msgstr "Nenašli sa žiadne krajiny"
 
-#: src/components/common/EventCard/index.tsx:241
-#: src/components/common/EventCard/index.tsx:339
+#: src/components/common/EventCard/index.tsx:105
+#: src/components/common/EventsTable/index.tsx:131
 msgid "No date added"
 msgstr "Nepridaný žiadny termín"
 
@@ -15207,7 +15202,7 @@ msgstr "Nie je dostupný žiadny kontext organizátora."
 msgid "No organizers yet."
 msgstr "Zatiaľ žiadni organizátori."
 
-#: src/components/modals/SwitchOrganizerModal/index.tsx:60
+#: src/components/modals/SwitchOrganizerModal/index.tsx:106
 msgid "No other organizers available"
 msgstr "Žiadni ďalší organizátori nie sú dostupní"
 
@@ -15364,6 +15359,7 @@ msgid "No Search Results"
 msgstr "Žiadne výsledky vyhľadávania"
 
 #: src/components/common/NoResultsSplash/index.tsx:29
+#: src/components/modals/SwitchOrganizerModal/index.tsx:106
 msgid "No search results."
 msgstr "Žiadne výsledky vyhľadávania."
 
@@ -16102,9 +16098,9 @@ msgstr "Na zverejnených udalostiach"
 msgid "On now"
 msgstr "Práve prebieha"
 
-#: src/components/common/EventCard/index.tsx:104
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:140
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:37
+#: src/utilites/eventSummary.ts:36
 msgid "On Sale"
 msgstr "V predaji"
 
@@ -16224,7 +16220,6 @@ msgstr "Jeden profil na osobu, zostavený z každej objednávky, vstupenky, regi
 msgid "Ongoing"
 msgstr "Prebiehajúce"
 
-#: src/components/common/EventCard/index.tsx:114
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:32
 #: src/components/routes/event/OccurrencesTab/index.tsx:343
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:482
@@ -16232,6 +16227,7 @@ msgstr "Prebiehajúce"
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:393
 #: src/ee/box-office/components/layouts/BoxOffice/ReaderPicker.tsx:16
 #: src/ee/box-office/components/routes/organizer/Payments/TerminalReaders/index.tsx:36
+#: src/utilites/eventSummary.ts:49
 msgid "Online"
 msgstr "Online"
 
@@ -16239,10 +16235,10 @@ msgstr "Online"
 msgid "Online — provide connection details"
 msgstr "Online — zadajte údaje na pripojenie"
 
-#: src/components/common/EventCard/index.tsx:111
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:29
 #: src/components/layouts/OrganizerHomepage/EventList/index.tsx:38
 #: src/components/widget/WidgetSections/index.tsx:58
+#: src/utilites/eventSummary.ts:45
 msgid "Online & in-person"
 msgstr "Online aj osobne"
 
@@ -17008,7 +17004,8 @@ msgstr "Názov organizácie"
 #: src/components/modals/CreateEventModal/index.tsx:270
 #: src/components/routes/admin/SpamEvents/index.tsx:147
 #: src/components/routes/admin/SpamEvents/index.tsx:331
-#: src/components/routes/events/Dashboard/index.tsx:198
+#: src/components/routes/events/Dashboard/index.tsx:116
+#: src/components/routes/events/Dashboard/index.tsx:157
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:496
 #: src/components/widget/WidgetSections/index.tsx:135
 #: src/ee/crm/components/routes/AdminCampaignReview/index.tsx:177
@@ -17581,9 +17578,9 @@ msgstr "Čakajúce pozvánky"
 msgid "Pending review"
 msgstr "Čaká na kontrolu"
 
-#: src/components/common/EventCard/index.tsx:96
 #: src/components/layouts/Event/index.tsx:259
 #: src/components/routes/admin/Messages/index.tsx:270
+#: src/utilites/eventSummary.ts:28
 msgid "Pending Review"
 msgstr "Čaká na kontrolu"
 
@@ -18944,9 +18941,9 @@ msgstr "Záložné kódy"
 msgid "Rectangular"
 msgstr "Obdĺžnikový"
 
-#: src/components/common/EventCard/index.tsx:224
-#: src/components/common/EventCard/index.tsx:328
-#: src/components/common/EventCard/index.tsx:343
+#: src/components/common/EventCard/index.tsx:88
+#: src/components/common/EventsTable/index.tsx:88
+#: src/components/common/EventsTable/index.tsx:89
 msgid "Recurring"
 msgstr "Opakujúce sa"
 
@@ -19632,8 +19629,9 @@ msgstr "Rezervované"
 msgid "reserved seating"
 msgstr "rezervované miesta"
 
-#: src/components/common/EventCard/index.tsx:229
-#: src/components/common/EventCard/index.tsx:329
+#: src/components/common/EventCard/index.tsx:93
+#: src/components/common/EventsTable/index.tsx:95
+#: src/components/common/EventsTable/index.tsx:96
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:365
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:8
 #: src/ee/licensing/licenceNotice.ts:55
@@ -19720,7 +19718,7 @@ msgstr "Obnoviť {removedSeats} odstránených sedadiel"
 msgid "Restore contact"
 msgstr "Obnoviť kontakt"
 
-#: src/components/common/EventCard/index.tsx:169
+#: src/hooks/useEventActions.tsx:73
 msgid "Restore event"
 msgstr "Obnoviť udalosť"
 
@@ -19826,8 +19824,8 @@ msgstr "Použite znova prepojenie Stripe od iného organizátora na tomto účte
 
 #: src/components/common/AffiliateTable/index.tsx:105
 #: src/components/common/AffiliateTable/index.tsx:106
-#: src/components/common/EventCard/index.tsx:275
-#: src/components/common/EventCard/index.tsx:405
+#: src/components/common/EventCard/index.tsx:139
+#: src/components/common/EventsTable/index.tsx:176
 #: src/components/common/StatsCharts/index.tsx:70
 #: src/components/common/WidgetEditor/WidgetStats.tsx:18
 #: src/components/routes/admin/Attribution/index.tsx:134
@@ -20508,8 +20506,8 @@ msgstr "Vyhľadávať podľa názvu účtu alebo e-mailu..."
 msgid "Search by attendee name, email or order #..."
 msgstr "Vyhľadávať podľa mena účastníka, e-mailu alebo č. objednávky..."
 
-#: src/components/routes/events/Dashboard/index.tsx:153
-#: src/components/routes/organizer/Events/index.tsx:51
+#: src/components/routes/events/Dashboard/index.tsx:104
+#: src/components/routes/organizer/Events/index.tsx:41
 msgid "Search by event name..."
 msgstr "Vyhľadávať podľa názvu udalosti..."
 
@@ -20635,6 +20633,10 @@ msgstr "Hľadať meno alebo e-mail"
 msgid "Search orders"
 msgstr "Hľadať objednávky"
 
+#: src/components/modals/SwitchOrganizerModal/index.tsx:84
+msgid "Search organizers"
+msgstr "Hľadať organizátorov"
+
 #: src/components/common/TeamAccessFields/index.tsx:236
 msgid "Search organizers and events"
 msgstr "Hľadať organizátorov a podujatia"
@@ -20669,6 +20671,7 @@ msgid "Search your saved profiles or type a new name in the {lineupLabel} panel.
 msgstr "Vyhľadajte v uložených profiloch alebo zadajte nové meno v paneli {lineupLabel}. Ku každému pridajte fotku, bio a odkazy."
 
 #: src/components/common/SearchBar/index.tsx:35
+#: src/components/modals/SwitchOrganizerModal/index.tsx:85
 msgid "Search..."
 msgstr "Vyhľadávať..."
 
@@ -20767,10 +20770,6 @@ msgstr "Predaj sedadiel a pozdržané sedadlá"
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:43
 msgid "Seat spacing"
 msgstr "Rozstup sedadiel"
-
-#: src/components/common/EventCard/index.tsx:349
-msgid "Seated"
-msgstr "Číslované sedenie"
 
 #: src/components/layouts/Event/index.tsx:139
 #: src/components/routes/event/Reports/index.tsx:62
@@ -22321,7 +22320,6 @@ msgstr "Predal(a) {operatorName}"
 msgid "sold out"
 msgstr "vypredané"
 
-#: src/components/common/EventCard/index.tsx:136
 #: src/components/common/EventDateRange/index.tsx:65
 #: src/components/common/ProductPriceAvailability/index.tsx:21
 #: src/components/common/ProductPriceAvailability/index.tsx:61
@@ -22334,6 +22332,7 @@ msgstr "vypredané"
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:54
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:85
 #: src/utilites/eventListingLabels.ts:18
+#: src/utilites/eventSummary.ts:72
 msgid "Sold out"
 msgstr "Vypredané"
 
@@ -22914,6 +22913,7 @@ msgstr "Štatistiky"
 #: src/components/common/AttendeeTable/index.tsx:246
 #: src/components/common/CapacityAssignmentList/index.tsx:94
 #: src/components/common/CheckInListTable/index.tsx:132
+#: src/components/common/EventsTable/index.tsx:118
 #: src/components/common/OrderDetails/index.tsx:73
 #: src/components/common/OrdersTable/index.tsx:221
 #: src/components/common/ProductsTable/index.tsx:100
@@ -23447,7 +23447,7 @@ msgid "Switch date"
 msgstr "Prepnúť dátum"
 
 #: src/components/layouts/OrganizerLayout/index.tsx:95
-#: src/components/modals/SwitchOrganizerModal/index.tsx:49
+#: src/components/modals/SwitchOrganizerModal/index.tsx:79
 msgid "Switch Organizer"
 msgstr "Prepnúť organizátora"
 
@@ -24884,7 +24884,7 @@ msgstr "Toto podujatie čaká na manuálnu kontrolu a nemôže byť zverejnené,
 msgid "This event is pending manual review and is not visible to the public"
 msgstr "Toto podujatie čaká na manuálnu kontrolu a nie je viditeľné pre verejnosť"
 
-#: src/components/common/EventCard/index.tsx:65
+#: src/hooks/useEventActions.tsx:28
 msgid "This event is pending manual review and its status cannot be changed until the review is complete."
 msgstr "Toto podujatie čaká na manuálnu kontrolu a jeho stav nie je možné zmeniť, kým sa kontrola nedokončí."
 
@@ -25521,6 +25521,7 @@ msgstr "Predaj lístkov"
 msgid "tickets"
 msgstr "lístky"
 
+#: src/components/common/EventsTable/index.tsx:154
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:96
 #: src/components/common/WidgetEditor/SectionsPicker.tsx:28
 #: src/components/common/WidgetEditor/TypePicker.tsx:7
@@ -26655,7 +26656,7 @@ msgstr "najviac {perDateAllocation} na dátum"
 msgid "Up to 40 photos, at least 400 × 300px. The first one is shown largest."
 msgstr "Až 40 fotiek, aspoň 400 × 300px. Prvá sa zobrazí najväčšia."
 
-#: src/components/common/EventsDashboardStatusButtons/index.tsx:20
+#: src/components/common/EventsStatusControl/index.tsx:31
 #: src/components/common/EventStatusBadge/index.tsx:16
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:137
 #: src/components/layouts/OrganizerHomepage/index.tsx:153
@@ -27278,7 +27279,7 @@ msgstr "Zobraziť udalosť"
 msgid "View Event"
 msgstr "Zobraziť udalosť"
 
-#: src/components/common/EventCard/index.tsx:152
+#: src/hooks/useEventActions.tsx:56
 msgid "View event page"
 msgstr "Zobraziť stránku udalosti"
 
@@ -28184,10 +28185,6 @@ msgstr "Vitajte späť{0} 👋"
 #: src/ee/crm/utilites/labels.ts:276
 msgid "Welcome first-timers"
 msgstr "Privítajte nováčikov"
-
-#: src/components/routes/events/Dashboard/index.tsx:89
-msgid "Welcome to {0}, here's a listing of all your events"
-msgstr "Vitajte v {0}, tu je zoznam všetkých vašich udalostí"
 
 #: src/constants/eventCategories.ts:20
 msgid "Wellness"
