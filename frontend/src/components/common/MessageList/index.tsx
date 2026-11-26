@@ -22,6 +22,20 @@ export const statusBadgeColor = (status?: string) => {
     }
 };
 
+export const messageStatusLabel = (status?: Message['status']) => {
+    switch (status) {
+        case 'SENT': return t`Sent`;
+        case 'PROCESSING': return t`Sending`;
+        case 'SCHEDULED': return t`Scheduled`;
+        case 'CANCELLED': return t`Cancelled`;
+        case 'FAILED': return t`Failed`;
+        case 'PENDING_REVIEW': return t`In review`;
+        default: return status ?? '';
+    }
+};
+
+export const recipientLabel = (message: Message) => message.is_test ? t`Only you (test)` : typeLabel(message.type);
+
 export const typeLabel = (type: MessageType) => {
     const map: Record<string, string> = {
         [MessageType.OrderOwnersWithProduct]: t`Order owners with products`,
@@ -74,9 +88,10 @@ const MessageItem = ({message, isSelected, onSelect}: {
                 <div className={classes.preview}>{message.message_preview}</div>
                 <div className={classes.itemBottomRow}>
                     <Badge size="xs" color={statusBadgeColor(message.status)} variant="outline">
-                        {message.status}
+                        {messageStatusLabel(message.status)}
                     </Badge>
-                    <span className={classes.typeLabel}>{typeLabel(message.type)}</span>
+                    {message.is_test && <Badge size="xs" color="gray" variant="light">{t`Test`}</Badge>}
+                    <span className={classes.typeLabel}>{recipientLabel(message)}</span>
                 </div>
             </div>
         </div>

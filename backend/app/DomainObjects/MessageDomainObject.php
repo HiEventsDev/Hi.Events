@@ -57,6 +57,17 @@ class MessageDomainObject extends Generated\MessageDomainObjectAbstract implemen
         return $this;
     }
 
+    public function isTest(): bool
+    {
+        $sendData = $this->getSendData();
+
+        if (is_string($sendData)) {
+            $sendData = json_decode($sendData, true);
+        }
+
+        return is_array($sendData) && ($sendData['is_test'] ?? false) === true;
+    }
+
     public function getMessagePreview(): string
     {
         return StringHelper::previewFromHtml($this->getMessage());
