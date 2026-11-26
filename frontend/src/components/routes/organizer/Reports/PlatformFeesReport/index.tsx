@@ -1,141 +1,145 @@
-import {Link, useParams} from "react-router";
-import {useGetOrganizer} from "../../../../../queries/useGetOrganizer.ts";
-import {useGetOrganizerStats} from "../../../../../queries/useGetOrganizerStats.ts";
-import {useGetOrganizerEvents} from "../../../../../queries/useGetOrganizerEvents.ts";
-import {formatCurrency} from "../../../../../utilites/currency.ts";
-import OrganizerReportTable from "../../../../common/OrganizerReportTable";
-import {t} from "@lingui/macro";
+import {useNavigate, useParams} from "react-router";
 import {Select} from "@mantine/core";
-import {useState} from "react";
-import classes from "./PlatformFeesReport.module.scss";
-import {Callout} from "../../../../common/Callout";
+import {t} from "@lingui/macro";
+import {IconInfoCircle} from "@tabler/icons-react";
+import {useGetOrganizer} from "../../../../../queries/useGetOrganizer.ts";
+import {useGetOrganizerEvents} from "../../../../../queries/useGetOrganizerEvents.ts";
+import {useGetOrganizerStripeConnect} from "../../../../../queries/useGetOrganizerStripeConnect.ts";
+import {useReportParams} from "../../../../../hooks/useReportFilters.ts";
+import {useAccess} from "../../../../../hooks/useAccess.ts";
+import {formatDateWithLocale} from "../../../../../utilites/dates.ts";
+import {ReportColumn} from "../../../../common/ReportView";
+import {CellCopy, CellLink, CellText, EmptyCell} from "../../../../common/TanStackTable/cells.tsx";
+import {OrganizerReport} from "../OrganizerReport.tsx";
+import {EventLink} from "../EventLink.tsx";
+import classes from "../../../../common/ReportView/ReportView.module.scss";
 
-const PlatformFeesReport = () => {
+interface PlatformFeesRow {
+    event_id: number;
+    event_name: string;
+    order_id: number;
+    order_reference: string;
+    payment_date: string | null;
+    amount_paid: number;
+    fee_amount: number;
+    vat_rate: number | null;
+    vat_amount: number | null;
+    total_fee: number;
+    currency: string;
+    payment_intent_id: string | null;
+    stripe_account_id: string | null;
+}
+
+const stripePaymentUrl = (row: PlatformFeesRow): string =>
+    ['https://dashboard.stripe.com', row.stripe_account_id, 'payments', row.payment_intent_id].filter(Boolean).join('/');
+
+const PlatformFeesReport = ({description}: { description: string }) => {
     const {organizerId} = useParams();
-    const organizerQuery = useGetOrganizer(organizerId);
-    const organizer = organizerQuery.data;
-    const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
-
-    const statsQuery = useGetOrganizerStats(organizerId, organizer?.currency);
-    const allCurrencies = statsQuery.data?.all_organizers_currencies || [];
-
-    const eventsQuery = useGetOrganizerEvents(organizerId, {
-        pageNumber: 1,
-        perPage: 100,
-    });
-    const events = eventsQuery.data?.data || [];
+    const navigate = useNavigate();
+    const {data: organizer} = useGetOrganizer(organizerId);
+    const {param, setFilter} = useReportParams();
+    const events = useGetOrganizerEvents(organizerId, {pageNumber: 1, perPage: 100}).data?.data ?? [];
+    const canManagePayments = useAccess().can('MANAGE_PAYMENTS');
+    const stripeAccounts = useGetOrganizerStripeConnect(organizerId, {enabled: canManagePayments})
+        .data?.stripe_connect_accounts ?? [];
+    const accountsWithStripeDashboard = new Set(stripeAccounts
+        .filter(account => account.account_type?.toLowerCase() === 'standard')
+        .map(account => account.stripe_account_id));
+    const canOpenInStripe = (row: PlatformFeesRow) =>
+        !!row.stripe_account_id && accountsWithStripeDashboard.has(row.stripe_account_id);
 
     if (!organizer) {
         return null;
     }
 
-    const eventOptions = [
-        {value: '', label: t`All Events`},
-        ...events.map(event => ({
-            value: String(event.id),
-            label: event.title || ''
-        }))
-    ];
+    const timezone = organizer.timezone || 'UTC';
+    const eventParam = param('event');
+    const selectedEventId = eventParam && events.some(event => String(event.id) === eventParam) ? eventParam : null;
 
-    const columns = [
+    const columns: ReportColumn<PlatformFeesRow>[] = [
+        {key: 'event_name', label: t`Event`, render: row => <EventLink eventId={row.event_id}>{row.event_name}</EventLink>},
         {
-            key: 'event_name' as const,
-            label: t`Event`,
-            sortable: true,
-            render: (value: string, row: any) => (
-                <Link to={`/manage/event/${row.event_id}/dashboard`} style={{textDecoration: 'none', color: 'inherit'}}>
-                    {value}
-                </Link>
-            )
+            key: 'payment_date',
+            label: t`Payment date`,
+            render: row => row.payment_date ? formatDateWithLocale(row.payment_date, 'shortDate', timezone) : <EmptyCell/>,
         },
         {
-            key: 'payment_date' as const,
-            label: t`Payment Date`,
-            sortable: true,
-            render: (value: string) => value ? new Date(value).toLocaleDateString() : '-'
-        },
-        {
-            key: 'order_reference' as const,
-            label: t`Order Ref`,
+            key: 'order_reference',
+            label: t`Order`,
             sortable: false,
-            render: (value: string, row: any) => (
-                <Link to={`/manage/event/${row.event_id}/orders/${row.order_id}`} style={{textDecoration: 'none', color: 'inherit'}}>
-                    {value}
-                </Link>
-            )
+            render: row => (
+                <CellLink mono onClick={() => navigate(`/manage/event/${row.event_id}/orders#order-${row.order_id}`)}>
+                    {row.order_reference}
+                </CellLink>
+            ),
         },
+        {key: 'currency', label: t`Currency`},
+        {key: 'amount_paid', label: t`Amount paid`, kind: 'money'},
+        {key: 'fee_amount', label: t`Hi.Events fee`, kind: 'money'},
         {
-            key: 'amount_paid' as const,
-            label: t`Amount Paid`,
-            sortable: true,
-            render: (value: number, row: any) => formatCurrency(value, row.currency)
+            key: 'vat_rate',
+            label: t`VAT rate`,
+            kind: 'count',
+            total: false,
+            render: row => row.vat_rate ? `${(Number(row.vat_rate) * 100).toFixed(0)}%` : <EmptyCell/>,
         },
+        {key: 'vat_amount', label: t`VAT on fee`, kind: 'money'},
+        {key: 'total_fee', label: t`Total fee`, kind: 'money'},
         {
-            key: 'fee_amount' as const,
-            label: t`Hi.Events Fee`,
-            sortable: true,
-            render: (value: number, row: any) => formatCurrency(value, row.currency)
-        },
-        {
-            key: 'vat_rate' as const,
-            label: t`VAT Rate`,
+            key: 'payment_intent_id',
+            label: t`Stripe payment ID`,
             sortable: false,
-            render: (value: number) => value ? `${(value * 100).toFixed(0)}%` : '-'
+            render: row => row.payment_intent_id
+                ? (
+                    <CellCopy value={row.payment_intent_id}>
+                        {canOpenInStripe(row) ? (
+                            <CellLink
+                                mono
+                                title={t`Open this payment in Stripe`}
+                                onClick={() => window.open(stripePaymentUrl(row), '_blank', 'noopener,noreferrer')}
+                            >
+                                {row.payment_intent_id}
+                            </CellLink>
+                        ) : <CellText mono>{row.payment_intent_id}</CellText>}
+                    </CellCopy>
+                )
+                : <EmptyCell/>,
         },
-        {
-            key: 'vat_amount' as const,
-            label: t`VAT on Fee`,
-            sortable: true,
-            render: (value: number, row: any) => value ? formatCurrency(value, row.currency) : '-'
-        },
-        {
-            key: 'total_fee' as const,
-            label: t`Total Fee`,
-            sortable: true,
-            render: (value: number, row: any) => formatCurrency(value, row.currency)
-        },
-        {
-            key: 'currency' as const,
-            label: t`Currency`,
-            sortable: false
-        },
-        {
-            key: 'payment_intent_id' as const,
-            label: t`Stripe Payment ID`,
-            sortable: false,
-            render: (value: string) => value || '-'
-        }
     ];
 
     return (
-        <>
-            <Callout variant="tip" title={t`Important Notice`} style={{marginBottom: 24}}>
-                {t`This report is for informational purposes only. Always consult with a tax professional before using this data for accounting or tax purposes. Please cross-reference with your Stripe dashboard as Hi.Events may be missing historical data.`}
-            </Callout>
-
-            <div className={classes.eventFilter}>
+        <OrganizerReport<PlatformFeesRow>
+            description={description}
+            organizer={organizer}
+            eventId={selectedEventId ? Number(selectedEventId) : null}
+            columns={columns}
+            rowCurrency={row => row.currency}
+            emptyMessage={t`No platform fees were charged in this period.`}
+            summary={sum => [
+                {label: t`Amount paid`, value: sum('amount_paid'), kind: 'money'},
+                {label: t`Hi.Events fee`, value: sum('fee_amount'), kind: 'money'},
+                {label: t`VAT on fee`, value: sum('vat_amount'), kind: 'money'},
+                {label: t`Total fee`, value: sum('total_fee'), kind: 'money'},
+            ]}
+            extraFilters={events.length > 1 && (
                 <Select
-                    label={t`Filter by Event`}
-                    placeholder={t`Select an event`}
-                    data={eventOptions}
+                    className={classes.eventSelect}
+                    aria-label={t`Event`}
+                    placeholder={t`All events`}
+                    data={events.map(event => ({value: String(event.id), label: event.title || ''}))}
                     value={selectedEventId}
-                    onChange={setSelectedEventId}
+                    onChange={value => setFilter('event', value)}
                     clearable
                     searchable
                 />
-            </div>
-
-            <OrganizerReportTable
-                title={t`Platform Fees Report`}
-                columns={columns}
-                isLoading={organizerQuery.isLoading}
-                showDateFilter={true}
-                organizer={organizer}
-                showCurrencyFilter={true}
-                availableCurrencies={allCurrencies}
-                eventId={selectedEventId ? parseInt(selectedEventId) : null}
-            />
-        </>
+            )}
+            notice={(
+                <p className={classes.note}>
+                    <IconInfoCircle size={16} stroke={1.5} aria-hidden/>
+                    {t`These figures are a guide. Your Stripe dashboard has the complete payment history, and a tax adviser can confirm what to use in your accounts.`}
+                </p>
+            )}
+        />
     );
 };
 

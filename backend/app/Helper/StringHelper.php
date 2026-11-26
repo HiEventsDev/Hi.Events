@@ -12,6 +12,16 @@ class StringHelper
         return preg_replace('/[\x{0000}-\x{001F}\x{007F}-\x{009F}\x{2028}\x{2029}]/u', '', $text) ?? $text;
     }
 
+    public static function onOneLine(string $text): string
+    {
+        return trim((string) preg_replace('/\s*\R\s*/u', ' ', $text));
+    }
+
+    public static function escapeMarkdown(string $text): string
+    {
+        return addcslashes(self::stripControlCharacters($text), '\\`*_[]!|~#');
+    }
+
     public static function previewFromHtml(string $text, int $length = 100): string
     {
         $textWithSpaces = preg_replace('/<[^>]+>/', ' ', $text);

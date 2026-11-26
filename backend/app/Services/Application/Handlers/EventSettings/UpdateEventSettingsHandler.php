@@ -93,6 +93,8 @@ class UpdateEventSettingsHandler
 
                     // Marketing settings
                     'show_marketing_opt_in' => $settings->show_marketing_opt_in,
+                    'phone_collection' => $settings->phone_collection->value,
+                    'show_sms_opt_in' => $settings->show_sms_opt_in,
 
                     // Attendee detail copy control
                     'allow_copy_details_to_all_attendees' => $settings->allow_copy_details_to_all_attendees,
@@ -108,6 +110,11 @@ class UpdateEventSettingsHandler
 
                     // Self-service settings
                     'allow_attendee_self_edit' => $settings->allow_attendee_self_edit,
+                    'allow_ticket_transfer' => $settings->allow_ticket_transfer,
+                    'ticket_transfer_cutoff_minutes' => $settings->ticket_transfer_cutoff_minutes,
+                    'max_transfers_per_ticket' => $settings->max_transfers_per_ticket,
+                    'allow_ticket_resale' => $settings->allow_ticket_resale,
+                    'ticket_resale_cutoff_minutes' => $settings->ticket_resale_cutoff_minutes,
 
                     // Occurrence display
                     'show_available_occurrence_capacity' => $settings->show_available_occurrence_capacity,

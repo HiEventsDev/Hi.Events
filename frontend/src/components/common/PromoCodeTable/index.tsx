@@ -3,14 +3,16 @@ import {WriteAccess} from "../WriteAccess";
 import {CreateButton} from "../CreateButton";
 import {Event, PromoCode, PromoCodeDiscountAppliesTo, PromoCodeDiscountType} from "../../../types.ts";
 import {prettyDate, relativeDate} from "../../../utilites/dates.ts";
-import {Badge, Button, Flex, Group, Menu, Table as MantineTable, Tooltip} from "@mantine/core";
-import {Table, TableHead} from "../Table";
-import {IconCheck, IconCopy, IconDotsVertical, IconPlus, IconSend, IconTrash} from "@tabler/icons-react";
-import {Currency} from "../Currency";
+import {ActionIcon, Menu, Tooltip, VisuallyHidden} from "@mantine/core";
+import {IconCopy, IconDotsVertical, IconPlus, IconSend, IconTrash} from "@tabler/icons-react";
+import {TanStackTable, TanStackTableColumn} from "../TanStackTable";
+import {CellCopy, CellText} from "../TanStackTable/cells.tsx";
+import {sortableHeader, TableSort} from "../TanStackTable/sorting.tsx";
+import {formatCurrency} from "../../../utilites/currency.ts";
 import {useClipboard, useDisclosure} from "@mantine/hooks";
 import {showSuccess} from "../../../utilites/notifications.tsx";
 import {EditPromoCodeModal} from "../../modals/EditPromoCodeModal";
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import {NoResultsSplash} from "../NoResultsSplash";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 import {useDeletePromoCode} from "../../../mutations/useDeletePromoCode.ts";
@@ -21,9 +23,11 @@ interface PromoCodeTableProps {
     event: Event,
     promoCodes: PromoCode[],
     openCreateModal: () => void,
+    isRefreshing?: boolean,
+    sort?: TableSort,
 }
 
-export const PromoCodeTable = ({event, promoCodes, openCreateModal}: PromoCodeTableProps) => {
+export const PromoCodeTable = ({event, promoCodes, openCreateModal, isRefreshing, sort}: PromoCodeTableProps) => {
     const [promoCodeId, setPromoCodeId] = useState<number | undefined>();
     const [editModalOpen, {open: openEditModal, close: closeEditModal}] = useDisclosure(false);
     const deleteMutation = useDeletePromoCode();
@@ -43,6 +47,122 @@ export const PromoCodeTable = ({event, promoCodes, openCreateModal}: PromoCodeTa
             }, {confirm: t`Delete`, cancel: t`Cancel`}
         );
     }
+
+    const discountLabel = (code: PromoCode) => {
+        if (!code.discount) {
+            return t`None`;
+        }
+        if (code.discount_type === PromoCodeDiscountType.Fixed) {
+            const scope = code.discount_applies_to === PromoCodeDiscountAppliesTo.Order ? t`per order` : t`per product`;
+            return `${formatCurrency(code.discount, event.currency)} ${scope}`;
+        }
+        return `${code.discount}%`;
+    };
+
+    const columns = useMemo<TanStackTableColumn<PromoCode>[]>(() => [
+        {
+            id: 'code',
+            enableHiding: false,
+            ...sortableHeader(t`Code`, 'code', sort, 'asc'),
+            meta: {label: t`Code`, sticky: 'left'},
+            cell: ({row: {original: code}}) => (
+                <CellCopy value={code.code.toUpperCase()}>
+                    <CellText mono strong title={code.code.toUpperCase()}>{code.code.toUpperCase()}</CellText>
+                </CellCopy>
+            ),
+        },
+        {
+            id: 'discount',
+            header: t`Discount`,
+            cell: ({row: {original: code}}) => code.discount
+                ? <CellText strong>{discountLabel(code)}</CellText>
+                : <CellText muted>{discountLabel(code)}</CellText>,
+        },
+        {
+            id: 'usage',
+            ...sortableHeader(t`Times used`, 'order_usage_count', sort),
+            meta: {label: t`Times used`, align: 'right'},
+            cell: ({row: {original: code}}) => (
+                <span>
+                    {code.order_usage_count} / {code.max_allowed_usages
+                    ? code.max_allowed_usages
+                    : <span title={t`Unlimited usages allowed`}>∞</span>}
+                </span>
+            ),
+        },
+        {
+            id: 'products',
+            header: t`Products`,
+            cell: ({row: {original: code}}) => {
+                const productIds = code.applicable_product_ids?.map(Number) ?? [];
+                if (productIds.length === 0) {
+                    return t`All Products`;
+                }
+                const titles = eventProducts
+                    ?.filter(product => productIds.includes(Number(product.id)))
+                    .map(product => product.title) ?? [];
+
+                return (
+                    <Tooltip label={titles.join('\n')} multiline withArrow style={{whiteSpace: 'pre-line'}}>
+                        <span>{productIds.length} {t`Product(s)`}</span>
+                    </Tooltip>
+                );
+            },
+        },
+        {
+            id: 'expires',
+            header: t`Expires`,
+            cell: ({row: {original: code}}) => code.expiry_date ? (
+                <Tooltip label={prettyDate(String(code.expiry_date), event.timezone)} withArrow>
+                    <span>{relativeDate(String(code.expiry_date))}</span>
+                </Tooltip>
+            ) : <CellText muted>{t`Never`}</CellText>,
+        },
+        {
+            id: 'actions',
+            header: () => <VisuallyHidden>{t`Actions`}</VisuallyHidden>,
+            enableHiding: false,
+            meta: {sticky: 'right'},
+            cell: ({row: {original: code}}) => (
+                <Menu shadow="md" width={200} position="bottom-end">
+                    <Menu.Target>
+                        <ActionIcon variant="subtle" color="gray" aria-label={t`Actions`} data-testid="promo-code-actions-button">
+                            <IconDotsVertical size={18}/>
+                        </ActionIcon>
+                    </Menu.Target>
+
+                    <Menu.Dropdown>
+                        <Menu.Label>{t`Manage`}</Menu.Label>
+                        <WriteAccess>
+                            <Menu.Item leftSection={<IconSend size={14}/>} onClick={() => handleEditModal(code.id)}>
+                                {t`Edit Code`}
+                            </Menu.Item>
+                        </WriteAccess>
+                        <Menu.Item
+                            leftSection={<IconCopy size={14}/>}
+                            onClick={() => {
+                                clipboard.copy(eventHomepageUrl(event) + `?promo_code=${code.code}`);
+                                showSuccess(t`URL copied to clipboard`);
+                            }}
+                        >
+                            {t`Copy URL`}
+                        </Menu.Item>
+                        <WriteAccess>
+                            <Menu.Divider/>
+                            <Menu.Label>{t`Danger zone`}</Menu.Label>
+                            <Menu.Item
+                                color="red"
+                                onClick={() => handleDeleteCode(code.id as number)}
+                                leftSection={<IconTrash size={14}/>}
+                            >
+                                {t`Delete code`}
+                            </Menu.Item>
+                        </WriteAccess>
+                    </Menu.Dropdown>
+                </Menu>
+            ),
+        },
+    ], [event, promoCodes, sort?.sortBy, sort?.sortDirection]);
 
     if (promoCodes.length === 0) {
         return <NoResultsSplash
@@ -66,149 +186,7 @@ export const PromoCodeTable = ({event, promoCodes, openCreateModal}: PromoCodeTa
 
     return (
         <>
-            <Table>
-                <TableHead>
-                    <MantineTable.Tr>
-                        <MantineTable.Th>{t`Code`}</MantineTable.Th>
-                        <MantineTable.Th>{t`Discount`}</MantineTable.Th>
-                        <MantineTable.Th>{t`Times used`}</MantineTable.Th>
-                        <MantineTable.Th>{t`Products`}</MantineTable.Th>
-                        <MantineTable.Th>{t`Expires`}</MantineTable.Th>
-                        <MantineTable.Th></MantineTable.Th>
-                    </MantineTable.Tr>
-                </TableHead>
-
-                <MantineTable.Tbody>
-                    {promoCodes?.map(code => {
-                        const Discount = () => {
-                            if (code?.discount === 0) {
-                                return <>{t`None`}</>;
-                            }
-
-                            if (code.discount_type === PromoCodeDiscountType.Fixed) {
-                                return (
-                                    <>
-                                        <Currency currency={event.currency} price={code.discount}/>
-                                        {' '}
-                                        {code.discount_applies_to === PromoCodeDiscountAppliesTo.Order
-                                            ? t`per order`
-                                            : t`per product`}
-                                    </>
-                                );
-                            }
-
-                            return <>{code.discount}%</>;
-                        };
-
-                        const CopyCodeBadge = () => {
-                            const clipboard = useClipboard({timeout: 500});
-
-                            return (
-                                <Badge
-                                    variant={'outline'}
-                                    title={t`Click to copy`}
-                                    style={{cursor: 'pointer', alignItems: 'center'}}
-                                    rightSection={(<Flex>
-                                        {clipboard.copied ? <IconCheck color={'green'} size={'12'}/> :
-                                            <IconCopy size={'12'}/>}
-                                    </Flex>)}
-                                    onClick={() => {
-                                        clipboard.copy(code.code.toUpperCase());
-                                        showSuccess(`${code?.code.toUpperCase()} ${t`copied to clipboard`}`)
-                                    }}>
-                                    {code.code.toUpperCase()}
-                                </Badge>
-                            )
-                        }
-
-                        return (
-                            <MantineTable.Tr>
-                                <MantineTable.Td>
-                                    <CopyCodeBadge/>
-                                </MantineTable.Td>
-                                <MantineTable.Td>
-                                    <Badge color={'cyan'} variant={'light'}>
-                                        <Discount/>
-                                    </Badge>
-                                </MantineTable.Td>
-                                <MantineTable.Td>
-                                    {code.order_usage_count} / {code.max_allowed_usages
-                                    ? code.max_allowed_usages
-                                    : <span title={t`Unlimited usages allowed`}>∞</span>}
-                                </MantineTable.Td>
-                                <MantineTable.Td>
-                                    <div style={{cursor: 'pointer'}}>
-                                        {code.applicable_product_ids?.length === 0 && (
-                                            <Badge variant={'light'} color={'primary'}>{t`All Products`}</Badge>
-                                        )}
-
-                                        {Number(code.applicable_product_ids?.length) > 0 && (
-                                            <Tooltip label={
-                                                eventProducts?.filter((product) =>
-                                                    code.applicable_product_ids?.map(Number)?.includes(Number(product.id)))
-                                                    .map(product => {
-                                                        return (
-                                                            <>
-                                                                {product.title}
-                                                                <br/>
-                                                            </>
-                                                        );
-                                                    })}>
-                                                <Badge
-                                                    variant={'light'}
-                                                    color={'pink'}>{code.applicable_product_ids?.length} {t`Product(s)`}</Badge>
-                                            </Tooltip>
-                                        )}
-                                    </div>
-                                </MantineTable.Td>
-                                <MantineTable.Td>{code.expiry_date ?
-                                    <Tooltip label={prettyDate(String(code.expiry_date), event.timezone)}>
-                                    <span>
-                                        {relativeDate(String(code.expiry_date))}
-                                    </span>
-                                    </Tooltip> : t`Never`}</MantineTable.Td>
-                                <MantineTable.Td>
-                                    <Group wrap={'nowrap'} gap={0} justify={'flex-end'}>
-                                        <Menu shadow="md" width={200}>
-                                            <Menu.Target>
-                                                <Button size={'xs'} variant={'transparent'} data-testid="promo-code-actions-button"><IconDotsVertical/></Button>
-                                            </Menu.Target>
-
-                                            <Menu.Dropdown>
-                                                <Menu.Label>{t`Manage`}</Menu.Label>
-                                                <WriteAccess>
-                                                    <Menu.Item leftSection={<IconSend size={14}/>}
-                                                               onClick={() => handleEditModal(code?.id)}>
-                                                        {t`Edit Code`}
-                                                    </Menu.Item>
-                                                </WriteAccess>
-                                                <Menu.Item leftSection={<IconCopy size={14}/>}
-                                                           onClick={() => {
-                                                                clipboard.copy(eventHomepageUrl(event) + `?promo_code=${code?.code}`);
-                                                                showSuccess(t`URL copied to clipboard`)
-                                                           }}>
-                                                    {t`Copy URL`}
-                                                </Menu.Item>
-                                                <WriteAccess>
-                                                    <Menu.Divider/>
-
-                                                    <Menu.Label>{t`Danger zone`}</Menu.Label>
-                                                    <Menu.Item color="red"
-                                                               onClick={() => handleDeleteCode(code?.id as number)}
-                                                               leftSection={<IconTrash size={14}/>}>
-                                                        {t`Delete code`}
-                                                    </Menu.Item>
-                                                </WriteAccess>
-
-                                            </Menu.Dropdown>
-                                        </Menu>
-                                    </Group>
-                                </MantineTable.Td>
-                            </MantineTable.Tr>
-                        )
-                    })}
-                </MantineTable.Tbody>
-            </Table>
+            <TanStackTable data={promoCodes} columns={columns} noCard isRefreshing={isRefreshing}/>
 
             {(promoCodeId && editModalOpen) &&
                 <EditPromoCodeModal promoCodeId={promoCodeId} onClose={closeEditModal}/>}

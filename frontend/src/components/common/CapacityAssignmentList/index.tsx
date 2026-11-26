@@ -1,15 +1,16 @@
 import {CapacityAssignment, IdParam} from "../../../types";
 import {CreateButton} from "../CreateButton";
-import {Badge, Progress} from "@mantine/core";
+import {Progress, Tooltip, VisuallyHidden} from "@mantine/core";
 import {t, Trans} from "@lingui/macro";
-import {IconHelp, IconPencil, IconPlus, IconTrash} from "@tabler/icons-react";
-import Truncate from "../Truncate";
+import {IconPencil, IconPlus, IconTrash} from "@tabler/icons-react";
 import {NoResultsSplash} from "../NoResultsSplash";
 import classes from './CapacityAssignmentList.module.scss';
-import {Card} from "../Card";
-import {Popover} from "../Popover";
-import {useState} from "react";
-import {ActionMenu} from "../ActionMenu";
+import {useMemo, useState} from "react";
+import {ActionMenu, RowActionsTarget} from "../ActionMenu";
+import {TanStackTable, TanStackTableColumn} from "../TanStackTable";
+import {CellText, IdentityCell} from "../TanStackTable/cells.tsx";
+import {sortableHeader, TableSort} from "../TanStackTable/sorting.tsx";
+import {StatusBadge} from "../StatusBadge";
 import {useDisclosure} from "@mantine/hooks";
 import {EditCapacityAssignmentModal} from "../../modals/EditCapacityAssignmentModal";
 import {useDeleteCapacityAssignment} from "../../../mutations/useDeleteCapacityAssignment";
@@ -19,9 +20,11 @@ import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 interface CapacityAssignmentListProps {
     capacityAssignments: CapacityAssignment[];
     openCreateModal: () => void;
+    isRefreshing?: boolean;
+    sort?: TableSort;
 }
 
-export const CapacityAssignmentList = ({capacityAssignments, openCreateModal}: CapacityAssignmentListProps) => {
+export const CapacityAssignmentList = ({capacityAssignments, openCreateModal, isRefreshing, sort}: CapacityAssignmentListProps) => {
     const [editModalOpen, {open: openEditModal, close: closeEditModal}] = useDisclosure(false);
     const [selectedCapacityAssignmentId, setSelectedCapacityAssignmentId] = useState<IdParam>();
     const deleteMutation = useDeleteCapacityAssignment();
@@ -36,6 +39,110 @@ export const CapacityAssignmentList = ({capacityAssignments, openCreateModal}: C
             }
         });
     }
+
+    const columns = useMemo<TanStackTableColumn<CapacityAssignment>[]>(() => [
+        {
+            id: 'name',
+            enableHiding: false,
+            ...sortableHeader(t`Name`, 'name', sort, 'asc'),
+            meta: {label: t`Name`, sticky: 'left'},
+            cell: ({row: {original: assignment}}) => {
+                const products = assignment.products ?? [];
+
+                return (
+                    <IdentityCell
+                        stacked
+                        primary={<CellText strong title={assignment.name}>{assignment.name}</CellText>}
+                        secondary={products.length > 0 && (
+                            <Tooltip
+                                label={products.map(product => product.title).join('\n')}
+                                multiline
+                                withArrow
+                                style={{whiteSpace: 'pre-line'}}
+                            >
+                                <span>
+                                    {products.length === 1
+                                        ? t`Applies to 1 product`
+                                        : <Trans>Applies to {products.length} products</Trans>}
+                                </span>
+                            </Tooltip>
+                        )}
+                    />
+                );
+            },
+        },
+        {
+            id: 'usage',
+            ...sortableHeader(t`Capacity`, 'used_capacity', sort),
+            meta: {label: t`Capacity`},
+            cell: ({row: {original: assignment}}) => {
+                const percentage = assignment.capacity ? (assignment.used_capacity / assignment.capacity) * 100 : 0;
+                const color = percentage > 80 ? 'red' : percentage > 50 ? 'yellow' : 'green';
+
+                return (
+                    <span className={classes.usage}>
+                        {!!assignment.capacity && (
+                            <Progress className={classes.usageBar} value={percentage} color={color} size="sm" radius="xl"/>
+                        )}
+                        <span>{assignment.used_capacity}/{assignment.capacity || '∞'}</span>
+                    </span>
+                );
+            },
+        },
+        {
+            id: 'status',
+            header: t`Status`,
+            cell: ({row: {original: assignment}}) => (
+                <StatusBadge tone={assignment.status === 'ACTIVE' ? 'positive' : 'neutral'}>
+                    {assignment.status === 'ACTIVE' ? t`Active` : t`Inactive`}
+                </StatusBadge>
+            ),
+        },
+        {
+            id: 'actions',
+            header: () => <VisuallyHidden>{t`Actions`}</VisuallyHidden>,
+            enableHiding: false,
+            meta: {sticky: 'right'},
+            cell: ({row: {original: assignment}}) => (
+                <ActionMenu
+                    target={<RowActionsTarget/>}
+                    itemsGroups={[
+                        {
+                            label: t`Manage`,
+                            items: [
+                                {
+                                    label: t`Edit Capacity`,
+                                    requiresEdit: true,
+                                    icon: <IconPencil size={14}/>,
+                                    onClick: () => {
+                                        setSelectedCapacityAssignmentId(assignment.id as IdParam);
+                                        openEditModal();
+                                    }
+                                },
+                            ],
+                        },
+                        {
+                            label: t`Danger zone`,
+                            items: [
+                                {
+                                    label: t`Delete Capacity`,
+                                    requiresEdit: true,
+                                    icon: <IconTrash size={14}/>,
+                                    onClick: () => {
+                                        confirmationDialog(
+                                            t`Are you sure you would like to delete this Capacity Assignment?`,
+                                            () => handleDeleteProduct(assignment.id as IdParam, assignment.event_id as IdParam),
+                                        )
+                                    },
+                                    color: 'red',
+                                },
+                            ],
+                        },
+                    ]}
+                />
+            ),
+        },
+    ], [sort?.sortBy, sort?.sortDirection]);
 
     if (capacityAssignments.length === 0) {
         return (
@@ -68,118 +175,7 @@ export const CapacityAssignmentList = ({capacityAssignments, openCreateModal}: C
 
     return (
         <>
-            <div className={classes.capacityAssignmentList}>
-                {capacityAssignments.map((assignment) => {
-                    const capacityPercentage = assignment.capacity
-                        ? (assignment.used_capacity / assignment.capacity) * 100
-                        : 0;
-                    const capacityColor = capacityPercentage > 80 ? 'red' : capacityPercentage > 50 ? 'yellow' : 'green';
-
-                    return (
-                        <Card className={classes.capacityCard} key={assignment.id}>
-                            <div className={classes.capacityAssignmentHeader}>
-                                <div className={classes.capacityAssignmentAppliesTo}>
-                                    {assignment.products && (
-                                        <Popover
-                                            title={assignment.products.map((product) => (
-                                                <div key={product.id}>
-                                                    {product.title}
-                                                </div>
-                                            ))}
-                                            position={'bottom'}
-                                            withArrow
-                                        >
-                                            <div className={classes.appliesToText}>
-                                                <div>
-                                                    {assignment.products.length > 1 &&
-                                                        <Trans>Applies to {assignment.products.length} products</Trans>}
-                                                    {assignment.products.length === 1 && t`Applies to 1 product`}
-                                                </div>
-                                                &nbsp;
-                                                <IconHelp size={16}/>
-                                            </div>
-                                        </Popover>
-                                    )}
-                                </div>
-
-                                <div className={classes.capacityAssignmentStatus}>
-                                    <Badge variant={'light'} color={assignment.status === 'ACTIVE' ? 'green' : 'gray'}>
-                                        {assignment.status}
-                                    </Badge>
-                                </div>
-                            </div>
-                            <div className={classes.capacityAssignmentName}>
-                                <b>
-                                    <Truncate text={assignment.name} length={30}/>
-                                </b>
-                            </div>
-
-                            <div className={classes.capacityAssignmentInfo}>
-                                <div className={classes.capacityAssignmentCapacity}>
-                                    {assignment.capacity ? (
-                                        <div className={classes.capacity}>
-                                            <Progress
-                                                className={classes.capacityBar}
-                                                value={capacityPercentage}
-                                                color={capacityColor}
-                                                size={'md'}
-                                            />
-                                            <div className={classes.capacityText}>
-                                                {assignment.used_capacity}/{assignment.capacity}
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <div className={classes.capacityText}>
-                                            {assignment.used_capacity}/∞
-                                        </div>
-                                    )}
-                                </div>
-                                <div className={classes.capacityAssignmentActions}>
-                                    <ActionMenu
-                                        itemsGroups={[
-                                            {
-                                                label: t`Manage`,
-                                                items: [
-                                                    {
-                                                        label: t`Edit Capacity`,
-                                                        requiresEdit: true,
-                                                        icon: <IconPencil size={14}/>,
-                                                        onClick: () => {
-                                                            setSelectedCapacityAssignmentId(assignment.id as IdParam);
-                                                            openEditModal();
-                                                        }
-                                                    },
-                                                ],
-                                            },
-                                            {
-                                                label: t`Danger zone`,
-                                                items: [
-                                                    {
-                                                        label: t`Delete Capacity`,
-                                                        requiresEdit: true,
-                                                        icon: <IconTrash size={14}/>,
-                                                        onClick: () => {
-                                                            confirmationDialog(
-                                                                t`Are you sure you would like to delete this Capacity Assignment?`,
-                                                                () => {
-                                                                    handleDeleteProduct(
-                                                                        assignment.id as IdParam,
-                                                                        assignment.event_id as IdParam,
-                                                                    );
-                                                                })
-                                                        },
-                                                        color: 'red',
-                                                    },
-                                                ],
-                                            },
-                                        ]}
-                                    />
-                                </div>
-                            </div>
-                        </Card>
-                    );
-                })}
-            </div>
+            <TanStackTable rowLines={2} data={capacityAssignments} columns={columns} noCard isRefreshing={isRefreshing}/>
             {(editModalOpen && selectedCapacityAssignmentId)
                 && <EditCapacityAssignmentModal onClose={closeEditModal}
                                                 capacityAssignmentId={selectedCapacityAssignmentId}/>}

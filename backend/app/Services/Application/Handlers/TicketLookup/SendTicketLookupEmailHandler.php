@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Mail\TicketLookup\TicketLookupEmail;
+use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketLookupTokenRepositoryInterface;
 use HiEvents\Services\Application\Handlers\TicketLookup\DTO\SendTicketLookupEmailDTO;
@@ -22,6 +23,7 @@ class SendTicketLookupEmailHandler
 
     public function __construct(
         private readonly OrderRepositoryInterface $orderRepository,
+        private readonly AttendeeRepositoryInterface $attendeeRepository,
         private readonly TicketLookupTokenRepositoryInterface $ticketLookupTokenRepository,
         private readonly TokenGeneratorService $tokenGeneratorService,
         private readonly Mailer $mailer,
@@ -37,8 +39,9 @@ class SendTicketLookupEmailHandler
         $email = strtolower($dto->email);
 
         $orders = $this->findOrdersByEmail($email);
+        $guestTicketCount = $this->attendeeRepository->findGuestTicketsByEmail($email)->count();
 
-        if ($orders->isEmpty()) {
+        if ($orders->isEmpty() && $guestTicketCount === 0) {
             $this->logger->info('Ticket lookup requested for email with no orders', [
                 'email' => $email,
             ]);
@@ -48,9 +51,9 @@ class SendTicketLookupEmailHandler
 
         $orderCount = $orders->count();
 
-        $this->databaseManager->transaction(function () use ($email, $orderCount) {
+        $this->databaseManager->transaction(function () use ($email, $orderCount, $guestTicketCount) {
             $token = $this->generateAndSaveToken($email);
-            $this->sendTicketLookupEmail($email, $token, $orderCount);
+            $this->sendTicketLookupEmail($email, $token, $orderCount, $guestTicketCount);
         });
     }
 
@@ -78,7 +81,7 @@ class SendTicketLookupEmailHandler
         return $token;
     }
 
-    private function sendTicketLookupEmail(string $email, string $token, int $orderCount): void
+    private function sendTicketLookupEmail(string $email, string $token, int $orderCount, int $guestTicketCount): void
     {
         $this->logger->info('Sending ticket lookup email', [
             'email' => $email,
@@ -91,6 +94,7 @@ class SendTicketLookupEmailHandler
                 email: $email,
                 token: $token,
                 orderCount: $orderCount,
+                guestTicketCount: $guestTicketCount,
             ));
     }
 }

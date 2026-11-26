@@ -51,7 +51,7 @@ class ResendAttendeeTicketPublicHandler
                 AttendeeDomainObjectAbstract::EVENT_ID => $dto->eventId,
             ]);
 
-        if (! $attendee) {
+        if (! $attendee || $attendee->hasLeftItsOrder()) {
             throw new ResourceNotFoundException(__('Attendee not found'));
         }
 

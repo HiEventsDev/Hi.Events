@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace HiEvents\Validators;
 
+use HiEvents\DomainObjects\Enums\PhoneCollection;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\QuestionDomainObjectAbstract;
@@ -13,6 +14,8 @@ use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
+use HiEvents\Services\Domain\Order\CheckoutSmsOptInService;
+use HiEvents\Validators\Rules\MobilePhoneNumberRule;
 use HiEvents\Validators\Rules\OrderQuestionRule;
 use HiEvents\Validators\Rules\PersonNameRule;
 use HiEvents\Validators\Rules\ProductQuestionRule;
@@ -24,6 +27,7 @@ class CompleteOrderValidator extends BaseValidator
         private readonly QuestionRepositoryInterface $questionRepository,
         private readonly ProductRepositoryInterface $productRepository,
         private readonly EventSettingsRepositoryInterface $eventSettingsRepository,
+        private readonly CheckoutSmsOptInService $checkoutSmsOptInService,
         private readonly Route $route
     ) {}
 
@@ -50,6 +54,9 @@ class CompleteOrderValidator extends BaseValidator
             'event_id' => $this->route->parameter('event_id'),
         ]);
 
+        $phoneCollection = PhoneCollection::from($eventSettings->getPhoneCollection());
+        $asksForSms = $this->checkoutSmsOptInService->isOffered($eventSettings);
+
         $addressRules = $eventSettings->getRequireBillingAddress() ? [
             'order.address' => 'array',
             'order.address.address_line_1' => 'required|string|max:255',
@@ -66,6 +73,11 @@ class CompleteOrderValidator extends BaseValidator
             'order.questions' => new OrderQuestionRule($questions, $products),
             'order.email' => 'required|email',
             'order.email_confirmation' => 'required|email|same:order.email',
+            'order.phone' => [
+                ...MobilePhoneNumberRule::rulesFor($phoneCollection),
+                ...($asksForSms ? ['required_if_accepted:order.sms_opted_in'] : []),
+            ],
+            'order.sms_opted_in' => ['boolean'],
             'products' => new ProductQuestionRule(
                 $questions,
                 $products,
@@ -90,6 +102,7 @@ class CompleteOrderValidator extends BaseValidator
             'order.address.city.required' => __('City is required'),
             'order.address.zip_or_postal_code.required' => __('Zip or postal code is required'),
             'order.address.country.required' => __('Country is required'),
+            'order.phone.required_if_accepted' => __('Add a mobile number to get text messages.'),
         ];
     }
 }

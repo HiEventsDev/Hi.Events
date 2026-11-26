@@ -61,4 +61,24 @@ class MessageDomainObject extends Generated\MessageDomainObjectAbstract implemen
     {
         return StringHelper::previewFromHtml($this->getMessage());
     }
+
+    /**
+     * @return array{decision: string, confidence: float, reasons: string[], reviewed_at: string}|null
+     */
+    public function aiReviewVerdict(): ?array
+    {
+        $verdict = $this->getAiReview();
+
+        return is_array($verdict) ? $verdict : null;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function eligibilityFailureValues(): array
+    {
+        $failures = $this->getEligibilityFailures();
+
+        return is_array($failures) ? array_values(array_map('strval', $failures)) : [];
+    }
 }

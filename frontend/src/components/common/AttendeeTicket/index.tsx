@@ -4,7 +4,7 @@ import {formatCurrency} from "../../../utilites/currency.ts";
 import {t} from "@lingui/macro";
 import {prettyDate} from "../../../utilites/dates.ts";
 import QRCode from "react-qr-code";
-import {IconCopy, IconPrinter, IconLock, IconX} from "@tabler/icons-react";
+import {IconCopy, IconPrinter, IconLock, IconTicketOff, IconX} from "@tabler/icons-react";
 import {Attendee, Event, EventOccurrence, LocationType, Product} from "../../../types.ts";
 import classes from './AttendeeTicket.module.scss';
 import {imageUrl} from "../../../utilites/urlHelper.ts";
@@ -32,6 +32,21 @@ const TicketField = ({label, value, meta, span, emphasis}: TicketFieldProps) => 
         {meta && <dd className={classes.fieldMeta}>{meta}</dd>}
     </div>
 );
+
+const ticketStatusLabel = ({isResold, isListedForResale, isCancelled}: {
+    isResold: boolean;
+    isListedForResale: boolean;
+    isCancelled: boolean;
+}): string => {
+    if (isResold) {
+        return t`Resold`;
+    }
+    if (isListedForResale) {
+        return t`Listed for resale`;
+    }
+
+    return isCancelled ? t`Cancelled` : t`Unpaid`;
+};
 
 interface AttendeeTicketProps {
     event: Event;
@@ -70,7 +85,10 @@ export const AttendeeTicket = ({
 
     const isCancelled = attendee.status === 'CANCELLED';
     const isAwaitingPayment = attendee.status === 'AWAITING_PAYMENT';
-    const isVoid = isCancelled || isAwaitingPayment;
+    const isListedForResale = attendee.resale?.status === 'LISTED';
+    const isResold = attendee.resale?.status === 'SOLD';
+    const isVoid = isCancelled || isAwaitingPayment || isResold;
+    const isUnusable = isVoid || isListedForResale;
     const attendeeName = [attendee.first_name, attendee.last_name].filter(Boolean).join(' ');
 
     return (
@@ -86,10 +104,11 @@ export const AttendeeTicket = ({
                         <h2 className={classes.eventTitle}>{event?.title}</h2>
                     </div>
 
-                    {isVoid && (
+                    {isUnusable && (
                         <span
-                            className={`${classes.status} ${isCancelled ? classes.statusCancelled : classes.statusPending}`}>
-                            {isCancelled ? t`Cancelled` : t`Unpaid`}
+                            className={`${classes.status} ${isCancelled || isResold ? classes.statusCancelled : classes.statusPending}`}
+                        >
+                            {ticketStatusLabel({isResold, isListedForResale, isCancelled})}
                         </span>
                     )}
                 </header>
@@ -143,19 +162,37 @@ export const AttendeeTicket = ({
                     </div>
 
                     <aside className={classes.stub}>
-                        <div className={`${classes.code} ${isVoid ? classes.codeVoid : ''}`}>
+                        <div className={`${classes.code} ${isUnusable ? classes.codeVoid : ''}`}>
                             <div className={classes.codeInner}>
-                                {isVoid ? (
-                                    <div className={classes.codeMessage}>
-                                        {isCancelled ? <IconX size={22} stroke={1.75}/> :
-                                            <IconLock size={22} stroke={1.75}/>}
-                                        <span>{isCancelled ? t`This ticket is no longer valid` : t`Available once payment completes`}</span>
+                                {isUnusable ? (
+                                    <div className={classes.codeMessage} data-testid="ticket-code-message">
+                                        {isListedForResale && (
+                                            <>
+                                                <IconTicketOff size={22} stroke={1.75}/>
+                                                <strong className={classes.codeMessageTitle}>{t`Listed for resale`}</strong>
+                                                <span>{t`This ticket can't be used while it's listed`}</span>
+                                            </>
+                                        )}
+                                        {isResold && (
+                                            <>
+                                                <IconX size={22} stroke={1.75}/>
+                                                <span>{t`This ticket was resold and is no longer valid`}</span>
+                                            </>
+                                        )}
+                                        {!isListedForResale && !isResold && (
+                                            <>
+                                                {isCancelled ? <IconX size={22} stroke={1.75}/> :
+                                                    <IconLock size={22} stroke={1.75}/>}
+                                                <span>{isCancelled ? t`This ticket is no longer valid` : t`Available once payment completes`}</span>
+                                            </>
+                                        )}
                                     </div>
                                 ) : (
                                     <QRCode
                                         value={String(attendee.public_id)}
                                         size={200}
                                         level="M"
+                                        data-testid="ticket-qr-code"
                                         style={{height: "auto", width: "100%", display: "block"}}
                                     />
                                 )}

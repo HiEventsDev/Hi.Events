@@ -21,6 +21,7 @@ use HiEvents\Models\OrderItem;
 use HiEvents\Repository\DTO\SalesByCurrencyDTO;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Services\Infrastructure\Phone\PhoneNumberNormalizer;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -53,6 +54,10 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
                     ->orWhere(OrderDomainObjectAbstract::LAST_NAME, 'ilike', '%'.$params->query.'%')
                     ->orWhere(OrderDomainObjectAbstract::PUBLIC_ID, 'ilike', '%'.$params->query.'%')
                     ->orWhere(OrderDomainObjectAbstract::EMAIL, 'ilike', '%'.$params->query.'%');
+
+                if ($phoneDigits = PhoneNumberNormalizer::searchDigits($params->query)) {
+                    $builder->orWhere(OrderDomainObjectAbstract::PHONE, 'like', '%'.$phoneDigits.'%');
+                }
             };
         }
 
@@ -119,6 +124,10 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
                     ->orWhere(OrderDomainObjectAbstract::LAST_NAME, 'ilike', '%'.$params->query.'%')
                     ->orWhere(OrderDomainObjectAbstract::PUBLIC_ID, 'ilike', '%'.$params->query.'%')
                     ->orWhere(OrderDomainObjectAbstract::EMAIL, 'ilike', '%'.$params->query.'%');
+
+                if ($phoneDigits = PhoneNumberNormalizer::searchDigits($params->query)) {
+                    $builder->orWhere(OrderDomainObjectAbstract::PHONE, 'like', '%'.$phoneDigits.'%');
+                }
             };
         }
 
@@ -341,6 +350,10 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
                     ->orWhere(OrderDomainObjectAbstract::LAST_NAME, 'ilike', '%'.$params->query.'%')
                     ->orWhere(OrderDomainObjectAbstract::PUBLIC_ID, 'ilike', '%'.$params->query.'%')
                     ->orWhere(OrderDomainObjectAbstract::EMAIL, 'ilike', '%'.$params->query.'%');
+
+                if ($phoneDigits = PhoneNumberNormalizer::searchDigits($params->query)) {
+                    $builder->orWhere(OrderDomainObjectAbstract::PHONE, 'like', '%'.$phoneDigits.'%');
+                }
             };
         }
 

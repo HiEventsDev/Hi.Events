@@ -4,6 +4,8 @@ namespace Tests\Feature\Http\TeamAccess;
 
 use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\Enterprise\BoxOffice\Http\Actions\GetBoxOfficeStatsAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Contacts\ExportSelectedContactsAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Suppressions\LookupSuppressionsAction;
 use HiEvents\Http\Actions\Accounts\DeletionRequest\CancelAccountDeletionAction;
 use HiEvents\Http\Actions\Accounts\DeletionRequest\GetAccountDeletionStatusAction;
 use HiEvents\Http\Actions\Accounts\DeletionRequest\RequestAccountDeletionAction;
@@ -33,6 +35,7 @@ use HiEvents\Http\Actions\Events\CreateEventAction;
 use HiEvents\Http\Actions\Events\GetEventsAction;
 use HiEvents\Http\Actions\EventSettings\GetPlatformFeePreviewAction;
 use HiEvents\Http\Actions\Locations\GetGeoStatusAction;
+use HiEvents\Http\Actions\Messages\PreviewMessageAction;
 use HiEvents\Http\Actions\OAuth\ApproveOAuthAuthorizationRequestAction;
 use HiEvents\Http\Actions\OAuth\DeleteOAuthConnectionAction;
 use HiEvents\Http\Actions\OAuth\DenyOAuthAuthorizationRequestAction;
@@ -56,6 +59,7 @@ use HiEvents\Http\Actions\Products\Purchases\GetProductPurchasesAction;
 use HiEvents\Http\Actions\Products\Purchases\GetProductPurchaseSummaryAction;
 use HiEvents\Http\Actions\Questions\ExportQuestionAnswersAction;
 use HiEvents\Http\Actions\Reports\GetReportAction;
+use HiEvents\Http\Actions\TicketResale\RetryTicketResaleRefundAction;
 use HiEvents\Http\Actions\Users\CancelEmailChangeAction;
 use HiEvents\Http\Actions\Users\ConfirmEmailAddressAction;
 use HiEvents\Http\Actions\Users\ConfirmEmailChangeAction;
@@ -91,7 +95,7 @@ use Tests\TestCase;
 
 class AccessCoverageTest extends TestCase
 {
-    private const ENTITY_CHECKS = '/isActionAuthorized\(|isOrganizerReadAuthorized\(|isAccountReadAuthorized\(|authorizeSeatMapAccess\(|authorizeSeatMapSetup\(|authorizeEventSeatMapAccess\(/';
+    private const ENTITY_CHECKS = '/isActionAuthorized\(|isOrganizerReadAuthorized\(|isAccountReadAuthorized\(|authorizeCrm(?:Change)?\(|authorizeSmsChange\(|authorizeSeatMapAccess\(|authorizeSeatMapSetup\(|authorizeEventSeatMapAccess\(/';
 
     private const SELF_SERVICE_OR_STATIC = [
         GetMeAction::class,
@@ -173,10 +177,13 @@ class AccessCoverageTest extends TestCase
         DismissAnnouncementAction::class,
         ExportAffiliatesAction::class,
         ExportAttendeesAction::class,
+        ExportSelectedContactsAction::class,
+        LookupSuppressionsAction::class,
         ExportOrdersAction::class,
         ExportProductPurchasesAction::class,
         ExportQuestionAnswersAction::class,
         PreviewEventEmailTemplateAction::class,
+        PreviewMessageAction::class,
         PreviewOrganizerEmailTemplateAction::class,
         RegenerateRecoveryCodesAction::class,
         ResendEmailConfirmationAction::class,
@@ -210,6 +217,7 @@ class AccessCoverageTest extends TestCase
         GetOrganizerWebhookLogsAction::class => Permission::VIEW_FINANCIALS,
         RefundOrderAction::class => Permission::ISSUE_REFUNDS,
         MarkOrderAsPaidAction::class => Permission::ISSUE_REFUNDS,
+        RetryTicketResaleRefundAction::class => Permission::ISSUE_REFUNDS,
     ];
 
     public function test_financial_actions_require_their_permission(): void

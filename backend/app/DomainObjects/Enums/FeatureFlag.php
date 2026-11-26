@@ -11,6 +11,8 @@ enum FeatureFlag: string
     case SEATING = 'seating';
     case BOX_OFFICE = 'box_office';
     case ENTERPRISE_SSO = 'enterprise_sso';
+    case CRM = 'crm';
+    case CRM_SMS = 'crm_sms';
 
     public function licensedFeature(): LicensedFeature
     {
@@ -18,6 +20,7 @@ enum FeatureFlag: string
             self::SEATING => LicensedFeature::SEATING,
             self::BOX_OFFICE => LicensedFeature::BOX_OFFICE,
             self::ENTERPRISE_SSO => LicensedFeature::ENTERPRISE_SSO,
+            self::CRM, self::CRM_SMS => LicensedFeature::CRM,
         };
     }
 }

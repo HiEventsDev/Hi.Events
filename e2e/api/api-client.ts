@@ -121,6 +121,19 @@ export interface SsoConnectionPayload {
   jit_default_role?: 'ADMIN' | 'ORGANIZER' | 'VIEWER';
 }
 
+export interface AudienceSyncStatus {
+  status: 'NOT_STARTED' | 'SYNCING' | 'READY' | 'FAILED';
+  contacts_count: number;
+}
+
+export interface AudienceContact {
+  id: number;
+  email: string;
+  full_name: string;
+  events_count: number;
+  email_marketing_status: string;
+}
+
 interface CurrentUser {
   id: number;
   feature_flags: Record<string, boolean>;
@@ -165,6 +178,14 @@ export class ApiClient {
         },
       }),
     );
+  }
+
+  getOrganizer(organizerId: number): Promise<Organizer> {
+    return unwrap<Organizer>(this.request.get(`organizers/${organizerId}`, { headers: jsonHeaders }));
+  }
+
+  getOrganizerSettings(organizerId: number): Promise<Record<string, unknown>> {
+    return unwrap<Record<string, unknown>>(this.request.get(`organizers/${organizerId}/settings`, { headers: jsonHeaders }));
   }
 
   updateOrganizerSettings(organizerId: number, settings: { first_day_of_week?: number; facebook_handle?: string }): Promise<void> {
@@ -576,6 +597,35 @@ export class ApiClient {
     return unwrap<Occurrence[]>(this.request.get(`events/${eventId}/occurrences`, { headers: jsonHeaders }));
   }
 
+  startAudienceSync(organizerId: number): Promise<AudienceSyncStatus> {
+    return unwrap<AudienceSyncStatus>(this.request.post(`organizers/${organizerId}/crm/sync`, { headers: jsonHeaders }));
+  }
+
+  getAudienceSync(organizerId: number): Promise<AudienceSyncStatus> {
+    return unwrap<AudienceSyncStatus>(this.request.get(`organizers/${organizerId}/crm/sync`, { headers: jsonHeaders }));
+  }
+
+  findAudienceContacts(organizerId: number, query: string): Promise<AudienceContact[]> {
+    return unwrap<AudienceContact[]>(
+      this.request.get(`organizers/${organizerId}/crm/contacts`, { headers: jsonHeaders, params: { query, per_page: 50 } }),
+    );
+  }
+
+  mergeAudienceContacts(organizerId: number, contactId: number, sourceContactId: number): Promise<AudienceContact> {
+    return unwrap<AudienceContact>(
+      this.request.post(`organizers/${organizerId}/crm/contacts/${contactId}/merge`, {
+        headers: jsonHeaders,
+        data: { source_contact_id: sourceContactId },
+      }),
+    );
+  }
+
+  getAudienceCampaign(organizerId: number, campaignId: number): Promise<{ id: number; status: string; scheduled_at: string | null; sent_at: string | null }> {
+    return unwrap<{ id: number; status: string; scheduled_at: string | null; sent_at: string | null }>(
+      this.request.get(`organizers/${organizerId}/crm/campaigns/${campaignId}`, { headers: jsonHeaders }),
+    );
+  }
+
   createOrganizerLocation(organizerId: number, payload: CreateOrganizerLocationPayload): Promise<{ id: number }> {
     return unwrap<{ id: number }>(
       this.request.post(`organizers/${organizerId}/locations`, { headers: jsonHeaders, data: payload }),
@@ -597,6 +647,12 @@ export class ApiClient {
   updateOccurrence(eventId: number, occurrenceId: number, payload: UpdateOccurrencePayload): Promise<void> {
     return check(
       this.request.put(`events/${eventId}/occurrences/${occurrenceId}`, { headers: jsonHeaders, data: payload }),
+    );
+  }
+
+  cancelOccurrence(eventId: number, occurrenceId: number): Promise<void> {
+    return check(
+      this.request.post(`events/${eventId}/occurrences/${occurrenceId}/cancel`, { headers: jsonHeaders, data: { refund_orders: false } }),
     );
   }
 
@@ -628,8 +684,15 @@ export interface CreateConfigurationPayload {
   application_fees: { percentage: number; fixed: number; currency: string };
 }
 
+const TRUSTED_MESSAGING_TIER_ID = 2;
+
 export class AdminApiClient {
   constructor(private readonly request: APIRequestContext) {}
+
+  async grantMessagingPrivileges(accountId: number): Promise<void> {
+    await this.setAccountVerification(accountId, true);
+    await this.setMessagingTier(accountId, TRUSTED_MESSAGING_TIER_ID);
+  }
 
   setMessagingTier(accountId: number, messagingTierId: number): Promise<void> {
     return check(
@@ -645,6 +708,22 @@ export class AdminApiClient {
       this.request.put(`admin/accounts/${accountId}/feature-flags/${key}`, {
         headers: jsonHeaders,
         data: { enabled },
+      }),
+    );
+  }
+
+  async approveAudienceCampaign(campaignId: number): Promise<void> {
+    const pending = await unwrap<{ id: number; updated_at: string }[]>(
+      this.request.get('admin/crm/campaigns/pending-review', { headers: jsonHeaders }),
+    );
+    const campaign = pending.find((candidate) => candidate.id === campaignId);
+    if (!campaign) {
+      throw new Error(`Campaign ${campaignId} is not waiting for review`);
+    }
+    await check(
+      this.request.post(`admin/crm/campaigns/${campaignId}/approve`, {
+        headers: jsonHeaders,
+        data: { reviewed_version: campaign.updated_at },
       }),
     );
   }

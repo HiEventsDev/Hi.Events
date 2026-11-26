@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { IdParam } from "../types.ts";
 import { organizerClient } from "../api/organizer.client.ts";
 
@@ -66,6 +66,7 @@ export const useGetOrganizerReport = (
                 }
             } as PaginatedReportResponse<any>;
         },
+        placeholderData: keepPreviousData,
         enabled: !!organizerId && !!reportType && ((!!startDate && !!endDate) || (!startDate && !endDate))
     });
 };

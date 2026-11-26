@@ -43,9 +43,16 @@ class RefundOccurrenceOrdersJobTest extends TestCase
         $ordersBuilder->shouldReceive('whereIn')->with('id', Mockery::any())->andReturnSelf();
         $ordersBuilder->shouldReceive('where')->with('status', 'COMPLETED')->andReturnSelf();
         $ordersBuilder->shouldReceive('where')->with('payment_status', 'PAYMENT_RECEIVED')->andReturnSelf();
-        $ordersBuilder->shouldReceive('whereNull')->with('refund_status')->andReturnSelf();
-        $ordersBuilder->shouldReceive('get')->with(['id', 'total_gross', 'currency'])->andReturn(
-            collect(array_map(fn ($o) => (object) $o, $refundableOrders))
+        $ordersBuilder->shouldReceive('where')->with(Mockery::on(function ($neverOrPartlyRefunded): bool {
+            $refundStatus = Mockery::mock('refundStatusBuilder');
+            $refundStatus->shouldReceive('whereNull')->once()->with('refund_status')->andReturnSelf();
+            $refundStatus->shouldReceive('orWhere')->once()->with('refund_status', 'PARTIALLY_REFUNDED')->andReturnSelf();
+            $neverOrPartlyRefunded($refundStatus);
+
+            return true;
+        }))->andReturnSelf();
+        $ordersBuilder->shouldReceive('get')->with(['id', 'total_gross', 'total_refunded', 'currency'])->andReturn(
+            collect(array_map(fn ($o) => (object) ['total_refunded' => 0.0, ...$o], $refundableOrders))
         );
 
         $batchBuilder->shouldReceive('whereIn')->andReturnSelf();
@@ -72,6 +79,31 @@ class RefundOccurrenceOrdersJobTest extends TestCase
                 && $dto->order_id === 100
                 && $dto->amount === 50.00
                 && $dto->notify_buyer === true
+                && $dto->cancel_order === true
+            ));
+
+        $job = new RefundOccurrenceOrdersJob(1, 10);
+        $job->handle($this->refundHandler, $this->auditLogRepository);
+
+        $this->assertTrue(true);
+    }
+
+    public function test_handle_refunds_what_is_left_of_an_order_that_was_already_partly_refunded(): void
+    {
+        $this->mockDbChain(
+            occurrenceId: 10,
+            orderIds: [100, 101],
+            refundableOrders: [
+                ['id' => 100, 'total_gross' => 100.00, 'total_refunded' => 46.85, 'currency' => 'USD'],
+                ['id' => 101, 'total_gross' => 30.00, 'total_refunded' => 30.00, 'currency' => 'USD'],
+            ],
+        );
+
+        $this->refundHandler
+            ->shouldReceive('handle')
+            ->once()
+            ->with(Mockery::on(fn (RefundOrderDTO $dto) => $dto->order_id === 100
+                && $dto->amount === 53.15
                 && $dto->cancel_order === true
             ));
 

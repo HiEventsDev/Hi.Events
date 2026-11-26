@@ -1,4 +1,4 @@
-import {IconUsers, IconBuildingBank, IconLayoutDashboard, IconCalendar, IconReceipt, IconSettings, IconChartBar, IconAlertTriangle, IconFlag, IconMail, IconSpeakerphone, IconTrash, IconToggleRight, IconLicense, IconMailCheck, IconMailForward} from "@tabler/icons-react";
+import {IconUsers, IconBuildingBank, IconLayoutDashboard, IconCalendar, IconReceipt, IconSettings, IconChartBar, IconAlertTriangle, IconFlag, IconMail, IconMailHeart, IconSpeakerphone, IconTrash, IconToggleRight, IconLicense, IconMailCheck, IconMailForward} from "@tabler/icons-react";
 import {t} from "@lingui/macro";
 import {NavItem, BreadcrumbItem} from "../AppLayout/types";
 import AppLayout from "../AppLayout";
@@ -6,12 +6,20 @@ import {useIsCurrentUserSuperAdmin} from "../../../hooks/useIsCurrentUserSuperAd
 import {useGetAdminFeatureFlags} from "../../../queries/useGetAdminFeatureFlags.ts";
 import {useGetAdminLifecycleEmails} from "../../../queries/useGetAdminLifecycleEmails.ts";
 import {useNavigate} from "react-router";
+import {useEffect} from "react";
+import {useGetMe} from "../../../queries/useGetMe.ts";
+import {FeatureFlag} from "../../../constants/featureFlags.ts";
+import {useLicensedFeature} from "../../../ee/licensing/hooks/useLicensedFeature.ts";
+import {useGetAccount} from "../../../queries/useGetAccount.ts";
 
 const AdminLayout = () => {
     const isSuperAdmin = useIsCurrentUserSuperAdmin();
     const {data: featureFlags} = useGetAdminFeatureFlags(isSuperAdmin);
     const {isSuccess: lifecycleEmailsAvailable} = useGetAdminLifecycleEmails(isSuperAdmin);
+    const {isFetched: isMeFetched} = useGetMe();
     const navigate = useNavigate();
+    const audience = useLicensedFeature(FeatureFlag.CRM);
+    const {data: account} = useGetAccount();
     const navItems: NavItem[] = [
         {label: t`Admin`},
         {link: '', label: t`Dashboard`, icon: IconLayoutDashboard},
@@ -20,6 +28,7 @@ const AdminLayout = () => {
         {link: 'events', label: t`Events`, icon: IconCalendar},
         {link: 'orders', label: t`Orders`, icon: IconReceipt},
         {link: 'messages', label: t`Messages`, icon: IconMail},
+        {link: 'audience-campaigns', label: t`Audience Campaigns`, icon: IconMailHeart, showWhen: () => !!account?.is_saas_mode_enabled && (!audience.isUnlicensed || audience.isLocked)},
         {link: 'spam-events', label: t`Flagged Events`, icon: IconFlag},
         {link: 'announcements', label: t`Announcements`, icon: IconSpeakerphone},
         {link: 'lifecycle-emails', label: t`Lifecycle Emails`, icon: IconMailForward, showWhen: () => lifecycleEmailsAvailable},
@@ -39,9 +48,14 @@ const AdminLayout = () => {
         }
     ];
 
+    useEffect(() => {
+        if (isMeFetched && !isSuperAdmin) {
+            navigate('/');
+        }
+    }, [isMeFetched, isSuperAdmin, navigate]);
+
     if (!isSuperAdmin) {
-        navigate('/');
-        return ;
+        return null;
     }
 
     return (

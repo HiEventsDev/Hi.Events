@@ -146,6 +146,23 @@ export const highlightSummary = (values: Product): RowSummary => {
     };
 };
 
+export const afterPurchaseSummary = (values: Product): RowSummary => {
+    const transferable = values.is_transferable !== false;
+    const resellable = values.is_resellable !== false;
+
+    if (transferable && resellable) {
+        return {text: t`Transferable · Resellable`, emphasized: false};
+    }
+    if (resellable) {
+        return {text: t`Not transferable · Resellable`, emphasized: true};
+    }
+    if (transferable) {
+        return {text: t`Transferable · Not resellable`, emphasized: true};
+    }
+
+    return {text: t`Not transferable · Not resellable`, emphasized: true};
+};
+
 export const accessSummary = (values: Product): RowSummary => {
     if (values.is_hidden) {
         return {text: t`Hidden from everyone`, emphasized: true};

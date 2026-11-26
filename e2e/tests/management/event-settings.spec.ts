@@ -84,7 +84,7 @@ test.describe('event settings', () => {
     const instructions = uniqueName('Wire the funds to account');
 
     const settings = new EventSettingsPage(authedPage);
-    await settings.goto(event.eventId);
+    await settings.goto(event.eventId, 'payment-settings');
 
     await settings.offlinePaymentsCheckbox.check();
     await settings.offlineInstructionsEditor.fill(instructions);
@@ -102,7 +102,7 @@ test.describe('event settings', () => {
     const event = await createDraftEvent(api, account.organizerId);
 
     const settings = new EventSettingsPage(authedPage);
-    await settings.goto(event.eventId);
+    await settings.goto(event.eventId, 'payment-settings');
 
     await expect(settings.offlinePaymentReportingSwitch).toBeHidden();
     await expect(settings.paymentLinksSwitch).toBeHidden();
@@ -142,24 +142,25 @@ test.describe('event settings', () => {
     await expect(settings.paymentLinksSwitch).toBeHidden();
   });
 
-  test('an organizer updates SEO and miscellaneous settings', async ({ authedPage, api, account }) => {
+  test('an organizer updates SEO and attendee self-service settings', async ({ authedPage, api, account }) => {
     const event = await createDraftEvent(api, account.organizerId);
     const seoTitle = uniqueName('E2E SEO Title');
 
     const settings = new EventSettingsPage(authedPage);
-    await settings.goto(event.eventId);
+    await settings.goto(event.eventId, 'seo-settings');
 
     await settings.seoTitleInput.fill(seoTitle);
     await settings.saveSection('seo-settings');
     await expect(authedPage.getByText('Successfully Updated Seo Settings')).toBeVisible();
 
-    await settings.selfServiceSwitch.check({ force: true });
-    await settings.saveSection('misc-settings');
-    await expect(authedPage.getByText('Successfully Updated Misc Settings')).toBeVisible();
+    await settings.goto(event.eventId, 'homepage-settings');
+    await settings.selfServiceSwitch.uncheck({ force: true });
+    await settings.saveSection('homepage-settings');
+    await expect(authedPage.getByText('Successfully Updated Homepage Settings')).toBeVisible();
 
     await expect
       .poll(async () => (await api.getEventSettings(event.eventId)).seo_title)
       .toBe(seoTitle);
-    expect((await api.getEventSettings(event.eventId)).allow_attendee_self_edit).toBe(true);
+    expect((await api.getEventSettings(event.eventId)).allow_attendee_self_edit).toBe(false);
   });
 });

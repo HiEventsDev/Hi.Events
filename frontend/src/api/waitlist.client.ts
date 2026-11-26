@@ -64,6 +64,6 @@ export const waitlistClientPublic = {
     },
 
     cancel: async (eventId: IdParam, cancelToken: string) => {
-        return publicApi.delete(`events/${eventId}/waitlist/${cancelToken}`);
+        return publicApi.delete(`events/${eventId}/waitlist/${encodeURIComponent(cancelToken)}`);
     },
 };

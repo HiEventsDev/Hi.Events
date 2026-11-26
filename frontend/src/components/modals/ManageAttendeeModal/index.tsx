@@ -11,6 +11,8 @@ import {useAttendeeActions} from "../../../hooks/useAttendeeActions.tsx";
 import {QuestionList} from "../../common/QuestionAndAnswerList";
 import {ManageOrderModal} from "../ManageOrderModal";
 import {AttendeeTicket} from "../../common/AttendeeTicket";
+import {TicketHistory} from "../../common/TicketHistory";
+import {useGetAttendeeHistory} from "../../../queries/useGetTicketHistory.ts";
 import {getInitials} from "../../../utilites/helpers.ts";
 import {t} from "@lingui/macro";
 import classes from './ManageAttendeeModal.module.scss';
@@ -49,6 +51,7 @@ export const ManageAttendeeModal = ({onClose, attendeeId}: ManageAttendeeModalPr
     const {data: attendee, refetch: refetchAttendee} = useGetAttendee(eventId, attendeeId);
     const {data: order} = useGetOrder(eventId, attendee?.order_id);
     const {data: event} = useGetEvent(eventId);
+    const {data: history = []} = useGetAttendeeHistory(eventId, attendeeId);
     const seatMap = useGetEventSeatMap(eventId, !!event?.has_seat_map && !!attendee?.seat_uid).data;
     const seatBandProductIds = useMemo(() => {
         if (!seatMap || !attendee?.seat_uid) {
@@ -78,7 +81,7 @@ export const ManageAttendeeModal = ({onClose, attendeeId}: ManageAttendeeModalPr
     });
 
     const [isEditing, setIsEditing] = useState(false);
-    const [showOrder, setShowOrder] = useState(false);
+    const [shownOrderId, setShownOrderId] = useState<IdParam>();
 
     useEffect(() => {
         if (attendee) {
@@ -158,17 +161,31 @@ export const ManageAttendeeModal = ({onClose, attendeeId}: ManageAttendeeModalPr
         {
             label: t`Order`,
             value: (
-                <Anchor className={classes.reference} onClick={() => setShowOrder(true)}>
+                <Anchor className={classes.reference} onClick={() => setShownOrderId(attendee.order_id)}>
                     {order.public_id}
                 </Anchor>
             ),
         },
     ];
 
+    const replacementOrderId = attendee.resale?.status === 'SOLD' ? attendee.resale.sold_order_id : null;
+
     const fields: DrawerStat[] = [
         ...(attendee.seat_uid ? [{
             label: t`Seat`,
             value: <AttendeeSeatField eventId={eventId} attendee={attendee}/>,
+        }] : []),
+        ...(replacementOrderId ? [{
+            label: t`Replacement order`,
+            value: (
+                <Anchor
+                    className={classes.reference}
+                    data-testid="attendee-replacement-order-link"
+                    onClick={() => setShownOrderId(replacementOrderId)}
+                >
+                    {attendee.resale?.sold_order_public_id}
+                </Anchor>
+            ),
         }] : []),
         {
             label: t`Email`,
@@ -288,13 +305,19 @@ export const ManageAttendeeModal = ({onClose, attendeeId}: ManageAttendeeModalPr
                             />
                         </SideDrawerSection>
                     )}
+
+                    {history.length > 0 && (
+                        <SideDrawerSection title={t`History`} count={history.length}>
+                            <TicketHistory entries={history} timezone={event.timezone}/>
+                        </SideDrawerSection>
+                    )}
                 </>
             )}
 
             {attendeeActionModals}
 
-            {showOrder && (
-                <ManageOrderModal orderId={attendee.order_id} onClose={() => setShowOrder(false)}/>
+            {shownOrderId && (
+                <ManageOrderModal orderId={shownOrderId} onClose={() => setShownOrderId(undefined)}/>
             )}
         </SideDrawer>
     );

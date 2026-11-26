@@ -32,12 +32,7 @@ export class OrganizerPage {
   }
 
   async gotoSettings(organizerId: number): Promise<void> {
-    await this.page.goto(`/manage/organizer/${organizerId}/settings`);
-    await this.page.waitForLoadState('networkidle');
-  }
-
-  async gotoReport(organizerId: number, reportType: string): Promise<void> {
-    await this.page.goto(`/manage/organizer/${organizerId}/report/${reportType}`);
+    await this.page.goto(`/manage/organizer/${organizerId}/settings/basic`);
     await this.page.waitForLoadState('networkidle');
   }
 
@@ -66,13 +61,6 @@ export class OrganizerPage {
     await this.page.locator('#basic-settings').getByRole('button', { name: 'Save' }).click();
   }
 
-  reportRow(text: string): Locator {
-    return this.page.getByRole('row').filter({ hasText: text });
-  }
-
-  get exportCsvButton(): Locator {
-    return this.page.getByRole('button', { name: 'Export CSV' });
-  }
 }
 
 export class OrganizerPublicPage {

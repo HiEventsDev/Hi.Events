@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {useAccess} from "../../../hooks/useAccess.ts";
 import {useParams} from "react-router";
-import {Button, Group} from "@mantine/core";
+import {Button} from "@mantine/core";
 import {IconDownload} from "@tabler/icons-react";
 import {t} from "@lingui/macro";
 import {useGetEvent} from "../../../queries/useGetEvent";
@@ -10,17 +10,16 @@ import {PageTitle} from "../../common/PageTitle";
 import {PageBody} from "../../common/PageBody";
 import {OrdersTable} from "../../common/OrdersTable";
 import {SearchBarWrapper} from "../../common/SearchBar";
-import {Pagination} from "../../common/Pagination";
-import {ToolBar} from "../../common/ToolBar";
+import {TableCard, TableCardFooter, TableCardSkeleton} from "../../common/TableCard";
+import {tableSortFromQuery} from "../../common/TanStackTable/sorting.tsx";
+import {ToolBar, ToolBarSlot} from "../../common/ToolBar";
 import {useFilterQueryParamSync} from "../../../hooks/useFilterQueryParamSync";
 import {EventType, IdParam, QueryFilterOperator, QueryFilters} from "../../../types";
-import {TableSkeleton} from "../../common/TableSkeleton";
 import {orderClient} from "../../../api/order.client";
 import {downloadBinary} from "../../../utilites/download";
 import {FilterModal, FilterOption} from "../../common/FilterModal";
 import {withLoadingNotification} from "../../../utilites/withLoadingNotification.tsx";
 import {useGetEventOccurrences} from "../../../queries/useGetEventOccurrences";
-import {SortSelector} from "../../common/SortSelector";
 import {OccurrenceSelect} from "../../common/OccurrenceSelect";
 import {useGetBoxOffices} from "../../../ee/box-office/queries/useGetBoxOffices";
 import {useLicensedFeature} from "../../../ee/licensing/hooks/useLicensedFeature.ts";
@@ -52,6 +51,7 @@ export const Orders: React.FC = () => {
     const orders = ordersQuery?.data?.data;
     const pagination = ordersQuery?.data?.meta;
     const [downloadPending, setDownloadPending] = useState(false);
+    const [columnToggleSlot, setColumnToggleSlot] = useState<HTMLDivElement | null>(null);
 
     const occurrences = occurrencesData?.data || [];
     const occurrenceFilter = searchParams.filterFields?.event_occurrence_id;
@@ -196,74 +196,71 @@ export const Orders: React.FC = () => {
             <PageTitle
                 subheading={t`View order details, issue refunds, and resend confirmations.`}
             >{t`Orders`}</PageTitle>
-            <ToolBar
-                searchComponent={() => (
-                    <SearchBarWrapper
-                        placeholder={t`Search by name, email, or order #...`}
-                        setSearchParams={setSearchParams}
-                        searchParams={searchParams}
+            <TableCard>
+                <ToolBar
+                    embedded
+                    searchComponent={() => (
+                        <SearchBarWrapper
+                            placeholder={t`Search by name, email, or order #...`}
+                            setSearchParams={setSearchParams}
+                            searchParams={searchParams}
+                        />
+                    )}
+                    filterComponent={
+                        <>
+                            {isRecurring && occurrences.length > 0 && event?.timezone && (
+                                <OccurrenceSelect
+                                    occurrences={occurrences}
+                                    timezone={event.timezone}
+                                    value={selectedOccurrenceId}
+                                    onChange={handleOccurrenceChange}
+                                    placeholder={t`All Dates`}
+                                    clearable
+                                    size="sm"
+                                />
+                            )}
+                            <FilterModal
+                                filters={filterOptions}
+                                activeFilters={currentFilters}
+                                onChange={handleFilterChange}
+                                onReset={handleResetFilters}
+                                title={t`Filter Orders`}
+                            />
+                        </>
+                    }
+                >
+                    <ToolBarSlot ref={setColumnToggleSlot}/>
+                    {canViewFinancials && <Button
+                        onClick={() => handleExport(eventId)}
+                        leftSection={<IconDownload size={16}/>}
+                        variant="default"
+                        loading={downloadPending}
+                    >
+                        {t`Export`}
+                    </Button>}
+                </ToolBar>
+
+                {(!orders || !event) && <TableCardSkeleton/>}
+
+                {orders && event && (
+                    <OrdersTable
+                        event={event}
+                        orders={orders}
+                        embedded
+                        isRefreshing={ordersQuery.isFetching}
+                        sort={tableSortFromQuery(searchParams, setSearchParams, pagination)}
+                        columnToggleSlot={columnToggleSlot}
                     />
                 )}
-                filterComponent={
-                    <Group gap="sm" wrap="wrap">
-                        {pagination?.allowed_sorts && (
-                            <SortSelector
-                                selected={searchParams.sortBy && searchParams.sortDirection
-                                    ? searchParams.sortBy + ':' + searchParams.sortDirection
-                                    : pagination.default_sort + ':' + pagination.default_sort_direction}
-                                options={pagination.allowed_sorts}
-                                onSortSelect={(key, sortDirection) => {
-                                    setSearchParams({sortBy: key, sortDirection});
-                                }}
-                            />
-                        )}
-                        {isRecurring && occurrences.length > 0 && event?.timezone && (
-                            <OccurrenceSelect
-                                occurrences={occurrences}
-                                timezone={event.timezone}
-                                value={selectedOccurrenceId}
-                                onChange={handleOccurrenceChange}
-                                placeholder={t`All Dates`}
-                                clearable
-                                size="sm"
-                            />
-                        )}
-                        <FilterModal
-                            filters={filterOptions}
-                            activeFilters={currentFilters}
-                            onChange={handleFilterChange}
-                            onReset={handleResetFilters}
-                            title={t`Filter Orders`}
-                        />
-                    </Group>
-                }
-                resultCount={pagination?.total}
-                resultLabel={t`orders`}
-            >
-                {canViewFinancials && <Button
-                    onClick={() => handleExport(eventId)}
-                    rightSection={<IconDownload size={14}/>}
-                    color="green"
-                    loading={downloadPending}
-                    size="sm"
-                >
-                    {t`Export`}
-                </Button>}
-            </ToolBar>
 
-            <TableSkeleton isVisible={!orders || ordersQuery.isFetching}/>
-
-            {orders && event && (
-                <OrdersTable event={event} orders={orders}/>
-            )}
-
-            {!!orders?.length && (
-                <Pagination
-                    value={searchParams.pageNumber}
-                    onChange={(value) => setSearchParams({pageNumber: value})}
-                    total={Number(pagination?.last_page)}
-                />
-            )}
+                {!!orders?.length && (
+                    <TableCardFooter
+                        pagination={pagination}
+                        page={searchParams.pageNumber}
+                        onPageChange={(value) => setSearchParams({pageNumber: value})}
+                    />
+                )}
+            </TableCard>
         </PageBody>
     );
 };

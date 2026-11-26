@@ -6,6 +6,7 @@ use HiEvents\Services\Domain\Account\Anonymization\AccountDataResolver;
 use HiEvents\Services\Domain\Account\Anonymization\Anonymizers\AccountAnonymizer;
 use HiEvents\Services\Domain\Account\Anonymization\Anonymizers\ActivityLogAnonymizer;
 use HiEvents\Services\Domain\Account\Anonymization\Anonymizers\ApiKeyAnonymizer;
+use HiEvents\Services\Domain\Account\Anonymization\Anonymizers\CrmAnonymizer;
 use HiEvents\Services\Domain\Account\Anonymization\Anonymizers\EventContentAnonymizer;
 use HiEvents\Services\Domain\Account\Anonymization\Anonymizers\ImageAnonymizer;
 use HiEvents\Services\Domain\Account\Anonymization\Anonymizers\OrderAnonymizer;
@@ -27,6 +28,7 @@ class AccountAnonymizationService
         private readonly EventContentAnonymizer $eventContentAnonymizer,
         private readonly ActivityLogAnonymizer $activityLogAnonymizer,
         private readonly PartnerAnonymizer $partnerAnonymizer,
+        private readonly CrmAnonymizer $crmAnonymizer,
         private readonly SsoConnectionAnonymizer $ssoConnectionAnonymizer,
         private readonly ApiKeyAnonymizer $apiKeyAnonymizer,
         private readonly UserAnonymizer $userAnonymizer,
@@ -55,6 +57,7 @@ class AccountAnonymizationService
                 $this->eventContentAnonymizer,
                 $this->activityLogAnonymizer,
                 $this->partnerAnonymizer,
+                $this->crmAnonymizer,
                 $this->ssoConnectionAnonymizer,
                 $this->apiKeyAnonymizer,
                 $this->userAnonymizer,

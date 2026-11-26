@@ -52,6 +52,9 @@ return [
         // Primary platform for new organizers
         'primary_platform' => env('STRIPE_PRIMARY_PLATFORM'),
     ],
+    'sms' => [
+        'driver' => env('SMS_DRIVER', 'twilio'),
+    ],
     'turnstile' => [
         'secret_key' => env('TURNSTILE_SECRET_KEY'),
     ],

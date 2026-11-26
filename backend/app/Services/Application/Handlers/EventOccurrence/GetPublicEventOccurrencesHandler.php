@@ -22,6 +22,7 @@ use HiEvents\Services\Application\Handlers\Event\GetPublicEventHandler;
 use HiEvents\Services\Application\Handlers\EventOccurrence\DTO\GetPublicEventOccurrencesDTO;
 use HiEvents\Services\Application\Handlers\EventOccurrence\DTO\GetPublicEventOccurrencesResultDTO;
 use HiEvents\Services\Domain\EventOccurrence\PublicOccurrenceVisibilityService;
+use HiEvents\Services\Domain\TicketResale\ResaleOccurrenceAvailabilityService;
 
 class GetPublicEventOccurrencesHandler
 {
@@ -31,6 +32,7 @@ class GetPublicEventOccurrencesHandler
         private readonly EventRepositoryInterface $eventRepository,
         private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
         private readonly PublicOccurrenceVisibilityService $occurrenceVisibilityService,
+        private readonly ResaleOccurrenceAvailabilityService $resaleOccurrenceAvailabilityService,
     ) {}
 
     /**
@@ -70,7 +72,7 @@ class GetPublicEventOccurrencesHandler
 
         return new GetPublicEventOccurrencesResultDTO(
             event: $event,
-            occurrences: $occurrences,
+            occurrences: $this->resaleOccurrenceAvailabilityService->markOccurrencesWithListedTickets($event->getId(), $occurrences),
         );
     }
 

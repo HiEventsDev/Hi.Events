@@ -26,6 +26,7 @@ use HiEvents\Resources\EventOccurrence\EventOccurrenceResource;
 use HiEvents\Resources\Order\OrderResource;
 use HiEvents\Resources\Product\ProductResource;
 use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
+use HiEvents\Services\Domain\TicketResale\TicketResaleStateService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use Illuminate\Config\Repository;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -47,6 +48,7 @@ class WebhookDispatchService
         private readonly EventOccurrenceRepositoryInterface $eventOccurrenceRepository,
         private readonly AccountUserAccessService $accessService,
         private readonly Repository $config,
+        private readonly TicketResaleStateService $ticketResaleStateService,
     ) {}
 
     public function dispatchEventWebhook(DomainEventType $eventType, int $eventId): void
@@ -81,6 +83,8 @@ class WebhookDispatchService
                 name: 'event_occurrence',
             ))
             ->findById($attendeeId);
+
+        $this->ticketResaleStateService->summarize(collect([$attendee]));
 
         $this->dispatchWebhook(
             eventType: $eventType,

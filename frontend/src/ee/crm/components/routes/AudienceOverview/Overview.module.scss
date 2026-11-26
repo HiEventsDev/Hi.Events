@@ -1,0 +1,63 @@
+$muted: var(--mantine-color-gray-6);
+
+.retentionScroll {
+  overflow-x: auto;
+}
+
+.retention {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 2px;
+  font-size: var(--mantine-font-size-xs);
+  font-variant-numeric: tabular-nums;
+
+  th {
+    padding: 4px 6px;
+    font-weight: 600;
+    color: $muted;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  th:first-child,
+  td:first-child {
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  td {
+    min-width: 44px;
+    padding: 6px;
+    border-radius: 4px;
+    text-align: center;
+  }
+}
+
+.retentionCell {
+  background: color-mix(in srgb, var(--mantine-color-primary-6) calc(var(--retention, 0) * 1%), var(--mantine-color-gray-0));
+  color: var(--mantine-color-gray-9);
+
+  &[data-strong] {
+    color: var(--mantine-color-white);
+  }
+}
+
+.barCaption {
+  margin: 0 0 6px;
+  font-size: var(--mantine-font-size-sm);
+}
+
+.barWide {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 48px;
+  align-items: center;
+  gap: 12px;
+  font-size: var(--mantine-font-size-sm);
+}
+
+.noticeLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin-top: 6px;
+}

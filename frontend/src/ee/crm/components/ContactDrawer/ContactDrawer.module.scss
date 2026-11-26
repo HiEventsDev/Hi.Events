@@ -1,0 +1,355 @@
+@use "../../../../styles/mixins";
+
+$border: var(--mantine-color-gray-2);
+$muted: var(--mantine-color-gray-6);
+
+.title {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.statusDescription {
+  margin: 6px 0 0;
+  font-size: var(--mantine-font-size-xs);
+  color: $muted;
+  line-height: 1.45;
+}
+
+.explained {
+  text-decoration: underline dotted var(--mantine-color-gray-5);
+  text-underline-offset: 3px;
+  cursor: help;
+}
+
+.consentNote {
+  margin: 14px 0 0;
+  font-size: var(--mantine-font-size-xs);
+  color: $muted;
+  line-height: 1.45;
+}
+
+.errorMessage {
+  padding-top: 16px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.listItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 8px 0;
+  border-top: 1px solid $border;
+  font-size: var(--mantine-font-size-sm);
+
+  &:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+}
+
+.listMain {
+  flex: 1;
+  min-width: 0;
+  @include mixins.ellipsis;
+}
+
+.listMeta {
+  flex-shrink: 0;
+  font-size: var(--mantine-font-size-xs);
+  color: $muted;
+  white-space: nowrap;
+}
+
+.pill {
+  flex-shrink: 0;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--mantine-color-gray-1);
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 500;
+  color: var(--mantine-color-gray-7);
+}
+
+.tags :global(.mantine-InputWrapper-root) {
+  margin-bottom: 0;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+}
+
+.event {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  gap: 2px 10px;
+  padding: 10px 0;
+  border-top: 1px solid $border;
+
+  &:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  &[data-link] {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover .eventTitle {
+      text-decoration: underline;
+    }
+  }
+}
+
+.eventIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  grid-row: 1 / span 2;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--mantine-color-gray-1);
+  color: var(--mantine-color-gray-7);
+
+  &[data-tone="good"] {
+    background: var(--mantine-color-teal-0);
+    color: var(--mantine-color-teal-8);
+  }
+
+  &[data-tone="bad"] {
+    background: var(--mantine-color-red-0);
+    color: var(--mantine-color-red-8);
+  }
+
+  &[data-tone="accent"] {
+    background: var(--mantine-color-primary-0);
+    color: var(--mantine-color-primary-7);
+  }
+}
+
+.eventTitle {
+  min-width: 0;
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.eventAmount {
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.eventMeta {
+  grid-column: 2 / -1;
+  font-size: var(--mantine-font-size-xs);
+  color: $muted;
+  line-height: 1.4;
+}
+
+.loadMore {
+  margin-top: 10px;
+}
+
+.noteForm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+
+  :global(.mantine-InputWrapper-root) {
+    margin-bottom: 0;
+  }
+}
+
+.noteActions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.note {
+  padding: 10px 0;
+  border-top: 1px solid $border;
+
+  p {
+    margin: 0;
+    font-size: var(--mantine-font-size-sm);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+}
+
+.noteMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 4px;
+  font-size: var(--mantine-font-size-xs);
+  color: $muted;
+}
+
+.empty {
+  margin: 0;
+  font-size: var(--mantine-font-size-sm);
+  color: $muted;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--mantine-spacing-sm);
+
+  @include mixins.respond-below(sm) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.mergeResults {
+  display: flex;
+  flex-direction: column;
+  max-height: 280px;
+  margin-top: 8px;
+  border: 1px solid $border;
+  border-radius: var(--mantine-radius-md);
+  overflow-y: auto;
+}
+
+.mergeEmpty {
+  padding: 12px;
+}
+
+.mergeOption {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border: 0;
+  border-top: 1px solid $border;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+
+  &:first-child {
+    border-top: 0;
+  }
+
+  &:hover,
+  &[data-selected] {
+    background: var(--mantine-color-primary-0);
+  }
+}
+
+.mergeText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+
+  span {
+    @include mixins.ellipsis;
+  }
+
+  small {
+    color: $muted;
+    @include mixins.ellipsis;
+  }
+}
+
+.guests {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.guest {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  padding: 2px 10px;
+  border: 1px solid $border;
+  border-radius: 999px;
+  font-size: var(--mantine-font-size-xs);
+  line-height: 1.6;
+
+  small {
+    color: $muted;
+  }
+}
+
+.guestToggle {
+  padding: 2px 4px;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 600;
+  color: var(--mantine-color-primary-7);
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.emailRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  min-width: 0;
+  padding: 8px 0;
+  border-top: 1px solid $border;
+  font-size: var(--mantine-font-size-sm);
+
+  &:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+}
+
+.emailAddress {
+  flex: 1 1 220px;
+  min-width: 0;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.emailMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  min-height: 24px;
+  margin-left: auto;
+}
+
+.emailActions {
+  display: inline-flex;
+  gap: 4px;
+
+  @media (pointer: coarse) {
+    :global(.mantine-Button-root) {
+      min-height: 40px;
+    }
+  }
+}
+
+.touchTarget {
+  @media (pointer: coarse) {
+    width: 40px;
+    height: 40px;
+  }
+}

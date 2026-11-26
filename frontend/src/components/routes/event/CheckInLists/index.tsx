@@ -77,11 +77,12 @@ const CheckInLists = () => {
                 </CreateButton>
             </div>
 
-            <TableSkeleton isVisible={!checkInLists || checkInListsQuery.isFetching}/>
+            <TableSkeleton isVisible={!checkInLists}/>
 
             {checkInLists && <CheckInListTable
                 checkInLists={checkInLists}
                 openCreateModal={openCreateModal}
+                isRefreshing={checkInListsQuery.isFetching}
                 event={event}
             />}
 

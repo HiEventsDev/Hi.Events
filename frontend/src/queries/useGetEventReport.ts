@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { IdParam } from "../types.ts";
 import { eventsClient } from "../api/event.client.ts";
 
@@ -32,6 +32,7 @@ export const useGetEventReport = (
                 occurrenceId,
             );
         },
+        placeholderData: keepPreviousData,
         enabled: !!eventId && !!reportType && (!!startDate && !!endDate) || (!startDate && !endDate)
     });
 };

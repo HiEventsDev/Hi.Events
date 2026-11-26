@@ -37,7 +37,7 @@ Before finishing: `npx tsc --noEmit` (no new errors in files you changed), `pint
 ## Code standards
 
 - **No explanatory comments**, in any language. That includes "why" comments justifying a design choice; rename, extract or restructure instead. Allowed: PHPDoc `@throws`/`@return`/`@param`, `// TODO(handle:owner)` linked to a tracked task, and schema notes in SQL migrations. Delete inherited explanatory comments in code you touch.
-- No dead code: no unused methods, DTO fields, constants, classes only called from tests, or columns written but never read. Wire speculative code to a real caller in the same change or delete it, and grep before claiming something is reachable. Exception: `locations.raw_provider_response` is write-only on purpose; keep it.
+- No dead code: no unused methods, DTO fields, constants, classes only called from tests, or columns written but never read. Wire speculative code to a real caller in the same change or delete it, and grep before claiming something is reachable. Exceptions: `locations.raw_provider_response` and `crm_pending_subscriptions.ip_address`/`user_agent` are write-only on purpose; keep them.
 - Wrap user-facing strings in `__()` (backend) or Lingui `t`/`<Trans>` (frontend), and add translations for every supported language in the same change.
 - Add unit tests for new features.
 
@@ -114,10 +114,12 @@ Feature rules live in `.claude/rules/`; Claude Code loads each file automaticall
 | Box office | `.claude/rules/ee/box-office.md` |
 | Enterprise SSO | `.claude/rules/ee/enterprise-sso.md` |
 | Reserved seating | `.claude/rules/ee/seating.md` |
+| Audience (CRM) | `.claude/rules/ee/crm.md` |
 | Lineup & schedule | `.claude/rules/features/lineup.md` |
 | Homepage sections | `.claude/rules/features/homepage-sections.md` |
 | Embeddable widget | `.claude/rules/features/widget.md` |
 | Registration questions | `.claude/rules/features/questions.md` |
+| Ticket transfer, resale, verified self-service | `.claude/rules/features/ticket-transfer-resale.md` |
 | Frontend UI patterns | `.claude/rules/frontend/ui.md` |
 | E2E specs | `.claude/rules/e2e.md` |
 

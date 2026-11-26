@@ -19,6 +19,14 @@ test.describe('single sign-on', () => {
     await sso.completeSignup();
     await expect(page).toHaveURL(/\/welcome/);
 
+    await expect(page.getByRole('heading', { name: 'Create your first event' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Check your email' })).toHaveCount(0);
+    await expect(page.getByLabel(/^Organizer name/)).toHaveValue('Ada Lovelace');
+    await page.getByLabel(/^Event name/).fill('Analytical Engine Evening');
+    await page.getByRole('button', { name: 'Create event' }).click();
+    await expect(page).toHaveURL(/\/manage\/event\/\d+\/dashboard/);
+    await expect(page.getByRole('heading', { name: 'Analytical Engine Evening' })).toBeVisible();
+
     const returning = await browser.newPage();
     const returningSso = new SsoPage(returning);
     await returning.goto('/auth/login');

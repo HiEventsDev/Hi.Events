@@ -12,6 +12,7 @@ use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeCheckInDomainObjectAbstract;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\Exceptions\CannotCheckInException;
+use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Helper\IdHelper;
 use HiEvents\Repository\Interfaces\AttendeeCheckInRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
@@ -19,6 +20,7 @@ use HiEvents\Services\Application\Handlers\CheckInList\Public\DTO\AttendeeAndAct
 use HiEvents\Services\Domain\CheckInList\DTO\CheckInResultDTO;
 use HiEvents\Services\Domain\CheckInList\DTO\CreateAttendeeCheckInsResponseDTO;
 use HiEvents\Services\Domain\Order\MarkOrderAsPaidService;
+use HiEvents\Services\Domain\TicketResale\TicketResaleClosureService;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Collection;
@@ -33,6 +35,7 @@ class CreateAttendeeCheckInService
         private readonly ConnectionInterface $db,
         private readonly MarkOrderAsPaidService $markOrderAsPaidService,
         private readonly CheckInListActivityValidator $checkInListActivityValidator,
+        private readonly TicketResaleClosureService $resaleClosureService,
     ) {}
 
     /**
@@ -126,7 +129,7 @@ class CreateAttendeeCheckInService
                 $checkInList,
                 $eventSettings,
                 $existingCheckIns,
-                $checkInUserIpAddress
+                $checkInUserIpAddress,
             );
 
             if ($result->checkIn) {
@@ -153,7 +156,7 @@ class CreateAttendeeCheckInService
         CheckInListDomainObject $checkInList,
         EventSettingDomainObject $eventSettings,
         Collection $existingCheckIns,
-        string $checkInUserIpAddress
+        string $checkInUserIpAddress,
     ): CheckInResultDTO {
         $this->checkInListDataService->verifyAttendeeBelongsToCheckInList($checkInList, $attendee);
 
@@ -176,11 +179,19 @@ class CreateAttendeeCheckInService
         }
 
         try {
-            return $this->db->transaction(function () use ($attendee, $checkInList, $checkInAction, $checkInUserIpAddress) {
+            return $this->db->transaction(function () use ($attendee, $checkInList, $checkInAction, $checkInUserIpAddress, $eventSettings) {
+                $lockedAttendee = $this->resaleClosureService->lockForCheckIn($attendee->getId());
+
+                if ($error = $this->validateAttendeeStatus($lockedAttendee, $checkInAction, $eventSettings)) {
+                    return new CheckInResultDTO(error: $error);
+                }
+
+                $this->resaleClosureService->releaseForCheckIn($attendee->getId());
+
                 $checkIn = $this->createCheckIn($attendee, $checkInList, $checkInUserIpAddress);
 
                 if ($checkInAction->value === AttendeeCheckInActionType::CHECK_IN_AND_MARK_ORDER_AS_PAID->value
-                    && $attendee->getStatus() === AttendeeStatus::AWAITING_PAYMENT->name
+                    && $lockedAttendee->getStatus() === AttendeeStatus::AWAITING_PAYMENT->name
                 ) {
                     $this->markOrderAsPaidService->markOrderAsPaid(
                         orderId: $attendee->getOrderId(),
@@ -190,6 +201,10 @@ class CreateAttendeeCheckInService
 
                 return new CheckInResultDTO(checkIn: $checkIn);
             });
+        } catch (ResourceConflictException) {
+            return new CheckInResultDTO(error: __('Attendee :attendee_name\'s ticket is listed for resale', [
+                'attendee_name' => $attendee->getFullName(),
+            ]));
         } catch (UniqueConstraintViolationException) {
             return new CheckInResultDTO(
                 checkIn: $this->attendeeCheckInRepository->findFirstWhere([

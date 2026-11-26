@@ -112,7 +112,7 @@ readonly class EventStatsFetchService
         $eventId = $requestData->event_id;
         $occurrenceId = $requestData->occurrence_id;
         $startDate = $requestData->start_date;
-        $endDate = $requestData->end_date;
+        $endDate = $this->capAtToday($requestData->end_date);
 
         if ($occurrenceId !== null) {
             $whereClause = 'eods.event_occurrence_id = :occurrenceId AND eods.event_id = :eventId';
@@ -164,6 +164,13 @@ readonly class EventStatsFetchService
                 total_refunded: $result->total_refunded,
             );
         });
+    }
+
+    private function capAtToday(string $endDate): string
+    {
+        $today = Carbon::now('UTC')->toDateString();
+
+        return Carbon::parse($endDate)->toDateString() > $today ? $today : $endDate;
     }
 
     private function resolveStatsDateRange(int $eventId, string $preset): array

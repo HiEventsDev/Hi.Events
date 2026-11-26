@@ -7,6 +7,7 @@ use HiEvents\DomainObjects\AccountMessagingTierDomainObject;
 use HiEvents\DomainObjects\Enums\MessagingEligibilityFailureEnum;
 use HiEvents\DomainObjects\Enums\MessagingTierViolationEnum;
 use HiEvents\DomainObjects\OrganizerStripePlatformDomainObject;
+use HiEvents\Helper\Url;
 use HiEvents\Repository\Interfaces\AccountMessagingTierRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -18,7 +19,7 @@ use HiEvents\Services\Domain\Message\DTO\MessagingTierViolationDTO;
 
 class MessagingEligibilityService
 {
-    private const UNTRUSTED_TIER_NAME = 'Untrusted';
+    public const UNTRUSTED_TIER_NAME = 'Untrusted';
 
     public function __construct(
         private readonly AccountRepositoryInterface $accountRepository,
@@ -35,7 +36,6 @@ class MessagingEligibilityService
 
         $tier = $this->getAccountMessagingTier($account->getAccountMessagingTierId());
 
-        // Trusted and Premium tiers bypass eligibility checks
         if ($tier->getName() !== self::UNTRUSTED_TIER_NAME) {
             return null;
         }
@@ -102,10 +102,10 @@ class MessagingEligibilityService
         );
     }
 
-    private function getAccountMessagingTier(?int $tierId): AccountMessagingTierDomainObject
+    public function getAccountMessagingTier(?int $tierId): AccountMessagingTierDomainObject
     {
         if ($tierId !== null) {
-            $tier = $this->accountMessagingTierRepository->findFirst($tierId);
+            $tier = $this->accountMessagingTierRepository->findFirstWhere(['id' => $tierId]);
             if ($tier !== null) {
                 return $tier;
             }
@@ -132,7 +132,14 @@ class MessagingEligibilityService
     private function containsLinks(string $content): bool
     {
         $urlPattern = '/https?:\/\/[^\s<>"\']+|href\s*=\s*["\'][^"\']+["\']/i';
+        $withoutOwnImages = (string) preg_replace_callback(
+            '/<img\b[^>]*>/i',
+            static fn (array $match): string => preg_match('/\bsrc\s*=\s*"([^"]+)"/i', $match[0], $src) && str_starts_with(html_entity_decode($src[1]), Url::getCdnBaseUrl())
+                ? ''
+                : $match[0],
+            $content,
+        );
 
-        return (bool) preg_match($urlPattern, $content);
+        return (bool) preg_match($urlPattern, $withoutOwnImages);
     }
 }

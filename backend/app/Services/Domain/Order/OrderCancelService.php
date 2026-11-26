@@ -5,6 +5,7 @@ namespace HiEvents\Services\Domain\Order;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
 use HiEvents\DomainObjects\Enums\ProductType;
+use HiEvents\DomainObjects\Enums\TicketResaleCloseReason;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
@@ -19,10 +20,12 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsCancellationService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
+use HiEvents\Services\Domain\TicketResale\TicketResaleClosureService;
 use HiEvents\Services\Domain\Waitlist\RevertWaitlistOffersForCancelledOrderService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
+use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
@@ -39,6 +42,8 @@ class OrderCancelService
         private readonly DomainEventDispatcherService $domainEventDispatcherService,
         private readonly EventStatisticsCancellationService $eventStatisticsCancellationService,
         private readonly RevertWaitlistOffersForCancelledOrderService $revertWaitlistOffersService,
+        private readonly TransactionLockService $transactionLockService,
+        private readonly TicketResaleClosureService $resaleClosureService,
     ) {}
 
     /**
@@ -47,6 +52,9 @@ class OrderCancelService
     public function cancelOrder(OrderDomainObject $order): void
     {
         $this->databaseManager->transaction(function () use ($order) {
+            $this->transactionLockService->lockEvent($order->getEventId());
+            $this->resaleClosureService->closeForOrder($order->getId(), TicketResaleCloseReason::TICKET_CANCELLED);
+
             $this->eventStatisticsCancellationService->decrementForCancelledOrder($order);
 
             $this->adjustProductQuantities($order);

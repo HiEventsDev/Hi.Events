@@ -3,7 +3,7 @@ import { test, expect } from '../fixtures';
 test.describe('@smoke stack wiring', () => {
   test('public register page renders', async ({ page }) => {
     await page.goto('/auth/register');
-    await expect(page.getByRole('button', { name: /register/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Create account' })).toBeVisible();
   });
 
   test('account fixture arranges an authenticated organizer', async ({ account, api }) => {

@@ -5,6 +5,7 @@ namespace HiEvents\Http\Request\Order;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\Http\Request\BaseRequest;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Validators\Rules\MobilePhoneNumberRule;
 use HiEvents\Validators\Rules\PersonNameRule;
 use HiEvents\Validators\Rules\RulesHelper;
 
@@ -19,6 +20,7 @@ class EditOrderRequest extends BaseRequest
             'first_name' => [...RulesHelper::REQUIRED_STRING, new PersonNameRule($this->order()?->getFirstName())],
             'last_name' => [...($this->isBoxOfficeOrder() ? RulesHelper::STRING : RulesHelper::REQUIRED_STRING), new PersonNameRule($this->order()?->getLastName())],
             'notes' => RulesHelper::OPTIONAL_TEXT_MEDIUM_LENGTH,
+            'phone' => MobilePhoneNumberRule::rules(required: false),
         ];
     }
 

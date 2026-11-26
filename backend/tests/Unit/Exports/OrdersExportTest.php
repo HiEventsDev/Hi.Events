@@ -52,6 +52,31 @@ class OrdersExportTest extends TestCase
         $this->assertCount(count($export->headings()), $export->map($order));
     }
 
+    public function test_the_mobile_number_and_text_message_opt_in_are_exported_under_their_headings(): void
+    {
+        $order = fn (?string $phone, ?string $optedInAt) => (new OrderDomainObject)
+            ->setId(1)
+            ->setPublicId('O-1')
+            ->setShortId('o_1')
+            ->setStatus(OrderStatus::COMPLETED->name)
+            ->setCurrency('USD')
+            ->setTotalGross(20.0)
+            ->setPhone($phone)
+            ->setSmsOptedInAt($optedInAt)
+            ->setCreatedAt('2026-09-20 10:00:00')
+            ->setOrderItems(new Collection)
+            ->setQuestionAndAnswerViews(new Collection);
+        $export = (new OrdersExport(new QuestionAnswerFormatter))->withData(new LengthAwarePaginator([], 0, 10), new Collection);
+        $phoneColumn = array_search(__('Mobile Number'), $export->headings(), true);
+        $optInColumn = array_search(__('Opted In To Text Messages'), $export->headings(), true);
+
+        $optedIn = $export->map($order('+353851234567', '2026-09-20 10:00:00'));
+        $notAsked = $export->map($order(null, null));
+
+        $this->assertSame(['+353851234567', __('Yes')], [$optedIn[$phoneColumn], $optedIn[$optInColumn]]);
+        $this->assertSame([null, __('No')], [$notAsked[$phoneColumn], $notAsked[$optInColumn]]);
+    }
+
     public function test_door_sale_columns_come_after_every_existing_column_so_spreadsheets_do_not_shift(): void
     {
         $question = (new QuestionDomainObject)->setId(9)->setTitle('Dietary needs')->setType(QuestionTypeEnum::SINGLE_LINE_TEXT->name);
@@ -63,7 +88,7 @@ class OrdersExportTest extends TestCase
         $this->assertSame(__('Opted In To Marketing'), $headings[24]);
         $this->assertSame('Dietary needs', $headings[25]);
         $this->assertSame(
-            [__('Sales Channel'), __('Tender'), __('Operator'), __('Amount Tendered'), __('Change Due'), __('Reference')],
+            [__('Sales Channel'), __('Tender'), __('Operator'), __('Amount Tendered'), __('Change Due'), __('Reference'), __('Mobile Number'), __('Opted In To Text Messages')],
             array_slice($headings, 26),
         );
     }

@@ -1,0 +1,294 @@
+@use "../../../styles/mixins";
+
+$border: var(--mantine-color-gray-2);
+$muted: var(--mantine-color-gray-6);
+$surface: var(--mantine-color-gray-0);
+
+.page {
+  container: audience-page / inline-size;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-bottom: var(--mantine-spacing-md);
+  border: 1px solid $border;
+  border-radius: var(--hi-radius-lg);
+  background: var(--mantine-color-body);
+  overflow: hidden;
+
+  @container audience-page (max-width: 719px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding: 14px 18px;
+  border-left: 1px solid $border;
+
+  &:first-child {
+    border-left: 0;
+  }
+
+  @container audience-page (max-width: 719px) {
+    padding: 12px 14px;
+
+    &:nth-child(odd) {
+      border-left: 0;
+    }
+
+    &:nth-child(n + 3) {
+      border-top: 1px solid $border;
+    }
+  }
+}
+
+.statLabel {
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 500;
+  color: $muted;
+  @include mixins.ellipsis;
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--mantine-color-gray-9);
+}
+
+.statHint {
+  font-size: var(--mantine-font-size-xs);
+  line-height: 1.4;
+  color: $muted;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--mantine-spacing-md);
+  margin-bottom: var(--mantine-spacing-md);
+  align-items: stretch;
+
+  @container audience-page (max-width: 899px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.panel {
+  container: audience-panel / inline-size;
+  min-width: 0;
+  margin-bottom: var(--mantine-spacing-md);
+  border: 1px solid $border;
+  border-radius: var(--hi-radius-lg);
+  background: var(--mantine-color-body);
+  overflow: hidden;
+
+  .grid > & {
+    margin-bottom: 0;
+  }
+}
+
+.panelHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px var(--mantine-spacing-sm);
+  padding: 14px 18px 0;
+}
+
+.panelTitle {
+  margin: 0;
+  font-size: var(--mantine-font-size-md);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.panelHint {
+  font-size: var(--mantine-font-size-xs);
+  color: $muted;
+}
+
+.panelLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 600;
+  color: var(--mantine-color-primary-7);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.panelBody {
+  padding: 14px 18px 18px;
+}
+
+.panelFlush {
+  padding-top: 10px;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 48px 16px;
+  text-align: center;
+  color: $muted;
+
+  p {
+    margin: 0;
+    max-width: 380px;
+    font-size: var(--mantine-font-size-sm);
+  }
+}
+
+.firstRun {
+  padding: 6px 18px 16px;
+
+  p {
+    margin: 4px 0 0;
+    max-width: 72ch;
+    font-size: var(--mantine-font-size-sm);
+    line-height: 1.5;
+    color: var(--mantine-color-gray-7);
+  }
+
+  p:first-child {
+    margin-top: 0;
+  }
+}
+
+.emptyActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.personRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+  padding: 9px 18px;
+  border: 0;
+  border-top: 1px solid $border;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:first-child {
+    border-top: 0;
+  }
+
+  &:hover {
+    background: $surface;
+  }
+}
+
+.personText {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.personName {
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 600;
+  line-height: 1.3;
+  @include mixins.ellipsis;
+}
+
+.personMeta {
+  font-size: var(--mantine-font-size-xs);
+  color: $muted;
+  @include mixins.ellipsis;
+}
+
+.personFigure {
+  flex-shrink: 0;
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+
+  small {
+    display: block;
+    font-size: var(--mantine-font-size-xs);
+    font-weight: 400;
+    color: $muted;
+  }
+}
+
+.bars {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bar {
+  display: grid;
+  grid-template-columns: minmax(0, 40%) minmax(0, 1fr) 48px;
+  align-items: center;
+  gap: 12px;
+  font-size: var(--mantine-font-size-sm);
+
+  @container audience-panel (max-width: 419px) {
+    grid-template-columns: minmax(0, 1fr) 48px;
+
+    .barTrack {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+  }
+}
+
+.barLabel {
+  min-width: 0;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.barTrack {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--mantine-color-gray-1);
+  overflow: hidden;
+}
+
+.barFill {
+  display: block;
+  height: 100%;
+  min-width: 2px;
+  border-radius: 999px;
+  background: var(--mantine-color-primary-6);
+}
+
+.barValue {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  color: $muted;
+}

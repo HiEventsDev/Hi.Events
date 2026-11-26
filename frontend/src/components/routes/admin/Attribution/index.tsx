@@ -1,13 +1,16 @@
-import {Container, Title, Text, Paper, Stack, SimpleGrid, SegmentedControl, Table, Skeleton, Pagination, Group, Select} from "@mantine/core";
+import {Container, Title, Text, Paper, Stack, SimpleGrid, SegmentedControl, Skeleton, Pagination, Group, Select} from "@mantine/core";
 import {DatePickerInput} from "@mantine/dates";
 import {IconCalendar} from "@tabler/icons-react";
 import {t, Trans} from "@lingui/macro";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import {useGetUtmAttributionStats} from "../../../../queries/useGetUtmAttributionStats";
-import {AttributionGroupBy} from "../../../../api/admin.client";
+import {AttributionGroupBy, UtmAttributionStats} from "../../../../api/admin.client";
 import {useMemo, useState} from "react";
 import {formatCurrency} from "../../../../utilites/currency";
+import {TanStackTable, TanStackTableColumn} from "../../../common/TanStackTable";
+import {CellText, EmptyCell} from "../../../common/TanStackTable/cells.tsx";
+import {TableCard} from "../../../common/TableCard";
 import tableStyles from "../../../../styles/admin-table.module.scss";
 
 dayjs.extend(utc);
@@ -27,15 +30,13 @@ const RevenueByCurrency = ({revenue}: { revenue: Record<string, number> }) => {
     const entries = Object.entries(revenue);
 
     if (entries.length === 0) {
-        return <Text size="sm" c="dimmed">—</Text>;
+        return <EmptyCell/>;
     }
 
     return (
-        <Stack gap={2}>
-            {entries.map(([currency, amount]) => (
-                <Text key={currency} size="sm" fw={600}>{formatCurrency(amount, currency)}</Text>
-            ))}
-        </Stack>
+        <CellText strong>
+            {entries.map(([currency, amount]) => formatCurrency(amount, currency)).join(' · ')}
+        </CellText>
     );
 };
 
@@ -88,6 +89,59 @@ const Attribution = () => {
         {label: t`Referral Accounts`, value: summary.referral_accounts},
         {label: t`Unattributed Accounts`, value: summary.unattributed_accounts},
     ] : [];
+
+    const columns = useMemo<TanStackTableColumn<UtmAttributionStats>[]>(() => [
+        {
+            id: 'attribution_value',
+            header: t`Attribution Value`,
+            meta: {sticky: 'left'},
+            cell: ({row: {original: stat}}) => (
+                <CellText strong title={stat.attribution_value}>{stat.attribution_value || t`(empty)`}</CellText>
+            ),
+        },
+        {
+            id: 'accounts',
+            header: t`Accounts`,
+            meta: {align: 'right'},
+            cell: ({row: {original: stat}}) => stat.total_accounts.toLocaleString(),
+        },
+        {
+            id: 'events',
+            header: t`Events`,
+            meta: {align: 'right'},
+            cell: ({row: {original: stat}}) => stat.total_events.toLocaleString(),
+        },
+        {
+            id: 'live_events',
+            header: t`Live Events`,
+            meta: {align: 'right'},
+            cell: ({row: {original: stat}}) => stat.live_events.toLocaleString(),
+        },
+        {
+            id: 'stripe_connected',
+            header: t`Stripe Connected`,
+            meta: {align: 'right'},
+            cell: ({row: {original: stat}}) => stat.stripe_connected.toLocaleString(),
+        },
+        {
+            id: 'verified',
+            header: t`Verified`,
+            meta: {align: 'right'},
+            cell: ({row: {original: stat}}) => stat.verified_accounts.toLocaleString(),
+        },
+        {
+            id: 'revenue',
+            header: t`Revenue`,
+            meta: {align: 'right'},
+            cell: ({row: {original: stat}}) => <RevenueByCurrency revenue={stat.revenue_by_currency}/>,
+        },
+        {
+            id: 'orders',
+            header: t`Orders`,
+            meta: {align: 'right'},
+            cell: ({row: {original: stat}}) => stat.total_orders.toLocaleString(),
+        },
+    ], []);
 
     return (
         <Container size="xl" p="xl">
@@ -178,63 +232,16 @@ const Attribution = () => {
                             <Skeleton height={400} radius="md"/>
                         </Stack>
                     ) : stats.length === 0 ? (
-                        <div className={tableStyles.emptyState}>
-                            <Text c="dimmed" size="lg">
-                                <Trans>No attribution data found</Trans>
-                            </Text>
-                        </div>
+                        <TableCard>
+                            <div className={tableStyles.emptyState}>
+                                <Text c="dimmed" size="lg">
+                                    <Trans>No attribution data found</Trans>
+                                </Text>
+                            </div>
+                        </TableCard>
                     ) : (
                         <>
-                            <div className={tableStyles.tableWrapper}>
-                                <div className={tableStyles.tableScroll}>
-                                    <Table className={tableStyles.table} highlightOnHover>
-                                        <Table.Thead>
-                                            <Table.Tr>
-                                                <Table.Th>{t`Attribution Value`}</Table.Th>
-                                                <Table.Th>{t`Accounts`}</Table.Th>
-                                                <Table.Th>{t`Events`}</Table.Th>
-                                                <Table.Th>{t`Live Events`}</Table.Th>
-                                                <Table.Th>{t`Stripe Connected`}</Table.Th>
-                                                <Table.Th>{t`Verified`}</Table.Th>
-                                                <Table.Th>{t`Revenue`}</Table.Th>
-                                                <Table.Th>{t`Orders`}</Table.Th>
-                                            </Table.Tr>
-                                        </Table.Thead>
-                                        <Table.Tbody>
-                                            {stats.map((stat) => (
-                                                <Table.Tr key={stat.attribution_value}>
-                                                    <Table.Td>
-                                                        <Text fw={600} size="sm">
-                                                            {stat.attribution_value || t`(empty)`}
-                                                        </Text>
-                                                    </Table.Td>
-                                                    <Table.Td>
-                                                        <Text size="sm">{stat.total_accounts.toLocaleString()}</Text>
-                                                    </Table.Td>
-                                                    <Table.Td>
-                                                        <Text size="sm">{stat.total_events.toLocaleString()}</Text>
-                                                    </Table.Td>
-                                                    <Table.Td>
-                                                        <Text size="sm">{stat.live_events.toLocaleString()}</Text>
-                                                    </Table.Td>
-                                                    <Table.Td>
-                                                        <Text size="sm">{stat.stripe_connected.toLocaleString()}</Text>
-                                                    </Table.Td>
-                                                    <Table.Td>
-                                                        <Text size="sm">{stat.verified_accounts.toLocaleString()}</Text>
-                                                    </Table.Td>
-                                                    <Table.Td>
-                                                        <RevenueByCurrency revenue={stat.revenue_by_currency}/>
-                                                    </Table.Td>
-                                                    <Table.Td>
-                                                        <Text size="sm">{stat.total_orders.toLocaleString()}</Text>
-                                                    </Table.Td>
-                                                </Table.Tr>
-                                            ))}
-                                        </Table.Tbody>
-                                    </Table>
-                                </div>
-                            </div>
+                            <TanStackTable data={stats} columns={columns}/>
 
                             {totalPages > 1 && (
                                 <Group justify="center" mt="lg">

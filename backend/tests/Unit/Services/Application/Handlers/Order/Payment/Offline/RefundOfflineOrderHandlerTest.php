@@ -167,6 +167,20 @@ class RefundOfflineOrderHandlerTest extends TestCase
         $this->handler->handle($this->givenDTO(amount: 50.0));
     }
 
+    public function test_exactly_what_is_left_can_be_refunded_whatever_the_cents(): void
+    {
+        $this->givenOrderIsFound(refundStatus: OrderRefundStatus::PARTIALLY_REFUNDED->name, totalRefunded: 8.21);
+        $this->givenOrderIsRefreshedAfterRefund();
+
+        $this->offlineOrderRefundService->shouldReceive('refundOrder')
+            ->once()
+            ->withArgs(fn (OrderDomainObject $refundOrder, MoneyValue $amount): bool => $amount->toMinorUnit() === 9179);
+
+        $this->handler->handle($this->givenDTO(amount: 91.79));
+
+        $this->assertTrue(true);
+    }
+
     public function test_the_refund_amount_cannot_exceed_the_remaining_amount(): void
     {
         $this->givenOrderIsFound(totalRefunded: 60.0);

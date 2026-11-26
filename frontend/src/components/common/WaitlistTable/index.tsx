@@ -1,6 +1,6 @@
 import {t} from "@lingui/macro";
 import {WriteAccess} from "../WriteAccess";
-import {Button, Group, Menu, Text} from "@mantine/core";
+import {ActionIcon, Menu, VisuallyHidden} from "@mantine/core";
 import {IconDotsVertical, IconEye, IconSend, IconTrash} from "@tabler/icons-react";
 import {useMemo, useState} from "react";
 import {CellContext} from "@tanstack/react-table";
@@ -13,6 +13,8 @@ import {useRemoveWaitlistEntry} from "../../../mutations/useRemoveWaitlistEntry.
 import {useOfferSpecificWaitlistEntry} from "../../../mutations/useOfferSpecificWaitlistEntry.ts";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {TanStackTable, TanStackTableColumn} from "../TanStackTable";
+import {CellText, EmptyCell, IdentityCell} from "../TanStackTable/cells.tsx";
+import {StatusBadge, StatusTone} from "../StatusBadge";
 import {ManageOrderModal} from "../../modals/ManageOrderModal";
 import classes from './WaitlistTable.module.scss';
 
@@ -20,7 +22,16 @@ interface WaitlistTableProps {
     eventId: IdParam;
     entries: WaitlistEntry[];
     event?: Event;
+    isRefreshing?: boolean;
 }
+
+const STATUS_TONES: Record<string, StatusTone> = {
+    [WaitlistEntryStatus.Waiting]: 'waiting',
+    [WaitlistEntryStatus.Offered]: 'active',
+    [WaitlistEntryStatus.Purchased]: 'positive',
+    [WaitlistEntryStatus.Cancelled]: 'negative',
+    [WaitlistEntryStatus.OfferExpired]: 'neutral',
+};
 
 const statusLabelMap: Record<string, () => string> = {
     [WaitlistEntryStatus.Waiting]: () => t`Waiting`,
@@ -44,51 +55,47 @@ const ActionMenu = ({entry, onOffer, onRemove, onViewOrder}: {
     const canCancel = isWaiting || isOffered;
 
     return (
-        <Group wrap="nowrap" gap={0} justify="flex-end">
-            <Menu shadow="md" width={200}>
-                <Menu.Target>
-                    <div className={classes.actionsMenu}>
-                        <Button size="xs" variant="transparent">
-                            <IconDotsVertical/>
-                        </Button>
-                    </div>
-                </Menu.Target>
-                <Menu.Dropdown>
-                    <Menu.Label>{t`Actions`}</Menu.Label>
-                    {isPurchased && entry.order_id && (
+        <Menu shadow="md" width={200} position="bottom-end">
+            <Menu.Target>
+                <ActionIcon variant="subtle" color="gray" aria-label={t`Actions`}>
+                    <IconDotsVertical size={18}/>
+                </ActionIcon>
+            </Menu.Target>
+            <Menu.Dropdown>
+                <Menu.Label>{t`Actions`}</Menu.Label>
+                {isPurchased && entry.order_id && (
+                    <Menu.Item
+                        leftSection={<IconEye size={14}/>}
+                        onClick={() => onViewOrder(entry.order_id!)}
+                    >
+                        {t`View Order`}
+                    </Menu.Item>
+                )}
+                <WriteAccess>
+                    {canOffer && (
                         <Menu.Item
-                            leftSection={<IconEye size={14}/>}
-                            onClick={() => onViewOrder(entry.order_id!)}
+                            leftSection={<IconSend size={14}/>}
+                            onClick={() => onOffer(entry.id)}
                         >
-                            {t`View Order`}
+                            {isExpired ? t`Re-offer Spot` : t`Offer Spot`}
                         </Menu.Item>
                     )}
-                    <WriteAccess>
-                        {canOffer && (
-                            <Menu.Item
-                                leftSection={<IconSend size={14}/>}
-                                onClick={() => onOffer(entry.id)}
-                            >
-                                {isExpired ? t`Re-offer Spot` : t`Offer Spot`}
-                            </Menu.Item>
-                        )}
-                        {canCancel && (
-                            <Menu.Item
-                                color="red"
-                                leftSection={<IconTrash size={14}/>}
-                                onClick={() => onRemove(entry.id as number)}
-                            >
-                                {isOffered ? t`Revoke Offer` : t`Remove`}
-                            </Menu.Item>
-                        )}
-                    </WriteAccess>
-                </Menu.Dropdown>
-            </Menu>
-        </Group>
+                    {canCancel && (
+                        <Menu.Item
+                            color="red"
+                            leftSection={<IconTrash size={14}/>}
+                            onClick={() => onRemove(entry.id as number)}
+                        >
+                            {isOffered ? t`Revoke Offer` : t`Remove`}
+                        </Menu.Item>
+                    )}
+                </WriteAccess>
+            </Menu.Dropdown>
+        </Menu>
     );
 };
 
-export const WaitlistTable = ({eventId, entries, event}: WaitlistTableProps) => {
+export const WaitlistTable = ({eventId, entries, event, isRefreshing}: WaitlistTableProps) => {
     const isRecurring = event?.type === EventType.RECURRING;
     const timezone = event?.timezone || 'UTC';
     const removeMutation = useRemoveWaitlistEntry();
@@ -142,34 +149,18 @@ export const WaitlistTable = ({eventId, entries, event}: WaitlistTableProps) => 
     const columns = useMemo<TanStackTableColumn<WaitlistEntry>[]>(
         () => [
             {
-                id: 'position',
-                header: '#',
-                enableHiding: false,
-                cell: (info: CellContext<WaitlistEntry, unknown>) => info.row.original.position,
-                meta: {
-                    headerStyle: {width: 60},
-                },
-            },
-            {
                 id: 'contact',
                 header: t`Contact`,
                 enableHiding: false,
-                cell: (info: CellContext<WaitlistEntry, unknown>) => {
-                    const entry = info.row.original;
-                    return (
-                        <div className={classes.contactDetails}>
-                            <Text className={classes.contactName}>
-                                {entry.first_name} {entry.last_name}
-                            </Text>
-                            <Text className={classes.contactEmail}>
-                                {entry.email}
-                            </Text>
-                        </div>
-                    );
-                },
-                meta: {
-                    headerStyle: {minWidth: 220},
-                },
+                meta: {sticky: 'left'},
+                cell: ({row: {original: entry}}: CellContext<WaitlistEntry, unknown>) => (
+                    <IdentityCell
+                        stacked
+                        avatar={<span className={classes.position}>{entry.position}</span>}
+                        primary={<CellText strong>{entry.first_name} {entry.last_name}</CellText>}
+                        secondary={entry.email}
+                    />
+                ),
             },
             {
                 id: 'product',
@@ -190,17 +181,10 @@ export const WaitlistTable = ({eventId, entries, event}: WaitlistTableProps) => 
                     const entry = info.row.original;
                     const occurrence = entry.event_occurrence;
                     if (!occurrence) {
-                        return <Text size="sm" c="dimmed">—</Text>;
+                        return <EmptyCell/>;
                     }
                     const dateText = prettyDate(occurrence.start_date, timezone);
-                    return (
-                        <Text size="sm">
-                            {occurrence.label ? `${dateText} (${occurrence.label})` : dateText}
-                        </Text>
-                    );
-                },
-                meta: {
-                    headerStyle: {minWidth: 180},
+                    return occurrence.label ? `${dateText} (${occurrence.label})` : dateText;
                 },
             } as TanStackTableColumn<WaitlistEntry>] : []),
             {
@@ -210,13 +194,12 @@ export const WaitlistTable = ({eventId, entries, event}: WaitlistTableProps) => 
                 cell: (info: CellContext<WaitlistEntry, unknown>) => {
                     const entry = info.row.original;
                     return (
-                        <div className={classes.statusBadge} data-status={entry.status}>
-                            {entry.status ? statusLabelMap[entry.status]() : ''}
-                        </div>
+                        <span data-status={entry.status}>
+                            <StatusBadge tone={STATUS_TONES[entry.status ?? ''] ?? 'neutral'}>
+                                {entry.status ? statusLabelMap[entry.status]() : ''}
+                            </StatusBadge>
+                        </span>
                     );
-                },
-                meta: {
-                    headerStyle: {minWidth: 130},
                 },
             },
             {
@@ -225,33 +208,22 @@ export const WaitlistTable = ({eventId, entries, event}: WaitlistTableProps) => 
                 enableHiding: true,
                 cell: (info: CellContext<WaitlistEntry, unknown>) => {
                     const entry = info.row.original;
-                    return (
-                        <Text size="sm" c="dimmed">
-                            {entry.created_at ? relativeDate(String(entry.created_at)) : ''}
-                        </Text>
-                    );
+                    return entry.created_at ? relativeDate(String(entry.created_at)) : <EmptyCell/>;
                 },
             },
             {
                 id: 'actions',
-                header: t`Actions`,
+                header: () => <VisuallyHidden>{t`Actions`}</VisuallyHidden>,
                 enableHiding: false,
-                cell: (info: CellContext<WaitlistEntry, unknown>) => {
-                    const entry = info.row.original;
-                    return (
-                        <div className={classes.actionsMenu}>
-                            <ActionMenu
-                                entry={entry}
-                                onOffer={handleOffer}
-                                onRemove={handleRemove}
-                                onViewOrder={handleViewOrder}
-                            />
-                        </div>
-                    );
-                },
-                meta: {
-                    sticky: 'right',
-                },
+                meta: {sticky: 'right'},
+                cell: ({row: {original: entry}}: CellContext<WaitlistEntry, unknown>) => (
+                    <ActionMenu
+                        entry={entry}
+                        onOffer={handleOffer}
+                        onRemove={handleRemove}
+                        onViewOrder={handleViewOrder}
+                    />
+                ),
             },
         ],
         [eventId, isRecurring, timezone]
@@ -273,10 +245,7 @@ export const WaitlistTable = ({eventId, entries, event}: WaitlistTableProps) => 
 
     return (
         <>
-            <TanStackTable
-                data={entries}
-                columns={columns}
-            />
+            <TanStackTable rowLines={2} data={entries} columns={columns} noCard isRefreshing={isRefreshing}/>
             {(selectedOrderId && isOrderModalOpen) && (
                 <ManageOrderModal
                     orderId={selectedOrderId}

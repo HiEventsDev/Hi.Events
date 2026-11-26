@@ -20,6 +20,13 @@ interface AttendeeRepositoryInterface extends RepositoryInterface
     public function getAttendeesByCheckInShortId(string $shortId, QueryParamsDTO $params): Paginator;
 
     /**
+     * @return Collection<int, AttendeeDomainObject>
+     */
+    public function findGuestTicketsByEmail(string $email): Collection;
+
+    public function findByIdLocked(int $id): AttendeeDomainObject;
+
+    /**
      * @return array<int, int> product_price_id => quantity
      */
     public function getSoldQuantitiesByPriceForOccurrence(int $occurrenceId): array;

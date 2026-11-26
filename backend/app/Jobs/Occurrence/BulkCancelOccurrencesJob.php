@@ -12,6 +12,7 @@ use HiEvents\Services\Domain\Event\RecurrenceRuleExclusionService;
 use HiEvents\Services\Domain\EventOccurrence\CancelOccurrenceAttendeesService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OccurrenceEvent;
+use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -43,13 +44,16 @@ class BulkCancelOccurrencesJob implements ShouldQueue
         EventOccurrenceRepositoryInterface $occurrenceRepository,
         RecurrenceRuleExclusionService $exclusionService,
         CancelOccurrenceAttendeesService $cancelAttendeesService,
+        TransactionLockService $transactionLockService,
     ): void {
         $cancelledStartDates = [];
         $failedIds = [];
 
         foreach ($this->occurrenceIds as $occurrenceId) {
             try {
-                $cancelResult = DB::transaction(function () use ($occurrenceRepository, $exclusionService, $cancelAttendeesService, $occurrenceId) {
+                $cancelResult = DB::transaction(function () use ($occurrenceRepository, $exclusionService, $cancelAttendeesService, $transactionLockService, $occurrenceId) {
+                    $transactionLockService->lockEvent($this->eventId);
+
                     $occurrence = $occurrenceRepository->findByIdLocked($occurrenceId);
 
                     if (! $occurrence || $occurrence->getEventId() !== $this->eventId) {

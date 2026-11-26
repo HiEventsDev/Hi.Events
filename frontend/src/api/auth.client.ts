@@ -40,27 +40,27 @@ export const authClient = {
     },
 
     verifyPasswordResetToken: async (token: string) => {
-        const response = await api.get(`auth/reset-password/${token}`);
+        const response = await api.get(`auth/reset-password/${encodeURIComponent(token)}`);
         return response.data;
     },
 
     resetPassword: async (token: string, resetData: ResetPasswordRequest) => {
-        const response = await api.post(`auth/reset-password/${token}`, resetData);
+        const response = await api.post(`auth/reset-password/${encodeURIComponent(token)}`, resetData);
         return response.data;
     },
 
     getInvitation: async (token: string) => {
-        const response = await api.get<GenericDataResponse<Invitation>>(`auth/invitation/${token}`);
+        const response = await api.get<GenericDataResponse<Invitation>>(`auth/invitation/${encodeURIComponent(token)}`);
         return response.data;
     },
 
     acceptInvitation: async (token: string, acceptData: AcceptInvitationRequest) => {
-        const response = await api.post(`auth/invitation/${token}`, acceptData);
+        const response = await api.post(`auth/invitation/${encodeURIComponent(token)}`, acceptData);
         return response.data;
     },
 
     joinInvitation: async (token: string) => {
-        const response = await api.post<LoginResponse>(`auth/invitation/${token}/join`);
+        const response = await api.post<LoginResponse>(`auth/invitation/${encodeURIComponent(token)}/join`);
         return response.data;
     }
 }

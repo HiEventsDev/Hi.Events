@@ -5,6 +5,8 @@ import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useGetOrder} from "../../../queries/useGetOrder.ts";
 import {OrderSummary} from "../../common/OrderSummary";
 import {AttendeeList} from "../../common/AttendeeList";
+import {TicketHistory} from "../../common/TicketHistory";
+import {useGetOrderHistory} from "../../../queries/useGetTicketHistory.ts";
 import {t} from "@lingui/macro";
 import {QuestionAndAnswerList} from "../../common/QuestionAndAnswerList";
 import {ActionIcon, Anchor, Avatar, Button, CopyButton, Text, Textarea, TextInput, Tooltip} from "@mantine/core";
@@ -27,6 +29,8 @@ import {capitalize} from "../../../utilites/stringHelper.ts";
 import {getBoxOfficeTenderLabel} from "../../../ee/box-office/utilites/boxOfficeTender.ts";
 import classes from './ManageOrderModal.module.scss';
 import {EditOrderPayload} from "../../../api/order.client.ts";
+import {PhoneNumberInput} from "../../common/PhoneNumberInput";
+import {formatPhoneNumber} from "../../../utilites/phoneNumber.ts";
 import {
     DrawerStat,
     SideDrawer,
@@ -46,6 +50,7 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
     const {eventId} = useParams();
     const {data: order, refetch: refetchOrder} = useGetOrder(eventId, orderId);
     const {data: event, data: {product_categories: productCategories} = {}} = useGetEvent(eventId);
+    const {data: history = []} = useGetOrderHistory(eventId, orderId);
     const products = productCategories?.flatMap(category => category.products);
     const [isEditing, setIsEditing] = useState(false);
     const errorHandler = useFormErrorResponseHandler();
@@ -62,6 +67,7 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
             last_name: "",
             email: "",
             notes: "",
+            phone: "",
         },
     });
 
@@ -72,6 +78,7 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
                 last_name: order.last_name,
                 email: order.email ?? "",
                 notes: order.notes || "",
+                phone: order.phone ?? "",
             });
         }
     }, [order]);
@@ -79,6 +86,8 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
     if (!order || !event) {
         return <SideDrawer opened={true} onClose={onClose} loading/>;
     }
+
+    const showPhoneField = !!order.phone || (event.settings?.phone_collection ?? 'OFF') !== 'OFF';
 
     const handleSubmit = (values: EditOrderPayload) => {
         mutation.mutate(
@@ -143,6 +152,10 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
                 ? <Anchor href={'mailto:' + order.email} target="_blank">{order.email}</Anchor>
                 : t`No email provided`,
         },
+        ...(order.phone ? [{
+            label: t`Mobile number`,
+            value: <Anchor href={'tel:' + order.phone}>{formatPhoneNumber(order.phone)}</Anchor>,
+        }] : []),
         ...(occurrences.length > 0 ? [{
             label: occurrences.length === 1 ? t`Occurrence` : t`Occurrences`,
             value: occurrences.map(occurrence => (
@@ -294,6 +307,13 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
                         placeholder="homer@simpson.com"
                         required={!order.box_office_id}
                     />
+                    {showPhoneField && (
+                        <PhoneNumberInput
+                            label={t`Mobile number`}
+                            defaultCountry={event.event_location?.location?.structured_address?.country}
+                            {...form.getInputProps("phone")}
+                        />
+                    )}
                     <Textarea
                         label={
                             <InputLabelWithHelp
@@ -349,6 +369,12 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
                                 onEditAnswer={refetchOrder}
                                 questionAnswers={questionAnswers as QuestionAnswer[]}
                             />
+                        </SideDrawerSection>
+                    )}
+
+                    {history.length > 0 && (
+                        <SideDrawerSection title={t`History`} count={history.length}>
+                            <TicketHistory entries={history} timezone={event.timezone}/>
                         </SideDrawerSection>
                     )}
                 </>

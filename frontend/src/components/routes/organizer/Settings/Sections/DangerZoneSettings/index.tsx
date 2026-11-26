@@ -1,9 +1,8 @@
 import {t} from "@lingui/macro";
-import {Button, TextInput, Stack, Text} from "@mantine/core";
-import {Callout} from "../../../../../common/Callout";
+import {Button, TextInput} from "@mantine/core";
 import {useNavigate, useParams} from "react-router";
 import {useState} from "react";
-import {DangerZone, DangerZoneSection} from "../../../../../common/DangerZone";
+import {SettingsPage, SettingsRow, SettingsSection} from "../../../../../common/SettingsPage";
 import {useGetOrganizerDeletionStatus} from "../../../../../../queries/useGetOrganizerDeletionStatus.ts";
 import {useDeleteOrganizer} from "../../../../../../mutations/useDeleteOrganizer.ts";
 import {useUpdateOrganizerStatus} from "../../../../../../mutations/useUpdateOrganizerStatus.ts";
@@ -14,7 +13,6 @@ import {confirmationDialog} from "../../../../../../utilites/confirmationDialog.
 import {OrganizerStatus} from "../../../../../../types.ts";
 import {IconTrash, IconArchive, IconArrowBackUp} from "@tabler/icons-react";
 import {useAccess} from "../../../../../../hooks/useAccess.ts";
-import {BouncingEmoji} from "../../../../../common/BouncingEmoji";
 
 export const DangerZoneSettings = () => {
     const {organizerId} = useParams();
@@ -72,70 +70,61 @@ export const DangerZoneSettings = () => {
 
     if (!isAdmin) {
         return (
-            <DangerZone>
-                <div style={{textAlign: 'center', padding: '20px 0'}}>
-                    <BouncingEmoji emoji="✋"/>
-                    <h3>{t`Admin Access Required`}</h3>
-                    <Text size="sm" c="dimmed">
-                        {t`Only account administrators can delete or archive organizers. Contact your account admin for assistance.`}
-                    </Text>
-                </div>
-            </DangerZone>
+            <SettingsPage title={t`Danger Zone`}>
+                <SettingsSection tone="danger">
+                    <SettingsRow
+                        label={t`Admin Access Required`}
+                        description={t`Only account administrators can delete or archive organizers. Contact your account admin for assistance.`}
+                    />
+                </SettingsSection>
+            </SettingsPage>
         );
     }
 
+    const canDelete = !!deletionStatus?.can_delete;
+
     return (
-        <DangerZone>
-            <DangerZoneSection
-                title={t`Delete Organizer`}
-                description={
-                    deletionStatus?.can_delete
-                        ? t`Permanently delete this organizer and all its events.`
-                        : deletionStatus?.reason || t`Loading...`
-                }
-                action={
-                    <>
-                        {!isDeletionStatusLoading && !deletionStatus?.can_delete && (
-                            <Callout variant="info" style={{marginBottom: 8}}>
-                                {deletionStatus?.reason}
-                            </Callout>
-                        )}
-                        {deletionStatus?.can_delete && (
-                            <Stack gap="xs" maw={400}>
-                                <Text size="sm" c="dimmed">
-                                    {t`Type "delete" to confirm`}
-                                </Text>
-                                <TextInput
-                                    placeholder={deleteConfirmationPhrase}
-                                    value={deleteConfirmation}
-                                    onChange={(e) => setDeleteConfirmation(e.currentTarget.value)}
-                                />
-                            </Stack>
-                        )}
-                        <Button
-                            mt="sm"
-                            color="red"
-                            variant="outline"
-                            onClick={handleDelete}
-                            loading={deleteMutation.isPending}
-                            disabled={!deletionStatus?.can_delete || isDeletionStatusLoading || !isDeleteConfirmed}
-                            leftSection={<IconTrash size={16}/>}
-                        >
-                            {t`Delete Organizer`}
-                        </Button>
-                    </>
-                }
-            />
-            <DangerZoneSection
-                title={isArchived ? t`Restore Organizer` : t`Archive Organizer`}
-                description={
-                    isArchived
-                        ? t`Restore this organizer and make it active again.`
-                        : isLastActiveOrganizer
-                            ? t`You cannot archive the last active organizer on your account.`
-                            : t`Archive this organizer. This will also archive all events belonging to this organizer.`
-                }
-                action={
+        <SettingsPage title={t`Danger Zone`}>
+            <SettingsSection tone="danger">
+                <SettingsRow
+                    label={t`Delete Organizer`}
+                    description={
+                        canDelete
+                            ? t`Permanently delete this organizer and all its events.`
+                            : deletionStatus?.reason || t`Loading...`
+                    }
+                    below={canDelete && (
+                        <TextInput
+                            id="organizer-delete-confirmation"
+                            label={t`Type "delete" to confirm`}
+                            placeholder={deleteConfirmationPhrase}
+                            value={deleteConfirmation}
+                            onChange={(e) => setDeleteConfirmation(e.currentTarget.value)}
+                            maw={400}
+                        />
+                    )}
+                >
+                    <Button
+                        color="red"
+                        variant="outline"
+                        onClick={handleDelete}
+                        loading={deleteMutation.isPending}
+                        disabled={!canDelete || isDeletionStatusLoading || !isDeleteConfirmed}
+                        leftSection={<IconTrash size={16}/>}
+                    >
+                        {t`Delete Organizer`}
+                    </Button>
+                </SettingsRow>
+                <SettingsRow
+                    label={isArchived ? t`Restore Organizer` : t`Archive Organizer`}
+                    description={
+                        isArchived
+                            ? t`Restore this organizer and make it active again.`
+                            : isLastActiveOrganizer
+                                ? t`You cannot archive the last active organizer on your account.`
+                                : t`Archive this organizer. This will also archive all events belonging to this organizer.`
+                    }
+                >
                     <Button
                         color={isArchived ? "blue" : "orange"}
                         variant="outline"
@@ -146,8 +135,8 @@ export const DangerZoneSettings = () => {
                     >
                         {isArchived ? t`Restore Organizer` : t`Archive Organizer`}
                     </Button>
-                }
-            />
-        </DangerZone>
+                </SettingsRow>
+            </SettingsSection>
+        </SettingsPage>
     );
 };

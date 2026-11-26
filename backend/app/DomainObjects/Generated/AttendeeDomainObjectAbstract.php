@@ -32,6 +32,7 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     final public const NOTES = 'notes';
     final public const SEAT_UID = 'seat_uid';
     final public const SEAT_LABEL = 'seat_label';
+    final public const TRANSFERRED_AT = 'transferred_at';
 
     protected int $id;
     protected int $order_id;
@@ -55,6 +56,7 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     protected ?string $notes = null;
     protected ?string $seat_uid = null;
     protected ?string $seat_label = null;
+    protected ?string $transferred_at = null;
 
     public function toArray(): array
     {
@@ -81,6 +83,7 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
                     'notes' => $this->notes ?? null,
                     'seat_uid' => $this->seat_uid ?? null,
                     'seat_label' => $this->seat_label ?? null,
+                    'transferred_at' => $this->transferred_at ?? null,
                 ];
     }
 
@@ -324,5 +327,16 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     public function getSeatLabel(): ?string
     {
         return $this->seat_label;
+    }
+
+    public function setTransferredAt(?string $transferred_at): self
+    {
+        $this->transferred_at = $transferred_at;
+        return $this;
+    }
+
+    public function getTransferredAt(): ?string
+    {
+        return $this->transferred_at;
     }
 }

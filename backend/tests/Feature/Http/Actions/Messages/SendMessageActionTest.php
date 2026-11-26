@@ -5,7 +5,11 @@ declare(strict_types=1);
 namespace Tests\Feature\Http\Actions\Messages;
 
 use HiEvents\DomainObjects\Enums\EventType;
+use HiEvents\DomainObjects\Enums\MessagingTierViolationEnum;
+use HiEvents\Exceptions\MessagingTierLimitExceededException;
 use HiEvents\Models\User;
+use HiEvents\Services\Application\Handlers\Message\SendMessageHandler;
+use HiEvents\Services\Domain\Message\DTO\MessagingTierViolationDTO;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
@@ -44,6 +48,30 @@ class SendMessageActionTest extends TestCase
             ->assertJsonValidationErrors(['order_id']);
 
         $this->assertSame(0, DB::table('messages')->where('event_id', $this->eventId)->count());
+    }
+
+    public function test_sends_are_rate_limited_per_member(): void
+    {
+        foreach (range(1, 60) as $ignored) {
+            $this->sendMessage(['message_type' => null])->assertStatus(422);
+        }
+
+        $this->sendMessage(['message_type' => null])->assertStatus(429);
+    }
+
+    public function test_a_tier_limit_violation_is_identified_by_its_error_code(): void
+    {
+        $this->mock(SendMessageHandler::class)
+            ->shouldReceive('handle')
+            ->andThrow(new MessagingTierLimitExceededException(new MessagingTierViolationDTO(
+                accountId: $this->accountId,
+                tierName: 'Untrusted',
+                violations: [MessagingTierViolationEnum::MESSAGE_LIMIT_EXCEEDED],
+            )));
+
+        $this->sendMessage(['message_type' => 'ALL_ATTENDEES'])
+            ->assertStatus(429)
+            ->assertJsonPath('error_code', MessagingTierLimitExceededException::ERROR_CODE);
     }
 
     private function sendMessage(array $overrides)

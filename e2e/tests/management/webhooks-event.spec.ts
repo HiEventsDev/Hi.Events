@@ -16,7 +16,7 @@ test.describe('event webhooks', () => {
 
     const row = webhooks.rowByUrl(url);
     await expect(row).toBeVisible();
-    await expect(row.getByText('ENABLED')).toBeVisible();
+    await expect(row.getByText('Enabled')).toBeVisible();
     await expect(row.getByText('2 events')).toBeVisible();
   });
 
@@ -53,7 +53,7 @@ test.describe('event webhooks', () => {
     await webhooks.selectPausedStatus();
     await webhooks.submitEditForm();
 
-    await expect(webhooks.rowByUrl(url).getByText(/^PAUSED$/)).toBeVisible();
+    await expect(webhooks.rowByUrl(url).getByText(/^Paused$/)).toBeVisible();
   });
 
   test('an organizer deletes an event webhook', async ({ authedPage, api, account }) => {

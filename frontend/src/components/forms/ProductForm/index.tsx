@@ -31,6 +31,7 @@ import {
     IconShoppingCart,
     IconTicket,
     IconUsers,
+    IconArrowsExchange,
     IconWorld,
 } from "@tabler/icons-react";
 import {Callout} from "../../common/Callout";
@@ -57,6 +58,7 @@ import {
     accessSummary,
     addonsSummary,
     descriptionSummary,
+    afterPurchaseSummary,
     eventPageSummary,
     highlightSummary,
     orderLimitsSummary,
@@ -82,6 +84,7 @@ const LEDGER_ROW_ORDER: LedgerRowId[] = [
     'addons',
     'highlight',
     'access',
+    'after-purchase',
 ];
 
 const FIELD_TO_LEDGER_ROW: Array<[RegExp, LedgerRowId]> = [
@@ -94,6 +97,7 @@ const FIELD_TO_LEDGER_ROW: Array<[RegExp, LedgerRowId]> = [
     [/^(addon_product_ids|is_addon_only)$/, 'addons'],
     [/^(is_highlighted|highlight_message)$/, 'highlight'],
     [/^(is_hidden|is_hidden_without_promo_code)$/, 'access'],
+    [/^(is_transferable|is_resellable)$/, 'after-purchase'],
 ];
 
 export const ProductForm = ({form, product}: ProductFormProps) => {
@@ -623,6 +627,32 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                         />
                     </div>
                 </LedgerRow>
+
+                {form.values.product_type === ProductType.Ticket && (
+                    <LedgerRow
+                        id="after-purchase"
+                        icon={<IconArrowsExchange size={16}/>}
+                        label={t`After purchase`}
+                        summary={afterPurchaseSummary(form.values)}
+                        opened={openRows.has('after-purchase')}
+                        onToggle={toggleRow}
+                    >
+                        <div className={classes.switchStack}>
+                            <Switch
+                                {...form.getInputProps('is_transferable', {type: 'checkbox'})}
+                                data-testid="product-transferable-switch"
+                                label={t`Holders can transfer this ticket`}
+                                description={t`Applies when ticket transfers are enabled in the event settings. Turn this off for tickets that must stay with the person they were issued to.`}
+                            />
+                            <Switch
+                                {...form.getInputProps('is_resellable', {type: 'checkbox'})}
+                                data-testid="product-resellable-switch"
+                                label={t`Buyers can resell this ticket`}
+                                description={t`Applies when ticket resale is enabled in the event settings.`}
+                            />
+                        </div>
+                    </LedgerRow>
+                )}
             </div>
 
             {taxFeeModalOpen && (

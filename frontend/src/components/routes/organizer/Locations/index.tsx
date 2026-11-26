@@ -10,8 +10,8 @@ import {PageTitle} from "../../../common/PageTitle";
 import {ToolBar} from "../../../common/ToolBar";
 import {SearchBarWrapper} from "../../../common/SearchBar";
 import {SortSelector} from "../../../common/SortSelector";
-import {Pagination} from "../../../common/Pagination";
-import {TableSkeleton} from "../../../common/TableSkeleton";
+import {TableCard, TableCardFooter, TableCardSkeleton} from "../../../common/TableCard";
+import {tableSortFromQuery} from "../../../common/TanStackTable/sorting.tsx";
 import {LocationsTable} from "../../../common/LocationsTable";
 import {useFilterQueryParamSync} from "../../../../hooks/useFilterQueryParamSync.ts";
 import {LocationEditModal} from "../../../modals/LocationEditModal";
@@ -29,7 +29,9 @@ export default function Locations() {
             <PageTitle
                 subheading={t`Reusable venues for your events. Locations created from the autocomplete are saved here automatically.`}
             >{t`Locations`}</PageTitle>
+            <TableCard>
             <ToolBar
+                embedded
                 searchComponent={() => (
                     <SearchBarWrapper
                         placeholder={t`Search by name or address...`}
@@ -48,30 +50,31 @@ export default function Locations() {
                         }}
                     />
                 ) : undefined}
-                resultCount={pagination?.total}
-                resultLabel={t`locations`}
             >
-                <CreateButton color={'green'} size={'sm'} onClick={openCreateModal} rightSection={<IconPlus/>}>
+                <CreateButton color="green" onClick={openCreateModal} leftSection={<IconPlus size={16}/>}>
                     {t`Add Location`}
                 </CreateButton>
             </ToolBar>
 
-            <TableSkeleton isVisible={!locations}/>
+            {!locations && <TableCardSkeleton rows={5}/>}
 
             {locations && (
                 <LocationsTable
                     locations={locations}
                     openCreateModal={openCreateModal}
+                    isRefreshing={locationsQuery.isFetching}
+                    sort={tableSortFromQuery(searchParams, setSearchParams, pagination)}
                 />
             )}
 
             {!!locations?.length && (
-                <Pagination
-                    value={searchParams.pageNumber}
-                    onChange={(value) => setSearchParams({pageNumber: value})}
-                    total={Number(pagination?.last_page)}
+                <TableCardFooter
+                    pagination={pagination}
+                    page={searchParams.pageNumber}
+                    onPageChange={(value) => setSearchParams({pageNumber: value})}
                 />
             )}
+            </TableCard>
 
             {createModalOpen && (
                 <LocationEditModal

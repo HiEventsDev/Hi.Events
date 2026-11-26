@@ -98,7 +98,7 @@ const SalesPeriodRow = ({licence, period}: { licence: AdminLicence, period: Lice
     </div>
 );
 
-const LICENSED_FEATURES: LicensedFeature[] = ['white_label', 'seating', 'box_office', 'enterprise_sso'];
+const LICENSED_FEATURES: LicensedFeature[] = ['white_label', 'seating', 'box_office', 'enterprise_sso', 'crm'];
 
 const LicenceFeatures = ({features}: { features: string[] }) => (
     <div className={classes.card} data-testid="admin-licence-features">

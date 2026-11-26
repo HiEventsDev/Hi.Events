@@ -12,6 +12,8 @@ export interface NavItem {
     onClick?: () => void;
     showWhen?: () => boolean | undefined;
     loading?: boolean;
+    testId?: string;
+    children?: NavItem[];
 }
 
 export interface BreadcrumbItem {

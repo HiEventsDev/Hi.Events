@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\Enums\HomepageFontFamily;
 use HiEvents\DomainObjects\Enums\HomepageSectionType;
 use HiEvents\DomainObjects\Enums\OrganizerHomepageVisibility;
 use HiEvents\DomainObjects\Enums\Permission;
+use HiEvents\DomainObjects\Enums\PhoneCollection;
 use HiEvents\DomainObjects\Enums\TrackingPixelProvider;
 use HiEvents\Http\Request\BaseRequest;
 use HiEvents\Repository\Interfaces\OrganizerSettingsRepositoryInterface;
@@ -22,6 +23,12 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
     public function after(): array
     {
         return [
+            function ($validator) {
+                if ($this->changesDefaultTicketResale()
+                    && app(AccountUserAccessService::class)->isWithheldFromCurrentUser(Permission::ISSUE_REFUNDS)) {
+                    $validator->errors()->add('default_allow_ticket_resale', __('Only members who can issue refunds can turn ticket resale on or off.'));
+                }
+            },
             function ($validator) {
                 $pixels = $this->input('tracking_pixels', []);
                 if (! is_array($pixels)) {
@@ -95,8 +102,12 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
             // Event defaults
             'default_attendee_details_collection_method' => ['sometimes', 'nullable', Rule::in(AttendeeDetailsCollectionMethod::valuesArray())],
             'default_show_marketing_opt_in' => ['sometimes', 'nullable', 'boolean'],
+            'default_phone_collection' => ['sometimes', 'nullable', Rule::in(PhoneCollection::valuesArray())],
+            'default_show_sms_opt_in' => ['sometimes', 'nullable', 'boolean'],
             'default_pass_platform_fee_to_buyer' => ['sometimes', 'nullable', 'boolean'],
             'default_allow_attendee_self_edit' => ['sometimes', 'nullable', 'boolean'],
+            'default_allow_ticket_transfer' => ['sometimes', 'nullable', 'boolean'],
+            'default_allow_ticket_resale' => ['sometimes', 'nullable', 'boolean'],
 
             // Social handles
             'facebook_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
@@ -164,6 +175,19 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
     /**
      * @return string[]
      */
+    private function changesDefaultTicketResale(): bool
+    {
+        if ($this->input('default_allow_ticket_resale') === null) {
+            return false;
+        }
+
+        $saved = (bool) app(OrganizerSettingsRepositoryInterface::class)
+            ->findFirstWhere(['organizer_id' => (int) $this->route('organizer_id')])
+            ?->getDefaultAllowTicketResale();
+
+        return $this->boolean('default_allow_ticket_resale') !== $saved;
+    }
+
     private function existingTagManagerIds(): array
     {
         $pixels = app(OrganizerSettingsRepositoryInterface::class)

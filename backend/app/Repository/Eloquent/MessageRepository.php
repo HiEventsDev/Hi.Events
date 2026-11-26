@@ -68,6 +68,9 @@ class MessageRepository extends BaseRepository implements MessageRepositoryInter
                 MessageStatus::SENT->name,
                 MessageStatus::PENDING_REVIEW->name,
             ])
+            ->where(fn ($query) => $query
+                ->where('messages.status', MessageStatus::PENDING_REVIEW->name)
+                ->orWhereRaw("coalesce(messages.send_data->>'is_test', 'false') <> 'true'"))
             ->count();
 
         $this->resetModel();

@@ -6,6 +6,8 @@ use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\Resources\EventOccurrence\EventOccurrenceResourcePublic;
 use HiEvents\Resources\Product\ProductMinimalResourcePublic;
+use HiEvents\Resources\TicketResale\TicketResaleStateResourcePublic;
+use HiEvents\Resources\TicketTransfer\TicketTransferResourcePublic;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -47,6 +49,14 @@ class AttendeeResourcePublic extends JsonResource
                 ),
             ),
             'locale' => $this->getLocale(),
+            'transfer' => $this->when($this->getTransferState() !== null, fn () => [
+                'can_start' => $this->getTransferState()->can_start,
+                'blocked_reason' => $this->getTransferState()->blocked_reason,
+                'pending' => $this->getTransferState()->pending === null
+                    ? null
+                    : new TicketTransferResourcePublic($this->getTransferState()->pending),
+            ]),
+            'resale' => $this->when($this->getResaleState() !== null, fn () => new TicketResaleStateResourcePublic($this->getResaleState())),
             'is_checked_in' => $this->when(
                 $this->getCheckIns() !== null,
                 fn () => $this->getCheckIns()->isNotEmpty(),

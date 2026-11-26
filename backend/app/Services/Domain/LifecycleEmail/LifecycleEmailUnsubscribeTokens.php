@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace HiEvents\Services\Domain\LifecycleEmail;
 
 use HiEvents\Helper\Url;
+use HiEvents\Services\Infrastructure\Url\PublicApiUrl;
 use Illuminate\Contracts\Config\Repository as ConfigRepository;
 
 class LifecycleEmailUnsubscribeTokens
@@ -13,6 +14,7 @@ class LifecycleEmailUnsubscribeTokens
 
     public function __construct(
         private readonly ConfigRepository $config,
+        private readonly PublicApiUrl $publicApiUrl,
     ) {}
 
     public function tokenFor(int $userId): string
@@ -38,7 +40,7 @@ class LifecycleEmailUnsubscribeTokens
 
     public function oneClickUrlFor(int $userId): string
     {
-        return Url::getApiUrl('public/lifecycle-emails/unsubscribe/'.$this->tokenFor($userId));
+        return $this->publicApiUrl->to('public/lifecycle-emails/unsubscribe/'.$this->tokenFor($userId));
     }
 
     private function signature(int $userId): string

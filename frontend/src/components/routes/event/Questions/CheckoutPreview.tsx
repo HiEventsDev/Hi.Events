@@ -3,7 +3,7 @@ import {t} from "@lingui/macro";
 import {Select, Text, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {IconEye} from "@tabler/icons-react";
-import {Product, ProductType, Question, QuestionBelongsToType} from "../../../../types.ts";
+import {PhoneCollection, Product, ProductType, Question, QuestionBelongsToType} from "../../../../types.ts";
 import {EligibilityNotice, LockedFields, QuestionInput} from "../../../common/CheckoutQuestion";
 import {
     AnswerMap,
@@ -18,6 +18,7 @@ interface CheckoutPreviewProps {
     questions: Question[];
     products: Product[];
     isPerOrderCollection: boolean;
+    phoneCollection: PhoneCollection;
 }
 
 const appliesToProduct = (question: Question, product?: Product): boolean => !!product && (
@@ -29,18 +30,28 @@ const previewAnswers = (values: Record<string, unknown> | undefined): AnswerMap 
     Object.entries(values ?? {}).map(([key, value]) => [Number(key.slice(1)), extractAnswer(value)])
 );
 
-const ContactFields = () => (
+const ContactFields = ({phoneCollection = 'OFF'}: { phoneCollection?: PhoneCollection }) => (
     <div className={classes.previewContactFields}>
         <TextInput label={t`First name`} disabled size="xs"/>
         <TextInput label={t`Last name`} disabled size="xs"/>
         <TextInput label={t`Email`} disabled size="xs" className={classes.previewFullWidth}/>
+        {phoneCollection !== 'OFF' && (
+            <TextInput
+                label={t`Mobile number`}
+                withAsterisk={phoneCollection === 'REQUIRED'}
+                disabled
+                size="xs"
+                className={classes.previewFullWidth}
+            />
+        )}
     </div>
 );
 
-const PreviewForm = ({questions, product, isPerOrderCollection}: {
+const PreviewForm = ({questions, product, isPerOrderCollection, phoneCollection}: {
     questions: Question[];
     product?: Product;
     isPerOrderCollection: boolean;
+    phoneCollection: PhoneCollection;
 }) => {
     const emptyResponses = (belongsTo: QuestionBelongsToType) => Object.fromEntries(
         questions
@@ -87,7 +98,7 @@ const PreviewForm = ({questions, product, isPerOrderCollection}: {
         <>
             <div className={classes.previewGroup}>
                 <Text size="xs" fw={600} c="dimmed" className={classes.previewGroupTitle}>{t`Your details`}</Text>
-                <ContactFields/>
+                <ContactFields phoneCollection={phoneCollection}/>
                 {renderedOrderQuestions}
             </div>
 
@@ -109,7 +120,7 @@ const PreviewForm = ({questions, product, isPerOrderCollection}: {
     );
 };
 
-export const CheckoutPreview = ({questions, products, isPerOrderCollection}: CheckoutPreviewProps) => {
+export const CheckoutPreview = ({questions, products, isPerOrderCollection, phoneCollection}: CheckoutPreviewProps) => {
     const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
     const defaultProduct = products.find((product) => product.product_type === ProductType.Ticket) ?? products[0];
     const product = products.find((candidate) => String(candidate.id) === selectedProductId) ?? defaultProduct;
@@ -145,6 +156,7 @@ export const CheckoutPreview = ({questions, products, isPerOrderCollection}: Che
                     questions={questions}
                     product={product}
                     isPerOrderCollection={isPerOrderCollection}
+                    phoneCollection={phoneCollection}
                 />
             </div>
         </aside>

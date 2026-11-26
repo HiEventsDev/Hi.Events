@@ -1,13 +1,11 @@
 import {t} from "@lingui/macro";
-import {Button} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {useParams} from "react-router";
 import {useEffect} from "react";
-import {Card} from "../../../../../common/Card";
+import {SettingsBlock, SettingsPage, SettingsSaveFooter, SettingsSection} from "../../../../../common/SettingsPage";
 import {showSuccess} from "../../../../../../utilites/notifications.tsx";
 import {useFormErrorResponseHandler} from "../../../../../../hooks/useFormErrorResponseHandler.tsx";
 import {useGetOrganizer} from "../../../../../../queries/useGetOrganizer.ts";
-import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
 import {LocationPicker, LocationPickerValue} from "../../../../../common/LocationPicker";
 import {useCreateLocation} from "../../../../../../mutations/useCreateLocation.ts";
 import {useUpdateOrganizerLocation} from "../../../../../../mutations/useUpdateOrganizerLocation.ts";
@@ -18,6 +16,7 @@ export const AddressSettings = () => {
     const organizerQuery = useGetOrganizer(organizerId);
     const createLocationMutation = useCreateLocation();
     const updateOrganizerLocationMutation = useUpdateOrganizerLocation();
+    const isSaving = createLocationMutation.isPending || updateOrganizerLocationMutation.isPending;
 
     const form = useForm({
         initialValues: {
@@ -37,11 +36,13 @@ export const AddressSettings = () => {
     useEffect(() => {
         if (organizerQuery?.isFetched && organizerQuery.data) {
             const organizer = organizerQuery.data;
-            form.setValues({
+            const values = {
                 location: organizer.location_id && organizer.location
-                    ? {kind: 'saved', location: {...organizer.location, id: organizer.location.id ?? organizer.location_id}}
+                    ? {kind: 'saved', location: {...organizer.location, id: organizer.location.id ?? organizer.location_id}} as LocationPickerValue
                     : null,
-            });
+            };
+            form.setInitialValues(values);
+            form.setValues(values);
         }
     }, [organizerQuery.isFetched]);
 
@@ -91,6 +92,7 @@ export const AddressSettings = () => {
                 });
             }
 
+            form.resetDirty();
             showSuccess(t`Successfully Updated Address`);
         } catch (error) {
             formErrorHandle(form, error);
@@ -98,28 +100,32 @@ export const AddressSettings = () => {
     };
 
     return (
-        <Card>
-            <HeadingWithDescription
-                heading={t`Address`}
-                description={t`Your organizer address`}
-            />
-            <form onSubmit={form.onSubmit(handleSubmit)}>
-                <fieldset disabled={organizerQuery.isLoading || createLocationMutation.isPending || updateOrganizerLocationMutation.isPending}>
-                    {organizerId && (
-                        <LocationPicker
-                            organizerId={organizerId}
-                            value={form.values.location}
-                            onChange={(value) => form.setFieldValue('location', value)}
-                            error={form.errors.location}
-                            clearable
-                        />
-                    )}
-
-                    <Button loading={createLocationMutation.isPending || updateOrganizerLocationMutation.isPending} type={'submit'}>
-                        {t`Save`}
-                    </Button>
-                </fieldset>
-            </form>
-        </Card>
+        <SettingsPage
+            title={t`Address`}
+            description={t`Your organizer address`}
+        >
+            <SettingsSection>
+                <form onSubmit={form.onSubmit(handleSubmit)}>
+                    <fieldset disabled={organizerQuery.isLoading || isSaving}>
+                        {organizerId && (
+                            <SettingsBlock>
+                                <LocationPicker
+                                    organizerId={organizerId}
+                                    value={form.values.location}
+                                    onChange={(value) => form.setFieldValue('location', value)}
+                                    error={form.errors.location}
+                                    clearable
+                                />
+                            </SettingsBlock>
+                        )}
+                    </fieldset>
+                    <SettingsSaveFooter
+                        isDirty={form.isDirty()}
+                        isSaving={isSaving}
+                        onDiscard={form.reset}
+                    />
+                </form>
+            </SettingsSection>
+        </SettingsPage>
     );
 }

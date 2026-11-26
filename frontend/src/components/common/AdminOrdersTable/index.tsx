@@ -1,20 +1,91 @@
-import {Badge, Table, Text, Button, Group} from "@mantine/core";
+import {useMemo} from "react";
+import {Text} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {AdminOrder} from "../../../api/admin.client";
-import {IconChevronDown, IconChevronUp} from "@tabler/icons-react";
 import {formatCurrency} from "../../../utilites/currency";
 import {prettyDate} from "../../../utilites/dates";
+import {TanStackTable, TanStackTableColumn} from "../TanStackTable";
+import {CellText, IdentityCell} from "../TanStackTable/cells.tsx";
+import {sortableHeader, TableSort} from "../TanStackTable/sorting.tsx";
+import {StatusBadge, StatusTone} from "../StatusBadge";
 import tableStyles from "../../../styles/admin-table.module.scss";
 
 interface AdminOrdersTableProps {
     orders: AdminOrder[];
-    onSort?: (column: string) => void;
-    sortBy?: string;
-    sortDirection?: 'asc' | 'desc';
+    sort?: TableSort;
 }
 
-const AdminOrdersTable = ({orders, onSort, sortBy, sortDirection}: AdminOrdersTableProps) => {
-    if (!orders || orders.length === 0) {
+const STATUS_TONES: Record<string, StatusTone> = {
+    COMPLETED: 'positive',
+    PENDING: 'waiting',
+    RESERVED: 'waiting',
+    CANCELLED: 'negative',
+    REFUNDED: 'active',
+    PARTIALLY_REFUNDED: 'active',
+};
+
+const AdminOrdersTable = ({orders, sort}: AdminOrdersTableProps) => {
+    const columns = useMemo<TanStackTableColumn<AdminOrder>[]>(() => [
+        {
+            id: 'short_id',
+            ...sortableHeader(t`Order ID`, 'short_id', sort),
+            meta: {sticky: 'left'},
+            cell: ({row: {original: order}}) => <CellText mono strong>#{order.short_id}</CellText>,
+        },
+        {
+            id: 'account',
+            header: t`Account`,
+            cell: ({row: {original: order}}) => (
+                <CellText maxWidth={200} title={order.account_name}>{order.account_name}</CellText>
+            ),
+        },
+        {
+            id: 'customer',
+            header: t`Customer`,
+            cell: ({row: {original: order}}) => (
+                <IdentityCell
+                    stacked
+                    primary={<CellText strong maxWidth={240}>{order.first_name} {order.last_name}</CellText>}
+                    secondary={order.email ?? t`No email provided`}
+                />
+            ),
+        },
+        {
+            id: 'event',
+            header: t`Event`,
+            cell: ({row: {original: order}}) => (
+                <CellText maxWidth={240} title={order.event_title}>{order.event_title}</CellText>
+            ),
+        },
+        {
+            id: 'total_gross',
+            ...sortableHeader(t`Total`, 'total_gross', sort),
+            meta: {align: 'right'},
+            cell: ({row: {original: order}}) => (
+                <CellText strong>{formatCurrency(order.total_gross, order.currency)}</CellText>
+            ),
+        },
+        {
+            id: 'total_tax',
+            header: t`Tax`,
+            meta: {align: 'right'},
+            cell: ({row: {original: order}}) => formatCurrency(order.total_tax, order.currency),
+        },
+        {
+            id: 'status',
+            header: t`Status`,
+            cell: ({row: {original: order}}) => (
+                <StatusBadge tone={STATUS_TONES[order.status.toUpperCase()] ?? 'neutral'}>{order.status}</StatusBadge>
+            ),
+        },
+        {
+            id: 'created_at',
+            ...sortableHeader(t`Date`, 'created_at', sort),
+            cell: ({row: {original: order}}) => prettyDate(order.created_at, 'UTC'),
+        },
+    ], [sort?.sortBy, sort?.sortDirection]);
+
+    if (orders.length === 0) {
         return (
             <div className={tableStyles.emptyState}>
                 <Text size="lg" c="dimmed">{t`No orders found`}</Text>
@@ -22,121 +93,7 @@ const AdminOrdersTable = ({orders, onSort, sortBy, sortDirection}: AdminOrdersTa
         );
     }
 
-    const handleSort = (column: string) => {
-        if (onSort) {
-            onSort(column);
-        }
-    };
-
-    const SortIcon = ({column}: {column: string}) => {
-        if (sortBy !== column) return null;
-        return sortDirection === 'asc' ? <IconChevronUp size={14} /> : <IconChevronDown size={14} />;
-    };
-
-    const getStatusBadgeColor = (status: string) => {
-        switch (status.toUpperCase()) {
-            case 'COMPLETED':
-                return 'green';
-            case 'PENDING':
-            case 'RESERVED':
-                return 'yellow';
-            case 'CANCELLED':
-                return 'red';
-            case 'REFUNDED':
-            case 'PARTIALLY_REFUNDED':
-                return 'blue';
-            default:
-                return 'gray';
-        }
-    };
-
-    return (
-        <div className={tableStyles.tableWrapper}>
-            <div className={tableStyles.tableScroll}>
-                <Table className={tableStyles.table} highlightOnHover>
-                    <Table.Thead>
-                        <Table.Tr>
-                            <Table.Th>
-                                <Button
-                                    variant="subtle"
-                                    size="compact-sm"
-                                    onClick={() => handleSort('short_id')}
-                                    rightSection={<SortIcon column="short_id" />}
-                                    className={tableStyles.sortButton}
-                                >
-                                    {t`Order ID`}
-                                </Button>
-                            </Table.Th>
-                            <Table.Th>{t`Account`}</Table.Th>
-                            <Table.Th>{t`Customer`}</Table.Th>
-                            <Table.Th>{t`Event`}</Table.Th>
-                            <Table.Th>
-                                <Button
-                                    variant="subtle"
-                                    size="compact-sm"
-                                    onClick={() => handleSort('total_gross')}
-                                    rightSection={<SortIcon column="total_gross" />}
-                                    className={tableStyles.sortButton}
-                                >
-                                    {t`Total`}
-                                </Button>
-                            </Table.Th>
-                            <Table.Th>{t`Tax`}</Table.Th>
-                            <Table.Th>{t`Status`}</Table.Th>
-                            <Table.Th>
-                                <Button
-                                    variant="subtle"
-                                    size="compact-sm"
-                                    onClick={() => handleSort('created_at')}
-                                    rightSection={<SortIcon column="created_at" />}
-                                    className={tableStyles.sortButton}
-                                >
-                                    {t`Date`}
-                                </Button>
-                            </Table.Th>
-                        </Table.Tr>
-                    </Table.Thead>
-                    <Table.Tbody>
-                        {orders.map((order) => (
-                            <Table.Tr key={order.id}>
-                                <Table.Td>
-                                    <Text fw={500} size="sm">#{order.short_id}</Text>
-                                </Table.Td>
-                                <Table.Td>
-                                    <Text size="sm">{order.account_name}</Text>
-                                </Table.Td>
-                                <Table.Td>
-                                    <div>
-                                        <Text size="sm" fw={500}>{order.first_name} {order.last_name}</Text>
-                                        <Text size="xs" c="dimmed">{order.email || t`No email provided`}</Text>
-                                    </div>
-                                </Table.Td>
-                                <Table.Td>
-                                    <Text size="sm">{order.event_title}</Text>
-                                </Table.Td>
-                                <Table.Td>
-                                    <Text size="sm" fw={600}>{formatCurrency(order.total_gross, order.currency)}</Text>
-                                </Table.Td>
-                                <Table.Td>
-                                    <Text size="sm">{formatCurrency(order.total_tax, order.currency)}</Text>
-                                </Table.Td>
-                                <Table.Td>
-                                    <Group gap="xs">
-                                        <Badge color={getStatusBadgeColor(order.status)} size="sm" variant="light">
-                                            {order.status}
-                                        </Badge>
-                                    </Group>
-                                </Table.Td>
-                                <Table.Td>
-                                    <Text size="sm">{prettyDate(order.created_at, 'UTC')}</Text>
-                                </Table.Td>
-                            </Table.Tr>
-                        ))}
-                    </Table.Tbody>
-                </Table>
-            </div>
-        </div>
-    );
+    return <TanStackTable rowLines={2} data={orders} columns={columns} noCard/>;
 };
 
 export default AdminOrdersTable;

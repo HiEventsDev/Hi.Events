@@ -51,7 +51,12 @@ class SendMessageAction extends BaseAction
         } catch (AccountNotVerifiedException $e) {
             return $this->errorResponse($e->getMessage(), Response::HTTP_UNAUTHORIZED);
         } catch (MessagingTierLimitExceededException $e) {
-            return $this->errorResponse($e->getMessage(), Response::HTTP_TOO_MANY_REQUESTS);
+            return $this->jsonResponse([
+                'message' => $e->getMessage(),
+                /** @var array<int, mixed> */
+                'errors' => [],
+                'error_code' => $e::ERROR_CODE,
+            ], Response::HTTP_TOO_MANY_REQUESTS);
         }
 
         return $this->resourceResponse(MessageResource::class, $message);

@@ -80,6 +80,7 @@ export const useAttendeeActions = ({eventId, onManage, onEdit}: UseAttendeeActio
 
     const getAttendeeActions = (attendee: Attendee): EntityAction[] => {
         const isCancelled = attendee.status === 'CANCELLED';
+        const isResold = attendee.resale?.status === 'SOLD';
 
         const actions: (EntityAction | false)[] = [
             !!onManage && {
@@ -111,7 +112,7 @@ export const useAttendeeActions = ({eventId, onManage, onEdit}: UseAttendeeActio
                 onClick: () => handleResendTicket(attendee),
                 group: 'primary',
             },
-            canEdit && {
+            canEdit && !isResold && {
                 key: 'cancel',
                 label: isCancelled ? t`Activate` : t`Cancel` + ` ` + t`ticket`,
                 icon: <IconTrash size={14}/>,

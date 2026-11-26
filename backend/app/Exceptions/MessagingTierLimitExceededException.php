@@ -7,6 +7,8 @@ use HiEvents\Services\Domain\Message\DTO\MessagingTierViolationDTO;
 
 class MessagingTierLimitExceededException extends Exception
 {
+    public const ERROR_CODE = 'MESSAGING_TIER_LIMIT_EXCEEDED';
+
     public function __construct(
         private readonly MessagingTierViolationDTO $violation,
         int $code = 429,

@@ -40,12 +40,22 @@ class PartialUpdateOrganizerSettingsHandler
 
             'default_show_marketing_opt_in' => $dto->getProvided('defaultShowMarketingOptIn')
                 ?? $organizerSettings->getDefaultShowMarketingOptIn(),
+            'default_phone_collection' => $dto->getProvided('defaultPhoneCollection')?->value
+                ?? $organizerSettings->getDefaultPhoneCollection(),
+            'default_show_sms_opt_in' => $dto->getProvided('defaultShowSmsOptIn')
+                ?? $organizerSettings->getDefaultShowSmsOptIn(),
 
             'default_pass_platform_fee_to_buyer' => $dto->getProvided('defaultPassPlatformFeeToBuyer')
                 ?? $organizerSettings->getDefaultPassPlatformFeeToBuyer(),
 
             'default_allow_attendee_self_edit' => $dto->getProvided('defaultAllowAttendeeSelfEdit')
                 ?? $organizerSettings->getDefaultAllowAttendeeSelfEdit(),
+
+            'default_allow_ticket_transfer' => $dto->getProvided('defaultAllowTicketTransfer')
+                ?? $organizerSettings->getDefaultAllowTicketTransfer(),
+
+            'default_allow_ticket_resale' => $dto->getProvided('defaultAllowTicketResale')
+                ?? $organizerSettings->getDefaultAllowTicketResale(),
 
             'social_media_handles' => array_filter([
                 'facebook' => $dto->getProvided('facebookHandle', $organizerSettings->getSocialMediaHandle('facebook')),

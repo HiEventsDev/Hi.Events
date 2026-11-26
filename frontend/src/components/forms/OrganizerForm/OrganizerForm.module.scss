@@ -1,0 +1,80 @@
+.dateTimeGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  align-items: start;
+  margin-bottom: 1em;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  :global(.mantine-DateTimePicker-root),
+  :global(.mantine-Select-root) {
+    width: 100%;
+  }
+
+  :global(.mantine-DateTimePicker-input),
+  :global(.mantine-Select-input) {
+    cursor: pointer;
+    width: 100%;
+  }
+
+  :global(.mantine-Input-input) {
+    cursor: pointer;
+  }
+
+  :global(.mantine-Select-dropdown) {
+    border: 1px solid var(--hi-color-gray-2) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+    padding: 4px !important;
+  }
+
+  :global(.mantine-Select-item) {
+    border-radius: 4px !important;
+    padding: 8px 12px !important;
+    font-size: 0.95rem !important;
+
+    &:hover {
+      background: var(--hi-color-gray) !important;
+    }
+
+    &[data-selected] {
+      background: var(--hi-primary) !important;
+      color: var(--hi-color-white) !important;
+    }
+  }
+
+  :global(.mantine-DateTimePicker-input input),
+  :global(.mantine-Select-input input) {
+    font-size: 1rem !important;
+  }
+}
+
+.primaryButton {
+  background: var(--hi-primary) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  height: 48px !important;
+  transition: all 0.2s ease !important;
+  margin-top: 1em;
+
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--hi-primary) 85%, var(--hi-primary-alt) 15%) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  }
+
+  &:disabled {
+    background: var(--hi-color-gray-dark) !important;
+    opacity: 0.7 !important;
+  }
+
+  @media (max-width: 768px) {
+    height: 44px !important;
+  }
+}

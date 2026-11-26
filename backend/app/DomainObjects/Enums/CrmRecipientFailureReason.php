@@ -1,0 +1,24 @@
+<?php
+
+namespace HiEvents\DomainObjects\Enums;
+
+enum CrmRecipientFailureReason: string
+{
+    use BaseEnum;
+
+    case PROVIDER_SUPPRESSED = 'PROVIDER_SUPPRESSED';
+    case PROVIDER_UNAVAILABLE = 'PROVIDER_UNAVAILABLE';
+    case PROVIDER_REJECTED = 'PROVIDER_REJECTED';
+    case TIMEOUT = 'TIMEOUT';
+    case UNDELIVERED = 'UNDELIVERED';
+    case SEND_ERROR = 'SEND_ERROR';
+    case UNSUBSCRIBED = 'UNSUBSCRIBED';
+    case BOUNCED = 'BOUNCED';
+    case NO_CONSENT = 'NO_CONSENT';
+    case EMAIL_CHANGED = 'EMAIL_CHANGED';
+    case NO_PHONE = 'NO_PHONE';
+    case COUNTRY_NOT_ENABLED = 'COUNTRY_NOT_ENABLED';
+    case CONTACT_DELETED = 'CONTACT_DELETED';
+    case ALREADY_BOUGHT = 'ALREADY_BOUGHT';
+    case CAMPAIGN_STOPPED = 'CAMPAIGN_STOPPED';
+}

@@ -7,13 +7,14 @@ import {useStartImpersonation} from "../../../../mutations/useStartImpersonation
 import AdminAccountsTable from "../../../common/AdminAccountsTable";
 import {showError, showSuccess} from "../../../../utilites/notifications";
 import {IdParam} from "../../../../types";
-import {useNavigate} from "react-router";
+import {useNavigate, useSearchParams} from "react-router";
 
 const Accounts = () => {
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
-    const [search, setSearch] = useState("");
-    const [debouncedSearch, setDebouncedSearch] = useState("");
+    const [searchParams] = useSearchParams();
+    const [search, setSearch] = useState(searchParams.get('search') ?? "");
+    const [debouncedSearch, setDebouncedSearch] = useState(search);
 
     const {data: accountsData, isLoading} = useGetAllAccounts({
         page,

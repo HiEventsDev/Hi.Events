@@ -1,71 +1,51 @@
-import {Link, useParams} from "react-router";
-import {useGetOrganizer} from "../../../../../queries/useGetOrganizer.ts";
-import {useGetOrganizerStats} from "../../../../../queries/useGetOrganizerStats.ts";
-import {formatCurrency} from "../../../../../utilites/currency.ts";
-import OrganizerReportTable from "../../../../common/OrganizerReportTable";
+import {useParams} from "react-router";
 import {t} from "@lingui/macro";
+import {useGetOrganizer} from "../../../../../queries/useGetOrganizer.ts";
+import {ReportColumn} from "../../../../common/ReportView";
+import {OrganizerReport} from "../OrganizerReport.tsx";
+import {EventLink} from "../EventLink.tsx";
 
-const TaxSummaryReport = () => {
+interface TaxSummaryRow {
+    event_id: number;
+    event_name: string;
+    event_currency: string;
+    tax_name: string;
+    tax_rate: number;
+    total_collected: string;
+    order_count: number;
+    total_order_count: number;
+}
+
+const distinctOrderCount = (rows: TaxSummaryRow[]) => Number(rows[0]?.total_order_count ?? 0);
+
+const TaxSummaryReport = ({description}: { description: string }) => {
     const {organizerId} = useParams();
-    const organizerQuery = useGetOrganizer(organizerId);
-    const organizer = organizerQuery.data;
-
-    const statsQuery = useGetOrganizerStats(organizerId, organizer?.currency);
-    const allCurrencies = statsQuery.data?.all_organizers_currencies || [];
+    const {data: organizer} = useGetOrganizer(organizerId);
 
     if (!organizer) {
         return null;
     }
 
-    const columns = [
-        {
-            key: 'event_name' as const,
-            label: t`Event`,
-            sortable: true,
-            render: (value: string, row: any) => (
-                <Link to={`/manage/event/${row.event_id}/dashboard`} style={{textDecoration: 'none', color: 'inherit'}}>
-                    {value}
-                </Link>
-            )
-        },
-        {
-            key: 'event_currency' as const,
-            label: t`Currency`,
-            sortable: true
-        },
-        {
-            key: 'tax_name' as const,
-            label: t`Tax Name`,
-            sortable: true
-        },
-        {
-            key: 'tax_rate' as const,
-            label: t`Rate`,
-            sortable: true,
-            render: (value: number) => `${value}%`
-        },
-        {
-            key: 'total_collected' as const,
-            label: t`Total Collected`,
-            sortable: true,
-            render: (value: string, row: any) => formatCurrency(value, row.event_currency)
-        },
-        {
-            key: 'order_count' as const,
-            label: t`Orders`,
-            sortable: true
-        }
+    const columns: ReportColumn<TaxSummaryRow>[] = [
+        {key: 'event_name', label: t`Event`, render: row => <EventLink eventId={row.event_id}>{row.event_name}</EventLink>},
+        {key: 'tax_name', label: t`Tax`},
+        {key: 'tax_rate', label: t`Tax rate`, kind: 'count', total: false, render: row => `${Number(row.tax_rate)}%`},
+        {key: 'event_currency', label: t`Currency`},
+        {key: 'total_collected', label: t`Tax collected`, kind: 'money'},
+        {key: 'order_count', label: t`Orders`, kind: 'count', totalValue: distinctOrderCount},
     ];
 
     return (
-        <OrganizerReportTable
-            title={t`Tax Summary`}
-            columns={columns}
-            isLoading={organizerQuery.isLoading}
-            showDateFilter={true}
+        <OrganizerReport<TaxSummaryRow>
+            description={description}
             organizer={organizer}
-            showCurrencyFilter={true}
-            availableCurrencies={allCurrencies}
+            columns={columns}
+            rowCurrency={row => row.event_currency}
+            emptyMessage={t`No tax was collected on completed orders in this period.`}
+            summary={(sum, rows) => [
+                {label: t`Tax collected`, value: sum('total_collected'), kind: 'money'},
+                {label: t`Orders`, value: distinctOrderCount(rows), kind: 'count'},
+            ]}
         />
     );
 };

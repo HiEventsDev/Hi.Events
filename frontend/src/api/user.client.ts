@@ -25,11 +25,11 @@ export interface UpdateUserRequest extends Partial<TeamAccessRequest> {
 
 export const userClient = {
     confirmEmailAddress: async (userId: IdParam, token: string) => {
-        const response = await api.post<GenericDataResponse<User>>(`users/${userId}/confirm-email/${token}`);
+        const response = await api.post<GenericDataResponse<User>>(`users/${userId}/confirm-email/${encodeURIComponent(token)}`);
         return response.data;
     },
     confirmEmailChange: async (userId: IdParam, token: string) => {
-        const response = await api.post<GenericDataResponse<User>>(`users/${userId}/email-change/${token}`);
+        const response = await api.post<GenericDataResponse<User>>(`users/${userId}/email-change/${encodeURIComponent(token)}`);
         return response.data;
     },
     cancelEmailChange: async (userId: IdParam) => {
