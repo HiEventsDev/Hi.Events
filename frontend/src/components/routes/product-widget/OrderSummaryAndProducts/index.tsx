@@ -832,14 +832,16 @@ export const OrderSummaryAndProducts = () => {
                                     {t`Guests`}
                                 </Group>
                             </h1>
-                            <Button
-                                size="sm"
-                                variant="subtle"
-                                leftSection={<IconPrinter size={16}/>}
-                                onClick={() => window?.open(`/order/${eventId}/${orderShortId}/print`, '_blank')}
-                            >
-                                {t`Print All Tickets`}
-                            </Button>
+                            {(order.attendees?.length ?? 0) > 0 && (
+                                <Button
+                                    size="sm"
+                                    variant="subtle"
+                                    leftSection={<IconPrinter size={16}/>}
+                                    onClick={() => window?.open(`/order/${eventId}/${orderShortId}/print`, '_blank')}
+                                >
+                                    {t`Print All Tickets`}
+                                </Button>
+                            )}
                         </Group>
 
                         <Card>

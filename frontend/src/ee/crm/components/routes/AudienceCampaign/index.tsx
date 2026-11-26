@@ -343,7 +343,8 @@ const AudienceCampaign = () => {
     const smsBubbles = isSmsRendered || form.values.body ? smsVariants : typedSmsVariants(organizerName, t`Your message`, smsCountries);
     const smsParts = Math.max(...smsVariants.map(variant => variant.parts));
     const hasSmsPlaceholders = isSmsRendered ? !!smsPreviewQuery.data?.uses_placeholders : form.values.body.includes('{{');
-    const title = campaign ? campaign.subject || campaign.name : (isSms ? t`New text message` : t`New email campaign`);
+    const renderedSubject = (!isSms && previewQuery.data?.subject) || campaign?.subject;
+    const title = campaign ? renderedSubject || campaign.name : (isSms ? t`New text message` : t`New email campaign`);
     const titleNote = campaign?.subject && campaign.name !== campaign.subject ? campaign.name : null;
     const scheduledCount = isSms ? reachableByText : mailable;
     const sentAudience = campaign
@@ -683,6 +684,7 @@ const AudienceCampaign = () => {
                 <SendModal
                     organizerId={organizerId}
                     campaign={campaign}
+                    campaignTitle={title}
                     timezone={timezone}
                     isScheduling={sendModal === 'later'}
                     estimatedSmsParts={smsParts}
