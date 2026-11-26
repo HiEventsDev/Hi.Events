@@ -1,146 +1,146 @@
 import {useState} from 'react';
-import {useAccess} from "../../../hooks/useAccess.ts";
-import {Modal} from '../../common/Modal';
-import {useGetOrganizers} from '../../../queries/useGetOrganizers';
-import {IconArrowsHorizontal, IconBuilding, IconArchive, IconChevronDown, IconChevronRight, IconPlus} from '@tabler/icons-react';
-import {t, Trans} from '@lingui/macro';
+import {t} from '@lingui/macro';
+import {Avatar, Skeleton, TextInput, UnstyledButton, VisuallyHidden} from '@mantine/core';
+import {IconCheck, IconChevronDown, IconChevronRight, IconPlus, IconSearch} from '@tabler/icons-react';
 import {useNavigate, useParams} from 'react-router';
+import {useAccess} from "../../../hooks/useAccess.ts";
+import {useGetOrganizers} from '../../../queries/useGetOrganizers';
+import {Organizer, OrganizerStatus} from "../../../types.ts";
+import {Modal} from '../../common/Modal';
 import classes from './SwitchOrganizerModal.module.scss';
-import {LoadingMask} from '../../common/LoadingMask';
-import {IdParam, OrganizerStatus} from "../../../types.ts";
 
 interface SwitchOrganizerModalProps {
     opened: boolean;
     onClose: () => void;
     onCreateOrganizer?: () => void;
     heading?: string;
-    excludeCurrentOrganizer?: boolean;
 }
 
-export const SwitchOrganizerModal: React.FC<SwitchOrganizerModalProps> = ({
-    opened,
-    onClose,
-    onCreateOrganizer,
-    heading,
-    excludeCurrentOrganizer = true,
-}) => {
+const SEARCHABLE_ORGANIZER_COUNT = 6;
+
+export const SwitchOrganizerModal = ({opened, onClose, onCreateOrganizer, heading}: SwitchOrganizerModalProps) => {
     const navigate = useNavigate();
     const {organizerId: currentOrganizerId} = useParams();
     const {data: organizers, isLoading} = useGetOrganizers();
     const {canManageOrganizer, canCreateOrganizers} = useAccess();
     const [showArchived, setShowArchived] = useState(false);
+    const [query, setQuery] = useState('');
 
-    const handleOrganizerSelect = (organizerId: IdParam) => {
-        navigate(`/manage/organizer/${organizerId}/dashboard`);
+    const manageableOrganizers = organizers?.data?.filter(organizer => canManageOrganizer(organizer.id)) || [];
+    const normalizedQuery = query.trim().toLowerCase();
+    const matchingOrganizers = normalizedQuery
+        ? manageableOrganizers.filter(organizer => organizer.name.toLowerCase().includes(normalizedQuery))
+        : manageableOrganizers;
+    const activeOrganizers = matchingOrganizers.filter(organizer => organizer.status !== OrganizerStatus.ARCHIVED);
+    const archivedOrganizers = matchingOrganizers.filter(organizer => organizer.status === OrganizerStatus.ARCHIVED);
+    const isArchivedListOpen = showArchived || !!normalizedQuery;
+
+    const selectOrganizer = (organizer: Organizer) => {
+        if (String(organizer.id) !== String(currentOrganizerId)) {
+            navigate(`/manage/organizer/${organizer.id}/dashboard`);
+        }
         onClose();
     };
 
-    const manageableOrganizers = organizers?.data?.filter(org => canManageOrganizer(org.id)) || [];
-    const allOrganizers = excludeCurrentOrganizer
-        ? manageableOrganizers.filter(org => String(org.id) !== String(currentOrganizerId))
-        : manageableOrganizers;
-    const activeOrganizers = allOrganizers.filter(org => org.status !== OrganizerStatus.ARCHIVED);
-    const archivedOrganizers = allOrganizers.filter(org => org.status === OrganizerStatus.ARCHIVED);
+    const renderOrganizer = (organizer: Organizer) => {
+        const isCurrent = String(organizer.id) === String(currentOrganizerId);
+        const isArchived = organizer.status === OrganizerStatus.ARCHIVED;
+
+        return (
+            <UnstyledButton
+                key={organizer.id}
+                className={classes.row}
+                data-archived={isArchived || undefined}
+                aria-current={isCurrent || undefined}
+                onClick={() => selectOrganizer(organizer)}
+            >
+                <Avatar
+                    src={organizer.images?.find(image => image.type === 'ORGANIZER_LOGO')?.url}
+                    alt=""
+                    size={32}
+                    radius={8}
+                    color="primary"
+                >
+                    {organizer.name.charAt(0).toUpperCase()}
+                </Avatar>
+                <span className={classes.name}>{organizer.name}</span>
+                {isArchived && <span className={classes.archivedLabel}>{t`Archived`}</span>}
+                {isCurrent && (
+                    <>
+                        <IconCheck className={classes.currentIcon} size={18} stroke={2} aria-hidden/>
+                        <VisuallyHidden>{t`Current organizer`}</VisuallyHidden>
+                    </>
+                )}
+            </UnstyledButton>
+        );
+    };
 
     return (
-        <Modal
-            opened={opened}
-            onClose={onClose}
-            heading={heading || t`Switch Organizer`}
-            modalHeader="branded"
-            size="md"
-        >
-                {isLoading ? (
-                    <LoadingMask/>
-                ) : (
-                    <div className={classes.organizerList}>
-                        {activeOrganizers.length === 0 && archivedOrganizers.length === 0 ? (
-                            <div className={classes.emptyState}>
-                                <IconBuilding size={48} stroke={1.5}/>
-                                <p><Trans>No other organizers available</Trans></p>
-                            </div>
-                        ) : (
-                            <>
-                                {activeOrganizers.map((organizer) => (
-                                    <button
-                                        key={organizer.id}
-                                        className={classes.organizerItem}
-                                        onClick={() => handleOrganizerSelect(organizer.id)}
-                                    >
-                                        <div className={classes.organizerLogo}>
-                                            {organizer.images?.find((image) => image.type === 'ORGANIZER_LOGO') ? (
-                                                <img
-                                                    src={organizer.images.find((image) => image.type === 'ORGANIZER_LOGO')?.url}
-                                                    alt={organizer.name}
-                                                />
-                                            ) : (
-                                                <div className={classes.logoPlaceholder}>
-                                                    <IconBuilding size={20} stroke={1.5}/>
-                                                </div>
-                                            )}
-                                        </div>
-                                        <div className={classes.organizerInfo}>
-                                            <h4 className={classes.organizerName}>{organizer.name}</h4>
-                                        </div>
-                                        <IconArrowsHorizontal size={20} className={classes.selectIcon}/>
-                                    </button>
-                                ))}
-                            </>
-                        )}
+        <Modal opened={opened} onClose={onClose} heading={heading || t`Switch Organizer`} size={440}>
+            {manageableOrganizers.length >= SEARCHABLE_ORGANIZER_COUNT && (
+                <div className={classes.search}>
+                    <TextInput
+                        data-autofocus
+                        aria-label={t`Search organizers`}
+                        placeholder={t`Search...`}
+                        leftSection={<IconSearch size={16} stroke={1.5}/>}
+                        value={query}
+                        onChange={event => setQuery(event.currentTarget.value)}
+                        onKeyDown={event => {
+                            const firstMatch = activeOrganizers[0] ?? archivedOrganizers[0];
+                            if (event.key === 'Enter' && firstMatch) {
+                                selectOrganizer(firstMatch);
+                            }
+                        }}
+                    />
+                </div>
+            )}
 
-                        {canCreateOrganizers && (
-                            <button
-                                className={classes.createButton}
-                                onClick={() => {
-                                    onClose();
-                                    onCreateOrganizer?.();
-                                }}
-                            >
-                                <IconPlus size={18}/>
-                                <Trans>Create Organizer</Trans>
-                            </button>
-                        )}
+            <div className={classes.list}>
+                {isLoading && Array.from({length: 3}, (_, index) => (
+                    <Skeleton key={index} height={36} radius={8} my={6}/>
+                ))}
 
-                        {archivedOrganizers.length > 0 && (
-                            <>
-                                <button
-                                    className={classes.archivedToggle}
-                                    onClick={() => setShowArchived(!showArchived)}
-                                >
-                                    {showArchived ? <IconChevronDown size={16}/> : <IconChevronRight size={16}/>}
-                                    <Trans>Archived Organizers</Trans>
-                                    <span className={classes.archivedCount}>({archivedOrganizers.length})</span>
-                                </button>
-                                {showArchived && archivedOrganizers.map((organizer) => (
-                                    <button
-                                        key={organizer.id}
-                                        className={classes.archivedItem}
-                                        onClick={() => handleOrganizerSelect(organizer.id)}
-                                    >
-                                        <div className={classes.organizerLogo}>
-                                            {organizer.images?.find((image) => image.type === 'ORGANIZER_LOGO') ? (
-                                                <img
-                                                    src={organizer.images.find((image) => image.type === 'ORGANIZER_LOGO')?.url}
-                                                    alt={organizer.name}
-                                                />
-                                            ) : (
-                                                <div className={classes.logoPlaceholder}>
-                                                    <IconBuilding size={20} stroke={1.5}/>
-                                                </div>
-                                            )}
-                                        </div>
-                                        <div className={classes.organizerInfo}>
-                                            <h4 className={classes.organizerName}>{organizer.name}</h4>
-                                        </div>
-                                        <span className={classes.archiveBadge}>
-                                            <IconArchive size={14}/>
-                                        </span>
-                                    </button>
-                                ))}
-                            </>
-                        )}
-                    </div>
+                {!isLoading && matchingOrganizers.length === 0 && (
+                    <p className={classes.empty}>
+                        {normalizedQuery ? t`No search results.` : t`No other organizers available`}
+                    </p>
                 )}
+
+                {activeOrganizers.map(renderOrganizer)}
+
+                {archivedOrganizers.length > 0 && (
+                    <>
+                        <UnstyledButton
+                            className={classes.archivedToggle}
+                            aria-expanded={isArchivedListOpen}
+                            onClick={() => setShowArchived(!showArchived)}
+                        >
+                            {isArchivedListOpen ? <IconChevronDown size={14}/> : <IconChevronRight size={14}/>}
+                            {t`Archived Organizers`}
+                            <span className={classes.archivedCount}>{archivedOrganizers.length}</span>
+                        </UnstyledButton>
+                        {isArchivedListOpen && archivedOrganizers.map(renderOrganizer)}
+                    </>
+                )}
+            </div>
+
+            {canCreateOrganizers && (
+                <div className={classes.footer}>
+                    <UnstyledButton
+                        className={classes.row}
+                        onClick={() => {
+                            onClose();
+                            onCreateOrganizer?.();
+                        }}
+                    >
+                        <span className={classes.createIcon}>
+                            <IconPlus size={16} stroke={1.8}/>
+                        </span>
+                        <span className={classes.createLabel}>{t`Create Organizer`}</span>
+                    </UnstyledButton>
+                </div>
+            )}
         </Modal>
     );
 };

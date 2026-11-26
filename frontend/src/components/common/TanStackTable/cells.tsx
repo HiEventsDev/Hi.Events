@@ -2,29 +2,43 @@ import {ReactNode} from 'react';
 import {t} from '@lingui/macro';
 import {ActionIcon, CopyButton, Tooltip, UnstyledButton} from '@mantine/core';
 import {IconCheck, IconCopy} from '@tabler/icons-react';
+import {Link} from 'react-router';
 import classNames from 'classnames';
 import classes from './cells.module.scss';
 
-interface CellLinkProps {
-    onClick: () => void;
+interface CellLinkBaseProps {
     children: ReactNode;
     title?: string;
     mono?: boolean;
     strong?: boolean;
 }
 
-export const CellLink = ({onClick, children, title, mono, strong}: CellLinkProps) => (
-    <UnstyledButton
-        className={classNames(classes.link, mono && classes.mono, strong && classes.strong)}
-        title={title}
-        onClick={event => {
-            event.stopPropagation();
-            onClick();
-        }}
-    >
-        {children}
-    </UnstyledButton>
-);
+type CellLinkProps = CellLinkBaseProps & ({ onClick: () => void } | { to: string });
+
+export const CellLink = ({children, title, mono, strong, ...target}: CellLinkProps) => {
+    const className = classNames(classes.link, mono && classes.mono, strong && classes.strong);
+
+    if ('to' in target) {
+        return (
+            <Link className={className} title={title} to={target.to} onClick={event => event.stopPropagation()}>
+                {children}
+            </Link>
+        );
+    }
+
+    return (
+        <UnstyledButton
+            className={className}
+            title={title}
+            onClick={event => {
+                event.stopPropagation();
+                target.onClick();
+            }}
+        >
+            {children}
+        </UnstyledButton>
+    );
+};
 
 interface CellTextProps {
     children: ReactNode;

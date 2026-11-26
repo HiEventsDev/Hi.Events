@@ -35,8 +35,8 @@ test.describe('reserved seating setup', () => {
     await expect(page.getByText('Tickets linked')).toBeVisible();
 
     await page.goto(`/manage/organizer/${account.organizerId}/events`);
-    await expect(page.getByText(event.title).first()).toBeVisible();
-    await expect(page.getByText('Seated').first()).toBeVisible();
+    const eventRow = page.getByRole('row').filter({hasText: event.title});
+    await expect(eventRow.getByRole('img', {name: 'Reserved seating'})).toBeVisible();
 
     await api.publishEvent(event.eventId);
     await page.goto(`/event/${event.eventId}/${event.slug}`);

@@ -8,19 +8,17 @@ import {useReturnFocusOnClose} from "../../../hooks/useReturnFocusOnClose.ts";
 
 interface ModalProps {
     heading?: string | React.ReactNode,
-    modalHeader?: 'default' | 'branded',
 }
 
 export const Modal = (props: MantineModalProps & ModalProps) => {
-    const {modalHeader = 'default', heading, children, classNames: customClassNames, ...restProps} = props;
+    const {heading, children, classNames: customClassNames, ...restProps} = props;
     const isSmallScreen = useMediaQuery('(max-width: 575px)', false, {getInitialValueInEffect: false});
-    const isBranded = modalHeader === 'branded';
     const extraClassNames = typeof customClassNames === 'object' ? customClassNames : {};
     useReturnFocusOnClose(restProps.opened && restProps.returnFocus !== false);
 
     return (
         <MantineModal
-            fullScreen={!isBranded && isSmallScreen}
+            fullScreen={isSmallScreen}
             radius="lg"
             padding="lg"
             {...restProps}
@@ -34,9 +32,7 @@ export const Modal = (props: MantineModalProps & ModalProps) => {
             title={heading}
             closeOnClickOutside={false}
             classNames={{
-                title: classNames(classes.modalTitle, isBranded && classes.brandedTitle),
-                header: classNames(isBranded && classes.brandedHeader),
-                close: classNames(isBranded && classes.brandedClose),
+                title: classes.modalTitle,
                 ...extraClassNames,
                 content: classNames(classes.content, extraClassNames.content),
                 body: classNames(classes.body, extraClassNames.body),

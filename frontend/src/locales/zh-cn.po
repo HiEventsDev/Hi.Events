@@ -374,7 +374,7 @@ msgstr "占门票的 {0}"
 msgid "{0} orders"
 msgstr "{0} 个订单"
 
-#: src/components/routes/events/Dashboard/index.tsx:143
+#: src/components/routes/events/Dashboard/index.tsx:94
 msgid "{0} organizers"
 msgstr "{0} 位组织者"
 
@@ -532,7 +532,7 @@ msgstr "本场次有 {attendeeCount} 位参与者已登记。"
 msgid "{attentionCount, plural, one {# refund needs attention} other {# refunds need attention}}"
 msgstr "{attentionCount, plural, other {# 笔退款需要处理}}"
 
-#: src/components/common/EventCard/index.tsx:144
+#: src/utilites/eventSummary.ts:80
 msgid "{availableCount} of {totalCount} available"
 msgstr "{availableCount} / {totalCount} 可用"
 
@@ -1100,7 +1100,7 @@ msgstr "{total, plural, one {正在退订 # 位联系人…} other {正在退订
 msgid "{total, plural, one {Updating # contact…} other {Updating # contacts…}}"
 msgstr "{total, plural, one {正在更新 # 位联系人…} other {正在更新 # 位联系人…}}"
 
-#: src/components/common/EventCard/index.tsx:140
+#: src/utilites/eventSummary.ts:76
 msgid "{totalCount} ticket types"
 msgstr "{totalCount} 个票种"
 
@@ -1383,7 +1383,7 @@ msgstr "1 个时段"
 msgid "1 ticket"
 msgstr "1张门票"
 
-#: src/components/common/EventCard/index.tsx:140
+#: src/utilites/eventSummary.ts:76
 msgid "1 ticket type"
 msgstr "1个票种"
 
@@ -1887,6 +1887,7 @@ msgstr "需要操作:需要提供增值税信息"
 #: src/components/common/CapacityAssignmentList/index.tsx:103
 #: src/components/common/CheckInListTable/index.tsx:145
 #: src/components/common/EntityActions/index.tsx:28
+#: src/components/common/EventsTable/index.tsx:190
 #: src/components/common/LocationsTable/index.tsx:76
 #: src/components/common/LocationsTable/index.tsx:83
 #: src/components/common/OrdersTable/index.tsx:127
@@ -2653,10 +2654,6 @@ msgstr "全部"
 msgid "All"
 msgstr "全部"
 
-#: src/components/routes/events/Dashboard/index.tsx:79
-msgid "All Archived Events"
-msgstr "所有已归档活动"
-
 #: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:43
 msgid "All areas"
 msgstr "所有区域"
@@ -2722,15 +2719,15 @@ msgstr "所有日期 · 共享"
 msgid "All days"
 msgstr "所有日期"
 
-#: src/components/routes/events/Dashboard/index.tsx:77
-msgid "All Ended Events"
-msgstr "所有已结束活动"
-
 #: src/components/common/WidgetEditor/ContentFields.tsx:180
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:128
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:128
 msgid "All events"
 msgstr "所有活动"
+
+#: src/components/routes/events/Dashboard/index.tsx:80
+msgid "All events across your organizers."
+msgstr "您所有主办方的全部活动。"
 
 #: src/components/routes/admin/FailedJobs/index.tsx:94
 msgid "All failed jobs deleted"
@@ -2806,10 +2803,6 @@ msgstr "已移除所有受信任设备"
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:182
 msgid "All upcoming"
 msgstr "所有即将到来的日期"
-
-#: src/components/routes/events/Dashboard/index.tsx:75
-msgid "All Upcoming Events"
-msgstr "所有即将到来的活动"
 
 #: src/components/routes/admin/Announcements/index.tsx:78
 #: src/components/routes/admin/Announcements/index.tsx:435
@@ -3334,7 +3327,7 @@ msgstr "4 月"
 msgid "Archive"
 msgstr "归档"
 
-#: src/components/common/EventCard/index.tsx:169
+#: src/hooks/useEventActions.tsx:73
 msgid "Archive event"
 msgstr "归档活动"
 
@@ -3356,14 +3349,15 @@ msgstr "归档此活动以向公众隐藏。您可以稍后恢复它。"
 msgid "Archive this organizer. This will also archive all events belonging to this organizer."
 msgstr "归档此主办方。这也将归档属于此主办方的所有活动。"
 
-#: src/components/common/EventCard/index.tsx:90
-#: src/components/common/EventsDashboardStatusButtons/index.tsx:32
+#: src/components/common/EventsStatusControl/index.tsx:33
+#: src/components/modals/SwitchOrganizerModal/index.tsx:67
 #: src/components/routes/event/Lineup/EventStatusBadge.tsx:12
 #: src/components/routes/settings/Organizers/index.tsx:21
+#: src/utilites/eventSummary.ts:22
 msgid "Archived"
 msgstr "已归档"
 
-#: src/components/modals/SwitchOrganizerModal/index.tsx:111
+#: src/components/modals/SwitchOrganizerModal/index.tsx:120
 msgid "Archived Organizers"
 msgstr "已归档的主办方"
 
@@ -3379,7 +3373,7 @@ msgstr "确定此活动不是垃圾内容吗？它将立即发布。"
 msgid "Are you sure you want to activate this attendee?"
 msgstr "您确定要激活该与会者吗？"
 
-#: src/components/common/EventCard/index.tsx:70
+#: src/hooks/useEventActions.tsx:33
 msgid "Are you sure you want to archive this event?"
 msgstr "您确定要归档此活动吗?"
 
@@ -3511,7 +3505,7 @@ msgstr "您确定要将门票重新发送到 {0} 吗？"
 msgid "Are you sure you want to restore this event?"
 msgstr "您确定要恢复此活动吗？"
 
-#: src/components/common/EventCard/index.tsx:71
+#: src/hooks/useEventActions.tsx:34
 msgid "Are you sure you want to restore this event? It will be restored as a draft event."
 msgstr "您确定要恢复此活动吗？它将作为草稿恢复。"
 
@@ -3794,8 +3788,8 @@ msgid "attendees"
 msgstr "位参与者"
 
 #: src/components/common/AdminEventsTable/index.tsx:76
-#: src/components/common/EventCard/index.tsx:271
-#: src/components/common/EventCard/index.tsx:397
+#: src/components/common/EventCard/index.tsx:135
+#: src/components/common/EventsTable/index.tsx:166
 #: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:60
 #: src/components/common/ProductsTable/index.tsx:96
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:530
@@ -3829,10 +3823,6 @@ msgstr "位参与者已签到"
 #: src/components/routes/event/attendees.tsx:164
 msgid "Attendees Exported"
 msgstr "与会者已导出"
-
-#: src/components/common/EventCard/index.tsx:394
-msgid "Attendees registered"
-msgstr "已注册参会者"
 
 #: src/components/common/StatsCharts/index.tsx:56
 msgid "Attendees Registered"
@@ -5705,7 +5695,7 @@ msgstr "选择区域"
 msgid "Choose an organizer"
 msgstr "选择主办方"
 
-#: src/components/routes/events/Dashboard/index.tsx:236
+#: src/components/routes/events/Dashboard/index.tsx:201
 msgid "Choose an Organizer"
 msgstr "选择一个组织者"
 
@@ -5948,7 +5938,7 @@ msgid "close"
 msgstr "关闭"
 
 #: src/components/common/BrandingUpsell/BrandingUpgradeModal.tsx:41
-#: src/components/common/Modal/index.tsx:33
+#: src/components/common/Modal/index.tsx:31
 #: src/components/common/SideDrawer/index.tsx:117
 #: src/components/common/TicketResale/SellTicketModal.tsx:122
 #: src/components/common/WidgetEditor/WidgetPreview.tsx:128
@@ -6663,7 +6653,7 @@ msgstr "Cookie 设置"
 #: src/components/common/AttendeeTicket/index.tsx:229
 #: src/components/common/CopyButton/index.tsx:14
 #: src/components/common/OfflinePaymentDetails/index.tsx:31
-#: src/components/common/TanStackTable/cells.tsx:79
+#: src/components/common/TanStackTable/cells.tsx:93
 #: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:84
 #: src/components/common/WidgetEditor/index.tsx:221
 #: src/components/common/WidgetEditor/InstallPanel.tsx:52
@@ -6699,8 +6689,8 @@ msgstr "复制分步说明，可粘贴到 ChatGPT、Claude、Cursor 或网站建
 
 #: src/components/common/CopyButton/index.tsx:14
 #: src/components/common/OfflinePaymentDetails/index.tsx:31
-#: src/components/common/TanStackTable/cells.tsx:79
-#: src/components/common/TanStackTable/cells.tsx:86
+#: src/components/common/TanStackTable/cells.tsx:93
+#: src/components/common/TanStackTable/cells.tsx:100
 #: src/components/modals/CheckInListSuccessModal/index.tsx:42
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:74
 #: src/components/modals/ManageOrderModal/index.tsx:240
@@ -7242,7 +7232,7 @@ msgstr "创建活动"
 
 #: src/components/common/NoEventsBlankSlate/index.tsx:28
 #: src/components/layouts/OrganizerLayout/index.tsx:248
-#: src/components/routes/organizer/Events/index.tsx:66
+#: src/components/routes/organizer/Events/index.tsx:54
 msgid "Create Event"
 msgstr "创建活动"
 
@@ -7262,7 +7252,7 @@ msgstr "创建密钥"
 msgid "Create more tickets or products to offer them as add-ons"
 msgstr "创建更多门票或产品，即可将它们作为附加产品提供"
 
-#: src/components/routes/events/Dashboard/index.tsx:175
+#: src/components/routes/events/Dashboard/index.tsx:139
 msgid "Create new"
 msgstr "创建新的"
 
@@ -7277,7 +7267,7 @@ msgid "Create organizer"
 msgstr "创建主办方"
 
 #: src/components/common/GlobalMenu/index.tsx:104
-#: src/components/modals/SwitchOrganizerModal/index.tsx:100
+#: src/components/modals/SwitchOrganizerModal/index.tsx:140
 msgid "Create Organizer"
 msgstr "创建组织器"
 
@@ -7438,6 +7428,10 @@ msgstr "货币"
 #: src/components/routes/welcome/FirstEventStep.tsx:86
 msgid "Currency is required"
 msgstr "货币为必填项"
+
+#: src/components/modals/SwitchOrganizerModal/index.tsx:71
+msgid "Current organizer"
+msgstr "当前主办方"
 
 #: src/components/common/ConfirmIdentity/index.tsx:70
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:40
@@ -7636,6 +7630,7 @@ msgstr "Dashboard"
 #: src/components/common/AdminOrdersTable/index.tsx:83
 #: src/components/common/AttendeeTable/index.tsx:227
 #: src/components/common/CheckInListTable/index.tsx:90
+#: src/components/common/EventsTable/index.tsx:127
 #: src/components/common/OrderDetails/index.tsx:44
 #: src/components/common/OrdersTable/index.tsx:271
 #: src/components/common/WaitlistTable/index.tsx:178
@@ -8559,7 +8554,6 @@ msgstr "下载电子表格 (.xlsx)"
 msgid "Downloading Invoice"
 msgstr "正在下载发票"
 
-#: src/components/common/EventCard/index.tsx:99
 #: src/components/layouts/Event/index.tsx:261
 #: src/components/layouts/OrganizerLayout/index.tsx:298
 #: src/components/routes/admin/Announcements/index.tsx:134
@@ -8567,6 +8561,7 @@ msgstr "正在下载发票"
 #: src/components/routes/event/Lineup/EventStatusBadge.tsx:10
 #: src/components/routes/settings/Organizers/index.tsx:23
 #: src/ee/crm/utilites/labels.ts:157
+#: src/utilites/eventSummary.ts:31
 msgid "Draft"
 msgstr "草稿"
 
@@ -8672,7 +8667,7 @@ msgstr "复制 {0}"
 msgid "Duplicate Date"
 msgstr "复制日期"
 
-#: src/components/common/EventCard/index.tsx:162
+#: src/hooks/useEventActions.tsx:66
 msgid "Duplicate event"
 msgstr "复制活动"
 
@@ -9453,10 +9448,10 @@ msgstr "结束日期必须在开始日期之后"
 msgid "End time"
 msgstr "结束时间"
 
-#: src/components/common/EventCard/index.tsx:93
-#: src/components/common/EventsDashboardStatusButtons/index.tsx:26
+#: src/components/common/EventsStatusControl/index.tsx:32
 #: src/components/common/EventStatusBadge/index.tsx:14
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:134
+#: src/utilites/eventSummary.ts:25
 msgid "Ended"
 msgstr "完工"
 
@@ -9742,12 +9737,13 @@ msgid "Even numbers only"
 msgstr "仅偶数"
 
 #: src/components/common/AdminOrdersTable/index.tsx:55
+#: src/components/common/EventsTable/index.tsx:60
 #: src/components/routes/admin/Dashboard/index.tsx:50
 #: src/components/routes/admin/Messages/index.tsx:152
 #: src/components/routes/admin/Messages/index.tsx:325
 #: src/components/routes/admin/SpamEvents/index.tsx:139
 #: src/components/routes/admin/SpamEvents/index.tsx:316
-#: src/components/routes/events/Dashboard/index.tsx:188
+#: src/components/routes/events/Dashboard/index.tsx:149
 #: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:32
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:52
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:60
@@ -9902,16 +9898,16 @@ msgstr "活动设置"
 msgid "Event setup"
 msgstr "活动设置"
 
-#: src/components/common/EventCard/index.tsx:82
 #: src/components/common/StatusToggle/index.tsx:62
 #: src/components/layouts/Event/index.tsx:223
 #: src/components/modals/PublishEventModal/index.tsx:153
+#: src/hooks/useEventActions.tsx:45
 msgid "Event status update failed. Please try again later"
 msgstr "活动状态更新失败。请稍后再试"
 
-#: src/components/common/EventCard/index.tsx:79
 #: src/components/common/StatusToggle/index.tsx:54
 #: src/components/layouts/Event/index.tsx:220
+#: src/hooks/useEventActions.tsx:42
 msgid "Event status updated"
 msgstr "事件状态已更新"
 
@@ -9955,7 +9951,8 @@ msgstr "活动已更新"
 #: src/components/routes/admin/Dashboard/index.tsx:322
 #: src/components/routes/admin/Events/index.tsx:80
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:236
-#: src/components/routes/organizer/Events/index.tsx:46
+#: src/components/routes/events/Dashboard/index.tsx:81
+#: src/components/routes/organizer/Events/index.tsx:34
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:84
 #: src/components/routes/organizer/Reports/index.tsx:31
 #: src/ee/crm/components/ContactDrawer/index.tsx:175
@@ -10783,6 +10780,7 @@ msgstr "按角色筛选"
 msgid "Filter by sign-in method"
 msgstr "按登录方式筛选"
 
+#: src/components/common/EventsStatusControl/index.tsx:27
 #: src/components/routes/event/Resale/index.tsx:98
 msgid "Filter by status"
 msgstr "按状态筛选"
@@ -11556,10 +11554,6 @@ msgstr "网格"
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:88
 msgid "Gross"
 msgstr "总额"
-
-#: src/components/common/EventCard/index.tsx:400
-msgid "Gross revenue"
-msgstr "总收入"
 
 #: src/components/common/StatBoxes/index.tsx:96
 #: src/components/modals/ProductPurchasesModal/index.tsx:211
@@ -13482,13 +13476,13 @@ msgstr "挂牌已关闭。已通过电子邮件通知卖家。"
 msgid "Listing withdrawn. Your ticket works again."
 msgstr "挂牌已撤回。你的门票恢复可用。"
 
-#: src/components/common/EventCard/index.tsx:102
 #: src/components/layouts/Event/index.tsx:263
 #: src/components/layouts/OrganizerLayout/index.tsx:300
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:122
 #: src/components/routes/event/Lineup/EventStatusBadge.tsx:8
 #: src/components/routes/settings/Organizers/index.tsx:19
 #: src/ee/crm/components/routes/AudienceForms/index.tsx:130
+#: src/utilites/eventSummary.ts:34
 msgid "Live"
 msgstr "上线"
 
@@ -13579,6 +13573,7 @@ msgstr "从 {service} 加载内容"
 
 #: src/components/common/AttendeeTicket/index.tsx:139
 #: src/components/common/AttendeeTicket/index.tsx:146
+#: src/components/common/EventsTable/index.tsx:145
 #: src/components/common/LocationPicker/index.tsx:173
 #: src/components/common/LocationPicker/index.tsx:221
 #: src/components/common/LocationPicker/index.tsx:294
@@ -13746,7 +13741,7 @@ msgstr "管理重复活动的日期和时间"
 msgid "Manage defaults"
 msgstr "管理默认值"
 
-#: src/components/common/EventCard/index.tsx:157
+#: src/hooks/useEventActions.tsx:61
 msgid "Manage event"
 msgstr "管理活动"
 
@@ -14326,11 +14321,11 @@ msgstr "多选下拉菜单"
 msgid "Multiple dates until {lastOccurrenceDate}"
 msgstr "多个日期，截至 {lastOccurrenceDate}"
 
-#: src/components/common/EventCard/index.tsx:111
 #: src/components/layouts/EventHomepage/index.tsx:112
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:29
 #: src/components/layouts/OrganizerHomepage/EventList/index.tsx:38
 #: src/components/widget/WidgetSections/index.tsx:58
+#: src/utilites/eventSummary.ts:45
 msgid "Multiple locations"
 msgstr "多个地点"
 
@@ -14945,8 +14940,8 @@ msgstr "尚无联系人。一旦有人预订，他们就会出现在这里。"
 msgid "No countries found"
 msgstr "未找到国家/地区"
 
-#: src/components/common/EventCard/index.tsx:241
-#: src/components/common/EventCard/index.tsx:339
+#: src/components/common/EventCard/index.tsx:105
+#: src/components/common/EventsTable/index.tsx:131
 msgid "No date added"
 msgstr "未添加日期"
 
@@ -15207,7 +15202,7 @@ msgstr "没有可用的主办方上下文。"
 msgid "No organizers yet."
 msgstr "还没有主办方。"
 
-#: src/components/modals/SwitchOrganizerModal/index.tsx:60
+#: src/components/modals/SwitchOrganizerModal/index.tsx:106
 msgid "No other organizers available"
 msgstr "无其他可用组织者"
 
@@ -15364,6 +15359,7 @@ msgid "No Search Results"
 msgstr "没有搜索结果"
 
 #: src/components/common/NoResultsSplash/index.tsx:29
+#: src/components/modals/SwitchOrganizerModal/index.tsx:106
 msgid "No search results."
 msgstr "没有搜索结果。"
 
@@ -16102,9 +16098,9 @@ msgstr "在已上线的活动中"
 msgid "On now"
 msgstr "正在进行"
 
-#: src/components/common/EventCard/index.tsx:104
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:140
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:37
+#: src/utilites/eventSummary.ts:36
 msgid "On Sale"
 msgstr "销售中"
 
@@ -16224,7 +16220,6 @@ msgstr "每人一个档案，由每笔订单、门票、签到和注册汇总而
 msgid "Ongoing"
 msgstr "持续进行"
 
-#: src/components/common/EventCard/index.tsx:114
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:32
 #: src/components/routes/event/OccurrencesTab/index.tsx:343
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:482
@@ -16232,6 +16227,7 @@ msgstr "持续进行"
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:393
 #: src/ee/box-office/components/layouts/BoxOffice/ReaderPicker.tsx:16
 #: src/ee/box-office/components/routes/organizer/Payments/TerminalReaders/index.tsx:36
+#: src/utilites/eventSummary.ts:49
 msgid "Online"
 msgstr "在线"
 
@@ -16239,10 +16235,10 @@ msgstr "在线"
 msgid "Online — provide connection details"
 msgstr "线上 — 请填写连接信息"
 
-#: src/components/common/EventCard/index.tsx:111
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:29
 #: src/components/layouts/OrganizerHomepage/EventList/index.tsx:38
 #: src/components/widget/WidgetSections/index.tsx:58
+#: src/utilites/eventSummary.ts:45
 msgid "Online & in-person"
 msgstr "线上与线下"
 
@@ -17008,7 +17004,8 @@ msgstr "组织名称"
 #: src/components/modals/CreateEventModal/index.tsx:270
 #: src/components/routes/admin/SpamEvents/index.tsx:147
 #: src/components/routes/admin/SpamEvents/index.tsx:331
-#: src/components/routes/events/Dashboard/index.tsx:198
+#: src/components/routes/events/Dashboard/index.tsx:116
+#: src/components/routes/events/Dashboard/index.tsx:157
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:496
 #: src/components/widget/WidgetSections/index.tsx:135
 #: src/ee/crm/components/routes/AdminCampaignReview/index.tsx:177
@@ -17581,9 +17578,9 @@ msgstr "待处理邀请"
 msgid "Pending review"
 msgstr "等待审核"
 
-#: src/components/common/EventCard/index.tsx:96
 #: src/components/layouts/Event/index.tsx:259
 #: src/components/routes/admin/Messages/index.tsx:270
+#: src/utilites/eventSummary.ts:28
 msgid "Pending Review"
 msgstr "待审核"
 
@@ -18944,9 +18941,9 @@ msgstr "恢复码"
 msgid "Rectangular"
 msgstr "矩形"
 
-#: src/components/common/EventCard/index.tsx:224
-#: src/components/common/EventCard/index.tsx:328
-#: src/components/common/EventCard/index.tsx:343
+#: src/components/common/EventCard/index.tsx:88
+#: src/components/common/EventsTable/index.tsx:88
+#: src/components/common/EventsTable/index.tsx:89
 msgid "Recurring"
 msgstr "重复"
 
@@ -19632,8 +19629,9 @@ msgstr "已预订"
 msgid "reserved seating"
 msgstr "预留座位"
 
-#: src/components/common/EventCard/index.tsx:229
-#: src/components/common/EventCard/index.tsx:329
+#: src/components/common/EventCard/index.tsx:93
+#: src/components/common/EventsTable/index.tsx:95
+#: src/components/common/EventsTable/index.tsx:96
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:365
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:8
 #: src/ee/licensing/licenceNotice.ts:55
@@ -19720,7 +19718,7 @@ msgstr "恢复 {removedSeats} 个已移除座位"
 msgid "Restore contact"
 msgstr "恢复联系人"
 
-#: src/components/common/EventCard/index.tsx:169
+#: src/hooks/useEventActions.tsx:73
 msgid "Restore event"
 msgstr "恢复活动"
 
@@ -19826,8 +19824,8 @@ msgstr "复用本账户中其他主办方的 Stripe 连接。"
 
 #: src/components/common/AffiliateTable/index.tsx:105
 #: src/components/common/AffiliateTable/index.tsx:106
-#: src/components/common/EventCard/index.tsx:275
-#: src/components/common/EventCard/index.tsx:405
+#: src/components/common/EventCard/index.tsx:139
+#: src/components/common/EventsTable/index.tsx:176
 #: src/components/common/StatsCharts/index.tsx:70
 #: src/components/common/WidgetEditor/WidgetStats.tsx:18
 #: src/components/routes/admin/Attribution/index.tsx:134
@@ -20508,8 +20506,8 @@ msgstr "按账户名称或电子邮件搜索..."
 msgid "Search by attendee name, email or order #..."
 msgstr "按与会者姓名、电子邮件或订单号搜索..."
 
-#: src/components/routes/events/Dashboard/index.tsx:153
-#: src/components/routes/organizer/Events/index.tsx:51
+#: src/components/routes/events/Dashboard/index.tsx:104
+#: src/components/routes/organizer/Events/index.tsx:41
 msgid "Search by event name..."
 msgstr "按活动名称搜索..."
 
@@ -20635,6 +20633,10 @@ msgstr "搜索姓名或邮箱"
 msgid "Search orders"
 msgstr "搜索订单"
 
+#: src/components/modals/SwitchOrganizerModal/index.tsx:84
+msgid "Search organizers"
+msgstr "搜索主办方"
+
 #: src/components/common/TeamAccessFields/index.tsx:236
 msgid "Search organizers and events"
 msgstr "搜索主办方和活动"
@@ -20669,6 +20671,7 @@ msgid "Search your saved profiles or type a new name in the {lineupLabel} panel.
 msgstr "搜索已保存的简介，或在{lineupLabel}面板中输入新名字。可为每人添加照片、简介和链接。"
 
 #: src/components/common/SearchBar/index.tsx:35
+#: src/components/modals/SwitchOrganizerModal/index.tsx:85
 msgid "Search..."
 msgstr "搜索..."
 
@@ -20767,10 +20770,6 @@ msgstr "座位销售情况与保留座位"
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:43
 msgid "Seat spacing"
 msgstr "座位间距"
-
-#: src/components/common/EventCard/index.tsx:349
-msgid "Seated"
-msgstr "对号入座"
 
 #: src/components/layouts/Event/index.tsx:139
 #: src/components/routes/event/Reports/index.tsx:62
@@ -22321,7 +22320,6 @@ msgstr "由 {operatorName} 销售"
 msgid "sold out"
 msgstr "已售罄"
 
-#: src/components/common/EventCard/index.tsx:136
 #: src/components/common/EventDateRange/index.tsx:65
 #: src/components/common/ProductPriceAvailability/index.tsx:21
 #: src/components/common/ProductPriceAvailability/index.tsx:61
@@ -22334,6 +22332,7 @@ msgstr "已售罄"
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:54
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:85
 #: src/utilites/eventListingLabels.ts:18
+#: src/utilites/eventSummary.ts:72
 msgid "Sold out"
 msgstr "售罄"
 
@@ -22914,6 +22913,7 @@ msgstr "统计"
 #: src/components/common/AttendeeTable/index.tsx:246
 #: src/components/common/CapacityAssignmentList/index.tsx:94
 #: src/components/common/CheckInListTable/index.tsx:132
+#: src/components/common/EventsTable/index.tsx:118
 #: src/components/common/OrderDetails/index.tsx:73
 #: src/components/common/OrdersTable/index.tsx:221
 #: src/components/common/ProductsTable/index.tsx:100
@@ -23447,7 +23447,7 @@ msgid "Switch date"
 msgstr "切换日期"
 
 #: src/components/layouts/OrganizerLayout/index.tsx:95
-#: src/components/modals/SwitchOrganizerModal/index.tsx:49
+#: src/components/modals/SwitchOrganizerModal/index.tsx:79
 msgid "Switch Organizer"
 msgstr "切换组织者"
 
@@ -24884,7 +24884,7 @@ msgstr "该活动正在等待人工审核，审核完成前无法发布。"
 msgid "This event is pending manual review and is not visible to the public"
 msgstr "该活动正在等待人工审核，公众无法看到"
 
-#: src/components/common/EventCard/index.tsx:65
+#: src/hooks/useEventActions.tsx:28
 msgid "This event is pending manual review and its status cannot be changed until the review is complete."
 msgstr "该活动正在等待人工审核，审核完成前无法更改其状态。"
 
@@ -25521,6 +25521,7 @@ msgstr "票务与销售"
 msgid "tickets"
 msgstr "门票"
 
+#: src/components/common/EventsTable/index.tsx:154
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:96
 #: src/components/common/WidgetEditor/SectionsPicker.tsx:28
 #: src/components/common/WidgetEditor/TypePicker.tsx:7
@@ -26655,7 +26656,7 @@ msgstr "每个日期最多 {perDateAllocation}"
 msgid "Up to 40 photos, at least 400 × 300px. The first one is shown largest."
 msgstr "最多 40 张照片，尺寸至少 400 × 300px。第一张显示最大。"
 
-#: src/components/common/EventsDashboardStatusButtons/index.tsx:20
+#: src/components/common/EventsStatusControl/index.tsx:31
 #: src/components/common/EventStatusBadge/index.tsx:16
 #: src/components/layouts/OrganizerEventsWidget/index.tsx:137
 #: src/components/layouts/OrganizerHomepage/index.tsx:153
@@ -27278,7 +27279,7 @@ msgstr "查看活动"
 msgid "View Event"
 msgstr "查看活动"
 
-#: src/components/common/EventCard/index.tsx:152
+#: src/hooks/useEventActions.tsx:56
 msgid "View event page"
 msgstr "查看活动页面"
 
@@ -28184,10 +28185,6 @@ msgstr "欢迎回来{0} 👋"
 #: src/ee/crm/utilites/labels.ts:276
 msgid "Welcome first-timers"
 msgstr "欢迎首次参加者"
-
-#: src/components/routes/events/Dashboard/index.tsx:89
-msgid "Welcome to {0}, here's a listing of all your events"
-msgstr "欢迎来到 {0}，这是您所有活动的列表"
 
 #: src/constants/eventCategories.ts:20
 msgid "Wellness"

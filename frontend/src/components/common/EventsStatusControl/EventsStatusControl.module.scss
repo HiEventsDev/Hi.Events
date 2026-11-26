@@ -1,0 +1,15 @@
+@container toolbar (max-width: 479px) {
+  .control {
+    display: flex;
+    flex: 1 1 auto;
+    min-width: 0;
+
+    :global(.mantine-SegmentedControl-control) {
+      flex: 1 1 auto;
+    }
+
+    :global(.mantine-SegmentedControl-label) {
+      padding-inline: 4px;
+    }
+  }
+}
