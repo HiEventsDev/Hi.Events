@@ -20,6 +20,7 @@ class MessageResource extends JsonResource
             'subject' => $this->getSubject(),
             'message' => $this->getMessage(),
             'type' => $this->getType(),
+            'is_test' => $this->isTest(),
             'attendee_ids' => $this->getAttendeeIds(),
             'order_id' => $this->getOrderId(),
             'product_ids' => $this->getProductIds(),

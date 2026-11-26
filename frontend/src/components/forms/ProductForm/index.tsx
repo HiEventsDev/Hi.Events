@@ -59,6 +59,7 @@ import {
     addonsSummary,
     descriptionSummary,
     afterPurchaseSummary,
+    canBeResold,
     eventPageSummary,
     highlightSummary,
     orderLimitsSummary,
@@ -644,12 +645,14 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                                 label={t`Holders can transfer this ticket`}
                                 description={t`Applies when ticket transfers are enabled in the event settings. Turn this off for tickets that must stay with the person they were issued to.`}
                             />
-                            <Switch
-                                {...form.getInputProps('is_resellable', {type: 'checkbox'})}
-                                data-testid="product-resellable-switch"
-                                label={t`Buyers can resell this ticket`}
-                                description={t`Applies when ticket resale is enabled in the event settings.`}
-                            />
+                            {canBeResold(form.values) && (
+                                <Switch
+                                    {...form.getInputProps('is_resellable', {type: 'checkbox'})}
+                                    data-testid="product-resellable-switch"
+                                    label={t`Buyers can resell this ticket`}
+                                    description={t`Applies when ticket resale is enabled in the event settings.`}
+                                />
+                            )}
                         </div>
                     </LedgerRow>
                 )}

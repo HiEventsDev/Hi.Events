@@ -25,7 +25,7 @@ test.describe('message lifecycle', () => {
     await messages.goto(event.eventId);
     await messages.sendToAllAttendees(subject, 'Parking is available on Level 2.');
 
-    await expect(messages.listItem(subject).getByText('SENT', { exact: true })).toBeVisible();
+    await expect(messages.listItem(subject).getByText('Sent', { exact: true })).toBeVisible();
     await messages.openSentMessageRecipients();
 
     await expect(authedPage.getByText(event.attendeeEmail)).toBeVisible();
@@ -41,10 +41,10 @@ test.describe('message lifecycle', () => {
     await messages.goto(event.eventId);
     await messages.scheduleToAllAttendees(subject, 'The event starts soon!', scheduledAt);
 
-    await expect(messages.listItem(subject).getByText('SCHEDULED', { exact: true })).toBeVisible();
+    await expect(messages.listItem(subject).getByText('Scheduled', { exact: true })).toBeVisible();
 
     await messages.cancelScheduledMessage();
 
-    await expect(messages.listItem(subject).getByText('CANCELLED', { exact: true })).toBeVisible();
+    await expect(messages.listItem(subject).getByText('Cancelled', { exact: true })).toBeVisible();
   });
 });

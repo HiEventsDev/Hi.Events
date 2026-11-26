@@ -22,6 +22,7 @@ import classes from "./Campaign.module.scss";
 interface SendModalProps {
     organizerId: IdParam;
     campaign: CrmCampaign;
+    campaignTitle: string;
     timezone: string;
     isScheduling: boolean;
     estimatedSmsParts: number;
@@ -108,7 +109,7 @@ const SmsFacts = ({estimate, recipients, estimatedParts, timezone, isScheduling}
     );
 };
 
-export const SendModal = ({organizerId, campaign, timezone, isScheduling, estimatedSmsParts, onClose}: SendModalProps) => {
+export const SendModal = ({organizerId, campaign, campaignTitle, timezone, isScheduling, estimatedSmsParts, onClose}: SendModalProps) => {
     const sendCampaign = useSendCrmCampaign();
     const checkQuery = useGetCrmCampaignSendCheck(organizerId, campaign.id, isScheduling);
     const check = checkQuery.data;
@@ -125,7 +126,6 @@ export const SendModal = ({organizerId, campaign, timezone, isScheduling, estima
     }, isSms);
     const isCountedAtSend = isScheduling && !requiresReview;
     const reviewNotice = campaignStatusReason(check?.review_reason ?? null);
-    const campaignTitle = campaign.subject ?? campaign.name;
 
     const handleSend = () => sendCampaign.mutate({
         organizerId,
