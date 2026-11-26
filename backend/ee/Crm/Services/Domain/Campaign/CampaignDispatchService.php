@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace HiEvents\Enterprise\Crm\Services\Domain\Campaign;
 
 use Carbon\CarbonInterface;
+use HiEvents\DomainObjects\CrmCampaignDomainObject;
 use HiEvents\DomainObjects\Enums\SmsCountry;
 use HiEvents\DomainObjects\Generated\CrmCampaignDomainObjectAbstract;
 use HiEvents\DomainObjects\Status\CrmCampaignStatus;
@@ -13,12 +14,15 @@ use HiEvents\Enterprise\Crm\Jobs\SendCampaignEmailJob;
 use HiEvents\Enterprise\Crm\Jobs\SendCampaignSmsJob;
 use HiEvents\Enterprise\Crm\Repository\Interfaces\CrmCampaignRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
+use HiEvents\Services\Domain\Account\AccountSuspensionService;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Database\DatabaseManager;
 
 class CampaignDispatchService
 {
     public const REASON_ORGANIZER_DELETED = 'ORGANIZER_DELETED';
+
+    public const REASON_ACCOUNT_SUSPENDED = 'ACCOUNT_SUSPENDED';
 
     public const WAVE_SIZE = 500;
 
@@ -41,6 +45,7 @@ class CampaignDispatchService
     public function __construct(
         private readonly CrmCampaignRepositoryInterface $campaignRepository,
         private readonly OrganizerRepositoryInterface $organizerRepository,
+        private readonly AccountSuspensionService $accountSuspensionService,
         private readonly CacheRepository $cache,
         private readonly DatabaseManager $databaseManager,
     ) {}
@@ -56,6 +61,10 @@ class CampaignDispatchService
         if ($this->organizerRepository->findFirstWhere(['id' => $campaign->getOrganizerId()]) === null) {
             $this->cancelForDeletedOrganizer($campaignId);
 
+            return;
+        }
+
+        if ($this->pauseIfAccountSuspended($campaign)) {
             return;
         }
 
@@ -92,6 +101,23 @@ class CampaignDispatchService
             ]);
             $this->campaignRepository->skipPendingRecipients($campaignId);
         });
+    }
+
+    public function pauseIfAccountSuspended(CrmCampaignDomainObject $campaign): bool
+    {
+        if (! $this->accountSuspensionService->isAccountSuspended($campaign->getAccountId())) {
+            return false;
+        }
+
+        $this->databaseManager->transaction(function () use ($campaign): void {
+            $this->campaignRepository->transitionStatus($campaign->getId(), [CrmCampaignStatus::SENDING->value], [
+                CrmCampaignDomainObjectAbstract::STATUS => CrmCampaignStatus::PAUSED->value,
+                CrmCampaignDomainObjectAbstract::STATUS_REASON => self::REASON_ACCOUNT_SUSPENDED,
+            ]);
+            $this->campaignRepository->skipPendingRecipients($campaign->getId());
+        });
+
+        return true;
     }
 
     public function restart(int $campaignId): void

@@ -58,6 +58,10 @@ class CampaignDeliveryService
             return;
         }
 
+        if ($this->dispatchService->pauseIfAccountSuspended($campaign)) {
+            return;
+        }
+
         $isStillSubscribed = $recipient->contact_id !== null
             && $recipient->contact_email === $recipient->email
             && $recipient->email_marketing_status === CrmEmailMarketingStatus::SUBSCRIBED->value;

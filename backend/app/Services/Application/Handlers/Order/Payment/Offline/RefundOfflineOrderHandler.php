@@ -95,7 +95,11 @@ class RefundOfflineOrderHandler
             throw new RefundNotPossibleException(__('This order has already been fully refunded.'));
         }
 
-        if ($amount > $order->getTotalGross() - $order->getTotalRefunded()) {
+        $currency = $order->getCurrency();
+        $leftToRefund = MoneyValue::fromFloat($order->getTotalGross(), $currency)->toMinorUnit()
+            - MoneyValue::fromFloat($order->getTotalRefunded(), $currency)->toMinorUnit();
+
+        if (MoneyValue::fromFloat($amount, $currency)->toMinorUnit() > $leftToRefund) {
             throw new RefundNotPossibleException(__('The refund amount cannot exceed the amount available to refund.'));
         }
     }

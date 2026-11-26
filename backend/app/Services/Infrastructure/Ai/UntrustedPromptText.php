@@ -34,12 +34,26 @@ class UntrustedPromptText
      */
     public function extractLinks(string $content): array
     {
+        return array_slice($this->everyLinkIn($content), 0, self::MAX_LINKS);
+    }
+
+    public function holdsMoreThanIsRead(string $html, int $maxLength): bool
+    {
+        return mb_strlen($this->htmlToPlainText($html, PHP_INT_MAX)) > $maxLength
+            || count($this->everyLinkIn($html)) > self::MAX_LINKS;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function everyLinkIn(string $content): array
+    {
         preg_match_all('/<a\b[^>]*\bhref=["\']([^"\']+)["\']/i', $content, $anchors);
         preg_match_all('/\bhttps?:\/\/[^\s"\'<>)]+/i', strip_tags($content), $bare);
 
         $links = array_map($this->sanitiseUrl(...), [...$anchors[1], ...$bare[0]]);
 
-        return array_slice(array_values(array_unique(array_filter($links))), 0, self::MAX_LINKS);
+        return array_values(array_unique(array_filter($links)));
     }
 
     private function sanitiseUrl(string $url): string

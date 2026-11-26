@@ -50,6 +50,7 @@ class EditOrderService
 
             $normalizedPhone = $phone === null ? null : $this->phoneNumberNormalizer->toMobileE164($phone);
             $phoneChanged = $phone !== null && $normalizedPhone !== $order->getPhone();
+            $movesToAnotherAddress = $email !== null && mb_strtolower(trim($email)) !== mb_strtolower(trim((string) $order->getEmail()));
 
             $this->orderRepository->updateWhere(
                 attributes: [
@@ -59,6 +60,7 @@ class EditOrderService
                         'notes' => $notes,
                     ]),
                     'email' => $email,
+                    ...($movesToAnotherAddress ? ['opted_into_marketing_at' => null] : []),
                     ...($phoneChanged ? [
                         'phone' => $normalizedPhone,
                         'phone_country' => $this->phoneNumberNormalizer->countryOf($normalizedPhone),

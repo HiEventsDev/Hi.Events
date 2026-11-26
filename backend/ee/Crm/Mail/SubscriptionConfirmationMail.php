@@ -13,12 +13,18 @@ use Illuminate\Mail\Mailables\Envelope;
  */
 class SubscriptionConfirmationMail extends BaseMail
 {
+    use FlattensLines;
+
+    private readonly ?string $organizerName;
+
     public function __construct(
-        private readonly ?string $organizerName,
+        ?string $organizerName,
         private readonly string $confirmUrl,
         private readonly int $expiresInDays,
     ) {
         parent::__construct();
+
+        $this->organizerName = $organizerName === null ? null : $this->onOneLine($organizerName);
     }
 
     public function envelope(): Envelope

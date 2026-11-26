@@ -97,7 +97,7 @@ class ResaleRefundService
         $this->dispatchRefundsNotStarted([TicketResaleListingDomainObjectAbstract::SOLD_ORDER_ID => $soldOrderId]);
     }
 
-    public function recordStripeOutcome(Refund $refund): void
+    public function recordStripeOutcome(Refund $refund, int $refundedOrderId): void
     {
         $listingId = $refund->metadata[StripePaymentIntentRefundService::RESALE_LISTING_METADATA_KEY] ?? null;
 
@@ -107,7 +107,9 @@ class ResaleRefundService
 
         $listing = $this->listingRepository->findFirst((int) $listingId);
 
-        if ($listing === null || $listing->getStatus() !== TicketResaleListingStatus::SOLD->name) {
+        if ($listing === null
+            || $listing->getOrderId() !== $refundedOrderId
+            || $listing->getStatus() !== TicketResaleListingStatus::SOLD->name) {
             return;
         }
 

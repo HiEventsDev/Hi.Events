@@ -81,14 +81,14 @@ class OrderResourcePublic extends BaseResource
             'attendees' => $this->when(
                 ! is_null($this->getAttendees()),
                 fn () => $this->getAttendees()
-                    ->reject(fn (AttendeeDomainObject $attendee) => $attendee->hasBeenTransferredAwayFrom($this->getEmail()))
+                    ->reject(fn (AttendeeDomainObject $attendee) => $attendee->hasLeftItsOrder())
                     ->map(fn ($attendee) => new AttendeeResourcePublic($attendee, $includePostCheckoutData))
                     ->values(),
             ),
             'transferred_tickets' => $this->when(
                 ! is_null($this->getAttendees()),
                 fn () => $this->getAttendees()
-                    ->filter(fn (AttendeeDomainObject $attendee) => $attendee->hasBeenTransferredAwayFrom($this->getEmail()))
+                    ->filter(fn (AttendeeDomainObject $attendee) => $attendee->hasLeftItsOrder())
                     ->map(fn (AttendeeDomainObject $attendee) => [
                         'product_id' => $attendee->getProductId(),
                         'product_title' => $attendee->getProduct()?->getTitle(),

@@ -103,7 +103,7 @@ test.describe('transfers that are not completed', () => {
     await expect(claim.acceptButton()).toHaveCount(0);
   });
 
-  test('a ticket transferred back to the buyer shows on their order as a normal ticket', async ({ page, api, account, publicApi, mailpit }) => {
+  test('a ticket transferred to the buyer is theirs through its own ticket page, not the order page', async ({ page, api, account, publicApi, mailpit }) => {
     const event = await createLiveEventWithFreeTicket(api, account.organizerId);
     const guestEmail = uniqueEmail('guest');
     const order = await createCompletedOrder(publicApi, event, { attendeeEmail: guestEmail });
@@ -118,8 +118,7 @@ test.describe('transfers that are not completed', () => {
     await expect(page.getByText('Back Again')).toBeVisible();
 
     await summary.goto(event.eventId, order.orderShortId);
-    await expect(page.getByText('Back Again')).toBeVisible();
-    await expect(summary.transferredTickets()).toHaveCount(0);
-    await expect(page.getByText(maskedEmail(order.buyerEmail))).toHaveCount(0);
+    await expect(summary.transferredTickets()).toContainText(maskedEmail(order.buyerEmail));
+    await expect(page.getByText('Back Again')).toHaveCount(0);
   });
 });

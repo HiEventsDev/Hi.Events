@@ -37,16 +37,16 @@ export const ticketTransferClient = {
     },
 
     getClaim: async (token: string): Promise<TicketTransferClaim> => {
-        const response = await publicApi.get<GenericDataResponse<TicketTransferClaim>>(`/ticket-transfers/${token}`);
+        const response = await publicApi.get<GenericDataResponse<TicketTransferClaim>>(`/ticket-transfers/${encodeURIComponent(token)}`);
         return response.data.data;
     },
 
     accept: async (token: string, data: AcceptTicketTransferData): Promise<{ event_id: number; attendee_short_id: string }> => {
-        const response = await publicApi.post(`/ticket-transfers/${token}/accept`, data);
+        const response = await publicApi.post(`/ticket-transfers/${encodeURIComponent(token)}/accept`, data);
         return response.data;
     },
 
     decline: async (token: string): Promise<void> => {
-        await publicApi.post(`/ticket-transfers/${token}/decline`);
+        await publicApi.post(`/ticket-transfers/${encodeURIComponent(token)}/decline`);
     },
 };

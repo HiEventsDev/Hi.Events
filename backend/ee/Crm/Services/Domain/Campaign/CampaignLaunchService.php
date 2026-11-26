@@ -33,6 +33,7 @@ use HiEvents\Enterprise\Crm\Services\Domain\Sms\SmsConnectionService;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Services\Domain\Account\AccountSuspensionService;
 use HiEvents\Services\Domain\FeatureFlag\FeatureFlagService;
 use HiEvents\Services\Domain\Product\Exception\UnrecognizedProductIdException;
 use Illuminate\Database\DatabaseManager;
@@ -71,6 +72,7 @@ class CampaignLaunchService
         private readonly CrmAutomationRepositoryInterface $automationRepository,
         private readonly CampaignAiReviewService $aiReviewService,
         private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
+        private readonly AccountSuspensionService $accountSuspensionService,
     ) {}
 
     /**
@@ -359,7 +361,8 @@ class CampaignLaunchService
                 return;
             }
 
-            if (! $this->featureFlagService->isEnabled(FeatureFlag::CRM, $campaign->getAccountId())) {
+            if (! $this->featureFlagService->isEnabled(FeatureFlag::CRM, $campaign->getAccountId())
+                || $this->accountSuspensionService->isAccountSuspended($campaign->getAccountId())) {
                 return;
             }
 

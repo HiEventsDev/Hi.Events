@@ -50,7 +50,7 @@ export const selfServiceClient = {
 
     startSessionFromLookup: async (lookupToken: string): Promise<SelfServiceSession> => {
         const response = await publicApi.post<GenericDataResponse<SelfServiceSession>>(
-            `/ticket-lookup/${lookupToken}/session`,
+            `/ticket-lookup/${encodeURIComponent(lookupToken)}/session`,
         );
         return response.data.data;
     },

@@ -22,6 +22,9 @@ use HiEvents\Enterprise\Crm\Services\Domain\Consent\ConsentRecorder;
 use HiEvents\Enterprise\Crm\Services\Domain\Identity\DeletedContactHasher;
 use HiEvents\Enterprise\Crm\Services\Domain\Identity\DeletedContactService;
 use HiEvents\Enterprise\Crm\Services\Domain\Projection\ContactSyncService;
+use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Services\Domain\Order\EditOrderService;
+use HiEvents\Services\Domain\SelfService\SelfServiceEditOrderService;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
@@ -1510,5 +1513,41 @@ class ContactProjectionTest extends TestCase
             'spend' => $rows('crm_contact_spend', ['contact_id', 'currency', 'total_gross', 'total_refunded'], ['contact_id', 'currency']),
             'consent' => $rows('crm_consent_events', ['contact_id', 'email', 'action', 'source_type', 'source_id', 'user_id', 'occurred_at'], ['contact_id', 'source_type', 'source_id']),
         ];
+    }
+
+    public static function waysAnOrderChangesAddress(): array
+    {
+        return [
+            'staff edit it' => ['staff', 'someone-else@example.com', null],
+            'the buyer edits it' => ['buyer', 'someone-else@example.com', null],
+            'only the capitals change' => ['staff', 'Ada@Example.com', 'SUBSCRIBED'],
+        ];
+    }
+
+    #[DataProvider('waysAnOrderChangesAddress')]
+    public function test_a_marketing_opt_in_stays_with_the_address_that_gave_it_when_the_order_changes_address(string $editor, string $newEmail, ?string $expectedStatus): void
+    {
+        $orderId = $this->insertOrder(['opted_into_marketing_at' => now()->subDays(5)]);
+        $this->insertAttendee($orderId);
+        $this->projectOrders($orderId);
+        $this->assertSame('SUBSCRIBED', $this->contact('ada@example.com')->email_marketing_status);
+        DB::table('event_settings')->insert(['event_id' => $this->eventId, 'created_at' => now(), 'updated_at' => now()]);
+
+        if ($editor === 'staff') {
+            app(EditOrderService::class)->editOrder(id: $orderId, eventId: $this->eventId, firstName: null, lastName: null, email: $newEmail, notes: null);
+        } else {
+            app(SelfServiceEditOrderService::class)->editOrder(
+                order: app(OrderRepositoryInterface::class)->findById($orderId),
+                firstName: null,
+                lastName: null,
+                email: $newEmail,
+                ipAddress: '203.0.113.9',
+                userAgent: null,
+            );
+        }
+        $this->projectOrders($orderId);
+
+        $this->assertSame($expectedStatus === null, DB::table('orders')->where('id', $orderId)->value('opted_into_marketing_at') === null);
+        $this->assertSame($expectedStatus ?? 'NOT_SUBSCRIBED', $this->contact(mb_strtolower($newEmail))?->email_marketing_status ?? 'NOT_SUBSCRIBED');
     }
 }

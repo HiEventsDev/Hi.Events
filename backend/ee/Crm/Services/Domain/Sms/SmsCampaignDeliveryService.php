@@ -66,6 +66,10 @@ class SmsCampaignDeliveryService
             return;
         }
 
+        if ($this->dispatchService->pauseIfAccountSuspended($campaign)) {
+            return;
+        }
+
         $country = SmsCountry::tryFrom((string) $recipient->phone_country);
         $connection = $this->connectionService->findForOrganizer((int) $recipient->organizer_id);
 

@@ -49,7 +49,7 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
             $this->model->join('orders', 'orders.id', '=', 'attendees.order_id');
             $this->model->where('orders.status', OrderStatus::COMPLETED->name);
             $this->model->whereRaw('lower(attendees.email) = ?', [$normalisedEmail]);
-            $this->model->whereRaw("lower(coalesce(orders.email, '')) <> ?", [$normalisedEmail]);
+            $this->model->whereRaw("(lower(coalesce(orders.email, '')) <> ? or attendees.transferred_at is not null)", [$normalisedEmail]);
 
             return $this->handleResults($this->model->orderByDesc('attendees.id')->limit(200)->get());
         });

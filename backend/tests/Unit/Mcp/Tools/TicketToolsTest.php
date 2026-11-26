@@ -90,6 +90,8 @@ class TicketToolsTest extends McpToolTestCase
     {
         $this->api->shouldReceive('get')->with(GetProductAction::class, ['event_id' => 12, 'ticket_id' => 5])->andReturn($this->ok($this->product([
             'hide_when_sold_out' => true,
+            'is_transferable' => false,
+            'is_resellable' => false,
             'taxes_and_fees' => [['id' => 7]],
             'sale_end_date' => '2026-12-12 00:00:00',
         ])));
@@ -101,6 +103,8 @@ class TicketToolsTest extends McpToolTestCase
                     && $parameters === ['event_id' => 12, 'ticket_id' => 5]
                     && $body['title'] === 'General admission'
                     && $body['hide_when_sold_out'] === true
+                    && $body['is_transferable'] === false
+                    && $body['is_resellable'] === false
                     && $body['tax_and_fee_ids'] === [7]
                     && $body['sale_end_date'] === '2026-12-11 19:00'
                     && $body['prices'][0]['id'] === 9

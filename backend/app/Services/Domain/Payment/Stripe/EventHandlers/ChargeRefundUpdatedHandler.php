@@ -73,7 +73,7 @@ class ChargeRefundUpdatedHandler
                 ]);
 
                 if ($refund->status === Refund::STATUS_FAILED) {
-                    $this->resaleRefundService->recordStripeOutcome($refund);
+                    $this->resaleRefundService->recordStripeOutcome($refund, $stripePayment->getOrderId());
                 }
 
                 return;
@@ -105,7 +105,7 @@ class ChargeRefundUpdatedHandler
             $this->updateOrderStatus($order, $refundedAmount);
             $this->updateEventStatistics($order, $refundedMoney);
             $this->createOrderRefund($refund, $order, $refundedAmount);
-            $this->resaleRefundService->recordStripeOutcome($refund);
+            $this->resaleRefundService->recordStripeOutcome($refund, $order->getId());
 
             if ($this->wasBuyerNotificationRequested($refund) && $order->getEmail() !== null) {
                 $this->notifyBuyer($order, $refundedMoney);
@@ -198,7 +198,7 @@ class ChargeRefundUpdatedHandler
         ]);
 
         $this->createOrderRefund($refund, $order, $this->amountAsFloat($refund->amount, $order->getCurrency()));
-        $this->resaleRefundService->recordStripeOutcome($refund);
+        $this->resaleRefundService->recordStripeOutcome($refund, $order->getId());
 
         $this->logger->error(__('Failed to refund stripe charge'), $refund->toArray());
     }

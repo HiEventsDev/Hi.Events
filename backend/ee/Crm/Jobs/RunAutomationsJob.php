@@ -7,6 +7,7 @@ namespace HiEvents\Enterprise\Crm\Jobs;
 use HiEvents\DomainObjects\Enums\FeatureFlag;
 use HiEvents\Enterprise\Crm\Repository\Interfaces\CrmAutomationRepositoryInterface;
 use HiEvents\Enterprise\Crm\Services\Domain\Automation\AutomationRunner;
+use HiEvents\Services\Domain\Account\AccountSuspensionService;
 use HiEvents\Services\Domain\FeatureFlag\FeatureFlagService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -38,16 +39,20 @@ class RunAutomationsJob implements ShouldBeUnique, ShouldQueue
         return (string) $this->afterAutomationId;
     }
 
-    public function handle(CrmAutomationRepositoryInterface $automationRepository, FeatureFlagService $featureFlagService): void
-    {
+    public function handle(
+        CrmAutomationRepositoryInterface $automationRepository,
+        FeatureFlagService $featureFlagService,
+        AccountSuspensionService $accountSuspensionService,
+    ): void {
         $accountIdsByAutomationId = $automationRepository->findEnabledAccountIdsByIdAfter($this->afterAutomationId, self::PAGE_SIZE);
-        $crmEnabledByAccountId = [];
+        $maySendByAccountId = [];
         $position = 0;
 
         foreach ($accountIdsByAutomationId as $automationId => $accountId) {
-            $crmEnabledByAccountId[$accountId] ??= $featureFlagService->isEnabled(FeatureFlag::CRM, $accountId);
+            $maySendByAccountId[$accountId] ??= $featureFlagService->isEnabled(FeatureFlag::CRM, $accountId)
+                && ! $accountSuspensionService->isAccountSuspended($accountId);
 
-            if (! $crmEnabledByAccountId[$accountId]) {
+            if (! $maySendByAccountId[$accountId]) {
                 continue;
             }
 

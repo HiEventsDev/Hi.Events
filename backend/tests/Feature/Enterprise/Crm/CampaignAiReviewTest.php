@@ -183,6 +183,35 @@ class CampaignAiReviewTest extends TestCase
         ];
     }
 
+    public static function campaignsTheCheckCannotReadInFull(): array
+    {
+        $paragraph = '<p>'.str_repeat('Tickets for our spring season are on sale now. ', 20).'</p>';
+        $links = implode('', array_map(static fn (int $number) => '<a href="https://example.com/page-'.$number.'">Page</a> ', range(1, 41)));
+
+        return [
+            'an image' => ['<p>See the poster</p><img src="https://cdn.example.com/poster.png" alt="">', 'The message contains images, which the automatic check can\'t read.'],
+            'more text than the check reads' => [str_repeat($paragraph, 15), 'The message is too long for the automatic check to read all of it.'],
+            'more links than the check reads' => ['<p>'.$links.'</p>', 'The message is too long for the automatic check to read all of it.'],
+        ];
+    }
+
+    #[DataProvider('campaignsTheCheckCannotReadInFull')]
+    public function test_a_campaign_the_check_cannot_read_in_full_is_handed_to_a_person_without_asking_the_model(string $body, string $expectedReason): void
+    {
+        Bus::fake([DispatchCampaignJob::class, NotifyCampaignPendingReviewJob::class]);
+        CampaignReviewAgent::fake()->preventStrayPrompts();
+        $campaignId = $this->pendingCampaign(['body' => $body]);
+
+        $this->runAutomaticCheck($campaignId);
+
+        $campaign = $this->campaign($campaignId);
+        $stored = json_decode($campaign->ai_review, true);
+        $this->assertSame(['PENDING_REVIEW', null], [$campaign->status, $campaign->approved_at]);
+        $this->assertSame(['NEEDS_PERSON', [$expectedReason]], [$stored['decision'], $stored['reasons']]);
+        Bus::assertDispatched(NotifyCampaignPendingReviewJob::class);
+        Bus::assertNotDispatched(DispatchCampaignJob::class);
+    }
+
     #[DataProvider('campaignsNoLongerWaiting')]
     public function test_a_campaign_that_left_review_is_not_checked(array $attributes): void
     {

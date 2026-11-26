@@ -590,23 +590,23 @@ export const crmClient = {
         return response.data;
     },
     subscriptionConfirmation: async (token: string) => {
-        const response = await publicApi.get<GenericDataResponse<CrmSubscriptionConfirmation>>(`crm/confirm/${token}`);
+        const response = await publicApi.get<GenericDataResponse<CrmSubscriptionConfirmation>>(`crm/confirm/${encodeURIComponent(token)}`);
         return response.data;
     },
     confirmSubscription: async (token: string) => {
-        const response = await publicApi.post<GenericDataResponse<CrmSubscriptionConfirmation>>(`crm/confirm/${token}`);
+        const response = await publicApi.post<GenericDataResponse<CrmSubscriptionConfirmation>>(`crm/confirm/${encodeURIComponent(token)}`);
         return response.data;
     },
     unsubscribeStatus: async (token: string) => {
-        const response = await publicApi.get<GenericDataResponse<CrmUnsubscribeStatus>>(`crm/unsubscribe/${token}`);
+        const response = await publicApi.get<GenericDataResponse<CrmUnsubscribeStatus>>(`crm/unsubscribe/${encodeURIComponent(token)}`);
         return response.data;
     },
     unsubscribe: async (token: string) => {
-        const response = await publicApi.post<GenericDataResponse<CrmUnsubscribeStatus>>(`crm/unsubscribe/${token}`);
+        const response = await publicApi.post<GenericDataResponse<CrmUnsubscribeStatus>>(`crm/unsubscribe/${encodeURIComponent(token)}`);
         return response.data;
     },
     resubscribe: async (token: string) => {
-        const response = await publicApi.post<GenericDataResponse<CrmUnsubscribeStatus>>(`crm/unsubscribe/${token}/resubscribe`);
+        const response = await publicApi.post<GenericDataResponse<CrmUnsubscribeStatus>>(`crm/unsubscribe/${encodeURIComponent(token)}/resubscribe`);
         return response.data;
     },
 

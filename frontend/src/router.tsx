@@ -6,6 +6,7 @@ import { publicEventRouteLoader } from "./routeLoaders/publicEventRouteLoader.ts
 import { publicOrganizerRouteLoader } from "./routeLoaders/publicOrganizerRouteLoader.ts";
 import { organizerPreviewRouteLoader } from "./routeLoaders/organizerPreviewRouteLoader.ts";
 import { authRouteLoader } from "./routeLoaders/authRouteLoader.ts";
+import { unsafePathRouteLoader } from "./routeLoaders/unsafePathRouteLoader.ts";
 import { eventContentWidgetRouteLoader, organizerWidgetRouteLoader, ticketWidgetRouteLoader } from "./routeLoaders/widgetRouteLoader.ts";
 import { signupFormRouteLoader } from "./ee/crm/routeLoaders/signupFormRouteLoader.ts";
 import { campaignUnsubscribeRouteLoader, subscriptionConfirmRouteLoader } from "./ee/crm/routeLoaders/tokenPageRouteLoaders.ts";
@@ -27,7 +28,7 @@ const Root = () => {
     }
 };
 
-export const router: RouteObject[] = [
+const routes: RouteObject[] = [
     {
         path: "",
         element: <Root />,
@@ -1045,3 +1046,10 @@ export const router: RouteObject[] = [
     }
 ];
 
+export const router: RouteObject[] = [
+    {
+        loader: unsafePathRouteLoader,
+        errorElement: <ErrorPage />,
+        children: routes,
+    },
+];

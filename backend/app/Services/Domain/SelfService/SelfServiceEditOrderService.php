@@ -70,6 +70,10 @@ class SelfServiceEditOrderService
             $newValues['email'] = $email;
             $updateData['email'] = $email;
             $emailChanged = true;
+
+            if (mb_strtolower(trim($email)) !== mb_strtolower(trim((string) $order->getEmail()))) {
+                $updateData['opted_into_marketing_at'] = null;
+            }
         }
 
         $normalizedPhone = $phone === null ? null : $this->phoneNumberNormalizer->toMobileE164($phone);

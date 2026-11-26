@@ -1171,6 +1171,9 @@ class AutomationRunnerTest extends TestCase
         $healthyId = $this->insertAutomation('WIN_BACK');
         $lastId = $this->insertAutomation('WELCOME');
         $flaggedOffId = $this->insertAutomation('WELCOME', organizerId: $flaggedOffOrganizerId, accountId: $flaggedOffAccountId);
+        [, $suspendedAccountId] = $this->createAccountOwner();
+        DB::table('accounts')->where('id', $suspendedAccountId)->update(['suspended_at' => now()]);
+        $suspendedId = $this->insertAutomation('WELCOME', organizerId: $this->createOrganizer($suspendedAccountId), accountId: $suspendedAccountId);
         $ran = [];
         $runner = Mockery::mock(AutomationRunner::class);
         $runner->shouldReceive('run')->andReturnUsing(static function (CrmAutomationDomainObject $automation) use (&$ran, $failingId): void {
@@ -1184,7 +1187,7 @@ class AutomationRunnerTest extends TestCase
 
         RunAutomationsJob::dispatchSync();
 
-        $ours = array_values(array_intersect($ran, [$failingId, $disabledId, $healthyId, $lastId, $flaggedOffId]));
+        $ours = array_values(array_intersect($ran, [$failingId, $disabledId, $healthyId, $lastId, $flaggedOffId, $suspendedId]));
         sort($ours);
         $this->assertSame([$failingId, $healthyId, $lastId], $ours);
         Exceptions::assertReported(static fn (RuntimeException $exception) => $exception->getMessage() === 'The first automation broke.');

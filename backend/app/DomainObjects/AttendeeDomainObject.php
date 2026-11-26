@@ -70,10 +70,9 @@ class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implem
         return $this;
     }
 
-    public function hasBeenTransferredAwayFrom(?string $buyerEmail): bool
+    public function hasLeftItsOrder(): bool
     {
-        return $this->getTransferredAt() !== null
-            && mb_strtolower(trim((string) $this->getEmail())) !== mb_strtolower(trim((string) $buyerEmail));
+        return $this->getTransferredAt() !== null;
     }
 
     public static function getDefaultSort(): string

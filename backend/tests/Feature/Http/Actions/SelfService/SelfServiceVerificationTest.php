@@ -141,6 +141,37 @@ class SelfServiceVerificationTest extends TestCase
             ->assertJsonValidationErrors(['code']);
     }
 
+    public function test_wrong_codes_count_against_the_address_across_new_codes_and_links(): void
+    {
+        Mail::fake();
+        DB::table('attendees')->where('id', $this->attendee['id'])->update(['email' => self::BUYER_EMAIL]);
+        $newCodeFrom = function (string $verificationUrl): string {
+            $this->postJson($verificationUrl)->assertOk();
+
+            return Mail::queued(SelfServiceVerificationCodeMail::class)->last()->content()->with['code'];
+        };
+        $wrongFor = static fn (string $code): string => $code === '000000' ? '111111' : '000000';
+
+        $firstCode = $newCodeFrom($this->orderUrl('verification'));
+        foreach (range(1, SelfServiceVerificationService::MAX_ATTEMPTS) as $attempt) {
+            $this->confirm($wrongFor($firstCode))->assertStatus(ResponseCodes::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $secondCode = $newCodeFrom($this->attendeeUrl('verification'));
+        foreach (range(1, SelfServiceVerificationService::MAX_ATTEMPTS) as $attempt) {
+            $this->postJson($this->attendeeUrl('verification/confirm'), ['code' => $wrongFor($secondCode)])
+                ->assertStatus(ResponseCodes::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $this->confirm($newCodeFrom($this->orderUrl('verification')))
+            ->assertStatus(ResponseCodes::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJsonPath('errors.code.0', 'Too many incorrect codes. Wait 15 minutes and try again.');
+
+        $this->travel(SelfServiceVerificationService::FAILED_CODES_LOCK_MINUTES + 1)->minutes();
+
+        $this->confirm($newCodeFrom($this->orderUrl('verification')))->assertOk();
+    }
+
     public function test_a_code_stops_working_after_ten_minutes(): void
     {
         $code = $this->requestOrderCode();

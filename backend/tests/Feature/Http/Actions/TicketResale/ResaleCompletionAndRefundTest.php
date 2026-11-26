@@ -25,6 +25,7 @@ use HiEvents\Models\User;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\ChargeRefundUpdatedHandler;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\ChargeSucceededHandler;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\PaymentIntentSucceededHandler;
+use HiEvents\Services\Domain\Payment\Stripe\StripePaymentIntentRefundService;
 use HiEvents\Services\Domain\TicketResale\ResaleRefundService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\AttendeeEvent;
@@ -381,6 +382,28 @@ class ResaleCompletionAndRefundTest extends TestCase
         $this->assertSame(ResaleRefundOutcome::SETTLED, $this->processRefund($listingId, attempt: 3));
 
         $this->assertSame([4750], array_column($this->stripeRefunds->created, 'amount'));
+    }
+
+    public function test_a_refund_of_another_order_that_names_the_listing_does_not_settle_it(): void
+    {
+        $listingId = $this->list();
+        $buyerOrderId = $this->startCheckout('buyer');
+        $this->pay($buyerOrderId);
+
+        $this->app->make(ChargeRefundUpdatedHandler::class)->handleEvent(Refund::constructFrom([
+            'id' => 're_another_order',
+            'payment_intent' => 'pi_buyer_'.$buyerOrderId,
+            'status' => 'succeeded',
+            'amount' => 1,
+            'currency' => 'usd',
+            'metadata' => [StripePaymentIntentRefundService::RESALE_LISTING_METADATA_KEY => (string) $listingId],
+        ]));
+
+        $this->assertDatabaseHas('ticket_resale_listings', [
+            'id' => $listingId,
+            'refund_status' => TicketResaleRefundStatus::PENDING->name,
+            'stripe_refund_id' => null,
+        ]);
     }
 
     public function test_a_failed_refund_is_flagged_and_the_organizer_and_seller_are_told(): void

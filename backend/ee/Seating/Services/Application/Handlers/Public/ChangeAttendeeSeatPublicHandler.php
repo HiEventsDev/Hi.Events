@@ -58,7 +58,7 @@ class ChangeAttendeeSeatPublicHandler
                 AttendeeDomainObjectAbstract::ORDER_ID => $order->getId(),
             ]);
 
-        if ($attendee === null || $attendee->hasBeenTransferredAwayFrom($order->getEmail())) {
+        if ($attendee === null || $attendee->hasLeftItsOrder()) {
             throw new ResourceNotFoundException(__('Attendee not found'));
         }
 

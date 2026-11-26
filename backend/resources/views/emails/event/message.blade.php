@@ -1,6 +1,6 @@
 @php /** @var \HiEvents\DomainObjects\EventDomainObject $event */ @endphp
 @php /** @var \HiEvents\DomainObjects\EventSettingDomainObject $eventSettings */ @endphp
-@php /** @var \HiEvents\Services\Application\Handlers\Message\DTO\SendMessageDTO $messageData */ @endphp
+@php /** @var string $messageBody */ @endphp
 
 @php /** @see \HiEvents\Mail\Event\EventMessage */ @endphp
 
@@ -13,7 +13,7 @@
 </div>
 @endunless
 
-{!! $messageData->message !!}
+<div>{!! $messageBody !!}</div>
 
 {!! $eventSettings->getGetEmailFooterHtml() !!}
 

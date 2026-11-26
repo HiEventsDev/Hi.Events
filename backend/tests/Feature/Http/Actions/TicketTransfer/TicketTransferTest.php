@@ -433,15 +433,53 @@ class TicketTransferTest extends TestCase
             ->assertStatus(ResponseCodes::HTTP_FORBIDDEN);
     }
 
-    public function test_a_ticket_transferred_back_to_the_buyer_shows_on_their_order_as_a_normal_ticket(): void
+    public function test_moving_the_order_to_the_new_holders_address_does_not_bring_a_transferred_ticket_back(): void
+    {
+        $this->insertTransfer('tt_regain');
+        $newShortId = $this->accept('tt_regain')->assertOk()->json('attendee_short_id');
+        $newPublicId = DB::table('attendees')->where('id', $this->attendee['id'])->value('public_id');
+        $orderUrl = "/public/events/{$this->eventId}/order";
+
+        $movedOrderShortId = $this->patchJson("$orderUrl/{$this->orderShortId}", ['email' => self::RECIPIENT_EMAIL], $this->selfServiceHeadersFor(self::BUYER_EMAIL))
+            ->assertOk()
+            ->json('new_short_id');
+
+        $order = $this->getJson("$orderUrl/$movedOrderShortId")->assertOk();
+        $order->assertJsonCount(0, 'data.attendees');
+        $order->assertJsonCount(1, 'data.transferred_tickets');
+        $this->assertStringNotContainsString($newPublicId, $order->getContent());
+        $this->assertStringNotContainsString($newShortId, $order->getContent());
+        $this->patchJson("$orderUrl/$movedOrderShortId/attendees/$newShortId", ['first_name' => 'Mine'])->assertNotFound();
+        $this->postJson("$orderUrl/$movedOrderShortId/attendees/$newShortId/resend-ticket")->assertNotFound();
+    }
+
+    public function test_a_ticket_transferred_to_the_orders_own_address_is_reached_through_its_ticket_link_not_the_order_page(): void
     {
         $this->insertTransfer('tt_back', senderEmail: self::GUEST_EMAIL, recipientEmail: self::BUYER_EMAIL);
-        $this->accept('tt_back')->assertOk();
+        $newShortId = $this->accept('tt_back')->assertOk()->json('attendee_short_id');
 
         $order = $this->getJson("/public/events/{$this->eventId}/order/{$this->orderShortId}?include=event")->assertOk();
 
-        $order->assertJsonCount(1, 'data.attendees');
-        $order->assertJsonCount(0, 'data.transferred_tickets');
+        $order->assertJsonCount(0, 'data.attendees');
+        $order->assertJsonCount(1, 'data.transferred_tickets');
+        $this->assertStringNotContainsString($newShortId, $order->getContent());
+        $this->getJson("/public/events/{$this->eventId}/attendees/$newShortId")->assertOk();
+    }
+
+    public function test_an_order_handed_to_the_recipient_before_the_transfer_never_shows_the_ticket_they_accepted(): void
+    {
+        $orderUrl = "/public/events/{$this->eventId}/order";
+        $handedOverOrderShortId = $this->patchJson("$orderUrl/{$this->orderShortId}", ['email' => self::RECIPIENT_EMAIL], $this->selfServiceHeadersFor(self::BUYER_EMAIL))
+            ->assertOk()
+            ->json('new_short_id');
+        $this->insertTransfer('tt_handed_over', senderEmail: self::GUEST_EMAIL);
+
+        $newShortId = $this->accept('tt_handed_over')->assertOk()->json('attendee_short_id');
+
+        $order = $this->getJson("$orderUrl/$handedOverOrderShortId")->assertOk();
+        $order->assertJsonCount(0, 'data.attendees');
+        $this->assertStringNotContainsString($newShortId, $order->getContent());
+        $this->assertStringNotContainsString(DB::table('attendees')->where('id', $this->attendee['id'])->value('public_id'), $order->getContent());
     }
 
     public function test_the_new_holder_can_transfer_the_ticket_on_again(): void

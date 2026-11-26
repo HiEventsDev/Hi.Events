@@ -116,6 +116,13 @@ class TicketTransferSettingsTest extends TestCase
             ->assertOk()
             ->assertJsonPath('data.is_transferable', false);
         $this->assertDatabaseHas('products', ['id' => $productId, 'is_transferable' => false]);
+
+        DB::table('products')->where('id', $productId)->update(['is_resellable' => false]);
+        $this->putJson("/events/{$this->eventId}/products/$productId", [...$payload, 'title' => 'VIP renamed'], $this->headers)
+            ->assertOk()
+            ->assertJsonPath('data.title', 'VIP renamed')
+            ->assertJsonPath('data.is_transferable', false)
+            ->assertJsonPath('data.is_resellable', false);
     }
 
     private function createEvent(string $title): int

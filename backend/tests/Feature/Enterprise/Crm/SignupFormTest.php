@@ -135,6 +135,23 @@ class SignupFormTest extends TestCase
         Mail::assertQueued(SubscriptionConfirmationMail::class, static fn (SubscriptionConfirmationMail $mail) => $mail->hasTo('new.fan@example.com'));
     }
 
+    public function test_an_organizer_name_cannot_add_headings_or_links_to_the_confirmation_email(): void
+    {
+        DB::table('organizers')->where('id', $this->organizerId)->update(['name' => "Acme\n\n# Card declined\n\n[Fix it](mailto:billing@phish.example)\n\n![](//phish.example/pixel)"]);
+
+        $this->submit(['email' => 'fan@example.com'])->assertStatus(202);
+
+        Mail::assertQueued(SubscriptionConfirmationMail::class, static function (SubscriptionConfirmationMail $mail): bool {
+            $html = $mail->render();
+
+            return str_contains($html, 'Acme # Card declined [Fix it](mailto:billing@phish.example)')
+                && ! str_contains($html, 'Card declined</h1>')
+                && ! str_contains($html, 'href="mailto:billing@phish.example"')
+                && ! str_contains($html, 'phish.example/pixel"')
+                && ! str_contains($mail->envelope()->subject, "\n");
+        });
+    }
+
     public function test_the_confirmation_email_says_how_long_the_link_lasts_and_the_link_expires_then(): void
     {
         $this->freezeSecond();

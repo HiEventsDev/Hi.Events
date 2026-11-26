@@ -69,6 +69,22 @@ class TicketLookupGuestTicketsTest extends TestCase
         $this->getJson("/public/ticket-lookup/$token/tickets")->assertOk()->assertJsonCount(0, 'data');
     }
 
+    public function test_a_ticket_accepted_by_the_orders_own_address_is_listed_once_as_a_ticket(): void
+    {
+        $orderId = $this->insertOrderFor(self::BUYER_EMAIL);
+        $acceptedShortId = $this->insertTicket($orderId, self::BUYER_EMAIL, 'Ada');
+        DB::table('attendees')->where('short_id', $acceptedShortId)->update(['transferred_at' => now()]);
+        $token = $this->lookupTokenFor(self::BUYER_EMAIL);
+
+        $tickets = $this->getJson("/public/ticket-lookup/$token/tickets")->assertOk();
+        $orders = $this->getJson("/public/ticket-lookup/$token")->assertOk();
+
+        $tickets->assertJsonCount(1, 'data');
+        $tickets->assertJsonPath('data.0.short_id', $acceptedShortId);
+        $orders->assertJsonCount(1, 'data');
+        $this->assertStringNotContainsString($acceptedShortId, $orders->getContent());
+    }
+
     public function test_cancelled_tickets_and_tickets_on_unfinished_orders_are_not_listed(): void
     {
         $this->insertTicket($this->insertOrderFor(self::BUYER_EMAIL), self::GUEST_EMAIL, 'Cancelled', AttendeeStatus::CANCELLED->name);

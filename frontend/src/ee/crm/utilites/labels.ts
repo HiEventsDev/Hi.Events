@@ -201,6 +201,8 @@ export const campaignStatusReason = (
             return t`Nobody this automation was meant for had opted in to marketing emails, so nothing was sent.`;
         case 'ORGANIZER_DELETED':
             return t`This campaign stopped because its organizer was deleted.`;
+        case 'ACCOUNT_SUSPENDED':
+            return t`We stopped this campaign because the account was suspended. It won't start again, and nobody else will get it.`;
         case 'SCHEDULED_SEND_EXPIRED': {
             const hours = Number(params?.hours ?? 0);
             return hours > 0

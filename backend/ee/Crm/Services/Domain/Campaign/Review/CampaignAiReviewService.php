@@ -48,7 +48,14 @@ class CampaignAiReviewService
      */
     public function review(CrmCampaignDomainObject $campaign, int $recipientsCount): CampaignAiReviewResultDTO
     {
-        $response = (new CampaignReviewAgent)->prompt($this->buildPrompt($campaign, $recipientsCount));
+        $html = $campaign->isSms() ? '' : $this->mailFactory->make($campaign, null)->render();
+        $unreadable = $this->whyItCannotBeReadInFull($campaign, $html);
+
+        if ($unreadable !== null) {
+            return new CampaignAiReviewResultDTO(approves: false, confidence: 0.0, reasons: [$unreadable]);
+        }
+
+        $response = (new CampaignReviewAgent)->prompt($this->buildPrompt($campaign, $html, $recipientsCount));
 
         $confidence = (float) ($response['confidence'] ?? 0.0);
         $threshold = (float) $this->config->get('app.crm_campaign_ai_review_confidence_threshold');
@@ -60,12 +67,28 @@ class CampaignAiReviewService
         );
     }
 
+    private function whyItCannotBeReadInFull(CrmCampaignDomainObject $campaign, string $html): ?string
+    {
+        if ($campaign->isSms()) {
+            return null;
+        }
+
+        if (preg_match('/<img\b/i', (string) $campaign->getBody()) === 1) {
+            return __('The message contains images, which the automatic check can\'t read.');
+        }
+
+        if ($this->promptText->holdsMoreThanIsRead($html, self::MESSAGE_MAX_LENGTH)) {
+            return __('The message is too long for the automatic check to read all of it.');
+        }
+
+        return null;
+    }
+
     /**
      * @throws CampaignOrganizerDeletedException
      */
-    private function buildPrompt(CrmCampaignDomainObject $campaign, int $recipientsCount): string
+    private function buildPrompt(CrmCampaignDomainObject $campaign, string $html, int $recipientsCount): string
     {
-        $html = $campaign->isSms() ? '' : $this->mailFactory->make($campaign, null)->render();
         $message = $campaign->isSms()
             ? $this->promptText->clip($this->smsPreviewService->preview($campaign, null)->variants[0]->text, self::MESSAGE_MAX_LENGTH)
             : $this->promptText->htmlToPlainText($html, self::MESSAGE_MAX_LENGTH);

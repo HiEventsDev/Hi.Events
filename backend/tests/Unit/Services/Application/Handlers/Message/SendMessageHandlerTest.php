@@ -7,11 +7,13 @@ use HiEvents\DomainObjects\AccountDomainObject;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\MessageTypeEnum;
 use HiEvents\DomainObjects\Enums\MessagingEligibilityFailureEnum;
+use HiEvents\DomainObjects\Enums\MessagingTierViolationEnum;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\MessageDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\Exceptions\AccountNotVerifiedException;
+use HiEvents\Exceptions\MessagingTierLimitExceededException;
 use HiEvents\Jobs\Event\SendMessagesJob;
 use HiEvents\Jobs\Message\ReviewMessageWithAiJob;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
@@ -23,6 +25,7 @@ use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Message\DTO\SendMessageDTO;
 use HiEvents\Services\Application\Handlers\Message\SendMessageHandler;
 use HiEvents\Services\Domain\Message\DTO\MessagingEligibilityFailureDTO;
+use HiEvents\Services\Domain\Message\DTO\MessagingTierViolationDTO;
 use HiEvents\Services\Domain\Message\MessagingEligibilityService;
 use HiEvents\Services\Domain\Message\Review\MessageAiReviewService;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
@@ -66,6 +69,7 @@ class SendMessageHandlerTest extends TestCase
         $this->messageRepository = m::mock(MessageRepositoryInterface::class);
         $this->accountRepository = m::mock(AccountRepositoryInterface::class);
         $this->purifier = m::mock(HtmlPurifierService::class);
+        $this->purifier->shouldReceive('purify')->andReturnUsing(static fn (string $html): string => $html)->byDefault();
         $this->config = m::mock(Repository::class);
         $this->eligibilityService = m::mock(MessagingEligibilityService::class);
         $this->eventRepository = m::mock(EventRepositoryInterface::class);
@@ -204,6 +208,42 @@ class SendMessageHandlerTest extends TestCase
         $this->assertSame($message, $result);
 
         Bus::assertDispatched(SendMessagesJob::class);
+    }
+
+    public function test_the_links_limit_is_checked_against_the_message_as_it_will_be_stored(): void
+    {
+        $submitted = '<p><a href=&#104;ttps://example.com>Tickets</a></p>';
+        $stored = '<p><a href="https://example.com">Tickets</a></p>';
+        $dto = new SendMessageDTO(
+            account_id: 1,
+            event_id: 101,
+            subject: 'Hello',
+            message: $submitted,
+            type: MessageTypeEnum::INDIVIDUAL_ATTENDEES,
+            is_test: false,
+            send_copy_to_current_user: false,
+            sent_by_user_id: 99,
+            order_id: null,
+            order_statuses: [],
+            attendee_ids: [10],
+            product_ids: [],
+        );
+        $account = m::mock(AccountDomainObject::class);
+        $account->shouldReceive('getAccountVerifiedAt')->andReturn(Carbon::now());
+        $account->shouldReceive('getIsManuallyVerified')->andReturn(true);
+        $this->accountRepository->shouldReceive('findById')->with(1)->andReturn($account);
+        $this->config->shouldReceive('get')->with('app.saas_mode_enabled')->andReturn(false);
+        $this->attendeeRepository->shouldReceive('findWhereIn')->andReturn(collect());
+        $this->purifier->shouldReceive('purify')->with($submitted)->andReturn($stored);
+        $this->eligibilityService->shouldReceive('checkTierLimits')
+            ->once()
+            ->with(1, m::any(), $stored)
+            ->andReturn(new MessagingTierViolationDTO(accountId: 1, tierName: 'Untrusted', violations: [MessagingTierViolationEnum::LINKS_NOT_ALLOWED]));
+        $this->messageRepository->shouldNotReceive('create');
+
+        $this->expectException(MessagingTierLimitExceededException::class);
+
+        $this->handler->handle($dto);
     }
 
     public function test_handle_estimates_recipients_for_multi_occurrence_targeting(): void

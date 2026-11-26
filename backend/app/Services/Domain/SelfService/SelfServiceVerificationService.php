@@ -11,6 +11,7 @@ use HiEvents\Repository\Eloquent\Value\OrderAndDirection;
 use HiEvents\Repository\Interfaces\SelfServiceVerificationRepositoryInterface;
 use HiEvents\Services\Domain\SelfService\DTO\SelfServiceSessionDTO;
 use HiEvents\Services\Infrastructure\TokenGenerator\TokenGeneratorService;
+use Illuminate\Cache\RateLimiter;
 use Illuminate\Config\Repository;
 
 class SelfServiceVerificationService
@@ -23,12 +24,17 @@ class SelfServiceVerificationService
 
     public const MAX_ATTEMPTS = 5;
 
+    public const MAX_FAILED_CODES_PER_ADDRESS = 10;
+
+    public const FAILED_CODES_LOCK_MINUTES = 15;
+
     public const SESSION_TTL_MINUTES = 30;
 
     public function __construct(
         private readonly SelfServiceVerificationRepositoryInterface $verificationRepository,
         private readonly TokenGeneratorService $tokenGeneratorService,
         private readonly Repository $config,
+        private readonly RateLimiter $rateLimiter,
     ) {}
 
     public function issueCode(string $email): string
@@ -56,18 +62,32 @@ class SelfServiceVerificationService
     public function confirmCode(string $email, string $code): SelfServiceSessionDTO
     {
         $email = $this->normalise($email);
+        $failedCodesKey = 'self-service-failed-codes|'.hash('sha256', $email);
+
+        if ($this->rateLimiter->tooManyAttempts($failedCodesKey, self::MAX_FAILED_CODES_PER_ADDRESS)) {
+            throw new SelfServiceVerificationException(__('Too many incorrect codes. Wait 15 minutes and try again.'));
+        }
+
         $verification = $this->pendingVerification($email);
 
         if ($verification === null || Carbon::parse($verification->getCodeExpiresAt())->isPast()) {
             throw new SelfServiceVerificationException(__('This code has expired. Request a new one.'));
         }
 
-        if ($verification->getAttempts() >= self::MAX_ATTEMPTS) {
+        $claimedAttempt = $this->verificationRepository->incrementWhere(
+            [
+                SelfServiceVerificationDomainObjectAbstract::ID => $verification->getId(),
+                [SelfServiceVerificationDomainObjectAbstract::ATTEMPTS, '<', self::MAX_ATTEMPTS],
+            ],
+            SelfServiceVerificationDomainObjectAbstract::ATTEMPTS,
+        ) === 1;
+
+        if (! $claimedAttempt) {
             throw new SelfServiceVerificationException(__('Too many incorrect attempts. Request a new code.'));
         }
 
         if (! hash_equals((string) $verification->getCodeHash(), $this->hash($code, $email))) {
-            $this->verificationRepository->increment($verification->getId(), SelfServiceVerificationDomainObjectAbstract::ATTEMPTS);
+            $this->rateLimiter->hit($failedCodesKey, self::FAILED_CODES_LOCK_MINUTES * 60);
 
             throw new SelfServiceVerificationException(
                 $verification->getAttempts() + 1 >= self::MAX_ATTEMPTS
@@ -75,6 +95,8 @@ class SelfServiceVerificationService
                     : __('That code is not correct. Check the email and try again.')
             );
         }
+
+        $this->rateLimiter->clear($failedCodesKey);
 
         return $this->openSession($email, $verification->getId());
     }

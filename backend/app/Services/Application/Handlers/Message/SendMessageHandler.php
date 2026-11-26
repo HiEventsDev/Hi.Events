@@ -64,10 +64,11 @@ class SendMessageHandler
         }
 
         $recipientCount = $this->estimateRecipientCount($messageData);
+        $storedMessage = $this->purifier->purify($messageData->message);
         $tierViolation = $this->eligibilityService->checkTierLimits(
             $messageData->account_id,
             $recipientCount,
-            $messageData->message
+            $storedMessage
         );
 
         if ($tierViolation !== null) {
@@ -106,7 +107,7 @@ class SendMessageHandler
         $message = $this->messageRepository->create([
             'event_id' => $messageData->event_id,
             'subject' => $messageData->subject,
-            'message' => $this->purifier->purify($messageData->message),
+            'message' => $storedMessage,
             'type' => $messageData->type->name,
             'order_id' => $this->getOrderId($messageData),
             'event_occurrence_id' => $messageData->event_occurrence_id,
@@ -137,7 +138,7 @@ class SendMessageHandler
                 'account_id' => $messageData->account_id,
                 'event_id' => $messageData->event_id,
                 'subject' => $messageData->subject,
-                'message' => $this->purifier->purify($messageData->message),
+                'message' => $storedMessage,
                 'type' => $messageData->type,
                 'is_test' => $messageData->is_test,
                 'send_copy_to_current_user' => $messageData->send_copy_to_current_user,

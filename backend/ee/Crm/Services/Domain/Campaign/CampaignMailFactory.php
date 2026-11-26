@@ -15,6 +15,7 @@ use HiEvents\Enterprise\Crm\Mail\CampaignMail;
 use HiEvents\Enterprise\Crm\Repository\Interfaces\CrmCampaignRepositoryInterface;
 use HiEvents\Enterprise\Crm\Services\Domain\Campaign\DTO\CampaignEventCardDTO;
 use HiEvents\Enterprise\Crm\Services\Domain\Campaign\DTO\CampaignRecipientDTO;
+use HiEvents\Helper\StringHelper;
 use HiEvents\Helper\Url;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
@@ -195,7 +196,7 @@ class CampaignMailFactory
 
     private function onOneLine(string $text): string
     {
-        return trim((string) preg_replace('/\s*\R\s*/u', ' ', $text));
+        return StringHelper::onOneLine($text);
     }
 
     private function eventCard(CrmCampaignDomainObject $campaign, bool $isAutomated, bool $isPreview): ?CampaignEventCardDTO

@@ -865,6 +865,53 @@ class CampaignDeliveryTest extends TestCase
         $this->assertSame('SENT', $this->campaign($campaignId)->status);
     }
 
+    public function test_a_campaign_of_an_account_suspended_mid_send_is_paused_and_its_remaining_recipients_skipped(): void
+    {
+        $campaignId = $this->insertCampaign(['status' => 'SENDING', 'sent_at' => now()->subMinute()]);
+        $firstId = $this->insertRecipient($campaignId, $this->adaId, 'ada@example.com');
+        $secondId = $this->insertRecipient($campaignId, $this->graceId, 'grace@example.com');
+        DB::table('accounts')->where('id', $this->accountId)->update(['suspended_at' => now()]);
+
+        app(CampaignDeliveryService::class)->deliver($firstId);
+        app(CampaignDeliveryService::class)->deliver($secondId);
+
+        $campaign = $this->campaign($campaignId);
+        $this->assertSame(['PAUSED', CampaignDispatchService::REASON_ACCOUNT_SUSPENDED], [$campaign->status, $campaign->status_reason]);
+        $this->assertSame(
+            [['SKIPPED', 'CAMPAIGN_STOPPED'], ['SKIPPED', 'CAMPAIGN_STOPPED']],
+            array_map(fn (int $id) => [$this->recipientStatus($id), $this->failureReason($id)], [$firstId, $secondId]),
+        );
+        $this->assertCount(0, $this->sentEmails());
+    }
+
+    public function test_dispatching_a_campaign_of_a_suspended_account_pauses_it_and_queues_nothing(): void
+    {
+        Bus::fake([SendCampaignEmailJob::class, DispatchCampaignJob::class]);
+        $campaignId = $this->insertCampaign(['status' => 'SENDING', 'sent_at' => now()->subMinute()]);
+        $recipientId = $this->insertRecipient($campaignId, $this->adaId, 'ada@example.com');
+        DB::table('accounts')->where('id', $this->accountId)->update(['suspended_at' => now()]);
+
+        app(CampaignDispatchService::class)->dispatch($campaignId);
+
+        $campaign = $this->campaign($campaignId);
+        $this->assertSame(['PAUSED', CampaignDispatchService::REASON_ACCOUNT_SUSPENDED], [$campaign->status, $campaign->status_reason]);
+        $this->assertSame(['SKIPPED', 'CAMPAIGN_STOPPED'], [$this->recipientStatus($recipientId), $this->failureReason($recipientId)]);
+        Bus::assertNothingDispatched();
+    }
+
+    public function test_an_approved_scheduled_campaign_of_a_suspended_account_is_not_released(): void
+    {
+        Bus::fake([DispatchCampaignJob::class]);
+        $campaignId = $this->insertCampaign(['status' => 'SCHEDULED', 'scheduled_at' => now()->subMinute(), 'approved_at' => now()->subDay()]);
+        $this->insertRecipient($campaignId, $this->adaId, 'ada@example.com');
+        DB::table('accounts')->where('id', $this->accountId)->update(['suspended_at' => now()]);
+
+        SendScheduledCampaignsJob::dispatchSync();
+
+        $this->assertSame('SCHEDULED', $this->campaign($campaignId)->status);
+        Bus::assertNotDispatched(DispatchCampaignJob::class);
+    }
+
     public function test_dispatching_a_campaign_whose_organizer_was_deleted_cancels_it_and_leaves_nobody_waiting(): void
     {
         $campaignId = $this->insertCampaign(['status' => 'SENDING', 'sent_at' => now()->subMinute()]);
