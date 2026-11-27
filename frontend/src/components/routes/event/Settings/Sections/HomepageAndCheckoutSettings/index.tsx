@@ -20,27 +20,8 @@ import {useSmsConnectionMissing} from "../../../../../../ee/crm/hooks/useSmsConn
 import {useGetEvent} from "../../../../../../queries/useGetEvent.ts";
 import {Callout} from "../../../../../common/Callout";
 import {useAccess} from "../../../../../../hooks/useAccess.ts";
-
-const CUTOFF_MINUTES = [0, 60, 120, 720, 1440, 2880, 10080];
-
-const cutoffLabel = (minutes: number): string => {
-    if (minutes === 0) {
-        return t`When the event starts`;
-    }
-    if (minutes % 1440 === 0) {
-        const days = minutes / 1440;
-        return days === 1 ? t`1 day before` : t`${days} days before`;
-    }
-    if (minutes % 60 === 0) {
-        const hours = minutes / 60;
-        return hours === 1 ? t`1 hour before` : t`${hours} hours before`;
-    }
-    return t`${minutes} minutes before`;
-};
-
-const cutoffOptions = (current: number) => [...new Set([...CUTOFF_MINUTES, current])]
-    .sort((a, b) => a - b)
-    .map((minutes) => ({value: String(minutes), label: cutoffLabel(minutes)}));
+import {cutoffOptions} from "../../../../../../utilites/cutoffOptions.ts";
+import {resaleToggleRefusedMessage, ticketResaleDescription} from "../../../../../../utilites/ticketResaleCopy.ts";
 
 export const HomepageAndCheckoutSettings = () => {
     const {eventId} = useParams();
@@ -279,7 +260,7 @@ export const HomepageAndCheckoutSettings = () => {
                             <SettingsSection id="ticket-resale" title={t`Ticket resale`}>
                                 <SettingsRow
                                     label={t`Let buyers resell tickets`}
-                                    description={t`Buyers who can't attend can list a ticket. Once that ticket type is sold out, the listed ticket is sold through your normal checkout and the seller is refunded to their original card, minus the card and platform fees of the replacement sale, so you are not out of pocket. You can turn this off for individual ticket types. If a replacement buyer later disputes their payment and wins, that chargeback is at your risk, as with any sale.`}
+                                    description={ticketResaleDescription()}
                                     htmlFor="event-ticket-resale"
                                     inlineControl
                                 >
@@ -287,7 +268,7 @@ export const HomepageAndCheckoutSettings = () => {
                                         id="event-ticket-resale"
                                         data-testid="ticket-resale-enabled-switch"
                                         disabled={!canTurnResaleOnOrOff}
-                                        title={canTurnResaleOnOrOff ? undefined : t`Only members who can issue refunds can turn ticket resale on or off.`}
+                                        title={canTurnResaleOnOrOff ? undefined : resaleToggleRefusedMessage()}
                                         {...form.getInputProps('allow_ticket_resale', {type: 'checkbox'})}
                                     />
                                 </SettingsRow>

@@ -2,7 +2,7 @@ import {useState} from "react";
 import {Link, useParams} from "react-router";
 import {plural, t} from "@lingui/macro";
 import {ActionIcon, Button, Menu, Skeleton} from "@mantine/core";
-import {IconDotsVertical, IconFilter, IconPencil, IconPlus, IconTrash} from "@tabler/icons-react";
+import {IconDotsVertical, IconPencil, IconPlus, IconTrash} from "@tabler/icons-react";
 import {CreateButton} from "../../../../../components/common/CreateButton";
 import {getClientLocale, toIntlLocale} from "../../../../../locales.ts";
 import {IdParam} from "../../../../../types.ts";
@@ -153,7 +153,7 @@ const AudienceSegments = () => {
 
                 {segments && segments.data.length === 0 && (
                     <div className={shared.empty}>
-                        <IconFilter size={22} stroke={1.5}/>
+                        <img className={shared.emptyImage} src="/blank-slate/audience-segments.svg" alt="" data-compact/>
                         <p>{t`No segments of your own yet. Combine rules like "booked 3+ events" and "not seen in 6 months" to build one.`}</p>
                         {canChange && (
                             <Button variant="default" size="xs" onClick={() => setModal({})}>{t`Create a segment`}</Button>

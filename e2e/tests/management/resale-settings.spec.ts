@@ -1,8 +1,9 @@
 import { test, expect } from '../../fixtures';
 import { EventSettingsPage } from '../../pages/event-settings.page';
 import { ProductEditPage } from '../../pages/product-edit.page';
+import { ResalePage } from '../../pages/resale.page';
 import { WebhookPage } from '../../pages/webhook.page';
-import { createFreshOrganizer, createLiveEventWithFreeTicket } from '../../api/factory';
+import { createFreshOrganizer, createLiveEventWithFreeTicket, createLiveEventWithPaidTicket } from '../../api/factory';
 
 test.describe('organizer controls for ticket resale', () => {
   test('resale is off by default and an organizer turns it on with a cutoff', async ({ authedPage, api, account }) => {
@@ -25,6 +26,30 @@ test.describe('organizer controls for ticket resale', () => {
     expect((await api.getEventSettings(event.eventId)).ticket_resale_cutoff_minutes).toBe(1440);
   });
 
+  test('an organizer turns resale on, moves the cutoff and turns it off again from the resale page', async ({ authedPage, api, account }) => {
+    const event = await createLiveEventWithFreeTicket(api, account.organizerId);
+
+    const resale = new ResalePage(authedPage);
+    await resale.goto(event.eventId);
+    await expect(resale.enabledSwitch()).not.toBeChecked();
+    await expect(resale.cutoffSelect()).toBeDisabled();
+
+    await resale.toggleResale();
+    const turnOn = authedPage.getByRole('dialog', { name: 'Turn on ticket resale?' });
+    await expect(turnOn.getByText('that chargeback is at your risk, as with any sale.')).toBeVisible();
+    await turnOn.getByRole('button', { name: 'Turn on resale' }).click();
+    await expect(resale.enabledSwitch()).toBeChecked();
+    await expect.poll(async () => (await api.getEventSettings(event.eventId)).allow_ticket_resale).toBe(true);
+
+    await resale.chooseCutoff('1 day before');
+    await expect.poll(async () => (await api.getEventSettings(event.eventId)).ticket_resale_cutoff_minutes).toBe(1440);
+
+    await resale.toggleResale();
+    await authedPage.getByRole('dialog', { name: 'Turn off ticket resale?' }).getByRole('button', { name: 'Turn off resale' }).click();
+    await expect(resale.enabledSwitch()).not.toBeChecked();
+    await expect.poll(async () => (await api.getEventSettings(event.eventId)).allow_ticket_resale).toBe(false);
+  });
+
   test('the organizer default decides whether a new event allows resale', async ({ authedPage, api }) => {
     const organizer = await createFreshOrganizer(api);
 
@@ -40,7 +65,7 @@ test.describe('organizer controls for ticket resale', () => {
   });
 
   test('a ticket type switched to not resellable says so when reopened', async ({ authedPage, api, account }) => {
-    const event = await createLiveEventWithFreeTicket(api, account.organizerId);
+    const event = await createLiveEventWithPaidTicket(api, account.organizerId);
 
     const products = new ProductEditPage(authedPage);
     await products.goto(event.eventId);

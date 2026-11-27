@@ -315,7 +315,9 @@ const AudienceContacts = () => {
 
                 {meta?.total === 0 && (
                     <div className={shared.empty}>
-                        {isSuppressed ? <IconMailOff size={22} stroke={1.5}/> : <IconAddressBook size={22} stroke={1.5}/>}
+                        {isSuppressed && <IconMailOff size={22} stroke={1.5}/>}
+                        {!isSuppressed && isFiltered && <IconAddressBook size={22} stroke={1.5}/>}
+                        {!isSuppressed && !isFiltered && <img className={shared.emptyImage} src="/blank-slate/audience-contacts.svg" alt=""/>}
                         <p>{emptyMessage()}</p>
                         {isFiltered && (
                             <Button

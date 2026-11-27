@@ -301,7 +301,9 @@ const AudienceCampaigns = () => {
             {campaignsQuery.data && campaigns.length === 0 && (
                 <div className={shared.panel}>
                     <div className={shared.empty}>
-                        <IconSend size={22} stroke={1.5}/>
+                        {debouncedQuery || filter !== 'all'
+                            ? <IconSend size={22} stroke={1.5}/>
+                            : <img className={shared.emptyImage} src="/blank-slate/audience-campaigns.svg" alt=""/>}
                         <p>{debouncedQuery ? t`No campaigns match your search.` : emptyCopy[filter]}</p>
                     </div>
                 </div>
