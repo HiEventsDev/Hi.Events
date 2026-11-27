@@ -213,7 +213,7 @@ test.describe('licence gating', () => {
     const card = superAdminPage.getByTestId('admin-licence-card');
     await expect(card).toContainText('Platform');
     await expect(card).toContainText('€300,000 of sales a year');
-    await expect(superAdminPage.getByTestId('admin-licence-features').getByText('Included', { exact: true })).toHaveCount(4);
+    await expect(superAdminPage.getByTestId('admin-licence-features').getByText('Included', { exact: true })).toHaveCount(5);
 
     const sales = superAdminPage.getByTestId('admin-licence-sales');
     await expect(sales).toContainText('Paid sales before tax, after refunds, across every organizer on this install');

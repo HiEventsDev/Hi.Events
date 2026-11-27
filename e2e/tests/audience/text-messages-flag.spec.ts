@@ -71,7 +71,9 @@ test.describe('text messages on Hi.Events Cloud', () => {
       await settings.goto(event.eventId, 'homepage-settings');
       await expect(textOptIn).toBeChecked();
       await page.goto(`/manage/organizer/${organizerId}/settings/text-messages`);
-      await expect(page.locator('#text-messages').getByRole('button', { name: 'Find Messaging Services' })).toBeVisible();
+      const texts = page.locator('#text-messages');
+      await expect(texts.getByRole('button', { name: 'Edit', exact: true })).toBeVisible();
+      await expect(texts).not.toContainText("Text messages aren't available on this account");
       await openCampaignPicker(page, audience);
       await expect(page.getByTestId('campaign-picker-channel')).toBeVisible();
 

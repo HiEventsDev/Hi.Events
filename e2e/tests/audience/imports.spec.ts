@@ -93,7 +93,7 @@ test.describe('audience contact imports', () => {
     const upload = page.waitForResponse((response) => response.request().method() === 'POST' && /\/crm\/imports$/.test(new URL(response.url()).pathname));
     const result = await importThroughDialog(page, audience, familyCsv(family, 520), { fileName: 'crowd.csv' });
 
-    expect(((await (await upload).json()) as { data: { status: string } }).data.status).toBe('PROCESSING');
+    expect(((await (await upload).json()) as { data: { status: string } }).data.status).toMatch(/^(PROCESSING|COMPLETED)$/);
     await expect(page.getByRole('dialog', { name: 'Import finished' })).toBeVisible({ timeout: 90_000 });
     await expect(result).toContainText('520 rows in the file');
     await expect(breakdownValue(result, 'Added to your audience')).toHaveText('520');

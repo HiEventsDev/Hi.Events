@@ -54,7 +54,9 @@ test.describe('audience campaign edge cases', () => {
     await createOptedInOrder(publicApi, event, { email: subscriber, firstName: 'Lin', lastName: 'Linkreader' });
     await buildAudience(api, organizerId);
     await waitForContact(api, organizerId, subscriber);
-    await adminApi.setAccountVerification((await api.getAccount()).id, true);
+    const { id: accountId } = await api.getAccount();
+    await adminApi.setAccountVerification(accountId, true);
+    await adminApi.setUntrustedMessagingTier(accountId);
     const subject = uniqueShort('With a link');
 
     const page = await freshAccount.newAuthedPage();

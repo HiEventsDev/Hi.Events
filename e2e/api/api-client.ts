@@ -684,6 +684,7 @@ export interface CreateConfigurationPayload {
   application_fees: { percentage: number; fixed: number; currency: string };
 }
 
+const UNTRUSTED_MESSAGING_TIER_ID = 1;
 const TRUSTED_MESSAGING_TIER_ID = 2;
 
 export class AdminApiClient {
@@ -692,6 +693,10 @@ export class AdminApiClient {
   async grantMessagingPrivileges(accountId: number): Promise<void> {
     await this.setAccountVerification(accountId, true);
     await this.setMessagingTier(accountId, TRUSTED_MESSAGING_TIER_ID);
+  }
+
+  setUntrustedMessagingTier(accountId: number): Promise<void> {
+    return this.setMessagingTier(accountId, UNTRUSTED_MESSAGING_TIER_ID);
   }
 
   setMessagingTier(accountId: number, messagingTierId: number): Promise<void> {

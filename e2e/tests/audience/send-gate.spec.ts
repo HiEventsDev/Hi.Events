@@ -14,6 +14,7 @@ test.describe('audience campaign send gate', () => {
     saasOnly();
     test.slow();
     const { api, organizerId } = freshAccount;
+    await adminApi.setUntrustedMessagingTier((await api.getAccount()).id);
     const event = await createLiveEventWithFreeTicket(api, organizerId);
     const subscriber = uniqueEmail('gated-subscriber');
     await createOptedInOrder(publicApi, event, { email: subscriber, firstName: 'Gia', lastName: 'Gated' });
