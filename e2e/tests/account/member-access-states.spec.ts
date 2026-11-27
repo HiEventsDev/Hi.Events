@@ -78,13 +78,14 @@ test.describe('member access states', () => {
     }
 
     await page.goto(`${organizerBase}/report/check_in_summary`);
-    await expect(page.getByText('Check-in Summary').first()).toBeVisible();
+    await expect(page.getByTestId('report-tab-check_in_summary')).toBeVisible();
+    await expect(page.getByTestId('report-tab-revenue_summary')).toHaveCount(0);
     await expect(page.getByRole('heading', { name: NO_ACCESS })).toHaveCount(0);
     await expect(page).not.toHaveURL(/\/auth\/login/);
 
     const ownerPage = await freshAccount.newAuthedPage();
     await ownerPage.goto(`${base}/reports`);
-    await expect(ownerPage.getByText('Product Sales').first()).toBeVisible();
+    await expect(ownerPage.getByTestId('report-tab-product_sales')).toBeVisible();
     await expect(ownerPage.getByRole('heading', { name: NO_ACCESS })).toHaveCount(0);
   });
 

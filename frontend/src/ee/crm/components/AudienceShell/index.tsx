@@ -91,15 +91,20 @@ export const AudienceShell = ({actions, isTextCampaign = false, children}: Audie
     const status = statusQuery.data;
     const startSync = useStartCrmSync();
     const wasSyncing = useRef(false);
+    const lastSyncedAt = useRef<string | null | undefined>(undefined);
 
     useEffect(() => {
-        if (status?.status === 'SYNCING') {
-            wasSyncing.current = true;
-        } else if (status && wasSyncing.current) {
-            wasSyncing.current = false;
+        if (!status) {
+            return;
+        }
+        const finishedSyncing = status.status !== 'SYNCING' && wasSyncing.current;
+        const syncedAtChanged = lastSyncedAt.current !== undefined && lastSyncedAt.current !== status.synced_at;
+        wasSyncing.current = status.status === 'SYNCING';
+        lastSyncedAt.current = status.synced_at;
+        if (finishedSyncing || syncedAtChanged) {
             void invalidateCrm(queryClient, [...audienceMembershipKeys(organizerId), crmKeys.contacts(organizerId), crmKeys.tags(organizerId)]);
         }
-    }, [status?.status, organizerId, queryClient]);
+    }, [status?.status, status?.synced_at, organizerId, queryClient]);
 
     const isBuilt = isAudienceBuilt(status);
     const isRefreshing = isBuilt && status?.status === 'SYNCING';

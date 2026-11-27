@@ -124,8 +124,8 @@ test.describe('read-only and permission spot checks', () => {
     await expect(page.getByRole('menuitem', { name: /Cancel order/ })).toBeVisible();
 
     await page.goto(`/manage/organizer/${freshAccount.organizerId}/reports`);
-    await expect(page.getByText('Check-In Summary').first()).toBeVisible();
-    await expect(page.getByText('Revenue Summary')).toHaveCount(0);
+    await expect(page.getByTestId('report-tab-check_in_summary')).toBeVisible();
+    await expect(page.getByTestId('report-tab-revenue_summary')).toHaveCount(0);
   });
 
   test('a non-admin member cannot reach team or account management', async ({ freshAccount, mailpit, publicApi, browser }) => {

@@ -4,18 +4,37 @@ import {IconCalendarEvent, IconChartBar, IconReceipt, IconReceiptTax, IconUserCh
 import {OrganizerReportTypes} from "../../../../types.ts";
 import {useAccess} from "../../../../hooks/useAccess.ts";
 import {useGetAccount} from "../../../../queries/useGetAccount.ts";
+import {PageBody} from "../../../common/PageBody";
+import {PageTitle} from "../../../common/PageTitle";
 import {ReportDefinition, ReportWorkspace} from "../../../common/ReportWorkspace";
+import {RequirePermission} from "../../../common/WriteAccess";
 import RevenueSummaryReport from "./RevenueSummaryReport";
 import EventsPerformanceReport from "./EventsPerformanceReport";
 import TaxSummaryReport from "./TaxSummaryReport";
 import CheckInSummaryReport from "./CheckInSummaryReport";
 import PlatformFeesReport from "./PlatformFeesReport";
 
+const FINANCIAL_REPORTS: string[] = [
+    OrganizerReportTypes.RevenueSummary,
+    OrganizerReportTypes.EventsPerformance,
+    OrganizerReportTypes.TaxSummary,
+    OrganizerReportTypes.PlatformFees,
+];
+
 const OrganizerReports = () => {
-    const {organizerId} = useParams();
+    const {organizerId, reportType} = useParams();
     const {isLoaded, can} = useAccess();
     const {data: account} = useGetAccount();
     const canViewFinancials = can('VIEW_FINANCIALS');
+
+    if (isLoaded && !canViewFinancials && reportType && FINANCIAL_REPORTS.includes(reportType)) {
+        return (
+            <PageBody>
+                <PageTitle>{t`Reports`}</PageTitle>
+                <RequirePermission permission="VIEW_FINANCIALS" imageHref="/blank-slate/reports.svg">{null}</RequirePermission>
+            </PageBody>
+        );
+    }
 
     const reports: ReportDefinition[] = [
         ...(canViewFinancials ? [
@@ -46,14 +65,14 @@ const OrganizerReports = () => {
             label: t`Check-ins`,
             description: t`Attendees and check-ins for every event, across all time.`,
             icon: IconUserCheck,
-                component: CheckInSummaryReport,
+            component: CheckInSummaryReport,
         },
         ...(canViewFinancials && account?.is_saas_mode_enabled ? [{
             id: OrganizerReportTypes.PlatformFees,
             label: t`Platform fees`,
             description: t`Hi.Events platform fees and the VAT charged on them, payment by payment.`,
             icon: IconReceipt,
-                component: PlatformFeesReport,
+            component: PlatformFeesReport,
         }] : []),
     ];
 

@@ -391,7 +391,9 @@ test.describe('audience text messages', () => {
     const history = audience.drawerSection('Consent history');
     const textDraftCount = async (): Promise<string> => {
       await page.goto(`/manage/organizer/${organizerId}/audience/campaigns/new?channel=SMS`);
-      return page.getByTestId('campaign-recipient-count').innerText();
+      const count = page.getByTestId('campaign-recipient-count');
+      await expect(count).toContainText('opted in to texts');
+      return count.innerText();
     };
     await openContact(audience, texter);
     await expect(texts).toContainText('Opted in to marketing text messages on this number.');
