@@ -3,6 +3,7 @@
 namespace HiEvents\Resources\User;
 
 use HiEvents\DomainObjects\Enums\Permission;
+use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Resources\BaseResource;
 use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
@@ -20,17 +21,20 @@ class UserResource extends BaseResource
         $authUserService = app(AuthUserService::class);
         $isImpersonating = $authUserService->isImpersonating();
         $impersonatorId = $authUserService->getImpersonatorId();
+        $hideSettings = $this->isPendingInvitationOfAnotherUser();
 
         return [
             'id' => $this->getId(),
-            'timezone' => $this->getTimezone(),
+            'timezone' => $hideSettings ? config('app.default_timezone') : $this->getTimezone(),
             'first_name' => $this->getFirstName(),
             'last_name' => $this->getLastName(),
             'full_name' => $this->getFullName(),
             'email' => $this->getEmail(),
-            'is_email_verified' => $this->getEmailVerifiedAt() !== null,
-            'locale' => $this->getLocale(),
-            'two_factor_enabled' => $this->getTwoFactorConfirmedAt() !== null,
+            /** @var bool */
+            'is_email_verified' => ! $hideSettings && $this->getEmailVerifiedAt() !== null,
+            'locale' => $hideSettings ? config('app.locale') : $this->getLocale(),
+            /** @var bool */
+            'two_factor_enabled' => ! $hideSettings && $this->getTwoFactorConfirmedAt() !== null,
             $this->mergeWhen($this->isCurrentUser(), fn () => [
                 'has_pending_email_change' => $this->getPendingEmail() !== null,
                 /** @var bool */
@@ -64,6 +68,12 @@ class UserResource extends BaseResource
     private function isCurrentUser(): bool
     {
         return auth()->id() !== null && (int) auth()->id() === $this->getId();
+    }
+
+    private function isPendingInvitationOfAnotherUser(): bool
+    {
+        return ! $this->isCurrentUser()
+            && $this->getCurrentAccountUser()?->getStatus() === UserStatus::INVITED->name;
     }
 
     private function accessSummary(): array

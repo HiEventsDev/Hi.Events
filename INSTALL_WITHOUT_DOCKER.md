@@ -172,7 +172,7 @@ For development and testing, you can set `APP_LICENCE_KEY` to `development` inst
 
 13. **Optional: Reverse proxies and rate limiting:**
 
-Rate limits are keyed by client IP. The default, `APP_TRUSTED_PROXIES=*`, trusts whichever proxy connects to the app and reads the client IP from its `X-Forwarded-For`. That works with no proxy or a single proxy, but lets clients that reach the app directly spoof their IP. Behind two or more proxies (for example Cloudflare in front of Traefik, Caddy or nginx) the default sees the outer proxy as the client, so many visitors share one rate limit. In both cases, list every proxy between the visitor and the app instead (`cloudflare` expands to Cloudflare's published ranges), including the frontend server if it calls the API from another host:
+Rate limits are keyed by client IP. The default, `APP_TRUSTED_PROXIES=*`, trusts every address, so the app takes the client IP from the first entry of `X-Forwarded-For`. Proxies append to that header rather than replace it, so a client can send its own value and get around per-IP rate limits, behind a proxy or not. List every proxy between the visitor and the app instead (`cloudflare` expands to Cloudflare's published ranges), including the frontend server if it calls the API from another host:
 
 ```bash
 APP_TRUSTED_PROXIES=127.0.0.1,10.0.0.0/8,cloudflare

@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Auth;
 
+use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\Models\Account;
 use HiEvents\Models\AccountAttribution;
 use HiEvents\Models\AccountConfiguration;
 use HiEvents\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\RateLimiter;
 use Tests\TestCase;
@@ -125,6 +128,62 @@ class RegisterTest extends TestCase
 
         $response2 = $this->post(self::REGISTER_ROUTE, $data, ['Accept' => 'application/json']);
         $response2->assertJsonValidationErrors(['email']);
+    }
+
+    public function test_registering_with_a_team_members_email_requires_their_password(): void
+    {
+        $password = fake()->password(16);
+        $member = $this->createTeamMemberWithoutOwnAccount($password);
+        $wrongPassword = fake()->password(16);
+
+        Config::set('app.disable_registration', false);
+
+        $this->post(self::REGISTER_ROUTE, $this->registrationPayload(['email' => $member->email, 'password' => $wrongPassword, 'password_confirmation' => $wrongPassword]), ['Accept' => 'application/json'])
+            ->assertJsonValidationErrors(['email']);
+
+        $this->assertDatabaseMissing('account_users', ['user_id' => $member->id, 'is_account_owner' => true]);
+        $this->assertSame(1, Account::query()->count());
+        $this->assertTrue(Hash::check($password, $member->fresh()->password));
+    }
+
+    public function test_a_team_member_can_create_their_own_account_with_their_password(): void
+    {
+        $password = fake()->password(16);
+        $member = $this->createTeamMemberWithoutOwnAccount($password);
+
+        Config::set('app.disable_registration', false);
+
+        $this->post(self::REGISTER_ROUTE, $this->registrationPayload(['email' => $member->email, 'password' => $password, 'password_confirmation' => $password]), ['Accept' => 'application/json'])
+            ->assertStatus(201);
+
+        $this->assertDatabaseHas('account_users', ['user_id' => $member->id, 'is_account_owner' => true]);
+    }
+
+    public function test_registering_with_the_email_of_a_member_who_has_no_password_is_refused(): void
+    {
+        $member = $this->createTeamMemberWithoutOwnAccount(null);
+        $password = fake()->password(16);
+
+        Config::set('app.disable_registration', false);
+
+        $this->post(self::REGISTER_ROUTE, $this->registrationPayload(['email' => $member->email, 'password' => $password, 'password_confirmation' => $password]), ['Accept' => 'application/json'])
+            ->assertJsonValidationErrors(['email']);
+
+        $this->assertDatabaseMissing('account_users', ['user_id' => $member->id, 'is_account_owner' => true]);
+    }
+
+    private function createTeamMemberWithoutOwnAccount(?string $password): User
+    {
+        $owner = User::factory()->withAccount()->create();
+        $member = User::factory()->create(['password' => $password === null ? null : Hash::make($password)]);
+
+        $member->accounts()->attach($owner->accounts()->first(), [
+            'role' => Role::ORGANIZER,
+            'status' => UserStatus::ACTIVE,
+            'is_account_owner' => false,
+        ]);
+
+        return $member;
     }
 
     public function test_register_user_with_invalid_data(): void

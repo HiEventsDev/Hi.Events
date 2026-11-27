@@ -1191,15 +1191,17 @@ $router->prefix('/public')->group(
         // Orders
         $router->post('/events/{event_id}/order', CreateOrderActionPublic::class)
             ->middleware('throttle:public-order-create');
-        $router->put('/events/{event_id}/order/{order_short_id}', CompleteOrderActionPublic::class);
-        $router->get('/events/{event_id}/order/{order_short_id}', GetOrderActionPublic::class);
-        $router->post('/events/{event_id}/order/{order_short_id}/abandon', AbandonOrderActionPublic::class);
-        $router->post('/events/{event_id}/order/{order_short_id}/await-offline-payment', TransitionOrderToOfflinePaymentPublicAction::class);
-        $router->post('/events/{event_id}/order/{order_short_id}/payment-link', CreateOrderPaymentLinkActionPublic::class)
-            ->middleware('throttle:10,1,public-order-payment-link');
-        $router->post('/events/{event_id}/order/{order_short_id}/report-offline-payment', ReportOfflinePaymentActionPublic::class)
-            ->middleware('throttle:10,1,public-offline-payment-report');
-        $router->get('/events/{event_id}/order/{order_short_id}/invoice', DownloadOrderInvoicePublicAction::class);
+        $router->middleware('order.event')->group(function (Router $router): void {
+            $router->put('/events/{event_id}/order/{order_short_id}', CompleteOrderActionPublic::class);
+            $router->get('/events/{event_id}/order/{order_short_id}', GetOrderActionPublic::class);
+            $router->post('/events/{event_id}/order/{order_short_id}/abandon', AbandonOrderActionPublic::class);
+            $router->post('/events/{event_id}/order/{order_short_id}/await-offline-payment', TransitionOrderToOfflinePaymentPublicAction::class);
+            $router->post('/events/{event_id}/order/{order_short_id}/payment-link', CreateOrderPaymentLinkActionPublic::class)
+                ->middleware('throttle:10,1,public-order-payment-link');
+            $router->post('/events/{event_id}/order/{order_short_id}/report-offline-payment', ReportOfflinePaymentActionPublic::class)
+                ->middleware('throttle:10,1,public-offline-payment-report');
+            $router->get('/events/{event_id}/order/{order_short_id}/invoice', DownloadOrderInvoicePublicAction::class);
+        });
 
         // Attendees
         $router->get('/events/{event_id}/attendees/{attendee_short_id}', GetAttendeeActionPublic::class);
@@ -1215,9 +1217,11 @@ $router->prefix('/public')->group(
             ->middleware('throttle:public-promo-code');
 
         // Stripe payment gateway
-        $router->post('/events/{event_id}/order/{order_short_id}/stripe/payment_intent', CreatePaymentIntentActionPublic::class)
-            ->middleware('throttle:public-payment-intent');
-        $router->get('/events/{event_id}/order/{order_short_id}/stripe/payment_intent', GetPaymentIntentActionPublic::class);
+        $router->middleware('order.event')->group(function (Router $router): void {
+            $router->post('/events/{event_id}/order/{order_short_id}/stripe/payment_intent', CreatePaymentIntentActionPublic::class)
+                ->middleware('throttle:public-payment-intent');
+            $router->get('/events/{event_id}/order/{order_short_id}/stripe/payment_intent', GetPaymentIntentActionPublic::class);
+        });
 
         // Questions
         $router->get('/events/{event_id}/questions', GetQuestionsPublicAction::class);

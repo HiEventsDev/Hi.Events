@@ -13,6 +13,8 @@ use JsonException;
 
 class ApiRouteDispatcher
 {
+    public const INNER_REQUEST_ATTRIBUTE = 'mcp.inner_request';
+
     private const JSON = 'application/json';
 
     private const MULTIPART = 'multipart/form-data';
@@ -69,6 +71,7 @@ class ApiRouteDispatcher
             server: $this->innerServerVariables($outerRequest, $contentType),
             content: $content,
         );
+        $innerRequest->attributes->set(self::INNER_REQUEST_ATTRIBUTE, true);
 
         try {
             $response = $this->kernel->handle($innerRequest);

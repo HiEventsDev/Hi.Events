@@ -64,6 +64,11 @@ class AuthUserService
         return $this->currentApiKey() !== null;
     }
 
+    public function isOAuthAccessTokenRequest(): bool
+    {
+        return $this->currentApiKey()?->getAttribute('oauth_connection_id') !== null;
+    }
+
     public function apiKeyCanWrite(): bool
     {
         $apiKey = $this->currentApiKey();

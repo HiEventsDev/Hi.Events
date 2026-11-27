@@ -6,12 +6,14 @@ use Closure;
 use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\Exceptions\ApiKeyReadOnlyException;
+use HiEvents\Exceptions\OAuthTokenMcpOnlyException;
 use HiEvents\Exceptions\PermissionRequiredException;
 use HiEvents\Exceptions\ReadOnlyAccessException;
 use HiEvents\Exceptions\UnauthorizedException;
 use HiEvents\Http\Actions\Admin\Users\StopImpersonationAction;
 use HiEvents\Http\Attributes\AllowedForReadOnlyUsers;
 use HiEvents\Http\Attributes\RequiresPermission;
+use HiEvents\Mcp\Routing\ApiRouteDispatcher;
 use HiEvents\Services\Domain\Auth\Access\AccountUserAccess;
 use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
 use HiEvents\Services\Domain\Auth\AuthUserService;
@@ -30,6 +32,10 @@ class EnforceAccountUserAccess
     {
         if (! $this->routeRequiresAuthentication($request) || ! Auth::check() || $this->isAuthPath($request)) {
             return $next($request);
+        }
+
+        if ($this->authUserService->isOAuthAccessTokenRequest() && ! $request->attributes->get(ApiRouteDispatcher::INNER_REQUEST_ATTRIBUTE)) {
+            throw new OAuthTokenMcpOnlyException;
         }
 
         $controller = $request->route()?->getControllerClass();

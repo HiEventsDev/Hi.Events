@@ -173,13 +173,22 @@ class CreateAccountHandler
             'is_account_owner' => true,
         ]);
 
-        if ($existingOwner !== null) {
+        $passwordMatches = $this->passwordMatches($accountData, $existingUser);
+
+        if ($existingOwner !== null || ! $passwordMatches) {
             throw new EmailAlreadyExists(
                 __('There is already an account associated with this email. Please log in instead.')
             );
         }
 
         return $existingUser;
+    }
+
+    private function passwordMatches(CreateAccountDTO $accountData, UserDomainObject $existingUser): bool
+    {
+        return $accountData->password !== null
+            && $existingUser->getPassword() !== null
+            && $this->hashManager->check($accountData->password, $existingUser->getPassword());
     }
 
     /**

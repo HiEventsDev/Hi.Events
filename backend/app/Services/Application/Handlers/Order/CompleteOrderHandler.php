@@ -45,6 +45,7 @@ use HiEvents\Services\Application\Handlers\Order\DTO\CreatedProductDataDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\OrderQuestionsDTO;
 use HiEvents\Services\Domain\Order\CheckoutSmsOptInService;
 use HiEvents\Services\Domain\Order\OccurrenceStatusValidator;
+use HiEvents\Services\Domain\Order\OrderReservationLapseGuard;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Domain\Question\QuestionVisibilityService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
@@ -82,6 +83,7 @@ class CompleteOrderHandler
         private readonly QuestionVisibilityService $questionVisibilityService,
         private readonly PhoneNumberNormalizer $phoneNumberNormalizer,
         private readonly CheckoutSmsOptInService $checkoutSmsOptInService,
+        private readonly OrderReservationLapseGuard $reservationLapseGuard,
     ) {}
 
     /**
@@ -99,7 +101,11 @@ class CompleteOrderHandler
 
             $this->transactionLockService->lockOrder($orderShortId);
 
-            $order = $this->getOrder($orderShortId);
+            $order = $this->getOrder($orderShortId, $orderData->event_id);
+
+            if (! $order->isPaymentRequired()) {
+                $this->reservationLapseGuard->assertReservationHeldUnderEventLock($order);
+            }
 
             $this->occurrenceStatusValidator->assertOrderOccurrencesArePurchasable($order);
 
@@ -420,7 +426,7 @@ class CompleteOrderHandler
     /**
      * @throws ResourceConflictException
      */
-    private function getOrder(string $orderShortId): OrderDomainObject
+    private function getOrder(string $orderShortId, int $eventId): OrderDomainObject
     {
         $order = $this->orderRepository
             ->loadRelation(
@@ -430,7 +436,7 @@ class CompleteOrderHandler
                 ))
             ->findByShortId($orderShortId);
 
-        if ($order === null) {
+        if ($order === null || $order->getEventId() !== $eventId) {
             throw new ResourceNotFoundException(__('Order not found'));
         }
 

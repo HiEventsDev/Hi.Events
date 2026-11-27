@@ -104,6 +104,7 @@ Errors return JSON with a `message`. Validation errors (`422`) also include an `
 | `401` | `INVITATION_PENDING` | `POST /auth/login` only: the user's only membership is an invitation they haven't accepted; they must open the invitation email |
 | `403` | `API_KEY_READ_ONLY` | A read-only API key tried to make a change |
 | `403` | `API_KEY_NOT_ALLOWED` | The endpoint can't be used with an API key |
+| `403` | `OAUTH_TOKEN_MCP_ONLY` | The token was issued to a connected app through OAuth and only works with the MCP server |
 | `403` | `READ_ONLY_ROLE` | The user has view-only access to the account |
 | `403` | `VERIFICATION_REQUIRED` | Public ticket transfer and resale endpoints only: the request needs an `X-Self-Service-Token` from the emailed verification code |
 | `403` | `PERMISSION_REQUIRED` | The user's role lacks a permission the endpoint needs (for example refunds or financial data) |

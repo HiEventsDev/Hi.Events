@@ -150,7 +150,9 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
                     ->orWhere('attendees.'.AttendeeDomainObjectAbstract::LAST_NAME, 'ilike', '%'.$params->query.'%')
                     ->orWhere('attendees.'.AttendeeDomainObjectAbstract::FIRST_NAME, 'ilike', '%'.$params->query.'%')
                     ->orWhere('attendees.'.AttendeeDomainObjectAbstract::PUBLIC_ID, 'ilike', '%'.$params->query.'%')
-                    ->orWhere('attendees.'.AttendeeDomainObjectAbstract::EMAIL, 'ilike', '%'.$params->query.'%')
+                    ->orWhere(static fn (Builder $emailMatch) => $emailMatch
+                        ->where('check_in_lists.public_show_order_details', true)
+                        ->where('attendees.'.AttendeeDomainObjectAbstract::EMAIL, 'ilike', '%'.$params->query.'%'))
                     ->orWhere('attendees.'.AttendeeDomainObjectAbstract::SEAT_LABEL, 'ilike', '%'.$params->query.'%');
             };
         }

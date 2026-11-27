@@ -66,6 +66,7 @@ export const ScanTab = ({boxOffice, session}: ScanTabProps) => {
                     isCheckInPending={controller.isCheckInPending}
                     isDeletePending={controller.isDeletePending}
                     allowOrdersAwaitingOfflinePaymentToCheckIn={controller.allowOrdersAwaitingOfflinePaymentToCheckIn}
+                    searchesEmail={!!checkInList?.public_show_order_details}
                     eventType={boxOffice.event.type as EventType}
                     timezone={boxOffice.event.timezone}
                     showRowOccurrences={false}
