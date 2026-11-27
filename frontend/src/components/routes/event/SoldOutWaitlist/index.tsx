@@ -20,6 +20,7 @@ import {IconSend} from "@tabler/icons-react";
 import {useGetEventOccurrences} from "../../../../queries/useGetEventOccurrences.ts";
 import {OccurrenceSelect} from "../../../common/OccurrenceSelect";
 import {SortSelector} from "../../../common/SortSelector";
+import {WriteAccess} from "../../../common/WriteAccess";
 
 export const SoldOutWaitlist = () => {
     const {eventId} = useParams();
@@ -124,14 +125,16 @@ export const SoldOutWaitlist = () => {
                     </Group>
                 )}
             >
-                <Button
-                    color="green"
-                    leftSection={<IconSend size={16}/>}
-                    data-testid="waitlist-offer-next-button"
-                    onClick={openOfferModal}
-                >
-                    {t`Offer Tickets`}
-                </Button>
+                <WriteAccess>
+                    <Button
+                        color="green"
+                        leftSection={<IconSend size={16}/>}
+                        data-testid="waitlist-offer-next-button"
+                        onClick={openOfferModal}
+                    >
+                        {t`Offer Tickets`}
+                    </Button>
+                </WriteAccess>
             </ToolBar>
 
             {(!entries || !event) && <TableCardSkeleton rows={5}/>}

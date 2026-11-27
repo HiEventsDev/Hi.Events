@@ -85,7 +85,7 @@ class EventShareSuggestionsActionTest extends TestCase
         EventShareCaptionAgent::fake()->preventStrayPrompts();
 
         $this->suggestions($this->owner)->assertOk()->assertJsonPath('data.availability', 'NOT_CONFIGURED');
-        $this->generate($this->owner)->assertForbidden();
+        $this->generate($this->owner)->assertStatus(409);
     }
 
     public function test_a_cloud_account_that_is_neither_verified_nor_connected_to_stripe_cannot_generate(): void
@@ -94,7 +94,7 @@ class EventShareSuggestionsActionTest extends TestCase
         EventShareCaptionAgent::fake()->preventStrayPrompts();
 
         $this->suggestions($this->owner)->assertOk()->assertJsonPath('data.availability', 'PAYMENTS_NOT_CONNECTED');
-        $this->generate($this->owner)->assertForbidden();
+        $this->generate($this->owner)->assertStatus(409);
     }
 
     public function test_an_account_that_has_used_its_daily_allowance_is_refused(): void

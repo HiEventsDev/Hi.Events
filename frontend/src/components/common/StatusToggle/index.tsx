@@ -116,6 +116,8 @@ const OrganizerStatusToggle = ({entityId, currentStatus, onSuccess}: {
     onSuccess?: () => void;
 }) => {
     const mutation = useUpdateOrganizerStatus();
+    const {isLoaded, isReadOnly, canManageOrganizer} = useAccess();
+    const canPublish = isLoaded && !isReadOnly && canManageOrganizer(entityId);
 
     const handlePublish = () => {
         confirmationDialog(
@@ -141,7 +143,7 @@ const OrganizerStatusToggle = ({entityId, currentStatus, onSuccess}: {
     return (
         <StatusBanner
             message={t`This organizer profile is not published yet`}
-            onPublish={handlePublish}
+            onPublish={canPublish ? handlePublish : undefined}
             loading={mutation.isPending}
         />
     );

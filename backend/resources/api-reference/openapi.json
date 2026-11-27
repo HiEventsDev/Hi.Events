@@ -10799,7 +10799,7 @@
               }
             }
           },
-          "403": {
+          "409": {
             "description": "",
             "content": {
               "application/json": {
@@ -10824,6 +10824,24 @@
           },
           "401": {
             "$ref": "#/components/responses/AuthenticationException"
+          },
+          "403": {
+            "description": "The authenticated user is not allowed to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
           },
           "404": {
             "description": "The requested resource was not found.",

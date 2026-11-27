@@ -27,7 +27,7 @@ class GenerateEventShareSuggestionsAction extends BaseAction
         } catch (ShareSuggestionsUnavailableException) {
             return $this->errorResponse(
                 __('Caption suggestions are not available for this event.'),
-                ResponseCodes::HTTP_FORBIDDEN,
+                ResponseCodes::HTTP_CONFLICT,
             );
         } catch (ShareSuggestionQuotaExceededException) {
             return $this->errorResponse(
