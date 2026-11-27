@@ -30,8 +30,8 @@ Self-hosted nebo v cloudu. Vaše události, vaše značka, vaše data.
 <br>
 
 > [!NOTE]
-> **Hi.Events 2.0 je tady** s opakovanými událostmi, místy k sezení, pokladnou na místě, programem a harmonogramem,
-> jednotným přihlášením (SSO), týmovými oprávněními a API klíči. [Podívejte se, co je nového →](https://github.com/HiEventsDev/hi.events/releases)
+> **Hi.Events 2.3 je tady** s Audience CRM a SMS kampaněmi, převody a přeprodejem vstupenek, MCP serverem pro AI
+> asistenty, doplňujícími otázkami v pokladně a platebními odkazy. [Podívejte se, co je nového →](https://github.com/HiEventsDev/hi.events/releases)
 
 <br>
 
@@ -71,14 +71,16 @@ skupiny a pořadatele konferencí. Provozujte ho sami, nebo to nechte na nás v 
 - Přizpůsobitelné vložené prvky pro váš web: widgety vstupenek, tlačítka, seznamy událostí, programy a harmonogramy
 - Promo kódy a slevy
 - Sledovací odkazy pro promotéry a affiliate partnery
-- Vlastní registrační otázky
+- Registrační otázky s doplňujícími otázkami a pravidly způsobilosti
 - Marketingový souhlas v pokladně
+- Audience CRM s kontakty, segmenty, registračními formuláři a e-mailovými a SMS kampaněmi <sup>Enterprise</sup>
 - Měření přes Meta, TikTok, Google Analytics a Tag Manager
 
 **💳 Platby**
 - Výplaty na váš vlastní účet Stripe
 - Daně a poplatky, zahrnuté v ceně nebo připočtené v pokladně
 - Fakturace a offline platby
+- Platební odkazy pro případy, kdy platí někdo jiný
 - Plné i částečné refundace
 
 **🚪 Účastníci a vstup**
@@ -87,6 +89,7 @@ skupiny a pořadatele konferencí. Provozujte ho sami, nebo to nechte na nás v 
 - Sdílitelné seznamy odbavení s živými počty
 - Zprávy účastníkům a vlastní e-mailové šablony
 - Brandované PDF vstupenky
+- Převody a přeprodej vstupenek s automatickou refundací prodávajícímu
 - Ručně přidaní účastníci
 - Reporty prodejů, daní a promo kódů
 
@@ -95,7 +98,8 @@ skupiny a pořadatele konferencí. Provozujte ho sami, nebo to nechte na nás v 
 ## Vytvořeno pro organizace
 
 **🔐 Zabezpečení a přístup**
-- Jednotné přihlášení (SSO)
+- Přihlášení přes Google, Microsoft nebo vlastního poskytovatele OIDC
+- Jednotné přihlášení (SSO) pro jednotlivé účty <sup>Enterprise</sup>
 - Dvoufázové ověření
 - Týmové role a oprávnění
 - Více organizátorů pod jedním účtem
@@ -103,6 +107,7 @@ skupiny a pořadatele konferencí. Provozujte ho sami, nebo to nechte na nás v 
 **🔌 Integrace**
 - REST API a API klíče
 - Webhooky
+- MCP server pro Claude a další AI asistenty
 - Exporty do CSV a XLSX
 
 **🗄️ Vaše data**
@@ -180,8 +185,8 @@ spravovaná verze, kterou provozuje tým, jenž Hi.Events vyvíjí.
 Hi.Events je licencován pod **AGPL-3.0 s dodatečnými podmínkami**. Dodatečné podmínky vyžadují zachování uvedení
 „Powered by Hi.Events“ na stránkách a v e-mailech generovaných softwarem — přesné znění najdete v souboru [LICENCE](LICENCE).
 
-Místa k sezení a pokladna na místě spadají pod [Hi.Events Enterprise Licence](backend/ee/LICENCE) a pro produkční
-použití vyžadují licenci.
+Místa k sezení, pokladna na místě, jednotné přihlášení (SSO) pro jednotlivé účty a Audience spadají pod
+[Hi.Events Enterprise Licence](backend/ee/LICENCE) a pro produkční použití vyžadují licenci.
 
 **K dispozici jsou komerční licence**, pokud chcete uvedení odstranit nebo potřebujete podmínky vhodné pro white-label
 nasazení. [Možnosti licencování](https://hi.events/licensing?utm_source=gh-readme) ·

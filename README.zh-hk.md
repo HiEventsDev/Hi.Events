@@ -30,8 +30,8 @@
 <br>
 
 > [!NOTE]
-> **Hi.Events 2.0 現已推出**，新增週期性活動、劃位座位、票房、表演陣容及節目表、單一
-> 登入、團隊權限及 API 金鑰。[看看有甚麼新功能 →](https://github.com/HiEventsDev/hi.events/releases)
+> **Hi.Events 2.3 現已推出**，新增 Audience CRM 及 SMS 推廣活動、門票轉讓及轉售、供 AI 助手使用的 MCP
+> 伺服器、結帳時的後續問題及付款連結。[看看有甚麼新功能 →](https://github.com/HiEventsDev/hi.events/releases)
 
 <br>
 
@@ -71,14 +71,16 @@
 - 可嵌入自家網站的自訂組件：售票小工具、按鈕、活動列表、表演陣容及節目表
 - 優惠碼及折扣
 - 供推廣商及聯盟夥伴使用的追蹤連結
-- 自訂登記問題
+- 支援後續問題及參加資格規則的登記問題
 - 結帳時徵求推廣訊息同意
+- Audience CRM：聯絡人、分群、訂閱表格，以及電郵及 SMS 推廣活動 <sup>Enterprise</sup>
 - 支援 Meta、TikTok、Google Analytics 及 Tag Manager 追蹤
 
 **💳 付款**
 - 款項直接存入你自己的 Stripe 帳戶
 - 稅項及手續費，可包含在票價內或於結帳時另加
 - 發票及線下付款
+- 付款連結，方便由他人代為付款
 - 全額及部分退款
 
 **🚪 參加者及入場**
@@ -87,6 +89,7 @@
 - 可分享的簽到名單，實時顯示人數
 - 參加者訊息及自訂電郵範本
 - 品牌化 PDF 門票
+- 門票轉讓及轉售，自動為賣家退款
 - 手動新增參加者
 - 銷售、稅項及優惠碼報告
 
@@ -95,7 +98,8 @@
 ## 為機構而設
 
 **🔐 安全及存取**
-- 單一登入
+- 以 Google、Microsoft 或自家 OIDC 供應商登入
+- 按帳戶設定的單一登入 <sup>Enterprise</sup>
 - 雙重認證
 - 團隊角色及權限
 - 一個帳戶管理多個主辦單位
@@ -103,6 +107,7 @@
 **🔌 整合**
 - REST API 及 API 金鑰
 - Webhooks
+- 供 Claude 及其他 AI 助手使用的 MCP 伺服器
 - CSV 及 XLSX 匯出
 
 **🗄️ 你的數據**
@@ -180,7 +185,7 @@ Polski、Čeština、Slovenčina、Magyar、Svenska、Suomi、Ελληνικά�
 Hi.Events 採用 **AGPL-3.0 及附加條款** 授權。附加條款規定須在本軟件產生的頁面及電郵中保留 "Powered by Hi.Events"
 署名——確切條文請參閱 [LICENCE](LICENCE)。
 
-劃位座位及票房功能受 [Hi.Events Enterprise Licence](backend/ee/LICENCE) 約束，用於正式環境
+劃位座位、票房、按帳戶設定的單一登入及 Audience 功能受 [Hi.Events Enterprise Licence](backend/ee/LICENCE) 約束，用於正式環境
 須取得授權。
 
 **我們提供商業授權**，適合希望移除署名或需要白牌

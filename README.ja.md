@@ -30,8 +30,8 @@
 <br>
 
 > [!NOTE]
-> **Hi.Events 2.0 がリリースされました。** 繰り返しイベント、指定席、ボックスオフィス、ラインナップとスケジュール、
-> シングルサインオン、チーム権限、APIキーに対応しています。[新機能を見る →](https://github.com/HiEventsDev/hi.events/releases)
+> **Hi.Events 2.3 がリリースされました。** Audience CRM と SMS キャンペーン、チケットの譲渡と再販、AI アシスタント向けの MCP サーバー、
+> チェックアウト時のフォローアップ質問、支払いリンクに対応しています。[新機能を見る →](https://github.com/HiEventsDev/hi.events/releases)
 
 <br>
 
@@ -71,14 +71,16 @@ Eventbrite、Tickettailor、Dice.fm などのチケット販売プラットフ�
 - 自社サイト向けにカスタマイズできる埋め込み：チケットウィジェット、ボタン、イベント一覧、ラインナップ、スケジュール
 - プロモーションコードと割引
 - プロモーター・アフィリエイト向けのトラッキングリンク
-- 登録時のカスタム質問
+- フォローアップの質問と参加資格ルールに対応した登録時の質問
 - チェックアウト時のマーケティング配信同意
+- 連絡先、セグメント、登録フォーム、メール・SMS キャンペーンを備えた Audience CRM <sup>Enterprise</sup>
 - Meta、TikTok、Google Analytics、Tag Manager によるトラッキング
 
 **💳 決済**
 - ご自身の Stripe アカウントへの入金
 - 税金と手数料（価格に含める・チェックアウト時に加算）
 - 請求書発行とオフライン決済
+- 他の人が支払う場合に使える支払いリンク
 - 全額返金・一部返金
 
 **🚪 参加者・入場**
@@ -87,6 +89,7 @@ Eventbrite、Tickettailor、Dice.fm などのチケット販売プラットフ�
 - リアルタイム集計つきの共有可能なチェックインリスト
 - 参加者へのメッセージ送信とカスタムメールテンプレート
 - ブランド化された PDF チケット
+- チケットの譲渡と再販（出品者へは自動で返金）
 - 参加者の手動追加
 - 売上・税金・プロモーションコードのレポート
 
@@ -95,7 +98,8 @@ Eventbrite、Tickettailor、Dice.fm などのチケット販売プラットフ�
 ## 組織での利用に
 
 **🔐 セキュリティ・アクセス管理**
-- シングルサインオン
+- Google、Microsoft、または独自の OIDC プロバイダーでのサインイン
+- アカウントごとのシングルサインオン <sup>Enterprise</sup>
 - 二要素認証
 - チームのロールと権限
 - 1つのアカウントで複数の主催者を管理
@@ -103,6 +107,7 @@ Eventbrite、Tickettailor、Dice.fm などのチケット販売プラットフ�
 **🔌 連携**
 - REST API と APIキー
 - Webhook
+- Claude などの AI アシスタント向け MCP サーバー
 - CSV・XLSX エクスポート
 
 **🗄️ データ管理**
@@ -180,7 +185,7 @@ Polski, Čeština, Slovenčina, Magyar, Svenska, Suomi, Ελληνικά, Türk�
 Hi.Events は **追加条項付きの AGPL-3.0** でライセンスされています。追加条項により、ソフトウェアが生成するページとメールには「Powered by Hi.Events」の
 表記を残す必要があります。正確な文言は [LICENCE](LICENCE) をご覧ください。
 
-指定席とボックスオフィスは [Hi.Events Enterprise Licence](backend/ee/LICENCE) の対象であり、本番環境で利用するには
+指定席、ボックスオフィス、アカウントごとのシングルサインオン、Audience は [Hi.Events Enterprise Licence](backend/ee/LICENCE) の対象であり、本番環境で利用するには
 ライセンスが必要です。
 
 表記を削除したい場合や、ホワイトラベルでの導入に適した条件が必要な場合は、**商用ライセンスをご用意しています**。
