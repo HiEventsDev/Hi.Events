@@ -270,6 +270,18 @@ class TicketTransferTest extends TestCase
         $this->accept('tt_accept')->assertStatus(ResponseCodes::HTTP_CONFLICT);
     }
 
+    public function test_accepting_flags_a_printed_badge_for_reprint_because_its_qr_code_stops_working(): void
+    {
+        DB::table('attendees')->where('id', $this->attendee['id'])->update(['badge_printed_at' => now(), 'badge_print_count' => 1]);
+        $this->insertTransfer('tt_badge');
+
+        $this->accept('tt_badge')->assertOk();
+
+        $current = DB::table('attendees')->where('id', $this->attendee['id'])->first();
+        $this->assertNull($current->badge_printed_at);
+        $this->assertSame(1, $current->badge_print_count);
+    }
+
     public function test_accepting_emails_the_new_holder_the_sender_and_the_buyer_and_tells_integrations(): void
     {
         $this->insertTransfer('tt_mails', senderEmail: self::GUEST_EMAIL);

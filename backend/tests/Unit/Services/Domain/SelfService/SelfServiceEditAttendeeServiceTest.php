@@ -8,6 +8,7 @@ use HiEvents\Repository\Interfaces\TicketResaleListingRepositoryInterface;
 use HiEvents\Services\Domain\Attendee\AttendeeCredentialRotationService;
 use HiEvents\Services\Domain\Attendee\AttendeeDetailsChangeNotificationService;
 use HiEvents\Services\Domain\Attendee\DTO\AttendeeCredentialsDTO;
+use HiEvents\Services\Domain\Badge\BadgeReprintService;
 use HiEvents\Services\Domain\SelfService\OrderAuditLogService;
 use HiEvents\Services\Domain\SelfService\SelfServiceEditAttendeeService;
 use HiEvents\Services\Domain\TicketTransfer\TicketTransferInitiationService;
@@ -40,6 +41,8 @@ class SelfServiceEditAttendeeServiceTest extends TestCase
 
     private MockInterface|TicketResaleListingRepositoryInterface $listingRepository;
 
+    private MockInterface|BadgeReprintService $badgeReprintService;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -53,6 +56,8 @@ class SelfServiceEditAttendeeServiceTest extends TestCase
         $this->transferInitiationService->shouldNotReceive('cancelForHolderChange')->byDefault();
         $this->listingRepository = Mockery::mock(TicketResaleListingRepositoryInterface::class);
         $this->listingRepository->shouldReceive('countWhere')->andReturn(0)->byDefault();
+        $this->badgeReprintService = Mockery::mock(BadgeReprintService::class);
+        $this->badgeReprintService->shouldReceive('flagForReprint')->byDefault();
 
         $this->service = new SelfServiceEditAttendeeService(
             $this->attendeeRepository,
@@ -62,6 +67,7 @@ class SelfServiceEditAttendeeServiceTest extends TestCase
             $this->domainEventDispatcherService,
             $this->transferInitiationService,
             $this->listingRepository,
+            $this->badgeReprintService,
         );
     }
 
@@ -69,6 +75,7 @@ class SelfServiceEditAttendeeServiceTest extends TestCase
     {
         $attendee = $this->attendee();
 
+        $this->badgeReprintService->shouldReceive('flagForReprint')->once()->with([self::ATTENDEE_ID]);
         $this->credentialRotationService->shouldNotReceive('issueFor');
         $this->attendeeRepository->shouldReceive('updateWhere')->once()
             ->with(['first_name' => 'Jane', 'last_name' => 'Smith'], ['id' => self::ATTENDEE_ID]);
@@ -102,6 +109,7 @@ class SelfServiceEditAttendeeServiceTest extends TestCase
         $attendee = $this->attendee();
 
         $this->transferInitiationService->shouldReceive('cancelForHolderChange')->once()->with(self::ATTENDEE_ID);
+        $this->badgeReprintService->shouldReceive('flagForReprint')->once()->with([self::ATTENDEE_ID]);
 
         $this->credentialRotationService->shouldReceive('issueFor')->once()->with(self::EVENT_ID)
             ->andReturn(new AttendeeCredentialsDTO(short_id: 'a_new', public_id: 'A-NEW'));
@@ -139,6 +147,7 @@ class SelfServiceEditAttendeeServiceTest extends TestCase
         $this->changeNotificationService->shouldNotReceive('notify');
         $this->orderAuditLogService->shouldNotReceive('logAttendeeUpdate');
         $this->domainEventDispatcherService->shouldNotReceive('dispatch');
+        $this->badgeReprintService->shouldNotReceive('flagForReprint');
 
         $result = $this->service->editAttendee($this->attendee(), 'John', 'Doe', 'old@example.com', '192.168.1.1', 'Mozilla/5.0');
 

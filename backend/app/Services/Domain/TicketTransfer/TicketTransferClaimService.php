@@ -16,6 +16,7 @@ use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketTransferRepositoryInterface;
 use HiEvents\Services\Domain\Attendee\AttendeeCredentialRotationService;
 use HiEvents\Services\Domain\Attendee\SendAttendeeTicketService;
+use HiEvents\Services\Domain\Badge\BadgeReprintService;
 use HiEvents\Services\Domain\SelfService\OrderAuditLogService;
 use HiEvents\Services\Domain\SelfService\TicketControlService;
 use HiEvents\Services\Domain\TicketTransfer\DTO\TicketTransferContextDTO;
@@ -40,6 +41,7 @@ class TicketTransferClaimService
         private readonly TicketControlService $ticketControlService,
         private readonly DomainEventDispatcherService $domainEventDispatcherService,
         private readonly DatabaseManager $databaseManager,
+        private readonly BadgeReprintService $badgeReprintService,
     ) {}
 
     public static function hashToken(string $token): string
@@ -102,6 +104,8 @@ class TicketTransferClaimService
                 ],
                 [AttendeeDomainObjectAbstract::ID => $context->attendee->getId()],
             );
+
+            $this->badgeReprintService->flagForReprint([$context->attendee->getId()]);
 
             $this->answerService->replaceAnswers($context->attendee, $questions);
 

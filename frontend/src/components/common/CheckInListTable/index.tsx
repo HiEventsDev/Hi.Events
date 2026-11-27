@@ -5,6 +5,7 @@ import {IconCopy, IconPencil, IconPlus, IconQrcode, IconTrash} from "@tabler/ico
 import {useMemo, useState} from "react";
 import {useDisclosure, useMediaQuery} from "@mantine/hooks";
 import {useParams} from "react-router";
+import {useEventFeature} from "../../../hooks/useEventFeature.ts";
 import {t, Trans} from "@lingui/macro";
 import {NoResultsSplash} from "../NoResultsSplash";
 import {EditCheckInListModal} from "../../modals/EditCheckInListModal";
@@ -39,6 +40,7 @@ export const CheckInListTable = ({checkInLists, openCreateModal, event, isRefres
     const [selectedCheckInListId, setSelectedCheckInListId] = useState<IdParam>();
     const deleteMutation = useDeleteCheckInList();
     const {eventId} = useParams();
+    const badgesEnabled = useEventFeature(eventId, 'BADGES');
     const isRecurring = event?.type === EventType.RECURRING;
     const isMobile = useMediaQuery('(max-width: 62em)');
 
@@ -81,7 +83,13 @@ export const CheckInListTable = ({checkInLists, openCreateModal, event, isRefres
                                     {list.name}
                                 </CellLink>
                             )}
-                            trailing={list.is_system_default && <StatusBadge tone="neutral">{t`Default`}</StatusBadge>}
+                            trailing={(
+                                <>
+                                    {list.is_system_default && <StatusBadge tone="neutral">{t`Default`}</StatusBadge>}
+                                    {badgesEnabled && list.badge_printing_enabled && <StatusBadge tone="neutral">{t`Prints badges`}</StatusBadge>}
+                                    {list.kiosk_mode && <StatusBadge tone="neutral">{t`Kiosk`}</StatusBadge>}
+                                </>
+                            )}
                         />
                     ),
                 },
@@ -224,7 +232,7 @@ export const CheckInListTable = ({checkInLists, openCreateModal, event, isRefres
                 return true;
             });
         },
-        [eventId, isRecurring, event?.timezone, isMobile]
+        [eventId, isRecurring, event?.timezone, isMobile, badgesEnabled]
     );
 
     if (checkInLists.length === 0) {

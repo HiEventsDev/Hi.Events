@@ -72,7 +72,6 @@ class PartialUpdateEventSettingsHandler
                 'notify_organizer_of_new_orders' => $eventSettingsDTO->settings['notify_organizer_of_new_orders'] ?? $existingSettings->getNotifyOrganizerOfNewOrders(),
                 'price_display_mode' => $eventSettingsDTO->settings['price_display_mode'] ?? $existingSettings->getPriceDisplayMode(),
 
-                // Payment settings
                 'payment_providers' => $eventSettingsDTO->settings['payment_providers'] ?? $existingSettings->getPaymentProviders(),
                 'offline_payment_instructions' => array_key_exists('offline_payment_instructions', $eventSettingsDTO->settings)
                     ? $eventSettingsDTO->settings['offline_payment_instructions']
@@ -88,7 +87,6 @@ class PartialUpdateEventSettingsHandler
                 'payment_link_expiry_hours' => $eventSettingsDTO->settings['payment_link_expiry_hours']
                     ?? $existingSettings->getPaymentLinkExpiryHours(),
 
-                // Invoice settings
                 'enable_invoicing' => $eventSettingsDTO->settings['enable_invoicing'] ?? $existingSettings->getEnableInvoicing(),
                 'invoice_label' => array_key_exists('invoice_label', $eventSettingsDTO->settings)
                     ? $eventSettingsDTO->settings['invoice_label']
@@ -114,23 +112,18 @@ class PartialUpdateEventSettingsHandler
                     ? $eventSettingsDTO->settings['invoice_payment_terms_days']
                     : $existingSettings->getInvoicePaymentTermsDays(),
 
-                // Ticket design settings
                 'ticket_design_settings' => array_key_exists('ticket_design_settings', $eventSettingsDTO->settings)
                     ? $eventSettingsDTO->settings['ticket_design_settings']
                     : $existingSettings->getTicketDesignSettings(),
 
-                // Marketing settings
                 'show_marketing_opt_in' => $eventSettingsDTO->settings['show_marketing_opt_in'] ?? $existingSettings->getShowMarketingOptIn(),
                 'phone_collection' => $eventSettingsDTO->settings['phone_collection'] ?? $existingSettings->getPhoneCollection(),
                 'show_sms_opt_in' => $eventSettingsDTO->settings['show_sms_opt_in'] ?? $existingSettings->getShowSmsOptIn(),
 
-                // Attendee detail copy control
                 'allow_copy_details_to_all_attendees' => $eventSettingsDTO->settings['allow_copy_details_to_all_attendees'] ?? $existingSettings->getAllowCopyDetailsToAllAttendees(),
 
-                // Platform fee settings
                 'pass_platform_fee_to_buyer' => $eventSettingsDTO->settings['pass_platform_fee_to_buyer'] ?? $existingSettings->getPassPlatformFeeToBuyer(),
 
-                // Homepage theme settings
                 'homepage_theme_settings' => array_key_exists('homepage_theme_settings', $eventSettingsDTO->settings)
                     ? $eventSettingsDTO->settings['homepage_theme_settings']
                     : $existingSettings->getHomepageThemeSettings(),
@@ -138,7 +131,6 @@ class PartialUpdateEventSettingsHandler
                     ? $eventSettingsDTO->settings['homepage_sections']
                     : $existingSettings->getHomepageSections(),
 
-                // Self-service settings
                 'allow_attendee_self_edit' => $eventSettingsDTO->settings['allow_attendee_self_edit'] ?? $existingSettings->getAllowAttendeeSelfEdit(),
                 'allow_ticket_transfer' => $eventSettingsDTO->settings['allow_ticket_transfer'] ?? $existingSettings->getAllowTicketTransfer(),
                 'ticket_transfer_cutoff_minutes' => $eventSettingsDTO->settings['ticket_transfer_cutoff_minutes'] ?? $existingSettings->getTicketTransferCutoffMinutes(),
@@ -148,13 +140,13 @@ class PartialUpdateEventSettingsHandler
                 'allow_ticket_resale' => $eventSettingsDTO->settings['allow_ticket_resale'] ?? $existingSettings->getAllowTicketResale(),
                 'ticket_resale_cutoff_minutes' => $eventSettingsDTO->settings['ticket_resale_cutoff_minutes'] ?? $existingSettings->getTicketResaleCutoffMinutes(),
 
-                // Occurrence display
                 'show_available_occurrence_capacity' => $eventSettingsDTO->settings['show_available_occurrence_capacity'] ?? $existingSettings->getShowAvailableOccurrenceCapacity(),
                 'hide_sold_out_occurrences' => $eventSettingsDTO->settings['hide_sold_out_occurrences'] ?? $existingSettings->getHideSoldOutOccurrences(),
 
-                // Waitlist settings
                 'waitlist_auto_process' => $eventSettingsDTO->settings['waitlist_auto_process'] ?? $existingSettings->getWaitlistAutoProcess(),
                 'waitlist_offer_timeout_minutes' => $eventSettingsDTO->settings['waitlist_offer_timeout_minutes'] ?? $existingSettings->getWaitlistOfferTimeoutMinutes(),
+
+                'enabled_features' => $eventSettingsDTO->settings['enabled_features'] ?? $existingSettings->getEnabledFeatures() ?? [],
             ]),
         );
     }

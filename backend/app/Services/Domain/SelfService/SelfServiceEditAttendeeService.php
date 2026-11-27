@@ -10,6 +10,7 @@ use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketResaleListingRepositoryInterface;
 use HiEvents\Services\Domain\Attendee\AttendeeCredentialRotationService;
 use HiEvents\Services\Domain\Attendee\AttendeeDetailsChangeNotificationService;
+use HiEvents\Services\Domain\Badge\BadgeReprintService;
 use HiEvents\Services\Domain\SelfService\DTO\EditAttendeeResultDTO;
 use HiEvents\Services\Domain\TicketTransfer\TicketTransferInitiationService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
@@ -26,6 +27,7 @@ class SelfServiceEditAttendeeService
         private readonly DomainEventDispatcherService $domainEventDispatcherService,
         private readonly TicketTransferInitiationService $transferInitiationService,
         private readonly TicketResaleListingRepositoryInterface $listingRepository,
+        private readonly BadgeReprintService $badgeReprintService,
     ) {}
 
     /**
@@ -84,6 +86,8 @@ class SelfServiceEditAttendeeService
                 attributes: $updateData,
                 where: ['id' => $attendee->getId()]
             );
+
+            $this->badgeReprintService->flagForReprint([$attendee->getId()]);
 
             if ($emailChanged) {
                 $this->transferInitiationService->cancelForHolderChange($attendee->getId());

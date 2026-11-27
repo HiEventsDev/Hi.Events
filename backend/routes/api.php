@@ -265,6 +265,13 @@ use HiEvents\Http\Actions\Auth\Sso\StartSsoLinkAction;
 use HiEvents\Http\Actions\Auth\Sso\StartSsoReauthAction;
 use HiEvents\Http\Actions\Auth\TwoFactorLoginAction;
 use HiEvents\Http\Actions\Auth\ValidateResetPasswordTokenAction;
+use HiEvents\Http\Actions\Badges\GetBadgeDesignAction;
+use HiEvents\Http\Actions\Badges\GetBadgesAction;
+use HiEvents\Http\Actions\Badges\GetBadgeStatsAction;
+use HiEvents\Http\Actions\Badges\MarkBadgesPrintedAction;
+use HiEvents\Http\Actions\Badges\Public\GetCheckInListAttendeeBadgePublicAction;
+use HiEvents\Http\Actions\Badges\Public\MarkCheckInListAttendeeBadgePrintedPublicAction;
+use HiEvents\Http\Actions\Badges\UpsertBadgeDesignAction;
 use HiEvents\Http\Actions\CapacityAssignments\CreateCapacityAssignmentAction;
 use HiEvents\Http\Actions\CapacityAssignments\DeleteCapacityAssignmentAction;
 use HiEvents\Http\Actions\CapacityAssignments\GetCapacityAssignmentAction;
@@ -281,6 +288,7 @@ use HiEvents\Http\Actions\CheckInLists\Public\GetCheckInListAttendeePublicAction
 use HiEvents\Http\Actions\CheckInLists\Public\GetCheckInListAttendeesPublicAction;
 use HiEvents\Http\Actions\CheckInLists\Public\GetCheckInListPublicAction;
 use HiEvents\Http\Actions\CheckInLists\Public\GetCheckInListStatsPublicAction;
+use HiEvents\Http\Actions\CheckInLists\Public\LookupKioskTicketsPublicAction;
 use HiEvents\Http\Actions\CheckInLists\UpdateCheckInListAction;
 use HiEvents\Http\Actions\Common\GetColorThemesAction;
 use HiEvents\Http\Actions\Common\Webhooks\HandleEmailDeliveryWebhookPublicAction;
@@ -910,6 +918,11 @@ $router->middleware(['auth:api,sanctum'])->group(
         $router->post('/events/{event_id}/attendees/{attendee_public_id}/resend-ticket', ResendAttendeeTicketAction::class);
         $router->post('/events/{event_id}/attendees/{attendee_public_id}/check_in', CheckInAttendeeAction::class);
 
+        $router->get('/events/{event_id}/badge-design', GetBadgeDesignAction::class);
+        $router->put('/events/{event_id}/badge-design', UpsertBadgeDesignAction::class);
+        $router->get('/events/{event_id}/badges', GetBadgesAction::class);
+        $router->get('/events/{event_id}/badges/stats', GetBadgeStatsAction::class);
+        $router->post('/events/{event_id}/badges/printed', MarkBadgesPrintedAction::class);
         $router->get('/events/{event_id}/resale-listings', GetTicketResaleListingsAction::class);
         $router->post('/events/{event_id}/resale-listings/{listing_id}/close', CloseTicketResaleListingAction::class);
         $router->post('/events/{event_id}/resale-listings/{listing_id}/retry-refund', RetryTicketResaleRefundAction::class);
@@ -1284,13 +1297,21 @@ $router->prefix('/public')->group(
         });
 
         // Check-In
-        $router->get('/check-in-lists/{check_in_list_short_id}', GetCheckInListPublicAction::class);
-        $router->get('/check-in-lists/{check_in_list_short_id}/stats', GetCheckInListStatsPublicAction::class);
-        $router->get('/check-in-lists/{check_in_list_short_id}/attendees', GetCheckInListAttendeesPublicAction::class);
-        $router->get('/check-in-lists/{check_in_list_short_id}/attendees/{attendee_public_id}', GetCheckInListAttendeePublicAction::class);
-        $router->get('/check-in-lists/{check_in_list_short_id}/attendees/{attendee_public_id}/detail', GetCheckInListAttendeeDetailPublicAction::class);
-        $router->post('/check-in-lists/{check_in_list_short_id}/check-ins', CreateAttendeeCheckInPublicAction::class);
-        $router->delete('/check-in-lists/{check_in_list_short_id}/check-ins/{check_in_short_id}', DeleteAttendeeCheckInPublicAction::class);
+        $router->withoutMiddleware(ThrottleRequests::class.':api')
+            ->middleware('throttle:1200,1,public-check-in')
+            ->group(function (Router $router): void {
+                $router->get('/check-in-lists/{check_in_list_short_id}', GetCheckInListPublicAction::class);
+                $router->get('/check-in-lists/{check_in_list_short_id}/stats', GetCheckInListStatsPublicAction::class);
+                $router->get('/check-in-lists/{check_in_list_short_id}/attendees', GetCheckInListAttendeesPublicAction::class);
+                $router->get('/check-in-lists/{check_in_list_short_id}/attendees/{attendee_public_id}', GetCheckInListAttendeePublicAction::class);
+                $router->get('/check-in-lists/{check_in_list_short_id}/attendees/{attendee_public_id}/detail', GetCheckInListAttendeeDetailPublicAction::class);
+                $router->post('/check-in-lists/{check_in_list_short_id}/check-ins', CreateAttendeeCheckInPublicAction::class);
+                $router->delete('/check-in-lists/{check_in_list_short_id}/check-ins/{check_in_short_id}', DeleteAttendeeCheckInPublicAction::class);
+                $router->get('/check-in-lists/{check_in_list_short_id}/attendees/{attendee_public_id}/badge', GetCheckInListAttendeeBadgePublicAction::class);
+                $router->post('/check-in-lists/{check_in_list_short_id}/attendees/{attendee_public_id}/badge/printed', MarkCheckInListAttendeeBadgePrintedPublicAction::class);
+                $router->post('/check-in-lists/{check_in_list_short_id}/kiosk/ticket-lookup', LookupKioskTicketsPublicAction::class)
+                    ->middleware('throttle:30,1,kiosk-ticket-lookup');
+            });
 
         // Color themes
         $router->get('/color-themes', GetColorThemesAction::class);

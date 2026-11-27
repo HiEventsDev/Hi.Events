@@ -1,4 +1,6 @@
 import {useParams} from "react-router";
+import {useEventFeature} from "../../../hooks/useEventFeature.ts";
+import {useBadgesPrintedSync} from "../../../hooks/useBadgesPrintedSync.ts";
 import {CreateButton} from "../../common/CreateButton";
 import {useGetAttendees} from "../../../queries/useGetAttendees.ts";
 import {PageTitle} from "../../common/PageTitle";
@@ -8,7 +10,7 @@ import {SearchBarWrapper} from "../../common/SearchBar";
 import {TableCard, TableCardFooter, TableCardSkeleton} from "../../common/TableCard";
 import {tableSortFromQuery} from "../../common/TanStackTable/sorting.tsx";
 import {Button} from "@mantine/core";
-import {IconDownload, IconPlus} from "@tabler/icons-react";
+import {IconDownload, IconIdBadge2, IconPlus} from "@tabler/icons-react";
 import {ToolBar, ToolBarSlot} from "../../common/ToolBar";
 import {useFilterQueryParamSync} from "../../../hooks/useFilterQueryParamSync.ts";
 import {EventType, IdParam, ProductType, QueryFilterOperator, QueryFilters} from "../../../types.ts";
@@ -24,6 +26,7 @@ import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {getProductsFromEvent} from "../../../utilites/helpers.ts";
 import {useGetEventOccurrences} from "../../../queries/useGetEventOccurrences.ts";
 import {OccurrenceSelect} from "../../common/OccurrenceSelect";
+import {PrintBadgesModal} from "../../modals/PrintBadgesModal";
 
 const getAttendeeStatuses = () => [
     {label: t`Active`, value: 'ACTIVE'},
@@ -38,9 +41,12 @@ const Attendees = () => {
     const attendees = attendeesQuery?.data?.data;
     const pagination = attendeesQuery?.data?.meta;
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
+    const [printBadgesModalOpen, printBadgesModal] = useDisclosure(false);
     const [downloadPending, setDownloadPending] = useState(false);
     const [columnToggleSlot, setColumnToggleSlot] = useState<HTMLDivElement | null>(null);
     const {data: event} = useGetEvent(eventId);
+    const badgesEnabled = useEventFeature(eventId, 'BADGES');
+    useBadgesPrintedSync(eventId);
     const isRecurring = event?.type === EventType.RECURRING;
     const {data: occurrencesData} = useGetEventOccurrences(eventId, {pageNumber: 1, perPage: 100} as QueryFilters, isRecurring);
 
@@ -248,6 +254,16 @@ const Attendees = () => {
                         >
                             {t`Export`}
                         </Button>
+                        {badgesEnabled && (
+                            <Button
+                                variant="default"
+                                onClick={printBadgesModal.open}
+                                leftSection={<IconIdBadge2 size={16}/>}
+                                data-testid="attendees-print-badges-button"
+                            >
+                                {t`Badges`}
+                            </Button>
+                        )}
                         <CreateButton color="green" data-testid="attendee-create-button" onClick={openCreateModal} leftSection={<IconPlus size={16}/>}>
                             {t`Create`}
                         </CreateButton>
@@ -277,6 +293,13 @@ const Attendees = () => {
                 </TableCard>
             </PageBody>
             {createModalOpen && <CreateAttendeeModal onClose={closeCreateModal} isOpen={createModalOpen}/>}
+            {printBadgesModalOpen && (
+                <PrintBadgesModal
+                    eventId={eventId as string}
+                    onClose={printBadgesModal.close}
+                    defaultOccurrenceId={selectedOccurrenceId}
+                />
+            )}
         </>
     );
 };

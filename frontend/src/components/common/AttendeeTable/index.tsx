@@ -7,6 +7,7 @@ import {useClipboard, useDisclosure} from "@mantine/hooks";
 import {useMemo, useState} from "react";
 import {NoResultsSplash} from "../NoResultsSplash";
 import {useParams} from "react-router";
+import {useEventFeature} from "../../../hooks/useEventFeature.ts";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useGetEventCheckInLists} from "../../../queries/useGetCheckInLists.ts";
 import {showSuccess} from "../../../utilites/notifications.tsx";
@@ -96,6 +97,9 @@ export const AttendeeTable = ({attendees, openCreateModal, compact, embedded, is
         setSelectedOrderId(orderId);
         orderModal.open();
     };
+
+    const badgesEnabled = useEventFeature(eventId, 'BADGES');
+    const hasPrintedBadges = badgesEnabled && attendees.some((attendee) => (attendee.badge_print_count ?? 0) > 0);
 
     const openAttendee = (attendee: Attendee) => handleModalClick(attendee, viewModalOpen);
     const hasSeats = attendees.some(attendee => attendee.seat_label);
@@ -323,6 +327,20 @@ export const AttendeeTable = ({attendees, openCreateModal, compact, embedded, is
                         </Tooltip>
                     ) : <EmptyCell/>,
                 },
+                hasPrintedBadges && {
+                    id: 'badge',
+                    header: t`Badge`,
+                    cell: ({row: {original: attendee}}: CellContext<Attendee, unknown>) => {
+                        const count = attendee.badge_print_count ?? 0;
+                        if (count === 0) {
+                            return <StatusBadge tone="neutral">{t`Not printed`}</StatusBadge>;
+                        }
+                        if (attendee.badge_print_status === 'NEEDS_REPRINT') {
+                            return <StatusBadge tone="waiting">{t`Needs reprint`}</StatusBadge>;
+                        }
+                        return <StatusBadge tone="positive">{count > 1 ? t`Printed ×${count}` : t`Printed`}</StatusBadge>;
+                    },
+                },
                 {
                     id: 'actions',
                     header: () => <VisuallyHidden>{t`Actions`}</VisuallyHidden>,
@@ -340,7 +358,7 @@ export const AttendeeTable = ({attendees, openCreateModal, compact, embedded, is
 
             return allColumns.filter(Boolean) as TanStackTableColumn<Attendee>[];
         },
-        [emailPopoverId, event, hasCheckInLists, relevantCheckInLists, occurrenceId, hasSeats, hasOccurrences, compact, sort?.sortBy, sort?.sortDirection]
+        [emailPopoverId, event, hasCheckInLists, relevantCheckInLists, occurrenceId, hasSeats, hasOccurrences, hasPrintedBadges, compact, sort?.sortBy, sort?.sortDirection]
     );
 
     if (attendees.length === 0) {

@@ -16,6 +16,7 @@ import {
     IconListCheck,
     IconMapPin,
     IconPercentage,
+    IconPuzzle,
     IconRepeat,
     IconShoppingCart,
 } from "@tabler/icons-react";
@@ -25,6 +26,7 @@ import {PlatformFeesSettings} from "./Sections/PlatformFeesSettings";
 import {WaitlistSettings} from "./Sections/WaitlistSettings";
 import {RecurringEventSettings} from "./Sections/RecurringEventSettings";
 import {DangerZoneSettings} from "./Sections/DangerZoneSettings";
+import {FeatureSettings} from "./Sections/FeatureSettings";
 import {useGetAccount} from "../../../../queries/useGetAccount.ts";
 import {useGetEvent} from "../../../../queries/useGetEvent.ts";
 import {useParams} from "react-router";
@@ -57,6 +59,13 @@ export const Settings = () => {
                     label: t`Event Type`,
                     icon: IconCalendarRepeat,
                     component: EventTypeSettings,
+                },
+                {
+                    slug: 'features',
+                    anchorId: 'features',
+                    label: t`Features`,
+                    icon: IconPuzzle,
+                    component: FeatureSettings,
                 },
                 {
                     slug: 'location',

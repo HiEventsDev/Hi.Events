@@ -21,6 +21,7 @@ use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketResaleListingRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Attendee\DTO\PartialEditAttendeeDTO;
 use HiEvents\Services\Domain\Attendee\OrganizerAttendeeIdentityChangeService;
+use HiEvents\Services\Domain\Badge\BadgeReprintService;
 use HiEvents\Services\Domain\EventOccurrence\OccurrencePurchaseEligibilityService;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsCancellationService;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsReactivationService;
@@ -55,6 +56,7 @@ class PartialEditAttendeeHandler
         private readonly OrganizerAttendeeIdentityChangeService $identityChangeService,
         private readonly TicketResaleClosureService $resaleClosureService,
         private readonly TicketResaleListingRepositoryInterface $resaleListingRepository,
+        private readonly BadgeReprintService $badgeReprintService,
     ) {}
 
     /**
@@ -122,7 +124,7 @@ class PartialEditAttendeeHandler
             );
         }
 
-        return $updatedAttendee;
+        return $this->badgeReprintService->flagIfBadgeDetailsChanged($attendee, $updatedAttendee);
     }
 
     /**

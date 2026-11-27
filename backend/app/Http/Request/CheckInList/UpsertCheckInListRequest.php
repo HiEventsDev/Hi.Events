@@ -28,6 +28,9 @@ class UpsertCheckInListRequest extends BaseRequest
             'public_show_attendee_notes' => ['nullable', 'boolean'],
             'public_show_question_answers' => ['nullable', 'boolean'],
             'public_show_order_details' => ['nullable', 'boolean'],
+            'badge_printing_enabled' => ['nullable', 'boolean'],
+            'kiosk_mode' => ['nullable', 'boolean'],
+            'kiosk_lookup_enabled' => ['nullable', 'boolean'],
         ];
     }
 

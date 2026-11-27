@@ -16,6 +16,7 @@ use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Attendee\DTO\EditAttendeeDTO;
 use HiEvents\Services\Application\Handlers\Attendee\EditAttendeeHandler;
 use HiEvents\Services\Domain\Attendee\OrganizerAttendeeIdentityChangeService;
+use HiEvents\Services\Domain\Badge\BadgeReprintService;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesDTO;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesResponseDTO;
@@ -61,6 +62,8 @@ class EditAttendeeHandlerTest extends TestCase
 
     private TransactionLockService|MockInterface $transactionLockService;
 
+    private MockInterface|BadgeReprintService $badgeReprintService;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -86,6 +89,9 @@ class EditAttendeeHandlerTest extends TestCase
         $this->transactionLockService = Mockery::mock(TransactionLockService::class);
         $this->transactionLockService->shouldReceive('lockEvent')->with(self::EVENT_ID)->byDefault();
 
+        $this->badgeReprintService = Mockery::mock(BadgeReprintService::class);
+        $this->badgeReprintService->shouldReceive('flagIfBadgeDetailsChanged')->andReturnUsing(fn ($before, $after) => $after)->byDefault();
+
         $this->handler = new EditAttendeeHandler(
             $this->attendeeRepository,
             $this->productRepository,
@@ -97,6 +103,7 @@ class EditAttendeeHandlerTest extends TestCase
             $this->identityChangeService(),
             $this->resaleClosureService,
             $this->transactionLockService,
+            $this->badgeReprintService,
         );
     }
 

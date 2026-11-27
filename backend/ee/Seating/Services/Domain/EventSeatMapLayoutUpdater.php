@@ -10,6 +10,7 @@ use HiEvents\Enterprise\Seating\Exceptions\SeatMapChangeConflictException;
 use HiEvents\Enterprise\Seating\Exceptions\SeatMapRelabelRequiresConfirmationException;
 use HiEvents\Enterprise\Seating\Repository\Interfaces\EventSeatMapRepositoryInterface;
 use HiEvents\Enterprise\Seating\Repository\Interfaces\SeatClaimRepositoryInterface;
+use HiEvents\Services\Domain\Badge\BadgeReprintService;
 
 class EventSeatMapLayoutUpdater
 {
@@ -18,6 +19,7 @@ class EventSeatMapLayoutUpdater
         private readonly SeatClaimRepositoryInterface $seatClaimRepository,
         private readonly EventSeatMapGuard $guard,
         private readonly EventSeatMapLookupService $eventSeatMapLookup,
+        private readonly BadgeReprintService $badgeReprintService,
     ) {}
 
     /**
@@ -49,7 +51,9 @@ class EventSeatMapLayoutUpdater
             ...$extraAttributes,
         ]);
 
-        $this->seatClaimRepository->relabel($eventSeatMap->getEventId(), $this->guard->relabelledSeats($liveSeats, $incoming));
+        $this->badgeReprintService->flagForReprint(
+            $this->seatClaimRepository->relabel($eventSeatMap->getEventId(), $this->guard->relabelledSeats($liveSeats, $incoming)),
+        );
 
         $this->seatClaimRepository->deleteDeadClaimsForRemovedSeats(
             $eventSeatMap->getEventId(),

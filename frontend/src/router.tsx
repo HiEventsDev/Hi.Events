@@ -691,6 +691,13 @@ const routes: RouteObject[] = [
                 }
             },
             {
+                path: "badges",
+                async lazy() {
+                    const BadgeDesigner = await import("./components/routes/event/Badges");
+                    return { Component: BadgeDesigner.default };
+                }
+            },
+            {
                 path: "sold-out-waitlist",
                 async lazy() {
                     const SoldOutWaitlist = await import("./components/routes/event/SoldOutWaitlist");
@@ -936,6 +943,14 @@ const routes: RouteObject[] = [
         async lazy() {
             const TicketDesignerPrint = await import("./components/routes/event/TicketDesigner/TicketDesignerPrint");
             return { Component: TicketDesignerPrint.default };
+        },
+        errorElement: <ErrorPage />
+    },
+    {
+        path: "/manage/event/:eventId/badges/print",
+        async lazy() {
+            const BadgePrint = await import("./components/routes/event/Badges/BadgePrint");
+            return { Component: BadgePrint.default };
         },
         errorElement: <ErrorPage />
     },

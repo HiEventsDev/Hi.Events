@@ -18,6 +18,7 @@ use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Attendee\DTO\EditAttendeeDTO;
 use HiEvents\Services\Domain\Attendee\OrganizerAttendeeIdentityChangeService;
+use HiEvents\Services\Domain\Badge\BadgeReprintService;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Domain\TicketResale\TicketResaleClosureService;
@@ -42,6 +43,7 @@ class EditAttendeeHandler
         private readonly OrganizerAttendeeIdentityChangeService $identityChangeService,
         private readonly TicketResaleClosureService $resaleClosureService,
         private readonly TransactionLockService $transactionLockService,
+        private readonly BadgeReprintService $badgeReprintService,
     ) {}
 
     /**
@@ -59,7 +61,10 @@ class EditAttendeeHandler
 
             $this->adjustProductQuantities($attendee, $editAttendeeDTO);
 
-            $updatedAttendee = $this->updateAttendee($editAttendeeDTO, $attendee);
+            $updatedAttendee = $this->badgeReprintService->flagIfBadgeDetailsChanged(
+                before: $attendee,
+                after: $this->updateAttendee($editAttendeeDTO, $attendee),
+            );
 
             $this->identityChangeService->record($attendee, $updatedAttendee);
 

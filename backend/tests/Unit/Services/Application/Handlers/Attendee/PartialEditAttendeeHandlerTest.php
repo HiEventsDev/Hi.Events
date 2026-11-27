@@ -17,6 +17,7 @@ use HiEvents\Repository\Interfaces\TicketResaleListingRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Attendee\DTO\PartialEditAttendeeDTO;
 use HiEvents\Services\Application\Handlers\Attendee\PartialEditAttendeeHandler;
 use HiEvents\Services\Domain\Attendee\OrganizerAttendeeIdentityChangeService;
+use HiEvents\Services\Domain\Badge\BadgeReprintService;
 use HiEvents\Services\Domain\EventOccurrence\OccurrencePurchaseEligibilityService;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsCancellationService;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsReactivationService;
@@ -81,6 +82,8 @@ class PartialEditAttendeeHandlerTest extends TestCase
 
     private TicketResaleListingRepositoryInterface|MockInterface $resaleListingRepository;
 
+    private MockInterface|BadgeReprintService $badgeReprintService;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -115,6 +118,9 @@ class PartialEditAttendeeHandlerTest extends TestCase
         $this->resaleListingRepository = Mockery::mock(TicketResaleListingRepositoryInterface::class);
         $this->resaleListingRepository->shouldReceive('countWhere')->andReturn(0)->byDefault();
 
+        $this->badgeReprintService = Mockery::mock(BadgeReprintService::class);
+        $this->badgeReprintService->shouldReceive('flagIfBadgeDetailsChanged')->andReturnUsing(fn ($before, $after) => $after)->byDefault();
+
         $this->handler = new PartialEditAttendeeHandler(
             $this->attendeeRepository,
             $this->orderRepository,
@@ -132,6 +138,7 @@ class PartialEditAttendeeHandlerTest extends TestCase
             $this->identityChangeService(),
             $this->resaleClosureService,
             $this->resaleListingRepository,
+            $this->badgeReprintService,
         );
     }
 
