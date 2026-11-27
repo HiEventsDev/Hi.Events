@@ -30,8 +30,8 @@ Zelf gehost of in de cloud. Jouw events, jouw merk, jouw data.
 <br>
 
 > [!NOTE]
-> **Hi.Events 2.0 is er** met terugkerende events, gereserveerde zitplaatsen, een kassa, line-ups en programma's, single
-> sign-on, teamrechten en API-sleutels. [Bekijk wat er nieuw is →](https://github.com/HiEventsDev/hi.events/releases)
+> **Hi.Events 2.3 is er** met Audience CRM en SMS-campagnes, tickets overdragen en doorverkopen, een MCP-server voor
+> AI-assistenten, vervolgvragen bij het afrekenen en betaallinks. [Bekijk wat er nieuw is →](https://github.com/HiEventsDev/hi.events/releases)
 
 <br>
 
@@ -71,14 +71,16 @@ en conferentieorganisatoren. Host het zelf, of laat ons het voor je beheren met 
 - Aanpasbare embeds voor je eigen site: ticketwidgets, knoppen, eventlijsten, line-ups en programma's
 - Kortingscodes en acties
 - Trackinglinks voor promotors en affiliates
-- Eigen registratievragen
+- Registratievragen met vervolgvragen en toelatingsregels
 - Marketingtoestemming bij het afrekenen
+- Audience CRM met contacten, segmenten, aanmeldformulieren en e-mail- en SMS-campagnes <sup>Enterprise</sup>
 - Tracking via Meta, TikTok, Google Analytics en Tag Manager
 
 **💳 Betalingen**
 - Uitbetalingen naar je eigen Stripe-account
 - Belastingen en kosten, inbegrepen of toegevoegd bij het afrekenen
 - Facturatie en offline betalingen
+- Betaallinks voor als iemand anders betaalt
 - Volledige en gedeeltelijke terugbetalingen
 
 **🚪 Deelnemers & de deur**
@@ -87,6 +89,7 @@ en conferentieorganisatoren. Host het zelf, of laat ons het voor je beheren met 
 - Deelbare inchecklijsten met live tellingen
 - Berichten aan deelnemers en eigen e-mailsjablonen
 - PDF-tickets in je eigen huisstijl
+- Tickets overdragen en doorverkopen, waarbij de verkoper automatisch wordt terugbetaald
 - Handmatig toegevoegde deelnemers
 - Rapporten over verkoop, belastingen en kortingscodes
 
@@ -95,7 +98,8 @@ en conferentieorganisatoren. Host het zelf, of laat ons het voor je beheren met 
 ## Gemaakt voor organisaties
 
 **🔐 Beveiliging & toegang**
-- Single sign-on
+- Inloggen met Google, Microsoft of je eigen OIDC-provider
+- Single sign-on per account <sup>Enterprise</sup>
 - Tweestapsverificatie
 - Teamrollen en rechten
 - Meerdere organisatoren onder één account
@@ -103,6 +107,7 @@ en conferentieorganisatoren. Host het zelf, of laat ons het voor je beheren met 
 **🔌 Integraties**
 - REST API en API-sleutels
 - Webhooks
+- MCP-server voor Claude en andere AI-assistenten
 - Exports naar CSV en XLSX
 
 **🗄️ Jouw data**
@@ -180,8 +185,8 @@ beheerde versie, gerund door het team dat Hi.Events bouwt.
 Hi.Events valt onder de **AGPL-3.0 met aanvullende voorwaarden**. Die voorwaarden vereisen dat de vermelding "Powered by Hi.Events"
 behouden blijft op pagina's en e-mails die de software genereert. Zie [LICENCE](LICENCE) voor de exacte tekst.
 
-Gereserveerde zitplaatsen en de kassa vallen onder de [Hi.Events Enterprise Licence](backend/ee/LICENCE) en vereisen een
-licentie voor productiegebruik.
+Gereserveerde zitplaatsen, de kassa, single sign-on per account en Audience vallen onder de
+[Hi.Events Enterprise Licence](backend/ee/LICENCE) en vereisen een licentie voor productiegebruik.
 
 **Commerciële licenties zijn beschikbaar** als je de vermelding wilt verwijderen of voorwaarden nodig hebt voor een
 white-label-implementatie. [Licentieopties](https://hi.events/licensing?utm_source=gh-readme) ·

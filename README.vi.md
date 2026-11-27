@@ -30,8 +30,8 @@ Tự lưu trữ hoặc trên cloud. Sự kiện của bạn, thương hiệu c�
 <br>
 
 > [!NOTE]
-> **Hi.Events 2.0 đã ra mắt** với sự kiện định kỳ, chỗ ngồi đặt trước, quầy vé, trang đội hình và lịch trình,
-> đăng nhập một lần, phân quyền nhóm và khóa API. [Xem có gì mới →](https://github.com/HiEventsDev/hi.events/releases)
+> **Hi.Events 2.3 đã ra mắt** với Audience CRM và chiến dịch SMS, chuyển nhượng và bán lại vé, máy chủ MCP cho trợ lý AI,
+> câu hỏi tiếp theo khi thanh toán và liên kết thanh toán. [Xem có gì mới →](https://github.com/HiEventsDev/hi.events/releases)
 
 <br>
 
@@ -71,14 +71,16 @@ và đơn vị tổ chức hội nghị. Tự vận hành, hoặc để chúng t
 - Mã nhúng tùy biến cho trang web của bạn: widget bán vé, nút, danh sách sự kiện, đội hình và lịch trình
 - Mã khuyến mãi và giảm giá
 - Liên kết theo dõi cho nhà quảng bá và đối tác liên kết
-- Câu hỏi đăng ký tùy chỉnh
+- Câu hỏi đăng ký với câu hỏi tiếp theo và quy tắc về điều kiện tham gia
 - Đồng ý nhận tin tiếp thị khi thanh toán
+- Audience CRM với liên hệ, phân khúc, biểu mẫu đăng ký, cùng chiến dịch email và SMS <sup>Enterprise</sup>
 - Theo dõi qua Meta, TikTok, Google Analytics và Tag Manager
 
 **💳 Thanh toán**
 - Nhận tiền trực tiếp vào tài khoản Stripe của bạn
 - Thuế và phí, đã bao gồm hoặc cộng thêm khi thanh toán
 - Xuất hóa đơn và thanh toán ngoại tuyến
+- Liên kết thanh toán cho trường hợp người khác trả tiền
 - Hoàn tiền toàn bộ hoặc một phần
 
 **🚪 Người tham dự & cửa vào**
@@ -87,6 +89,7 @@ và đơn vị tổ chức hội nghị. Tự vận hành, hoặc để chúng t
 - Danh sách check-in có thể chia sẻ, đếm số lượng theo thời gian thực
 - Nhắn tin cho người tham dự và mẫu email tùy chỉnh
 - Vé PDF mang thương hiệu riêng
+- Chuyển nhượng và bán lại vé, tự động hoàn tiền cho người bán
 - Thêm người tham dự thủ công
 - Báo cáo doanh số, thuế và mã khuyến mãi
 
@@ -95,7 +98,8 @@ và đơn vị tổ chức hội nghị. Tự vận hành, hoặc để chúng t
 ## Xây dựng cho tổ chức
 
 **🔐 Bảo mật & truy cập**
-- Đăng nhập một lần
+- Đăng nhập bằng Google, Microsoft hoặc nhà cung cấp OIDC của riêng bạn
+- Đăng nhập một lần theo từng tài khoản <sup>Enterprise</sup>
 - Xác thực hai yếu tố
 - Vai trò và phân quyền nhóm
 - Nhiều nhà tổ chức trong một tài khoản
@@ -103,6 +107,7 @@ và đơn vị tổ chức hội nghị. Tự vận hành, hoặc để chúng t
 **🔌 Tích hợp**
 - REST API và khóa API
 - Webhooks
+- Máy chủ MCP cho Claude và các trợ lý AI khác
 - Xuất CSV và XLSX
 
 **🗄️ Dữ liệu của bạn**
@@ -180,7 +185,7 @@ hoàn toàn, do chính đội ngũ phát triển Hi.Events vận hành.
 Hi.Events được cấp phép theo **AGPL-3.0 kèm các điều khoản bổ sung**. Các điều khoản bổ sung yêu cầu giữ lại dòng ghi nhận "Powered by Hi.Events"
 trên các trang và email do phần mềm tạo ra — xem [LICENCE](LICENCE) để biết nội dung chính xác.
 
-Chỗ ngồi đặt trước và quầy vé thuộc phạm vi [Hi.Events Enterprise Licence](backend/ee/LICENCE) và cần
+Chỗ ngồi đặt trước, quầy vé, đăng nhập một lần theo từng tài khoản và Audience thuộc phạm vi [Hi.Events Enterprise Licence](backend/ee/LICENCE) và cần
 giấy phép khi sử dụng trong môi trường production.
 
 **Chúng tôi cung cấp giấy phép thương mại** nếu bạn muốn gỡ dòng ghi nhận hoặc cần điều khoản phù hợp cho triển khai

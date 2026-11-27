@@ -30,8 +30,8 @@ Omalla palvelimella tai pilvessä. Sinun tapahtumasi, sinun brändisi, sinun dat
 <br>
 
 > [!NOTE]
-> **Hi.Events 2.0 on täällä**: toistuvat tapahtumat, varatut paikat, lippukassa, esiintyjät ja aikataulut, kertakirjautuminen,
-> tiimien käyttöoikeudet ja API-avaimet. [Katso uudet ominaisuudet →](https://github.com/HiEventsDev/hi.events/releases)
+> **Hi.Events 2.3 on täällä**: Audience CRM ja SMS-kampanjat, lippujen siirrot ja jälleenmyynti, MCP-palvelin
+> tekoälyavustajille, jatkokysymykset kassalla ja maksulinkit. [Katso uudet ominaisuudet →](https://github.com/HiEventsDev/hi.events/releases)
 
 <br>
 
@@ -71,14 +71,16 @@ ja konferenssien järjestäjiin. Ylläpidä sitä itse tai anna meidän hoitaa s
 - Muokattavat upotukset omalle sivustollesi: lippuwidgetit, painikkeet, tapahtumalistat, esiintyjät ja aikataulut
 - Kampanjakoodit ja alennukset
 - Seurantalinkit promoottoreille ja kumppaneille
-- Omat rekisteröintikysymykset
+- Rekisteröintikysymykset jatkokysymyksillä ja kelpoisuussäännöillä
 - Markkinointisuostumus kassalla
+- Audience CRM: yhteystiedot, segmentit, liittymislomakkeet sekä sähköposti- ja SMS-kampanjat <sup>Enterprise</sup>
 - Meta-, TikTok-, Google Analytics- ja Tag Manager -seuranta
 
 **💳 Maksut**
 - Tilitykset omalle Stripe-tilillesi
 - Verot ja palvelumaksut, hintaan sisältyvinä tai kassalla lisättyinä
 - Laskutus ja offline-maksut
+- Maksulinkit tilanteisiin, joissa maksajana on joku muu
 - Täydet ja osittaiset hyvitykset
 
 **🚪 Osallistujat ja sisäänpääsy**
@@ -87,6 +89,7 @@ ja konferenssien järjestäjiin. Ylläpidä sitä itse tai anna meidän hoitaa s
 - Jaettavat sisäänkirjauslistat reaaliaikaisilla määrillä
 - Viestit osallistujille ja omat sähköpostipohjat
 - Brändätyt PDF-liput
+- Lippujen siirrot ja jälleenmyynti, myyjälle automaattinen hyvitys
 - Manuaalisesti lisätyt osallistujat
 - Myynti-, vero- ja kampanjakoodiraportit
 
@@ -95,7 +98,8 @@ ja konferenssien järjestäjiin. Ylläpidä sitä itse tai anna meidän hoitaa s
 ## Organisaatioille
 
 **🔐 Tietoturva ja käyttöoikeudet**
-- Kertakirjautuminen
+- Kirjautuminen Googlella, Microsoftilla tai omalla OIDC-palveluntarjoajalla
+- Tilikohtainen kertakirjautuminen <sup>Enterprise</sup>
 - Kaksivaiheinen tunnistautuminen
 - Tiimiroolit ja käyttöoikeudet
 - Useita järjestäjiä yhdellä tilillä
@@ -103,6 +107,7 @@ ja konferenssien järjestäjiin. Ylläpidä sitä itse tai anna meidän hoitaa s
 **🔌 Integraatiot**
 - REST API ja API-avaimet
 - Webhookit
+- MCP-palvelin Claudelle ja muille tekoälyavustajille
 - CSV- ja XLSX-viennit
 
 **🗄️ Sinun datasi**
@@ -180,8 +185,8 @@ hallinnoitu versio, jota ylläpitää Hi.Eventsin kehittäjätiimi.
 Hi.Events on lisensoitu **AGPL-3.0-lisenssillä lisäehdoin**. Lisäehdot edellyttävät, että "Powered by Hi.Events" -maininta
 säilytetään ohjelmiston luomilla sivuilla ja sähköposteissa – tarkka sanamuoto on tiedostossa [LICENCE](LICENCE).
 
-Varatut paikat ja lippukassa kuuluvat [Hi.Events Enterprise Licence](backend/ee/LICENCE) -lisenssin piiriin, ja niiden tuotantokäyttö
-vaatii lisenssin.
+Varatut paikat, lippukassa, tilikohtainen kertakirjautuminen ja Audience kuuluvat
+[Hi.Events Enterprise Licence](backend/ee/LICENCE) -lisenssin piiriin, ja niiden tuotantokäyttö vaatii lisenssin.
 
 **Kaupallisia lisenssejä on saatavilla**, jos haluat poistaa maininnan tai tarvitset white label -käyttöön sopivat
 ehdot. [Lisensointivaihtoehdot](https://hi.events/licensing?utm_source=gh-readme) ·

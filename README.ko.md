@@ -30,8 +30,8 @@
 <br>
 
 > [!NOTE]
-> **Hi.Events 2.0이 출시되었습니다.** 반복 이벤트, 지정 좌석, 박스 오피스, 라인업 및 일정표, 싱글
-> 사인온(SSO), 팀 권한, API 키를 지원합니다. [새로운 기능 보기 →](https://github.com/HiEventsDev/hi.events/releases)
+> **Hi.Events 2.3이 출시되었습니다.** Audience CRM 및 SMS 캠페인, 티켓 양도 및 재판매, AI 어시스턴트용 MCP
+> 서버, 결제 시 후속 질문, 결제 링크를 지원합니다. [새로운 기능 보기 →](https://github.com/HiEventsDev/hi.events/releases)
 
 <br>
 
@@ -71,14 +71,16 @@
 - 내 사이트에 맞춤형 임베드: 티켓 위젯, 버튼, 이벤트 목록, 라인업, 일정표
 - 프로모션 코드 및 할인
 - 프로모터 및 제휴 파트너용 추적 링크
-- 맞춤 등록 질문
+- 후속 질문 및 참가 자격 규칙을 지원하는 등록 질문
 - 결제 시 마케팅 수신 동의
+- 연락처, 세그먼트, 가입 양식, 이메일 및 SMS 캠페인을 갖춘 Audience CRM <sup>Enterprise</sup>
 - Meta, TikTok, Google Analytics, Tag Manager 추적
 
 **💳 결제**
 - 내 Stripe 계정으로 직접 정산
 - 세금 및 수수료, 가격에 포함하거나 결제 시 추가
 - 인보이스 발행 및 오프라인 결제
+- 다른 사람이 결제할 때 사용하는 결제 링크
 - 전액 및 부분 환불
 
 **🚪 참석자 및 현장 입장**
@@ -87,6 +89,7 @@
 - 실시간 인원이 표시되는 공유용 체크인 목록
 - 참석자 메시지 및 맞춤 이메일 템플릿
 - 브랜드 PDF 티켓
+- 판매자에게 자동 환불되는 티켓 양도 및 재판매
 - 참석자 수동 추가
 - 판매, 세금, 프로모션 코드 보고서
 
@@ -95,7 +98,8 @@
 ## 조직을 위한 설계
 
 **🔐 보안 및 접근 관리**
-- 싱글 사인온(SSO)
+- Google, Microsoft 또는 자체 OIDC 공급자로 로그인
+- 계정별 싱글 사인온(SSO) <sup>Enterprise</sup>
 - 2단계 인증
 - 팀 역할 및 권한
 - 하나의 계정에서 여러 주최자 관리
@@ -103,6 +107,7 @@
 **🔌 연동**
 - REST API 및 API 키
 - 웹훅
+- Claude 및 기타 AI 어시스턴트용 MCP 서버
 - CSV 및 XLSX 내보내기
 
 **🗄️ 나의 데이터**
@@ -180,7 +185,7 @@ Hi.Events를 개발하는 팀이 직접 운영하는 완전 관리형 버전입�
 Hi.Events는 **AGPL-3.0 및 추가 조항**에 따라 라이선스가 부여됩니다. 추가 조항에 따라 소프트웨어가 생성하는 페이지와 이메일에 "Powered by Hi.Events"
 표기를 유지해야 합니다. 정확한 문구는 [LICENCE](LICENCE)를 참고하세요.
 
-지정 좌석과 박스 오피스는 [Hi.Events Enterprise Licence](backend/ee/LICENCE)가 적용되며, 프로덕션 환경에서 사용하려면
+지정 좌석, 박스 오피스, 계정별 싱글 사인온(SSO), Audience는 [Hi.Events Enterprise Licence](backend/ee/LICENCE)가 적용되며, 프로덕션 환경에서 사용하려면
 라이선스가 필요합니다.
 
 표기를 제거하거나 화이트 라벨 배포에 맞는 조건이 필요하다면 **상업용 라이선스를 이용할 수 있습니다**.

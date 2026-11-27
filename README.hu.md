@@ -30,8 +30,8 @@ Saját szerveren vagy a felhőben. Az Ön eseményei, az Ön márkája, az Ön a
 <br>
 
 > [!NOTE]
-> **Megérkezett a Hi.Events 2.0** ismétlődő eseményekkel, helyfoglalással, pénztárral, line-uppal és programmal, egyszeri
-> bejelentkezéssel, csapatjogosultságokkal és API-kulcsokkal. [Az újdonságok →](https://github.com/HiEventsDev/hi.events/releases)
+> **Megérkezett a Hi.Events 2.3** Audience CRM-mel és SMS-kampányokkal, jegyátruházással és -viszonteladással, MCP-szerverrel
+> AI-asszisztensekhez, kiegészítő kérdésekkel a vásárláskor és fizetési linkekkel. [Az újdonságok →](https://github.com/HiEventsDev/hi.events/releases)
 
 <br>
 
@@ -71,14 +71,16 @@ a konferenciaszervezőkig. Üzemeltesse saját maga, vagy bízza ránk a Hi.Even
 - Testreszabható beágyazások saját weboldalra: jegywidgetek, gombok, eseménylisták, line-upok és programok
 - Promóciós kódok és kedvezmények
 - Követő linkek promótereknek és partnereknek
-- Egyedi regisztrációs kérdések
+- Regisztrációs kérdések kiegészítő kérdésekkel és jogosultsági szabályokkal
 - Marketing-hozzájárulás a vásárláskor
+- Audience CRM kontaktokkal, szegmensekkel, feliratkozási űrlapokkal, valamint e-mail- és SMS-kampányokkal <sup>Enterprise</sup>
 - Meta, TikTok, Google Analytics és Tag Manager követés
 
 **💳 Fizetések**
 - Kifizetések közvetlenül a saját Stripe-fiókjába
 - Adók és díjak, az árban foglalva vagy a vásárláskor hozzáadva
 - Számlázás és offline fizetések
+- Fizetési linkek arra az esetre, ha más fizet
 - Teljes és részleges visszatérítések
 
 **🚪 Résztvevők és beléptetés**
@@ -87,6 +89,7 @@ a konferenciaszervezőkig. Üzemeltesse saját maga, vagy bízza ránk a Hi.Even
 - Megosztható beléptetési listák élő számlálással
 - Üzenetküldés a résztvevőknek és egyedi e-mail-sablonok
 - Saját márkás PDF-jegyek
+- Jegyátruházás és -viszonteladás, az eladó számára automatikus visszatérítéssel
 - Kézzel hozzáadott résztvevők
 - Értékesítési, adó- és promóciós kód riportok
 
@@ -95,7 +98,8 @@ a konferenciaszervezőkig. Üzemeltesse saját maga, vagy bízza ránk a Hi.Even
 ## Szervezetek számára
 
 **🔐 Biztonság és hozzáférés**
-- Egyszeri bejelentkezés
+- Bejelentkezés Google-, Microsoft- vagy saját OIDC-szolgáltatóval
+- Fiókonkénti egyszeri bejelentkezés <sup>Enterprise</sup>
 - Kétlépcsős azonosítás
 - Csapatszerepkörök és jogosultságok
 - Több szervező egy fiók alatt
@@ -103,6 +107,7 @@ a konferenciaszervezőkig. Üzemeltesse saját maga, vagy bízza ránk a Hi.Even
 **🔌 Integrációk**
 - REST API és API-kulcsok
 - Webhookok
+- MCP-szerver Claude-hoz és más AI-asszisztensekhez
 - CSV és XLSX exportálás
 
 **🗄️ Az Ön adatai**
@@ -180,8 +185,8 @@ menedzselt változat, amelyet a Hi.Events fejlesztőcsapata üzemeltet.
 A Hi.Events licence **AGPL-3.0, kiegészítő feltételekkel**. A kiegészítő feltételek előírják, hogy a "Powered by Hi.Events"
 feltüntetés megmaradjon a szoftver által generált oldalakon és e-mailekben – a pontos szöveget lásd a [LICENCE](LICENCE) fájlban.
 
-A helyfoglalásra és a pénztárra a [Hi.Events Enterprise Licence](backend/ee/LICENCE) vonatkozik, éles használatukhoz
-licenc szükséges.
+A helyfoglalásra, a pénztárra, a fiókonkénti egyszeri bejelentkezésre és az Audience-re a
+[Hi.Events Enterprise Licence](backend/ee/LICENCE) vonatkozik, éles használatukhoz licenc szükséges.
 
 **Kereskedelmi licencek is elérhetők**, ha el szeretné távolítani a feltüntetést, vagy white-label telepítéshez illő
 feltételekre van szüksége. [Licencelési lehetőségek](https://hi.events/licensing?utm_source=gh-readme) ·
