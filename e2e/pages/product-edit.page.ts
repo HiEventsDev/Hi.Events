@@ -29,6 +29,10 @@ export class ProductEditPage {
     await this.page.getByRole('heading', { name: 'Edit Product' }).waitFor();
   }
 
+  async setPrice(price: number): Promise<void> {
+    await this.page.getByRole('textbox', { name: /^Price/ }).fill(String(price));
+  }
+
   async setQuantity(quantity: number): Promise<void> {
     await this.page.getByLabel(/^Quantity Available/).fill(String(quantity));
   }
@@ -40,6 +44,17 @@ export class ProductEditPage {
   async chooseQuantityScope(scope: 'OCCURRENCE' | 'EVENT'): Promise<void> {
     await this.quantityScopeButton().click();
     await this.page.getByTestId(`product-quantity-applies-to-option-${scope}`).click();
+  }
+
+  ledgerRow(id: string): Locator {
+    return this.page.getByTestId(`product-ledger-${id}`);
+  }
+
+  async toggleSwitchInLedgerRow(id: string, label: string): Promise<void> {
+    await this.ledgerRow(id).click();
+    await expect(this.ledgerRow(id)).toHaveAttribute('aria-expanded', 'true');
+    const control = this.page.getByRole('switch', { name: label });
+    await control.setChecked(!(await control.isChecked()));
   }
 
   async clickSubmit(): Promise<void> {

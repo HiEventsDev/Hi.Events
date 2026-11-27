@@ -16,6 +16,7 @@ class TaxSummaryReport extends AbstractOrganizerReportService
         return <<<SQL
             WITH tax_data AS (
                 SELECT
+                    o.id AS order_id,
                     e.id AS event_id,
                     e.title AS event_name,
                     e.currency AS event_currency,
@@ -33,6 +34,10 @@ class TaxSummaryReport extends AbstractOrganizerReportService
                     AND e.deleted_at IS NULL
                     $currencyFilter
                     AND o.created_at BETWEEN :start_at AND :end_at
+            ),
+            report_totals AS (
+                SELECT COUNT(DISTINCT order_id) AS total_order_count
+                FROM tax_data
             )
             SELECT
                 event_id,
@@ -41,9 +46,11 @@ class TaxSummaryReport extends AbstractOrganizerReportService
                 tax_name,
                 tax_rate,
                 SUM(tax_value) AS total_collected,
-                COUNT(*) AS order_count
+                COUNT(DISTINCT order_id) AS order_count,
+                report_totals.total_order_count
             FROM tax_data
-            GROUP BY event_id, event_name, event_currency, tax_name, tax_rate
+            CROSS JOIN report_totals
+            GROUP BY event_id, event_name, event_currency, tax_name, tax_rate, report_totals.total_order_count
             ORDER BY event_name, tax_name
 SQL;
     }

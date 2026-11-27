@@ -12,11 +12,13 @@ use Laravel\Mcp\Server\Attributes\Description;
 use Laravel\Mcp\Server\Attributes\Name;
 use Laravel\Mcp\Server\Attributes\Title;
 use Laravel\Mcp\Server\Tools\Annotations\IsDestructive;
+use Laravel\Mcp\Server\Tools\Annotations\IsOpenWorld;
 
 #[Name('resend_ticket')]
 #[Title('Resend ticket')]
 #[Description('Emails an active attendee their ticket again, to the email address already on the attendee. Each attendee can be sent their ticket at most once every 10 minutes, and an email address gets at most 5 emails from these tools every 10 minutes.')]
 #[IsDestructive]
+#[IsOpenWorld]
 class ResendTicketTool extends WriteApiTool
 {
     public function schema(JsonSchema $schema): array

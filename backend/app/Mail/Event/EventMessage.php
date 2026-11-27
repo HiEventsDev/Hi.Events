@@ -4,6 +4,7 @@ namespace HiEvents\Mail\Event;
 
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\Helper\StringHelper;
 use HiEvents\Mail\BaseMail;
 use HiEvents\Mail\Concerns\ContainsEventContent;
 use HiEvents\Mail\Concerns\ProvidesEventContent;
@@ -30,7 +31,7 @@ class EventMessage extends BaseMail implements ContainsEventContent
     {
         return new Envelope(
             replyTo: $this->eventSettings->getSupportEmail(),
-            subject: $this->messageData->subject,
+            subject: ($this->messageData->is_test ? __('[Test]').' ' : '').$this->messageData->subject,
         );
     }
 
@@ -39,7 +40,7 @@ class EventMessage extends BaseMail implements ContainsEventContent
         return new Content(
             markdown: 'emails.event.message',
             with: [
-                'messageData' => $this->messageData,
+                'messageBody' => StringHelper::onOneLine($this->messageData->message),
                 'event' => $this->event,
                 'eventSettings' => $this->eventSettings,
             ]

@@ -43,6 +43,8 @@ export const CreateProductModal = ({onClose, selectedCategoryId = undefined}: Cr
             tax_and_fee_ids: undefined,
             addon_product_ids: [],
             is_addon_only: false,
+            is_transferable: true,
+            is_resellable: true,
             product_category_id: selectedCategoryId ? String(selectedCategoryId) : undefined,
             prices: [{
                 price: 0,

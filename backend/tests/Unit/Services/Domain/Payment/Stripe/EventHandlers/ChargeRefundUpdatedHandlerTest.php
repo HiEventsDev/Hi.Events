@@ -19,6 +19,7 @@ use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsRefundService;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\ChargeRefundUpdatedHandler;
 use HiEvents\Services\Domain\Payment\Stripe\StripePaymentIntentRefundService;
+use HiEvents\Services\Domain\TicketResale\ResaleRefundService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
@@ -61,6 +62,8 @@ class ChargeRefundUpdatedHandlerTest extends TestCase
 
     private Mailer|MockInterface $mailer;
 
+    private ResaleRefundService|MockInterface $resaleRefundService;
+
     private ChargeRefundUpdatedHandler $handler;
 
     protected function setUp(): void
@@ -76,6 +79,9 @@ class ChargeRefundUpdatedHandlerTest extends TestCase
         $this->eventRepository = Mockery::mock(EventRepositoryInterface::class);
         $this->mailer = Mockery::mock(Mailer::class);
 
+        $this->resaleRefundService = Mockery::mock(ResaleRefundService::class);
+        $this->resaleRefundService->shouldReceive('recordStripeOutcome')->byDefault();
+
         $databaseManager = Mockery::mock(DatabaseManager::class);
         $databaseManager->shouldReceive('transaction')->andReturnUsing(fn (callable $callback) => $callback());
 
@@ -90,6 +96,7 @@ class ChargeRefundUpdatedHandlerTest extends TestCase
             $this->transactionLockService,
             $this->eventRepository,
             $this->mailer,
+            $this->resaleRefundService,
         );
     }
 
@@ -113,12 +120,20 @@ class ChargeRefundUpdatedHandlerTest extends TestCase
                 && $amount->toMinorUnit() === 2500);
 
         $createdRefund = null;
+        $calls = [];
         $this->orderRefundRepository->shouldReceive('create')
             ->once()
-            ->andReturnUsing(function (array $attributes) use (&$createdRefund) {
+            ->andReturnUsing(function (array $attributes) use (&$createdRefund, &$calls) {
                 $createdRefund = $attributes;
+                $calls[] = 'create-refund';
 
                 return new OrderRefundDomainObject;
+            });
+        $this->resaleRefundService->shouldReceive('recordStripeOutcome')
+            ->once()
+            ->withArgs(fn (Refund $refund): bool => $refund->id === self::REFUND_ID)
+            ->andReturnUsing(function () use (&$calls) {
+                $calls[] = 'record-outcome';
             });
 
         $this->domainEventDispatcherService->shouldReceive('dispatch')
@@ -130,6 +145,7 @@ class ChargeRefundUpdatedHandlerTest extends TestCase
 
         $this->handler->handleEvent($this->refund(amountMinor: 2500, status: Refund::STATUS_SUCCEEDED));
 
+        $this->assertSame(['create-refund', 'record-outcome'], $calls);
         $this->assertSame(self::ORDER_ID, $createdRefund['order_id']);
         $this->assertSame(PaymentProviders::STRIPE->value, $createdRefund['payment_provider']);
         $this->assertSame(self::REFUND_ID, $createdRefund['refund_id']);
@@ -197,6 +213,7 @@ class ChargeRefundUpdatedHandlerTest extends TestCase
         $this->orderRepository->shouldNotReceive('updateFromArray');
         $this->eventStatisticsRefundService->shouldNotReceive('updateForRefund');
         $this->orderRefundRepository->shouldNotReceive('create');
+        $this->resaleRefundService->shouldNotReceive('recordStripeOutcome');
         $this->domainEventDispatcherService->shouldNotReceive('dispatch');
         $this->mailer->shouldNotReceive('to');
 
@@ -214,6 +231,7 @@ class ChargeRefundUpdatedHandlerTest extends TestCase
         $this->orderRefundRepository->shouldNotReceive('findFirstWhere');
         $this->orderRepository->shouldNotReceive('findById');
         $this->eventStatisticsRefundService->shouldNotReceive('updateForRefund');
+        $this->resaleRefundService->shouldNotReceive('recordStripeOutcome');
 
         $this->handler->handleEvent($this->refund(amountMinor: 2500, status: Refund::STATUS_SUCCEEDED));
     }
@@ -239,6 +257,7 @@ class ChargeRefundUpdatedHandlerTest extends TestCase
         $this->orderRepository->shouldNotReceive('increment');
         $this->eventStatisticsRefundService->shouldNotReceive('updateForRefund');
         $this->orderRefundRepository->shouldNotReceive('create');
+        $this->resaleRefundService->shouldNotReceive('recordStripeOutcome');
         $this->domainEventDispatcherService->shouldNotReceive('dispatch');
         $this->mailer->shouldNotReceive('to');
 
@@ -278,6 +297,9 @@ class ChargeRefundUpdatedHandlerTest extends TestCase
 
                 return new OrderRefundDomainObject;
             });
+        $this->resaleRefundService->shouldReceive('recordStripeOutcome')
+            ->once()
+            ->withArgs(fn (Refund $refund): bool => $refund->status === $status);
 
         $this->orderRepository->shouldNotReceive('increment');
         $this->eventStatisticsRefundService->shouldNotReceive('updateForRefund');

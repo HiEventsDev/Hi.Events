@@ -64,6 +64,12 @@ class AttendeeResource extends JsonResource
                         ?->filter(fn ($qav) => $qav->getBelongsTo() === QuestionBelongsTo::PRODUCT->name)
                 )
             ),
+            'resale' => $this->when($this->getResaleSummary() !== null, fn () => [
+                /** @var 'LISTED'|'SOLD'|null */
+                'status' => $this->getResaleSummary()->status,
+                'sold_order_id' => $this->getResaleSummary()->sold_order_id,
+                'sold_order_public_id' => $this->getResaleSummary()->sold_order_public_id,
+            ]),
             'created_at' => $this->getCreatedAt(),
             'updated_at' => $this->getUpdatedAt(),
         ];

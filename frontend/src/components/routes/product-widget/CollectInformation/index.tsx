@@ -37,6 +37,9 @@ import {trackEvent, AnalyticsEvents} from "../../../../utilites/analytics.ts";
 import {clearWaitlistJoinedForEvent} from "../../../../hooks/useWaitlistJoined.ts";
 import {useCheckoutPrefill, CheckoutPrefill} from "../../../../hooks/useCheckoutPrefill.ts";
 import {UserGeneratedContent} from "../../../common/UserGeneratedContent";
+import {PhoneNumberInput} from "../../../common/PhoneNumberInput";
+import {isValidPhoneNumber} from "libphonenumber-js";
+import {getSmsConsentTerms, isInTextMessageCountry} from "../../../../utilites/phoneNumber.ts";
 import {answersByQuestionId, findDisqualifyingQuestion, indexQuestions} from "../../../../utilites/questionLogic.ts";
 
 const LoadingSkeleton = () =>
@@ -88,6 +91,10 @@ export const CollectInformation = () => {
     const requireBillingAddress = event?.settings?.require_billing_address;
     const isPerOrderCollection = event?.settings?.attendee_details_collection_method === 'PER_ORDER';
     const allowCopyToAllAttendees = event?.settings?.allow_copy_details_to_all_attendees ?? true;
+    const phoneCollection = event?.settings?.phone_collection ?? 'OFF';
+    const collectsPhone = phoneCollection !== 'OFF';
+    const asksForSmsConsent = collectsPhone && !!event?.settings?.show_sms_opt_in;
+    const organizerName = event?.organizer?.name || t`this organizer`;
     const [copyOption, setCopyOption] = useState<'none' | 'first' | 'all'>('none');
 
     const isEmailValid = (email: string) => {
@@ -108,9 +115,11 @@ export const CollectInformation = () => {
                 last_name: "",
                 email: "",
                 email_confirmation: "",
+                phone: "",
                 address: {},
                 questions: {},
                 opted_into_marketing: false,
+                sms_opted_in: false,
             },
             products: [{
                 first_name: "",
@@ -126,6 +135,15 @@ export const CollectInformation = () => {
             order: {
                 email_confirmation: (value, values) =>
                     value !== values.order.email ? t`Email addresses do not match` : null,
+                phone: (value) => {
+                    if (!collectsPhone) {
+                        return null;
+                    }
+                    if (!value) {
+                        return phoneCollection === 'REQUIRED' ? t`Mobile number is required` : null;
+                    }
+                    return isValidPhoneNumber(value) ? null : t`Enter a valid mobile number`;
+                },
             },
             products: {
                 email_confirmation: (value, values, path) => {
@@ -140,6 +158,14 @@ export const CollectInformation = () => {
         },
         validateInputOnBlur: true,
     });
+
+    const offersSmsOptIn = asksForSmsConsent && isInTextMessageCountry(form.values.order.phone);
+
+    useEffect(() => {
+        if (!offersSmsOptIn && form.values.order.sms_opted_in) {
+            form.setFieldValue('order.sms_opted_in', false);
+        }
+    }, [offersSmsOptIn]);
 
     const getTicketAttendeeIndices = (): number[] => {
         if (!products || !form.values.products) return [];
@@ -350,6 +376,10 @@ export const CollectInformation = () => {
                 ...(prefill.last_name !== undefined && {last_name: prefill.last_name}),
                 ...(prefill.email !== undefined && {email: prefill.email, email_confirmation: prefill.email}),
             };
+            const buyerPrefill = {
+                ...orderPrefill,
+                ...(prefill.phone !== undefined && {phone: prefill.phone}),
+            };
 
             const ticketProductIds = new Set(
                 (products ?? [])
@@ -368,7 +398,7 @@ export const CollectInformation = () => {
                 products: prefilledProducts,
                 order: {
                     ...form.values.order,
-                    ...orderPrefill,
+                    ...buyerPrefill,
                     questions: formOrderQuestions,
                 },
             });
@@ -548,13 +578,23 @@ export const CollectInformation = () => {
                         />
                     </InputGroup>
 
+                    {collectsPhone && (
+                        <PhoneNumberInput
+                            label={t`Mobile Number`}
+                            withAsterisk={phoneCollection === 'REQUIRED'}
+                            disabled={isLocked('phone')}
+                            defaultCountry={event?.event_location?.location?.structured_address?.country}
+                            {...form.getInputProps("order.phone")}
+                        />
+                    )}
+
                     {orderRequiresAttendeeDetails && !isPerOrderCollection && totalTicketAttendees > 0 && !lock && (
                         <div className={classes.copyDetailsSection}>
                             {totalTicketAttendees === 1 ? (
                                 <Tooltip
                                     label={t`Fill in your details above first`}
                                     disabled={areOrderDetailsComplete()}
-                                    position="right"
+                                    position="top-start"
                                     withArrow
                                 >
                                     <div style={{display: 'inline-block'}}>
@@ -650,8 +690,23 @@ export const CollectInformation = () => {
                         <LockedFields locked={ineligibleAnswer?.scope === 'order'}>
                             <Checkbox
                                 mt="md"
-                                label={t`Keep me updated on news and events from ${event?.organizer?.name || t`this organizer`}`}
+                                label={asksForSmsConsent
+                                    ? t`Email me news and updates from ${organizerName}`
+                                    : t`Keep me updated on news and events from ${event?.organizer?.name || t`this organizer`}`}
                                 {...form.getInputProps('order.opted_into_marketing', {type: 'checkbox'})}
+                            />
+                        </LockedFields>
+                    )}
+
+                    {offersSmsOptIn && (
+                        <LockedFields locked={ineligibleAnswer?.scope === 'order'}>
+                            <Checkbox
+                                mt="md"
+                                label={t`Text me news and updates from ${organizerName}`}
+                                description={getSmsConsentTerms(form.values.order.phone)}
+                                styles={{description: {color: 'var(--checkout-text-primary, var(--mantine-color-gray-7))'}}}
+                                data-testid="checkout-sms-opt-in"
+                                {...form.getInputProps('order.sms_opted_in', {type: 'checkbox'})}
                             />
                         </LockedFields>
                     )}

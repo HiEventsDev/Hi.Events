@@ -1,16 +1,20 @@
 import {t} from "@lingui/macro";
 import {Button, Group, Modal, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
-import {Order} from "../../../../../types";
+import {Order, PhoneCollection} from "../../../../../types";
 import classes from "./EditOrderModal.module.scss";
 import {InputGroup} from "../../../../common/InputGroup";
 import {Callout} from "../../../../common/Callout";
+import {PhoneNumberInput} from "../../../../common/PhoneNumberInput";
+import {isValidPhoneNumber} from "libphonenumber-js";
 
 interface EditOrderModalProps {
     opened: boolean;
     onClose: () => void;
     order: Order;
     onSuccess: (values: any) => void;
+    phoneCollection: PhoneCollection;
+    defaultCountry?: string | null;
 }
 
 export const EditOrderModal = ({
@@ -18,14 +22,18 @@ export const EditOrderModal = ({
                                    onClose,
                                    order,
                                    onSuccess,
+                                   phoneCollection,
+                                   defaultCountry,
                                }: EditOrderModalProps) => {
     const emailRequired = !!order.email;
+    const showPhone = phoneCollection !== 'OFF' || !!order.phone;
 
     const form = useForm({
         initialValues: {
             first_name: order.first_name,
             last_name: order.last_name,
             email: order.email ?? "",
+            phone: order.phone ?? "",
         },
         validate: {
             first_name: (value) => !value ? t`First name is required` : null,
@@ -34,6 +42,10 @@ export const EditOrderModal = ({
                 if (!value) return emailRequired ? t`Email is required` : null;
                 if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return t`Invalid email`;
                 return null;
+            },
+            phone: (value) => {
+                if (!value) return phoneCollection === 'REQUIRED' ? t`Mobile number is required` : null;
+                return isValidPhoneNumber(value) ? null : t`Enter a valid mobile number`;
             },
         },
     });
@@ -73,6 +85,15 @@ export const EditOrderModal = ({
                         type="email"
                         {...form.getInputProps('email')}
                     />
+
+                    {showPhone && (
+                        <PhoneNumberInput
+                            label={t`Mobile Number`}
+                            withAsterisk={phoneCollection === 'REQUIRED'}
+                            defaultCountry={defaultCountry}
+                            {...form.getInputProps('phone')}
+                        />
+                    )}
 
                     {emailChanged && (
                         <Callout variant="tip">

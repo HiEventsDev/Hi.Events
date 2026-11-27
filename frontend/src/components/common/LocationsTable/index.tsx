@@ -1,14 +1,15 @@
-import {Button, Group, Menu, Table as MantineTable, Text} from "@mantine/core";
+import {ActionIcon, Menu, VisuallyHidden} from "@mantine/core";
 import {WriteAccess} from "../WriteAccess";
 import {CreateButton} from "../CreateButton";
 import {IconDotsVertical, IconPencil, IconPlus, IconTrash} from "@tabler/icons-react";
 import {useDisclosure} from "@mantine/hooks";
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import {useParams} from "react-router";
 import {t} from "@lingui/macro";
-import {Table, TableHead} from "../Table";
+import {TanStackTable, TanStackTableColumn} from "../TanStackTable";
+import {CellText, EmptyCell, IdentityCell} from "../TanStackTable/cells.tsx";
+import {sortableHeader, TableSort} from "../TanStackTable/sorting.tsx";
 import {NoResultsSplash} from "../NoResultsSplash";
-import Truncate from "../Truncate";
 import {IdParam, Location} from "../../../types";
 import {useDeleteLocation} from "../../../mutations/useDeleteLocation.ts";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
@@ -20,9 +21,11 @@ import {LocationEditModal} from "../../modals/LocationEditModal";
 interface LocationsTableProps {
     locations: Location[];
     openCreateModal: () => void;
+    isRefreshing?: boolean;
+    sort?: TableSort;
 }
 
-export const LocationsTable = ({locations, openCreateModal}: LocationsTableProps) => {
+export const LocationsTable = ({locations, openCreateModal, isRefreshing, sort}: LocationsTableProps) => {
     const {organizerId} = useParams();
     const [editModalOpen, {open: openEditModal, close: closeEditModal}] = useDisclosure(false);
     const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
@@ -46,41 +49,68 @@ export const LocationsTable = ({locations, openCreateModal}: LocationsTableProps
         );
     };
 
-    const ActionMenu = ({location}: { location: Location }) => (
-        <Group wrap="nowrap" gap={0} justify="flex-end">
-            <WriteAccess>
-                <Menu shadow="md" width={200}>
-                    <Menu.Target>
-                        <Button size="xs" variant="transparent">
-                            <IconDotsVertical/>
-                        </Button>
-                    </Menu.Target>
+    const columns = useMemo<TanStackTableColumn<Location>[]>(() => [
+        {
+            id: 'name',
+            enableHiding: false,
+            ...sortableHeader(t`Name`, 'name', sort, 'asc'),
+            meta: {label: t`Name`, sticky: 'left'},
+            cell: ({row: {original: location}}) => (
+                <IdentityCell
+                    stacked
+                    primary={<CellText strong title={locationName(location)}>{locationName(location)}</CellText>}
+                    secondary={formatAddress(location.structured_address ?? {})}
+                />
+            ),
+        },
+        {
+            id: 'created',
+            ...sortableHeader(t`Created`, 'created_at', sort),
+            meta: {label: t`Created`},
+            cell: ({row: {original: location}}) => location.created_at
+                ? <span title={location.created_at}>{relativeDate(location.created_at)}</span>
+                : <EmptyCell/>,
+        },
+        {
+            id: 'actions',
+            header: () => <VisuallyHidden>{t`Actions`}</VisuallyHidden>,
+            enableHiding: false,
+            meta: {sticky: 'right'},
+            cell: ({row: {original: location}}) => (
+                <WriteAccess>
+                    <Menu shadow="md" width={200} position="bottom-end">
+                        <Menu.Target>
+                            <ActionIcon variant="subtle" color="gray" aria-label={t`Actions`}>
+                                <IconDotsVertical size={18}/>
+                            </ActionIcon>
+                        </Menu.Target>
 
-                    <Menu.Dropdown>
-                        <Menu.Label>{t`Manage`}</Menu.Label>
-                        <Menu.Item
-                            leftSection={<IconPencil size={14}/>}
-                            onClick={() => {
-                                setSelectedLocation(location);
-                                openEditModal();
-                            }}
-                        >
-                            {t`Edit location`}
-                        </Menu.Item>
-                        <Menu.Divider/>
-                        <Menu.Label>{t`Danger zone`}</Menu.Label>
-                        <Menu.Item
-                            color="red"
-                            leftSection={<IconTrash size={14}/>}
-                            onClick={() => handleDelete(location)}
-                        >
-                            {t`Delete location`}
-                        </Menu.Item>
-                    </Menu.Dropdown>
-                </Menu>
-            </WriteAccess>
-        </Group>
-    );
+                        <Menu.Dropdown>
+                            <Menu.Label>{t`Manage`}</Menu.Label>
+                            <Menu.Item
+                                leftSection={<IconPencil size={14}/>}
+                                onClick={() => {
+                                    setSelectedLocation(location);
+                                    openEditModal();
+                                }}
+                            >
+                                {t`Edit location`}
+                            </Menu.Item>
+                            <Menu.Divider/>
+                            <Menu.Label>{t`Danger zone`}</Menu.Label>
+                            <Menu.Item
+                                color="red"
+                                leftSection={<IconTrash size={14}/>}
+                                onClick={() => handleDelete(location)}
+                            >
+                                {t`Delete location`}
+                            </Menu.Item>
+                        </Menu.Dropdown>
+                    </Menu>
+                </WriteAccess>
+            ),
+        },
+    ], [sort?.sortBy, sort?.sortDirection]);
 
     if (locations.length === 0) {
         return (
@@ -106,38 +136,7 @@ export const LocationsTable = ({locations, openCreateModal}: LocationsTableProps
 
     return (
         <>
-            <Table>
-                <TableHead>
-                    <MantineTable.Tr>
-                        <MantineTable.Th>{t`Name`}</MantineTable.Th>
-                        <MantineTable.Th>{t`Address`}</MantineTable.Th>
-                        <MantineTable.Th>{t`Created`}</MantineTable.Th>
-                        <MantineTable.Th></MantineTable.Th>
-                    </MantineTable.Tr>
-                </TableHead>
-                <MantineTable.Tbody>
-                    {locations.map((location) => (
-                        <MantineTable.Tr key={String(location.id)}>
-                            <MantineTable.Td>
-                                <Text fw={500} component="span">
-                                    <Truncate text={locationName(location)} length={40}/>
-                                </Text>
-                            </MantineTable.Td>
-                            <MantineTable.Td>
-                                <Truncate text={formatAddress(location.structured_address ?? {})} length={60}/>
-                            </MantineTable.Td>
-                            <MantineTable.Td>
-                                <Text size="sm" c="dimmed" title={location.created_at}>
-                                    {location.created_at ? relativeDate(location.created_at) : ''}
-                                </Text>
-                            </MantineTable.Td>
-                            <MantineTable.Td>
-                                <ActionMenu location={location}/>
-                            </MantineTable.Td>
-                        </MantineTable.Tr>
-                    ))}
-                </MantineTable.Tbody>
-            </Table>
+            <TanStackTable rowLines={2} data={locations} columns={columns} noCard isRefreshing={isRefreshing}/>
 
             {(editModalOpen && selectedLocation) && (
                 <LocationEditModal

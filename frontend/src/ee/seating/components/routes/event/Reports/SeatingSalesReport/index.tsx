@@ -1,8 +1,12 @@
+import {ReactNode} from "react";
 import {useParams} from "react-router";
 import {t} from "@lingui/macro";
 import {useGetEvent} from "../../../../../../../queries/useGetEvent.ts";
 import {formatCurrency} from "../../../../../../../utilites/currency.ts";
-import ReportTable from "../../../../../../../components/common/ReportTable";
+import {formatNumber} from "../../../../../../../utilites/helpers.ts";
+import {ReportColumn} from "../../../../../../../components/common/ReportView";
+import {EmptyCell} from "../../../../../../../components/common/TanStackTable/cells.tsx";
+import {EventReport} from "../../../../../../../components/routes/event/Reports/EventReport.tsx";
 
 interface SeatingSalesRow {
     band_key: string;
@@ -18,68 +22,61 @@ interface SeatingSalesRow {
     total_gross: string | null;
 }
 
-const SeatingSalesReport = () => {
+type SeatCountKey = 'capacity' | 'sold' | 'held' | 'blocked' | 'free';
+
+const SeatingSalesReport = ({description}: { description: string }) => {
     const {eventId} = useParams();
-    const eventQuery = useGetEvent(eventId);
-    const event = eventQuery.data;
+    const {data: event} = useGetEvent(eventId);
 
     if (!event) {
         return null;
     }
 
-    const emphasise = (row: SeatingSalesRow, value: string | number) => row.is_band_total ? <strong>{value}</strong> : value;
+    const emphasise = (row: SeatingSalesRow, value: ReactNode) => row.is_band_total ? <strong>{value}</strong> : value;
+    const seatCount = (key: SeatCountKey, label: string): ReportColumn<SeatingSalesRow> => ({
+        key,
+        label,
+        kind: 'count',
+        sortable: false,
+        render: row => emphasise(row, formatNumber(Number(row[key]))),
+    });
+    const areaName = (row: SeatingSalesRow) => row.is_band_total ? t`All areas` : row.area_name ?? '';
 
-    const columns = [
+    const columns: ReportColumn<SeatingSalesRow>[] = [
+        {key: 'band_name', label: t`Price band`, sortable: false, render: row => emphasise(row, row.band_name)},
+        {key: 'area_name', label: t`Area`, sortable: false, render: row => emphasise(row, areaName(row)), csv: areaName},
+        seatCount('capacity', t`Capacity`),
+        seatCount('sold', t`Sold`),
+        seatCount('held', t`In a basket`),
+        seatCount('blocked', t`Held back`),
+        seatCount('free', t`Free`),
         {
-            key: 'band_name' as const,
-            label: t`Price band`,
-            render: (value: string, row: SeatingSalesRow) => emphasise(row, value),
-        },
-        {
-            key: 'area_name' as const,
-            label: t`Area`,
-            render: (value: string | null, row: SeatingSalesRow) => row.is_band_total ? <strong>{t`All areas`}</strong> : value,
-        },
-        {
-            key: 'capacity' as const,
-            label: t`Capacity`,
-            render: (value: number, row: SeatingSalesRow) => emphasise(row, value),
-        },
-        {
-            key: 'sold' as const,
-            label: t`Sold`,
-            render: (value: number, row: SeatingSalesRow) => emphasise(row, value),
-        },
-        {
-            key: 'held' as const,
-            label: t`In a basket`,
-            render: (value: number, row: SeatingSalesRow) => emphasise(row, value),
-        },
-        {
-            key: 'blocked' as const,
-            label: t`Held back`,
-            render: (value: number, row: SeatingSalesRow) => emphasise(row, value),
-        },
-        {
-            key: 'free' as const,
-            label: t`Free`,
-            render: (value: number, row: SeatingSalesRow) => emphasise(row, value),
-        },
-        {
-            key: 'total_gross' as const,
-            label: t`Gross Sales`,
-            render: (value: string | null, row: SeatingSalesRow) => value === null ? '—' : emphasise(row, formatCurrency(value, event.currency)),
+            key: 'total_gross',
+            label: t`Gross sales`,
+            kind: 'money',
+            sortable: false,
+            render: row => row.total_gross === null
+                ? <EmptyCell/>
+                : emphasise(row, formatCurrency(row.total_gross, event.currency)),
         },
     ];
 
     return (
-        <ReportTable<SeatingSalesRow>
-            title={t`Seating Sales`}
-            columns={columns}
-            isLoading={eventQuery.isLoading}
-            downloadFileName="seating_sales_report.csv"
+        <EventReport<SeatingSalesRow>
+            description={description}
             event={event}
-            showDateFilter={false}
+            fileName="seating_sales_report.csv"
+            columns={columns}
+            hasPeriod={false}
+            allTimeLabel={t`Seats as they are now`}
+            totalRows={rows => rows.filter(row => row.is_band_total)}
+            emptyMessage={t`Link price bands to tickets to see seat sales here.`}
+            summary={sum => [
+                {label: t`Capacity`, value: sum('capacity'), kind: 'count'},
+                {label: t`Sold`, value: sum('sold'), kind: 'count'},
+                {label: t`Free`, value: sum('free'), kind: 'count'},
+                {label: t`Gross sales`, value: sum('total_gross'), kind: 'money'},
+            ]}
         />
     );
 };

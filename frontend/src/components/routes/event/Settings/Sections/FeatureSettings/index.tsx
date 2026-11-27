@@ -3,12 +3,11 @@ import {t} from "@lingui/macro";
 import {Switch} from "@mantine/core";
 import {useParams} from "react-router";
 import {IconIdBadge2} from "@tabler/icons-react";
-import {Card} from "../../../../../common/Card";
-import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
 import {showError, showSuccess} from "../../../../../../utilites/notifications.tsx";
 import {useUpdateEventSettings} from "../../../../../../mutations/useUpdateEventSettings.ts";
 import {useGetEventSettings} from "../../../../../../queries/useGetEventSettings.ts";
 import {EventFeature} from "../../../../../../types.ts";
+import {SettingsPage, SettingsRow, SettingsSection} from "../../../../../common/SettingsPage";
 import classes from "./FeatureSettings.module.scss";
 
 interface FeatureOption {
@@ -27,7 +26,7 @@ export const FeatureSettings = () => {
     const options: FeatureOption[] = [
         {
             feature: 'BADGES',
-            icon: <IconIdBadge2 size={18}/>,
+            icon: <IconIdBadge2 size={16}/>,
             label: t`Name badges`,
             description: t`Design name badges, print them in batches, and print them at check-in.`,
         },
@@ -46,30 +45,32 @@ export const FeatureSettings = () => {
     };
 
     return (
-        <Card>
-            <HeadingWithDescription
-                heading={t`Features`}
-                description={t`Turn on the extra tools this event needs. Features that are off are hidden from the menu and pages.`}
-            />
-            <div className={classes.list}>
-                {options.map((option) => (
-                    <label key={option.feature} className={classes.row}>
-                        <span className={classes.icon}>{option.icon}</span>
-                        <span className={classes.text}>
-                            <span className={classes.label}>{option.label}</span>
-                            <span className={classes.description}>{option.description}</span>
-                        </span>
-                        <Switch
-                            size="md"
-                            checked={enabledFeatures.includes(option.feature)}
-                            disabled={settingsQuery.isLoading || updateMutation.isPending}
-                            onChange={(event) => toggle(option, event.currentTarget.checked)}
-                            aria-label={option.label}
-                            data-testid={`event-feature-${option.feature.toLowerCase()}-switch`}
-                        />
-                    </label>
-                ))}
-            </div>
-        </Card>
+        <SettingsPage
+            title={t`Features`}
+            description={t`Turn on the extra tools this event needs. Features that are off are hidden from the menu and pages.`}
+        >
+            <SettingsSection>
+                {options.map((option) => {
+                    const switchId = `event-feature-${option.feature.toLowerCase()}`;
+                    return (
+                        <SettingsRow
+                            key={option.feature}
+                            label={<span className={classes.label}>{option.icon}{option.label}</span>}
+                            description={option.description}
+                            htmlFor={switchId}
+                            inlineControl
+                        >
+                            <Switch
+                                id={switchId}
+                                checked={enabledFeatures.includes(option.feature)}
+                                disabled={settingsQuery.isLoading || updateMutation.isPending}
+                                onChange={(event) => toggle(option, event.currentTarget.checked)}
+                                data-testid={`${switchId}-switch`}
+                            />
+                        </SettingsRow>
+                    );
+                })}
+            </SettingsSection>
+        </SettingsPage>
     );
 };

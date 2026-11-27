@@ -164,6 +164,10 @@ class EditProductHandler
                 'highlight_message' => $productsData->highlight_message,
                 'waitlist_enabled' => $productsData->waitlist_enabled,
                 'is_addon_only' => $productsData->is_addon_only ?? false,
+                ...array_filter([
+                    'is_transferable' => $productsData->is_transferable,
+                    'is_resellable' => $productsData->is_resellable,
+                ], static fn (?bool $submitted): bool => $submitted !== null),
             ],
             where: $where
         );

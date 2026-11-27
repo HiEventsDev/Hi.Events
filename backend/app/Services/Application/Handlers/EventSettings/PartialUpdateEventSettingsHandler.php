@@ -117,6 +117,8 @@ class PartialUpdateEventSettingsHandler
                     : $existingSettings->getTicketDesignSettings(),
 
                 'show_marketing_opt_in' => $eventSettingsDTO->settings['show_marketing_opt_in'] ?? $existingSettings->getShowMarketingOptIn(),
+                'phone_collection' => $eventSettingsDTO->settings['phone_collection'] ?? $existingSettings->getPhoneCollection(),
+                'show_sms_opt_in' => $eventSettingsDTO->settings['show_sms_opt_in'] ?? $existingSettings->getShowSmsOptIn(),
 
                 'allow_copy_details_to_all_attendees' => $eventSettingsDTO->settings['allow_copy_details_to_all_attendees'] ?? $existingSettings->getAllowCopyDetailsToAllAttendees(),
 
@@ -130,6 +132,13 @@ class PartialUpdateEventSettingsHandler
                     : $existingSettings->getHomepageSections(),
 
                 'allow_attendee_self_edit' => $eventSettingsDTO->settings['allow_attendee_self_edit'] ?? $existingSettings->getAllowAttendeeSelfEdit(),
+                'allow_ticket_transfer' => $eventSettingsDTO->settings['allow_ticket_transfer'] ?? $existingSettings->getAllowTicketTransfer(),
+                'ticket_transfer_cutoff_minutes' => $eventSettingsDTO->settings['ticket_transfer_cutoff_minutes'] ?? $existingSettings->getTicketTransferCutoffMinutes(),
+                'max_transfers_per_ticket' => array_key_exists('max_transfers_per_ticket', $eventSettingsDTO->settings)
+                    ? $eventSettingsDTO->settings['max_transfers_per_ticket']
+                    : $existingSettings->getMaxTransfersPerTicket(),
+                'allow_ticket_resale' => $eventSettingsDTO->settings['allow_ticket_resale'] ?? $existingSettings->getAllowTicketResale(),
+                'ticket_resale_cutoff_minutes' => $eventSettingsDTO->settings['ticket_resale_cutoff_minutes'] ?? $existingSettings->getTicketResaleCutoffMinutes(),
 
                 'show_available_occurrence_capacity' => $eventSettingsDTO->settings['show_available_occurrence_capacity'] ?? $existingSettings->getShowAvailableOccurrenceCapacity(),
                 'hide_sold_out_occurrences' => $eventSettingsDTO->settings['hide_sold_out_occurrences'] ?? $existingSettings->getHideSoldOutOccurrences(),

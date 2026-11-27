@@ -5,20 +5,25 @@ namespace Tests\Unit\Services\Application\Handlers\Attendee;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\ProductPriceType;
 use HiEvents\DomainObjects\Enums\ProductType;
+use HiEvents\DomainObjects\Enums\TicketResaleCloseReason;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\Enterprise\Seating\Services\Domain\SeatClaimService;
 use HiEvents\Exceptions\NoTicketsAvailableException;
+use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Attendee\DTO\EditAttendeeDTO;
 use HiEvents\Services\Application\Handlers\Attendee\EditAttendeeHandler;
+use HiEvents\Services\Domain\Attendee\OrganizerAttendeeIdentityChangeService;
 use HiEvents\Services\Domain\Badge\BadgeReprintService;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesDTO;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesResponseDTO;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
+use HiEvents\Services\Domain\TicketResale\TicketResaleClosureService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
+use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Facades\Event;
 use Mockery;
@@ -53,6 +58,10 @@ class EditAttendeeHandlerTest extends TestCase
 
     private SeatClaimService|MockInterface $seatClaimService;
 
+    private TicketResaleClosureService|MockInterface $resaleClosureService;
+
+    private TransactionLockService|MockInterface $transactionLockService;
+
     private MockInterface|BadgeReprintService $badgeReprintService;
 
     protected function setUp(): void
@@ -74,6 +83,12 @@ class EditAttendeeHandlerTest extends TestCase
         $this->seatClaimService->shouldReceive('changeProductForAttendee')->andReturn(false)->byDefault();
         $this->seatClaimService->shouldReceive('releaseForAttendee')->byDefault();
 
+        $this->resaleClosureService = Mockery::mock(TicketResaleClosureService::class);
+        $this->resaleClosureService->shouldReceive('closeUnheldForAttendee')->byDefault();
+
+        $this->transactionLockService = Mockery::mock(TransactionLockService::class);
+        $this->transactionLockService->shouldReceive('lockEvent')->with(self::EVENT_ID)->byDefault();
+
         $this->badgeReprintService = Mockery::mock(BadgeReprintService::class);
         $this->badgeReprintService->shouldReceive('flagIfBadgeDetailsChanged')->andReturnUsing(fn ($before, $after) => $after)->byDefault();
 
@@ -85,8 +100,20 @@ class EditAttendeeHandlerTest extends TestCase
             $this->domainEventDispatcherService,
             $this->availableProductQuantitiesFetchService,
             $this->seatClaimService,
+            $this->identityChangeService(),
+            $this->resaleClosureService,
+            $this->transactionLockService,
             $this->badgeReprintService,
         );
+    }
+
+    private function identityChangeService(): OrganizerAttendeeIdentityChangeService
+    {
+        $service = Mockery::mock(OrganizerAttendeeIdentityChangeService::class);
+        $service->shouldReceive('credentialAttributesFor')->andReturn([]);
+        $service->shouldReceive('record')->andReturn(false);
+
+        return $service;
     }
 
     protected function tearDown(): void
@@ -122,6 +149,46 @@ class EditAttendeeHandlerTest extends TestCase
         $this->assertSame($updated, $this->handler->handle($this->dto()));
     }
 
+    public function test_a_price_change_locks_the_event_and_closes_the_resale_listing_first(): void
+    {
+        $this->givenAttendeeAndProduct();
+        $this->givenAvailabilityForNewTier(1);
+
+        $this->transactionLockService->shouldReceive('lockEvent')->once()->with(self::EVENT_ID)->ordered();
+        $this->resaleClosureService->shouldReceive('closeUnheldForAttendee')
+            ->once()
+            ->with(self::ATTENDEE_ID, TicketResaleCloseReason::TICKET_TYPE_CHANGED)
+            ->ordered();
+        $this->productQuantityService->shouldReceive('decreaseQuantitySold')->once()->ordered();
+        $this->productQuantityService->shouldReceive('increaseQuantitySold')->once()->ordered();
+
+        $updated = Mockery::mock(AttendeeDomainObject::class);
+        $updated->shouldReceive('getId')->andReturn(self::ATTENDEE_ID);
+        $this->attendeeRepository->shouldReceive('updateByIdWhere')->once()->andReturn($updated);
+        $this->domainEventDispatcherService->shouldReceive('dispatch')->once();
+
+        $this->assertSame($updated, $this->handler->handle($this->dto()));
+    }
+
+    public function test_a_held_resale_listing_blocks_the_price_change_without_touching_quantities(): void
+    {
+        $this->givenAttendeeAndProduct();
+        $this->givenAvailabilityForNewTier(1);
+
+        $this->resaleClosureService->shouldReceive('closeUnheldForAttendee')
+            ->once()
+            ->with(self::ATTENDEE_ID, TicketResaleCloseReason::TICKET_TYPE_CHANGED)
+            ->andThrow(new ResourceConflictException('A buyer is paying for this ticket'));
+        $this->productQuantityService->shouldNotReceive('decreaseQuantitySold');
+        $this->productQuantityService->shouldNotReceive('increaseQuantitySold');
+        $this->attendeeRepository->shouldNotReceive('updateByIdWhere');
+        $this->domainEventDispatcherService->shouldNotReceive('dispatch');
+
+        $this->expectException(ResourceConflictException::class);
+
+        $this->handler->handle($this->dto());
+    }
+
     private function dto(): EditAttendeeDTO
     {
         return new EditAttendeeDTO(
@@ -138,6 +205,7 @@ class EditAttendeeHandlerTest extends TestCase
     private function givenAttendeeAndProduct(): void
     {
         $attendee = Mockery::mock(AttendeeDomainObject::class);
+        $attendee->shouldReceive('getId')->andReturn(self::ATTENDEE_ID);
         $attendee->shouldReceive('getProductPriceId')->andReturn(self::OLD_PRICE_ID);
         $attendee->shouldReceive('getProductId')->andReturn(self::PRODUCT_ID);
         $attendee->shouldReceive('getEventOccurrenceId')->andReturn(self::OCCURRENCE_ID);

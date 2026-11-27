@@ -10,9 +10,13 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\ProfileDomainObject;
 use HiEvents\Enterprise\BoxOffice\Services\Domain\BoxOfficeSessionService;
+use HiEvents\Enterprise\Crm\Services\Domain\Sms\FakeSmsProvider;
+use HiEvents\Enterprise\Crm\Services\Domain\Sms\SmsProviderInterface;
+use HiEvents\Enterprise\Crm\Services\Domain\Sms\TwilioSmsProvider;
 use HiEvents\Enterprise\Licensing\LicenceService;
 use HiEvents\Enterprise\Seating\Services\Domain\EventSeatMapLookupService;
 use HiEvents\Enterprise\Seating\Services\Domain\SeatedProductLookupService;
+use HiEvents\Http\Middleware\TrimStrings;
 use HiEvents\Models\Event;
 use HiEvents\Models\Organizer;
 use HiEvents\Models\Profile;
@@ -31,6 +35,7 @@ use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Client\Factory as HttpClient;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\URL;
@@ -50,6 +55,7 @@ class AppServiceProvider extends ServiceProvider
         $this->bindStripeServices();
         $this->bindCurrencyConversionClient();
         $this->bindGeoProvider();
+        $this->bindSmsProvider();
         $this->app->scoped(EventSeatMapLookupService::class);
         $this->app->scoped(SeatedProductLookupService::class);
         $this->app->scoped(LicenceService::class);
@@ -73,6 +79,13 @@ class AppServiceProvider extends ServiceProvider
         $this->registerMorphMaps();
 
         $this->restrictApiKeysToActiveMembers();
+
+        $this->keepSignedSmsWebhookParametersUntouched();
+    }
+
+    private function keepSignedSmsWebhookParametersUntouched(): void
+    {
+        TrimStrings::skipWhen(static fn (Request $request): bool => str_contains($request->path(), 'webhooks/sms/twilio/'));
     }
 
     private function restrictApiKeysToActiveMembers(): void
@@ -188,6 +201,16 @@ class AppServiceProvider extends ServiceProvider
                     logger: $this->app->make('log')
                 );
             }
+        );
+    }
+
+    private function bindSmsProvider(): void
+    {
+        $this->app->bind(
+            SmsProviderInterface::class,
+            fn () => config('services.sms.driver') === 'fake'
+                ? $this->app->make(FakeSmsProvider::class)
+                : $this->app->make(TwilioSmsProvider::class),
         );
     }
 

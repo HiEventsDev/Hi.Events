@@ -70,6 +70,20 @@ class BadgeReprintServiceTest extends TestCase
         $this->assertSame(BadgePrintStatus::NEEDS_REPRINT, $after->getBadgePrintStatus());
     }
 
+    public function test_a_printed_badge_whose_qr_value_was_replaced_needs_a_reprint(): void
+    {
+        $this->attendeeRepository->shouldReceive('updateWhere')
+            ->once()
+            ->with(['badge_printed_at' => null], [['id', 'in', [9]], ['badge_printed_at', 'not null', null]]);
+
+        $after = $this->service->flagIfBadgeDetailsChanged(
+            $this->printedAttendee('Ada'),
+            $this->printedAttendee('Ada')->setPublicId('A-NEW'),
+        );
+
+        $this->assertSame(BadgePrintStatus::NEEDS_REPRINT, $after->getBadgePrintStatus());
+    }
+
     public function test_unchanged_or_unprinted_badges_are_left_alone(): void
     {
         $this->attendeeRepository->shouldNotReceive('updateWhere');
@@ -112,6 +126,7 @@ class BadgeReprintServiceTest extends TestCase
             ->setId(9)
             ->setFirstName($firstName)
             ->setLastName('Lovelace')
+            ->setPublicId('A-ADA')
             ->setProductId(3)
             ->setSeatLabel(null)
             ->setBadgePrintCount(1)

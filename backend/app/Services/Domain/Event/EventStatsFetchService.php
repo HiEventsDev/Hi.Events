@@ -3,6 +3,8 @@
 namespace HiEvents\Services\Domain\Event;
 
 use Carbon\Carbon;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
+use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\EventStatsRequestDTO;
 use HiEvents\Services\Application\Handlers\Event\DTO\EventStatsResponseDTO;
@@ -110,7 +112,7 @@ readonly class EventStatsFetchService
         $eventId = $requestData->event_id;
         $occurrenceId = $requestData->occurrence_id;
         $startDate = $requestData->start_date;
-        $endDate = $requestData->end_date;
+        $endDate = $this->capAtToday($requestData->end_date);
 
         if ($occurrenceId !== null) {
             $whereClause = 'eods.event_occurrence_id = :occurrenceId AND eods.event_id = :eventId';
@@ -164,9 +166,16 @@ readonly class EventStatsFetchService
         });
     }
 
+    private function capAtToday(string $endDate): string
+    {
+        $today = Carbon::now('UTC')->toDateString();
+
+        return Carbon::parse($endDate)->toDateString() > $today ? $today : $endDate;
+    }
+
     private function resolveStatsDateRange(int $eventId, string $preset): array
     {
-        $event = $this->eventRepository->findById($eventId);
+        $event = $this->eventRepository->loadRelation(new Relationship(EventOccurrenceDomainObject::class))->findById($eventId);
 
         $bounds = $this->db->selectOne(
             'SELECT MIN(date) as min_date, MAX(date) as max_date

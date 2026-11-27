@@ -46,6 +46,8 @@ class TicketPayload
         'is_highlighted',
         'highlight_message',
         'waitlist_enabled',
+        'is_transferable',
+        'is_resellable',
     ];
 
     public static function tiersSchema(JsonSchema $schema): ArrayType

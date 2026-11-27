@@ -24,6 +24,42 @@ class HiEventsServerTest extends TestCase
         $this->assertSame([], $untested, 'Add a unit test under tests/Unit/Mcp/Tools for: '.implode(', ', $untested));
     }
 
+    public function test_registered_tools_have_boolean_safety_hints(): void
+    {
+        $tools = (new ReflectionClass(HiEventsServer::class))->getDefaultProperties()['tools'];
+
+        foreach ($tools as $toolClass) {
+            $annotations = (new ReflectionClass($toolClass))->newInstanceWithoutConstructor()->annotations();
+            foreach (['readOnlyHint', 'destructiveHint', 'openWorldHint'] as $hint) {
+                $this->assertArrayHasKey($hint, $annotations, $toolClass);
+                $this->assertIsBool($annotations[$hint], $toolClass);
+            }
+            $this->assertFalse($annotations['readOnlyHint'] && $annotations['destructiveHint'], $toolClass);
+        }
+    }
+
+    public function test_only_tools_that_reach_outside_the_account_are_open_world(): void
+    {
+        $tools = (new ReflectionClass(HiEventsServer::class))->getDefaultProperties()['tools'];
+
+        $openWorld = collect($tools)
+            ->filter(static fn (string $tool): bool => (new ReflectionClass($tool))->newInstanceWithoutConstructor()->annotations()['openWorldHint'])
+            ->map(static fn (string $tool): string => class_basename($tool))
+            ->sort()
+            ->values()
+            ->all();
+
+        $this->assertSame([
+            'AddAttendeeTool',
+            'AddLineupPerformerTool',
+            'PublishEventTool',
+            'ResendOrderConfirmationTool',
+            'ResendTicketTool',
+            'SetEventCoverImageTool',
+            'UpdateTicketDesignTool',
+        ], $openWorld);
+    }
+
     public function test_the_tool_list_fits_on_one_page(): void
     {
         $defaults = (new ReflectionClass(HiEventsServer::class))->getDefaultProperties();

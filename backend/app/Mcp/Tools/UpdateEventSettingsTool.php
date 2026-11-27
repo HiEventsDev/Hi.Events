@@ -2,6 +2,7 @@
 
 namespace HiEvents\Mcp\Tools;
 
+use HiEvents\DomainObjects\Enums\PhoneCollection;
 use HiEvents\Http\Actions\EventSettings\PartialEditEventSettingsAction;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Laravel\Mcp\Request;
@@ -14,7 +15,7 @@ use Laravel\Mcp\Server\Tools\Annotations\IsDestructive;
 
 #[Name('update_event_settings')]
 #[Title('Update event settings')]
-#[Description('Changes an event\'s checkout and page settings: support email, messages shown before and after checkout, attendee details, order timeout, website link and search engine settings. Fields you leave out stay as they are. Payment settings are changed in Hi.Events itself.')]
+#[Description('Changes an event\'s checkout and page settings: support email, messages shown before and after checkout, attendee details, whether to ask buyers for a mobile number, order timeout, website link and search engine settings. Fields you leave out stay as they are. Payment settings are changed in Hi.Events itself.')]
 #[IsDestructive]
 class UpdateEventSettingsTool extends WriteApiTool
 {
@@ -23,6 +24,7 @@ class UpdateEventSettingsTool extends WriteApiTool
         'pre_checkout_message',
         'post_checkout_message',
         'require_attendee_details',
+        'phone_collection',
         'order_timeout_in_minutes',
         'website_url',
         'seo_title',
@@ -39,6 +41,7 @@ class UpdateEventSettingsTool extends WriteApiTool
             'pre_checkout_message' => $schema->string()->description('HTML shown on the checkout page before payment.'),
             'post_checkout_message' => $schema->string()->description('HTML shown after a successful order.'),
             'require_attendee_details' => $schema->boolean()->description('Ask for a name and email for every ticket, not only the buyer.'),
+            'phone_collection' => $schema->string()->enum(PhoneCollection::valuesArray())->description('Ask buyers for a mobile number at checkout: OFF, OPTIONAL or REQUIRED.'),
             'order_timeout_in_minutes' => $schema->integer()->description('Minutes a buyer has to finish checkout, 1-120.'),
             'website_url' => $schema->string()->description('The event\'s own website.'),
             'seo_title' => $schema->string()->description('Search engine title, up to 255 characters.'),

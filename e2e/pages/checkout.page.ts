@@ -127,6 +127,24 @@ export class CheckoutPage {
     }
   }
 
+  async fillBlankContactFields(details: BuyerDetails): Promise<void> {
+    const fields: [RegExp, string][] = [
+      [/^First Name/, details.firstName],
+      [/^Last Name/, details.lastName],
+      [/^Email Address/, details.email],
+      [/^Confirm Email Address/, details.email],
+    ];
+    for (const [label, value] of fields) {
+      const inputs = this.surface.getByLabel(label);
+      for (let index = 0; index < await inputs.count(); index += 1) {
+        const input = inputs.nth(index);
+        if ((await input.isEditable()) && (await input.inputValue()) === '') {
+          await input.fill(value);
+        }
+      }
+    }
+  }
+
   async completeFreeOrder(): Promise<void> {
     await this.surface.getByRole('button', { name: 'Complete Order' }).click();
     await this.surface.waitForURL(/\/checkout\/\d+\/[^/]+\/summary/);

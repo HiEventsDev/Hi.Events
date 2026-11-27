@@ -89,6 +89,8 @@ class UpdateEventSettingsHandler
                     'ticket_design_settings' => $settings->ticket_design_settings,
 
                     'show_marketing_opt_in' => $settings->show_marketing_opt_in,
+                    'phone_collection' => $settings->phone_collection->value,
+                    'show_sms_opt_in' => $settings->show_sms_opt_in,
 
                     'allow_copy_details_to_all_attendees' => $settings->allow_copy_details_to_all_attendees,
 
@@ -100,6 +102,11 @@ class UpdateEventSettingsHandler
                         : $this->homepageSectionsSanitizer->sanitizeForEvent($settings->homepage_sections, $settings->event_id),
 
                     'allow_attendee_self_edit' => $settings->allow_attendee_self_edit,
+                    'allow_ticket_transfer' => $settings->allow_ticket_transfer,
+                    'ticket_transfer_cutoff_minutes' => $settings->ticket_transfer_cutoff_minutes,
+                    'max_transfers_per_ticket' => $settings->max_transfers_per_ticket,
+                    'allow_ticket_resale' => $settings->allow_ticket_resale,
+                    'ticket_resale_cutoff_minutes' => $settings->ticket_resale_cutoff_minutes,
 
                     'show_available_occurrence_capacity' => $settings->show_available_occurrence_capacity,
                     'hide_sold_out_occurrences' => $settings->hide_sold_out_occurrences,

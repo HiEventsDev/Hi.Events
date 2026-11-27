@@ -16,6 +16,7 @@ async function expectReadOnlyPage(page: Page, path: string, heading: RegExp): Pr
 }
 
 async function openFirstRowMenu(page: Page, rowText: string): Promise<void> {
+  await page.getByText(rowText).first().waitFor();
   const row = page.getByRole('row').filter({ hasText: rowText }).first();
   const container = (await row.count()) > 0 ? row : page.getByText(rowText).first().locator('xpath=ancestor::*[.//button][1]');
   await container.getByRole('button').last().click();

@@ -1,55 +1,47 @@
 import {useParams} from "react-router";
+import {t} from "@lingui/macro";
 import {useGetEvent} from "../../../../../queries/useGetEvent.ts";
-import {formatCurrency} from "../../../../../utilites/currency.ts";
-import ReportTable from "../../../../common/ReportTable";
+import {ReportColumn} from "../../../../common/ReportView";
+import {EventReport} from "../EventReport.tsx";
 
-const ProductSalesReport = () => {
+interface ProductSalesRow {
+    product_id: number;
+    product_title: string;
+    number_sold: number;
+    total_gross: string;
+    total_tax: string;
+    total_service_fees: string;
+}
+
+const ProductSalesReport = ({description}: { description: string }) => {
     const {eventId} = useParams();
-    const eventQuery = useGetEvent(eventId);
-    const event = eventQuery.data;
+    const {data: event} = useGetEvent(eventId);
 
     if (!event) {
         return null;
     }
 
-    const columns = [
-        {
-            key: 'product_title' as const,
-            label: 'Product Title',
-            sortable: true
-        },
-        {
-            key: 'number_sold' as const,
-            label: 'Units Sold',
-            sortable: true
-        },
-        {
-            key: 'total_gross' as const,
-            label: 'Gross Sales',
-            sortable: true,
-            render: (value: string) => formatCurrency(value, event?.currency)
-        },
-        {
-            key: 'total_tax' as const,
-            label: 'Tax',
-            sortable: true,
-            render: (value: string) => formatCurrency(value, event?.currency)
-        },
-        {
-            key: 'total_service_fees' as const,
-            label: 'Service Fees',
-            sortable: true,
-            render: (value: string) => formatCurrency(value, event?.currency)
-        }
+    const columns: ReportColumn<ProductSalesRow>[] = [
+        {key: 'product_title', label: t`Product`},
+        {key: 'number_sold', label: t`Units sold`, kind: 'count'},
+        {key: 'total_gross', label: t`Gross sales`, kind: 'money'},
+        {key: 'total_tax', label: t`Tax`, kind: 'money'},
+        {key: 'total_service_fees', label: t`Service fees`, kind: 'money'},
     ];
 
     return (
-        <ReportTable
-            title="Product Sales Report"
-            columns={columns}
-            isLoading={eventQuery.isLoading}
-            downloadFileName="product_sales_report.csv"
+        <EventReport<ProductSalesRow>
+            description={description}
             event={event}
+            fileName="product_sales_report.csv"
+            columns={columns}
+            emptyMessage={t`Add tickets or products to this event to see their sales here.`}
+            summary={sum => [
+                {label: t`Units sold`, value: sum('number_sold'), kind: 'count'},
+                {label: t`Gross sales`, value: sum('total_gross'), kind: 'money'},
+                {label: t`Tax`, value: sum('total_tax'), kind: 'money'},
+                {label: t`Service fees`, value: sum('total_service_fees'), kind: 'money'},
+            ]}
         />
     );
 };

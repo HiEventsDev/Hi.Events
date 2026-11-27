@@ -8,11 +8,15 @@ use HiEvents\DomainObjects\Enums\CheckInAction;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\Exceptions\CannotCheckInException;
+use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Attendee\DTO\CheckInAttendeeDTO;
+use HiEvents\Services\Domain\TicketResale\TicketResaleClosureService;
+use Illuminate\Database\DatabaseManager;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Throwable;
 
 class CheckInAttendeeHandler
 {
@@ -20,11 +24,14 @@ class CheckInAttendeeHandler
         private readonly AttendeeRepositoryInterface $attendeeRepository,
         private readonly UserRepositoryInterface $userRepository,
         private readonly LoggerInterface $logger,
+        private readonly TicketResaleClosureService $resaleClosureService,
+        private readonly DatabaseManager $databaseManager,
     ) {}
 
     /**
      * @throws CannotCheckInException
      * @throws ResourceNotFoundException
+     * @throws Throwable
      */
     public function handle(CheckInAttendeeDTO $checkInAttendeeDTO): AttendeeDomainObject
     {
@@ -33,7 +40,14 @@ class CheckInAttendeeHandler
         $this->validateAttendeeStatus($attendee);
         $this->validateAction($attendee, $checkInAttendeeDTO);
 
-        $this->updateCheckInStatus($checkInAttendeeDTO);
+        $this->databaseManager->transaction(function () use ($attendee, $checkInAttendeeDTO) {
+            if ($checkInAttendeeDTO->action === CheckInAction::CHECK_IN) {
+                $this->validateAttendeeStatus($this->resaleClosureService->lockForCheckIn($attendee->getId()));
+                $this->releaseResaleListing($attendee);
+            }
+
+            $this->updateCheckInStatus($checkInAttendeeDTO);
+        });
 
         return $this->fetchAttendee($checkInAttendeeDTO);
     }
@@ -69,6 +83,18 @@ class CheckInAttendeeHandler
             );
 
             throw new CannotCheckInException(__('Cannot check in attendee as they are not active.'));
+        }
+    }
+
+    /**
+     * @throws CannotCheckInException
+     */
+    private function releaseResaleListing(AttendeeDomainObject $attendee): void
+    {
+        try {
+            $this->resaleClosureService->releaseForCheckIn($attendee->getId());
+        } catch (ResourceConflictException $exception) {
+            throw new CannotCheckInException($exception->getMessage());
         }
     }
 

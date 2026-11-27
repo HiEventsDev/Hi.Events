@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Hi.Events",
-    "description": "The Hi.Events API powers event management, ticketing, and checkout.\n\n## Authentication\n\nManagement endpoints require a bearer token in the `Authorization` header. Endpoints under `/public/*` — event pages, checkout, ticket lookup, check-in — require no authentication and are marked *(public)*.\n\n### API keys\n\nFor integrations, create an API key under **Settings → API keys** and send it with every request:\n\n```bash\ncurl https://your-hi-events-host/api/events \\\n  -H \"Authorization: Bearer hie_…\" \\\n  -H \"Accept: application/json\"\n```\n\n- A key acts as the person who created it, in the one account it was created in, with that person's role, permissions and event access. It never has more access than its owner, and changes to the owner's role apply straight away.\n- **Read and write** keys can call every endpoint the owner can. **Read-only** keys can call `GET` endpoints and exports; other requests return `403` with `error_code: API_KEY_READ_ONLY`.\n- Keys can't sign in, or manage the user's profile, sign-in security, team, API keys, payouts or account settings. Those endpoints return `403` with `error_code: API_KEY_NOT_ALLOWED`.\n- An expired, revoked or unknown key returns `401`. A key is revoked when its owner revokes it, when an admin revokes it, when the owner is deactivated or leaves the account, and when the owner's password is reset or their single sign-on changes.\n- The full key is shown once, when it's created. Hi.Events stores only a hash of it.\n\n### Session tokens\n\nThe Hi.Events web app uses a JWT obtained from `POST /auth/login`. It works on every management endpoint, including the ones API keys can't use.\n\n### Two-factor authentication\n\nWhen the user has two-factor authentication turned on, `POST /auth/login` returns `200` with `token: null`, `two_factor_required: true` and a `two_factor_challenge_token` that is valid for 10 minutes. Complete the login with `POST /auth/login/two-factor`, sending the challenge token plus either a 6-digit `code` from the user's authenticator app or a `recovery_code`. A wrong code returns `422`; an expired challenge, or too many wrong codes, returns `401` with `error_code: TWO_FACTOR_CHALLENGE_EXPIRED` and the login must start again. Users with several accounts verify once, then call `POST /auth/login/two-factor` again with the same challenge token and an `account_id`.\n\nTokens work the same once issued: two-factor authentication is only checked at login.\n\nIf an account requires two-factor authentication and the user has not set it up, authenticated endpoints return `403` with `error_code: TWO_FACTOR_SETUP_REQUIRED` until they do. `GET /users/me`, `GET /accounts`, the `/auth/*` endpoints and the `/users/me/two-factor/*` setup endpoints stay available.\n\n## Errors\n\nErrors return JSON with a `message`. Validation errors (`422`) also include an `errors` object keyed by field. Access errors include an `error_code`:\n\n| Status | `error_code` | Meaning |\n| --- | --- | --- |\n| `401` | — | Missing, invalid or expired token, or an invalid, expired or revoked API key |\n| `401` | `SESSION_REVOKED` | The session token was signed out everywhere, for example after a password reset |\n| `401` | `SSO_REQUIRED` | The user's organization requires single sign-on; sign in again through it |\n| `401` | `SSO_SESSION_EXPIRED` | A session started through single sign-on can't be refreshed; sign in again |\n| `401` | `INVITATION_PENDING` | `POST /auth/login` only: the user's only membership is an invitation they haven't accepted; they must open the invitation email |\n| `403` | `API_KEY_READ_ONLY` | A read-only API key tried to make a change |\n| `403` | `API_KEY_NOT_ALLOWED` | The endpoint can't be used with an API key |\n| `403` | `READ_ONLY_ROLE` | The user has view-only access to the account |\n| `403` | `PERMISSION_REQUIRED` | The user's role lacks a permission the endpoint needs (for example refunds or financial data) |\n| `403` | `ACCESS_RESTRICTED` | The user only has access to some organizers or events, and this isn't one of them |\n| `403` | `TWO_FACTOR_SETUP_REQUIRED` | The account requires two-factor authentication and the user hasn't set it up |\n| `403` | `ACCOUNT_PENDING_DELETION` | The account is scheduled for deletion |\n| `403` | `FEATURE_UNAVAILABLE` | The feature isn't available on this installation or plan |\n| `429` | — | Too many requests; wait for the number of seconds in the `Retry-After` header |\n\n## Rate limits\n\nManagement endpoints are rate limited per user, shared between the web app and all of that user's API keys. The default is 180 requests a minute; self-hosted installations can change it with `APP_API_RATE_LIMIT_PER_MINUTE`.\n\n## Stability\n\nThe API isn't versioned yet. Endpoints that accept API keys are the integration surface, and we keep them backward compatible: new endpoints, optional request fields and response fields can be added at any time, so ignore fields you don't recognise. Removing or renaming an endpoint or field, or changing its type or meaning, is a breaking change; it's avoided where possible and always called out in the release notes. Endpoints marked *Not available to API keys* serve the Hi.Events web app and may change without notice.\n\n## Outgoing webhooks\n\nWebhooks are configured per event or organizer (see the *Webhooks* endpoints) and deliver a `POST` request to your URL for each subscribed event:\n\n```json\n{\n    \"event_type\": \"order.created\",\n    \"event_sent_at\": \"2026-08-07T10:00:00+00:00\",\n    \"payload\": { }\n}\n```\n\n`payload` matches the schema of the corresponding resource (see the *Schemas* section):\n\n| Events | Payload schema |\n| --- | --- |\n| `order.created`, `order.updated`, `order.marked_as_paid`, `order.refunded`, `order.cancelled` | `OrderResource` |\n| `attendee.created`, `attendee.updated`, `attendee.cancelled` | `AttendeeResource` |\n| `product.created`, `product.updated`, `product.deleted` | `ProductResource` |\n| `event.created`, `event.updated`, `event.archived` | `EventResource` |\n| `checkin.created`, `checkin.deleted` | `AttendeeCheckInResource` |\n| `occurrence.cancelled` | `EventOccurrenceResource` |\n\n`email` on an order payload is `null` for box office sales made without a buyer email. `order.created` and `order.cancelled` additionally emit an `attendee.created` / `attendee.cancelled` webhook for each attendee on the order. Deliveries are signed: the `Signature` header contains an HMAC-SHA256 hash of the JSON body using your webhook's secret."
+    "description": "The Hi.Events API powers event management, ticketing, and checkout.\n\n## Authentication\n\nManagement endpoints require a bearer token in the `Authorization` header. Endpoints under `/public/*` — event pages, checkout, ticket lookup, check-in — require no authentication and are marked *(public)*.\n\n### API keys\n\nFor integrations, create an API key under **Settings → API keys** and send it with every request:\n\n```bash\ncurl https://your-hi-events-host/api/events \\\n  -H \"Authorization: Bearer hie_…\" \\\n  -H \"Accept: application/json\"\n```\n\n- A key acts as the person who created it, in the one account it was created in, with that person's role, permissions and event access. It never has more access than its owner, and changes to the owner's role apply straight away.\n- **Read and write** keys can call every endpoint the owner can. **Read-only** keys can call `GET` endpoints and exports; other requests return `403` with `error_code: API_KEY_READ_ONLY`.\n- Keys can't sign in, or manage the user's profile, sign-in security, team, API keys, payouts or account settings. Those endpoints return `403` with `error_code: API_KEY_NOT_ALLOWED`.\n- An expired, revoked or unknown key returns `401`. A key is revoked when its owner revokes it, when an admin revokes it, when the owner is deactivated or leaves the account, and when the owner's password is reset or their single sign-on changes.\n- The full key is shown once, when it's created. Hi.Events stores only a hash of it.\n\n### Session tokens\n\nThe Hi.Events web app uses a JWT obtained from `POST /auth/login`. It works on every management endpoint, including the ones API keys can't use.\n\n### Two-factor authentication\n\nWhen the user has two-factor authentication turned on, `POST /auth/login` returns `200` with `token: null`, `two_factor_required: true` and a `two_factor_challenge_token` that is valid for 10 minutes. Complete the login with `POST /auth/login/two-factor`, sending the challenge token plus either a 6-digit `code` from the user's authenticator app or a `recovery_code`. A wrong code returns `422`; an expired challenge, or too many wrong codes, returns `401` with `error_code: TWO_FACTOR_CHALLENGE_EXPIRED` and the login must start again. Users with several accounts verify once, then call `POST /auth/login/two-factor` again with the same challenge token and an `account_id`.\n\nTokens work the same once issued: two-factor authentication is only checked at login.\n\nIf an account requires two-factor authentication and the user has not set it up, authenticated endpoints return `403` with `error_code: TWO_FACTOR_SETUP_REQUIRED` until they do. `GET /users/me`, `GET /accounts`, the `/auth/*` endpoints and the `/users/me/two-factor/*` setup endpoints stay available.\n\n## Errors\n\nErrors return JSON with a `message`. Validation errors (`422`) also include an `errors` object keyed by field. Access errors include an `error_code`:\n\n| Status | `error_code` | Meaning |\n| --- | --- | --- |\n| `401` | — | Missing, invalid or expired token, or an invalid, expired or revoked API key |\n| `401` | `SESSION_REVOKED` | The session token was signed out everywhere, for example after a password reset |\n| `401` | `SSO_REQUIRED` | The user's organization requires single sign-on; sign in again through it |\n| `401` | `SSO_SESSION_EXPIRED` | A session started through single sign-on can't be refreshed; sign in again |\n| `401` | `INVITATION_PENDING` | `POST /auth/login` only: the user's only membership is an invitation they haven't accepted; they must open the invitation email |\n| `403` | `API_KEY_READ_ONLY` | A read-only API key tried to make a change |\n| `403` | `API_KEY_NOT_ALLOWED` | The endpoint can't be used with an API key |\n| `403` | `READ_ONLY_ROLE` | The user has view-only access to the account |\n| `403` | `VERIFICATION_REQUIRED` | Public ticket transfer and resale endpoints only: the request needs an `X-Self-Service-Token` from the emailed verification code |\n| `403` | `PERMISSION_REQUIRED` | The user's role lacks a permission the endpoint needs (for example refunds or financial data) |\n| `403` | `ACCESS_RESTRICTED` | The user only has access to some organizers or events, and this isn't one of them |\n| `403` | `TWO_FACTOR_SETUP_REQUIRED` | The account requires two-factor authentication and the user hasn't set it up |\n| `403` | `ACCOUNT_PENDING_DELETION` | The account is scheduled for deletion |\n| `403` | `FEATURE_UNAVAILABLE` | The feature isn't available on this installation or plan |\n| `429` | — | Too many requests; wait for the number of seconds in the `Retry-After` header |\n\n## Rate limits\n\nManagement endpoints are rate limited per user, shared between the web app and all of that user's API keys. The default is 180 requests a minute; self-hosted installations can change it with `APP_API_RATE_LIMIT_PER_MINUTE`.\n\n## Stability\n\nThe API isn't versioned yet. Endpoints that accept API keys are the integration surface, and we keep them backward compatible: new endpoints, optional request fields and response fields can be added at any time, so ignore fields you don't recognise. Removing or renaming an endpoint or field, or changing its type or meaning, is a breaking change; it's avoided where possible and always called out in the release notes. Endpoints marked *Not available to API keys* serve the Hi.Events web app and may change without notice.\n\n## Outgoing webhooks\n\nWebhooks are configured per event or organizer (see the *Webhooks* endpoints) and deliver a `POST` request to your URL for each subscribed event:\n\n```json\n{\n    \"event_type\": \"order.created\",\n    \"event_sent_at\": \"2026-08-07T10:00:00+00:00\",\n    \"payload\": { }\n}\n```\n\n`payload` matches the schema of the corresponding resource (see the *Schemas* section):\n\n| Events | Payload schema |\n| --- | --- |\n| `order.created`, `order.updated`, `order.marked_as_paid`, `order.refunded`, `order.cancelled` | `OrderResource` |\n| `attendee.created`, `attendee.updated`, `attendee.cancelled`, `attendee.transferred`, `attendee.resale_listed`, `attendee.resold` | `AttendeeResource` |\n| `product.created`, `product.updated`, `product.deleted` | `ProductResource` |\n| `event.created`, `event.updated`, `event.archived` | `EventResource` |\n| `checkin.created`, `checkin.deleted` | `AttendeeCheckInResource` |\n| `occurrence.cancelled` | `EventOccurrenceResource` |\n\n`email` on an order payload is `null` for box office sales made without a buyer email. `order.created` and `order.cancelled` additionally emit an `attendee.created` / `attendee.cancelled` webhook for each attendee on the order. Deliveries are signed: the `Signature` header contains an HMAC-SHA256 hash of the JSON body using your webhook's secret."
   },
   "security": [
     {
@@ -1275,6 +1275,95 @@
           },
           "422": {
             "$ref": "#/components/responses/ValidationException"
+          },
+          "403": {
+            "description": "The authenticated user is not allowed to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/events/{eventId}/attendees/{attendeeId}/history": {
+      "get": {
+        "operationId": "attendees.getAttendeeHistoryAction",
+        "summary": "Get Attendee History",
+        "tags": [
+          "Attendees"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "attendeeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of `TicketHistoryEntryResource`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/TicketHistoryEntryResource"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
           },
           "403": {
             "description": "The authenticated user is not allowed to perform this action.",
@@ -5296,6 +5385,674 @@
                   },
                   "required": [
                     "data"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/public/crm/forms/{publicId}": {
+      "get": {
+        "operationId": "public.getSignupFormPublicAction",
+        "summary": "Get Signup Form (public)",
+        "tags": [
+          "Crm / Public"
+        ],
+        "parameters": [
+          {
+            "name": "publicId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "`SignupFormPublicResource`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/SignupFormPublicResource"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/public/crm/forms/{publicId}/submissions": {
+      "post": {
+        "operationId": "public.submitSignupFormPublicAction",
+        "summary": "Submit Signup Form (public)",
+        "tags": [
+          "Crm / Public"
+        ],
+        "parameters": [
+          {
+            "name": "publicId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitSignupFormRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "const": "check_inbox"
+                    }
+                  },
+                  "required": [
+                    "status"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/public/organizers/{organizerId}/signup-form": {
+      "get": {
+        "operationId": "public.getOrganizerSignupFormPublicAction",
+        "summary": "Get Organizer Signup Form (public)",
+        "tags": [
+          "Crm / Public"
+        ],
+        "parameters": [
+          {
+            "name": "organizerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "`SignupFormPublicResource`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/SignupFormPublicResource"
+                        }
+                      },
+                      "required": [
+                        "data"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "null"
+                        }
+                      },
+                      "required": [
+                        "data"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/public/crm/confirm/{token}": {
+      "get": {
+        "operationId": "public.getSubscriptionConfirmationPublicAction",
+        "summary": "Get Subscription Confirmation (public)",
+        "tags": [
+          "Crm / Public"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      },
+      "post": {
+        "operationId": "public.confirmSubscriptionPublicAction",
+        "summary": "Confirm Subscription (public)",
+        "tags": [
+          "Crm / Public"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/public/crm/unsubscribe/{token}": {
+      "get": {
+        "operationId": "public.getCampaignUnsubscribePublicAction",
+        "summary": "Get Campaign Unsubscribe (public)",
+        "tags": [
+          "Crm / Public"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "`UnsubscribeStatusResource`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/UnsubscribeStatusResource"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      },
+      "post": {
+        "operationId": "public.unsubscribeFromCampaignsPublicAction",
+        "summary": "Unsubscribe From Campaigns (public)",
+        "tags": [
+          "Crm / Public"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "`UnsubscribeStatusResource`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/UnsubscribeStatusResource"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/public/crm/unsubscribe/{token}/resubscribe": {
+      "post": {
+        "operationId": "public.resubscribeToCampaignsPublicAction",
+        "summary": "Resubscribe To Campaigns (public)",
+        "tags": [
+          "Crm / Public"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "`UnsubscribeStatusResource`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/UnsubscribeStatusResource"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
                   ]
                 }
               }
@@ -10999,6 +11756,211 @@
         }
       }
     },
+    "/events/{eventId}/share-suggestions": {
+      "get": {
+        "operationId": "shareSuggestions.getEventShareSuggestionsAction",
+        "summary": "Get Event Share Suggestions",
+        "tags": [
+          "Events / Share Suggestions"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "`EventShareSuggestionsResource`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/EventShareSuggestionsResource"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "403": {
+            "description": "The authenticated user is not allowed to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "shareSuggestions.generateEventShareSuggestionsAction",
+        "summary": "Generate Event Share Suggestions",
+        "tags": [
+          "Events / Share Suggestions"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "`EventShareSuggestionsResource`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/EventShareSuggestionsResource"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/events/{eventId}/stats": {
       "get": {
         "operationId": "stats.getEventStatsAction",
@@ -13853,11 +14815,15 @@
                     "errors": {
                       "type": "array",
                       "items": {}
+                    },
+                    "error_code": {
+                      "type": "string"
                     }
                   },
                   "required": [
                     "message",
-                    "errors"
+                    "errors",
+                    "error_code"
                   ]
                 }
               }
@@ -14086,6 +15052,120 @@
           },
           "404": {
             "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/events/{eventId}/messages/preview": {
+      "post": {
+        "operationId": "messages.previewMessageAction",
+        "summary": "Preview Message",
+        "tags": [
+          "Messages"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PreviewMessageRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
+          },
+          "403": {
+            "description": "The authenticated user is not allowed to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14740,6 +15820,95 @@
           },
           "422": {
             "$ref": "#/components/responses/ValidationException"
+          },
+          "403": {
+            "description": "The authenticated user is not allowed to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/events/{eventId}/orders/{orderId}/history": {
+      "get": {
+        "operationId": "orders.getOrderHistoryAction",
+        "summary": "Get Order History",
+        "tags": [
+          "Orders"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of `TicketHistoryEntryResource`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/TicketHistoryEntryResource"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
           },
           "403": {
             "description": "The authenticated user is not allowed to perform this action.",
@@ -24277,6 +25446,29 @@
               }
             }
           },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
           "200": {
             "description": "",
             "content": {
@@ -24438,6 +25630,473 @@
                     "message": {
                       "type": "string",
                       "const": "Ticket resent successfully"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/public/ticket-lookup/{token}/session": {
+      "post": {
+        "operationId": "verification.startSessionFromTicketLookupPublicAction",
+        "summary": "Start Session From Ticket Lookup (public)",
+        "tags": [
+          "Self Service / Verification"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "`SelfServiceSessionResource`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/SelfServiceSessionResource"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/public/events/{eventId}/order/{orderShortId}/verification": {
+      "post": {
+        "operationId": "verification.requestOrderVerificationPublicAction",
+        "summary": "Request Order Verification (public)",
+        "tags": [
+          "Self Service / Verification"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "orderShortId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "email"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/public/events/{eventId}/order/{orderShortId}/verification/confirm": {
+      "post": {
+        "operationId": "verification.confirmOrderVerificationPublicAction",
+        "summary": "Confirm Order Verification (public)",
+        "tags": [
+          "Self Service / Verification"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "orderShortId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfirmSelfServiceVerificationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`SelfServiceSessionResource`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/SelfServiceSessionResource"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/public/events/{eventId}/attendees/{attendeeShortId}/verification": {
+      "post": {
+        "operationId": "verification.requestAttendeeVerificationPublicAction",
+        "summary": "Request Attendee Verification (public)",
+        "tags": [
+          "Self Service / Verification"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "attendeeShortId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "email"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/public/events/{eventId}/attendees/{attendeeShortId}/verification/confirm": {
+      "post": {
+        "operationId": "verification.confirmAttendeeVerificationPublicAction",
+        "summary": "Confirm Attendee Verification (public)",
+        "tags": [
+          "Self Service / Verification"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "attendeeShortId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfirmSelfServiceVerificationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`SelfServiceSessionResource`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/SelfServiceSessionResource"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
                     }
                   },
                   "required": [
@@ -24933,6 +26592,1629 @@
           },
           "404": {
             "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/public/ticket-lookup/{token}/tickets": {
+      "get": {
+        "operationId": "ticketLookup.getTicketsByLookupTokenAction",
+        "summary": "Get Tickets By Lookup Token (public)",
+        "tags": [
+          "Ticket Lookup"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Array of `LookupTicketResourcePublic`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/LookupTicketResourcePublic"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/events/{eventId}/resale-listings": {
+      "get": {
+        "operationId": "ticketResale.getTicketResaleListingsAction",
+        "summary": "Get Ticket Resale Listings",
+        "tags": [
+          "Ticket Resale"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated set of `TicketResaleListingResource`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/TicketResaleListingResource"
+                      }
+                    },
+                    "links": {
+                      "type": "object",
+                      "properties": {
+                        "first": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "last": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "prev": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "next": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "first",
+                        "last",
+                        "prev",
+                        "next"
+                      ]
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "current_page": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "from": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ],
+                          "minimum": 1
+                        },
+                        "last_page": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "links": {
+                          "type": "array",
+                          "description": "Generated paginator links.",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "url": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "label": {
+                                "type": "string"
+                              },
+                              "active": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "url",
+                              "label",
+                              "active"
+                            ]
+                          }
+                        },
+                        "path": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "description": "Base path for paginator generated URLs."
+                        },
+                        "per_page": {
+                          "type": "integer",
+                          "description": "Number of items shown per page.",
+                          "minimum": 0
+                        },
+                        "to": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ],
+                          "description": "Number of the last item in the slice.",
+                          "minimum": 1
+                        },
+                        "total": {
+                          "type": "integer",
+                          "description": "Total number of items being paginated.",
+                          "minimum": 0
+                        }
+                      },
+                      "required": [
+                        "current_page",
+                        "from",
+                        "last_page",
+                        "links",
+                        "path",
+                        "per_page",
+                        "to",
+                        "total"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "links",
+                    "meta"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "403": {
+            "description": "The authenticated user is not allowed to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/events/{eventId}/resale-listings/{listingId}/close": {
+      "post": {
+        "operationId": "ticketResale.closeTicketResaleListingAction",
+        "summary": "Close Ticket Resale Listing",
+        "tags": [
+          "Ticket Resale"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "listingId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "`TicketResaleListingResource`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/TicketResaleListingResource"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "403": {
+            "description": "The authenticated user is not allowed to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/events/{eventId}/resale-listings/{listingId}/retry-refund": {
+      "post": {
+        "operationId": "ticketResale.retryTicketResaleRefundAction",
+        "summary": "Retry Ticket Resale Refund",
+        "tags": [
+          "Ticket Resale"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "listingId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "`TicketResaleListingResource`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/TicketResaleListingResource"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "403": {
+            "description": "The authenticated user is not allowed to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public/events/{eventId}/order/{orderShortId}/attendees/{attendeeShortId}/resale": {
+      "get": {
+        "operationId": "ticketResale.getTicketResaleEstimatePublicAction",
+        "summary": "Get Ticket Resale Estimate (public)",
+        "tags": [
+          "Ticket Resale"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "orderShortId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "attendeeShortId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "error_code": {
+                      "type": "string",
+                      "const": "VERIFICATION_REQUIRED"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "error_code"
+                  ]
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "`TicketResaleEstimateResourcePublic`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/TicketResaleEstimateResourcePublic"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      },
+      "post": {
+        "operationId": "ticketResale.listTicketForResalePublicAction",
+        "summary": "List Ticket For Resale (public)",
+        "tags": [
+          "Ticket Resale"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "orderShortId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "attendeeShortId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "error_code": {
+                      "type": "string",
+                      "const": "VERIFICATION_REQUIRED"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "error_code"
+                  ]
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "`TicketResaleStateResourcePublic`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/TicketResaleStateResourcePublic"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      },
+      "delete": {
+        "operationId": "ticketResale.withdrawTicketResalePublicAction",
+        "summary": "Withdraw Ticket Resale (public)",
+        "tags": [
+          "Ticket Resale"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "orderShortId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "attendeeShortId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "error_code": {
+                      "type": "string",
+                      "const": "VERIFICATION_REQUIRED"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "error_code"
+                  ]
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "`TicketResaleStateResourcePublic`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/TicketResaleStateResourcePublic"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/public/events/{eventId}/order/{orderShortId}/attendees/{attendeeShortId}/transfer": {
+      "post": {
+        "operationId": "ticketTransfer.startOrderTicketTransferPublicAction",
+        "summary": "Start Order Ticket Transfer (public)",
+        "tags": [
+          "Ticket Transfer"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "orderShortId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "attendeeShortId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StartTicketTransferRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "error_code": {
+                      "type": "string",
+                      "const": "VERIFICATION_REQUIRED"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "error_code"
+                  ]
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "`TicketTransferResourcePublic`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/TicketTransferResourcePublic"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      },
+      "delete": {
+        "operationId": "ticketTransfer.cancelOrderTicketTransferPublicAction",
+        "summary": "Cancel Order Ticket Transfer (public)",
+        "tags": [
+          "Ticket Transfer"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "orderShortId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "attendeeShortId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "error_code": {
+                      "type": "string",
+                      "const": "VERIFICATION_REQUIRED"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "error_code"
+                  ]
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No content"
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/public/events/{eventId}/attendees/{attendeeShortId}/transfer": {
+      "post": {
+        "operationId": "ticketTransfer.startTicketTransferPublicAction",
+        "summary": "Start Ticket Transfer (public)",
+        "tags": [
+          "Ticket Transfer"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "attendeeShortId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StartTicketTransferRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "error_code": {
+                      "type": "string",
+                      "const": "VERIFICATION_REQUIRED"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "error_code"
+                  ]
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "`TicketTransferResourcePublic`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/TicketTransferResourcePublic"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      },
+      "delete": {
+        "operationId": "ticketTransfer.cancelTicketTransferPublicAction",
+        "summary": "Cancel Ticket Transfer (public)",
+        "tags": [
+          "Ticket Transfer"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "attendeeShortId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "error_code": {
+                      "type": "string",
+                      "const": "VERIFICATION_REQUIRED"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "error_code"
+                  ]
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No content"
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/public/ticket-transfers/{token}": {
+      "get": {
+        "operationId": "ticketTransfer.getTicketTransferClaimPublicAction",
+        "summary": "Get Ticket Transfer Claim (public)",
+        "tags": [
+          "Ticket Transfer"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "`TicketTransferClaimResourcePublic`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/TicketTransferClaimResourcePublic"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/public/ticket-transfers/{token}/accept": {
+      "post": {
+        "operationId": "ticketTransfer.acceptTicketTransferPublicAction",
+        "summary": "Accept Ticket Transfer (public)",
+        "tags": [
+          "Ticket Transfer"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcceptTicketTransferRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "event_id": {
+                      "type": "integer"
+                    },
+                    "attendee_short_id": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "event_id",
+                    "attendee_short_id"
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/public/ticket-transfers/{token}/decline": {
+      "post": {
+        "operationId": "ticketTransfer.declineTicketTransferPublicAction",
+        "summary": "Decline Ticket Transfer (public)",
+        "tags": [
+          "Ticket Transfer"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry once the rate limit window resets.",
             "content": {
               "application/json": {
                 "schema": {
@@ -26958,6 +30240,33 @@
       }
     },
     "schemas": {
+      "AcceptTicketTransferRequest": {
+        "type": "object",
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "last_name": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "questions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "products": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "first_name",
+          "last_name"
+        ],
+        "title": "AcceptTicketTransferRequest"
+      },
       "AccountDeletionRequestResource": {
         "type": "object",
         "properties": {
@@ -27452,6 +30761,39 @@
                   "$ref": "#/components/schemas/QuestionAnswerViewResource"
                 }
               },
+              "resale": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "enum": [
+                      "LISTED",
+                      "SOLD",
+                      null
+                    ]
+                  },
+                  "sold_order_id": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "sold_order_public_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "status",
+                  "sold_order_id",
+                  "sold_order_public_id"
+                ]
+              },
               "created_at": {
                 "type": "string"
               },
@@ -27898,6 +31240,39 @@
               "$ref": "#/components/schemas/QuestionAnswerViewResource"
             }
           },
+          "resale": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "LISTED",
+                  "SOLD",
+                  null
+                ]
+              },
+              "sold_order_id": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "sold_order_public_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "status",
+              "sold_order_id",
+              "sold_order_public_id"
+            ]
+          },
           "created_at": {
             "type": "string"
           },
@@ -28008,6 +31383,45 @@
           },
           "locale": {
             "type": "string"
+          },
+          "transfer": {
+            "type": "object",
+            "properties": {
+              "can_start": {
+                "type": "boolean"
+              },
+              "blocked_reason": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "pending": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/TicketTransferResourcePublic"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "can_start",
+              "blocked_reason",
+              "pending"
+            ]
+          },
+          "resale": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TicketResaleStateResourcePublic"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "is_checked_in": {
             "type": "boolean"
@@ -29598,6 +33012,16 @@
                 "type": "string",
                 "format": "email"
               },
+              "phone": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 30
+              },
+              "sms_opted_in": {
+                "type": "boolean"
+              },
               "questions": {
                 "type": "array",
                 "items": {
@@ -29679,6 +33103,18 @@
           "order"
         ],
         "title": "CompleteOrderRequest"
+      },
+      "ConfirmSelfServiceVerificationRequest": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code"
+        ],
+        "title": "ConfirmSelfServiceVerificationRequest"
       },
       "CreateAttendeeCheckInPublicRequest": {
         "type": "object",
@@ -30632,6 +34068,9 @@
             "type": "string",
             "format": "email",
             "maxLength": 255
+          },
+          "phone": {
+            "type": "string"
           }
         },
         "title": "EditOrderPublicRequest"
@@ -30660,6 +34099,13 @@
               "null"
             ],
             "maxLength": 2000
+          },
+          "phone": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 30
           }
         },
         "required": [
@@ -31903,6 +35349,17 @@
           "show_marketing_opt_in": {
             "type": "boolean"
           },
+          "phone_collection": {
+            "type": "string",
+            "enum": [
+              "OFF",
+              "OPTIONAL",
+              "REQUIRED"
+            ]
+          },
+          "show_sms_opt_in": {
+            "type": "boolean"
+          },
           "allow_copy_details_to_all_attendees": {
             "type": "boolean"
           },
@@ -31945,6 +35402,24 @@
           },
           "allow_attendee_self_edit": {
             "type": "boolean"
+          },
+          "allow_ticket_transfer": {
+            "type": "boolean"
+          },
+          "ticket_transfer_cutoff_minutes": {
+            "type": "integer"
+          },
+          "max_transfers_per_ticket": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "allow_ticket_resale": {
+            "type": "boolean"
+          },
+          "ticket_resale_cutoff_minutes": {
+            "type": "integer"
           },
           "show_available_occurrence_capacity": {
             "type": "boolean"
@@ -32014,11 +35489,18 @@
           "invoice_notes",
           "invoice_payment_terms_days",
           "show_marketing_opt_in",
+          "phone_collection",
+          "show_sms_opt_in",
           "allow_copy_details_to_all_attendees",
           "pass_platform_fee_to_buyer",
           "homepage_theme_settings",
           "homepage_sections",
           "allow_attendee_self_edit",
+          "allow_ticket_transfer",
+          "ticket_transfer_cutoff_minutes",
+          "max_transfers_per_ticket",
+          "allow_ticket_resale",
+          "ticket_resale_cutoff_minutes",
           "show_available_occurrence_capacity",
           "hide_sold_out_occurrences",
           "waitlist_auto_process",
@@ -32229,6 +35711,17 @@
             "type": "boolean",
             "description": "Marketing settings"
           },
+          "phone_collection": {
+            "type": "string",
+            "enum": [
+              "OFF",
+              "OPTIONAL",
+              "REQUIRED"
+            ]
+          },
+          "show_sms_opt_in": {
+            "type": "boolean"
+          },
           "allow_copy_details_to_all_attendees": {
             "type": "boolean",
             "description": "Attendee detail copy control"
@@ -32275,6 +35768,24 @@
           "allow_attendee_self_edit": {
             "type": "boolean",
             "description": "Self-service settings"
+          },
+          "allow_ticket_transfer": {
+            "type": "boolean"
+          },
+          "ticket_transfer_cutoff_minutes": {
+            "type": "integer"
+          },
+          "max_transfers_per_ticket": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "allow_ticket_resale": {
+            "type": "boolean"
+          },
+          "ticket_resale_cutoff_minutes": {
+            "type": "integer"
           },
           "show_available_occurrence_capacity": {
             "type": "boolean",
@@ -32329,17 +35840,72 @@
           "require_billing_address",
           "invoice_label",
           "show_marketing_opt_in",
+          "phone_collection",
+          "show_sms_opt_in",
           "allow_copy_details_to_all_attendees",
           "pass_platform_fee_to_buyer",
           "homepage_theme_settings",
           "homepage_sections",
           "allow_attendee_self_edit",
+          "allow_ticket_transfer",
+          "ticket_transfer_cutoff_minutes",
+          "max_transfers_per_ticket",
+          "allow_ticket_resale",
+          "ticket_resale_cutoff_minutes",
           "show_available_occurrence_capacity",
           "hide_sold_out_occurrences",
           "waitlist_auto_process",
           "waitlist_offer_timeout_minutes"
         ],
         "title": "EventSettingsResourcePublic"
+      },
+      "EventShareSuggestionsResource": {
+        "type": "object",
+        "properties": {
+          "availability": {
+            "type": "string",
+            "enum": [
+              "AVAILABLE",
+              "NOT_CONFIGURED",
+              "EMAIL_NOT_CONFIRMED",
+              "PAYMENTS_NOT_CONNECTED",
+              "EVENT_UNDER_REVIEW"
+            ]
+          },
+          "captions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "tone": {
+                  "type": "string",
+                  "enum": [
+                    "FRIENDLY",
+                    "PROFESSIONAL",
+                    "ENERGETIC",
+                    "SHORT"
+                  ]
+                },
+                "text": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "tone",
+                "text"
+              ]
+            }
+          },
+          "remaining_generations": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "availability",
+          "captions",
+          "remaining_generations"
+        ],
+        "title": "EventShareSuggestionsResource"
       },
       "EventSpaceResource": {
         "type": "object",
@@ -33272,6 +36838,55 @@
         ],
         "title": "LookupKioskTicketsRequest"
       },
+      "LookupTicketResourcePublic": {
+        "type": "object",
+        "properties": {
+          "short_id": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "product_title": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "event_id": {
+            "type": "integer"
+          },
+          "event_title": {
+            "type": "string"
+          },
+          "event_timezone": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "start_date": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "short_id",
+          "first_name",
+          "last_name",
+          "product_title",
+          "event_id",
+          "event_title",
+          "event_timezone",
+          "start_date"
+        ],
+        "title": "LookupTicketResourcePublic"
+      },
       "MarkBadgesPrintedRequest": {
         "type": "object",
         "properties": {
@@ -33490,7 +37105,8 @@
                     "seating",
                     "box_office",
                     "enterprise_sso",
-                    "white_label"
+                    "white_label",
+                    "crm"
                   ]
                 }
               },
@@ -33502,7 +37118,8 @@
                     "seating",
                     "box_office",
                     "enterprise_sso",
-                    "white_label"
+                    "white_label",
+                    "crm"
                   ]
                 }
               },
@@ -33514,7 +37131,8 @@
                     "seating",
                     "box_office",
                     "enterprise_sso",
-                    "white_label"
+                    "white_label",
+                    "crm"
                   ]
                 }
               }
@@ -33564,6 +37182,9 @@
           },
           "type": {
             "type": "string"
+          },
+          "is_test": {
+            "type": "boolean"
           },
           "attendee_ids": {
             "anyOf": [
@@ -33640,6 +37261,7 @@
           "subject",
           "message",
           "type",
+          "is_test",
           "attendee_ids",
           "order_id",
           "product_ids",
@@ -34067,6 +37689,12 @@
               "null"
             ]
           },
+          "phone": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
           "created_at": {
             "type": "string"
           },
@@ -34245,6 +37873,7 @@
           "first_name",
           "last_name",
           "email",
+          "phone",
           "created_at",
           "public_id",
           "is_partially_refunded",
@@ -34321,6 +37950,9 @@
           "currency": {
             "type": "string"
           },
+          "created_at": {
+            "type": "string"
+          },
           "reserved_until": {
             "type": [
               "string",
@@ -34348,6 +37980,12 @@
               "null"
             ]
           },
+          "phone": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
           "public_id": {
             "type": "string"
           },
@@ -34368,6 +38006,9 @@
               "string",
               "null"
             ]
+          },
+          "holds_resale_listing": {
+            "type": "boolean"
           },
           "payment_link_url": {
             "type": [
@@ -34460,6 +38101,38 @@
               "$ref": "#/components/schemas/AttendeeResourcePublic"
             }
           },
+          "transferred_tickets": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "product_id": {
+                  "type": "integer"
+                },
+                "product_title": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "recipient_email": {
+                  "type": "string"
+                },
+                "transferred_at": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "product_id",
+                "product_title",
+                "recipient_email",
+                "transferred_at"
+              ]
+            }
+          },
           "seats": {
             "type": "array",
             "items": {
@@ -34490,9 +38163,6 @@
               "string",
               "null"
             ]
-          },
-          "created_at": {
-            "type": "string"
           },
           "box_office_operator_name": {
             "type": [
@@ -34574,15 +38244,18 @@
           "refund_status",
           "payment_status",
           "currency",
+          "created_at",
           "reserved_until",
           "first_name",
           "last_name",
           "email",
+          "phone",
           "public_id",
           "is_payment_required",
           "payment_link_created_at",
           "is_payment_link_payer",
           "offline_payment_reported_at",
+          "holds_resale_listing",
           "promo_code",
           "taxes_and_fees_rollup"
         ],
@@ -34842,10 +38515,27 @@
           "default_show_marketing_opt_in": {
             "type": "boolean"
           },
+          "default_phone_collection": {
+            "type": "string",
+            "enum": [
+              "OFF",
+              "OPTIONAL",
+              "REQUIRED"
+            ]
+          },
+          "default_show_sms_opt_in": {
+            "type": "boolean"
+          },
           "default_pass_platform_fee_to_buyer": {
             "type": "boolean"
           },
           "default_allow_attendee_self_edit": {
+            "type": "boolean"
+          },
+          "default_allow_ticket_transfer": {
+            "type": "boolean"
+          },
+          "default_allow_ticket_resale": {
             "type": "boolean"
           },
           "social_media_handles": {
@@ -34942,8 +38632,12 @@
           "organizer_id",
           "default_attendee_details_collection_method",
           "default_show_marketing_opt_in",
+          "default_phone_collection",
+          "default_show_sms_opt_in",
           "default_pass_platform_fee_to_buyer",
           "default_allow_attendee_self_edit",
+          "default_allow_ticket_transfer",
+          "default_allow_ticket_resale",
           "social_media_handles",
           "homepage_theme_settings",
           "homepage_sections",
@@ -34973,10 +38667,27 @@
           "default_show_marketing_opt_in": {
             "type": "boolean"
           },
+          "default_phone_collection": {
+            "type": "string",
+            "enum": [
+              "OFF",
+              "OPTIONAL",
+              "REQUIRED"
+            ]
+          },
+          "default_show_sms_opt_in": {
+            "type": "boolean"
+          },
           "default_pass_platform_fee_to_buyer": {
             "type": "boolean"
           },
           "default_allow_attendee_self_edit": {
+            "type": "boolean"
+          },
+          "default_allow_ticket_transfer": {
+            "type": "boolean"
+          },
+          "default_allow_ticket_resale": {
             "type": "boolean"
           },
           "social_media_handles": {
@@ -35095,8 +38806,12 @@
           "organizer_id",
           "default_attendee_details_collection_method",
           "default_show_marketing_opt_in",
+          "default_phone_collection",
+          "default_show_sms_opt_in",
           "default_pass_platform_fee_to_buyer",
           "default_allow_attendee_self_edit",
+          "default_allow_ticket_transfer",
+          "default_allow_ticket_resale",
           "social_media_handles",
           "homepage_theme_settings",
           "homepage_sections",
@@ -35404,6 +39119,24 @@
               "null"
             ]
           },
+          "default_phone_collection": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "OFF",
+              "OPTIONAL",
+              "REQUIRED",
+              null
+            ]
+          },
+          "default_show_sms_opt_in": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
           "default_pass_platform_fee_to_buyer": {
             "type": [
               "boolean",
@@ -35411,6 +39144,18 @@
             ]
           },
           "default_allow_attendee_self_edit": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "default_allow_ticket_transfer": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "default_allow_ticket_resale": {
             "type": [
               "boolean",
               "null"
@@ -35920,6 +39665,26 @@
           "total"
         ],
         "title": "PlatformFeePreviewResource"
+      },
+      "PreviewMessageRequest": {
+        "type": "object",
+        "properties": {
+          "subject": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 100
+          },
+          "message": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 20000
+          }
+        },
+        "title": "PreviewMessageRequest"
       },
       "ProductCategoryResource": {
         "type": "object",
@@ -36656,6 +40421,12 @@
           "is_addon_only": {
             "type": "boolean"
           },
+          "is_transferable": {
+            "type": "boolean"
+          },
+          "is_resellable": {
+            "type": "boolean"
+          },
           "addon_product_ids": {
             "type": [
               "array",
@@ -36711,7 +40482,9 @@
           "is_highlighted",
           "highlight_message",
           "waitlist_enabled",
-          "is_addon_only"
+          "is_addon_only",
+          "is_transferable",
+          "is_resellable"
         ],
         "title": "ProductResource"
       },
@@ -36841,6 +40614,12 @@
           "is_addon_only": {
             "type": "boolean"
           },
+          "is_transferable": {
+            "type": "boolean"
+          },
+          "is_resellable": {
+            "type": "boolean"
+          },
           "addon_product_ids": {
             "type": [
               "array",
@@ -36867,7 +40646,9 @@
           "is_highlighted",
           "highlight_message",
           "waitlist_enabled",
-          "is_addon_only"
+          "is_addon_only",
+          "is_transferable",
+          "is_resellable"
         ],
         "title": "ProductResourcePublic"
       },
@@ -37696,6 +41477,26 @@
         ],
         "title": "SeatMapResource"
       },
+      "SelfServiceSessionResource": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "expires_at": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "token",
+          "expires_at",
+          "email"
+        ],
+        "title": "SelfServiceSessionResource"
+      },
       "SendMessageRequest": {
         "type": "object",
         "properties": {
@@ -37785,6 +41586,69 @@
           "email"
         ],
         "title": "SendTicketLookupEmailRequest"
+      },
+      "SignupFormPublicResource": {
+        "type": "object",
+        "properties": {
+          "public_id": {
+            "type": "string"
+          },
+          "organizer_id": {
+            "type": "integer"
+          },
+          "organizer_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "organizer_slug": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "button_label": {
+            "type": "string"
+          },
+          "success_message": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "asks_for_name": {
+            "type": "boolean"
+          },
+          "privacy_url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "public_id",
+          "organizer_id",
+          "organizer_name",
+          "organizer_slug",
+          "title",
+          "description",
+          "button_label",
+          "success_message",
+          "asks_for_name",
+          "privacy_url"
+        ],
+        "title": "SignupFormPublicResource"
       },
       "SortLineupEntriesRequest": {
         "type": "object",
@@ -37880,6 +41744,94 @@
         },
         "title": "SortQuestionsRequest"
       },
+      "StartTicketTransferRequest": {
+        "type": "object",
+        "properties": {
+          "recipient_email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 255
+          }
+        },
+        "required": [
+          "recipient_email"
+        ],
+        "title": "StartTicketTransferRequest"
+      },
+      "SubmitSignupFormRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 254
+          },
+          "first_name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1,
+            "maxLength": 50
+          },
+          "last_name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1,
+            "maxLength": 50
+          },
+          "locale": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "en",
+              "de",
+              "fi",
+              "fr",
+              "it",
+              "nl",
+              "hu",
+              "es",
+              "pt",
+              "pt-br",
+              "zh-cn",
+              "se",
+              "zh-hk",
+              "vi",
+              "tr",
+              "pl",
+              "sk",
+              "el",
+              "ko",
+              "ja",
+              "cs",
+              null
+            ]
+          },
+          "turnstile_token": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 2048
+          },
+          "website": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 255
+          }
+        },
+        "required": [
+          "email"
+        ],
+        "title": "SubmitSignupFormRequest"
+      },
       "TaxAndFeeResource": {
         "type": "object",
         "properties": {
@@ -37929,6 +41881,522 @@
           "type"
         ],
         "title": "TaxAndFeeResource"
+      },
+      "TicketHistoryEntryResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "action": {
+            "type": "string"
+          },
+          "order_id": {
+            "type": "integer"
+          },
+          "attendee_id": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "old_values": {
+            "type": "object"
+          },
+          "new_values": {
+            "type": "object"
+          },
+          "created_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "action",
+          "order_id",
+          "attendee_id",
+          "old_values",
+          "new_values",
+          "created_at"
+        ],
+        "title": "TicketHistoryEntryResource"
+      },
+      "TicketResaleEstimateResourcePublic": {
+        "type": "object",
+        "properties": {
+          "can_list": {
+            "type": "boolean"
+          },
+          "block": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "RESALE_DISABLED",
+              "TICKET_TYPE_NOT_RESELLABLE",
+              "EVENT_NOT_LIVE",
+              "PRICE_TYPE_NOT_SUPPORTED",
+              "TICKET_TYPE_NOT_ON_SALE",
+              "SEATED",
+              "ORDER_NOT_COMPLETED",
+              "TICKET_NOT_ACTIVE",
+              "CHECKED_IN",
+              "TRANSFERRED",
+              "DATE_CANCELLED",
+              "DATE_PASSED",
+              "CUTOFF_PASSED",
+              "NOT_PAID_ONLINE",
+              "STRIPE_ACCOUNT_CHANGED",
+              "CURRENCY_NOT_SUPPORTED",
+              "ORDER_REFUNDED",
+              "NOTHING_TO_REFUND",
+              "TRANSFER_PENDING",
+              "ALREADY_LISTED",
+              null
+            ]
+          },
+          "block_message": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "Ticket resale is not available for this event.",
+              "This type of ticket cannot be resold.",
+              "Tickets for this event cannot be resold right now.",
+              "This ticket is free or pay-what-you-want, so it cannot be resold.",
+              "This type of ticket is no longer on sale, so it cannot be resold.",
+              "This ticket has a reserved seat, so it cannot be resold.",
+              "This ticket cannot be resold until its order is complete.",
+              "This ticket is no longer valid, so it cannot be resold.",
+              "This ticket has already been checked in, so it cannot be resold.",
+              "This ticket was transferred, so it cannot be resold.",
+              "This event date was cancelled.",
+              "This event date has passed.",
+              "Resale has closed for this event.",
+              "This ticket was not paid for online, so it cannot be resold.",
+              "This ticket cannot be resold because the organizer has changed how they take payments.",
+              "We are still confirming the payment for this ticket. Please try again in a few minutes.",
+              "This ticket cannot be resold because of the currency it was paid in.",
+              "This ticket is on an order with a refund, so it cannot be resold.",
+              "This ticket has nothing to refund, so it cannot be resold.",
+              "This ticket has a transfer waiting to be accepted, so it cannot be resold.",
+              "This ticket is already listed for resale.",
+              null
+            ]
+          },
+          "currency": {
+            "type": "string"
+          },
+          "amount_paid": {
+            "type": "number"
+          },
+          "estimated_fees": {
+            "type": "number"
+          },
+          "estimated_refund": {
+            "type": "number"
+          },
+          "add_ons": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "cutoff": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "can_list",
+          "block",
+          "block_message",
+          "currency",
+          "amount_paid",
+          "estimated_fees",
+          "estimated_refund",
+          "add_ons",
+          "cutoff"
+        ],
+        "title": "TicketResaleEstimateResourcePublic"
+      },
+      "TicketResaleListingResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "LISTED",
+              "SOLD",
+              "CLOSED"
+            ]
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "OPEN",
+              "HELD",
+              "WITHDRAWAL_REQUESTED",
+              "NOT_OFFERED",
+              "SOLD",
+              "CLOSED"
+            ]
+          },
+          "closed_reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "WITHDRAWN",
+              "CUTOFF_PASSED",
+              "RESALE_TURNED_OFF",
+              "TICKET_CANCELLED",
+              "TICKET_USED",
+              "TICKET_TYPE_CHANGED",
+              "DATE_CANCELLED",
+              "CLOSED_BY_ORGANIZER",
+              null
+            ]
+          },
+          "needs_attention": {
+            "type": "boolean"
+          },
+          "attendee": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "public_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "first_name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "last_name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "email": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "public_id",
+              "first_name",
+              "last_name",
+              "email"
+            ]
+          },
+          "order": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "public_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "short_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "public_id"
+            ]
+          },
+          "sold_order": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "public_id": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "public_id"
+            ]
+          },
+          "product_title": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "price_label": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "event_occurrence_id": {
+            "type": "integer"
+          },
+          "held_until": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "created_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "updated_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "currency": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "estimated_refund": {
+            "type": "number"
+          },
+          "refund_amount": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "refund_status": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "PENDING",
+              "SUCCEEDED",
+              "FAILED",
+              null
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "state",
+          "closed_reason",
+          "needs_attention",
+          "attendee",
+          "order",
+          "sold_order",
+          "product_title",
+          "price_label",
+          "event_occurrence_id",
+          "held_until",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "TicketResaleListingResource"
+      },
+      "TicketResaleStateResourcePublic": {
+        "type": "object",
+        "properties": {
+          "can_list": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "LISTED",
+              "SOLD",
+              null
+            ]
+          },
+          "held_until": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "withdrawal_requested": {
+            "type": "boolean"
+          },
+          "cutoff": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "can_list",
+          "status",
+          "held_until",
+          "withdrawal_requested",
+          "cutoff"
+        ],
+        "title": "TicketResaleStateResourcePublic"
+      },
+      "TicketTransferClaimResourcePublic": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "ACCEPTED",
+              "CANCELLED",
+              "DECLINED",
+              "EXPIRED"
+            ]
+          },
+          "can_accept": {
+            "type": "boolean"
+          },
+          "recipient_email": {
+            "type": "string"
+          },
+          "sender_email": {
+            "type": "string"
+          },
+          "expires_at": {
+            "type": "string"
+          },
+          "event_id": {
+            "type": "integer"
+          },
+          "event_title": {
+            "type": "string"
+          },
+          "event_timezone": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "product_id": {
+            "type": "integer"
+          },
+          "ticket_title": {
+            "type": "string"
+          },
+          "start_date": {
+            "type": "string"
+          },
+          "questions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QuestionResourcePublic"
+            }
+          }
+        },
+        "required": [
+          "status",
+          "can_accept",
+          "recipient_email",
+          "sender_email",
+          "expires_at",
+          "event_id",
+          "event_title",
+          "event_timezone",
+          "product_id",
+          "ticket_title",
+          "start_date",
+          "questions"
+        ],
+        "title": "TicketTransferClaimResourcePublic"
+      },
+      "TicketTransferResourcePublic": {
+        "type": "object",
+        "properties": {
+          "recipient_email": {
+            "type": "string"
+          },
+          "expires_at": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "recipient_email",
+          "expires_at"
+        ],
+        "title": "TicketTransferResourcePublic"
+      },
+      "UnsubscribeStatusResource": {
+        "type": "object",
+        "properties": {
+          "organizer_name": {
+            "type": "string"
+          },
+          "email": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "is_unsubscribed": {
+            "type": "boolean"
+          },
+          "can_resubscribe": {
+            "type": "boolean"
+          },
+          "channel": {
+            "type": "string",
+            "enum": [
+              "EMAIL",
+              "SMS"
+            ]
+          },
+          "phone": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "organizer_name",
+          "email",
+          "is_unsubscribed",
+          "can_resubscribe",
+          "channel",
+          "phone"
+        ],
+        "title": "UnsubscribeStatusResource"
       },
       "UpdateAffiliateRequest": {
         "type": "object",
@@ -38660,6 +43128,17 @@
           "show_marketing_opt_in": {
             "type": "boolean"
           },
+          "phone_collection": {
+            "type": "string",
+            "enum": [
+              "OFF",
+              "OPTIONAL",
+              "REQUIRED"
+            ]
+          },
+          "show_sms_opt_in": {
+            "type": "boolean"
+          },
           "allow_copy_details_to_all_attendees": {
             "type": "boolean"
           },
@@ -38886,6 +43365,30 @@
           },
           "allow_attendee_self_edit": {
             "type": "boolean"
+          },
+          "allow_ticket_transfer": {
+            "type": "boolean"
+          },
+          "ticket_transfer_cutoff_minutes": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 525600
+          },
+          "max_transfers_per_ticket": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 1,
+            "maximum": 100
+          },
+          "allow_ticket_resale": {
+            "type": "boolean"
+          },
+          "ticket_resale_cutoff_minutes": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 525600
           },
           "show_available_occurrence_capacity": {
             "type": "boolean"
@@ -40758,6 +45261,12 @@
             }
           },
           "is_addon_only": {
+            "type": "boolean"
+          },
+          "is_transferable": {
+            "type": "boolean"
+          },
+          "is_resellable": {
             "type": "boolean"
           },
           "product_category_id": {

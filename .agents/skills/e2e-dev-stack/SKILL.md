@@ -17,6 +17,9 @@ E2E_BASE_URL=https://localhost:8443 MAILPIT_URL=http://localhost:8025 E2E_SAAS_M
 - A queue worker must be running to deliver the verification emails: `docker compose -f docker-compose.dev.yml exec -d backend php artisan queue:work`.
 - Superadmin-dependent specs need a one-time `php artisan dev:bootstrap --email=superadmin@e2e.test --password='SuperAdminPass123!'`.
 - Seating and box office specs need `APP_LICENCE_KEY=development` in `backend/.env`.
+- Audience text message specs need `SMS_DRIVER=fake` in `backend/.env` (they skip otherwise) and, like the feature-flag specs, a Hi.Events Cloud licence key so `crm_sms` can be switched per account.
+- Audience specs that run scheduled jobs (`e2e/utils/artisan.ts`) rely on the queue worker; start it with `-e APP_EVENT_SPAM_CHECK_ENABLED=false`, or the "announce a published event" spec waits on the spam check.
+- The dev nginx runs out of upstream ports (502s, blank pages) when many pages load at once; run large sets with `--workers=2`.
 - `@stripe` specs need `STRIPE_SECRET_KEY`, the backend's `STRIPE_WEBHOOK_SECRET` and `E2E_STRIPE_CONNECT_ACCOUNT_ID` exported. Webhooks are handled by the queue worker, so poll for the result.
 
 See "Against the running dev stack" in `e2e/README.md` for more.

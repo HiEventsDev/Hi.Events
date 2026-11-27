@@ -13,7 +13,7 @@ const DefaultLayout = () => {
             <PendingDeletionBanner />
             <AnnouncementDisplay />
             <Header rightContent={<GlobalMenu/>}/>
-            <Container>
+            <Container size="xl">
                 <Outlet/>
             </Container>
         </>

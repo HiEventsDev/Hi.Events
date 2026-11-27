@@ -390,7 +390,7 @@ export const OrganizerDashboard = () => {
                     {recentEvents && recentEvents.length > 0 ? (
                         <div className={classes.eventCardList}>
                             {recentEvents.map((event: Event) => (
-                                <EventCard key={event.id} event={event} compact/>
+                                <EventCard key={event.id} event={event}/>
                             ))}
                         </div>
                     ) : (

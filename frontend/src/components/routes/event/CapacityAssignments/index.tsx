@@ -5,7 +5,6 @@ import {t} from "@lingui/macro";
 import {useParams} from "react-router";
 import {useGetEventCapacityAssignments} from "../../../../queries/useGetCapacityAssignments.ts";
 import {CapacityAssignmentList} from "../../../common/CapacityAssignmentList";
-import {TableSkeleton} from "../../../common/TableSkeleton";
 import {CreateCapacityAssignmentModal} from "../../../modals/CreateCapacityAssignmentModal";
 import {useDisclosure} from "@mantine/hooks";
 import {ToolBar} from "../../../common/ToolBar";
@@ -13,18 +12,16 @@ import {SearchBarWrapper} from "../../../common/SearchBar";
 import {IconPlus} from "@tabler/icons-react";
 import {useFilterQueryParamSync} from "../../../../hooks/useFilterQueryParamSync.ts";
 import {QueryFilters} from "../../../../types.ts";
-import {Pagination} from "../../../common/Pagination";
+import {TableCard, TableCardFooter, TableCardSkeleton} from "../../../common/TableCard";
+import {tableSortFromQuery} from "../../../common/TanStackTable/sorting.tsx";
 import {SortSelector} from "../../../common/SortSelector";
 
 const CapacityAssignments = () => {
     const {eventId} = useParams();
     const [searchParams, setSearchParams] = useFilterQueryParamSync();
-    const {data: capacityAssignmentsData} = useGetEventCapacityAssignments(
-        eventId,
-        searchParams as QueryFilters,
-    );
-    const capacityAssignments = capacityAssignmentsData?.data;
-    const pagination = capacityAssignmentsData?.meta
+    const capacityAssignmentsQuery = useGetEventCapacityAssignments(eventId, searchParams as QueryFilters);
+    const capacityAssignments = capacityAssignmentsQuery.data?.data;
+    const pagination = capacityAssignmentsQuery.data?.meta;
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
 
     return (
@@ -35,7 +32,9 @@ const CapacityAssignments = () => {
                 {t`Shared Capacity Management`}
             </PageTitle>
 
+            <TableCard>
             <ToolBar
+                embedded
                 searchComponent={() => (
                     <SearchBarWrapper
                         placeholder={t`Search capacity assignments...`}
@@ -56,28 +55,32 @@ const CapacityAssignments = () => {
                 ) : undefined}
             >
                 <CreateButton
-                    leftSection={<IconPlus/>}
+                    leftSection={<IconPlus size={16}/>}
                     color={'green'}
                     data-testid="capacity-create-button"
                     onClick={() => openCreateModal()}>{t`Create Capacity Assignment`}
                 </CreateButton>
             </ToolBar>
 
-            <TableSkeleton isVisible={!capacityAssignments}/>
+            {!capacityAssignments && <TableCardSkeleton rows={5}/>}
 
             {capacityAssignments && <CapacityAssignmentList
                 capacityAssignments={capacityAssignments}
                 openCreateModal={openCreateModal}
+                isRefreshing={capacityAssignmentsQuery.isFetching}
+                sort={tableSortFromQuery(searchParams, setSearchParams, pagination)}
             />}
 
-            {createModalOpen && <CreateCapacityAssignmentModal onClose={closeCreateModal}/>}
-
-            {(!!capacityAssignments?.length && (pagination?.total || 0) >= 20) && (
-                <Pagination value={searchParams.pageNumber}
-                            onChange={(value) => setSearchParams({pageNumber: value})}
-                            total={Number(pagination?.last_page)}
+            {!!capacityAssignments?.length && (
+                <TableCardFooter
+                    pagination={pagination}
+                    page={searchParams.pageNumber}
+                    onPageChange={(value) => setSearchParams({pageNumber: value})}
                 />
             )}
+            </TableCard>
+
+            {createModalOpen && <CreateCapacityAssignmentModal onClose={closeCreateModal}/>}
         </PageBody>
     );
 }

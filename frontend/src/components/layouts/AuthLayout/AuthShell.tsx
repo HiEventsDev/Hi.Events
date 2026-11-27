@@ -27,7 +27,21 @@ const getTickerFeatures = () => [
     t`Capacity management`,
 ];
 
-const FeaturePanel = () => {
+export interface TicketPreview {
+    title: string;
+    meta: string;
+}
+
+const SAMPLE_TICKET: TicketPreview = {
+    title: 'Dublin Jazz Festival',
+    meta: 'Sat, Aug 16 · 8:00 PM · Dublin',
+};
+
+const FeaturePanel = ({ticketPreview}: { ticketPreview?: Partial<TicketPreview> }) => {
+    const isPreviewingOwnEvent = !!ticketPreview?.title;
+    const ticket = isPreviewingOwnEvent
+        ? {title: ticketPreview.title, meta: ticketPreview.meta ?? ''}
+        : SAMPLE_TICKET;
     const tickerFeatures = getTickerFeatures();
     const tickerLoop = [...tickerFeatures, ...tickerFeatures];
 
@@ -51,8 +65,8 @@ const FeaturePanel = () => {
                                     <span>Admit One</span>
                                     <span>№ 000482</span>
                                 </div>
-                                <div className={classes.ticketTitle}>Dublin Jazz Festival</div>
-                                <div className={classes.ticketMeta}>Sat, Aug 16 · 8:00 PM · Dublin</div>
+                                <div className={classes.ticketTitle}>{ticket.title}</div>
+                                <div className={classes.ticketMeta}>{ticket.meta}</div>
                                 <div className={classes.ticketFields}>
                                     <div className={classes.ticketField}>
                                         <span>Door</span>
@@ -104,7 +118,7 @@ const FeaturePanel = () => {
                             </div>
                         </div>
                     </div>
-                    <div className={classes.stamp}>Sold Out</div>
+                    {!isPreviewingOwnEvent && <div className={classes.stamp}>Sold Out</div>}
                 </div>
             </div>
 
@@ -125,9 +139,10 @@ const FeaturePanel = () => {
 interface AuthShellProps {
     children: ReactNode;
     isStatic?: boolean;
+    ticketPreview?: Partial<TicketPreview>;
 }
 
-export const AuthShell = ({children, isStatic = false}: AuthShellProps) => {
+export const AuthShell = ({children, isStatic = false, ticketPreview}: AuthShellProps) => {
     const clickCountRef = useRef(0);
     const clickTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
@@ -191,7 +206,7 @@ export const AuthShell = ({children, isStatic = false}: AuthShellProps) => {
                     </main>
                 </div>
 
-                <FeaturePanel />
+                <FeaturePanel ticketPreview={ticketPreview}/>
             </div>
         </div>
     );

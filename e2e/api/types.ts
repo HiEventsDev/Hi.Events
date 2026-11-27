@@ -121,6 +121,7 @@ export interface CreateProductPayload {
   sale_start_date?: string;
   sale_end_date?: string;
   sequential_tier_release_enabled?: boolean;
+  is_resellable?: boolean;
 }
 
 export interface CreateProductCategoryPayload {

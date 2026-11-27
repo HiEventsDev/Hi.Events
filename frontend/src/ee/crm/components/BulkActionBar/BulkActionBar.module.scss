@@ -1,0 +1,63 @@
+.progressLabel {
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.progress {
+  flex: 1 1 160px;
+  min-width: 120px;
+  margin: 0 8px;
+}
+
+.percent {
+  min-width: 36px;
+  padding-right: 8px;
+  font-size: var(--mantine-font-size-xs);
+  color: var(--mantine-color-gray-6);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.tagDropdown {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+
+  :global(.mantine-InputWrapper-root) {
+    margin-bottom: 0;
+  }
+}
+
+.tagOption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: var(--mantine-radius-sm);
+  font-size: var(--mantine-font-size-sm);
+
+  &:hover,
+  &:focus-visible {
+    background: var(--mantine-color-gray-0);
+  }
+
+  @media (pointer: coarse) {
+    min-height: 40px;
+  }
+}
+
+.tagDot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.tagEmpty {
+  margin: 6px 8px;
+  font-size: var(--mantine-font-size-xs);
+  color: var(--mantine-color-gray-6);
+}

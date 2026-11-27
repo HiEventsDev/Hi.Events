@@ -74,6 +74,8 @@ class AccountDeletionExecutionTest extends TestCase
 
         $this->assertDatabaseMissing('question_answers', ['question_id' => $this->question->id]);
         $this->assertDatabaseCount('question_answers', 1);
+        $this->assertDatabaseMissing('ticket_transfers', ['event_id' => $this->event->id]);
+        $this->assertDatabaseHas('ticket_resale_listings', ['event_id' => $this->event->id, 'order_id' => $this->order->id]);
 
         $soleUser = $this->soleUser->fresh();
         $this->assertSame('Anonymized', $soleUser->first_name);
@@ -122,6 +124,8 @@ class AccountDeletionExecutionTest extends TestCase
         $this->assertDatabaseMissing('events', ['id' => $this->event->id]);
         $this->assertDatabaseMissing('orders', ['id' => $this->order->id]);
         $this->assertDatabaseMissing('attendees', ['id' => $this->attendee->id]);
+        $this->assertDatabaseMissing('ticket_transfers', ['event_id' => $this->event->id]);
+        $this->assertDatabaseMissing('ticket_resale_listings', ['event_id' => $this->event->id]);
         $this->assertDatabaseMissing('questions', ['event_id' => $this->event->id]);
         $this->assertDatabaseMissing('users', ['id' => $this->soleUser->id]);
         $this->assertDatabaseMissing('stripe_customers', ['stripe_account_id' => 'acct_deltest123']);
@@ -362,6 +366,42 @@ class AccountDeletionExecutionTest extends TestCase
             'status' => 'ACTIVE',
             'public_id' => 'pub-att-1',
             'short_id' => 'att_doomed',
+        ]);
+
+        DB::table('ticket_transfers')->insert([
+            'event_id' => $this->event->id,
+            'order_id' => $this->order->id,
+            'attendee_id' => $this->attendee->id,
+            'sender_email' => 'sender@example.com',
+            'recipient_email' => 'recipient@example.com',
+            'token_hash' => hash('sha256', 'tt_deletion'),
+            'status' => 'PENDING',
+            'expires_at' => now()->addDay(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('ticket_resale_listings')->insert([
+            'event_id' => $this->event->id,
+            'order_id' => $this->order->id,
+            'attendee_id' => $this->attendee->id,
+            'product_price_id' => $productPrice->id,
+            'event_occurrence_id' => DB::table('event_occurrences')->insertGetId([
+                'short_id' => 'occ_doomed',
+                'event_id' => $this->event->id,
+                'start_date' => now()->addMonth(),
+                'status' => 'ACTIVE',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]),
+            'status' => 'SOLD',
+            'min_unit_price' => 25,
+            'estimated_refund' => 23.50,
+            'claimed_by_order_id' => $this->order->id,
+            'sold_order_id' => $this->order->id,
+            'refund_status' => 'PENDING',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
         $this->question = Question::forceCreate([

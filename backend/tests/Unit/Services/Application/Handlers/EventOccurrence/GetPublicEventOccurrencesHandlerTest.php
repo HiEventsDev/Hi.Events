@@ -12,10 +12,12 @@ use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\Exceptions\InvalidOccurrenceDatesException;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Repository\Interfaces\TicketResaleListingRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\GetPublicEventHandler;
 use HiEvents\Services\Application\Handlers\EventOccurrence\DTO\GetPublicEventOccurrencesDTO;
 use HiEvents\Services\Application\Handlers\EventOccurrence\GetPublicEventOccurrencesHandler;
 use HiEvents\Services\Domain\EventOccurrence\PublicOccurrenceVisibilityService;
+use HiEvents\Services\Domain\TicketResale\ResaleOccurrenceAvailabilityService;
 use Mockery as m;
 use Tests\TestCase;
 
@@ -38,6 +40,7 @@ class GetPublicEventOccurrencesHandlerTest extends TestCase
             $this->eventRepository,
             $this->occurrenceRepository,
             new PublicOccurrenceVisibilityService,
+            new ResaleOccurrenceAvailabilityService(m::mock(TicketResaleListingRepositoryInterface::class)),
         );
     }
 

@@ -163,7 +163,7 @@ export class OccurrencePage {
   }
 
   selectionSummary(): Locator {
-    return this.page.locator('[class*="selectionCount"]');
+    return this.page.getByTestId('occurrence-selection-count');
   }
 
   async clearSelection(): Promise<void> {

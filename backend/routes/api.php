@@ -28,6 +28,99 @@ use HiEvents\Enterprise\BoxOffice\Http\Actions\Public\TenderBoxOfficeOrderPublic
 use HiEvents\Enterprise\BoxOffice\Http\Actions\Public\UpdateBoxOfficeSessionPublicAction;
 use HiEvents\Enterprise\BoxOffice\Http\Actions\ResetBoxOfficePinAction;
 use HiEvents\Enterprise\BoxOffice\Http\Actions\UpdateBoxOfficeAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Admin\ApproveCampaignAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Admin\GetCampaignsPendingReviewAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Admin\RejectCampaignAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Automations\CreateAutomationAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Automations\DeleteAutomationAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Automations\DisableAutomationAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Automations\EnableAutomationAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Automations\GetAutomationsAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Automations\GetAutomationTemplatesAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Automations\PreviewAutomationAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Automations\SendTestAutomationAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Automations\UpdateAutomationAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Bulk\BulkDeleteContactsAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Bulk\BulkTagContactsAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Bulk\BulkUnsubscribeContactsAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Bulk\GetBulkOperationAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Bulk\UndoBulkOperationAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Campaigns\CancelCampaignAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Campaigns\CreateCampaignAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Campaigns\DeleteCampaignAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Campaigns\DuplicateCampaignAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Campaigns\EndEarlyAccessAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Campaigns\GetCampaignAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Campaigns\GetCampaignPreviewAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Campaigns\GetCampaignRecipientsAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Campaigns\GetCampaignsAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Campaigns\GetCampaignSendCheckAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Campaigns\PreviewCampaignDraftAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Campaigns\SendCampaignAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Campaigns\SendTestCampaignAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Campaigns\UpdateCampaignAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Contacts\CreateContactAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Contacts\DeleteContactAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Contacts\ExportContactsAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Contacts\ExportSelectedContactsAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Contacts\GetContactAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Contacts\GetContactActivitiesAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Contacts\GetContactConsentHistoryAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Contacts\GetContactsAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Contacts\MergeContactsAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Contacts\SetContactTagsAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Contacts\SetPrimaryContactEmailAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Contacts\SplitContactEmailAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Contacts\UnsubscribeContactAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Contacts\UpdateContactAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Imports\GetContactImportsAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Imports\ImportContactsAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Imports\PreviewSuppressionImportAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Insights\GetAudienceOverviewAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Insights\GetEventAudienceAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Insights\GetLeadTimeAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Insights\GetRetentionAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Notes\CreateContactNoteAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Notes\DeleteContactNoteAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Notes\GetContactNotesAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Public\ConfirmSubscriptionPublicAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Public\GetCampaignUnsubscribePublicAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Public\GetOrganizerSignupFormPublicAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Public\GetSignupFormPublicAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Public\GetSubscriptionConfirmationPublicAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Public\ResubscribeToCampaignsPublicAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Public\SubmitSignupFormPublicAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Public\TwilioSmsWebhookPublicAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Public\UnsubscribeFromCampaignsPublicAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Segments\CountSegmentAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Segments\CreateSegmentAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Segments\DeleteSegmentAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Segments\GetSegmentOptionsAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Segments\GetSegmentsAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Segments\UpdateSegmentAction;
+use HiEvents\Enterprise\Crm\Http\Actions\SignupForms\CreateSignupFormAction;
+use HiEvents\Enterprise\Crm\Http\Actions\SignupForms\DeleteSignupFormAction;
+use HiEvents\Enterprise\Crm\Http\Actions\SignupForms\GetSignupFormsAction;
+use HiEvents\Enterprise\Crm\Http\Actions\SignupForms\UpdateSignupFormAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Sms\DeleteSmsConnectionAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Sms\GetSmsConnectionAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Sms\ListSmsSendersAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Sms\PreviewSmsCampaignDraftAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Sms\SaveSmsConnectionAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Sms\SendSmsTestAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Suppressions\ClearBounceAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Suppressions\GetSuppressionSummaryAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Suppressions\LookupSuppressionsAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Sync\GetContactSyncStatusAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Sync\StartContactSyncAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Tags\CreateTagAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Tags\DeleteTagAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Tags\GetTagsAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Tags\UpdateTagAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Templates\CreateCampaignTemplateAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Templates\DeleteCampaignTemplateAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Templates\GetCampaignTemplatesAction;
+use HiEvents\Enterprise\Crm\Http\Actions\Templates\UpdateCampaignTemplateAction;
 use HiEvents\Enterprise\Licensing\Http\Actions\GetCompliancePublicAction;
 use HiEvents\Enterprise\Licensing\Http\Actions\GetInstanceInfoPublicAction;
 use HiEvents\Enterprise\Licensing\Http\Actions\GetLicenceAdminAction;
@@ -147,6 +240,7 @@ use HiEvents\Http\Actions\Attendees\EditAttendeeAction;
 use HiEvents\Http\Actions\Attendees\ExportAttendeesAction;
 use HiEvents\Http\Actions\Attendees\GetAttendeeAction;
 use HiEvents\Http\Actions\Attendees\GetAttendeeActionPublic;
+use HiEvents\Http\Actions\Attendees\GetAttendeeHistoryAction;
 use HiEvents\Http\Actions\Attendees\GetAttendeesAction;
 use HiEvents\Http\Actions\Attendees\PartialEditAttendeeAction;
 use HiEvents\Http\Actions\Attendees\ResendAttendeeTicketAction;
@@ -239,6 +333,8 @@ use HiEvents\Http\Actions\Events\GetOrganizerEventsPublicAction;
 use HiEvents\Http\Actions\Events\Images\CreateEventImageAction;
 use HiEvents\Http\Actions\Events\Images\DeleteEventImageAction;
 use HiEvents\Http\Actions\Events\Images\GetEventImagesAction;
+use HiEvents\Http\Actions\Events\ShareSuggestions\GenerateEventShareSuggestionsAction;
+use HiEvents\Http\Actions\Events\ShareSuggestions\GetEventShareSuggestionsAction;
 use HiEvents\Http\Actions\Events\Stats\GetEventCountsAction;
 use HiEvents\Http\Actions\Events\Stats\GetEventStatsAction;
 use HiEvents\Http\Actions\Events\UpdateEventAction;
@@ -281,6 +377,7 @@ use HiEvents\Http\Actions\Locations\UpdateLocationAction;
 use HiEvents\Http\Actions\Messages\CancelMessageAction;
 use HiEvents\Http\Actions\Messages\GetMessageRecipientsAction;
 use HiEvents\Http\Actions\Messages\GetMessagesAction;
+use HiEvents\Http\Actions\Messages\PreviewMessageAction;
 use HiEvents\Http\Actions\Messages\SendMessageAction;
 use HiEvents\Http\Actions\OAuth\ApproveOAuthAuthorizationRequestAction;
 use HiEvents\Http\Actions\OAuth\AuthorizeOAuthClientAction;
@@ -298,6 +395,7 @@ use HiEvents\Http\Actions\Orders\DownloadOrderInvoiceAction;
 use HiEvents\Http\Actions\Orders\EditOrderAction;
 use HiEvents\Http\Actions\Orders\ExportOrdersAction;
 use HiEvents\Http\Actions\Orders\GetOrderAction;
+use HiEvents\Http\Actions\Orders\GetOrderHistoryAction;
 use HiEvents\Http\Actions\Orders\GetOrdersAction;
 use HiEvents\Http\Actions\Orders\MarkOrderAsPaidAction;
 use HiEvents\Http\Actions\Orders\Payment\RefundOrderAction;
@@ -375,6 +473,11 @@ use HiEvents\Http\Actions\SelfService\EditAttendeePublicAction;
 use HiEvents\Http\Actions\SelfService\EditOrderPublicAction;
 use HiEvents\Http\Actions\SelfService\ResendAttendeeTicketPublicAction;
 use HiEvents\Http\Actions\SelfService\ResendOrderConfirmationPublicAction;
+use HiEvents\Http\Actions\SelfService\Verification\ConfirmAttendeeVerificationPublicAction;
+use HiEvents\Http\Actions\SelfService\Verification\ConfirmOrderVerificationPublicAction;
+use HiEvents\Http\Actions\SelfService\Verification\RequestAttendeeVerificationPublicAction;
+use HiEvents\Http\Actions\SelfService\Verification\RequestOrderVerificationPublicAction;
+use HiEvents\Http\Actions\SelfService\Verification\StartSessionFromTicketLookupPublicAction;
 use HiEvents\Http\Actions\Sitemap\GetSitemapEventsAction;
 use HiEvents\Http\Actions\Sitemap\GetSitemapIndexAction;
 use HiEvents\Http\Actions\Sitemap\GetSitemapOrganizersAction;
@@ -385,7 +488,21 @@ use HiEvents\Http\Actions\TaxesAndFees\GetTaxOrFeeAction;
 use HiEvents\Http\Actions\Team\GetEventTeamAction;
 use HiEvents\Http\Actions\Team\GetOrganizerTeamAction;
 use HiEvents\Http\Actions\TicketLookup\GetOrdersByLookupTokenAction;
+use HiEvents\Http\Actions\TicketLookup\GetTicketsByLookupTokenAction;
 use HiEvents\Http\Actions\TicketLookup\SendTicketLookupEmailAction;
+use HiEvents\Http\Actions\TicketResale\CloseTicketResaleListingAction;
+use HiEvents\Http\Actions\TicketResale\GetTicketResaleEstimatePublicAction;
+use HiEvents\Http\Actions\TicketResale\GetTicketResaleListingsAction;
+use HiEvents\Http\Actions\TicketResale\ListTicketForResalePublicAction;
+use HiEvents\Http\Actions\TicketResale\RetryTicketResaleRefundAction;
+use HiEvents\Http\Actions\TicketResale\WithdrawTicketResalePublicAction;
+use HiEvents\Http\Actions\TicketTransfer\AcceptTicketTransferPublicAction;
+use HiEvents\Http\Actions\TicketTransfer\CancelOrderTicketTransferPublicAction;
+use HiEvents\Http\Actions\TicketTransfer\CancelTicketTransferPublicAction;
+use HiEvents\Http\Actions\TicketTransfer\DeclineTicketTransferPublicAction;
+use HiEvents\Http\Actions\TicketTransfer\GetTicketTransferClaimPublicAction;
+use HiEvents\Http\Actions\TicketTransfer\StartOrderTicketTransferPublicAction;
+use HiEvents\Http\Actions\TicketTransfer\StartTicketTransferPublicAction;
 use HiEvents\Http\Actions\Users\CancelEmailChangeAction;
 use HiEvents\Http\Actions\Users\ConfirmEmailAddressAction;
 use HiEvents\Http\Actions\Users\ConfirmEmailChangeAction;
@@ -559,6 +676,88 @@ $router->middleware(['auth:api'])->group(
         $router->post('/oauth/authorization-requests/{request_id}/deny', DenyOAuthAuthorizationRequestAction::class)->where('request_id', OAuthAuthorizationStore::REQUEST_ID_PATTERN);
         $router->get('/oauth/connections', GetOAuthConnectionsAction::class);
         $router->delete('/oauth/connections/{connection_id}', DeleteOAuthConnectionAction::class)->whereNumber('connection_id');
+
+        $router->get('/organizers/{organizer_id}/crm/sync', GetContactSyncStatusAction::class)->whereNumber('organizer_id');
+        $router->post('/organizers/{organizer_id}/crm/sync', StartContactSyncAction::class)->whereNumber('organizer_id')->middleware(['ee.licensed:crm', 'throttle:6,60,crm-sync']);
+        $router->get('/organizers/{organizer_id}/crm/contacts', GetContactsAction::class)->whereNumber('organizer_id');
+        $router->get('/organizers/{organizer_id}/crm/contacts/export', ExportContactsAction::class)->whereNumber('organizer_id')->middleware('throttle:20,60,crm-contact-export');
+        $router->post('/organizers/{organizer_id}/crm/contacts/export', ExportSelectedContactsAction::class)->whereNumber('organizer_id')->middleware('throttle:20,60,crm-contact-export');
+        $router->post('/organizers/{organizer_id}/crm/contacts/bulk/tags', BulkTagContactsAction::class)->whereNumber('organizer_id')->middleware(['ee.licensed:crm', 'throttle:30,60,crm-bulk']);
+        $router->post('/organizers/{organizer_id}/crm/contacts/bulk/unsubscribe', BulkUnsubscribeContactsAction::class)->whereNumber('organizer_id')->middleware('throttle:30,60,crm-bulk');
+        $router->post('/organizers/{organizer_id}/crm/contacts/bulk/delete', BulkDeleteContactsAction::class)->whereNumber('organizer_id')->middleware('throttle:30,60,crm-bulk');
+        $router->get('/organizers/{organizer_id}/crm/bulk-operations/{operation_id}', GetBulkOperationAction::class)->whereNumber('organizer_id')->whereNumber('operation_id');
+        $router->post('/organizers/{organizer_id}/crm/bulk-operations/{operation_id}/undo', UndoBulkOperationAction::class)->whereNumber('organizer_id')->whereNumber('operation_id')->middleware('ee.licensed:crm');
+        $router->get('/organizers/{organizer_id}/crm/forms', GetSignupFormsAction::class)->whereNumber('organizer_id');
+        $router->post('/organizers/{organizer_id}/crm/forms', CreateSignupFormAction::class)->whereNumber('organizer_id')->middleware('ee.licensed:crm');
+        $router->put('/organizers/{organizer_id}/crm/forms/{form_id}', UpdateSignupFormAction::class)->whereNumber('organizer_id')->whereNumber('form_id')->middleware('ee.licensed:crm');
+        $router->delete('/organizers/{organizer_id}/crm/forms/{form_id}', DeleteSignupFormAction::class)->whereNumber('organizer_id')->whereNumber('form_id');
+        $router->get('/organizers/{organizer_id}/crm/imports', GetContactImportsAction::class)->whereNumber('organizer_id');
+        $router->post('/organizers/{organizer_id}/crm/imports', ImportContactsAction::class)->whereNumber('organizer_id')->middleware(['ee.licensed:crm', 'throttle:10,60,crm-contact-import']);
+        $router->post('/organizers/{organizer_id}/crm/imports/suppressions/preview', PreviewSuppressionImportAction::class)->whereNumber('organizer_id')->middleware(['ee.licensed:crm', 'throttle:30,60,crm-import-preview']);
+        $router->get('/organizers/{organizer_id}/crm/suppressions/summary', GetSuppressionSummaryAction::class)->whereNumber('organizer_id');
+        $router->post('/organizers/{organizer_id}/crm/suppressions/lookup', LookupSuppressionsAction::class)->whereNumber('organizer_id')->middleware('throttle:30,1,crm-suppression-lookup');
+        $router->post('/organizers/{organizer_id}/crm/contacts/{contact_id}/emails/{contact_email_id}/clear-bounce', ClearBounceAction::class)->whereNumber('organizer_id')->whereNumber('contact_id')->whereNumber('contact_email_id')->middleware('ee.licensed:crm');
+        $router->post('/organizers/{organizer_id}/crm/contacts', CreateContactAction::class)->whereNumber('organizer_id')->middleware('ee.licensed:crm');
+        $router->get('/organizers/{organizer_id}/crm/contacts/{contact_id}', GetContactAction::class)->whereNumber('organizer_id')->whereNumber('contact_id');
+        $router->put('/organizers/{organizer_id}/crm/contacts/{contact_id}', UpdateContactAction::class)->whereNumber('organizer_id')->whereNumber('contact_id')->middleware('ee.licensed:crm');
+        $router->delete('/organizers/{organizer_id}/crm/contacts/{contact_id}', DeleteContactAction::class)->whereNumber('organizer_id')->whereNumber('contact_id');
+        $router->post('/organizers/{organizer_id}/crm/contacts/{contact_id}/merge', MergeContactsAction::class)->whereNumber('organizer_id')->whereNumber('contact_id')->middleware('ee.licensed:crm');
+        $router->post('/organizers/{organizer_id}/crm/contacts/{contact_id}/emails/{contact_email_id}/split', SplitContactEmailAction::class)->whereNumber('organizer_id')->whereNumber('contact_id')->whereNumber('contact_email_id')->middleware('ee.licensed:crm');
+        $router->post('/organizers/{organizer_id}/crm/contacts/{contact_id}/emails/{contact_email_id}/primary', SetPrimaryContactEmailAction::class)->whereNumber('organizer_id')->whereNumber('contact_id')->whereNumber('contact_email_id')->middleware('ee.licensed:crm');
+        $router->put('/organizers/{organizer_id}/crm/contacts/{contact_id}/tags', SetContactTagsAction::class)->whereNumber('organizer_id')->whereNumber('contact_id')->middleware('ee.licensed:crm');
+        $router->post('/organizers/{organizer_id}/crm/contacts/{contact_id}/unsubscribe', UnsubscribeContactAction::class)->whereNumber('organizer_id')->whereNumber('contact_id');
+        $router->get('/organizers/{organizer_id}/crm/sms-connection', GetSmsConnectionAction::class)->whereNumber('organizer_id');
+        $router->post('/organizers/{organizer_id}/crm/sms-connection/senders', ListSmsSendersAction::class)->whereNumber('organizer_id')->middleware(['ee.licensed:crm', 'throttle:20,60,crm-sms-senders']);
+        $router->put('/organizers/{organizer_id}/crm/sms-connection', SaveSmsConnectionAction::class)->whereNumber('organizer_id')->middleware(['ee.licensed:crm', 'throttle:20,60,crm-sms-connection']);
+        $router->post('/organizers/{organizer_id}/crm/sms-connection/test', SendSmsTestAction::class)->whereNumber('organizer_id')->middleware(['ee.licensed:crm', 'throttle:10,60,crm-sms-test']);
+        $router->delete('/organizers/{organizer_id}/crm/sms-connection', DeleteSmsConnectionAction::class)->whereNumber('organizer_id');
+        $router->get('/organizers/{organizer_id}/crm/contacts/{contact_id}/activities', GetContactActivitiesAction::class)->whereNumber('organizer_id')->whereNumber('contact_id');
+        $router->get('/organizers/{organizer_id}/crm/contacts/{contact_id}/consent', GetContactConsentHistoryAction::class)->whereNumber('organizer_id')->whereNumber('contact_id');
+        $router->get('/organizers/{organizer_id}/crm/contacts/{contact_id}/notes', GetContactNotesAction::class)->whereNumber('organizer_id')->whereNumber('contact_id');
+        $router->post('/organizers/{organizer_id}/crm/contacts/{contact_id}/notes', CreateContactNoteAction::class)->whereNumber('organizer_id')->whereNumber('contact_id')->middleware('ee.licensed:crm');
+        $router->delete('/organizers/{organizer_id}/crm/contacts/{contact_id}/notes/{note_id}', DeleteContactNoteAction::class)->whereNumber('organizer_id')->whereNumber('contact_id')->whereNumber('note_id');
+        $router->get('/organizers/{organizer_id}/crm/tags', GetTagsAction::class)->whereNumber('organizer_id');
+        $router->post('/organizers/{organizer_id}/crm/tags', CreateTagAction::class)->whereNumber('organizer_id')->middleware('ee.licensed:crm');
+        $router->put('/organizers/{organizer_id}/crm/tags/{tag_id}', UpdateTagAction::class)->whereNumber('organizer_id')->whereNumber('tag_id')->middleware('ee.licensed:crm');
+        $router->delete('/organizers/{organizer_id}/crm/tags/{tag_id}', DeleteTagAction::class)->whereNumber('organizer_id')->whereNumber('tag_id');
+        $router->get('/organizers/{organizer_id}/crm/segments', GetSegmentsAction::class)->whereNumber('organizer_id');
+        $router->get('/organizers/{organizer_id}/crm/segments/count', CountSegmentAction::class)->whereNumber('organizer_id');
+        $router->get('/organizers/{organizer_id}/crm/segment-options', GetSegmentOptionsAction::class)->whereNumber('organizer_id');
+        $router->post('/organizers/{organizer_id}/crm/segments', CreateSegmentAction::class)->whereNumber('organizer_id')->middleware('ee.licensed:crm');
+        $router->put('/organizers/{organizer_id}/crm/segments/{segment_id}', UpdateSegmentAction::class)->whereNumber('organizer_id')->whereNumber('segment_id')->middleware('ee.licensed:crm');
+        $router->delete('/organizers/{organizer_id}/crm/segments/{segment_id}', DeleteSegmentAction::class)->whereNumber('organizer_id')->whereNumber('segment_id');
+        $router->get('/organizers/{organizer_id}/crm/insights/overview', GetAudienceOverviewAction::class)->whereNumber('organizer_id');
+        $router->get('/organizers/{organizer_id}/crm/insights/retention', GetRetentionAction::class)->whereNumber('organizer_id');
+        $router->get('/organizers/{organizer_id}/crm/insights/lead-time', GetLeadTimeAction::class)->whereNumber('organizer_id');
+        $router->get('/organizers/{organizer_id}/crm/insights/events/{event_id}', GetEventAudienceAction::class)->whereNumber('organizer_id')->whereNumber('event_id');
+        $router->get('/organizers/{organizer_id}/crm/campaigns', GetCampaignsAction::class)->whereNumber('organizer_id');
+        $router->post('/organizers/{organizer_id}/crm/campaigns', CreateCampaignAction::class)->whereNumber('organizer_id')->middleware(['ee.licensed:crm']);
+        $router->get('/organizers/{organizer_id}/crm/campaigns/{campaign_id}', GetCampaignAction::class)->whereNumber('organizer_id')->whereNumber('campaign_id');
+        $router->put('/organizers/{organizer_id}/crm/campaigns/{campaign_id}', UpdateCampaignAction::class)->whereNumber('organizer_id')->whereNumber('campaign_id')->middleware(['ee.licensed:crm']);
+        $router->delete('/organizers/{organizer_id}/crm/campaigns/{campaign_id}', DeleteCampaignAction::class)->whereNumber('organizer_id')->whereNumber('campaign_id');
+        $router->post('/organizers/{organizer_id}/crm/campaigns/preview', PreviewCampaignDraftAction::class)->whereNumber('organizer_id')->middleware(['ee.licensed:crm', 'throttle:120,1,crm-campaign-preview']);
+        $router->post('/organizers/{organizer_id}/crm/campaigns/sms-preview', PreviewSmsCampaignDraftAction::class)->whereNumber('organizer_id')->middleware(['ee.licensed:crm', 'throttle:120,1,crm-campaign-sms-preview']);
+        $router->get('/organizers/{organizer_id}/crm/campaigns/{campaign_id}/recipients', GetCampaignRecipientsAction::class)->whereNumber('organizer_id')->whereNumber('campaign_id');
+        $router->get('/organizers/{organizer_id}/crm/automations', GetAutomationsAction::class)->whereNumber('organizer_id');
+        $router->get('/organizers/{organizer_id}/crm/automations/templates', GetAutomationTemplatesAction::class)->whereNumber('organizer_id');
+        $router->post('/organizers/{organizer_id}/crm/automations', CreateAutomationAction::class)->whereNumber('organizer_id')->middleware('ee.licensed:crm');
+        $router->post('/organizers/{organizer_id}/crm/automations/preview', PreviewAutomationAction::class)->whereNumber('organizer_id')->middleware(['ee.licensed:crm', 'throttle:120,1,crm-automation-preview']);
+        $router->post('/organizers/{organizer_id}/crm/automations/test', SendTestAutomationAction::class)->whereNumber('organizer_id')->middleware(['ee.licensed:crm', 'throttle:10,60,crm-automation-test']);
+        $router->put('/organizers/{organizer_id}/crm/automations/{automation_id}', UpdateAutomationAction::class)->whereNumber('organizer_id')->whereNumber('automation_id')->middleware('ee.licensed:crm');
+        $router->post('/organizers/{organizer_id}/crm/automations/{automation_id}/enable', EnableAutomationAction::class)->whereNumber('organizer_id')->whereNumber('automation_id')->middleware('ee.licensed:crm');
+        $router->post('/organizers/{organizer_id}/crm/automations/{automation_id}/disable', DisableAutomationAction::class)->whereNumber('organizer_id')->whereNumber('automation_id');
+        $router->delete('/organizers/{organizer_id}/crm/automations/{automation_id}', DeleteAutomationAction::class)->whereNumber('organizer_id')->whereNumber('automation_id');
+        $router->get('/organizers/{organizer_id}/crm/campaigns/{campaign_id}/preview', GetCampaignPreviewAction::class)->whereNumber('organizer_id')->whereNumber('campaign_id');
+        $router->get('/organizers/{organizer_id}/crm/campaigns/{campaign_id}/send-check', GetCampaignSendCheckAction::class)->whereNumber('organizer_id')->whereNumber('campaign_id');
+        $router->post('/organizers/{organizer_id}/crm/campaigns/{campaign_id}/send', SendCampaignAction::class)->whereNumber('organizer_id')->whereNumber('campaign_id')->middleware(['ee.licensed:crm', 'throttle:20,60,crm-campaign-send']);
+        $router->post('/organizers/{organizer_id}/crm/campaigns/{campaign_id}/cancel', CancelCampaignAction::class)->whereNumber('organizer_id')->whereNumber('campaign_id');
+        $router->post('/organizers/{organizer_id}/crm/campaigns/{campaign_id}/duplicate', DuplicateCampaignAction::class)->whereNumber('organizer_id')->whereNumber('campaign_id')->middleware('ee.licensed:crm');
+        $router->post('/organizers/{organizer_id}/crm/campaigns/{campaign_id}/end-early-access', EndEarlyAccessAction::class)->whereNumber('organizer_id')->whereNumber('campaign_id');
+        $router->get('/organizers/{organizer_id}/crm/templates', GetCampaignTemplatesAction::class)->whereNumber('organizer_id');
+        $router->post('/organizers/{organizer_id}/crm/templates', CreateCampaignTemplateAction::class)->whereNumber('organizer_id')->middleware('ee.licensed:crm');
+        $router->put('/organizers/{organizer_id}/crm/templates/{template_id}', UpdateCampaignTemplateAction::class)->whereNumber('organizer_id')->whereNumber('template_id')->middleware('ee.licensed:crm');
+        $router->delete('/organizers/{organizer_id}/crm/templates/{template_id}', DeleteCampaignTemplateAction::class)->whereNumber('organizer_id')->whereNumber('template_id');
+        $router->post('/organizers/{organizer_id}/crm/campaigns/{campaign_id}/test', SendTestCampaignAction::class)->whereNumber('organizer_id')->whereNumber('campaign_id')->middleware(['ee.licensed:crm', 'throttle:10,60,crm-campaign-test']);
     }
 );
 
@@ -676,6 +875,8 @@ $router->middleware(['auth:api,sanctum'])->group(
         $router->delete('/events/{event_id}', DeleteEventAction::class);
         $router->get('/events/{event_id}/deletion-status', GetEventDeletionStatusAction::class);
         $router->post('/events/{event_id}/duplicate', DuplicateEventAction::class);
+        $router->get('/events/{event_id}/share-suggestions', GetEventShareSuggestionsAction::class);
+        $router->post('/events/{event_id}/share-suggestions', GenerateEventShareSuggestionsAction::class)->middleware('throttle:6,1,event-share-suggestions');
 
         // Product Categories
         $router->post('/events/{event_id}/product-categories', CreateProductCategoryAction::class);
@@ -712,6 +913,7 @@ $router->middleware(['auth:api,sanctum'])->group(
         $router->get('/events/{event_id}/attendees/{attendee_id}', GetAttendeeAction::class);
         $router->put('/events/{event_id}/attendees/{attendee_id}', EditAttendeeAction::class);
         $router->patch('/events/{event_id}/attendees/{attendee_id}', PartialEditAttendeeAction::class);
+        $router->get('/events/{event_id}/attendees/{attendee_id}/history', GetAttendeeHistoryAction::class);
         $router->post('/events/{event_id}/attendees/export', ExportAttendeesAction::class);
         $router->post('/events/{event_id}/attendees/{attendee_public_id}/resend-ticket', ResendAttendeeTicketAction::class);
         $router->post('/events/{event_id}/attendees/{attendee_public_id}/check_in', CheckInAttendeeAction::class);
@@ -721,11 +923,15 @@ $router->middleware(['auth:api,sanctum'])->group(
         $router->get('/events/{event_id}/badges', GetBadgesAction::class);
         $router->get('/events/{event_id}/badges/stats', GetBadgeStatsAction::class);
         $router->post('/events/{event_id}/badges/printed', MarkBadgesPrintedAction::class);
+        $router->get('/events/{event_id}/resale-listings', GetTicketResaleListingsAction::class);
+        $router->post('/events/{event_id}/resale-listings/{listing_id}/close', CloseTicketResaleListingAction::class);
+        $router->post('/events/{event_id}/resale-listings/{listing_id}/retry-refund', RetryTicketResaleRefundAction::class);
 
         // Orders
         $router->get('/events/{event_id}/orders', GetOrdersAction::class);
         $router->get('/events/{event_id}/orders/{order_id}', GetOrderAction::class);
         $router->put('/events/{event_id}/orders/{order_id}', EditOrderAction::class);
+        $router->get('/events/{event_id}/orders/{order_id}/history', GetOrderHistoryAction::class);
         $router->post('/events/{event_id}/orders/{order_id}/refund', RefundOrderAction::class);
         $router->post('/events/{event_id}/orders/{order_id}/resend_confirmation', ResendOrderConfirmationAction::class);
         $router->post('/events/{event_id}/orders/{order_id}/cancel', CancelOrderAction::class);
@@ -783,7 +989,8 @@ $router->middleware(['auth:api,sanctum'])->group(
         $router->delete('/events/{event_id}/lineup/schedule-items/{schedule_item_id}', DeleteScheduleItemAction::class);
 
         // Messages
-        $router->post('/events/{event_id}/messages', SendMessageAction::class);
+        $router->post('/events/{event_id}/messages', SendMessageAction::class)->middleware('throttle:60,60,message-send');
+        $router->post('/events/{event_id}/messages/preview', PreviewMessageAction::class)->middleware('throttle:120,1,message-preview');
         $router->get('/events/{event_id}/messages', GetMessagesAction::class);
         $router->post('/events/{event_id}/messages/{message_id}/cancel', CancelMessageAction::class);
         $router->get('/events/{event_id}/messages/{message_id}/recipients', GetMessageRecipientsAction::class);
@@ -892,6 +1099,10 @@ $router->prefix('/admin')->middleware(['auth:api'])->group(
         // Messages
         $router->get('/messages', GetAllAdminMessagesAction::class);
         $router->post('/messages/{message_id}/approve', ApproveMessageAction::class);
+
+        $router->get('/crm/campaigns/pending-review', GetCampaignsPendingReviewAction::class);
+        $router->post('/crm/campaigns/{campaign_id}/approve', ApproveCampaignAction::class)->whereNumber('campaign_id')->middleware('ee.licensed:crm');
+        $router->post('/crm/campaigns/{campaign_id}/reject', RejectCampaignAction::class)->whereNumber('campaign_id');
 
         // Spam Events
         $router->get('/spam-events', GetAllSpamEventsAction::class);
@@ -1029,6 +1240,33 @@ $router->prefix('/public')->group(
             ->withoutMiddleware(ThrottleRequests::class.':api');
         $router->post('/webhooks/email-delivery/{provider}', HandleEmailDeliveryWebhookPublicAction::class)
             ->withoutMiddleware(ThrottleRequests::class.':api');
+        $router->post('/webhooks/sms/twilio/{public_id}/{kind}', TwilioSmsWebhookPublicAction::class)
+            ->where('public_id', 'smsc_[a-z0-9]{24}')
+            ->whereIn('kind', [TwilioSmsWebhookPublicAction::KIND_STATUS, TwilioSmsWebhookPublicAction::KIND_INBOUND])
+            ->withoutMiddleware(ThrottleRequests::class.':api')
+            ->middleware('throttle:crm-sms-webhook');
+        $router->get('/crm/forms/{public_id}', GetSignupFormPublicAction::class)
+            ->where('public_id', 'sf_[a-z0-9]{16}')
+            ->middleware('throttle:300,1,crm-form-view');
+        $router->post('/crm/forms/{public_id}/submissions', SubmitSignupFormPublicAction::class)
+            ->where('public_id', 'sf_[a-z0-9]{16}')
+            ->middleware('throttle:crm-form-submit');
+        $router->get('/organizers/{organizer_id}/signup-form', GetOrganizerSignupFormPublicAction::class)
+            ->whereNumber('organizer_id')
+            ->middleware('throttle:300,1,crm-form-view');
+        $router->get('/crm/confirm/{token}', GetSubscriptionConfirmationPublicAction::class)
+            ->where('token', '[A-Za-z0-9_-]{20,64}')
+            ->middleware('throttle:60,1,crm-confirm-view');
+        $router->post('/crm/confirm/{token}', ConfirmSubscriptionPublicAction::class)
+            ->where('token', '[A-Za-z0-9_-]{20,64}')
+            ->middleware('throttle:30,1,crm-confirm');
+        $router->get('/crm/unsubscribe/{token}', GetCampaignUnsubscribePublicAction::class)
+            ->middleware('throttle:300,1,crm-unsubscribe-view');
+        $router->post('/crm/unsubscribe/{token}', UnsubscribeFromCampaignsPublicAction::class)
+            ->withoutMiddleware(ThrottleRequests::class.':api')
+            ->middleware('throttle:2000,1,crm-unsubscribe');
+        $router->post('/crm/unsubscribe/{token}/resubscribe', ResubscribeToCampaignsPublicAction::class)
+            ->middleware('throttle:30,1,crm-resubscribe');
         $router->post('/lifecycle-emails/unsubscribe/{token}', UnsubscribeFromLifecycleEmailsAction::class)
             ->middleware(['lifecycle-emails', 'throttle:30,1,lifecycle-email-unsubscribe']);
 
@@ -1082,16 +1320,36 @@ $router->prefix('/public')->group(
         $router->post('/ticket-lookup', SendTicketLookupEmailAction::class)
             ->middleware('throttle:10,1,ticket-lookup');
         $router->get('/ticket-lookup/{token}', GetOrdersByLookupTokenAction::class);
+        $router->get('/ticket-lookup/{token}/tickets', GetTicketsByLookupTokenAction::class);
+        $router->post('/ticket-lookup/{token}/session', StartSessionFromTicketLookupPublicAction::class)->middleware('throttle:20,1,ticket-lookup-session');
 
         // Self-service order and attendee edits
         $router->prefix('/events/{event_id}/order/{order_short_id}')->group(function (Router $router): void {
             $router->patch('/', EditOrderPublicAction::class)->middleware('throttle:self-service-edit');
+            $router->post('/verification', RequestOrderVerificationPublicAction::class)->middleware(['throttle:self-service-verify-request', 'throttle:60,60,self-service-verify-ip']);
+            $router->post('/verification/confirm', ConfirmOrderVerificationPublicAction::class)->middleware(['throttle:self-service-verify-confirm', 'throttle:180,60,self-service-verify-confirm-ip']);
             $router->post('/resend-confirmation', ResendOrderConfirmationPublicAction::class)->middleware('throttle:self-service-email');
 
             $router->patch('/attendees/{attendee_short_id}', EditAttendeePublicAction::class)->middleware('throttle:self-service-edit');
             $router->post('/attendees/{attendee_short_id}/resend-ticket', ResendAttendeeTicketPublicAction::class)->middleware('throttle:self-service-email');
             $router->put('/attendees/{attendee_short_id}/seat', ChangeAttendeeSeatPublicAction::class)->middleware('throttle:self-service-edit');
+            $router->post('/attendees/{attendee_short_id}/transfer', StartOrderTicketTransferPublicAction::class)->middleware(['throttle:self-service-transfer', 'throttle:40,60,self-service-transfer-ip']);
+            $router->delete('/attendees/{attendee_short_id}/transfer', CancelOrderTicketTransferPublicAction::class)->middleware('throttle:self-service-edit');
+            $router->get('/attendees/{attendee_short_id}/resale', GetTicketResaleEstimatePublicAction::class)->middleware('throttle:30,1,self-service-resale-estimate');
+            $router->post('/attendees/{attendee_short_id}/resale', ListTicketForResalePublicAction::class)->middleware(['throttle:self-service-resale', 'throttle:40,60,self-service-resale-ip']);
+            $router->delete('/attendees/{attendee_short_id}/resale', WithdrawTicketResalePublicAction::class)->middleware('throttle:self-service-edit');
         });
+
+        $router->prefix('/events/{event_id}/attendees/{attendee_short_id}')->group(function (Router $router): void {
+            $router->post('/verification', RequestAttendeeVerificationPublicAction::class)->middleware(['throttle:self-service-verify-request', 'throttle:60,60,self-service-verify-ip']);
+            $router->post('/verification/confirm', ConfirmAttendeeVerificationPublicAction::class)->middleware(['throttle:self-service-verify-confirm', 'throttle:180,60,self-service-verify-confirm-ip']);
+            $router->post('/transfer', StartTicketTransferPublicAction::class)->middleware(['throttle:self-service-transfer', 'throttle:40,60,self-service-transfer-ip']);
+            $router->delete('/transfer', CancelTicketTransferPublicAction::class)->middleware('throttle:self-service-edit');
+        });
+
+        $router->get('/ticket-transfers/{token}', GetTicketTransferClaimPublicAction::class)->middleware('throttle:60,1,ticket-transfer-claim');
+        $router->post('/ticket-transfers/{token}/accept', AcceptTicketTransferPublicAction::class)->middleware('throttle:20,1,ticket-transfer-claim-write');
+        $router->post('/ticket-transfers/{token}/decline', DeclineTicketTransferPublicAction::class)->middleware('throttle:20,1,ticket-transfer-claim-write');
 
         // Sitemap
         $router->get('/sitemap.xml', GetSitemapIndexAction::class);

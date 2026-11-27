@@ -11,6 +11,7 @@ use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Helper\Url;
 use HiEvents\Mail\BaseMail;
 use HiEvents\Mail\Concerns\ContainsEventContent;
+use HiEvents\Mail\Concerns\SentOnBehalfOfOrganizer;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Services\Domain\Mail\DTO\MailBrandingDTO;
@@ -34,23 +35,32 @@ class MailBrandingService
 
         $isHiEvents = $this->accountSubscriptionAccessService->areSubscriptionsAvailable();
 
+        $namedOrganizer = $mail instanceof SentOnBehalfOfOrganizer ? $mail->getContentOrganizer() : null;
+
+        $accountId = $event?->getAccountId() ?? $namedOrganizer?->getAccountId();
+
         $hasSubscription = $isHiEvents
-            && $event !== null
-            && $this->accountSubscriptionAccessService->hasActiveSubscription($event->getAccountId());
+            && $accountId !== null
+            && $this->accountSubscriptionAccessService->hasActiveSubscription($accountId);
 
         $showPromo = $isHiEvents && $mail->showsHiEventsPromo() && ! $hasSubscription;
 
-        $organizer = $hasSubscription ? $this->findOrganizer($event) : null;
+        $organizer = match (true) {
+            $event !== null && ($hasSubscription || $mail->isSentToBuyers()) => $this->findOrganizer($event->getOrganizerId(), $event->getAccountId()),
+            $namedOrganizer !== null && $hasSubscription => $this->findOrganizer($namedOrganizer->getId(), $accountId),
+            default => $namedOrganizer,
+        };
 
-        if ($organizer === null) {
+        if (! $hasSubscription || $organizer === null) {
             return new MailBrandingDTO(
                 hideHiEventsBranding: false,
                 showHiEventsPromo: $showPromo,
                 promoUrl: $this->promoUrl(),
+                organizerName: $this->headerOrganizerName($mail, $organizer),
             );
         }
 
-        $accent = $this->emailAccentColorService->fromAccent($this->eventAccent($event));
+        $accent = $event === null ? null : $this->emailAccentColorService->fromAccent($this->eventAccent($event));
 
         return new MailBrandingDTO(
             hideHiEventsBranding: true,
@@ -59,7 +69,7 @@ class MailBrandingService
             organizerName: $organizer->getName(),
             organizerLogoUrl: $this->organizerLogoUrl($organizer),
             organizerUrl: $organizer->getWebsite(),
-            senderName: $mail->isSentToBuyers() ? $this->senderName($organizer->getName()) : null,
+            senderName: $event !== null && $mail->isSentToBuyers() ? $this->safeDisplayName($organizer->getName()) : null,
             buttonColor: $accent?->buttonColor,
             buttonTextColor: $accent?->buttonTextColor,
             linkColor: $accent?->linkColor,
@@ -78,7 +88,16 @@ class MailBrandingService
         return is_string($accent) ? $accent : null;
     }
 
-    private function senderName(string $organizerName): ?string
+    private function headerOrganizerName(BaseMail $mail, ?OrganizerDomainObject $organizer): ?string
+    {
+        if ($organizer === null || ! $mail->isSentToBuyers()) {
+            return null;
+        }
+
+        return $this->safeDisplayName($organizer->getName());
+    }
+
+    private function safeDisplayName(string $organizerName): ?string
     {
         if (str_contains($organizerName, '@') || preg_match('/[\p{Cf}\x{80}-\x{9F}]/u', $organizerName)) {
             return null;
@@ -108,9 +127,9 @@ class MailBrandingService
         return Str::lower((string) preg_replace('/[^\p{L}\p{N}]+/u', '', $value));
     }
 
-    private function findOrganizer(EventDomainObject $event): ?OrganizerDomainObject
+    private function findOrganizer(?int $organizerId, int $accountId): ?OrganizerDomainObject
     {
-        if ($event->getOrganizerId() === null) {
+        if ($organizerId === null) {
             return null;
         }
 
@@ -118,8 +137,8 @@ class MailBrandingService
         return $this->organizerRepository
             ->loadRelation(ImageDomainObject::class)
             ->findFirstWhere([
-                'id' => $event->getOrganizerId(),
-                'account_id' => $event->getAccountId(),
+                'id' => $organizerId,
+                'account_id' => $accountId,
             ]);
     }
 

@@ -38,6 +38,13 @@ interface AttendeeRepositoryInterface extends RepositoryInterface
     public function getBadgeStats(int $eventId, bool $includeAwaitingPayment, ?int $eventOccurrenceId = null): BadgeStatsDTO;
 
     /**
+     * @return Collection<int, AttendeeDomainObject>
+     */
+    public function findGuestTicketsByEmail(string $email): Collection;
+
+    public function findByIdLocked(int $id): AttendeeDomainObject;
+
+    /**
      * @return array<int, int> product_price_id => quantity
      */
     public function getSoldQuantitiesByPriceForOccurrence(int $occurrenceId): array;

@@ -1,17 +1,7 @@
-import {Anchor, Badge, Button, Progress} from '@mantine/core';
+import {Button, Progress, VisuallyHidden} from '@mantine/core';
 import {CreateButton} from "../CreateButton";
 import {CheckInList, Event, EventType, IdParam} from "../../../types.ts";
-import {
-    IconCalendarEvent,
-    IconCheck,
-    IconCopy,
-    IconPencil,
-    IconPlus,
-    IconQrcode,
-    IconTrash,
-    IconUsers,
-    IconX,
-} from "@tabler/icons-react";
+import {IconCopy, IconPencil, IconPlus, IconQrcode, IconTrash} from "@tabler/icons-react";
 import {useMemo, useState} from "react";
 import {useDisclosure, useMediaQuery} from "@mantine/hooks";
 import {useParams} from "react-router";
@@ -23,15 +13,17 @@ import {useDeleteCheckInList} from "../../../mutations/useDeleteCheckInList";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 import {TanStackTable, TanStackTableColumn} from "../TanStackTable";
-import {ActionMenu} from '../ActionMenu';
+import {ActionMenu, RowActionsTarget} from '../ActionMenu';
+import {CellLink, CellText, IdentityCell} from "../TanStackTable/cells.tsx";
+import {StatusBadge} from "../StatusBadge";
 import {CellContext} from "@tanstack/react-table";
-import Truncate from "../Truncate";
 import {formatDateWithLocale} from "../../../utilites/dates.ts";
 import classes from './CheckInListTable.module.scss';
 
 interface CheckInListTableProps {
     checkInLists: CheckInList[];
     openCreateModal: () => void;
+    isRefreshing?: boolean;
     event?: Event;
 }
 
@@ -43,14 +35,14 @@ export const copyCheckInListLink = (shortId: string) => {
     });
 };
 
-export const CheckInListTable = ({checkInLists, openCreateModal, event}: CheckInListTableProps) => {
+export const CheckInListTable = ({checkInLists, openCreateModal, event, isRefreshing}: CheckInListTableProps) => {
     const [editModalOpen, {open: openEditModal, close: closeEditModal}] = useDisclosure(false);
     const [selectedCheckInListId, setSelectedCheckInListId] = useState<IdParam>();
     const deleteMutation = useDeleteCheckInList();
     const {eventId} = useParams();
     const badgesEnabled = useEventFeature(eventId, 'BADGES');
     const isRecurring = event?.type === EventType.RECURRING;
-    const isMobile = useMediaQuery('(max-width: 768px)');
+    const isMobile = useMediaQuery('(max-width: 62em)');
 
     const handleDeleteCheckInList = (checkInListId: IdParam, eventId: IdParam) => {
         deleteMutation.mutate({checkInListId, eventId}, {
@@ -70,136 +62,95 @@ export const CheckInListTable = ({checkInLists, openCreateModal, event}: CheckIn
                     id: 'name',
                     header: t`Check-In List`,
                     enableHiding: false,
-                    cell: (info: CellContext<CheckInList, unknown>) => {
-                        const list = info.row.original;
-                        const coversAllTickets = !list.products || list.products.length === 0;
-                        return (
-                            <div className={classes.listDetails}>
-                                <div className={classes.nameRow}>
-                                    <Anchor
-                                        className={classes.listName}
-                                        onClick={() => {
-                                            setSelectedCheckInListId(list.id as IdParam);
-                                            openEditModal();
-                                        }}
-                                    >
-                                        <Truncate text={list.name} length={40}/>
-                                    </Anchor>
-                                    {list.is_system_default && (
-                                        <Badge size="xs" color="gray" variant="light">{t`Default`}</Badge>
-                                    )}
-                                    {badgesEnabled && list.badge_printing_enabled && (
-                                        <Badge size="xs" color="gray" variant="light">{t`Prints badges`}</Badge>
-                                    )}
-                                    {list.kiosk_mode && (
-                                        <Badge size="xs" color="gray" variant="light">{t`Kiosk`}</Badge>
-                                    )}
-                                </div>
-                                <div className={classes.productsText}>
-                                    {coversAllTickets
-                                        ? t`Covers every ticket`
-                                        : list.products!.length === 1
-                                            ? t`Includes 1 product`
-                                            : <Trans>Includes {list.products!.length} products</Trans>
-                                    }
-                                </div>
-                            </div>
-                        );
-                    },
-                    meta: {
-                        headerStyle: {minWidth: 250},
-                    },
+                    meta: {sticky: 'left'},
+                    cell: ({row: {original: list}}: CellContext<CheckInList, unknown>) => (
+                        <IdentityCell
+                            stacked
+                            secondary={!list.products || list.products.length === 0
+                                ? t`Covers every ticket`
+                                : list.products.length === 1
+                                    ? t`Includes 1 product`
+                                    : <Trans>Includes {list.products.length} products</Trans>}
+                            primary={(
+                                <CellLink
+                                    strong
+                                    title={list.name}
+                                    onClick={() => {
+                                        setSelectedCheckInListId(list.id as IdParam);
+                                        openEditModal();
+                                    }}
+                                >
+                                    {list.name}
+                                </CellLink>
+                            )}
+                            trailing={(
+                                <>
+                                    {list.is_system_default && <StatusBadge tone="neutral">{t`Default`}</StatusBadge>}
+                                    {badgesEnabled && list.badge_printing_enabled && <StatusBadge tone="neutral">{t`Prints badges`}</StatusBadge>}
+                                    {list.kiosk_mode && <StatusBadge tone="neutral">{t`Kiosk`}</StatusBadge>}
+                                </>
+                            )}
+                        />
+                    ),
                 },
                 {
                     id: 'occurrence',
                     header: t`Date`,
-                    enableHiding: true,
-                    cell: (info: CellContext<CheckInList, unknown>) => {
-                        const list = info.row.original;
+                    cell: ({row: {original: list}}: CellContext<CheckInList, unknown>) => {
                         const occurrence = list.event_occurrence;
 
                         if (!occurrence || !event?.timezone) {
-                            return (
-                                <div className={classes.occurrenceText}>
-                                    {t`All Dates`}
-                                </div>
-                            );
+                            return <CellText muted>{t`All Dates`}</CellText>;
                         }
 
                         return (
-                            <div className={classes.occurrenceContainer}>
-                                <span className={classes.occurrenceChip}>
-                                    <IconCalendarEvent size={12}/>
-                                    {formatDateWithLocale(occurrence.start_date, 'shortDate', event.timezone)}
-                                    {' '}
-                                    {formatDateWithLocale(occurrence.start_date, 'timeOnly', event.timezone)}
-                                    {occurrence.label && ` · ${occurrence.label}`}
-                                </span>
-                            </div>
+                            <CellText maxWidth={240}>
+                                {formatDateWithLocale(occurrence.start_date, 'shortDate', event.timezone)}
+                                {' '}
+                                {formatDateWithLocale(occurrence.start_date, 'timeOnly', event.timezone)}
+                                {occurrence.label && ` · ${occurrence.label}`}
+                            </CellText>
                         );
-                    },
-                    meta: {
-                        headerStyle: {minWidth: 160},
                     },
                 },
                 {
                     id: 'progress',
                     header: t`Check-Ins`,
-                    enableHiding: true,
-                    cell: (info: CellContext<CheckInList, unknown>) => {
-                        const list = info.row.original;
+                    cell: ({row: {original: list}}: CellContext<CheckInList, unknown>) => {
                         const percentage = list.total_attendees === 0
                             ? 0
                             : (list.checked_in_attendees / list.total_attendees) * 100;
+
                         return (
-                            <div className={classes.progressContainer}>
+                            <span className={classes.progress}>
                                 <Progress
+                                    className={classes.progressBar}
                                     value={percentage}
                                     radius="xl"
                                     color={list.checked_in_attendees === list.total_attendees && list.total_attendees > 0 ? 'primary' : 'green'}
-                                    size="md"
+                                    size="sm"
                                 />
-                                <div className={classes.progressText}>
-                                    <IconUsers size={14}/>
-                                    {list.checked_in_attendees} / {list.total_attendees}
-                                </div>
-                            </div>
+                                {list.checked_in_attendees} / {list.total_attendees}
+                            </span>
                         );
-                    },
-                    meta: {
-                        headerStyle: {minWidth: 160},
                     },
                 },
                 {
                     id: 'status',
                     header: t`Status`,
-                    enableHiding: true,
-                    cell: (info: CellContext<CheckInList, unknown>) => {
-                        const list = info.row.original;
+                    cell: ({row: {original: list}}: CellContext<CheckInList, unknown>) => {
                         const isActive = !list.is_expired && list.is_active;
+
                         return (
-                            <div className={classes.statusBadge} data-status={isActive ? 'active' : 'inactive'}>
-                                {isActive ? (
-                                    <>
-                                        <IconCheck size={14}/>
-                                        {t`Active`}
-                                    </>
-                                ) : (
-                                    <>
-                                        <IconX size={14}/>
-                                        {t`Inactive`}
-                                    </>
-                                )}
-                            </div>
+                            <StatusBadge tone={isActive ? 'positive' : 'neutral'}>
+                                {isActive ? t`Active` : t`Inactive`}
+                            </StatusBadge>
                         );
-                    },
-                    meta: {
-                        headerStyle: {minWidth: 100},
                     },
                 },
                 {
                     id: 'actions',
-                    header: '',
+                    header: () => <VisuallyHidden>{t`Actions`}</VisuallyHidden>,
                     enableHiding: false,
                     cell: (info: CellContext<CheckInList, unknown>) => {
                         const list = info.row.original;
@@ -255,8 +206,8 @@ export const CheckInListTable = ({checkInLists, openCreateModal, event}: CheckIn
                             <div className={classes.rowActions}>
                                 {!isMobile && (
                                     <Button
-                                        size="xs"
-                                        variant="light"
+                                        size="compact-sm"
+                                        variant="default"
                                         leftSection={<IconQrcode size={14}/>}
                                         onClick={() => window.open(checkInListUrl(list.short_id), '_blank')}
                                         data-testid="check-in-list-open-button"
@@ -264,7 +215,7 @@ export const CheckInListTable = ({checkInLists, openCreateModal, event}: CheckIn
                                         {t`Open Check-In`}
                                     </Button>
                                 )}
-                                <ActionMenu itemsGroups={groups} dataTestId="check-in-list-actions-menu"/>
+                                <ActionMenu itemsGroups={groups} dataTestId="check-in-list-actions-menu" target={<RowActionsTarget/>}/>
                             </div>
                         );
                     },
@@ -281,7 +232,7 @@ export const CheckInListTable = ({checkInLists, openCreateModal, event}: CheckIn
                 return true;
             });
         },
-        [eventId, isRecurring, event?.timezone, isMobile]
+        [eventId, isRecurring, event?.timezone, isMobile, badgesEnabled]
     );
 
     if (checkInLists.length === 0) {
@@ -310,10 +261,10 @@ export const CheckInListTable = ({checkInLists, openCreateModal, event}: CheckIn
 
     return (
         <>
-            <TanStackTable
+            <TanStackTable rowLines={2}
                 data={checkInLists}
                 columns={columns}
-                storageKey="check-in-lists-table"
+                isRefreshing={isRefreshing}
             />
             {(editModalOpen && selectedCheckInListId)
                 && <EditCheckInListModal onClose={closeEditModal}

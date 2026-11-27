@@ -6,6 +6,7 @@ use HiEvents\DataTransferObjects\BaseDTO;
 use HiEvents\DomainObjects\Enums\AttendeeDetailsCollectionMethod;
 use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
+use HiEvents\DomainObjects\Enums\PhoneCollection;
 use HiEvents\DomainObjects\Enums\PriceDisplayMode;
 use HiEvents\DomainObjects\Enums\TicketDateDisplayMode;
 use HiEvents\DomainObjects\OrganizerDomainObject;
@@ -67,6 +68,8 @@ class UpdateEventSettingsDTO extends BaseDTO
         public readonly ?array $ticket_design_settings = null,
 
         public readonly bool $show_marketing_opt_in = true,
+        public readonly PhoneCollection $phone_collection = PhoneCollection::OFF,
+        public readonly bool $show_sms_opt_in = false,
 
         public readonly bool $allow_copy_details_to_all_attendees = true,
 
@@ -76,6 +79,11 @@ class UpdateEventSettingsDTO extends BaseDTO
         public readonly ?array $homepage_sections = null,
 
         public readonly bool $allow_attendee_self_edit = false,
+        public readonly bool $allow_ticket_transfer = true,
+        public readonly int $ticket_transfer_cutoff_minutes = 0,
+        public readonly ?int $max_transfers_per_ticket = null,
+        public readonly bool $allow_ticket_resale = false,
+        public readonly int $ticket_resale_cutoff_minutes = 120,
 
         public readonly bool $show_available_occurrence_capacity = false,
         public readonly bool $hide_sold_out_occurrences = false,
@@ -144,6 +152,8 @@ class UpdateEventSettingsDTO extends BaseDTO
             ],
 
             show_marketing_opt_in: true,
+            phone_collection: PhoneCollection::OFF,
+            show_sms_opt_in: false,
 
             allow_copy_details_to_all_attendees: true,
 

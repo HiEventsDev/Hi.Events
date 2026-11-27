@@ -5,6 +5,7 @@ namespace HiEvents\Services\Application\Handlers\Attendee;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
 use HiEvents\DomainObjects\Enums\ProductPriceType;
+use HiEvents\DomainObjects\Enums\TicketResaleCloseReason;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\ProductDomainObject;
@@ -16,12 +17,15 @@ use HiEvents\Exceptions\NoTicketsAvailableException;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Attendee\DTO\EditAttendeeDTO;
+use HiEvents\Services\Domain\Attendee\OrganizerAttendeeIdentityChangeService;
 use HiEvents\Services\Domain\Badge\BadgeReprintService;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
+use HiEvents\Services\Domain\TicketResale\TicketResaleClosureService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\AttendeeEvent;
+use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Validation\ValidationException;
 use Throwable;
@@ -36,6 +40,9 @@ class EditAttendeeHandler
         private readonly DomainEventDispatcherService $domainEventDispatcherService,
         private readonly AvailableProductQuantitiesFetchService $availableProductQuantitiesFetchService,
         private readonly SeatClaimService $seatClaimService,
+        private readonly OrganizerAttendeeIdentityChangeService $identityChangeService,
+        private readonly TicketResaleClosureService $resaleClosureService,
+        private readonly TransactionLockService $transactionLockService,
         private readonly BadgeReprintService $badgeReprintService,
     ) {}
 
@@ -46,6 +53,8 @@ class EditAttendeeHandler
     public function handle(EditAttendeeDTO $editAttendeeDTO): AttendeeDomainObject
     {
         return $this->databaseManager->transaction(function () use ($editAttendeeDTO) {
+            $this->transactionLockService->lockEvent($editAttendeeDTO->event_id);
+
             $attendee = $this->getAttendee($editAttendeeDTO);
 
             $this->validateProductId($editAttendeeDTO, $attendee);
@@ -54,8 +63,10 @@ class EditAttendeeHandler
 
             $updatedAttendee = $this->badgeReprintService->flagIfBadgeDetailsChanged(
                 before: $attendee,
-                after: $this->updateAttendee($editAttendeeDTO),
+                after: $this->updateAttendee($editAttendeeDTO, $attendee),
             );
+
+            $this->identityChangeService->record($attendee, $updatedAttendee);
 
             $this->domainEventDispatcherService->dispatch(
                 new AttendeeEvent(
@@ -71,6 +82,7 @@ class EditAttendeeHandler
     private function adjustProductQuantities(AttendeeDomainObject $attendee, EditAttendeeDTO $editAttendeeDTO): void
     {
         if ($attendee->getProductPriceId() !== $editAttendeeDTO->product_price_id) {
+            $this->resaleClosureService->closeUnheldForAttendee($attendee->getId(), TicketResaleCloseReason::TICKET_TYPE_CHANGED);
             $this->productQuantityService->decreaseQuantitySold($attendee->getProductPriceId(), 1, $attendee->getEventOccurrenceId());
             $this->productQuantityService->increaseQuantitySold($editAttendeeDTO->product_price_id, 1, $attendee->getEventOccurrenceId());
 
@@ -84,7 +96,7 @@ class EditAttendeeHandler
         }
     }
 
-    private function updateAttendee(EditAttendeeDTO $editAttendeeDTO): AttendeeDomainObject
+    private function updateAttendee(EditAttendeeDTO $editAttendeeDTO, AttendeeDomainObject $attendee): AttendeeDomainObject
     {
         return $this->attendeeRepository->updateByIdWhere($editAttendeeDTO->attendee_id, [
             'first_name' => $editAttendeeDTO->first_name,
@@ -93,6 +105,7 @@ class EditAttendeeHandler
             'product_id' => $editAttendeeDTO->product_id,
             'product_price_id' => $editAttendeeDTO->product_price_id,
             'notes' => $editAttendeeDTO->notes,
+            ...$this->identityChangeService->credentialAttributesFor($attendee, $editAttendeeDTO->email),
         ], [
             'event_id' => $editAttendeeDTO->event_id,
         ]);

@@ -1,0 +1,46 @@
+.section {
+  margin-top: 24px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--hi-color-text-muted);
+}
+
+.note {
+  margin: -4px 0 var(--mantine-spacing-md);
+  font-size: var(--mantine-font-size-xs);
+  color: var(--mantine-color-gray-6);
+}
+
+.setup {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--mantine-spacing-sm);
+  padding: 14px 18px;
+
+  p {
+    margin: 0;
+    font-size: var(--mantine-font-size-sm);
+    color: var(--mantine-color-gray-7);
+  }
+}
+
+.fullLink {
+  @media (pointer: coarse) {
+    min-height: 40px;
+  }
+}

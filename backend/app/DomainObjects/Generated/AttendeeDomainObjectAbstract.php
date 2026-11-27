@@ -34,6 +34,7 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     final public const SEAT_LABEL = 'seat_label';
     final public const BADGE_PRINTED_AT = 'badge_printed_at';
     final public const BADGE_PRINT_COUNT = 'badge_print_count';
+    final public const TRANSFERRED_AT = 'transferred_at';
 
     protected int $id;
     protected int $order_id;
@@ -59,6 +60,7 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     protected ?string $seat_label = null;
     protected ?string $badge_printed_at = null;
     protected int $badge_print_count = 0;
+    protected ?string $transferred_at = null;
 
     public function toArray(): array
     {
@@ -87,6 +89,7 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
                     'seat_label' => $this->seat_label ?? null,
                     'badge_printed_at' => $this->badge_printed_at ?? null,
                     'badge_print_count' => $this->badge_print_count ?? null,
+                    'transferred_at' => $this->transferred_at ?? null,
                 ];
     }
 
@@ -352,5 +355,16 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     public function getBadgePrintCount(): int
     {
         return $this->badge_print_count;
+    }
+
+    public function setTransferredAt(?string $transferred_at): self
+    {
+        $this->transferred_at = $transferred_at;
+        return $this;
+    }
+
+    public function getTransferredAt(): ?string
+    {
+        return $this->transferred_at;
     }
 }

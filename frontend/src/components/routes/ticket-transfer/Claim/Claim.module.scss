@@ -1,0 +1,84 @@
+@use "../../../../styles/mixins.scss";
+
+.container {
+  max-width: 620px;
+  margin: 0 auto;
+  padding: 40px 20px;
+
+  @include mixins.respond-below(md) {
+    padding: 20px 16px;
+  }
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 28px;
+
+  h1 {
+    margin: 16px 0 8px;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--checkout-text-primary, #111827);
+
+    @include mixins.respond-below(md) {
+      font-size: 1.4rem;
+    }
+  }
+}
+
+.headerIcon {
+  color: var(--checkout-accent, var(--mantine-color-primary-filled));
+}
+
+.headerIconMuted {
+  color: var(--mantine-color-gray-6);
+}
+
+.subtitle {
+  margin: 0;
+  color: var(--checkout-text-secondary, #6b7280);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.card {
+  padding: 24px;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0 0 24px;
+
+  @include mixins.respond-below(sm) {
+    grid-template-columns: 1fr;
+  }
+
+  dt {
+    font-size: 12px;
+    color: var(--checkout-text-secondary, #6b7280);
+  }
+
+  dd {
+    margin: 2px 0 0;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+}
+
+.formIntro {
+  margin-bottom: 12px;
+  overflow-wrap: anywhere;
+}
+
+.notice {
+  margin-top: 8px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}

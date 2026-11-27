@@ -2,6 +2,7 @@ import axios from "axios";
 import {isSsr} from "../utilites/helpers.ts";
 import {getConfig} from "../utilites/config.ts";
 import {applySsrRequestHeaders} from "./ssrRequestHeaders.ts";
+import {rejectUnsafeRequestPath} from "./rejectUnsafeRequestPath.ts";
 import {queueSilentReauthAfterExpiry, setAuthNotice} from "../utilites/ssoFlow.ts";
 import {LOGIN_PATH, resolveAuthErrorAction, TWO_FACTOR_SETUP_PATH} from "./authErrorRedirect.ts";
 
@@ -21,6 +22,7 @@ export const api = axios.create({
     withCredentials: true,
 });
 
+api.interceptors.request.use(rejectUnsafeRequestPath);
 api.interceptors.request.use(applySsrRequestHeaders);
 
 api.interceptors.response.use(

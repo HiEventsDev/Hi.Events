@@ -13,11 +13,13 @@ use Laravel\Mcp\Server\Attributes\Description;
 use Laravel\Mcp\Server\Attributes\Name;
 use Laravel\Mcp\Server\Attributes\Title;
 use Laravel\Mcp\Server\Tools\Annotations\IsDestructive;
+use Laravel\Mcp\Server\Tools\Annotations\IsOpenWorld;
 
 #[Name('resend_order_confirmation')]
 #[Title('Resend order confirmation')]
 #[Description('Emails the buyer of a completed order their order confirmation again, to the email address already on the order. Each order can be resent at most once every 10 minutes, and an email address gets at most 5 emails from these tools every 10 minutes.')]
 #[IsDestructive]
+#[IsOpenWorld]
 class ResendOrderConfirmationTool extends WriteApiTool
 {
     public function schema(JsonSchema $schema): array

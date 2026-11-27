@@ -11,7 +11,7 @@ test.describe('name badges feature switch', () => {
     await expect(authedPage.getByTestId('attendees-print-badges-button')).toHaveCount(0);
     await expect(badgesLink).toHaveCount(0);
 
-    await authedPage.goto(`/manage/event/${event.eventId}/settings#features`);
+    await authedPage.goto(`/manage/event/${event.eventId}/settings/features`);
     await authedPage.waitForLoadState('networkidle');
     await authedPage.getByTestId('event-feature-badges-switch').click({ force: true });
     await expect(authedPage.getByText('Name badges turned on')).toBeVisible();

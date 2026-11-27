@@ -4,6 +4,7 @@ import {t} from "@lingui/macro";
 import classNames from "classnames";
 import {StatusDot} from "../StatusDot";
 import classes from "./SettingsPage.module.scss";
+import {useRegisterSettingsSubsection, useReportUnsavedSettings} from "../SectionedSettings";
 
 interface SettingsPageProps {
     title: ReactNode;
@@ -33,14 +34,18 @@ interface SettingsSectionProps {
     children: ReactNode;
 }
 
-export const SettingsSection = ({id, title, tone = 'default', children}: SettingsSectionProps) => (
-    <section id={id} className={classes.section}>
-        {title && <h2 className={classes.sectionTitle}>{title}</h2>}
-        <div className={classNames(classes.card, {[classes.danger]: tone === 'danger'})}>
-            {children}
-        </div>
-    </section>
-);
+export const SettingsSection = ({id, title, tone = 'default', children}: SettingsSectionProps) => {
+    useRegisterSettingsSubsection(id, typeof title === 'string' ? title : undefined);
+
+    return (
+        <section id={id} className={classes.section}>
+            {title && <h2 className={classes.sectionTitle}>{title}</h2>}
+            <div className={classNames(classes.card, {[classes.danger]: tone === 'danger'})}>
+                {children}
+            </div>
+        </section>
+    );
+};
 
 interface SettingsRowProps {
     label: ReactNode;
@@ -49,21 +54,44 @@ interface SettingsRowProps {
     children?: ReactNode;
     below?: ReactNode;
     inlineControl?: boolean;
+    required?: boolean;
 }
 
-export const SettingsRow = ({label, description, htmlFor, children, below, inlineControl = false}: SettingsRowProps) => (
-    <div className={classes.row}>
-        <div className={classNames(classes.rowMain, {[classes.textOnly]: !children, [classes.inlineControl]: inlineControl})}>
-            <div className={classes.rowText}>
-                {htmlFor
-                    ? <label htmlFor={htmlFor} className={classes.rowLabel}>{label}</label>
-                    : <div className={classes.rowLabel}>{label}</div>}
-                {description && <div className={classes.rowDescription}>{description}</div>}
+export const SettingsRow = ({label, description, htmlFor, children, below, inlineControl = false, required = false}: SettingsRowProps) => {
+    const labelContent = required
+        ? <>{label}<span className={classes.requiredMark} aria-hidden> *</span></>
+        : label;
+
+    return (
+        <div className={classes.row}>
+            <div className={classNames(classes.rowMain, {[classes.textOnly]: !children, [classes.inlineControl]: inlineControl})}>
+                <div className={classes.rowText}>
+                    {htmlFor
+                        ? <label htmlFor={htmlFor} className={classes.rowLabel}>{labelContent}</label>
+                        : <div className={classes.rowLabel}>{labelContent}</div>}
+                    {description && <div className={classes.rowDescription}>{description}</div>}
+                </div>
+                {children && <div className={classes.rowControl}>{children}</div>}
             </div>
-            {children && <div className={classes.rowControl}>{children}</div>}
+            {below && <div className={classes.rowBelow}>{below}</div>}
         </div>
-        {below && <div className={classes.rowBelow}>{below}</div>}
-    </div>
+    );
+};
+
+interface SettingsSectionsProps {
+    children: ReactNode;
+}
+
+export const SettingsSections = ({children}: SettingsSectionsProps) => (
+    <div className={classes.body}>{children}</div>
+);
+
+interface SettingsBlockProps {
+    children: ReactNode;
+}
+
+export const SettingsBlock = ({children}: SettingsBlockProps) => (
+    <div className={classNames(classes.row, classes.block)}>{children}</div>
 );
 
 interface SettingsFooterProps {
@@ -92,6 +120,8 @@ const isBehindModalDialog = (element: HTMLElement) => Array
 export const SettingsSaveFooter = ({isDirty, isSaving, onDiscard, saveTestId}: SettingsSaveFooterProps) => {
     const saveButton = useRef<HTMLButtonElement>(null);
     const focusBeforeSave = useRef<HTMLElement | null>(null);
+
+    useReportUnsavedSettings(isDirty);
 
     useEffect(() => {
         const target = focusBeforeSave.current;
@@ -145,3 +175,9 @@ export const SettingsSaveFooter = ({isDirty, isSaving, onDiscard, saveTestId}: S
         </SettingsFooter>
     );
 };
+
+export const SettingsSaveBar = (props: SettingsSaveFooterProps) => (
+    <div className={classNames(classes.saveBar, {[classes.pinned]: props.isDirty})}>
+        <SettingsSaveFooter {...props}/>
+    </div>
+);

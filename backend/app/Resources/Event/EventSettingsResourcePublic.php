@@ -14,6 +14,7 @@ class EventSettingsResourcePublic extends JsonResource
     public function __construct(
         mixed $resource,
         private readonly bool $includePostCheckoutData = false,
+        private readonly bool $offersSmsOptIn = false,
     ) {
         parent::__construct($resource);
     }
@@ -23,9 +24,6 @@ class EventSettingsResourcePublic extends JsonResource
         return [
             'pre_checkout_message' => $this->getPreCheckoutMessage(),
 
-            // We only show post checkout data if the order is completed. So this data is only returned when this
-            // resource is returned within the context of an order that is completed.
-            // i.e. order->event->event_settings and not event->event_settings
             $this->mergeWhen($this->includePostCheckoutData, [
                 'post_checkout_message' => $this->getPostCheckoutMessage(),
             ]),
@@ -77,6 +75,10 @@ class EventSettingsResourcePublic extends JsonResource
 
             // Marketing settings
             'show_marketing_opt_in' => $this->getShowMarketingOptIn(),
+            /** @var 'OFF'|'OPTIONAL'|'REQUIRED' */
+            'phone_collection' => $this->getPhoneCollection(),
+            /** @var bool */
+            'show_sms_opt_in' => $this->offersSmsOptIn,
 
             // Attendee detail copy control
             'allow_copy_details_to_all_attendees' => $this->getAllowCopyDetailsToAllAttendees(),
@@ -90,6 +92,11 @@ class EventSettingsResourcePublic extends JsonResource
 
             // Self-service settings
             'allow_attendee_self_edit' => $this->getAllowAttendeeSelfEdit(),
+            'allow_ticket_transfer' => $this->getAllowTicketTransfer(),
+            'ticket_transfer_cutoff_minutes' => $this->getTicketTransferCutoffMinutes(),
+            'max_transfers_per_ticket' => $this->getMaxTransfersPerTicket(),
+            'allow_ticket_resale' => $this->getAllowTicketResale(),
+            'ticket_resale_cutoff_minutes' => $this->getTicketResaleCutoffMinutes(),
 
             // Occurrence display
             'show_available_occurrence_capacity' => $this->getShowAvailableOccurrenceCapacity(),

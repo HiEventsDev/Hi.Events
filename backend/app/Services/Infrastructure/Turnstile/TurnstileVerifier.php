@@ -22,7 +22,7 @@ class TurnstileVerifier
         return ! empty($this->config->get('services.turnstile.secret_key'));
     }
 
-    public function verify(?string $token, ?string $ipAddress): bool
+    public function verify(?string $token, ?string $ipAddress, bool $passWhenUnreachable = true): bool
     {
         if (! $this->isEnabled()) {
             return true;
@@ -46,7 +46,7 @@ class TurnstileVerifier
                 'exception' => $exception->getMessage(),
             ]);
 
-            return true;
+            return $passWhenUnreachable;
         }
 
         return $response->successful() && $response->json('success') === true;

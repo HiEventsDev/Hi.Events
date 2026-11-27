@@ -1,0 +1,98 @@
+.notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0 0 16px;
+  font-size: var(--mantine-font-size-sm);
+  line-height: 1.45;
+  color: var(--mantine-color-gray-7);
+
+  svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: var(--mantine-color-gray-6);
+  }
+
+  a {
+    font-weight: 500;
+    color: var(--mantine-color-primary-7);
+  }
+}
+
+.toolbar :global(.mantine-Switch-root) {
+  margin-bottom: 0;
+}
+
+.attentionSummary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--mantine-color-gray-3);
+  background: var(--mantine-color-orange-0);
+  font-size: var(--mantine-font-size-sm);
+  line-height: 1.45;
+  color: var(--mantine-color-gray-7);
+
+  svg {
+    flex-shrink: 0;
+    color: var(--hi-color-warning);
+  }
+}
+
+.attentionCount {
+  font-weight: 600;
+  color: var(--mantine-color-gray-9);
+}
+
+.attentionAction {
+  margin-left: auto;
+  font-size: inherit;
+  font-weight: 500;
+  color: var(--mantine-color-gray-9);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.listings :global(tbody tr[data-attention]) {
+  --row-background: var(--mantine-color-orange-0);
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+}
+
+.hint {
+  display: inline-flex;
+  cursor: help;
+}
+
+.attention {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+  color: var(--hi-color-warning);
+}
+
+.refundStatus {
+  color: var(--mantine-color-gray-6);
+}
+
+.failed {
+  font-weight: 600;
+  color: var(--hi-color-danger);
+}
+
+.empty {
+  margin: 0;
+  padding: 40px 16px;
+  font-size: var(--mantine-font-size-sm);
+  text-align: center;
+  color: var(--mantine-color-gray-6);
+}

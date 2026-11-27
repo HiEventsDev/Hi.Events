@@ -12,6 +12,7 @@ use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EventOccurrence\CancelOccurrenceHandler;
 use HiEvents\Services\Domain\Event\RecurrenceRuleExclusionService;
 use HiEvents\Services\Domain\EventOccurrence\CancelOccurrenceAttendeesService;
+use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
@@ -28,6 +29,8 @@ class CancelOccurrenceHandlerTest extends TestCase
     private CancelOccurrenceAttendeesService|MockInterface $cancelAttendeesService;
 
     private DatabaseManager|MockInterface $databaseManager;
+
+    private TransactionLockService|MockInterface $transactionLockService;
 
     private CancelOccurrenceHandler $handler;
 
@@ -46,11 +49,15 @@ class CancelOccurrenceHandlerTest extends TestCase
         $this->databaseManager->shouldReceive('transaction')
             ->andReturnUsing(fn ($callback) => $callback());
 
+        $this->transactionLockService = Mockery::mock(TransactionLockService::class);
+        $this->transactionLockService->shouldReceive('lockEvent')->byDefault();
+
         $this->handler = new CancelOccurrenceHandler(
             $this->occurrenceRepository,
             $this->exclusionService,
             $this->cancelAttendeesService,
             $this->databaseManager,
+            $this->transactionLockService,
         );
     }
 
@@ -70,6 +77,16 @@ class CancelOccurrenceHandlerTest extends TestCase
                 'attendee_ids' => $cancelledAttendeeIds,
                 'sales_backed_count' => $salesBackedCount,
             ]);
+    }
+
+    public function test_the_event_is_locked_before_the_date_so_a_resale_cannot_complete_mid_cancel(): void
+    {
+        $this->transactionLockService->shouldReceive('lockEvent')->once()->with(1)->globally()->ordered();
+        $this->occurrenceRepository->shouldReceive('findByIdLocked')->once()->with(10)->globally()->ordered()->andReturnNull();
+
+        $this->expectException(ResourceNotFoundException::class);
+
+        $this->handler->handle(1, 10);
     }
 
     public function test_handle_sets_status_to_cancelled(): void

@@ -40,6 +40,7 @@ class SalesPresenter
             'first_name' => $order['first_name'] ?? null,
             'last_name' => $order['last_name'] ?? null,
             'email' => $order['email'] ?? null,
+            'phone' => $order['phone'] ?? null,
             'created_at' => McpPresenter::localDate($order['created_at'] ?? null, $timezone),
             'currency' => $order['currency'] ?? null,
             'total' => $order['total_gross'] ?? null,

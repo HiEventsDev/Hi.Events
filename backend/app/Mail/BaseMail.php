@@ -8,6 +8,7 @@ use HiEvents\Services\Domain\Mail\UnpublishedEventMailPolicy;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Mail\SentMessage;
@@ -59,12 +60,27 @@ abstract class BaseMail extends Mailable implements ShouldQueue
         return $this->withMailBranding(fn () => parent::send($mailer));
     }
 
+    public function renderAsSent(): string
+    {
+        return $this->withMailBranding(fn () => $this->render());
+    }
+
+    protected function defaultFrom(): ?Address
+    {
+        return null;
+    }
+
     private function withMailBranding(callable $callback): mixed
     {
         $branding = app(MailBrandingService::class)->forMail($this);
 
-        if ($branding->senderName !== null && $this->from === []) {
-            $this->from(config('mail.from.address'), $branding->senderName);
+        $defaultFrom = $this->defaultFrom();
+
+        if ($this->from === [] && ($branding->senderName !== null || $defaultFrom !== null)) {
+            $this->from(
+                $defaultFrom?->address ?? config('mail.from.address'),
+                $branding->senderName ?? $defaultFrom?->name,
+            );
         }
 
         $view = app('view');

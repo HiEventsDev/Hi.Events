@@ -1,102 +1,73 @@
 import {useParams} from "react-router";
-import {useGetEvent} from "../../../../../queries/useGetEvent.ts";
-import {formatCurrency} from "../../../../../utilites/currency.ts";
-import ReportTable from "../../../../common/ReportTable";
 import {t} from "@lingui/macro";
+import {useGetEvent} from "../../../../../queries/useGetEvent.ts";
+import {PromoCodeDiscountType} from "../../../../../types.ts";
+import {formatCurrency} from "../../../../../utilites/currency.ts";
 import {formatDateWithLocale} from "../../../../../utilites/dates.ts";
+import {formatNumber} from "../../../../../utilites/helpers.ts";
+import {ReportColumn} from "../../../../common/ReportView";
+import {EmptyCell} from "../../../../common/TanStackTable/cells.tsx";
+import {EventReport} from "../EventReport.tsx";
 
-const PromoCodesReport = () => {
+interface PromoCodesRow {
+    promo_code: string;
+    times_used: number;
+    unique_customers: number;
+    configured_discount: number;
+    discount_type: string;
+    total_gross_sales: string;
+    total_before_discounts: string;
+    total_discount_amount: string;
+    first_used_at: string | null;
+    last_used_at: string | null;
+    max_allowed_usages: number | null;
+    remaining_uses: number | null;
+    status: string;
+}
+
+const PromoCodesReport = ({description}: { description: string }) => {
     const {eventId} = useParams();
-    const eventQuery = useGetEvent(eventId);
-    const event = eventQuery.data;
+    const {data: event} = useGetEvent(eventId);
 
     if (!event) {
         return null;
     }
 
-    const columns = [
-        {
-            key: 'promo_code' as const,
-            label: t`Promo Code`,
-            sortable: true
-        },
-        {
-            key: 'times_used' as const,
-            label: t`Times Used`,
-            sortable: true
-        },
-        {
-            key: 'unique_customers' as const,
-            label: t`Unique Customers`,
-            sortable: true
-        },
-        {
-            key: 'configured_discount' as const,
-            label: t`Configured Discount`,
-            sortable: true,
-            render: (value: number, row: any) => {
-                if (row.discount_type === 'percentage') {
-                    return `${value}%`;
-                }
-                return formatCurrency(value, event?.currency);
-            }
-        },
-        {
-            key: 'total_gross_sales' as const,
-            label: t`Total Gross Sales`,
-            sortable: true,
-            render: (value: string) => formatCurrency(value, event?.currency)
-        },
-        {
-            key: 'total_before_discounts' as const,
-            label: t`Total Before Discounts`,
-            sortable: true,
-            render: (value: string) => formatCurrency(value, event?.currency)
-        },
-        {
-            key: 'total_discount_amount' as const,
-            label: t`Total Discount Amount`,
-            sortable: true,
-            render: (value: string) => formatCurrency(value, event?.currency)
-        },
-        {
-            key: 'first_used_at' as const,
-            label: t`First Used`,
-            sortable: true,
-            render: (value: string) => value ? formatDateWithLocale(value, 'shortDate', event.timezone) : '-'
-        },
-        {
-            key: 'last_used_at' as const,
-            label: t`Last Used`,
-            sortable: true,
-            render: (value: string) => value ? formatDateWithLocale(value, 'shortDate', event.timezone) : '-'
-        },
-        {
-            key: 'max_allowed_usages' as const,
-            label: t`Usage Limit`,
-            sortable: true,
-            render: (value: number) => value || t`Unlimited`
-        },
-        {
-            key: 'remaining_uses' as const,
-            label: t`Remaining Uses`,
-            sortable: true,
-            render: (value: number) => value || t`Unlimited`
-        },
-        {
-            key: 'status' as const,
-            label: t`Status`,
-            sortable: true
-        }
+    const usedOn = (date: string | null) => date
+        ? formatDateWithLocale(date, 'shortDate', event.timezone)
+        : <EmptyCell/>;
+    const limit = (value: number | null) => value === null ? t`Unlimited` : formatNumber(Number(value));
+    const discount = (row: PromoCodesRow) => row.discount_type === PromoCodeDiscountType.Percentage
+        ? `${Number(row.configured_discount)}%`
+        : formatCurrency(row.configured_discount, event.currency);
+
+    const columns: ReportColumn<PromoCodesRow>[] = [
+        {key: 'promo_code', label: t`Promo code`},
+        {key: 'status', label: t`Status`},
+        {key: 'times_used', label: t`Times used`, kind: 'count'},
+        {key: 'unique_customers', label: t`Unique customers`, kind: 'count', total: false},
+        {key: 'configured_discount', label: t`Discount`, kind: 'count', total: false, render: discount, csv: discount},
+        {key: 'total_before_discounts', label: t`Sales before discounts`, kind: 'money'},
+        {key: 'total_discount_amount', label: t`Discounts given`, kind: 'money'},
+        {key: 'total_gross_sales', label: t`Gross sales`, kind: 'money'},
+        {key: 'first_used_at', label: t`First used`, render: row => usedOn(row.first_used_at)},
+        {key: 'last_used_at', label: t`Last used`, render: row => usedOn(row.last_used_at)},
+        {key: 'max_allowed_usages', label: t`Usage limit`, kind: 'count', total: false, render: row => limit(row.max_allowed_usages)},
+        {key: 'remaining_uses', label: t`Uses left`, kind: 'count', total: false, render: row => limit(row.remaining_uses)},
     ];
 
     return (
-        <ReportTable
-            title={t`Promo Codes Report`}
-            columns={columns}
-            isLoading={eventQuery.isLoading}
-            downloadFileName="promo_codes_report.csv"
+        <EventReport<PromoCodesRow>
+            description={description}
             event={event}
+            fileName="promo_codes_report.csv"
+            columns={columns}
+            emptyMessage={t`Create a promo code to see how it performs here.`}
+            summary={sum => [
+                {label: t`Times used`, value: sum('times_used'), kind: 'count'},
+                {label: t`Discounts given`, value: sum('total_discount_amount'), kind: 'money'},
+                {label: t`Gross sales`, value: sum('total_gross_sales'), kind: 'money'},
+            ]}
         />
     );
 };

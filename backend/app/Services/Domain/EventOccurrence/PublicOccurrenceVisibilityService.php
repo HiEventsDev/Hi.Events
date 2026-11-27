@@ -11,9 +11,21 @@ use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
 use HiEvents\DomainObjects\ProductCategoryDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
+use HiEvents\DomainObjects\Status\TicketResaleListingStatus;
 
 class PublicOccurrenceVisibilityService
 {
+    private const HAS_LISTED_TICKET = <<<'SQL'
+        EXISTS (
+            SELECT 1 FROM ticket_resale_listings
+            JOIN event_settings ON event_settings.event_id = ticket_resale_listings.event_id
+            WHERE ticket_resale_listings.event_occurrence_id = event_occurrences.id
+              AND ticket_resale_listings.status = ?
+              AND ticket_resale_listings.withdrawal_requested_at IS NULL
+              AND event_settings.allow_ticket_resale = TRUE
+        )
+    SQL;
+
     public function shouldHideSoldOutOccurrences(EventDomainObject $event): bool
     {
         return $event->getType() === EventType::RECURRING->name
@@ -47,7 +59,8 @@ class PublicOccurrenceVisibilityService
                     EventOccurrenceDomainObjectAbstract::USED_CAPACITY,
                     '<',
                     EventOccurrenceDomainObjectAbstract::CAPACITY,
-                );
+                )
+                ->orWhereRaw(self::HAS_LISTED_TICKET, [TicketResaleListingStatus::LISTED->name]);
         };
     }
 

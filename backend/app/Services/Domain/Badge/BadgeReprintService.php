@@ -58,7 +58,8 @@ class BadgeReprintService
         $changed = $before->getFirstName() !== $after->getFirstName()
             || $before->getLastName() !== $after->getLastName()
             || $before->getProductId() !== $after->getProductId()
-            || $before->getSeatLabel() !== $after->getSeatLabel();
+            || $before->getSeatLabel() !== $after->getSeatLabel()
+            || $before->getPublicId() !== $after->getPublicId();
 
         if (! $changed || $after->getBadgePrintedAt() === null) {
             return $after;

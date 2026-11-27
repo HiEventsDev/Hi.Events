@@ -6,7 +6,10 @@ import { publicEventRouteLoader } from "./routeLoaders/publicEventRouteLoader.ts
 import { publicOrganizerRouteLoader } from "./routeLoaders/publicOrganizerRouteLoader.ts";
 import { organizerPreviewRouteLoader } from "./routeLoaders/organizerPreviewRouteLoader.ts";
 import { authRouteLoader } from "./routeLoaders/authRouteLoader.ts";
+import { unsafePathRouteLoader } from "./routeLoaders/unsafePathRouteLoader.ts";
 import { eventContentWidgetRouteLoader, organizerWidgetRouteLoader, ticketWidgetRouteLoader } from "./routeLoaders/widgetRouteLoader.ts";
+import { signupFormRouteLoader } from "./ee/crm/routeLoaders/signupFormRouteLoader.ts";
+import { campaignUnsubscribeRouteLoader, subscriptionConfirmRouteLoader } from "./ee/crm/routeLoaders/tokenPageRouteLoaders.ts";
 
 const Root = () => {
     const [redirectPath, setRedirectPath] = useState<string | null>(null);
@@ -25,7 +28,7 @@ const Root = () => {
     }
 };
 
-export const router: RouteObject[] = [
+const routes: RouteObject[] = [
     {
         path: "",
         element: <Root />,
@@ -262,6 +265,13 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "audience-campaigns",
+                async lazy() {
+                    const AdminCampaignReview = await import("./ee/crm/components/routes/AdminCampaignReview");
+                    return { Component: AdminCampaignReview.default };
+                }
+            },
+            {
                 path: "messages",
                 async lazy() {
                     const Messages = await import("./components/routes/admin/Messages");
@@ -401,7 +411,7 @@ export const router: RouteObject[] = [
                 }
             },
             {
-                path: "settings",
+                path: "settings/:section?",
                 async lazy() {
                     const Settings = await import("./components/routes/organizer/Settings");
                     return { Component: Settings.default };
@@ -450,6 +460,62 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "audience",
+                async lazy() {
+                    const AudienceOverview = await import("./ee/crm/components/routes/AudienceOverview");
+                    return { Component: AudienceOverview.default };
+                }
+            },
+            {
+                path: "audience/contacts",
+                async lazy() {
+                    const AudienceContacts = await import("./ee/crm/components/routes/AudienceContacts");
+                    return { Component: AudienceContacts.default };
+                }
+            },
+            {
+                path: "audience/segments",
+                async lazy() {
+                    const AudienceSegments = await import("./ee/crm/components/routes/AudienceSegments");
+                    return { Component: AudienceSegments.default };
+                }
+            },
+            {
+                path: "audience/forms",
+                async lazy() {
+                    const AudienceForms = await import("./ee/crm/components/routes/AudienceForms");
+                    return { Component: AudienceForms.default };
+                }
+            },
+            {
+                path: "audience/campaigns",
+                async lazy() {
+                    const AudienceCampaigns = await import("./ee/crm/components/routes/AudienceCampaigns");
+                    return { Component: AudienceCampaigns.default };
+                }
+            },
+            {
+                path: "audience/campaigns/:campaignId",
+                async lazy() {
+                    const AudienceCampaign = await import("./ee/crm/components/routes/AudienceCampaign");
+                    return { Component: AudienceCampaign.default };
+                }
+            },
+            {
+                path: "audience/templates",
+                async lazy() {
+                    const AudienceTemplates = await import("./ee/crm/components/routes/AudienceTemplates");
+                    return { Component: AudienceTemplates.default };
+                }
+            },
+            {
+                path: "audience/automations",
+                async lazy() {
+                    const AudienceAutomations = await import("./ee/crm/components/routes/AudienceAutomations");
+                    return { Component: AudienceAutomations.default };
+                }
+            },
+            {
                 path: "seat-maps",
                 async lazy() {
                     const SeatMaps = await import("./ee/seating/components/routes/organizer/SeatMaps");
@@ -480,8 +546,8 @@ export const router: RouteObject[] = [
             {
                 path: "report/:reportType",
                 async lazy() {
-                    const OrganizerReportLayout = await import("./components/routes/organizer/Reports/ReportLayout");
-                    return { Component: OrganizerReportLayout.default };
+                    const OrganizerReports = await import("./components/routes/organizer/Reports");
+                    return { Component: OrganizerReports.default };
                 }
             }
         ],
@@ -522,8 +588,8 @@ export const router: RouteObject[] = [
             {
                 path: "report/:reportType",
                 async lazy() {
-                    const ReportLayout = await import("./components/routes/event/Reports/ReportLayout");
-                    return { Component: ReportLayout.default };
+                    const Reports = await import("./components/routes/event/Reports");
+                    return { Component: Reports.default };
                 },
             },
             {
@@ -597,7 +663,7 @@ export const router: RouteObject[] = [
                 }
             },
             {
-                path: "settings",
+                path: "settings/:section?",
                 async lazy() {
                     const Settings = await import("./components/routes/event/Settings");
                     return { Component: Settings.default };
@@ -636,6 +702,13 @@ export const router: RouteObject[] = [
                 async lazy() {
                     const SoldOutWaitlist = await import("./components/routes/event/SoldOutWaitlist");
                     return { Component: SoldOutWaitlist.default };
+                }
+            },
+            {
+                path: "resale",
+                async lazy() {
+                    const Resale = await import("./components/routes/event/Resale");
+                    return { Component: Resale.default };
                 }
             },
             {
@@ -763,6 +836,16 @@ export const router: RouteObject[] = [
         async lazy() {
             const OrganizerEventsWidget = await import("./components/layouts/OrganizerEventsWidget");
             return { Component: OrganizerEventsWidget.default };
+        },
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/widget/forms/:publicId",
+        loader: signupFormRouteLoader,
+        handle: {styles: "src/ee/crm/components/routes/SignupFormWidget/index.tsx"},
+        async lazy() {
+            const SignupFormWidget = await import("./ee/crm/components/routes/SignupFormWidget");
+            return { Component: SignupFormWidget.default };
         },
         errorElement: <ErrorPage />,
     },
@@ -912,6 +995,46 @@ export const router: RouteObject[] = [
         errorElement: <ErrorPage />,
     },
     {
+        path: "/u/:token",
+        loader: campaignUnsubscribeRouteLoader,
+        handle: {styles: "src/ee/crm/components/routes/CampaignUnsubscribe/index.tsx"},
+        async lazy() {
+            const CampaignUnsubscribe = await import("./ee/crm/components/routes/CampaignUnsubscribe");
+            return { Component: CampaignUnsubscribe.default };
+        },
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/audience/unsubscribe/:token",
+        loader: campaignUnsubscribeRouteLoader,
+        handle: {styles: "src/ee/crm/components/routes/CampaignUnsubscribe/index.tsx"},
+        async lazy() {
+            const CampaignUnsubscribe = await import("./ee/crm/components/routes/CampaignUnsubscribe");
+            return { Component: CampaignUnsubscribe.default };
+        },
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/subscribe/:publicId",
+        loader: signupFormRouteLoader,
+        handle: {styles: "src/ee/crm/components/routes/SubscribePage/index.tsx"},
+        async lazy() {
+            const SubscribePage = await import("./ee/crm/components/routes/SubscribePage");
+            return { Component: SubscribePage.default };
+        },
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/audience/confirm/:token",
+        loader: subscriptionConfirmRouteLoader,
+        handle: {styles: "src/ee/crm/components/routes/SubscriptionConfirm/index.tsx"},
+        async lazy() {
+            const SubscriptionConfirm = await import("./ee/crm/components/routes/SubscriptionConfirm");
+            return { Component: SubscriptionConfirm.default };
+        },
+        errorElement: <ErrorPage />,
+    },
+    {
         path: "/emails/unsubscribe/:token",
         async lazy() {
             const Unsubscribe = await import("./components/routes/emails/Unsubscribe");
@@ -926,6 +1049,22 @@ export const router: RouteObject[] = [
             return { Component: MyTickets.default };
         },
         errorElement: <ErrorPage />,
+    },
+    {
+        path: "/transfer/:token",
+        handle: {styles: "src/components/routes/ticket-transfer/Claim/index.tsx"},
+        async lazy() {
+            const TicketTransferClaim = await import("./components/routes/ticket-transfer/Claim");
+            return { Component: TicketTransferClaim.default };
+        },
+        errorElement: <ErrorPage />,
     }
 ];
 
+export const router: RouteObject[] = [
+    {
+        loader: unsafePathRouteLoader,
+        errorElement: <ErrorPage />,
+        children: routes,
+    },
+];

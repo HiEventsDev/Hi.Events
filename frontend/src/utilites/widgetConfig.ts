@@ -83,6 +83,7 @@ const PREFILL_PARAMS: Record<string, string> = {
     PrefillEmail: 'email',
     PrefillFirstName: 'first_name',
     PrefillLastName: 'last_name',
+    PrefillPhone: 'phone',
 };
 
 const settingParamName = (key: string) => key

@@ -15,18 +15,18 @@ test.describe('offline payment instructions access', () => {
 
     const { page } = await invitedMember(freshAccount, mailpit, publicApi, browser, { role: 'ORGANIZER' });
     const settings = new EventSettingsPage(page);
-    await settings.goto(event.eventId);
+    await settings.goto(event.eventId, 'payment-settings');
 
     const payment = settings.section('payment-settings');
     await expect(payment.getByText(instructions.replace(/<\/?p>/g, '')).first()).toBeVisible();
     await expect(payment.getByText('Only members who can manage payments can change these instructions.')).toBeVisible();
     await expect(settings.offlineInstructionsEditor).toHaveCount(0);
 
-    await payment.getByLabel('Require Billing Address').uncheck({ force: true });
+    await payment.getByLabel('Require Billing Address').check({ force: true });
     await settings.saveSection('payment-settings');
     await expect(page.getByText('Successfully Updated Payment & Invoicing Settings')).toBeVisible();
 
-    await expect.poll(async () => (await freshAccount.api.getEventSettings(event.eventId)).require_billing_address).toBe(false);
+    await expect.poll(async () => (await freshAccount.api.getEventSettings(event.eventId)).require_billing_address).toBe(true);
     const saved = await freshAccount.api.getEventSettings(event.eventId);
     expect(saved.offline_payment_instructions).toBe(instructions);
     expect(saved.payment_providers).toEqual(['STRIPE', 'OFFLINE']);

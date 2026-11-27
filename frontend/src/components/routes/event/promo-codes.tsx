@@ -6,14 +6,14 @@ import {PageBody} from "../../common/PageBody";
 import {PromoCodeTable} from "../../common/PromoCodeTable";
 import {SearchBarWrapper} from "../../common/SearchBar";
 import {useDisclosure} from "@mantine/hooks";
-import {Pagination} from "../../common/Pagination";
+import {TableCard, TableCardFooter, TableCardSkeleton} from "../../common/TableCard";
+import {tableSortFromQuery} from "../../common/TanStackTable/sorting.tsx";
 import {IconPlus} from "@tabler/icons-react";
 import {ToolBar} from "../../common/ToolBar";
 import {useGetEventPromoCodes} from "../../../queries/useGetEventPromoCodes.ts";
 import {CreatePromoCodeModal} from "../../modals/CreatePromoCodeModal";
 import {useFilterQueryParamSync} from "../../../hooks/useFilterQueryParamSync.ts";
 import {QueryFilters} from "../../../types.ts";
-import {TableSkeleton} from "../../common/TableSkeleton";
 import {t} from "@lingui/macro";
 import {SortSelector} from "../../common/SortSelector";
 
@@ -32,7 +32,9 @@ export const PromoCodes = () => {
                 <PageTitle
                     subheading={t`Create discounts, access codes for hidden tickets, and special offers.`}
                 >{t`Promo Codes`}</PageTitle>
+                <TableCard>
                 <ToolBar
+                    embedded
                     searchComponent={() => (
                         <SearchBarWrapper
                             placeholder={t`Search by name...`}
@@ -51,31 +53,31 @@ export const PromoCodes = () => {
                             }}
                         />
                     ) : undefined}
-                    resultCount={pagination?.total}
-                    resultLabel={t`promo codes`}
                 >
-                    <CreateButton color={'green'} size={'sm'} onClick={openCreateModal} rightSection={<IconPlus/>} data-testid="promo-code-create-button">
-                        Create
+                    <CreateButton color="green" onClick={openCreateModal} leftSection={<IconPlus size={16}/>} data-testid="promo-code-create-button">
+                        {t`Create`}
                     </CreateButton>
                 </ToolBar>
 
-                <TableSkeleton isVisible={!promoCodes || !event}/>
+                {(!promoCodes || !event) && <TableCardSkeleton rows={5}/>}
 
                 {(promoCodes && event) &&
                     <PromoCodeTable
                         openCreateModal={openCreateModal}
                         event={event}
                         promoCodes={promoCodes}
+                        isRefreshing={promoCodesQuery.isFetching}
+                        sort={tableSortFromQuery(searchParams, setSearchParams, pagination)}
                     />}
 
                 {!!promoCodes?.length && (
-                    <Pagination
-                        value={searchParams.pageNumber}
-                        onChange={(value) => setSearchParams({pageNumber: value})}
-                        total={Number(pagination?.last_page)}
+                    <TableCardFooter
+                        pagination={pagination}
+                        page={searchParams.pageNumber}
+                        onPageChange={(value) => setSearchParams({pageNumber: value})}
                     />
                 )}
-
+                </TableCard>
             </PageBody>
             {createModalOpen && <CreatePromoCodeModal onClose={closeCreateModal} isOpen/>}
         </>

@@ -94,12 +94,11 @@ test.describe('messages', () => {
     await confirmTransactional(authedPage);
     await expect(authedPage.getByTestId('message-send-button')).toHaveText('Schedule Message');
 
-    await authedPage.getByTestId('message-send-options-button').click();
-    await authedPage.getByRole('menuitem', { name: 'Send as test' }).click();
-    await expect(authedPage.getByTestId('message-send-button')).toHaveText('Send Test');
+    await expect(authedPage.getByTestId('message-preview')).toBeVisible();
+    await expect(authedPage.getByTestId('message-preview-inbox')).toContainText(subject);
 
     const sent = authedPage.waitForResponse((response) => isSendMessageRequest(response.request()));
-    await authedPage.getByTestId('message-send-button').click();
+    await authedPage.getByTestId('message-test-button').click();
     const response = await sent;
 
     expect(response.ok()).toBe(true);
@@ -109,8 +108,10 @@ test.describe('messages', () => {
     expect((await response.json()).data.scheduled_at).toBeNull();
 
     await expect(authedPage.getByText('Test email sent to your inbox')).toBeVisible();
+    await expect(authedPage.getByRole('heading', { name: 'Send a message' })).toBeVisible();
     await expect(messages.listItem(subject)).toBeVisible();
-    await expect(messages.listItem(subject).getByText('SCHEDULED', { exact: true })).toHaveCount(0);
-    await mailpit.waitForMessage(account.email, { subjectContains: subject });
+    await expect(messages.listItem(subject).getByText('Scheduled', { exact: true })).toHaveCount(0);
+    const delivered = await mailpit.waitForMessage(account.email, { subjectContains: subject });
+    expect(delivered.Subject).toContain('[Test]');
   });
 });

@@ -18,6 +18,7 @@ use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\OrderApplicationFeeStatus;
 use HiEvents\DomainObjects\Status\OrderPaymentStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\DomainObjects\TicketResaleListingDomainObject;
 use HiEvents\Enterprise\Seating\Services\Domain\SeatedOrderCompletionGuard;
 use HiEvents\Events\OrderStatusChangedEvent;
 use HiEvents\Exceptions\CannotAcceptPaymentException;
@@ -25,6 +26,7 @@ use HiEvents\Exceptions\OrderNotCompletableException;
 use HiEvents\Exceptions\PaymentRefundedException;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Exceptions\Stripe\StripeClientConfigurationException;
+use HiEvents\Jobs\TicketResale\ProcessResaleRefundJob;
 use HiEvents\Repository\Eloquent\StripePaymentsRepository;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
@@ -35,8 +37,10 @@ use HiEvents\Services\Domain\Order\OccurrenceStatusValidator;
 use HiEvents\Services\Domain\Order\OrderApplicationFeeService;
 use HiEvents\Services\Domain\Payment\Stripe\StripeRefundExpiredOrderService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
+use HiEvents\Services\Domain\TicketResale\ResaleCompletionService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
+use HiEvents\Services\Infrastructure\DomainEvents\Events\AttendeeEvent;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
 use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use Illuminate\Cache\Repository;
@@ -64,6 +68,7 @@ class PaymentIntentSucceededHandler
         private readonly OccurrenceStatusValidator $occurrenceStatusValidator,
         private readonly SeatedOrderCompletionGuard $seatedOrderCompletionGuard,
         private readonly TransactionLockService $transactionLockService,
+        private readonly ResaleCompletionService $resaleCompletionService,
     ) {}
 
     /**
@@ -105,6 +110,16 @@ class PaymentIntentSucceededHandler
                 orderId: $result['order']->getId()
             ),
         );
+
+        $result['resoldListings']->each(function (TicketResaleListingDomainObject $listing): void {
+            ProcessResaleRefundJob::dispatch($listing->getId());
+
+            foreach ([DomainEventType::ATTENDEE_CANCELLED, DomainEventType::ATTENDEE_RESOLD] as $eventType) {
+                $this->domainEventDispatcherService->dispatch(
+                    new AttendeeEvent(type: $eventType, attendeeId: $listing->getAttendeeId())
+                );
+            }
+        });
     }
 
     /**
@@ -155,7 +170,20 @@ class PaymentIntentSucceededHandler
                 return null;
             }
 
+            $this->resaleCompletionService->lockEventIfHoldingListings($stripePayment->getOrder());
+
             $this->validatePaymentAndOrderStatus($stripePayment);
+
+            if ($this->resaleCompletionService->hasUnsellableClaim($stripePayment->getOrder())) {
+                $this->rejectForRefund(
+                    $stripePayment,
+                    __('Payment was successful, but the resale ticket in this order is no longer available. Order: :id', [
+                        'id' => $stripePayment->getOrderId(),
+                    ])
+                );
+            }
+
+            $resoldListings = $this->resaleCompletionService->completeForPaidOrder($stripePayment->getOrder());
 
             $this->updateStripePaymentInfo($paymentIntent, $stripePayment);
 
@@ -174,7 +202,7 @@ class PaymentIntentSucceededHandler
 
             $this->storeApplicationFeePayment($updatedOrder, $paymentIntent);
 
-            return ['order' => $updatedOrder, 'eventSettings' => $eventSettings];
+            return ['order' => $updatedOrder, 'eventSettings' => $eventSettings, 'resoldListings' => $resoldListings];
         });
     }
 

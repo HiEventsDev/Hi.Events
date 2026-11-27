@@ -4,6 +4,7 @@ namespace HiEvents\Services\Domain\Abuse;
 
 use HiEvents\Mail\Admin\SuspiciousActivityReportMail;
 use HiEvents\Services\Domain\Abuse\DTO\SuspiciousActivityFindingDTO;
+use HiEvents\Services\Domain\Abuse\DTO\SuspiciousActivityItemDTO;
 use Illuminate\Config\Repository;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Contracts\Mail\Mailer;
@@ -40,7 +41,7 @@ class SuspiciousActivityReportService
             'findings' => $newFindings->map(fn (SuspiciousActivityFindingDTO $finding) => [
                 'type' => $finding->type,
                 'summary' => $finding->summary,
-                'details' => $finding->details,
+                'items' => array_map(fn (SuspiciousActivityItemDTO $item) => $item->label, $finding->items),
             ])->all(),
         ]);
 

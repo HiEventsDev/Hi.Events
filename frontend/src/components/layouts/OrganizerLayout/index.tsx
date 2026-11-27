@@ -2,9 +2,15 @@ import {
     IconArrowLeft,
     IconArrowsHorizontal,
     IconBrandStripe,
+    IconAddressBook,
     IconCalendar,
     IconCalendarPlus,
+    IconChartDots,
     IconChartPie,
+    IconMail,
+    IconFilter,
+    IconForms,
+    IconRobot,
     IconChevronRight,
     IconDashboard,
     IconDeviceTabletCode,
@@ -72,6 +78,7 @@ const OrganizerLayout = () => {
     const organizers = organizerResposne?.data?.filter(org => canManageOrganizer(org.id));
     const { data: account } = useGetAccount();
     const seating = useLicensedFeature(FeatureFlag.SEATING);
+    const audience = useLicensedFeature(FeatureFlag.CRM);
     const resendEmailConfirmationMutation = useResendEmailConfirmation();
     const [emailConfirmationResent, setEmailConfirmationResent] = useState(false);
     const { data: me } = useGetMe();
@@ -94,7 +101,7 @@ const OrganizerLayout = () => {
         ...(showPayoutsSection && !isStripeConnected && can('MANAGE_PAYMENTS') ? [
             { label: t`Get Paid` },
             {
-                link: 'settings#payouts',
+                link: 'settings/payouts',
                 label: t`Set up payouts`,
                 icon: IconBrandStripe,
                 isActive: () => false,
@@ -117,6 +124,50 @@ const OrganizerLayout = () => {
         { label: t`Manage` },
         { link: 'events', label: t`Events`, icon: IconCalendar },
         { link: 'settings', label: t`Settings`, icon: IconSettings, showWhen: () => !isReadOnly },
+
+        { label: t`Audience` },
+        {
+            link: 'audience',
+            label: t`Overview`,
+            icon: IconChartDots,
+            showWhen: () => audience.isVisible,
+            isActive: (isActive) => isActive && /\/audience\/?$/.test(location.pathname),
+        },
+        {
+            link: 'audience/contacts',
+            label: t`Contacts`,
+            icon: IconAddressBook,
+            showWhen: () => audience.isVisible,
+        },
+        {
+            link: 'audience/segments',
+            label: t`Segments`,
+            icon: IconFilter,
+            showWhen: () => audience.isVisible,
+        },
+        {
+            link: 'audience/campaigns',
+            label: t`Campaigns`,
+            icon: IconMail,
+            showWhen: () => audience.isVisible,
+            children: [
+                { link: 'audience/templates', label: t`Templates`, testId: 'audience-nav-templates' },
+            ],
+        },
+        {
+            link: 'audience/automations',
+            label: t`Automations`,
+            icon: IconRobot,
+            showWhen: () => audience.isVisible,
+            testId: 'audience-nav-automations',
+        },
+        {
+            link: 'audience/forms',
+            label: t`Signup forms`,
+            icon: IconForms,
+            showWhen: () => audience.isVisible,
+            testId: 'audience-nav-forms',
+        },
 
         { label: t`Tools` },
         { link: 'organizer-homepage-designer', label: t`Homepage Designer`, icon: IconPaint, showWhen: () => !isReadOnly },
@@ -306,6 +357,7 @@ const OrganizerLayout = () => {
                     url={organizerHomepageUrl(organizer)}
                     title={organizer.name}
                     modalTitle={t`Share Organizer Page`}
+                    organizer={organizer}
                     opened={shareModalOpen}
                     onClose={closeShareModal}
                 />

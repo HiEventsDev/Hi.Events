@@ -26,6 +26,8 @@ const lockableFeatureName = (feature: LicensedFeature): string | null => {
             return t`box office`;
         case 'enterprise_sso':
             return t`enterprise single sign-on`;
+        case 'crm':
+            return t`audience`;
         default:
             return null;
     }
@@ -57,6 +59,8 @@ export const licensedFeatureLabel = (feature: string): string => {
             return t`Enterprise single sign-on`;
         case 'white_label':
             return t`White-label`;
+        case 'crm':
+            return t`Audience`;
         default:
             return feature;
     }

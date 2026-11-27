@@ -1,5 +1,6 @@
 import {publicApi} from "./public-client.ts";
-import {IdParam} from "../types.ts";
+import {GenericDataResponse, IdParam} from "../types.ts";
+import {selfServiceHeaders, SelfServiceLink} from "../utilites/selfServiceSession.ts";
 
 export interface SelfServiceUpdateResult {
     success: boolean;
@@ -20,9 +21,40 @@ export interface EditOrderData {
     first_name?: string;
     last_name?: string;
     email?: string;
+    phone?: string;
 }
 
+export interface SelfServiceSession {
+    token: string;
+    expires_at: string;
+    email: string;
+}
+
+const verificationPath = (link: SelfServiceLink): string => link.attendeeShortId
+    ? `/events/${link.eventId}/attendees/${link.attendeeShortId}/verification`
+    : `/events/${link.eventId}/order/${link.orderShortId}/verification`;
+
 export const selfServiceClient = {
+    requestVerification: async (link: SelfServiceLink): Promise<{ email: string }> => {
+        const response = await publicApi.post(verificationPath(link));
+        return response.data;
+    },
+
+    confirmVerification: async (link: SelfServiceLink, code: string): Promise<SelfServiceSession> => {
+        const response = await publicApi.post<GenericDataResponse<SelfServiceSession>>(
+            `${verificationPath(link)}/confirm`,
+            {code},
+        );
+        return response.data.data;
+    },
+
+    startSessionFromLookup: async (lookupToken: string): Promise<SelfServiceSession> => {
+        const response = await publicApi.post<GenericDataResponse<SelfServiceSession>>(
+            `/ticket-lookup/${encodeURIComponent(lookupToken)}/session`,
+        );
+        return response.data.data;
+    },
+
     editAttendee: async (
         eventId: IdParam,
         orderShortId: string,
@@ -31,7 +63,8 @@ export const selfServiceClient = {
     ): Promise<SelfServiceUpdateResult> => {
         const response = await publicApi.patch(
             `/events/${eventId}/order/${orderShortId}/attendees/${attendeeShortId}`,
-            data
+            data,
+            {headers: selfServiceHeaders({eventId: eventId as string | number, orderShortId})},
         );
         return response.data;
     },
@@ -43,7 +76,8 @@ export const selfServiceClient = {
     ): Promise<SelfServiceUpdateResult> => {
         const response = await publicApi.patch(
             `/events/${eventId}/order/${orderShortId}`,
-            data
+            data,
+            {headers: selfServiceHeaders({eventId: eventId as string | number, orderShortId})},
         );
         return response.data;
     },

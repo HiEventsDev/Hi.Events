@@ -9,6 +9,7 @@ use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\Enterprise\Licensing\Plan;
 use HiEvents\Mail\Order\OrderSummary;
 use HiEvents\Services\Domain\Email\Delivery\EmailDeliveryRecorder;
 use HiEvents\Services\Domain\Mail\DTO\MailBrandingDTO;
@@ -62,6 +63,56 @@ class MailBrandingLayoutTest extends TestCase
         $this->assertStringContainsString('Powered by', $html);
     }
 
+    public function test_unsubscribed_organizers_are_named_above_a_small_ticketing_by_logo(): void
+    {
+        $message = $this->send(new MailBrandingDTO(
+            hideHiEventsBranding: false,
+            showHiEventsPromo: false,
+            promoUrl: self::PROMO_URL,
+            organizerName: 'Acme Events',
+        ))->getOriginalMessage();
+
+        $html = $message->getHtmlBody();
+
+        $this->assertMatchesRegularExpression('/<td class="header"[^>]*>\s*<span class="organizer-name"[^>]*>Acme Events<\/span>\s*<span class="ticketing-by"[^>]*>Ticketing by <a href="[^"]+"[^>]*><img src="[^"]*hi-events-horizontal-light\.png"[^>]*height="20"/', $html);
+        $this->assertStringNotContainsString('hi-events-stacked-light.png', $html);
+        $this->assertStringContainsString('Powered by', $html);
+        $this->assertStringContainsString('Acme Events · Ticketing by '.config('app.name'), $message->getTextBody());
+    }
+
+    public function test_a_white_label_licence_without_its_own_logo_drops_the_ticketing_by_logo(): void
+    {
+        $this->useLicence(expiresAt: '2099-12-31', plan: Plan::PLATFORM);
+
+        $html = $this->render(new MailBrandingDTO(
+            hideHiEventsBranding: false,
+            showHiEventsPromo: false,
+            promoUrl: self::PROMO_URL,
+            organizerName: 'Acme Events',
+        ));
+
+        $this->assertStringContainsString('<span class="organizer-name"', $html);
+        $this->assertStringNotContainsString('Ticketing by', $html);
+        $this->assertStringNotContainsString('hi-events-horizontal-light.png', $html);
+    }
+
+    public function test_a_configured_email_logo_stays_full_size_above_the_organizer_name(): void
+    {
+        config(['app.email_logo_url' => 'https://cdn.test/platform-logo.png']);
+
+        $html = $this->render(new MailBrandingDTO(
+            hideHiEventsBranding: false,
+            showHiEventsPromo: false,
+            promoUrl: self::PROMO_URL,
+            organizerName: 'Acme Events',
+        ));
+
+        $this->assertMatchesRegularExpression('/<td class="header"[^>]*>\s*<a href="[^"]+"[^>]*><img src="https:\/\/cdn\.test\/platform-logo\.png" class="logo"[^>]*><\/a>\s*<span class="organizer-name organizer-name-under-logo"[^>]*>Acme Events<\/span>/', $html);
+        $this->assertStringNotContainsString('Ticketing by', $html);
+        $this->assertStringNotContainsString('hi-events-horizontal-light.png', $html);
+        $this->assertStringContainsString('Powered by', $html);
+    }
+
     public function test_subscribed_organizers_replace_hi_events_branding_with_their_own(): void
     {
         $html = $this->render(new MailBrandingDTO(
@@ -77,6 +128,7 @@ class MailBrandingLayoutTest extends TestCase
         $this->assertStringContainsString('href="https://acme.test"', $html);
         $this->assertStringContainsString('© '.date('Y').' Acme Events', $html);
         $this->assertStringNotContainsString('hi-events-stacked-light.png', $html);
+        $this->assertStringNotContainsString('Ticketing by', $html);
         $this->assertStringNotContainsString('Powered by', $html);
         $this->assertStringNotContainsString('Planning an event of your own?', $html);
     }

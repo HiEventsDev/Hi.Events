@@ -55,6 +55,9 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     final public const PAYMENT_LINK_CREATED_AT = 'payment_link_created_at';
     final public const OFFLINE_PAYMENT_REPORTED_AT = 'offline_payment_reported_at';
     final public const OFFLINE_PAYMENT_NOTE = 'offline_payment_note';
+    final public const PHONE = 'phone';
+    final public const SMS_OPTED_IN_AT = 'sms_opted_in_at';
+    final public const PHONE_COUNTRY = 'phone_country';
 
     protected int $id;
     protected int $event_id;
@@ -101,6 +104,9 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     protected ?string $payment_link_created_at = null;
     protected ?string $offline_payment_reported_at = null;
     protected ?string $offline_payment_note = null;
+    protected ?string $phone = null;
+    protected ?string $sms_opted_in_at = null;
+    protected ?string $phone_country = null;
 
     public function toArray(): array
     {
@@ -150,6 +156,9 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
                     'payment_link_created_at' => $this->payment_link_created_at ?? null,
                     'offline_payment_reported_at' => $this->offline_payment_reported_at ?? null,
                     'offline_payment_note' => $this->offline_payment_note ?? null,
+                    'phone' => $this->phone ?? null,
+                    'sms_opted_in_at' => $this->sms_opted_in_at ?? null,
+                    'phone_country' => $this->phone_country ?? null,
                 ];
     }
 
@@ -646,5 +655,38 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     public function getOfflinePaymentNote(): ?string
     {
         return $this->offline_payment_note;
+    }
+
+    public function setPhone(?string $phone): self
+    {
+        $this->phone = $phone;
+        return $this;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setSmsOptedInAt(?string $sms_opted_in_at): self
+    {
+        $this->sms_opted_in_at = $sms_opted_in_at;
+        return $this;
+    }
+
+    public function getSmsOptedInAt(): ?string
+    {
+        return $this->sms_opted_in_at;
+    }
+
+    public function setPhoneCountry(?string $phone_country): self
+    {
+        $this->phone_country = $phone_country;
+        return $this;
+    }
+
+    public function getPhoneCountry(): ?string
+    {
+        return $this->phone_country;
     }
 }

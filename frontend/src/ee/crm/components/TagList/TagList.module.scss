@@ -1,0 +1,51 @@
+@use "../../../../styles/mixins";
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-width: 0;
+
+  &[data-single-line] {
+    flex-wrap: nowrap;
+    max-width: 100%;
+    overflow: hidden;
+
+    .tag {
+      min-width: 3rem;
+    }
+
+    .more {
+      flex-shrink: 0;
+      min-width: 0;
+    }
+  }
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  max-width: 140px;
+  padding: 1px 8px;
+  border: 1px solid var(--mantine-color-gray-2);
+  border-radius: 999px;
+  font-size: var(--mantine-font-size-xs);
+  line-height: 1.5;
+  color: var(--mantine-color-gray-8);
+  white-space: nowrap;
+
+  &[data-colored]::before {
+    content: "";
+    flex-shrink: 0;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--tag-color);
+  }
+
+  span {
+    min-width: 0;
+    @include mixins.ellipsis;
+  }
+}

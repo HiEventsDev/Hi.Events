@@ -6,6 +6,7 @@ namespace HiEvents\Services\Domain\EventOccurrence;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
+use HiEvents\DomainObjects\Enums\TicketResaleCloseReason;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
@@ -16,6 +17,7 @@ use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsCancellationService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
+use HiEvents\Services\Domain\TicketResale\TicketResaleClosureService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\AttendeeEvent;
@@ -33,6 +35,7 @@ class CancelOccurrenceAttendeesService
         private readonly EventStatisticsCancellationService $statisticsCancellationService,
         private readonly SeatClaimService $seatClaimService,
         private readonly LoggerInterface $logger,
+        private readonly TicketResaleClosureService $resaleClosureService,
     ) {}
 
     /**
@@ -59,9 +62,10 @@ class CancelOccurrenceAttendeesService
             ],
         );
 
-        $this->seatClaimService->releaseForAttendees(
-            $attendees->map(fn (AttendeeDomainObject $attendee) => $attendee->getId())->all()
-        );
+        $attendeeIds = $attendees->map(fn (AttendeeDomainObject $attendee) => $attendee->getId())->all();
+
+        $this->seatClaimService->releaseForAttendees($attendeeIds);
+        $this->resaleClosureService->closeForAttendees($attendeeIds, TicketResaleCloseReason::DATE_CANCELLED);
 
         $ordersById = $this->orderRepository
             ->findWhereIn('id', $attendees->map(fn (AttendeeDomainObject $attendee) => $attendee->getOrderId())->unique()->values()->all())

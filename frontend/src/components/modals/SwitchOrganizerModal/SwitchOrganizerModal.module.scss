@@ -1,163 +1,138 @@
 @use "../../../styles/mixins.scss";
 
-.organizerList {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-top: 8px;
+$row-inset: 8px;
+
+.search {
+  margin-bottom: 8px;
+
+  :global(.mantine-InputWrapper-root) {
+    margin-bottom: 0;
+  }
 }
 
-.organizerItem {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    padding: 12px 16px;
-    border: 1px solid var(--mantine-color-gray-3);
-    border-radius: 8px;
-    background: white;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-align: left;
-    position: relative;
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: min(408px, 55vh);
+  margin-inline: -$row-inset;
+  overflow-y: auto;
 
-    &:hover {
-        background: var(--mantine-color-gray-0);
-        border-color: var(--mantine-color-primary-5);
-        transform: translateY(-1px);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-
-        .selectIcon {
-            opacity: 1;
-        }
-    }
-
-    &:active {
-        transform: translateY(0);
-    }
+  @include mixins.respond-below(sm) {
+    max-height: none;
+  }
 }
 
-.organizerLogo {
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
-    overflow: hidden;
-    flex-shrink: 0;
+.row {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 48px;
+  padding: 6px $row-inset;
+  border-radius: 8px;
+  transition: background-color 120ms ease;
+
+  &:hover {
     background: var(--mantine-color-gray-1);
+  }
 
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-}
+  &:focus-visible {
+    outline: 2px solid var(--mantine-color-primary-5);
+    outline-offset: -2px;
+  }
 
-.logoPlaceholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--mantine-color-gray-2);
-    color: var(--mantine-color-gray-6);
-}
-
-.organizerInfo {
-    flex: 1;
-    min-width: 0;
-}
-
-.organizerName {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--mantine-color-gray-9);
-    margin: 0 0 2px 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.selectIcon {
-    color: var(--mantine-color-primary-6);
-    opacity: 0;
-    transition: opacity 0.2s ease;
-}
-
-.emptyState {
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--mantine-color-gray-6);
-
-    svg {
-        margin-bottom: 16px;
-        opacity: 0.5;
+  &[data-archived] {
+    :global(.mantine-Avatar-root) {
+      opacity: 0.55;
     }
 
-    p {
-        margin: 0;
-        font-size: 0.875rem;
+    .name {
+      font-weight: 500;
+      color: var(--mantine-color-gray-6);
     }
+  }
 }
 
-.createButton {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    width: 100%;
-    padding: 10px 16px;
-    border: 1px dashed var(--mantine-color-gray-4);
-    border-radius: 8px;
-    background: transparent;
-    cursor: pointer;
-    color: var(--mantine-color-gray-6);
-    font-size: 0.875rem;
-    font-weight: 500;
-    transition: all 0.2s ease;
+.name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 600;
+  color: var(--mantine-color-gray-9);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-    &:hover {
-        border-color: var(--mantine-color-primary-5);
-        color: var(--mantine-color-primary-6);
-        background: var(--mantine-color-primary-0);
-    }
+.currentIcon {
+  flex-shrink: 0;
+  color: var(--mantine-color-primary-6);
+}
+
+.archivedLabel {
+  flex-shrink: 0;
+  font-size: var(--mantine-font-size-xs);
+  color: var(--mantine-color-gray-6);
 }
 
 .archivedToggle {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    width: 100%;
-    padding: 8px 4px;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    color: var(--mantine-color-gray-6);
-    font-size: 0.8rem;
-    font-weight: 500;
-    margin-top: 4px;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  margin-top: 4px;
+  padding: 0 $row-inset;
+  border-radius: 8px;
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 600;
+  color: var(--mantine-color-gray-6);
 
-    &:hover {
-        color: var(--mantine-color-gray-8);
-    }
+  &:hover {
+    color: var(--mantine-color-gray-8);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--mantine-color-primary-5);
+    outline-offset: -2px;
+  }
 }
 
 .archivedCount {
-    color: var(--mantine-color-gray-5);
-    font-weight: 400;
+  font-weight: 500;
+  color: var(--mantine-color-gray-5);
 }
 
-.archivedItem {
-    composes: organizerItem;
-    opacity: 0.6;
-    border-color: var(--mantine-color-gray-2);
-
-    &:hover {
-        opacity: 0.85;
-    }
+.empty {
+  margin: 0;
+  padding: 20px $row-inset;
+  font-size: var(--mantine-font-size-sm);
+  color: var(--mantine-color-gray-6);
+  text-align: center;
 }
 
-.archiveBadge {
-    display: flex;
-    align-items: center;
-    color: var(--mantine-color-gray-5);
+.footer {
+  margin: 8px (-$row-inset) (-$row-inset);
+  padding-top: 8px;
+  border-top: 1px solid var(--hi-color-border);
+}
+
+.createIcon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px dashed var(--mantine-color-gray-4);
+  border-radius: 8px;
+  color: var(--mantine-color-gray-6);
+}
+
+.createLabel {
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 500;
+  color: var(--mantine-color-gray-7);
 }

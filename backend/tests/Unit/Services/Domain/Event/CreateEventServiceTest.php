@@ -454,9 +454,17 @@ class CreateEventServiceTest extends TestCase
             ->andReturn('per_order');
         $organizerSettings->shouldReceive('getDefaultShowMarketingOptIn')
             ->andReturn(false);
+        $organizerSettings->shouldReceive('getDefaultPhoneCollection')
+            ->andReturn('OFF');
+        $organizerSettings->shouldReceive('getDefaultShowSmsOptIn')
+            ->andReturn(false);
         $organizerSettings->shouldReceive('getDefaultPassPlatformFeeToBuyer')
             ->andReturn(false);
         $organizerSettings->shouldReceive('getDefaultAllowAttendeeSelfEdit')
+            ->andReturn(false);
+        $organizerSettings->shouldReceive('getDefaultAllowTicketTransfer')
+            ->andReturn(false);
+        $organizerSettings->shouldReceive('getDefaultAllowTicketResale')
             ->andReturn(false);
 
         $organizer = $this->createMockOrganizerDomainObject()

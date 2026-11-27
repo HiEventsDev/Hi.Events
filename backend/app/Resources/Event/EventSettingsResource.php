@@ -66,6 +66,9 @@ class EventSettingsResource extends JsonResource
             'invoice_payment_terms_days' => $this->getInvoicePaymentTermsDays(),
 
             'show_marketing_opt_in' => $this->getShowMarketingOptIn(),
+            /** @var 'OFF'|'OPTIONAL'|'REQUIRED' */
+            'phone_collection' => $this->getPhoneCollection(),
+            'show_sms_opt_in' => $this->getShowSmsOptIn(),
 
             'allow_copy_details_to_all_attendees' => $this->getAllowCopyDetailsToAllAttendees(),
 
@@ -75,6 +78,11 @@ class EventSettingsResource extends JsonResource
             'homepage_sections' => $this->getHomepageSections(),
 
             'allow_attendee_self_edit' => $this->getAllowAttendeeSelfEdit(),
+            'allow_ticket_transfer' => $this->getAllowTicketTransfer(),
+            'ticket_transfer_cutoff_minutes' => $this->getTicketTransferCutoffMinutes(),
+            'max_transfers_per_ticket' => $this->getMaxTransfersPerTicket(),
+            'allow_ticket_resale' => $this->getAllowTicketResale(),
+            'ticket_resale_cutoff_minutes' => $this->getTicketResaleCutoffMinutes(),
 
             'show_available_occurrence_capacity' => $this->getShowAvailableOccurrenceCapacity(),
             'hide_sold_out_occurrences' => $this->getHideSoldOutOccurrences(),

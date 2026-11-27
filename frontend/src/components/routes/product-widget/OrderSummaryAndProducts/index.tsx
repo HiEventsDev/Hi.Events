@@ -8,13 +8,16 @@ import {
     IconCash,
     IconCheck,
     IconClock,
+    IconDeviceMobile,
     IconEdit,
+    IconArrowsExchange,
     IconExternalLink,
     IconId,
     IconMail,
     IconMapPin,
     IconMenuOrder,
     IconPrinter,
+    IconReceiptRefund,
     IconSend,
     IconTicket,
     IconUser
@@ -24,7 +27,7 @@ import {useQueryClient} from "@tanstack/react-query";
 
 import {useGetOrderPublic, GET_ORDER_PUBLIC_QUERY_KEY} from "../../../../queries/useGetOrderPublic.ts";
 import {eventCheckoutPath} from "../../../../utilites/urlHelper.ts";
-import {dateToBrowserTz} from "../../../../utilites/dates.ts";
+import {dateToBrowserTz, prettyDate} from "../../../../utilites/dates.ts";
 import {formatAddress} from "../../../../utilites/addressUtilities.ts";
 import {getEventLocationDisplay, resolveEventLocation} from "../../../../utilites/effectiveLocation.ts";
 import {getAttendeeProductTitle} from "../../../../utilites/products.ts";
@@ -41,6 +44,12 @@ import {InlineOrderSummary} from "../../../common/InlineOrderSummary";
 import {CheckoutContent} from "../../../layouts/Checkout/CheckoutContent";
 import {CheckoutStepTitle} from "../../../layouts/Checkout/CheckoutStepTitle";
 import {EditAttendeeModal} from "./EditAttendeeModal";
+import {useTicketTransferActions} from "../../../../hooks/useTicketTransferActions.tsx";
+import {TicketTransferPending} from "../../../common/TicketTransfer/TicketTransferPending.tsx";
+import {useTicketResaleActions} from "../../../../hooks/useTicketResaleActions.tsx";
+import {TicketResaleListed} from "../../../common/TicketResale/TicketResaleListed.tsx";
+import {useSelfServiceVerification} from "../../../../hooks/useSelfServiceVerification.tsx";
+import {clearSelfServiceSession, getSelfServiceToken} from "../../../../utilites/selfServiceSession.ts";
 import {ChangeSeatButton} from "../../../../ee/seating/components/ChangeSeatButton";
 import {canAttendeeChangeSeat} from "../../../../ee/seating/components/ChangeSeatButton/canAttendeeChangeSeat.ts";
 import {EditOrderModal} from "./EditOrderModal";
@@ -50,10 +59,11 @@ import {useEditOrderPublic} from "../../../../mutations/useEditOrderPublic";
 import {useResendAttendeeTicketPublic} from "../../../../mutations/useResendAttendeeTicketPublic";
 import {useResendOrderConfirmationPublic} from "../../../../mutations/useResendOrderConfirmationPublic";
 
-import {Attendee, Event, IdParam, LocationType, Order, Product} from "../../../../types.ts";
+import {Attendee, Event, IdParam, LocationType, Order, Product, TransferredTicket} from "../../../../types.ts";
 import classes from './OrderSummaryAndProducts.module.scss';
 import {clearWaitlistJoinedForEvent} from "../../../../hooks/useWaitlistJoined.ts";
 import {UserGeneratedContent} from "../../../common/UserGeneratedContent";
+import {formatPhoneNumber} from "../../../../utilites/phoneNumber.ts";
 import {OfflinePaymentDetails} from "../../../common/OfflinePaymentDetails";
 import {formatCurrency, plainAmount} from "../../../../utilites/currency.ts";
 import {ReportOfflinePayment} from "./ReportOfflinePayment";
@@ -94,6 +104,10 @@ const GuestListItem = ({
     allowSelfEdit,
     onEditClick,
     onResendClick,
+    onTransferClick,
+    onCancelTransferClick,
+    onSellClick,
+    onWithdrawListingClick,
 }: {
     attendee: Attendee;
     event: Event;
@@ -102,16 +116,27 @@ const GuestListItem = ({
     allowSelfEdit: boolean;
     onEditClick: () => void;
     onResendClick: () => void;
+    onTransferClick: () => void;
+    onCancelTransferClick: () => void;
+    onSellClick: () => void;
+    onWithdrawListingClick: () => void;
 }) => {
     const productTitle = getAttendeeProductTitle(attendee, attendee.product as Product);
-    const isCancelled = attendee.status === 'CANCELLED';
+    const isListedForResale = attendee.resale?.status === 'LISTED';
+    const isResold = attendee.resale?.status === 'SOLD';
+    const isCancelled = attendee.status === 'CANCELLED' && !isResold;
 
     return (
-        <div className={`${classes.guestItem} ${isCancelled ? classes.guestItemCancelled : ''}`}>
+        <div
+            className={`${classes.guestItem} ${isCancelled || isResold ? classes.guestItemCancelled : ''}`}
+            data-testid="order-guest"
+        >
             <div className={classes.guestInfo}>
                 <div className={classes.guestName}>
-                    {attendee.first_name} {attendee.last_name}
+                    <span className={classes.guestNameText}>{attendee.first_name} {attendee.last_name}</span>
                     {isCancelled && <span className={classes.cancelledBadge}>{t`Cancelled`}</span>}
+                    {isListedForResale && <span className={classes.listedBadge}>{t`Listed for resale`}</span>}
+                    {isResold && <span className={classes.transferredBadge}>{t`Resold`}</span>}
                 </div>
                 <div className={classes.guestDetails}>
                     {attendee.email ? <span className={classes.guestEmail}>{attendee.email}</span> : null}
@@ -119,51 +144,117 @@ const GuestListItem = ({
                         {[productTitle, attendee.seat_label].filter(Boolean).join(' · ')}
                     </span>
                 </div>
-            </div>
-            <div className={classes.guestActions}>
-                <Tooltip label={t`View Ticket`}>
-                    <ActionIcon
-                        variant="subtle"
-                        onClick={() => window?.open(`/product/${event.id}/${attendee.short_id}`, '_blank')}
-                    >
-                        <IconExternalLink size={18}/>
-                    </ActionIcon>
-                </Tooltip>
-                <Tooltip label={t`Print Ticket`}>
-                    <ActionIcon
-                        variant="subtle"
-                        onClick={() => window?.open(`/product/${event.id}/${attendee.short_id}/print`, '_blank')}
-                    >
-                        <IconPrinter size={18}/>
-                    </ActionIcon>
-                </Tooltip>
-                {canChangeSeat && (
-                    <ChangeSeatButton eventId={event.id as IdParam} orderShortId={orderShortId} attendee={attendee}/>
+                {attendee.transfer?.pending && (
+                    <TicketTransferPending
+                        pending={attendee.transfer.pending}
+                        timezone={event.timezone}
+                        onCancel={onCancelTransferClick}
+                    />
                 )}
-                {allowSelfEdit && !isCancelled && (
-                    <>
-                        <Tooltip label={t`Edit Attendee`}>
+                {isListedForResale && attendee.resale && (
+                    <TicketResaleListed
+                        resale={attendee.resale}
+                        timezone={event.timezone}
+                        onWithdraw={onWithdrawListingClick}
+                    />
+                )}
+                {isResold && (
+                    <div className={classes.guestNotice}>
+                        {t`Your refund is on its way to the card you paid with.`}
+                    </div>
+                )}
+            </div>
+            {!isListedForResale && !isResold && (
+                <div className={classes.guestActions}>
+                    <Tooltip label={t`View Ticket`}>
+                        <ActionIcon
+                            variant="subtle"
+                            aria-label={t`View Ticket`}
+                            onClick={() => window?.open(`/product/${event.id}/${attendee.short_id}`, '_blank')}
+                        >
+                            <IconExternalLink size={18}/>
+                        </ActionIcon>
+                    </Tooltip>
+                    <Tooltip label={t`Print Ticket`}>
+                        <ActionIcon
+                            variant="subtle"
+                            aria-label={t`Print Ticket`}
+                            onClick={() => window?.open(`/product/${event.id}/${attendee.short_id}/print`, '_blank')}
+                        >
+                            <IconPrinter size={18}/>
+                        </ActionIcon>
+                    </Tooltip>
+                    {canChangeSeat && (
+                        <ChangeSeatButton eventId={event.id as IdParam} orderShortId={orderShortId} attendee={attendee}/>
+                    )}
+                    {attendee.transfer?.can_start && (
+                        <Tooltip label={t`Transfer Ticket`}>
                             <ActionIcon
                                 variant="subtle"
-                                data-testid="attendee-edit-button"
-                                onClick={onEditClick}
+                                aria-label={t`Transfer Ticket`}
+                                data-testid="ticket-transfer-button"
+                                onClick={onTransferClick}
                             >
-                                <IconEdit size={18}/>
+                                <IconArrowsExchange size={18}/>
                             </ActionIcon>
                         </Tooltip>
-                        {attendee.email ? (
-                            <Tooltip label={t`Resend Ticket`}>
+                    )}
+                    {attendee.resale?.can_list && (
+                        <Tooltip label={t`Sell this ticket`}>
+                            <ActionIcon
+                                variant="subtle"
+                                aria-label={t`Sell this ticket`}
+                                data-testid="ticket-resale-button"
+                                onClick={onSellClick}
+                            >
+                                <IconReceiptRefund size={18}/>
+                            </ActionIcon>
+                        </Tooltip>
+                    )}
+                    {allowSelfEdit && !isCancelled && (
+                        <>
+                            <Tooltip label={t`Edit Attendee`}>
                                 <ActionIcon
                                     variant="subtle"
-                                    data-testid="resend-ticket-button"
-                                    onClick={onResendClick}
+                                    data-testid="attendee-edit-button"
+                                    onClick={onEditClick}
                                 >
-                                    <IconSend size={18}/>
+                                    <IconEdit size={18}/>
                                 </ActionIcon>
                             </Tooltip>
-                        ) : null}
-                    </>
-                )}
+                            {attendee.email ? (
+                                <Tooltip label={t`Resend Ticket`}>
+                                    <ActionIcon
+                                        variant="subtle"
+                                        data-testid="resend-ticket-button"
+                                        onClick={onResendClick}
+                                    >
+                                        <IconSend size={18}/>
+                                    </ActionIcon>
+                                </Tooltip>
+                            ) : null}
+                        </>
+                    )}
+                </div>
+            )}
+        </div>
+    );
+};
+
+const TransferredTicketItem = ({ticket, timezone}: { ticket: TransferredTicket; timezone: string }) => {
+    const recipient = ticket.recipient_email;
+    const transferredOn = prettyDate(ticket.transferred_at, timezone);
+
+    return (
+        <div className={`${classes.guestItem} ${classes.guestItemCancelled}`} data-testid="transferred-ticket">
+            <div className={classes.guestInfo}>
+                <div className={classes.guestName}>
+                    {ticket.product_title ?? t`Ticket`}
+                    <span className={classes.transferredBadge}>{t`Transferred`}</span>
+                </div>
+                <div className={classes.guestDetails}>
+                    <span>{t`Now held by ${recipient} since ${transferredOn}. It is no longer part of your order.`}</span>
+                </div>
             </div>
         </div>
     );
@@ -311,6 +402,13 @@ const OrderDetails = ({
                     }
                 />
             ) : null}
+            {order.phone && (
+                <DetailItem
+                    icon={IconDeviceMobile}
+                    label={t`Mobile Number`}
+                    value={formatPhoneNumber(order.phone)}
+                />
+            )}
             <DetailItem
                 icon={IconCalendar}
                 label={t`Order Date`}
@@ -500,6 +598,21 @@ export const OrderSummaryAndProducts = () => {
     const resendOrderConfirmationMutation = useResendOrderConfirmationPublic();
 
     const allowSelfEdit = (event?.settings?.allow_attendee_self_edit ?? false) && !isPayer;
+    const selfServiceLink = {eventId: eventId!, orderShortId: orderShortId!};
+    const {requireVerification, startVerification, verificationModal} = useSelfServiceVerification(selfServiceLink);
+    const {openTransfer, cancelTransfer, transferModals} = useTicketTransferActions(selfServiceLink);
+    const {openSell, withdrawListing, resaleModals} = useTicketResaleActions(selfServiceLink, event?.timezone);
+
+    const retryAfterVerification = (error: any, retry: () => void): boolean => {
+        if (error?.response?.status !== 422 || !error?.response?.data?.errors?.email || !getSelfServiceToken(selfServiceLink)) {
+            return false;
+        }
+
+        clearSelfServiceSession(selfServiceLink);
+        startVerification(retry);
+
+        return true;
+    };
 
     const handleEditAttendee = (attendee: Attendee, data: any) => {
         editAttendeeMutation.mutate(
@@ -519,10 +632,13 @@ export const OrderSummaryAndProducts = () => {
                     }
                 },
                 onError: (error: any) => {
+                    if (retryAfterVerification(error, () => handleEditAttendee(attendee, data))) {
+                        return;
+                    }
                     if (error?.response?.status === 429) {
                         showError(t`Rate limit exceeded. Please try again later.`);
                     } else {
-                        showError(error?.response?.data?.message || t`Failed to update attendee`);
+                        showError(error?.response?.data?.errors?.email?.[0] || error?.response?.data?.message || t`Failed to update attendee`);
                     }
                 },
             }
@@ -554,10 +670,13 @@ export const OrderSummaryAndProducts = () => {
                     }
                 },
                 onError: (error: any) => {
+                    if (retryAfterVerification(error, () => handleEditOrder(data))) {
+                        return;
+                    }
                     if (error?.response?.status === 429) {
                         showError(t`Rate limit exceeded. Please try again later.`);
                     } else {
-                        showError(error?.response?.data?.message || t`Failed to update order`);
+                        showError(error?.response?.data?.errors?.email?.[0] || error?.response?.data?.message || t`Failed to update order`);
                     }
                 },
             }
@@ -704,7 +823,7 @@ export const OrderSummaryAndProducts = () => {
 
                 {(order.status === 'COMPLETED' && !isPayer) && <AddToCalendarCTA event={event} occurrence={order.order_items?.[0]?.event_occurrence}/>}
 
-                {(!isPayer && order?.attendees && order.attendees.length > 0) && (
+                {(!isPayer && ((order?.attendees?.length ?? 0) > 0 || (order?.transferred_tickets?.length ?? 0) > 0)) && (
                     <>
                         <Group justify="space-between" align="center">
                             <h1 className={classes.heading}>
@@ -713,19 +832,21 @@ export const OrderSummaryAndProducts = () => {
                                     {t`Guests`}
                                 </Group>
                             </h1>
-                            <Button
-                                size="sm"
-                                variant="subtle"
-                                leftSection={<IconPrinter size={16}/>}
-                                onClick={() => window?.open(`/order/${eventId}/${orderShortId}/print`, '_blank')}
-                            >
-                                {t`Print All Tickets`}
-                            </Button>
+                            {(order.attendees?.length ?? 0) > 0 && (
+                                <Button
+                                    size="sm"
+                                    variant="subtle"
+                                    leftSection={<IconPrinter size={16}/>}
+                                    onClick={() => window?.open(`/order/${eventId}/${orderShortId}/print`, '_blank')}
+                                >
+                                    {t`Print All Tickets`}
+                                </Button>
+                            )}
                         </Group>
 
                         <Card>
                             <div className={classes.guestList}>
-                                {order.attendees.map((attendee) => (
+                                {(order.attendees ?? []).map((attendee) => (
                                     <GuestListItem
                                         key={attendee.id}
                                         attendee={attendee}
@@ -735,6 +856,17 @@ export const OrderSummaryAndProducts = () => {
                                         allowSelfEdit={allowSelfEdit}
                                         onEditClick={() => setEditingAttendee(attendee)}
                                         onResendClick={() => handleResendAttendeeTicket(attendee)}
+                                        onTransferClick={() => openTransfer(attendee)}
+                                        onCancelTransferClick={() => cancelTransfer(attendee)}
+                                        onSellClick={() => openSell(attendee)}
+                                        onWithdrawListingClick={() => withdrawListing(attendee)}
+                                    />
+                                ))}
+                                {(order.transferred_tickets ?? []).map((ticket) => (
+                                    <TransferredTicketItem
+                                        key={`${ticket.product_id}-${ticket.transferred_at}-${ticket.recipient_email}`}
+                                        ticket={ticket}
+                                        timezone={event.timezone}
                                     />
                                 ))}
                             </div>
@@ -751,6 +883,10 @@ export const OrderSummaryAndProducts = () => {
                     onClose={() => setEditingAttendee(null)}
                     attendee={editingAttendee}
                     onSuccess={(values: any) => {
+                        if ((values.email ?? '') !== (editingAttendee.email ?? '')) {
+                            requireVerification(() => handleEditAttendee(editingAttendee, values));
+                            return;
+                        }
                         handleEditAttendee(editingAttendee, values);
                     }}
                 />
@@ -761,11 +897,21 @@ export const OrderSummaryAndProducts = () => {
                     opened={editOrderModalOpened}
                     onClose={() => setEditOrderModalOpened(false)}
                     order={order}
+                    phoneCollection={event?.settings?.phone_collection ?? 'OFF'}
+                    defaultCountry={event?.event_location?.location?.structured_address?.country}
                     onSuccess={(values: any) => {
+                        if ((values.email ?? '') !== (order.email ?? '')) {
+                            requireVerification(() => handleEditOrder(values));
+                            return;
+                        }
                         handleEditOrder(values);
                     }}
                 />
             )}
+
+            {verificationModal}
+            {transferModals}
+            {resaleModals}
         </>
     );
 };

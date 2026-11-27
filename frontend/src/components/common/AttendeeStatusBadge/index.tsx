@@ -29,7 +29,17 @@ export const AttendeeStatusBadge = ({attendee, noStyle = false}: AttendeeStatusB
         'AWAITING_PAYMENT': t`Awaiting Payment`,
     };
 
-    const status = statusLabels[attendee.status] || attendee.status.replace('_', ' ');
+    const resaleStatus = attendee.resale?.status;
+    const status = (resaleStatus === 'SOLD' && t`Resold`)
+        || (resaleStatus === 'LISTED' && t`Listed for resale`)
+        || statusLabels[attendee.status]
+        || attendee.status.replace('_', ' ');
+
+    if (resaleStatus === 'SOLD') {
+        color = 'gray';
+    } else if (resaleStatus === 'LISTED') {
+        color = 'orange';
+    }
 
     if (noStyle) {
         return <span style={{color: color}}>{status}</span>;

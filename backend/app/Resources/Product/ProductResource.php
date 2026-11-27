@@ -68,6 +68,8 @@ class ProductResource extends JsonResource
             'highlight_message' => $this->getHighlightMessage(),
             'waitlist_enabled' => $this->getWaitlistEnabled(),
             'is_addon_only' => $this->getIsAddonOnly(),
+            'is_transferable' => $this->getIsTransferable(),
+            'is_resellable' => $this->getIsResellable(),
             'addon_product_ids' => $this->when(
                 $this->getAddons() !== null,
                 fn () => $this->getAddonProductIds(),

@@ -44,6 +44,7 @@ class ProcessWaitlistOnCapacityAvailableListener implements ShouldQueue
             $event->eventId,
             ignoreCache: true,
             eventOccurrenceId: $eventOccurrenceId,
+            includeResaleStock: true,
         );
 
         foreach ($quantities->productQuantities as $productQuantity) {

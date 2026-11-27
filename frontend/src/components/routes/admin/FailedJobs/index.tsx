@@ -1,7 +1,7 @@
-import {Container, Title, TextInput, Skeleton, Pagination, Stack, Table, Button, Group, Text, Badge, Modal, Code, ScrollArea, ActionIcon, Tooltip} from "@mantine/core";
+import {Container, Title, TextInput, Stack, Button, Group, Text, Badge, Menu, Modal, Code, ScrollArea, ActionIcon, VisuallyHidden} from "@mantine/core";
 import {t} from "@lingui/macro";
-import {IconSearch, IconTrash, IconRefresh, IconEye} from "@tabler/icons-react";
-import {useState, useEffect} from "react";
+import {IconDotsVertical, IconSearch, IconTrash, IconRefresh, IconEye} from "@tabler/icons-react";
+import {useState, useEffect, useMemo} from "react";
 import {useGetAdminFailedJobs} from "../../../../queries/useGetAdminFailedJobs";
 import {useDeleteFailedJob} from "../../../../mutations/useDeleteFailedJob";
 import {useDeleteAllFailedJobs} from "../../../../mutations/useDeleteAllFailedJobs";
@@ -11,6 +11,10 @@ import {showError, showSuccess} from "../../../../utilites/notifications";
 import {AdminFailedJob} from "../../../../api/admin.client";
 import {useDisclosure} from "@mantine/hooks";
 import {relativeDate} from "../../../../utilites/dates";
+import {TanStackTable, TanStackTableColumn} from "../../../common/TanStackTable";
+import {CellCopy, CellText} from "../../../common/TanStackTable/cells.tsx";
+import {TableCard, TableCardFooter, TableCardSkeleton} from "../../../common/TableCard";
+import {ToolBar} from "../../../common/ToolBar";
 import tableStyles from "../../../../styles/admin-table.module.scss";
 import {IdParam} from "../../../../types";
 
@@ -106,6 +110,66 @@ const FailedJobs = () => {
 
     const totalJobs = jobsData?.meta?.total || 0;
 
+    const columns = useMemo<TanStackTableColumn<AdminFailedJob>[]>(() => [
+        {
+            id: 'job',
+            header: t`Job`,
+            meta: {sticky: 'left'},
+            cell: ({row: {original: job}}) => <CellText strong title={job.job_name}>{job.job_name}</CellText>,
+        },
+        {
+            id: 'uuid',
+            header: t`UUID`,
+            cell: ({row: {original: job}}) => (
+                <CellCopy value={job.uuid}>
+                    <CellText mono muted>{job.uuid}</CellText>
+                </CellCopy>
+            ),
+        },
+        {
+            id: 'queue',
+            header: t`Queue`,
+            cell: ({row: {original: job}}) => <CellText mono>{job.queue}</CellText>,
+        },
+        {
+            id: 'failed_at',
+            header: t`Failed At`,
+            cell: ({row: {original: job}}) => <span title={job.failed_at}>{relativeDate(job.failed_at)}</span>,
+        },
+        {
+            id: 'exception',
+            header: t`Exception`,
+            cell: ({row: {original: job}}) => (
+                <CellText maxWidth={300} title={job.exception_summary}>{job.exception_summary}</CellText>
+            ),
+        },
+        {
+            id: 'actions',
+            header: () => <VisuallyHidden>{t`Actions`}</VisuallyHidden>,
+            meta: {sticky: 'right'},
+            cell: ({row: {original: job}}) => (
+                <Menu shadow="md" width={200} position="bottom-end">
+                    <Menu.Target>
+                        <ActionIcon variant="subtle" color="gray" aria-label={t`Actions`}>
+                            <IconDotsVertical size={18}/>
+                        </ActionIcon>
+                    </Menu.Target>
+                    <Menu.Dropdown>
+                        <Menu.Item leftSection={<IconEye size={14}/>} onClick={() => handleViewDetails(job)}>
+                            {t`View Details`}
+                        </Menu.Item>
+                        <Menu.Item leftSection={<IconRefresh size={14}/>} onClick={() => handleRetryJob(job.id)}>
+                            {t`Retry`}
+                        </Menu.Item>
+                        <Menu.Item color="red" leftSection={<IconTrash size={14}/>} onClick={() => handleDeleteJob(job.id)}>
+                            {t`Delete`}
+                        </Menu.Item>
+                    </Menu.Dropdown>
+                </Menu>
+            ),
+        },
+    ], []);
+
     return (
         <Container size="xl" p="xl">
             <Stack gap="lg">
@@ -138,102 +202,33 @@ const FailedJobs = () => {
                     )}
                 </Group>
 
-                <TextInput
-                    placeholder={t`Search by job name or exception...`}
-                    leftSection={<IconSearch size={16} />}
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                />
-
-                {isLoading ? (
-                    <Stack gap="md">
-                        <Skeleton height={50} radius="md" />
-                        <Skeleton height={400} radius="md" />
-                    </Stack>
-                ) : totalJobs === 0 ? (
-                    <div className={tableStyles.emptyState}>
-                        <Text c="dimmed" size="lg">{t`No failed jobs`}</Text>
-                    </div>
-                ) : (
-                    <div className={tableStyles.tableWrapper}>
-                        <div className={tableStyles.tableScroll}>
-                            <Table className={tableStyles.table} highlightOnHover>
-                                <Table.Thead>
-                                    <Table.Tr>
-                                        <Table.Th>{t`Job`}</Table.Th>
-                                        <Table.Th>{t`Queue`}</Table.Th>
-                                        <Table.Th>{t`Failed At`}</Table.Th>
-                                        <Table.Th>{t`Exception`}</Table.Th>
-                                        <Table.Th style={{width: 120}}>{t`Actions`}</Table.Th>
-                                    </Table.Tr>
-                                </Table.Thead>
-                                <Table.Tbody>
-                                    {jobsData?.data?.map((job) => (
-                                        <Table.Tr key={job.id}>
-                                            <Table.Td>
-                                                <Text size="sm" fw={500}>{job.job_name}</Text>
-                                                <Text size="xs" c="dimmed">{job.uuid}</Text>
-                                            </Table.Td>
-                                            <Table.Td>
-                                                <Badge variant="light">{job.queue}</Badge>
-                                            </Table.Td>
-                                            <Table.Td>
-                                                <Text size="sm">{relativeDate(job.failed_at)}</Text>
-                                            </Table.Td>
-                                            <Table.Td>
-                                                <Text size="sm" lineClamp={1} maw={300}>
-                                                    {job.exception_summary}
-                                                </Text>
-                                            </Table.Td>
-                                            <Table.Td>
-                                                <Group gap="xs">
-                                                    <Tooltip label={t`View Details`}>
-                                                        <ActionIcon
-                                                            variant="subtle"
-                                                            color="gray"
-                                                            onClick={() => handleViewDetails(job)}
-                                                        >
-                                                            <IconEye size={16} />
-                                                        </ActionIcon>
-                                                    </Tooltip>
-                                                    <Tooltip label={t`Retry`}>
-                                                        <ActionIcon
-                                                            variant="subtle"
-                                                            color="blue"
-                                                            onClick={() => handleRetryJob(job.id)}
-                                                            loading={retryJobMutation.isPending}
-                                                        >
-                                                            <IconRefresh size={16} />
-                                                        </ActionIcon>
-                                                    </Tooltip>
-                                                    <Tooltip label={t`Delete`}>
-                                                        <ActionIcon
-                                                            variant="subtle"
-                                                            color="red"
-                                                            onClick={() => handleDeleteJob(job.id)}
-                                                            loading={deleteJobMutation.isPending}
-                                                        >
-                                                            <IconTrash size={16} />
-                                                        </ActionIcon>
-                                                    </Tooltip>
-                                                </Group>
-                                            </Table.Td>
-                                        </Table.Tr>
-                                    ))}
-                                </Table.Tbody>
-                            </Table>
-                        </div>
-                    </div>
-                )}
-
-                {jobsData?.meta && jobsData.meta.last_page > 1 && (
-                    <Pagination
-                        total={jobsData.meta.last_page}
-                        value={page}
-                        onChange={setPage}
-                        mt="md"
+                <TableCard>
+                    <ToolBar
+                        embedded
+                        searchComponent={() => (
+                            <TextInput
+                                placeholder={t`Search by job name or exception...`}
+                                leftSection={<IconSearch size={16}/>}
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                            />
+                        )}
                     />
-                )}
+
+                    {isLoading && <TableCardSkeleton/>}
+
+                    {!isLoading && totalJobs === 0 && (
+                        <div className={tableStyles.emptyState}>
+                            <Text c="dimmed" size="lg">{t`No failed jobs`}</Text>
+                        </div>
+                    )}
+
+                    {!isLoading && totalJobs > 0 && (
+                        <TanStackTable data={jobsData?.data ?? []} columns={columns} noCard/>
+                    )}
+
+                    <TableCardFooter pagination={jobsData?.meta} page={page} onPageChange={setPage}/>
+                </TableCard>
             </Stack>
 
             <Modal

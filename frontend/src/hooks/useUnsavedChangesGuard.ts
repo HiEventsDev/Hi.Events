@@ -4,15 +4,17 @@ import {useWindowEvent} from "@mantine/hooks";
 import {t} from "@lingui/macro";
 import {confirmationDialogAsync} from "../utilites/confirmationDialog.tsx";
 
-export const useUnsavedChangesGuard = (hasUnsavedChanges: boolean, message: string) => {
+export const useUnsavedChangesGuard = (hasUnsavedChanges: boolean | (() => boolean), message: string) => {
+    const isDirty = () => typeof hasUnsavedChanges === 'function' ? hasUnsavedChanges() : hasUnsavedChanges;
+
     useWindowEvent('beforeunload', event => {
-        if (hasUnsavedChanges) {
+        if (isDirty()) {
             event.preventDefault();
         }
     });
 
     const blocker = useBlocker(({currentLocation, nextLocation}) =>
-        hasUnsavedChanges && currentLocation.pathname !== nextLocation.pathname);
+        currentLocation.pathname !== nextLocation.pathname && isDirty());
 
     const isConfirming = useRef(false);
 

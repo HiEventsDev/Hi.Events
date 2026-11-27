@@ -3,6 +3,7 @@
 namespace HiEvents\DomainObjects;
 
 use HiEvents\DomainObjects\Enums\EventFeature;
+use HiEvents\Helper\StringHelper;
 
 class EventSettingDomainObject extends Generated\EventSettingDomainObjectAbstract
 {
@@ -22,10 +23,8 @@ class EventSettingDomainObject extends Generated\EventSettingDomainObjectAbstrac
             return '';
         }
 
-        return <<<HTML
-<div style="color: #888; margin-top: 30px; margin-bottom: 30px; font-size: .9em;">
-    {$this->getEmailFooterMessage()}
-</div>
-HTML;
+        return '<div style="color: #888; margin-top: 30px; margin-bottom: 30px; font-size: .9em;">'
+            .StringHelper::onOneLine($this->getEmailFooterMessage())
+            .'</div>';
     }
 }

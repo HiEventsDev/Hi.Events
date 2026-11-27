@@ -118,6 +118,24 @@ export const WebhookForm = ({ form, isEventContext = false }: WebhookFormProps) 
         },
         {
             icon: <IconBolt size={14} />,
+            label: t`Attendee Transferred`,
+            value: 'attendee.transferred',
+            description: t`When a ticket is accepted by a new holder`,
+        },
+        {
+            icon: <IconBolt size={14} />,
+            label: t`Ticket Listed for Resale`,
+            value: 'attendee.resale_listed',
+            description: t`When a buyer lists a ticket for resale`,
+        },
+        {
+            icon: <IconBolt size={14} />,
+            label: t`Ticket Resold`,
+            value: 'attendee.resold',
+            description: t`When a listed ticket is bought and the seller's ticket is cancelled`,
+        },
+        {
+            icon: <IconBolt size={14} />,
             label: t`Check-in Created`,
             value: 'checkin.created',
             description: t`When an attendee is checked in`,

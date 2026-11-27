@@ -29,6 +29,8 @@ class EventOccurrenceDomainObject extends EventOccurrenceDomainObjectAbstract im
 
     private ?OccurrenceBookingLimitsDTO $bookingLimits = null;
 
+    private bool $hasListedTickets = false;
+
     public static function getAllowedFilterFields(): array
     {
         return [
@@ -133,11 +135,18 @@ class EventOccurrenceDomainObject extends EventOccurrenceDomainObjectAbstract im
 
     public function getStatus(): string
     {
-        if ($this->isSoldOut()) {
+        if ($this->isSoldOut() && ! $this->hasListedTickets) {
             return EventOccurrenceStatus::SOLD_OUT->name;
         }
 
         return parent::getStatus();
+    }
+
+    public function setHasListedTickets(bool $hasListedTickets): self
+    {
+        $this->hasListedTickets = $hasListedTickets;
+
+        return $this;
     }
 
     public function isActive(): bool

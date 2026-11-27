@@ -15,6 +15,16 @@ abstract class ApiTool extends Tool
         protected readonly ApiRouteDispatcher $api,
     ) {}
 
+    public function annotations(): array
+    {
+        return [
+            'readOnlyHint' => false,
+            'destructiveHint' => false,
+            'openWorldHint' => false,
+            ...parent::annotations(),
+        ];
+    }
+
     protected function getEvent(int $eventId): ApiRouteResponseDTO
     {
         return $this->api->get(GetEventAction::class, ['event_id' => $eventId]);

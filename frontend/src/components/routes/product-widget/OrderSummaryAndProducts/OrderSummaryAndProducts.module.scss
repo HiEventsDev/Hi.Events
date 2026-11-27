@@ -125,12 +125,18 @@ $font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 
   &:first-child {
     padding-top: 0;
   }
+
+  @include mixins.respond-below(sm) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
 }
 
 .guestItemCancelled {
   opacity: 0.6;
 
-  .guestName {
+  .guestNameText {
     text-decoration: line-through;
   }
 }
@@ -158,6 +164,39 @@ $font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 
   padding: 2px 8px;
   border-radius: 4px;
   text-decoration: none;
+}
+
+.transferredBadge {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--checkout-text-secondary, #6b7280);
+  background: rgba(107, 114, 128, 0.12);
+  padding: 2px 8px;
+  border-radius: 4px;
+
+  :global([data-mantine-color-scheme='dark']) & {
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.listedBadge {
+  font-size: 11px;
+  font-weight: 500;
+  color: #b54708;
+  background: rgba(181, 71, 8, 0.1);
+  padding: 2px 8px;
+  border-radius: 4px;
+
+  :global([data-mantine-color-scheme='dark']) & {
+    color: #fdba74;
+    background: rgba(253, 186, 116, 0.14);
+  }
+}
+
+.guestNotice {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--checkout-text-secondary, #6b7280);
 }
 
 .guestDetails {
@@ -192,4 +231,8 @@ $font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 
   display: flex;
   gap: 4px;
   flex-shrink: 0;
+
+  @include mixins.respond-below(sm) {
+    margin-left: -6px;
+  }
 }

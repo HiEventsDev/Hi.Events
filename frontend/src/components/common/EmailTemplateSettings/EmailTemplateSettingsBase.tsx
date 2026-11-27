@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {CreateButton} from "../CreateButton";
-import {ActionIcon, Badge, Button, Group, LoadingOverlay, Modal, Paper, Stack, Text} from '@mantine/core';
+import {ActionIcon, Badge, Button, Group, LoadingOverlay, Modal, Stack, Text} from '@mantine/core';
 import {IconBrandStripe, IconEdit, IconMail, IconPlus, IconTrash} from '@tabler/icons-react';
 import {Callout} from '../Callout';
 import {t, Trans} from '@lingui/macro';
@@ -17,23 +17,21 @@ import {
     UpdateEmailTemplateRequest,
     DefaultEmailTemplate
 } from '../../../types';
-import {Card} from '../Card';
-import {HeadingWithDescription} from '../Card/CardHeading';
+import {SettingsBlock, SettingsSection} from '../SettingsPage';
+import classes from './EmailTemplateSettings.module.scss';
 import {useGetAccount} from '../../../queries/useGetAccount';
 import {NavLink} from 'react-router';
 import {useGetEvent} from '../../../queries/useGetEvent';
 
 interface EmailTemplateSettingsBaseProps {
-    // Context 
     contextId: string | number;
     contextType: 'event' | 'organizer';
+    sectionTitle?: string;
     
-    // Data
     templates: EmailTemplate[];
     defaultTemplates?: Record<EmailTemplateType, DefaultEmailTemplate>;
     isLoading: boolean;
     
-    // Mutations
     createMutation: {
         mutate: (params: any, options?: any) => void;
         isPending: boolean;
@@ -52,7 +50,6 @@ interface EmailTemplateSettingsBaseProps {
         data?: any;
     };
     
-    // Callbacks
     onCreateTemplate?: (type: EmailTemplateType) => void;
     onSaveSuccess?: () => void;
     onDeleteSuccess?: () => void;
@@ -63,6 +60,7 @@ interface EmailTemplateSettingsBaseProps {
 export const EmailTemplateSettingsBase = ({
     contextId,
     contextType,
+    sectionTitle,
     templates,
     defaultTemplates,
     isLoading,
@@ -149,13 +147,10 @@ export const EmailTemplateSettingsBase = ({
                     if (error.response?.data?.errors && editorForm) {
                         const errors = error.response.data.errors;
                         
-                        // Check if body field has syntax error
                         if (errors.body) {
-                            // Set form error for the body field and show specific message
                             editorForm.setFieldError('body', t`Invalid Liquid syntax. Please correct it and try again.`);
                             showError(t`The template body contains invalid Liquid syntax. Please correct it and try again.`);
                         } else {
-                            // Handle other field errors normally
                             handleFormError(editorForm, error, t`Failed to save template`);
                         }
                     } else {
@@ -180,13 +175,10 @@ export const EmailTemplateSettingsBase = ({
                     if (error.response?.data?.errors && editorForm) {
                         const errors = error.response.data.errors;
                         
-                        // Check if body field has syntax error
                         if (errors.body) {
-                            // Set form error for the body field and show specific message
                             editorForm.setFieldError('body', t`Invalid Liquid syntax. Please correct it and try again.`);
                             showError(t`The template body contains invalid Liquid syntax. Please correct it and try again.`);
                         } else {
-                            // Handle other field errors normally
                             handleFormError(editorForm, error, t`Failed to save template`);
                         }
                     } else {
@@ -249,20 +241,20 @@ export const EmailTemplateSettingsBase = ({
         label: string;
         description: string;
     }) => (
-        <Paper p="md" withBorder>
-            <Group justify="space-between" align="flex-start">
-                <div style={{flex: 1}}>
-                    <Group gap="xs" mb="xs">
+        <SettingsBlock>
+            <Group justify="space-between" align="flex-start" data-testid="email-template-card">
+                <div className={classes.templateText}>
+                    <Group gap="xs" mb={4}>
                         <IconMail size={16}/>
-                        <Text fw={600}>{label}</Text>
+                        <Text size="sm" fw={600}>{label}</Text>
                         {getTemplateStatusBadge(template)}
                     </Group>
-                    <Text size="sm" c="dimmed" mb="md">
+                    <Text size="sm" c="dimmed">
                         {description}
                     </Text>
 
                     {template && (
-                        <Stack gap="xs">
+                        <Stack gap="xs" mt="sm">
                             <div>
                                 <Text size="sm" fw={500}>
                                     <Trans>Subject:</Trans>
@@ -317,15 +309,8 @@ export const EmailTemplateSettingsBase = ({
                     )}
                 </Group>
             </Group>
-        </Paper>
+        </SettingsBlock>
     );
-
-    const getHeadingDescription = () => {
-        if (contextType === 'event') {
-            return t`Create custom email templates for this event that override the organizer defaults`;
-        }
-        return t`Customize the emails sent to your customers using Liquid templating. These templates will be used as defaults for all events in your organization.`;
-    };
 
     const getAlertMessage = () => {
         if (contextType === 'event') {
@@ -345,44 +330,41 @@ export const EmailTemplateSettingsBase = ({
     };
 
     return (
-        <Card>
-            <HeadingWithDescription
-                heading={t`Email Templates`}
-                description={getHeadingDescription()}
-            />
+        <>
+            <SettingsSection title={sectionTitle}>
+                <div className={classes.templates}>
+                    <LoadingOverlay visible={isLoading}/>
 
-            {(!isAccountVerified && isAccountFetched) && (
-                <Callout variant="tip">
-                    {t`You need to verify your account email before you can modify email templates.`}
-                </Callout>
-            )}
+                    <SettingsBlock>
+                        {(!isAccountVerified && isAccountFetched) && (
+                            <Callout variant="tip">
+                                {t`You need to verify your account email before you can modify email templates.`}
+                            </Callout>
+                        )}
 
-            {accountRequiresManualVerification && (
-                <Callout variant="tip" title={t`Connect Stripe to enable email template editing`}>
-                    {t`Due to the high risk of spam, you must connect a Stripe account before you can modify email templates. This is to ensure that all event organizers are verified and accountable.`}
-                    {stripeOrganizerId && (
-                        <div style={{marginTop: '0.75rem'}}>
-                            <Button
-                                component={NavLink}
-                                to={`/manage/organizer/${stripeOrganizerId}/settings#payouts`}
-                                leftSection={<IconBrandStripe size={16}/>}
-                                variant="light"
-                            >
-                                {t`Connect Stripe`}
-                            </Button>
-                        </div>
-                    )}
-                </Callout>
-            )}
+                        {accountRequiresManualVerification && (
+                            <Callout variant="tip" title={t`Connect Stripe to enable email template editing`}>
+                                {t`Due to the high risk of spam, you must connect a Stripe account before you can modify email templates. This is to ensure that all event organizers are verified and accountable.`}
+                                {stripeOrganizerId && (
+                                    <div className={classes.calloutAction}>
+                                        <Button
+                                            component={NavLink}
+                                            to={`/manage/organizer/${stripeOrganizerId}/settings/payouts`}
+                                            leftSection={<IconBrandStripe size={16}/>}
+                                            variant="light"
+                                        >
+                                            {t`Connect Stripe`}
+                                        </Button>
+                                    </div>
+                                )}
+                            </Callout>
+                        )}
 
-            <Callout variant="info">
-                {getAlertMessage()}
-            </Callout>
+                        <Callout variant="info" className={classes.lastCallout}>
+                            {getAlertMessage()}
+                        </Callout>
+                    </SettingsBlock>
 
-            <div style={{position: 'relative'}}>
-                <LoadingOverlay visible={isLoading}/>
-
-                <Stack gap="md">
                     <TemplateCard
                         type="order_confirmation"
                         template={orderConfirmationTemplate}
@@ -405,8 +387,8 @@ export const EmailTemplateSettingsBase = ({
                             description={templateDescriptions.occurrence_cancellation}
                         />
                     )}
-                </Stack>
-            </div>
+                </div>
+            </SettingsSection>
 
             <Modal
                 opened={editorOpened}
@@ -427,6 +409,6 @@ export const EmailTemplateSettingsBase = ({
                     previewData={previewMutation.data}
                 />
             </Modal>
-        </Card>
+        </>
     );
 };

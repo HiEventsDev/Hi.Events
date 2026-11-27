@@ -25,7 +25,7 @@ test.describe('report load errors', () => {
 
     recover();
     await page.getByRole('button', { name: 'Try again' }).click();
-    await expect(page.getByRole('heading', { name: 'Product Sales Report' }).or(page.getByText('Nothing to show yet'))).toBeVisible();
+    await expect(page.getByTestId('report-table')).toBeVisible();
     await expect(page.getByText("Couldn't load this report")).toHaveCount(0);
   });
 
@@ -36,10 +36,11 @@ test.describe('report load errors', () => {
     await page.goto(`/manage/organizer/${freshAccount.organizerId}/report/events_performance`);
 
     await expect(page.getByText("Couldn't load this report")).toBeVisible({ timeout: 20_000 });
-    await expect(page.getByText(/No data found for the selected filters/)).toHaveCount(0);
+    await expect(page.getByText('Nothing to show yet')).toHaveCount(0);
 
     recover();
     await page.getByRole('button', { name: 'Try again' }).click();
     await expect(page.getByText("Couldn't load this report")).toHaveCount(0);
+    await expect(page.getByText('Create an event to see how it performs here.')).toBeVisible();
   });
 });
