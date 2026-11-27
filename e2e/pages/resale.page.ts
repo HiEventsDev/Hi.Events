@@ -32,6 +32,23 @@ export class ResalePage {
     return this.page.getByTestId('resale-attention-summary');
   }
 
+  enabledSwitch(): Locator {
+    return this.page.getByTestId('resale-enabled-switch');
+  }
+
+  cutoffSelect(): Locator {
+    return this.page.getByTestId('resale-cutoff-select');
+  }
+
+  async toggleResale(): Promise<void> {
+    await this.enabledSwitch().click({ force: true });
+  }
+
+  async chooseCutoff(label: string): Promise<void> {
+    await this.cutoffSelect().click();
+    await this.page.getByRole('option', { name: label }).click();
+  }
+
   async filterBy(status: 'All' | 'Open' | 'Sold' | 'Closed'): Promise<void> {
     await this.page.getByRole('radiogroup', { name: 'Filter by status' }).getByText(status, { exact: true }).click();
   }

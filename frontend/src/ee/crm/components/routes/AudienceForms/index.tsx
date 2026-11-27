@@ -110,7 +110,11 @@ const AudienceForms = () => {
             {formsQuery.isSuccess && forms.length === 0 && (
                 <div className={shared.panel}>
                     <div className={shared.empty}>
+                        <img className={shared.emptyImage} src="/blank-slate/audience-signup-forms.svg" alt=""/>
                         <p>{t`No signup forms yet. Create one to collect subscribers from a link, your website or your organizer page.`}</p>
+                        {canChange && (
+                            <CreateButton variant="default" size="xs" onClick={() => setEditing({})}>{t`New form`}</CreateButton>
+                        )}
                     </div>
                 </div>
             )}
