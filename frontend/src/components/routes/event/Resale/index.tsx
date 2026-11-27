@@ -1,7 +1,7 @@
 import {useState} from "react";
-import {Link, useParams} from "react-router";
+import {useParams} from "react-router";
 import {plural, t} from "@lingui/macro";
-import {SegmentedControl, Switch, UnstyledButton} from "@mantine/core";
+import {SegmentedControl, Skeleton, Switch, UnstyledButton} from "@mantine/core";
 import {IconAlertTriangle, IconInfoCircle} from "@tabler/icons-react";
 import {useGetEvent} from "../../../../queries/useGetEvent.ts";
 import {useGetEventSettings} from "../../../../queries/useGetEventSettings.ts";
@@ -15,6 +15,7 @@ import {PageTitle} from "../../../common/PageTitle";
 import {TableCard, TableCardFooter, TableCardSkeleton} from "../../../common/TableCard";
 import {ToolBar} from "../../../common/ToolBar";
 import {ResaleListingsTable} from "./ResaleListingsTable.tsx";
+import {ResaleSettings} from "./ResaleSettings.tsx";
 import classes from "./Resale.module.scss";
 
 const ALL_STATUSES = 'ALL';
@@ -71,20 +72,14 @@ const Resale = () => {
                 {t`Ticket resale`}
             </PageTitle>
 
-            {isResaleOff && (
+            {!isReadOnly && !eventSettings && <Skeleton height={62} radius="md" mb={16}/>}
+
+            {!isReadOnly && eventSettings && <ResaleSettings eventId={eventId} eventSettings={eventSettings}/>}
+
+            {isReadOnly && isResaleOff && (
                 <p className={classes.notice} data-testid="resale-off-notice">
                     <IconInfoCircle size={16} stroke={1.8} aria-hidden/>
-                    <span>
-                        {t`Ticket resale is off for this event.`}
-                        {!isReadOnly && (
-                            <>
-                                {' '}
-                                <Link to={`/manage/event/${eventId}/settings/checkout`}>
-                                    {t`Turn it on in checkout settings`}
-                                </Link>
-                            </>
-                        )}
-                    </span>
+                    <span>{t`Ticket resale is off for this event.`}</span>
                 </p>
             )}
 
