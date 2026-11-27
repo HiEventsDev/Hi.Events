@@ -3,7 +3,6 @@ import {Link, useParams} from "react-router";
 import {plural, t} from "@lingui/macro";
 import {Button, Skeleton} from "@mantine/core";
 import {BarChart} from "@mantine/charts";
-import {IconUsersGroup} from "@tabler/icons-react";
 import {useAccess} from "../../../../../hooks/useAccess.ts";
 import {getClientLocale, toDayjsLocale} from "../../../../../locales.ts";
 import {formatCurrency} from "../../../../../utilites/currency.ts";
@@ -282,7 +281,7 @@ const AudienceOverview = () => {
                     {isEmpty && (
                         <div className={shared.panel}>
                             <div className={shared.empty}>
-                                <IconUsersGroup size={22} stroke={1.5}/>
+                                <img className={shared.emptyImage} src="/blank-slate/audience-overview.svg" alt=""/>
                                 <p><strong>{t`Nobody in your audience yet`}</strong></p>
                                 <p>
                                     {canChange
