@@ -19,6 +19,7 @@ interface SearchTabProps {
     isCheckInPending: boolean;
     isDeletePending: boolean;
     allowOrdersAwaitingOfflinePaymentToCheckIn: boolean;
+    searchesEmail: boolean;
     eventType?: EventType;
     timezone?: string;
     showRowOccurrences?: boolean;
@@ -38,6 +39,7 @@ export const SearchTab = ({
                               isCheckInPending,
                               isDeletePending,
                               allowOrdersAwaitingOfflinePaymentToCheckIn,
+                              searchesEmail,
                               eventType,
                               timezone,
                               showRowOccurrences,
@@ -90,7 +92,7 @@ export const SearchTab = ({
                     type="text"
                     value={searchQuery}
                     onChange={e => onSearchChange(e.target.value)}
-                    placeholder={t`Search by name, order #, ticket # or email`}
+                    placeholder={searchesEmail ? t`Search by name, order #, ticket # or email` : t`Search by name, order # or ticket #`}
                     aria-label={t`Search attendees`}
                 />
                 {searchQuery && (

@@ -169,6 +169,29 @@ class OAuthFlowTest extends TestCase
         $this->assertDatabaseHas('oauth_connections', ['user_id' => $this->owner->id, 'account_id' => $this->accountId, 'access' => 'READ_WRITE']);
     }
 
+    public function test_an_mcp_access_token_cannot_call_the_rest_api_directly(): void
+    {
+        $clientId = $this->registerClient();
+        $tokens = $this->exchange($clientId, $this->approve($this->startAuthorization($clientId)))->assertOk()->json();
+        $organizerId = $this->owner->accounts()->first()->organizers()->first()->id;
+
+        $this->getJson('/organizers', $this->apiKeyHeaders($tokens['access_token']))
+            ->assertForbidden()
+            ->assertJsonPath('error_code', 'OAUTH_TOKEN_MCP_ONLY');
+
+        $this->postJson("/organizers/$organizerId/webhooks", [
+            'url' => 'https://8.8.8.8/hook',
+            'event_types' => ['order.created'],
+            'status' => 'ENABLED',
+        ], $this->apiKeyHeaders($tokens['access_token']))->assertForbidden();
+
+        $this->assertDatabaseCount('webhooks', 0);
+        $this->callTool($tokens['access_token'], 'list_organizers')->assertJsonPath('result.isError', false);
+
+        $apiKey = $this->createApiKey($this->owner, $this->accountId);
+        $this->getJson('/organizers', $this->apiKeyHeaders($apiKey))->assertOk();
+    }
+
     public function test_the_code_is_bound_to_the_pkce_verifier_and_redirect_uri(): void
     {
         $clientId = $this->registerClient();

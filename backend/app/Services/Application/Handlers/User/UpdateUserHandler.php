@@ -72,6 +72,12 @@ class UpdateUserHandler
             ));
         }
 
+        if ($accountUser->getRole() === Role::SUPERADMIN->name && $this->changesRoleStatusOrAccess($updateUserData)) {
+            throw new CannotUpdateResourceException(__(
+                'You cannot change the role, status or access of a Super Admin'
+            ));
+        }
+
         if ($updateUserData->status !== null && $accountUser->getStatus() === UserStatus::INVITED->name) {
             throw new CannotUpdateResourceException(__(
                 'An invitation becomes active only when it is accepted'
@@ -134,5 +140,12 @@ class UpdateUserHandler
             userId: $updateUserData->id,
             accountId: $updateUserData->account_id
         );
+    }
+
+    private function changesRoleStatusOrAccess(UpdateUserDTO $updateUserData): bool
+    {
+        return ($updateUserData->role !== null && $updateUserData->role !== Role::SUPERADMIN)
+            || ($updateUserData->status !== null && $updateUserData->status !== UserStatus::ACTIVE)
+            || $updateUserData->access !== null;
     }
 }

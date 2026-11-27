@@ -152,7 +152,7 @@ Sitemap: ${frontendUrl}/sitemap.xml
         return next();
     });
 
-    const frameProtectedPathPattern = /^\/(auth|manage|account|profile|settings|welcome|admin|sso)(\/|$)/;
+    const frameProtectedPathPattern = /^\/(auth|manage|account|profile|settings|welcome|admin|sso|connect)(\/|$)/;
     const homepagePreviewPathPattern = /^\/(event|organizer)\/[^/]+\/preview\/*$/;
     const widgetPathPattern = /^\/widget\//;
     const credentialInUrlPathPattern = /^\/(sso\/callback|auth\/accept-invitation\/)/;

@@ -50,6 +50,76 @@ class CreateAttendeeCheckInPublicActionTest extends TestCase
         $this->assertStringContainsString($missingPublicId, $message);
     }
 
+    public function test_an_unpaid_card_checkout_cannot_check_in_when_offline_orders_may(): void
+    {
+        $eventId = $this->createEventInNewAccount();
+        DB::table('event_settings')->where('event_id', $eventId)->update(['allow_orders_awaiting_offline_payment_to_check_in' => true]);
+        $listShortId = $this->createCheckInList($eventId);
+        $unpaidCard = $this->createAttendee($eventId, 'Card', 'Abandoned', orderStatus: 'RESERVED', attendeeStatus: 'AWAITING_PAYMENT');
+        $offline = $this->createAttendee($eventId, 'Bank', 'Transfer', orderStatus: 'AWAITING_OFFLINE_PAYMENT', attendeeStatus: 'AWAITING_PAYMENT');
+
+        $this->checkIn($listShortId, [$unpaidCard])->assertOk();
+        $this->checkIn($listShortId, [$offline])->assertOk();
+
+        $this->assertDatabaseMissing('attendee_check_ins', ['attendee_id' => $this->attendeeId($unpaidCard)]);
+        $this->assertDatabaseHas('attendee_check_ins', ['attendee_id' => $this->attendeeId($offline)]);
+    }
+
+    public function test_marking_an_unpaid_card_checkout_as_paid_at_the_door_says_it_is_awaiting_payment(): void
+    {
+        $eventId = $this->createEventInNewAccount();
+        DB::table('event_settings')->where('event_id', $eventId)->update(['allow_orders_awaiting_offline_payment_to_check_in' => true]);
+        $listShortId = $this->createCheckInList($eventId);
+        $unpaidCard = $this->createAttendee($eventId, 'Card', 'Abandoned', orderStatus: 'RESERVED', attendeeStatus: 'AWAITING_PAYMENT');
+
+        $response = $this->postJson("/public/check-in-lists/$listShortId/check-ins", [
+            'attendees' => [['public_id' => $unpaidCard, 'action' => 'check-in-and-mark-order-as-paid']],
+        ])->assertOk();
+
+        $this->assertStringContainsString('awaiting payment', $response->getContent());
+        $this->assertDatabaseMissing('attendee_check_ins', ['attendee_id' => $this->attendeeId($unpaidCard)]);
+        $this->assertSame('RESERVED', DB::table('orders')->where('id', DB::table('attendees')->where('public_id', $unpaidCard)->value('order_id'))->value('status'));
+    }
+
+    public function test_the_public_list_search_only_matches_email_when_order_details_are_shown(): void
+    {
+        $eventId = $this->createEventInNewAccount();
+        $listShortId = $this->createCheckInList($eventId);
+        $this->createAttendee($eventId, 'Ada', 'Lovelace', email: 'hidden-inbox@example.test');
+
+        $this->getJson("/public/check-in-lists/$listShortId/attendees?query=hidden-inbox")
+            ->assertOk()
+            ->assertJsonCount(0, 'data');
+        $this->getJson("/public/check-in-lists/$listShortId/attendees?query=Lovelace")
+            ->assertOk()
+            ->assertJsonCount(1, 'data');
+
+        DB::table('check_in_lists')->where('short_id', $listShortId)->update(['public_show_order_details' => true]);
+
+        $this->getJson("/public/check-in-lists/$listShortId/attendees?query=hidden-inbox")
+            ->assertOk()
+            ->assertJsonCount(1, 'data');
+    }
+
+    public function test_an_expired_list_cannot_remove_check_ins(): void
+    {
+        $eventId = $this->createEventInNewAccount();
+        $listShortId = $this->createCheckInList($eventId);
+        $publicId = $this->createAttendee($eventId, 'Grace', 'Hopper');
+        $checkInShortId = $this->checkIn($listShortId, [$publicId])->assertOk()->json('data.0.short_id');
+
+        DB::table('check_in_lists')->where('short_id', $listShortId)->update(['expires_at' => now()->subHour()]);
+
+        $this->deleteJson("/public/check-in-lists/$listShortId/check-ins/$checkInShortId")->assertStatus(409);
+
+        $this->assertDatabaseHas('attendee_check_ins', ['short_id' => $checkInShortId, 'deleted_at' => null]);
+    }
+
+    private function attendeeId(string $publicId): int
+    {
+        return DB::table('attendees')->where('public_id', $publicId)->value('id');
+    }
+
     private function checkIn(string $listShortId, array $publicIds)
     {
         return $this->postJson("/public/check-in-lists/$listShortId/check-ins", [
@@ -81,8 +151,14 @@ class CreateAttendeeCheckInPublicActionTest extends TestCase
         return $shortId;
     }
 
-    private function createAttendee(int $eventId, string $firstName, string $lastName): string
-    {
+    private function createAttendee(
+        int $eventId,
+        string $firstName,
+        string $lastName,
+        string $email = 'attendee@example.test',
+        string $orderStatus = 'COMPLETED',
+        string $attendeeStatus = 'ACTIVE',
+    ): string {
         $productId = DB::table('products')->insertGetId([
             'title' => 'General Admission',
             'event_id' => $eventId,
@@ -100,7 +176,7 @@ class CreateAttendeeCheckInPublicActionTest extends TestCase
             'short_id' => 'ord_'.uniqid(),
             'event_id' => $eventId,
             'currency' => 'USD',
-            'status' => 'COMPLETED',
+            'status' => $orderStatus,
             'public_id' => 'PUB_'.uniqid(),
             'first_name' => $firstName,
             'last_name' => $lastName,
@@ -111,7 +187,7 @@ class CreateAttendeeCheckInPublicActionTest extends TestCase
         $publicId = 'A-'.strtoupper(substr(uniqid(), -7));
         DB::table('attendees')->insert([
             'short_id' => 'att_'.uniqid(),
-            'email' => 'attendee@example.test',
+            'email' => $email,
             'first_name' => $firstName,
             'last_name' => $lastName,
             'order_id' => $orderId,
@@ -119,7 +195,7 @@ class CreateAttendeeCheckInPublicActionTest extends TestCase
             'product_price_id' => $priceId,
             'event_id' => $eventId,
             'public_id' => $publicId,
-            'status' => 'ACTIVE',
+            'status' => $attendeeStatus,
             'created_at' => now(),
             'updated_at' => now(),
         ]);

@@ -291,6 +291,68 @@ class TeamInviteTest extends TestCase
         $this->assertArrayNotHasKey('marketing_opted_in_at', $response->json('data'));
     }
 
+    public function test_a_pending_invitation_hides_the_invitees_settings_and_security_status(): void
+    {
+        [$existing, $existingAccountId] = $this->createAccountOwner();
+        DB::table('users')->where('id', $existing->id)->update([
+            'timezone' => 'Asia/Tokyo',
+            'locale' => 'ja',
+            'email_verified_at' => now(),
+            'two_factor_secret' => 'secret',
+            'two_factor_confirmed_at' => now(),
+        ]);
+
+        $invited = $this->postJson('/users', [
+            'first_name' => 'Anyone',
+            'email' => $existing->email,
+            'role' => Role::VIEWER->value,
+        ], $this->ownerHeaders())->assertCreated()->json('data');
+
+        $listed = collect($this->getJson('/users', $this->ownerHeaders())->assertOk()->json('data'))
+            ->firstWhere('id', $existing->id);
+        $fetched = $this->getJson("/users/{$existing->id}", $this->ownerHeaders())->assertOk()->json('data');
+
+        foreach ([$invited, $listed, $fetched] as $member) {
+            $this->assertSame(config('app.default_timezone'), $member['timezone']);
+            $this->assertSame(config('app.locale'), $member['locale']);
+            $this->assertFalse($member['two_factor_enabled']);
+            $this->assertFalse($member['is_email_verified']);
+        }
+
+        $this->getJson('/users/me', $this->headersFor($existing, $existingAccountId))
+            ->assertOk()
+            ->assertJsonPath('data.timezone', 'Asia/Tokyo')
+            ->assertJsonPath('data.two_factor_enabled', true);
+    }
+
+    public function test_an_admin_cannot_demote_or_deactivate_a_superadmin_member(): void
+    {
+        $superadmin = $this->addAccountUser($this->accountId, Role::SUPERADMIN);
+        $admin = $this->addAccountUser($this->accountId, Role::ADMIN);
+        $adminHeaders = $this->headersFor($admin, $this->accountId);
+
+        $this->putJson("/users/{$superadmin->id}", [
+            'first_name' => 'Super',
+            'role' => Role::VIEWER->value,
+        ], $adminHeaders)->assertUnprocessable();
+
+        $this->putJson("/users/{$superadmin->id}", [
+            'first_name' => 'Super',
+            'status' => UserStatus::INACTIVE->name,
+        ], $this->headersFor($admin, $this->accountId))->assertUnprocessable();
+
+        $this->assertDatabaseHas('account_users', [
+            'user_id' => $superadmin->id,
+            'account_id' => $this->accountId,
+            'role' => Role::SUPERADMIN->value,
+            'status' => UserStatus::ACTIVE->name,
+        ]);
+
+        $this->putJson("/users/{$superadmin->id}", [
+            'first_name' => 'Renamed',
+        ], $this->headersFor($admin, $this->accountId))->assertOk();
+    }
+
     public function test_an_invitation_cannot_be_activated_or_used_to_rename_a_user_from_another_account(): void
     {
         [$existing] = $this->createAccountOwner();
