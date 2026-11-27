@@ -26,8 +26,7 @@ export const EventPublishFlow = ({event, onPublished, onClose}: EventPublishFlow
                 opened
                 onClose={onClose}
                 url={eventHomepageUrl(event)}
-                eventTitle={event.title}
-                eventId={String(event.id)}
+                event={event}
             />
         );
     }

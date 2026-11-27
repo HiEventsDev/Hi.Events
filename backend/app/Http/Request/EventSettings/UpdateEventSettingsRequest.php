@@ -204,7 +204,7 @@ class UpdateEventSettingsRequest extends BaseRequest
 
     private function changesTicketResale(): bool
     {
-        if (! $this->exists('allow_ticket_resale')) {
+        if (! $this->isMethod('PUT') && ! $this->exists('allow_ticket_resale')) {
             return false;
         }
 

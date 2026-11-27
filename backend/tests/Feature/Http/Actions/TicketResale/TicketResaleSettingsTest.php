@@ -112,6 +112,22 @@ class TicketResaleSettingsTest extends TestCase
             ->assertJsonValidationErrors(['allow_ticket_resale']);
     }
 
+    public function test_a_full_settings_save_without_resale_cannot_turn_it_off_for_a_member_who_cannot_issue_refunds(): void
+    {
+        $this->patchJson("/events/{$this->eventId}/settings", ['allow_ticket_resale' => true], $this->headers)->assertOk();
+        $settings = $this->getJson("/events/{$this->eventId}/settings", $this->headers)->assertOk()->json('data');
+        unset($settings['allow_ticket_resale']);
+
+        $member = $this->addAccountUser($this->accountId);
+        $this->setPermissionOverrides($member, $this->accountId, ['ISSUE_REFUNDS' => false]);
+
+        $this->forgetAuthenticatedUser();
+        $this->putJson("/events/{$this->eventId}/settings", $settings, $this->headersFor($member, $this->accountId))
+            ->assertJsonValidationErrors(['allow_ticket_resale']);
+
+        $this->assertDatabaseHas('event_settings', ['event_id' => $this->eventId, 'allow_ticket_resale' => true]);
+    }
+
     public function test_a_ticket_type_can_be_marked_as_not_resellable(): void
     {
         $payload = [
