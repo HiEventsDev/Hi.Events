@@ -3,7 +3,7 @@ import { EventSettingsPage } from '../../pages/event-settings.page';
 import { ProductEditPage } from '../../pages/product-edit.page';
 import { ResalePage } from '../../pages/resale.page';
 import { WebhookPage } from '../../pages/webhook.page';
-import { createFreshOrganizer, createLiveEventWithFreeTicket } from '../../api/factory';
+import { createFreshOrganizer, createLiveEventWithFreeTicket, createLiveEventWithPaidTicket } from '../../api/factory';
 
 test.describe('organizer controls for ticket resale', () => {
   test('resale is off by default and an organizer turns it on with a cutoff', async ({ authedPage, api, account }) => {
@@ -65,7 +65,7 @@ test.describe('organizer controls for ticket resale', () => {
   });
 
   test('a ticket type switched to not resellable says so when reopened', async ({ authedPage, api, account }) => {
-    const event = await createLiveEventWithFreeTicket(api, account.organizerId);
+    const event = await createLiveEventWithPaidTicket(api, account.organizerId);
 
     const products = new ProductEditPage(authedPage);
     await products.goto(event.eventId);
