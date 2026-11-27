@@ -25,6 +25,7 @@ class AdminMessageResource extends JsonResource
             'sent_at' => $this->sent_at,
             'created_at' => $this->created_at,
             'eligibility_failures' => $this->eligibility_failures,
+            'ai_review' => $this->ai_review,
         ];
     }
 }

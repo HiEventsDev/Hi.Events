@@ -9,6 +9,7 @@ use HiEvents\DomainObjects\Enums\HomepageLayout;
 use HiEvents\DomainObjects\Enums\HomepageSectionType;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\Enums\Permission;
+use HiEvents\DomainObjects\Enums\PhoneCollection;
 use HiEvents\DomainObjects\Enums\PriceDisplayMode;
 use HiEvents\DomainObjects\Enums\TicketDateDisplayMode;
 use HiEvents\DomainObjects\EventDomainObject;
@@ -33,6 +34,12 @@ class UpdateEventSettingsRequest extends BaseRequest
 
                 if ($refusal !== null && $this->changesOfflinePaymentInstructions()) {
                     $validator->errors()->add('offline_payment_instructions', $refusal);
+                }
+            },
+            function (Validator $validator): void {
+                if ($this->changesTicketResale()
+                    && app(AccountUserAccessService::class)->isWithheldFromCurrentUser(Permission::ISSUE_REFUNDS)) {
+                    $validator->errors()->add('allow_ticket_resale', __('Only members who can issue refunds can turn ticket resale on or off.'));
                 }
             },
         ];
@@ -105,6 +112,8 @@ class UpdateEventSettingsRequest extends BaseRequest
 
             // Marketing settings
             'show_marketing_opt_in' => ['boolean'],
+            'phone_collection' => [Rule::in(PhoneCollection::valuesArray())],
+            'show_sms_opt_in' => ['boolean'],
 
             // Attendee detail copy control
             'allow_copy_details_to_all_attendees' => ['boolean'],
@@ -124,6 +133,11 @@ class UpdateEventSettingsRequest extends BaseRequest
 
             // Self-service settings
             'allow_attendee_self_edit' => ['boolean'],
+            'allow_ticket_transfer' => ['boolean'],
+            'ticket_transfer_cutoff_minutes' => ['integer', 'min:0', 'max:525600'],
+            'max_transfers_per_ticket' => ['nullable', 'integer', 'min:1', 'max:100'],
+            'allow_ticket_resale' => ['boolean'],
+            'ticket_resale_cutoff_minutes' => ['integer', 'min:0', 'max:525600'],
 
             // Occurrence display
             'show_available_occurrence_capacity' => ['boolean'],
@@ -186,6 +200,25 @@ class UpdateEventSettingsRequest extends BaseRequest
         }
 
         return null;
+    }
+
+    private function changesTicketResale(): bool
+    {
+        if (! $this->isMethod('PUT') && ! $this->exists('allow_ticket_resale')) {
+            return false;
+        }
+
+        $event = $this->eventTheMemberCanEdit();
+
+        if ($event === null) {
+            return false;
+        }
+
+        $saved = (bool) app(EventSettingsRepositoryInterface::class)
+            ->findFirstWhere(['event_id' => $event->getId()])
+            ?->getAllowTicketResale();
+
+        return $this->boolean('allow_ticket_resale') !== $saved;
     }
 
     private function changesOfflinePaymentInstructions(): bool

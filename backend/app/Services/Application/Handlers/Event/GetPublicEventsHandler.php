@@ -107,7 +107,7 @@ class GetPublicEventsHandler
         $this->eventSeatMapLookup->findSummariesForEvents(
             $onSaleEvents->map(fn (EventDomainObject $event) => $event->getId())->values()->all(),
         );
-        $productQuantities = $this->productQuantitiesFetchService->getEventWideQuantitiesForEvents($onSaleEvents);
+        $productQuantities = $this->productQuantitiesFetchService->getEventWideQuantitiesForEvents($onSaleEvents, includeResaleStock: true);
 
         $onSaleEvents->each(fn (EventDomainObject $event) => $this->applyPublicProductVisibility(
             event: $event,

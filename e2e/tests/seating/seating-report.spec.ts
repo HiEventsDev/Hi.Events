@@ -24,8 +24,9 @@ test.describe('seating sales report', () => {
     expect(standard.totalGross).toBe(30);
 
     await page.goto(`/manage/event/${event.eventId}/reports`);
-    await page.getByRole('link', {name: /Seating Sales/}).click();
-    await expect(page.getByRole('heading', {name: 'Seating Sales'})).toBeVisible();
+    await page.getByTestId('report-tab-seating_sales').click();
+    await expect(page.getByRole('heading', {name: 'Seating'})).toBeVisible();
+    await expect(page.getByText('Seats as they are now')).toBeVisible();
 
     const bandTotal = (band: string) => page.getByRole('row').filter({hasText: band}).filter({hasText: 'All areas'});
     await expect(bandTotal('Premium').getByRole('cell').nth(3)).toHaveText('1');

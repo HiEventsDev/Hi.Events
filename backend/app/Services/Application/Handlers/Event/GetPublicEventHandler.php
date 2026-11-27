@@ -33,6 +33,7 @@ use HiEvents\Services\Domain\EventOccurrence\PublicOccurrenceVisibilityService;
 use HiEvents\Services\Domain\Product\ProductFilterService;
 use HiEvents\Services\Domain\Product\PublicProductSelectionFilter;
 use HiEvents\Services\Domain\Subscription\AccountSubscriptionAccessService;
+use HiEvents\Services\Domain\TicketResale\ResaleOccurrenceAvailabilityService;
 
 class GetPublicEventHandler
 {
@@ -48,6 +49,7 @@ class GetPublicEventHandler
         private readonly EventSeatMapLookupService $eventSeatMapLookupService,
         private readonly PublicProductSelectionFilter $productSelectionFilter,
         private readonly AccountSubscriptionAccessService $accountSubscriptionAccessService,
+        private readonly ResaleOccurrenceAvailabilityService $resaleOccurrenceAvailabilityService,
     ) {}
 
     public function handle(GetPublicEventDTO $data): EventDomainObject
@@ -97,6 +99,11 @@ class GetPublicEventHandler
             );
         }
 
+        $this->resaleOccurrenceAvailabilityService->markOccurrencesWithListedTickets(
+            $data->eventId,
+            $event->getEventOccurrences() ?? collect(),
+        );
+
         $promoCodeDomainObject = $this->promoCodeRepository->findFirstWhere([
             PromoCodeDomainObjectAbstract::EVENT_ID => $data->eventId,
             PromoCodeDomainObjectAbstract::CODE => $data->promoCode,
@@ -124,6 +131,7 @@ class GetPublicEventHandler
             ),
             promoCode: $promoCodeDomainObject,
             eventOccurrenceId: $verifiedOccurrence?->getId(),
+            includeResaleStock: true,
         ));
     }
 

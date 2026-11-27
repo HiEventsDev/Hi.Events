@@ -6,6 +6,7 @@ namespace HiEvents\Http\Request\Order;
 
 use HiEvents\Http\Request\BaseRequest;
 use HiEvents\Validators\CompleteOrderValidator;
+use HiEvents\Validators\Rules\MobilePhoneNumberRule;
 use HiEvents\Validators\Rules\PersonNameRule;
 
 class CompleteOrderRequest extends BaseRequest
@@ -18,6 +19,8 @@ class CompleteOrderRequest extends BaseRequest
                 'order.last_name' => ['required', 'string', 'max:40', new PersonNameRule],
                 'order.email' => ['required', 'email'],
                 'order.email_confirmation' => ['required', 'email', 'same:order.email'],
+                'order.phone' => MobilePhoneNumberRule::rules(required: false),
+                'order.sms_opted_in' => ['boolean'],
                 'order.questions' => ['array'],
                 'order.address' => ['array'],
                 'order.address.address_line_1' => ['nullable', 'string', 'max:255'],

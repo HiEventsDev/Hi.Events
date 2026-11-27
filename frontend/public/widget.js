@@ -55,6 +55,7 @@
         schedule: 'Hi.Events Schedule',
         events: 'Hi.Events Events',
     };
+    const FORM_TITLE = 'Signup form';
 
     const topParams = new URLSearchParams(window.location.search);
     const returnEventId = topParams.get('hievents_event');
@@ -506,6 +507,9 @@
                     openEventWidgetModal(source, data.eventId);
                 }
                 break;
+            case 'hievents:subscribed':
+                emit('hievents:subscribed', {}, originElement);
+                break;
             case 'hievents:order-completed':
                 emit('hievents:order-completed', {
                     eventId: data.eventId,
@@ -544,7 +548,9 @@
         const eventId = attributes.id;
         let path;
 
-        if (type === 'events' || (organizerId && !eventId)) {
+        if (attributes.form) {
+            path = `/widget/forms/${encodeURIComponent(attributes.form)}`;
+        } else if (type === 'events' || (organizerId && !eventId)) {
             path = `/widget/organizer/${encodeURIComponent(organizerId)}`;
         } else {
             path = `/widget/${encodeURIComponent(eventId)}${WIDGET_PATHS[type] || ''}`;
@@ -555,7 +561,7 @@
             `parentUrl=${encodeURIComponent(parentBaseUrl())}`,
         ];
         Object.keys(attributes).forEach((name) => {
-            if (name === 'id' || name === 'organizer-id') return;
+            if (name === 'id' || name === 'organizer-id' || name === 'form') return;
             params.push(`${toParamName(name)}=${encodeURIComponent(attributes[name])}`);
         });
         hostParams.forEach(([key, value]) => {
@@ -567,6 +573,7 @@
     };
 
     const isValidTarget = (attributes) => {
+        if (attributes.form) return true;
         const type = attributes['widget-type'] || 'widget';
         if (type === 'events') return !!attributes['organizer-id'];
         return !!attributes.id || !!attributes['organizer-id'];
@@ -660,7 +667,7 @@
         const attributes = attributesOf(element);
 
         if (!isValidTarget(attributes)) {
-            console.error('HiEvent widget error: data-hievents-id or data-hievents-organizer-id is required');
+            console.error('HiEvent widget error: data-hievents-id, data-hievents-organizer-id or data-hievents-form is required');
             return;
         }
 
@@ -695,7 +702,7 @@
         const iframe = document.createElement('iframe');
         iframe.setAttribute('sandbox', SANDBOX);
         iframe.setAttribute('allow', ALLOW);
-        iframe.setAttribute('title', WIDGET_TITLES[attributes['widget-type']] || 'Hi.Events Widget');
+        iframe.setAttribute('title', attributes.form ? FORM_TITLE : (WIDGET_TITLES[attributes['widget-type']] || 'Hi.Events Widget'));
         if (attributes.lazy !== 'false') {
             iframe.setAttribute('loading', 'lazy');
         }
@@ -814,7 +821,7 @@
                     'continue-button-text', 'button-text', 'checkout', 'products', 'categories', 'sections',
                     'occurrence-id', 'promo-code', 'theme', 'font', 'radius', 'hide-promo-code',
                     'hide-category-titles', 'show-lineup', 'autoresize', 'lazy', 'layout', 'limit', 'event-category',
-                    'show-past', 'open-in', 'prefill-email', 'prefill-first-name', 'prefill-last-name',
+                    'show-past', 'open-in', 'prefill-email', 'prefill-first-name', 'prefill-last-name', 'prefill-phone', 'form',
                 ];
             }
         }

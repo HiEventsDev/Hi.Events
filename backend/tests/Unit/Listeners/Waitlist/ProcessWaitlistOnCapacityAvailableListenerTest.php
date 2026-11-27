@@ -39,7 +39,7 @@ class ProcessWaitlistOnCapacityAvailableListenerTest extends TestCase
         $quantitiesService = Mockery::mock(AvailableProductQuantitiesFetchService::class);
         $quantitiesService->shouldReceive('getAvailableProductQuantities')
             ->once()
-            ->with(10, true, null)
+            ->with(10, true, null, true, false, true)
             ->andReturn(new AvailableProductQuantitiesResponseDTO(productQuantities: collect()));
 
         $listener = new ProcessWaitlistOnCapacityAvailableListener(

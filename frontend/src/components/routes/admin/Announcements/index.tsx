@@ -1,20 +1,17 @@
 import {
     ActionIcon,
-    Badge,
     Button,
     Container,
     Group,
     Menu,
-    Pagination,
     SegmentedControl,
     Select,
-    Skeleton,
     Stack,
-    Table,
     Text,
     TextInput,
     Title,
     Tooltip,
+    VisuallyHidden,
 } from "@mantine/core";
 import {t} from "@lingui/macro";
 import {
@@ -27,7 +24,7 @@ import {
     IconSpeakerphone,
     IconTrash,
 } from "@tabler/icons-react";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {useForm} from "@mantine/form";
 import {useGetAdminAnnouncements} from "../../../../queries/useGetAdminAnnouncements";
 import {useCreateAnnouncement} from "../../../../mutations/useCreateAnnouncement";
@@ -46,6 +43,11 @@ import {BouncingEmoji} from "../../../common/BouncingEmoji";
 import {AnnouncementBanner} from "../../../common/AnnouncementDisplay/AnnouncementBanner";
 import {AnnouncementModal} from "../../../common/AnnouncementDisplay/AnnouncementModal";
 import {AnnouncementTargetPicker} from "./AnnouncementTargetPicker";
+import {TanStackTable, TanStackTableColumn} from "../../../common/TanStackTable";
+import {CellText} from "../../../common/TanStackTable/cells.tsx";
+import {StatusBadge} from "../../../common/StatusBadge";
+import {TableCard, TableCardFooter, TableCardSkeleton} from "../../../common/TableCard";
+import {ToolBar} from "../../../common/ToolBar";
 import {showError, showSuccess} from "../../../../utilites/notifications";
 import {useFormErrorResponseHandler} from "../../../../hooks/useFormErrorResponseHandler";
 import tableStyles from "../../../../styles/admin-table.module.scss";
@@ -111,6 +113,99 @@ const Announcements = () => {
         }
     };
 
+    const columns = useMemo<TanStackTableColumn<AdminAnnouncement>[]>(() => [
+        {
+            id: 'title',
+            header: t`Title`,
+            meta: {sticky: 'left'},
+            cell: ({row: {original: announcement}}) => (
+                <CellText strong title={announcement.title}>{announcement.title}</CellText>
+            ),
+        },
+        {
+            id: 'type',
+            header: t`Type`,
+            cell: ({row: {original: announcement}}) => announcement.display_type === 'MODAL' ? t`Modal` : t`Banner`,
+        },
+        {
+            id: 'status',
+            header: t`Status`,
+            cell: ({row: {original: announcement}}) => announcement.status === 'DRAFT'
+                ? <StatusBadge tone="waiting">{t`Draft`}</StatusBadge>
+                : <StatusBadge tone="positive">{t`Published`}</StatusBadge>,
+        },
+        {
+            id: 'audience',
+            header: t`Audience`,
+            cell: ({row: {original: announcement}}) => {
+                const target = targetSummary(announcement);
+
+                return (
+                    <Tooltip label={target.tooltip} disabled={!target.tooltip} multiline maw={320}>
+                        <span>{target.label}</span>
+                    </Tooltip>
+                );
+            },
+        },
+        {
+            id: 'seen',
+            header: t`Seen`,
+            meta: {align: 'right'},
+            cell: ({row: {original: announcement}}) => announcement.seen_count,
+        },
+        {
+            id: 'dismissed',
+            header: t`Dismissed`,
+            meta: {align: 'right'},
+            cell: ({row: {original: announcement}}) => announcement.dismissed_count,
+        },
+        {
+            id: 'updated',
+            header: t`Updated`,
+            cell: ({row: {original: announcement}}) => (
+                <CellText muted>{new Date(announcement.updated_at).toLocaleDateString()}</CellText>
+            ),
+        },
+        {
+            id: 'actions',
+            header: () => <VisuallyHidden>{t`Actions`}</VisuallyHidden>,
+            meta: {sticky: 'right'},
+            cell: ({row: {original: announcement}}) => (
+                <Menu position="bottom-end" withinPortal>
+                    <Menu.Target>
+                        <ActionIcon variant="subtle" color="gray" aria-label={t`Actions`} data-testid="announcement-row-menu">
+                            <IconDotsVertical size={18}/>
+                        </ActionIcon>
+                    </Menu.Target>
+                    <Menu.Dropdown>
+                        <Menu.Item
+                            leftSection={<IconEdit size={14}/>}
+                            onClick={() => setEditingAnnouncement(announcement)}
+                            data-testid="announcement-edit-menu-item"
+                        >
+                            {t`Edit`}
+                        </Menu.Item>
+                        <Menu.Item
+                            leftSection={<IconCopy size={14}/>}
+                            onClick={() => setDuplicatingAnnouncement(announcement)}
+                            data-testid="announcement-duplicate-menu-item"
+                        >
+                            {t`Duplicate`}
+                        </Menu.Item>
+                        <Menu.Item
+                            color="red"
+                            leftSection={<IconTrash size={14}/>}
+                            onClick={() => handleDelete(announcement)}
+                            data-testid="announcement-delete-menu-item"
+                        >
+                            {t`Delete`}
+                        </Menu.Item>
+                    </Menu.Dropdown>
+                </Menu>
+            ),
+        },
+    ], []);
+
     return (
         <>
             <Container size="xl" p="xl">
@@ -126,124 +221,39 @@ const Announcements = () => {
                         </Button>
                     </Group>
 
-                    <TextInput
-                        placeholder={t`Search by title...`}
-                        leftSection={<IconSearch size={16}/>}
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                    />
-
-                    {isLoading ? (
-                        <Stack gap="md">
-                            <Skeleton height={120} radius="md"/>
-                            <Skeleton height={120} radius="md"/>
-                        </Stack>
-                    ) : announcements.length === 0 ? (
-                        <div className={tableStyles.emptyState}>
-                            <Stack align="center" gap="sm">
-                                <IconSpeakerphone size={40} color="var(--hi-color-gray-dark)"/>
-                                <Text size="lg" c="dimmed">{t`No announcements yet`}</Text>
-                                <Text size="sm" c="dimmed">
-                                    {t`Create an announcement to show a message to your users.`}
-                                </Text>
-                            </Stack>
-                        </div>
-                    ) : (
-                        <div className={tableStyles.tableWrapper}>
-                            <div className={tableStyles.tableScroll}>
-                                <Table className={`${tableStyles.table} ${classes.announcementsTable}`} highlightOnHover>
-                                    <Table.Thead>
-                                        <Table.Tr>
-                                            <Table.Th>{t`Title`}</Table.Th>
-                                            <Table.Th>{t`Type`}</Table.Th>
-                                            <Table.Th>{t`Status`}</Table.Th>
-                                            <Table.Th>{t`Audience`}</Table.Th>
-                                            <Table.Th>{t`Seen`}</Table.Th>
-                                            <Table.Th>{t`Dismissed`}</Table.Th>
-                                            <Table.Th>{t`Updated`}</Table.Th>
-                                            <Table.Th></Table.Th>
-                                        </Table.Tr>
-                                    </Table.Thead>
-                                    <Table.Tbody>
-                                        {announcements.map((announcement) => {
-                                            const target = targetSummary(announcement);
-                                            const isDraft = announcement.status === 'DRAFT';
-                                            return (
-                                                <Table.Tr key={announcement.id}>
-                                                    <Table.Td>
-                                                        <Text fw={500} size="sm">{announcement.title}</Text>
-                                                    </Table.Td>
-                                                    <Table.Td>
-                                                        <Badge variant="light" color={announcement.display_type === 'MODAL' ? 'grape' : 'blue'} size="sm">
-                                                            {announcement.display_type === 'MODAL' ? t`Modal` : t`Banner`}
-                                                        </Badge>
-                                                    </Table.Td>
-                                                    <Table.Td>
-                                                        <Badge variant="light" color={isDraft ? 'yellow' : 'green'} size="sm">
-                                                            {isDraft ? t`Draft` : t`Published`}
-                                                        </Badge>
-                                                    </Table.Td>
-                                                    <Table.Td>
-                                                        <Tooltip label={target.tooltip} disabled={!target.tooltip} multiline maw={320}>
-                                                            <Badge variant="outline" color="gray" size="sm">{target.label}</Badge>
-                                                        </Tooltip>
-                                                    </Table.Td>
-                                                    <Table.Td>{announcement.seen_count}</Table.Td>
-                                                    <Table.Td>{announcement.dismissed_count}</Table.Td>
-                                                    <Table.Td>
-                                                        <Text size="sm" c="dimmed">
-                                                            {new Date(announcement.updated_at).toLocaleDateString()}
-                                                        </Text>
-                                                    </Table.Td>
-                                                    <Table.Td>
-                                                        <Menu position="bottom-end" withinPortal>
-                                                            <Menu.Target>
-                                                                <ActionIcon variant="subtle" color="gray" data-testid="announcement-row-menu">
-                                                                    <IconDotsVertical size={16}/>
-                                                                </ActionIcon>
-                                                            </Menu.Target>
-                                                            <Menu.Dropdown>
-                                                                <Menu.Item
-                                                                    leftSection={<IconEdit size={14}/>}
-                                                                    onClick={() => setEditingAnnouncement(announcement)}
-                                                                    data-testid="announcement-edit-menu-item"
-                                                                >
-                                                                    {t`Edit`}
-                                                                </Menu.Item>
-                                                                <Menu.Item
-                                                                    leftSection={<IconCopy size={14}/>}
-                                                                    onClick={() => setDuplicatingAnnouncement(announcement)}
-                                                                    data-testid="announcement-duplicate-menu-item"
-                                                                >
-                                                                    {t`Duplicate`}
-                                                                </Menu.Item>
-                                                                <Menu.Item
-                                                                    color="red"
-                                                                    leftSection={<IconTrash size={14}/>}
-                                                                    onClick={() => handleDelete(announcement)}
-                                                                    data-testid="announcement-delete-menu-item"
-                                                                >
-                                                                    {t`Delete`}
-                                                                </Menu.Item>
-                                                            </Menu.Dropdown>
-                                                        </Menu>
-                                                    </Table.Td>
-                                                </Table.Tr>
-                                            );
-                                        })}
-                                    </Table.Tbody>
-                                </Table>
-                            </div>
-                        </div>
-                    )}
-
-                    {announcementsData?.meta && announcementsData.meta.last_page > 1 && (
-                        <Pagination
-                            total={announcementsData.meta.last_page}
-                            value={page}
-                            onChange={setPage}
+                    <TableCard>
+                        <ToolBar
+                            embedded
+                            searchComponent={() => (
+                                <TextInput
+                                    placeholder={t`Search by title...`}
+                                    leftSection={<IconSearch size={16}/>}
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                />
+                            )}
                         />
-                    )}
+
+                        {isLoading && <TableCardSkeleton/>}
+
+                        {!isLoading && announcements.length === 0 && (
+                            <div className={tableStyles.emptyState}>
+                                <Stack align="center" gap="sm">
+                                    <IconSpeakerphone size={40} color="var(--hi-color-gray-dark)"/>
+                                    <Text size="lg" c="dimmed">{t`No announcements yet`}</Text>
+                                    <Text size="sm" c="dimmed">
+                                        {t`Create an announcement to show a message to your users.`}
+                                    </Text>
+                                </Stack>
+                            </div>
+                        )}
+
+                        {!isLoading && announcements.length > 0 && (
+                            <TanStackTable data={announcements} columns={columns} noCard/>
+                        )}
+
+                        <TableCardFooter pagination={announcementsData?.meta} page={page} onPageChange={setPage}/>
+                    </TableCard>
                 </Stack>
             </Container>
 

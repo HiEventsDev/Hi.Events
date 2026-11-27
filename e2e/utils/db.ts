@@ -16,16 +16,18 @@ const defaultTarget = (): DbTarget => isDevStack()
   ? { composeFile: repoPath('docker/development/docker-compose.dev.yml'), user: 'username', database: 'backend' }
   : { composeFile: repoPath('docker/e2e/docker-compose.e2e.yml'), user: 'hievents', database: 'hievents_e2e' };
 
+export const composeFile = (): string => process.env.E2E_COMPOSE_FILE ?? defaultTarget().composeFile;
+
 function dbTarget(): DbTarget {
   const defaults = defaultTarget();
   return {
-    composeFile: process.env.E2E_COMPOSE_FILE ?? defaults.composeFile,
+    composeFile: composeFile(),
     user: process.env.E2E_DB_USER ?? defaults.user,
     database: process.env.E2E_DB_NAME ?? defaults.database,
   };
 }
 
-function runSql(sql: string): string {
+export function runSql(sql: string): string {
   const { composeFile, user, database } = dbTarget();
   return execFileSync(
     'docker',

@@ -4,9 +4,8 @@ import {useFormErrorResponseHandler} from "../../../../../../hooks/useFormErrorR
 import {useEffect, useMemo, useState} from "react";
 import {showSuccess} from "../../../../../../utilites/notifications.tsx";
 import {t} from "@lingui/macro";
-import {Card} from "../../../../../common/Card";
-import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
-import {Button, Collapse, Group, Text, TextInput, UnstyledButton} from "@mantine/core";
+import {SettingsBlock, SettingsPage, SettingsRow, SettingsSaveFooter, SettingsSection} from "../../../../../common/SettingsPage";
+import {Button, TextInput} from "@mantine/core";
 import {useGetOrganizerSettings} from "../../../../../../queries/useGetOrganizerSettings.ts";
 import {useUpdateOrganizerSettings} from "../../../../../../mutations/useUpdateOrganizerSettings.ts";
 import {
@@ -31,7 +30,6 @@ import {
     IconChevronDown,
     IconChevronUp,
 } from '@tabler/icons-react';
-import {InputGroup} from "../../../../../common/InputGroup";
 
 interface SocialPlatform {
     name: string;
@@ -143,7 +141,9 @@ export const SocialLinks = () => {
                 });
             }
 
-            form.setValues(formValues);
+            const values = {...initialValues, ...formValues};
+            form.setInitialValues(values);
+            form.setValues(values);
         }
     }, [organizerSettingsQuery.isFetched]);
 
@@ -165,6 +165,7 @@ export const SocialLinks = () => {
             organizerId: organizerId,
         }, {
             onSuccess: () => {
+                form.resetDirty();
                 showSuccess(t`Successfully Updated Social Links`);
             },
             onError: (error) => {
@@ -176,89 +177,54 @@ export const SocialLinks = () => {
     const primaryPlatforms = socialPlatforms.filter(p => p.priority === 'primary');
     const secondaryPlatforms = socialPlatforms.filter(p => p.priority === 'secondary');
 
+    const visiblePlatforms = showMore ? [...primaryPlatforms, ...secondaryPlatforms] : primaryPlatforms;
+
     return (
-        <Card>
-            <HeadingWithDescription
-                heading={t`Social Links & Website`}
-                description={t`Add your social media handles and website URL. These will be displayed on your public organizer page.`}
-            />
-            <form onSubmit={form.onSubmit(handleSubmit)}>
-                <fieldset disabled={organizerSettingsQuery.isLoading || updateMutation.isPending}>
-                    <InputGroup>
-                        {primaryPlatforms.map((platform) => {
+        <SettingsPage
+            title={t`Social Links`}
+            description={t`Add your social media handles and website URL. These will be displayed on your public organizer page.`}
+        >
+            <SettingsSection>
+                <form onSubmit={form.onSubmit(handleSubmit)}>
+                    <fieldset disabled={organizerSettingsQuery.isLoading || updateMutation.isPending}>
+                        {visiblePlatforms.map((platform) => {
                             const Icon = platform.icon;
+                            const inputId = `organizer-social-${platform.field}`;
                             return (
-                                <TextInput
-                                    key={platform.field}
-                                    {...form.getInputProps(platform.field)}
-                                    label={platform.name}
-                                    placeholder={platform.placeholder}
-                                    leftSection={<Icon size={18}/>}
-                                    type={platform.field === 'website_url' ? 'url' : 'text'}
-                                />
+                                <SettingsRow key={platform.field} label={platform.name} htmlFor={inputId}>
+                                    <TextInput
+                                        id={inputId}
+                                        {...form.getInputProps(platform.field)}
+                                        placeholder={platform.placeholder}
+                                        leftSection={<Icon size={18}/>}
+                                    />
+                                </SettingsRow>
                             );
                         })}
-                    </InputGroup>
-
-                    <UnstyledButton
-                        onClick={() => setShowMore(!showMore)}
-                        style={{
-                            width: '100%',
-                            padding: '12px',
-                            marginTop: '20px',
-                            marginBottom: '20px',
-                            borderRadius: '8px',
-                            backgroundColor: 'var(--mantine-color-gray-0)',
-                            border: '1px solid var(--mantine-color-gray-3)',
-                            transition: 'all 0.2s',
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = 'var(--mantine-color-gray-1)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = 'var(--mantine-color-gray-0)';
-                        }}
-                    >
-                        <Group justify="center" gap="xs">
-                            {showMore ? <IconChevronUp size={18}/> : <IconChevronDown size={18}/>}
-                            <Text size="sm" fw={500}>
+                        <SettingsBlock>
+                            <Button
+                                variant="subtle"
+                                color="gray"
+                                fullWidth
+                                leftSection={showMore ? <IconChevronUp size={18}/> : <IconChevronDown size={18}/>}
+                                onClick={() => setShowMore(!showMore)}
+                            >
                                 {showMore
                                     ? t`Show fewer platforms`
                                     : hasSecondaryValues
                                         ? t`Show all platforms (${secondaryPlatforms.filter(p => form.values[p.field]).length} more with values)`
                                         : t`Show more platforms`
                                 }
-                            </Text>
-                        </Group>
-                    </UnstyledButton>
-
-                    <Collapse expanded={showMore}>
-                        <InputGroup>
-                            {secondaryPlatforms.map((platform) => {
-                                const Icon = platform.icon;
-                                return (
-                                    <TextInput
-                                        key={platform.field}
-                                        {...form.getInputProps(platform.field)}
-                                        label={platform.name}
-                                        placeholder={platform.placeholder}
-                                        leftSection={<Icon size={18}/>}
-                                        type={platform.field === 'website_url' ? 'url' : 'text'}
-                                    />
-                                );
-                            })}
-                        </InputGroup>
-                    </Collapse>
-
-                    <Button
-                        loading={updateMutation.isPending}
-                        type={'submit'}
-                        mt="xl"
-                    >
-                        {t`Save Social Links`}
-                    </Button>
-                </fieldset>
-            </form>
-        </Card>
+                            </Button>
+                        </SettingsBlock>
+                    </fieldset>
+                    <SettingsSaveFooter
+                        isDirty={form.isDirty()}
+                        isSaving={updateMutation.isPending}
+                        onDiscard={form.reset}
+                    />
+                </form>
+            </SettingsSection>
+        </SettingsPage>
     );
 }

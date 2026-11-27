@@ -6,10 +6,12 @@ import {useParams} from "react-router";
 import {
     AttendeeDetailsCollectionMethod,
     IdParam,
+    PhoneCollection,
     Product,
     Question,
     QuestionBelongsToType,
     QuestionRequestData,
+    QuestionType,
 } from "../../../../types.ts";
 import {PageTitle} from "../../../common/PageTitle";
 import {useAccess} from "../../../../hooks/useAccess.ts";
@@ -33,6 +35,7 @@ import {
 import {indexQuestions} from "../../../../utilites/questionLogic.ts";
 import {AddQuestionMenu} from "./AddQuestionMenu.tsx";
 import {AttendeeDetailsSetting} from "./AttendeeDetailsSetting.tsx";
+import {PhoneCollectionSetting} from "./PhoneCollectionSetting.tsx";
 import {QuestionSection} from "./QuestionSection.tsx";
 import {CheckoutPreview} from "./CheckoutPreview.tsx";
 import classes from "./QuestionsBuilder.module.scss";
@@ -88,6 +91,7 @@ export const QuestionsBuilder = ({questions}: QuestionsBuilderProps) => {
     const productTitles = new Map(products.map((product) => [Number(product.id), product.title]));
     const isPerOrderCollection = eventSettingsQuery.data?.attendee_details_collection_method === 'PER_ORDER';
     const requiresBillingAddress = !!eventSettingsQuery.data?.require_billing_address;
+    const phoneCollection: PhoneCollection = eventSettingsQuery.data?.phone_collection ?? 'OFF';
 
     const orderQuestions = questions.filter((question) => question.belongs_to === QuestionBelongsToType.ORDER);
     const attendeeQuestions = questions.filter((question) => question.belongs_to === QuestionBelongsToType.PRODUCT);
@@ -151,6 +155,16 @@ export const QuestionsBuilder = ({questions}: QuestionsBuilderProps) => {
         }, {destructive: true});
     };
 
+    const handlePhoneCollectionChange = (value: PhoneCollection) => {
+        updateSettingsMutation.mutate({
+            eventSettings: {phone_collection: value},
+            eventId,
+        }, {
+            onSuccess: () => showSuccess(t`Setting updated`),
+            onError: () => showError(t`Failed to update setting`),
+        });
+    };
+
     const handleCollectionMethodChange = (value: AttendeeDetailsCollectionMethod) => {
         updateSettingsMutation.mutate({
             eventSettings: {attendee_details_collection_method: value},
@@ -194,11 +208,19 @@ export const QuestionsBuilder = ({questions}: QuestionsBuilderProps) => {
                             />
                         )}
                         intro={(
-                            <FixedFieldsNote>
-                                {requiresBillingAddress
-                                    ? t`Name, email and billing address are always collected.`
-                                    : t`Name and email are always collected.`}
-                            </FixedFieldsNote>
+                            <>
+                                <FixedFieldsNote>
+                                    {requiresBillingAddress
+                                        ? t`Name, email and billing address are always collected.`
+                                        : t`Name and email are always collected.`}
+                                </FixedFieldsNote>
+                                <PhoneCollectionSetting
+                                    value={phoneCollection}
+                                    disabled={isReadOnly || updateSettingsMutation.isPending}
+                                    hasPhoneQuestion={orderQuestions.some((question) => question.type === QuestionType.PHONE)}
+                                    onChange={handlePhoneCollectionChange}
+                                />
+                            </>
                         )}
                         questions={orderQuestions}
                         emptyMessage={t`No order questions yet`}
@@ -244,6 +266,7 @@ export const QuestionsBuilder = ({questions}: QuestionsBuilderProps) => {
                     questions={questions}
                     products={products}
                     isPerOrderCollection={isPerOrderCollection}
+                    phoneCollection={phoneCollection}
                 />
             </div>
 

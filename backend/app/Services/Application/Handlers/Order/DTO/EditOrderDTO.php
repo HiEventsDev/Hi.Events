@@ -13,5 +13,6 @@ class EditOrderDTO extends BaseDTO
         public ?string $lastName,
         public ?string $email,
         public ?string $notes,
+        public ?string $phone = null,
     ) {}
 }

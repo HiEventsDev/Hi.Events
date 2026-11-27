@@ -15,5 +15,6 @@ class EditAttendeePublicDTO extends BaseDataObject
         public readonly ?string $email,
         public readonly string $ipAddress,
         public readonly ?string $userAgent,
+        public readonly ?string $sessionToken = null,
     ) {}
 }

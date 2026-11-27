@@ -30,6 +30,7 @@ export interface EditOrderPayload {
     last_name: string,
     email: string | null,
     notes: string,
+    phone?: string | null,
 }
 
 export interface ProductPriceQuantityFormValue {

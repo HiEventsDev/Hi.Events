@@ -4,6 +4,8 @@ namespace HiEvents\Http\Actions\Attendees;
 
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\NoTicketsAvailableException;
+use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Exceptions\TicketListedForResaleException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Attendee\EditAttendeeRequest;
 use HiEvents\Resources\Attendee\AttendeeResource;
@@ -37,7 +39,11 @@ class EditAttendeeAction extends BaseAction
                 'attendee_id' => $attendeeId,
                 'notes' => $request->input('notes'),
             ]));
-        } catch (NoTicketsAvailableException $exception) {
+        } catch (TicketListedForResaleException $exception) {
+            throw ValidationException::withMessages([
+                'email' => $exception->getMessage(),
+            ]);
+        } catch (NoTicketsAvailableException|ResourceConflictException $exception) {
             throw ValidationException::withMessages([
                 'product_id' => $exception->getMessage(),
             ]);

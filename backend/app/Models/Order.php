@@ -72,6 +72,7 @@ class Order extends BaseModel
             'taxes_and_fees_rollup' => 'array',
             'statistics_decremented_at' => 'datetime',
             'opted_into_marketing_at' => 'datetime',
+            'sms_opted_in_at' => 'datetime',
         ];
     }
 }

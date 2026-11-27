@@ -1,0 +1,50 @@
+.card {
+  container: table-card / inline-size;
+  margin-bottom: 16px;
+  border: 1px solid var(--mantine-color-gray-3);
+  border-radius: var(--hi-radius-lg);
+  background: var(--mantine-color-body);
+  overflow: hidden;
+
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  min-height: 48px;
+  padding: 8px 12px;
+  border-top: 1px solid var(--mantine-color-gray-3);
+
+  @container table-card (max-width: 479px) {
+    justify-content: center;
+  }
+}
+
+.range {
+  font-size: var(--mantine-font-size-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--mantine-color-gray-6);
+}
+
+.skeletonRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  height: 44px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--mantine-color-gray-2);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  @container table-card (max-width: 479px) {
+    > :nth-child(n + 4) {
+      display: none;
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import {t} from "@lingui/macro";
 import dayjs from "dayjs";
-import {Product, TaxAndFee, TaxAndFeeCalculationType} from "../../../types.ts";
+import {Product, ProductPriceType, TaxAndFee, TaxAndFeeCalculationType} from "../../../types.ts";
 import {formatCurrency} from "../../../utilites/currency.ts";
 import {getSafeLocale} from "../../../utilites/dates.ts";
 import {getClientLocale, toDayjsLocale} from "../../../locales.ts";
@@ -144,6 +144,33 @@ export const highlightSummary = (values: Product): RowSummary => {
         text: values.highlight_message ? `“${values.highlight_message}”` : t`Highlighted`,
         emphasized: true,
     };
+};
+
+export const canBeResold = (values: Product): boolean =>
+    values.type === ProductPriceType.Paid || values.type === ProductPriceType.Tiered;
+
+export const afterPurchaseSummary = (values: Product): RowSummary => {
+    const transferable = values.is_transferable !== false;
+
+    if (!canBeResold(values)) {
+        return transferable
+            ? {text: t`Transferable`, emphasized: false}
+            : {text: t`Not transferable`, emphasized: true};
+    }
+
+    const resellable = values.is_resellable !== false;
+
+    if (transferable && resellable) {
+        return {text: t`Transferable · Resellable`, emphasized: false};
+    }
+    if (resellable) {
+        return {text: t`Not transferable · Resellable`, emphasized: true};
+    }
+    if (transferable) {
+        return {text: t`Transferable · Not resellable`, emphasized: true};
+    }
+
+    return {text: t`Not transferable · Not resellable`, emphasized: true};
 };
 
 export const accessSummary = (values: Product): RowSummary => {

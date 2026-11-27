@@ -269,9 +269,13 @@ class CreateEventService
                 ? AttendeeDetailsCollectionMethod::PER_ORDER->value
                 : $organizerSettings->getDefaultAttendeeDetailsCollectionMethod(),
             'show_marketing_opt_in' => $organizerSettings->getDefaultShowMarketingOptIn(),
+            'phone_collection' => $organizerSettings->getDefaultPhoneCollection(),
+            'show_sms_opt_in' => $organizerSettings->getDefaultShowSmsOptIn(),
             'allow_copy_details_to_all_attendees' => true,
             'pass_platform_fee_to_buyer' => $organizerSettings->getDefaultPassPlatformFeeToBuyer(),
             'allow_attendee_self_edit' => $organizerSettings->getDefaultAllowAttendeeSelfEdit(),
+            'allow_ticket_transfer' => $organizerSettings->getDefaultAllowTicketTransfer(),
+            'allow_ticket_resale' => $organizerSettings->getDefaultAllowTicketResale(),
             'ticket_design_settings' => [
                 'accent_color' => $homepageThemeSettings['accent'] ?? '#333',
             ],

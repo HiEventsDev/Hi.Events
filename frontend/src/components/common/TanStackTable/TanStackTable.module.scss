@@ -1,121 +1,213 @@
-@use "../../../styles/mixins";
+$row-border: var(--mantine-color-gray-2);
+$head-background: var(--mantine-color-gray-0);
+$select-width: 40px;
 
 .tableWrapper {
+  container: data-table / inline-size;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-}
-
-.toolbar {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.tableHead {
-  white-space: nowrap;
-
-  th {
-    background-color: #f2f0f5;
-    color: var(--hi-secondary-text) !important;
-    padding: 20px !important;
-
-    @include mixins.respond-below(sm) {
-      padding: 14px 12px !important;
-    }
-  }
-}
-
-.card {
-  padding: 0 !important;
-  overflow: hidden;
+  gap: 8px;
+  min-width: 0;
 
   :global(.mantine-ScrollArea-viewport) {
     padding-bottom: 0;
   }
 
   :global(.mantine-ScrollArea-scrollbar) {
-    z-index: 20 !important;
+    z-index: 20;
   }
 }
 
-.table {
-  th {
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+
+.card {
+  border: 1px solid var(--mantine-color-gray-3);
+  border-radius: var(--hi-radius-lg);
+  background: var(--mantine-color-body);
+  overflow: hidden;
+}
+
+table.table {
+  position: relative;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: var(--mantine-font-size-sm);
+  font-variant-numeric: tabular-nums;
+  transition: opacity 120ms ease;
+
+  &[data-refreshing] {
+    opacity: 0.55;
+  }
+
+  thead tr th {
+    height: 36px;
+    padding: 0 12px;
+    border-bottom: 1px solid var(--mantine-color-gray-3);
+    background: $head-background;
+    font-size: var(--mantine-font-size-xs);
+    font-weight: 600;
+    color: var(--mantine-color-gray-6);
     white-space: nowrap;
   }
 
   tbody tr {
-
-    td {
-      padding: 20px !important;
-      white-space: nowrap;
-
-      @include mixins.respond-below(sm) {
-        padding: 14px 12px !important;
-      }
-    }
+    --row-background: var(--mantine-color-body);
+    border: 0;
   }
 
-  position: relative;
+  tbody tr td {
+    height: 44px;
+    padding: 0 12px;
+    border-bottom: 1px solid $row-border;
+    background: var(--row-background);
+    color: var(--mantine-color-gray-7);
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  &[data-row-lines="2"] tbody tr td {
+    height: 56px;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  tfoot tr td {
+    height: 44px;
+    padding: 0 12px;
+    border-top: 1px solid var(--mantine-color-gray-3);
+    background: $head-background;
+    font-weight: 600;
+    color: var(--mantine-color-gray-9);
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  tbody tr:hover {
+    --row-background: var(--mantine-color-gray-0);
+  }
+
+  tbody tr[data-selected] {
+    --row-background: var(--mantine-color-primary-0);
+  }
+
+  &[data-clickable] tbody tr {
+    cursor: pointer;
+  }
+
+  .alignRight {
+    text-align: right;
+  }
+}
+
+.pinnedContent {
+  max-width: clamp(150px, 46cqi, 360px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .stickyLeft {
   position: sticky;
   left: 0;
   z-index: 10;
-  background: var(--mantine-color-body);
 
   &::after {
     content: '';
     position: absolute;
-    top: -1px;
+    top: 0;
     bottom: 0;
     left: 100%;
-    width: 18px;
-    background: linear-gradient(
-                    to right,
-                    rgba(20, 10, 40, 0.11),
-                    rgba(20, 10, 40, 0.045) 45%,
-                    rgba(20, 10, 40, 0)
-    );
+    width: 14px;
+    border-left: 1px solid var(--mantine-color-gray-3);
+    background: linear-gradient(to right, rgba(20, 10, 40, 0.07), rgba(20, 10, 40, 0));
     opacity: 0;
     transition: opacity 0.2s ease;
     pointer-events: none;
   }
 }
 
-.stickyRight {
+table.table .stickyRight {
   position: sticky;
   right: 0;
   z-index: 2;
-  background: var(--mantine-color-body);
+  width: 1%;
+  padding: 0 12px 0 4px;
+  text-align: right;
 
   &::before {
     content: '';
     position: absolute;
-    top: -1px;
+    top: 0;
     bottom: 0;
     right: 100%;
-    width: 18px;
-    background: linear-gradient(
-                    to left,
-                    rgba(20, 10, 40, 0.11),
-                    rgba(20, 10, 40, 0.045) 45%,
-                    rgba(20, 10, 40, 0)
-    );
+    width: 14px;
+    border-right: 1px solid var(--mantine-color-gray-3);
+    background: linear-gradient(to left, rgba(20, 10, 40, 0.07), rgba(20, 10, 40, 0));
     opacity: 0;
     transition: opacity 0.2s ease;
     pointer-events: none;
   }
 }
 
-.showStartShadow tbody .stickyLeft::after,
-.showEndShadow tbody .stickyRight::before {
+table.table[data-release-end-pin] .stickyRight {
+  position: static;
+  width: auto;
+
+  &::before {
+    content: none;
+  }
+}
+
+table.table .stickyRight :global(.mantine-ActionIcon-root) {
+  @media (pointer: coarse) {
+    --ai-size: 36px;
+  }
+}
+
+.showStartShadow .stickyLeft::after,
+.showEndShadow .stickyRight::before {
   opacity: 1;
 }
 
-.tableHead .stickyLeft,
-.tableHead .stickyRight {
-  background-color: #f2f0f5;
+table.table .selectCell {
+  width: $select-width;
+  min-width: $select-width;
+  max-width: $select-width;
+  padding: 0 0 0 12px;
+  box-sizing: border-box;
+
+  :global(.mantine-Checkbox-root) {
+    opacity: 0;
+    transition: opacity 120ms ease;
+  }
+}
+
+.pinnedSelect {
+  position: sticky;
+  left: 0;
+  z-index: 10;
+}
+
+.afterSelect {
+  left: $select-width;
+}
+
+.table tbody tr:hover .selectCell :global(.mantine-Checkbox-root),
+.table[data-selecting] .selectCell :global(.mantine-Checkbox-root),
+.selectCell:focus-within :global(.mantine-Checkbox-root),
+.tableHead .selectCell :global(.mantine-Checkbox-root) {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  table.table .selectCell :global(.mantine-Checkbox-root) {
+    opacity: 1;
+  }
 }

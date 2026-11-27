@@ -90,6 +90,16 @@ export class MailpitClient {
     return new URL(href);
   }
 
+  async waitForSelfServiceCode(toAddress: string, opts: { timeoutMs?: number } = {}): Promise<string> {
+    const summary = await this.waitForMessage(toAddress, { ...opts, subjectContains: 'Your verification code' });
+    const message = await this.getMessage(summary.ID);
+    const match = message.Text.match(/\b(\d{6})\b/);
+    if (!match) {
+      throw new Error(`Could not find a 6-digit verification code in the email to ${toAddress}`);
+    }
+    return match[1];
+  }
+
   async waitForVerificationCode(toAddress: string, opts: { timeoutMs?: number } = {}): Promise<string> {
     const summary = await this.waitForMessage(toAddress, opts);
     const message = await this.getMessage(summary.ID);

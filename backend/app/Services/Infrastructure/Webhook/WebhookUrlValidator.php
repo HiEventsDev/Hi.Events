@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace HiEvents\Services\Infrastructure\Webhook;
 
 use HiEvents\Exceptions\UnsafeWebhookUrlException;
+use HiEvents\Services\Infrastructure\Network\PublicIpAddress;
 use HiEvents\Services\Infrastructure\Webhook\DTO\WebhookTargetDTO;
 use Illuminate\Support\Facades\Config;
 
@@ -133,25 +134,7 @@ class WebhookUrlValidator
             return false;
         }
 
-        if (str_starts_with($normalised, '169.254.')) {
-            return false;
-        }
-
-        $binary = @inet_pton($normalised);
-
-        if ($binary !== false && strlen($binary) === 16) {
-            $firstByte = ord($binary[0]);
-
-            if (($firstByte & 0xFE) === 0xFC) {
-                return false;
-            }
-
-            if ($firstByte === 0xFE && (ord($binary[1]) & 0xC0) === 0x80) {
-                return false;
-            }
-        }
-
-        return true;
+        return PublicIpAddress::isPublic($normalised);
     }
 
     private function normaliseToRoutableIp(string $ipAddress): string

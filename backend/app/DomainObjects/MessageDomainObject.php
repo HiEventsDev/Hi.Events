@@ -57,8 +57,39 @@ class MessageDomainObject extends Generated\MessageDomainObjectAbstract implemen
         return $this;
     }
 
+    public function isTest(): bool
+    {
+        $sendData = $this->getSendData();
+
+        if (is_string($sendData)) {
+            $sendData = json_decode($sendData, true);
+        }
+
+        return is_array($sendData) && ($sendData['is_test'] ?? false) === true;
+    }
+
     public function getMessagePreview(): string
     {
         return StringHelper::previewFromHtml($this->getMessage());
+    }
+
+    /**
+     * @return array{decision: string, confidence: float, reasons: string[], reviewed_at: string}|null
+     */
+    public function aiReviewVerdict(): ?array
+    {
+        $verdict = $this->getAiReview();
+
+        return is_array($verdict) ? $verdict : null;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function eligibilityFailureValues(): array
+    {
+        $failures = $this->getEligibilityFailures();
+
+        return is_array($failures) ? array_values(array_map('strval', $failures)) : [];
     }
 }

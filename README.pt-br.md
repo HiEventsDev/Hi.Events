@@ -30,8 +30,8 @@ Hospede você mesmo ou use a nuvem. Seus eventos, sua marca, seus dados.
 <br>
 
 > [!NOTE]
-> **O Hi.Events 2.0 chegou** com eventos recorrentes, assentos reservados, bilheteria, line-ups e programação, login
-> único, permissões de equipe e chaves de API. [Confira as novidades →](https://github.com/HiEventsDev/hi.events/releases)
+> **O Hi.Events 2.3 chegou** com o CRM Audience e campanhas de SMS, transferência e revenda de ingressos, um servidor MCP para
+> assistentes de IA, perguntas de acompanhamento no checkout e links de pagamento. [Confira as novidades →](https://github.com/HiEventsDev/hi.events/releases)
 
 <br>
 
@@ -71,14 +71,16 @@ e organizadores de conferências. Rode na sua própria infraestrutura ou deixe c
 - Embeds personalizáveis para o seu site: widgets de ingressos, botões, listas de eventos, line-ups e programação
 - Códigos promocionais e descontos
 - Links de rastreamento para promoters e afiliados
-- Perguntas de cadastro personalizadas
+- Perguntas de cadastro com perguntas de acompanhamento e regras de elegibilidade
 - Opt-in de marketing no checkout
+- CRM Audience com contatos, segmentos, formulários de inscrição e campanhas de e-mail e SMS <sup>Enterprise</sup>
 - Rastreamento com Meta, TikTok, Google Analytics e Tag Manager
 
 **💳 Pagamentos**
 - Repasses direto na sua própria conta Stripe
 - Impostos e taxas, incluídos no preço ou cobrados no checkout
 - Faturamento e pagamentos offline
+- Links de pagamento para quando outra pessoa vai pagar
 - Reembolsos totais e parciais
 
 **🚪 Participantes e portaria**
@@ -87,6 +89,7 @@ e organizadores de conferências. Rode na sua própria infraestrutura ou deixe c
 - Listas de check-in compartilháveis com contagem em tempo real
 - Mensagens para participantes e modelos de e-mail personalizados
 - Ingressos em PDF com a sua marca
+- Transferência e revenda de ingressos, com reembolso automático para o vendedor
 - Participantes adicionados manualmente
 - Relatórios de vendas, impostos e códigos promocionais
 
@@ -95,7 +98,8 @@ e organizadores de conferências. Rode na sua própria infraestrutura ou deixe c
 ## Feito para organizações
 
 **🔐 Segurança e acesso**
-- Login único
+- Login com Google, Microsoft ou seu próprio provedor OIDC
+- Login único por conta <sup>Enterprise</sup>
 - Autenticação em duas etapas
 - Funções e permissões de equipe
 - Vários organizadores em uma única conta
@@ -103,6 +107,7 @@ e organizadores de conferências. Rode na sua própria infraestrutura ou deixe c
 **🔌 Integrações**
 - REST API e chaves de API
 - Webhooks
+- Servidor MCP para Claude e outros assistentes de IA
 - Exportação em CSV e XLSX
 
 **🗄️ Seus dados**
@@ -180,8 +185,8 @@ gerenciada, operada pela equipe que desenvolve o Hi.Events.
 O Hi.Events é licenciado sob a **AGPL-3.0 com termos adicionais**. Os termos adicionais exigem que a atribuição "Powered by Hi.Events"
 seja mantida nas páginas e e-mails gerados pelo software — veja a [LICENCE](LICENCE) para o texto exato.
 
-Os assentos reservados e a bilheteria são cobertos pela [Hi.Events Enterprise Licence](backend/ee/LICENCE) e exigem uma
-licença para uso em produção.
+Os assentos reservados, a bilheteria, o login único por conta e o Audience são cobertos pela
+[Hi.Events Enterprise Licence](backend/ee/LICENCE) e exigem uma licença para uso em produção.
 
 **Licenças comerciais estão disponíveis** se você quiser remover a atribuição ou precisar de termos adequados a uma implantação
 white-label. [Opções de licenciamento](https://hi.events/licensing?utm_source=gh-readme) ·

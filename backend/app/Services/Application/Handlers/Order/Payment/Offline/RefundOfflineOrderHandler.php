@@ -14,6 +14,7 @@ use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\RefundOrderDTO;
 use HiEvents\Services\Domain\Order\OfflineOrderRefundService;
 use HiEvents\Services\Domain\Order\OrderCancelService;
+use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use HiEvents\Values\MoneyValue;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
@@ -29,6 +30,7 @@ class RefundOfflineOrderHandler
         private readonly OrderCancelService $orderCancelService,
         private readonly OfflineOrderRefundService $offlineOrderRefundService,
         private readonly DatabaseManager $databaseManager,
+        private readonly TransactionLockService $transactionLockService,
     ) {}
 
     /**
@@ -45,6 +47,8 @@ class RefundOfflineOrderHandler
      */
     private function refundOrder(RefundOrderDTO $refundOrderDTO): OrderDomainObject
     {
+        $this->transactionLockService->lockEvent($refundOrderDTO->event_id);
+
         $order = $this->fetchOrder($refundOrderDTO->event_id, $refundOrderDTO->order_id);
 
         $this->validateRefundability($order, $refundOrderDTO->amount);
@@ -95,7 +99,11 @@ class RefundOfflineOrderHandler
             throw new RefundNotPossibleException(__('This order has already been fully refunded.'));
         }
 
-        if ($amount > $order->getTotalGross() - $order->getTotalRefunded()) {
+        $currency = $order->getCurrency();
+        $leftToRefund = MoneyValue::fromFloat($order->getTotalGross(), $currency)->toMinorUnit()
+            - MoneyValue::fromFloat($order->getTotalRefunded(), $currency)->toMinorUnit();
+
+        if (MoneyValue::fromFloat($amount, $currency)->toMinorUnit() > $leftToRefund) {
             throw new RefundNotPossibleException(__('The refund amount cannot exceed the amount available to refund.'));
         }
     }

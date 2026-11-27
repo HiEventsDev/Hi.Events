@@ -2,8 +2,7 @@ import {t} from "@lingui/macro";
 import {Button, Text} from "@mantine/core";
 import {IconCalendarEvent, IconCalendarRepeat} from "@tabler/icons-react";
 import {useParams} from "react-router";
-import {Card} from "../../../../../common/Card";
-import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
+import {SettingsPage, SettingsRow, SettingsSection} from "../../../../../common/SettingsPage";
 import {WriteAccess} from "../../../../../common/WriteAccess";
 import {useGetEvent} from "../../../../../../queries/useGetEvent.ts";
 import {useGetEventCounts} from "../../../../../../queries/useGetEventCounts.ts";
@@ -59,36 +58,35 @@ export const EventTypeSettings = () => {
     };
 
     return (
-        <Card>
-            <HeadingWithDescription
-                heading={t`Event Type`}
-                description={t`Choose whether this event happens once or on several dates`}
-            />
-            <Text fw={500}>
-                {isRecurring ? t`This is a recurring event.` : t`This is a single event.`}
-            </Text>
-            <Text size="sm" c="dimmed" mt={4}>
-                {isRecurring
-                    ? t`A recurring event can become a single event when it has exactly one active date and no orders. The date's own prices, product visibility, capacity and label are removed; its time and location are kept.`
-                    : t`Change to a recurring event to sell tickets for several dates. You'll manage dates from the Occurrence Schedule. Capacity assignments don't apply to recurring events.`}
-            </Text>
-            {!isRecurring && (
-                <Text size="sm" c="dimmed" mt={4}>
-                    {toRecurringWarning}
-                </Text>
-            )}
-            <WriteAccess>
-                <Button
-                    mt="md"
-                    variant="outline"
-                    data-testid="event-type-change-button"
-                    leftSection={isRecurring ? <IconCalendarEvent size={16}/> : <IconCalendarRepeat size={16}/>}
-                    loading={typeMutation.isPending}
-                    onClick={handleChange}
+        <SettingsPage
+            title={t`Event Type`}
+            description={t`Choose whether this event happens once or on several dates`}
+        >
+            <SettingsSection>
+                <SettingsRow
+                    label={isRecurring ? t`This is a recurring event.` : t`This is a single event.`}
+                    description={(
+                        <>
+                            {isRecurring
+                                ? t`A recurring event can become a single event when it has exactly one active date and no orders. The date's own prices, product visibility, capacity and label are removed; its time and location are kept.`
+                                : t`Change to a recurring event to sell tickets for several dates. You'll manage dates from the Occurrence Schedule. Capacity assignments don't apply to recurring events.`}
+                            {!isRecurring && <Text inherit mt={6}>{toRecurringWarning}</Text>}
+                        </>
+                    )}
                 >
-                    {isRecurring ? t`Change to single event` : t`Change to recurring event`}
-                </Button>
-            </WriteAccess>
-        </Card>
+                    <WriteAccess>
+                        <Button
+                            variant="outline"
+                            data-testid="event-type-change-button"
+                            leftSection={isRecurring ? <IconCalendarEvent size={16}/> : <IconCalendarRepeat size={16}/>}
+                            loading={typeMutation.isPending}
+                            onClick={handleChange}
+                        >
+                            {isRecurring ? t`Change to single event` : t`Change to recurring event`}
+                        </Button>
+                    </WriteAccess>
+                </SettingsRow>
+            </SettingsSection>
+        </SettingsPage>
     );
 };

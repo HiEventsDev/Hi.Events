@@ -104,7 +104,9 @@ Errors return JSON with a `message`. Validation errors (`422`) also include an `
 | `401` | `INVITATION_PENDING` | `POST /auth/login` only: the user's only membership is an invitation they haven't accepted; they must open the invitation email |
 | `403` | `API_KEY_READ_ONLY` | A read-only API key tried to make a change |
 | `403` | `API_KEY_NOT_ALLOWED` | The endpoint can't be used with an API key |
+| `403` | `OAUTH_TOKEN_MCP_ONLY` | The token was issued to a connected app through OAuth and only works with the MCP server |
 | `403` | `READ_ONLY_ROLE` | The user has view-only access to the account |
+| `403` | `VERIFICATION_REQUIRED` | Public ticket transfer and resale endpoints only: the request needs an `X-Self-Service-Token` from the emailed verification code |
 | `403` | `PERMISSION_REQUIRED` | The user's role lacks a permission the endpoint needs (for example refunds or financial data) |
 | `403` | `ACCESS_RESTRICTED` | The user only has access to some organizers or events, and this isn't one of them |
 | `403` | `TWO_FACTOR_SETUP_REQUIRED` | The account requires two-factor authentication and the user hasn't set it up |
@@ -137,7 +139,7 @@ Webhooks are configured per event or organizer (see the *Webhooks* endpoints) an
 | Events | Payload schema |
 | --- | --- |
 | `order.created`, `order.updated`, `order.marked_as_paid`, `order.refunded`, `order.cancelled` | `OrderResource` |
-| `attendee.created`, `attendee.updated`, `attendee.cancelled` | `AttendeeResource` |
+| `attendee.created`, `attendee.updated`, `attendee.cancelled`, `attendee.transferred`, `attendee.resale_listed`, `attendee.resold` | `AttendeeResource` |
 | `product.created`, `product.updated`, `product.deleted` | `ProductResource` |
 | `event.created`, `event.updated`, `event.archived` | `EventResource` |
 | `checkin.created`, `checkin.deleted` | `AttendeeCheckInResource` |

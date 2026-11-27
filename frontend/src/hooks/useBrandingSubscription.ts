@@ -15,6 +15,7 @@ export const useBrandingSubscription = ({refreshFromStripe = false}: { refreshFr
         isSettled: subscriptionQuery.isSuccess || subscriptionQuery.isError,
         isAvailable: !!subscription?.available,
         isActive: !!subscription?.active,
+        canUpgrade: !!subscription?.available && !subscription.active,
         canManageBilling: isLoaded && !isRestricted && can('MANAGE_ACCOUNT'),
         prices: subscription?.prices ?? [],
     };

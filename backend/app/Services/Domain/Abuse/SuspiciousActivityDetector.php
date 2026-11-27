@@ -5,7 +5,9 @@ namespace HiEvents\Services\Domain\Abuse;
 use Carbon\CarbonImmutable;
 use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Repository\Interfaces\SuspiciousActivityRepositoryInterface;
+use HiEvents\Services\Domain\Abuse\DTO\SuspiciousActivityAccountDTO;
 use HiEvents\Services\Domain\Abuse\DTO\SuspiciousActivityFindingDTO;
+use HiEvents\Services\Domain\Abuse\DTO\SuspiciousActivityItemDTO;
 use HiEvents\Services\Domain\Event\EventSpamCheckService;
 use Illuminate\Support\Collection;
 
@@ -67,7 +69,7 @@ class SuspiciousActivityDetector
     {
         $now ??= CarbonImmutable::now();
 
-        return collect([
+        $findings = collect([
             $this->detectSignupSpike($now),
             $this->detectSuspiciousNames($now),
             $this->detectInviteBursts($now),
@@ -77,6 +79,8 @@ class SuspiciousActivityDetector
             $this->detectUncheckedLiveEvents($now),
             ...$this->detectEmailProblems($now),
         ])->filter()->values();
+
+        return $this->attachAccounts($findings);
     }
 
     private function detectSignupSpike(CarbonImmutable $now): ?SuspiciousActivityFindingDTO
@@ -92,9 +96,12 @@ class SuspiciousActivityDetector
             return null;
         }
 
-        $details = $this->repository
+        $items = $this->repository
             ->findRecentAccountNamesAndEmailDomains($since, self::LIST_LIMIT)
-            ->map(fn (object $row) => sprintf('%dx "%s" (@%s)', $row->total, $row->name, $row->email_domain))
+            ->map(fn (object $row) => new SuspiciousActivityItemDTO(
+                label: sprintf('%dx "%s" (@%s)', $row->total, $row->name, $row->email_domain),
+                accountSearch: $row->name,
+            ))
             ->all();
 
         return new SuspiciousActivityFindingDTO(
@@ -105,8 +112,11 @@ class SuspiciousActivityDetector
                 self::SIGNUP_WINDOW_MINUTES,
                 $baselinePerWindow,
             ),
-            details: $details,
+            items: $items,
             fingerprint: 'signup_spike|'.$now->format('Y-m-d-H'),
+            nextStep: 'Repeated names or one email domain usually mean scripted sign-ups. Open the matching accounts and suspend the automated ones.',
+            adminPath: 'accounts',
+            adminLinkLabel: 'Open accounts',
         );
     }
 
@@ -121,7 +131,10 @@ class SuspiciousActivityDetector
             'event' => $this->repository->findEventsWithSuspiciousTitles($since, self::SUSPICIOUS_TITLE_PATTERN, self::LIST_LIMIT),
         ])->flatMap(fn (Collection $matches, string $kind) => $matches->map(fn (object $row) => [
             'key' => $kind.':'.$row->id,
-            'line' => sprintf('%s %d: "%s"', $kind, $row->id, $row->name),
+            'item' => new SuspiciousActivityItemDTO(
+                label: sprintf('%s %d: "%s"', ucfirst($kind), $row->id, $row->name),
+                accountId: $this->accountId($row),
+            ),
         ]));
 
         if ($rows->isEmpty()) {
@@ -131,8 +144,9 @@ class SuspiciousActivityDetector
         return new SuspiciousActivityFindingDTO(
             type: 'suspicious_names',
             summary: sprintf('%d recently created or edited records contain URLs, phone numbers or scam keywords.', $rows->count()),
-            details: $rows->pluck('line')->all(),
+            items: $rows->pluck('item')->all(),
             fingerprint: 'suspicious_names|'.$rows->pluck('key')->sort()->implode(','),
+            nextStep: 'Scam pages put phone numbers, crypto terms or links in names and titles. Suspend the account if the name is an advert or a scam; leave it if it is a real business name.',
         );
     }
 
@@ -150,8 +164,12 @@ class SuspiciousActivityDetector
         return new SuspiciousActivityFindingDTO(
             type: 'invite_burst',
             summary: sprintf('Accounts sent %d or more team invitations in the last hour.', self::INVITE_THRESHOLD),
-            details: $rows->map(fn (object $row) => sprintf('account %d: %d invitations', $row->account_id, $row->total))->all(),
+            items: $rows->map(fn (object $row) => new SuspiciousActivityItemDTO(
+                label: sprintf('%d invitations', $row->total),
+                accountId: (int) $row->account_id,
+            ))->all(),
             fingerprint: 'invite_burst|'.$rows->pluck('account_id')->sort()->implode(',').'|'.$now->format('Y-m-d-H'),
+            nextStep: 'Each invitation emails an address the account typed in, so bursts are a common spam route. Check the members list and suspend the account if the invitees look like a mailing list.',
         );
     }
 
@@ -170,16 +188,16 @@ class SuspiciousActivityDetector
         return new SuspiciousActivityFindingDTO(
             type: 'unpublished_event_attendees',
             summary: 'Attendees are being created in bulk on events that are not live.',
-            details: $rows->map(fn (object $row) => sprintf(
-                'event %d (account %d, %s): %d attendees, %d distinct emails, %d orders',
-                $row->event_id,
-                $row->account_id,
-                $row->status,
-                $row->attendees,
-                $row->distinct_emails,
-                $row->orders,
+            items: $rows->map(fn (object $row) => new SuspiciousActivityItemDTO(
+                label: $this->eventLabel($row->event_id, $row->title),
+                facts: [
+                    $row->status,
+                    sprintf('%d attendees, %d distinct emails, %d orders', $row->attendees, $row->distinct_emails, $row->orders),
+                ],
+                accountId: (int) $row->account_id,
             ))->all(),
             fingerprint: 'unpublished_event_attendees|'.$rows->pluck('event_id')->sort()->implode(',').'|'.$now->format('Y-m-d-H'),
+            nextStep: 'Orders on an event that is not live usually mean ticket emails are being used to reach a list of addresses. Suspend the account if the attendee emails do not look like real buyers.',
         );
     }
 
@@ -197,8 +215,13 @@ class SuspiciousActivityDetector
         return new SuspiciousActivityFindingDTO(
             type: 'failed_payment_burst',
             summary: 'Possible card testing: many failed payments on one event in the last hour.',
-            details: $rows->map(fn (object $row) => sprintf('event %d: %d orders with failed payments', $row->event_id, $row->total))->all(),
+            items: $rows->map(fn (object $row) => new SuspiciousActivityItemDTO(
+                label: $this->eventLabel($row->event_id, $row->title),
+                facts: [$row->status, sprintf('%d orders with failed payments', $row->total)],
+                accountId: (int) $row->account_id,
+            ))->all(),
             fingerprint: 'failed_payment_burst|'.$rows->pluck('event_id')->sort()->implode(',').'|'.$now->format('Y-m-d-H'),
+            nextStep: 'Check the declines in the Stripe dashboard. If they come from many cards in quick succession, suspend the account to take the event offline.',
         );
     }
 
@@ -216,8 +239,13 @@ class SuspiciousActivityDetector
         return new SuspiciousActivityFindingDTO(
             type: 'waitlist_burst',
             summary: 'Unusually many waitlist sign-ups on one event in the last hour.',
-            details: $rows->map(fn (object $row) => sprintf('event %d: %d waitlist entries', $row->event_id, $row->total))->all(),
+            items: $rows->map(fn (object $row) => new SuspiciousActivityItemDTO(
+                label: $this->eventLabel($row->event_id, $row->title),
+                facts: [$row->status, sprintf('%d waitlist entries', $row->total)],
+                accountId: (int) $row->account_id,
+            ))->all(),
             fingerprint: 'waitlist_burst|'.$rows->pluck('event_id')->sort()->implode(',').'|'.$now->format('Y-m-d-H'),
+            nextStep: 'Every waitlist sign-up sends a confirmation email. A popular event can do this legitimately; suspend the account only if the entries look scripted.',
         );
     }
 
@@ -240,8 +268,14 @@ class SuspiciousActivityDetector
         return new SuspiciousActivityFindingDTO(
             type: 'unchecked_live_events',
             summary: 'Live events have no spam check result after 30 minutes. The spam check job may be failing.',
-            details: $rows->map(fn (object $row) => sprintf('event %d (account %d): "%s"', $row->id, $row->account_id, $row->title))->all(),
+            items: $rows->map(fn (object $row) => new SuspiciousActivityItemDTO(
+                label: $this->eventLabel($row->id, $row->title),
+                accountId: (int) $row->account_id,
+            ))->all(),
             fingerprint: 'unchecked_live_events|'.$rows->pluck('id')->sort()->implode(','),
+            nextStep: 'Look for failed EventSpamCheckJob runs and check the queue worker is running. These events are live without having been reviewed.',
+            adminPath: 'failed-jobs',
+            adminLinkLabel: 'Open failed jobs',
         );
     }
 
@@ -263,21 +297,73 @@ class SuspiciousActivityDetector
             $deliveryProblems->isEmpty() ? null : new SuspiciousActivityFindingDTO(
                 type: 'email_bounces_or_complaints',
                 summary: 'High bounce or complaint numbers in the last hour.',
-                details: $deliveryProblems->map(fn (object $row) => sprintf(
-                    '%s: %d sent, %d bounced, %d complaints',
-                    $row->category,
-                    $row->total,
-                    $row->bounced,
-                    $row->complained,
+                items: $deliveryProblems->map(fn (object $row) => new SuspiciousActivityItemDTO(
+                    label: $row->category,
+                    facts: [sprintf('%d sent, %d bounced, %d complaints', $row->total, $row->bounced, $row->complained)],
                 ))->values()->all(),
                 fingerprint: 'email_bounces_or_complaints|'.$deliveryProblems->pluck('category')->sort()->implode(',').'|'.$hour,
+                nextStep: 'Bounces and complaints hurt sending reputation for every account. Find the recipients in email delivery and trace them back to the account that triggered the emails.',
+                adminPath: 'email-delivery',
+                adminLinkLabel: 'Open email delivery',
             ),
             $volumeSpikes->isEmpty() ? null : new SuspiciousActivityFindingDTO(
                 type: 'email_volume_spike',
                 summary: sprintf('%d or more account, invite or contact emails of one type sent in the last hour.', self::EMAIL_VOLUME_THRESHOLD),
-                details: $volumeSpikes->map(fn (object $row) => sprintf('%s: %d sent', $row->category, $row->total))->values()->all(),
+                items: $volumeSpikes->map(fn (object $row) => new SuspiciousActivityItemDTO(
+                    label: $row->category,
+                    facts: [sprintf('%d sent', $row->total)],
+                ))->values()->all(),
                 fingerprint: 'email_volume_spike|'.$volumeSpikes->pluck('category')->sort()->implode(',').'|'.$hour,
+                nextStep: 'These emails go to addresses a visitor typed in, so a spike usually means a form is being abused. Find the recipients in email delivery and check for a matching signup, invite or waitlist finding.',
+                adminPath: 'email-delivery',
+                adminLinkLabel: 'Open email delivery',
             ),
         ]));
+    }
+
+    /**
+     * @param  Collection<int, SuspiciousActivityFindingDTO>  $findings
+     * @return Collection<int, SuspiciousActivityFindingDTO>
+     */
+    private function attachAccounts(Collection $findings): Collection
+    {
+        $accountIds = $findings
+            ->flatMap(fn (SuspiciousActivityFindingDTO $finding) => $finding->items)
+            ->map(fn (SuspiciousActivityItemDTO $item) => $item->accountId)
+            ->filter()
+            ->unique()
+            ->values()
+            ->all();
+
+        if ($accountIds === []) {
+            return $findings;
+        }
+
+        $accounts = $this->repository->findAccountContexts($accountIds)
+            ->map(fn (object $row) => new SuspiciousActivityAccountDTO(
+                id: (int) $row->id,
+                name: $row->name,
+                email: $row->email,
+                createdAt: CarbonImmutable::parse($row->created_at),
+                isVerified: (bool) $row->is_manually_verified,
+                hasStripe: (bool) $row->has_stripe,
+                liveEvents: (int) $row->live_events,
+                isSuspended: $row->suspended_at !== null,
+            ));
+
+        return $findings->map(fn (SuspiciousActivityFindingDTO $finding) => $finding->withItems(array_map(
+            fn (SuspiciousActivityItemDTO $item) => $item->withAccount($accounts->get($item->accountId)),
+            $finding->items,
+        )));
+    }
+
+    private function eventLabel(int|string $eventId, ?string $title): string
+    {
+        return sprintf('Event %d: "%s"', $eventId, $title);
+    }
+
+    private function accountId(object $row): ?int
+    {
+        return isset($row->account_id) ? (int) $row->account_id : null;
     }
 }

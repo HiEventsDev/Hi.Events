@@ -12,6 +12,7 @@ use HiEvents\Resources\Image\ImageResource;
 use HiEvents\Resources\Organizer\OrganizerResourcePublic;
 use HiEvents\Resources\ProductCategory\ProductCategoryResourcePublic;
 use HiEvents\Resources\Question\QuestionResource;
+use HiEvents\Services\Domain\Order\CheckoutSmsOptInService;
 use Illuminate\Http\Request;
 
 /**
@@ -74,7 +75,8 @@ class EventResourcePublic extends BaseResource
                 condition: ! is_null($this->getEventSettings()),
                 value: fn () => new EventSettingsResourcePublic(
                     $this->getEventSettings(),
-                    $this->includePostCheckoutData
+                    $this->includePostCheckoutData,
+                    app(CheckoutSmsOptInService::class)->isOffered($this->getEventSettings()),
                 ),
             ),
             // @TODO - public question resource

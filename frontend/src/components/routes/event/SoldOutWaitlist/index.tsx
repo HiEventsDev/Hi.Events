@@ -5,7 +5,7 @@ import {PageBody} from "../../../common/PageBody";
 import {WaitlistTable} from "../../../common/WaitlistTable";
 import {WaitlistStatsCards} from "../../../common/WaitlistStats";
 import {SearchBarWrapper} from "../../../common/SearchBar";
-import {Pagination} from "../../../common/Pagination";
+import {TableCard, TableCardFooter, TableCardSkeleton} from "../../../common/TableCard";
 import {Button, Group, Select} from "@mantine/core";
 import {ToolBar} from "../../../common/ToolBar";
 import {useGetEventWaitlistEntries} from "../../../../queries/useGetEventWaitlistEntries.ts";
@@ -13,7 +13,6 @@ import {useGetWaitlistStats} from "../../../../queries/useGetWaitlistStats.ts";
 import {useGetEventSettings} from "../../../../queries/useGetEventSettings.ts";
 import {useFilterQueryParamSync} from "../../../../hooks/useFilterQueryParamSync.ts";
 import {EventType, QueryFilterOperator, QueryFilters, WaitlistEntryStatus} from "../../../../types.ts";
-import {TableSkeleton} from "../../../common/TableSkeleton";
 import {t} from "@lingui/macro";
 import {useDisclosure} from "@mantine/hooks";
 import {OfferWaitlistModal} from "../../../modals/OfferWaitlistModal";
@@ -21,6 +20,7 @@ import {IconSend} from "@tabler/icons-react";
 import {useGetEventOccurrences} from "../../../../queries/useGetEventOccurrences.ts";
 import {OccurrenceSelect} from "../../../common/OccurrenceSelect";
 import {SortSelector} from "../../../common/SortSelector";
+import {WriteAccess} from "../../../common/WriteAccess";
 
 export const SoldOutWaitlist = () => {
     const {eventId} = useParams();
@@ -74,7 +74,9 @@ export const SoldOutWaitlist = () => {
 
             {stats && <WaitlistStatsCards stats={stats}/>}
 
+            <TableCard>
             <ToolBar
+                embedded
                 searchComponent={() => (
                     <SearchBarWrapper
                         placeholder={t`Search by name or email...`}
@@ -122,37 +124,38 @@ export const SoldOutWaitlist = () => {
                         />
                     </Group>
                 )}
-                resultCount={pagination?.total}
-                resultLabel={t`entries`}
             >
-                <Button
-                    size="sm"
-                    color="green"
-                    leftSection={<IconSend size={16}/>}
-                    data-testid="waitlist-offer-next-button"
-                    onClick={openOfferModal}
-                >
-                    {t`Offer Tickets`}
-                </Button>
+                <WriteAccess>
+                    <Button
+                        color="green"
+                        leftSection={<IconSend size={16}/>}
+                        data-testid="waitlist-offer-next-button"
+                        onClick={openOfferModal}
+                    >
+                        {t`Offer Tickets`}
+                    </Button>
+                </WriteAccess>
             </ToolBar>
 
-            <TableSkeleton isVisible={!entries || !event}/>
+            {(!entries || !event) && <TableCardSkeleton rows={5}/>}
 
             {(entries && event) && (
                 <WaitlistTable
                     eventId={eventId}
                     entries={entries}
                     event={event}
+                    isRefreshing={entriesQuery.isFetching}
                 />
             )}
 
             {!!entries?.length && (
-                <Pagination
-                    value={searchParams.pageNumber}
-                    onChange={(value) => setSearchParams({pageNumber: value})}
-                    total={Number(pagination?.last_page)}
+                <TableCardFooter
+                    pagination={pagination}
+                    page={searchParams.pageNumber}
+                    onPageChange={(value) => setSearchParams({pageNumber: value})}
                 />
             )}
+            </TableCard>
 
             {(offerModalOpen && eventId) && (
                 <OfferWaitlistModal

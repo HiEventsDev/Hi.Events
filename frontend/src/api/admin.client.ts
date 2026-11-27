@@ -495,6 +495,14 @@ export interface AdminMessage {
     sent_at: string | null;
     created_at: string;
     eligibility_failures?: string[];
+    ai_review?: AdminMessageAiReview | null;
+}
+
+export interface AdminMessageAiReview {
+    decision: 'APPROVED' | 'NEEDS_PERSON';
+    confidence: number;
+    reasons: string[];
+    reviewed_at: string;
 }
 
 export interface SpamCheckVerdict {

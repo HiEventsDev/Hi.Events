@@ -37,11 +37,12 @@
     }
   }
 
-  .nav {
+  .scrollArea {
+    display: flex;
+    flex-direction: column;
     flex: 1 1 auto;
+    min-height: 0;
     overflow: auto;
-    position: relative;
-    padding: 8px 0 24px;
     scrollbar-width: thin;
     scrollbar-color: transparent transparent;
 
@@ -67,6 +68,12 @@
     &::-webkit-scrollbar-track {
       background: transparent;
     }
+  }
+
+  .nav {
+    flex: 0 0 auto;
+    position: relative;
+    padding: 8px 0 24px;
 
     .sectionHeading {
       padding: 18px 20px 6px;
@@ -164,6 +171,100 @@
 
       &:hover svg {
         color: color-mix(in srgb, white 85%, transparent);
+      }
+    }
+  }
+
+  .nav .groupRow {
+    position: relative;
+
+    > a {
+      padding-right: 34px;
+
+      @media (pointer: coarse) {
+        padding-right: 40px;
+      }
+    }
+  }
+
+  .nav .groupToggle {
+    position: absolute;
+    top: 50%;
+    right: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    margin: 0;
+    padding: 0;
+    border-radius: var(--hi-radius-md, 6px);
+    color: color-mix(in srgb, white 50%, transparent);
+    transform: translateY(-50%);
+
+    svg {
+      margin: 0;
+      min-width: 0;
+      color: inherit;
+      transform: rotate(-90deg);
+    }
+
+    &:hover {
+      background: color-mix(in srgb, white 10%, transparent);
+      color: white;
+    }
+
+    @media (pointer: coarse) {
+      right: 12px;
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  .nav .group[data-open] .groupToggle svg {
+    transform: rotate(0deg);
+  }
+
+  .nav .children {
+    position: relative;
+    margin: 2px 12px 6px 32px;
+    padding-left: 10px;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 4px;
+      bottom: 4px;
+      left: 0;
+      width: 1px;
+      background: color-mix(in srgb, white 14%, transparent);
+    }
+
+    a.childLink {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      margin: 1px 0;
+      padding: 5px 10px;
+      border-radius: var(--hi-radius-md, 6px);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: color-mix(in srgb, white 62%, transparent);
+
+      &:hover {
+        background: color-mix(in srgb, white 7%, transparent);
+        color: white;
+      }
+
+      &.linkActive {
+        background: color-mix(in srgb, white 9%, transparent);
+        color: white;
+        font-weight: 600;
+
+        &::before {
+          content: none;
+        }
       }
     }
   }

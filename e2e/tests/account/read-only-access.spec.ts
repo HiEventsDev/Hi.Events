@@ -16,6 +16,7 @@ async function expectReadOnlyPage(page: Page, path: string, heading: RegExp): Pr
 }
 
 async function openFirstRowMenu(page: Page, rowText: string): Promise<void> {
+  await page.getByText(rowText).first().waitFor();
   const row = page.getByRole('row').filter({ hasText: rowText }).first();
   const container = (await row.count()) > 0 ? row : page.getByText(rowText).first().locator('xpath=ancestor::*[.//button][1]');
   await container.getByRole('button').last().click();
@@ -123,8 +124,8 @@ test.describe('read-only and permission spot checks', () => {
     await expect(page.getByRole('menuitem', { name: /Cancel order/ })).toBeVisible();
 
     await page.goto(`/manage/organizer/${freshAccount.organizerId}/reports`);
-    await expect(page.getByText('Check-In Summary').first()).toBeVisible();
-    await expect(page.getByText('Revenue Summary')).toHaveCount(0);
+    await expect(page.getByTestId('report-tab-check_in_summary')).toBeVisible();
+    await expect(page.getByTestId('report-tab-revenue_summary')).toHaveCount(0);
   });
 
   test('a non-admin member cannot reach team or account management', async ({ freshAccount, mailpit, publicApi, browser }) => {

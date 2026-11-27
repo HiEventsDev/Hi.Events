@@ -15,17 +15,16 @@ use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Resources\Attendee\AttendeeResource;
+use HiEvents\Services\Domain\TicketResale\TicketResaleStateService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class GetAttendeeAction extends BaseAction
 {
-    private AttendeeRepositoryInterface $attendeeRepository;
-
-    public function __construct(AttendeeRepositoryInterface $attendeeRepository)
-    {
-        $this->attendeeRepository = $attendeeRepository;
-    }
+    public function __construct(
+        private readonly AttendeeRepositoryInterface $attendeeRepository,
+        private readonly TicketResaleStateService $ticketResaleStateService,
+    ) {}
 
     public function __invoke(int $eventId, int $attendeeId): Response|JsonResponse
     {
@@ -67,6 +66,8 @@ class GetAttendeeAction extends BaseAction
         if (! $attendee) {
             return $this->notFoundResponse();
         }
+
+        $this->ticketResaleStateService->summarize(collect([$attendee]));
 
         return $this->resourceResponse(AttendeeResource::class, $attendee);
     }

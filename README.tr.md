@@ -30,8 +30,8 @@ Kendi sunucunuzda ya da bulutta. Sizin etkinlikleriniz, sizin markanız, sizin v
 <br>
 
 > [!NOTE]
-> **Hi.Events 2.0 yayında:** tekrarlanan etkinlikler, numaralı koltuk, gişe, kadro ve program sayfaları, tek oturum açma,
-> ekip yetkileri ve API anahtarları. [Yenilikleri görün →](https://github.com/HiEventsDev/hi.events/releases)
+> **Hi.Events 2.3 yayında:** Audience CRM ve SMS kampanyaları, bilet devri ve yeniden satış, yapay zekâ asistanları için MCP
+> sunucusu, ödeme sırasında takip soruları ve ödeme bağlantıları. [Yenilikleri görün →](https://github.com/HiEventsDev/hi.events/releases)
 
 <br>
 
@@ -71,14 +71,16 @@ ve konferans düzenleyicilerine kadar. Kendiniz çalıştırın ya da Hi.Events 
 - Kendi siteniz için özelleştirilebilir yerleştirmeler: bilet widget'ları, butonlar, etkinlik listeleri, kadrolar ve programlar
 - Promosyon kodları ve indirimler
 - Promotörler ve satış ortakları için takip bağlantıları
-- Özel kayıt soruları
+- Takip soruları ve uygunluk kuralları içeren kayıt soruları
 - Ödeme sırasında pazarlama izni
+- Kişiler, segmentler, kayıt formları ve e-posta ile SMS kampanyaları içeren Audience CRM <sup>Enterprise</sup>
 - Meta, TikTok, Google Analytics ve Tag Manager ile takip
 
 **💳 Ödemeler**
 - Kendi Stripe hesabınıza ödeme aktarımı
 - Fiyata dahil ya da ödeme sırasında eklenen vergi ve ücretler
 - Faturalandırma ve çevrimdışı ödemeler
+- Ödemeyi başka biri yapacaksa kullanılacak ödeme bağlantıları
 - Tam ve kısmi iadeler
 
 **🚪 Katılımcılar ve giriş**
@@ -87,6 +89,7 @@ ve konferans düzenleyicilerine kadar. Kendiniz çalıştırın ya da Hi.Events 
 - Canlı sayımlı, paylaşılabilir check-in listeleri
 - Katılımcılara mesaj ve özel e-posta şablonları
 - Markalı PDF biletler
+- Satıcıya otomatik iade yapılan bilet devri ve yeniden satış
 - Elle eklenen katılımcılar
 - Satış, vergi ve promosyon kodu raporları
 
@@ -95,7 +98,8 @@ ve konferans düzenleyicilerine kadar. Kendiniz çalıştırın ya da Hi.Events 
 ## Kurumlar için tasarlandı
 
 **🔐 Güvenlik ve erişim**
-- Tek oturum açma
+- Google, Microsoft veya kendi OIDC sağlayıcınızla giriş
+- Hesap başına tek oturum açma <sup>Enterprise</sup>
 - İki adımlı doğrulama
 - Ekip rolleri ve yetkileri
 - Tek hesapta birden fazla organizatör
@@ -103,6 +107,7 @@ ve konferans düzenleyicilerine kadar. Kendiniz çalıştırın ya da Hi.Events 
 **🔌 Entegrasyonlar**
 - REST API ve API anahtarları
 - Webhook'lar
+- Claude ve diğer yapay zekâ asistanları için MCP sunucusu
 - CSV ve XLSX dışa aktarma
 
 **🗄️ Verileriniz**
@@ -180,7 +185,7 @@ ekip tarafından işletilen, tamamen yönetilen sürümdür.
 Hi.Events, **ek koşullarla AGPL-3.0** lisansı altında sunulur. Ek koşullar, yazılımın oluşturduğu sayfalarda ve e-postalarda "Powered by Hi.Events"
 ibaresinin korunmasını gerektirir — tam metin için [LICENCE](LICENCE) dosyasına bakın.
 
-Numaralı koltuk ve gişe özellikleri [Hi.Events Enterprise Licence](backend/ee/LICENCE) kapsamındadır ve üretimde kullanım için
+Numaralı koltuk, gişe, hesap başına tek oturum açma ve Audience özellikleri [Hi.Events Enterprise Licence](backend/ee/LICENCE) kapsamındadır ve üretimde kullanım için
 lisans gerektirir.
 
 İbareyi kaldırmak ya da white-label bir kurulum için uygun koşullara ihtiyacınız varsa **ticari lisanslar mevcuttur**.

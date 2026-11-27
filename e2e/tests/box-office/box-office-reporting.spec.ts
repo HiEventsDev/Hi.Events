@@ -12,7 +12,7 @@ test.describe('box office reporting', () => {
     await orders.goto(event.eventId);
 
     const row = authedPage.getByRole('row').filter({ hasText: 'Box office sale' });
-    await expect(row).toContainText('Box office · Sold by Robin');
+    await expect(row).toContainText('Sold by Robin');
     await expect(row).toContainText('Cash');
     await expect(row).toContainText('No email provided');
 

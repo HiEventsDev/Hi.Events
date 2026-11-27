@@ -4,12 +4,14 @@ namespace HiEvents\Services\Application\Handlers\SelfService;
 
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\Exceptions\SelfServiceDisabledException;
+use HiEvents\Exceptions\SelfServiceVerificationRequiredException;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\SelfService\DTO\EditAttendeePublicDTO;
 use HiEvents\Services\Domain\SelfService\DTO\EditAttendeeResultDTO;
 use HiEvents\Services\Domain\SelfService\SelfServiceEditAttendeeService;
+use HiEvents\Services\Domain\SelfService\VerifiedTicketAccessService;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class EditAttendeePublicHandler
@@ -21,10 +23,12 @@ class EditAttendeePublicHandler
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly EventRepositoryInterface $eventRepository,
         private readonly SelfServiceEditAttendeeService $selfServiceEditAttendeeService,
+        private readonly VerifiedTicketAccessService $verifiedTicketAccessService,
     ) {}
 
     /**
      * @throws SelfServiceDisabledException
+     * @throws SelfServiceVerificationRequiredException
      */
     public function handle(EditAttendeePublicDTO $dto): EditAttendeeResultDTO
     {
@@ -37,8 +41,12 @@ class EditAttendeePublicHandler
             AttendeeDomainObjectAbstract::EVENT_ID => $dto->eventId,
         ]);
 
-        if (! $attendee) {
+        if (! $attendee || $attendee->hasLeftItsOrder()) {
             throw new ResourceNotFoundException(__('Attendee not found'));
+        }
+
+        if ($dto->email !== null && $dto->email !== $attendee->getEmail()) {
+            $this->verifiedTicketAccessService->assertControlsTicket($dto->sessionToken, $attendee, $order);
         }
 
         return $this->selfServiceEditAttendeeService->editAttendee(

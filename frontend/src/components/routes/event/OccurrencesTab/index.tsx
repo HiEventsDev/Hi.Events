@@ -3,15 +3,17 @@ import {CreateButton} from "../../../common/CreateButton";
 import {WriteAccess} from "../../../common/WriteAccess";
 import {useAccess} from "../../../../hooks/useAccess.ts";
 import {t} from "@lingui/macro";
-import {Anchor, Button, Checkbox, Group, HoverCard, Menu, Paper, Progress, SegmentedControl, Skeleton, Stack, Text, Tooltip} from "@mantine/core";
+import {ActionIcon, Anchor, Button, Checkbox, Group, HoverCard, Menu, Paper, Progress, SegmentedControl, Skeleton, Stack, Text, Tooltip, VisuallyHidden} from "@mantine/core";
 import {
     IconCalendar,
     IconCalendarEvent,
+    IconBan,
     IconCalendarPlus,
     IconDotsVertical,
     IconList,
     IconPencil,
     IconPlus,
+    IconTrash,
 } from "@tabler/icons-react";
 import {useDisclosure} from "@mantine/hooks";
 import {useCallback, useMemo, useRef, useState} from "react";
@@ -33,6 +35,7 @@ import {getEventLocationDisplay} from "../../../../utilites/effectiveLocation.ts
 import {formatCurrency} from "../../../../utilites/currency.ts";
 import {OccurrenceEditModal, OccurrenceEditTab} from "./OccurrenceEditModal";
 import {OccurrenceBulkEditModal} from "./OccurrenceBulkEditModal";
+import {SelectionBar} from "../../../common/SelectionBar";
 import {RecurrenceScheduleDrawer} from "./RecurrenceScheduleDrawer";
 import {CalendarView} from "./CalendarView";
 import {useCancelOccurrence} from "../../../../mutations/useCancelOccurrence.ts";
@@ -333,14 +336,14 @@ const OccurrencesTab = () => {
                                     </Tooltip>
                                 )}
                             </div>
-                            {occ.label && (
-                                <div className={classes.dateTimeMeta}>{occ.label}</div>
-                            )}
-                            {locationDisplay && (
-                                <div className={classes.dateTimeLocation}>
-                                    {locationDisplay.isOnline ? t`Online` : locationDisplay.short}
-                                </div>
-                            )}
+                            <div className={classes.dateTimeSecondary}>
+                                {occ.label && <span className={classes.dateTimeMeta}>{occ.label}</span>}
+                                {locationDisplay && (
+                                    <span className={classes.dateTimeLocation}>
+                                        {locationDisplay.isOnline ? t`Online` : locationDisplay.short}
+                                    </span>
+                                )}
+                            </div>
                         </Anchor>
                     );
                 },
@@ -465,23 +468,19 @@ const OccurrencesTab = () => {
             },
             {
                 id: 'actions',
-                header: '',
+                header: <VisuallyHidden>{t`Actions`}</VisuallyHidden>,
                 sticky: 'right',
                 render: (occ: EventOccurrence) => (
-                    <Group wrap={'nowrap'} gap={0} justify={'flex-end'}>
-                        <Menu shadow="md" width={200}>
-                            <Menu.Target>
-                                <div className={classes.action}>
-                                    <Button size="xs" variant="transparent" data-testid="occurrence-actions-menu">
-                                        <IconDotsVertical/>
-                                    </Button>
-                                </div>
-                            </Menu.Target>
-                            <Menu.Dropdown>
-                                <OccurrenceMenuItems occurrence={occ} actions={menuActions}/>
-                            </Menu.Dropdown>
-                        </Menu>
-                    </Group>
+                    <Menu shadow="md" width={200} position="bottom-end">
+                        <Menu.Target>
+                            <ActionIcon variant="subtle" color="gray" aria-label={t`Actions`} data-testid="occurrence-actions-menu">
+                                <IconDotsVertical size={18}/>
+                            </ActionIcon>
+                        </Menu.Target>
+                        <Menu.Dropdown>
+                            <OccurrenceMenuItems occurrence={occ} actions={menuActions}/>
+                        </Menu.Dropdown>
+                    </Menu>
                 ),
                 headerStyle: {width: 70},
             },
@@ -527,36 +526,6 @@ const OccurrencesTab = () => {
                 )}
 
                 <div className={classes.toolbarSpacer}/>
-
-                {selectedIds.size > 0 && !isReadOnly && (
-                    <div className={classes.selectionGroup}>
-                        <span className={classes.selectionCount}>{selectedIds.size} {t`selected`}</span>
-                        <button
-                            className={classes.selectionAction}
-                            data-danger
-                            data-testid="occurrence-bulk-cancel-button"
-                            onClick={handleBulkCancel}
-                        >
-                            {t`Cancel`}
-                        </button>
-                        <button
-                            className={classes.selectionAction}
-                            data-danger
-                            data-testid="occurrence-bulk-delete-button"
-                            onClick={handleBulkDelete}
-                        >
-                            {t`Delete`}
-                        </button>
-                        <button
-                            className={classes.selectionAction}
-                            data-testid="occurrence-bulk-clear-selection-button"
-                            onClick={() => setSelectedIds(new Set())}
-                        >
-                            {t`Clear`}
-                        </button>
-                        <div className={classes.toolbarDivider}/>
-                    </div>
-                )}
 
                 <WriteAccess>
                     <Button
@@ -716,6 +685,39 @@ const OccurrencesTab = () => {
                 />
             )}
 
+            {selectedIds.size > 0 && !isReadOnly && viewMode === 'list' && (
+                <SelectionBar
+                    count={selectedIds.size}
+                    label={t`Bulk Edit`}
+                    onClear={() => setSelectedIds(new Set())}
+                    countTestId="occurrence-selection-count"
+                    clearTestId="occurrence-bulk-clear-selection-button"
+                >
+                    <Button
+                        variant="subtle"
+                        color="gray"
+                        size="compact-sm"
+                        leftSection={<IconBan size={15}/>}
+                        onClick={handleBulkCancel}
+                        disabled={bulkUpdateMutation.isPending}
+                        data-testid="occurrence-bulk-cancel-button"
+                    >
+                        {t`Cancel`}
+                    </Button>
+                    <Button
+                        variant="subtle"
+                        color="red"
+                        size="compact-sm"
+                        leftSection={<IconTrash size={15}/>}
+                        onClick={handleBulkDelete}
+                        disabled={bulkUpdateMutation.isPending}
+                        data-testid="occurrence-bulk-delete-button"
+                    >
+                        {t`Delete`}
+                    </Button>
+                </SelectionBar>
+            )}
+
             {bulkEditOpen && (
                 <OccurrenceBulkEditModal onClose={closeBulkEdit} occurrences={occurrences}/>
             )}
@@ -747,6 +749,7 @@ const OccurrencesTab = () => {
                     onClose={() => setShareOccurrence(undefined)}
                     url={`${eventHomepageUrl(event)}?occurrence_id=${shareOccurrence.id}`}
                     title={event.title}
+                    event={event}
                     shareText={`${event.title} — ${formatDateWithLocale(shareOccurrence.start_date, 'shortDateTime', event.timezone)}`}
                 />
             )}

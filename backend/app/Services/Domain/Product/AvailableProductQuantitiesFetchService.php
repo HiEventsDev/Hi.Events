@@ -47,10 +47,15 @@ class AvailableProductQuantitiesFetchService
         ?int $eventOccurrenceId = null,
         bool $applyOccurrenceLimits = true,
         bool $allowPastOccurrence = false,
+        bool $includeResaleStock = false,
     ): AvailableProductQuantitiesResponseDTO {
         if ($eventOccurrenceId === null) {
-            return $this->cachedEventWideQuantities([$eventId], $ignoreCache)[$eventId]
-                ?? $this->calculateEventWideQuantities(collect([$this->eventRepository->findById($eventId)]), $ignoreCache)[$eventId];
+            return $this->cachedEventWideQuantities([$eventId], $ignoreCache, $includeResaleStock)[$eventId]
+                ?? $this->calculateEventWideQuantities(
+                    collect([$this->eventRepository->findById($eventId)]),
+                    $ignoreCache,
+                    $includeResaleStock,
+                )[$eventId];
         }
 
         $event = $this->eventRepository->findById($eventId);
@@ -73,6 +78,13 @@ class AvailableProductQuantitiesFetchService
             $quantities = $this->applyOccurrenceCapacity($quantities, $occurrence, $occurrenceReserved, $allowPastOccurrence);
         }
 
+        if ($includeResaleStock) {
+            $quantities = $this->addResaleStock(
+                $quantities,
+                $this->soldAndReservedQuantities->getResaleStockByPrice([$eventId], $eventOccurrenceId),
+            );
+        }
+
         return new AvailableProductQuantitiesResponseDTO(
             productQuantities: $quantities,
             capacities: $capacities,
@@ -85,16 +97,18 @@ class AvailableProductQuantitiesFetchService
      * @param  Collection<int, EventDomainObject>  $events
      * @return array<int, AvailableProductQuantitiesResponseDTO> keyed by event id
      */
-    public function getEventWideQuantitiesForEvents(Collection $events): array
+    public function getEventWideQuantitiesForEvents(Collection $events, bool $includeResaleStock = false): array
     {
         $cached = $this->cachedEventWideQuantities(
             $events->map(fn (EventDomainObject $event) => $event->getId())->all(),
             ignoreCache: false,
+            includeResaleStock: $includeResaleStock,
         );
 
         return $cached + $this->calculateEventWideQuantities(
             $events->reject(fn (EventDomainObject $event) => isset($cached[$event->getId()])),
             ignoreCache: false,
+            includeResaleStock: $includeResaleStock,
         );
     }
 
@@ -102,7 +116,7 @@ class AvailableProductQuantitiesFetchService
      * @param  Collection<int, EventDomainObject>  $events
      * @return array<int, AvailableProductQuantitiesResponseDTO>
      */
-    private function calculateEventWideQuantities(Collection $events, bool $ignoreCache): array
+    private function calculateEventWideQuantities(Collection $events, bool $ignoreCache, bool $includeResaleStock): array
     {
         if ($events->isEmpty()) {
             return [];
@@ -121,6 +135,8 @@ class AvailableProductQuantitiesFetchService
             $this->seatAvailabilityOccurrenceIds($eventIds, $recurringEventIds),
         );
 
+        $resaleStock = $includeResaleStock ? $this->soldAndReservedQuantities->getResaleStockByPrice($eventIds) : [];
+
         $results = [];
         foreach ($eventIds as $eventId) {
             $capacities = $capacitiesByEventId[$eventId] ?? collect();
@@ -131,7 +147,10 @@ class AvailableProductQuantitiesFetchService
             }
 
             $results[$eventId] = new AvailableProductQuantitiesResponseDTO(
-                productQuantities: $this->applyFreeSeats($quantities, $freeSeatsByEventId[$eventId] ?? []),
+                productQuantities: $this->addResaleStock(
+                    $this->applyFreeSeats($quantities, $freeSeatsByEventId[$eventId] ?? []),
+                    $resaleStock,
+                ),
                 capacities: $capacities,
             );
         }
@@ -139,7 +158,11 @@ class AvailableProductQuantitiesFetchService
         $ttl = $this->config->get('app.homepage_product_quantities_cache_ttl');
         if (! $ignoreCache && $ttl) {
             $this->cache->setMultiple(
-                collect($results)->mapWithKeys(fn (AvailableProductQuantitiesResponseDTO $dto, int $eventId) => [$this->getCacheKey($eventId) => $dto])->all(),
+                collect($results)
+                    ->mapWithKeys(fn (AvailableProductQuantitiesResponseDTO $dto, int $eventId) => [
+                        $this->getCacheKey($eventId, $includeResaleStock) => $dto,
+                    ])
+                    ->all(),
                 $ttl,
             );
         }
@@ -151,17 +174,19 @@ class AvailableProductQuantitiesFetchService
      * @param  int[]  $eventIds
      * @return array<int, AvailableProductQuantitiesResponseDTO>
      */
-    private function cachedEventWideQuantities(array $eventIds, bool $ignoreCache): array
+    private function cachedEventWideQuantities(array $eventIds, bool $ignoreCache, bool $includeResaleStock): array
     {
         if ($ignoreCache || ! $this->config->get('app.homepage_product_quantities_cache_ttl')) {
             return [];
         }
 
-        $cached = $this->cache->getMultiple(array_map(fn (int $eventId) => $this->getCacheKey($eventId), $eventIds));
+        $cached = $this->cache->getMultiple(
+            array_map(fn (int $eventId) => $this->getCacheKey($eventId, $includeResaleStock), $eventIds)
+        );
 
         $results = [];
         foreach ($eventIds as $eventId) {
-            $dto = $cached[$this->getCacheKey($eventId)] ?? null;
+            $dto = $cached[$this->getCacheKey($eventId, $includeResaleStock)] ?? null;
             if ($dto instanceof AvailableProductQuantitiesResponseDTO) {
                 $results[$eventId] = $dto;
             }
@@ -439,8 +464,31 @@ class AvailableProductQuantitiesFetchService
         return $productCapacities;
     }
 
-    private function getCacheKey(int $eventId): string
+    /**
+     * @param  array<int, int>  $resaleStockByPrice
+     */
+    private function addResaleStock(Collection $quantities, array $resaleStockByPrice): Collection
     {
-        return "event.$eventId.available_product_quantities";
+        if ($resaleStockByPrice === []) {
+            return $quantities;
+        }
+
+        return $quantities->map(function (AvailableProductQuantitiesDTO $dto) use ($resaleStockByPrice) {
+            $listed = $resaleStockByPrice[$dto->price_id] ?? 0;
+
+            if ($listed > 0 && $dto->quantity_available !== Constants::INFINITE) {
+                $dto->resale_quantity_available = $listed;
+                $dto->quantity_available += $listed;
+            }
+
+            return $dto;
+        });
+    }
+
+    private function getCacheKey(int $eventId, bool $includeResaleStock = false): string
+    {
+        return $includeResaleStock
+            ? "event.$eventId.available_product_quantities.with_resale"
+            : "event.$eventId.available_product_quantities";
     }
 }

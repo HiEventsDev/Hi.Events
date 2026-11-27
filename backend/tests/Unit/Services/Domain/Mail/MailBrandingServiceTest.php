@@ -8,6 +8,8 @@ use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\Mail\BaseMail;
+use HiEvents\Mail\Concerns\SentOnBehalfOfOrganizer;
 use HiEvents\Mail\Event\UnpublishedEventUpdateMail;
 use HiEvents\Mail\Order\OrderSummary;
 use HiEvents\Mail\Organizer\OrderSummaryForOrganizer;
@@ -16,6 +18,8 @@ use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Services\Domain\Mail\EmailAccentColorService;
 use HiEvents\Services\Domain\Mail\MailBrandingService;
 use HiEvents\Services\Domain\Subscription\AccountSubscriptionAccessService;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -37,6 +41,8 @@ class MailBrandingServiceTest extends TestCase
 
         $this->accessService = Mockery::mock(AccountSubscriptionAccessService::class);
         $this->organizerRepository = Mockery::mock(OrganizerRepositoryInterface::class);
+        $this->organizerRepository->shouldReceive('loadRelation')->andReturnSelf()->byDefault();
+        $this->organizerRepository->shouldReceive('findFirstWhere')->andReturnNull()->byDefault();
         config(['app.cdn_url' => 'https://cdn.test', 'app.frontend_url' => 'https://tickets.example.test', 'app.name' => 'Hi.Events']);
 
         $this->accessService->shouldReceive('areSubscriptionsAvailable')->andReturnTrue()->byDefault();
@@ -65,6 +71,84 @@ class MailBrandingServiceTest extends TestCase
             'https://tickets.example.test/auth/register?utm_source=email-promo&utm_medium=email&utm_campaign=create-your-event',
             $branding->promoUrl,
         );
+    }
+
+    public function test_buyer_mail_from_unsubscribed_accounts_names_the_organizer_beside_the_platform(): void
+    {
+        $this->givenSubscription(false);
+        $this->givenOrganizer("Acme\r\nEvents", 'https://acme.test');
+
+        $branding = $this->service->forMail($this->orderSummary());
+
+        $this->assertFalse($branding->hideHiEventsBranding);
+        $this->assertSame('Acme Events', $branding->organizerName);
+        $this->assertNull($branding->organizerUrl);
+        $this->assertNull($branding->organizerLogoUrl);
+        $this->assertNull($branding->senderName);
+    }
+
+    public function test_installs_other_than_hi_events_name_the_organizer_on_buyer_mail(): void
+    {
+        $this->accessService->shouldReceive('areSubscriptionsAvailable')->andReturnFalse();
+        $this->givenOrganizer('Acme Events');
+
+        $this->assertSame('Acme Events', $this->service->forMail($this->orderSummary())->organizerName);
+    }
+
+    public function test_the_organizers_own_notification_from_an_unsubscribed_account_keeps_the_platform_header(): void
+    {
+        $this->givenSubscription(false);
+        $this->organizerRepository->shouldNotReceive('findFirstWhere');
+
+        $branding = $this->service->forMail(new OrderSummaryForOrganizer($this->order(), $this->event()));
+
+        $this->assertNull($branding->organizerName);
+    }
+
+    #[DataProvider('impersonatingNames')]
+    public function test_unsubscribed_organizers_with_impersonating_names_keep_the_platform_header(string $name): void
+    {
+        $this->givenSubscription(false);
+        $this->givenOrganizer($name);
+
+        $this->assertNull($this->service->forMail($this->orderSummary())->organizerName);
+    }
+
+    public function test_mail_sent_on_behalf_of_an_unsubscribed_organizer_names_them_without_an_event(): void
+    {
+        $this->givenSubscription(false);
+        $this->organizerRepository->shouldNotReceive('findFirstWhere');
+
+        $branding = $this->service->forMail($this->organizerMail($this->namedOrganizer()));
+
+        $this->assertFalse($branding->hideHiEventsBranding);
+        $this->assertSame('Acme Events', $branding->organizerName);
+        $this->assertNull($branding->senderName);
+    }
+
+    public function test_mail_sent_on_behalf_of_a_subscribed_organizer_hides_hi_events_branding_and_keeps_the_platform_sender(): void
+    {
+        $this->givenSubscription(true);
+        $this->organizerRepository->shouldReceive('loadRelation')->with(ImageDomainObject::class)->andReturnSelf();
+        $this->organizerRepository->shouldReceive('findFirstWhere')
+            ->with(['id' => 4, 'account_id' => 7])
+            ->andReturn($this->namedOrganizer()->setImages(collect([
+                (new ImageDomainObject)->setType(ImageType::ORGANIZER_LOGO->name)->setPath('logo.png'),
+            ])));
+
+        $branding = $this->service->forMail($this->organizerMail($this->namedOrganizer()));
+
+        $this->assertTrue($branding->hideHiEventsBranding);
+        $this->assertSame('https://cdn.test/logo.png', $branding->organizerLogoUrl);
+        $this->assertNull($branding->senderName);
+        $this->assertNull($branding->buttonColor);
+    }
+
+    public function test_mail_sent_without_a_known_organizer_keeps_the_platform_header(): void
+    {
+        $this->accessService->shouldNotReceive('hasActiveSubscription');
+
+        $this->assertNull($this->service->forMail($this->organizerMail(null))->organizerName);
     }
 
     public function test_other_event_mail_has_no_promo(): void
@@ -204,11 +288,42 @@ class MailBrandingServiceTest extends TestCase
         $this->assertSame(70, mb_strlen($this->service->forMail($this->orderSummary())->senderName));
     }
 
-    private function givenOrganizer(string $name): void
+    private function givenOrganizer(string $name, ?string $website = null): void
     {
         $this->organizerRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->organizerRepository->shouldReceive('findFirstWhere')
-            ->andReturn((new OrganizerDomainObject)->setId(4)->setName($name)->setImages(collect()));
+            ->andReturn((new OrganizerDomainObject)->setId(4)->setName($name)->setWebsite($website)->setImages(collect()));
+    }
+
+    private function namedOrganizer(): OrganizerDomainObject
+    {
+        return (new OrganizerDomainObject)->setId(4)->setAccountId(7)->setName('Acme Events')->setWebsite('https://acme.test');
+    }
+
+    private function organizerMail(?OrganizerDomainObject $organizer): BaseMail
+    {
+        return new class($organizer) extends BaseMail implements SentOnBehalfOfOrganizer
+        {
+            public function __construct(private readonly ?OrganizerDomainObject $organizer)
+            {
+                parent::__construct();
+            }
+
+            public function getContentOrganizer(): ?OrganizerDomainObject
+            {
+                return $this->organizer;
+            }
+
+            public function envelope(): Envelope
+            {
+                return new Envelope(subject: 'News');
+            }
+
+            public function content(): Content
+            {
+                return new Content(markdown: 'emails.crm.campaign');
+            }
+        };
     }
 
     public function test_subscribed_organizers_without_a_logo_fall_back_to_their_name(): void

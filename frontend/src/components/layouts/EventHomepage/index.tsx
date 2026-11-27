@@ -259,16 +259,7 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
     return (
         <>
             {!isPreview && event.status && event.id && (
-                <StatusToggle
-                    entityType="event"
-                    entityId={event.id}
-                    currentStatus={event.status as 'DRAFT' | 'LIVE' | 'PENDING_MANUAL_REVIEW'}
-                    entityName={event.title}
-                    onSuccess={() =>
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 1000)}
-                />
+                <StatusToggle entityType="event" event={event}/>
             )}
 
             <HomepageFrame

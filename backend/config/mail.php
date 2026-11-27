@@ -71,6 +71,11 @@ return [
             'message_stream_id' => env('POSTMARK_BROADCAST_MESSAGE_STREAM_ID', 'broadcast'),
         ],
 
+        'postmark-campaigns' => [
+            'transport' => 'postmark',
+            'message_stream_id' => env('POSTMARK_CAMPAIGNS_MESSAGE_STREAM_ID', 'broadcast'),
+        ],
+
         'sendmail' => [
             'transport' => 'sendmail',
             'path' => env('MAIL_SENDMAIL_PATH', '/usr/sbin/sendmail -bs -i'),
@@ -108,6 +113,14 @@ return [
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'hello@hi.events'),
         'name' => env('MAIL_FROM_NAME', 'Hi.Events'),
+    ],
+
+    'campaigns' => [
+        'mailer' => env('MAIL_CAMPAIGNS_MAILER') ?: null,
+        'from' => [
+            'address' => env('MAIL_CAMPAIGNS_FROM_ADDRESS') ?: null,
+            'name' => env('MAIL_CAMPAIGNS_FROM_NAME') ?: env('MAIL_FROM_NAME', 'Hi.Events'),
+        ],
     ],
 
     'lifecycle' => [

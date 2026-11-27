@@ -18,6 +18,8 @@ class HtmlPurifierService
 
     private HTMLPurifier_Config $config;
 
+    private ?HTMLPurifier_Config $configWithoutCssImages = null;
+
     public function __construct(private readonly HTMLPurifier $htmlPurifier)
     {
         $this->config = HTMLPurifier_Config::createDefault();
@@ -32,6 +34,26 @@ class HtmlPurifierService
 
     public function purify(?string $html): ?string
     {
+        return $this->purifyWith($html, $this->config);
+    }
+
+    public function purifyWithoutCssImages(?string $html): ?string
+    {
+        if ($this->configWithoutCssImages === null) {
+            $this->configWithoutCssImages = clone $this->config;
+            $this->configWithoutCssImages->set('CSS.ForbiddenProperties', [
+                'background' => true,
+                'background-image' => true,
+                'list-style' => true,
+                'list-style-image' => true,
+            ]);
+        }
+
+        return $this->purifyWith($html, $this->configWithoutCssImages);
+    }
+
+    private function purifyWith(?string $html, HTMLPurifier_Config $config): ?string
+    {
         if ($html === null) {
             return null;
         }
@@ -39,7 +61,7 @@ class HtmlPurifierService
         return preg_replace_callback(
             self::ENCODED_LIQUID_TOKEN,
             static fn (array $matches): string => '{{'.strtr($matches[1], self::DECODABLE).'}}',
-            $this->htmlPurifier->purify($html, $this->config),
+            $this->htmlPurifier->purify($html, $config),
         );
     }
 }

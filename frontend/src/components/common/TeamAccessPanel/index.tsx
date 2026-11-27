@@ -1,10 +1,13 @@
-import {Button, Select, Table, Text} from "@mantine/core";
+import {Button, Select, Text, VisuallyHidden} from "@mantine/core";
 import {IconPlus, IconUserMinus} from "@tabler/icons-react";
 import {t} from "@lingui/macro";
 import {useState} from "react";
 import {useDisclosure} from "@mantine/hooks";
 import {Card} from "../Card";
 import {TableSkeleton} from "../TableSkeleton";
+import {TanStackTable, TanStackTableColumn} from "../TanStackTable";
+import {CellText, IdentityCell} from "../TanStackTable/cells.tsx";
+import {StatusBadge} from "../StatusBadge";
 import {InviteUserModal} from "../../modals/InviteUserModal";
 import {useGetTeam} from "../../../queries/useGetTeam.ts";
 import {useGetUsers} from "../../../queries/useGetUsers.ts";
@@ -92,6 +95,53 @@ export const TeamAccessPanel = ({scope}: TeamAccessPanelProps) => {
         }
     };
 
+    const columns: TanStackTableColumn<TeamMemberAccess>[] = [
+        {
+            id: 'person',
+            header: t`Person`,
+            meta: {sticky: 'left'},
+            cell: ({row: {original: member}}) => (
+                <IdentityCell
+                    stacked
+                    primary={<CellText strong>{member.first_name} {member.last_name}</CellText>}
+                    secondary={member.email}
+                />
+            ),
+        },
+        {
+            id: 'role',
+            header: t`Role`,
+            cell: ({row: {original: member}}) => roleLabel(member.role),
+        },
+        {
+            id: 'access',
+            header: t`Access`,
+            cell: ({row: {original: member}}) => (
+                <StatusBadge tone={member.access_via === directVia ? 'active' : 'neutral'}>
+                    {accessLabel(member)}
+                </StatusBadge>
+            ),
+        },
+        {
+            id: 'actions',
+            header: () => <VisuallyHidden>{t`Actions`}</VisuallyHidden>,
+            meta: {sticky: 'right'},
+            cell: ({row: {original: member}}) => member.access_via === directVia && (
+                <Button
+                    variant="subtle"
+                    color="red"
+                    size="compact-sm"
+                    leftSection={<IconUserMinus size={14}/>}
+                    onClick={() => handleRemove(member)}
+                    disabled={editMutation.isPending}
+                    data-testid="team-remove-access-button"
+                >
+                    {t`Remove`}
+                </Button>
+            ),
+        },
+    ];
+
     if (!canManageTeam) {
         return <Text c="dimmed">{t`Only admins can manage team access.`}</Text>;
     }
@@ -128,50 +178,12 @@ export const TeamAccessPanel = ({scope}: TeamAccessPanelProps) => {
             <TableSkeleton isVisible={!members}/>
 
             {members && (
-                <Card className={classes.tableCard}>
-                    <Table.ScrollContainer minWidth={360}>
-                        <Table verticalSpacing="sm" data-testid="team-access-table">
-                            <Table.Thead>
-                                <Table.Tr>
-                                    <Table.Th>{t`Person`}</Table.Th>
-                                    <Table.Th>{t`Access`}</Table.Th>
-                                    <Table.Th/>
-                                </Table.Tr>
-                            </Table.Thead>
-                            <Table.Tbody>
-                                {members.map(member => (
-                                    <Table.Tr key={member.user_id}>
-                                        <Table.Td>
-                                            <Text fz="sm" fw={500}>{member.first_name} {member.last_name}</Text>
-                                            <Text fz="xs" c="dimmed" className={classes.email}>{member.email}</Text>
-                                            <Text fz="xs" fw={500}>{roleLabel(member.role)}</Text>
-                                        </Table.Td>
-                                        <Table.Td>
-                                            <Text fz="sm" fw={500} c={member.access_via === directVia ? 'blue' : 'dimmed'}>
-                                                {accessLabel(member)}
-                                            </Text>
-                                        </Table.Td>
-                                        <Table.Td width={60}>
-                                            {member.access_via === directVia && (
-                                                <Button
-                                                    variant="subtle"
-                                                    color="red"
-                                                    size="xs"
-                                                    leftSection={<IconUserMinus size={14}/>}
-                                                    onClick={() => handleRemove(member)}
-                                                    disabled={editMutation.isPending}
-                                                    data-testid="team-remove-access-button"
-                                                >
-                                                    {t`Remove`}
-                                                </Button>
-                                            )}
-                                        </Table.Td>
-                                    </Table.Tr>
-                                ))}
-                            </Table.Tbody>
-                        </Table>
-                    </Table.ScrollContainer>
-                </Card>
+                <TanStackTable
+                    data={members}
+                    columns={columns}
+                    rowLines={2}
+                    dataTestId="team-access-table"
+                />
             )}
 
             {inviteOpen && (

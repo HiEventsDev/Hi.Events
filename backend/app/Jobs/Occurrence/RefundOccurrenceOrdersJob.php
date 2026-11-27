@@ -5,11 +5,13 @@ namespace HiEvents\Jobs\Occurrence;
 use HiEvents\DomainObjects\Enums\OrderAuditAction;
 use HiEvents\DomainObjects\Generated\OrderItemDomainObjectAbstract;
 use HiEvents\DomainObjects\Status\OrderPaymentStatus;
+use HiEvents\DomainObjects\Status\OrderRefundStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Exceptions\RefundNotPossibleException;
 use HiEvents\Repository\Interfaces\OrderAuditLogRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\RefundOrderDTO;
 use HiEvents\Services\Application\Handlers\Order\RefundOrderHandler;
+use HiEvents\Values\MoneyValue;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -62,8 +64,10 @@ class RefundOccurrenceOrdersJob implements ShouldBeUnique, ShouldQueue
             ->whereIn('id', $orderIds)
             ->where('status', OrderStatus::COMPLETED->name)
             ->where('payment_status', OrderPaymentStatus::PAYMENT_RECEIVED->name)
-            ->whereNull('refund_status')
-            ->get(['id', 'total_gross', 'currency']);
+            ->where(static fn ($neverOrPartlyRefunded) => $neverOrPartlyRefunded
+                ->whereNull('refund_status')
+                ->orWhere('refund_status', OrderRefundStatus::PARTIALLY_REFUNDED->name))
+            ->get(['id', 'total_gross', 'total_refunded', 'currency']);
 
         if ($refundableOrders->isEmpty()) {
             return;
@@ -94,11 +98,21 @@ class RefundOccurrenceOrdersJob implements ShouldBeUnique, ShouldQueue
                 continue;
             }
 
+            $unrefunded = MoneyValue::fromMinorUnit(
+                MoneyValue::fromFloat((float) $order->total_gross, $order->currency)->toMinorUnit()
+                    - MoneyValue::fromFloat((float) $order->total_refunded, $order->currency)->toMinorUnit(),
+                $order->currency,
+            );
+
+            if ($unrefunded->toMinorUnit() <= 0) {
+                continue;
+            }
+
             try {
                 $refundHandler->handle(new RefundOrderDTO(
                     event_id: $this->eventId,
                     order_id: $order->id,
-                    amount: (float) $order->total_gross,
+                    amount: $unrefunded->toFloat(),
                     notify_buyer: true,
                     cancel_order: true,
                 ));

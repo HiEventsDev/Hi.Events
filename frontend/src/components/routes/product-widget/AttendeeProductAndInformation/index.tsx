@@ -1,9 +1,12 @@
 import {useGetEventPublic} from "../../../../queries/useGetEventPublic.ts";
+import {IconArrowsExchange} from "@tabler/icons-react";
+import {useTicketTransferActions} from "../../../../hooks/useTicketTransferActions.tsx";
+import {TicketTransferPending} from "../../../common/TicketTransfer/TicketTransferPending.tsx";
 import {useParams} from "react-router";
 import {useGetAttendeePublic} from "../../../../queries/useGetAttendeePublic.ts";
 import {AttendeeTicket} from "../../../common/AttendeeTicket";
 import {Attendee, Product} from "../../../../types.ts";
-import {Container} from "@mantine/core";
+import {Button, Container} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {PoweredByFooter} from "../../../common/PoweredByFooter";
 import {OnlineEventDetails} from "../../../common/OnlineEventDetails";
@@ -14,6 +17,10 @@ export const AttendeeProductAndInformation = () => {
     const {eventId, attendeeShortId} = useParams();
     const {data: event, isError: eventError} = useGetEventPublic(eventId);
     const {data: attendee, isError: attendeeError} = useGetAttendeePublic(eventId, String(attendeeShortId));
+    const {openTransfer, cancelTransfer, transferModals} = useTicketTransferActions({
+        eventId: String(eventId),
+        attendeeShortId: String(attendeeShortId),
+    });
 
     if (eventError || attendeeError) {
         return (
@@ -60,6 +67,35 @@ export const AttendeeProductAndInformation = () => {
                 product={attendee.product as Product}
                 event={event}
             />
+
+            {(attendee.transfer?.can_start || attendee.transfer?.pending) && (
+                <div className={classes.manage}>
+                    {attendee.transfer.pending ? (
+                        <TicketTransferPending
+                            pending={attendee.transfer.pending}
+                            timezone={event.timezone}
+                            onCancel={() => cancelTransfer(attendee as Attendee)}
+                        />
+                    ) : (
+                        <>
+                            <div>
+                                <div className={classes.manageTitle}>{t`Can't make it?`}</div>
+                                <div className={classes.manageText}>{t`Give this ticket to someone else. They get their own ticket and this one stops working.`}</div>
+                            </div>
+                            <Button
+                                variant="default"
+                                leftSection={<IconArrowsExchange size={16}/>}
+                                onClick={() => openTransfer(attendee as Attendee)}
+                                data-testid="ticket-transfer-button"
+                            >
+                                {t`Transfer ticket`}
+                            </Button>
+                        </>
+                    )}
+                </div>
+            )}
+
+            {transferModals}
 
             <OnlineEventDetails event={event} occurrence={attendee?.event_occurrence ?? null}/>
 

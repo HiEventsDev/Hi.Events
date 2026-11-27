@@ -1,182 +1,50 @@
-.attendeeDetails {
-  min-width: 0;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.nameRow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-@media (max-width: 768px) {
-  .attendeeDetails {
-    max-width: 130px;
-  }
-
-  .nameRow {
-    flex-wrap: wrap;
-    row-gap: 2px;
-  }
-
-  .attendeeName {
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-}
-
-.attendeeName {
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 1.3;
-  text-decoration: none;
-  color: var(--mantine-color-text);
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
-.attendeeId {
-  font-size: 12px;
-  color: var(--mantine-color-dimmed);
-  font-family: 'Courier New', monospace;
-  line-height: 1.3;
-}
-
-.emailRow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.attendeeEmail {
-  font-size: 13px;
-  line-height: 1.3;
-  color: var(--mantine-color-dimmed);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 250px;
-}
-
-.emailActions {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  flex-shrink: 0;
-}
-
-.actionIcon {
-  flex-shrink: 0;
-}
-
-.orderTicketContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.ticketName {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--mantine-color-text);
-  line-height: 1.3;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.occurrenceChip {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 12px;
-  line-height: 1.3;
-  color: var(--mantine-primary-color-filled);
-  white-space: nowrap;
-}
-
-.orderId {
+.avatar {
   font-size: 11px;
-  color: var(--mantine-color-dimmed);
-  font-family: 'Courier New', monospace;
-  line-height: 1.3;
+}
 
-  :hover {
-    text-decoration: underline;
+.emailTarget {
+  display: inline-flex;
+  max-width: 100%;
+
+  button {
+    color: inherit;
   }
 }
 
-.seatLabel {
-  font-size: 12px;
-  color: var(--mantine-color-dimmed);
-  line-height: 1.3;
-}
-
-.registrationDate {
-  font-size: 12px;
-  color: var(--mantine-color-dimmed);
-  line-height: 1.3;
+.resold {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
 }
 
 .checkInButton {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  border: 1.5px solid var(--mantine-color-default-border);
-  border-radius: 8px;
-  background: var(--mantine-color-body);
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  white-space: nowrap;
-
-  &.checkedIn {
-    border-color: var(--mantine-color-green-6);
-    background: var(--mantine-color-green-0);
-    color: var(--mantine-color-green-9);
-  }
-
-  &.notCheckedIn {
-    color: var(--mantine-color-dimmed);
-  }
-}
-
-.statusBadge {
-  display: inline-flex;
-  align-items: center;
   gap: 4px;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
+  height: 24px;
+  padding: 0 8px;
+  border: 1px solid var(--mantine-color-gray-3);
+  border-radius: var(--mantine-radius-sm);
+  background: var(--mantine-color-body);
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 500;
+  color: var(--mantine-color-gray-6);
   white-space: nowrap;
+  cursor: pointer;
 
-  &[data-status="ACTIVE"] {
-    background: var(--mantine-color-green-1);
-    color: var(--mantine-color-green-9);
+  &:hover {
+    border-color: var(--mantine-color-gray-5);
+    color: var(--mantine-color-gray-9);
   }
 
-  &[data-status="AWAITING_PAYMENT"] {
-    background: var(--mantine-color-yellow-1);
-    color: var(--mantine-color-yellow-9);
+  &[data-checked-in] {
+    border-color: var(--mantine-color-teal-3);
+    background: var(--mantine-color-teal-0);
+    color: var(--mantine-color-teal-9);
   }
 
-  &[data-status="CANCELLED"] {
-    background: var(--mantine-color-red-1);
-    color: var(--mantine-color-red-9);
+  @media (pointer: coarse) {
+    height: 32px;
   }
-}
-
-.actionsMenu {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
 }

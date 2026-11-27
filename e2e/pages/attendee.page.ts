@@ -43,6 +43,28 @@ export class AttendeePage {
     await this.page.getByRole('button', { name: 'Save Changes' }).click();
   }
 
+  async changeEmail(email: string): Promise<void> {
+    await this.editButton().click();
+    await this.page.getByLabel(/^Email address/).fill(email);
+    await this.page.getByRole('button', { name: 'Save Changes' }).click();
+  }
+
+  async changeTicketType(productTitle: string): Promise<void> {
+    await this.editButton().click();
+    await this.page.getByRole('combobox', { name: 'Product', exact: true }).click();
+    await this.page.getByRole('option', { name: productTitle }).click();
+    await this.page.getByRole('button', { name: 'Save Changes' }).click();
+  }
+
+  async cancelTicket(rowText: string): Promise<void> {
+    await this.openRowAction(rowText, 'Cancel ticket');
+    await this.page.getByRole('button', { name: 'Confirm' }).click();
+  }
+
+  history(): Locator {
+    return this.page.getByRole('list', { name: 'History' });
+  }
+
   async closeDrawer(): Promise<void> {
     await this.page.keyboard.press('Escape');
   }

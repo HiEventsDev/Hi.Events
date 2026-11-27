@@ -4,15 +4,19 @@ namespace Tests\Unit\Services\Domain\Payment\Stripe\EventHandlers;
 
 use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
+use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\DomainObjects\Status\OrderPaymentStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\DomainObjects\StripePaymentDomainObject;
+use HiEvents\DomainObjects\TicketResaleListingDomainObject;
 use HiEvents\Enterprise\Seating\Services\Domain\SeatedOrderCompletionGuard;
+use HiEvents\Events\OrderStatusChangedEvent;
 use HiEvents\Exceptions\CannotAcceptPaymentException;
 use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Jobs\TicketResale\ProcessResaleRefundJob;
 use HiEvents\Repository\Eloquent\StripePaymentsRepository;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
@@ -25,10 +29,16 @@ use HiEvents\Services\Domain\Payment\Stripe\DTOs\NotCompletableOrderRefundDTO;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\PaymentIntentSucceededHandler;
 use HiEvents\Services\Domain\Payment\Stripe\StripeRefundExpiredOrderService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
+use HiEvents\Services\Domain\TicketResale\ResaleCompletionService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
+use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
+use HiEvents\Services\Infrastructure\DomainEvents\Events\AttendeeEvent;
+use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
 use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use Illuminate\Cache\Repository;
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Queue;
 use Mockery;
 use Mockery\MockInterface;
 use Psr\Log\LoggerInterface;
@@ -107,6 +117,18 @@ class PaymentIntentSucceededHandlerTest extends TestCase
 
     private SeatedOrderCompletionGuard|MockInterface $seatedOrderCompletionGuard;
 
+    private ResaleCompletionService|MockInterface $resaleCompletionService;
+
+    private AttendeeRepositoryInterface|MockInterface $attendeeRepository;
+
+    private ProductQuantityUpdateService|MockInterface $quantityUpdateService;
+
+    private DomainEventDispatcherService|MockInterface $domainEventDispatcher;
+
+    private OrderApplicationFeeService|MockInterface $orderApplicationFeeService;
+
+    private EventSettingsRepositoryInterface|MockInterface $eventSettingsRepository;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -138,22 +160,33 @@ class PaymentIntentSucceededHandlerTest extends TestCase
         $this->seatedOrderCompletionGuard = Mockery::mock(SeatedOrderCompletionGuard::class);
         $this->seatedOrderCompletionGuard->shouldReceive('assertSeatsHeld')->byDefault();
 
+        $this->resaleCompletionService = Mockery::mock(ResaleCompletionService::class);
+        $this->resaleCompletionService->shouldReceive('completeForPaidOrder')->andReturn(collect())->byDefault();
+        $this->resaleCompletionService->shouldReceive('lockEventIfHoldingListings')->byDefault();
+        $this->resaleCompletionService->shouldReceive('hasUnsellableClaim')->andReturnFalse()->byDefault();
+        $this->attendeeRepository = Mockery::mock(AttendeeRepositoryInterface::class);
+        $this->quantityUpdateService = Mockery::mock(ProductQuantityUpdateService::class);
+        $this->domainEventDispatcher = Mockery::mock(DomainEventDispatcherService::class);
+        $this->orderApplicationFeeService = Mockery::mock(OrderApplicationFeeService::class);
+        $this->eventSettingsRepository = Mockery::mock(EventSettingsRepositoryInterface::class);
+
         $this->handler = new PaymentIntentSucceededHandler(
             $this->orderRepository,
             $this->stripePaymentsRepository,
             Mockery::mock(AffiliateRepositoryInterface::class),
-            Mockery::mock(ProductQuantityUpdateService::class),
+            $this->quantityUpdateService,
             new RecordingRefundExpiredOrderService($this->refundLog),
-            Mockery::mock(AttendeeRepositoryInterface::class),
+            $this->attendeeRepository,
             $databaseManager,
             Mockery::mock(LoggerInterface::class)->shouldIgnoreMissing(),
             $cache,
-            Mockery::mock(DomainEventDispatcherService::class),
-            Mockery::mock(OrderApplicationFeeService::class),
-            Mockery::mock(EventSettingsRepositoryInterface::class),
+            $this->domainEventDispatcher,
+            $this->orderApplicationFeeService,
+            $this->eventSettingsRepository,
             new OccurrenceStatusValidator($this->occurrenceRepository),
             $this->seatedOrderCompletionGuard,
             new TransactionLockService($databaseManager),
+            $this->resaleCompletionService,
         );
     }
 
@@ -459,6 +492,51 @@ class PaymentIntentSucceededHandlerTest extends TestCase
         $this->handler->handleEvent(PaymentIntent::constructFrom(['id' => 'pi_test', 'amount_received' => 1000, 'currency' => 'eur']));
 
         $this->assertSame([], $this->refundLog->orderIds);
+    }
+
+    public function test_a_resold_listing_queues_its_refund_and_dispatches_both_attendee_events(): void
+    {
+        Queue::fake();
+        Event::fake([OrderStatusChangedEvent::class]);
+
+        $order = (new OrderDomainObject)->setShortId('o_test')
+            ->setId(1)
+            ->setEventId(9)
+            ->setStatus(OrderStatus::RESERVED->name)
+            ->setPaymentStatus(OrderPaymentStatus::AWAITING_PAYMENT->name)
+            ->setReservedUntil(now()->addMinutes(5)->toDateTimeString());
+        $order->setOrderItems(collect([(new OrderItemDomainObject)->setEventOccurrenceId(5)]));
+        $this->givenStripePaymentFor($order);
+        $this->occurrenceRepository->shouldReceive('findWhereIn')->andReturn(collect());
+
+        $listing = Mockery::mock(TicketResaleListingDomainObject::class);
+        $listing->shouldReceive('getId')->andReturn(55);
+        $listing->shouldReceive('getAttendeeId')->andReturn(77);
+        $this->resaleCompletionService->shouldReceive('completeForPaidOrder')->once()->with($order)->andReturn(collect([$listing]));
+
+        $updatedOrder = (new OrderDomainObject)->setId(1)->setEventId(9)->setEmail('buyer@example.com')->setCurrency('EUR');
+        $this->stripePaymentsRepository->shouldReceive('updateWhere')->once();
+        $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->orderRepository->shouldReceive('updateFromArray')->once()->andReturn($updatedOrder);
+        $this->attendeeRepository->shouldReceive('updateWhere')->once();
+        $this->quantityUpdateService->shouldReceive('updateQuantitiesFromOrder')->once()->with($updatedOrder);
+        $this->eventSettingsRepository->shouldReceive('findFirstWhere')->once()->andReturn((new EventSettingDomainObject)->setEnableInvoicing(false));
+        $this->orderApplicationFeeService->shouldReceive('createOrderApplicationFee')->once();
+
+        $dispatched = [];
+        $this->domainEventDispatcher->shouldReceive('dispatch')->times(3)->andReturnUsing(function ($event) use (&$dispatched) {
+            $dispatched[] = $event;
+        });
+
+        $this->handler->handleEvent(PaymentIntent::constructFrom(['id' => 'pi_test', 'last_payment_error' => null, 'amount_received' => 1000, 'payment_method' => 'pm_test', 'latest_charge' => 'ch_test', 'currency' => 'eur']));
+
+        Queue::assertPushed(ProcessResaleRefundJob::class, 1);
+        $this->assertCount(3, $dispatched);
+        $this->assertInstanceOf(OrderEvent::class, $dispatched[0]);
+        $attendeeEvents = array_slice($dispatched, 1);
+        $this->assertContainsOnlyInstancesOf(AttendeeEvent::class, $attendeeEvents);
+        $this->assertSame([DomainEventType::ATTENDEE_CANCELLED, DomainEventType::ATTENDEE_RESOLD], array_map(fn ($e) => $e->type, $attendeeEvents));
+        $this->assertSame([77, 77], array_map(fn ($e) => $e->attendeeId, $attendeeEvents));
     }
 
     private function stripePaidOrder(): OrderDomainObject

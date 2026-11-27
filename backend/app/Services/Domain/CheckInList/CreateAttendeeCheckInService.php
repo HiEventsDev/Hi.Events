@@ -11,14 +11,18 @@ use HiEvents\DomainObjects\Enums\AttendeeCheckInActionType;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeCheckInDomainObjectAbstract;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
+use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Exceptions\CannotCheckInException;
+use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Helper\IdHelper;
 use HiEvents\Repository\Interfaces\AttendeeCheckInRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\CheckInList\Public\DTO\AttendeeAndActionDTO;
 use HiEvents\Services\Domain\CheckInList\DTO\CheckInResultDTO;
 use HiEvents\Services\Domain\CheckInList\DTO\CreateAttendeeCheckInsResponseDTO;
 use HiEvents\Services\Domain\Order\MarkOrderAsPaidService;
+use HiEvents\Services\Domain\TicketResale\TicketResaleClosureService;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Collection;
@@ -33,6 +37,8 @@ class CreateAttendeeCheckInService
         private readonly ConnectionInterface $db,
         private readonly MarkOrderAsPaidService $markOrderAsPaidService,
         private readonly CheckInListActivityValidator $checkInListActivityValidator,
+        private readonly TicketResaleClosureService $resaleClosureService,
+        private readonly OrderRepositoryInterface $orderRepository,
     ) {}
 
     /**
@@ -52,6 +58,7 @@ class CreateAttendeeCheckInService
         $attendees = $this->fetchAttendees($checkInList, $attendeesAndActions);
         $eventSettings = $this->fetchEventSettings($checkInList->getEventId());
         $existingCheckIns = $this->fetchExistingCheckIns($attendees, $checkInList);
+        $offlinePaymentOrderIds = $this->fetchOfflinePaymentOrderIds($attendees);
 
         return $this->processAttendeeCheckIns(
             $attendees,
@@ -59,6 +66,7 @@ class CreateAttendeeCheckInService
             $checkInList,
             $eventSettings,
             $existingCheckIns,
+            $offlinePaymentOrderIds,
             $checkInUserIpAddress
         );
     }
@@ -105,6 +113,28 @@ class CreateAttendeeCheckInService
     }
 
     /**
+     * @param  Collection<int, AttendeeDomainObject>  $attendees
+     * @return Collection<int, int>
+     */
+    private function fetchOfflinePaymentOrderIds(Collection $attendees): Collection
+    {
+        $awaitingPaymentOrderIds = $attendees
+            ->filter(fn (AttendeeDomainObject $attendee) => $attendee->getStatus() === AttendeeStatus::AWAITING_PAYMENT->name)
+            ->map(fn (AttendeeDomainObject $attendee) => $attendee->getOrderId())
+            ->unique()
+            ->values();
+
+        if ($awaitingPaymentOrderIds->isEmpty()) {
+            return new Collection;
+        }
+
+        return $this->orderRepository
+            ->findWhereIn('id', $awaitingPaymentOrderIds->all(), ['status' => OrderStatus::AWAITING_OFFLINE_PAYMENT->name])
+            ->map(fn ($order) => $order->getId())
+            ->values();
+    }
+
+    /**
      * @throws Throwable
      * @throws CannotCheckInException
      */
@@ -114,6 +144,7 @@ class CreateAttendeeCheckInService
         CheckInListDomainObject $checkInList,
         EventSettingDomainObject $eventSettings,
         Collection $existingCheckIns,
+        Collection $offlinePaymentOrderIds,
         string $checkInUserIpAddress
     ): CreateAttendeeCheckInsResponseDTO {
         $errors = new ErrorBagDTO;
@@ -126,7 +157,8 @@ class CreateAttendeeCheckInService
                 $checkInList,
                 $eventSettings,
                 $existingCheckIns,
-                $checkInUserIpAddress
+                $offlinePaymentOrderIds,
+                $checkInUserIpAddress,
             );
 
             if ($result->checkIn) {
@@ -153,7 +185,8 @@ class CreateAttendeeCheckInService
         CheckInListDomainObject $checkInList,
         EventSettingDomainObject $eventSettings,
         Collection $existingCheckIns,
-        string $checkInUserIpAddress
+        Collection $offlinePaymentOrderIds,
+        string $checkInUserIpAddress,
     ): CheckInResultDTO {
         $this->checkInListDataService->verifyAttendeeBelongsToCheckInList($checkInList, $attendee);
 
@@ -171,16 +204,26 @@ class CreateAttendeeCheckInService
             );
         }
 
-        if ($error = $this->validateAttendeeStatus($attendee, $checkInAction, $eventSettings)) {
+        $orderAwaitsOfflinePayment = $offlinePaymentOrderIds->contains($attendee->getOrderId());
+
+        if ($error = $this->validateAttendeeStatus($attendee, $checkInAction, $eventSettings, $orderAwaitsOfflinePayment)) {
             return new CheckInResultDTO(error: $error);
         }
 
         try {
-            return $this->db->transaction(function () use ($attendee, $checkInList, $checkInAction, $checkInUserIpAddress) {
+            return $this->db->transaction(function () use ($attendee, $checkInList, $checkInAction, $checkInUserIpAddress, $eventSettings, $orderAwaitsOfflinePayment) {
+                $lockedAttendee = $this->resaleClosureService->lockForCheckIn($attendee->getId());
+
+                if ($error = $this->validateAttendeeStatus($lockedAttendee, $checkInAction, $eventSettings, $orderAwaitsOfflinePayment)) {
+                    return new CheckInResultDTO(error: $error);
+                }
+
+                $this->resaleClosureService->releaseForCheckIn($attendee->getId());
+
                 $checkIn = $this->createCheckIn($attendee, $checkInList, $checkInUserIpAddress);
 
                 if ($checkInAction->value === AttendeeCheckInActionType::CHECK_IN_AND_MARK_ORDER_AS_PAID->value
-                    && $attendee->getStatus() === AttendeeStatus::AWAITING_PAYMENT->name
+                    && $lockedAttendee->getStatus() === AttendeeStatus::AWAITING_PAYMENT->name
                 ) {
                     $this->markOrderAsPaidService->markOrderAsPaid(
                         orderId: $attendee->getOrderId(),
@@ -190,6 +233,10 @@ class CreateAttendeeCheckInService
 
                 return new CheckInResultDTO(checkIn: $checkIn);
             });
+        } catch (ResourceConflictException) {
+            return new CheckInResultDTO(error: __('Attendee :attendee_name\'s ticket is listed for resale', [
+                'attendee_name' => $attendee->getFullName(),
+            ]));
         } catch (UniqueConstraintViolationException) {
             return new CheckInResultDTO(
                 checkIn: $this->attendeeCheckInRepository->findFirstWhere([
@@ -213,12 +260,22 @@ class CreateAttendeeCheckInService
     private function validateAttendeeStatus(
         AttendeeDomainObject $attendee,
         AttendeeCheckInActionType $checkInAction,
-        EventSettingDomainObject $eventSettings
+        EventSettingDomainObject $eventSettings,
+        bool $orderAwaitsOfflinePayment,
     ): ?string {
         $allowAttendeesAwaitingPaymentToCheckIn = $eventSettings->getAllowOrdersAwaitingOfflinePaymentToCheckIn();
 
         if ($attendee->getStatus() === AttendeeStatus::CANCELLED->name) {
             return __('Attendee :attendee_name\'s ticket is cancelled', [
+                'attendee_name' => $attendee->getFullName(),
+            ]);
+        }
+
+        if ($allowAttendeesAwaitingPaymentToCheckIn
+            && $attendee->getStatus() === AttendeeStatus::AWAITING_PAYMENT->name
+            && ! $orderAwaitsOfflinePayment
+        ) {
+            return __('Unable to check in as attendee :attendee_name\'s order is awaiting payment', [
                 'attendee_name' => $attendee->getFullName(),
             ]);
         }

@@ -13,6 +13,7 @@ use HiEvents\Http\Middleware\EnforceAccountUserAccess;
 use HiEvents\Http\Middleware\EnsureAccountIsNotPendingDeletion;
 use HiEvents\Http\Middleware\EnsureAccountIsNotSuspended;
 use HiEvents\Http\Middleware\EnsureLifecycleEmailsAvailable;
+use HiEvents\Http\Middleware\EnsureOrderBelongsToEvent;
 use HiEvents\Http\Middleware\EnsureTokenNotRevoked;
 use HiEvents\Http\Middleware\EnsureTwoFactorEnrolled;
 use HiEvents\Http\Middleware\HandleDeprecatedTimezones;
@@ -107,6 +108,7 @@ class Kernel extends HttpKernel
         'auth.basic' => AuthenticateWithBasicAuth::class,
         'box-office.session' => AuthenticateBoxOfficeSession::class,
         'ee.licensed' => RequireLicensedFeature::class,
+        'order.event' => EnsureOrderBelongsToEvent::class,
         'lifecycle-emails' => EnsureLifecycleEmailsAvailable::class,
         'auth.session' => AuthenticateSession::class,
         'cache.guest' => CacheGuestJsonResponse::class,

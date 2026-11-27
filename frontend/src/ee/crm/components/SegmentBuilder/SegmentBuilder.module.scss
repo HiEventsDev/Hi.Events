@@ -1,0 +1,131 @@
+@use "../../../../styles/mixins";
+
+$border: var(--mantine-color-gray-2);
+
+.builder {
+  container: segment-builder / inline-size;
+
+  :global(.mantine-InputWrapper-root) {
+    margin-bottom: 0;
+  }
+}
+
+.match {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: var(--mantine-font-size-sm);
+}
+
+.rules {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rule {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.9fr) minmax(0, 1.4fr) 28px;
+  align-items: start;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid $border;
+  border-radius: var(--mantine-radius-md);
+  background: var(--mantine-color-gray-0);
+
+  &[data-invalid] {
+    border-color: var(--mantine-color-red-4);
+  }
+
+  &[data-choosing] {
+    grid-template-columns: minmax(0, 1fr) 28px;
+  }
+
+  @container segment-builder (max-width: 599px) {
+    grid-template-columns: minmax(0, 1fr) 28px;
+
+    .field {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .remove {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    .operator,
+    .value {
+      grid-column: 1;
+    }
+  }
+}
+
+.value {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  min-height: 36px;
+
+  > :first-child {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+.suffix {
+  flex-shrink: 0;
+  font-size: var(--mantine-font-size-sm);
+  color: var(--mantine-color-gray-7);
+  white-space: nowrap;
+}
+
+.remove {
+  margin-top: 4px;
+
+  @media (pointer: coarse) {
+    width: 40px;
+    height: 40px;
+    margin: -2px -6px 0;
+  }
+}
+
+.error {
+  grid-column: 1 / -1;
+  font-size: var(--mantine-font-size-xs);
+  color: var(--mantine-color-red-7);
+}
+
+.unfinished {
+  grid-column: 1 / -1;
+  font-size: var(--mantine-font-size-xs);
+  color: var(--mantine-color-gray-6);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-top: 10px;
+
+  @media (pointer: coarse) {
+    :global(.mantine-Button-root) {
+      min-height: 40px;
+    }
+  }
+}
+
+.count {
+  font-size: var(--mantine-font-size-sm);
+  color: var(--mantine-color-gray-7);
+
+  strong {
+    color: var(--mantine-color-gray-9);
+    font-variant-numeric: tabular-nums;
+  }
+}

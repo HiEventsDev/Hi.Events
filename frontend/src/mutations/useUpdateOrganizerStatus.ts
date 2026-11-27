@@ -4,6 +4,7 @@ import {IdParam} from "../types.ts";
 import {GET_ORGANIZER_QUERY_KEY} from "../queries/useGetOrganizer.ts";
 import {GET_ORGANIZERS_QUERY_KEY} from "../queries/useGetOrganizers.ts";
 import {GET_ORGANIZER_PUBLIC_QUERY_KEY} from "../queries/useGetOrganizerPublic.ts";
+import {crmPublicKeys} from "../ee/crm/queries/crmQueryKeys.ts";
 
 export const useUpdateOrganizerStatus = () => {
     const queryClient = useQueryClient();
@@ -24,6 +25,9 @@ export const useUpdateOrganizerStatus = () => {
                 }),
                 queryClient.invalidateQueries({
                     queryKey: [GET_ORGANIZER_PUBLIC_QUERY_KEY, variables.organizerId]
+                }),
+                queryClient.invalidateQueries({
+                    queryKey: crmPublicKeys.organizerSignupForm(variables.organizerId)
                 }),
             ]);
         }

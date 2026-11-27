@@ -5,11 +5,11 @@ import {PageTitle} from "../../common/PageTitle";
 import {PageBody} from "../../common/PageBody";
 import {AttendeeTable} from "../../common/AttendeeTable";
 import {SearchBarWrapper} from "../../common/SearchBar";
-import {Pagination} from "../../common/Pagination";
-import {Button, Group} from "@mantine/core";
+import {TableCard, TableCardFooter, TableCardSkeleton} from "../../common/TableCard";
+import {tableSortFromQuery} from "../../common/TanStackTable/sorting.tsx";
+import {Button} from "@mantine/core";
 import {IconDownload, IconPlus} from "@tabler/icons-react";
-import {ToolBar} from "../../common/ToolBar";
-import {TableSkeleton} from "../../common/TableSkeleton";
+import {ToolBar, ToolBarSlot} from "../../common/ToolBar";
 import {useFilterQueryParamSync} from "../../../hooks/useFilterQueryParamSync.ts";
 import {EventType, IdParam, ProductType, QueryFilterOperator, QueryFilters} from "../../../types.ts";
 import {useDisclosure} from "@mantine/hooks";
@@ -23,7 +23,6 @@ import {FilterModal, FilterOption} from "../../common/FilterModal";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {getProductsFromEvent} from "../../../utilites/helpers.ts";
 import {useGetEventOccurrences} from "../../../queries/useGetEventOccurrences.ts";
-import {SortSelector} from "../../common/SortSelector";
 import {OccurrenceSelect} from "../../common/OccurrenceSelect";
 
 const getAttendeeStatuses = () => [
@@ -40,6 +39,7 @@ const Attendees = () => {
     const pagination = attendeesQuery?.data?.meta;
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
     const [downloadPending, setDownloadPending] = useState(false);
+    const [columnToggleSlot, setColumnToggleSlot] = useState<HTMLDivElement | null>(null);
     const {data: event} = useGetEvent(eventId);
     const isRecurring = event?.type === EventType.RECURRING;
     const {data: occurrencesData} = useGetEventOccurrences(eventId, {pageNumber: 1, perPage: 100} as QueryFilters, isRecurring);
@@ -206,75 +206,75 @@ const Attendees = () => {
                     {t`Attendees`}
                 </PageTitle>
 
-                <ToolBar
-                    searchComponent={() => (
-                        <SearchBarWrapper
-                            placeholder={t`Search by attendee name, email or order #...`}
-                            setSearchParams={setSearchParams}
-                            searchParams={searchParams}
-                        />
-                    )}
-                    filterComponent={
-                        <Group gap="sm" wrap="wrap">
-                            {pagination?.allowed_sorts && (
-                                <SortSelector
-                                    selected={searchParams.sortBy && searchParams.sortDirection
-                                        ? searchParams.sortBy + ':' + searchParams.sortDirection
-                                        : pagination.default_sort + ':' + pagination.default_sort_direction}
-                                    options={pagination.allowed_sorts}
-                                    onSortSelect={(key, sortDirection) => {
-                                        setSearchParams({sortBy: key, sortDirection});
-                                    }}
-                                />
-                            )}
-                            {isRecurring && occurrences.length > 0 && event?.timezone && (
-                                <OccurrenceSelect
-                                    occurrences={occurrences}
-                                    timezone={event.timezone}
-                                    value={selectedOccurrenceId}
-                                    onChange={handleOccurrenceChange}
-                                    placeholder={t`All Dates`}
-                                    clearable
-                                    size="sm"
-                                />
-                            )}
-                            <FilterModal
-                                filters={filterOptions}
-                                activeFilters={currentFilters}
-                                onChange={handleFilterChange}
-                                onReset={handleResetFilters}
-                                title={t`Filter Attendees`}
+                <TableCard>
+                    <ToolBar
+                        embedded
+                        searchComponent={() => (
+                            <SearchBarWrapper
+                                placeholder={t`Search by attendee name, email or order #...`}
+                                setSearchParams={setSearchParams}
+                                searchParams={searchParams}
                             />
-                        </Group>
-                    }
-                    resultCount={pagination?.total}
-                    resultLabel={t`attendees`}
-                >
-                    <CreateButton color={'green'} size={'sm'} data-testid="attendee-create-button" onClick={openCreateModal} rightSection={<IconPlus/>}>
-                        {t`Create`}
-                    </CreateButton>
-
-                    <Button color={'green'}
-                            size={'sm'}
+                        )}
+                        filterComponent={
+                            <>
+                                {isRecurring && occurrences.length > 0 && event?.timezone && (
+                                    <OccurrenceSelect
+                                        occurrences={occurrences}
+                                        timezone={event.timezone}
+                                        value={selectedOccurrenceId}
+                                        onChange={handleOccurrenceChange}
+                                        placeholder={t`All Dates`}
+                                        clearable
+                                        size="sm"
+                                    />
+                                )}
+                                <FilterModal
+                                    filters={filterOptions}
+                                    activeFilters={currentFilters}
+                                    onChange={handleFilterChange}
+                                    onReset={handleResetFilters}
+                                    title={t`Filter Attendees`}
+                                />
+                            </>
+                        }
+                    >
+                        <ToolBarSlot ref={setColumnToggleSlot}/>
+                        <Button
+                            variant="default"
                             loading={downloadPending}
                             onClick={() => handleExport(eventId)}
-                            rightSection={<IconDownload/>}
-                    >
-                        {t`Export`}
-                    </Button>
-                </ToolBar>
+                            leftSection={<IconDownload size={16}/>}
+                        >
+                            {t`Export`}
+                        </Button>
+                        <CreateButton color="green" data-testid="attendee-create-button" onClick={openCreateModal} leftSection={<IconPlus size={16}/>}>
+                            {t`Create`}
+                        </CreateButton>
+                    </ToolBar>
 
-                <TableSkeleton isVisible={!attendees || attendeesQuery.isFetching}/>
+                    {!attendees && <TableCardSkeleton/>}
 
-                {(!!attendees) && <AttendeeTable openCreateModal={openCreateModal}
-                                                 attendees={attendees}
-                                                 occurrenceId={selectedOccurrenceId ?? undefined}
-                />}
+                    {attendees && (
+                        <AttendeeTable
+                            openCreateModal={openCreateModal}
+                            attendees={attendees}
+                            embedded
+                            isRefreshing={attendeesQuery.isFetching}
+                            sort={tableSortFromQuery(searchParams, setSearchParams, pagination)}
+                            columnToggleSlot={columnToggleSlot}
+                            occurrenceId={selectedOccurrenceId ?? undefined}
+                        />
+                    )}
 
-                {!!attendees?.length
-                    && <Pagination value={searchParams.pageNumber}
-                                   onChange={(value) => setSearchParams({pageNumber: value})}
-                                   total={Number(pagination?.last_page)}/>}
+                    {!!attendees?.length && (
+                        <TableCardFooter
+                            pagination={pagination}
+                            page={searchParams.pageNumber}
+                            onPageChange={(value) => setSearchParams({pageNumber: value})}
+                        />
+                    )}
+                </TableCard>
             </PageBody>
             {createModalOpen && <CreateAttendeeModal onClose={closeCreateModal} isOpen={createModalOpen}/>}
         </>

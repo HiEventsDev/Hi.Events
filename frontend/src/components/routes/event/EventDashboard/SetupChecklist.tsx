@@ -87,6 +87,13 @@ export const SetupChecklist = ({
 
     const steps: Step[] = [
         {
+            key: 'created',
+            title: t`Create your event`,
+            helperIncomplete: event.title,
+            helperComplete: event.title,
+            complete: true,
+        },
+        {
             key: 'tickets',
             title: t`Add tickets`,
             helperIncomplete: t`Set up the tickets you'll sell and their prices`,

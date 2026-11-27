@@ -23,10 +23,13 @@ class SuspiciousActivityReportMail extends BaseMail
 
     public function envelope(): Envelope
     {
+        $otherFindings = count($this->findings) - 1;
+        $summary = $this->findings[0]->summary;
+
         return new Envelope(
-            subject: __('[Action Required] Suspicious activity detected (:count)', [
-                'count' => count($this->findings),
-            ]),
+            subject: $otherFindings > 0
+                ? __('[Action Required] :summary (+:count more)', ['summary' => $summary, 'count' => $otherFindings])
+                : __('[Action Required] :summary', ['summary' => $summary]),
         );
     }
 
@@ -36,7 +39,7 @@ class SuspiciousActivityReportMail extends BaseMail
             markdown: 'emails.admin.suspicious-activity-report',
             with: [
                 'findings' => $this->findings,
-                'adminUrl' => config('app.frontend_url').'/admin',
+                'adminUrl' => rtrim((string) config('app.frontend_url'), '/').'/admin',
             ],
         );
     }

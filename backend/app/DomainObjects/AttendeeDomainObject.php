@@ -5,6 +5,9 @@ namespace HiEvents\DomainObjects;
 use HiEvents\DomainObjects\Interfaces\IsFilterable;
 use HiEvents\DomainObjects\Interfaces\IsSortable;
 use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
+use HiEvents\Services\Domain\TicketResale\DTO\TicketResaleStateDTO;
+use HiEvents\Services\Domain\TicketResale\DTO\TicketResaleSummaryDTO;
+use HiEvents\Services\Domain\TicketTransfer\DTO\TicketTransferStateDTO;
 use Illuminate\Support\Collection;
 
 class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implements IsSortable, IsFilterable
@@ -24,6 +27,53 @@ class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implem
     private ?Collection $checkIns = null;
 
     private ?EventOccurrenceDomainObject $eventOccurrence = null;
+
+    private ?TicketTransferStateDTO $transferState = null;
+
+    private ?TicketResaleStateDTO $resaleState = null;
+
+    private ?TicketResaleSummaryDTO $resaleSummary = null;
+
+    public function getTransferState(): ?TicketTransferStateDTO
+    {
+        return $this->transferState;
+    }
+
+    public function setTransferState(?TicketTransferStateDTO $transferState): self
+    {
+        $this->transferState = $transferState;
+
+        return $this;
+    }
+
+    public function getResaleState(): ?TicketResaleStateDTO
+    {
+        return $this->resaleState;
+    }
+
+    public function setResaleState(?TicketResaleStateDTO $resaleState): self
+    {
+        $this->resaleState = $resaleState;
+
+        return $this;
+    }
+
+    public function getResaleSummary(): ?TicketResaleSummaryDTO
+    {
+        return $this->resaleSummary;
+    }
+
+    public function setResaleSummary(TicketResaleSummaryDTO $resaleSummary): self
+    {
+        $this->resaleSummary = $resaleSummary;
+
+        return $this;
+    }
+
+    public function hasLeftItsOrder(): bool
+    {
+        return $this->getTransferredAt() !== null;
+    }
 
     public static function getDefaultSort(): string
     {
@@ -153,5 +203,10 @@ class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implem
     public function getEventOccurrence(): ?EventOccurrenceDomainObject
     {
         return $this->eventOccurrence;
+    }
+
+    public function isCheckedIn(): bool
+    {
+        return $this->getCheckedInAt() !== null || ($this->getCheckIns()?->isNotEmpty() ?? false);
     }
 }

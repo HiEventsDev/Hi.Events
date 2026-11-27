@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Exception;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\AttendeeDetailsCollectionMethod;
+use HiEvents\DomainObjects\Enums\PhoneCollection;
 use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
@@ -42,13 +43,16 @@ use HiEvents\Services\Application\Handlers\Order\DTO\CompleteOrderOrderDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\CompleteOrderProductDataDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\CreatedProductDataDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\OrderQuestionsDTO;
+use HiEvents\Services\Domain\Order\CheckoutSmsOptInService;
 use HiEvents\Services\Domain\Order\OccurrenceStatusValidator;
+use HiEvents\Services\Domain\Order\OrderReservationLapseGuard;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Domain\Question\QuestionVisibilityService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
 use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
+use HiEvents\Services\Infrastructure\Phone\PhoneNumberNormalizer;
 use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -77,6 +81,9 @@ class CompleteOrderHandler
         private readonly TransactionLockService $transactionLockService,
         private readonly QuestionRepositoryInterface $questionRepository,
         private readonly QuestionVisibilityService $questionVisibilityService,
+        private readonly PhoneNumberNormalizer $phoneNumberNormalizer,
+        private readonly CheckoutSmsOptInService $checkoutSmsOptInService,
+        private readonly OrderReservationLapseGuard $reservationLapseGuard,
     ) {}
 
     /**
@@ -94,13 +101,17 @@ class CompleteOrderHandler
 
             $this->transactionLockService->lockOrder($orderShortId);
 
-            $order = $this->getOrder($orderShortId);
+            $order = $this->getOrder($orderShortId, $orderData->event_id);
+
+            if (! $order->isPaymentRequired()) {
+                $this->reservationLapseGuard->assertReservationHeldUnderEventLock($order);
+            }
 
             $this->occurrenceStatusValidator->assertOrderOccurrencesArePurchasable($order);
 
             $this->seatedOrderCompletionGuard->assertSeatsHeld($order);
 
-            $updatedOrder = $this->updateOrder($order, $orderDTO);
+            $updatedOrder = $this->updateOrder($order, $orderDTO, $eventSettings);
 
             $questionsById = $this->questionVisibilityService->keyById(
                 $this->questionRepository
@@ -415,7 +426,7 @@ class CompleteOrderHandler
     /**
      * @throws ResourceConflictException
      */
-    private function getOrder(string $orderShortId): OrderDomainObject
+    private function getOrder(string $orderShortId, int $eventId): OrderDomainObject
     {
         $order = $this->orderRepository
             ->loadRelation(
@@ -425,7 +436,7 @@ class CompleteOrderHandler
                 ))
             ->findByShortId($orderShortId);
 
-        if ($order === null) {
+        if ($order === null || $order->getEventId() !== $eventId) {
             throw new ResourceNotFoundException(__('Order not found'));
         }
 
@@ -441,8 +452,13 @@ class CompleteOrderHandler
         return $order;
     }
 
-    private function updateOrder(OrderDomainObject $order, CompleteOrderOrderDTO $orderDTO): OrderDomainObject
+    private function updateOrder(OrderDomainObject $order, CompleteOrderOrderDTO $orderDTO, EventSettingDomainObject $eventSettings): OrderDomainObject
     {
+        $phone = PhoneCollection::from($eventSettings->getPhoneCollection())->isCollected()
+            ? $this->phoneNumberNormalizer->toMobileE164($orderDTO->phone)
+            : null;
+        $phoneCountry = $this->phoneNumberNormalizer->countryOf($phone);
+
         $updatedOrder = $this->orderRepository
             ->loadRelation(OrderItemDomainObject::class)
             ->updateFromArray(
@@ -452,6 +468,11 @@ class CompleteOrderHandler
                     OrderDomainObjectAbstract::FIRST_NAME => $orderDTO->first_name,
                     OrderDomainObjectAbstract::LAST_NAME => $orderDTO->last_name,
                     OrderDomainObjectAbstract::EMAIL => $orderDTO->email,
+                    OrderDomainObjectAbstract::PHONE => $phone,
+                    OrderDomainObjectAbstract::PHONE_COUNTRY => $phoneCountry,
+                    OrderDomainObjectAbstract::SMS_OPTED_IN_AT => $orderDTO->sms_opted_in && $this->checkoutSmsOptInService->isRecordedFor($eventSettings, $phoneCountry)
+                        ? Carbon::now()
+                        : null,
                     OrderDomainObjectAbstract::PAYMENT_STATUS => $order->isPaymentRequired()
                         ? OrderPaymentStatus::AWAITING_PAYMENT->name
                         : OrderPaymentStatus::NO_PAYMENT_REQUIRED->name,

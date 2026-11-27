@@ -17,7 +17,7 @@ test.describe('admin message approval', () => {
     await messages.sendToAllAttendees(subject, 'The venue has changed, please check your tickets.');
 
     await expect(messages.listItem(subject)).toBeVisible();
-    await expect(messages.listItem(subject).getByText(/^PENDING_REVIEW$/)).toBeVisible();
+    await expect(messages.listItem(subject).getByText('In review', { exact: true })).toBeVisible();
 
     await superAdminPage.goto('/admin/messages');
     await superAdminPage.waitForLoadState('networkidle');
@@ -26,13 +26,13 @@ test.describe('admin message approval', () => {
     const messageRow = superAdminPage.getByRole('row').filter({ hasText: subject });
     await expect(messageRow).toBeVisible();
     await messageRow.getByTestId('admin-approve-message-button').click();
-    await expect(messageRow.getByText(/^SENT$/)).toBeVisible();
+    await expect(messageRow.getByText(/^(PROCESSING|SENT)$/)).toBeVisible();
 
     const delivered = await mailpit.waitForMessage(event.attendeeEmail, { subjectContains: subject });
     expect(delivered.Subject).toContain(subject);
 
     await organizerPage.reload();
     await organizerPage.waitForLoadState('networkidle');
-    await expect(messages.listItem(subject).getByText(/^SENT$/)).toBeVisible();
+    await expect(messages.listItem(subject).getByText('Sent', { exact: true })).toBeVisible();
   });
 });

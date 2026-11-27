@@ -12,11 +12,14 @@ import {
     IconMail,
 } from "@tabler/icons-react";
 import {useForm} from "@mantine/form";
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
 
 import {useGetOrdersByLookupToken} from "../../../queries/useGetOrdersByLookupToken.ts";
+import {useGetTicketsByLookupToken} from "../../../queries/useGetTicketsByLookupToken.ts";
+import {useStartLookupSession} from "../../../mutations/useSelfServiceVerification.ts";
+import {storeLookupSession} from "../../../utilites/selfServiceSession.ts";
 import {useSendTicketLookupEmail} from "../../../mutations/useSendTicketLookupEmail.ts";
-import {dateToBrowserTz} from "../../../utilites/dates.ts";
+import {dateToBrowserTz, prettyDate} from "../../../utilites/dates.ts";
 import {resolveEventLocation} from "../../../utilites/effectiveLocation.ts";
 import {formatAddress} from "../../../utilites/addressUtilities.ts";
 import {showError} from "../../../utilites/notifications.tsx";
@@ -27,7 +30,7 @@ import {PoweredByFooter} from "../../common/PoweredByFooter";
 import {EventDateRange} from "../../common/EventDateRange";
 import {CheckoutContent} from "../../layouts/Checkout/CheckoutContent";
 
-import {Event, LocationType, Order} from "../../../types.ts";
+import {Event, LocationType, LookupTicket, Order} from "../../../types.ts";
 import classes from './MyTickets.module.scss';
 
 const OrderStatusBadge = () => (
@@ -141,9 +144,73 @@ const OrderCard = ({order}: { order: Order }) => {
     );
 };
 
+const GuestTicketCard = ({ticket}: { ticket: LookupTicket }) => (
+    <Card className={classes.orderCard}>
+        <div className={classes.orderHeader}>
+            <div className={classes.eventInfo}>
+                <h3 className={classes.eventTitle}>{ticket.event_title}</h3>
+            </div>
+            <Text size="xs" c="dimmed">
+                {ticket.first_name} {ticket.last_name}
+            </Text>
+        </div>
+
+        <SimpleGrid cols={{base: 1, sm: 2}} spacing="md" className={classes.orderDetails}>
+            {ticket.start_date && (
+                <div className={classes.detailItem}>
+                    <Group gap="xs" wrap="nowrap">
+                        <IconCalendarEvent size={18} style={{color: 'var(--mantine-color-gray-6)'}}/>
+                        <div>
+                            <Text size="xs" c="dimmed">{t`Event Date`}</Text>
+                            <Text size="sm">{prettyDate(ticket.start_date, ticket.event_timezone)}</Text>
+                        </div>
+                    </Group>
+                </div>
+            )}
+
+            {ticket.product_title && (
+                <div className={classes.detailItem}>
+                    <Group gap="xs" wrap="nowrap">
+                        <IconTicket size={18} style={{color: 'var(--mantine-color-gray-6)'}}/>
+                        <div>
+                            <Text size="xs" c="dimmed">{t`Ticket`}</Text>
+                            <Text size="sm">{ticket.product_title}</Text>
+                        </div>
+                    </Group>
+                </div>
+            )}
+        </SimpleGrid>
+
+        <Group gap="sm" mt="md" wrap="wrap">
+            <Button
+                component={NavLink}
+                to={`/product/${ticket.event_id}/${ticket.short_id}`}
+                variant="gradient"
+                gradient={{from: 'grape', to: 'pink', deg: 90}}
+                size="sm"
+                leftSection={<IconExternalLink size={16}/>}
+            >
+                {t`View Ticket`}
+            </Button>
+        </Group>
+    </Card>
+);
+
 export const MyTickets = () => {
     const {token} = useParams();
     const {data: orders, isLoading, isError, error} = useGetOrdersByLookupToken(token);
+    const {data: guestTickets = []} = useGetTicketsByLookupToken(token);
+
+    const startLookupSessionMutation = useStartLookupSession();
+    const startedSessionForToken = useRef<string | null>(null);
+
+    useEffect(() => {
+        if (!token || startedSessionForToken.current === token) {
+            return;
+        }
+        startedSessionForToken.current = token;
+        startLookupSessionMutation.mutate(token, {onSuccess: storeLookupSession});
+    }, [token]);
     const [requestSuccess, setRequestSuccess] = useState(false);
     const ticketLookupMutation = useSendTicketLookupEmail();
 
@@ -228,7 +295,7 @@ export const MyTickets = () => {
         );
     }
 
-    if (!orders || orders.length === 0) {
+    if ((!orders || orders.length === 0) && guestTickets.length === 0) {
         return (
             <CheckoutContent>
                 <div className={classes.container}>
@@ -257,8 +324,11 @@ export const MyTickets = () => {
                 </div>
 
                 <div className={classes.ordersList}>
-                    {orders.map((order) => (
+                    {(orders ?? []).map((order) => (
                         <OrderCard key={order.short_id} order={order}/>
+                    ))}
+                    {guestTickets.map((ticket) => (
+                        <GuestTicketCard key={ticket.short_id} ticket={ticket}/>
                     ))}
                 </div>
             </div>

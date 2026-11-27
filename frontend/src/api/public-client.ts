@@ -3,6 +3,7 @@ import {isSsr} from "../utilites/helpers";
 import {getConfig} from "../utilites/config";
 import {getCheckoutSessionIdentifier} from "../utilites/checkoutSession";
 import {applySsrRequestHeaders} from "./ssrRequestHeaders";
+import {rejectUnsafeRequestPath} from "./rejectUnsafeRequestPath";
 import {
     BOX_OFFICE_SESSION_HEADER,
     getBoxOfficeSessionToken,
@@ -14,6 +15,7 @@ export const publicApi = axios.create({
     withCredentials: true,
 });
 
+publicApi.interceptors.request.use(rejectUnsafeRequestPath);
 publicApi.interceptors.request.use(applySsrRequestHeaders);
 
 publicApi.interceptors.request.use((config) => {

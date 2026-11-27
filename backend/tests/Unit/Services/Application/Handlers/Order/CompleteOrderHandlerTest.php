@@ -33,13 +33,16 @@ use HiEvents\Services\Application\Handlers\Order\DTO\CompleteOrderDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\CompleteOrderOrderDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\CompleteOrderProductDataDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\OrderQuestionsDTO;
+use HiEvents\Services\Domain\Order\CheckoutSmsOptInService;
 use HiEvents\Services\Domain\Order\OccurrenceStatusValidator;
+use HiEvents\Services\Domain\Order\OrderReservationLapseGuard;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Domain\Question\QuestionVisibilityService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
 use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
+use HiEvents\Services\Infrastructure\Phone\PhoneNumberNormalizer;
 use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Collection;
@@ -152,6 +155,9 @@ class CompleteOrderHandlerTest extends TestCase
             new TransactionLockService(DB::getFacadeRoot()),
             $this->questionRepository,
             new QuestionVisibilityService,
+            new PhoneNumberNormalizer,
+            Mockery::mock(CheckoutSmsOptInService::class)->shouldReceive('isRecordedFor')->andReturn(false)->byDefault()->getMock(),
+            new OrderReservationLapseGuard(new TransactionLockService(DB::getFacadeRoot())),
         );
     }
 
@@ -348,6 +354,38 @@ class CompleteOrderHandlerTest extends TestCase
 
         $this->assertSame(
             [['SELECT pg_advisory_xact_lock(?, hashtext(?))', [TransactionLockService::ORDER_LOCK_KEYSPACE, $orderShortId]]],
+            $this->executedStatements,
+        );
+    }
+
+    public function test_a_free_order_close_to_expiry_also_takes_the_event_lock_after_the_order_lock(): void
+    {
+        $orderShortId = 'ABC123';
+        $orderData = $this->createMockCompleteOrderDTO();
+        $order = $this->createMockOrder()
+            ->setTotalGross(0)
+            ->setReservedUntil(Carbon::now()->addSeconds(30)->toDateTimeString());
+
+        $this->orderRepository->shouldReceive('findByShortId')->with($orderShortId)->andReturn($order);
+        $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->orderRepository->shouldReceive('updateFromArray')->andReturn($this->createMockOrder());
+
+        $this->productPriceRepository->shouldReceive('findWhereIn')->andReturn(new Collection([$this->createMockProductPrice()]));
+
+        $this->attendeeRepository->shouldReceive('insert')->andReturn(true);
+        $this->attendeeRepository->shouldReceive('findWhereIn')->andReturn(new Collection([$this->createMockAttendee()]));
+
+        $this->productQuantityUpdateService->shouldReceive('updateQuantitiesFromOrder');
+
+        $this->eventSettingsRepository->shouldReceive('findFirstWhere')->andReturn($this->createMockEventSetting());
+
+        $this->completeOrderHandler->handle($orderShortId, $orderData);
+
+        $this->assertSame(
+            [
+                ['SELECT pg_advisory_xact_lock(?, hashtext(?))', [TransactionLockService::ORDER_LOCK_KEYSPACE, $orderShortId]],
+                ['SELECT pg_advisory_xact_lock(?, ?)', [TransactionLockService::EVENT_LOCK_KEYSPACE, 1]],
+            ],
             $this->executedStatements,
         );
     }

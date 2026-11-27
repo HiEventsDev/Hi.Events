@@ -30,7 +30,8 @@ class EditOrderHandler
             firstName: $dto->firstName,
             lastName: $dto->lastName,
             email: $dto->email,
-            notes: $dto->notes
+            notes: $dto->notes,
+            phone: $dto->phone,
         );
     }
 }

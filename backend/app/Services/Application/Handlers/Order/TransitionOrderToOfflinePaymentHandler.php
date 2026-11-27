@@ -17,8 +17,10 @@ use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\TransitionOrderToOfflinePaymentPublicDTO;
 use HiEvents\Services\Domain\Order\OccurrenceStatusValidator;
+use HiEvents\Services\Domain\Order\OrderReservationLapseGuard;
 use HiEvents\Services\Domain\Order\PaymentLink\OrderCheckoutAccessService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
+use HiEvents\Services\Domain\TicketResale\ResaleClaimService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
@@ -37,6 +39,8 @@ class TransitionOrderToOfflinePaymentHandler
         private readonly OrderCheckoutAccessService $checkoutAccessService,
         private readonly SeatedOrderCompletionGuard $seatedOrderCompletionGuard,
         private readonly TransactionLockService $transactionLockService,
+        private readonly ResaleClaimService $resaleClaimService,
+        private readonly OrderReservationLapseGuard $reservationLapseGuard,
     ) {}
 
     public function handle(TransitionOrderToOfflinePaymentPublicDTO $dto): OrderDomainObject
@@ -65,6 +69,10 @@ class TransitionOrderToOfflinePaymentHandler
             ]);
 
             $this->validateOfflinePayment($order, $eventSettings);
+
+            $this->reservationLapseGuard->assertReservationHeldUnderEventLock($order);
+
+            $this->resaleClaimService->assertPaidOnlineNow($order->getId());
 
             $this->occurrenceStatusValidator->assertOrderOccurrencesArePurchasable($order);
 

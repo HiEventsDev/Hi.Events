@@ -9,11 +9,13 @@ import {IconArrowLeft, IconClock, IconMail, IconSearch, IconSend, IconX} from "@
 import {useFilterQueryParamSync} from "../../../hooks/useFilterQueryParamSync.ts";
 import {IdParam, Message, QueryFilters} from "../../../types.ts";
 import {useGetEventMessages} from "../../../queries/useGetEventMessages.ts";
-import {MessageList, statusBadgeColor, typeLabel} from "../../common/MessageList";
+import {MessageList, messageStatusLabel, recipientLabel, statusBadgeColor} from "../../common/MessageList";
 import {NoResultsSplash} from "../../common/NoResultsSplash";
 import {SendMessageModal} from "../../modals/SendMessageModal";
 import {t} from "@lingui/macro";
-import {useCallback, useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useMemo, useRef, useState} from "react";
+import {EmailPreview} from "../../common/EmailPreview";
+import {useGetMessagePreview} from "../../../queries/useGetMessagePreview.ts";
 import {dateToBrowserTz, relativeDate} from "../../../utilites/dates.ts";
 import {getInitials} from "../../../utilites/helpers.ts";
 import {useCancelMessage} from "../../../mutations/useCancelMessage.ts";
@@ -23,6 +25,8 @@ import classes from "./messages.module.scss";
 const MessagePreview = ({message, eventId, onBack, eventTimezone}: { message: Message; eventId: string; onBack: () => void; eventTimezone: string }) => {
     const [recipientsOpen, {open: openRecipients, close: closeRecipients}] = useDisclosure(false);
     const cancelMutation = useCancelMessage();
+    const previewDraft = useMemo(() => ({subject: message.subject, message: message.message}), [message.subject, message.message]);
+    const previewQuery = useGetMessagePreview(eventId, previewDraft);
     const senderName = message.sent_by_user
         ? `${message.sent_by_user.first_name} ${message.sent_by_user.last_name}`
         : t`Unknown`;
@@ -68,7 +72,7 @@ const MessagePreview = ({message, eventId, onBack, eventTimezone}: { message: Me
                             </span>
                         )}
                         <Badge size="sm" color={statusBadgeColor(message.status)} variant="outline">
-                            {message.status}
+                            {messageStatusLabel(message.status)}
                         </Badge>
                         {message.status === 'SCHEDULED' && (
                             <WriteAccess>
@@ -94,10 +98,10 @@ const MessagePreview = ({message, eventId, onBack, eventTimezone}: { message: Me
                         <div className={classes.previewSenderName}>{senderName}</div>
                         <div className={classes.previewRecipientType}>
                             {t`To`}: {message.status === 'SENT' || message.status === 'FAILED' ? (
-                                <span className={classes.recipientLink} onClick={openRecipients} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openRecipients(); } }}>{typeLabel(message.type)}</span>
+                                <span className={classes.recipientLink} onClick={openRecipients} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openRecipients(); } }}>{recipientLabel(message)}</span>
                             ) : (
                                 <Tooltip label={t`Recipients are available after the message is sent`} withArrow>
-                                    <span className={classes.recipientLinkDisabled}>{typeLabel(message.type)}</span>
+                                    <span className={classes.recipientLinkDisabled}>{recipientLabel(message)}</span>
                                 </Tooltip>
                             )}
                         </div>
@@ -105,12 +109,15 @@ const MessagePreview = ({message, eventId, onBack, eventTimezone}: { message: Me
                 </div>
             </div>
             <div className={classes.previewBody}>
-                <div className={classes.previewCard}>
-                    <div
-                        className={classes.previewContent}
-                        dangerouslySetInnerHTML={{__html: message.message}}
-                    />
-                </div>
+                <EmailPreview
+                    className={classes.previewCard}
+                    label={t`Preview`}
+                    fromName={previewQuery.data?.from_name ?? ''}
+                    subject={message.subject}
+                    html={previewQuery.data?.html}
+                    isError={previewQuery.isError}
+                    testId="message-preview"
+                />
             </div>
             {recipientsOpen && (
                 <MessageRecipientsModal

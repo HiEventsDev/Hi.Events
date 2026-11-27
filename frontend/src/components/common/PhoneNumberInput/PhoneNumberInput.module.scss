@@ -1,0 +1,30 @@
+.row {
+  display: flex;
+  gap: 8px;
+
+  :global(.mantine-InputWrapper-description) + & {
+    margin-top: calc(var(--mantine-spacing-xs) / 2);
+  }
+
+  :global(.mantine-InputWrapper-root) {
+    margin-bottom: 0;
+  }
+}
+
+.country {
+  flex: 0 0 112px;
+  white-space: nowrap;
+}
+
+.number {
+  flex: 1;
+  min-width: 0;
+}
+
+.callingCode {
+  color: var(--mantine-color-dimmed);
+}
+
+.option[data-combobox-active] {
+  font-weight: 600;
+}

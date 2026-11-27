@@ -57,6 +57,7 @@ class ProductFilterService
         ?int $eventOccurrenceId = null,
         bool $hideHiddenCategories = true,
         ?ProductFilterEventContextDTO $eventContext = null,
+        bool $includeResaleStock = false,
     ): Collection {
         if ($productsCategories->isEmpty()) {
             return $productsCategories;
@@ -79,6 +80,7 @@ class ProductFilterService
             hideSoldOutProducts: $hideSoldOutProducts,
             eventOccurrenceId: $eventOccurrenceId,
             eventContext: $eventContext,
+            includeResaleStock: $includeResaleStock,
         );
 
         return $filteredCategories
@@ -101,6 +103,7 @@ class ProductFilterService
         bool $allowPastOccurrence = false,
         bool $applyPlatformFee = true,
         ?ProductFilterEventContextDTO $eventContext = null,
+        bool $includeResaleStock = false,
     ): Collection {
         if ($products->isEmpty()) {
             return $products;
@@ -116,6 +119,7 @@ class ProductFilterService
                 $eventId,
                 eventOccurrenceId: $eventOccurrenceId,
                 allowPastOccurrence: $allowPastOccurrence,
+                includeResaleStock: $includeResaleStock,
             );
 
         $filteredProducts = $products
@@ -228,10 +232,13 @@ class ProductFilterService
                 max($availableQuantity, 0)
             );
             $price->setQuantityReserved($priceQuantities?->quantity_reserved ?? 0);
+            $price->setResaleQuantityAvailable($priceQuantities?->resale_quantity_available ?? 0);
         });
 
-        $productTotal = $productQuantities
-            ->filter(fn (AvailableProductQuantitiesDTO $quantity) => $quantity->product_id === $product->getId())
+        $ownQuantities = $productQuantities
+            ->filter(fn (AvailableProductQuantitiesDTO $quantity) => $quantity->product_id === $product->getId());
+
+        $productTotal = $ownQuantities
             ->flatMap(fn (AvailableProductQuantitiesDTO $quantity) => array_merge(
                 ($quantity->capacities ?? collect())
                     ->map(fn (CapacityAssignmentDomainObject $capacity) => $capacity->getAvailableCapacity())
@@ -241,7 +248,7 @@ class ProductFilterService
             ->min();
 
         if ($productTotal !== null) {
-            $product->setQuantityAvailable($productTotal);
+            $product->setQuantityAvailable($productTotal + $ownQuantities->sum('resale_quantity_available'));
         }
 
         return $product;

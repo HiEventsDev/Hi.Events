@@ -80,13 +80,15 @@ Hi.Events has two main directories: `backend` (Laravel) and `frontend` (React).
 
 4. **URL Configuration:**
 
-   Set the application and frontend URLs in the `.env` file:
+   Set the API and frontend URLs in the `.env` file. `APP_URL` is the address the API itself is reached at, because mail providers and Twilio call it directly (one-click unsubscribe, delivery and text message webhooks):
 
    ```bash
-   APP_URL=http://localhost
+   APP_URL=http://localhost:8000
    APP_PORT=8000
    APP_FRONTEND_URL=http://localhost:5678
    ```
+
+   If a reverse proxy serves the API under `/api` on the same address as the frontend, set `APP_URL` to the same value as `APP_FRONTEND_URL` instead.
 
 5. **Install Dependencies:**
 
@@ -139,7 +141,18 @@ Hi.Events has two main directories: `backend` (Laravel) and `frontend` (React).
 
    Visit `http://localhost:8000` to verify the backend is running.
 
-10. **Optional: Configure Stripe (for Payment Integration):**
+10. **Run the Queue Worker and the Scheduler:**
+
+Scheduled messages, waitlist offers, webhooks and the Audience features (campaigns, automations, contact syncing) run in the background, so keep both of these running next to the server:
+
+```bash
+php artisan queue:work --queue=default,webhook-queue
+php artisan schedule:work
+```
+
+The worker needs a [Redis](https://redis.io/docs/latest/operate/oss_and_stack/install/) server: set `QUEUE_CONNECTION=redis`, `WEBHOOK_QUEUE_NAME=webhook-queue` and `REDIS_HOST` (for example `127.0.0.1`) in `.env` first. With the default `sync`, jobs run inside the request that created them: a campaign is sent to every recipient before the page responds, and delayed sends are not delayed. In production, run the worker under a process manager such as Supervisor and call `php artisan schedule:run` from cron every minute instead of `schedule:work`.
+
+11. **Optional: Configure Stripe (for Payment Integration):**
 
 If you want to test the payment functionality, configure Stripe:
 
@@ -151,15 +164,15 @@ STRIPE_WEBHOOK_SECRET=your_webhook_secret
 
 Point a Stripe webhook at `/api/public/webhooks/stripe` and subscribe it to `payment_intent.succeeded`, `payment_intent.payment_failed`, `charge.succeeded`, `charge.updated`, `charge.refunded`, `refund.created`, `refund.updated`, `account.updated`, `payout.paid`, `payout.updated` and `terminal.reader.action_failed` (box office card readers).
 
-11. **Optional: Enterprise features:**
+12. **Optional: Enterprise features:**
 
 Reserved seating, the box office and enterprise single sign-on are Hi.Events Enterprise features. Set `APP_LICENCE_KEY` in `.env` to the licence key you received: it removes the "Powered by Hi.Events" notice and unlocks the Enterprise features your licence includes. Without a key they stay off, and everything else works as normal.
 
 For development and testing, you can set `APP_LICENCE_KEY` to `development` instead. That unlocks them with a "Development licence" notice shown to ticket buyers, and must not be used for real events. A superadmin (`php artisan user:make-superadmin <user id>`) can check the licence status at `/admin/licence`.
 
-12. **Optional: Reverse proxies and rate limiting:**
+13. **Optional: Reverse proxies and rate limiting:**
 
-Rate limits are keyed by client IP. The default, `APP_TRUSTED_PROXIES=*`, trusts whichever proxy connects to the app and reads the client IP from its `X-Forwarded-For`. That works with no proxy or a single proxy, but lets clients that reach the app directly spoof their IP. Behind two or more proxies (for example Cloudflare in front of Traefik, Caddy or nginx) the default sees the outer proxy as the client, so many visitors share one rate limit. In both cases, list every proxy between the visitor and the app instead (`cloudflare` expands to Cloudflare's published ranges), including the frontend server if it calls the API from another host:
+Rate limits are keyed by client IP. The default, `APP_TRUSTED_PROXIES=*`, trusts every address, so the app takes the client IP from the first entry of `X-Forwarded-For`. Proxies append to that header rather than replace it, so a client can send its own value and get around per-IP rate limits, behind a proxy or not. List every proxy between the visitor and the app instead (`cloudflare` expands to Cloudflare's published ranges), including the frontend server if it calls the API from another host:
 
 ```bash
 APP_TRUSTED_PROXIES=127.0.0.1,10.0.0.0/8,cloudflare

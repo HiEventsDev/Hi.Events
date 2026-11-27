@@ -6,3 +6,6 @@ export const firstApiError = (error: unknown, fallback: string): string => {
     if (firstError) return firstError;
     return typeof data?.message === 'string' && data.message !== '' ? data.message : fallback;
 };
+
+export const apiErrorStatus = (error: unknown): number | undefined =>
+    (error as { response?: { status?: number } })?.response?.status;

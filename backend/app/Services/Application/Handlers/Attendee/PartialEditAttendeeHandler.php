@@ -4,8 +4,11 @@ namespace HiEvents\Services\Application\Handlers\Attendee;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
+use HiEvents\DomainObjects\Enums\TicketResaleCloseReason;
+use HiEvents\DomainObjects\Generated\TicketResaleListingDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
+use HiEvents\DomainObjects\Status\TicketResaleListingStatus;
 use HiEvents\Enterprise\Seating\Exceptions\SeatSelectionInvalidException;
 use HiEvents\Enterprise\Seating\Exceptions\SeatsUnavailableException;
 use HiEvents\Enterprise\Seating\Services\Domain\SeatClaimLiveness;
@@ -15,12 +18,15 @@ use HiEvents\Enterprise\Seating\Services\Domain\SeatingEventLockService;
 use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Repository\Interfaces\TicketResaleListingRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Attendee\DTO\PartialEditAttendeeDTO;
+use HiEvents\Services\Domain\Attendee\OrganizerAttendeeIdentityChangeService;
 use HiEvents\Services\Domain\EventOccurrence\OccurrencePurchaseEligibilityService;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsCancellationService;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsReactivationService;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
+use HiEvents\Services\Domain\TicketResale\TicketResaleClosureService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\AttendeeEvent;
@@ -46,6 +52,9 @@ class PartialEditAttendeeHandler
         private readonly SeatingEventLockService $seatingEventLock,
         private readonly OccurrencePurchaseEligibilityService $occurrenceEligibilityService,
         private readonly AvailableProductQuantitiesFetchService $availableProductQuantitiesFetchService,
+        private readonly OrganizerAttendeeIdentityChangeService $identityChangeService,
+        private readonly TicketResaleClosureService $resaleClosureService,
+        private readonly TicketResaleListingRepositoryInterface $resaleListingRepository,
     ) {}
 
     /**
@@ -85,17 +94,35 @@ class PartialEditAttendeeHandler
             $this->cancel($attendee);
         }
 
-        return $this->attendeeRepository->updateByIdWhere(
+        if ($status !== null && $status !== AttendeeStatus::CANCELLED->name && $status !== $attendee->getStatus() && ! $wasCancelled) {
+            $this->assertNotListed($attendee);
+        }
+
+        $email = $data->email ?? $attendee->getEmail();
+
+        $updatedAttendee = $this->attendeeRepository->updateByIdWhere(
             id: $data->attendee_id,
             attributes: [
                 'status' => $status ?? $attendee->getStatus(),
                 'first_name' => $data->first_name ?? $attendee->getFirstName(),
                 'last_name' => $data->last_name ?? $attendee->getLastName(),
-                'email' => $data->email ?? $attendee->getEmail(),
+                'email' => $email,
+                ...$this->identityChangeService->credentialAttributesFor($attendee, $email),
             ],
             where: [
                 'event_id' => $data->event_id,
             ]);
+
+        if ($this->identityChangeService->record($attendee, $updatedAttendee)) {
+            $this->domainEventDispatcherService->dispatch(
+                new AttendeeEvent(
+                    type: DomainEventType::ATTENDEE_UPDATED,
+                    attendeeId: $updatedAttendee->getId(),
+                )
+            );
+        }
+
+        return $updatedAttendee;
     }
 
     /**
@@ -104,6 +131,8 @@ class PartialEditAttendeeHandler
      */
     private function reactivate(string $status, AttendeeDomainObject $attendee): void
     {
+        $this->assertNotResold($attendee);
+
         $seatedOrder = $this->assertSeatAllowsReactivation($status, $attendee);
 
         $this->assertRoomToReactivate($attendee);
@@ -137,6 +166,7 @@ class PartialEditAttendeeHandler
      */
     private function cancel(AttendeeDomainObject $attendee): void
     {
+        $this->resaleClosureService->closeForAttendees([$attendee->getId()], TicketResaleCloseReason::TICKET_CANCELLED);
         $this->seatClaimService->releaseForAttendee($attendee->getId());
 
         $this->productQuantityService->decreaseQuantitySold($attendee->getProductPriceId(), 1, $attendee->getEventOccurrenceId());
@@ -164,6 +194,40 @@ class PartialEditAttendeeHandler
                 attendeeId: $attendee->getId(),
             )
         );
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    private function assertNotResold(AttendeeDomainObject $attendee): void
+    {
+        $resold = $this->resaleListingRepository->countWhere([
+            TicketResaleListingDomainObjectAbstract::ATTENDEE_ID => $attendee->getId(),
+            TicketResaleListingDomainObjectAbstract::STATUS => TicketResaleListingStatus::SOLD->name,
+        ]) > 0;
+
+        if ($resold) {
+            throw ValidationException::withMessages([
+                'status' => __('This ticket was resold to another buyer, so it cannot be reactivated.'),
+            ]);
+        }
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    private function assertNotListed(AttendeeDomainObject $attendee): void
+    {
+        $listed = $this->resaleListingRepository->countWhere([
+            TicketResaleListingDomainObjectAbstract::ATTENDEE_ID => $attendee->getId(),
+            TicketResaleListingDomainObjectAbstract::STATUS => TicketResaleListingStatus::LISTED->name,
+        ]) > 0;
+
+        if ($listed) {
+            throw ValidationException::withMessages([
+                'status' => __('This ticket is listed for resale. Close the listing on the resale page before changing its status.'),
+            ]);
+        }
     }
 
     /**

@@ -1,18 +1,17 @@
-import {Event, EventOccurrence, EventType, GenericModalProps, IdParam, MessageType, ProductType, QueryFilters} from "../../../types.ts";
+import {Event, EventOccurrence, EventType, GenericModalProps, IdParam, Message, MessageType, ProductType, QueryFilters} from "../../../types.ts";
 import {NavLink, useParams} from "react-router";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useGetOrder} from "../../../queries/useGetOrder.ts";
-import {Modal} from "../../common/Modal";
+import {Modal, ModalFooter} from "../../common/Modal";
 import {
     Alert,
     Button,
     Checkbox,
     ComboboxItem,
     ComboboxItemGroup,
-    Group,
     LoadingOverlay,
-    Menu,
     MultiSelect,
+    SegmentedControl,
     Select,
     Text,
     TextInput
@@ -20,10 +19,7 @@ import {
 import {
     IconAlertCircle,
     IconBrandStripe,
-    IconCheck,
-    IconChevronDown,
     IconClock,
-    IconCopy,
     IconSend,
     IconTestPipe
 } from "@tabler/icons-react";
@@ -31,12 +27,17 @@ import {Callout} from "../../common/Callout";
 import {useGetMe} from "../../../queries/useGetMe.ts";
 import {useForm, UseFormReturnType} from "@mantine/form";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
-import {showSuccess} from "../../../utilites/notifications.tsx";
+import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {t} from "@lingui/macro";
 import {Editor} from "../../common/Editor";
 import {useSendEventMessage} from "../../../mutations/useSendEventMessage.ts";
 import {ProductSelector} from "../../common/ProductSelector";
-import {useMemo, useState} from "react";
+import {useMemo, useRef, useState} from "react";
+import {useDebouncedValue} from "@mantine/hooks";
+import {BrandingSwitch} from "../../common/BrandingUpsell";
+import {EmailPreview} from "../../common/EmailPreview";
+import {useBrandingSubscription} from "../../../hooks/useBrandingSubscription.ts";
+import {useGetMessagePreview} from "../../../queries/useGetMessagePreview.ts";
 import {useGetAccount} from "../../../queries/useGetAccount.ts";
 import {getConfig} from "../../../utilites/config";
 import {utcToTz, prettyDate} from "../../../utilites/dates.ts";
@@ -111,6 +112,10 @@ const AttendeeField = ({orderId, eventId, attendeeId, form}: {
 
 const CUSTOM_PRESET = 'custom';
 
+const MAX_MESSAGE_LENGTH = 8000;
+
+const MESSAGING_TIER_LIMIT_ERROR_CODE = 'MESSAGING_TIER_LIMIT_EXCEEDED';
+
 const getSchedulePresets = (event: Event, occurrence?: EventOccurrence) => {
     const now = dayjs.utc();
     const startDate = occurrence ? dayjs.utc(occurrence.start_date) : dayjs.utc(event.start_date);
@@ -174,6 +179,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
     const errorHandler = useFormErrorResponseHandler();
     const isPreselectedRecipient = !!(orderId || attendeeId || productId);
     const {data: account, isFetched: isAccountFetched} = useGetAccount();
+    const {canUpgrade: canRemoveBranding} = useBrandingSubscription();
     const isAccountVerified = isAccountFetched && account?.is_account_email_confirmed;
     const accountRequiresManualVerification = isAccountFetched && account?.requires_manual_verification;
     const formIsDisabled = !isAccountVerified || accountRequiresManualVerification;
@@ -181,6 +187,8 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
     const [tierLimitError, setTierLimitError] = useState<string | null>(null);
     const [isScheduled, setIsScheduled] = useState(false);
     const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
+    const [mode, setMode] = useState<'write' | 'preview'>('write');
+    const isTestSubmission = useRef(false);
 
     const sendMessageMutation = useSendEventMessage();
 
@@ -192,7 +200,6 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
             attendee_ids: attendeeId ? [String(attendeeId)] : [],
             product_ids: productId ? [String(productId)] : [],
             order_id: orderId,
-            is_test: false,
             send_copy_to_current_user: false,
             type: 'EVENT',
             acknowledgement: false,
@@ -206,8 +213,8 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
         validate: {
             acknowledgement: (value) => value === true ? null : t`You must acknowledge that this email is not promotional`,
             message_type: (value) => value ? null : t`Choose who should receive this message`,
-            scheduled_at: (value, values) => {
-                if (!isScheduled || values.is_test) return null;
+            scheduled_at: (value) => {
+                if (!isScheduled || isTestSubmission.current) return null;
                 if (selectedPreset && selectedPreset !== CUSTOM_PRESET) return null;
                 if (!value) return t`The scheduled time is required`;
                 if (event && dayjs.tz(value, event.timezone).isBefore(dayjs())) return t`The scheduled time must be in the future`;
@@ -228,12 +235,15 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
         return presets.find(p => p.value === selectedPreset) ?? null;
     }, [selectedPreset, presets]);
 
-    const willSchedule = isScheduled && !form.values.is_test;
+    const [draftSubject] = useDebouncedValue(form.values.subject, 600);
+    const [draftMessage] = useDebouncedValue(form.values.message, 600);
+    const previewDraft = useMemo(() => ({subject: draftSubject, message: draftMessage}), [draftSubject, draftMessage]);
+    const previewQuery = useGetMessagePreview(eventId, previewDraft, !formIsDisabled && draftMessage.length <= MAX_MESSAGE_LENGTH);
 
-    const handleSend = (values: any) => {
+    const send = (values: typeof form.values, isTest: boolean) => {
         setTierLimitError(null);
-        const submitData = {...values};
-        if (willSchedule) {
+        const submitData: Record<string, unknown> = {...values, is_test: isTest};
+        if (isScheduled && !isTest) {
             if (selectedPreset && selectedPreset !== CUSTOM_PRESET && resolvedPreset && event) {
                 submitData.scheduled_at = resolvedPreset.utcDate.tz(event.timezone).format('YYYY-MM-DDTHH:mm');
             }
@@ -242,27 +252,46 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
         }
         sendMessageMutation.mutate({
             eventId: eventId,
-            messageData: submitData,
+            messageData: submitData as Partial<Message>,
         }, {
-            onSuccess: () => {
-                if (values.is_test) {
-                    showSuccess(t`Test email sent to your inbox`);
+            onSuccess: (response) => {
+                const isPendingReview = response.data.data.status === 'PENDING_REVIEW';
+                if (isTest) {
+                    showSuccess(isPendingReview
+                        ? t`Your test is waiting for a quick review before it's sent.`
+                        : t`Test email sent to your inbox`);
+                    return;
+                }
+                if (isPendingReview) {
+                    showSuccess(t`Your message is waiting for a quick review before it's sent.`);
                 } else {
-                    showSuccess(willSchedule ? t`Message Scheduled` : t`Message Sent`);
+                    showSuccess(isScheduled ? t`Message Scheduled` : t`Message Sent`);
                 }
                 form.reset();
                 onClose();
             },
             onError: (error: any) => {
-                if (error?.response?.status === 429) {
-                    const message = error?.response?.data?.message || t`You have reached your messaging limit.`;
-                    setTierLimitError(message);
+                if (error?.response?.data?.error_code === MESSAGING_TIER_LIMIT_ERROR_CODE) {
+                    setTierLimitError(error.response.data.message || t`You have reached your messaging limit.`);
+                } else if (error?.response?.status === 429) {
+                    showError(t`You're sending messages too quickly. Please wait a few minutes and try again.`);
                 } else {
                     errorHandler(form, error);
                 }
             }
         });
     }
+
+    const replyTo = previewQuery.data?.reply_to;
+
+    const sendTest = () => {
+        isTestSubmission.current = true;
+        form.onSubmit(values => send(values, true))();
+        isTestSubmission.current = false;
+    };
+
+    const isSendingTest = sendMessageMutation.isPending && sendMessageMutation.variables?.messageData.is_test === true;
+    const isSendDisabled = !form.values.acknowledgement || !isAccountVerified || accountRequiresManualVerification;
 
     if (!event || !me || !product_categories) {
         return <LoadingOverlay visible/>;
@@ -274,6 +303,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
             opened
             onClose={onClose}
             heading={t`Send a message`}
+            size="76rem"
         >
             {!isAccountFetched && (
                 <div className={classes.loadingContainer}>
@@ -281,7 +311,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                 </div>
             )}
 
-            <form onSubmit={form.onSubmit(handleSend)}>
+            <form onSubmit={form.onSubmit(values => send(values, false))}>
                 {(!isAccountVerified && isAccountFetched) && (
                     <Callout variant="info" className={classes.verificationAlert}>
                         {t`You need to verify your account email before you can send messages.`}
@@ -297,7 +327,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                             <div className={classes.stripeConnectButton}>
                                 <Button
                                     component={NavLink}
-                                    to={`/manage/organizer/${event.organizer_id}/settings#payouts`}
+                                    to={`/manage/organizer/${event.organizer_id}/settings/payouts`}
                                     leftSection={<IconBrandStripe size={16}/>}
                                     variant="light"
                                 >
@@ -334,259 +364,285 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
 
                 {!formIsDisabled && (
                     <fieldset disabled={formIsDisabled} style={{border: 'none', padding: 0, margin: 0}}>
-                        <div className={classes.formSection}>
-                            {isMultiOccurrence && (
-                                <Callout variant="info">
-                                    <Text size="sm" fw={500} mb={targetedOccurrences.length ? 'xs' : 0}>
-                                        {t`Targeting attendees across ${eventOccurrenceIds!.length} selected sessions.`}
-                                    </Text>
-                                    {targetedOccurrences.length > 0 && (
-                                        <div className={classes.occurrenceList}>
-                                            {targetedOccurrences.map(occ => (
-                                                <div key={occ.id} className={classes.occurrenceChip}>
-                                                    {prettyDate(occ.start_date, event?.timezone || 'UTC')}
-                                                    {occ.label && <span className={classes.occurrenceChipLabel}> · {occ.label}</span>}
-                                                </div>
-                                            ))}
+                        <SegmentedControl
+                            className={classes.modeSwitch}
+                            fullWidth
+                            value={mode}
+                            onChange={value => setMode(value === 'preview' ? 'preview' : 'write')}
+                            data={[{value: 'write', label: t`Write`}, {value: 'preview', label: t`Preview`}]}
+                        />
+                        <div className={classes.workspace}>
+                            <div className={classes.compose} data-hidden={mode === 'preview' || undefined}>
+                                <div className={classes.formSection}>
+                                    {previewQuery.data && (
+                                        <div className={classes.senderLine}>
+                                            <span>{t`From`}</span>
+                                            <strong>{previewQuery.data.from_name}</strong>
+                                            {replyTo && <span>{t`Replies go to ${replyTo}`}</span>}
                                         </div>
                                     )}
-                                    {eventOccurrenceIds!.length > targetedOccurrences.length && (
-                                        <Text size="xs" c="dimmed" mt="xs">
-                                            {t`Showing the first ${targetedOccurrences.length} — the remaining ${eventOccurrenceIds!.length - targetedOccurrences.length} session(s) will still be targeted when the message is sent.`}
-                                        </Text>
+
+                                    {isMultiOccurrence && (
+                                        <Callout variant="info">
+                                            <Text size="sm" fw={500} mb={targetedOccurrences.length ? 'xs' : 0}>
+                                                {t`Targeting attendees across ${eventOccurrenceIds!.length} selected sessions.`}
+                                            </Text>
+                                            {targetedOccurrences.length > 0 && (
+                                                <div className={classes.occurrenceList}>
+                                                    {targetedOccurrences.map(occ => (
+                                                        <div key={occ.id} className={classes.occurrenceChip}>
+                                                            {prettyDate(occ.start_date, event?.timezone || 'UTC')}
+                                                            {occ.label && <span className={classes.occurrenceChipLabel}> · {occ.label}</span>}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                            {eventOccurrenceIds!.length > targetedOccurrences.length && (
+                                                <Text size="xs" c="dimmed" mt="xs">
+                                                    {t`Showing the first ${targetedOccurrences.length} — the remaining ${eventOccurrenceIds!.length - targetedOccurrences.length} session(s) will still be targeted when the message is sent.`}
+                                                </Text>
+                                            )}
+                                        </Callout>
                                     )}
-                                </Callout>
-                            )}
 
-                            {isRecurring && !isPreselectedRecipient && !isMultiOccurrence && occurrenceOptions.length > 0 && (
-                                <Select
-                                    label={t`Occurrence`}
-                                    description={t`Send to all occurrences, or choose a specific one`}
-                                    placeholder={t`All occurrences`}
-                                    data={occurrenceOptions}
-                                    value={form.values.event_occurrence_id ? String(form.values.event_occurrence_id) : null}
-                                    onChange={(val) => form.setFieldValue('event_occurrence_id', val ? Number(val) : null)}
-                                    clearable={!eventOccurrenceId}
-                                    disabled={!!eventOccurrenceId}
-                                />
-                            )}
+                                    {isRecurring && !isPreselectedRecipient && !isMultiOccurrence && occurrenceOptions.length > 0 && (
+                                        <Select
+                                            label={t`Occurrence`}
+                                            description={t`Send to all occurrences, or choose a specific one`}
+                                            placeholder={t`All occurrences`}
+                                            data={occurrenceOptions}
+                                            value={form.values.event_occurrence_id ? String(form.values.event_occurrence_id) : null}
+                                            onChange={(val) => form.setFieldValue('event_occurrence_id', val ? Number(val) : null)}
+                                            clearable={!eventOccurrenceId}
+                                            disabled={!!eventOccurrenceId}
+                                        />
+                                    )}
 
-                            {!isPreselectedRecipient && (
-                                <Select
-                                    data={[
-                                        {
-                                            value: 'TICKET_HOLDERS',
-                                            label: t`Attendees with a specific ticket`,
-                                        },
-                                        {
-                                            value: 'ALL_ATTENDEES',
-                                            label: isMultiOccurrence
-                                                ? t`All attendees of the selected sessions`
-                                                : form.values.event_occurrence_id
-                                                    ? t`All attendees of this occurrence`
-                                                    : t`All attendees of this event`,
-                                        },
-                                        {
-                                            value: 'ORDER_OWNERS_WITH_PRODUCT',
-                                            label: t`Order owners with a specific product`,
-                                        },
-                                    ]}
-                                    label={t`Recipients`}
-                                    description={t`Select which attendees should receive this message`}
-                                    placeholder={t`Select attendee group`}
-                                    withAsterisk
-                                    {...form.getInputProps('message_type')}
-                                    onChange={(value) => {
-                                        form.setFieldValue('message_type', value as MessageType | null);
-                                        form.setFieldValue('product_ids', []);
-                                    }}
-                                />
-                            )}
+                                    {!isPreselectedRecipient && (
+                                        <Select
+                                            data={[
+                                                {
+                                                    value: 'TICKET_HOLDERS',
+                                                    label: t`Attendees with a specific ticket`,
+                                                },
+                                                {
+                                                    value: 'ALL_ATTENDEES',
+                                                    label: isMultiOccurrence
+                                                        ? t`All attendees of the selected sessions`
+                                                        : form.values.event_occurrence_id
+                                                            ? t`All attendees of this occurrence`
+                                                            : t`All attendees of this event`,
+                                                },
+                                                {
+                                                    value: 'ORDER_OWNERS_WITH_PRODUCT',
+                                                    label: t`Order owners with a specific product`,
+                                                },
+                                            ]}
+                                            label={t`Recipients`}
+                                            description={t`Select which attendees should receive this message`}
+                                            placeholder={t`Select attendee group`}
+                                            withAsterisk
+                                            {...form.getInputProps('message_type')}
+                                            onChange={(value) => {
+                                                form.setFieldValue('message_type', value as MessageType | null);
+                                                form.setFieldValue('product_ids', []);
+                                            }}
+                                        />
+                                    )}
 
-                            {((form.values.message_type === MessageType.IndividualAttendees) && attendeeId && orderId) && (
-                                <AttendeeField eventId={eventId} orderId={orderId} attendeeId={attendeeId} form={form}/>
-                            )}
+                                    {((form.values.message_type === MessageType.IndividualAttendees) && attendeeId && orderId) && (
+                                        <AttendeeField eventId={eventId} orderId={orderId} attendeeId={attendeeId} form={form}/>
+                                    )}
 
-                            {((form.values.message_type === MessageType.TicketHolders && event.product_categories)) && (
-                                <ProductSelector
-                                    label={t`Message attendees with specific tickets`}
-                                    placeholder={t`Select tickets`}
-                                    productCategories={event.product_categories}
-                                    form={form}
-                                    productFieldName={'product_ids'}
-                                    includedProductTypes={[ProductType.Ticket]}
-                                />
-                            )}
+                                    {((form.values.message_type === MessageType.TicketHolders && event.product_categories)) && (
+                                        <ProductSelector
+                                            label={t`Message attendees with specific tickets`}
+                                            placeholder={t`Select tickets`}
+                                            productCategories={event.product_categories}
+                                            form={form}
+                                            productFieldName={'product_ids'}
+                                            includedProductTypes={[ProductType.Ticket]}
+                                        />
+                                    )}
 
-                            {((form.values.message_type === MessageType.OrderOwnersWithProduct && event.product_categories)) && (
-                                <>
-                                    <ProductSelector
-                                        label={t`Message order owners with specific products`}
-                                        placeholder={t`Select products`}
-                                        productCategories={event.product_categories}
-                                        form={form}
-                                        productFieldName={'product_ids'}
-                                        includedProductTypes={[ProductType.Ticket, ProductType.General]}
+                                    {((form.values.message_type === MessageType.OrderOwnersWithProduct && event.product_categories)) && (
+                                        <>
+                                            <ProductSelector
+                                                label={t`Message order owners with specific products`}
+                                                placeholder={t`Select products`}
+                                                productCategories={event.product_categories}
+                                                form={form}
+                                                productFieldName={'product_ids'}
+                                                includedProductTypes={[ProductType.Ticket, ProductType.General]}
+                                            />
+                                            <MultiSelect
+                                                description={t`Only send to orders with these statuses`}
+                                                label={t`Order statuses`}
+                                                data={[
+                                                    {value: 'COMPLETED', label: t`Completed`},
+                                                    {value: 'AWAITING_OFFLINE_PAYMENT', label: t`Awaiting offline payment`},
+                                                ]}
+                                                {...form.getInputProps('order_statuses')}
+                                            />
+                                        </>
+                                    )}
+
+                                    {(form.values.message_type === MessageType.OrderOwner && orderId) && (
+                                        <OrderField orderId={orderId} eventId={eventId}/>
+                                    )}
+
+                                    <TextInput
+                                        required
+                                        label={t`Subject`}
+                                        placeholder={t`e.g., Important update about your tickets`}
+                                        maxLength={100}
+                                        {...form.getInputProps('subject')}
                                     />
-                                    <MultiSelect
-                                        description={t`Only send to orders with these statuses`}
-                                        label={t`Order statuses`}
-                                        data={[
-                                            {value: 'COMPLETED', label: t`Completed`},
-                                            {value: 'AWAITING_OFFLINE_PAYMENT', label: t`Awaiting offline payment`},
-                                        ]}
-                                        {...form.getInputProps('order_statuses')}
+
+                                    <Editor
+                                        label={t`Message`}
+                                        value={form.values.message || ''}
+                                        onChange={(value) => form.setFieldValue('message', value)}
+                                        error={form.errors.message as string}
+                                        maxLength={MAX_MESSAGE_LENGTH}
                                     />
-                                </>
-                            )}
-
-                            {(form.values.message_type === MessageType.OrderOwner && orderId) && (
-                                <OrderField orderId={orderId} eventId={eventId}/>
-                            )}
-
-                            <TextInput
-                                required
-                                label={t`Subject`}
-                                placeholder={t`e.g., Important update about your tickets`}
-                                {...form.getInputProps('subject')}
-                            />
-
-                            <Editor
-                                label={t`Message`}
-                                value={form.values.message || ''}
-                                onChange={(value) => form.setFieldValue('message', value)}
-                                error={form.errors.message as string}
-                            />
-                        </div>
-
-                        <div className={classes.footerSection}>
-                            <div className={classes.scheduleSection}>
-                                <div className={classes.sendToggle}>
-                                    <button
-                                        type="button"
-                                        className={`${classes.toggleOption} ${!isScheduled ? classes.toggleActive : ''}`}
-                                        onClick={() => {
-                                            setIsScheduled(false);
-                                            form.setFieldValue('scheduled_at', '');
-                                            setSelectedPreset(null);
-                                        }}
-                                    >
-                                        <IconSend size={15}/>
-                                        {t`Send now`}
-                                    </button>
-                                    <button
-                                        type="button"
-                                        className={`${classes.toggleOption} ${isScheduled ? classes.toggleActive : ''}`}
-                                        onClick={() => setIsScheduled(true)}
-                                    >
-                                        <IconClock size={15}/>
-                                        {t`Schedule for later`}
-                                    </button>
                                 </div>
-                                {isScheduled && (
-                                    <div className={classes.scheduleBody}>
-                                        <div className={classes.presetChips}>
-                                            {presets.map(p => (
-                                                <button
-                                                    key={p.value}
-                                                    type="button"
-                                                    className={`${classes.presetChip} ${selectedPreset === p.value ? classes.presetChipActive : ''}`}
-                                                    onClick={() => {
-                                                        setSelectedPreset(p.value);
-                                                        form.setFieldValue('scheduled_at', '');
-                                                    }}
-                                                >
-                                                    {p.label}
-                                                </button>
-                                            ))}
+
+                                <div className={classes.footerSection}>
+                                    <div className={classes.scheduleSection}>
+                                        <div className={classes.sendToggle}>
                                             <button
                                                 type="button"
-                                                className={`${classes.presetChip} ${selectedPreset === CUSTOM_PRESET ? classes.presetChipActive : ''}`}
-                                                onClick={() => setSelectedPreset(CUSTOM_PRESET)}
+                                                className={`${classes.toggleOption} ${!isScheduled ? classes.toggleActive : ''}`}
+                                                onClick={() => {
+                                                    setIsScheduled(false);
+                                                    form.setFieldValue('scheduled_at', '');
+                                                    setSelectedPreset(null);
+                                                }}
                                             >
-                                                {t`Custom date and time`}
+                                                <IconSend size={15}/>
+                                                {t`Send now`}
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className={`${classes.toggleOption} ${isScheduled ? classes.toggleActive : ''}`}
+                                                onClick={() => setIsScheduled(true)}
+                                            >
+                                                <IconClock size={15}/>
+                                                {t`Schedule for later`}
                                             </button>
                                         </div>
-                                        {selectedPreset === CUSTOM_PRESET && (
-                                            <DateTimeField
-                                                label={t`Scheduled time`}
-                                                description={event.timezone}
-                                                minDate={utcToTz(dayjs.utc().toISOString(), event.timezone)}
-                                                {...form.getInputProps('scheduled_at')}
-                                            />
-                                        )}
-                                        {resolvedPreset && event && (
-                                            <div className={classes.scheduledConfirmation}>
-                                                <div className={classes.scheduledConfirmationIcon}>
-                                                    <IconClock size={20}/>
+                                        {isScheduled && (
+                                            <div className={classes.scheduleBody}>
+                                                <div className={classes.presetChips}>
+                                                    {presets.map(p => (
+                                                        <button
+                                                            key={p.value}
+                                                            type="button"
+                                                            className={`${classes.presetChip} ${selectedPreset === p.value ? classes.presetChipActive : ''}`}
+                                                            onClick={() => {
+                                                                setSelectedPreset(p.value);
+                                                                form.setFieldValue('scheduled_at', '');
+                                                            }}
+                                                        >
+                                                            {p.label}
+                                                        </button>
+                                                    ))}
+                                                    <button
+                                                        type="button"
+                                                        className={`${classes.presetChip} ${selectedPreset === CUSTOM_PRESET ? classes.presetChipActive : ''}`}
+                                                        onClick={() => setSelectedPreset(CUSTOM_PRESET)}
+                                                    >
+                                                        {t`Custom date and time`}
+                                                    </button>
                                                 </div>
-                                                <div className={classes.scheduledConfirmationText}>
-                                                    <span className={classes.scheduledConfirmationDate}>
-                                                        {resolvedPreset.utcDate.tz(event.timezone).format('dddd, MMMM D, YYYY')}
-                                                    </span>
-                                                    <span className={classes.scheduledConfirmationTime}>
-                                                        {resolvedPreset.utcDate.tz(event.timezone).format('h:mm A')}
-                                                        {' '}<span className={classes.scheduledConfirmationTz}>{event.timezone}</span>
-                                                    </span>
-                                                </div>
+                                                {selectedPreset === CUSTOM_PRESET && (
+                                                    <DateTimeField
+                                                        label={t`Scheduled time`}
+                                                        description={event.timezone}
+                                                        minDate={utcToTz(dayjs.utc().toISOString(), event.timezone)}
+                                                        {...form.getInputProps('scheduled_at')}
+                                                    />
+                                                )}
+                                                {resolvedPreset && event && (
+                                                    <div className={classes.scheduledConfirmation}>
+                                                        <div className={classes.scheduledConfirmationIcon}>
+                                                            <IconClock size={20}/>
+                                                        </div>
+                                                        <div className={classes.scheduledConfirmationText}>
+                                                            <span className={classes.scheduledConfirmationDate}>
+                                                                {resolvedPreset.utcDate.tz(event.timezone).format('dddd, MMMM D, YYYY')}
+                                                            </span>
+                                                            <span className={classes.scheduledConfirmationTime}>
+                                                                {resolvedPreset.utcDate.tz(event.timezone).format('h:mm A')}
+                                                                {' '}<span className={classes.scheduledConfirmationTz}>{event.timezone}</span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
                                         )}
                                     </div>
-                                )}
+
+                                    <Checkbox
+                                        {...form.getInputProps('acknowledgement', {type: 'checkbox'})}
+                                        label={t`I confirm this is a transactional message related to this event`}
+                                    />
+
+                                    <Checkbox
+                                        {...form.getInputProps('send_copy_to_current_user', {type: 'checkbox'})}
+                                        label={t`Send me a copy`}
+                                    />
+
+                                    <p className={classes.warningText}>
+                                        {t`Promotional emails may result in account suspension`}
+                                    </p>
+                                </div>
                             </div>
-
-                            <Checkbox
-                                {...form.getInputProps('acknowledgement', {type: 'checkbox'})}
-                                label={t`I confirm this is a transactional message related to this event`}
-                            />
-
-                            <Group gap={0}>
-                                <Button
-                                    className={classes.sendButton}
-                                    loading={sendMessageMutation.isPending}
-                                    type={'submit'}
-                                    leftSection={willSchedule ? <IconClock size={16}/> : <IconSend size={16}/>}
-                                    disabled={!form.values.acknowledgement || !isAccountVerified || accountRequiresManualVerification}
-                                    data-testid="message-send-button"
-                                >
-                                    {form.values.is_test ? t`Send Test` : (willSchedule ? t`Schedule Message` : t`Send Message`)}
-                                </Button>
-                                <Menu shadow="md" width={220} position="bottom-end">
-                                    <Menu.Target>
-                                        <Button
-                                            type="button"
-                                            className={classes.menuButton}
-                                            disabled={!form.values.acknowledgement || !isAccountVerified || accountRequiresManualVerification}
-                                            data-testid="message-send-options-button"
-                                        >
-                                            <IconChevronDown size={16}/>
-                                        </Button>
-                                    </Menu.Target>
-                                    <Menu.Dropdown>
-                                        <Menu.Item
-                                            leftSection={<IconTestPipe size={16}/>}
-                                            rightSection={form.values.is_test ? <IconCheck size={14}/> : null}
-                                            onClick={() => form.setFieldValue('is_test', !form.values.is_test)}
-                                        >
-                                            {t`Send as test`}
-                                        </Menu.Item>
-                                        <Menu.Item
-                                            leftSection={<IconCopy size={16}/>}
-                                            rightSection={form.values.send_copy_to_current_user ?
-                                                <IconCheck size={14}/> : null}
-                                            onClick={() => form.setFieldValue('send_copy_to_current_user', !form.values.send_copy_to_current_user)}
-                                        >
-                                            {t`Send me a copy`}
-                                        </Menu.Item>
-                                    </Menu.Dropdown>
-                                </Menu>
-                            </Group>
-
-                            <p className={classes.warningText}>
-                                {t`Promotional emails may result in account suspension`}
-                            </p>
+                            <div className={classes.previewPane} data-hidden={mode === 'write' || undefined}>
+                                <EmailPreview
+                                    label={t`How it will look`}
+                                    banner={canRemoveBranding && <BrandingSwitch/>}
+                                    fromName={previewQuery.data?.from_name ?? ''}
+                                    subject={previewQuery.data?.subject ?? form.values.subject}
+                                    html={previewQuery.data?.html}
+                                    isError={previewQuery.isError}
+                                    testId="message-preview"
+                                />
+                            </div>
                         </div>
                     </fieldset>
+                )}
+
+                {!formIsDisabled && (
+                    <ModalFooter
+                        start={(
+                            <Button
+                                type="button"
+                                variant="default"
+                                leftSection={<IconTestPipe size={16}/>}
+                                loading={isSendingTest}
+                                disabled={isSendDisabled || sendMessageMutation.isPending}
+                                onClick={sendTest}
+                                data-testid="message-test-button"
+                            >
+                                {t`Send test to me`}
+                            </Button>
+                        )}
+                    >
+                        <Button type="button" variant="default" onClick={onClose}>
+                            {t`Cancel`}
+                        </Button>
+                        <Button
+                            loading={sendMessageMutation.isPending && !isSendingTest}
+                            type="submit"
+                            leftSection={isScheduled ? <IconClock size={16}/> : <IconSend size={16}/>}
+                            disabled={isSendDisabled || sendMessageMutation.isPending}
+                            data-testid="message-send-button"
+                        >
+                            {isScheduled ? t`Schedule Message` : t`Send Message`}
+                        </Button>
+                    </ModalFooter>
                 )}
             </form>
         </Modal>

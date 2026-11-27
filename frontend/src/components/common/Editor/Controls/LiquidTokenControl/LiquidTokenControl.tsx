@@ -46,7 +46,7 @@ export const LiquidTokenMenu = ({tokens}: LiquidTokenMenuProps) => {
     }
 
     return (
-        <Menu shadow="md" width={380} position="bottom-start" withinPortal>
+        <Menu shadow="md" position="bottom-start" withinPortal styles={{dropdown: {width: 'min(380px, calc(100vw - 16px))'}}}>
             <Menu.Target>
                 <RichTextEditor.Control
                     title={t`Insert Liquid Token`}
@@ -73,6 +73,8 @@ export const LiquidTokenMenu = ({tokens}: LiquidTokenMenuProps) => {
                                     size="xs"
                                     variant="light"
                                     color="blue"
+                                    tt="none"
+                                    maw="100%"
                                     style={{fontFamily: 'monospace', marginBottom: '4px'}}
                                 >
                                     {token.token}

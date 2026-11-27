@@ -243,6 +243,7 @@ const CheckIn = () => {
                         isCheckInPending={controller.isCheckInPending}
                         isDeletePending={controller.isDeletePending}
                         allowOrdersAwaitingOfflinePaymentToCheckIn={controller.allowOrdersAwaitingOfflinePaymentToCheckIn}
+                        searchesEmail={!!checkInList?.public_show_order_details}
                         eventType={event?.type as EventType | undefined}
                         timezone={event?.timezone}
                         showRowOccurrences={controller.showOccurrenceFilter}

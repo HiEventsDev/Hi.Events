@@ -15,6 +15,8 @@ class StripePaymentIntentRefundService
 {
     public const NOTIFY_BUYER_METADATA_KEY = 'notify_buyer';
 
+    public const RESALE_LISTING_METADATA_KEY = 'resale_listing_id';
+
     public function __construct(
         private readonly Repository $config,
     ) {}
@@ -31,22 +33,49 @@ class StripePaymentIntentRefundService
         StripeClient $stripeClient,
         bool $notifyBuyer,
     ): Refund {
+        return $this->createRefund(
+            amount: $amount,
+            payment: $payment,
+            stripeClient: $stripeClient,
+            idempotencyKey: $this->idempotencyKey($payment, $amount, $alreadyRefunded, $failedRefundCount),
+            metadata: $notifyBuyer ? [self::NOTIFY_BUYER_METADATA_KEY => '1'] : [],
+        );
+    }
+
+    /**
+     * @param  array<string, string>  $metadata
+     *
+     * @throws ApiErrorException
+     * @throws MathException
+     */
+    public function createRefund(
+        MoneyValue $amount,
+        StripePaymentDomainObject $payment,
+        StripeClient $stripeClient,
+        string $idempotencyKey,
+        array $metadata,
+    ): Refund {
         $params = [
             'payment_intent' => $payment->getPaymentIntentId(),
             'amount' => $amount->toMinorUnit(),
         ];
 
-        if ($notifyBuyer) {
-            $params['metadata'] = [self::NOTIFY_BUYER_METADATA_KEY => '1'];
+        if ($metadata !== []) {
+            $params['metadata'] = $metadata;
         }
 
         return $stripeClient->refunds->create(
             params: $params,
             opts: array_merge(
                 $this->getStripeAccountData($payment),
-                ['idempotency_key' => $this->idempotencyKey($payment, $amount, $alreadyRefunded, $failedRefundCount)],
+                ['idempotency_key' => $idempotencyKey],
             ),
         );
+    }
+
+    public function retrieveRefund(string $refundId, StripePaymentDomainObject $payment, StripeClient $stripeClient): Refund
+    {
+        return $stripeClient->refunds->retrieve($refundId, [], $this->getStripeAccountData($payment));
     }
 
     private function idempotencyKey(

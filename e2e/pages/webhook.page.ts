@@ -54,7 +54,7 @@ export class WebhookPage {
   }
 
   async chooseRowAction(url: string, action: string): Promise<void> {
-    await this.rowByUrl(url).getByRole('button').click();
+    await this.rowByUrl(url).getByTestId('webhook-actions-button').click();
     await this.page.getByRole('menuitem', { name: action }).click();
   }
 

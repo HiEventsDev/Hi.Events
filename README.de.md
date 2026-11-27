@@ -30,8 +30,8 @@ Selbst gehostet oder in der Cloud. Ihre Events, Ihre Marke, Ihre Daten.
 <br>
 
 > [!NOTE]
-> **Hi.Events 2.0 ist da** mit wiederkehrenden Events, reservierten Sitzplätzen, Abendkasse, Line-ups und Programmen, Single
-> Sign-On, Teamberechtigungen und API-Schlüsseln. [Alle Neuerungen →](https://github.com/HiEventsDev/hi.events/releases)
+> **Hi.Events 2.3 ist da** mit Audience-CRM und SMS-Kampagnen, Ticketübertragung und Weiterverkauf, einem MCP-Server
+> für KI-Assistenten, Folgefragen im Checkout und Zahlungslinks. [Alle Neuerungen →](https://github.com/HiEventsDev/hi.events/releases)
 
 <br>
 
@@ -71,14 +71,16 @@ und Konferenzveranstaltern. Betreiben Sie es selbst oder überlassen Sie den Bet
 - Anpassbare Embeds für Ihre Website: Ticket-Widgets, Buttons, Eventlisten, Line-ups und Programme
 - Aktionscodes und Rabatte
 - Tracking-Links für Promoter und Affiliates
-- Eigene Fragen bei der Registrierung
+- Registrierungsfragen mit Folgefragen und Teilnahmebedingungen
 - Marketing-Einwilligung im Checkout
+- Audience-CRM mit Kontakten, Segmenten, Anmeldeformularen sowie E-Mail- und SMS-Kampagnen <sup>Enterprise</sup>
 - Tracking mit Meta, TikTok, Google Analytics und Tag Manager
 
 **💳 Zahlungen**
 - Auszahlungen auf Ihr eigenes Stripe-Konto
 - Steuern und Gebühren, inklusive oder im Checkout aufgeschlagen
 - Rechnungen und Offline-Zahlungen
+- Zahlungslinks, wenn jemand anderes bezahlt
 - Voll- und Teilerstattungen
 
 **🚪 Teilnehmer & Einlass**
@@ -87,6 +89,7 @@ und Konferenzveranstaltern. Betreiben Sie es selbst oder überlassen Sie den Bet
 - Teilbare Check-in-Listen mit Live-Zählern
 - Nachrichten an Teilnehmer und eigene E-Mail-Vorlagen
 - Gebrandete PDF-Tickets
+- Ticketübertragung und Weiterverkauf, mit automatischer Erstattung an den Verkäufer
 - Manuell hinzugefügte Teilnehmer
 - Berichte zu Umsatz, Steuern und Aktionscodes
 
@@ -95,7 +98,8 @@ und Konferenzveranstaltern. Betreiben Sie es selbst oder überlassen Sie den Bet
 ## Für Organisationen gemacht
 
 **🔐 Sicherheit & Zugriff**
-- Single Sign-On
+- Anmeldung mit Google, Microsoft oder Ihrem eigenen OIDC-Anbieter
+- Single Sign-On pro Konto <sup>Enterprise</sup>
 - Zwei-Faktor-Authentifizierung
 - Teamrollen und Berechtigungen
 - Mehrere Veranstalter unter einem Konto
@@ -103,6 +107,7 @@ und Konferenzveranstaltern. Betreiben Sie es selbst oder überlassen Sie den Bet
 **🔌 Integrationen**
 - REST API und API-Schlüssel
 - Webhooks
+- MCP-Server für Claude und andere KI-Assistenten
 - Exporte als CSV und XLSX
 
 **🗄️ Ihre Daten**
@@ -180,8 +185,8 @@ verwaltete Version, betrieben vom Team hinter Hi.Events.
 Hi.Events steht unter der **AGPL-3.0 mit zusätzlichen Bedingungen**. Diese verlangen, dass der Hinweis "Powered by Hi.Events"
 auf allen von der Software erzeugten Seiten und E-Mails erhalten bleibt. Den genauen Wortlaut finden Sie in der [LICENCE](LICENCE).
 
-Reservierte Sitzplätze und die Abendkasse fallen unter die [Hi.Events Enterprise Licence](backend/ee/LICENCE) und benötigen
-für den Produktiveinsatz eine Lizenz.
+Reservierte Sitzplätze, die Abendkasse, Single Sign-On pro Konto und Audience fallen unter die
+[Hi.Events Enterprise Licence](backend/ee/LICENCE) und benötigen für den Produktiveinsatz eine Lizenz.
 
 **Kommerzielle Lizenzen sind verfügbar**, wenn Sie den Hinweis entfernen möchten oder Bedingungen für eine
 White-Label-Bereitstellung benötigen. [Lizenzoptionen](https://hi.events/licensing?utm_source=gh-readme) ·

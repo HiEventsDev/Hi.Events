@@ -17,6 +17,7 @@ use HiEvents\Services\Application\Handlers\Order\DTO\RefundOrderDTO;
 use HiEvents\Services\Application\Handlers\Order\Payment\Offline\RefundOfflineOrderHandler;
 use HiEvents\Services\Domain\Order\OfflineOrderRefundService;
 use HiEvents\Services\Domain\Order\OrderCancelService;
+use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use HiEvents\Values\MoneyValue;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
@@ -40,6 +41,10 @@ class RefundOfflineOrderHandlerTest extends TestCase
 
     private OfflineOrderRefundService|MockInterface $offlineOrderRefundService;
 
+    private TransactionLockService|MockInterface $transactionLockService;
+
+    private array $calls = [];
+
     private RefundOfflineOrderHandler $handler;
 
     protected function setUp(): void
@@ -51,6 +56,11 @@ class RefundOfflineOrderHandlerTest extends TestCase
         $this->mailer = Mockery::mock(Mailer::class);
         $this->orderCancelService = Mockery::mock(OrderCancelService::class);
         $this->offlineOrderRefundService = Mockery::mock(OfflineOrderRefundService::class);
+        $this->transactionLockService = Mockery::mock(TransactionLockService::class);
+        $this->transactionLockService->shouldReceive('lockEvent')
+            ->andReturnUsing(function (int $eventId): void {
+                $this->calls[] = "lock-event:$eventId";
+            });
 
         $databaseManager = Mockery::mock(DatabaseManager::class);
         $databaseManager->shouldReceive('transaction')->andReturnUsing(fn (callable $callback) => $callback());
@@ -62,6 +72,7 @@ class RefundOfflineOrderHandlerTest extends TestCase
             $this->orderCancelService,
             $this->offlineOrderRefundService,
             $databaseManager,
+            $this->transactionLockService,
         );
     }
 
@@ -78,6 +89,17 @@ class RefundOfflineOrderHandlerTest extends TestCase
         $result = $this->handler->handle($this->givenDTO(amount: 50.0));
 
         $this->assertSame($refreshedOrder, $result);
+    }
+
+    public function test_the_event_is_locked_before_the_order_is_read(): void
+    {
+        $this->givenOrderIsFound();
+        $this->givenOrderIsRefreshedAfterRefund();
+        $this->offlineOrderRefundService->shouldReceive('refundOrder')->once();
+
+        $this->handler->handle($this->givenDTO(amount: 50.0));
+
+        $this->assertSame(['lock-event:'.self::EVENT_ID, 'read-order'], $this->calls);
     }
 
     public function test_the_order_is_cancelled_when_requested(): void
@@ -167,6 +189,20 @@ class RefundOfflineOrderHandlerTest extends TestCase
         $this->handler->handle($this->givenDTO(amount: 50.0));
     }
 
+    public function test_exactly_what_is_left_can_be_refunded_whatever_the_cents(): void
+    {
+        $this->givenOrderIsFound(refundStatus: OrderRefundStatus::PARTIALLY_REFUNDED->name, totalRefunded: 8.21);
+        $this->givenOrderIsRefreshedAfterRefund();
+
+        $this->offlineOrderRefundService->shouldReceive('refundOrder')
+            ->once()
+            ->withArgs(fn (OrderDomainObject $refundOrder, MoneyValue $amount): bool => $amount->toMinorUnit() === 9179);
+
+        $this->handler->handle($this->givenDTO(amount: 91.79));
+
+        $this->assertTrue(true);
+    }
+
     public function test_the_refund_amount_cannot_exceed_the_remaining_amount(): void
     {
         $this->givenOrderIsFound(totalRefunded: 60.0);
@@ -209,7 +245,11 @@ class RefundOfflineOrderHandlerTest extends TestCase
         $this->orderRepository->shouldReceive('findFirstWhere')
             ->once()
             ->with(['event_id' => self::EVENT_ID, 'id' => self::ORDER_ID])
-            ->andReturn($order);
+            ->andReturnUsing(function () use ($order): OrderDomainObject {
+                $this->calls[] = 'read-order';
+
+                return $order;
+            });
 
         return $order;
     }

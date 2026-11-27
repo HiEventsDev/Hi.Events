@@ -1,4 +1,4 @@
-import { type Locator, type Page } from '@playwright/test';
+import { expect, type Locator, type Page } from '@playwright/test';
 
 export class PublicEventPage {
   constructor(private readonly page: Page) {}
@@ -6,6 +6,24 @@ export class PublicEventPage {
   async goto(eventId: number, slug: string): Promise<void> {
     await this.page.goto(`/event/${eventId}/${slug}`);
     await this.page.waitForLoadState('networkidle');
+  }
+
+  ticketRow(productTitle: string): Locator {
+    return this.page.locator('.hi-product-row').filter({ hasText: productTitle });
+  }
+
+  async expectTicketsAvailable(event: { eventId: number; slug: string; productTitle: string }, available: number): Promise<void> {
+    await expect(async () => {
+      await this.goto(event.eventId, event.slug);
+      await expect(this.ticketRow(event.productTitle).locator('.hi-scarcity-pill')).toHaveText(`${available} available`, { timeout: 2_000 });
+    }).toPass({ timeout: 30_000 });
+  }
+
+  async expectTicketSoldOut(event: { eventId: number; slug: string; productTitle: string }): Promise<void> {
+    await expect(async () => {
+      await this.goto(event.eventId, event.slug);
+      await expect(this.ticketRow(event.productTitle)).toHaveAttribute('data-availability', 'sold-out', { timeout: 2_000 });
+    }).toPass({ timeout: 30_000 });
   }
 
   ticketsRegion(): Locator {

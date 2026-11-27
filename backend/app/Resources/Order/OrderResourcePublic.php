@@ -3,10 +3,12 @@
 namespace HiEvents\Resources\Order;
 
 use Carbon\Carbon;
+use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\SeatClaimDomainObject;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Enterprise\BoxOffice\Http\Middleware\AuthenticateBoxOfficeSession;
+use HiEvents\Helper\EmailMasker;
 use HiEvents\Resources\Attendee\AttendeeResourcePublic;
 use HiEvents\Resources\BaseResource;
 use HiEvents\Resources\Event\EventResourcePublic;
@@ -35,6 +37,7 @@ class OrderResourcePublic extends BaseResource
             /** @var 'NO_PAYMENT_REQUIRED'|'AWAITING_PAYMENT'|'AWAITING_OFFLINE_PAYMENT'|'PAYMENT_FAILED'|'PAYMENT_RECEIVED'|null */
             'payment_status' => $this->getPaymentStatus(),
             'currency' => $this->getCurrency(),
+            'created_at' => $this->getCreatedAt(),
             'reserved_until' => $this->getReservedUntil(),
             'is_expired' => $this->when(
                 ! is_null($this->getReservedUntil()),
@@ -43,11 +46,13 @@ class OrderResourcePublic extends BaseResource
             'first_name' => $this->getFirstName(),
             'last_name' => $this->getLastName(),
             'email' => $this->getEmail(),
+            'phone' => $this->getPhone(),
             'public_id' => $this->getPublicId(),
             'is_payment_required' => $this->isPaymentRequired(),
             'payment_link_created_at' => $this->getPaymentLinkCreatedAt(),
             'is_payment_link_payer' => $this->isAccessedViaPaymentLink(),
             'offline_payment_reported_at' => $this->getOfflinePaymentReportedAt(),
+            'holds_resale_listing' => $this->holdsResaleListing(),
             $this->mergeWhen($this->getPaymentLinkUrl() !== null && ($this->isOrderReserved() || $this->isOrderAwaitingOfflinePayment()), fn () => [
                 'payment_link_url' => $this->getPaymentLinkUrl(),
             ]),
@@ -76,9 +81,22 @@ class OrderResourcePublic extends BaseResource
             ),
             'attendees' => $this->when(
                 ! is_null($this->getAttendees()),
-                fn () => $this->getAttendees()->map(
-                    fn ($attendee) => new AttendeeResourcePublic($attendee, $includePostCheckoutData),
-                )
+                fn () => $this->getAttendees()
+                    ->reject(fn (AttendeeDomainObject $attendee) => $attendee->hasLeftItsOrder())
+                    ->map(fn ($attendee) => new AttendeeResourcePublic($attendee, $includePostCheckoutData))
+                    ->values(),
+            ),
+            'transferred_tickets' => $this->when(
+                ! is_null($this->getAttendees()),
+                fn () => $this->getAttendees()
+                    ->filter(fn (AttendeeDomainObject $attendee) => $attendee->hasLeftItsOrder())
+                    ->map(fn (AttendeeDomainObject $attendee) => [
+                        'product_id' => $attendee->getProductId(),
+                        'product_title' => $attendee->getProduct()?->getTitle(),
+                        'recipient_email' => EmailMasker::mask((string) $attendee->getEmail()),
+                        'transferred_at' => $attendee->getTransferredAt(),
+                    ])
+                    ->values(),
             ),
             'seats' => $this->when(
                 ! is_null($this->getSeatClaims()),
@@ -92,7 +110,6 @@ class OrderResourcePublic extends BaseResource
                 'session_identifier' => $this->getSessionIdentifier(),
             ]),
             $this->mergeWhen($this->isBoxOfficeOrder() && $request->attributes->has(AuthenticateBoxOfficeSession::SESSION_ATTRIBUTE), fn () => [
-                'created_at' => $this->getCreatedAt(),
                 'box_office_operator_name' => $this->getBoxOfficeOperatorName(),
                 /** @var 'CASH'|'CARD'|'COMP'|'OTHER'|'FREE'|null */
                 'box_office_tender' => $this->getBoxOfficeTender(),

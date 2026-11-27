@@ -1,9 +1,12 @@
-import {Container, Title, TextInput, Skeleton, Pagination, Stack} from "@mantine/core";
+import {Container, Title, TextInput, Stack} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {IconSearch} from "@tabler/icons-react";
 import {useState, useEffect} from "react";
 import {useGetAllAdminOrders} from "../../../../queries/useGetAllAdminOrders.ts";
 import AdminOrdersTable from "../../../common/AdminOrdersTable";
+import {TableCard, TableCardFooter, TableCardSkeleton} from "../../../common/TableCard";
+import {ToolBar} from "../../../common/ToolBar";
+import {TableSort} from "../../../common/TanStackTable/sorting.tsx";
 
 const Orders = () => {
     const [page, setPage] = useState(1);
@@ -29,13 +32,13 @@ const Orders = () => {
         return () => clearTimeout(timer);
     }, [search]);
 
-    const handleSort = (column: string) => {
-        if (sortBy === column) {
-            setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-        } else {
+    const sort: TableSort = {
+        sortBy,
+        sortDirection,
+        onSort: (column, direction) => {
             setSortBy(column);
-            setSortDirection('desc');
-        }
+            setSortDirection(direction);
+        },
     };
 
     return (
@@ -43,35 +46,28 @@ const Orders = () => {
             <Stack gap="lg">
                 <Title order={1}>{t`Orders`}</Title>
 
-                <TextInput
-                    placeholder={t`Search by order ID, customer name, or email...`}
-                    leftSection={<IconSearch size={16} />}
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                />
-
-                {isLoading ? (
-                    <Stack gap="md">
-                        <Skeleton height={50} radius="md" />
-                        <Skeleton height={400} radius="md" />
-                    </Stack>
-                ) : (
-                    <AdminOrdersTable
-                        orders={ordersData?.data || []}
-                        onSort={handleSort}
-                        sortBy={sortBy}
-                        sortDirection={sortDirection}
+                <TableCard>
+                    <ToolBar
+                        embedded
+                        searchComponent={() => (
+                            <TextInput
+                                placeholder={t`Search by order ID, customer name, or email...`}
+                                leftSection={<IconSearch size={16}/>}
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                            />
+                        )}
                     />
-                )}
 
-                {ordersData?.meta && ordersData.meta.last_page > 1 && (
-                    <Pagination
-                        total={ordersData.meta.last_page}
-                        value={page}
-                        onChange={setPage}
-                        mt="md"
-                    />
-                )}
+                    {isLoading ? <TableCardSkeleton/> : (
+                        <AdminOrdersTable
+                            orders={ordersData?.data || []}
+                            sort={sort}
+                        />
+                    )}
+
+                    <TableCardFooter pagination={ordersData?.meta} page={page} onPageChange={setPage}/>
+                </TableCard>
             </Stack>
         </Container>
     );

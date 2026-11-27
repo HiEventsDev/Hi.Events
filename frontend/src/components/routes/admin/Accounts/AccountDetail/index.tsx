@@ -1,6 +1,6 @@
 import {Container, Title, Stack, Card, Text, Group, Button, Badge, Skeleton, Select, Switch} from "@mantine/core";
 import {t} from "@lingui/macro";
-import {useParams, useNavigate} from "react-router";
+import {useParams, useNavigate, useSearchParams} from "react-router";
 import {useState} from "react";
 import {useGetAdminAccount} from "../../../../../queries/useGetAdminAccount";
 import {useGetMessagingTiers} from "../../../../../queries/useGetMessagingTiers";
@@ -25,13 +25,14 @@ import {getLifecycleEmailLabel} from "../../LifecycleEmails/lifecycleEmailLabels
 const AccountDetail = () => {
     const {accountId} = useParams();
     const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
     const {data: accountData, isLoading} = useGetAdminAccount(accountId);
     const {data: messagingTiersData} = useGetMessagingTiers();
     const updateTierMutation = useUpdateAccountMessagingTier(accountId!);
     const updateVerificationMutation = useUpdateAccountVerification(accountId!);
     const [managedOrganizer, setManagedOrganizer] = useState<AdminOrganizerSummary | null>(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-    const [isSuspendModalOpen, setIsSuspendModalOpen] = useState(false);
+    const [isSuspendModalOpen, setIsSuspendModalOpen] = useState(searchParams.get('action') === 'suspend');
     const unsuspendMutation = useAdminUnsuspendAccount(accountId!);
     const {impersonate, isPending: isImpersonating, pendingUserId} = useImpersonateUser();
     const executeDeletionMutation = useAdminExecuteDeletionRequest();
@@ -82,6 +83,13 @@ const AccountDetail = () => {
             onSuccess: () => showSuccess(t`Account deletion cancelled`),
             onError: (error: any) => showError(error?.response?.data?.message ?? t`Failed to cancel account deletion`),
         });
+    };
+
+    const closeSuspendModal = () => {
+        setIsSuspendModalOpen(false);
+        if (searchParams.has('action')) {
+            setSearchParams({}, {replace: true});
+        }
     };
 
     const handleUnsuspend = () => {
@@ -483,8 +491,8 @@ const AccountDetail = () => {
                 </Stack>
             </Container>
 
-            {isSuspendModalOpen && (
-                <SuspendAccountModal account={account} onClose={() => setIsSuspendModalOpen(false)}/>
+            {isSuspendModalOpen && !account.suspended_at && (
+                <SuspendAccountModal account={account} onClose={closeSuspendModal}/>
             )}
 
             {isDeleteModalOpen && (

@@ -8,6 +8,7 @@ import {useGetEvent} from "../../../../../../queries/useGetEvent.ts";
 import {useGetOrganizer} from "../../../../../../queries/useGetOrganizer.ts";
 import {useGetPlatformFeePreview} from "../../../../../../queries/useGetPlatformFeePreview.ts";
 import {PlatformFeesSettings as PlatformFeesSettingsBase} from "../../../../../common/PlatformFeesSettings";
+import {SettingsPage} from "../../../../../common/SettingsPage";
 
 export const PlatformFeesSettings = () => {
     const {eventId} = useParams();
@@ -39,18 +40,21 @@ export const PlatformFeesSettings = () => {
     };
 
     return (
-        <PlatformFeesSettingsBase
-            configuration={organizerQuery.data?.configuration}
-            currentValue={currentValue}
-            onSave={handleSave}
-            isLoading={eventSettingsQuery.isLoading}
-            isSaving={updateMutation.isPending}
-            heading={t`Platform Fees`}
+        <SettingsPage
+            title={t`Platform Fees`}
             description={t`Control how platform fees are handled for this event`}
-            feeHandlingLabel={t`Fee Handling`}
-            feeHandlingDescription={t`Choose who pays the platform fee. This does not affect additional fees you've configured in your account settings.`}
-            feePreview={feePreviewQuery.data}
-            onPriceChange={setPreviewPrice}
-        />
+        >
+            <PlatformFeesSettingsBase
+                configuration={organizerQuery.data?.configuration}
+                currentValue={currentValue}
+                onSave={handleSave}
+                isLoading={eventSettingsQuery.isLoading}
+                isSaving={updateMutation.isPending}
+                feeHandlingLabel={t`Fee Handling`}
+                feeHandlingDescription={t`Choose who pays the platform fee. This does not affect additional fees you've configured in your account settings.`}
+                feePreview={feePreviewQuery.data}
+                onPriceChange={setPreviewPrice}
+            />
+        </SettingsPage>
     );
 };

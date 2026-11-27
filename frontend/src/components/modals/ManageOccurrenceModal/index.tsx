@@ -230,6 +230,7 @@ export const ManageOccurrenceModal = ({onClose, occurrenceId}: GenericModalProps
                     onClose={() => setShowShareOccurrence(undefined)}
                     url={`${eventHomepageUrl(event)}?occurrence_id=${showShareOccurrence.id}`}
                     title={event.title}
+                    event={event}
                     shareText={`${event.title} — ${formatDateWithLocale(showShareOccurrence.start_date, 'shortDateTime', event.timezone)}`}
                 />
             )}

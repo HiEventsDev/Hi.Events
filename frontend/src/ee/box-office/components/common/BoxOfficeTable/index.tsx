@@ -1,19 +1,8 @@
-import {Anchor, Badge, Button, Tooltip} from '@mantine/core';
+import {Button, Tooltip, VisuallyHidden} from '@mantine/core';
 import {CreateButton} from "../../../../../components/common/CreateButton";
 import {useAccess} from "../../../../../hooks/useAccess.ts";
 import {BoxOffice, Event, EventType, IdParam} from "../../../../../types.ts";
-import {
-    IconCalendarEvent,
-    IconCashRegister,
-    IconChartBar,
-    IconCheck,
-    IconCopy,
-    IconKey,
-    IconPencil,
-    IconPlus,
-    IconTrash,
-    IconX,
-} from "@tabler/icons-react";
+import {IconCashRegister, IconChartBar, IconCopy, IconKey, IconPencil, IconPlus, IconTrash} from "@tabler/icons-react";
 import {useMemo, useState} from "react";
 import {useDisclosure, useMediaQuery} from "@mantine/hooks";
 import {useParams} from "react-router";
@@ -26,9 +15,10 @@ import {useBoxOfficePin} from "../../../hooks/useBoxOfficePin.tsx";
 import {showError, showSuccess} from "../../../../../utilites/notifications.tsx";
 import {confirmationDialog} from "../../../../../utilites/confirmationDialog.tsx";
 import {TanStackTable, TanStackTableColumn} from "../../../../../components/common/TanStackTable";
-import {ActionMenu} from '../../../../../components/common/ActionMenu';
+import {ActionMenu, RowActionsTarget} from '../../../../../components/common/ActionMenu';
+import {CellLink, CellText, EmptyCell, IdentityCell} from "../../../../../components/common/TanStackTable/cells.tsx";
+import {StatusBadge} from "../../../../../components/common/StatusBadge";
 import {CellContext} from "@tanstack/react-table";
-import Truncate from "../../../../../components/common/Truncate";
 import {formatDateWithLocale} from "../../../../../utilites/dates.ts";
 import {formatCurrency} from "../../../../../utilites/currency.ts";
 import classes from './BoxOfficeTable.module.scss';
@@ -36,6 +26,7 @@ import classes from './BoxOfficeTable.module.scss';
 interface BoxOfficeTableProps {
     boxOffices: BoxOffice[];
     openCreateModal: () => void;
+    isRefreshing?: boolean;
     event?: Event;
     isLocked?: boolean;
 }
@@ -48,7 +39,7 @@ export const copyBoxOfficeLink = (shortId: string) => {
     });
 };
 
-export const BoxOfficeTable = ({boxOffices, openCreateModal, event, isLocked = false}: BoxOfficeTableProps) => {
+export const BoxOfficeTable = ({boxOffices, openCreateModal, event, isLocked = false, isRefreshing}: BoxOfficeTableProps) => {
     const [editModalOpen, {open: openEditModal, close: closeEditModal}] = useDisclosure(false);
     const [selectedBoxOfficeId, setSelectedBoxOfficeId] = useState<IdParam>();
     const [statsBoxOffice, setStatsBoxOffice] = useState<BoxOffice | null>(null);
@@ -57,7 +48,7 @@ export const BoxOfficeTable = ({boxOffices, openCreateModal, event, isLocked = f
     const {generatePin, openBoxOffice, pinModalElement} = useBoxOfficePin();
     const {eventId} = useParams();
     const isRecurring = event?.type === EventType.RECURRING;
-    const isMobile = useMediaQuery('(max-width: 768px)');
+    const isMobile = useMediaQuery('(max-width: 62em)');
 
     const handleDelete = (boxOfficeId: IdParam, eventId: IdParam) => {
         deleteMutation.mutate({boxOfficeId, eventId}, {
@@ -73,135 +64,94 @@ export const BoxOfficeTable = ({boxOffices, openCreateModal, event, isLocked = f
                     id: 'name',
                     header: t`Box Office`,
                     enableHiding: false,
-                    cell: (info: CellContext<BoxOffice, unknown>) => {
-                        const boxOffice = info.row.original;
-                        const sellsEverything = !boxOffice.products || boxOffice.products.length === 0;
-                        return (
-                            <div className={classes.listDetails}>
-                                <div className={classes.nameRow}>
-                                    {isLocked ? (
-                                        <span className={classes.listName}><Truncate text={boxOffice.name} length={40}/></span>
-                                    ) : (
-                                        <Anchor
-                                            className={classes.listName}
-                                            onClick={() => {
-                                                setSelectedBoxOfficeId(boxOffice.id as IdParam);
-                                                openEditModal();
-                                            }}
-                                        >
-                                            <Truncate text={boxOffice.name} length={40}/>
-                                        </Anchor>
-                                    )}
-                                    {boxOffice.is_system_default && (
-                                        <Badge size="xs" color="gray" variant="light">{t`Default`}</Badge>
-                                    )}
+                    meta: {sticky: 'left'},
+                    cell: ({row: {original: boxOffice}}: CellContext<BoxOffice, unknown>) => (
+                        <IdentityCell
+                            stacked
+                            secondary={!boxOffice.products || boxOffice.products.length === 0
+                                ? t`Sells every product`
+                                : boxOffice.products.length === 1
+                                    ? t`Sells 1 product`
+                                    : <Trans>Sells {boxOffice.products.length} products</Trans>}
+                            primary={isLocked ? (
+                                <CellText strong title={boxOffice.name}>{boxOffice.name}</CellText>
+                            ) : (
+                                <CellLink
+                                    strong
+                                    title={boxOffice.name}
+                                    onClick={() => {
+                                        setSelectedBoxOfficeId(boxOffice.id as IdParam);
+                                        openEditModal();
+                                    }}
+                                >
+                                    {boxOffice.name}
+                                </CellLink>
+                            )}
+                            trailing={(
+                                <>
+                                    {boxOffice.is_system_default && <StatusBadge tone="neutral">{t`Default`}</StatusBadge>}
                                     {!boxOffice.has_pin && (
                                         <Tooltip label={t`Staff can't sign in until a PIN is set`}>
-                                            <Badge size="xs" color="orange" variant="light">{t`No PIN`}</Badge>
+                                            <span><StatusBadge tone="waiting">{t`No PIN`}</StatusBadge></span>
                                         </Tooltip>
                                     )}
-                                </div>
-                                <div className={classes.productsText}>
-                                    {sellsEverything
-                                        ? t`Sells every product`
-                                        : boxOffice.products!.length === 1
-                                            ? t`Sells 1 product`
-                                            : <Trans>Sells {boxOffice.products!.length} products</Trans>
-                                    }
-                                </div>
-                            </div>
-                        );
-                    },
-                    meta: {
-                        headerStyle: {minWidth: 250},
-                    },
+                                </>
+                            )}
+                        />
+                    ),
                 },
                 {
                     id: 'occurrence',
                     header: t`Date`,
-                    enableHiding: true,
-                    cell: (info: CellContext<BoxOffice, unknown>) => {
-                        const occurrence = info.row.original.event_occurrence;
+                    cell: ({row: {original: boxOffice}}: CellContext<BoxOffice, unknown>) => {
+                        const occurrence = boxOffice.event_occurrence;
 
                         if (!occurrence || !event?.timezone) {
-                            return (
-                                <div className={classes.occurrenceText}>
-                                    {t`Any date`}
-                                </div>
-                            );
+                            return <CellText muted>{t`Any date`}</CellText>;
                         }
 
                         return (
-                            <div className={classes.occurrenceContainer}>
-                                <span className={classes.occurrenceChip}>
-                                    <IconCalendarEvent size={12}/>
-                                    {formatDateWithLocale(occurrence.start_date, 'shortDate', event.timezone)}
-                                    {' '}
-                                    {formatDateWithLocale(occurrence.start_date, 'timeOnly', event.timezone)}
-                                    {occurrence.label && ` · ${occurrence.label}`}
-                                </span>
-                            </div>
+                            <CellText maxWidth={240}>
+                                {formatDateWithLocale(occurrence.start_date, 'shortDate', event.timezone)}
+                                {' '}
+                                {formatDateWithLocale(occurrence.start_date, 'timeOnly', event.timezone)}
+                                {occurrence.label && ` · ${occurrence.label}`}
+                            </CellText>
                         );
-                    },
-                    meta: {
-                        headerStyle: {minWidth: 160},
                     },
                 },
                 {
+                    id: 'orders',
+                    header: t`Orders`,
+                    meta: {align: 'right'},
+                    cell: ({row: {original: boxOffice}}: CellContext<BoxOffice, unknown>) => boxOffice.sales_count === 1
+                        ? t`1 order`
+                        : <Trans>{boxOffice.sales_count} orders</Trans>,
+                },
+                ...(canViewFinancials ? [{
                     id: 'sales',
                     header: t`Sales`,
-                    enableHiding: true,
-                    cell: (info: CellContext<BoxOffice, unknown>) => {
-                        const boxOffice = info.row.original;
-                        return (
-                            <div className={classes.salesContainer}>
-                                {boxOffice.gross_sales !== undefined && (
-                                    <div className={classes.salesGross}>
-                                        {formatCurrency(boxOffice.gross_sales, boxOffice.currency ?? event?.currency)}
-                                    </div>
-                                )}
-                                <div className={classes.salesCount}>
-                                    {boxOffice.sales_count === 1
-                                        ? t`1 order`
-                                        : <Trans>{boxOffice.sales_count} orders</Trans>}
-                                </div>
-                            </div>
-                        );
-                    },
-                    meta: {
-                        headerStyle: {minWidth: 120},
-                    },
-                },
+                    meta: {align: 'right'},
+                    cell: ({row: {original: boxOffice}}: CellContext<BoxOffice, unknown>) => boxOffice.gross_sales !== undefined
+                        ? <CellText strong>{formatCurrency(boxOffice.gross_sales, boxOffice.currency ?? event?.currency)}</CellText>
+                        : <EmptyCell/>,
+                } satisfies TanStackTableColumn<BoxOffice>] : []),
                 {
                     id: 'status',
                     header: t`Status`,
-                    enableHiding: true,
-                    cell: (info: CellContext<BoxOffice, unknown>) => {
-                        const boxOffice = info.row.original;
+                    cell: ({row: {original: boxOffice}}: CellContext<BoxOffice, unknown>) => {
                         const isActive = !boxOffice.is_expired && boxOffice.is_active;
+
                         return (
-                            <div className={classes.statusBadge} data-status={isActive ? 'active' : 'inactive'}>
-                                {isActive ? (
-                                    <>
-                                        <IconCheck size={14}/>
-                                        {t`Active`}
-                                    </>
-                                ) : (
-                                    <>
-                                        <IconX size={14}/>
-                                        {t`Inactive`}
-                                    </>
-                                )}
-                            </div>
+                            <StatusBadge tone={isActive ? 'positive' : 'neutral'}>
+                                {isActive ? t`Active` : t`Inactive`}
+                            </StatusBadge>
                         );
-                    },
-                    meta: {
-                        headerStyle: {minWidth: 100},
                     },
                 },
                 {
                     id: 'actions',
-                    header: '',
+                    header: () => <VisuallyHidden>{t`Actions`}</VisuallyHidden>,
                     enableHiding: false,
                     cell: (info: CellContext<BoxOffice, unknown>) => {
                         const boxOffice = info.row.original;
@@ -271,8 +221,8 @@ export const BoxOfficeTable = ({boxOffices, openCreateModal, event, isLocked = f
                             <div className={classes.rowActions}>
                                 {!isMobile && !isLocked && (
                                     <Button
-                                        size="xs"
-                                        variant="light"
+                                        size="compact-sm"
+                                        variant="default"
                                         leftSection={<IconCashRegister size={14}/>}
                                         onClick={() => openBoxOffice(boxOffice)}
                                         data-testid="box-office-open-button"
@@ -280,7 +230,7 @@ export const BoxOfficeTable = ({boxOffices, openCreateModal, event, isLocked = f
                                         {t`Open Box Office`}
                                     </Button>
                                 )}
-                                <ActionMenu itemsGroups={groups} dataTestId="box-office-actions-menu"/>
+                                <ActionMenu itemsGroups={groups} dataTestId="box-office-actions-menu" target={<RowActionsTarget/>}/>
                             </div>
                         );
                     },
@@ -292,7 +242,7 @@ export const BoxOfficeTable = ({boxOffices, openCreateModal, event, isLocked = f
 
             return allColumns.filter(column => !(column.id === 'occurrence' && !isRecurring));
         },
-        [eventId, isRecurring, event?.timezone, event?.currency, isMobile, isLocked]
+        [eventId, isRecurring, event?.timezone, event?.currency, isMobile, isLocked, canViewFinancials]
     );
 
     if (boxOffices.length === 0) {
@@ -323,10 +273,10 @@ export const BoxOfficeTable = ({boxOffices, openCreateModal, event, isLocked = f
 
     return (
         <>
-            <TanStackTable
+            <TanStackTable rowLines={2}
                 data={boxOffices}
                 columns={columns}
-                storageKey="box-offices-table"
+                isRefreshing={isRefreshing}
             />
             {(editModalOpen && selectedBoxOfficeId)
                 && <EditBoxOfficeModal onClose={closeEditModal} boxOfficeId={selectedBoxOfficeId}/>}

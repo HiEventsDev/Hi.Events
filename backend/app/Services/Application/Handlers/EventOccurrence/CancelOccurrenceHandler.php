@@ -15,6 +15,7 @@ use HiEvents\Services\Domain\Event\RecurrenceRuleExclusionService;
 use HiEvents\Services\Domain\EventOccurrence\CancelOccurrenceAttendeesService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OccurrenceEvent;
+use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
@@ -25,6 +26,7 @@ class CancelOccurrenceHandler
         private readonly RecurrenceRuleExclusionService $exclusionService,
         private readonly CancelOccurrenceAttendeesService $cancelAttendeesService,
         private readonly DatabaseManager $databaseManager,
+        private readonly TransactionLockService $transactionLockService,
     ) {}
 
     /**
@@ -36,6 +38,8 @@ class CancelOccurrenceHandler
         $cancelledAttendeeIds = [];
 
         $updated = $this->databaseManager->transaction(function () use ($eventId, $occurrenceId, &$wasCancelled, &$cancelledAttendeeIds) {
+            $this->transactionLockService->lockEvent($eventId);
+
             $occurrence = $this->occurrenceRepository->findByIdLocked($occurrenceId);
 
             if (! $occurrence || $occurrence->getEventId() !== $eventId) {

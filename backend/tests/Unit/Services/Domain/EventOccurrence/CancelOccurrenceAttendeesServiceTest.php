@@ -4,6 +4,7 @@ namespace Tests\Unit\Services\Domain\EventOccurrence;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
+use HiEvents\DomainObjects\Enums\TicketResaleCloseReason;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
@@ -15,6 +16,7 @@ use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\EventOccurrence\CancelOccurrenceAttendeesService;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsCancellationService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
+use HiEvents\Services\Domain\TicketResale\TicketResaleClosureService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\AttendeeEvent;
@@ -41,6 +43,8 @@ class CancelOccurrenceAttendeesServiceTest extends TestCase
 
     private SeatClaimService $seatClaimService;
 
+    private TicketResaleClosureService|MockInterface $resaleClosureService;
+
     private CancelOccurrenceAttendeesService $service;
 
     protected function setUp(): void
@@ -56,6 +60,9 @@ class CancelOccurrenceAttendeesServiceTest extends TestCase
         $this->statisticsCancellationService = Mockery::mock(EventStatisticsCancellationService::class);
         $this->logger = Mockery::mock(LoggerInterface::class);
         $this->seatClaimService = Mockery::mock(SeatClaimService::class);
+
+        $this->resaleClosureService = Mockery::mock(TicketResaleClosureService::class);
+        $this->resaleClosureService->shouldReceive('closeForAttendees')->zeroOrMoreTimes()->byDefault();
 
         $this->seatClaimService->shouldReceive('releaseForAttendees')->zeroOrMoreTimes()->byDefault();
 
@@ -79,6 +86,7 @@ class CancelOccurrenceAttendeesServiceTest extends TestCase
             $this->statisticsCancellationService,
             $this->seatClaimService,
             $this->logger,
+            $this->resaleClosureService,
         );
     }
 
@@ -136,6 +144,11 @@ class CancelOccurrenceAttendeesServiceTest extends TestCase
             ->shouldReceive('releaseForAttendees')
             ->once()
             ->with([101, 102, 103]);
+
+        $this->resaleClosureService
+            ->shouldReceive('closeForAttendees')
+            ->once()
+            ->with([101, 102, 103], TicketResaleCloseReason::DATE_CANCELLED);
 
         $result = $this->service->cancelForOccurrence($eventId, $occurrenceId);
 

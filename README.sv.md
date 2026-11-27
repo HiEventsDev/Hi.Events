@@ -30,8 +30,8 @@ På egen server eller i molnet. Dina evenemang, ditt varumärke, din data.
 <br>
 
 > [!NOTE]
-> **Hi.Events 2.0 är här** med återkommande evenemang, reserverade platser, biljettkassa, line-ups och scheman, enkel
-> inloggning, teambehörigheter och API-nycklar. [Se vad som är nytt →](https://github.com/HiEventsDev/hi.events/releases)
+> **Hi.Events 2.3 är här** med Audience CRM och SMS-kampanjer, överlåtelse och vidareförsäljning av biljetter, en MCP-server
+> för AI-assistenter, följdfrågor i kassan och betalningslänkar. [Se vad som är nytt →](https://github.com/HiEventsDev/hi.events/releases)
 
 <br>
 
@@ -71,14 +71,16 @@ och konferensarrangörer. Driv det själv, eller låt oss driva det åt dig i Hi
 - Anpassningsbara inbäddningar för din egen webbplats: biljettwidgets, knappar, evenemangslistor, line-ups och scheman
 - Kampanjkoder och rabatter
 - Spårningslänkar för promotorer och partners
-- Egna registreringsfrågor
+- Registreringsfrågor med följdfrågor och behörighetsregler
 - Marknadsföringssamtycke i kassan
+- Audience CRM med kontakter, segment, registreringsformulär samt e-post- och SMS-kampanjer <sup>Enterprise</sup>
 - Spårning med Meta, TikTok, Google Analytics och Tag Manager
 
 **💳 Betalningar**
 - Utbetalningar till ditt eget Stripe-konto
 - Skatter och avgifter, inkluderade eller tillagda i kassan
 - Fakturering och offlinebetalningar
+- Betalningslänkar för när någon annan betalar
 - Hela och delvisa återbetalningar
 
 **🚪 Deltagare och insläpp**
@@ -87,6 +89,7 @@ och konferensarrangörer. Driv det själv, eller låt oss driva det åt dig i Hi
 - Delbara incheckningslistor med siffror i realtid
 - Meddelanden till deltagare och egna e-postmallar
 - PDF-biljetter med ditt varumärke
+- Överlåtelse och vidareförsäljning av biljetter, där säljaren återbetalas automatiskt
 - Manuellt tillagda deltagare
 - Rapporter för försäljning, moms och kampanjkoder
 
@@ -95,7 +98,8 @@ och konferensarrangörer. Driv det själv, eller låt oss driva det åt dig i Hi
 ## Byggt för organisationer
 
 **🔐 Säkerhet och åtkomst**
-- Enkel inloggning
+- Logga in med Google, Microsoft eller din egen OIDC-leverantör
+- Enkel inloggning per konto <sup>Enterprise</sup>
 - Tvåfaktorsautentisering
 - Teamroller och behörigheter
 - Flera arrangörer under ett konto
@@ -103,6 +107,7 @@ och konferensarrangörer. Driv det själv, eller låt oss driva det åt dig i Hi
 **🔌 Integrationer**
 - REST API och API-nycklar
 - Webhooks
+- MCP-server för Claude och andra AI-assistenter
 - Export till CSV och XLSX
 
 **🗄️ Din data**
@@ -180,8 +185,8 @@ förvaltade versionen, som drivs av teamet bakom Hi.Events.
 Hi.Events är licensierat under **AGPL-3.0 med ytterligare villkor**. De ytterligare villkoren kräver att attributionen "Powered by Hi.Events"
 behålls på sidor och i e-postmeddelanden som programvaran genererar – se [LICENCE](LICENCE) för exakt formulering.
 
-Reserverade platser och biljettkassan omfattas av [Hi.Events Enterprise Licence](backend/ee/LICENCE) och kräver en
-licens för produktionsbruk.
+Reserverade platser, biljettkassan, enkel inloggning per konto och Audience omfattas av
+[Hi.Events Enterprise Licence](backend/ee/LICENCE) och kräver en licens för produktionsbruk.
 
 **Kommersiella licenser finns** om du vill ta bort attributionen eller behöver villkor anpassade för en
 white label-lösning. [Licensalternativ](https://hi.events/licensing?utm_source=gh-readme) ·
